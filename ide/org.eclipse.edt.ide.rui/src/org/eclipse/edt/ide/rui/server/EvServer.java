@@ -844,9 +844,9 @@ public class EvServer implements IClientProxy {
 							args = xmlRequest.getArguments();
 						}
 						
-						if (args.containsKey("contextKey")) {
+						String strContextKey = (String) args.get("contextKey");
+						if (strContextKey != null && strContextKey.length() != 0) {
 							// search contextKey
-							String strContextKey = (String) args.get("contextKey");
 							try {
 								Integer intContextKey = Integer.valueOf(strContextKey);
 								//debug("handleBrowserEvent url: " + url + " - key: " + intContextKey.toString());
