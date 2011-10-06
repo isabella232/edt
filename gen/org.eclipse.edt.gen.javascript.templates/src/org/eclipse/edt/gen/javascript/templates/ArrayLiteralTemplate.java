@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.Expression;
 
 public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
@@ -24,7 +25,8 @@ public class ArrayLiteralTemplate extends JavaScriptTemplate {
 		if (!expr.getEntries().isEmpty()) {
 			out.print(".setType(");
 			out.print("\"");
-			ctx.invoke(genSignature, expr.getEntries().get(0).getType(), ctx, out, expr.getEntries().get(0));
+			Expression expression = expr.getEntries().get(0);
+			ctx.invoke(genSignature, expr.getType(), ctx, out, expression);
 			out.print("\"");
 			out.print(")");
 		}
