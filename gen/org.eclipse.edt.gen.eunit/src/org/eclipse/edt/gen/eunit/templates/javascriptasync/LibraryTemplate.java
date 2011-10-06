@@ -71,7 +71,8 @@ public class LibraryTemplate extends EUnitTemplate {
 		}
 		out.println("TestAsyncLib.runTestMtds ::= " + CommonUtilities.endTestMethodName + ";");
 		out.println();
-		out.println("TestAsyncLib.runTestMtds[1]();");	
+		out.println("TestAsyncLib.nextTestIndex = 1;");		
+		out.println("TestAsyncLib.runTestMtds[TestAsyncLib.nextTestIndex]();");	
 		out.popIndent();
 		out.println("end");		
 		 
