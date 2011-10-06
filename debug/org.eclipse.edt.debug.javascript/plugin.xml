@@ -70,8 +70,6 @@
              </with>
            </enablement>
   		 </contextualLaunch>
-         <configurationType
-               id="org.eclipse.edt.debug.javascript.ruiLaunchConfigurationType"/>
          <description
                description="%RunRUILaunchShortcut.description"
                mode="run"/>
