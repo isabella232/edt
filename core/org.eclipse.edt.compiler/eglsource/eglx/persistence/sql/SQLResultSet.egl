@@ -12,5 +12,7 @@ externalType SQLResultSet extends ScrollableDataSource type NativeType
 	function rowDeleted() returns(boolean);
 	function rowUpdated() returns(boolean);
 	
+	function getWarnings() returns(SQLWarning?);
+	
 	function setFetchSize(size int);
 end

@@ -13,9 +13,11 @@ package org.eclipse.edt.compiler.internal.core.validation.statement;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -27,7 +29,6 @@ import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -121,6 +122,16 @@ public class TryStatementValidator extends DefaultASTVisitor {
 		}
 		
 		if (type.getName() != InternUtil.intern("anyException")) {
+			// Check if it's a type that extends anyException.
+			ExternalTypeBinding etBinding = (ExternalTypeBinding)type;
+			List supers = ((ExternalTypeBinding)etBinding.getNonNullableInstance()).getExtendedTypes();
+			if (supers.size() > 0) {
+				for (Object o : supers) {
+					if (o instanceof ITypeBinding && isAnyException((ITypeBinding)o)) {
+						return true;
+					}
+				}
+			}
 			return false;
 		}
 		

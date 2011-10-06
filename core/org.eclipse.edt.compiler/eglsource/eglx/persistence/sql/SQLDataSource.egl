@@ -3,9 +3,28 @@ package eglx.persistence.sql;
 import eglx.lang.Nativetype;
 import eglx.persistence.DataSource;
 
-externalType SQLDataSource extends DataSource type NativeType 
-	constructor(connectionUrl string);
+externalType SQLDataSource extends DataSource type NativeType
+	static TRANSACTION_ISOLATION_NONE int;
+	static TRANSACTION_ISOLATION_READ_UNCOMMITTED int;
+    static TRANSACTION_ISOLATION_READ_COMMITTED int;
+    static TRANSACTION_ISOLATION_REPEATABLE_READ int;
+    static TRANSACTION_ISOLATION_SERIALIZABLE int;
+     
+	constructor(connectionUrl string in);
+	constructor(connectionUrl string in, properties Dictionary in);
 	
 	function setCurrentSchema(schemaName string in);
 	
+	function getAutoCommit() returns(boolean);
+	function setAutoCommit(autoCommit boolean in);
+	
+	function getTransactionIsolation() returns(int);
+	function setTransactionIsolation(level int in);
+	function supportsTransactionIsolationLevel(level int in) returns(boolean);
+	
+	function getWarnings() returns(SQLWarning?);
+	
+	function isClosed() returns(boolean);
+	function isReadOnly() returns(boolean);
+	function isValid(timeout int in); 
 end
