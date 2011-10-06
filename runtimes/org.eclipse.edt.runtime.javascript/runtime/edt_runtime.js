@@ -193,7 +193,7 @@ egl.defineClass( "eglx.lang", "EDecimal"
 				,"eglx.lang", "AnyBoxedObject",
 {
 	"constructor" : function(s){
-		egl.eglx.lang.AnyBoxedObject.call(this, i); //TODO no ctor chaining?!
+		egl.eglx.lang.AnyBoxedObject.call(this, s); //TODO no ctor chaining?!
 	}
 }
 );
