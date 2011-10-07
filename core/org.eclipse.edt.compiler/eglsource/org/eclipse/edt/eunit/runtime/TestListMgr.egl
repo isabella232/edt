@@ -70,4 +70,17 @@ Library TestListMgr
 		s Status = LogResult.getStatus();				
 		s.reason = assertMsg + s.reason;			
 	end	
+	
+	function getBindingTypeString(bType ServiceBindingType) returns (String)		
+		case(bType)
+			when(ServiceBindingType.DEDICATED)
+				return ("DEDICATED Binding");
+			when(ServiceBindingType.DEVELOP)
+				return ("DEVELOP Binding");
+			when(ServiceBindingType.DEPLOYED)
+				return ("DEPLOYED Binding");
+			otherwise
+				return ("UNKNOWN Binding Type - NOT supported");		
+		end		
+	end
 end
