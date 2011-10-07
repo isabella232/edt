@@ -159,12 +159,12 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 		return minus + value;
 	}
 
-    public static void unboxStart(Object dontunbox, boolean unbox, TabbedWriter out){
-    	if ((unbox) && ((dontunbox == null) || (Boolean.FALSE.equals(dontunbox))))
+    public static void unboxStart(boolean unbox, TabbedWriter out){
+    	if (unbox)
 			out.print("egl.eglx.lang.EAny.unbox(");  //TODO sbg Lookup or use constant
     }
-    public static void unboxEnd(Object dontunbox, boolean unbox, TabbedWriter out){
-    	if ((unbox) && ((dontunbox == null) || (Boolean.FALSE.equals(dontunbox))))
+    public static void unboxEnd(boolean unbox, TabbedWriter out){
+    	if (unbox) 
 			out.print(")");
     }
 }
