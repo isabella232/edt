@@ -33,6 +33,13 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 		else {
 			stmtVar = getExprString(stmt.getPreparedStatement(), ctx);
 			out.println("try {");
+			int idx = 1;
+			if(stmt.getUsingExpressions() != null){
+				for (Expression uexpr : stmt.getUsingExpressions()) {
+					genSetColumnValue(uexpr, stmtVar, idx++, ctx, out);
+					out.println(";");
+				}
+			}
 			out.print(stmtVar);
 			out.println(".execute();");
 		}
