@@ -77,9 +77,9 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			boolean targetIsList = target.getType() instanceof ArrayType;
 			EGLClass targetType;
 			if (targetIsList) {
-				ctx.invoke(genRuntimeTypeName, target.getType(), ctx, out, TypeNameKind.EGLImplementation);
+				ctx.invoke(genRuntimeTypeName, target.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(" ezeList = ");
-				ctx.invoke(genInstantiation, target.getType().getClassifier(), ctx, out);
+				ctx.invoke(genInstantiation, target.getType(), ctx, out);
 				out.println(";");
 				// Assume target type is an EGLClass as other Classifiers would be filtered out by front end validation
 				targetType = (EGLClass)((ArrayType)target.getType()).getElementType().getClassifier();
