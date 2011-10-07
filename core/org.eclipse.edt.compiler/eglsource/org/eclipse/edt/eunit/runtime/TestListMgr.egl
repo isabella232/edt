@@ -13,7 +13,8 @@ end
 Library TestListMgr	
 	ms MultiStatus;							//multiStatus for one library
 	nextTestIndex int = 1;					//test method index
-	runTestMtds runTestMethod[];			//list of test methods within a libraries
+	testMethodNames String[];				//list of the test method names within a library
+	runTestMtds runTestMethod[];			//list of test methods within a library
 	
 	LibraryStartTests runTestMethod[];		//list of test libraries
 	private nextLibIndex int = 1;					//test library index
