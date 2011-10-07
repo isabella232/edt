@@ -96,7 +96,7 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/LogResult.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/MultiStatus.js"); //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/Status.js"); //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/TestAsyncLib.js"); //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/TestListMgr.js"); //$NON-NLS-1$
 		
 	}
 	public static final String RUI_PROPERTIES_LIBRARY = "RUIPropertiesLibrary";
