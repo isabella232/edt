@@ -3,6 +3,11 @@ package org.eclipse.edt.eunit.runtime;
 delegate runTestMethod()	
 end
 
+enumeration ServiceBindingType
+	DEDICATED = 1,
+	DEVELOP = 2,
+	DEPLOYED = 3
+end
 
 /**
  * managing 2 lists
@@ -11,6 +16,8 @@ end
  *    this list gets reset for each library 
 **/ 
 Library TestListMgr	
+	bindingType ServiceBindingType = ServiceBindingType.DEDICATED;
+	
 	ms MultiStatus;							//multiStatus for current test library
 	testIndex int = 1;						//current test method index
 	testMethodNames String[];				//list of the test method names within a library (excluding the generatedLib.endTest())
