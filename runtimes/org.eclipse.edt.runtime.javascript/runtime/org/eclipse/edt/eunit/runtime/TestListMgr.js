@@ -11,6 +11,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"eze$$setEmpty": function() {
 			this.ms = new egl.org.eclipse.edt.eunit.runtime.MultiStatus();
 			this.nextTestIndex = 0;
+			this.testMethodNames =  [];
 			this.runTestMtds =  [];
 			this.LibraryStartTests =  [];
 			this.nextLibIndex = 0;
@@ -43,17 +44,21 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 				annotations["JsonName"] = new egl.eglx.json.JsonName("nextTestIndex");
 				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("nextTestIndex", "nextTestIndex", "I;", Number, annotations);
 				annotations = {};
+				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("testMethodNames", null, false, false);
+				annotations["JsonName"] = new egl.eglx.json.JsonName("testMethodNames");
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("testMethodNames", "testMethodNames", "[S;", String, annotations);
+				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("runTestMtds", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("runTestMtds");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("runTestMtds", "runTestMtds", "[org.eclipse.edt.eunit.runtime.runTestMethod", "", annotations);
+				this.fieldInfos[3] =new egl.eglx.services.FieldInfo("runTestMtds", "runTestMtds", "[org.eclipse.edt.eunit.runtime.runTestMethod", "", annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("LibraryStartTests", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("LibraryStartTests");
-				this.fieldInfos[3] =new egl.eglx.services.FieldInfo("LibraryStartTests", "LibraryStartTests", "[org.eclipse.edt.eunit.runtime.runTestMethod", "", annotations);
+				this.fieldInfos[4] =new egl.eglx.services.FieldInfo("LibraryStartTests", "LibraryStartTests", "[org.eclipse.edt.eunit.runtime.runTestMethod", "", annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("nextLibIndex", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("nextLibIndex");
-				this.fieldInfos[4] =new egl.eglx.services.FieldInfo("nextLibIndex", "nextLibIndex", "I;", Number, annotations);
+				this.fieldInfos[5] =new egl.eglx.services.FieldInfo("nextLibIndex", "nextLibIndex", "I;", Number, annotations);
 			}
 			return this.fieldInfos;
 		}
@@ -91,6 +96,14 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		,
 		"setNextTestIndex": function(ezeValue) {
 			this.nextTestIndex = ezeValue;
+		}
+		,
+		"getTestMethodNames": function() {
+			return testMethodNames;
+		}
+		,
+		"setTestMethodNames": function(ezeValue) {
+			this.testMethodNames = ezeValue;
 		}
 		,
 		"getRunTestMtds": function() {
