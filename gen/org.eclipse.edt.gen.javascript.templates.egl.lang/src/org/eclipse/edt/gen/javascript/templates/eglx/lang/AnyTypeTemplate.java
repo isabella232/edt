@@ -59,9 +59,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, boxingExpr, ctx, out);
 			}
 			else {
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
 			}
 			out.print(",");
 			out.print(arg.getObjectExpr().isNullable());
