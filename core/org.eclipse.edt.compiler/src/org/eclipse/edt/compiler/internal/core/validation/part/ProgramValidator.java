@@ -155,12 +155,14 @@ public class ProgramValidator extends FunctionContainerValidator {
 							typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING){
 							boolean error = false;
 							if (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING &&
-								((FlexibleRecordBinding)typeBinding).getDeclaredFields().size() == 0	){
+								((FlexibleRecordBinding)typeBinding).getDeclaredFields().size() == 0 &&
+								((FlexibleRecordBinding)typeBinding).getDefaultSuperType() == null){
 								error = true;
 							}
 							
 							if (typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING &&
-									((FixedRecordBinding)typeBinding).getStructureItems().size() == 0	){
+									((FixedRecordBinding)typeBinding).getStructureItems().size() == 0 &&
+									((FixedRecordBinding)typeBinding).getDefaultSuperType() == null ){
 									error = true;
 							}
 							

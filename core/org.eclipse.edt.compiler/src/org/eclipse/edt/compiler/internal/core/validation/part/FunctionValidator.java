@@ -289,11 +289,15 @@ public class FunctionValidator extends AbstractASTVisitor {
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, ITypeBinding parmType) {
 		boolean isEmptyRecord = false;
     	if(ITypeBinding.FIXED_RECORD_BINDING == parmType.getKind()) {
-    		isEmptyRecord = ((FixedRecordBinding) parmType).getStructureItems().isEmpty();
+    		FixedRecordBinding rec = (FixedRecordBinding) parmType;
+    		isEmptyRecord = rec.getStructureItems().isEmpty() && rec.getDefaultSuperType() == null;
     	}
     	else if(ITypeBinding.FLEXIBLE_RECORD_BINDING == parmType.getKind()) {
-    		isEmptyRecord = ((FlexibleRecordBinding) parmType).getDeclaredFields().isEmpty();
+    		FlexibleRecordBinding rec = (FlexibleRecordBinding) parmType;
+    		isEmptyRecord = rec.getDeclaredFields().isEmpty() && rec.getDefaultSuperType() == null;
     	}
+    	
+    	
     	
     	if(isEmptyRecord) {
     		problemRequestor.acceptProblem(
