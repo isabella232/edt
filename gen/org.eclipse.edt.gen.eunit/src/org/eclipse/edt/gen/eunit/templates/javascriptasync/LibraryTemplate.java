@@ -33,24 +33,23 @@ public class LibraryTemplate extends EUnitTemplate {
 	}
 	
 	public void genImports(Part part, Context ctx, TabbedWriter out) {
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestAsyncLib;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestListMgr;");
 		generateImportStatement(part, ctx, out);
 	}	
 	
 	public void genLibDriverImports(Library part, Context ctx, TabbedWriter out){
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestAsyncLib;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".TestListMgr;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
 		generateLibDriverImportStatements(part, ctx, out);
-	}	
+	}
 	
 	public void genClassBody(Library part, Context ctx, TabbedWriter out, TestCounter counter) {
 		out.println("library " + part.getName());
 		out.pushIndent();
 		out.println("function " + CommonUtilities.exeTestMethodName + "()");
 		out.pushIndent();
+		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);				
 		out.print("testMethods String[] = [");
-		
-		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);		
 		boolean flag2 = false;
 		for (String function : functions) {
 			if (flag2)
@@ -61,18 +60,26 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("];");
 		
 		out.println("testVariationCnt int = testMethods.getSize();");
-		out.println(part.getFullyQualifiedName() + ".ms.expectedCnt = testVariationCnt;");
+		out.println();
+		out.println("//reset the multiStatus in this library");
+		out.println("TestListMgr.ms = new MultiStatus;");
+		out.println("TestListMgr.ms.expectedCnt = testVariationCnt;");
+		out.println();
+		
 		out.println("LogResult.clearResults();");
 		
-		out.println("TestAsyncLib.runTestMtds = new runTestMethod[];");
+		out.println("//reset the list of tests in this libary ");
+		out.println("TestListMgr.runTestMtds = new runTestMethod[];");
 		for(String function : functions){
-			out.print("TestAsyncLib.runTestMtds ::= ");
+			out.print("TestListMgr.runTestMtds ::= ");
 			out.println(part.getFullyQualifiedName() + "." + function + ";");
 		}
-		out.println("TestAsyncLib.runTestMtds ::= " + CommonUtilities.endTestMethodName + ";");
+		out.println("TestListMgr.runTestMtds ::= " + CommonUtilities.endTestMethodName + ";");
 		out.println();
-		out.println("TestAsyncLib.nextTestIndex = 1;");		
-		out.println("TestAsyncLib.runTestMtds[TestAsyncLib.nextTestIndex]();");	
+		
+		out.println("//reset the index back to 1");
+		out.println("TestListMgr.nextTestIndex = 1;");		
+		out.println("TestListMgr.runTestMtds[TestListMgr.nextTestIndex]();");	
 		out.popIndent();
 		out.println("end");		
 		 
@@ -100,8 +107,8 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("td.sources = \"" + part.getName() + ".egl\";");
 		out.println("td.keywords = \"\";");
 		
-		out.println("TestExecutionLib.writeResults(td, " + part.getFullyQualifiedName() + ".ms, true);");						
-		out.println("TestAsyncLib.nextTestLibrary();");		
+		out.println("TestExecutionLib.writeResults(td, TestListMgr.ms, true);");						
+		out.println("TestListMgr.nextTestLibrary();");		
 		out.popIndent();
 		out.println("end");
 		out.popIndent();
@@ -115,10 +122,10 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.pushIndent();	
 		out.println("function start()");
 		out.pushIndent();
-		out.println("TestAsyncLib.LibraryStartTests = new runTestMethod[];");
-		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + ";");
-		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
-		out.println("TestAsyncLib.LibraryStartTests[1]();");
+		out.println("TestListMgr.LibraryStartTests = new runTestMethod[];");
+		out.println("TestListMgr.LibraryStartTests ::= " + CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + ";");
+		out.println("TestListMgr.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
+		out.println("TestListMgr.LibraryStartTests[1]();");
 		out.popIndent();
 		out.println("end");
 		out.println();

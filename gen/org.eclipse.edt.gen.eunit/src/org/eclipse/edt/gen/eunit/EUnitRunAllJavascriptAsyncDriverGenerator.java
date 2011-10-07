@@ -17,7 +17,7 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 	
 	@Override
 	protected void genImports() {
-		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME +".TestAsyncLib;");
+		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME +".TestListMgr;");
 		out.println("import " + CommonUtilities.EUNITRUNTIME_PACKAGENAME + ".runTestMethod;");
 		super.genImports();
 	}
@@ -34,13 +34,13 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 		out.pushIndent();
 		out.println("function start()");
 		out.pushIndent();
-		out.println("TestAsyncLib.LibraryStartTests = new runTestMethod[];");
+		out.println("TestListMgr.LibraryStartTests = new runTestMethod[];");
 		for(String genLibName : listOfGenedLibs){
-			out.print("TestAsyncLib.LibraryStartTests ::= ");
+			out.print("TestListMgr.LibraryStartTests ::= ");
 			out.println(genLibName + "." + CommonUtilities.exeTestMethodName + ";");				
 		}
-		out.println("TestAsyncLib.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
-		out.println("TestAsyncLib.LibraryStartTests[1]();");
+		out.println("TestListMgr.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
+		out.println("TestListMgr.LibraryStartTests[1]();");
 		out.popIndent();
 		out.println("end");
 		
