@@ -48,8 +48,9 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.pushIndent();
 		out.println("function " + CommonUtilities.exeTestMethodName + "()");
 		out.pushIndent();
-		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);				
-		out.print("testMethods String[] = [");
+		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);
+		out.println("//reset the list of test method names in this libary ");
+		out.print("TestListMgr.testMethodNames = [");
 		boolean flag2 = false;
 		for (String function : functions) {
 			if (flag2)
@@ -59,7 +60,7 @@ public class LibraryTemplate extends EUnitTemplate {
 		}
 		out.println("];");
 		
-		out.println("testVariationCnt int = testMethods.getSize();");
+		out.println("testVariationCnt int = TestListMgr.testMethodNames.getSize();");
 		out.println();
 		out.println("//reset the multiStatus in this library");
 		out.println("TestListMgr.ms = new MultiStatus;");
