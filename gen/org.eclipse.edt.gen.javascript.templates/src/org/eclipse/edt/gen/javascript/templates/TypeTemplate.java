@@ -205,9 +205,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, boxingExpr, ctx, out);
 			}
 			else {
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
 			}
 			out.print(", ");
 			out.print(arg.getObjectExpr().isNullable());
@@ -221,9 +219,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, boxingExpr, ctx, out);
 			}
 			else {
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.TRUE);
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-				ctx.putAttribute(arg.getObjectExpr(), Constants.DONT_UNBOX, Boolean.FALSE);
 			}
 			out.print(", ");
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
@@ -315,9 +311,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 		else {
 			out.print("egl.isa(");
-			ctx.putAttribute(lhs, Constants.DONT_UNBOX, Boolean.TRUE);
 			ctx.invoke(genExpression, lhs, ctx, out);
-			ctx.putAttribute(lhs, Constants.DONT_UNBOX, Boolean.FALSE);  //TODO sbg Can we just remove DONT_UNBOX?
 			out.print(", ");
 			out.print("\"");
 			ctx.invoke(genSignature, isaType, ctx, out); 

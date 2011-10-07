@@ -106,9 +106,9 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 
 		boolean unbox = (expr.getMember() instanceof FunctionParameter
 			&& isBoxedParameterType((FunctionParameter) expr.getMember(), ctx));
-		unboxStart(ctx.getAttribute(expr, Constants.DONT_UNBOX), unbox, out);
+		unboxStart(unbox, out);
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
-		unboxEnd(ctx.getAttribute(expr, Constants.DONT_UNBOX), unbox, out);
+		unboxEnd(unbox, out);
 	}
 	
 	private static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx)
@@ -116,6 +116,6 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		/* TODO sbg If the parm type is ANY, then we want to also treat as boxed; this check may get moved
 		 * to CommonUtilities.isBoxedParameterType if it makes sense for all generators....
 		 */
-		return (CommonUtilities.isBoxedParameterType(parameter, ctx) || (parameter.getType() == TypeUtils.Type_ANY));
+		return (CommonUtilities.isBoxedParameterType(parameter, ctx)); // || (parameter.getType() == TypeUtils.Type_ANY));
 	}
 }
