@@ -1,14 +1,14 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.eunit.runtime.MultiStatus;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -16,6 +16,8 @@ public class TestListMgr extends ExecutableBase {
 	public MultiStatus ms;
 	@javax.xml.bind.annotation.XmlTransient
 	public int nextTestIndex;
+	@javax.xml.bind.annotation.XmlTransient
+	public List<String> testMethodNames;
 	@javax.xml.bind.annotation.XmlTransient
 	public List<org.eclipse.edt.javart.Delegate> runTestMtds;
 	@javax.xml.bind.annotation.XmlTransient
@@ -28,6 +30,7 @@ public class TestListMgr extends ExecutableBase {
 	}
 	public void ezeInitialize() {
 		ms = new MultiStatus();
+		testMethodNames = EList.ezeNew(String.class);
 		runTestMtds = EList.ezeNew(org.eclipse.edt.javart.Delegate.class);
 		LibraryStartTests = EList.ezeNew(org.eclipse.edt.javart.Delegate.class);
 		nextTestIndex = (int)((short) 1);
@@ -46,6 +49,13 @@ public class TestListMgr extends ExecutableBase {
 	}
 	public void setNextTestIndex( int ezeValue ) {
 		this.nextTestIndex = ezeValue;
+	}
+	@org.eclipse.edt.javart.json.Json(name="testMethodNames", clazz=EString.class, asOptions={})
+	public List<String> getTestMethodNames() {
+		return (testMethodNames);
+	}
+	public void setTestMethodNames( List<String> ezeValue ) {
+		this.testMethodNames = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="runTestMtds", clazz=org.eclipse.edt.javart.Delegate.class, asOptions={})
 	public List<org.eclipse.edt.javart.Delegate> getRunTestMtds() {
