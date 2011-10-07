@@ -1,0 +1,36 @@
+package org.eclipse.edt.eunit.runtime;
+
+delegate runTestMethod()	
+end
+
+
+/**
+ * managing 2 lists
+ * 1. list of libraries 
+ * 2. list of test methods in the library that's running
+ *    this list gets reset for each library 
+**/ 
+Library TestListMgr	
+	ms MultiStatus;							//multiStatus for one library
+	nextTestIndex int = 1;					//test method index
+	runTestMtds runTestMethod[];			//list of test methods within a libraries
+	
+	LibraryStartTests runTestMethod[];		//list of test libraries
+	private nextLibIndex int = 1;					//test library index
+	
+	function nextTest(testId String in)
+		//culmulate the status of each test method result into the multiStatus for one library
+		ms.addStatus(testId);			
+		if(nextTestIndex < runTestMtds.getSize())
+			nextTestIndex += 1;
+			runTestMtds[nextTestIndex]();
+		end
+	end	
+	
+	function nextTestLibrary()
+		if(nextLibIndex < LibraryStartTests.getSize())
+			nextLibIndex += 1;
+			LibraryStartTests[nextLibIndex]();	
+		end		
+	end		
+end
