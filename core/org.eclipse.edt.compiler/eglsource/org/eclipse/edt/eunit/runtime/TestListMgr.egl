@@ -48,4 +48,19 @@ Library TestListMgr
 			LibraryStartTests[libIndex]();	
 		end		
 	end		
+	
+	//helper functions to handle asynchronize call exceptions
+	function handleCallBackException(exp AnyException in)
+		str String = "Caught service exception: " + exp.messageID + ": " + exp.message;
+		LogResult.error(str);
+		testId String = TestListMgr.testMethodNames[TestListMgr.testIndex];
+		TestListMgr.nextTest();
+	end
+	
+	function caughtFailedAssertion(exp AssertionFailedException in)
+		//prepend the assertion failure error message to Status
+		assertMsg String = "Assertion failed for: "; 
+		s Status = LogResult.getStatus();				
+		s.reason = assertMsg + s.reason;			
+	end	
 end
