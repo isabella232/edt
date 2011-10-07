@@ -11,27 +11,41 @@ end
  *    this list gets reset for each library 
 **/ 
 Library TestListMgr	
-	ms MultiStatus;							//multiStatus for one library
-	nextTestIndex int = 1;					//test method index
-	testMethodNames String[];				//list of the test method names within a library
-	runTestMtds runTestMethod[];			//list of test methods within a library
+	ms MultiStatus;							//multiStatus for current test library
+	testIndex int = 1;						//current test method index
+	testMethodNames String[];				//list of the test method names within a library (excluding the generatedLib.endTest())
+	runTestMtds runTestMethod[];			//list of test methods within a library including an extra generatedLib.endTest()
 	
+	testLibName String;						//current test library name (testdescription.name)
 	LibraryStartTests runTestMethod[];		//list of test libraries
-	private nextLibIndex int = 1;					//test library index
+	private libIndex int = 1;					//current test library index
 	
-	function nextTest(testId String in)
+	function nextTest()
+		testMethodNamesSize int = testMethodNames.getSize();		
+		
+		testId String = testLibName + "::";		
+		if(testIndex <= testMethodNamesSize)
+			testId += testMethodNames[testIndex];
+		else
+			if(testIndex == (testMethodNamesSize+1))
+				testId += "endTest";
+			else
+				testId +="INVALIDINDEXFOUND!!!";
+			end
+		end				
+		
 		//culmulate the status of each test method result into the multiStatus for one library
 		ms.addStatus(testId);			
-		if(nextTestIndex < runTestMtds.getSize())
-			nextTestIndex += 1;
-			runTestMtds[nextTestIndex]();
+		if(testIndex < runTestMtds.getSize())
+			testIndex += 1;
+			runTestMtds[testIndex]();
 		end
 	end	
 	
 	function nextTestLibrary()
-		if(nextLibIndex < LibraryStartTests.getSize())
-			nextLibIndex += 1;
-			LibraryStartTests[nextLibIndex]();	
+		if(libIndex < LibraryStartTests.getSize())
+			libIndex += 1;
+			LibraryStartTests[libIndex]();	
 		end		
 	end		
 end
