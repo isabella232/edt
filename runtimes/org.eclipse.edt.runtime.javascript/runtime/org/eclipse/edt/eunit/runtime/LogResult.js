@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
-
 egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 {
 	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/LogResult.egl',
@@ -347,7 +336,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		,
 		"expect": function(expected, actual) {
 			var standardMsg = "";
-			standardMsg = (((((((((((((((("Failed: ") + this.EXPECTEDHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast({eze$$value : expected, eze$$signature : "Teglx/lang/eany;"},false))) + "' ")) + this.ACTUALHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast({eze$$value : actual, eze$$signature : "Teglx/lang/eany;"},false))) + "' ");
+			standardMsg = (((((((((((((((("Failed: ") + this.EXPECTEDHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(expected,false))) + "' ")) + this.ACTUALHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(actual,false))) + "' ");
 			return standardMsg;
 		}
 		,

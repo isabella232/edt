@@ -4,8 +4,8 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 	'eze$$runtimePropertiesFile': 'org.eclipse.edt.eunit.runtime.MultiStatus',
 		"constructor": function() {
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
-			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			new egl.eglx.rbd.StrLib();
+			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			this.eze$$setInitial();
 		}
 		,
