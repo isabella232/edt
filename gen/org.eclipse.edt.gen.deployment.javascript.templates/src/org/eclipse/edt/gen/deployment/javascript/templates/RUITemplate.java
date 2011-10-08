@@ -78,10 +78,8 @@ public class RUITemplate extends JavaScriptTemplate {
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
 			List egldds, HashMap eglParameters, String userMsgLocale,
 			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
-		// TODO the css is not interpreted: "Resource interpreted as stylesheet but transferred with MIME type text/html." 
-		// Uncomment when this issue is addressed
-//		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
-//				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
+		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
+				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
 		preGenComment(out);
 		out.println( "<html>" ); //$NON-NLS-1$
 		out.println( "<head>" ); 		
