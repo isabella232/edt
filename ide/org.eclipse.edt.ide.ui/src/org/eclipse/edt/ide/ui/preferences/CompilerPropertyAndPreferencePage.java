@@ -607,6 +607,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		this.currTabProviders.add( provider );
 		provider.performAddition();
 		this.tabFolder.setSelection( item );
+		this.tabFolder.getParent().getParent().layout(); 	
 	}
 
 	/**
