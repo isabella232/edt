@@ -525,6 +525,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	}		
 	
 	private void generateDevelopmentRootHandler( Handler part, TabbedWriter out ) {
+		out.println("			egl.handleIDEEvent();");
 		out.println("			egl.rootHandler = new egl." + part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName() + "();");
 		out.println("			if ( egl.rootHandler.targetWidget || !egl.rootHandler.egl$isWidget ) {");
 		out.println("				egl.rootHandler.setParent(egl.Document);");
