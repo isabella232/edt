@@ -74,7 +74,7 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	public static final String TAB_CLASS = "class"; //$NON-NLS-1$
 
 	// The resource for a property page (project, folder, or file)
-	private IResource resource;
+	protected IResource resource;
 
 	private CompilerAndGeneratorControls compilerAndGeneratorControls;
 
@@ -82,11 +82,11 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 	private String  selectedCompiler = new String();
 
 	// Currently selected generator names
-	private List<String> selectedGenerators = new ArrayList<String>();
+	protected List<String> selectedGenerators = new ArrayList<String>();
 	
 	// Generator properties override section
 	private Composite generatorComposite;
-	private Button generatorOverrideCheckbox;
+	protected Button generatorOverrideCheckbox;
 	private ControlEnableState generatorEnableState;
 	
 

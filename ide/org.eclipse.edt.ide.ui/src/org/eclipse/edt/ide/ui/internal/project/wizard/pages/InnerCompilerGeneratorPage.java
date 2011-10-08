@@ -11,10 +11,25 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.project.wizard.pages;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.edt.compiler.IGenerator;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage;
 import org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage;
+import org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class InnerCompilerGeneratorPage extends
 		CompilerPropertyAndPreferencePage {
@@ -39,5 +54,9 @@ public class InnerCompilerGeneratorPage extends
 	
 	public List<String> getSelectedGenerators() {
 		return super.getSelectedGenerators();
+	}
+	
+	protected boolean doPerformOk( final boolean isApply ) {
+		return true;
 	}
 }
