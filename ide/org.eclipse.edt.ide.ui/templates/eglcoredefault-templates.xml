@@ -415,7 +415,7 @@ end</template>
 	${cursor}
 end</template>
 
-<template name="foreach" description="%Templates.foreach_statement" id="org.eclipse.edt.ide.ui.templates.foreach_statement" context = "egl-core" enabled="true">foreach (${target} into ${item})
+<template name="foreach" description="%Templates.foreach_statement" id="org.eclipse.edt.ide.ui.templates.foreach_statement" context = "egl-core" enabled="true">foreach (${item} from ${ds})
 	// EGL statements
 	${cursor}
 end</template>
