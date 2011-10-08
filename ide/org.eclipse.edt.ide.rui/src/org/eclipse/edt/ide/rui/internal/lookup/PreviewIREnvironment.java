@@ -16,15 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.tools.EGL2IR;
-import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.impl.Bootstrap;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
 import org.eclipse.edt.mof.serialization.IEnvironment;
-import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
@@ -36,29 +31,29 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
  * generate the temporary content to JS and HTML 
  * 
  */
-public class PreviewIREnvironment extends Environment implements IEnvironment{
+public class PreviewIREnvironment extends ProjectIREnvironment implements IEnvironment{
 
-	//TODO need to make sure the contextStore is the first one to search for IR
 	private boolean projectEnvironmentInitialized;
-	private ObjectStore contextStore = null;
+	private PreviewObjectStore contextStore;
 	
 	public PreviewIREnvironment(IEnvironment environment, File contextDirectory) {
 		super();
-		this.initProjectEnvironment(environment);
-		this.initContext(contextDirectory);
 		
+		// Initialize the special context directory first, so that it's first in line when looking up IRs.
+		this.initContext(contextDirectory);
+		this.initProjectEnvironment(environment);
 	}
 	
 	public void reset() {
 		super.reset();
-		registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
+		
 		projectEnvironmentInitialized = false;
 		contextStore = null;
 	}
 	
 	public void initContext(File contextDirectory) {
-		contextStore = new FileSystemObjectStore(contextDirectory, this, ObjectStore.XML, EGL2IR.EGLXML);
-		((FileSystemObjectStore)contextStore).supportedScheme = Type.EGL_KeyScheme;
+		contextStore = new PreviewObjectStore(contextDirectory, this, ObjectStore.XML, EGL2IR.EGLXML);
+		contextStore.supportedScheme = Type.EGL_KeyScheme;
 		registerObjectStore(contextStore.getKeyScheme(), contextStore);
 		setDefaultSerializeStore(contextStore.getKeyScheme(), contextStore);
 	}
@@ -82,20 +77,6 @@ public class PreviewIREnvironment extends Environment implements IEnvironment{
 			for (ObjectStore store : stores) {
 				registerObjectStore(scheme, store);
 			}
-		}
-	}
-
-	@Override
-	public EObject find(String key) throws MofObjectNotFoundException, DeserializationException {
-		LookupDelegate delegate = getDelegateForKey(key);
-		key = delegate.normalizeKey(key);
-
-		//search in contextStore first
-		EObject object = contextStore.get(key);
-		if (object != null) {
-			return object;
-		}else{
-			return super.find(key);
 		}
 	}
 	
