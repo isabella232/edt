@@ -266,8 +266,6 @@ egl.handleIDEEvent = function() {
 	}
 }
 
-egl.handleIDEEvent();
-
 window.onunload = function() {
 	try { egl.terminateSession(); } catch (e) {}
 }
