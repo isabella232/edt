@@ -24,11 +24,13 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.StandardEGLElementContentProvider;
+import org.eclipse.edt.ide.ui.internal.deployment.Include;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementLabelProvider;
 import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementSorter;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.internal.wizards.TypedViewerFilter;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -43,7 +45,6 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 public class FileBrowseDialog {	
-
 	public static ElementTreeSelectionDialog openBrowseFileDialog(Shell shell, 
 			final IProject project, IFile initWSDLFile, 
 			final boolean isWorkspaceScope,
@@ -53,6 +54,20 @@ public class FileBrowseDialog {
 			String dialogTitle,
 			String dialogDescription,
 			final String validationMsgInsert) {
+		return FileBrowseDialog.openBrowseFileDialog(shell,project,initWSDLFile,isWorkspaceScope,showEGLProjectsOnly,helpId,filterFileExtension,
+				dialogTitle,dialogDescription,validationMsgInsert,null,null);
+	}
+	public static ElementTreeSelectionDialog openBrowseFileDialog(Shell shell, 
+			final IProject project, IFile initWSDLFile, 
+			final boolean isWorkspaceScope,
+			boolean showEGLProjectsOnly,
+			final String helpId, 
+			final String filterFileExtension, 
+			String dialogTitle,
+			String dialogDescription,
+			final String validationMsgInsert,
+			final EList<Include> includes,
+			final IFile currentFile) {
 		
 		IEGLProject eglProject = EGLCore.create(project);
 		
@@ -84,10 +99,19 @@ public class FileBrowseDialog {
 				if(selection.length == 1 && selection[0] instanceof IResource)
 				{
 					IResource resource = (IResource)selection[0];
-					if(resource.getType() == IResource.FILE)
+					if(resource.getType() == IResource.FILE && resource.getFileExtension().equalsIgnoreCase(filterFileExtension))
 					{
-						resource.getFileExtension().equalsIgnoreCase(filterFileExtension);
-							return new StatusInfo();
+						if(currentFile!=null && resource.equals(currentFile)){
+							return new StatusInfo(IStatus.ERROR, NewWizardMessages.ChooseEGLDDDialog_Error_CurrentDD);				
+						}
+						if(includes!=null){
+							for (Include include : includes) {
+								if(include.getLocation().equalsIgnoreCase(resource.getFullPath().toString())){
+									return new StatusInfo(IStatus.ERROR, NewWizardMessages.ChooseEGLDDDialog_Error_ImportedDD);				
+								}
+							}
+						}
+						return new StatusInfo();
 					}
 				}
 				return new StatusInfo(IStatus.ERROR, NewWizardMessages.bind(NewWizardMessages.WSDLFileSelectionError, validationMsgInsert));				

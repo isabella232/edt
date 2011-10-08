@@ -292,17 +292,20 @@ public class EGLDDImportsFormPage extends EGLDDBaseFormPage {
 
 	protected void HandleAddIncludePressed() {
 		IProject proj = ((EGLDeploymentDescriptorEditor)getEditor()).getProject();
+		EGLDeploymentRoot root = getModelRoot();
+		Deployment deployment = root.getDeployment();
+		
 		ElementTreeSelectionDialog dialog = FileBrowseDialog.openBrowseFileDialog(getSite().getShell(), 
 				proj, null, true, true, IUIHelpConstants.EGLDDWIZ_INCLUDEEGLDD, 
 				EGLDDRootHelper.EXTENSION_EGLDD,
 				SOAMessages.IncludeDialogTitle,
 				SOAMessages.IncludeDialogDescription,
-				SOAMessages.IncludeDialogMsg);
+				SOAMessages.IncludeDialogMsg,
+				deployment.getInclude(),
+				((EGLDeploymentDescriptorEditor)getEditor()).getEditorInputFile());
 		if(dialog.open() == IDialogConstants.OK_ID){
 			Object obj = dialog.getFirstResult();
 			if(obj instanceof IFile){	//this should be the wsdl file
-				EGLDeploymentRoot root = getModelRoot();
-				Deployment deployment = root.getDeployment();
 				Include newInclude = DeploymentFactory.eINSTANCE.createInclude();
 				newInclude.setLocation(((IFile)obj).getFullPath().toString());
 				deployment.getInclude().add(newInclude);

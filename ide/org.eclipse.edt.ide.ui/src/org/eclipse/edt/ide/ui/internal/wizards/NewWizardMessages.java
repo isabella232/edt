@@ -46,6 +46,8 @@ public class NewWizardMessages extends NLS {
 	public static String ChooseEGLDDDialogDescription;
 	public static String ChooseEGLDDDialogMsg;
 	public static String ChooseEGLDDDialogTitle;
+	public static String ChooseEGLDDDialog_Error_CurrentDD;
+	public static String ChooseEGLDDDialog_Error_ImportedDD;
 	public static String ChooseProtocolGrpLabel;
 	public static String ChooseProtocolLabel;
 //	public static String CICSECIConversionTableTextLabel;
