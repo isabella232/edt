@@ -90,6 +90,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		public static final String FLOAT = "float";
 		public static final String DECIMAL = "decimal";
 		public static final String NUM = "num";
+		public static final String NUMBER = "number";
 		public static final String MONEY = "money";
 		public static final String BOOLEAN = "boolean";
 	}
@@ -100,10 +101,10 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		this.setDescription(Messages.NL_NEVWP_Description);
 		this.evEditor = evEditor;
 		this.supportedPrimitiveTypes = new String[]{SupportedPrimitiveType.STRING, SupportedPrimitiveType.BOOLEAN,
-				SupportedPrimitiveType.DATE, SupportedPrimitiveType.TIME, SupportedPrimitiveType.TIMESTAMP,
+				SupportedPrimitiveType.DATE, /*SupportedPrimitiveType.TIME,*/ SupportedPrimitiveType.TIMESTAMP,
 				SupportedPrimitiveType.SMALLINT, SupportedPrimitiveType.INT, SupportedPrimitiveType.BIGINT,
-				SupportedPrimitiveType.BIN, SupportedPrimitiveType.SMALLFLOAT, SupportedPrimitiveType.FLOAT,
-				SupportedPrimitiveType.DECIMAL, SupportedPrimitiveType.NUM, SupportedPrimitiveType.MONEY};
+				/*SupportedPrimitiveType.BIN,*/ SupportedPrimitiveType.SMALLFLOAT, SupportedPrimitiveType.FLOAT,
+				SupportedPrimitiveType.DECIMAL, /*SupportedPrimitiveType.NUM, SupportedPrimitiveType.MONEY,*/ SupportedPrimitiveType.NUMBER};
 		
 		NameFinder.getInstance().initralize(evEditor.getEditorInput());
 	}
@@ -732,6 +733,9 @@ public class NewEGLVariableWizardPage extends WizardPage {
 				if(!maxSize.equals("")){
 					sbPreview.append("{maxSize=").append(maxSize).append("}");
 				}
+			}
+			if(fieldType.equals(SupportedPrimitiveType.NUMBER)){
+				sbPreview.append("?");
 			}
 			
 			sbPreview.append(";");
