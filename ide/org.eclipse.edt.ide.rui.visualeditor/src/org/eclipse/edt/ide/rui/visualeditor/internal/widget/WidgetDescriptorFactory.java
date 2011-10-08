@@ -34,8 +34,8 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
-import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -499,7 +499,6 @@ public class WidgetDescriptorFactory {
 				widgetDescriptor._eventFilter.add( (String)excludedEvents.get(i));
 			}
 		}
-
 	}
 
 	private void processWidgetContainer(Annotation widgetAnnotation, WidgetDescriptor widgetDescriptor) {
@@ -570,13 +569,36 @@ public class WidgetDescriptorFactory {
 	
 	private List<Field> getAllFields( LogicAndDataPart part ){
 		List<Field> fields = new ArrayList<Field>();
-		
-		if(part.getSuperTypes().get(0) instanceof ExternalType){
-			fields.addAll( ((ExternalType)part.getSuperTypes().get(0)).getFields() );
+		List<ExternalType> ancestors = getAllAncestors(part);
+		for(ExternalType ancestor : ancestors){
+			fields.addAll( ancestor.getFields() );
 		}
-		
 		fields.addAll( part.getFields() );
 		return fields;
+	}
+	
+	private List<ExternalType> getAllAncestors( LogicAndDataPart part ){
+		List<ExternalType> ancestors = new ArrayList<ExternalType>();
+		List<StructPart> parents = part.getSuperTypes();
+		for(StructPart parent : parents){
+			if(parent instanceof ExternalType){
+				ExternalType externalTypeParent = (ExternalType)parent;
+				ancestors.add(externalTypeParent);
+				getParents(ancestors, externalTypeParent);
+			}
+		}
+		return ancestors;
+	}
+	
+	private void getParents(List<ExternalType> ancestors, ExternalType part){
+		List<StructPart> parents = part.getSuperTypes();
+		for(StructPart parent : parents){
+			if(parent instanceof ExternalType){
+				ExternalType externalTypeParent = (ExternalType)parent;
+				ancestors.add(externalTypeParent);
+				getParents(ancestors, externalTypeParent);
+			}
+		}
 	}
 
 	private void processEvent( Annotation annotation, Field field, WidgetDescriptor widgetDescriptor ) {

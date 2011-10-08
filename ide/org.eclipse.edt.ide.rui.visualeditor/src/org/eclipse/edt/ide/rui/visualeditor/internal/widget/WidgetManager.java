@@ -326,10 +326,5 @@ public class WidgetManager {
 		//---------------------------
 		// Yun Feng: the invalid widgets have been filtered out in browser.
 		//removeInvalidWidgets();
-
-		// Debug only
-		//-----------
-		if( false )
-			_widgetRoot.printWidgetTree( 0 );
 	}
 }
