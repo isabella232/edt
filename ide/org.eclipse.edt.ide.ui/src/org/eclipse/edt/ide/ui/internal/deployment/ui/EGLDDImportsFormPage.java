@@ -111,7 +111,7 @@ public class EGLDDImportsFormPage extends EGLDDBaseFormPage {
 	private class IncludeCellModifier implements ICellModifier{
 
 		public boolean canModify(Object element, String property) {
-			return true;
+			return false;
 		}
 
 		public Object getValue(Object element, String property) {
