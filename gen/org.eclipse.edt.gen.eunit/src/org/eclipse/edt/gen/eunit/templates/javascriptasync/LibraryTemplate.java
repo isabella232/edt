@@ -47,7 +47,19 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("library " + part.getName());
 		out.pushIndent();
 		out.println("function " + CommonUtilities.exeTestMethodName + "()");
+		out.pushIndent();		
+//		out.println("TestListMgr.bindingType = ServiceBindingType.DEDICATED;");
+		out.println(CommonUtilities.runningTestMethodName + "();");
+		out.popIndent();
+		out.println("end");
+		
+		out.println();
+		
+		out.println("function " + CommonUtilities.runningTestMethodName + "()");
 		out.pushIndent();
+		out.println("//reset the test library name (TestDescription.name)");
+		out.println("TestListMgr.testLibName = \"" + part.getName() + "\" + \"_\" + TestListMgr.getBindingTypeString(TestListMgr.bindingType);");
+		
 		List<String> functions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);
 		out.println("//reset the list of test method names in this libary ");
 		out.print("TestListMgr.testMethodNames = [");
@@ -79,8 +91,8 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println();
 		
 		out.println("//reset the index back to 1");
-		out.println("TestListMgr.nextTestIndex = 1;");		
-		out.println("TestListMgr.runTestMtds[TestListMgr.nextTestIndex]();");	
+		out.println("TestListMgr.testIndex = 1;");		
+		out.println("TestListMgr.runTestMtds[TestListMgr.testIndex]();");	
 		out.popIndent();
 		out.println("end");		
 		 
@@ -88,6 +100,22 @@ public class LibraryTemplate extends EUnitTemplate {
 		
 		out.println("function " + CommonUtilities.endTestMethodName + "()");
 		out.pushIndent();
+//		
+//		out.println("case(TestListMgr.bindingType)");
+//		out.pushIndent();
+//		out.println("when(ServiceBindingType.DEDICATED)");
+//		out.pushIndent();
+//		out.println("TestListMgr.bindingType = ServiceBindingType.DEVELOP;");
+//		out.println(CommonUtilities.runningTestMethodName + "();");
+//		out.popIndent();
+//		out.println("when(ServiceBindingType.DEVELOP)");
+//		out.pushIndent();
+//		out.println("TestListMgr.bindingType = ServiceBindingType.DEPLOYED;");
+//		out.println(CommonUtilities.runningTestMethodName + "();");
+//		out.popIndent();
+//		out.popIndent();
+//		out.println("end");
+		
 		out.println("td TestDescription;");
 		out.println("td.expCnt = " + counter.getCount() + ";");
 		out.println("td.rootDir = \"\";");

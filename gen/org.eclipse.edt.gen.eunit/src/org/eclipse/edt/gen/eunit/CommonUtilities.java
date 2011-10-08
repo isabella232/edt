@@ -16,6 +16,7 @@ import org.eclipse.edt.mof.egl.Part;
 public class CommonUtilities {
 
 	public static final String exeTestMethodName = "invokeTheTest";
+	public static final String runningTestMethodName = "runningTest";
 	public static final String endTestMethodName = "endTest";
 	public static final String EUNITGEN_ROOT = "eunitgen";
 	public static final String EUNITRUNTIME_PACKAGENAME = "org.eclipse.edt.eunit.runtime";	
