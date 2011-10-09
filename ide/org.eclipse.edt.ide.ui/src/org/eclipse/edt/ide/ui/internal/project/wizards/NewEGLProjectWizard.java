@@ -70,9 +70,16 @@ public class NewEGLProjectWizard extends Wizard
 		try{
 			ISchedulingRule rule = getCurrentSchedulingRule();
 			model.setProjectName(mainPage.getModel().getProjectName());
-			
+			// If a page of the dynamically embedded template wizard is not
+			// currently being displayed, the performFinish() on this wizard will
+			// not get displayed. This code ensures this happens.		
 			IWizardNode node = mainPage.getSelectedNode();
-			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;		
+			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;
+			if (twn.getTemplate().hasWizard()) {
+				if (!twn.getWizard().performFinish()) {
+					return false;
+				}
+			}
 			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) twn.getTemplate().getProjectTemplateClass(), model, 0, rule);
 			for(Iterator it = ops.iterator(); it.hasNext();)
 			{
