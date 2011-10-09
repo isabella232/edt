@@ -1381,6 +1381,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 		super.editorContextMenuAboutToShow(menu);
 		addAction(menu, ITextEditorActionConstants.GROUP_COPY, ITextEditorActionConstants.SELECT_ALL);
 		addAction(menu, ITextEditorActionConstants.GROUP_FIND, ITextEditorActionConstants.FIND);
+		addAction(menu, ITextEditorActionConstants.GROUP_UNDO, ITextEditorActionConstants.REDO);
 		menu.addMenuListener( new IMenuListener() {
 
 			@Override
