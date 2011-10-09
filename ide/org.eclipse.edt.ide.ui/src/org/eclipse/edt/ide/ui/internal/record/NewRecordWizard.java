@@ -44,7 +44,6 @@ public class NewRecordWizard extends EGLFileWizard {
 		super();
 
 		setWindowTitle(NewRecordWizardMessages.NewRecordWizard_title);
-		setNeedsProgressMonitor(true);
 	}
 
 	/**

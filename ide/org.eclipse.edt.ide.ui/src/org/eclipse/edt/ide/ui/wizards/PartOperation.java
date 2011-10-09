@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.wizards;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.templates.TemplateEngine;
 
 public abstract class PartOperation extends EGLFileOperation {
@@ -21,6 +22,11 @@ public abstract class PartOperation extends EGLFileOperation {
 	
 	public PartOperation(EGLPartConfiguration configuration) {
 		super(configuration);
+		this.configuration = configuration;
+	}
+
+	public PartOperation(EGLPartConfiguration configuration, ISchedulingRule rule) {
+		super(configuration, rule);
 		this.configuration = configuration;
 	}
 	

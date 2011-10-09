@@ -11,10 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.wizards;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+
 public class ProgramOperation extends PartOperation {
 
 	public ProgramOperation(ProgramConfiguration configuration) {
 		super(configuration);
+	}
+	
+	public ProgramOperation(ProgramConfiguration configuration, ISchedulingRule rule) {
+		super(configuration, rule);
 	}
 
 	protected String getFileContents() throws PartTemplateException {		

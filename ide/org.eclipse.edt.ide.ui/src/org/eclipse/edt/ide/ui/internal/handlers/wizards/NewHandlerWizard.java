@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizard;
@@ -45,7 +46,6 @@ public class NewHandlerWizard extends EGLFileWizard {
 		super();
 
 		setWindowTitle(NewHandlerWizardMessages.NewHandlerWizard_title);
-		setNeedsProgressMonitor(true);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class NewHandlerWizard extends EGLFileWizard {
 		IRunnableWithProgress operation = getOperation();
 		if(operation != null){
 			try {
-				getContainer().run(false, true, operation);
+				getContainer().run(canRunForked(), true, getOperation());
 			} catch (InterruptedException e) {
 				boolean dialogResult = false;
 				if (e.getMessage().indexOf(':') != -1) {
@@ -156,6 +156,15 @@ public class NewHandlerWizard extends EGLFileWizard {
 				codeTemplateId = twn.getTemplate().getCodeTemplateId();				
 			}
 		}
-		return (new HandlerOperation((HandlerConfiguration) getConfiguration(), codeTemplateId, contentObj));		
+		
+		HandlerOperation operation = null;
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		if(null != rule){
+			operation = new HandlerOperation((HandlerConfiguration) getConfiguration(), codeTemplateId, contentObj, rule);
+		}else{
+			operation = new HandlerOperation((HandlerConfiguration) getConfiguration(), codeTemplateId, contentObj);
+		}
+		
+		return (operation);		
 	}
 }

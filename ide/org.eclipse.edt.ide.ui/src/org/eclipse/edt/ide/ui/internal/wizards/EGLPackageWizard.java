@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
@@ -39,14 +41,26 @@ public class EGLPackageWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor(true);
 	}	
 
+	private EGLPackageOperation getOperation(){
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		EGLPackageOperation operation = null;
+		if (rule != null){
+			operation = new EGLPackageOperation(getConfiguration(), rule);
+		}else{
+			operation = new EGLPackageOperation(getConfiguration());
+		}
+		
+	    return operation;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	public boolean performFinish() {
-		EGLPackageOperation operation = new EGLPackageOperation(getConfiguration());
+		EGLPackageOperation operation = getOperation();
 		
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, operation);
 			newPackageFragment = operation.getNewPackageFragment();
 		}
 		catch (InterruptedException e) {
@@ -94,4 +108,18 @@ public class EGLPackageWizard extends Wizard implements INewWizard {
 	public IPackageFragment getNewPackageFragment() {
 		return newPackageFragment;
 	}
+	
+	protected ISchedulingRule getCurrentSchedulingRule(){
+		Job job= Job.getJobManager().currentJob();
+		if (job != null){
+			return(job.getRule());
+		}
+			
+		return null;
+	}
+	
+	protected boolean canRunForked() {
+		return true;
+	}
+	
 }

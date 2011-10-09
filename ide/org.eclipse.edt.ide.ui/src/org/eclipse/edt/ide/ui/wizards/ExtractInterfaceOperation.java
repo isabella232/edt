@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.wizards;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.binding.DataBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -34,6 +35,11 @@ public class ExtractInterfaceOperation extends EGLFileOperation {
      */
     public ExtractInterfaceOperation(ExtractInterfaceConfiguration configuration) {
         super(configuration);
+        this.configuration = configuration;
+    }
+    
+    public ExtractInterfaceOperation(ExtractInterfaceConfiguration configuration, ISchedulingRule rule) {
+        super(configuration, rule);
         this.configuration = configuration;
     }
     

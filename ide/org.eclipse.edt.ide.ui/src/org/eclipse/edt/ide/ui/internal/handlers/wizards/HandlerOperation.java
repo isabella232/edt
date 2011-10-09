@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
 import org.eclipse.edt.ide.ui.internal.record.RecordConfiguration;
 import org.eclipse.edt.ide.ui.wizards.PartOperation;
@@ -24,6 +25,12 @@ public class HandlerOperation extends PartOperation {
 
 	public HandlerOperation(HandlerConfiguration configuration, String templateID, Object contentsObj) {
 		super(configuration);
+		this.codeTemplateId = templateID;
+		this.contentObj = contentsObj;
+	}
+	
+	public HandlerOperation(HandlerConfiguration configuration, String templateID, Object contentsObj, ISchedulingRule rule) {
+		super(configuration, rule);
 		this.codeTemplateId = templateID;
 		this.contentObj = contentsObj;
 	}

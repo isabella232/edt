@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -37,6 +38,11 @@ public class EGLSourceFolderOperation extends WorkspaceModifyOperation {
 
 	public EGLSourceFolderOperation(EGLSourceFolderConfiguration configuration) {
 		super();
+		this.configuration = configuration;
+	}
+	
+	public EGLSourceFolderOperation(EGLSourceFolderConfiguration configuration, ISchedulingRule rule) {
+		super(rule);
 		this.configuration = configuration;
 	}
 

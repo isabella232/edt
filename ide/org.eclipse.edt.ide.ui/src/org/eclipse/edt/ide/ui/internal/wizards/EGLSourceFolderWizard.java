@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.wizards.EGLSourceFolderConfiguration;
@@ -37,10 +39,9 @@ public class EGLSourceFolderWizard extends Wizard implements INewWizard {
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	public boolean performFinish() {
-		EGLSourceFolderOperation operation = new EGLSourceFolderOperation(getConfiguration());
-		
+
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, getOperation());
 		}
 		catch (InterruptedException e) {
 			return false;
@@ -77,6 +78,32 @@ public class EGLSourceFolderWizard extends Wizard implements INewWizard {
 	
 	public void addPages() {
 		addPage(new EGLSourceFolderWizardPage("Define this string!")); //$NON-NLS-1$
+	}
+	
+	protected ISchedulingRule getCurrentSchedulingRule(){
+		Job job= Job.getJobManager().currentJob();
+		if (job != null){
+			return(job.getRule());
+		}
+			
+		return null;
+	}
+	
+
+	private EGLSourceFolderOperation getOperation(){
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		EGLSourceFolderOperation operation = null;
+		if (rule != null){
+			operation = new EGLSourceFolderOperation(getConfiguration(), rule);
+		}else{
+			operation = new EGLSourceFolderOperation(getConfiguration());
+		}
+		
+	    return operation;
+	}
+	
+	protected boolean canRunForked() {
+		return true;
 	}
 
 }

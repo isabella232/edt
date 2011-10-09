@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.wizards;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.ui.internal.templates.TemplateEngine;
@@ -24,6 +25,12 @@ public class InterfaceOperation extends EGLFileOperation {
 
 	public InterfaceOperation(InterfaceConfiguration configuration, List superInterfaces) {
 		super(configuration);
+		this.configuration = configuration;
+		interfaces = superInterfaces;
+	}
+	
+	public InterfaceOperation(InterfaceConfiguration configuration, List superInterfaces, ISchedulingRule rule) {
+		super(configuration, rule);
 		this.configuration = configuration;
 		interfaces = superInterfaces;
 	}

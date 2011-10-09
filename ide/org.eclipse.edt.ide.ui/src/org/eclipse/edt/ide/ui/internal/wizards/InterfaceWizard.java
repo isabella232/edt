@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -22,6 +23,7 @@ import org.eclipse.edt.ide.ui.wizards.InterfaceConfiguration;
 import org.eclipse.edt.ide.ui.wizards.InterfaceOperation;
 import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -53,15 +55,26 @@ public class InterfaceWizard extends EGLPartWizard {
 		addPage(interfacePage); //$NON-NLS-1$
 	}
 	
+	private IRunnableWithProgress getOperation()
+	{
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		InterfaceOperation operation = null;
+		if (rule != null){
+			operation = new InterfaceOperation((InterfaceConfiguration)getConfiguration(), interfacePage.getSuperInterfaces(), rule);
+		}else{
+			operation = new InterfaceOperation((InterfaceConfiguration)getConfiguration(), interfacePage.getSuperInterfaces());
+		}
+		
+	    return operation;
+	} 
+	
 	@Override
 	public boolean performFinish() {
 		if (!super.performFinish())
 			return false;
-		
-		InterfaceOperation operation = new InterfaceOperation((InterfaceConfiguration)getConfiguration(), interfacePage.getSuperInterfaces());
-		
+
 		try {
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, getOperation());
 		} catch (InterruptedException e) {
 			boolean dialogResult = false;
 			if(e.getMessage().indexOf(':')!=-1) {

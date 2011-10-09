@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
@@ -61,6 +62,18 @@ public class EGLFileWizard extends EGLPackageWizard implements INewWizard {
 		else
 			return true;
 	}
+	
+	private EGLFileOperation getOperation() {
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		EGLFileOperation operation = null;
+		if (rule != null){
+			operation = new EGLFileOperation((EGLFileConfiguration)getConfiguration(), rule);
+		}else{
+			operation = new EGLFileOperation((EGLFileConfiguration)getConfiguration());
+		}
+		
+	    return(operation);
+	}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
@@ -69,10 +82,8 @@ public class EGLFileWizard extends EGLPackageWizard implements INewWizard {
 		if (!defaultPackageCheckQuestion())
 			return false;
 		
-		EGLFileOperation operation = new EGLFileOperation((EGLFileConfiguration)getConfiguration());
-		
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, getOperation());
 		}
 		catch (InterruptedException e) {
 			return false;

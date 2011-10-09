@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -68,6 +69,13 @@ public class ServiceOperation extends EGLFileOperation {
      */
     public ServiceOperation(ServiceConfiguration configuration, List interfaces, List programs) {
         super(configuration);
+        this.configuration = configuration; 
+        this.interfaces = interfaces;
+        this.calledPrograms = programs;
+    }
+    
+    public ServiceOperation(ServiceConfiguration configuration, List interfaces, List programs, ISchedulingRule rule) {
+		super(configuration, rule);
         this.configuration = configuration; 
         this.interfaces = interfaces;
         this.calledPrograms = programs;

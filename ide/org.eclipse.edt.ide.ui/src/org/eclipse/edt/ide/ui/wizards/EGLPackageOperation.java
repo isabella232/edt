@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
@@ -38,6 +39,11 @@ public class EGLPackageOperation extends WorkspaceModifyOperation {
 		this.configuration = configuration;
 	}
 
+	public EGLPackageOperation(EGLPackageConfiguration configuration, ISchedulingRule rule) {
+		super(rule);
+		this.configuration = configuration;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.actions.WorkspaceModifyOperation#execute(org.eclipse.core.runtime.IProgressMonitor)
 	 */

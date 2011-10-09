@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -54,8 +55,17 @@ public class ServiceWizard extends EGLPartWizard implements INewWizard {
 	}
 	
 	protected ServiceOperation getServiceOperation() {
-	    return new ServiceOperation((ServiceConfiguration)getConfiguration(), 
-	    		servicewizPage.getSuperInterfaces(), servicewizPage.getCalledBasicPrograms());
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		ServiceOperation operation = null;
+		if (rule != null){
+			operation = new ServiceOperation((ServiceConfiguration)getConfiguration(), 
+		    		servicewizPage.getSuperInterfaces(), servicewizPage.getCalledBasicPrograms(), rule);
+		}else{
+			operation = new ServiceOperation((ServiceConfiguration)getConfiguration(), 
+		    		servicewizPage.getSuperInterfaces(), servicewizPage.getCalledBasicPrograms());
+		}
+		
+	    return(operation);
 	}
 	
 	@Override
@@ -63,10 +73,8 @@ public class ServiceWizard extends EGLPartWizard implements INewWizard {
 		if (!super.performFinish())
 			return false;
 		
-		ServiceOperation operation = getServiceOperation();
-		
 		try {
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true,  getServiceOperation());
 		} catch (InterruptedException e) {
 			boolean dialogResult = false;
 			if(e.getMessage().indexOf(':')!=-1){

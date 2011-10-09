@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -39,7 +40,15 @@ public class LibraryWizard extends EGLPartWizard implements INewWizard {
 
 	protected IRunnableWithProgress getOperation()
 	{
-	    return (new LibraryOperation((LibraryConfiguration)getConfiguration()));
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		LibraryOperation operation = null;
+		if (rule != null){
+			operation = new LibraryOperation((LibraryConfiguration)getConfiguration(), rule);
+		}else{
+			operation = new LibraryOperation((LibraryConfiguration)getConfiguration());
+		}
+		
+	    return operation;
 	}
 	
 	/* (non-Javadoc)
@@ -52,7 +61,7 @@ public class LibraryWizard extends EGLPartWizard implements INewWizard {
 		IRunnableWithProgress operation = getOperation();
 	
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, operation);
 		}
 		catch (InterruptedException e) {
 			boolean dialogResult = false;

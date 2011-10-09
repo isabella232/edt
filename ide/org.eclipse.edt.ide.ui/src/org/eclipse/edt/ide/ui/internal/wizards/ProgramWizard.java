@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -22,6 +23,7 @@ import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
 import org.eclipse.edt.ide.ui.wizards.ProgramConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProgramOperation;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -36,17 +38,27 @@ public class ProgramWizard extends EGLPartWizard implements INewWizard {
 		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWPROGRAM);
 	}
 
+	protected IRunnableWithProgress getOperation()
+	{
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		ProgramOperation operation = null;
+		if (rule != null){
+			operation = new ProgramOperation((ProgramConfiguration)getConfiguration(), rule);
+		}else{
+			operation = new ProgramOperation((ProgramConfiguration)getConfiguration());
+		}
+		
+	    return operation;
+	}
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.IWizard#performFinish()
 	 */
 	public boolean performFinish() {
 		if (!super.performFinish())
 			return false;
-		
-		ProgramOperation operation = new ProgramOperation((ProgramConfiguration)getConfiguration());
-		
+
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, getOperation());
 		}
 		catch (InterruptedException e) {
 			boolean dialogResult = false;

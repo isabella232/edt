@@ -14,8 +14,10 @@ package org.eclipse.edt.ide.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.wizards.EGLFileOperation;
 import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceOperation;
@@ -58,10 +60,9 @@ public class ExtractInterfaceWizard extends EGLPartWizard {
 
 	protected boolean runExtractInterfaceOp() {
 		boolean success = true;
-		ExtractInterfaceOperation operation = new ExtractInterfaceOperation((ExtractInterfaceConfiguration)getConfiguration());
 		
 		try{
-			getContainer().run(false, true, operation);
+			getContainer().run(canRunForked(), true, getOperation());
 		} catch (InterruptedException e) {
 			EGLLogger.log(this, e);
 			success = false;
@@ -82,4 +83,17 @@ public class ExtractInterfaceWizard extends EGLPartWizard {
 		openResource(configuration.getFile());
 		return success;
 	}	
+	
+	private EGLFileOperation getOperation() {
+		ISchedulingRule rule= getCurrentSchedulingRule();
+		ExtractInterfaceOperation operation = null;
+		if (rule != null){
+			operation = new ExtractInterfaceOperation((ExtractInterfaceConfiguration)getConfiguration(), rule);
+		}else{
+			operation = new ExtractInterfaceOperation((ExtractInterfaceConfiguration)getConfiguration());
+		}
+		
+	    return(operation);
+	}
+	
 }

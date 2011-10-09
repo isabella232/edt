@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -55,6 +56,11 @@ public class EGLFileOperation extends WorkspaceModifyOperation {
 	
 	public EGLFileOperation(EGLFileConfiguration configuration) {
 		super();
+		this.configuration = configuration;
+	}
+	
+	public EGLFileOperation(EGLFileConfiguration configuration, ISchedulingRule rule) {
+		super(rule);
 		this.configuration = configuration;
 	}
 
