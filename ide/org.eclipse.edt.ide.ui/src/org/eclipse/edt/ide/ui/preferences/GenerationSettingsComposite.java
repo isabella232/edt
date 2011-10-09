@@ -15,13 +15,11 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.Logger;
-import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -123,18 +121,34 @@ public class GenerationSettingsComposite extends Composite {
 						if (text.length() == 0) {
 							latestStatus.setError(UINlsStrings.genSettingsValidationDefaultBlank);
 							statusListener.statusChanged(latestStatus);
+							return;
 						}
-						else if (!new Path(text).isValidPath(text)) {
+
+						if (!new Path(text).isValidPath(text)) {
 							latestStatus.setError(UINlsStrings.genSettingsValidationDefaultInvalid);
 							statusListener.statusChanged(latestStatus);
+							return;
 						}
-						else if (text.charAt(0) == '/') {
+						
+						if (text.charAt(0) == '/') {
 							latestStatus.setError(UINlsStrings.genSettingsValidationDefaultRetlative);
 							statusListener.statusChanged(latestStatus);
+							return;
 						}
-						else if (latestStatus != null && !latestStatus.isOK()){
+						
+						for (String segment : new Path(text).segments()) {
+							IStatus status = ResourcesPlugin.getWorkspace().validateName(segment,IResource.FOLDER);
+							if(!status.isOK()){
+								latestStatus.setError(UINlsStrings.genSettingsValidationInvalid);
+								statusListener.statusChanged(status);
+								return;
+							}
+						} 
+						
+						if (latestStatus != null && !latestStatus.isOK()){
 							latestStatus.setOK();
 							statusListener.statusChanged(latestStatus);
+							return;
 						}
 					}
 				});
@@ -202,21 +216,35 @@ public class GenerationSettingsComposite extends Composite {
 							if (text.length() == 0) {
 								latestStatus.setError(UINlsStrings.genSettingsValidationBlank);
 								statusListener.statusChanged(latestStatus);
+								return;
 							}
-							else {
-								IPath path = new Path(text);
-								if (!path.isValidPath(text)) {
+
+							IPath path = new Path(text);
+							if (!path.isValidPath(text)) {
+								latestStatus.setError(UINlsStrings.genSettingsValidationInvalid);
+								statusListener.statusChanged(latestStatus);
+								return;
+							}
+
+							if (text.charAt(0) == '/' && (path.segmentCount() < 1 || !ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0)).exists())) {
+								latestStatus.setError(UINlsStrings.genSettingsValidationProject);
+								statusListener.statusChanged(latestStatus);
+								return;
+							}
+
+							for (String segment : path.segments()) {
+								IStatus status = ResourcesPlugin.getWorkspace().validateName(segment,IResource.FOLDER);
+								if(!status.isOK()){
 									latestStatus.setError(UINlsStrings.genSettingsValidationInvalid);
-									statusListener.statusChanged(latestStatus);
+									statusListener.statusChanged(status);
+									return;
 								}
-								else if (text.charAt(0) == '/' && (path.segmentCount() < 1 || !ResourcesPlugin.getWorkspace().getRoot().getProject(path.segment(0)).exists())) {
-									latestStatus.setError(UINlsStrings.genSettingsValidationProject);
-									statusListener.statusChanged(latestStatus);
-								}
-								else if (latestStatus != null && !latestStatus.isOK()){
-									latestStatus.setOK();
-									statusListener.statusChanged(latestStatus);
-								}
+							} 
+
+							if (latestStatus != null && !latestStatus.isOK()){
+								latestStatus.setOK();
+								statusListener.statusChanged(latestStatus);
+								return;
 							}
 						}
 				});
