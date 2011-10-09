@@ -346,6 +346,12 @@ public class RUIFormPage extends EGLDDBaseFormPage implements ILocalesListViewer
 				}
 			}
 		} );
+		
+		t.addSelectionListener(new SelectionAdapter(){
+			public void widgetDefaultSelected(SelectionEvent e) {
+				HandleOpenPressed();
+			}	
+		});
 		fHandlerTableViewer.setInput( getModelRoot() );
 		
 		Composite buttonComposite = toolkit.createComposite( fieldComposite );
