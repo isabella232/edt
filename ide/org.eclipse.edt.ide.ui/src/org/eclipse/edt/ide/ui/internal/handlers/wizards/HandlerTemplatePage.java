@@ -119,8 +119,10 @@ public class HandlerTemplatePage extends WizardSelectionPage implements	ISelecti
 			handleSelectedTemplate();
 
 			String templateID = ((ITemplate) o).getCodeTemplateId();
-			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) || templateID != null;
-			setPageComplete(b);
+//			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) || templateID != null;
+//			setPageComplete(b);
+			// Always enable finish when get to the template page
+			setPageComplete(true);
 		} else {
 			setPageComplete(false);
 		}

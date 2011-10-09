@@ -51,21 +51,27 @@ public class RUIHandlerWizard extends TemplateWizard implements IPageChangingLis
 	}
 	
 	public boolean performFinish() {
-		if (inputPage.isInputNeedsProcessing()) {
-			processInput();
+		if(inputPage == null){
+			processInput(getConfiguration().getHandlerName());			
+		}else{
+			if (inputPage.isInputNeedsProcessing()) {
+				processInput(inputPage.getHandlerTitle());
+			}
 		}
 		if(part == null)
 			return false;
-		((NewHandlerWizard)getParentWizard()).setContentObj(part);
+		((NewHandlerWizard)getParentWizard()).setContentObj(part);			
 		return true;
 	}
 
-	private void processInput() {
-		RUIHandlerOperation op = new RUIHandlerOperation(getConfiguration(), inputPage.getHandlerTitle());
+	private void processInput(String handlerName) {
+		RUIHandlerOperation op = new RUIHandlerOperation(getConfiguration(), handlerName);
 		try{
 			part = op.getFileContents();
-			summaryPage.setContent(part);
-	//		summaryPage.setMessages(getFilteredMessages());
+			if(summaryPage != null){
+				summaryPage.setContent(part);
+		//		summaryPage.setMessages(getFilteredMessages());
+			}	
 		}catch (Exception ex) {
 			ex.printStackTrace();		 
 		}
@@ -74,7 +80,7 @@ public class RUIHandlerWizard extends TemplateWizard implements IPageChangingLis
 	@Override
 	public void handlePageChanging(PageChangingEvent event) {
 		if (event.getCurrentPage() == inputPage && inputPage.isInputNeedsProcessing() && event.getTargetPage() == summaryPage) {
-			processInput();
+			processInput(inputPage.getHandlerTitle());
 		}else if(event.getTargetPage() == inputPage){
 			inputPage.updateHandlerName();
 		}

@@ -60,8 +60,10 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 		RUIWidgetOperation op = new RUIWidgetOperation(getConfiguration(), getConfiguration().getFileName());
 		try{
 			part = op.getFileContents();
-			summaryPage.setContent(part);
-//			summaryPage.setMessages(getFilteredMessages());
+			if(summaryPage != null){
+				summaryPage.setContent(part);
+//				summaryPage.setMessages(getFilteredMessages());
+			}			
 		}catch (Exception ex) {
 			ex.printStackTrace();		 
 		}

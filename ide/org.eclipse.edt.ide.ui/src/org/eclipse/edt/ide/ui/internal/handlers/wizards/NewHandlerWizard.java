@@ -70,19 +70,17 @@ public class NewHandlerWizard extends EGLFileWizard {
 
 		// If a page of the dynamically embedded template wizard is not
 		// currently being displayed, the performFinish() on this wizard will
-		// not get displayed. This code ensures this happens.
-		IWizard wizard = getContainer().getCurrentPage().getWizard();
-		if (wizard instanceof EGLPartWizard) {		
-			IWizardNode node = templatePage.getSelectedNode();
-			if (node instanceof TemplateWizardNode) {
-				TemplateWizardNode twn = (TemplateWizardNode) node;
-				if (twn.getTemplate().hasWizard()) {
-					if (!twn.getWizard().performFinish()) {
-						return false;
-					}
+		// not get displayed. This code ensures this happens.		
+		IWizardNode node = templatePage.getSelectedNode();
+		if (node instanceof TemplateWizardNode) {
+			TemplateWizardNode twn = (TemplateWizardNode) node;
+			if (twn.getTemplate().hasWizard()) {
+				if (!twn.getWizard().performFinish()) {
+					return false;
 				}
 			}
 		}
+		
 		IRunnableWithProgress operation = getOperation();
 		if(operation != null){
 			try {
