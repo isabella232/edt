@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.wizards;
 
-import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryPage;
+import java.util.ArrayList;
+
 import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryPage;
+import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
+import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
+import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
 
 public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	
@@ -27,6 +32,19 @@ public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	}
 
 	public boolean performFinish() {
+		//if the wizard is not displayed, set the default widget library
+		if(libraryPage == null){
+			IWidgetLibProvider[] libProviders = WidgetLibProviderManager.getInstance().getProviders();
+			if (libProviders != null) {
+				ArrayList<String> selectedWidgetLibraries = new ArrayList<String>();				
+				for (int i = 0; i < libProviders.length; i++) {
+					if(libProviders[i].isSelected()){
+						selectedWidgetLibraries.add(libProviders[i].getId());
+					}					
+				}
+				((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedWidgetLibraries(selectedWidgetLibraries);
+			}
+		}
 		return true;
 	}
 }
