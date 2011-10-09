@@ -347,13 +347,13 @@ public class EGLPathEntry implements IEGLPathEntry {
 					If no, then try to find the project in the target platform,
 					and create the entry as a library entry which reference to an EGLAR! 
 					*/
-					if(isProjectExistedInWS(projSegment) ) {
+//					if(isProjectExistedInWS(projSegment) ) {
 						return EGLCore.newProjectEntry(path, isExported);
-					} 
+//					} 
 					//if we get here, assume its going to be in the workspace
 					//One possible is that workspace cannot find the project, assume the 
 					//project is not imported to the workspace.
-					return EGLCore.newSourceEntry(path, exclusionPatterns, outputLocation);
+//					return EGLCore.newSourceEntry(path, exclusionPatterns, outputLocation);
 
 				}
 
