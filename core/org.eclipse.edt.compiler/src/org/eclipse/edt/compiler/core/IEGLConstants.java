@@ -1236,6 +1236,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_DATEFORMAT = "dateFormat";  //$NON-NLS-1$
 	public static final String PROPERTY_DEBUGIMPL = "debugImpl";  //$NON-NLS-1$
 	public static final String PROPERTY_DEDICATEDSERVICE = "dedicatedService";  //$NON-NLS-1$
+	public static final String PROPERTY_RESOURCE = "Resource";  //$NON-NLS-1$
 	public static final String PROPERTY_DEFAULTPSBNAME = "defaultPSBName";  //$NON-NLS-1$
 	public static final String PROPERTY_DEFAULTSELECTCONDITION = "defaultSelectCondition";  //$NON-NLS-1$
 	public static final String PROPERTY_DELETEAFTERUSE = "deleteAfterUse";  //$NON-NLS-1$

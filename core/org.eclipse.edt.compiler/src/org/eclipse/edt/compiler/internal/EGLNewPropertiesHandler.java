@@ -636,6 +636,7 @@ public class EGLNewPropertiesHandler {
 			ServiceDeclarationPropertyRules = new TreeSet();
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_BINDSERVICE));
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_DEDICATEDSERVICE));
+			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_RESOURCE));
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_RESTBINDING));
 			ServiceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_WEBBINDING));
 		}
