@@ -17,11 +17,11 @@ import org.eclipse.datatools.connectivity.sqm.core.definition.DatabaseDefinition
 import org.eclipse.datatools.modelbase.sql.tables.Column;
 import org.eclipse.edt.compiler.core.EGLKeywordHandler;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.internal.sql.StringToken;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLRetrieveUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLStructureItem;
 import org.eclipse.edt.ide.sql.SQLConstants;
-import org.eclipse.edt.ide.ui.internal.record.conversion.xmlschema.WSDLUtil;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
@@ -40,9 +40,9 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		
 		colNameAlias = getAliasName(item.getName().trim(),ctx);
 		if( colNameAlias != null) {
-			builder.append(colNameAlias);
+			builder.append(StringToken.trim(colNameAlias));
 		} else {
-			builder.append(item.getName());
+			builder.append(StringToken.trim(item.getName()));
 		}
 		builder.append(" ");
 		builder.append(item.getPrimitiveType());
@@ -83,7 +83,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			}
 			
 			builder.append(SQLConstants.DOUBLE_QUOTE);
-			builder.append(item.getColumnName());
+			builder.append(StringToken.trim(item.getColumnName()));
 			builder.append(SQLConstants.DOUBLE_QUOTE);
 			if (column.isPartOfPrimaryKey()) {
 				builder.append("}");
