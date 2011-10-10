@@ -35,7 +35,7 @@ public class ValidatorFunctionAnnotationValidator implements IValueValidationRul
 		}
 		final IFunctionBinding value = (IFunctionBinding)annotationBinding.getValue();
 			
-		if(!value.getParameters().isEmpty() && !value.getDeclarer().isSystemPart()) {
+		if(!value.getParameters().isEmpty()) {
 			problemRequestor.acceptProblem(
 				annotation,
 				IProblemRequestor.VALIDATOR_FUNCTION_HAS_PARAMETERS,
