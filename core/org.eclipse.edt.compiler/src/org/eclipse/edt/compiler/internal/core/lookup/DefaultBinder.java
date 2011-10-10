@@ -236,26 +236,7 @@ public abstract class DefaultBinder extends AbstractBinder {
         	}
         	if(simpleName.resolveBinding() == null ) {
 	            try {
-	            	IDataBinding binding = bindExpressionName(simpleName, bindingFunctionInvocationTarget);
-	            	
-	            	if(binding != null) {
-	            		IPartBinding declaringPart = binding.getDeclaringPart();
-		            	if(declaringPart != null &&
-		            	   declaringPart.isSystemPart() &&
-		            	   declaringPart.getAnnotation(EGLNotInCurrentReleaseAnnotationTypeBinding.getInstance()) != null) {
-		            		switch(binding.getKind()) {
-		            		case IDataBinding.NESTED_FUNCTION_BINDING:
-		            		case IDataBinding.CLASS_FIELD_BINDING:
-		            			problemRequestor.acceptProblem(
-			            			simpleName,
-			            			IProblemRequestor.SYSTEM_LIBRARY_NOT_SUPPORTED,
-			            			new String[] {
-			            				declaringPart.getCaseSensitiveName(),
-			            				binding.getCaseSensitiveName()
-			            			});
-		            		}
-		            	}
-	            	}
+	            	bindExpressionName(simpleName, bindingFunctionInvocationTarget);	            	
 	            } catch (ResolutionException e) {
                     handleNameResolutionException(e);
                 }
@@ -2504,7 +2485,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			PrimitiveTypeBinding operandPrimType = (PrimitiveTypeBinding) operandType;
 			if(TypeCompatibilityUtil.isMoveCompatible(
 				PrimitiveTypeBinding.getInstance(Primitive.INT),
-				operandPrimType) || Primitive.isDateTimeType(operandPrimType.getPrimitive())) {
+				operandPrimType)) {
 				return operandType;	
 			}
 			else {
