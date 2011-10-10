@@ -81,7 +81,7 @@ public abstract class AbstractProjectTemplateClass implements
 			List listOps, String basePackage, String packageName) {
 		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
 		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
-		packageConfiguration.setSourceFolderName(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE);
+		//packageConfiguration.setSourceFolderName(packageConfiguration.getSourceFolderName());
 		
 		if(packageName != null && packageName.length()>0){
 			if(basePackage !=null && basePackage.length()>0){

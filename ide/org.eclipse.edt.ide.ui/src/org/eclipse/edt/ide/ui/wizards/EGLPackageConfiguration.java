@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.wizards;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -22,6 +24,7 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -127,15 +130,19 @@ public class EGLPackageConfiguration extends EGLContainerConfiguration {
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
 			IEGLProject eProject = EGLCore.create(project);
 			
-			IPackageFragmentRoot[] roots;
-			try{
-				roots = eProject.getAllPackageFragmentRoots();
-				if(roots.length>0){
-					sourceFolderPath = roots[0].getElementName();
+			IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
+			sourceFolderPath = store.getString(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER);
+			
+			if(sourceFolderPath == null || sourceFolderPath.equals("")) {
+				IPackageFragmentRoot[] roots;
+				try{
+					roots = eProject.getAllPackageFragmentRoots();
+					if(roots.length>0){
+						sourceFolderPath = roots[0].getElementName();
+					}
+				} catch(EGLModelException e){
+					EGLLogger.log(this, e);
 				}
-			}
-			catch(EGLModelException e){
-				EGLLogger.log(this, e);
 			}
 		}
 		
