@@ -1192,6 +1192,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     				return false;
 	    		}
 	    	}
+	    	else if(PrimitiveTypeBinding.getInstance(Primitive.DECIMAL) == parmType.getBaseType()) {
+    			isValid = argPrim == Primitive.DECIMAL ||
+    		    		  argPrim == Primitive.NUMBER;
+	    	}
 	    	else if(PrimitiveTypeBinding.getInstance(Primitive.INTERVAL) == parmType.getBaseType()) {
     			isValid = argPrim == Primitive.INTERVAL ||
     		    		  argPrim == Primitive.SECONDSPAN_INTERVAL ||
