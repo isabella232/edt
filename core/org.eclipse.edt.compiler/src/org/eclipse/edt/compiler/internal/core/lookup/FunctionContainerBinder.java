@@ -265,7 +265,7 @@ public abstract class FunctionContainerBinder extends DefaultBinder {
 				resultDBinding = (IDataBinding) ((OverloadedFunctionSet) resultDBinding).getNestedFunctionBindings().get(0);
 			}
 			if (resultDBinding.getType() != null && resultDBinding.getType().isFunctionBinding()) {
-				if(ITypeBinding.LIBRARY_BINDING == resultDBinding.getDeclaringPart().getKind() && !resultDBinding.getDeclaringPart().isSystemPart()) {					
+				if(ITypeBinding.LIBRARY_BINDING == resultDBinding.getDeclaringPart().getKind()) {					
 					result = IBinding.NOT_FOUND_BINDING;
 					problemRequestor.acceptProblem(errorNode, IProblemRequestor.PROPERTY_MUST_NOT_RESOLVE_TO_LIBRARY_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {IEGLConstants.PROPERTY_VALIDATORFUNCTION, value});
 				}
