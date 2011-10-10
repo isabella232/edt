@@ -183,35 +183,35 @@
 			id="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction"/>
 -->	
 		<!-- References/Project -->
-		<!--command
+		<command
 			name="%InProject.name"
 			description="%InProject.description"
-			id="org.eclipse.edt.ide.ui.search.findProjectReferences"/-->
+			id="org.eclipse.edt.ide.ui.search.findProjectReferences"/>
 		<!-- Declarations/Project -->
-		<!--command
+		<command
 			name="%InProject.name"
 			description="%InProject.description"
-			id="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/-->
+			id="org.eclipse.edt.ide.ui.search.findProjectDeclarations"/>
 		<!-- References/Working set -->
-		<!--command
+		<command
 			name="%InWorkingSet.name"
 			description="%InWorkingSet.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/-->
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetReferences"/>
 		<!-- Declarations/Working set -->
-		<!--command
+		<command
 			name="%InWorkingSet.name"
 			description="%InWorkingSet.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/-->
+			id="org.eclipse.edt.ide.ui.search.findWorkingSetDeclarations"/>
 		<!-- References/Workspace -->
-		<!--command
+		<command
 			name="%InWorkspace.name"
 			description="%InWorkspace.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/-->
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
 		<!-- Declarations/Workspace -->
-		<!--command
+		<command
 			name="%InWorkspace.name"
 			description="%InWorkspace.description"
-			id="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/-->			
+			id="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations"/>			
 		<!-- Source edit SQL -->
 <!-- Uncomment when SQL support is ready
 		<command
@@ -327,7 +327,7 @@
      			</visibleWhen>
  			</command>
  		</menuContribution>
-   		<!--menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.navigate.openOnSelection">
+   		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.navigate.openOnSelection">
      		<menu id="org.eclipse.edt.ide.ui.popup.references.menu" 
      			label="%ReferencesMenu.name">
        	 		<command commandId="org.eclipse.edt.ide.ui.search.findWorkspaceReferences"/>
@@ -360,7 +360,7 @@
            			</with>
      			</visibleWhen>
     	 	</menu>
-  		</menuContribution-->
+  		</menuContribution>
   		<menuContribution locationURI="popup:#EGLEditorContext?after=org.eclipse.edt.ide.ui.popup.declarations.menu">
        	 	<command commandId="org.eclipse.ui.edit.text.goto.line" label="%GoToLine.Name">
        	 		<visibleWhen>
