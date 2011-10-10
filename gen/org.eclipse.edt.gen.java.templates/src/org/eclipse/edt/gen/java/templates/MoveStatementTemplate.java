@@ -105,13 +105,13 @@ public class MoveStatementTemplate extends JavaTemplate
 							MemberName targetName = ctx.getFactory().createMemberName();
 							targetName.setId( targetField.getName() );
 							targetName.setMember( (Member)targetField );
-							MemberAccess access = targetName.addQualifier( targetExpr );
+							MemberAccess access = (MemberAccess)targetName.addQualifier( targetExpr );
 							assign.setLHS( access );
 							
 							MemberName sourceName = ctx.getFactory().createMemberName();
 							sourceName.setId( sourceField.getName() );
 							sourceName.setMember( (Member)sourceField );
-							access = sourceName.addQualifier( sourceExpr );
+							access = (MemberAccess)sourceName.addQualifier( sourceExpr );
 							assign.setRHS( access );
 							
 							ctx.invoke( genExpression, assign, ctx, out );
