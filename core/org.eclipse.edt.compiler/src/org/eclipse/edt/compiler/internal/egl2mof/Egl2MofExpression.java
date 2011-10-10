@@ -77,6 +77,7 @@ import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.HexLiteral;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.IsNotExpression;
@@ -95,6 +96,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -113,7 +115,8 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 abstract class Egl2MofExpression extends Egl2MofStatement {
 	
 	private Stack<Expression> sveStack = new Stack<Expression>();
-	private Stack<Name> localStack = new Stack<Name>();
+	private Stack<Type> sveTypeStack = new Stack<Type>();
+	private Stack<LHSExpr> localStack = new Stack<LHSExpr>();
  
 	Egl2MofExpression(IEnvironment env) {
 		super(env);
@@ -838,10 +841,23 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	}
 	
 	private SetValuesExpression processSettings(Expression target, Type targetType, SettingsBlock settings) {
-		if (!localStack.isEmpty() && target instanceof Name) {
-			target = ((Name)target).addQualifier(localStack.peek());
+		if (!localStack.isEmpty() && target instanceof LHSExpr) {
+			
+			if (!sveTypeStack.isEmpty() && TypeUtils.isDynamicType(sveTypeStack.peek())) {
+				//If the previous type was a dynamic type (like dictionary), we need to create a dynamic
+				//access to use
+				DynamicAccess da = factory.createDynamicAccess();
+				setElementInformation(settings, da);
+				LHSExpr newLHS = setAccessForDynamicAccess(da, target);					
+				da.setExpression(localStack.peek());
+				target = newLHS;
+			}
+			else {
+				target = addQualifier(localStack.peek(), (LHSExpr)target);
+			}
 		}
 		sveStack.push(target);
+		sveTypeStack.push(targetType);
 		SetValuesExpression sve = factory.createSetValuesExpression();
 		sve.setTarget(target);
 		StatementBlock block = factory.createStatementBlock();
@@ -851,7 +867,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		int arrayIndex = 0;
 		MemberName localRef = null;
 		Field decl = null;
-		if (!(target instanceof Name)) {
+		if (!(target instanceof LHSExpr)) {
 			LocalVariableDeclarationStatement local = factory.createLocalVariableDeclarationStatement();
 			DeclarationExpression declExpr = factory.createDeclarationExpression();
 			decl = factory.createField();	
@@ -879,22 +895,22 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			block.getStatements().add(local);
 		}
 		else {
-			localStack.push((Name)target);
+			localStack.push((LHSExpr)target);
 		}
 		
 		for (Node setting : (List<Node>)settings.getSettings()) {
 			setting.accept(this);
 			Expression setexpr = (Expression)stack.pop();
-			Name ref = null;
+			LHSExpr ref = null;
 			if (decl == null) {
 				// No temp was created so use the actual target
 				// but clone it because it should be a different
 				// instance of the expression when used in another place
-				ref = (Name)target;
+				ref = (LHSExpr)target;
 			}
 			else { 
 				ref = factory.createMemberName();
-				ref.setId(decl.getName());
+				((MemberName)ref).setId(decl.getName());
 				((MemberName)ref).setMember(decl);
 			}
 			if (setexpr instanceof Assignment) {
@@ -919,10 +935,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else if (setexpr instanceof SetValuesExpression) {
 				SetValuesExpression ex = (SetValuesExpression)setexpr;
-				ExpressionStatement stmt = factory.createExpressionStatement();
-				stmt.setExpr(ex);
-				setElementInformation(setting, stmt);
-				block.getStatements().add(stmt);
+				//move the statements from the setValues block into this block
+				for (Statement stmt : ex.getSettings().getStatements()) {
+					block.getStatements().add(stmt);
+				}
 			}
 			else {
 				
@@ -942,6 +958,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		sve.setSettings(block);
 		sveStack.pop();
+		sveTypeStack.pop();
 		localStack.pop();
 		return sve;
 	}
@@ -1002,56 +1019,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			if (primType.getPrimitive() == Primitive.ANY) {
 				return true;
 			}
-		}
-		return false;
-	}
-
-	private boolean isAnyException(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-			FlexibleRecordBinding rec = (FlexibleRecordBinding) type;
-			if (rec.isSystemPart() && rec.getName() == InternUtil.intern("anyexception")) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isBoolean(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-			PrimitiveTypeBinding primType = (PrimitiveTypeBinding) type;
-			if (primType.getPrimitive() == Primitive.BOOLEAN) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isBytesFunction(IDataBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		IAnnotationBinding ann = binding.getAnnotation(EGLSystemConstantAnnotationTypeBinding.getInstance());
-		if (ann == null) {
-			return false;
-		}
-		if (ann.getValue() instanceof Integer) {
-			int value = ((Integer) ann.getValue()).intValue();
-			return value == ISystemLibrary.Bytes_func;
-		}
-		return false;
-	}
-
-	private boolean isConvertFunction(IDataBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		IAnnotationBinding ann = binding.getAnnotation(EGLSystemConstantAnnotationTypeBinding.getInstance());
-		if (ann == null) {
-			return false;
-		}
-		if (ann.getValue() instanceof Integer) {
-			int value = ((Integer) ann.getValue()).intValue();
-			return value == ISystemLibrary.Convert_func;
 		}
 		return false;
 	}

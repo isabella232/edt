@@ -580,33 +580,57 @@ class Egl2MofMember extends Egl2MofPart {
 				if (block == null)
 					block = factory.createStatementBlock();
 				if (result instanceof StatementBlock) {
-					// Assumption is that all statements are AssignmentStatements
 					// Need to now add the qualifier to each LHS of each assignment
 					// which is the element associated with the block - context
 					for (Statement stmt : ((StatementBlock)result).getStatements()) {
-						Assignment assignExpr = ((AssignmentStatement)stmt).getAssignment();
-						LHSExpr lhs = addQualifier(context, assignExpr.getLHS());
-						assignExpr.setLHS(lhs);
+						if (stmt instanceof AssignmentStatement) {
+							Assignment assignExpr = ((AssignmentStatement)stmt).getAssignment();
+							LHSExpr lhs = addQualifier(context, assignExpr.getLHS());
+							assignExpr.setLHS(lhs);
+						}
 						block.getStatements().add(stmt);
 					}
 				}
 				else {
 					if (result instanceof org.eclipse.edt.mof.egl.SetValuesExpression) {
 						org.eclipse.edt.mof.egl.SetValuesExpression sve = (org.eclipse.edt.mof.egl.SetValuesExpression) result;
-						if (sve.getTarget() instanceof LHSExpr) {
-							sve.setTarget(addQualifier(context, (LHSExpr)sve.getTarget()));
-						}
-						SetValuesStatement sveStmt = factory.createSetValuesStatement();
-						setElementInformation(expr, sveStmt);
-						sveStmt.setAssignment((org.eclipse.edt.mof.egl.SetValuesExpression)result);
-						block.getStatements().add(sveStmt);
-						//add the qualifier to any statements in the sttings block
+						//add the qualifier to any statements in the settings block
 						for (Statement stmt : sve.getSettings().getStatements()) {
 							if (stmt instanceof AssignmentStatement) {
 								Assignment assignExpr = ((AssignmentStatement)stmt).getAssignment();
-								LHSExpr lhs = addQualifier(context, assignExpr.getLHS());
-								assignExpr.setLHS(lhs);
+								
+								org.eclipse.edt.mof.egl.Type type = null;
+								if (context instanceof TypedElement) {
+									type = ((TypedElement)context).getType();
+								}
+
+								if (TypeUtils.isDynamicType(type)) {
+									DynamicAccess da = factory.createDynamicAccess();
+									setElementInformation(expr, da);
+									LHSExpr newLHS = setAccessForDynamicAccess(da, assignExpr.getLHS());
+									
+									if (context instanceof Expression) {
+										da.setExpression((Expression)context);
+									}
+									else {
+										if (context instanceof Member) {
+											MemberName exp = factory.createMemberName();
+											exp.setId(((Member)context).getName());
+											exp.setMember((Member)context);	
+											da.setExpression(exp);
+										}
+									}
+									assignExpr.setLHS(newLHS);
+								}
+								else {
+									LHSExpr lhs = addQualifier(context, assignExpr.getLHS());
+									assignExpr.setLHS(lhs);
+								}
+
+								
+								
 							}
+							block.getStatements().add(stmt);
 						}
 
 					}
@@ -857,25 +881,33 @@ class Egl2MofMember extends Egl2MofPart {
 	}
 	
 	public LHSExpr addQualifier(Element context, LHSExpr expr) {
+				
 		if (context instanceof Member) {
-			return addQualifier((Member)context, (Name)expr);
+			
+			return addQualifier((Member)context, (LHSExpr)expr);
 		}
 		
 		if (context instanceof Expression) {
 			if (expr instanceof InvalidName) {
 				return expr;
 			}
-			return ((Name)expr).addQualifier((Expression)context);
+			return ((LHSExpr)expr).addQualifier((Expression)context);
 		}
 		
 		throw new IllegalArgumentException("Qualifier " + context.toString() + " must be a Member or Expression");
 	}
 	
-	public LHSExpr addQualifier(Member context, Name nameExpr) {
-		MemberName qualifier = factory.createMemberName();
-		qualifier.setId(((Member)context).getName());
-		qualifier.setMember((Member)context);
-		return nameExpr.addQualifier(qualifier);
+	public LHSExpr addQualifier(Member context, LHSExpr lhsExpr) {
+		MemberName qualifier = createMemberName(context);
+		return lhsExpr.addQualifier(qualifier);
+	}
+
+
+	public MemberName createMemberName(Member context) {
+		MemberName mbrName = factory.createMemberName();
+		mbrName.setId(context.getName());
+		mbrName.setMember(context);
+		return mbrName;
 	}
 	
 	public LHSExpr addQualifier(Part context, Name nameExpr) {
