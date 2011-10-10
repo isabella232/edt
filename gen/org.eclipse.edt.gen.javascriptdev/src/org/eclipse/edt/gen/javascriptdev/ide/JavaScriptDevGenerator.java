@@ -25,6 +25,7 @@ public class JavaScriptDevGenerator extends JavaScriptGenerator {
 
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
+		preprocess(part);
 		EclipseJavaScriptDevGenerator cmd = new EclipseJavaScriptDevGenerator(file, part, this);
 		cmd.generate(buildArgs(file, part), new EclipseJavaScriptGenerator(cmd, msgRequestor), env, null);
 	}
