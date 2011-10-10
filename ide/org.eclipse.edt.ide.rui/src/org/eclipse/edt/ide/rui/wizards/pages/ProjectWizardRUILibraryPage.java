@@ -47,6 +47,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -56,6 +58,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 
 
 public class ProjectWizardRUILibraryPage extends ProjectWizardPage {	
@@ -82,7 +85,8 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		GridData adata = new GridData(GridData.FILL_BOTH);
 		ancestor.setLayoutData(adata);
 		ancestor.setLayout(new GridLayout());	
-
+		
+		createBasePackageEntry(ancestor);
         createSelectionTable(ancestor);
 		createDetailGroup(ancestor);
 		
@@ -91,6 +95,10 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		//TODO: <jiyong> Help
 //		PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, HelpContextIDs.New_EGL_Base_Project_Advanced_Page);
 		
+	}
+	
+	protected void createBasePackageEntry(Composite parent) {
+		// Empty
 	}
 	
 	private void populateLibraryData() {

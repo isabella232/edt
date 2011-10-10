@@ -25,10 +25,14 @@ public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	protected ProjectWizardRUILibraryPage libraryPage;
 	
 	public void addPages() {
-		libraryPage = new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
+		libraryPage = getLibraryPage();
 		libraryPage.setTitle(NewWizardMessages.WebClientProjectTemplateWizard_0);
 		addPage(libraryPage);
 		super.addPages();
+	}
+	
+	protected ProjectWizardRUILibraryPage getLibraryPage(){
+		return new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
 	}
 
 	public boolean performFinish() {
