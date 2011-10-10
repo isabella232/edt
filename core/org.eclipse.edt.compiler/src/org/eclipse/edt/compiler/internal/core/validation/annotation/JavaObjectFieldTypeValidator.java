@@ -68,48 +68,44 @@ public class JavaObjectFieldTypeValidator extends DefaultFieldContentAnnotationV
 	}
 	
 	public static void checkTypeValidInExternalType(Node errorNode, IPartBinding partBinding, ITypeBinding typeBinding, boolean issueErrorForDelegate, IProblemRequestor problemRequestor) {
-		if(!partBinding.isSystemPart()) {
-			if(IBinding.NOT_FOUND_BINDING != typeBinding && typeBinding != null) {
-				boolean typeValid = true;
-				switch(typeBinding.getKind()) {
-					case ITypeBinding.FIXED_RECORD_BINDING:
-					case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					case ITypeBinding.DICTIONARY_BINDING:
-					case ITypeBinding.ARRAYDICTIONARY_BINDING:
-					case ITypeBinding.HANDLER_BINDING:
-						typeValid = false;
-						break;
-					case ITypeBinding.DELEGATE_BINDING:
-						typeValid = !issueErrorForDelegate;
-						break;
-					case ITypeBinding.PRIMITIVE_TYPE_BINDING:
-						typeValid = !getInvalidPrimitives().contains(typeBinding);
-						break;
-				}
-				if(!typeValid) {
-					problemRequestor.acceptProblem(
-						errorNode,
-						IProblemRequestor.TYPE_INVALID_IN_EXTERNALTYPE,
-						new String[] {StatementValidator.getTypeString(typeBinding)});
-				}
+		if(IBinding.NOT_FOUND_BINDING != typeBinding && typeBinding != null) {
+			boolean typeValid = true;
+			switch(typeBinding.getKind()) {
+				case ITypeBinding.FIXED_RECORD_BINDING:
+				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
+				case ITypeBinding.DICTIONARY_BINDING:
+				case ITypeBinding.ARRAYDICTIONARY_BINDING:
+				case ITypeBinding.HANDLER_BINDING:
+					typeValid = false;
+					break;
+				case ITypeBinding.DELEGATE_BINDING:
+					typeValid = !issueErrorForDelegate;
+					break;
+				case ITypeBinding.PRIMITIVE_TYPE_BINDING:
+					typeValid = !getInvalidPrimitives().contains(typeBinding);
+					break;
+			}
+			if(!typeValid) {
+				problemRequestor.acceptProblem(
+					errorNode,
+					IProblemRequestor.TYPE_INVALID_IN_EXTERNALTYPE,
+					new String[] {StatementValidator.getTypeString(typeBinding)});
 			}
 		}
 	}
 	
 	public static void checkDataDeclarationValidInExternalType(Node errorNode, IDataBinding binding, IProblemRequestor problemRequestor) {
-		if(!binding.getDeclaringPart().isSystemPart()) {
-			ITypeBinding tBinding = binding.getType();
-			if(Binding.isValidBinding(tBinding)) {
-				tBinding = tBinding.getBaseType();
-				if(IBinding.NOT_FOUND_BINDING != tBinding && tBinding != null) {
-					if(ITypeBinding.DELEGATE_BINDING == tBinding.getKind()) {
-						IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, IEGLConstants.PROPERTY_EVENTLISTENER);
-						if(aBinding == null) {						
-							problemRequestor.acceptProblem(
-								errorNode,
-								IProblemRequestor.TYPE_INVALID_IN_EXTERNALTYPE_UNLESS_PROPERTY_SPECIFIED,
-								new String[] {StatementValidator.getTypeString(tBinding), IEGLConstants.PROPERTY_EVENTLISTENER});
-						}
+		ITypeBinding tBinding = binding.getType();
+		if(Binding.isValidBinding(tBinding)) {
+			tBinding = tBinding.getBaseType();
+			if(IBinding.NOT_FOUND_BINDING != tBinding && tBinding != null) {
+				if(ITypeBinding.DELEGATE_BINDING == tBinding.getKind()) {
+					IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, IEGLConstants.PROPERTY_EVENTLISTENER);
+					if(aBinding == null) {						
+						problemRequestor.acceptProblem(
+							errorNode,
+							IProblemRequestor.TYPE_INVALID_IN_EXTERNALTYPE_UNLESS_PROPERTY_SPECIFIED,
+							new String[] {StatementValidator.getTypeString(tBinding), IEGLConstants.PROPERTY_EVENTLISTENER});
 					}
 				}
 			}
