@@ -509,7 +509,7 @@ public class WidgetDescriptorFactory {
 		if(containerAnnotation != null){
 			isContainer = true;
 			String layoutDataTypeTemplate = (String) containerAnnotation.getValue( WIDGET_LAYOUTDATATYPE );
-			if (layoutDataTypeTemplate != null ) {
+			if (!isEmpty(layoutDataTypeTemplate)) {
 				try {
 					layoutDescriptor = new WidgetLayoutDescriptor();
 					widgetDescriptor.setChildLayoutDataTemplate( layoutDataTypeTemplate );
