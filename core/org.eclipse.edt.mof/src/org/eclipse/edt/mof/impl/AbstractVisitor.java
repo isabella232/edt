@@ -24,6 +24,7 @@ public class AbstractVisitor implements EVisitor {
 	private boolean allowRevisit = true;
 	private boolean trackParent = false;
 	private Set<Object> visited;
+	private Set<Object> endVisited;
 	private Stack<Object> parents;
 	private Stack<Integer> slotIndices;
 	private Object returnData;
@@ -31,14 +32,22 @@ public class AbstractVisitor implements EVisitor {
 	public Set<Object> getVisited() {
 		return visited;
 	}
+	public Set<Object> getEndVisited() {
+		return endVisited;
+	}
 
 	public void setVisited(Set<Object> visited) {
 		this.visited = visited;
 	}
 
+	public void setEndVisited(Set<Object> endVisited) {
+		this.endVisited = endVisited;
+	}
+
 	public void disallowRevisit() {
 		allowRevisit = false;
 		visited = new HashSet<Object>();
+		endVisited = new HashSet<Object>();
 	}
 	
 	public void allowParentTracking() {
@@ -78,7 +87,8 @@ public class AbstractVisitor implements EVisitor {
 	public void primEndVisit(Object obj) {
 		Class<?> clazz = obj.getClass();
 		if (!allowRevisit) {
-			if (alreadyVisited(obj)) return;
+			if (alreadyEndVisited(obj)) return;
+			else endVisited.add(obj);
 		}
 		invokeEndVisit(clazz, obj);
 	}
@@ -202,6 +212,10 @@ public class AbstractVisitor implements EVisitor {
 		return visited.contains(obj);
 	}
 
+	private boolean alreadyEndVisited(Object obj) {
+		return endVisited.contains(obj);
+	}
+	
 	public void setReturnData(Object returnData) {
 		this.returnData = returnData;
 	}
