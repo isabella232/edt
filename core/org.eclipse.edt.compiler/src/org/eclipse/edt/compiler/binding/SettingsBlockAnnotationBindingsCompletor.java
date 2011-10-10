@@ -1096,10 +1096,16 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 				ExpressionVisitor expressionVisitor = new ExpressionVisitor();
 				annotationExpression.accept(expressionVisitor);
 				IDataBinding expressionDataBinding = annotationExpression.resolveDataBinding();
-				if (expressionDataBinding != null && expressionDataBinding != IBinding.NOT_FOUND_BINDING
-						&& expressionDataBinding.isAnnotationBinding()) {
-					AnnotationBinding annotationBinding = (AnnotationBinding) expressionDataBinding;
-					storeAnnotationInBinding(annotationBinding);
+				if (Binding.isValidBinding(expressionDataBinding)) {
+					if (expressionDataBinding.isAnnotationBinding()) {
+						AnnotationBinding annotationBinding = (AnnotationBinding) expressionDataBinding;
+						storeAnnotationInBinding(annotationBinding);
+					}
+					else {
+						
+						problemRequestor.acceptProblem(annotationExpression, IProblemRequestor.NOT_AN_ANNOTATION,
+								new String[] { annotationExpression.getCanonicalString() });
+					}
 				}
 				return false;
 			}

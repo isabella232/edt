@@ -354,7 +354,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         else if (result instanceof PartFoundButNotAnnotationRecordAnnotationBinding) {
         	name.setBinding(IBinding.NOT_FOUND_BINDING);
         	int[] errorOffsets = getLastIdentifierOffsets(name);
-        	throw new ResolutionException(errorOffsets[0], errorOffsets[1], IProblemRequestor.PART_FOUND_FOR_PROPERTY_SETTING_THAT_IS_NOT_ANNOTATION, new String[] {result.getType().getPackageQualifiedName()});
+        	throw new ResolutionException(errorOffsets[0], errorOffsets[1], IProblemRequestor.NOT_AN_ANNOTATION, new String[] {result.getType().getPackageQualifiedName()});
         }
         else if(IDataBinding.AMBIGUOUSSYSTEMLIBRARYFIELD_BINDING == result.getKind()) {
         	name.setBinding(IBinding.NOT_FOUND_BINDING);

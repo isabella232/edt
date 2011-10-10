@@ -65,7 +65,7 @@ public interface IProblemRequestor {
 	public static final int TABLE_NAME_VARIABLE_MUST_BE_NAME_EXPR = 2062; 
 	public static final int SELECTEDINDEXITEM_MUST_BE_IN_RECORD  = 2063;
 	public static final int ANNOTATION_VALUE_MUST_BE_NAME_ARRAY = 2064;
-	public static final int PART_FOUND_FOR_PROPERTY_SETTING_THAT_IS_NOT_ANNOTATION = 2065;
+	public static final int NOT_AN_ANNOTATION = 2065;
 	public static final int ONLY_STRING_FIELDS_ALLOWED = 2066;
 	
 	
