@@ -90,12 +90,19 @@ public class InterfaceSelectionDialog extends PartSelectionDialog {
 		Object ref= getLowerSelectedElement();
 		if (ref instanceof PartInfo) {
 		    PartInfo partinfo = (PartInfo) ref;
-			String qualifiedName= (partinfo).getFullyQualifiedName();			
-			fList.addElement(qualifiedName);
-			IPart part = getPartFromPartInfo(partinfo);
-			if(part != null)
-			    fConfig.addInterface(qualifiedName, part);
-			String message= NewWizardMessages.bind(NewWizardMessages.EGLInterfaceSelectionDialogInterfaceaddedInfo, qualifiedName); //$NON-NLS-1$
+			String qualifiedName= (partinfo).getFullyQualifiedName();
+			
+			String message;
+			if(fList.getElements().contains(qualifiedName)) {
+				message= NewWizardMessages.bind(NewWizardMessages.EGLInterfaceSelectionDialogInterfaceDuplicateaddedInfo, qualifiedName); //$NON-NLS-1$
+			} else {
+				fList.addElement(qualifiedName);
+				IPart part = getPartFromPartInfo(partinfo);
+				if(part != null)
+				    fConfig.addInterface(qualifiedName, part);
+				message= NewWizardMessages.bind(NewWizardMessages.EGLInterfaceSelectionDialogInterfaceaddedInfo, qualifiedName); //$NON-NLS-1$
+			}
+			
 			updateStatus(new StatusInfo(IStatus.INFO, message));
 		}
 	}	

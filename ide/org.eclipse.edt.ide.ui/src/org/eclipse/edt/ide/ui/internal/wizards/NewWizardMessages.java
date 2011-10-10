@@ -741,6 +741,7 @@ public class NewWizardMessages extends NLS {
 		
 	public static String EGLInterfaceSelectionDialogAddButtonLabel;
 	public static String EGLInterfaceSelectionDialogInterfaceaddedInfo;
+	public static String EGLInterfaceSelectionDialogInterfaceDuplicateaddedInfo;
 
 	public static String EGLElementLabels_concat_string;
 	public static String EGLElementLabels_comma_string;
