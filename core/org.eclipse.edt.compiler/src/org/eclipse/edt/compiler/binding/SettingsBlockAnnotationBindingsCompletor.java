@@ -1826,7 +1826,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 				resultDBinding = (IDataBinding) ((OverloadedFunctionSet) resultDBinding).getNestedFunctionBindings().get(0);
 			}
 			if (resultDBinding.getType() != null && resultDBinding.getType().isFunctionBinding()) {
-				if(!allowLibraryFunctions && ITypeBinding.LIBRARY_BINDING == resultDBinding.getDeclaringPart().getKind() && !resultDBinding.getDeclaringPart().isSystemPart()) {					
+				if(!allowLibraryFunctions && ITypeBinding.LIBRARY_BINDING == resultDBinding.getDeclaringPart().getKind()) {					
 					result = IBinding.NOT_FOUND_BINDING;
 					problemRequestor.acceptProblem(expr, IProblemRequestor.PROPERTY_MUST_NOT_RESOLVE_TO_LIBRARY_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {annotationName, name.getCanonicalName()});
 				}
