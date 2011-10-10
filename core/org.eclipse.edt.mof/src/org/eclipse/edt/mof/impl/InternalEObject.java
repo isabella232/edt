@@ -288,24 +288,34 @@ public class InternalEObject implements Cloneable {
 		return obj;
 	}
 	
+	public static Object cloneIfNeeded(Object value) {
+		// References to MofSerializable should not be cloned
+		if (value instanceof MofSerializable) {
+			InternalEObject hasClone = Cloner.alreadyCloned.get(value);
+			if (hasClone != null) {
+				return hasClone;
+			}
+			else {
+				return value;
+			}
+		}
+		else if (value instanceof EObject) {
+			return ((EObject)value).clone();
+		}
+		else if (value instanceof EList) {
+			return ((EList)value).clone();
+		}
+		else {
+			return value;
+		}
+	}
+	
 	private InternalEObject primClone(InternalEObject cloned) {
 		cloned.slots = new Slot[slots.length];
 		for (int i=0; i<slots.length; i++) {
 			cloned.slots[i] = slots[i] == null ? new Slot() : (Slot)slots[i].clone();
 			Object value = slotGet(i);
-			// References to MofSerializable should not be cloned
-			if (value instanceof MofSerializable) {
-				cloned.slots[i].set(value);
-			}
-			else if (value instanceof EObject) {
-				cloned.slots[i].set(((EObject)value).clone());
-			}
-			else if (value instanceof EList) {
-				cloned.slots[i].set(((EList)value).clone());
-			}
-			else {
-				cloned.slots[i].set(value);
-			}
+			cloned.slots[i].set(cloneIfNeeded(value));
 		}
 		return cloned;
 	}

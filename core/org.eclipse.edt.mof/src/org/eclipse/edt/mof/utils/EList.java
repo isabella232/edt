@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.utils;
 import java.util.ArrayList;
 
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.impl.InternalEObject;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 
 
@@ -81,10 +82,7 @@ public class EList<E> extends ArrayList<E> implements Cloneable {
 	public EList clone() {
 		EList cloned = new EList();
 		for (Object obj : this) {
-			if (obj instanceof EObject)
-				cloned.add(((EObject)obj).clone());
-			else
-				cloned.add(obj);
+			cloned.add(InternalEObject.cloneIfNeeded(obj));
 		}
 		return cloned;
 	}
