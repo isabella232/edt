@@ -95,7 +95,7 @@ public class PageDataModelBuilder {
 												ArrayTypeBinding arrayTypeBinding = (ArrayTypeBinding)typeBinding;
 												ITypeBinding elementTypeBinding = arrayTypeBinding.getElementType();
 												if(elementTypeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING || elementTypeBinding.getKind() == ITypeBinding.DATAITEM_BINDING || elementTypeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
-													if(!isAnyType(typeBinding)){
+													if(!isAnyType(elementTypeBinding)){
 														DataFieldPageDataNode dataFieldPageDataNode = (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE);
 														dataFieldPageDataNode.setDataBindingName(dataBinding.getCaseSensitiveName());
 														handlerPageDataNode.addChild(dataFieldPageDataNode);
