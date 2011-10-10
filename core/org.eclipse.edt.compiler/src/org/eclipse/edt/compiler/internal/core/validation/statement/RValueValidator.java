@@ -91,15 +91,6 @@ public class RValueValidator {
 		}
 		
 		if(IDataBinding.NESTED_FUNCTION_BINDING == dBinding.getKind()) {
-			if(dBinding.getDeclaringPart().isSystemPart()) {
-				problemRequestor.acceptProblem(
-					nodeForErrors,
-					IProblemRequestor.SYSTEM_FUNCTION_CANNOT_BE_DELEGATED,
-					new String[] {
-						dBinding.getCaseSensitiveName()	
-					});
-				result = false;
-			}
 			
 			if(ITypeBinding.PROGRAM_BINDING == dBinding.getDeclaringPart().getKind() &&
 			   InternUtil.intern("main") == dBinding.getName()) {
