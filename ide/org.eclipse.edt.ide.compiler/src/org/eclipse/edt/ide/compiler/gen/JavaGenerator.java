@@ -21,6 +21,7 @@ import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.utils.CompoundConditionExpander;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -37,8 +38,14 @@ public class JavaGenerator extends AbstractGenerator {
 	@Override
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
+		preprocess(part);
 		EclipseEGL2Java cmd = new EclipseEGL2Java(file, part, this);
 		cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd, msgRequestor), env, null);
+	}
+	
+	private void preprocess(Part part) {
+		//expand complex conditional expressions that contain function invocations
+		new CompoundConditionExpander(part);
 	}
 	
 	@Override
