@@ -14,12 +14,15 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
+import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
@@ -27,6 +30,7 @@ import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -73,16 +77,23 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 
 	@Override
 	public QualifiedFunctionInvocation addQualifier(Expression expr) {
-		if (getQualifier() instanceof MemberAccess) {
-			setQualifier( ((MemberAccess)getQualifier()).addQualifier(expr));
-		}
-		else if (getQualifier() instanceof MemberName){
-			setQualifier(((MemberName)getQualifier()).addQualifier(expr));
+		
+		QualifiedFunctionInvocation newInv = IrFactory.INSTANCE.createQualifiedFunctionInvocation();
+		newInv.setId(getId());
+		newInv.getArguments().addAll(getArguments());
+		newInv.setQualifier(getQualifier());
+		newInv.getAnnotations().addAll(getAnnotations());
+		
+		if (getQualifier() instanceof LHSExpr) {
+			newInv.setQualifier(((LHSExpr)getQualifier()).addQualifier(expr));
 		}
 		else if (getQualifier() instanceof InvocationExpression) {
-			setQualifier(((InvocationExpression)getQualifier()).addQualifier(expr));
+			newInv.setQualifier(((InvocationExpression)getQualifier()).addQualifier(expr));
 		}
-		return this;
+		else if (getQualifier() instanceof ThisExpression) {
+			newInv.setQualifier(expr);
+		}
+		return newInv;
 	}
 	
 	@Override

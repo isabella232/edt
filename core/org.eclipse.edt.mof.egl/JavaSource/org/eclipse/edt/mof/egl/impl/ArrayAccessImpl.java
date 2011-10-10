@@ -15,8 +15,12 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
 import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -99,5 +103,26 @@ public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 		Operation op = IRUtils.getMyOperation(getArray().getType().getClassifier(), "[]");
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
+	}
+
+	@Override
+	public ArrayAccess addQualifier(Expression expr) {
+		
+		ArrayAccess newAA = IrFactory.INSTANCE.createArrayAccess();		
+		newAA.setIndex(getIndex());
+		newAA.setArray(getArray());
+		newAA.getAnnotations().addAll(getAnnotations());
+
+		if (getArray() instanceof LHSExpr) {
+			newAA.setArray(((LHSExpr)getArray()).addQualifier(expr));
+		}
+		else if (getArray() instanceof InvocationExpression) {
+			newAA.setArray(((InvocationExpression)getArray()).addQualifier(expr));
+		}
+		else if (getArray() instanceof ThisExpression) {
+			newAA.setArray(expr);
+		}
+		
+		return newAA;
 	}
 }

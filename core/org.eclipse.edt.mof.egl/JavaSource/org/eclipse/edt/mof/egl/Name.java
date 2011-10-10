@@ -22,5 +22,4 @@ public interface Name extends Expression, LHSExpr {
 	
 	NamedElement getNamedElement();
 	
-	MemberAccess addQualifier(Expression expr);
 }

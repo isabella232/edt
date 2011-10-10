@@ -11,7 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.SubstringAccess;
+import org.eclipse.edt.mof.egl.ThisExpression;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class SubstringAccessImpl extends ExpressionImpl implements SubstringAccess {
@@ -89,4 +97,27 @@ public class SubstringAccessImpl extends ExpressionImpl implements SubstringAcce
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
 	}
+	
+	
+	@Override
+	public LHSExpr addQualifier(Expression expr) {		
+		
+		SubstringAccess newSA = IrFactory.INSTANCE.createSubstringAccess();
+		newSA.setEnd(getEnd());
+		newSA.setStart(getStart());
+		newSA.setStringExpression(getStringExpression());
+		newSA.getAnnotations().addAll(getAnnotations());
+		
+		if (getStringExpression() instanceof LHSExpr) {
+			newSA.setStringExpression(((LHSExpr)getStringExpression()).addQualifier(expr));
+		}		
+		else if (getStringExpression() instanceof InvocationExpression) {
+			newSA.setStringExpression(((InvocationExpression)getStringExpression()).addQualifier(expr));
+		}
+		else if (getStringExpression() instanceof ThisExpression) {
+			newSA.setStringExpression(expr);
+		}
+		return newSA;
+	}
+
 }

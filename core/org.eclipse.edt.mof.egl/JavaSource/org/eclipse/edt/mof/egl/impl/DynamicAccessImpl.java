@@ -11,7 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.DynamicAccess;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.ThisExpression;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -78,5 +86,25 @@ public class DynamicAccessImpl extends ExpressionImpl implements DynamicAccess {
 		Operation op = IRUtils.getMyOperation(getExpression().getType().getClassifier(), "['");
 		if (op == null) throw new NoSuchFunctionError();
 		return op;
+	}
+
+	@Override
+	public LHSExpr addQualifier(Expression expr) {
+		
+		DynamicAccess newDA = IrFactory.INSTANCE.createDynamicAccess();
+		newDA.setAccess(getAccess());
+		newDA.setExpression(getExpression());
+		newDA.getAnnotations().addAll(getAnnotations());
+		
+		if (getExpression() instanceof LHSExpr) {
+			newDA.setExpression(((LHSExpr)getExpression()).addQualifier(expr));
+		}		
+		else if (getExpression() instanceof InvocationExpression) {
+			newDA.setExpression(((InvocationExpression)getExpression()).addQualifier(expr));
+		}
+		else if (getExpression() instanceof ThisExpression) {
+			newDA.setExpression(expr);
+		}
+		return newDA;
 	}
 }

@@ -21,4 +21,6 @@ public interface LHSExpr extends Expression {
 	 * ArrayType.elementsNullable flag set on
 	 */
 	boolean isNullable();
+	
+	LHSExpr addQualifier(Expression expr);
 }

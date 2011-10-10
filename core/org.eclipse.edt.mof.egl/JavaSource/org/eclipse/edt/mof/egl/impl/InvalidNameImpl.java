@@ -13,7 +13,9 @@ package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvalidName;
+import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -31,7 +33,10 @@ public class InvalidNameImpl extends NameImpl implements InvalidName {
 
 	@Override
 	public MemberAccess addQualifier(Expression expr) {
-		throw new UnsupportedOperationException();
+		MemberAccess mbrAccess = IrFactory.INSTANCE.createMemberAccess();
+		mbrAccess.setId(getId());
+		mbrAccess.setQualifier(expr);
+		return mbrAccess;
 	}
 
 }

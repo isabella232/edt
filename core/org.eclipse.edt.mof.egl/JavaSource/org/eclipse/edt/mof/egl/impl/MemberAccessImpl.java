@@ -11,14 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReferenceException;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.GenericType;
+import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
 import org.eclipse.edt.mof.egl.ThisExpression;
@@ -60,19 +65,22 @@ public class MemberAccessImpl extends NameImpl implements MemberAccess {
 
 	@Override
 	public MemberAccess addQualifier(Expression expr) {
-		if (getQualifier() instanceof MemberAccess) {
-			setQualifier( ((MemberAccess)getQualifier()).addQualifier(expr));
-		}
-		else if (getQualifier() instanceof MemberName){
-			setQualifier(((MemberName)getQualifier()).addQualifier(expr));
-		}
+		
+		MemberAccess newMA = IrFactory.INSTANCE.createMemberAccess();
+		newMA.setId(getId());
+		newMA.setQualifier(getQualifier());
+		newMA.getAnnotations().addAll(getAnnotations());
+		
+		if (getQualifier() instanceof LHSExpr) {
+			newMA.setQualifier(((LHSExpr)getQualifier()).addQualifier(expr));
+		}		
 		else if (getQualifier() instanceof InvocationExpression) {
-			setQualifier(((InvocationExpression)getQualifier()).addQualifier(expr));
+			newMA.setQualifier(((InvocationExpression)getQualifier()).addQualifier(expr));
 		}
 		else if (getQualifier() instanceof ThisExpression) {
-			setQualifier(expr);
+			newMA.setQualifier(expr);
 		}
-		return this;
+		return newMA;
 	}
 
 	@Override
