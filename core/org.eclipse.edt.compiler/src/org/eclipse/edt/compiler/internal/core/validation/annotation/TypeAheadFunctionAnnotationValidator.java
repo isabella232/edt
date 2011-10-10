@@ -48,7 +48,7 @@ public class TypeAheadFunctionAnnotationValidator extends DefaultFieldContentAnn
 	
 		if(value != null && value != IBinding.NOT_FOUND_BINDING){
 			boolean isValidSignature = false;
-			if (value.getParameters().size() == 1 && !value.getDeclarer().isSystemPart()) {
+			if (value.getParameters().size() == 1) {
 			List params = value.getParameters();
 			FunctionParameterBinding paramBinding = (FunctionParameterBinding)params.get(0);
 			ITypeBinding paramTypeBinding = paramBinding.getType();
