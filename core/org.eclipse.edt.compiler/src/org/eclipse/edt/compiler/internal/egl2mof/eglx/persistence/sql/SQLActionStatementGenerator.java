@@ -150,10 +150,12 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 		SqlForEachStatement forEachStmt = factory.createSqlForEachStatement();
 		stack.push(forEachStmt);
 		doCommonVisit(forEachStatement, forEachStmt);
-		if (forEachStatement.hasSQLRecord()) {
-			forEachStatement.getSQLRecord().accept(this);
+		
+		for (Node expr : (List<Node>)forEachStatement.getTargets()) {
+			expr.accept(this);
 			forEachStmt.getTargets().add((Expression)stack.pop());
 		}
+
 		StatementBlock block = irFactory.createStatementBlock();
 		// TODO: set source info
 //		setSourceInfoOn(block, forEachStatement);

@@ -91,17 +91,16 @@ public class ForEachStatement extends Statement {
 		}
 	}
 
-	private Expression target;
+	private List targets;
 	private FromOrToExpressionClause resultSet;
 	private List foreachOptions;	// List of Nodes
 	private List stmts;	// List of Statements
 	private int closingParenOffset;
 
-	public ForEachStatement(Expression target, FromOrToExpressionClause resultSet, List options, List stmts, int closingParenOffset, int startOffset, int endOffset) {
+	public ForEachStatement(List targets, FromOrToExpressionClause resultSet, List options, List stmts, int closingParenOffset, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.target = target;
-		target.setParent(this);
+		this.targets = setParent(targets);
 		this.resultSet = resultSet;
 		resultSet.setParent(this);
 		this.foreachOptions = setParent(options);
@@ -109,8 +108,8 @@ public class ForEachStatement extends Statement {
 		this.closingParenOffset = closingParenOffset;
 	}
 	
-	public Expression getTarget() {
-		return target;
+	public List getTargets() {
+		return targets;
 	}
 	
 	public boolean hasResultSet() {
@@ -130,7 +129,10 @@ public class ForEachStatement extends Statement {
 	}
 	
 	public Expression getSQLRecord() {
-		return target;
+		if (targets.size() > 0) {
+			return (Expression)targets.get(0);
+		}
+		return null;
 	}
 		
 	public List getStmts() {
@@ -144,7 +146,7 @@ public class ForEachStatement extends Statement {
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			target.accept(visitor);
+			acceptChildren(visitor, targets);
 			resultSet.accept(visitor);
 			acceptChildren(visitor, foreachOptions);			
 			acceptChildren(visitor, stmts);
@@ -161,6 +163,6 @@ public class ForEachStatement extends Statement {
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {		
-		return new ForEachStatement((Expression)target.clone(), (FromOrToExpressionClause) resultSet.clone(), cloneList(foreachOptions), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
+		return new ForEachStatement(cloneList(targets), (FromOrToExpressionClause) resultSet.clone(), cloneList(foreachOptions), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
 	}
 }

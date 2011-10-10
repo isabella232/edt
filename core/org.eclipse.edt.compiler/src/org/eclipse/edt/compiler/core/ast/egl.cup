@@ -579,8 +579,8 @@ stmt
 	|	FOR:for1 LPAREN ID:id1 type:type1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
 	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
 
-	|	FOREACH:foreach1 LPAREN expr:expr1 FROM:from1 expr:fromexpr1 foreachOption_star:foreachOpts1 RPAREN:rparen1 stmt_star:stmts1 END:end1
-	{: RESULT = new ForEachStatement(expr1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), foreachOpts1, stmts1, rparen1left, foreach1left, end1right); :}
+	|	FOREACH:foreach1 LPAREN expr_plus:exprs1 FROM:from1 expr:fromexpr1 foreachOption_star:foreachOpts1 RPAREN:rparen1 stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(exprs1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), foreachOpts1, stmts1, rparen1left, foreach1left, end1right); :}
 
 	|	CONTINUE:continue1 continueModifierOpt:continueModifier1 SEMI:semi1
 	{: RESULT = new ContinueStatement(continueModifier1, continue1left, semi1right); :}
