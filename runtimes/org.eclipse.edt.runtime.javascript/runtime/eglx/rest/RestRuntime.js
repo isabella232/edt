@@ -51,7 +51,7 @@ egl.eglx.rest.invokeService = function(http,
 			for(idx = 0; idx < inFunctionParameterNames.length; idx++){
 				var indexOf = http.request.uri.indexOf(http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}"));
 				if(idx == 0 && 
-						egl.toString(inFunctionParameterNames[idx].indexOf("http://")) &&
+						(inFunctionParameterNames[idx].indexOf("http://") != -1 || inFunctionParameterNames[idx].indexOf("https://") != -1)&&
 						http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}") > -1){
 					http.request.uri.replace("{" + inFunctionParameterNames[idx] + "}", egl.toString(inData[idx]));
 				}
@@ -84,7 +84,8 @@ egl.eglx.rest.configHttp = function(http,
 		http.request.uri = requestConfig.uri;
 	}
 	else{
-		http.request.userUri = true;
+		http.request.uri += requestConfig.uri;
+		http.request.userUri = requestConfig.uri.indexOf("http://") != -1 || requestConfig.uri.indexOf("https://") != -1;
 	}
 	if(http.request.method === null)
 		http.request.method = requestConfig.method;
