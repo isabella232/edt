@@ -20,6 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
+import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
+import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
+import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Tooltips;
+import org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model.PageDataNode;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.EGLNameValidator;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.NameFinder;
+import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -57,15 +65,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IEditorInput;
-
-import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
-import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
-import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
-import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Tooltips;
-import org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model.PageDataNode;
-import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.NameFinder;
-import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 
 
 public class InsertWidgetWizardPage extends WizardPage{
@@ -613,11 +612,10 @@ public class InsertWidgetWizardPage extends WizardPage{
 			}
 			
 			private boolean isWidgetNameValid(String widgetName){
-//TODO EDT name validate
-//				List messages = EGLNameValidator.validateEGLName(widgetName, EGLNameValidator.PART, null);
-//				if (!messages.isEmpty()){
-//					return false;
-//				}
+				List messages = EGLNameValidator.validateEGLName(widgetName, EGLNameValidator.PART, null);
+				if (!messages.isEmpty()){
+					return false;
+				}
 				return true;
 			}
 		});

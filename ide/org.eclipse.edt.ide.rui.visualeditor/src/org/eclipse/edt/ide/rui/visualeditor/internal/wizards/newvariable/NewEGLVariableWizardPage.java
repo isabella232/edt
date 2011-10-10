@@ -21,6 +21,7 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvEditor;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.newvariable.NewEGLVariableWizardUtil.DataType;
+import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.EGLNameValidator;
 import org.eclipse.edt.ide.rui.visualeditor.internal.wizards.util.NameFinder;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -386,12 +387,11 @@ public class NewEGLVariableWizardPage extends WizardPage {
 			return false;
 		}
 		else{
-//TODO EDT name validate
-//			List messages = EGLNameValidator.validateEGLName(fieldName, EGLNameValidator.PART, null);
-//			if (!messages.isEmpty()){
-//				setErrorMessage(Messages.NL_NEVWP_Error_Message_Field_Name_Is_Not_Valid);
-//				return false;
-//			}
+			List messages = EGLNameValidator.validateEGLName(fieldName, EGLNameValidator.PART, null);
+			if (!messages.isEmpty()){
+				setErrorMessage(Messages.NL_NEVWP_Error_Message_Field_Name_Is_Not_Valid);
+				return false;
+			}
 		}
 		return true;
 	}
