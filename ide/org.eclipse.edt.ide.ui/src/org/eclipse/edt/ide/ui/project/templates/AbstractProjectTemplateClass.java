@@ -46,7 +46,7 @@ public abstract class AbstractProjectTemplateClass implements
 		configureOperation = new ProjectConfigurationOperation(eglProjConfiguration, rule);
 		listOps.add(configureOperation);		
 		
-		//add base package
+		//add base package, base package is only used in WebClientWithServiceProject
 		setDefaultPackages();
 		String basePackage = eglProjConfiguration.getBasePackageName();
 		
@@ -77,20 +77,14 @@ public abstract class AbstractProjectTemplateClass implements
 		listOps.add(op);
 	}
 
-	private void createPackage(final ProjectConfiguration eglProjConfiguration,
+	protected void createPackage(final ProjectConfiguration eglProjConfiguration,
 			List listOps, String basePackage, String packageName) {
 		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
 		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
 		//packageConfiguration.setSourceFolderName(packageConfiguration.getSourceFolderName());
 		
-		if(packageName != null && packageName.length()>0){
-			if(basePackage !=null && basePackage.length()>0){
-				packageConfiguration.setFPackage(basePackage + "." + packageName);
-			}else{
-				packageConfiguration.setFPackage(packageName);
-			}
-		}else if(basePackage !=null && basePackage.length()>0){
-			packageConfiguration.setFPackage(basePackage);
+		if(packageName != null && packageName.length()>0){			
+			packageConfiguration.setFPackage(packageName);
 		}else{
 			return;
 		}

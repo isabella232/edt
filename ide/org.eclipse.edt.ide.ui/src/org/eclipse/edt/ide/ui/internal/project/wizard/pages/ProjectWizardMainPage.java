@@ -68,16 +68,12 @@ import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledFormText;
 
-public class ProjectWizardMainPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {
-	
-	private static final String BASE_PACKAGE_HINT = "com.mycompany.myapp"; //$NON-NLS-1$
+public class ProjectWizardMainPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {	
 
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.ui", 0, "OK", null); //$NON-NLS-1$
 	
 	private Label projectNameLabel;
-	private Text projectName;
-	private Label basePackageLabel;
-	private Text basePackage;
+	private Text projectName;	
 	private Composite contentSection;
 	private SourceProjectContentFragment contentFragment;
 	private ProjectConfiguration model;	
@@ -108,7 +104,6 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 		c.setLayout(layout);
 		
 		createProjectNameEntry(c);
-		createBasePackageEntry(c);
 		createLocationArea(c);
 		createTemplateArea(c);
 		setControl(c);
@@ -124,31 +119,6 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 		if (getContainer().getCurrentPage() != null) {
 			getContainer().updateButtons();
 		}		
-	}
-
-	protected void createBasePackageEntry(Composite parent) {
-		this.basePackageLabel = new Label(parent, SWT.NULL);
-		this.basePackageLabel.setText(NewWizardMessages.EGLProjectWizardTypePage_BasePackage);
-		this.basePackage = new Text(parent, SWT.BORDER);
-		this.basePackage.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				String name = ((Text)e.widget).getText();
-				model.setBasePackageName(name);				
-			}
-			
-		});
-		
-		this.basePackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		
-		String defaultBasePackageName = model.getBasePackageName();
-		if(defaultBasePackageName != null && !defaultBasePackageName.isEmpty()){
-			basePackage.setText(defaultBasePackageName);
-		}else{
-			basePackage.setMessage(BASE_PACKAGE_HINT);
-		}		
-		
-		hookListenerPackageName(basePackage);
 	}
 	
 	private void createProjectNameEntry(Composite parent) {
@@ -328,22 +298,8 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 				}
 			}	
 		});
-	}
+	}	
 	
-	private void hookListenerPackageName(Text text) {
-		text.addModifyListener(new ModifyListener() {
-
-			public void modifyText(ModifyEvent e) {
-				IStatus status = validatePackageName(basePackage.getText());
-				// Check whether the project name is valid
-				if (status != OK_STATUS) {
-					setErrorMessage(status.getMessage());
-				} else {
-					setErrorMessage(null);
-				}
-			}	
-		});
-	}
 
 	public boolean isPageComplete() {
 		return super.isPageComplete() && validatePage();
@@ -357,9 +313,6 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 			return false;
 		} else {
 			contentFragment.specifyProjectDirectory.setEnabled(true);
-			status = validatePackageName(basePackage.getText());
-			if(status != OK_STATUS)
-				return false;
 			
 			Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
 			if (o instanceof IProjectTemplate) {
