@@ -687,14 +687,14 @@ public class TypeCompatibilityUtil {
 		if(targetIsFloat) {
 			if(Primitive.HEX == sourcePrim && (16 == source.getLength() || 8 == source.getLength())) return true;
 			
-			return sourceIsNumeric || sourceIsText || Primitive.DATE == sourcePrim || Primitive.BOOLEAN == sourcePrim;
+			return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim;
 		}
 		if(targetIsNumeric) {
 			if(target.getDecimals() == 0) {
-				return sourceIsNumeric || sourceIsText || Primitive.DATE == sourcePrim || Primitive.BOOLEAN == sourcePrim || sourceIsInterval;
+				return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim || sourceIsInterval;
 			}
 			else {
-				return sourceIsNumeric || sourceIsText || Primitive.DATE == sourcePrim || Primitive.BOOLEAN == sourcePrim;
+				return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim;
 			}
 		}
 		if(Primitive.CHAR == targetPrim) {
@@ -715,7 +715,7 @@ public class TypeCompatibilityUtil {
 			return Primitive.CHAR == sourcePrim || Primitive.UNICODE == sourcePrim || Primitive.STRING == sourcePrim || Primitive.NUMBER == sourcePrim;
 		}
 		if(Primitive.DATE == targetPrim) {
-			return sourceIsNumeric || sourceIsText || Primitive.TIMESTAMP == sourcePrim;
+			return  sourceIsText || Primitive.TIMESTAMP == sourcePrim;
 		}
 		if(Primitive.TIME == targetPrim) {
 			return sourceIsText || Primitive.TIMESTAMP == sourcePrim;
