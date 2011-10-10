@@ -7,6 +7,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
@@ -85,6 +86,11 @@ public class DummyExpressionDynamicImpl extends DynamicEObject implements DummyE
 	public void removeAnnotation(Annotation ann) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public LHSExpr addQualifier(Expression expr) {
+		return this;
 	}
 
 }
