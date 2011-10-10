@@ -768,7 +768,7 @@ public class EGLWizardUtilities {
 								containerStatus.setWarning(NewWizardMessages.NewContainerWizardPageWarningNotAnEGLProject);
 							}
 							if (!eproject.isOnEGLPath(currRoot)) {
-								containerStatus.setWarning(NewWizardMessages.bind(NewWizardMessages.NewContainerWizardPageWarningNotOnEGLPath, containerName)); //$NON-NLS-1$
+								containerStatus.setError(NewWizardMessages.bind(NewWizardMessages.NewContainerWizardPageWarningNotOnEGLPath, containerName)); //$NON-NLS-1$
 							}		
 							if (currRoot.isArchive()) {
 								containerStatus.setError(NewWizardMessages.bind(NewWizardMessages.NewContainerWizardPageErrorContainerIsBinary, containerName)); //$NON-NLS-1$
