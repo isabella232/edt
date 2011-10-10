@@ -208,9 +208,6 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
         		else if(AbstractBinder.annotationIs(typeBinding, new String[] {"egl", "ui"}, "ValidValues")) {
         			valid = value instanceof Object[];
         		}
-        		else if(value instanceof VariableBinding && ((IDataBinding) value).getDeclaringPart().isSystemPart()) {
-        			valid = isInSpecificValuesList(((IDataBinding) value).getName());
-        		}
         	}
         }
         if (valid) {
@@ -249,20 +246,6 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
     	
     }
     
-    private boolean isInSpecificValuesList(String name) {
-		IAnnotationBinding aBinding = typeBinding.getAnnotation(EGLSpecificValuesAnnotationTypeBinding.getInstance());
-		if(aBinding != null) {
-			String[] value = (String[]) aBinding.getValue();
-			if(value != null) {
-				for(int i = 0; i < value.length; i++) {
-					if(name.equalsIgnoreCase(value[i])) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
 
 	private boolean valueMatchesType(Object value, ITypeBinding valueType, ITypeBinding singleValueType) {
 		if(singleValueType == null) {
