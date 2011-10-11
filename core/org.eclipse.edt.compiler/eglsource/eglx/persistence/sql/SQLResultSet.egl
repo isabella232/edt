@@ -5,6 +5,15 @@ import eglx.persistence.ScrollableDataSource;
 
 externalType SQLResultSet extends ScrollableDataSource type NativeType
 	private constructor();
+
+	static CONCUR_READ_ONLY int;
+	static CONCUR_UPDATABLE int;
+	static HOLD_CURSORS_OVER_COMMIT int;
+	static CLOSE_CURSORS_AT_COMMIT int;
+	static TYPE_FORWARD_ONLY int;
+	static TYPE_SCROLL_INSENSITIVE int;
+	static TYPE_SCROLL_SENSITIVE int;
+
 	function cancelRowUpdates();
 	function deleteRow();
 	function refreshRow();
@@ -13,6 +22,8 @@ externalType SQLResultSet extends ScrollableDataSource type NativeType
 	function rowUpdated() returns(boolean);
 	
 	function getWarnings() returns(SQLWarning?);
+	
+	function getHoldability() returns(int);
 	
 	function setFetchSize(size int in);
 end

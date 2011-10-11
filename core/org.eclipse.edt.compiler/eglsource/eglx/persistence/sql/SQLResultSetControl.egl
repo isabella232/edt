@@ -1,0 +1,26 @@
+package eglx.persistence.sql;
+
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
+
+record SQLResultSetControl type Annotation {
+	targets=[elementKind.fieldMbr],
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.SQLResultSetControlAnnotationTypeBinding"
+}
+	scrollablity SQLResultSetScrollablity? = SQLResultSetScrollablity.TYPE_FORWARD_ONLY;
+	concurrency SQLResultSetConcurrency? = SQLResultSetConcurrency.CONCUR_READ_ONLY;
+	holdability SQLResultSetHoldability?;
+end
+
+enumeration SQLResultSetScrollablity
+	TYPE_FORWARD_ONLY = 1, 
+	TYPE_SCROLL_INSENSITIVE = 2,
+	TYPE_SCROLL_SENSITIVE = 3
+end
+enumeration SQLResultSetConcurrency
+	CONCUR_READ_ONLY = 1, 
+	CONCUR_UPDATABLE = 2 
+end
+enumeration SQLResultSetHoldability
+	HOLD_CURSORS_OVER_COMMIT = 1, 
+	CLOSE_CURSORS_AT_COMMIT = 2
+end

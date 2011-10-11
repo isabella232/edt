@@ -27,5 +27,5 @@ externalType SQLDataSource extends DataSource type NativeType
 	
 	function isClosed() returns(boolean);
 	function isReadOnly() returns(boolean);
-	function isValid(timeout int in); 
+	function isValid(timeout int in) returns(boolean); 
 end
