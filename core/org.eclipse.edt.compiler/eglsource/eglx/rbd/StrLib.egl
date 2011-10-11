@@ -221,8 +221,8 @@ library StrLib
 	end
 
 	defaultDateFormat string;
-	defaultTimeFormat string;
+//	defaultTimeFormat string;
 	defaultTimeStampFormat string;
-	defaultMoneyFormat string;
+//	defaultMoneyFormat string;
 	defaultNumericFormat string;
 end
