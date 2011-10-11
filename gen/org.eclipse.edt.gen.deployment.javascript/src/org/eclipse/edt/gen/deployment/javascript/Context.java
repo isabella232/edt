@@ -11,20 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript;
 
-import java.util.List;
-
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public class Context extends EglContext {
 	
 	protected ISystemEnvironment sysEnv;
+	private static String EGL_SCHEMA = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 
 	public Context(AbstractGeneratorCommand processor, ISystemEnvironment sysEnv) {
 		super(processor);
@@ -53,20 +50,20 @@ public class Context extends EglContext {
 		// TODO Auto-generated method stub
 
 	}
-	
 	public boolean isSystemPart( String partName ) {
-		try {
-			List<ObjectStore> oss = sysEnv.getStores().get( Type.EGL_KeyScheme );
-			for ( ObjectStore os : oss ) {
-					if ( os.get( partName ) != null ) {
-						return true;
-					}
-			}
-		} catch (DeserializationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String key = makeEGLKey(partName);
+		if(sysEnv.getIREnvironment().get(key)!=null){
+			return true;
+		}else{
+			return false;
 		}
-		return false;
+	}
+	
+	public String makeEGLKey(String key) {
+		if (key != null && !key.startsWith(EGL_SCHEMA)) {
+			key = EGL_SCHEMA + key;
+		}
+		return key.toUpperCase().toLowerCase();
 	}
 
 }
