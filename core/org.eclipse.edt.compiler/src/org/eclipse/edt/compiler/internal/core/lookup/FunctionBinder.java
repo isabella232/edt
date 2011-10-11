@@ -110,7 +110,6 @@ import org.eclipse.edt.compiler.internal.sql.SQLInfo;
 import org.eclipse.edt.compiler.internal.sql.Token;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLAddStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeleteStatementFactory;
-import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLExecuteStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByKeyForUpdateStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByKeyStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLOpenForUpdateStatementFactory;
@@ -1564,8 +1563,8 @@ public class FunctionBinder extends DefaultBinder {
     }
     
     public boolean visit(ForEachStatement forEachStatement) {
-    	if(forEachStatement.hasSQLRecord()) {
-    		forEachStatement.getSQLRecord().accept(this);
+    	for (Node n : (List<Node>)forEachStatement.getTargets()) {
+    		n.accept(this);
     	}
     	
     	forEachStatement.getResultSet().getExpression().accept(this);
