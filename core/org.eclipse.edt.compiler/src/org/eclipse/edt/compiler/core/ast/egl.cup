@@ -761,6 +761,9 @@ replaceOption
 	|	WITH:with1 INLINE_DLI:dliStatement
 	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
 
+	|	WITH:with1 expr:expr1
+	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
+
 	|	TO:to1 expr:expr1
 	{: RESULT = new FromOrToExpressionClause(expr1, to1left, expr1right); :}
 
@@ -772,6 +775,12 @@ replaceOption
 
 	|	USINGKEYS:usingkeys1 expr_plus:exprs1
 	{: RESULT = new UsingKeysClause(exprs1, usingkeys1left, exprs1right); :}
+	
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
+
+	|	USING:using1 expr_plus:exprs1
+	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
 	;
 
 foreachOption
@@ -900,6 +909,9 @@ addOption
 
 	|	TO:to1 expr:expr1
 	{: RESULT = new FromOrToExpressionClause(expr1, to1left, expr1right); :}
+
+	|	FOR:for1 expr:expr1
+	{: RESULT = new ForExpressionClause(expr1, for1left, expr1right); :}
 	;
 	
 deleteOption
@@ -911,6 +923,9 @@ deleteOption
 
 	|	WITH:with1 INLINE_DLI:dliStatement
 	{: RESULT = new WithInlineDLIClause(dliStatement, with1left, dliStatementright); :}
+	
+	|	WITH:with1 expr:expr1
+	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
 	
 	|	NOCURSOR:nocursor
 	{: RESULT = new NoCursorClause(nocursorleft, nocursorright); :}
