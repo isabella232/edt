@@ -17,6 +17,9 @@ public class Constants {
 	public static final String FOR_LOOP_COUNTER_ANNOTATION = "FOR_LOOP_COUNTER_ANNOTATION";
 	public static final String ENTER_BLOCK_ANNOTATION = "ENTER_BLOCK_ANNOTATION";
 	public static final String LOOP_AT_LINE_ANNOTATION = "LOOP_AT_LINE_ANNOTATION";
+
+	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
+	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
 	
 	public static final String genAddLocalFunctionVariable = "genAddLocalFunctionVariable";
 	public static final String genAtLine = "genAtLine";
@@ -31,4 +34,6 @@ public class Constants {
 	public static final String genGetVariablesEntry = "genGetVariablesEntry";
 	public static final String genSetLocalFunctionVariable = "genSetLocalFunctionVariable";
 	public static final String genSetWidgetLocation = "genSetWidgetLocation";
+	public static final String genLoadScript4DependentParts = "genLoadScript4DependentParts";
+	public static final String genLoadCSS = "genLoadCSS";
 }
