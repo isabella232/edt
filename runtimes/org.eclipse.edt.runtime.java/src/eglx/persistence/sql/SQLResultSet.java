@@ -19,6 +19,14 @@ public class SQLResultSet {
 	private ResultSet resultSet;
 	private String[] updateFieldNames;
 	
+	public static int CONCUR_READ_ONLY = ResultSet.CONCUR_READ_ONLY;
+	public static int CONCUR_UPDATABLE = ResultSet.CONCUR_UPDATABLE;
+	public static int HOLD_CURSORS_OVER_COMMIT = ResultSet.HOLD_CURSORS_OVER_COMMIT;
+	public static int CLOSE_CURSORS_AT_COMMIT = ResultSet.CLOSE_CURSORS_AT_COMMIT;
+	public static int TYPE_FORWARD_ONLY = ResultSet.TYPE_FORWARD_ONLY;
+	public static int TYPE_SCROLL_INSENSITIVE = ResultSet.TYPE_SCROLL_INSENSITIVE;
+	public static int TYPE_SCROLL_SENSITIVE = ResultSet.TYPE_SCROLL_SENSITIVE;
+	
 	public SQLResultSet(ResultSet rs) {
 		this.resultSet = rs;
 	}
@@ -159,6 +167,14 @@ public class SQLResultSet {
 				return null;
 			}
 			return (SQLWarning)JavartUtil.makeEglException(warning);
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
+
+	public int getHoldability() throws SQLException {
+		try {
+			return resultSet.getHoldability();
 		} catch (java.sql.SQLException e) {
 			throw JavartUtil.makeEglException(e);
 		}
