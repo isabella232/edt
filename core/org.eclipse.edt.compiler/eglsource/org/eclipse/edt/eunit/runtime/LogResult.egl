@@ -62,26 +62,20 @@ Library LogResult
 	
 	function failed(str String)
 		s.code = ConstantsLib.SFAILED;
-		if(str == null || str == "")
-			str = "FAILED";
-		end
+		str = "FAILED - " + str;
 		s.reason = str;
 	end
 	
 	//usually used when exception occurs  
 	function error(str String)
 		s.code = ConstantsLib.SERROR;
-		if(str == null || str == "")
-			str = "ERROR";	
-		end	
+		str = "ERROR - " + str;
 		s.reason = str;
 	end
 	
 	function skipped(str String)
 		s.code = ConstantsLib.SNOT_RUN;
-		if(str == null || str == "")
-			str = "SKIPPED";		
-		end
+		str = "SKIPPED - " + str;
 		s.reason = str;
 	end
 	
