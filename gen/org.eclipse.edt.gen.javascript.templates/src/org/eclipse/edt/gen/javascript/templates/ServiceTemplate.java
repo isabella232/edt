@@ -18,11 +18,15 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ServiceTemplate extends JavaScriptTemplate {
 
 	public void genPart(Service service, Context ctx, TabbedWriter out) {}
 
+	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
+		out.print("null");
+	}
 
 	public void genDefaultValue(Service service, Context ctx, TabbedWriter out, Field field) {
 		if(field.getAnnotation(Constants.AnnotationResource)!= null){
