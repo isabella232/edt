@@ -83,7 +83,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.AddStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
@@ -550,7 +549,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 					val.validateStatement(addStatement, problemRequestor, compilerOptions);
 				}
 			}
-			addStatement.accept(new AddStatementValidator(problemRequestor));
 		}
 		postVisitStatement(addStatement);
 		return false;
