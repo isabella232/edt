@@ -7,6 +7,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.StatementTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.Classifier;
@@ -18,6 +19,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
@@ -30,6 +32,8 @@ import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String sqlStmtKey = "org.eclipse.edt.gen.java.sql.stmtkey";
 	public static final String genClause = "genClause";
+	private static final String genStatementOptions = "genStatementOptions";
+	private static final String AnnotationSQLResultSetControl = "eglx.persistence.sql.SQLResultSetControl";
 	public static final String genSelectClause = "genSelectClause";
 	public static final String var_connection = "ezeConn";
 //	public static final String var_datasource = "ds";
@@ -193,11 +197,15 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.print('.' + expr_getConnection);
 			if (isCall) {
-				out.println(".prepareCall(stmtStr);");
+				out.print(".prepareCall(stmtStr");
 			}
 			else {
-				out.println(".prepareStatement(stmtStr);");
+				out.print(".prepareStatement(stmtStr");
 			}
+			if(stmt.getTarget() != null){
+				ctx.invoke(genStatementOptions, stmt, ctx, out, stmt.getTarget());
+			}
+			out.println(");");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".registerStatement(" + typeSignature + ", " + stmtNumber + ", " + var_stmt + ");");
 			out.println("}");
@@ -239,7 +247,20 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		genSqlStatementSetup(stmt, ctx, out, var_statement);
 	}
 
-	
+	public void genStatementOptions(SqlActionStatement stmt, Context ctx, TabbedWriter out, MemberAccess member) {
+		genStatementOptions(member.getMember().getAnnotation(AnnotationSQLResultSetControl), ctx, out);
+	}
+
+	public void genStatementOptions(SqlActionStatement stmt, Context ctx, TabbedWriter out, MemberName member) {
+		genStatementOptions(member.getMember().getAnnotation(AnnotationSQLResultSetControl), ctx, out);
+	}
+
+	private void genStatementOptions(Annotation annot, Context ctx, TabbedWriter out) {
+		if(annot != null){
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
+		}
+	}
+
 	public void genDefaultWhereClauseParameterSettings(EGLClass targetType, Expression targetExpr, String var_statement, int startParmIndex, Context ctx, TabbedWriter out) {
 		int i = startParmIndex;
 		for (Field f : targetType.getFields()) {
