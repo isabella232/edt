@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.externaltools.internal.model.BuilderCoreUtils;
@@ -27,6 +28,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -36,6 +38,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
+import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -428,5 +431,34 @@ public class EclipseUtilities {
 		} catch (Exception e) {
 		}
 		return folderName;
+	}
+	
+	public static List<String> getDependentDescriptors( IProject project ) throws Exception {
+		List eglProjectPath = org.eclipse.edt.ide.core.internal.utils.Util.getEGLProjectPath(project);
+		
+		final List<String> egldds = new ArrayList<String>();
+		for (Iterator<IEGLProject> iter1 = eglProjectPath.iterator(); iter1.hasNext();) {
+			IEGLProject eglProject = iter1.next();
+			IProject dependentPro = eglProject.getProject();
+			final IPath outputPath = eglProject.getOutputLocation();
+			dependentPro.accept( new IResourceVisitor() {
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					if ( resource.getFullPath().equals( outputPath ) ) {
+						return false;
+					}
+					if ( resource instanceof IFile && "egldd".equals( resource.getFileExtension() ) ) {
+						try {
+							egldds.add( resource.getFullPath().toString() );
+						} catch (Exception e) {
+						}
+						return false;
+					}
+					return true;
+				}
+			});
+		}
+		
+		return egldds;
 	}
 }
