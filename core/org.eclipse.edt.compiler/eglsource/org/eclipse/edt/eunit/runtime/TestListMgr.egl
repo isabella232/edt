@@ -27,7 +27,17 @@ Library TestListMgr
 	LibraryStartTests runTestMethod[];		//list of test libraries
 	private libIndex int = 1;					//current test library index
 	
-	function nextTest()
+	function nextTest()				
+		testId String = getTestIdString();
+		//culmulate the status of each test method result into the multiStatus for one library
+		ms.addStatus(testId);			
+		if(testIndex < runTestMtds.getSize())
+			testIndex += 1;
+			runTestMtds[testIndex]();
+		end
+	end	
+	
+	private function getTestIdString() returns (String)
 		testMethodNamesSize int = testMethodNames.getSize();		
 		
 		testId String = testLibName + "::";		
@@ -39,15 +49,9 @@ Library TestListMgr
 			else
 				testId +="INVALIDINDEXFOUND!!!";
 			end
-		end				
-		
-		//culmulate the status of each test method result into the multiStatus for one library
-		ms.addStatus(testId);			
-		if(testIndex < runTestMtds.getSize())
-			testIndex += 1;
-			runTestMtds[testIndex]();
 		end
-	end	
+		return (testId);		
+	end
 	
 	function nextTestLibrary()
 		if(libIndex < LibraryStartTests.getSize())
@@ -70,6 +74,13 @@ Library TestListMgr
 		s Status = LogResult.getStatus();				
 		s.reason = assertMsg + s.reason;			
 	end	
+	
+	function caughtAnyException(exp AnyException in)
+		//caught the exception from the test
+		expMsg String = "uncaught exception for: " + getTestIdString(); 
+		//StatusLib.error(expMsg, s);
+		LogResult.error(expMsg);		
+	end
 	
 	function getBindingTypeString(bType ServiceBindingType) returns (String)		
 		case(bType)
