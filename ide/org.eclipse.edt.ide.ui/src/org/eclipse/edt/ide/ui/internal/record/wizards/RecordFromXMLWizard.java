@@ -38,7 +38,15 @@ public class RecordFromXMLWizard extends AbstractRecordFromInputWizard implement
 		setMessages(null);
 
 		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			//Make DocumentBuilder.parse ignore DTD references since we do not need them
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setValidating(false);
+			dbf.setFeature("http://xml.org/sax/features/namespaces", false);
+			dbf.setFeature("http://xml.org/sax/features/validation", false);
+			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+			dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			DocumentBuilder builder = dbf.newDocumentBuilder();
+			
 			java.io.StringReader reader = new java.io.StringReader(input.toString().trim());
 			Document dom = builder.parse(new org.xml.sax.InputSource(reader));
 			Element doc = dom.getDocumentElement();

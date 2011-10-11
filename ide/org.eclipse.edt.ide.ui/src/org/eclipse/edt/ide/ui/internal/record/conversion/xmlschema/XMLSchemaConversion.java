@@ -78,6 +78,12 @@ public class XMLSchemaConversion extends RecordConversion implements DOMErrorHan
 				this.error(buffer.toString());
 			else
 				this.addMessage(buffer.toString());
+		} else {
+			buffer.append(error.getMessage());
+			if ((error.getSeverity() == DOMError.SEVERITY_FATAL_ERROR) 
+				|| (error.getSeverity() == DOMError.SEVERITY_ERROR)) {
+				this.error(buffer.toString());
+			}
 		}
 		return error.getSeverity() != DOMError.SEVERITY_FATAL_ERROR;
 	}
