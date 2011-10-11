@@ -572,6 +572,8 @@ public class EGLNewPropertiesHandler {
 			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_BINDSERVICE));
 			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_RESTBINDING));
 			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_WEBBINDING));
+			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_RESOURCE));
+			InterfaceDeclarationPropertyRules.addAll(createRulesFor(IEGLConstants.PROPERTY_DEDICATEDSERVICE));
 		}
 		return InterfaceDeclarationPropertyRules;
 
