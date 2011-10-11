@@ -176,25 +176,14 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ArrayLiteral node) {
 		List<Expression> entries = new ArrayList<Expression>();
-		List<Annotation> locations = new ArrayList<Annotation>();
 		Iterator i = node.getExpressions().iterator();
 		while (i.hasNext()) {
 			org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) i.next();
 			expr.accept(this);
 			entries.add((Expression)stack.pop());
-
-			Annotation annotation = factory.createAnnotation(IEGLConstants.LOCATION);
-			annotation.setValue("Offset", new Integer(expr.getOffset()));
-			annotation.setValue("Length", new Integer(expr.getLength()));
-			locations.add(annotation);
-
 		}
 		ArrayLiteral lit = factory.createArrayLiteral();
 		lit.getEntries().addAll(entries);
-
-		Annotation annotation = factory.createAnnotation(IEGLConstants.LOCATIONS);
-		annotation.setValue(locations);
-		lit.addAnnotation(annotation);
 
 		setElementInformation(node, lit);
 		stack.push(lit);

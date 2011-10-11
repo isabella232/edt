@@ -1681,7 +1681,5 @@ public interface IEGLConstants {
 	
 	public static final String LOCATION = "eglLocation"; //$NON-NLS-1$
 
-	public static final String LOCATIONS = "eglLocations"; //$NON-NLS-1$
-
 
 }
