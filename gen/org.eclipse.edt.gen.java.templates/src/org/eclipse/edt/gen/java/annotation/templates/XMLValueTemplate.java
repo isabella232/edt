@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.annotation.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -26,8 +26,8 @@ public class XMLValueTemplate extends JavaTemplate {
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, EGLClass part) {
 		//add an xmlValue to the field
 		Object kind = annot.getValue("kind");
-		if(kind instanceof EnumerationEntry){
-			if("simpleContent".equalsIgnoreCase(((EnumerationEntry)kind).getName())){
+		if(kind != null){
+			if("simpleContent".equalsIgnoreCase(CommonUtilities.getEnumerationName(kind))){
 				for(Field field : part.getFields()){
 					if(field.getAnnotation(org.eclipse.edt.gen.Constants.AnnotationXmlAttribute) == null){
 						field.addAnnotation(annot);
