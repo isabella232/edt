@@ -97,8 +97,11 @@ public class DeploymentContext {
 
 	public void setSourceProject(IProject sourceProject) {
 		this.sourceProject = sourceProject;
-		
-		this.setDependentModels( DeploymentUtilities.getDependentModels( this.sourceProject ) );
+		try {
+			this.setDependentModels( DeploymentUtilities.getDependentModels( this.sourceProject, this.model ) );
+		} catch ( Exception e ) {
+			
+		}
 
 		environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(this.sourceProject);
 //			Environment.pushEnv(environment.getIREnvironment());			

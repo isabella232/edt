@@ -31,7 +31,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -43,6 +46,7 @@ import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.search.AllPartsCache;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
+import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -51,7 +55,7 @@ import org.eclipse.edt.ide.core.model.Signature;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
-import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.Activator;
 import org.eclipse.edt.ide.deployment.core.DeploymentDescFileLocator;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
@@ -355,36 +359,24 @@ public class DeploymentUtilities {
 		return display;
 	}
 	
-	public static List<DeploymentDesc> getDependentModels( IProject project ) {
-		List eglProjectPath = org.eclipse.edt.ide.core.internal.utils.Util.getEGLProjectPath(project);
+	public static List<DeploymentDesc> getDependentModels( IProject project, DeploymentDesc mainModel ) throws Exception {
+		List<String> egldds = EclipseUtilities.getDependentDescriptors(project);
 		
-		List<DeploymentDesc> models = new ArrayList<DeploymentDesc>();
-		IDEDeploymentDescFileLocator fileLocator = new IDEDeploymentDescFileLocator();
-		for (Iterator iter1 = eglProjectPath.iterator(); iter1.hasNext();) {
-			IEGLProject eglProject = (IEGLProject)iter1.next();
-			IProject dependentPro = eglProject.getProject();
-			if ( dependentPro != project ) {
-				String eglddPath = ProjectSettingsUtility.getDefaultDeploymentDescriptor( dependentPro );
-				if ( eglddPath == null ) {
-					continue;
-				}
-				IFile resource = (IFile)dependentPro.getWorkspace().getRoot().findMember( eglddPath );
-				
-				try {
-            		String ddName = resource.getName();
-            		ddName = ddName.substring(0, ddName.indexOf( resource.getFileExtension() ) - 1);
-					DeploymentDesc model = DeploymentDesc.createDeploymentDescriptor(ddName, resource.getContents());
-					resolveIncludes( model, fileLocator );
-					models.add( model );
-				} catch (Exception e) {
-				}
-//				eglProject.
-			}
-		}
+		final List<DeploymentDesc> models = new ArrayList<DeploymentDesc>();
+		final IDEDeploymentDescFileLocator fileLocator = new IDEDeploymentDescFileLocator();
+		for (String eglddFile : egldds ) {
+			IFile eglddResource = (IFile)ResourcesPlugin.getWorkspace().getRoot().findMember(eglddFile);
 
-		
+			String ddName = eglddResource.getName();
+    		ddName = ddName.substring(0, ddName.indexOf( eglddResource.getFileExtension() ) - 1);
+    		if ( !ddName.equalsIgnoreCase( mainModel.getName() ) ) {
+    			DeploymentDesc model = DeploymentDesc.createDeploymentDescriptor(ddName, eglddResource.getContents());
+    			models.add( model );
+    		}
+//								resolveIncludes( model, fileLocator );
+		}
+	
 		return models;
-		
 	}
 	
 	public static List getAllEglddsName( DeploymentContext context ) {
@@ -479,7 +471,7 @@ public class DeploymentUtilities {
 
 		return IEGLBaseConstants.EGL_VALIDATION_RESOURCE_BUNDLE_NAME;
 	}
-	
+/*	
 	public static void resolveIncludes(DeploymentDesc root, DeploymentDescFileLocator locator) throws Exception {
 		resolveDeploymentDescriptors( root, root, locator );
 	}
@@ -500,5 +492,6 @@ public class DeploymentUtilities {
 			}
 		}
 	}
+*/
 
 }
