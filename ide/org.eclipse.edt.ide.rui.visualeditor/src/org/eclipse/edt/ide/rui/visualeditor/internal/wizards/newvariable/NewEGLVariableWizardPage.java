@@ -74,9 +74,9 @@ public class NewEGLVariableWizardPage extends WizardPage {
 	private Text secondDimensionsText;
 	private Button isArrayButton;
 //	private Text arraySizeText;
-	private Label arraySizeLabel;
-	private Text maxSizeText;
-	private Label maxSizeLabel;
+//	private Label arraySizeLabel;
+//	private Text maxSizeText;
+//	private Label maxSizeLabel;
 	
 	class SupportedPrimitiveType{
 		public static final String STRING = "string";
@@ -268,34 +268,34 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		isArrayButton = new Button(arrayPropertiesGroup, SWT.CHECK);
 		isArrayButton.setText(Messages.NL_NEVWP_Is_Array_Button);
 		
-		arraySizeLabel = new Label(arrayPropertiesGroup, SWT.NONE);
-		arraySizeLabel.setText(Messages.NL_NEVWP_Array_Size_Label);
-		arraySizeLabel.setEnabled(false);
+//		arraySizeLabel = new Label(arrayPropertiesGroup, SWT.NONE);
+//		arraySizeLabel.setText(Messages.NL_NEVWP_Array_Size_Label);
+//		arraySizeLabel.setEnabled(false);
 //		arraySizeText = new Text(arrayPropertiesGroup, SWT.BORDER);
 //		arraySizeText.setEnabled(false);
-		maxSizeText = new Text(arrayPropertiesGroup, SWT.BORDER);
-		maxSizeText.setEnabled(false);
-		maxSizeLabel = new Label(arrayPropertiesGroup, SWT.NONE);
-		maxSizeLabel.setText(Messages.NL_NEVWP_Array_Size_Intro_Label);
-		maxSizeLabel.setEnabled(false);
+//		maxSizeText = new Text(arrayPropertiesGroup, SWT.BORDER);
+//		maxSizeText.setEnabled(false);
+//		maxSizeLabel = new Label(arrayPropertiesGroup, SWT.NONE);
+//		maxSizeLabel.setText(Messages.NL_NEVWP_Array_Size_Intro_Label);
+//		maxSizeLabel.setEnabled(false);
 		
 		//isArrayButton
 		isArrayButton.addSelectionListener(new SelectionListener(){
 
 			public void widgetSelected(SelectionEvent e) {
 				if(isArrayButton.getSelection()){
-					arraySizeLabel.setEnabled(true);
+//					arraySizeLabel.setEnabled(true);
 //					arraySizeText.setEnabled(true);
-					maxSizeText.setEnabled(true);
-					maxSizeLabel.setEnabled(true);
+//					maxSizeText.setEnabled(true);
+//					maxSizeLabel.setEnabled(true);
 					isArray = true;
 //					arraySizeText.setText("0");
 					updatePreview();
 				}else{
-					arraySizeLabel.setEnabled(false);
+//					arraySizeLabel.setEnabled(false);
 //					arraySizeText.setEnabled(false);
-					maxSizeText.setEnabled(false);
-					maxSizeLabel.setEnabled(false);
+//					maxSizeText.setEnabled(false);
+//					maxSizeLabel.setEnabled(false);
 					isArray = false;
 //					arraySizeText.setText("");
 					updatePreview();
@@ -340,40 +340,40 @@ public class NewEGLVariableWizardPage extends WizardPage {
 //		});
 		
 		//maxSizeText
-		maxSizeText.addModifyListener(new ModifyListener(){
-
-			public void modifyText(ModifyEvent e) {
-				setErrorMessage(null);
-				String input = maxSizeText.getText();
-				if(isMaxSizeValid(input)){
-					maxSize = input;
-					updatePreview();
-				}else{
-					setPageComplete(false);
-				}
-			}
-			
-			private boolean isMaxSizeValid(String input){
-				if(input != null && !input.equals("")){
-					try{
-						long maxSize = Long.parseLong(input);
-						if(maxSize < 0 || maxSize > 2147483647){
-							setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Text_Input_Is_Out_Of_Range);
-							return false;
-						}
-						if(maxSize <= Long.parseLong(arraySize)){
-							setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Is_Less_Than_Max_Size);
-							return false;
-						}
-					}catch(Exception e){
-						setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Text_Input_Is_Not_Number);
-						return false;
-					}
-				}
-				return true;
-			}
-			
-		});
+//		maxSizeText.addModifyListener(new ModifyListener(){
+//
+//			public void modifyText(ModifyEvent e) {
+//				setErrorMessage(null);
+//				String input = maxSizeText.getText();
+//				if(isMaxSizeValid(input)){
+//					maxSize = input;
+//					updatePreview();
+//				}else{
+//					setPageComplete(false);
+//				}
+//			}
+//			
+//			private boolean isMaxSizeValid(String input){
+//				if(input != null && !input.equals("")){
+//					try{
+//						long maxSize = Long.parseLong(input);
+//						if(maxSize < 0 || maxSize > 2147483647){
+//							setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Text_Input_Is_Out_Of_Range);
+//							return false;
+//						}
+//						if(maxSize <= Long.parseLong(arraySize)){
+//							setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Is_Less_Than_Max_Size);
+//							return false;
+//						}
+//					}catch(Exception e){
+//						setErrorMessage(Messages.NL_NEVWP_Error_Message_Array_Size_Text_Input_Is_Not_Number);
+//						return false;
+//					}
+//				}
+//				return true;
+//			}
+//			
+//		});
 	}
 	
 	private boolean isFieldNameValid(String fieldName){
@@ -729,10 +729,11 @@ public class NewEGLVariableWizardPage extends WizardPage {
 				sbPreview.append(")");
 			}
 			if(isArray){
-				sbPreview.append("[").append(arraySize).append("]");
-				if(!maxSize.equals("")){
-					sbPreview.append("{maxSize=").append(maxSize).append("}");
-				}
+				sbPreview.append("[").append("]");
+//				sbPreview.append("[").append(arraySize).append("]");
+//				if(!maxSize.equals("")){
+//					sbPreview.append("{maxSize=").append(maxSize).append("}");
+//				}
 			}
 			if(fieldType.equals(SupportedPrimitiveType.NUMBER)){
 				sbPreview.append("?");
