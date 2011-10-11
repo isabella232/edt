@@ -95,7 +95,7 @@ public class RuntimeDeploymentDesc {
 	
 	public void addRestBindingsAll(List<RestBinding> bindings)
 	{
-		bindings.addAll(bindings);
+		this.bindings.addAll(bindings);
 	}
 	
 	public String getName() {
@@ -103,7 +103,7 @@ public class RuntimeDeploymentDesc {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 	}
 
 	public List<RestBinding> getRestBindings() {
