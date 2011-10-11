@@ -91,5 +91,9 @@ public class CommonUtilities {
 		}
 		dependentFiles.add(part);
 	}
+	
+	public static String toIncludeDDName( String eglddPath ) {
+		return eglddPath.substring( eglddPath.lastIndexOf( "/" ) + 1, eglddPath.lastIndexOf( "." ) ).toLowerCase();
+	}
 
 }
