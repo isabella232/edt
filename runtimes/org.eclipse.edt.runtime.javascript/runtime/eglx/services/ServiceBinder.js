@@ -59,11 +59,20 @@ egl.defineClass( 'eglx.services', 'ServiceBinder', {
 		for (var n=0; n < bindFile.bindings.length && binding == null; n++) {
 			if (bindingKey == bindFile.bindings[n].name.toLowerCase()) {
 				binding = bindFile.bindings[n];
+				break;
 			}			
 		}
 		if(binding == null){
-			//can not find binding key
-	    	throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [bindingKey, eglddName]);
+		    for (var n = 0; n <  bindFile.includes.length; n++) {
+		    	binding = this.getBinding(bindFile.includes[n], bindingKey);
+		    	if ( binding != null ) {
+		    		break;
+		    	}
+		    }
+			if (binding == null){
+				//can not find binding key
+		    	throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [bindingKey, eglddName]);
+			}
 		}
 		return binding;
 	}
@@ -73,6 +82,7 @@ egl.defineClass( "eglx.services", "BindFile", {
     "constructor" : function(/*String*/ eglddName) { 
 		this.name = eglddName; 
         this.bindings = [];
+        this.includes = [];
     }
 });
 
