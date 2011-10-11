@@ -575,4 +575,19 @@ public class CommonUtilities {
 
 		return result;
 	}
+	public static String getEnumerationName(Object enm){
+		if(enm instanceof Enum){
+			return ((Enum<?>)enm).name();
+		}
+		else if(enm instanceof MemberAccess){
+			return ((MemberAccess)enm).getId();
+		}
+		else if(enm instanceof EnumerationEntry){
+			return ((EnumerationEntry)enm).getName();
+		}
+		else{
+			return "";
+		}
+	}
+
 }
