@@ -48,7 +48,6 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.search.ui.ISearchPageContainer;
 import org.eclipse.search.ui.NewSearchUI;
@@ -58,7 +57,6 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.EditorActionBarContributor;
 
 public class SearchHandler extends EGLHandler {
@@ -73,29 +71,24 @@ public class SearchHandler extends EGLHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		// Initialize selection	if called from Part Reference or Part List
-	    ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getSelectionService().getSelection();
-		if (selection instanceof IStructuredSelection) {
-			fSelection = (IStructuredSelection) selection;
-			fSite = HandlerUtil.getActiveSite( event );			
-		}
-		
 		// Initialize editor if called from EGL Editor
-		IEditorPart editor = HandlerUtil.getActiveEditor( event );
-		if( editor instanceof EGLEditor ) {
-			fEditor = (EGLEditor)editor;
-			if(fSelection == null && editor != null)
-			{	
-				IEditorInput editorInput = editor.getEditorInput();
-				// Could be a VirtualEditorInput if coming from PageDesigners QEV
-				if (editorInput instanceof IFileEditorInput) {
-					IResource resource = ((IFileEditorInput) editorInput).getFile();
-					IEGLElement element = EGLCore.create(resource);
-					fSite = editor.getSite();
-					fSelection = new StructuredSelection( element );
-				}			
-		    }			
-		}	
+		if(isInvokedFromEditorContext(event)){
+			IEditorPart editor = getCurrentActiveEditor( event );
+			if( editor instanceof EGLEditor ) {
+				fEditor = (EGLEditor)editor;
+				if(editor != null)
+				{	
+					IEditorInput editorInput = editor.getEditorInput();
+					// Could be a VirtualEditorInput if coming from PageDesigners QEV
+					if (editorInput instanceof IFileEditorInput) {
+						IResource resource = ((IFileEditorInput) editorInput).getFile();
+						IEGLElement element = EGLCore.create(resource);
+						fSite = editor.getSite();
+						fSelection = new StructuredSelection( element );
+					}			
+			    }			
+			}	
+		}
 		
 		if( fSelection != null )
 		{

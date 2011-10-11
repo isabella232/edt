@@ -31,6 +31,7 @@ import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -57,11 +58,7 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
     
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// Initialize editor 
-		IEditorPart editor = HandlerUtil.getActiveEditor( event );
-		
-		if(editor instanceof IEGLEditorWrapper){
-			editor = ((IEGLEditorWrapper)editor).getEGLEditor();
-		}
+		IEditorPart editor = getCurrentActiveEditor(event);
 		
 		if( editor instanceof EGLEditor ) {
 			fEditor = (EGLEditor)editor;
@@ -201,4 +198,25 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 		}
 	}
 	
+	protected IEditorPart getCurrentActiveEditor(ExecutionEvent event){
+		IEditorPart editor = HandlerUtil.getActiveEditor( event );
+		if(editor instanceof IEGLEditorWrapper){
+			editor = ((IEGLEditorWrapper)editor).getEGLEditor();
+		}
+		
+		return editor;
+	}
+	
+	protected boolean isInvokedFromEditorContext(ExecutionEvent event){
+		// Initialize selection	if called from Part Reference or Part List
+	    ISelection selection = HandlerUtil.getActiveWorkbenchWindow(event).getSelectionService().getSelection();
+		if (selection instanceof IStructuredSelection) {
+			fSelection = (IStructuredSelection) selection;
+			fSite = HandlerUtil.getActiveSite( event );	
+			return(false);
+		}
+		
+		return(true);
+	}
+		
 }
