@@ -33,14 +33,19 @@ import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.gen.deployment.util.RuntimePropertiesFileUtil;
 import org.eclipse.edt.gen.deployment.util.WorkingCopyGenerationResult;
 import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
@@ -49,7 +54,8 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 public class RUITemplate extends JavaScriptTemplate {	
 	
 	private static final String DEFAULT_THEME = "claro";
-
+	private PartReferenceCache partReferenceCache= null;
+	
 	private static final Map JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap();
 	static{
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_Arabic_Runtime, "JavaScript \u063a\u064a\u0631 \u0645\u062f\u0639\u0645 \u062d\u0627\u0644\u064a\u0627 \u0623\u0648 \u0644\u0645 \u064a\u062a\u0645 \u0627\u062a\u0627\u062d\u062a\u0647 \u0628\u0648\u0627\u0633\u0637\u0629 \u0628\u0631\u0646\u0627\u0645\u062c \u0627\u0644\u0627\u0633\u062a\u0639\u0631\u0627\u0636 \u0647\u0630\u0627. \u0628\u0631\u062c\u0627\u0621 \u0627\u062a\u0627\u062d\u0629 JavaScript \u0644\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0627\u0644\u0648\u0638\u0627\u0626\u0641 \u0628\u0627\u0644\u0643\u0627\u0645\u0644.");
@@ -78,6 +84,8 @@ public class RUITemplate extends JavaScriptTemplate {
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
 			List egldds, HashMap eglParameters, String userMsgLocale,
 			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
+		partReferenceCache = new PartReferenceCache();
+		
 		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
 		preGenComment(out);
@@ -163,18 +171,26 @@ public class RUITemplate extends JavaScriptTemplate {
 		}		
 	}
 	
+
+	
 	private void generateCSSFiles(Handler handler, Context ctx, TabbedWriter out) {
-		LinkedHashSet cssFiles = new LinkedHashSet();
-		ctx.invoke(genCSSFiles, handler, cssFiles);
-		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentCSSs, handler, ctx, cssFiles, handledParts);
-		ArrayList cssFileList = new ArrayList(cssFiles);
+		LinkedHashSet<String> cssFiles = new LinkedHashSet<String>();
+		genCSSFiles(handler, cssFiles);
+
+		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler, ctx);
+		for(Part refPart:refParts){
+			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart)){
+				genCSSFiles((Handler)refPart, cssFiles);
+			}
+		}		
+		
+		ArrayList<String> cssFileList = new ArrayList<String>(cssFiles);
 		Collections.reverse(cssFileList);
-		for (Iterator iter = cssFileList.iterator(); iter.hasNext();) {
+		for (Iterator<String> iter = cssFileList.iterator(); iter.hasNext();) {
 			String cssFileString = (String)iter.next();
 			out.println( "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssFileString + "\" />"); //$NON-NLS-1$
 		}		
-	}
+	}	
 	
 	protected void generateEGLNamespace(TabbedWriter out){
 		// instantiate all the system libraries
@@ -234,12 +250,19 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/"  + ruiPropFile.generateIncludeStatement() + "\");");
 		// Add support for RUI Property file
 		
-		LinkedHashSet propFiles = new LinkedHashSet();
-		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentProps, handler, ctx, propFiles, handledParts);
-		ArrayList propFileList = new ArrayList(propFiles);
+		LinkedHashSet<String> propFiles = new LinkedHashSet<String>();
+		
+		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler, ctx);
+		for(Part refPart:refParts){
+			if(refPart instanceof Library){
+				ctx.invoke(genPropFiles, refPart, propFiles);
+			}
+		}
+		
+		ArrayList<String> propFileList = new ArrayList<String>(propFiles);
 		Collections.reverse(propFileList);
-		for (Iterator iter = propFileList.iterator(); iter.hasNext();) {
+		
+		for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
 			String propertiesFile = (String)iter.next();
 			PropertiesFileUtil propFile = new PropertiesFileUtil(propertiesFile, userMsgLocale);
 			out.println("RUI_DEPENDENT_JAVASCRIPT_FILES.push(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propFile.generateIncludeStatement() + "\");");
@@ -304,15 +327,19 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out, boolean isDevelopment) {
-		LinkedHashSet dependentFiles = new LinkedHashSet();
+		LinkedHashSet<String> dependentFiles = new LinkedHashSet<String>();
 		ctx.invoke(genOutputFileName, handler, dependentFiles);
-		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentParts, handler, ctx, dependentFiles, handledParts);
+
+		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler, ctx);
+		for(Part refPart:refParts){
+			if((refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) ) || refPart instanceof Enumeration)
+				ctx.invoke(genOutputFileName, refPart, dependentFiles);
+		} 
 		
-		ArrayList dependentFileList = new ArrayList(dependentFiles);		
+		ArrayList<String> dependentFileList = new ArrayList<String>(dependentFiles);		
 		Collections.reverse(dependentFileList);		
 		out.println("var RUI_DEPENDENT_JAVASCRIPT_FILES = [");		
-		for (Iterator iter = dependentFileList.iterator(); iter.hasNext();) {
+		for (Iterator<String> iter = dependentFileList.iterator(); iter.hasNext();) {
 			out.print( (String)iter.next());
 			if(isDevelopment){
 				out.print( " + \"?contextKey=\" + egl__contextKey");
@@ -322,7 +349,6 @@ public class RUITemplate extends JavaScriptTemplate {
 			}
 		}
 		out.println("];");
-
 	}
 	
 	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
@@ -368,10 +394,16 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void generateIncludeFiles(Handler handler, Context ctx, TabbedWriter out) {					
 		
-		LinkedHashSet includeFiles = new LinkedHashSet();
+		LinkedHashSet<String> includeFiles = new LinkedHashSet<String>();
 		ctx.invoke(genIncludeFiles, handler, includeFiles);
-		LinkedHashSet handledParts = new LinkedHashSet();
-		ctx.invoke(genDependentIncludeFiles, handler, ctx, includeFiles, handledParts);
+		
+		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler, ctx);
+		for(Part refPart:refParts){
+			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart) || refPart instanceof ExternalType){
+				ctx.invoke(genIncludeFiles, refPart, includeFiles);
+			}
+		}		
+
 		if(!includeFiles.isEmpty()){
 			out.println("var isLastFile = false; var currentFile = \"\"");
 			out.println("var htmlString = \"\";");
@@ -644,7 +676,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("};");
 	}
 	
-	public void genCSSFiles(Handler handler, LinkedHashSet cssFiles){
+	public void genCSSFiles(Handler handler, LinkedHashSet<String> cssFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
 		if ( a != null ){
 			String fileName = (String)a.getValue( "cssFile" );
@@ -653,8 +685,8 @@ public class RUITemplate extends JavaScriptTemplate {
 			}
 		}
 	}	
-
-	public void genIncludeFiles(Handler handler, LinkedHashSet includeFiles){
+	
+	public void genIncludeFiles(Handler handler, LinkedHashSet<String> includeFiles){
 		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
 		if ( a != null ){
 			String fileName = (String)a.getValue( "includeFile" );

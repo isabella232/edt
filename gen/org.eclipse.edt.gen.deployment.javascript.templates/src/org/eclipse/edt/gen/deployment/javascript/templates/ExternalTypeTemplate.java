@@ -13,15 +13,13 @@ package org.eclipse.edt.gen.deployment.javascript.templates;
 
 import java.util.LinkedHashSet;
 
-import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 	
-	public void genOutputFileName(ExternalType et, LinkedHashSet dependentFiles) {
+	public void genOutputFileName(ExternalType et, LinkedHashSet<String> dependentFiles) {
 		Annotation annot = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if (annot != null) {
 			String pkg = (String)annot.getValue( "relativePath" );
@@ -48,7 +46,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 		}
 	}
 	
-	public void genIncludeFiles(ExternalType et, LinkedHashSet includeFiles){
+	public void genIncludeFiles(ExternalType et, LinkedHashSet<String> includeFiles){
 		Annotation a = et.getAnnotation( "eglx.javascript.JavaScriptObject" );
 		if ( a != null && a.getValue( "includeFile" ) != null ){
 			String fileName = a.getValue( "includeFile" ).toString();
