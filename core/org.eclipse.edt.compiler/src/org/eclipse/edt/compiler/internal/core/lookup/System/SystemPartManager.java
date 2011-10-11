@@ -67,7 +67,7 @@ public class SystemPartManager {
     private static void initializeSystemParts() {    
     	systemParts = new HashMap();
     	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_DICTIONARY_STRING), DictionaryBinding.INSTANCE);
-    	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING), ArrayDictionaryBinding.INSTANCE);
+//    	systemParts.put(InternUtil.intern(IEGLConstants.MIXED_ARRAYDICTIONARY_STRING), ArrayDictionaryBinding.INSTANCE);
     	systemParts.put(InternUtil.intern("InternalRef"), INTERNALREF_BINDING);    	
     	systemParts.put(InternUtil.intern("FieldRef"), FIELDREF_BINDING);
     	systemParts.put(InternUtil.intern("FieldInTargetRef"), FIELDINTARGETREF_BINDING);
