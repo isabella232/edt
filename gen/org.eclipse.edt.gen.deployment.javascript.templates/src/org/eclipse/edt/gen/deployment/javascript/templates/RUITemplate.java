@@ -263,27 +263,16 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 		processedParts.add(part);
 		try {
-			Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
-			for(Part refPart:refParts){
-				if(!processedParts.contains(refPart)){
-					processedParts.add(refPart);
-					if(CommonUtilities.isUserPart(refPart, ctx)){
-//						Annotation annot = refPart.getAnnotation(Constants.USES_SERVICELIB_BINDSERVICE_FUNCTION);
-						if(refPart instanceof Service || refPart instanceof Interface ){
-							out.print("RUI_RUNTIME_JAVASCRIPT_FILES.push(");
-							int size = egldds.size();
-							for ( int i = 0; i < egldds.size(); i ++ ) {
-								String next = (String)egldds.get(i);
-								if (next != null && next.length() > 0) {
-									out.print( "\"" + next.toLowerCase() + "-bnd.js\"" + (i == size-1 ? "" : ",") );
-								}
-							}
-							out.println(");");
-							return;
-						}
-					}
+			out.print("RUI_RUNTIME_JAVASCRIPT_FILES.push(");
+			int size = egldds.size();
+			for ( int i = 0; i < egldds.size(); i ++ ) {
+				String next = (String)egldds.get(i);
+				if (next != null && next.length() > 0) {
+					out.print( "\"" + next + "-bnd.js\"" + (i == size-1 ? "" : ",") );
 				}
-			}		
+			}
+			out.println(");");
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
