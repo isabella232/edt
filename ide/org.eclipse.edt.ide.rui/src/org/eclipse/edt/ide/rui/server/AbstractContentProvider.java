@@ -45,6 +45,7 @@ import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
+import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
@@ -107,18 +108,18 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 //				else
 				//FIXME using default specified on the project for now. also need a constant for -bnd.js
 				if (uri.endsWith("-bnd.js")) {
-					PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
-					if (defaultDD.getPartPath() != null && defaultDD.getPartPath().length() > 0) {
-						DeploymentDesc dd = null;
-						try {
-							IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
-							if (ddFile.exists()) {
-								dd = DeploymentDesc.createDeploymentDescriptor(defaultDD.getPartName(), ddFile.getContents());
-							}
-						} catch (Exception e) {}
-						if (dd != null) {
-							bytes = new DeploymentDescGenerator().generateBindFile(dd);
-						}
+					DeploymentDesc model = null;
+					try {
+						uri = uri.substring( projectName.length() + 1 );
+						uri = uri.substring( 0, uri.length() - 7 );
+						IFile eglddResource = (IFile)ResourcesPlugin.getWorkspace().getRoot().findMember(uri);
+
+						String ddName = eglddResource.getName();
+			    		ddName = ddName.substring(0, ddName.indexOf( eglddResource.getFileExtension() ) - 1);
+		    			model = DeploymentDesc.createDeploymentDescriptor(ddName, eglddResource.getContents());
+					} catch (Exception e) {}
+					if (model != null) {
+						bytes = new DeploymentDescGenerator().generateBindFile(model);
 					}
 				}
 //TODO EDT NLS				
@@ -207,8 +208,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				
 				//FIXME using default specified on the project for now
 				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
-				List<String> egldds = new ArrayList<String>();
-				egldds.add( egldd );
+				List<String> egldds = EclipseUtilities.getDependentDescriptors(project);
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
 				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
 						ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment());

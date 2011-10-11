@@ -1141,7 +1141,7 @@ public class EvServer implements IClientProxy {
 			EGLResource resource = resourceLocator.findResource( fileName );
 			if ( resource == null || !resource.exists() ) {
 				try {
-					ps.write( "throw(\"missing\");".getBytes() );
+					ps.write( ("egl.printError( 'Missing:" + fileName + "');").getBytes() );
 				} catch ( IOException ioe ) {
 				}
 				return;
