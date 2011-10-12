@@ -112,7 +112,15 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static ETimestamp ezeBox(Calendar value, int startCode, int endCode) {
-		return new ETimestamp((Calendar) value.clone(), startCode, endCode);
+		Calendar clone = null;
+		if (value != null) {
+			clone = (Calendar) value.clone();
+		}
+		return new ETimestamp(clone, startCode, endCode);
+	}
+
+	public static ETimestamp ezeBox(Calendar value) {
+		return ezeBox(value, YEAR_CODE, SECOND_CODE);
 	}
 
 	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
