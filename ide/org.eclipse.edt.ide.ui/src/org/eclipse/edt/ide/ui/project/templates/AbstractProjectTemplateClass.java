@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLFeatureOperationsUtilities;
 import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
@@ -23,6 +24,7 @@ import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfigurationOperation;
 import org.eclipse.edt.ide.ui.wizards.ProjectCreationOperation;
 import org.eclipse.edt.ide.ui.wizards.ProjectGeneratorOperation;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 
@@ -80,8 +82,12 @@ public abstract class AbstractProjectTemplateClass implements
 	protected void createPackage(final ProjectConfiguration eglProjConfiguration,
 			List listOps, String basePackage, String packageName) {
 		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
+		packageConfiguration.init(null, null);
+		
 		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
-		//packageConfiguration.setSourceFolderName(packageConfiguration.getSourceFolderName());
+		IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
+		String sourceFolderPath = store.getString(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER);
+		packageConfiguration.setSourceFolderName(sourceFolderPath);	
 		
 		if(packageName != null && packageName.length()>0){			
 			packageConfiguration.setFPackage(packageName);

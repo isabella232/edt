@@ -29,24 +29,32 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 		super.addPages();
 	}
 	
-	public boolean performFinish() {		
-		((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedGenerators(getGeneratorIds());
-		return generatorPage.performOK();
+	public boolean performFinish() {
+		if(generatorPage != null){
+			String[] genIds = getGeneratorIds();
+			if(genIds != null)
+				((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedGenerators(genIds);
+			return generatorPage.performOK();
+		}
+		return true;
 	}
 
 	private String[] getGeneratorIds() {
-		List<String> selectedGenerators = generatorPage.getSelectedGenerators();
-		String[] genIds = new String[selectedGenerators.size()];
-		int index = 0;
-		StringBuilder buffer = new StringBuilder(100);
-		for( String genName : selectedGenerators ) {
-			genIds[index] = convertGeneratorNameToId( genName );				
-			if (index != 0) {
-				buffer.append(',');
+		String[] genIds = null;
+		if(generatorPage != null){
+			List<String> selectedGenerators = generatorPage.getSelectedGenerators();
+			genIds = new String[selectedGenerators.size()];
+			int index = 0;
+			StringBuilder buffer = new StringBuilder(100);
+			for( String genName : selectedGenerators ) {
+				genIds[index] = convertGeneratorNameToId( genName );				
+				if (index != 0) {
+					buffer.append(',');
+				}
+				buffer.append( genIds[index] );
+				index++;
 			}
-			buffer.append( genIds[index] );
-			index++;
-		}
+		}		
 		return genIds;
 	}
 	
