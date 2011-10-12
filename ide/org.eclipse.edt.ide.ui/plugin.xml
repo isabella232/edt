@@ -591,6 +591,7 @@
 	<extension point="org.eclipse.ui.editors">
 		<editor
         class="org.eclipse.edt.ide.ui.internal.editor.EGLEditor"
+        contributorClass="org.eclipse.edt.ide.ui.internal.editor.EGLEditorActionContributor"
         extensions="egl"
         icon="icons/obj16/eglfile_obj.gif"
         id="org.eclipse.edt.ide.ui.EGLEditor"

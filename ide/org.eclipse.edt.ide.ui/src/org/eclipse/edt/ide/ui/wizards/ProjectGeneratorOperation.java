@@ -64,7 +64,7 @@ public class ProjectGeneratorOperation extends WorkspaceModifyOperation {
 			}else{
 				EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
 				packageConfiguration.setProjectName(configuration.getProjectName());
-				packageConfiguration.setSourceFolderName(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE);
+				//packageConfiguration.setSourceFolderName(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE);
 				IEGLProject eproject = EGLCore.create(project);
 				IPackageFragmentRoot root = eproject.getPackageFragmentRoot(new Path(packageConfiguration.getSourceFolderName()));
 				IPackageFragment newPackageFragment = root.createPackageFragment(resourceName, true, monitor);
