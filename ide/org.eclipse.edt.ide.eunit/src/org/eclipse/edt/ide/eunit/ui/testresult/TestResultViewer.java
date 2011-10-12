@@ -7,6 +7,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -59,6 +60,27 @@ public class TestResultViewer extends FormEditor{
 		super.init(site, input);
 		setPartName(input.getName());
 	}
+	
+	protected IProject getProject()
+	{
+		IFile file = getEditorInputFile();
+		if(file != null)
+			return file.getProject();
+		
+		return null;
+	}
+	
+	protected IFile getEditorInputFile()
+	{
+		IEditorInput editorInput = getEditorInput();
+		if(editorInput instanceof IFileEditorInput)
+		{
+			IFileEditorInput fileInput = (IFileEditorInput)editorInput;
+			IFile file = fileInput.getFile();
+			return file;
+		}
+		return null;
+	}	
 	
 	public Element getResultSummaryRoot(){
 		if(fResultSummaryRoot == null){
