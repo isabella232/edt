@@ -49,7 +49,6 @@ import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class RUITemplate extends JavaScriptTemplate {	
 	
@@ -84,7 +83,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
 			List egldds, HashMap eglParameters, String userMsgLocale,
 			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
-		partReferenceCache = new PartReferenceCache();
+		partReferenceCache = new PartReferenceCache(ctx.getSystemIREnvironment());
 		
 		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
@@ -177,7 +176,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> cssFiles = new LinkedHashSet<String>();
 		genCSSFiles(handler, cssFiles);
 
-		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler, ctx);
+		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler);
 		for(Part refPart:refParts){
 			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart)){
 				genCSSFiles((Handler)refPart, cssFiles);
@@ -252,7 +251,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		
 		LinkedHashSet<String> propFiles = new LinkedHashSet<String>();
 		
-		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler, ctx);
+		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler);
 		for(Part refPart:refParts){
 			if(refPart instanceof Library){
 				ctx.invoke(genPropFiles, refPart, propFiles);
@@ -330,7 +329,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> dependentFiles = new LinkedHashSet<String>();
 		ctx.invoke(genOutputFileName, handler, dependentFiles);
 
-		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler, ctx);
+		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler);
 		for(Part refPart:refParts){
 			if((refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) ) || refPart instanceof Enumeration)
 				ctx.invoke(genOutputFileName, refPart, dependentFiles);
@@ -397,7 +396,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> includeFiles = new LinkedHashSet<String>();
 		ctx.invoke(genIncludeFiles, handler, includeFiles);
 		
-		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler, ctx);
+		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler);
 		for(Part refPart:refParts){
 			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart) || refPart instanceof ExternalType){
 				ctx.invoke(genIncludeFiles, refPart, includeFiles);
