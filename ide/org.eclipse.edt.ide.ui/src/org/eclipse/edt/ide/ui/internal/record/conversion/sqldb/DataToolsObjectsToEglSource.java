@@ -18,6 +18,7 @@ public class DataToolsObjectsToEglSource extends AbstractObjectToEglSource {
 	
 	public static final String DATA_DEFINITION_OBJECT = "dataDefinition";
 	public static final String TABLE_NAME_QUALIFIED = "tableNameQualified";
+	public static final String DB_MESSAGE_HANDLER = "dbMessageHandler";
 
 	@Override
 	public String[] getTemplatePath() {

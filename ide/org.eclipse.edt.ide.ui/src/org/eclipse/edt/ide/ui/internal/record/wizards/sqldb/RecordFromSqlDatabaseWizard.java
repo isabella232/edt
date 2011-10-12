@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.internal.record.wizards.sqldb;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -37,6 +38,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.Parameter;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordSummaryPage;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizard;
+import org.eclipse.edt.ide.ui.internal.record.conversion.IMessageHandler;
 import org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.DataToolsObjectsToEglSource;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
@@ -54,13 +56,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
-public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWorkbenchWizard, IPageChangingListener {
+public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWorkbenchWizard, IPageChangingListener,IMessageHandler {
 
 	private RecordFromSqlDatabaseWizardConfiguration config;
 
 	protected RecordFromSqlDatabasePage sqlDbPage;
 	protected NewRecordSummaryPage summaryPage;
 	protected IStructuredSelection selection;
+	
+	protected List<String> messages = new ArrayList<String>();
 
 	public RecordFromSqlDatabaseWizard() {
 		super();
@@ -131,6 +135,10 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 				Display.getDefault().asyncExec(new Runnable() {
 					public void run() {
 						summaryPage.setContent(results);
+						List<String> messages = getMessages();
+					    if(messages!=null && messages.size() > 0) {
+					    	summaryPage.setMessages(messages);
+					    }
 					}
 				});
 
@@ -172,6 +180,7 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 						EglSourceGenerator generator = new EglSourceGenerator(d);
 						generator.getContext().put(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT, connection.getDatabaseDefinition());
 						generator.getContext().put(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED, config.isQualifiedTableNames());
+						generator.getContext().put(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER, this);
 						generator.generate(table);
 						buffer.append(generator.getResult());
 						
@@ -265,5 +274,16 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		}
 		
 		return null;
+	}
+	
+	public void addMessage(String message) {
+		if (this.messages == null) {
+			messages = new ArrayList<String>();
+		}
+		this.messages.add(message);
+	}
+	
+	public List<String> getMessages() {
+		return this.messages;
 	}
 }
