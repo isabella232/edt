@@ -205,7 +205,6 @@ public class DeploymentDescriptorFinder {
 			Activator.getDefault().log(e.getMessage(), e);
 		}
 		
-		//NOTE also add imports. maybe make this return a List<String[]>
 		return null;
 	}
 	
