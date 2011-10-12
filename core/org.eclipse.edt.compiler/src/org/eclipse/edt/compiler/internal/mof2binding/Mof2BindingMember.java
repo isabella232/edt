@@ -80,6 +80,7 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			else {
 				binding = new ClassFieldBinding(name, declarer, type);
 				((ClassFieldBinding)binding).setIsStatic(field.isStatic());
+				((ClassFieldBinding)binding).setIsPrivate(field.getAccessKind() == AccessKind.ACC_PRIVATE);
 			}
 			handleAnnotations(field, binding);
 			putBinding(field, binding);
@@ -147,9 +148,7 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			}
 			binding = new ConstructorBinding((IPartBinding)type);
 			
-			if (constructor.getAccessKind() == AccessKind.ACC_PRIVATE) {
-				((ConstructorBinding)binding).setPrivate(true);
-			}			
+			((ConstructorBinding)binding).setPrivate(constructor.getAccessKind() == AccessKind.ACC_PRIVATE);
 			
 			putBinding(constructor, ((ConstructorBinding)binding).getType());
 			for (FunctionParameter parm : constructor.getParameters()) {
@@ -185,6 +184,7 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			}
 			
 			((FunctionBinding)binding).setStatic(function.isStatic());
+			((FunctionBinding)binding).setPrivate(function.getAccessKind() == AccessKind.ACC_PRIVATE);
 			handleAnnotations(function, binding);
 			
 			overrideFunctionParameterTypes((FunctionBinding)binding);   // TODO temporary workaround

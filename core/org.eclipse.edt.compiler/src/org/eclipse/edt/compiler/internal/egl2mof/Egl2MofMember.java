@@ -31,7 +31,6 @@ import org.eclipse.edt.compiler.binding.VariableFormFieldBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
-import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
@@ -71,10 +70,8 @@ import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
-import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -82,13 +79,11 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
-import org.eclipse.edt.mof.egl.SetValuesStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.VariableFormField;
-import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -130,6 +125,9 @@ class Egl2MofMember extends Egl2MofPart {
 				setUpEglTypedElement(f, field);
 				if (field instanceof ClassFieldBinding) {
 					f.setIsStatic(((ClassFieldBinding)field).isStatic());
+				}
+				if (node.isPrivate()) {
+					f.setAccessKind(AccessKind.ACC_PRIVATE);
 				}
 				addInitializers(node, f, node.getType());
 				obj = f;
@@ -287,6 +285,9 @@ class Egl2MofMember extends Egl2MofPart {
 			}
 			if (!node.getStmts().isEmpty() && node.getStmts().get(0) instanceof SettingsBlock) {
 				processSettings(func, (SettingsBlock)node.getStmts().get(0));
+			}
+			if (node.isPrivate()) {
+				func.setAccessKind(AccessKind.ACC_PRIVATE);
 			}
 			obj = func;
 		}
