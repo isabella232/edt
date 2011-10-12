@@ -79,48 +79,42 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		,
 		"failed": function(str) {
 			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SFAILED;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("FAILED");
-			}
+			str.ezeCopy((("FAILED - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"error": function(str) {
 			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SERROR;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("ERROR");
-			}
+			str.ezeCopy((("ERROR - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"skipped": function(str) {
 			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SNOT_RUN;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("SKIPPED");
-			}
+			str.ezeCopy((("SKIPPED - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"assertTrueException": function(failedReason, testCondition, throwsFailException) {
 			if (testCondition) {
-				var eze$Temp6 = null;
-				eze$Temp6 = egl.eglx.lang.EAny.ezeWrap("OK");
-				this.passed(eze$Temp6);
+				var eze$Temp3 = null;
+				eze$Temp3 = egl.eglx.lang.EAny.ezeWrap("OK");
+				this.passed(eze$Temp3);
 			}
 			else {
-				var eze$Temp7 = null;
-				eze$Temp7 = egl.eglx.lang.EAny.ezeWrap(failedReason);
-				this.failed(eze$Temp7);
-				failedReason = eze$Temp7.ezeUnbox();
+				var eze$Temp4 = null;
+				eze$Temp4 = egl.eglx.lang.EAny.ezeWrap(failedReason);
+				this.failed(eze$Temp4);
+				failedReason = eze$Temp4.ezeUnbox();
 				if (throwsFailException) {
-					var eze$Temp9 = null;
+					var eze$Temp6 = null;
 					{
 						var eze$SettingTarget1 = null;
 						eze$SettingTarget1 = new egl.org.eclipse.edt.eunit.runtime.AssertionFailedException();
 						egl.checkNull(eze$SettingTarget1).message = this.s.reason;
-						eze$Temp9 = eze$SettingTarget1;
+						eze$Temp6 = eze$SettingTarget1;
 					}
-					throw eze$Temp9;
+					throw eze$Temp6;
 				}
 			}
 		}
@@ -296,16 +290,16 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 			var signActual = "";
 			var deltaLimit = 0;
 			deltaLimit = 1E-14;
-			var eze$Temp16 = egl.eglx.lang.EAny.ezeWrap(0);
-			var eze$Temp17 = egl.eglx.lang.EAny.ezeWrap("");
-			normalExpected = this.normalFloat(expected, eze$Temp16, eze$Temp17);
-			mantissaExpected = eze$Temp16.ezeUnbox();
-			signExpected = eze$Temp17.ezeUnbox();
-			var eze$Temp18 = egl.eglx.lang.EAny.ezeWrap(0);
-			var eze$Temp19 = egl.eglx.lang.EAny.ezeWrap("");
-			normalActual = this.normalFloat(actual, eze$Temp18, eze$Temp19);
-			mantissaActual = eze$Temp18.ezeUnbox();
-			signActual = eze$Temp19.ezeUnbox();
+			var eze$Temp13 = egl.eglx.lang.EAny.ezeWrap(0);
+			var eze$Temp14 = egl.eglx.lang.EAny.ezeWrap("");
+			normalExpected = this.normalFloat(expected, eze$Temp13, eze$Temp14);
+			mantissaExpected = eze$Temp13.ezeUnbox();
+			signExpected = eze$Temp14.ezeUnbox();
+			var eze$Temp15 = egl.eglx.lang.EAny.ezeWrap(0);
+			var eze$Temp16 = egl.eglx.lang.EAny.ezeWrap("");
+			normalActual = this.normalFloat(actual, eze$Temp15, eze$Temp16);
+			mantissaActual = eze$Temp15.ezeUnbox();
+			signActual = eze$Temp16.ezeUnbox();
 			delta = ((normalExpected - normalActual));
 			delta = egl.eglx.lang.MathLib.abs(delta);
 			var isEqual = false;

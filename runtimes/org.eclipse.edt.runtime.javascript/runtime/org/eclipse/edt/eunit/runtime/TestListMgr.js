@@ -5,6 +5,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']) return egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']=this;
+			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			this.eze$$setInitial();
 		}
@@ -76,6 +77,18 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		}
 		,
 		"nextTest": function() {
+			var testId = "";
+			testId = this.getTestIdString();
+			this.ms.addStatus(testId);
+			var eze$Temp1 = false;
+			eze$Temp1 = ((this.testIndex < this.runTestMtds.getSize()));
+			if (eze$Temp1) {
+				this.testIndex = ((this.testIndex + 1));
+				egl.checkNull(this.runTestMtds)[this.runTestMtds.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : this.testIndex, eze$$signature : "I;"},false) - 1)]();
+			}
+		}
+		,
+		"getTestIdString": function() {
 			var testMethodNamesSize = 0;
 			testMethodNamesSize = this.testMethodNames.getSize();
 			var testId = "";
@@ -91,13 +104,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 					testId = ((testId) + "INVALIDINDEXFOUND!!!");
 				}
 			}
-			this.ms.addStatus(testId);
-			var eze$Temp3 = false;
-			eze$Temp3 = ((this.testIndex < this.runTestMtds.getSize()));
-			if (eze$Temp3) {
-				this.testIndex = ((this.testIndex + 1));
-				egl.checkNull(this.runTestMtds)[this.runTestMtds.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : this.testIndex, eze$$signature : "I;"},false) - 1)]();
-			}
+			return testId;
 		}
 		,
 		"nextTestLibrary": function() {
@@ -112,10 +119,24 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"handleCallBackException": function(exp) {
 			var str = "";
 			str = (((((("Caught service exception: ") + egl.checkNull(exp).messageID)) + ": ")) + egl.checkNull(exp).message);
-			var eze$Temp7 = null;
-			eze$Temp7 = egl.eglx.lang.EAny.ezeWrap(str);
-			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(eze$Temp7);
-			str = eze$Temp7.ezeUnbox();
+			if (egl.isa(exp, "Teglx/services/serviceinvocationexception;")) {
+				var sexp = null;
+				sexp = egl.eglx.lang.EAny.ezeCast({eze$$value : exp, eze$$signature : "Teglx/lang/anyexception;"}, egl.eglx.services.ServiceInvocationException);
+				var s1 = "";
+				s1 = (("detail1:") + egl.checkNull(sexp).detail1);
+				var s2 = "";
+				s2 = (("detail2:") + egl.checkNull(sexp).detail2);
+				var s3 = "";
+				s3 = (("detail3:") + egl.checkNull(sexp).detail3);
+				str = ((str) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+				str = ((((str) + s1)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+				str = ((((str) + s2)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+				str = ((((str) + s3)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+			}
+			var eze$Temp8 = null;
+			eze$Temp8 = egl.eglx.lang.EAny.ezeWrap(str);
+			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(eze$Temp8);
+			str = eze$Temp8.ezeUnbox();
 			var testId = "";
 			testId = egl.checkNull(egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testMethodNames)[egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testMethodNames.checkIndex(egl.eglx.lang.EInt32.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']).testIndex, eze$$signature : "I;"},false) - 1)];
 			this.nextTest();
@@ -129,17 +150,26 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 			s.reason = ((assertMsg) + s.reason);
 		}
 		,
+		"caughtAnyException": function(exp) {
+			var expMsg = "";
+			expMsg = (("uncaught exception for: ") + this.getTestIdString());
+			var eze$Temp9 = null;
+			eze$Temp9 = egl.eglx.lang.EAny.ezeWrap(expMsg);
+			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(eze$Temp9);
+			expMsg = eze$Temp9.ezeUnbox();
+		}
+		,
 		"getBindingTypeString": function(bType) {
 			if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED)) {
-				return "DEDICATED Binding";
+				return "DEDICATED_BINDING";
 			}
 			else {
 				if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEVELOP)) {
-					return "DEVELOP Binding";
+					return "DEVELOP_BINDING";
 				}
 				else {
 					if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEPLOYED)) {
-						return "DEPLOYED Binding";
+						return "DEPLOYED_BINDING";
 					}
 					else {
 						return "UNKNOWN Binding Type - NOT supported";
