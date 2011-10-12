@@ -34,6 +34,7 @@ import org.eclipse.edt.ide.sql.SQLPlugin;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
+import org.eclipse.datatools.modelbase.sql.datatypes.XMLDataType;
 
 /**
  * Utility to retrieve column information from SQL tables in a database.
@@ -287,13 +288,16 @@ public class EGLSQLRetrieveUtility {
 		PredefinedDataTypeDefinition typeDefinition = databaseDefinition.getPredefinedDataTypeDefinition(type.getName());
 		boolean recognizedType = true;
 		int intType;
+		
 		if (type.getName().equals("DATETIME") && type instanceof IntervalDataType) {
-			intType = setJDBCType(type);
-		}
-		else {
+			intType = setJDBCType(type) ;
+		} else if(type.getName().equals("XML") && type instanceof XMLDataType) {
+			intType = Types.SQLXML;
+		} else {
 			intType = typeDefinition.getJdbcEnumType();
 		}
 		switch (intType) {
+		case Types.SQLXML: // Treated as String in current release
 		case Types.CHAR: {
 			sqlStructureItem.setSQLVar(false);
 			recognizedType = handleCharType(type, sqlStructureItem, itemName);
@@ -522,6 +526,7 @@ public class EGLSQLRetrieveUtility {
 		switch (type.getPrimitiveType().getValue()) {
 		   case PrimitiveType.CHARACTER:
 		   case PrimitiveType.CHARACTER_VARYING:
+		   case PrimitiveType.XML_TYPE:
 			    break;
 		   case PrimitiveType.NATIONAL_CHARACTER:
 		   case PrimitiveType.NATIONAL_CHARACTER_VARYING:
@@ -532,17 +537,20 @@ public class EGLSQLRetrieveUtility {
 			    break;
 		}
 		if (recognizedType) {
-			try {
-				stringLength =  ((Integer) type.eGet(feature)).toString();
-				length = Integer.parseInt(stringLength);
-			} catch (NumberFormatException e) {
-				// The string does not represent a number, so assume it is zero
-				newItem.getMessages().add(
-								getErrorMessage(
-										EGLMessage.EGLMESSAGE_INFO_INVALID_LENGTH_SET_TO_ZERO_ON_RETRIEVE,
-										new String[] { stringLength, itemName })); 
-				stringLength = "0"; //$NON-NLS-1$
+			if(!(type instanceof XMLDataType)){
+				try {
+					stringLength =  ((Integer) type.eGet(feature)).toString();
+					length = Integer.parseInt(stringLength);
+				} catch (NumberFormatException e) {
+					// The string does not represent a number, so assume it is zero
+					newItem.getMessages().add(
+									getErrorMessage(
+											EGLMessage.EGLMESSAGE_INFO_INVALID_LENGTH_SET_TO_ZERO_ON_RETRIEVE,
+											new String[] { stringLength, itemName })); 
+					stringLength = "0"; //$NON-NLS-1$
+				}
 			}
+			
 			if (charType) {
 				newItem.setPrimitiveType(changeCharacterTypeBasedOnPreferences()); //$NON-NLS-1$
 				newItem.setLength(stringLength);
