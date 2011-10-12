@@ -32,6 +32,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.project.features.operations.EGLProjectFeatureOperation;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.osgi.service.prefs.BackingStoreException;
 
 
@@ -70,7 +71,7 @@ public class EGLProjectEGLDDGenerationOperation extends EGLProjectFeatureOperati
 		IPackageFragmentRoot eglSrcFolder = thisProject.getPackageFragmentRoot(srcPath);
 		IContainer container = (IFolder)eglSrcFolder.getUnderlyingResource();
 
-		IPath filePath = new Path(project.getName());
+		IPath filePath = new Path(CoreUtility.getValidProjectName( project.getName() ));
 		filePath = filePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
 		IFile eglddFile = container.getFile(filePath);
 		
