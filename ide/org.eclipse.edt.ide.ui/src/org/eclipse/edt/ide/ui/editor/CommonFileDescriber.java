@@ -30,9 +30,9 @@ public class CommonFileDescriber implements ITextContentDescriber {
 	
 	public CommonFileDescriber() {
 		//to match handler XXX type RUIhandler
-		handlerPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIHANDLER\\b", Pattern.CASE_INSENSITIVE);
+		handlerPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIHANDLER", Pattern.CASE_INSENSITIVE);
 		//to match handler XXX type RUIwidget
-		widgetPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIWIDGET\\b", Pattern.CASE_INSENSITIVE);
+		widgetPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIWIDGET", Pattern.CASE_INSENSITIVE);
 	}
 	
 	@Override
