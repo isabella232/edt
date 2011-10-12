@@ -30,13 +30,13 @@ public class RUIFileDescriber implements ITextContentDescriber {
 	
 	public RUIFileDescriber() {
 		//to match handler XXX type RUIhandler
-		handlerPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIHANDLER\\b", Pattern.CASE_INSENSITIVE);
+		handlerPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIHANDLER", Pattern.CASE_INSENSITIVE);
 		//to match handler XXX type RUIwidget
-		widgetPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIWIDGET\\b", Pattern.CASE_INSENSITIVE);
+		widgetPattern = Pattern.compile("\\bHANDLER\\b\\s\\s*.*\\s*\\s\\bTYPE\\b\\s\\s*\\bRUIWIDGET", Pattern.CASE_INSENSITIVE);
 	}
 
 	@Override
-	public int describe(InputStream contents, IContentDescription description) throws IOException {		
+	public int describe(InputStream contents, IContentDescription description) throws IOException {				
 		BufferedReader reader = new BufferedReader(new InputStreamReader(contents, "UTF-8"));
 		String line;
 		while((line = reader.readLine()) != null){
