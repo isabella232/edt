@@ -436,7 +436,7 @@ public class IRUtils {
 		}
 		
 		if (exprType.getClassifier().equals(type.getClassifier())) {
-			if (exprType instanceof SequenceType) {
+			if (exprType instanceof SequenceType && type instanceof SequenceType) {
 				if (((SequenceType)exprType).getLength() < ((SequenceType)type).getLength()) {
 					return expr;
 				}
@@ -465,9 +465,13 @@ public class IRUtils {
 				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
 			return expr;
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
-			BoxingExpression box = factory.createBoxingExpression();
-			box.setExpr(expr);
-			return createAsExpression(box, type);
+			 //Conversions from value types to Number, Decimal, TimeStamp, String do not need to be boxed
+			if (!(type instanceof ParameterizableType) && !(type == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
+				BoxingExpression box = factory.createBoxingExpression();
+				box.setExpr(expr);
+				return createAsExpression(box, type);
+			}
+			
 		}
 		return createAsExpression(expr, type);
 	}
