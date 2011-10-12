@@ -14,13 +14,9 @@ package org.eclipse.edt.gen.deployment.util;
 import java.util.LinkedHashSet;
 
 import org.eclipse.edt.gen.deployment.javascript.Constants;
-import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class CommonUtilities {
@@ -72,17 +68,8 @@ public class CommonUtilities {
 		return result;
 	}
 	
-	public static boolean isUserClass(Part part, Context context) {
-		return isUserDefined(part, context) && (part instanceof EGLClass);
-	}
-	
-	public static boolean isUserPart(Part part, Context context){
-		return isUserDefined(part, context) && (part instanceof EGLClass || part instanceof Enumeration);
-	}
-	
-	private static boolean isUserDefined(Part part, Context context){
-		//return !part.getFullyQualifiedName().startsWith("egl") && !part.getFullyQualifiedName().startsWith("eglx");
-		return !context.isSystemPart( part.getFullyQualifiedName() );
+	public static String toIncludeDDName( String eglddPath ) {
+		return eglddPath.substring( eglddPath.lastIndexOf( "/" ) + 1, eglddPath.lastIndexOf( "." ) ).toLowerCase();
 	}
 	
 	public static void addToDependentList(LinkedHashSet dependentFiles, String part) {
@@ -90,10 +77,6 @@ public class CommonUtilities {
 			dependentFiles.remove(part);
 		}
 		dependentFiles.add(part);
-	}
-	
-	public static String toIncludeDDName( String eglddPath ) {
-		return eglddPath.substring( eglddPath.lastIndexOf( "/" ) + 1, eglddPath.lastIndexOf( "." ) ).toLowerCase();
 	}
 
 }

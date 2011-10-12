@@ -16,33 +16,40 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.mof.egl.ExternalType;
-import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.TypeName;
-import org.eclipse.edt.mof.impl.AbstractVisitor;
-
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
+/**
+ * The PartRefernceCache retrieves all referenced, Non-System part ordered by dependency. 
+ * The result is cached
+ *  
+ */
 public class PartReferenceCache {
 	private Map<String,Set<Part>> cache;
-
-	public PartReferenceCache(){
+	private IEnvironment sysIREnv=null;
+	
+	public PartReferenceCache(IEnvironment env){
+		this.sysIREnv = env;
 		cache = new HashMap<String, Set<Part>>();
 	}
 
-	public Set<Part> getReferencedPartsFor(Part part, Context ctx) {
+	public Set<Part> getReferencedPartsFor(Part part) {
 		
 		Set<Part> parts = cache.get(part.getFullyQualifiedName());
 		if(parts == null){
 			parts = new LinkedHashSet<Part>();
-			getReferencedParts(part, ctx, parts);
-			parts.remove(parts);
+			getReferencedParts(part, parts);
+			parts.remove(part);
 			cache.put(part.getFullyQualifiedName(), parts);
 		}
 		return parts;
 	}
 	
-	private void getReferencedParts(Part part, Context ctx, Set<Part> allParts){
+	private void getReferencedParts(Part part, Set<Part> allParts){
+		// ExternalType is processed multiple times in order to keep the inherit dependency. 
+		// A super type will always appear later in the list then the sub types
+		System.err.println("getReferencedParts - "+part.getFullyQualifiedName());
 		if(allParts.contains(part)){
 			if(part instanceof ExternalType){
 				allParts.remove(part);
@@ -51,119 +58,10 @@ public class PartReferenceCache {
 			}
 		}
 		allParts.add(part);
-		for(Part refPart: (new PartsReferencedResolver()).getReferencedPartsFor(part, ctx)){
-			getReferencedParts(refPart, ctx, allParts);
+		for(Part refPart: IRUtils.getReferencedPartsFor(part)){
+			if(!IRUtils.isSystemPart(refPart.getFullyQualifiedName(), sysIREnv)){
+				getReferencedParts(refPart, allParts);
+			}
 		}
 	}
-	
-	public class PartsReferencedResolver extends AbstractVisitor {
-		Part root;
-		Set<Part> referencedParts;
-		Context ctx;
-		
-		PartsReferencedResolver() {
-			disallowRevisit();
-			referencedParts = new LinkedHashSet<Part>();
-		}
-		
-		public boolean visit(Part part) {
-			
-			if(! CommonUtilities.isUserClass(part,ctx)){
-				return false;
-			}else{
-				if (part != root) {
-					referencedParts.add(part);
-					return false;
-				}
-				return true;
-			}
-		}	
-
-		public boolean visit(TypeName name) {
-			name.getType().accept(this);
-			return false;
-		}
-		
-		public boolean visit(NewExpression newExpr) {
-			newExpr.getType().accept(this);
-			return true;
-		}
-
-		
-		public Set<Part> getReferencedPartsFor(Part part, Context ctx) {
-			root = part;
-			this.ctx = ctx;
-			root.accept(this);
-			return referencedParts;
-		}
-	}	
-	
-
-//	public Set<Part> getReferencedPartsFor(Part part, Context ctx) {
-//	Set<Part> parts = cache.get(part.getFullyQualifiedName());
-//	if(parts == null){
-//		parts = (new PartsReferencedResolver()).getReferencedPartsFor(part, ctx);
-//		cache.put(part.getFullyQualifiedName(), parts);
-//	}
-//	return parts;
-//}
-//
-//	public class PartsReferencedResolver extends AbstractVisitor {
-//		Part root;
-//		Set<Part> referencedParts;
-//		Context ctx;
-//		
-//		PartsReferencedResolver() {
-//			disallowRevisit();
-//			referencedParts = new LinkedHashSet<Part>();
-//		}
-//		
-//		public boolean visit(Part part) {
-//			
-//			if(! CommonUtilities.isUserClass(part,ctx)){
-//				return false;
-//			}else{
-//				if (part != root) {
-//					appendToReferencedParts(part);
-//					
-//					//add all super types of the part to the end of the list
-//					if(part instanceof ExternalType){
-//						addSuperTypes((ExternalType)part);
-//					}
-//				}
-//				return true;
-//			}
-//		}	
-//
-//		private void addSuperTypes(ExternalType part){
-//			for(Part superPart:part.getSuperTypes()){
-//				if(superPart instanceof ExternalType && !CommonUtilities.isUserClass(superPart,ctx)){
-//					appendToReferencedParts(superPart);
-//					addSuperTypes((ExternalType)superPart);
-//				}
-//			}
-//		}
-//		
-//		private void appendToReferencedParts(Part part){
-//			//add to the end of the list
-//			if(referencedParts.contains(part)){
-//				referencedParts.remove(part);
-//			}
-//			referencedParts.add(part);
-//
-//		}
-//		
-//		public Set<Part> getReferencedPartsFor(Part part, Context ctx) {
-//			root = part;
-//			this.ctx = ctx;
-//			root.accept(this);
-//			for (Part p : referencedParts) {
-//				System.err.println("find reference - "+p.getFullyQualifiedName());
-//				
-//			}
-//			return referencedParts;
-//		}
-//		
-//	}
-	
 }
