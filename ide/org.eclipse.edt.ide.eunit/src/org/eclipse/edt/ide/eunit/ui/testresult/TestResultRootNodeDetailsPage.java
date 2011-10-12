@@ -13,13 +13,13 @@ public class TestResultRootNodeDetailsPage extends TestResultPkgNodeDetailsPage 
 	}
 
 	protected void createControlsInTopSection(FormToolkit toolkit, Composite parent) {
-		createOneLabelPerLine(toolkit, parent, nColumnSpan, "Expected total test variation count: " + expectedTotalCnt);
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "Expected total test variation count: " + expectedTotalCnt);
 		if(expectedTotalCnt != statisticCnt.getExpectedCnt() ||
 				statisticCnt.getExpectedCnt() != statisticCnt.getTestCnt()){
 			
 			String errorMsg = "ERROR: Expected total test variation count [" + expectedTotalCnt + "] differs from the calculated expected test count [" + 
 					statisticCnt.getExpectedCnt() + "] or the actual test count [" + statisticCnt.getTestCnt() + "]!";
-			createErrorLable(toolkit, parent, nColumnSpan, errorMsg);		
+			createErrorReadOnlyNoBoarderText(toolkit, parent, nColumnSpan, errorMsg);		
 		}
 			
 		super.createControlsInTopSection(toolkit, parent);		

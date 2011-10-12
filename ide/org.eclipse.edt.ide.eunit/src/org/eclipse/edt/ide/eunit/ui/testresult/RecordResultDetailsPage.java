@@ -22,6 +22,7 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.internal.ide.dialogs.CreateLinkedResourceGroup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -168,7 +169,9 @@ public class RecordResultDetailsPage extends TestResultPkgNodeDetailsPage {
 				if(nodeName.equals(ConstantUtil.ELEM_code)){					
 					nodeTextContent += " - " + ConstantUtil.STEXTS[Integer.parseInt(nodeTextContent)];
 				}
-				createOneLabelPerLine(toolkit, parent, nColumnSpan, nodeName + ": " + nodeTextContent);
+				createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, nodeName + ": " + nodeTextContent);
+				//createOneLabelPerLine(toolkit, parent, nColumnSpan, nodeName + ": " + nodeTextContent);
+				
 			}
 		}
 	}

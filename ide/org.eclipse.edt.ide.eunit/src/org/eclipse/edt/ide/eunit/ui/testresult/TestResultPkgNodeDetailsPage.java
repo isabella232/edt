@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
@@ -184,20 +185,20 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 			double rate = (double)(cnt) / (double)(statisticCnt.getExpectedCnt());
 			
 			String failedSummary = cnt + " out of " + statisticCnt.getExpectedCnt() + ", [" +  df.format(rate) + "] " + resultText ;
-			createColorBoldLabel(toolkit, parent, nColumnSpan, failedSummary, color);
+			createColorBoldReadOnlyNoBoraderText(toolkit, parent, nColumnSpan, failedSummary, color);
 		}
 	}	
 	
 	protected void createControlsInTopSection(FormToolkit toolkit, Composite parent) {
 		createSpacer(toolkit, parent, nColumnSpan);
-		createOneLabelPerLine(toolkit, parent, nColumnSpan, "testCnt: " + statisticCnt.getTestCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan, "expCnt: " + statisticCnt.getExpectedCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "passedCnt: " + statisticCnt.getPassedCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "failedCnt: " + statisticCnt.getFailedCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "errCnt: " + statisticCnt.getErrCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "badCnt: " + statisticCnt.getBadCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan,  "notRunCnt: " + statisticCnt.getNotRunCnt());
-		createOneLabelPerLine(toolkit, parent, nColumnSpan, "");
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "testCnt: " + statisticCnt.getTestCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "expCnt: " + statisticCnt.getExpectedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "passedCnt: " + statisticCnt.getPassedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "failedCnt: " + statisticCnt.getFailedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "errCnt: " + statisticCnt.getErrCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "badCnt: " + statisticCnt.getBadCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "notRunCnt: " + statisticCnt.getNotRunCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "");
 		
 		createSummaryLine(toolkit, parent, statisticCnt.getPassedCnt(), " PASSED.", getGreen(), true);
 		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
@@ -208,14 +209,14 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		if(statisticCnt.getTestCnt() != statisticCnt.getExpectedCnt())
 		{
 			String errMsg = "ERROR: Expected count [" + statisticCnt.getExpectedCnt() + "] is different from the actual test ran [" + statisticCnt.getTestCnt() + "]";
-			createErrorLable(toolkit, parent, nColumnSpan, errMsg);
+			createErrorReadOnlyNoBoarderText(toolkit, parent, nColumnSpan, errMsg);
 		}
 		
 		if(isBIRTPluginInstalled()) {
 			createPieChart(parent);
 		} else {
 			String errMsg = "NOTE: You need birt chart engine to view pie chart, please install BIRT feature (version 2.6.2 and up)";
-			createErrorLable(toolkit, parent, nColumnSpan, errMsg);
+			createErrorReadOnlyNoBoarderText(toolkit, parent, nColumnSpan, errMsg);
 		}
 	}
 
@@ -261,23 +262,37 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		return createOneLabelPerLine(toolkit, parent, span, "");
 	}	
 	
-	protected Label createOneLabelPerLine(FormToolkit toolkit, Composite parent, int span, String labelText) {
+	private Label createOneLabelPerLine(FormToolkit toolkit, Composite parent, int span, String labelText) {
 		Label spacer = toolkit.createLabel(parent, labelText); //$NON-NLS-1$
+		
 		GridData gd = new GridData();
 		gd.horizontalSpan = span;
 		spacer.setLayoutData(gd);
 		return spacer;
 	}	
 	
-	protected Label createErrorLable(FormToolkit toolkit, Composite parent, int span, String labelText){
-		return createColorBoldLabel(toolkit, parent, span, labelText, getRed());
+	protected Text createReadOnlyNoBorderText(FormToolkit toolkit, Composite parent, int span, String labelText){
+		boolean toggleBorder = toolkit.getBorderStyle() == SWT.BORDER;
+		if (toggleBorder) {
+			toolkit.setBorderStyle(SWT.NONE);
+		}		
+		Text spacer = toolkit.createText(parent, labelText, SWT.READ_ONLY|SWT.MULTI); //$NON-NLS-1$
+		
+		GridData gd = new GridData();
+		gd.horizontalSpan = span;
+		spacer.setLayoutData(gd);
+		return spacer;		
+	}
+	
+	protected Text createErrorReadOnlyNoBoarderText(FormToolkit toolkit, Composite parent, int span, String labelText){
+		return createColorBoldReadOnlyNoBoraderText(toolkit, parent, span, labelText, getRed());
 	}	
 	
-	protected Label createColorBoldLabel(FormToolkit toolkit, Composite parent, int span, String labelText, Color color){
-		Label label = createOneLabelPerLine(toolkit, parent, span, labelText);
-		label.setForeground(color);
-		label.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
-		return label;		
+	protected Text createColorBoldReadOnlyNoBoraderText(FormToolkit toolkit, Composite parent, int span, String labelText, Color color){
+		Text textControl = createReadOnlyNoBorderText(toolkit, parent, span, labelText);
+		textControl.setForeground(color);
+		textControl.setFont(JFaceResources.getFontRegistry().getBold(JFaceResources.DIALOG_FONT));
+		return textControl;		
 	}
 
 	protected Composite createSection(Composite parent, FormToolkit toolkit, String title,
