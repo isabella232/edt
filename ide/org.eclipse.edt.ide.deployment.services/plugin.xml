@@ -3,6 +3,12 @@
 <plugin>
    <extension
          point="org.eclipse.edt.ide.deployment.deploymentOperation">
+         
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.ConvertWorkspaceResourceOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.ConvertWorkspaceResourceOperation">
+      </DeploymentOperation>
       <DeploymentOperation
             class="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindXMLFileOperation"
             deploymentSolutionName="j2ee"
@@ -22,6 +28,11 @@
             class="org.eclipse.edt.ide.deployment.services.operation.UpdateWebXMLServiceOperation"
             deploymentSolutionName="j2ee"
             id="org.eclipse.edt.ide.deployment.services.operation.UpdateWebXMLServiceOperation">
+      </DeploymentOperation>
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.CopyJDBCJarOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.CopyJDBCJarOperation">
       </DeploymentOperation>
    </extension>
 
