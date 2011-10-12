@@ -34,6 +34,7 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 		out.pushIndent();
 		out.println("function start()");
 		out.pushIndent();
+		out.println("TestListMgr.bindingType = ServiceBindingType.DEDICATED;");
 		out.println("TestListMgr.LibraryStartTests = new runTestMethod[];");
 		for(String genLibName : listOfGenedLibs){
 			out.print("TestListMgr.LibraryStartTests ::= ");
