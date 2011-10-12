@@ -91,6 +91,10 @@ public class Binding {
 		return useURI;
 	}
 	
+	public void setUseURI( boolean useURI) {
+		this.useURI = useURI;
+	}
+	
 	public boolean equals(Object o) {
 		if (!(o instanceof Binding)) {
 			return false;
