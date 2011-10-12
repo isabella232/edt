@@ -203,6 +203,10 @@ public class TypeUtils implements MofConversion {
 			if (key.equalsIgnoreCase(Type_EGLDecimal) && type instanceof ParameterizableType) {
 				return false;
 			}
+
+			if (key.equalsIgnoreCase(Type_EGLTimestamp) && type instanceof ParameterizableType) {
+				return false;
+			}
 			
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
 		}
