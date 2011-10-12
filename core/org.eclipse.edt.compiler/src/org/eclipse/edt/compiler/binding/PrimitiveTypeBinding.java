@@ -414,7 +414,10 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	}
 	
 	public boolean isReference() {
-		return REFERENCE_PRIMITIVES.contains(getPrimitive()) || (getPrimitive() == Primitive.DECIMAL && getLength() == 0);
+		return 
+				REFERENCE_PRIMITIVES.contains(getPrimitive()) 
+				|| (getPrimitive() == Primitive.DECIMAL && getLength() == 0)
+				|| (getPrimitive() == Primitive.TIMESTAMP && getPattern() == null);
 	}
 	
 	@Override

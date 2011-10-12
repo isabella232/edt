@@ -811,6 +811,14 @@ public class TypeCompatibilityUtil {
 			if (srcPrim == Primitive.NUMBER && tgtPrim == Primitive.DECIMAL) {
 				return true;
 			}
+			
+			if (srcPrim == Primitive.TIMESTAMP && tgtPrim == Primitive.TIMESTAMP && (sourceType.isReference() || targetType.isReference())) {
+				return true;
+			}
+
+			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.DECIMAL && (sourceType.isReference() || targetType.isReference())) {
+				return true;
+			}
 		}
 		
 		if(compilerOptions.isVAGCompatible()) {
