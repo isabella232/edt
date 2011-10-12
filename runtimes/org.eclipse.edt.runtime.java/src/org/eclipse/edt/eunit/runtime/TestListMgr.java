@@ -11,19 +11,21 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.eunit.runtime.MultiStatus;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import eglx.lang.AnyException;
 import org.eclipse.edt.eunit.runtime.ServiceBindingType;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
+import org.eclipse.edt.eunit.runtime.MultiStatus;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import eglx.services.ServiceInvocationException;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import org.eclipse.edt.eunit.runtime.Status;
-import eglx.lang.AnyException;
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -42,7 +44,8 @@ public class TestListMgr extends ExecutableBase {
 	@javax.xml.bind.annotation.XmlTransient
 	public List<org.eclipse.edt.javart.Delegate> LibraryStartTests;
 	@javax.xml.bind.annotation.XmlTransient
-	public int libIndex;
+	private int libIndex;
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	public TestListMgr() {
 		super();
@@ -114,6 +117,12 @@ public class TestListMgr extends ExecutableBase {
 	public void setLibIndex( int ezeValue ) {
 		this.libIndex = ezeValue;
 	}
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
+		}
+		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	}
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
 			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
@@ -121,6 +130,17 @@ public class TestListMgr extends ExecutableBase {
 		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	}
 	public void nextTest() {
+		String testId;
+		testId = getTestIdString();
+		ms.addStatus(testId);
+		boolean eze$Temp1;
+		eze$Temp1 = (testIndex < EList.getSize(runTestMtds));
+		if (eze$Temp1) {
+			testIndex += (int)((short) 1);
+			runTestMtds.get(testIndex - 1).invoke();
+		}
+	}
+	private String getTestIdString() {
 		int testMethodNamesSize;
 		testMethodNamesSize = EList.getSize(testMethodNames);
 		String testId;
@@ -136,13 +156,7 @@ public class TestListMgr extends ExecutableBase {
 				testId += "INVALIDINDEXFOUND!!!";
 			}
 		}
-		ms.addStatus(testId);
-		boolean eze$Temp3;
-		eze$Temp3 = (testIndex < EList.getSize(runTestMtds));
-		if (eze$Temp3) {
-			testIndex += (int)((short) 1);
-			runTestMtds.get(testIndex - 1).invoke();
-		}
+		return testId;
 	}
 	public void nextTestLibrary() {
 		boolean eze$Temp5;
@@ -155,10 +169,24 @@ public class TestListMgr extends ExecutableBase {
 	public void handleCallBackException(AnyException exp) {
 		String str;
 		str = (((((("Caught service exception: ") + exp.getMessageID())) + ": ")) + exp.getMessage());
-		AnyBoxedObject<String> eze$Temp7;
-		eze$Temp7 = EAny.ezeWrap(str);
-		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp7);
-		str = eze$Temp7.ezeUnbox();
+		if (EAny.ezeIsa(exp, ServiceInvocationException.class)) {
+			ServiceInvocationException sexp;
+			sexp = EAny.ezeCast(exp, ServiceInvocationException.class);
+			String s1;
+			s1 = (("detail1:") + sexp.detail1);
+			String s2;
+			s2 = (("detail2:") + sexp.detail2);
+			String s3;
+			s3 = (("detail3:") + sexp.detail3);
+			str = ((str) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
+			str = ((((str) + s1)) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
+			str = ((((str) + s2)) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
+			str = ((((str) + s3)) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
+		}
+		AnyBoxedObject<String> eze$Temp8;
+		eze$Temp8 = EAny.ezeWrap(str);
+		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp8);
+		str = eze$Temp8.ezeUnbox();
 		String testId;
 		testId = this.testMethodNames.get(this.testIndex - 1);
 		nextTest();
@@ -170,17 +198,25 @@ public class TestListMgr extends ExecutableBase {
 		s = org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().getStatus(), s);
 		s.reason = ((assertMsg) + s.reason);
 	}
+	public void caughtAnyException(AnyException exp) {
+		String expMsg;
+		expMsg = (("uncaught exception for: ") + getTestIdString());
+		AnyBoxedObject<String> eze$Temp9;
+		eze$Temp9 = EAny.ezeWrap(expMsg);
+		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp9);
+		expMsg = eze$Temp9.ezeUnbox();
+	}
 	public String getBindingTypeString(ServiceBindingType bType) {
 		if ((bType == ServiceBindingType.DEDICATED)) {
-			return "DEDICATED_Binding";
+			return "DEDICATED_BINDING";
 		}
 		else {
 			if ((bType == ServiceBindingType.DEVELOP)) {
-				return "DEVELOP_Binding";
+				return "DEVELOP_BINDING";
 			}
 			else {
 				if ((bType == ServiceBindingType.DEPLOYED)) {
-					return "DEPLOYED_Binding";
+					return "DEPLOYED_BINDING";
 				}
 				else {
 					return "UNKNOWN Binding Type - NOT supported";
