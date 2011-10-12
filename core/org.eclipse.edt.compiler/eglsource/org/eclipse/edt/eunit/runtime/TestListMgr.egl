@@ -61,8 +61,18 @@ Library TestListMgr
 	end		
 	
 	//helper functions to handle asynchronize call exceptions
-	function handleCallBackException(exp AnyException in)
+	function handleCallBackException(exp AnyException in)		
 		str String = "Caught service exception: " + exp.messageID + ": " + exp.message;
+		if(exp isa ServiceInvocationException)
+			sexp ServiceInvocationException = exp as ServiceInvocationException;
+	    	s1 String = "detail1:" + sexp.detail1;
+	    	s2 String = "detail2:" + sexp.detail2;
+	    	s3 String = "detail3:" + sexp.detail3;
+			str = str + ConstantsLib.NEWLINE;
+			str = str + s1 + ConstantsLib.NEWLINE;
+			str = str + s2 + ConstantsLib.NEWLINE;
+			str = str + s3 + ConstantsLib.NEWLINE;
+		end
 		LogResult.error(str);
 		testId String = TestListMgr.testMethodNames[TestListMgr.testIndex];
 		TestListMgr.nextTest();
@@ -85,11 +95,11 @@ Library TestListMgr
 	function getBindingTypeString(bType ServiceBindingType) returns (String)		
 		case(bType)
 			when(ServiceBindingType.DEDICATED)
-				return ("DEDICATED Binding");
+				return ("DEDICATED_BINDING");
 			when(ServiceBindingType.DEVELOP)
-				return ("DEVELOP Binding");
+				return ("DEVELOP_BINDING");
 			when(ServiceBindingType.DEPLOYED)
-				return ("DEPLOYED Binding");
+				return ("DEPLOYED_BINDING");
 			otherwise
 				return ("UNKNOWN Binding Type - NOT supported");		
 		end		
