@@ -1187,7 +1187,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		}
 //		case Primitive.TIME_PRIMITIVE:
 		case Primitive.TIMESTAMP_PRIMITIVE: {
-			typeSignature += "(" + getPattern(type) + ")";
+			typeSignature += (type.getPattern() == null ? "" : "(" + getPattern(type) + ")");
 			break;
 		}
 
@@ -1241,6 +1241,10 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	protected boolean isParameterizedType(PrimitiveTypeBinding type) {
 		boolean is = false;
 		switch (type.getPrimitive().getType()) {
+			case Primitive.TIMESTAMP_PRIMITIVE: {
+				is = type.getPattern() != null;
+				break;
+			}
 			case Primitive.CHAR_PRIMITIVE:
 			case Primitive.MBCHAR_PRIMITIVE:
 			case Primitive.DBCHAR_PRIMITIVE:
@@ -1253,9 +1257,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			case Primitive.NUM_PRIMITIVE: 
 			case Primitive.INTERVAL_PRIMITIVE:
 			case Primitive.MONTHSPAN_INTERVAL_PRIMITIVE:
-			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE:
+			case Primitive.SECONDSPAN_INTERVAL_PRIMITIVE: {
 	//		case Primitive.TIME_PRIMITIVE:
-			case Primitive.TIMESTAMP_PRIMITIVE: {
 				is = true;
 				break;
 			}
