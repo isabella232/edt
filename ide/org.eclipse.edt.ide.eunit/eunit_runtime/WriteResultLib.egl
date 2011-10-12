@@ -99,7 +99,7 @@ Library WriteResultLib
 	private function getTimeStamp() returns (String)
 		if(currentTime == null || currentTime == "")
 			format String = "yyyyMMdd_HHmmss";
-			myTime TimeStamp;
+			myTime TimeStamp("yyyyMMddHHmmss");
 			currentTime = strLib.formatTimestamp(myTime, format);				
 		end
 		
