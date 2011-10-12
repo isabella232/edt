@@ -28,10 +28,8 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReference;
-import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
@@ -69,6 +67,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
 
@@ -77,6 +76,7 @@ public class IRUtils {
 
 	private static IrFactory factory = IrFactory.INSTANCE;
 	public static String OVERLOADED_FUNCTION = "EZE_OVERLOADED_FUNCTION";
+	private static String EGL_SCHEMA = Type.EGL_KeyScheme + Type.KeySchemeDelimiter;
 	
 	
 	public static class FileNameResolver extends AbstractVisitor {
@@ -1037,6 +1037,22 @@ public class IRUtils {
 		
 		return packageName.replace('.', '/') + "/" + fileName;
 		
+	}
+
+	public static boolean isSystemPart( String partName, IEnvironment sysIREnv ) {
+		String key = makeEGLKey(partName);
+		if(sysIREnv.get(key)!=null){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
+	public static String makeEGLKey(String key) {
+		if (key != null && !key.startsWith(EGL_SCHEMA)) {
+			key = EGL_SCHEMA + key;
+		}
+		return key.toUpperCase().toLowerCase();
 	}
 
 }
