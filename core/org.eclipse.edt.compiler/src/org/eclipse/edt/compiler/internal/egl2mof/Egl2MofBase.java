@@ -1783,7 +1783,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		
 		if (obj instanceof Element) {
 			Element elem = (Element) obj;
-			Annotation ann = factory.createAnnotation(IEGLConstants.EGL_LOCATION);
+			Annotation ann = factory.createDynamicAnnotation(IEGLConstants.EGL_LOCATION);
 			ann.setValue(IEGLConstants.EGL_PARTLENGTH, new Integer(node.getLength()));
 			ann.setValue(IEGLConstants.EGL_PARTOFFSET, new Integer(node.getOffset()));
 			ann.setValue(IEGLConstants.EGL_PARTLINE, new Integer(getLine(node)));
