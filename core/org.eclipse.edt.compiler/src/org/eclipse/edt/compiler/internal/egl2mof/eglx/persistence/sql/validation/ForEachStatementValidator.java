@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
+import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
@@ -26,6 +27,7 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 	ICompilerOptions compilerOptions;
 	
 	FromOrToExpressionClause from;
+	IntoClause into;
 
 	public ForEachStatementValidator(ForEachStatement statement, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		super();
@@ -39,6 +41,7 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 		
 		validateIsEntityOrMapsToColumns(statement.getTargets(), problemRequestor);
 		validateFrom();
+		validateInto();
 	}
 	
 	private void validateFrom() {
@@ -54,6 +57,13 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 		}
 	}
 	
+	private void validateInto() {
+		if (into != null) {
+			// INTO not currently part of the spec.
+			problemRequestor.acceptProblem(into, IProblemRequestor.SQL_INTO_NOT_ALLOWED, new String[] {});
+		}
+	}
+	
 	private void initialize() {
 		statement.accept(new AbstractASTVisitor() {
 			public boolean visit(FromOrToExpressionClause clause) {
@@ -64,6 +74,18 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 					problemRequestor.acceptProblem(clause,
 							IProblemRequestor.DUPE_OPTION,
 							new String[] { IEGLConstants.KEYWORD_FOREACH.toUpperCase(), IEGLConstants.KEYWORD_FROM.toUpperCase()});
+				}
+				return false;
+			}
+			
+			public boolean visit(IntoClause intoClause) {
+				if (into == null) {
+					into = intoClause;
+				}
+				else {
+					problemRequestor.acceptProblem(intoClause,
+							IProblemRequestor.DUPE_OPTION,
+							new String[] { IEGLConstants.KEYWORD_FOREACH.toUpperCase(), IEGLConstants.KEYWORD_INTO.toUpperCase()});
 				}
 				return false;
 			}

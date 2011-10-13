@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
+import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithExpressionClause;
@@ -37,6 +38,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 	FromOrToExpressionClause from;
 	WithInlineSQLClause withInline;
 	WithExpressionClause withExpression;
+	IntoClause into;
 	
 	public GetByKeyStatementValidator(GetByKeyStatement statement, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		super();
@@ -50,6 +52,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 		
 		validateTargets();
 		validateFrom();
+		validateInto();
 		
 		//TODO when associations are supported, add the following validation:
 		// "If the action target is an association_expr no WITH clause is allowed and the data source must be of type SQLDataSource, i.e. it cannot be an SQLResultSet."
@@ -106,6 +109,13 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 						new String[] {from.getExpression().getCanonicalString(), "eglx.persistence.sql.SQLDataSource"});
 				return;
 			}
+		}
+	}
+	
+	private void validateInto() {
+		if (into != null) {
+			// INTO not currently part of the spec.
+			problemRequestor.acceptProblem(into, IProblemRequestor.SQL_INTO_NOT_ALLOWED, new String[] {});
 		}
 	}
 	
@@ -169,6 +179,18 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 					problemRequestor.acceptProblem(clause,
 							IProblemRequestor.DUPE_OPTION,
 							new String[] { IEGLConstants.KEYWORD_GET.toUpperCase(), IEGLConstants.KEYWORD_FROM.toUpperCase()});
+				}
+				return false;
+			}
+			
+			public boolean visit(IntoClause intoClause) {
+				if (into == null) {
+					into = intoClause;
+				}
+				else {
+					problemRequestor.acceptProblem(intoClause,
+							IProblemRequestor.DUPE_OPTION,
+							new String[] { IEGLConstants.KEYWORD_GET.toUpperCase(), IEGLConstants.KEYWORD_INTO.toUpperCase()});
 				}
 				return false;
 			}
