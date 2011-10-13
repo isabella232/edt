@@ -135,9 +135,11 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 			}
 		}
 		else {
-			out.println("if(" + var_resultSet + ".next()) {");
+			if (!isResultSet)
+				out.println("if(" + var_resultSet + ".next()) {");
 			genGetSingleRowFromResultSet(stmt.getTargets(), var_resultSet, ctx, out);
-			out.println('}');
+			if (!isResultSet)
+				out.println('}');
 		}
 		if (!isResultSet)
 			out.println(var_resultSet + ".close();");
