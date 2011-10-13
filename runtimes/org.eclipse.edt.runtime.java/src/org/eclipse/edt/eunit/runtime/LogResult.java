@@ -8,39 +8,31 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+
 package org.eclipse.edt.eunit.runtime;
-import org.eclipse.edt.javart.resources.*;
-import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import java.lang.Long;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import java.util.Calendar;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.eunit.runtime.Log;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.List;
+
+import org.eclipse.edt.javart.AnyBoxedObject;
+import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
 import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+
 import eglx.lang.MathLib;
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
-	public Log outR;
+	private Log outR;
 	@javax.xml.bind.annotation.XmlTransient
-	public Status s;
+	private Status s;
 	private static final String ezeConst_ACTUALHEADER = "Actual value = ";
 	public final String ACTUALHEADER = ezeConst_ACTUALHEADER;
 	private static final String ezeConst_EXPECTEDHEADER = "Expected value = ";
@@ -131,7 +123,7 @@ public class LogResult extends ExecutableBase {
 		str.ezeCopy((("SKIPPED - ") + str.ezeUnbox()));
 		s.reason = str.ezeUnbox();
 	}
-	public void assertTrueException(String failedReason, boolean testCondition, boolean throwsFailException) {
+	private void assertTrueException(String failedReason, boolean testCondition, boolean throwsFailException) {
 		if (testCondition) {
 			AnyBoxedObject<String> eze$Temp3;
 			eze$Temp3 = EAny.ezeWrap("OK");
@@ -160,9 +152,6 @@ public class LogResult extends ExecutableBase {
 	public void assertTrue1(boolean testCondition) {
 		assertTrue("", testCondition);
 	}
-	public void assertTrueNoException(String failedReason, boolean testCondition) {
-		assertTrueException(failedReason, testCondition, false);
-	}
 	public void assertBigIntEqual(String message, long expected, long actual) {
 		boolean isEqual;
 		isEqual = (expected == actual);
@@ -171,11 +160,6 @@ public class LogResult extends ExecutableBase {
 	public void assertBigIntEqual1(long expected, long actual) {
 		assertBigIntEqual("", expected, actual);
 	}
-	public void assertBigIntEqualNoException(String message, long expected, long actual) {
-		boolean isEqual;
-		isEqual = (expected == actual);
-		expectAssertTrueNoException(message, EBigint.ezeBox(expected), EBigint.ezeBox(actual), isEqual);
-	}
 	public void assertStringEqual(String message, String expected, String actual) {
 		boolean isEqual;
 		isEqual = ((expected).equals(actual));
@@ -183,11 +167,6 @@ public class LogResult extends ExecutableBase {
 	}
 	public void assertStringEqual1(String expected, String actual) {
 		assertStringEqual("", expected, actual);
-	}
-	public void assertStringEqualNoException(String message, String expected, String actual) {
-		boolean isEqual;
-		isEqual = ((expected).equals(actual));
-		expectAssertTrueNoException(message, EString.ezeBox(expected), EString.ezeBox(actual), isEqual);
 	}
 	public void assertStringArrayEqual(String message, List<String> expected, List<String> actual) {
 		boolean isArrayEqual;
@@ -248,23 +227,13 @@ public class LogResult extends ExecutableBase {
 	public void assertDateEqual1(Calendar expected, Calendar actual) {
 		assertDateEqual("", expected, actual);
 	}
-	public void assertDateEqualNoException(String message, Calendar expected, Calendar actual) {
-		boolean isEqual;
-		isEqual = (EDate.equals(expected, actual));
-		expectAssertTrueNoException(message, EDate.ezeBox(expected), EDate.ezeBox(actual), isEqual);
-	}
 	public void assertTimestampEqual(String message, Calendar expected, Calendar actual) {
 		boolean isEqual;
 		isEqual = (ETimestamp.equals(expected, actual));
-		expectAssertTrue(message, ETimestamp.ezeBox(expected, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), ETimestamp.ezeBox(actual, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), isEqual);
+		expectAssertTrue(message, ETimestamp.ezeBox(expected), ETimestamp.ezeBox(actual), isEqual);
 	}
 	public void assertTimestampEqual1(Calendar expected, Calendar actual) {
 		assertTimestampEqual("", expected, actual);
-	}
-	public void assertTimestampEqualNoException(String message, Calendar expected, Calendar actual) {
-		boolean isEqual;
-		isEqual = (ETimestamp.equals(expected, actual));
-		expectAssertTrueNoException(message, ETimestamp.ezeBox(expected, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), ETimestamp.ezeBox(actual, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE), isEqual);
 	}
 	public void assertDecimalEqual(String message, BigDecimal expected, BigDecimal actual) {
 		boolean isEqual;
@@ -274,11 +243,6 @@ public class LogResult extends ExecutableBase {
 	public void assertDecimalEqual1(BigDecimal expected, BigDecimal actual) {
 		assertDecimalEqual("", expected, actual);
 	}
-	public void assertDecimalEqualNoException(String message, BigDecimal expected, BigDecimal actual) {
-		boolean isEqual;
-		isEqual = (EDecimal.equals(expected, actual));
-		expectAssertTrueNoException(message, EDecimal.ezeBox(expected), EDecimal.ezeBox(actual), isEqual);
-	}
 	public void assertFloatEqual(String message, double expected, double actual) {
 		boolean isEqual;
 		isEqual = isFloatEqual(expected, actual);
@@ -287,12 +251,7 @@ public class LogResult extends ExecutableBase {
 	public void assertFloatEqual1(double expected, double actual) {
 		assertFloatEqual("", expected, actual);
 	}
-	public void assertFloatEqualNoException(String message, double expected, double actual) {
-		boolean isEqual;
-		isEqual = isFloatEqual(expected, actual);
-		expectAssertTrueNoException(message, EFloat.ezeBox(expected), EFloat.ezeBox(actual), isEqual);
-	}
-	public boolean isFloatEqual(double expected, double actual) {
+	private boolean isFloatEqual(double expected, double actual) {
 		double normalExpected = 0.0;
 		double normalActual = 0.0;
 		double delta = 0.0;
@@ -318,17 +277,12 @@ public class LogResult extends ExecutableBase {
 		isEqual = ((((signExpected).equals(signActual)) && (mantissaExpected == mantissaActual)) && (delta < deltaLimit));
 		return isEqual;
 	}
-	public void expectAssertTrueNoException(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
-		String failedReason;
-		failedReason = buildFailedReason(message, expected, actual);
-		assertTrueNoException(failedReason, isEqual);
-	}
-	public void expectAssertTrue(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
+	private void expectAssertTrue(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, boolean isEqual) {
 		String failedReason;
 		failedReason = buildFailedReason(message, expected, actual);
 		assertTrue(failedReason, isEqual);
 	}
-	public String buildFailedReason(String message, eglx.lang.EAny expected, eglx.lang.EAny actual) {
+	private String buildFailedReason(String message, eglx.lang.EAny expected, eglx.lang.EAny actual) {
 		String failedReason;
 		failedReason = expect(expected, actual);
 		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(message), null)) && (!(message).equals("")))) {
@@ -336,12 +290,12 @@ public class LogResult extends ExecutableBase {
 		}
 		return failedReason;
 	}
-	public String expect(eglx.lang.EAny expected, eglx.lang.EAny actual) {
+	private String expect(eglx.lang.EAny expected, eglx.lang.EAny actual) {
 		String standardMsg;
 		standardMsg = (((((((((((((((("Failed: ") + EXPECTEDHEADER)) + "'")) + EString.ezeCast(expected))) + "' ")) + ACTUALHEADER)) + "'")) + EString.ezeCast(actual))) + "' ");
 		return standardMsg;
 	}
-	public double normalFloat(double afloat, AnyBoxedObject<Integer> mantissa, AnyBoxedObject<String> sign) {
+	private double normalFloat(double afloat, AnyBoxedObject<Integer> mantissa, AnyBoxedObject<String> sign) {
 		mantissa.ezeCopy((int)((short) 0));
 		if ((afloat >= (double)((short) 0))) {
 			sign.ezeCopy("+");
