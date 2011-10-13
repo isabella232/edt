@@ -78,7 +78,7 @@ public class InsertDataModelBuilder {
 							if(oName instanceof SimpleName){
 								SimpleName simpleName = (SimpleName)oName;
 								IDataBinding dataBinding = simpleName.resolveDataBinding();
-								if(dataBinding != null && dataBinding.getCaseSensitiveName().endsWith(bindingName)){
+								if(dataBinding != null && dataBinding.getCaseSensitiveName().equals(bindingName)){
 									return dataBinding;
 								}
 							}
