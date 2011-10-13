@@ -52,6 +52,7 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.ELSE, IEGLConstants.KEYWORD_ELSE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.EMBED, IEGLConstants.KEYWORD_EMBED));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.END, IEGLConstants.KEYWORD_END));
+			completionList.add(new EGLKeywordCompletion(NodeTypes.ENUMERATION, IEGLConstants.KEYWORD_ENUMERATION));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.ESCAPE, IEGLConstants.KEYWORD_ESCAPE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.EXECUTE, IEGLConstants.KEYWORD_EXECUTE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.EXIT, IEGLConstants.KEYWORD_EXIT));

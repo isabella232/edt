@@ -52,6 +52,7 @@ import org.eclipse.edt.ide.ui.internal.refactoring.reorg.MoveRefactoring;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgMoveWizard;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgPolicyFactory;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgQueries;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -72,6 +73,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+
 /**
  * Helper class to run refactorings from action code.
  * <p>
@@ -91,16 +93,19 @@ public final class RefactoringExecutionStarter {
 			DeleteRefactoringWizard wizard = new DeleteRefactoringWizard(ref, elements);
 			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(wizard);
 			try {
-				handleFileRemoval(elements);
+				//handleFileRemoval(elements);
+				IFile eglddFile = getEGLDDFileHandle(elements);
+				String[] serviceQualifiedNames = getServiceQualifiedName(elements);
 				
 				String titleForFailedChecks = ""; //$NON-NLS-1$
-				op.run(shell, titleForFailedChecks);
+				int status = op.run(shell, titleForFailedChecks);
+				if( status == IDialogConstants.OK_ID && serviceQualifiedNames != null) {
+					handleFileRemoval(eglddFile,serviceQualifiedNames);
+				}
 			} catch (final InterruptedException irex) {
 				// operation was cancelled
 			}
-		}
-
-		else {
+		} else {
 
 			final CreateChangeOperation create = new CreateChangeOperation(new CheckConditionsOperation(ref,
 					CheckConditionsOperation.ALL_CONDITIONS), RefactoringStatus.FATAL);
@@ -111,51 +116,65 @@ public final class RefactoringExecutionStarter {
 
 	}
 	
-	private static void handleFileRemoval(Object[] removedFiles) throws EGLModelException {
-		IFile eglddFile = getEGLDDFileHandle(removedFiles);
-		
-		if(removedFiles != null && eglddFile != null) {
-			String fullyQualifiedServiceName = "";
+	private static void handleFileRemoval(IFile eglddFile, String[] serviceQualifiedNames) throws EGLModelException {
+		if(eglddFile != null) {
 			EGLDeploymentRoot deploymentRoot = null;
 			try {
 				deploymentRoot = EGLDDRootHelper.getEGLDDFileSharedWorkingModel(eglddFile, false);
 				Deployment deployment = deploymentRoot.getDeployment();
 				Services services = deployment.getServices();
 				
-				for(int i=0; i< removedFiles.length; i++) {
-					if(removedFiles[i] instanceof IEGLFile) {
-						IEGLFile eglFile = (IEGLFile)removedFiles[i];
-						String packageName = eglFile.getParent().getElementName();
-						String fileName = eglFile.getElementName();
-						if(org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(fileName)) {
-							fileName = fileName.substring(0, fileName.length() - org.eclipse.edt.ide.core.internal.model.Util.SUFFIX_EGL.length);
-							fullyQualifiedServiceName = packageName + '.' + fileName;
-							
-							//Remove service binding
-							if(services != null) {
-								Service removedService = null;
-								for(Service restService : services.getService()) {
-									if(fullyQualifiedServiceName.equals(restService.getImplementation())) {
-										removedService = restService;
-										break;
-									}
-								}
-								if(removedService != null) {
-									services.getService().remove(removedService);
-								}
+				if(services != null) {
+					for(int i=0; i <serviceQualifiedNames.length; i++) {
+						Service removedService = null;
+						for(Service restService : services.getService()) {
+							if(restService.getImplementation() != null && 
+									restService.getImplementation().equals(serviceQualifiedNames[i])) {
+								removedService = restService;
+								break;
 							}
-							
-							//persist the file if we're the only client 
-							if(!EGLDDRootHelper.isWorkingModelSharedByUserClients(eglddFile))
-								EGLDDRootHelper.saveEGLDDFile(eglddFile, deploymentRoot);
 						}
+						if(removedService != null) {
+							services.getService().remove(removedService);
+						}
+					} // end for	
+					
+					//persist the file if we're the only client 
+					if(!EGLDDRootHelper.isWorkingModelSharedByUserClients(eglddFile)) {
+						EGLDDRootHelper.saveEGLDDFile(eglddFile, deploymentRoot);
 					}
-				}//end for loop
+				}
+				
 			} finally{
 				if(deploymentRoot != null)
 					EGLDDRootHelper.releaseSharedWorkingModel(eglddFile, false);
 			}
 		}
+	}
+	
+	private static String[] getServiceQualifiedName(Object[] removedFiles) {
+		ArrayList<String> qualifiedNames = new ArrayList<String>();
+		
+		for(int i=0; i< removedFiles.length; i++) {
+			if(removedFiles[i] instanceof IEGLFile) {
+				IEGLFile eglFile = (IEGLFile)removedFiles[i];
+				String packageName = eglFile.getParent().getElementName();
+				String fileName = eglFile.getElementName();
+				
+				if(org.eclipse.edt.ide.core.internal.model.Util.isEGLFileName(fileName)) {
+					fileName = fileName.substring(0, fileName.length() - org.eclipse.edt.ide.core.internal.model.Util.SUFFIX_EGL.length);
+					qualifiedNames.add(packageName + '.' + fileName);
+				}
+			}
+		}
+		
+		String[] names = null;
+		if(qualifiedNames.size() > 0) {
+			names = new String[qualifiedNames.size()];;
+			qualifiedNames.toArray(names);
+		} 
+		
+		return names;
 	}
 	
 	private static IFile getEGLDDFileHandle(Object[] removedFiles) throws EGLModelException {
