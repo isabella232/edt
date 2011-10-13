@@ -217,13 +217,13 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 				return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
 			
 			case 'I':
-				return jsonObject;
+				return egl.eglx.lang.EInt32.fromEString(jsonObject);
 			
 			case 'i':
-				return jsonObject;
+				return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
 			
 			case '0':
-				return jsonObject;
+				return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
 			
 			case 'F':
 				return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
@@ -232,7 +232,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 				return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
 			
 			case 'B':
-				return egl.eglx.lang.EDecimal.fromAnyNum(jsonObject);
+				return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
 			
 			case 'N':
 				var colon = fieldInfo.eglSignature.indexOf(':');
@@ -257,6 +257,36 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 	}
 	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.Enumeration){
 		return egl.eglx.services.$ServiceRT.convertToEnum(jsonObject, fieldInfo.eglType);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt64){
+		return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt32){
+		return egl.eglx.lang.EInt32.fromEString(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt16){
+		return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat64){
+		return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat32){
+		return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDecimal){
+		return egl.eglx.lang.EDecimal.fromAnyNumber(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EBoolean){
+		return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDate){
+		return egl.stringToDate(jsonObject, "yyyy-MM-dd");
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.ETimestamp){
+		return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
+	}
+	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EString){
+		return jsonObject.toString();
 	}
 	if (typeof(jsonObject) == "string") {
 		return jsonObject;
@@ -315,7 +345,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 	else if(typeof jsonObject === "object"){
 		for (f in jsonObject) {
 			if(typeof jsonObject[f] !== "function"){
-				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], null, null, cleanDictionary);
+				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
 			}
 		}
 		return eglObject;
