@@ -47,7 +47,6 @@ public class EDTCompiler extends BaseCompiler {
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
 			path += File.pathSeparator;
-			System.out.println("loading ServiceCallStatement");
 			path += SystemEnvironmentUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib");
 			path += File.pathSeparator;
 			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
