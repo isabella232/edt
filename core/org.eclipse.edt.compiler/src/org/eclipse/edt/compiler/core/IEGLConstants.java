@@ -1270,6 +1270,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_FORMSIZE = "formSize";  //$NON-NLS-1$
 	public static final String PROPERTY_GETINPARENT = "getInParent";  //$NON-NLS-1$
 	public static final String PROPERTY_GETOPTIONSRECORD = "getOptionsRecord";  //$NON-NLS-1$
+	public static final String PROPERTY_GENERATEDVALUE = "generatedValue";  //$NON-NLS-1$
 	public static final String PROPERTY_HANDLEHARDDLIERRORS = "handleHardDLIErrors";  //$NON-NLS-1$
 	public static final String PROPERTY_HANDLEHARDIOERRORS = "handleHardIOErrors";  //$NON-NLS-1$
 	public static final String PROPERTY_HASCOMMENT = "hasComment";  //$NON-NLS-1$
@@ -1287,6 +1288,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_INCLUDEREFERENCEDFUNCTIONS = "includeReferencedFunctions";  //$NON-NLS-1$
 	public static final String PROPERTY_INDEXORIENTATION = "indexOrientation";  //$NON-NLS-1$
 	public static final String PROPERTY_INITIALIZED = "initialized";  //$NON-NLS-1$
+	public static final String PROPERTY_INSERTABLE = "insertable";  //$NON-NLS-1$
 	public static final String PROPERTY_INPUTFORM = "inputForm";  //$NON-NLS-1$
 	public static final String PROPERTY_INPUTUIRECORD = "inputUIRecord";  //$NON-NLS-1$
 	public static final String PROPERTY_INPUTRECORD = "inputRecord";  //$NON-NLS-1$

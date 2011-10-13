@@ -11,20 +11,21 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.sql.util;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IRecordBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.Boolean;
+import org.eclipse.edt.compiler.binding.NotFoundBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.core.Boolean;
 
 
 public class SQLUtility {
@@ -226,10 +227,10 @@ public class SQLUtility {
     }
 
     public static String getColumnName(IDataBinding itemBinding, IDataBinding recordData) {
-        IAnnotationBinding annotation = itemBinding.getAnnotation(EGLXSQL, "Column");
+        IAnnotationBinding annotation = itemBinding.getAnnotation(EGLXSQL, IEGLConstants.PROPERTY_COLUMN);
         if (annotation != null) {
         	IAnnotationBinding columnNameAnnotation= (IAnnotationBinding)annotation.findData(IEGLConstants.PROPERTY_NAME);
-        	if(columnNameAnnotation != null) {
+        	if(!(columnNameAnnotation instanceof NotFoundBinding)) {
                return (String) columnNameAnnotation.getValue();
         	} else {
         	   return itemBinding.getName();
@@ -240,20 +241,26 @@ public class SQLUtility {
     }
 
     public static boolean getIsReadOnly(IDataBinding itemBinding, IDataBinding recordData) {
-        IAnnotationBinding annotation = recordData.getAnnotationFor(EGLIOSQL, "IsReadOnly",
-                new IDataBinding[] { itemBinding });
-
+    	boolean isReadOnly = false;
+    	IAnnotationBinding annotation = itemBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_GENERATEDVALUE);
+    
         if (annotation != null) {
-            if (annotation.getValue() == Boolean.YES) {
-                return true;
-            }
+        	isReadOnly = true;
+        } else {
+        	annotation = itemBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_COLUMN);
+        	if(annotation != null) {
+        	    IAnnotationBinding insertableAnnotation = (IAnnotationBinding) annotation.findData(IEGLConstants.PROPERTY_INSERTABLE);
+        	    if(insertableAnnotation != null && !(insertableAnnotation instanceof NotFoundBinding)) {
+        	    	 if ((Boolean)insertableAnnotation.getValue() == Boolean.YES) {
+        	    		 isReadOnly = false;
+        	         } else {
+        	        	 isReadOnly = true;
+        	         }
+        	    }
+        	}
         }
 
-        if(recordData.getAnnotation(EGLIOSQL, "SQLRecord") != null) {
-        	return isSQLRecordDefinedWithMultipleTables(recordData);
-        } else {
-        	return false;
-        }
+        return isReadOnly;
     }
 
     public static boolean isValid(IDataBinding dataBinding) {
