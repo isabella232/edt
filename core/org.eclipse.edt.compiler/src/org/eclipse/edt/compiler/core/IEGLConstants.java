@@ -1447,6 +1447,7 @@ public interface IEGLConstants {
 	public static final String PROPERTY_UITYPE = "uiType";  //$NON-NLS-1$
 	public static final String PROPERTY_UNLOADONEXIT = "unloadOnExit";  //$NON-NLS-1$
 	public static final String PROPERTY_UPPERCASE = "upperCase";  //$NON-NLS-1$
+	public static final String PROPERTY_UPDATEABLE = "updateable";  //$NON-NLS-1$
 	public static final String PROPERTY_VALIDATIONBYPASSFUNCTIONS = "validationBypassFunctions";  //$NON-NLS-1$
 	public static final String PROPERTY_VALIDATIONBYPASSKEYS = "validationBypassKeys";  //$NON-NLS-1$
 	public static final String PROPERTY_VALIDATIONCLASS = "validationClass";  //$NON-NLS-1$

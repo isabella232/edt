@@ -20,12 +20,12 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IRecordBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NotFoundBinding;
+import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.compiler.core.Boolean;
 
 
 public class SQLUtility {
@@ -240,6 +240,11 @@ public class SQLUtility {
         }
     }
 
+    /**
+     * Check whether a column is insertable or not
+     * true: not insertable
+     * false: insertable
+     */
     public static boolean getIsReadOnly(IDataBinding itemBinding, IDataBinding recordData) {
     	boolean isReadOnly = false;
     	IAnnotationBinding annotation = itemBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_GENERATEDVALUE);
@@ -247,20 +252,39 @@ public class SQLUtility {
         if (annotation != null) {
         	isReadOnly = true;
         } else {
-        	annotation = itemBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_COLUMN);
-        	if(annotation != null) {
-        	    IAnnotationBinding insertableAnnotation = (IAnnotationBinding) annotation.findData(IEGLConstants.PROPERTY_INSERTABLE);
-        	    if(insertableAnnotation != null && !(insertableAnnotation instanceof NotFoundBinding)) {
-        	    	 if ((Boolean)insertableAnnotation.getValue() == Boolean.YES) {
-        	    		 isReadOnly = false;
-        	         } else {
-        	        	 isReadOnly = true;
-        	         }
-        	    }
-        	}
+        	IAnnotationBinding insertableAnnotation = getColumnAnnotation(itemBinding,IEGLConstants.PROPERTY_INSERTABLE);
+        	if(insertableAnnotation != null && !(insertableAnnotation instanceof NotFoundBinding)) {
+    	    	 if (insertableAnnotation.getValue() == Boolean.NO) {
+    	    		 isReadOnly = true;
+    	         }
+    	    }
         }
 
         return isReadOnly;
+    }
+    
+    public static boolean getIsUpdateable(IDataBinding itemBinding) {
+    	boolean isUpdateable = true;
+    	
+    	IAnnotationBinding updateableAnnotation = getColumnAnnotation(itemBinding,IEGLConstants.PROPERTY_UPDATEABLE);
+    	if(updateableAnnotation != null && !(updateableAnnotation instanceof NotFoundBinding)) {
+	    	 if (updateableAnnotation.getValue() == Boolean.NO) {
+	    		 isUpdateable = false;
+	         }
+	    }
+    	
+    	return isUpdateable;
+    }
+    
+    private static IAnnotationBinding getColumnAnnotation(IDataBinding itemBinding, String annotationName) {
+    	IAnnotationBinding columnAnnotation = null;
+    	
+    	IAnnotationBinding annotation = itemBinding.getAnnotation(SQLUtility.EGLXSQL, IEGLConstants.PROPERTY_COLUMN);
+    	if(annotation != null) {
+    		columnAnnotation = (IAnnotationBinding) annotation.findData(annotationName);
+    	}
+    	
+    	return columnAnnotation;
     }
 
     public static boolean isValid(IDataBinding dataBinding) {

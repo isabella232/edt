@@ -509,13 +509,13 @@ public abstract class EGLSQLStatementFactory {
 
         if (structureItemBindings != null) {
             IDataBinding itemBinding;
-            boolean isReadOnly;
+            boolean isUpdateable;
             for (int i = 0; i < numSQLDataItems; i++) {
                 itemBinding = structureItemBindings[i];
                 itemName = itemBinding.getName();
                 columnName = getColumnName(itemBinding);
-                isReadOnly = getIsReadOnly(itemBinding);
-                if (!(isReadOnly || isRecordKeyItem(itemBinding))) {
+                isUpdateable = getIsUpdateable(itemBinding);
+                if ((isUpdateable && !isRecordKeyItem(itemBinding))) {
                     items[numNonReadOnlyAndKeys] = itemName;
                     columns[numNonReadOnlyAndKeys] = columnName;
                     numNonReadOnlyAndKeys++;
@@ -601,6 +601,10 @@ public abstract class EGLSQLStatementFactory {
 
     protected boolean getIsReadOnly(IDataBinding itemBinding) {
         return SQLUtility.getIsReadOnly(itemBinding, sqlRecordData);
+    }
+    
+    protected boolean getIsUpdateable(IDataBinding itemBinding) {
+        return SQLUtility.getIsUpdateable(itemBinding);
     }
     
     private static IAnnotationBinding getField(IAnnotationBinding aBinding, String fieldName) {
