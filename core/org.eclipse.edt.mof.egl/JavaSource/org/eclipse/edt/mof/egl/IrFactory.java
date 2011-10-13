@@ -17,5 +17,6 @@ public interface IrFactory extends IrFactoryBase {
 	public static final IrFactory INSTANCE = new IrFactoryImpl();
 
 	Annotation createAnnotation(String name);
+	Annotation createDynamicAnnotation(String name);
 	InvalidName createInvalidName(String name);
 }

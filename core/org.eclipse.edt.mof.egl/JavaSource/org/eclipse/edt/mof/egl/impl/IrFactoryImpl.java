@@ -15,7 +15,6 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.StereotypeType;
@@ -24,11 +23,17 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class IrFactoryImpl extends IrFactoryBase implements IrFactory {
 	
+	public Annotation createDynamicAnnotation(String typeSignature){
+		return createAnnotation(IEnvironment.DynamicScheme + ":" + getAnnotationEClass().getETypeSignature() + ":" + typeSignature);
+		
+	}
 	public Annotation createAnnotation(String typeSignature) {
 		EClassifier annType;
+		
 		try {
 			annType = getTypeNamed(typeSignature);
 		} catch (Exception e) {
+			// In case we missed a place that is invoking createAnnotation and should be invoking createDynamicAnnotation
 			typeSignature = IEnvironment.DynamicScheme + ":" + getAnnotationEClass().getETypeSignature() + ":" + typeSignature;
 			annType = getTypeNamed(typeSignature);
 		}
