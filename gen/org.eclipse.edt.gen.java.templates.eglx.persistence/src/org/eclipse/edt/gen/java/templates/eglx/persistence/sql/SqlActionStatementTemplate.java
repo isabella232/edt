@@ -66,7 +66,11 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	}
 	
 	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt) {
-		genSqlStatementSetup(stmt, ctx, out, var_statement, false);
+		String varName = var_statement;
+		if(stmt.getPreparedStatement() != null){
+			varName = getExprString(stmt.getPreparedStatement(), ctx);
+		}
+		genSqlStatementSetup(stmt, ctx, out, varName, false);
 	}
 
 	/**
