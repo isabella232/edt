@@ -113,26 +113,7 @@ public abstract class FileLocator {
 	protected FileLocator(){
 	}
 	
-	public EGLResource findResource(String name){
-		EGLResource result = null;
-		result = findResource(name, true);
-		if(result == null){
-			result = findResource(name, false);
-		}
-		return result;
-	}
-	
-	public EGLResource findResource(String name, boolean isLowercase){
-		int lastSlash = name.lastIndexOf( '/' );
-		if (lastSlash != -1) {
-			if(isLowercase){
-				// Lowercase the package.
-				name = name.substring( 0, lastSlash ).toLowerCase() + name.substring( lastSlash );
-			}else{
-				name = name.substring( 0, lastSlash ) + name.substring( lastSlash );
-			}
-		}
-		
+	public EGLResource findResource(String name){		
 		EGLResource result = null;
 		for (Iterator iter1 = eglProjectPath.iterator(); iter1.hasNext();) {
 			IEGLProject eglProject = (IEGLProject)iter1.next();
