@@ -113,6 +113,7 @@ library sql
 		foreach (parent.id, child.name from rs) end //1 different parents
 		foreach (parent.orphan from rs) end //1 association not yet supported
 		foreach (parent.id, parent.id from rs) end //0
+		foreach (parent from rs into a) end //1 INTO not allowed
 	end
 	
 	function validateGetByKey()
@@ -131,6 +132,7 @@ library sql
 		get dict from ds using a; //0
 		get array from ds using a; //0
 		get invalidArray from ds using a; //1
+		get dict from ds into a; //1 INTO not allowed
 	end
 	
 	function validateAdd()
