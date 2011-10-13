@@ -179,4 +179,14 @@ public class SQLResultSet {
 			throw JavartUtil.makeEglException(e);
 		}
 	}
+	
+	public int getPosition() throws SQLException {
+		try {
+			return resultSet.getRow();
+		} catch (java.sql.SQLException e) {
+			throw JavartUtil.makeEglException(e);
+		}
+	}
 }
+
+
