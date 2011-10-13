@@ -8,7 +8,7 @@ Library WriteResultLib
 	//persist the test result
 	trHandler CreateResultFile = new CreateResultFile;
 	
-	private currentTime String = null;
+	private currentTime String? = null;
 	
 	function writeResult(s Status in, ms MultiStatus in, outR Log in, td TestDescription in, resultRootSum ResultSummaryRoot)
 		tr TestResult;
