@@ -16,10 +16,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
-import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
+import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
 
 
@@ -283,7 +281,10 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		STRING_FUNCTIONS.put(ISLIKE3.getName(), ISLIKE3);
 		STRING_FUNCTIONS.put(MATCHESPATTERN3.getName(), MATCHESPATTERN3);
 	}
-
+	
+	public static Map getStringFunctions(){
+		return(STRING_FUNCTIONS);
+	}
 	
 	public static final SystemFunctionBinding DAYSDIFFERENT = SystemLibrary.createSystemFunction(
 			"daysDifferent",
@@ -322,6 +323,9 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		DATE_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
 	}
 
+	public static Map getDateFunctions(){
+		return(DATE_FUNCTIONS);
+	}
 	
 	public static final SystemFunctionBinding DAYOF = SystemLibrary.createSystemFunction(
 			"dayOf",
@@ -375,6 +379,10 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		TIMESTAMP_FUNCTIONS.put(DATEOF.getName(), new NestedFunctionBinding(DATEOF.getName(), null, DATEOF));
 		TIMESTAMP_FUNCTIONS.put(TIMEOF.getName(), new NestedFunctionBinding(TIMEOF.getName(), null, TIMEOF));
 		TIMESTAMP_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
+	}
+	
+	public static Map getTimestampFunctions(){
+		return(TIMESTAMP_FUNCTIONS);
 	}
 	
 	protected PrimitiveTypeBinding(String caseSensitiveInternedName) {

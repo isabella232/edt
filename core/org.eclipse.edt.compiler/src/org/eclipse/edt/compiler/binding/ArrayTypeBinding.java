@@ -188,24 +188,10 @@ public static final SystemFunctionBinding SORT = SystemLibrary.createSystemFunct
 		ARRAY_FUNCTIONS.put(SORT.getName(), new NestedFunctionBinding(SORT.getName(), null, SORT));
 	}
 	
-	protected static final Map SYSTEM_FUNCTIONS = new HashMap();
-	static{
-		SYSTEM_FUNCTIONS.put(APPENDELEMENT.getName(), APPENDELEMENT);
-		SYSTEM_FUNCTIONS.put(APPENDALL.getName(), APPENDALL);
-		SYSTEM_FUNCTIONS.put(INSERTELEMENT.getName(), INSERTELEMENT);
-		SYSTEM_FUNCTIONS.put(REMOVEELEMENT.getName(), REMOVEELEMENT);
-		SYSTEM_FUNCTIONS.put(REMOVEALL.getName(), REMOVEALL);
-		SYSTEM_FUNCTIONS.put(SETELEMENT.getName(), SETELEMENT);
-		SYSTEM_FUNCTIONS.put(GETSIZE.getName(), GETSIZE);
-		SYSTEM_FUNCTIONS.put(RESIZE.getName(), RESIZE);
-		SYSTEM_FUNCTIONS.put(SORT.getName(), SORT);
-		SYSTEM_FUNCTIONS.put(INDEXOFELEMENT1.getName(), INDEXOFELEMENT1);
-		SYSTEM_FUNCTIONS.put(INDEXOFELEMENT2.getName(), INDEXOFELEMENT2);
+	public static Map getARRAY_FUNCTIONS(){
+		return(ARRAY_FUNCTIONS);
 	}
 	
-	public static Map getSYSTEM_FUNCTIONS(){
-		return(SYSTEM_FUNCTIONS);
-	}
 	public boolean isReference() {
 		return isReference;
 	}
