@@ -249,7 +249,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		
 		if (Binding.isValidBinding(lhsBinding) && Binding.isValidBinding(rhsBinding)) {
 			
-			if (rhsBinding.getKind() == ITypeBinding.NIL_BINDING && lhsBinding.isReference() && !lhsBinding.isNullable()) {
+			if (rhsBinding.getKind() == ITypeBinding.NIL_BINDING && !lhsBinding.isNullable()) {
 				problemRequestor.acceptProblem(lhs,
 						IProblemRequestor.CANNOT_ASSIGN_NULL,
 						new String[] {lhs.getCanonicalString()});
