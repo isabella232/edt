@@ -36,11 +36,14 @@ import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
+import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
+import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ServiceBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.SystemFunctionBinding;
 import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
@@ -191,12 +194,33 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					
 				case ITypeBinding.ARRAY_TYPE_BINDING:
 					if(includeFunctions) {
-						result.addAll(getSystemWordProposals(ArrayTypeBinding.getSYSTEM_FUNCTIONS(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
+						result.addAll(getSystemWordProposals(ArrayTypeBinding.getARRAY_FUNCTIONS(), UINlsStrings.CAProposal_ArrayFunctionSystemWord));
 					}
-					return result;					
+					return result;	
+					
+				case ITypeBinding.PRIMITIVE_TYPE_BINDING:
+					if(includeFunctions){
+						result.addAll(getPrimitiveSystemFunctionProposals(((PrimitiveTypeBinding)qualifierTypeBinding)));
+					}
+					return result;	
 			}
 		}
 		return Collections.EMPTY_LIST;
+	}
+	
+	private List getPrimitiveSystemFunctionProposals(PrimitiveTypeBinding primitiveBinding){
+		Primitive prim = primitiveBinding.getPrimitive();
+		String primType = prim.getName();
+		
+		if(primType.equalsIgnoreCase(IEGLConstants.STRING_STRING)){
+			return(getSystemWordProposals(PrimitiveTypeBinding.getStringFunctions(), UINlsStrings.CAProposal_StringLibrary));
+		}else if(primType.equalsIgnoreCase(IEGLConstants.TIMESTAMP_STRING)){
+			return(getSystemWordProposals(PrimitiveTypeBinding.getTimestampFunctions(), UINlsStrings.CAProposal_TimeStampLibrary));
+		}else if(primType.equalsIgnoreCase(IEGLConstants.DATE_STRING)){
+			return(getSystemWordProposals(PrimitiveTypeBinding.getDateFunctions(), UINlsStrings.CAProposal_DateLibrary));
+		}
+		
+		return null;
 	}
 
 	private List filterStaticDataBindings(List dataBindings) {
@@ -275,25 +299,36 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 	private List getSystemWordProposals(Map systemWords, String additionalInfo) {
 		List proposals = new ArrayList();
 		for (Iterator iter = systemWords.values().iterator(); iter.hasNext();) {
-			SystemFunctionBinding systemFunctionBinding = (SystemFunctionBinding) iter.next();
-			if (systemFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-				String displayString = systemFunctionBinding.getCaseSensitiveName();
-				String parameterStr = getParmString(systemFunctionBinding);
-				String proposalString = displayString + "(" + parameterStr + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-				int cusorPos = parameterStr.length() == 0 ? displayString.length() + 2 : displayString.length() + 1;
-				proposals.add(
-						new EGLCompletionProposal(viewer,
-							displayString,
-							proposalString,
-							additionalInfo,
-							getDocumentOffset() - getPrefix().length(),
-							getPrefix().length(),
-							cusorPos,
-							EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
-							getFirstParmLength(systemFunctionBinding)));
+			IBinding functionBinding = (IBinding)iter.next();
+			if(functionBinding instanceof NestedFunctionBinding){
+				NestedFunctionBinding systemFunctionBinding = (NestedFunctionBinding) functionBinding;
+				getNestedFunctionProposal(systemFunctionBinding, additionalInfo, proposals);
+			}else if(functionBinding instanceof OverloadedFunctionSet){
+				for (Iterator iterator = ((OverloadedFunctionSet) (functionBinding)).getNestedFunctionBindings().iterator(); iterator.hasNext();) {
+					getNestedFunctionProposal((NestedFunctionBinding)iterator.next(), additionalInfo, proposals);
+				}
 			}
 		}
+		
 		return proposals;
+	}
+	
+	private void getNestedFunctionProposal(NestedFunctionBinding nestedFunctionBinding, String additionalInfo, List proposals){
+		if (nestedFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+			String displayString = nestedFunctionBinding.getCaseSensitiveName();
+			String parameterStr = getParmString((IFunctionBinding) nestedFunctionBinding.getType());
+			String proposalString = displayString + "(" + parameterStr + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+			int cusorPos = parameterStr.length() == 0 ? displayString.length() + 2 : displayString.length() + 1;
+			proposals.add(new EGLCompletionProposal(viewer, 
+												displayString,
+												proposalString, 
+												additionalInfo, 
+												getDocumentOffset() - getPrefix().length(), 
+												getPrefix().length(),
+												cusorPos, 
+												EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
+												getFirstParmLength((IFunctionBinding) nestedFunctionBinding.getType())));
+		}
 	}
 
 	private List getResourceAssociationSystemWordProposal() {

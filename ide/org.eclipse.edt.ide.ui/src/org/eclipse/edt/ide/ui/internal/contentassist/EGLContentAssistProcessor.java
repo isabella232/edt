@@ -58,7 +58,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.keys.IBindingService;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
-import com.ibm.icu.text.MessageFormat;
 
 public class EGLContentAssistProcessor implements IContentAssistProcessor {
 	
@@ -193,8 +192,15 @@ public class EGLContentAssistProcessor implements IContentAssistProcessor {
 	}
 	
 	protected List filterAndSortProposals(List proposals, IProgressMonitor monitor, EGLContentAssistInvocationContext context) {
+		removeAllNullProposals(proposals);
 		Collections.sort(proposals, this.comparator);
 		return proposals;
+	}
+	
+	private void removeAllNullProposals(List proposals){
+		List nullList = new ArrayList();
+		nullList.add(null);
+		proposals.removeAll(nullList);
 	}
 
 	protected IProgressMonitor createProgressMonitor() {

@@ -945,6 +945,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_ConsoleLibrary;
 	public static String CAProposal_ConstantDeclaration;
 	public static String CAProposal_ConstantDeclarationIn;
+	public static String CAProposal_DateLibrary;
 	public static String CAProposal_DictionaryKey;
 	public static String CAProposal_DLISegmentRecordState;
 	public static String CAProposal_EGLKeyword;
@@ -1022,6 +1023,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_TableType;
 	public static String CAProposal_TextFieldState;
 	public static String CAProposal_TextFormState;
+	public static String CAProposal_TimeStampLibrary;
 	public static String CAProposal_TypeSpecification;
 	public static String CAProposal_UseDeclarationIn;
 	public static String CAProposal_Variable;
