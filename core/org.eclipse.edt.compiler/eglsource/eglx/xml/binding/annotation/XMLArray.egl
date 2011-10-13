@@ -12,7 +12,7 @@
 package eglx.xml.binding.annotation;
 
 Record XMLArray type Annotation
-{ targets = [ ElementKind.fieldMbr ], eglIsSystemAnnotation = yes}
+{ targets = [ ElementKind.fieldMbr ]}
   wrapped boolean;
   names string[];
 end

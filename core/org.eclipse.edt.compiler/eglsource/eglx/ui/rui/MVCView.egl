@@ -5,8 +5,7 @@ Record MVCView type Annotation
 	targets = [
 		ElementKind.HandlerPart, ElementKind.ExternalTypePart
 	],
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.MVCViewAnnotationTypeBinding",
-	eglIsSystemAnnotation = yes
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.MVCViewAnnotationTypeBinding"
 } 
 	retrieveViewHelper FunctionMemberRef;
 	publishHelper FunctionMemberRef;
