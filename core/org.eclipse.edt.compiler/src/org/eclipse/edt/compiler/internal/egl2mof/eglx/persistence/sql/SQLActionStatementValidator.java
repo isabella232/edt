@@ -1,52 +1,60 @@
+
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql;
 
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.AddStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.DeleteStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ExecuteStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ForEachStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.GetByKeyStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.OpenStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.PrepareStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ReplaceStatementValidator;
 
 public class SQLActionStatementValidator extends DefaultStatementValidator {
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.AddStatement addStatement) {
-		//TODO validate the sql action statement
+		new AddStatementValidator(addStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CloseStatement closeStatement) {
-		//TODO validate the sql action statement
+		// nothing to validate.
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.DeleteStatement deleteStatement) {
-		//TODO validate the sql action statement
+		new DeleteStatementValidator(deleteStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ExecuteStatement executeStatement) {
-		//TODO validate the sql action statement
+		new ExecuteStatementValidator(executeStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement foreachStatement) {
-		//TODO validate the sql action statement
+		new ForEachStatementValidator(foreachStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByKeyStatement getStatement) {
-		//TODO validate the sql action statement
+		new GetByKeyStatementValidator(getStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement openStatement) {
-//		new OpenStatementValidator(openStatement, problemRequestor, compilerOptions).validate();
+		new OpenStatementValidator(openStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.PrepareStatement prepareStatement) {
-		//TODO validate the sql action statement
+		new PrepareStatementValidator( prepareStatement, problemRequestor, compilerOptions ).validate();
 		return false;
 	}
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReplaceStatement replaceStatement) {
-		//TODO validate the sql action statement
+		new ReplaceStatementValidator(replaceStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 }

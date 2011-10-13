@@ -511,7 +511,13 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		
 		new Integer(SQL_EXPR_HAS_WRONG_TYPE),
 		new Integer(SQL_WITH_STMT_REQUIRED),
-		new Integer(SQL_FOR_TYPE_INVALID)
+		new Integer(SQL_FOR_TYPE_INVALID),
+		new Integer(SQL_FOR_AND_TARGET_TYPES_MUST_MATCH),
+		new Integer(SQL_NO_ID_IN_TARGET_TYPE),
+		new Integer(SQL_FOR_NOT_ALLOWED_WITH_DATA_SOURCE_TYPE),
+		new Integer(SQL_WITH_STMT_REQUIRED_FOR_DELETE),
+		new Integer(SQL_NO_WITH_FOR_USING),
+		new Integer(SQL_NO_WITH_USING),
 	}));
 	
 	/**

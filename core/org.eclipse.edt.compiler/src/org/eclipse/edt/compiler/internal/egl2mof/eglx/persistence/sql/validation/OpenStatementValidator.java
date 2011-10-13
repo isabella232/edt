@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation;
 
 import org.eclipse.edt.compiler.binding.Binding;
@@ -44,6 +55,7 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 		validateFrom();
 		validateWith();
 		validateFor();
+		validateInto();
 	}
 	
 	private void validateTarget() {
@@ -58,6 +70,7 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	
 	private void validateFrom() {
 		if (from != null) {
+			// Must be of type SQLDataSource
 			ITypeBinding type = from.getExpression().resolveTypeBinding();
 			if (Binding.isValidBinding(type) && !isDataSource(type)) {
 				problemRequestor.acceptProblem(from.getExpression(),
@@ -99,19 +112,30 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 		if (forExpression != null) {
 			//If no USING or WITH clause is specified the FOR clause can be specified 
 			if (using != null || withExpression != null || withInline != null) {
-				problemRequestor.acceptProblem(forExpression.getExpression(),
+				problemRequestor.acceptProblem(forExpression,
 						IProblemRequestor.SQL_FOR_NOT_ALLOWED,
 						new String[] {});
 				return;
 			}
-
+			
 			ITypeBinding type = forExpression.getExpression().resolveTypeBinding();
-				if (Binding.isValidBinding(type) && !isEntityWithID(type) && !isAssociationExpression(forExpression.getExpression())) {
-					problemRequestor.acceptProblem(forExpression.getExpression(),
-							IProblemRequestor.SQL_FOR_TYPE_INVALID,
-							new String[] {forExpression.getExpression().getCanonicalString()});
-					return;
-				}
+			if (Binding.isValidBinding(type) && (!isEntityWithID(type)
+					// TODO associations not supported yet. when they are, change it to the commented out line.
+					|| isAssociationExpression(forExpression.getExpression())
+//						&& !isAssociationExpression(forExpression.getExpression())
+					)) {
+				problemRequestor.acceptProblem(forExpression.getExpression(),
+						IProblemRequestor.SQL_FOR_TYPE_INVALID,
+						new String[] {forExpression.getExpression().getCanonicalString()});
+				return;
+			}
+		}
+	}
+	
+	private void validateInto() {
+		if (into != null) {
+			// INTO not currently part of the spec.
+			problemRequestor.acceptProblem(into, IProblemRequestor.SQL_INTO_NOT_ALLOWED, new String[] {});
 		}
 	}
 	
@@ -217,8 +241,5 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 				return false;
 			}
 		});
-		
 	}
-	
-	
 }
