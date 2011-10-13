@@ -72,6 +72,8 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	
 	public static final int DEFAULT_PORT = 9701;
 	
+	public static final String TEST_SERVER_CONFIG_TYPE_ID = "org.eclipse.edt.ide.rui.testServerLaunchType"; // $NON-NLS-1$
+	
 	private static final JavaLaunchDelegate delegate = new JavaLaunchDelegate(); // Used for calculating a resolved classpath
 	
 	private IProject project;
@@ -111,8 +113,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			}
 			
 			// Create a temporary launch configuration, set the project and claspath entries, then run it in either RUN or DEBUG mode.
-			ILaunchConfigurationType type = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(
-					IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
+			ILaunchConfigurationType type = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(TEST_SERVER_CONFIG_TYPE_ID);
 			ILaunchConfigurationWorkingCopy copy = type.newInstance(null, NLS.bind(TestServerMessages.TestServerProcessName, new Object[]{project.getName(), port}));
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, project.getName());
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, TestServer.class.getCanonicalName());

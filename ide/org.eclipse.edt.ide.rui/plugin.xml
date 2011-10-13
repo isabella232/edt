@@ -98,5 +98,24 @@ Register the Preference Pages
             version="0.7.0"
             version_desc="Dojo 1.6.1 Remote">
       </provider>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.edt.ide.rui.internal.testserver.TestServerLaunchDelegate"
+            id="org.eclipse.edt.ide.rui.testServerLaunchType"
+            modes="run, debug"
+            name="%TestServerConfigTypeName"
+            public="false"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.edt.ide.rui.testServerLaunchType"
+            icon="icons/full/obj16/egl_launch_obj.gif"
+            id="org.eclipse.edt.ide.rui.testServerLaunchImage">
+      </launchConfigurationTypeImage>
    </extension>   
 </plugin>
