@@ -821,6 +821,23 @@ public class TypeCompatibilityUtil {
 			}
 		}
 		
+		if (ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind() ) {
+			Primitive srcPrim = ((PrimitiveTypeBinding)sourceType).getPrimitive();
+			
+			if (srcPrim == Primitive.ANY) {
+				return true;
+			}
+		}
+
+		if (ITypeBinding.PRIMITIVE_TYPE_BINDING == targetType.getKind() ) {
+			Primitive tgtPrim = ((PrimitiveTypeBinding)targetType).getPrimitive();
+			
+			if (tgtPrim == Primitive.ANY) {
+				return true;
+			}
+		}
+
+		
 		if(compilerOptions.isVAGCompatible()) {
 			//even-length decimal source items can match decimal target items
 			//whose length is one greater
