@@ -25,6 +25,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -52,7 +53,9 @@ import org.eclipse.edt.ide.ui.internal.refactoring.reorg.MoveRefactoring;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgMoveWizard;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgPolicyFactory;
 import org.eclipse.edt.ide.ui.internal.refactoring.reorg.ReorgQueries;
+import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -94,7 +97,7 @@ public final class RefactoringExecutionStarter {
 			RefactoringWizardOpenOperation op = new RefactoringWizardOpenOperation(wizard);
 			try {
 				//handleFileRemoval(elements);
-				IFile eglddFile = getEGLDDFileHandle(elements);
+				IFile eglddFile = CoreUtility.getExistingEGLDDFileHandle(elements);//getEGLDDFileHandle(elements);
 				String[] serviceQualifiedNames = getServiceQualifiedName(elements);
 				
 				String titleForFailedChecks = ""; //$NON-NLS-1$
@@ -175,27 +178,6 @@ public final class RefactoringExecutionStarter {
 		} 
 		
 		return names;
-	}
-	
-	private static IFile getEGLDDFileHandle(Object[] removedFiles) throws EGLModelException {
-		IFile eglddFile = null;
-		for(int i=0; i< removedFiles.length; i++) {
-			if(removedFiles[i] instanceof IEGLFile) {
-				IEGLFile eglFile = (IEGLFile)removedFiles[i];
-				IEGLPathEntry[] entries = eglFile.getEGLProject().getRawEGLPath();
-				for(IEGLPathEntry entry : entries) {
-					IPath sourcePath =  entry.getPath();
-					if(sourcePath.toOSString().contains(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER_VALUE)) {
-						sourcePath = sourcePath.append(eglFile.getEGLProject().getElementName());	
-						sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
-						eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
-						return eglddFile;
-					}
-				}
-			}
-		}
-		
-		return eglddFile;
 	}
 
 	public static void startRenameRefactoring(final IPart part, final Shell shell) throws CoreException {

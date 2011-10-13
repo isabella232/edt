@@ -123,7 +123,7 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 	protected void handleEGLFileDialogFieldChanged() {
 		super.handleEGLFileDialogFieldChanged();
 		
-		IFile eglddFile = getEGLDDFileHandle();		
+		IFile eglddFile = CoreUtility.getExistingEGLDDFileHandle(getBindingEGLConfiguration());//getEGLDDFileHandle();		
 		if(eglddFile != null){
 			EGLDeploymentRoot deploymentRoot = null;			
 			try{
@@ -139,18 +139,6 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 			}
 		}
 	}
-	
-	private IFile getEGLDDFileHandle() {
-		IPath sourcePath = new Path(getBindingEGLConfiguration().getContainerName());
-		
-		String fileName = getBindingEGLConfiguration().getFileName();
-		if(fileName != null && fileName.trim().length()>0){
-			sourcePath = sourcePath.append(getBindingEGLConfiguration().getFileName());	
-			sourcePath = sourcePath.addFileExtension(getBindingEGLConfiguration().getFileExtension());
-			return ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
-		}
-		return null;
-	}
 
 	protected void validateBindingName(StatusInfo statusinfo) {
 		if(!getBindingEGLConfiguration().isOverwrite()){
@@ -161,7 +149,8 @@ public class ServiceBindingWizardPage extends EGLBindingWizardPage {
 				String currBindingName = getBindingEGLConfiguration().getBindingName();
 				Binding eglBinding = EGLDDRootHelper.getBindingByName(deploymentRoot, currBindingName);
 				if(eglBinding != null){
-					statusinfo.setError(NewWizardMessages.bind(NewWizardMessages.WSDLBindingWizpageValidationQueryOverride, currBindingName, getEGLDDFileHandle().getName()));
+					statusinfo.setError(NewWizardMessages.bind(NewWizardMessages.WSDLBindingWizpageValidationQueryOverride, currBindingName, 
+							 CoreUtility.getExistingEGLDDFileHandle(getBindingEGLConfiguration()).getName()));
 				}
 			}
 		}

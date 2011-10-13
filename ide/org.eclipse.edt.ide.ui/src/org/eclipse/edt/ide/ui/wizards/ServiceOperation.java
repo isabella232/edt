@@ -469,7 +469,7 @@ public class ServiceOperation extends EGLFileOperation {
 		if(configuration.IsGenAsWebService() || configuration.isGenAsRestService()) {
 			//we need to add the service to the deployment descriptor as web service
 			//by default, we'll use the <projectName>.egldd 
-			IFile eglddFile = getEGLDDFileHandle();		
+			IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(configuration); //getEGLDDFileHandle();		
 			if(eglddFile != null) {
 				EGLDeploymentRoot deploymentRoot = null;			
 				try {
@@ -528,25 +528,6 @@ public class ServiceOperation extends EGLFileOperation {
 			}
 			
 		}
-	}
-	
-	private IFile getEGLDDFileHandle() {
-		IPath sourcePath = new Path(configuration.getContainerName());
-		
-		String fileName = CoreUtility.getValidProjectName(configuration.getProjectName());
-		if(fileName != null && fileName.trim().length()>0){
-			sourcePath = sourcePath.append(fileName);	
-			sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
-			IFile eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
-			
-			//if this egldd does not exist, we should create one 
-			if(eglddFile == null || !eglddFile.exists()){
-				String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
-				EGLDDRootHelper.createNewEGLDDFile(eglddFile, encodingName);						
-			}
-			return eglddFile;
-		}
-		return null;
 	}
 	
 	@Override

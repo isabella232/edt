@@ -12,11 +12,23 @@
 package org.eclipse.edt.ide.ui.internal.util;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.sql.SQLConstants;
-import org.eclipse.edt.ide.ui.internal.record.conversion.xmlschema.WSDLUtil;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
+import org.eclipse.edt.ide.ui.wizards.EGLContainerConfiguration;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 
 public class CoreUtility {
@@ -89,5 +101,52 @@ public class CoreUtility {
 		}
 		return str;
 	}
+	
+   public static IFile getExistingEGLDDFileHandle(EGLContainerConfiguration config) {
+	   IPath sourcePath = new Path(config.getContainerName());
+	   String fileName = CoreUtility.getValidProjectName(config.getProjectName());
+	   IFile eglddFile = null;
+	   
+	   if(fileName != null && fileName.trim().length()>0){
+		   sourcePath = sourcePath.append(fileName);	
+		   sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
+		   eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
+		}
+		return eglddFile;
+   }
+   
+   public static IFile getExistingEGLDDFileHandle(Object[] removedFiles) throws EGLModelException {
+		IFile eglddFile = null;
+		for(int i=0; i< removedFiles.length; i++) {
+			if(removedFiles[i] instanceof IEGLFile) {
+				IEGLFile eglFile = (IEGLFile)removedFiles[i];
+				IEGLPathEntry[] entries = eglFile.getEGLProject().getRawEGLPath();
+				for(IEGLPathEntry entry : entries) {
+					IPath sourcePath =  entry.getPath();
+					IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
+					String sourceFolderPath = store.getString(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER);
+					if(sourcePath.toOSString().contains(sourceFolderPath)) {
+						sourcePath = sourcePath.append(eglFile.getEGLProject().getElementName());	
+						sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
+						eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
+						return eglddFile;
+					}
+				}
+			}
+		}
+		
+		return eglddFile;
+	}
+   
+   public static IFile getOrCreateEGLDDFileHandle(EGLContainerConfiguration config) {
+	   IFile eglddFile = getExistingEGLDDFileHandle(config);
+	   //if this egldd does not exist, we should create one 
+		if(eglddFile == null || !eglddFile.exists()) {
+			String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
+			EGLDDRootHelper.createNewEGLDDFile(eglddFile, encodingName);						
+		}
+		
+		return eglddFile;
+   }
 }
 

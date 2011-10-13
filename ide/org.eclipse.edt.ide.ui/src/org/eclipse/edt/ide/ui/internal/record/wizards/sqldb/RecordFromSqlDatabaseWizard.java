@@ -193,7 +193,7 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 			
 			if(isFinished) {
 				BindingSQLDatabaseConfiguration sqlConfig = new BindingSQLDatabaseConfiguration();
-				IFile eglddFile = getEGLDDFileHandle(sqlConfig);
+				IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(sqlConfig);//getEGLDDFileHandle(sqlConfig);
 				
 				if(eglddFile != null) {
 					EGLDeploymentRoot deploymentRoot = null;
@@ -252,28 +252,6 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		}
 
 		return buffer.toString();
-	}
-	
-	
-	private IFile getEGLDDFileHandle(BindingSQLDatabaseConfiguration sqlConfig) {
-		sqlConfig = new BindingSQLDatabaseConfiguration();
-		
-        IPath sourcePath = new Path(sqlConfig.getContainerName());
-		String fileName = CoreUtility.getValidProjectName(sqlConfig.getProjectName());
-		if(fileName != null && fileName.trim().length()>0) {
-			sourcePath = sourcePath.append(fileName);	
-			sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
-			IFile eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
-			
-			//if this egldd does not exist, we should create one 
-			if(eglddFile == null || !eglddFile.exists()) {
-				String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
-				EGLDDRootHelper.createNewEGLDDFile(eglddFile, encodingName);						
-			}
-			return eglddFile;
-		}
-		
-		return null;
 	}
 	
 	public void addMessage(String message) {
