@@ -60,21 +60,18 @@ public class WebClientWithServicesProjectTemplate extends
 	
 	protected void createPackage(final ProjectConfiguration eglProjConfiguration,
 			List listOps, String basePackage, String packageName) {
-		EGLPackageConfiguration packageConfiguration = new EGLPackageConfiguration();
-		packageConfiguration.setProjectName(eglProjConfiguration.getProjectName());
-		//packageConfiguration.setSourceFolderName(packageConfiguration.getSourceFolderName());
-		
+		String comboundPackageName;
 		if(packageName != null && packageName.length()>0){
 			if(basePackage !=null && basePackage.length()>0){
-				packageConfiguration.setFPackage(basePackage + "." + packageName);
+				comboundPackageName = basePackage + "." + packageName;
 			}else{
-				packageConfiguration.setFPackage(packageName);
+				comboundPackageName = packageName;
 			}
 		}else if(basePackage !=null && basePackage.length()>0){
-			packageConfiguration.setFPackage(basePackage);
+			comboundPackageName = basePackage;
 		}else{
 			return;
 		}
-		listOps.add(new EGLPackageOperation(packageConfiguration));
+		super.createPackage(eglProjConfiguration, listOps, basePackage, comboundPackageName);
 	}
 }
