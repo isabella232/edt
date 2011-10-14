@@ -1,11 +1,11 @@
-egl.defineRUILibrary('runtime', 'LogResult',
+egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 {
-	'eze$$fileName': 'runtime/LogResult.egl',
-	'eze$$runtimePropertiesFile': 'runtime.LogResult',
+	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/LogResult.egl',
+	'eze$$runtimePropertiesFile': 'org.eclipse.edt.eunit.runtime.LogResult',
 		"constructor": function() {
-			if(egl.runtime.LogResult['$inst']) return egl.runtime.LogResult['$inst'];
-			egl.runtime.LogResult['$inst']=this;
-			new egl.runtime.ConstantsLib();
+			if(egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']) return egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'];
+			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']=this;
+			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			this.ACTUALHEADER = "";
 			this.ACTUALHEADER = "Actual value = ";
 			this.EXPECTEDHEADER = "";
@@ -18,8 +18,8 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.outR = new egl.runtime.Log();
-			this.s = new egl.runtime.Status();
+			this.outR = new egl.org.eclipse.edt.eunit.runtime.Log();
+			this.s = new egl.org.eclipse.edt.eunit.runtime.Status();
 		}
 		,
 		"eze$$setInitial": function() {
@@ -41,11 +41,11 @@ egl.defineRUILibrary('runtime', 'LogResult',
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("outR", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("outR");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("outR", "outR", "Truntime/log;", egl.runtime.Log, annotations);
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("outR", "outR", "Torg/eclipse/edt/eunit/runtime/log;", egl.org.eclipse.edt.eunit.runtime.Log, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("s", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("s");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("s", "s", "Truntime/status;", egl.runtime.Status, annotations);
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("s", "s", "Torg/eclipse/edt/eunit/runtime/status;", egl.org.eclipse.edt.eunit.runtime.Status, annotations);
 			}
 			return this.fieldInfos;
 		}
@@ -65,12 +65,12 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		}
 		,
 		"logStdOut": function(logmsg) {
-			this.outR.msg = ((this.outR.msg) + egl.checkNull(egl.runtime.ConstantsLib['$inst']).NEWLINE);
+			this.outR.msg = ((this.outR.msg) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
 			this.outR.msg = ((this.outR.msg) + logmsg);
 		}
 		,
 		"passed": function(str) {
-			this.s.code = egl.checkNull(egl.runtime.ConstantsLib['$inst']).SPASSED;
+			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SPASSED;
 			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
 				str.ezeCopy("OK");
 			}
@@ -78,49 +78,43 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		}
 		,
 		"failed": function(str) {
-			this.s.code = egl.checkNull(egl.runtime.ConstantsLib['$inst']).SFAILED;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("FAILED");
-			}
+			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SFAILED;
+			str.ezeCopy((("FAILED - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"error": function(str) {
-			this.s.code = egl.checkNull(egl.runtime.ConstantsLib['$inst']).SERROR;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("ERROR");
-			}
+			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SERROR;
+			str.ezeCopy((("ERROR - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"skipped": function(str) {
-			this.s.code = egl.checkNull(egl.runtime.ConstantsLib['$inst']).SNOT_RUN;
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : egl.eglx.lang.EAny.unbox(str), eze$$signature : "S;"}, null)) || ((egl.eglx.lang.EAny.unbox(str)) == "")))) {
-				str.ezeCopy("SKIPPED");
-			}
+			this.s.code = egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SNOT_RUN;
+			str.ezeCopy((("SKIPPED - ") + egl.eglx.lang.EAny.unbox(str)));
 			this.s.reason = egl.eglx.lang.EAny.unbox(str);
 		}
 		,
 		"assertTrueException": function(failedReason, testCondition, throwsFailException) {
 			if (testCondition) {
-				var eze$Temp6 = null;
-				eze$Temp6 = egl.eglx.lang.EAny.ezeWrap("OK");
-				this.passed(eze$Temp6);
+				var eze$Temp3 = null;
+				eze$Temp3 = egl.eglx.lang.EAny.ezeWrap("OK");
+				this.passed(eze$Temp3);
 			}
 			else {
-				var eze$Temp7 = null;
-				eze$Temp7 = egl.eglx.lang.EAny.ezeWrap(failedReason);
-				this.failed(eze$Temp7);
-				failedReason = eze$Temp7.ezeUnbox();
+				var eze$Temp4 = null;
+				eze$Temp4 = egl.eglx.lang.EAny.ezeWrap(failedReason);
+				this.failed(eze$Temp4);
+				failedReason = eze$Temp4.ezeUnbox();
 				if (throwsFailException) {
-					var eze$Temp9 = null;
+					var eze$Temp6 = null;
 					{
 						var eze$SettingTarget1 = null;
-						eze$SettingTarget1 = new egl.runtime.AssertionFailedException();
+						eze$SettingTarget1 = new egl.org.eclipse.edt.eunit.runtime.AssertionFailedException();
 						egl.checkNull(eze$SettingTarget1).message = this.s.reason;
-						eze$Temp9 = eze$SettingTarget1;
+						eze$Temp6 = eze$SettingTarget1;
 					}
-					throw eze$Temp9;
+					throw eze$Temp6;
 				}
 			}
 		}
@@ -133,10 +127,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 			this.assertTrue("", testCondition);
 		}
 		,
-		"assertTrueNoException": function(failedReason, testCondition) {
-			this.assertTrueException(failedReason, testCondition, false);
-		}
-		,
 		"assertBigIntEqual": function(message, expected, actual) {
 			var isEqual = false;
 			isEqual = ((expected.compareTo(actual) == 0));
@@ -147,12 +137,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 			this.assertBigIntEqual("", expected, actual);
 		}
 		,
-		"assertBigIntEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = ((expected.compareTo(actual) == 0));
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "B;"}, {eze$$value : actual, eze$$signature : "B;"}, isEqual);
-		}
-		,
 		"assertStringEqual": function(message, expected, actual) {
 			var isEqual = false;
 			isEqual = ((expected) == actual);
@@ -161,12 +145,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		,
 		"assertStringEqual1": function(expected, actual) {
 			this.assertStringEqual("", expected, actual);
-		}
-		,
-		"assertStringEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = ((expected) == actual);
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "S;"}, {eze$$value : actual, eze$$signature : "S;"}, isEqual);
 		}
 		,
 		"assertStringArrayEqual": function(message, expected, actual) {
@@ -232,12 +210,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 			this.assertDateEqual("", expected, actual);
 		}
 		,
-		"assertDateEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = (egl.eglx.lang.EDate.equals(expected, actual));
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "K;"}, {eze$$value : actual, eze$$signature : "K;"}, isEqual);
-		}
-		,
 		"assertTimestampEqual": function(message, expected, actual) {
 			var isEqual = false;
 			isEqual = (egl.eglx.lang.ETimestamp.equals(expected, actual));
@@ -246,12 +218,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		,
 		"assertTimestampEqual1": function(expected, actual) {
 			this.assertTimestampEqual("", expected, actual);
-		}
-		,
-		"assertTimestampEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = (egl.eglx.lang.ETimestamp.equals(expected, actual));
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "J;"}, {eze$$value : actual, eze$$signature : "J;"}, isEqual);
 		}
 		,
 		"assertDecimalEqual": function(message, expected, actual) {
@@ -264,12 +230,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 			this.assertDecimalEqual("", expected, actual);
 		}
 		,
-		"assertDecimalEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = ((expected.compareTo(actual) == 0));
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "d;"}, {eze$$value : actual, eze$$signature : "d;"}, isEqual);
-		}
-		,
 		"assertFloatEqual": function(message, expected, actual) {
 			var isEqual = false;
 			isEqual = this.isFloatEqual(expected, actual);
@@ -278,12 +238,6 @@ egl.defineRUILibrary('runtime', 'LogResult',
 		,
 		"assertFloatEqual1": function(expected, actual) {
 			this.assertFloatEqual("", expected, actual);
-		}
-		,
-		"assertFloatEqualNoException": function(message, expected, actual) {
-			var isEqual = false;
-			isEqual = this.isFloatEqual(expected, actual);
-			this.expectAssertTrueNoException(message, {eze$$value : expected, eze$$signature : "F;"}, {eze$$value : actual, eze$$signature : "F;"}, isEqual);
 		}
 		,
 		"isFloatEqual": function(expected, actual) {
@@ -296,27 +250,21 @@ egl.defineRUILibrary('runtime', 'LogResult',
 			var signActual = "";
 			var deltaLimit = 0;
 			deltaLimit = 1E-14;
-			var eze$Temp16 = egl.eglx.lang.EAny.ezeWrap(0);
-			var eze$Temp17 = egl.eglx.lang.EAny.ezeWrap("");
-			normalExpected = this.normalFloat(expected, eze$Temp16, eze$Temp17);
-			mantissaExpected = eze$Temp16.ezeUnbox();
-			signExpected = eze$Temp17.ezeUnbox();
-			var eze$Temp18 = egl.eglx.lang.EAny.ezeWrap(0);
-			var eze$Temp19 = egl.eglx.lang.EAny.ezeWrap("");
-			normalActual = this.normalFloat(actual, eze$Temp18, eze$Temp19);
-			mantissaActual = eze$Temp18.ezeUnbox();
-			signActual = eze$Temp19.ezeUnbox();
+			var eze$Temp13 = egl.eglx.lang.EAny.ezeWrap(0);
+			var eze$Temp14 = egl.eglx.lang.EAny.ezeWrap("");
+			normalExpected = this.normalFloat(expected, eze$Temp13, eze$Temp14);
+			mantissaExpected = eze$Temp13.ezeUnbox();
+			signExpected = eze$Temp14.ezeUnbox();
+			var eze$Temp15 = egl.eglx.lang.EAny.ezeWrap(0);
+			var eze$Temp16 = egl.eglx.lang.EAny.ezeWrap("");
+			normalActual = this.normalFloat(actual, eze$Temp15, eze$Temp16);
+			mantissaActual = eze$Temp15.ezeUnbox();
+			signActual = eze$Temp16.ezeUnbox();
 			delta = ((normalExpected - normalActual));
 			delta = egl.eglx.lang.MathLib.abs(delta);
 			var isEqual = false;
 			isEqual = ((((((signExpected) == signActual) && ((mantissaExpected == mantissaActual)))) && ((delta.compareTo(deltaLimit) < 0))));
 			return isEqual;
-		}
-		,
-		"expectAssertTrueNoException": function(message, expected, actual, isEqual) {
-			var failedReason = "";
-			failedReason = this.buildFailedReason(message, expected, actual);
-			this.assertTrueNoException(failedReason, isEqual);
 		}
 		,
 		"expectAssertTrue": function(message, expected, actual, isEqual) {
