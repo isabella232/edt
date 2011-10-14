@@ -183,9 +183,9 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.OpenStatement node) {
 		SqlOpenStatement stmt = factory.createSqlOpenStatement();
 		stack.push(stmt);
-		doCommonVisit(node, stmt);
 		node.getResultSet().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
+		doCommonVisit(node, stmt);
 		
 		return false;
 	}
