@@ -121,6 +121,9 @@ public class EGLContainerConfiguration extends EGLElementConfiguration{
 	 */
 	public String getContainerName() {
 		String str = getProjectName();
+		if(str.trim().length() == 0){
+			return str;
+		}
 		return str.concat(System.getProperty("file.separator") + getSourceFolderName()); //$NON-NLS-1$
 	}
 	
@@ -137,6 +140,9 @@ public class EGLContainerConfiguration extends EGLElementConfiguration{
 		if(separatorIndex != -1) {
 			projectToken = container.substring(0, separatorIndex);
 			sourceToken = container.substring(separatorIndex+1);
+		}else{
+			projectToken = container;
+			sourceToken = "";
 		}
 		
 		setProjectName(projectToken);
