@@ -67,7 +67,7 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		out.println("this.eze$$setInitial();");
 		
 		Stereotype stereotype = handler.getStereotype();
-		if (stereotype != null) {
+		if ((stereotype != null) && ("RUIWidget".equals(stereotype.getEClass().getName()))){
 			MemberName onConstruction = (MemberName) stereotype.getValue(FieldName_OnConstructionFunction);
 			if (onConstruction != null) {
 				out.print("this.");
