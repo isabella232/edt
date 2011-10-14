@@ -65,13 +65,16 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 	}
 	
 	public void genAtLine(Function function, Context ctx, TabbedWriter out) {
-		Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
-		if (annotation != null){
-			Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
-			Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
-			Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
-			out.println( "egl.atLine(this.eze$$fileName," + line + ","
-				+ offset + "," + length + ", this);" );
+		Object noatline = ctx.getParameter(Constants.PARAMETER_NOATLINE);
+		if (noatline == null || noatline == Boolean.FALSE) {
+			Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null){
+				Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
+				Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);
+				Integer length = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLENGTH);
+				out.println( "egl.atLine(this.eze$$fileName," + line + ","
+					+ offset + "," + length + ", this);" );
+			}
 		}
 	}
 }

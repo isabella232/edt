@@ -22,6 +22,10 @@ public class JavaScriptDevGenerator extends EGL2JavaScript {
 	public JavaScriptDevGenerator() {
 		// bring in the EGL2JavaScript's parameters first
 		super();
+		
+		this.installParameter(false, "noatline", new String[] { "noatline" }, new Boolean[] { false, true },
+				"noatline must be defined as true or false");
+		
 		// define our additional parameters here. In this case we want to add a boolean type of parameter. Its name will be
 		// extendComments and we will allow a short form (ec). These parameter names are always case insensitive. Its default
 		// will be false (the 1st entry in the accepted values list { false, true }).
