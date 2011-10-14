@@ -143,12 +143,10 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					return result;
 				
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					result.addAll(getResourceAssociationSystemWordProposal());
 					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(), addEquals, includePrivateFields, propertyBlockList));
 					return result;
 
 				case ITypeBinding.FIXED_RECORD_BINDING:
-					result.addAll(getResourceAssociationSystemWordProposal());
 					Set dBindings = new HashSet();
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getSimpleNamesToDataBindingsMap().values());
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getStructureItems());
