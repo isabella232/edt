@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -115,28 +120,61 @@ public class CoreUtility {
 		return eglddFile;
    }
    
-   public static IFile getExistingEGLDDFileHandle(Object[] removedFiles) throws EGLModelException {
-		IFile eglddFile = null;
-		for(int i=0; i< removedFiles.length; i++) {
-			if(removedFiles[i] instanceof IEGLFile) {
-				IEGLFile eglFile = (IEGLFile)removedFiles[i];
-				IEGLPathEntry[] entries = eglFile.getEGLProject().getRawEGLPath();
+   public static List<IFile> getExistingEGLDDFileHandle(IEGLFile eglFile) throws EGLModelException,CoreException {
+		List<IFile> allDDFile = new ArrayList<IFile>();
+		List<IFolder> sourceFolders = new ArrayList<IFolder>();
+		
+		IProject project = eglFile.getEGLProject().getProject();
+		IResource[] resources = project.members(false);
+		IFile file;
+		IFolder folder;
+		IEGLPathEntry[] entries = eglFile.getEGLProject().getRawEGLPath();
+		
+		for(IResource resource : resources) {
+			if(resource instanceof IFile) {
+				file = (IFile) resource;
+				if(file.getName().endsWith(EGLDDRootHelper.EXTENSION_EGLDD)) {
+					allDDFile.add(file);
+				}
+			} else if(resource instanceof IFolder) {
+				folder = (IFolder)resource;
 				for(IEGLPathEntry entry : entries) {
 					IPath sourcePath =  entry.getPath();
-					IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
-					String sourceFolderPath = store.getString(EDTCorePreferenceConstants.EGL_SOURCE_FOLDER);
-					if(sourcePath.toOSString().contains(sourceFolderPath)) {
-						sourcePath = sourcePath.append(eglFile.getEGLProject().getElementName());	
-						sourcePath = sourcePath.addFileExtension(EGLDDRootHelper.EXTENSION_EGLDD);
-						eglddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(sourcePath);
-						return eglddFile;
+					if(sourcePath.toOSString().contains(folder.getName())) {
+						sourceFolders.add(folder);
+						break;
 					}
 				}
 			}
 		}
 		
-		return eglddFile;
+		for(IFolder sourceFolder : sourceFolders) {
+			allDDFile.addAll(getExistingEGLDDWithinFolder(sourceFolder));
+		}
+		
+		return allDDFile;
 	}
+   
+   private static List<IFile> getExistingEGLDDWithinFolder(IFolder containingFolder) throws CoreException{
+	   List<IFile> allDDFile = new ArrayList<IFile>();
+	   IResource[] resources = containingFolder.members(false);
+	   IFile file;
+	   IFolder folder;
+	   
+	   for(IResource resource : resources) {
+		   if(resource instanceof IFile) {
+				file = (IFile) resource;
+				if(file.getName().endsWith(EGLDDRootHelper.EXTENSION_EGLDD)) {
+					allDDFile.add(file);
+				}
+			} else if(resource instanceof IFolder) {
+				folder = (IFolder)resource;
+				allDDFile.addAll(getExistingEGLDDWithinFolder(folder));
+			}
+	   }
+	   
+	   return allDDFile;
+   }
    
    public static IFile getOrCreateEGLDDFileHandle(EGLContainerConfiguration config) {
 	   IFile eglddFile = getExistingEGLDDFileHandle(config);
