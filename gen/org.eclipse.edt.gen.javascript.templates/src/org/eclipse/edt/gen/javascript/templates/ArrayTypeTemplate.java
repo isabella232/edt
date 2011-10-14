@@ -49,6 +49,42 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	public void processDefaultValue(ArrayType generic, Context ctx, TabbedWriter out) {
 		out.print(" []"); // TODO sbg Nullable support
 	}
+	
+	public void genContainerBasedNewExpression( ArrayType type, Context ctx, TabbedWriter out, NewExpression expr ) {
+		int arraySize = 0;
+		List<Expression> arguments = expr.getArguments();
+		if ((arguments != null) && (arguments.size() == 1)) {
+			try {
+				arraySize = Integer.valueOf(((IntegerLiteral)arguments.get(0)).getValue()); 
+			}
+			catch (Exception e) {
+				arraySize = 0;
+			}
+		}
+		ArrayType generic = (ArrayType)type;
+		String temporary = ctx.nextTempName();
+		out.print("(function() { var ");
+		out.print(temporary);
+		out.print(" = []; ");
+		out.print(temporary);
+		out.print(".setType(");
+		out.print("\"");
+		genSignature(generic, ctx, out);
+		out.print("\"");
+		out.println(");");
+		out.println("for (var i = 0; i < " + arraySize + "; i++) {");
+		out.print(temporary);
+		out.print("[i] = ");
+		if (generic.elementsNullable())
+			out.print("null");
+		else
+			ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+		out.println(";}");
+		out.print("return ");
+		out.print(temporary);
+		out.print(";})()");
+	}
+
 
 	public void genSignature(ArrayType generic, Context ctx, TabbedWriter out) {
 		if (!generic.getTypeArguments().isEmpty()) {
@@ -89,42 +125,6 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 				ctx.invoke(genExpression, rhs, ctx, out);
 			out.print(")");
 		} 
-		else if ("=".equals(operator) && arg.getRHS() instanceof NewExpression){
-			int arraySize = 0;
-			List<Expression> arguments = ((NewExpression)arg.getRHS()).getArguments();
-			if ((arguments != null) && (arguments.size() == 1)) {
-				try {
-					arraySize = Integer.valueOf(((IntegerLiteral)arguments.get(0)).getValue()); 
-				}
-				catch (Exception e) {
-					arraySize = 0;
-				}
-			}
-			ArrayType generic = (ArrayType)type;
-			String temporary = ctx.nextTempName();
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-			out.print(" "+operator+" ");
-			out.print("(function() { var ");
-			out.print(temporary);
-			out.print(" = []; ");
-			out.print(temporary);
-			out.print(".setType(");
-			out.print("\"");
-			genSignature(generic, ctx, out);
-			out.print("\"");
-			out.println(");");
-			out.println("for (var i = 0; i < " + arraySize + "; i++) {");
-			out.print(temporary);
-			out.print("[i] = ");
-			if (generic.elementsNullable())
-				out.print("null");
-			else
-				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
-			out.println(";}");
-			out.print("return ");
-			out.print(temporary);
-			out.print(";})()");
-		}
 		else
 			ctx.invokeSuper(this, genTypeBasedAssignment, type, ctx, out, arg);
 	}
