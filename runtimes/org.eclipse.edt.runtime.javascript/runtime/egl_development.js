@@ -50,7 +50,7 @@ egl.binarySearch = function( /*int[]*/ values, /* int */ value ) {
 	}
 	
 	return (-left) - 1;
-}
+};
 
 egl.canSendEventToIDE = function(){
 	return egl.sessionIsValid && egl.contextAware;
@@ -94,7 +94,7 @@ egl.eval = function( codes ) {
 	    };
 	    geval();
 	}
-}
+};
 //Send a request to the IDE Gateway from the browser
 //A random key is appended to avoid having cached results returned
 egl.loadIDEURL = function(url, handler, synchronous, sendAsContent) {
@@ -132,7 +132,7 @@ egl.loadScript = function(packageName, className) {
 		   			egl.canPrintToConsole = true;
 			}
 			, true, null );
-}
+};
 
 egl.loadCSS = function(cssFile) {
 	if ( egl.ptCrash )
@@ -143,7 +143,7 @@ egl.loadCSS = function(cssFile) {
     objCSS.rel = 'stylesheet';
     objCSS.href = cssFile;
     objCSS.type = 'text/css';
-}
+};
 
 egl.reloadHandler = function(packageName, className) {
 	var pkg = egl.makePackage( packageName );
@@ -167,7 +167,7 @@ egl.reloadHandler = function(packageName, className) {
 		   			egl.canPrintToConsole = true;
 			}
 			, true, null );
-}
+};
 
 //Send a request to the IDE Gateway from the browser
 egl.loadURL = function(url, handler, synchronous, sendAsContent) {
@@ -183,14 +183,14 @@ egl.loadURL = function(url, handler, synchronous, sendAsContent) {
           }
           if (synchronous) {
           	//For synchronous calls, we will automatically invoke the handler when the load returns
-		        xmlhttp.onreadystatechange = function() {}
+		        xmlhttp.onreadystatechange = function() {};
           }
           else {
 		        xmlhttp.onreadystatechange = function() {
 		            if (xmlhttp.readyState==4) {
 		            	runHandler();
 		            }
-		        }
+		        };
 	        }
 		    try { 
 		    	if (sendAsContent || url.length > 256) {
@@ -218,7 +218,7 @@ egl.loadURL = function(url, handler, synchronous, sendAsContent) {
 				}
 
 				setTimeout(function() { 
-					           xmlhttp.onreadystatechange = function() { return function() { } }(); 
+					           xmlhttp.onreadystatechange = function() { return function() { }; }(); 
 				               xmlhttp.abort(); 
 				           }, 15000);
 		    } catch (e) { 
@@ -264,11 +264,11 @@ egl.handleIDEEvent = function() {
 	   			window.setTimeout("if (window.egl) egl.handleIDEEvent()", 10);
 		}, false);
 	}
-}
+};
 
 window.onunload = function() {
 	try { egl.terminateSession(); } catch (e) {}
-}
+};
 
 egl.getElementAt = function(x, y, element) {
 	if (!element ) {
@@ -305,7 +305,7 @@ egl.doWidgetClick = function( x, y ) {
         element.dispatchEvent (mousedownEvent);
     }
     setTimeout( "egl.getWidgetPositions()", 400 );
-}
+};
 
 egl.debugg = window.egl__debugg;
 egl.traceStartupTime = window.egl__traceStartupTime;
@@ -338,7 +338,7 @@ egl.getValueForDebug = function(variableName, functionName, object, args) {
 				egl.getValueForDebug(response, functionName, object, args);
 			}, true);
 	}
-}
+};
 
 egl.debugStack = [];
 
@@ -385,7 +385,7 @@ egl.getStackString = function() {
 	}
 	
 	return str;
-}
+};
 
 egl.getVariableInfoString = function(frame) {
 	if (frame.variableInfos.length == 0) {
@@ -414,7 +414,7 @@ egl.getVariableInfoString = function(frame) {
 		str += (children && children.length > 0) ? "1" : "0";
 	}	
 	return str;
-}
+};
 
 egl.tweakTypeForDebug = function(type, variableInfo){
 	// 1. Non-null ANYs can obtain the element type info.
@@ -472,7 +472,7 @@ egl.resolveAnyType = function(any) {
 		return egl.getDebugTypeFromSig(currType);
 	}
 	return "";
-}
+};
 
 egl.getDebugType = function(obj) {
 	if (obj == null) {
@@ -480,7 +480,7 @@ egl.getDebugType = function(obj) {
 	}
 	
 	return egl.getDebugTypeFromSig(egl.inferSignature(obj));
-}
+};
 
 egl.getDebugTypeFromSig = function(sig) {
 	if (!sig) {
@@ -495,7 +495,7 @@ egl.getDebugTypeFromSig = function(sig) {
 		default:
 			return type;
 	}
-}
+};
 
 egl.buildVariableInfos = function(frame) {
 	frame.variableInfos = [];
@@ -525,7 +525,7 @@ egl.buildVariableInfos = function(frame) {
 			}
 		}
 	}
-}
+};
 
 egl.beginWidgetPosition = function() { 
 	// called by partial update logic in VE, leave here until we remove that call from the VE
@@ -541,13 +541,13 @@ egl.enter = function(functionName, object, args, varUpdater){
 			egl.debugStackSize += 1;
 			egl.debugStack.length = egl.debugStackSize;
 		}
-		egl.debugStack.push( { functionName:functionName, longFunctionName:longName, toString:function(){return ""}, updater:varUpdater } );
+		egl.debugStack.push( { functionName:functionName, longFunctionName:longName, toString:function(){return "";}, updater:varUpdater } );
 		egl.lastFunctionEntered = functionName;
 	}
 	catch (e) {
 		egl.println("Internal error inside egl.enter "+functionName+" "+e.message);
 	}
-}
+};
 
 egl.leave = function() {
 	try {
@@ -586,7 +586,7 @@ egl.leave = function() {
 	catch (e) {
 		egl.println("Internal error inside egl.leave "+functionName+" "+e.message);
 	}
-}
+};
 
 egl.breakpoints = null;
 egl.singleUseBreakpoints = [];
@@ -616,7 +616,7 @@ egl.addBreakpoint = function(file, line, enabled) {
 		}
 	}
 	breakpointsForFile[ breakpointsForFile.length ] = {line : line, enabled : enabled};
-}
+};
 
 egl.removeBreakpoint = function(file, line) {
 	if (!egl.breakpoints) {
@@ -638,7 +638,7 @@ egl.removeBreakpoint = function(file, line) {
 			}
 		}
 	}	
-}
+};
 
 egl.changeBreakpoint = function(file, line, enabled) {
 	if (!egl.breakpoints) {
@@ -656,7 +656,7 @@ egl.changeBreakpoint = function(file, line, enabled) {
 			}
 		}
 	}
-}
+};
 
 egl.addSingleUseBreakpoint = function(file, line) {
 	var breakpointsForFile = null;
@@ -676,13 +676,13 @@ egl.addSingleUseBreakpoint = function(file, line) {
 		}
 	}
 	breakpointsForFile[ breakpointsForFile.length ] = line;
-}
+};
 
 egl.isBreakpoint = function(file, line) {
 	if (egl.breakpointManagerEnabled) {
 		// Check for single-use breakpoint.
 		for( var i = 0; i < egl.singleUseBreakpoints.length; i++){
-			var key = egl.singleUseBreakpoints[i].key
+			var key = egl.singleUseBreakpoints[i].key;
 			if(key == file){
 				for( var j = 0; j < egl.singleUseBreakpoints[i].value.length; j++){
 					var nextLine = egl.singleUseBreakpoints[i].value[j];
@@ -699,7 +699,7 @@ egl.isBreakpoint = function(file, line) {
 		}
 		
 		for( var i = 0; i < egl.breakpoints.length; i++){
-			var key = egl.breakpoints[i].key
+			var key = egl.breakpoints[i].key;
 			if(key == file){
 				for( var j = 0; j < egl.breakpoints[i].value.length; j++){
 					var nextBP = egl.breakpoints[i].value[j];
@@ -712,11 +712,11 @@ egl.isBreakpoint = function(file, line) {
 		}
 	}
 	return false;
-}
+};
 
 egl.breakpointManagerChanged = function(enabled) {
 	egl.breakpointManagerEnabled = enabled;
-}
+};
 
 egl.disconnectDebugger = function() {
 	var message;
@@ -732,7 +732,7 @@ egl.disconnectDebugger = function() {
 		egl.sessionIsValid = false;
 	}
 	throw new egl.egl.debug.DebugTermination(message || "");
-}
+};
 
 egl.suspendReason = null;
 egl.stepKind = null;
@@ -972,7 +972,7 @@ egl.atLine = function(file, line, offset, length, thisObj) {
 	finally {
 		egl.processingAtLine = false;
 	}
-}
+};
 
 egl.getVariableValue = function(response) {
 	var arr = response.split(" ");
@@ -1064,7 +1064,7 @@ egl.getVariableValue = function(response) {
 	}
 	
 	return varValue;
-}
+};
 
 egl.getVariableType = function(response) {
 	var arr = response.split(" ");
@@ -1079,7 +1079,7 @@ egl.getVariableType = function(response) {
 	else {
 		return "";
 	}
-}
+};
 
 egl.evTerminateReloadHandler = function() {
 	var packageName, typeName;
@@ -1098,7 +1098,7 @@ egl.evTerminateReloadHandler = function() {
 	} catch ( e ) {
 		document.location = document.location;
 	}
-}
+};
 
 egl.getFormattedNumber = function(value) {
 	var tempValue = String(value);
@@ -1107,7 +1107,7 @@ egl.getFormattedNumber = function(value) {
 		tempValue = tempValue.replace(".", decimal);
 	}
 	return tempValue;
-}
+};
 
 egl.getFormattedBigDecimal = function(value, type) {
 	var tempValue = String(value);
@@ -1118,7 +1118,7 @@ egl.getFormattedBigDecimal = function(value, type) {
 	}
 	
 	return tempValue;
-}
+};
 
 egl.setVariableValue = function(response) {
 	try {
@@ -1137,7 +1137,7 @@ egl.setVariableValue = function(response) {
 		}
 	} catch (e) {}
 	return "0";
-}
+};
 
 egl.getDebugVariablesString = function(response) {
 	var arr = response.split(" ");
@@ -1203,8 +1203,7 @@ egl.getDebugVariablesString = function(response) {
 		catch (e) {}
 	}
 	return varString;
-}
-
+};
 
 egl.getVariablesFromObject = function(value) {
 	value = egl.resolveAnyValue(value);
@@ -1240,7 +1239,7 @@ egl.getVariablesFromObject = function(value) {
 	catch (e) {
 		return null;
 	}
-}
+};
 
 egl.addLocalFunctionVariable = function(varName, varValue, varType, varJSName) {
 	if (egl.debugg && egl.debugStack.length > 0) {
@@ -1261,7 +1260,7 @@ egl.addLocalFunctionVariable = function(varName, varValue, varType, varJSName) {
 		//Push the variable onto the current blockStack
 		blockStack[blockStack.length - 1].push({name: varName, value : varValue, type : varType, jsName : varJSName});
 	}
-}
+};
 
 egl.setLocalFunctionVariable = function(varName, varValue, varType) {
 	if (egl.debugg && egl.debugStack.length > 0) {
@@ -1284,7 +1283,7 @@ egl.setLocalFunctionVariable = function(varName, varValue, varType) {
 			}		
 		}
 	}
-}
+};
 
 egl.enterBlock = function() {
 	if (egl.debugg && egl.debugStack.length > 0) {
@@ -1297,7 +1296,7 @@ egl.enterBlock = function() {
 		//Push an array onto the stack. The array will hold the variables for this block
 		blockStack.push([]);
 	}
-}
+};
 
 egl.exitBlock = function() {
 	if (egl.debugg && egl.debugStack.length > 0) {
@@ -1309,11 +1308,11 @@ egl.exitBlock = function() {
 		}
 		blockStack.pop();
 	}
-}
+};
 
 egl.showEditingFeedback = function() {
 	document.body.innerHTML = "document being edited...";
-}
+};
 
 egl.getWidgetPositions = function() {
 	var result = [];
@@ -1323,7 +1322,7 @@ egl.getWidgetPositions = function() {
 		egl.loadIDEURL("___widgetPositions?value=" + encodeURIComponent(result), null, false, false);
 	}
 	return result;
-}
+};
 
 egl.debugCallback = function(handler, func, args){
 	// A synchronous XMLHttpRequest will "yield" to an asynchronous
@@ -1344,12 +1343,12 @@ egl.debugCallback = function(handler, func, args){
 			egl.debugCallbacks.push({handler : handler, func : func, args : args});
 		}
 	}
-}
+};
 
 egl.debugSuspend = function(){
 	// Called by IDE to suspend next line.
 	egl.suspend = true;
-}
+};
 
 egl.setWidgetLocation = function(widgetRef, variableName, offset, length, isMoveable){
 	try {
@@ -1360,7 +1359,7 @@ egl.setWidgetLocation = function(widgetRef, variableName, offset, length, isMove
 	}
 	catch (E) { }
 	return widgetRef;
-}
+};
 
 egl.setWidgetMoveable = function(widgetRef, variableName){
 	if(widgetRef != null){
@@ -1370,7 +1369,7 @@ egl.setWidgetMoveable = function(widgetRef, variableName){
 		}
 		catch (E) {}
 	}
-}
+};
 
 egl.onerror = function(msg, url, line) {
 	if (url.match(/http.*/)) {
@@ -1378,7 +1377,7 @@ egl.onerror = function(msg, url, line) {
 		url = url.substring(url.indexOf('/')+1);
 	}
 	egl.printError(msg, url+":"+line);
-}
+};
 
 window.onerror = egl.onerror;
 
@@ -1394,7 +1393,7 @@ egl.getFileURL = function(file, functionName, line) {
 		return start + "<b style='cursor:pointer; text-decoration:underline;' "+
 				"onclick=\"egl.loadIDEURL('___openFile?file="+
 				encodeURIComponent(file)+"&line="+line+"')\"><font color=blue>line "+line+"</font></b>";
-}
+};
 
 egl.printError = function( /*String*/ description, /*Error*/ e ) {
 	if ( !egl.canPrintError ) {
@@ -1442,7 +1441,7 @@ egl.printError = function( /*String*/ description, /*Error*/ e ) {
 		egl.exceptionThrown = false;
 		egl.debugStack = [];
 	}
-}
+};
 
 egl.instrumentFunctions = function(className, clazz) {
 	if (!window.loadFirebugConsole) { 
@@ -1475,7 +1474,7 @@ egl.instrumentFunction = function(className, func, functionName) {
 		egl.printError(egl.getRuntimeMessage( "CRRUI2093E", [className+"."+functionName + ":<hr><font color=blue>" +string+"</font><hr>"]), e);
 	}
 	return func;
-}
+};
 
 if (egl.egl.ui) {
 	egl.instrumentFunctions("Widget", egl.eglx.ui.rui.Widget.prototype);
@@ -1767,11 +1766,11 @@ egl.getWidgetInfo = function() {
 	// covert the result object into a JSON string
 	var jsonStr = egl.toJSONString(result);
 	return jsonStr;
-}	
+};	
 
 egl.evUpdateWidgetInfo = function() {
 	egl.prevJSONPos = egl.getWidgetPositions();
-}
+};
 //
 egl.partialDisconnectedElements = [];
 egl.ptCrash = false;
@@ -1864,11 +1863,11 @@ egl.cleanupDebug = function(){
 		}
 		catch (e) {}
 	}
-}
+};
 
 window.onbeforeunload = function() {
 	try {egl.cleanupDebug();}catch(e){}
-}
+};
 
 egl.terminateSession = function(){
 	if (egl.partialDisconnectedElements) {
