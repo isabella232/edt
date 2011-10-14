@@ -58,14 +58,16 @@ public class EGLExceptionProposalHandler extends EGLAbstractProposalHandler {
 	 * if the system package was changed, the function should be changed. 
 	 */
 	private  void addAnyException(List proposals){
-		proposals.add(new EGLCompletionProposal(viewer,
-				"anyexception - eglx.lang (record)",
-				"anyexception",
-				UINlsStrings.CAProposal_Exception,
-				getDocumentOffset() - getPrefix().length(),
-				getPrefix().length(),
-				"anyexception".length(),
-				EGLCompletionProposal.RELEVANCE_EXCEPTION));
+		if("ANYEXCEPTION".startsWith(getPrefix().toUpperCase())){
+			proposals.add(new EGLCompletionProposal(viewer,
+					"anyexception - eglx.lang (record)",
+					"anyexception",
+					UINlsStrings.CAProposal_Exception,
+					getDocumentOffset() - getPrefix().length(),
+					getPrefix().length(),
+					"anyexception".length(),
+					EGLCompletionProposal.RELEVANCE_EXCEPTION));
+		}
 	}
 
 	private EGLCompletionProposal createProposal(Binding binding) {

@@ -13,12 +13,14 @@ package org.eclipse.edt.ide.ui.internal.contentassist.referencecompletion;
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLExceptionProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPartSearchProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPredefinedDataTypeProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPrimitiveProposalHandler;
@@ -57,7 +59,9 @@ public class EGLFunctionParameterTypeReferenceCompletion extends EGLAbstractRefe
 		});
 		//Get all data part names
 		final List proposals = new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(partTypes[0]);
-
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.HANDLER, "", new String[] {IEGLConstants.PROPERTY_RUIWIDGET, IEGLConstants.PROPERTY_RUIHANDLER}));
+		proposals.addAll(new EGLExceptionProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
+		
 		getBoundASTNode(viewer, documentOffset, new String[] {"x) end", "x)", "x", ""}, new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			public boolean nodeIsValid(Node astNode) {
 				return astNode != null;
