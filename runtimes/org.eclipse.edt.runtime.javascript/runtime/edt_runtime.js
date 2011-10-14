@@ -358,7 +358,7 @@ egl.defineClass( "eglx.lang", "EString"
 }
 );
 egl.eglx.lang.EString.textLen = function (s) {
-   return egl.textLen(s);
+   return ( s === null ) ? 0 : s.length;
 };
 egl.eglx.lang.EString.ezeCast = function (x, nullable) {
 	return egl.convertAnyToString(x, nullable);  
