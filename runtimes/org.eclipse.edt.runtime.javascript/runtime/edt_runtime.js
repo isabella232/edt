@@ -456,7 +456,7 @@ egl.eglx.lang.EString.charCodeAt = function (str, index) {
 	if ((str == null) || (index == null)) {
 		throw new egl.eglx.lang.NullValueException();
 	}
-	return str.charAt(index - 1);
+	return egl.eglx.lang.EString.substring(str, index, index).charCodeAt();
 };
 egl.eglx.lang.EString.trim = function (str) {
 	if (str == null) {
