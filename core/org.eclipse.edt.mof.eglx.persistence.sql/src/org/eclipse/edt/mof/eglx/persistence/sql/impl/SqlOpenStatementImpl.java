@@ -25,14 +25,7 @@ public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenS
 
 	@Override
 	public Expression getResultSet() {
-		//if there is a FOR clause the resultset is in target[1]
-		//else the resultset is in target[0]
-		if (getTargets().size() == 2) {
-			return getTargets().get(1);
-		}
-		else{
-			return getTarget();
-		}
+		return getTarget();
 	}
 	
 	@Override
@@ -50,7 +43,7 @@ public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenS
 		
 		String sql = null;
 		if (getTargets().size() == 2) {//resultset and a for clause
-			Expression target = getTargets().get(0);
+			Expression target = getTargets().get(1);
 			EGLClass targetType = (EGLClass)target.getType().getClassifier();
 			if (!TypeUtils.isDynamicType(targetType)) {
 				sql = "SELECT ";
