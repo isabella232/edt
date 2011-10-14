@@ -817,9 +817,7 @@ public class WidgetDescriptorFactory {
 		}
 	}
 
-	private void processPropertyType( Annotation propertyAnnotation, Field field, WidgetPropertyDescriptor propertyDescriptor ) {
-		field.getName();
-		
+	private void processPropertyType( Annotation propertyAnnotation, Field field, WidgetPropertyDescriptor propertyDescriptor ) {		
 		String propertyValue = (String)propertyAnnotation.getValue( PROPERTY_PROPERTYTYPE );
 
 
@@ -845,11 +843,13 @@ public class WidgetDescriptorFactory {
 			Type arrayElementType = ((ArrayType)type).getElementType();
 			//TODO - Add support for arrays of type other than string?
 			if(TypeUtils.Type_INT.equals(arrayElementType)){
-				return IVEConstants.INTEGER_TYPE;
+				//return IVEConstants.INTEGER_TYPE;
+				return IVEConstants.STRING_ARRAY_TYPE;
 			}else if(TypeUtils.Type_STRING.equals(arrayElementType)){
 				return IVEConstants.STRING_ARRAY_TYPE;
 			}else if(TypeUtils.Type_BOOLEAN.equals(arrayElementType)){
-				return IVEConstants.BOOLEAN_TYPE;
+				//return IVEConstants.BOOLEAN_TYPE;
+				return IVEConstants.STRING_ARRAY_TYPE;
 			}else{
 				//TODO - Return String if it's an unknown type?
 				return IVEConstants.STRING_ARRAY_TYPE;
