@@ -1151,7 +1151,12 @@ egl.leave = function() { };
 egl.lastFile;
 egl.lastLine;
 egl.atLine = function() { };
+egl.addLocalFunctionVariable = function() {};
+egl.setLocalFunctionVariable = function() {};
+egl.enterBlock = function() {};
+egl.exitBlock = function() {};
 egl.showEditingFeedback = function() { };
+egl.setWidgetLocation = function() {};
 
 egl.startNewWork = function() {
 	//if (egl.debugg) return;
