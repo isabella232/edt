@@ -65,7 +65,33 @@ public class PartsFromXMLUtil extends PartsUtil {
 
 		LinkedHashMap<String,Record> map = new LinkedHashMap<String,Record>();
 		map.put(wrapRec.getName().toUpperCase().toLowerCase(), wrapRec);
-		return process(xmlNode, wrapRec, map);
+		Part[] parts = process(xmlNode, wrapRec, map);
+		if(parts != null && parts.length == 1) {
+			boolean hasChildElement = false;
+			
+			Field[] fields = wrapRec.getFields();
+			for(Field field : fields) {
+				String annoName = null;
+				annoName = field.getAnnotationString();
+				if(annoName == null) {
+					hasChildElement = true;
+				} else if(!annoName.contains("XMLAttribute")) {
+					hasChildElement = true;
+				}
+			}
+			
+			if(!hasChildElement) {
+				String fieldName = "simValue";
+				Field field = new Field();
+				field.setName(fieldName);
+				SimpleType type = new SimpleType();
+				type.setName("string?");//$NON-NLS-1$
+				
+				field.setType(type);
+				wrapRec.addField(field);
+			}
+		}
+		return parts;
 	}
 
 	public Part[] process(XMLNode node, Record wrapRec, LinkedHashMap<String,Record> recs) {
