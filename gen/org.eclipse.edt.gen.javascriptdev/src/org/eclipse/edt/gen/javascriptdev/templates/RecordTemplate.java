@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -32,6 +33,18 @@ public class RecordTemplate extends org.eclipse.edt.gen.javascript.templates.Rec
 		out.print(quoted("eze$$getChildVariables"));
 		out.println(": function() {");
 		out.println("var eze$$parent = this;");
+		
+		if (CommonUtilities.isException(part)) {
+			genExceptionGetVariablesBody(part, ctx, out);
+		}
+		else {
+			genRecordGetVariablesBody(part, ctx, out);
+		}
+		
+		out.println("}");
+	}
+	
+	protected void genRecordGetVariablesBody(Record part, Context ctx, TabbedWriter out) {
 		out.print("return [");
 		
 		boolean first = true;
@@ -48,6 +61,17 @@ public class RecordTemplate extends org.eclipse.edt.gen.javascript.templates.Rec
 		}
 		
 		out.println("\n];");
-		out.println("}");
+	}
+	
+	protected void genExceptionGetVariablesBody(Record part, Context ctx, TabbedWriter out) {
+		out.println("var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);");
+		
+		for (Field field : part.getFields()) {
+			out.print("childVars.push(");
+			ctx.invoke(Constants.genGetVariablesEntry, field, ctx, out);
+			out.println(");");
+		}
+		
+		out.println("return childVars;");
 	}
 }
