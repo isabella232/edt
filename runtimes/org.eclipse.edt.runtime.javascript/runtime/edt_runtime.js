@@ -421,7 +421,7 @@ egl.eglx.lang.EString.fromETimestamp = function (timestamp) {
 	return egl.timeStampToString(timestamp, "yyyy-MM-dd-HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
-	return egl.dateToString(d, "yyyy-MM-dd"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	return egl.dateToString(d, "MM/dd/yyyy"); 
 };
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
@@ -559,10 +559,22 @@ egl.eglx.lang.EDate.fromEDate = function (x) {
 	return x;  // TODO sbg bug in generator -- delete this fn when fixed
 };
 egl.eglx.lang.EDate.fromEString = function (x) {   
-    return egl.stringToDate( x, egl.eglx.lang.Constants['$inst'].isoDateFormat ); // TODO need dateformat as arg?
+    return egl.stringToDate( x, egl.eglx.lang.Constants['$inst'].usaDateFormat ); // TODO need dateformat as arg?
 };
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+egl.eglx.lang.EDate.addDays = function (x, y) {
+	if ((x === null) || (y === null))
+		throw new egl.eglx.lang.NullValueException();
+	else
+		return egl.eglx.lang.DateTimeLib.dateFromInt(egl.convertDateToInt(x) + y);
+};
+egl.eglx.lang.EDate.daysDifferent = function (x, y) {
+	if ((x === null) || (y === null))
+		throw new egl.eglx.lang.NullValueException();
+	else
+		return egl.convertDateToInt(x) - egl.convertDateToInt(y);
 };
 egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
 	return egl.convertAnyToDate(any, nullable);

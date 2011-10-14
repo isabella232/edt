@@ -130,12 +130,12 @@ egl.formatTimeStampPattern = function( mask ) {
 	var firstCharInMask = mask.charAt(0);
 	var lastCharInMask = mask.charAt(mask.length-1);
 	
-	var startIndex = egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.indexOf(firstCharInMask);
-	var endIndex = egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.lastIndexOf(lastCharInMask)+1; // (add 1 so we actually *get* the last character)
+	var startIndex = egl.eglx.lang.Constants['$inst'].odbcTimeStampFormat.indexOf(firstCharInMask);
+	var endIndex = egl.eglx.lang.Constants['$inst'].odbcTimeStampFormat.lastIndexOf(lastCharInMask)+1; // (add 1 so we actually *get* the last character)
 	
 	if( startIndex >= 0 && endIndex > startIndex )
 	{
-		return egl.eglx.lang.Constants['$inst'].odbcTimestampFormat.substring( startIndex, endIndex );
+		return egl.eglx.lang.Constants['$inst'].odbcTimeStampFormat.substring( startIndex, endIndex );
 	}
 	else
 	{
