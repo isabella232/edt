@@ -50,6 +50,7 @@ public class RUIWidgetWizard extends TemplateWizard implements IPageChangingList
 	
 	public boolean performFinish() {
 		processInput();
+		getConfiguration().setHandlerType(HandlerConfiguration.WIDGET_HANDLER);
 		if(part == null)
 			return false;
 		((NewHandlerWizard)getParentWizard()).setContentObj(part);

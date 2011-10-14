@@ -13,11 +13,12 @@ package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizard;
-import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizardPage;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
@@ -27,14 +28,23 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
 public class NewHandlerWizard extends EGLFileWizard {
 	private static final String WIZPAGENAME_HandlerWizardPage = "WIZPAGENAME_HandlerWizardPage"; //$NON-NLS-1$
 	private static final String WIZPAGENAME_HandlerTemplatePage = "WIZPAGENAME_HandlerTemplatePage"; //$NON-NLS-1$
+
+	private static String Visual_Editor_Registered_ID = "org.eclipse.edt.ide.rui.visualeditor.EvEditor";   //$NON-NLS-1$
 
 	private NewHandlerWizardPage mainPage;
 	private HandlerTemplatePage templatePage;
@@ -165,4 +175,42 @@ public class NewHandlerWizard extends EGLFileWizard {
 		
 		return (operation);		
 	}
+	
+
+		protected void openResource(final IFile resource) {
+	
+			final IWorkbenchPage activePage;
+			IWorkbenchWindow window= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if (window == null)
+				activePage = null;
+			else
+				activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			if (activePage != null) {
+				final Display display= getShell().getDisplay();
+				if (display != null) {
+					display.asyncExec(new Runnable() {
+						public void run() {
+							try {
+								String editorID = null;
+								if(((HandlerConfiguration)configuration).getHandlerType() == HandlerConfiguration.HANDLER_HANDLER){
+									editorID = Visual_Editor_Registered_ID;
+								}else{
+									IEditorDescriptor desc= IDE.getDefaultEditor(resource);
+									if (desc == null){
+										editorID = EDTUIPlugin.getDefault().getWorkbench().getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID).getId();
+									}else{
+										editorID = desc.getId();
+									}
+								}
+								IDE.openEditor(activePage, resource, editorID);
+							} catch (PartInitException e) {
+								EDTUIPlugin.log(e);
+							}
+						}
+					});
+				}
+			}
+		}
+
+	
 }

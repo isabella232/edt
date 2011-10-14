@@ -18,6 +18,8 @@ import org.eclipse.ui.IWorkbench;
 public class HandlerConfiguration extends EGLPartConfiguration {
 	/** Handler Types */
 	public final static int BASIC_HANDLER = 0;
+	public final static int HANDLER_HANDLER = 1;
+	public final static int WIDGET_HANDLER = 2;
 
 	private String handlerName;
 	private int handlerType;

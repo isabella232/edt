@@ -58,6 +58,7 @@ public class RUIHandlerWizard extends TemplateWizard implements IPageChangingLis
 				processInput(inputPage.getHandlerTitle());
 			}
 		}
+		getConfiguration().setHandlerType(HandlerConfiguration.HANDLER_HANDLER);
 		if(part == null)
 			return false;
 		((NewHandlerWizard)getParentWizard()).setContentObj(part);			
