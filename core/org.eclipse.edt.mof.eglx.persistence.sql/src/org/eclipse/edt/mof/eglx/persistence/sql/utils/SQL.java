@@ -78,6 +78,22 @@ public class SQL {
 		return field.getAnnotation("eglx.persistence.Transient") != null;
 	}
 	
+	public static boolean isInsertable(Field field) {
+		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
+		if(column != null){
+			return ((Boolean)column.getValue("insertable")).booleanValue();
+		}
+		return true;
+	}
+	
+	public static boolean isUpdateable(Field field) {
+		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
+		if(column != null){
+			return ((Boolean)column.getValue("updateable")).booleanValue();
+		}
+		return true;
+	}
+	
 	public static boolean isPersistable(Field field) {
 		return !isAutoGenKeyField(field) 
 			&& !isAssociationField(field)

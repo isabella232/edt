@@ -49,7 +49,7 @@ public class SqlAddStatementImpl extends SqlIOStatementImpl implements SqlAddSta
 		int fieldNum = 0;
 		for (Field f : targetType.getFields()) {
 			// Do not INSERT list fields which represent associations
-			if (SQL.isPersistable(f)) {
+			if (SQL.isPersistable(f) && SQL.isInsertable(f)) {
 				fieldNum++;
 				if (doComma) sql += ", ";
 				sql += SQL.getColumnName(f);
