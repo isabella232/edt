@@ -49,7 +49,6 @@ public class PartReferenceCache {
 	private void getReferencedParts(Part part, Set<Part> allParts){
 		// ExternalType is processed multiple times in order to keep the inherit dependency. 
 		// A super type will always appear later in the list then the sub types
-		System.err.println("getReferencedParts - "+part.getFullyQualifiedName());
 		if(allParts.contains(part)){
 			if(part instanceof ExternalType){
 				allParts.remove(part);
