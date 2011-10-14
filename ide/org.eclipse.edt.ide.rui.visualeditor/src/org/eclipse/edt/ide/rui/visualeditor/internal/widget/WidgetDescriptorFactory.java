@@ -30,6 +30,7 @@ import org.eclipse.edt.ide.rui.document.utils.IVEConstants;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
@@ -817,6 +818,8 @@ public class WidgetDescriptorFactory {
 	}
 
 	private void processPropertyType( Annotation propertyAnnotation, Field field, WidgetPropertyDescriptor propertyDescriptor ) {
+		field.getName();
+		
 		String propertyValue = (String)propertyAnnotation.getValue( PROPERTY_PROPERTYTYPE );
 
 
@@ -838,34 +841,24 @@ public class WidgetDescriptorFactory {
 			return IVEConstants.STRING_TYPE;
 		}else if(TypeUtils.Type_BOOLEAN.equals(type)){
 			return IVEConstants.BOOLEAN_TYPE;
-		}else {
+		}else if(TypeUtils.getTypeKind(type) == TypeUtils.TypeKind_ARRAY){
+			Type arrayElementType = ((ArrayType)type).getElementType();
+			//TODO - Add support for arrays of type other than string?
+			if(TypeUtils.Type_INT.equals(arrayElementType)){
+				return IVEConstants.INTEGER_TYPE;
+			}else if(TypeUtils.Type_STRING.equals(arrayElementType)){
+				return IVEConstants.STRING_ARRAY_TYPE;
+			}else if(TypeUtils.Type_BOOLEAN.equals(arrayElementType)){
+				return IVEConstants.BOOLEAN_TYPE;
+			}else{
+				//TODO - Return String if it's an unknown type?
+				return IVEConstants.STRING_ARRAY_TYPE;
+			}
+		}
+		else {
+			//TODO - Return String if it's an unknown type?
 			return IVEConstants.STRING_TYPE;
 		}
-		
-//		switch( type.getTypeKind() ){
-//			case ( Type.INT ):
-//				return IVEConstants.INTEGER_TYPE;
-//			case ( Type.STRING ):
-//				return IVEConstants.STRING_TYPE;
-//			case ( Type.BOOLEAN ):
-//				return IVEConstants.BOOLEAN_TYPE;
-//			case ( Type.ARRAY ):
-//				Type arrayType = ((ArrayType)type).getElementType();
-//				switch( arrayType.getTypeKind() ){
-//					//TODO - Add support for arrays of type other than string?
-//					case ( Type.INT ):
-//						//return WidgetPropertyDescriptor.INTEGER_TYPE;
-//					case ( Type.STRING ):
-//						return IVEConstants.STRING_ARRAY_TYPE;
-//					case ( Type.BOOLEAN ):
-//						//return WidgetPropertyDescriptor.BOOLEAN_TYPE;
-//					default:
-//						//TODO - Return String if it's an unknown type?
-//						return IVEConstants.STRING_ARRAY_TYPE;
-//				}
-//			default:
-//				//TODO - Return String if it's an unknown type?
-//				return IVEConstants.STRING_TYPE;
 	}
 	
 	private boolean isPredefined( Field field, WidgetDescriptor widgetDescriptor ) {
