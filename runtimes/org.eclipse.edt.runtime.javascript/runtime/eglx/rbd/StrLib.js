@@ -428,5 +428,18 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		"toString": function() {
 			return "[StrLib]";
 		}
+		,
+		"eze$$getName": function() {
+			return "StrLib";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "defaultDateFormat", value : eze$$parent.defaultDateFormat, type : "eglx.lang.EString", jsName : "defaultDateFormat"},
+			{name: "defaultTimeStampFormat", value : eze$$parent.defaultTimeStampFormat, type : "eglx.lang.EString", jsName : "defaultTimeStampFormat"},
+			{name: "defaultNumericFormat", value : eze$$parent.defaultNumericFormat, type : "eglx.lang.EString", jsName : "defaultNumericFormat"}
+			];
+		}
 	}
 );

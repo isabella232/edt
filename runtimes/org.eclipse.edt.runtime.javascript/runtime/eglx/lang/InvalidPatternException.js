@@ -56,5 +56,16 @@ egl.defineClass('eglx.lang', "InvalidPatternException", "eglx.lang", "AnyExcepti
 		"toString": function() {
 			return "[InvalidPatternException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.InvalidPatternException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "pattern", value : eze$$parent.pattern, type : "eglx.lang.EString", jsName : "pattern"});
+			return childVars;
+		}
 	}
 );

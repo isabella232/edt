@@ -39,5 +39,15 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "AssertionFailedException", "eg
 		"toString": function() {
 			return "[AssertionFailedException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "org.eclipse.edt.eunit.runtime.AssertionFailedException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			return childVars;
+		}
 	}
 );

@@ -56,5 +56,16 @@ egl.defineClass('eglx.lang', "DynamicAccessException", "eglx.lang", "AnyExceptio
 		"toString": function() {
 			return "[DynamicAccessException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.DynamicAccessException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "key", value : eze$$parent.key, type : "eglx.lang.EString", jsName : "key"});
+			return childVars;
+		}
 	}
 );

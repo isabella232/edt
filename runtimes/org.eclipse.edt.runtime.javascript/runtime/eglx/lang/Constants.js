@@ -104,5 +104,25 @@ egl.defineRUILibrary('eglx.lang', 'Constants',
 		"toString": function() {
 			return "[Constants]";
 		}
+		,
+		"eze$$getName": function() {
+			return "Constants";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "isoDateFormat", value : eze$$parent.isoDateFormat, type : "eglx.lang.EString", jsName : "isoDateFormat"},
+			{name: "usaDateFormat", value : eze$$parent.usaDateFormat, type : "eglx.lang.EString", jsName : "usaDateFormat"},
+			{name: "eurDateFormat", value : eze$$parent.eurDateFormat, type : "eglx.lang.EString", jsName : "eurDateFormat"},
+			{name: "jisDateFormat", value : eze$$parent.jisDateFormat, type : "eglx.lang.EString", jsName : "jisDateFormat"},
+			{name: "isoTimeFormat", value : eze$$parent.isoTimeFormat, type : "eglx.lang.EString", jsName : "isoTimeFormat"},
+			{name: "usaTimeFormat", value : eze$$parent.usaTimeFormat, type : "eglx.lang.EString", jsName : "usaTimeFormat"},
+			{name: "eurTimeFormat", value : eze$$parent.eurTimeFormat, type : "eglx.lang.EString", jsName : "eurTimeFormat"},
+			{name: "jisTimeFormat", value : eze$$parent.jisTimeFormat, type : "eglx.lang.EString", jsName : "jisTimeFormat"},
+			{name: "db2TimeStampFormat", value : eze$$parent.db2TimeStampFormat, type : "eglx.lang.EString", jsName : "db2TimeStampFormat"},
+			{name: "odbcTimeStampFormat", value : eze$$parent.odbcTimeStampFormat, type : "eglx.lang.EString", jsName : "odbcTimeStampFormat"}
+			];
+		}
 	}
 );

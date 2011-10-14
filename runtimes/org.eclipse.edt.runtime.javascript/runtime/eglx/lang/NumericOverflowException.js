@@ -49,5 +49,15 @@ egl.defineClass('eglx.lang', "NumericOverflowException", "eglx.lang", "AnyExcept
 		"toString": function() {
 			return "[NumericOverflowException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.NumericOverflowException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			return childVars;
+		}
 	}
 );

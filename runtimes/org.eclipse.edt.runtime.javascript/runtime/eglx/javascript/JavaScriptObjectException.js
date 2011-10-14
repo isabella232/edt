@@ -20,7 +20,7 @@ egl.createJavaScriptObjectException = function( /*string*/ messageID, /*string o
 	args.push( [ "name", arguments[ 2 ] || "" ] );
 	return new egl.eglx.javascript.JavaScriptObjectException( args );
 };
-egl.defineClass('eglx.javascript', "JavaScriptObjectException", "egl.jsrt", "Record", {
+egl.defineClass('eglx.javascript', "JavaScriptObjectException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/javascript/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
@@ -67,6 +67,17 @@ egl.defineClass('eglx.javascript', "JavaScriptObjectException", "egl.jsrt", "Rec
 		,
 		"toString": function() {
 			return "[JavaScriptObjectException]";
+		}
+		,
+		"eze$$getName": function() {
+			return "eglx.javascript.JavaScriptObjectException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "name", value : eze$$parent.name, type : "eglx.lang.EString", jsName : "name"});
+			return childVars;
 		}
 	}
 );

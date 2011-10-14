@@ -77,5 +77,19 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "Any
 		"toString": function() {
 			return "[ServiceInvocationException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.services.ServiceInvocationException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "source", value : eze$$parent.source, type : "eglx.services.ServiceKind", jsName : "source"});
+			childVars.push({name: "detail1", value : eze$$parent.detail1, type : "eglx.lang.EString", jsName : "detail1"});
+			childVars.push({name: "detail2", value : eze$$parent.detail2, type : "eglx.lang.EString", jsName : "detail2"});
+			childVars.push({name: "detail3", value : eze$$parent.detail3, type : "eglx.lang.EString", jsName : "detail3"});
+			return childVars;
+		}
 	}
 );

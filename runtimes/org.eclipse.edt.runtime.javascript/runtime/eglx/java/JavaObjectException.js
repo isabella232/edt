@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.java', "JavaObjectException", "egl.jsrt", "Record", {
+egl.defineClass('eglx.java', "JavaObjectException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/java/Exceptions.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
@@ -55,6 +55,17 @@ egl.defineClass('eglx.java', "JavaObjectException", "egl.jsrt", "Record", {
 		,
 		"toString": function() {
 			return "[JavaObjectException]";
+		}
+		,
+		"eze$$getName": function() {
+			return "eglx.java.JavaObjectException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "exceptionType", value : eze$$parent.exceptionType, type : "eglx.lang.EString", jsName : "exceptionType"});
+			return childVars;
 		}
 	}
 );

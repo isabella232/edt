@@ -53,5 +53,17 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "Status", "egl.jsrt", "Record",
 		"toString": function() {
 			return "[Status]";
 		}
+		,
+		"eze$$getName": function() {
+			return "org.eclipse.edt.eunit.runtime.Status";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "code", value : eze$$parent.code, type : "eglx.lang.EInt", jsName : "code"},
+			{name: "reason", value : eze$$parent.reason, type : "eglx.lang.EString", jsName : "reason"}
+			];
+		}
 	}
 );

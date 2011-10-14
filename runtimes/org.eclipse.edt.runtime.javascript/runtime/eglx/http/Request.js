@@ -96,5 +96,23 @@ egl.defineClass('eglx.http', 'Request',
 		"toString": function() {
 			return "[Request]";
 		}
+		,
+		"eze$$getName": function() {
+			return "Request";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "uri", value : eze$$parent.uri, type : "eglx.lang.EString", jsName : "uri"},
+			{name: "method", value : eze$$parent.method, type : "eglx.http.HttpMethod", jsName : "method"},
+			{name: "encoding", value : eze$$parent.encoding, type : "eglx.services.Encoding", jsName : "encoding"},
+			{name: "charset", value : eze$$parent.charset, type : "eglx.lang.EString", jsName : "charset"},
+			{name: "contentType", value : eze$$parent.contentType, type : "eglx.lang.EString", jsName : "contentType"},
+			{name: "headers", value : eze$$parent.headers, type : "eglx.lang.EDictionary", jsName : "headers"},
+			{name: "body", value : eze$$parent.body, type : "eglx.lang.EString", jsName : "body"},
+			{name: "timeout", value : eze$$parent.timeout, type : "eglx.lang.EInt", jsName : "timeout"}
+			];
+		}
 	}
 );

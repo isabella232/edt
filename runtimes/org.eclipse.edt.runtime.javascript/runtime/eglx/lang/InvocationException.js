@@ -63,5 +63,17 @@ egl.defineClass('eglx.lang', "InvocationException", "eglx.lang", "AnyException",
 		"toString": function() {
 			return "[InvocationException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.InvocationException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "name", value : eze$$parent.name, type : "eglx.lang.EString", jsName : "name"});
+			childVars.push({name: "returnValue", value : eze$$parent.returnValue, type : "eglx.lang.EInt", jsName : "returnValue"});
+			return childVars;
+		}
 	}
 );

@@ -90,5 +90,22 @@ egl.defineClass('eglx.http', 'Response',
 		"toString": function() {
 			return "[Response]";
 		}
+		,
+		"eze$$getName": function() {
+			return "Response";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "status", value : eze$$parent.status, type : "eglx.lang.EInt", jsName : "status"},
+			{name: "statusMessage", value : eze$$parent.statusMessage, type : "eglx.lang.EString", jsName : "statusMessage"},
+			{name: "encoding", value : eze$$parent.encoding, type : "eglx.services.Encoding", jsName : "encoding"},
+			{name: "charset", value : eze$$parent.charset, type : "eglx.lang.EString", jsName : "charset"},
+			{name: "contentType", value : eze$$parent.contentType, type : "eglx.lang.EString", jsName : "contentType"},
+			{name: "headers", value : eze$$parent.headers, type : "eglx.lang.EDictionary", jsName : "headers"},
+			{name: "body", value : eze$$parent.body, type : "eglx.lang.EString", jsName : "body"}
+			];
+		}
 	}
 );

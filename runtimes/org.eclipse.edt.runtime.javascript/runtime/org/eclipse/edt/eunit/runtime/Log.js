@@ -46,5 +46,16 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "Log", "egl.jsrt", "Record", {
 		"toString": function() {
 			return "[Log]";
 		}
+		,
+		"eze$$getName": function() {
+			return "org.eclipse.edt.eunit.runtime.Log";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "msg", value : eze$$parent.msg, type : "eglx.lang.EString", jsName : "msg"}
+			];
+		}
 	}
 );

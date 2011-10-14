@@ -49,5 +49,15 @@ egl.defineClass('eglx.lang', "NullValueException", "eglx.lang", "AnyException", 
 		"toString": function() {
 			return "[NullValueException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.NullValueException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			return childVars;
+		}
 	}
 );

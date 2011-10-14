@@ -74,5 +74,18 @@ egl.defineClass('eglx.http', 'HttpRest',
 		"toString": function() {
 			return "[HttpRest]";
 		}
+		,
+		"eze$$getName": function() {
+			return "HttpRest";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "request", value : eze$$parent.request, type : "eglx.http.Request", jsName : "request"},
+			{name: "response", value : eze$$parent.response, type : "eglx.http.Response", jsName : "response"},
+			{name: "restType", value : eze$$parent.restType, type : "eglx.rest.ServiceType", jsName : "restType"}
+			];
+		}
 	}
 );

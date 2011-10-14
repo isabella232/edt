@@ -81,5 +81,18 @@ egl.defineClass('eglx.http', 'HttpSoap',
 		"toString": function() {
 			return "[HttpSoap]";
 		}
+		,
+		"eze$$getName": function() {
+			return "HttpSoap";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "request", value : eze$$parent.request, type : "eglx.http.Request", jsName : "request"},
+			{name: "response", value : eze$$parent.response, type : "eglx.http.Response", jsName : "response"},
+			{name: "responseHeader", value : eze$$parent.responseHeader, type : "eglx.lang.EAny", jsName : "responseHeader"}
+			];
+		}
 	}
 );

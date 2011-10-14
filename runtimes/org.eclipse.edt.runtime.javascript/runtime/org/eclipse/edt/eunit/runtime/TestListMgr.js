@@ -245,5 +245,25 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"toString": function() {
 			return "[TestListMgr]";
 		}
+		,
+		"eze$$getName": function() {
+			return "TestListMgr";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
+			{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
+			{name: "bindingType", value : eze$$parent.bindingType, type : "org.eclipse.edt.eunit.runtime.ServiceBindingType", jsName : "bindingType"},
+			{name: "ms", value : eze$$parent.ms, type : "org.eclipse.edt.eunit.runtime.MultiStatus", jsName : "ms"},
+			{name: "testIndex", value : eze$$parent.testIndex, type : "eglx.lang.EInt", jsName : "testIndex"},
+			{name: "testMethodNames", value : eze$$parent.testMethodNames, type : "eglx.lang.EList<eglx.lang.EString>", jsName : "testMethodNames"},
+			{name: "runTestMtds", value : eze$$parent.runTestMtds, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "runTestMtds"},
+			{name: "testLibName", value : eze$$parent.testLibName, type : "eglx.lang.EString", jsName : "testLibName"},
+			{name: "LibraryStartTests", value : eze$$parent.LibraryStartTests, type : "eglx.lang.EList<org.eclipse.edt.eunit.runtime.runTestMethod>", jsName : "LibraryStartTests"},
+			{name: "libIndex", value : eze$$parent.libIndex, type : "eglx.lang.EInt", jsName : "libIndex"}
+			];
+		}
 	}
 );

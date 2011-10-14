@@ -76,5 +76,22 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 		"toString": function() {
 			return "[ConstantsLib]";
 		}
+		,
+		"eze$$getName": function() {
+			return "ConstantsLib";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "NEWLINE", value : eze$$parent.NEWLINE, type : "eglx.lang.EString", jsName : "NEWLINE"},
+			{name: "EXIT_PREFIX", value : eze$$parent.EXIT_PREFIX, type : "eglx.lang.EString", jsName : "EXIT_PREFIX"},
+			{name: "SPASSED", value : eze$$parent.SPASSED, type : "eglx.lang.EInt", jsName : "SPASSED"},
+			{name: "SFAILED", value : eze$$parent.SFAILED, type : "eglx.lang.EInt", jsName : "SFAILED"},
+			{name: "SERROR", value : eze$$parent.SERROR, type : "eglx.lang.EInt", jsName : "SERROR"},
+			{name: "SNOT_RUN", value : eze$$parent.SNOT_RUN, type : "eglx.lang.EInt", jsName : "SNOT_RUN"},
+			{name: "SBAD", value : eze$$parent.SBAD, type : "eglx.lang.EInt", jsName : "SBAD"}
+			];
+		}
 	}
 );

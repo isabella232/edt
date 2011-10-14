@@ -49,5 +49,15 @@ egl.defineClass('eglx.lang', "InvalidArgumentException", "eglx.lang", "AnyExcept
 		"toString": function() {
 			return "[InvalidArgumentException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.InvalidArgumentException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			return childVars;
+		}
 	}
 );

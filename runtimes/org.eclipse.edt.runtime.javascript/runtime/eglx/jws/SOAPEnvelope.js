@@ -79,5 +79,17 @@ egl.defineClass('eglx.jws', "SOAPEnvelope", "egl.jsrt", "Record", {
 		"toString": function() {
 			return "[SOAPEnvelope]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.jws.SOAPEnvelope";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			{name: "soapHeader", value : eze$$parent.soapHeader, type : "eglx.lang.EAny", jsName : "soapHeader"},
+			{name: "body", value : eze$$parent.body, type : "eglx.lang.EAny", jsName : "body"}
+			];
+		}
 	}
 );

@@ -56,5 +56,16 @@ egl.defineClass('eglx.lang', "InvalidIndexException", "eglx.lang", "AnyException
 		"toString": function() {
 			return "[InvalidIndexException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.InvalidIndexException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "index", value : eze$$parent.index, type : "eglx.lang.EInt", jsName : "index"});
+			return childVars;
+		}
 	}
 );

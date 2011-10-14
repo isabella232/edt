@@ -72,10 +72,15 @@ egl.defineClass( "eglx.lang", "AnyException", "egl.jsrt", "Record", {
 		return s + "}";
 	},
 	
+	"eze$$getName": function() {
+		return "AnyException";
+	},
+	
 	"eze$$getChildVariables": function() {
+		var eze$$parent = this;
 		return [
-		        {name: "messageID", value : this.messageID, type : "eglx.lang.EString"},
-		        {name: "message", value : this.message, type : "eglx.lang.EString"}
+		{name: "message", value : eze$$parent.message, type : "eglx.lang.EString", jsName : "message"},
+		{name: "messageID", value : eze$$parent.messageID, type : "eglx.lang.EString", jsName : "messageID"}
 		];
 	}
 	

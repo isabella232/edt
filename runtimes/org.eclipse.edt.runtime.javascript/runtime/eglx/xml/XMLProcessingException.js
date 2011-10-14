@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.defineClass('eglx.xml', "XMLProcessingException", "egl.jsrt", "Record", {
+egl.defineClass('eglx.xml', "XMLProcessingException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/xml/XMLProcessingException.egl",
 		"constructor": function() {
 			this.eze$$setInitial();
@@ -55,6 +55,17 @@ egl.defineClass('eglx.xml', "XMLProcessingException", "egl.jsrt", "Record", {
 		,
 		"toString": function() {
 			return "[XMLProcessingException]";
+		}
+		,
+		"eze$$getName": function() {
+			return "eglx.xml.XMLProcessingException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "detail", value : eze$$parent.detail, type : "eglx.lang.EString", jsName : "detail"});
+			return childVars;
 		}
 	}
 );

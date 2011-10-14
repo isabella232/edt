@@ -63,5 +63,17 @@ egl.defineClass('eglx.lang', "TypeCastException", "eglx.lang", "AnyException", {
 		"toString": function() {
 			return "[TypeCastException]";
 		}
+		,
+		"eze$$getName": function() {
+			return "eglx.lang.TypeCastException";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
+			childVars.push({name: "castToName", value : eze$$parent.castToName, type : "eglx.lang.EString", jsName : "castToName"});
+			childVars.push({name: "actualTypeName", value : eze$$parent.actualTypeName, type : "eglx.lang.EString", jsName : "actualTypeName"});
+			return childVars;
+		}
 	}
 );
