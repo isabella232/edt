@@ -426,7 +426,7 @@ egl.eglx.lang.EString.fromEDate = function (d) {
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
-egl.eglx.lang.EString.matches = function (str1, str2, esc) {
+egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
 	esc = esc || "\\";
 	return egl.matches(str1, str2, esc);
 };
@@ -493,7 +493,12 @@ egl.eglx.lang.EString.toLowerCase = function(s){
 egl.eglx.lang.EString.toUpperCase = function(s){
 	return ( s === null ) ? null : s.toUpperCase();
 };
-
+egl.eglx.lang.EString.endsWith = function(s, substr) { 
+	return ( s === null ) ? null : s.endsWith(substr);
+};
+egl.eglx.lang.EString.startsWith = function(s, substr) { 
+	return ( s === null ) ? null : s.startsWith(substr);
+};
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
 String.prototype.length = function() {  //TODO Don't override JavaScript field of the same name
