@@ -47,7 +47,6 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 							// and is not an EGLProperty or Property field
 							String varName = getExprString(stmt.getTarget(), ctx);
 							genSetColumnValue(f, var_statement, varName, i, ctx, out);
-							out.println(";");
 							i++;
 						}
 					}

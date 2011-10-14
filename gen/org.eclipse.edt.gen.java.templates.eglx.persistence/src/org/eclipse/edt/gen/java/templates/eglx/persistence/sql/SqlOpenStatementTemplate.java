@@ -2,6 +2,8 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
 
 public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
@@ -12,6 +14,18 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 		}
 		else {
 			out.println("try {");
+			if (stmt.getUsingExpressions()!= null) {
+				int i = 1;
+				String varName = var_statement;
+				if(stmt.getPreparedStatement() != null){
+					varName = getExprString(stmt.getPreparedStatement(), ctx);
+				}
+				for (Expression uexpr : stmt.getUsingExpressions()) {
+					genSetColumnValue(uexpr, varName, i, ctx, out);
+					out.println(";");
+					i++;
+				}
+			}
 		}
 		String var_resultSet = ctx.nextTempName();
 		out.print(class_ResultSet + " " + var_resultSet + " = ");
@@ -21,11 +35,15 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 			ctx.invoke(genExpression, stmt.getPreparedStatement(), ctx, out);
 			out.println(".executeQuery();");
 		}
-		ctx.invoke(genExpression, stmt.getResultSet(), ctx, out);
+		Expression resultSet = getResultSet(stmt);
+		ctx.invoke(genExpression, resultSet, ctx, out);
 		out.print(" = ");
-		ctx.invoke(genInstantiation, stmt.getResultSet().getType(), ctx, out, var_resultSet);
+		ctx.invoke(genInstantiation, resultSet.getType(), ctx, out, var_resultSet);
 		out.println(";");
 		genSqlStatementEnd(stmt, ctx, out);
 	}
-	
+	@Override
+	protected Expression getResultSet(SqlActionStatement stmt) {
+		return ((SqlOpenStatement)stmt).getResultSet();
+	}
 }

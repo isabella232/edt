@@ -206,8 +206,8 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			else {
 				out.print(".prepareStatement(stmtStr");
 			}
-			if(stmt.getTarget() != null){
-				ctx.invoke(genStatementOptions, stmt, ctx, out, stmt.getTarget());
+			if(getResultSet(stmt) != null){
+				ctx.invoke(genStatementOptions, stmt, ctx, out, getResultSet(stmt));
 			}
 			out.println(");");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
@@ -247,6 +247,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		return isCall;
 	}
 	
+	
 	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
 		genSqlStatementSetup(stmt, ctx, out, var_statement);
 	}
@@ -259,6 +260,9 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		genStatementOptions(member.getMember().getAnnotation(AnnotationSQLResultSetControl), ctx, out);
 	}
 
+	protected Expression getResultSet(SqlActionStatement stmt){
+		return stmt.getTarget();
+	}
 	private void genStatementOptions(Annotation annot, Context ctx, TabbedWriter out) {
 		if(annot != null){
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
@@ -363,6 +367,22 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	
 	public void genSetColumnValue(Field field, String stmt_or_resultSet_var, String varName, int columnIndex, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)field.getType().getClassifier();
+		if(field.isNullable()){
+			out.print("if(null == ");
+			out.print(varName);
+			out.print('.');
+			ctx.invoke(genName, field, ctx, out);
+			genConvertValueEnd(type, ctx, out);
+			out.println("){");
+			out.print(stmt_or_resultSet_var);
+			out.print(".setNull(");
+			out.print(columnIndex);
+			out.print(", ");
+			out.print(SQL.getSQLTypeConstant(field.getType().getClassifier()));
+			out.println(");");
+			out.println("}");
+			out.println("else{");
+		}
 		out.print(stmt_or_resultSet_var);
 		out.print('.');
 		genSqlSetValueMethodName(type, ctx, out);
@@ -374,7 +394,10 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		out.print('.');
 		ctx.invoke(genName, field, ctx, out);
 		genConvertValueEnd(type, ctx, out);
-		out.print(')');
+		out.println(");");
+		if(field.isNullable()){
+			out.println("}");
+		}
 	}
 
 	
