@@ -19,8 +19,8 @@ egl.defineClass(
 	}
 );	
 
-egl.eglx.lang.MathLib["random"] = function() {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+egl.eglx.lang.MathLib["random"] = function(x) {
+	return Math.random(x);
 };
 		
 egl.eglx.lang.MathLib["abs"] = function(x) {
@@ -30,22 +30,22 @@ egl.eglx.lang.MathLib["abs"] = function(x) {
 	return Math.abs(x);
 };
 egl.eglx.lang.MathLib["acos"] = function(/* float */value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.acos(value);
 };
 egl.eglx.lang.MathLib["asin"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.asin(value);
 };
 egl.eglx.lang.MathLib["atan"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.atan(value);
 };
-egl.eglx.lang.MathLib["atan2"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+egl.eglx.lang.MathLib["atan2"] = function(/*float*/value1, /*float*/value2) {
+	return Math.atan2(value1, value2);
 };
 egl.eglx.lang.MathLib["ceiling"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.ceil(value);
 };
 egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return ( Math.cos(x));
 };
 egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
@@ -81,7 +81,7 @@ egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
 };
 
 egl.eglx.lang.MathLib["exp"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.exp(value);
 };
 egl.eglx.lang.MathLib["floor"] = function(/*float*/value) {
 	return Math.floor(value); //throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
@@ -159,12 +159,12 @@ egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*int*/ intPart, assignF
 };
 
 egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
-	if (base == 0 && exp <= 0) {
+	if (base == 0 && exponent <= 0) {
 		throw egl.createRuntimeException("CRRUI2040E", [ "MathLib.pow" ]);
-	} else if (base < 0 && parseInt(exp) != parseFloat(exp)) {
+	} else if (base < 0 && parseInt(exponent) != parseFloat(exponent)) {
 		throw egl.createRuntimeException("CRRUI2041E", [ "MathLib.pow" ]);
 	} else {
-		return Math.pow(base, exp);
+		return Math.pow(base, exponent);
 	}
 };
 
@@ -243,11 +243,11 @@ egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
 };
 
 egl.eglx.lang.MathLib["sin"] = function(/*float*/x) {
-	return ((Math.exp(x) - Math.exp(-x)) / 2);
+	return Math.sin(x);
 };
 
-egl.eglx.lang.MathLib["sinh"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+egl.eglx.lang.MathLib["sinh"] = function(/*float*/x) {
+	return ((Math.exp(x) - Math.exp(-x)) / 2);
 };
 
 egl.eglx.lang.MathLib["sqrt"] = function(/*float*/x) {
@@ -259,7 +259,7 @@ egl.eglx.lang.MathLib["sqrt"] = function(/*float*/x) {
 };
 
 egl.eglx.lang.MathLib["tan"] = function(/*float*/value) {
-	throw egl.createRuntimeException("NOIMPL", null); // TODO sbg Implement
+	return Math.tan(value);
 };
 
 egl.eglx.lang.MathLib["tanh"] = function(/*float*/x) {
