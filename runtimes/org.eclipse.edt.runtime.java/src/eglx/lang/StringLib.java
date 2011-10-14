@@ -82,7 +82,7 @@ public class StringLib extends ExecutableBase {
 	 * formats a parameter into a timestamp value and returns a value of type STRING.
 	 */
 	public static String format(Calendar timestampValue, String timestampFormat) {
-		TimestampData data = new TimestampData(timestampValue, 0);
+		TimestampData data = new TimestampData(timestampValue, timestampValue.get( Calendar.MILLISECOND ) * 1000);
 		boolean reset = false;
 		int micros = data.microseconds;
 		if (micros < 0) {

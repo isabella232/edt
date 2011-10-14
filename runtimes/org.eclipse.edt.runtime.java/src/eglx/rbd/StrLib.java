@@ -11,30 +11,34 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import java.lang.Integer;
-import java.lang.Long;
-import java.math.BigDecimal;
-import java.lang.Double;
-import java.lang.Boolean;
-import java.util.Calendar;
-import eglx.lang.StringLib;
-import java.lang.String;
-import java.lang.Short;
-
-import org.eclipse.edt.runtime.java.eglx.lang.*;
-
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import java.lang.Float;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import java.lang.Short;
+import eglx.lang.StringLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	@javax.xml.bind.annotation.XmlTransient
 	public String defaultDateFormat;
 	@javax.xml.bind.annotation.XmlTransient
-	public String defaultTimeFormat;
-	@javax.xml.bind.annotation.XmlTransient
 	public String defaultTimeStampFormat;
-	@javax.xml.bind.annotation.XmlTransient
-	public String defaultMoneyFormat;
 	@javax.xml.bind.annotation.XmlTransient
 	public String defaultNumericFormat;
 	public StrLib() {
@@ -43,9 +47,7 @@ public class StrLib extends ExecutableBase {
 	}
 	public void ezeInitialize() {
 		defaultDateFormat = "";
-		defaultTimeFormat = "";
 		defaultTimeStampFormat = "";
-		defaultMoneyFormat = "";
 		defaultNumericFormat = "";
 	}
 	@org.eclipse.edt.javart.json.Json(name="defaultDateFormat", clazz=EString.class, asOptions={})
@@ -55,26 +57,12 @@ public class StrLib extends ExecutableBase {
 	public void setDefaultDateFormat( String ezeValue ) {
 		this.defaultDateFormat = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="defaultTimeFormat", clazz=EString.class, asOptions={})
-	public String getDefaultTimeFormat() {
-		return (defaultTimeFormat);
-	}
-	public void setDefaultTimeFormat( String ezeValue ) {
-		this.defaultTimeFormat = ezeValue;
-	}
 	@org.eclipse.edt.javart.json.Json(name="defaultTimeStampFormat", clazz=EString.class, asOptions={})
 	public String getDefaultTimeStampFormat() {
 		return (defaultTimeStampFormat);
 	}
 	public void setDefaultTimeStampFormat( String ezeValue ) {
 		this.defaultTimeStampFormat = ezeValue;
-	}
-	@org.eclipse.edt.javart.json.Json(name="defaultMoneyFormat", clazz=EString.class, asOptions={})
-	public String getDefaultMoneyFormat() {
-		return (defaultMoneyFormat);
-	}
-	public void setDefaultMoneyFormat( String ezeValue ) {
-		this.defaultMoneyFormat = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="defaultNumericFormat", clazz=EString.class, asOptions={})
 	public String getDefaultNumericFormat() {
@@ -318,10 +306,8 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp61;
-			eze$Temp61 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
 			String eze$Temp60;
-			eze$Temp60 = StringLib.format(eze$Temp61, defaultTimeStampFormat);
+			eze$Temp60 = StringLib.format(timestampvalue, defaultTimeStampFormat);
 			return eze$Temp60;
 		}
 	}
@@ -330,51 +316,49 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			Calendar eze$Temp64;
-			eze$Temp64 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(ETimestamp.ezeCast(timestampvalue, ETimestamp.YEAR_CODE, ETimestamp.SECOND_CODE));
-			String eze$Temp65;
-			eze$Temp65 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
 			String eze$Temp63;
-			eze$Temp63 = StringLib.format(eze$Temp64, eze$Temp65);
-			return eze$Temp63;
+			eze$Temp63 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
+			String eze$Temp62;
+			eze$Temp62 = StringLib.format(timestampvalue, eze$Temp63);
+			return eze$Temp62;
 		}
 	}
 	public String getNextToken(AnyBoxedObject<String> source, AnyBoxedObject<Integer> index, String delimiters) {
 		int charIndex;
-		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal(ESmallint.ezeBox((short) 1)))));
-		AnyBoxedObject<Integer> eze$Temp66;
-		eze$Temp66 = EAny.ezeWrap(charIndex);
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
+		AnyBoxedObject<Integer> eze$Temp64;
+		eze$Temp64 = EAny.ezeWrap(charIndex);
 		String token;
-		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp66, delimiters);
-		charIndex = eze$Temp66.ezeUnbox();
+		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp64, delimiters);
+		charIndex = eze$Temp64.ezeUnbox();
 		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(token), null))) {
 			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
 		return token;
 	}
 	public int getTokenCount(String source, String delimiters) {
-		int eze$Temp68;
-		eze$Temp68 = StringLib.getTokenCount(source, delimiters);
-		return eze$Temp68;
+		int eze$Temp66;
+		eze$Temp66 = StringLib.getTokenCount(source, delimiters);
+		return eze$Temp66;
 	}
 	public int indexOf(AnyBoxedObject<String> source, String pattern) {
-		int eze$Temp69;
-		eze$Temp69 = EString.indexOf(source.ezeUnbox(), pattern);
-		return eze$Temp69;
+		int eze$Temp67;
+		eze$Temp67 = EString.indexOf(source.ezeUnbox(), pattern);
+		return eze$Temp67;
 	}
 	public int indexOf(AnyBoxedObject<String> source, String pattern, int startIndex) {
-		int eze$Temp70;
-		eze$Temp70 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
-		return eze$Temp70;
+		int eze$Temp68;
+		eze$Temp68 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
+		return eze$Temp68;
 	}
 	public String lowerCase(String characterItem) {
 		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(EString.ezeBox(characterItem), null))) {
 			return null;
 		}
 		else {
-			String eze$Temp72;
-			eze$Temp72 = EString.toLowerCase(characterItem);
-			return eze$Temp72;
+			String eze$Temp70;
+			eze$Temp70 = EString.toLowerCase(characterItem);
+			return eze$Temp70;
 		}
 	}
 	public String spaces(Integer characterCount) {
@@ -386,11 +370,11 @@ public class StrLib extends ExecutableBase {
 			String fiftyBlanks;
 			fiftyBlanks = "                                                  ";
 			while ((EInt.compareTo(characterCount, (int)((short) 50)) >= 0)) {
-				result += fiftyBlanks;
+				result = ((result) + fiftyBlanks);
 				characterCount -= (int)((short) 50);
 			}
 			if ((EInt.compareTo(characterCount, (int)((short) 0)) > 0)) {
-				result += EString.substring(fiftyBlanks, (int)((short) 1), characterCount);
+				result = ((result) + EString.substring(fiftyBlanks, (int)((short) 1), characterCount));
 			}
 			return result;
 		}
@@ -400,9 +384,9 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp77;
-			eze$Temp77 = EString.toUpperCase(characterItem);
-			return eze$Temp77;
+			String eze$Temp75;
+			eze$Temp75 = EString.toUpperCase(characterItem);
+			return eze$Temp75;
 		}
 	}
 }

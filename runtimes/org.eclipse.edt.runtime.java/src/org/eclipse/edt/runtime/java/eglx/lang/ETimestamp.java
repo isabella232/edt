@@ -120,7 +120,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static ETimestamp ezeBox(Calendar value) {
-		return ezeBox(value, YEAR_CODE, SECOND_CODE);
+		return ezeBox(value, YEAR_CODE, FRACTION6_CODE);
 	}
 
 	public static Object ezeCast(Object value, Object[] constraints) throws AnyException {
@@ -623,7 +623,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (seconds != -1)
 			cal.set(Calendar.SECOND, seconds);
 		if (microseconds != -1)
-			cal.set(Calendar.MILLISECOND, 0);
+			//Calendar only supports miliseconds, so drop the last 3 digits of precision from microseconds
+			cal.set(Calendar.MILLISECOND, microseconds / 1000);
 		// Verify that the values are valid.
 		try {
 			cal.getTimeInMillis();
