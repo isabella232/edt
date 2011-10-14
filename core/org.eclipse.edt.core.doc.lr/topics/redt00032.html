@@ -6,9 +6,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="eglx.lang package"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="eglx.http defines an API for accessing details in HTTP messages. "></meta>
+<meta name="description" content="eglx.http defines an API for accessing details in HTTP messages. "></meta>
+<meta name="DC.subject" content="EGL packages, eglx.lang, eglx.lang EGL package"></meta>
+<meta name="keywords" content="EGL packages, eglx.lang, eglx.lang EGL package"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00050.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00058.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00240.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00262.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00069.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00083.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00067.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00068.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00066.html"></meta>
@@ -26,13 +33,290 @@
 <h1 class="topictitle1">eglx.lang package</h1>
 
 
-<div id="list_body"><a name="list_body"><!-- --></a><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">eglx.http</span></span> defines
+an API for accessing details in HTTP messages. </p>
+
+<div class="p" id="redt00032__types"><a name="redt00032__types"><!-- --></a>
+<div class="tablenoborder"><a name="redt00032__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00032__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00050.html" title="The EGL Any type lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny.">Any and EAny types</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every Delegate type.                            *
+   *******************************************************************/
+externalType AnyDelegate extends EAny type ClassType
+   static function $EQ(lvalue AnyDelegate in, 
+                       rvalue AnyDelegate in) 
+                   returns(EBoolean) {@Operation{"=="}};
+
+   static function $NEQ(lvalue AnyDelegate in, 
+                        rvalue AnyDelegate in) 
+                   returns(EBoolean) {@Operation{"!="}};
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every Enumeration type.                         *
+   *******************************************************************/
+externalType AnyEnumeration extends EAny type ClassType
+   static function $EQ(lvalue AnyEnumeration in,
+                       rvalue AnyEnumeration in) 
+                   returns(EBoolean) {@Operation{"=="}};
+
+   static function $NEQ(lvalue AnyEnumeration in, 
+                        rvalue AnyEnumeration in) 
+                   returns(EBoolean) {@Operation{"!="}};
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every Exception type.                           *
+   *******************************************************************/
+externalType AnyException extends EAny type ClassType
+	
+   message String; // text that explains the exception 
+                   // and that might be in the user's language and locale. 
+
+   messageID String; // unique identifier for condition that caused the exception.
+                     // should not be translated or localized. 
+end</pre>
+</td>
+
+</tr>
+
+<tr id="redt00032__compat_javascript">
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every Record type.                              *
+   *******************************************************************/
+externalType AnyRecord extends AnyStruct type ClassType {isAbstract=yes} end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every Struct type.  For future use with Record. *
+   *******************************************************************/
+externalType AnyStruct extends AnyValue type ClassType {isAbstract=yes} end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The supertype of every type that represents a set of characters. *
+   *******************************************************************/
+externalType AnyText extends AnyValue type ClassType {isAbstract=yes} end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /********************************************************************
+   * The supertype of every value type, not reference type             *
+   ********************************************************************/
+externalType AnyValue extends EAny type ClassType {isAbstract=yes} end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00058.html" title="The EGL Bigint type lets you create an eight-byte value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, inclusive, with no decimal places. The EDT implementation of Bigint is EBigint.">Bigint and EBigint types</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00240.html" title="Constants contains a set of constant strings that you can use as patterns to format numeric, date, and timestamp values into strings. The primary formatting function is StringLib.format.">Constants library</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*********************************************************************
+   * Marks a type that must be available in content assist.            *
+   **********************************************************************/
+Record ContentAssist type Annotation
+{
+   targets = [ ElementKind.ExternalTypePart ]
+}
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00069.html" title="DateTimeLib contains functions that return date values in response to numeric input.">DateTimeLib external type</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00262.html" title="EGLProperty identifies functions that get and set the EGL field value when an EGL application uses the property. The annotation is useful when you create a widget by authoring a handler, stereotype RUIWidget.">EGLProperty</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*********************************************************************
+   * The supertype of all other types; can reference any type of value. *
+   *********************************************************************/
+externalType EAny type ClassType
+
+   /* {@Operation ==} compares two values of type any.                 */
+   static function $EQ(lvalue EAny in, rvalue EAny in)
+      returns(EBoolean) {@Operation{"=="}};
+
+   /* {@Operation !=} compares two values of type any.                 */
+   static function $NEQ(lvalue EAny in, rvalue EAny in) 
+      returns(EBoolean) {@Operation{"!="}};
+
+   /* {@Operation widen} Converts to an any, as used in boxing         */
+   static function asAny(value EAny in) 
+      returns(EAny) {@Operation{"widen"}};
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00083.html" title="EventListener lets you write an event handler for a Java environment, giving the EGL generator the information needed to create code that conforms to the Java event-listener pattern. The annotation is used in an external type of stereotypeJavaObject.">EventListener annotation</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * The stereotype for all exceptions.                               *
+   *******************************************************************/
+Record Exception type Annotation
+{
+   targets = [ElementKind.recordPart],
+   @Stereotype { defaultSuperType = AnyException }
+}
+end
+</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+   * Identifies an alias for the name of a field or function in an    *
+   * external type. You must use this if the name is not a valid      *
+   * EGL identifier.                                                  *
+   *******************************************************************/
+Record ExternalName type Annotation
+{
+   targets = [
+      ElementKind.FieldMbr,
+      ElementKind.FunctionMbr
+   ]
+}
+   value String;
+end
+</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%">&#xA0;</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00067.html" title="MathLib includes mathematical and trigonometric functions.">MathLib external type</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">/**
+ * Put Property on a field of an ExternalType to indicate that it should always 
+ * be accessed through getter and/or setter functions in generated code.  If only
+ * getMethod is set, the field is read-only. 
+ */
+Record Property type Annotation
+{
+	targets = [ElementKind.FieldMbr]
+}
+	getMethod String;
+	setMethod String;
+end
+</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%">&#xA0;</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00068.html" title="StringLib includes functions to work with strings.">StringLib external type</a></td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00066.html" title="SysLib provides a set of EGL system functions that are generally useful.">SysLib system library</a></td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+
+<div class="p">
+<div class="tablenoborder"><a name="redt00032__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00032__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d11028e285">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d11028e288">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00032__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d11028e285 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d11028e288 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00032__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d11028e285 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d11028e288 ">See type-specific topics.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div></div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

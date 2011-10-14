@@ -5,29 +5,208 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="BIGINT type"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Bigint and EBigint types"></meta>
+<meta name="abstract" content="The EGL Bigint type lets you create an eight-byte value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, inclusive, with no decimal places. The EDT implementation of Bigint is EBigint."></meta>
+<meta name="description" content="The EGL Bigint type lets you create an eight-byte value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, inclusive, with no decimal places. The EDT implementation of Bigint is EBigint."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00058"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>BIGINT type</title>
+<title>Bigint and EBigint types</title>
 </head>
 <body id="redt00058"><a name="redt00058"><!-- --></a>
 
 
-<h1 class="topictitle1">BIGINT  type</h1>
+<h1 class="topictitle1">Bigint and EBigint types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Bigint type lets you create an eight-byte
+value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807,
+inclusive, with no decimal places. The EDT implementation of Bigint
+is EBigint.</p>
+
+<a name="redt00058__main"><!-- --></a><dl id="redt00058__main">
+<dt class="dlterm"><a name="redt00058__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00058__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00058__detail"><!-- --></a>Type detail</dt>
+
+<dd><pre class="codeblock">externalType EBigint extends ENumber type ClassType
+
+   /* Unary + has no effect on the numeric value.                       */
+   static function $Plus(value EBigint in) 
+          returns (EBigint) {@Operation{"+"}};
+
+   /* Operation + adds two numbers.                                     */
+   static function $Plus(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBigint) {@Operation{"+"}};
+
+   /* Operation - negates the value.                                    */
+   static function $Minus(value EBigint in) 
+          returns (EBigint) {@Operation{"-"}};
+
+   /* Operation - subtracts one number from another.                    */
+   static function $Minus(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBigint) {@Operation{"-"}};
+
+   /* Operation * multiplies two numbers.                               */
+   static function $Multiply(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBigint) {@Operation{"*"}};
+
+   /* Operation / divides one number by another.                        */
+   static function $Divide(lvalue EBigint in, rvalue EBigint in) 
+          returns (EDecimal) {@Operation{"/"}};
+
+   /* Operation % computes the remainder of division.                   */
+   static function $Modulo(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBigint) {@Operation{"%"}};
+
+   /* Operation ** computes lvalue to the power of rvalue.              */
+   static function $PowerOf(lvalue EBigint in, rvalue EBigint in) 
+          returns (EFloat) {@Operation{"**"}};
+
+   /* Operation &lt; compares two numbers.                                 */
+   static function $LT(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+   /* Operation &gt; compares two numbers.                                 */
+   static function $GT(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBoolean) {@Operation{"&gt;"}};
+
+   /* Operation &lt;= compares two numbers.                                */
+   static function $LTE(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+   /* Operation &gt;= compares two numbers.                                */
+   static function $GTE(lvalue EBigint in, rvalue EBigint in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+   /* Operation == compares two numbers.                                */
+   static function $EQ(lvalue EBigint in, rvalue EBigint in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+   /* Operation != compares two numbers.                                */
+   static function $NEQ(lvalue EBigint in, rvalue EBigint in)
+          returns(EBoolean) {@Operation{"!="}};
+
+   /* Operation narrow converts a string to a bigint.                    *
+   *  The string might begin with an optional + or - sign.               *
+   *  After the sign must be a sequence of one or more digit             *
+   *  characters. Nothing can follow the digits.  The digits             *
+   *  in the string must be within the valid range for a Bigint.         *
+   *  A TypeCastException is thrown if the string can't be parsed        *
+   *  into a bigint.                                                    */
+   static function asBigint(value EString in) 
+          returns(EBigint) {@Operation{"narrow"}};
+
+   /* Operation narrow converts a smallfloat to a bigint.                *
+   *  Digits after the decimal point are discarded.                      *
+   *  A TypeCastException is thrown if the smallfloat is out of range    *
+   *  for a bigint.                                                     */
+   static function asBigint(value ESmallfloat in) 
+          returns(EBigint) {@Operation{"narrow"}};
+
+   /* Operation narrow converts a float to a bigint.                     *
+   *  Digits after the decimal point are discarded.                      *
+   *  A TypeCastException is thrown                                      *
+   *  if the float is out of range for a bigint.                        */
+   static function asBigint(value EFloat in) 
+          returns(EBigint) {@Operation{"narrow"}};
+
+   /* Operation narrow converts a decimal to a bigint.                   *
+   *  Digits after the decimal point are discarded.                      *
+   *  A TypeCastException is thrown if the decimal is                    *
+   *  out of range for a bigint.                                        */
+   static function asBigint(value EDecimal in) 
+          returns(EBigint) {@Operation{"narrow"}};
+
+   /* Operation narrow converts a number to a bigint.                    *
+   *  Digits after the decimal point are discarded.                      *
+   *  A TypeCastException is thrown if the number is out of              *
+   *  range for a bigint.                                               */
+   static function asBigint(value ENumber in) 
+          returns(EBigint) {@Operation{"narrow"}};
+
+   /* Operation widen converts a smallint to a bigint.                  */
+   static function asBigint(value ESmallint in)  
+          returns(EBigint) {@Operation{"widen"}};  
+
+   /* Operation widen converts an int to a bigint.                      */
+   static function asBigint(value EInt in) 
+          returns(EBigint) {@Operation{"widen"}};
+
+   /* Operation widen converts a bigint to a number.                    */
+   static function asNumber(value EBigint in) 
+          returns(ENumber) {@Operation{"widen"}};
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00058__comments"><!-- --></a>Comments</dt>
+
+<dd> <anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00058__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00058__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00058__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d14840e81">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d14840e84">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00058__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d14840e81 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14840e84 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00058__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d14840e81 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14840e84 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
 
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>

@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="EGL Language Reference">
-   <topic label="EGL language overview" href="topics/cedt00002.html">
-      <topic label="Types" href="topics/cedt00004.html">
-         <topic label="EGL types" href="topics/cedt00005.html"/>
-         <topic label="Value and reference types" href="topics/cedt00012.html"/>
-         <topic label="Assignment and reference compatibility" href="topics/cedt00041.html"/>
-         <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
-         <topic label="Data items" href="topics/cedt00006.html"/>
-         <topic label="Classifiers (part types)" href="topics/cedt00007.html"/>
-         <topic label="Annotations" href="topics/cedt00008.html"/>
-         <topic label="Stereotypes" href="topics/cedt00009.html"/>
-      </topic>
-      <topic label="EGL packages" href="topics/cedt00014.html"/>
-      <topic label="Part imports" href="topics/cedt00017.html"/>
-      <topic label="Part-name resolution" href="topics/cedt00015.html"/>
-      <topic label="Run units" href="topics/cedt00011.html"/>
-      <topic label="Name resolution at run time" href="topics/cedt00016.html"/>
-      <topic label="Overview of simple types" href="topics/cedt00018.html">
-         <topic label="EGL character types" href="topics/cedt00020.html"/>
-         <topic label="EGL date-and-time types" href="topics/cedt00022.html"/>
-         <topic label="EGL large-object types" href="topics/cedt00023.html"/>
-         <topic label="EGL numeric types" href="topics/cedt00021.html"/>
-      </topic>
+   <topic label="EGL language overview" href="topics/cedt00002.html"/>
+   <topic label="EGL core">
+      <topic label="Assignment and reference compatibility" href="topics/cedt00041.html"/>
+      <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
       <topic label="Overview of classifiers" href="topics/cedt00019.html">
          <topic label="Class classifier overview" href="topics/cedt00029.html"/>
          <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
@@ -36,14 +18,26 @@
          <topic label="Record classifier overview" href="topics/cedt00031.html"/>
          <topic label="Service classifier overview" href="topics/cedt00035.html"/>
       </topic>
-      <topic label="EGL Syntax" href="topics/cedt00013.html"/>
-      <topic label="Logical unit of work" href="topics/cedt00042.html"/>
-   </topic>
-   <topic label="EGL core">
+      <topic label="Simple types" href="topics/cedt00018.html">
+         <topic label="EGL character types" href="topics/cedt00020.html"/>
+         <topic label="EGL date-and-time types" href="topics/cedt00022.html"/>
+         <topic label="EGL large-object types" href="topics/cedt00023.html"/>
+         <topic label="EGL numeric types" href="topics/cedt00021.html"/>
+      </topic>
       <topic label="Statements list" href="topics/redt00030.html">
+         <topic label="Add statement" href="topics/redt00021.html"/>
          <topic label="Assignment statement" href="topics/redt00004.html"/>
+         <topic label="Call statement" href="topics/redt00003.html"/>
+         <topic label="Close statement" href="topics/redt00022.html"/>
          <topic label="Continue statement" href="topics/redt00020.html"/>
          <topic label="Case statement" href="topics/redt00014.html"/>
+         <topic label="Delete statement" href="topics/redt00023.html"/>
+         <topic label="Action statements" href="topics/redt00026.html"/>
+         <topic label="ForEach statement" href="topics/redt00018.html"/>
+         <topic label="FreeSQL statement" href="topics/redt00029.html"/>
+         <topic label="Get statement" href="topics/redt00024.html"/>
+         <topic label="Replace statement" href="topics/redt00025.html"/>
+         <topic label="Transfer statement" href="topics/redt00010.html"/>
          <topic label="Use statement" href="topics/redt00005.html"/>
          <topic label="While statement" href="topics/redt00016.html"/>
       </topic>
@@ -103,6 +97,10 @@
          </topic>
       </topic>
       <topic label="eglx.lang package" href="topics/redt00032.html">
+         <topic label="Any and EAny types" href="topics/redt00050.html"/>
+         <topic label="Bigint and EBigint types" href="topics/redt00058.html"/>
+         <topic label="Constants library" href="topics/redt00240.html"/>
+         <topic label="EGLProperty" href="topics/redt00262.html"/>
          <topic label="DateTimeLib external type" href="topics/redt00069.html">
             <topic label="DateTimeLib.dateFromGregorian system function"
                    href="topics/redt00244.html"/>
@@ -110,6 +108,7 @@
             <topic label="DateTimeLib.dateFromJulian system function" href="topics/redt00241.html"/>
             <topic label="DateTimeLib.mdy system function" href="topics/redt00243.html"/>
          </topic>
+         <topic label="EventListener annotation" href="topics/redt00083.html"/>
          <topic label="MathLib external type" href="topics/redt00067.html">
             <topic label="MathLib.abs function" href="topics/redt00206.html"/>
             <topic label="MathLib.acos function" href="topics/redt00207.html"/>
@@ -171,6 +170,16 @@
             <topic label="XMLLib.convertToXML function" href="topics/redt00256.html"/>
          </topic>
       </topic>
+      <topic label="eglx.xml.binding.annotation package" href="topics/redt00259.html">
+         <topic label="XMLArray annotation" href="topics/redt00260.html"/>
+         <topic label="XMLAttribute annotation" href="topics/redt00089.html"/>
+         <topic label="XMLElement annotation" href="topics/redt00090.html"/>
+         <topic label="XMLRootElement annotation" href="topics/redt00091.html"/>
+         <topic label="XMLSchemaType annotation" href="topics/redt00092.html"/>
+         <topic label="XMLStructureKind enumeration" href="topics/redt00093.html"/>
+         <topic label="XMLType annotation" href="topics/redt00094.html"/>
+         <topic label="XMLValue annotation" href="topics/redt00261.html"/>
+      </topic>
       <topic label="org.eclipse.edt.rui.widgets package" href="topics/redt00031.html">
          <topic label="BidiTextArea widget" href="topics/redt00121.html"/>
          <topic label="BidiTextField widget" href="topics/redt00122.html"/>
@@ -203,28 +212,14 @@
       </topic>
    </topic>
    <topic label="Supplemental details">
-      <topic label="Action statements" href="topics/redt00026.html">
-         <topic label="Add statement" href="topics/redt00021.html"/>
-         <topic label="Call statement" href="topics/redt00003.html"/>
-         <topic label="Close statement" href="topics/redt00022.html"/>
-         <topic label="Delete statement" href="topics/redt00023.html"/>
-         <topic label="Action statements" href="topics/redt00026.html"/>
-         <topic label="ForEach statement" href="topics/redt00018.html"/>
-         <topic label="FreeSQL statement" href="topics/redt00029.html"/>
-         <topic label="Get statement" href="topics/redt00024.html"/>
-         <topic label="Replace statement" href="topics/redt00025.html"/>
-         <topic label="Transfer statement" href="topics/redt00010.html"/>
-      </topic>
-      <topic label="ANY type" href="topics/redt00050.html"/>
+      <topic label="Action statements" href="topics/redt00026.html"/>
       <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
-      <topic label="BIGINT type" href="topics/redt00058.html"/>
       <topic label="BIRTHandler stereotype" href="topics/redt00084.html"/>
       <topic label="BLOB type" href="topics/redt00054.html"/>
       <topic label="BOOLEAN type" href="topics/redt00176.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
       <topic label="CLOB type" href="topics/redt00055.html"/>
       <topic label="Column annotation" href="topics/redt00174.html"/>
-      <topic label="Constants system library" href="topics/redt00240.html"/>
       <topic label="Correspondence between a JSON string and an EGL variable"
              href="topics/redt00253.html"/>
       <topic label="Correspondence between an XML string and an EGL variable"
@@ -237,7 +232,6 @@
       <topic label="Entity stereotype" href="topics/redt00081.html"/>
       <topic label="Enumeration classifier detail" href="topics/redt00046.html"/>
       <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
-      <topic label="EventListener annotation" href="topics/redt00083.html"/>
       <topic label="Exception stereotype" href="topics/redt00079.html">
          <topic label="Exception records provided in EDT" href="topics/redt00080.html"/>
       </topic>
@@ -265,6 +259,7 @@
       <topic label="Like operator" href="topics/redt00098.html"/>
       <topic label="List part" href="topics/redt00049.html"/>
       <topic label="Literals" href="topics/redt00096.html"/>
+      <topic label="Logical unit of work" href="topics/cedt00042.html"/>
       <topic label="ManyToMany annotation" href="topics/redt00168.html"/>
       <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
       <topic label="Matches operator" href="topics/redt00099.html"/>
@@ -291,6 +286,7 @@
       <topic label="Reserved words" href="topics/redt00103.html"/>
       <topic label="Resource annotation" href="topics/redt00087.html"/>
       <topic label="Return statement" href="topics/redt00007.html"/>
+      <topic label="Run units" href="topics/cedt00011.html"/>
       <topic label="RUIHandler stereotype" href="topics/redt00082.html"/>
       <topic label="RUILib system library" href="topics/redt00070.html"/>
       <topic label="RUIWidget stereotype" href="topics/redt00101.html"/>
@@ -315,12 +311,5 @@
       <topic label="Tree widget" href="topics/redt00120.html"/>
       <topic label="Try blocks" href="topics/redt00013.html"/>
       <topic label="Type conversions" href="topics/redt00064.html"/>
-      <topic label="XMLAttribute annotation" href="topics/redt00089.html"/>
-      <topic label="XMLElement annotation" href="topics/redt00090.html"/>
-      <topic label="XMLLib system library" href="topics/redt00074.html"/>
-      <topic label="XMLRootElement annotation" href="topics/redt00091.html"/>
-      <topic label="XMLSchemaType annotation" href="topics/redt00092.html"/>
-      <topic label="XMLStructure annotation" href="topics/redt00093.html"/>
-      <topic label="XMLType annotation" href="topics/redt00094.html"/>
    </topic>
 </toc>

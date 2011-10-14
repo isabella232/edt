@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DataItem classifier overview"></meta>
-<meta name="abstract" content="The capabilities of the DataItem classifier are made available when you code a data item. A data item is an alias of another type and can include multiple field-level annotations. For examples, see “Data Items.”"></meta>
-<meta name="description" content="The capabilities of the DataItem classifier are made available when you code a data item. A data item is an alias of another type and can include multiple field-level annotations. For examples, see “Data Items.”"></meta>
+<meta name="abstract" content="The capabilities of the DataItem classifier are made available when you code a data item. A data item is an alias of another type and can include multiple field-level annotations."></meta>
+<meta name="description" content="The capabilities of the DataItem classifier are made available when you code a data item. A data item is an alias of another type and can include multiple field-level annotations."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00019.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -26,8 +26,29 @@
 
 <div><p>The capabilities of the DataItem classifier are made available
 when you code a <dfn class="term">data item</dfn>. A data item is an alias of
-another type and can include multiple field-level annotations. For
-examples, see “Data Items.” </p>
+another type and can include multiple field-level annotations. </p>
+
+<div class="p">For example, you might define the <samp class="codeph">NumberOfCars</samp> alias
+and use it in place of INT. Here is the alias definition:<pre class="codeblock">DataItem
+   NumberOfCars INT
+End</pre>
+</div>
+
+<div class="p">Here is a second type, which defines the <samp class="codeph">NumberOfDrivers</samp> alias:<pre class="codeblock">DataItem 
+   NumberOfDrivers INT 
+End </pre>
+</div>
+
+<p>As suggested by the examples, each alias is called a <dfn class="term">data
+item</dfn>. A data item is an EGL part.</p>
+
+<div class="p">Your logic can include variables and constants that are based on
+a data item. Here are examples:<pre class="codeblock">myCarCount NumberOfCars;
+const myAntiqueCarCount NumberOfCars = 5;</pre>
+</div>
+
+<p>A data item is not only for simple types, but for other native
+types and for the parts that you define.</p>
 
 <p>A data item does not include a stereotype.</p>
 
