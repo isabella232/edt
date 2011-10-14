@@ -460,6 +460,7 @@ public interface IProblemRequestor {
 	public static final int TYPE_NOT_INSTANTIABLE_2 = 3435;
 
 	public static final int SETTING_NOT_ALLOWED = 3436;
+	public static final int SETTING_NOT_ALLOWED_NULL = 3437;
 
 	public static final int TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION = 3440;
 	public static final int DUPLICATE_ONEXCEPTION_EXCEPTION = 3441;

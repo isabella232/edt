@@ -4142,7 +4142,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		
 		if (classDataDeclaration.hasInitializer()) {
 			if (classDataDeclaration.hasSettingsBlock()) {
-				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName());
+				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
 			}
 		}
 		else {
@@ -4152,6 +4152,11 @@ public abstract class DefaultBinder extends AbstractBinder {
 				problemRequestor.acceptProblem(type,
 						IProblemRequestor.TYPE_NOT_INSTANTIABLE,
 					new String[] {type.getCanonicalName()});
+			}
+			
+			//nullable types cannot specify a settings block that contains settings for data in the field
+			if (classDataDeclaration.hasSettingsBlock() && Binding.isValidBinding(tBinding) && tBinding.isNullable()) {
+				issueErrorForInitialization(classDataDeclaration.getSettingsBlockOpt(), ((Name)classDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
 			}
 		}
 		
@@ -4231,7 +4236,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 			if (functionDataDeclaration.hasInitializer()) {
 				if (functionDataDeclaration.hasSettingsBlock()) {
-					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName());
+					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
 				}
 			}
 			else {
@@ -4241,6 +4246,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 					problemRequestor.acceptProblem(type,
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
 						new String[] {type.getCanonicalName()});
+				}
+				//nullable types cannot specify a settings block that contains settings for data in the field
+				if (functionDataDeclaration.hasSettingsBlock() && Binding.isValidBinding(tBinding) && tBinding.isNullable()) {
+					issueErrorForInitialization(functionDataDeclaration.getSettingsBlockOpt(), ((Name)functionDataDeclaration.getNames().get(0)).getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
 				}
 			}
 
@@ -4296,7 +4305,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			if (structureItem.hasInitializer()) {
 				if (structureItem.hasSettingsBlock()) {
 					if (structureItem.getName() != null) {
-						issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName());
+						issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED);
 					}
 				}
 			}
@@ -4307,6 +4316,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 					problemRequestor.acceptProblem(type,
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
 						new String[] {type.getCanonicalName()});
+				}
+				//nullable types cannot specify a settings block that contains settings for data in the field
+				if (structureItem.hasSettingsBlock() && Binding.isValidBinding(tBinding) && tBinding.isNullable()) {
+					issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
 				}
 			}
 		}
@@ -4929,7 +4942,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return IBinding.NOT_FOUND_BINDING == fieldBinding ? null : (IAnnotationBinding) fieldBinding;
 	}
     
-    private void issueErrorForInitialization(SettingsBlock settings, final String fieldName) {
+    private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {
 		final Node[] errorNode = new Node[1];
     	settings.accept(new AbstractASTExpressionVisitor() {
     		public boolean visit(Assignment assignment) {
@@ -4972,7 +4985,7 @@ public abstract class DefaultBinder extends AbstractBinder {
     		
     	});
     	if (errorNode[0] != null) {
-    		problemRequestor.acceptProblem(errorNode[0], IProblemRequestor.SETTING_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {fieldName});
+    		problemRequestor.acceptProblem(errorNode[0], errorNo, IMarker.SEVERITY_ERROR, new String[] {fieldName});
     	}
     }
  }
