@@ -41,6 +41,7 @@ import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ServiceBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
+import org.eclipse.edt.compiler.binding.SystemFunctionBinding;
 import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -306,6 +307,24 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			}else if(functionBinding instanceof OverloadedFunctionSet){
 				for (Iterator iterator = ((OverloadedFunctionSet) (functionBinding)).getNestedFunctionBindings().iterator(); iterator.hasNext();) {
 					getNestedFunctionProposal((NestedFunctionBinding)iterator.next(), additionalInfo, proposals);
+				}
+			}else if(functionBinding instanceof SystemFunctionBinding){
+				SystemFunctionBinding systemFunctionBinding = (SystemFunctionBinding) functionBinding;
+				if (systemFunctionBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
+					String displayString = systemFunctionBinding.getCaseSensitiveName();
+					String parameterStr = getParmString(systemFunctionBinding);
+					String proposalString = displayString + "(" + parameterStr + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+					int cusorPos = parameterStr.length() == 0 ? displayString.length() + 2 : displayString.length() + 1;
+					proposals.add(
+							new EGLCompletionProposal(viewer,
+								displayString,
+								proposalString,
+								additionalInfo,
+								getDocumentOffset() - getPrefix().length(),
+								getPrefix().length(),
+								cusorPos,
+								EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
+								getFirstParmLength(systemFunctionBinding)));
 				}
 			}
 		}
