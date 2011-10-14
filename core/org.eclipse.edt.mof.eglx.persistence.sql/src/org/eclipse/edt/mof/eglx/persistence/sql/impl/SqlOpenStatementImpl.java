@@ -11,14 +11,63 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenStatement {
 
 	@Override
 	public Expression getResultSet() {
-		return getTarget();
+		//if there is a FOR clause the resultset is in target[1]
+		//else the resultset is in target[0]
+		if (getTargets().size() == 2) {
+			return getTargets().get(1);
+		}
+		else{
+			return getTarget();
+		}
 	}
 	
+	@Override
+	public String getSqlString() {
+		String sql = super.getSqlString();
+		if (sql == null || "".equals(sql)) {
+			sql = generateDefaultSqlString();
+			setSqlString(sql);
+		}
+		return sql;
+	}
+	
+	// TODO This is a simplified mapping of one type to one table only - handle multiple tables
+	private String generateDefaultSqlString() {
+		
+		String sql = null;
+		if (getTargets().size() == 2) {//resultset and a for clause
+			Expression target = getTargets().get(0);
+			EGLClass targetType = (EGLClass)target.getType().getClassifier();
+			if (!TypeUtils.isDynamicType(targetType)) {
+				sql = "SELECT ";
+				List<Field> idFields = new ArrayList<Field>();
+				boolean doComma = false;
+				for (Field f : targetType.getFields()) {
+					if (SQL.isKeyField(f)) idFields.add(f);
+					if (SQL.isPersistable(f)) {
+						if (doComma) sql += ", ";
+						sql += SQL.getColumnName(f);
+						if (!doComma) doComma = true;
+					}
+				}
+				sql += " FROM ";
+				sql += SQL.getTableName(targetType);
+			}
+		}
+		return sql;
+	}
 }
