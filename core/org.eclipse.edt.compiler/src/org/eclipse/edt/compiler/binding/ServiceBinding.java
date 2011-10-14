@@ -99,4 +99,9 @@ public class ServiceBinding extends FunctionContainerBinding {
 		return nullable;
 	}
 	
+	@Override
+	public boolean isInstantiable() {
+		return false;
+	}
+	
 }
