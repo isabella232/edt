@@ -111,6 +111,10 @@ egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
 egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
+	return egl.convertAnyToSmallint(x, nullable);    
+};
+
 
 /****************************************************************************
  * EInt32 covers the egl type "int" and is represented as a native JavaScript 
@@ -183,6 +187,9 @@ egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
 };
 egl.eglx.lang.EFloat32.fromEString = function (x){
 	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+};
+egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
+	return egl.convertAnyToSmallfloat(x, nullable);    
 };
 
 
@@ -312,8 +319,14 @@ egl.eglx.lang.EFloat64.fromEDecimal = function (x) {
 egl.eglx.lang.EFloat64.fromEString = function (x){
 	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
+	return egl.convertAnyToFloat(x, nullable);    
+};
 
 
+/****************************************************************************
+ * EBoolean 
+ ****************************************************************************/
 egl.defineClass( "eglx.lang", "EBoolean"
 		,"eglx.lang", "AnyBoxedObject",
 {
