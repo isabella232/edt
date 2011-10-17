@@ -8,6 +8,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Element;
@@ -15,10 +16,12 @@ import org.eclipse.edt.mof.egl.ExceptionBlock;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.ForStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.LoopStatement;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -27,11 +30,49 @@ import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.WhileStatement;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.impl.EObjectImpl;
 
 public class CompoundConditionExpander  extends AbstractVisitor{
+	
+	public static class CompoundConditionChecker extends AbstractVisitor{
+		
+		private boolean needsExpanding = false;
+		public static boolean needsExpanding(Expression expr) {
+			if (expr == null) {
+				return false;
+			}
+			CompoundConditionChecker checker = new CompoundConditionChecker();
+			expr.accept(checker);
+			return checker.needsExpanding;
+		}
+		
+		public CompoundConditionChecker() {
+			disallowRevisit();
+		}
+				
+		public boolean visit(Expression expr) {
+			return true;
+		}
+		
+		public boolean visit(BinaryExpression exp) {
+			if (shouldExpand(exp)) {
+				needsExpanding = true;
+				return false;
+			}
+			return true;
+		}
+		
+		public boolean visit(EObject obj) {
+			return false;
+		}
+		
+		
+	}
+
 	
 	public static class InvocationChecker extends AbstractVisitor{
 		
@@ -123,18 +164,26 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 	
 	public boolean visit(BinaryExpression exp) {
 		
-		if (MultiOperandExpression.Op_AND.equals(exp.getOperator()) || 
-			MultiOperandExpression.Op_OR.equals(exp.getOperator())) {
-			
-			if (hasInvocation(exp.getLHS()) || hasInvocation(exp.getRHS())) {
-				expand(exp);
-			}
-			
-		}	
+		if (shouldExpand(exp)) {
+			expand(exp);
+		}
+
 		return false;
 	}
 	
-	private boolean hasInvocation(Expression expr) {
+	private static boolean shouldExpand(BinaryExpression exp) {
+		if (MultiOperandExpression.Op_AND.equals(exp.getOperator()) || 
+				MultiOperandExpression.Op_OR.equals(exp.getOperator())) {
+				
+				if (hasInvocation(exp.getLHS()) || hasInvocation(exp.getRHS())) {
+					return true;
+				}
+		}
+		return false;
+		
+	}
+	
+	private static boolean hasInvocation(Expression expr) {
 		return InvocationChecker.hasInvocation(expr);
 	}
 	
@@ -142,33 +191,9 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 		//create a temporary statementBlock to hold the new statements
 		StatementBlock block = IrFactory.INSTANCE.createStatementBlock();
 		
-		//Create a temporary variable:  temp boolean;
-		LocalVariableDeclarationStatement localDeclaration = IrFactory.INSTANCE.createLocalVariableDeclarationStatement();
-		setAnnotations(exp, localDeclaration);
-		addStatementToBlock(localDeclaration, block);
-		DeclarationExpression declarationExpression = IrFactory.INSTANCE.createDeclarationExpression();
-		setAnnotations(exp, declarationExpression);
-		Field field = IrFactory.INSTANCE.createField();
-		field.setName(createTempVarName());
-		field.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Boolean));
-		MemberName nameExpression = IrFactory.INSTANCE.createMemberName();
-		setAnnotations(exp, nameExpression);
-		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
-		declarationExpression.getFields().add(field);
-		localDeclaration.setExpression(declarationExpression);
-		
-		//create assignment statement:  temp = LHS;
-		AssignmentStatement assignStmt = IrFactory.INSTANCE.createAssignmentStatement();
-		setAnnotations(exp, assignStmt);
-		addStatementToBlock(assignStmt, block);
-		Assignment assign = IrFactory.INSTANCE.createAssignment();
-		setAnnotations(exp, assign);
-		assign.setLHS(nameExpression);
-		assign.setRHS(exp.getLHS());
-		assign.setOperator("=");
-		assignStmt.setAssignment(assign);
-		
+		//Create a temporary variable:  boolean temp = LHS;
+		Field field = createTemporaryField(exp, block, getBooleanType(), exp.getLHS(), blockStack.peek().getContainer());
+				
 		//create if statement...
 		// || :  if (!temp)
 		// && :  if (temp)
@@ -178,10 +203,7 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 		
 		StatementBlock ifBlock = createBlock(exp, blockStack.peek().getContainer());
 		ifStmt.setTrueBranch(ifBlock);
-		nameExpression = IrFactory.INSTANCE.createMemberName();
-		setAnnotations(exp, nameExpression);
-		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
+		MemberName nameExpression = createMemberName(exp, field);
 		
 		if (MultiOperandExpression.Op_OR.equals(exp.getOperator())) {
 			UnaryExpression unExp = IrFactory.INSTANCE.createUnaryExpression();
@@ -195,16 +217,8 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 		}
 		
 		//create Assignment statement: temp = RHS;
-		assignStmt = IrFactory.INSTANCE.createAssignmentStatement();
-		setAnnotations(exp, assignStmt);
-		addStatementToBlock(assignStmt, ifBlock);
-		assign = IrFactory.INSTANCE.createAssignment();
-		setAnnotations(exp, assign);
-		assign.setLHS(nameExpression);
-		assign.setRHS(exp.getRHS());
-		assign.setOperator("=");
-		assignStmt.setAssignment(assign);
-		
+		createAssignentStmt(exp, ifBlock, createMemberName(exp, field), exp.getRHS());
+
 		//Expand any Compound conditions in the newly created block
 		Function func = IrFactory.INSTANCE.createFunction();
 		func.setStatementBlock(block);
@@ -217,11 +231,7 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 		}
 		
 		//create a name expression for the temporary variable and replace the binary expression with it
-		nameExpression = IrFactory.INSTANCE.createMemberName();
-		setAnnotations(exp, nameExpression);
-		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
-		setNewObjectInParent(nameExpression);
+		setNewObjectInParent(createMemberName(exp, field));
 	}
 	
 	private String createTempVarName() {
@@ -271,6 +281,93 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 		return true;
 	}
 	
+	public boolean visit(WhileStatement stmt) {
+		visit((LoopStatement)stmt);
+		if (CompoundConditionChecker.needsExpanding(stmt.getCondition())) {
+			//If the condition in the while statement requires expanding, we need to turn this:
+			//		while (condition)
+			//			block;
+			//		end
+			//into this:
+			//		temp boolean = true;
+			//		while (temp)
+			//			temp = condition;
+			//			if (temp) 
+			//				block;
+			//			end
+			//		end
+			//Then the condition will be expanded when the new statements are visited
+			
+			Expression condition = stmt.getCondition();
+			
+			//create a new block for the while statement
+			Statement oldBody = stmt.getBody();
+			StatementBlock newBody = createBlock(oldBody, stmt.getContainer());
+			stmt.setBody(newBody);
+
+			//create temp field: temp boolean = true;
+			BooleanLiteral boolLit = IrFactory.INSTANCE.createBooleanLiteral();
+			boolLit.setBooleanValue(Boolean.TRUE);
+			setAnnotations(condition, boolLit);
+			Field field = createTemporaryField(condition, blockStack.peek(), getBooleanType(), boolLit, stmt.getContainer());
+			
+			//replace the conditition in the while with the temp field
+			stmt.setCondition(createMemberName(condition, field));
+			
+			//create assignment stmt: temp = condition;
+			createAssignentStmt(condition, newBody, createMemberName(condition, field), condition);
+			
+			//create if statement: if (temp)
+			IfStatement ifStmt = IrFactory.INSTANCE.createIfStatement();
+			setAnnotations(condition, ifStmt);
+			addStatementToBlock(ifStmt, newBody);
+			
+			ifStmt.setCondition(createMemberName(condition, field));
+			ifStmt.setTrueBranch(oldBody);
+			
+		}
+		return true;
+	}
+	
+	public boolean visit(ForStatement stmt) {
+		visit((LoopStatement)stmt);
+		//IF the FOR stmt contains a TO expression and a DELTA that need to be expanded, we will turn this:
+		//   for (index from start to end by inc)
+		//      stmt;
+		//   end
+		//into this:
+		//   tempTo int = end;
+		//   tempInc int = 0;
+		//   for (index from start to tempTo by tempInc
+		//      stmt;
+		//      tempTo = end;
+		//      tempInc = inc;
+		//   end
+		
+		Expression toExpr = stmt.getToExpression();
+		Expression incExpr = stmt.getDeltaExpression();
+		
+		if (CompoundConditionChecker.needsExpanding(toExpr)) {
+			//create temp variable for TO:  tempTO = end;
+			Field tempToField = createTemporaryField(toExpr, blockStack.peek(), toExpr.getType(), toExpr, stmt.getContainer());
+			stmt.setToExpression(createMemberName(toExpr, tempToField));
+			
+			//add assignment statement to the end of the for body: tempTo = end;
+			//NOTE: must clone the TO expression, because we reference it 2 times.
+			Expression cloneTo = ExpressionCloner.clone(toExpr);
+			createAssignentStmt(toExpr, (StatementBlock)stmt.getBody(), createMemberName(toExpr, tempToField), cloneTo);
+		}
+		
+		if (CompoundConditionChecker.needsExpanding(incExpr)) {
+			Field tempIncField = createTemporaryField(incExpr, blockStack.peek(), incExpr.getType(), null, stmt.getContainer());
+			stmt.setDeltaExpression(createMemberName(incExpr, tempIncField));
+			//add assignment statement to the end of the for body: tempInc = inc;
+			createAssignentStmt(incExpr, (StatementBlock)stmt.getBody(), createMemberName(incExpr, tempIncField), incExpr);
+		}
+		return true;
+	}
+
+	
 	public boolean visit(ForEachStatement stmt) {
 		//If the false branch is just a statement, we must expand it to be a block
 		if (stmt.getBody() != null && !(stmt.getBody() instanceof StatementBlock)) {
@@ -279,6 +376,53 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 			stmt.setBody(newBlock);
 		}
 		return true;
+	}
+	
+	private Field createTemporaryField(Element annotationElem, StatementBlock block , Type type, Expression initValue, Container container) {
+		//Create a temporary variable:  temp boolean;
+		LocalVariableDeclarationStatement localDeclaration = IrFactory.INSTANCE.createLocalVariableDeclarationStatement();
+		setAnnotations(annotationElem, localDeclaration);
+		addStatementToBlock(localDeclaration, block);
+		DeclarationExpression declarationExpression = IrFactory.INSTANCE.createDeclarationExpression();
+		setAnnotations(annotationElem, declarationExpression);
+		Field field = IrFactory.INSTANCE.createField();
+		field.setName(createTempVarName());
+		field.setType(type);
+		declarationExpression.getFields().add(field);
+		localDeclaration.setExpression(declarationExpression);
+		
+		if (initValue != null) {
+			field.setInitializerStatements(createBlock(annotationElem, container));			
+			//create assignment statement: temp = true;
+			createAssignentStmt(annotationElem, field.getInitializerStatements(), createMemberName(annotationElem, field), initValue);
+		}
+		
+		return field;
+	}
+	
+	private MemberName createMemberName(Element annotationElem, Field field) {
+		MemberName nameExpression = IrFactory.INSTANCE.createMemberName();
+		setAnnotations(annotationElem, nameExpression);
+		nameExpression.setMember(field);
+		nameExpression.setId(field.getName());
+		return nameExpression;
+	}
+	
+	private AssignmentStatement createAssignentStmt(Element annotationElem, StatementBlock block, LHSExpr lhs, Expression rhs) {
+		AssignmentStatement assignStmt = IrFactory.INSTANCE.createAssignmentStatement();
+		setAnnotations(annotationElem, assignStmt);
+		addStatementToBlock(assignStmt, block);
+		Assignment assign = IrFactory.INSTANCE.createAssignment();
+		setAnnotations(annotationElem, assign);
+		assign.setLHS(lhs);
+		assign.setRHS(rhs);
+		assign.setOperator("=");
+		assignStmt.setAssignment(assign);
+		return assignStmt;
+	}
+	
+	private Type getBooleanType() {
+		return IRUtils.getEGLPrimitiveType(MofConversion.Type_Boolean);
 	}
 
 }
