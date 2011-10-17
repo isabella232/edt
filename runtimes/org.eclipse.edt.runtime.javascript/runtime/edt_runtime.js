@@ -444,6 +444,9 @@ egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
 	return egl.matches(str1, str2, esc);
 };
 egl.eglx.lang.EString.isLike = function (str1, str2, esc) {
+	if ((str1 == null) || (str2 == null)) {
+		throw new egl.eglx.lang.NullValueException();
+	}
 	esc = esc || "\\";
 	return egl.like(str1, str2, esc);
 };
@@ -463,6 +466,9 @@ egl.eglx.lang.EString.lastIndexOf = function (str, pattern) {
 	return str.lastIndexOf(pattern) + 1;
 };
 egl.eglx.lang.EString.replaceStr = function(str, target, replacement) {
+	if ((str == null) || (target == null) || (replacement == null)) {
+		throw new egl.eglx.lang.NullValueException();
+	}
 	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
 };
 egl.eglx.lang.EString.charCodeAt = function (str, index) {
@@ -492,25 +498,32 @@ egl.eglx.lang.EString.nullconcat = function (op1, op2) {
 	return egl.nullableconcat(op1, op2);
 };
 egl.eglx.lang.EString.clip = function(s){
-	return ( s === null ) ? null : s.clip();
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.clip();
 };
 egl.eglx.lang.EString.clipLeading = function(s){
-	return ( s === null ) ? null : s.clipLeading();
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.clipLeading();
 };
 egl.eglx.lang.EString.clipTrailing = function(s){
-	return ( s === null ) ? null : s.clipTrailing();
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.clipTrailing();
 };
 egl.eglx.lang.EString.toLowerCase = function(s){
-	return ( s === null ) ? null : s.toLowerCase();
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.toLowerCase();
 };
 egl.eglx.lang.EString.toUpperCase = function(s){
-	return ( s === null ) ? null : s.toUpperCase();
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.toUpperCase();
 };
 egl.eglx.lang.EString.endsWith = function(s, substr) { 
-	return ( s === null ) ? null : s.endsWith(substr);
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.endsWith(substr);
 };
 egl.eglx.lang.EString.startsWith = function(s, substr) { 
-	return ( s === null ) ? null : s.startsWith(substr);
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.startsWith(substr);
 };
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
