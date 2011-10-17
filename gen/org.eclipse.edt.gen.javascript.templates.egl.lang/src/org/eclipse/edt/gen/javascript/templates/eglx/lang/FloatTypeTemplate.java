@@ -129,9 +129,9 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_NE))
-			return "!";
-		if (op.equals(expr.Op_DIVIDE))
-			return "egl.divide";
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return "egl.remainder(";
 		return "";
 	}
 
@@ -146,43 +146,47 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
-			return ",";
+			return " / ";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
-			return ".compareTo(";
+			return " != ";
 		if (op.equals(expr.Op_LT))
-			return ".compareTo(";
+			return " < ";
 		if (op.equals(expr.Op_GT))
-			return ".compareTo(";
+			return " > ";
 		if (op.equals(expr.Op_LE))
-			return ".compareTo(";
+			return " <= ";
 		if (op.equals(expr.Op_GE))
-			return ".compareTo(";
+			return " >= ";
 		if (op.equals(expr.Op_AND))
 			return " && ";
 		if (op.equals(expr.Op_OR))
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_MODULO))
+			return ",";
 		return "";
 	}
 
 	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_MULTIPLY))
+		if (op.equals(expr.Op_EQ))
 			return "";
 		if (op.equals(expr.Op_NE))
-			return ")";
+			return "";
 		if (op.equals(expr.Op_LT))
-			return ") < 0";
+			return "";
 		if (op.equals(expr.Op_GT))
-			return ") > 0";
+			return "";
 		if (op.equals(expr.Op_LE))
-			return ") <= 0";
+			return "";
 		if (op.equals(expr.Op_GE))
-			return ") >= 0";
+			return "";
+		if (op.equals(expr.Op_MODULO))
+			return ")";
 		return "";
 	}
 
