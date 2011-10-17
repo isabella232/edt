@@ -72,7 +72,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 						aliasedServiceClassName = buf.append('.').append(JavaAliaser.getAlias(serviceClassName.substring(idx + 1))).toString();
 					}
 					else{
-						aliasedServiceClassName = JavaAliaser.getAlias(aliasedServiceClassName);
+						aliasedServiceClassName = JavaAliaser.getAlias(serviceClassName);
 					}
 					cachedAliases.put(serviceClassName, aliasedServiceClassName);
 				}
@@ -80,7 +80,7 @@ public abstract class LocalServiceInvoker extends Invoker{
 			} 
 			catch(Exception e)
 			{
-				ServiceUtilities.buildServiceInvocationException( 
+				throw ServiceUtilities.buildServiceInvocationException( 
 						Message.SOA_E_LOAD_LOCAL_SERVICE,
 						new Object[] { serviceClassName }, e, serviceKind);
 			}
