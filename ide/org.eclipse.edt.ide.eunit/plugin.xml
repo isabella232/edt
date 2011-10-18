@@ -58,7 +58,7 @@
        	 	</menu>
        	 	<action
 				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascriptAsync"
-				enablesFor="1"
+				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.javascriptasync"
 				label="%GenECKTestDriver.JavaScriptAsync">
@@ -96,7 +96,7 @@
        	 	</menu>
        	 	<action
 				class="org.eclipse.edt.ide.eunit.internal.actions.GenTestDriverActionJavascriptAsync"
-				enablesFor="1"
+				enablesFor="*"
 				menubarPath="org.eclipse.edt.eck.gentestdriver.menu1/group1"				
 				id="org.eclipse.edt.eck.gentestdriver.javascriptasync"
 				label="%GenECKTestDriver.JavaScriptAsync">
