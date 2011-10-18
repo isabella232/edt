@@ -440,6 +440,9 @@ egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
 egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
+	if ((str1 == null) || (str2 == null)) {
+		throw new egl.eglx.lang.NullValueException();
+	}
 	esc = esc || "\\";
 	return egl.matches(str1, str2, esc);
 };

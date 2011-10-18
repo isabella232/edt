@@ -2250,21 +2250,14 @@ egl.convertAnyToString = function( any, nullable )
 				return any.eze$$value;
 			
 			case 'K':
-				return egl.eglx.lang.StringLib.format(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultDateFormat);
+				return egl.eglx.lang.StringLib.format(any.eze$$value,egl.eglx.lang.Constants['$inst'].usaDateFormat);
 			
 //unsupported 0.7			case 'L':
 //				return egl.egl.core.$StrLib.formatTime(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultTimeFormat);
 			
 			case 'J':
 				var pattern;
-				if ( egl.eglx.rbd.StrLib[$inst].defaultTimeStampFormat.length === 0 )
-				{
-					pattern = any.eze$$signature.substring( any.eze$$signature.charAt(0) !== '?' ? 2 : 3, any.eze$$signature.length - 2 );
-				}
-				else
-				{
-					pattern = egl.eglx.rbd.StrLib[$inst].defaultTimeStampFormat;
-				}
+				pattern = any.eze$$signature.substring( any.eze$$signature.charAt(0) !== '?' ? 2 : 3, any.eze$$signature.length - 2 );
 				return egl.eglx.lang.StringLib.format(any.eze$$value,pattern);
 
 			case 'I':
