@@ -210,14 +210,18 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	}
 
 	public static boolean equals(Double op1, Double op2) {
+		if (op1 == null && op2 == null)
+			return true;
 		if (op1 == null || op2 == null)
 			return false;
 		return op1.compareTo(op2) == 0;
 	}
 
 	public static boolean notEquals(Double op1, Double op2) {
-		if (op1 == null || op2 == null)
+		if (op1 == null && op2 == null)
 			return false;
+		if (op1 == null || op2 == null)
+			return true;
 		return op1.compareTo(op2) != 0;
 	}
 }

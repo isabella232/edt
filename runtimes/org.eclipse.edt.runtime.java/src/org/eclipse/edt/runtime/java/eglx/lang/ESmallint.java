@@ -351,14 +351,18 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	}
 
 	public static boolean equals(Short op1, Short op2) {
+		if (op1 == null && op2 == null)
+			return true;
 		if (op1 == null || op2 == null)
 			return false;
 		return op1.compareTo(op2) == 0;
 	}
 
 	public static boolean notEquals(Short op1, Short op2) {
-		if (op1 == null || op2 == null)
+		if (op1 == null && op2 == null)
 			return false;
+		if (op1 == null || op2 == null)
+			return true;
 		return op1.compareTo(op2) != 0;
 	}
 

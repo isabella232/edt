@@ -1259,10 +1259,12 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 	}
 
 	public static boolean equals(Object op1, Object op2) {
-		if (op1 == null || op2 == null)
-			return false;
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
+		if (unboxed1 == null && unboxed2 == null)
+			return true;
+		if (unboxed1 == null || unboxed2 == null)
+			return false;
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
 			if (unboxed1 instanceof Double) {
 				if (unboxed2 instanceof Double)
@@ -1408,10 +1410,12 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 	}
 
 	public static boolean notEquals(Object op1, Object op2) {
-		if (op1 == null || op2 == null)
-			return false;
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
+		if (unboxed1 == null && unboxed2 == null)
+			return false;
+		if (unboxed1 == null || unboxed2 == null)
+			return true;
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
 			if (unboxed1 instanceof Double) {
 				if (unboxed2 instanceof Double)

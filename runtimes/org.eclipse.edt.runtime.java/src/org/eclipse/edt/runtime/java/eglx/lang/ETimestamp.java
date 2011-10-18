@@ -389,14 +389,18 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
+		if (op1 == null && op2 == null)
+			return true;
 		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
-		if (op1 == null || op2 == null)
+		if (op1 == null && op2 == null)
 			return false;
+		if (op1 == null || op2 == null)
+			return true;
 		return !op1.equals(op2);
 	}
 

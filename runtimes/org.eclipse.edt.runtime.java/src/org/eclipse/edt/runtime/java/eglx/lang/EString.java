@@ -347,14 +347,18 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static boolean equals(String op1, String op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return true;
 		if (op1 == null || op2 == null)
 			return false;
 		return op1.equals(op2);
 	}
 
 	public static boolean notEquals(String op1, String op2) throws AnyException {
-		if (op1 == null || op2 == null)
+		if (op1 == null && op2 == null)
 			return false;
+		if (op1 == null || op2 == null)
+			return true;
 		return !op1.equals(op2);
 	}
 
