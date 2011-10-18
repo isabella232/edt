@@ -37,7 +37,7 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EAny.ezeCast(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			unboxCheck( arg.getObjectExpr(), ctx, out );
 			out.print(", ");
