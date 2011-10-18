@@ -156,19 +156,25 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 
 	private EDecimal(BigDecimal value) {
 		super(value);
-		maxPrecision = value.precision();
-		maxDecimals = value.scale();
+		if (value != null) {
+			maxPrecision = value.precision();
+			maxDecimals = value.scale();
+		}
 	}
 
 	private EDecimal(BigDecimal value, int precision) {
 		super(value);
-		maxPrecision = precision;
+		if (value != null) {
+			maxPrecision = precision;
+		}
 	}
 
 	private EDecimal(BigDecimal value, int precision, int decimals) {
 		super(value);
-		maxPrecision = precision;
-		maxDecimals = decimals;
+		if (value != null) {
+			maxPrecision = precision;
+			maxDecimals = decimals;
+		}
 	}
 
 	public String toString() {
