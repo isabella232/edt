@@ -62,6 +62,7 @@ library TestExecutionLib
 		for (i int from 1 to testVariationCnt by 1)
 			testId = testName1 + testMethods[i];
 			try
+				sysLib.writeStdOut("Running test: " + testId);
 				runTestMtd[i]();
 			onException (assertion AssertionFailedException)
 				//prepend the assertion failure error message to Status
