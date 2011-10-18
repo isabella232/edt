@@ -33,9 +33,8 @@ egl.defineClass(
 egl.defineClass(
 	    'eglx.xml.binding.annotation', 'XMLValue',
 {
-		"constructor" : function( /*string*/ kind, /*string*/ simpleContentFieldName) {
+		"constructor" : function( /*string*/ kind) {
 			this.kind = kind;
-			this.simpleContentFieldName = simpleContentFieldName;
 		}
 });
 
