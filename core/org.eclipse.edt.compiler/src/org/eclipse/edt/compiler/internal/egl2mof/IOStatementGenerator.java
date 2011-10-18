@@ -37,7 +37,7 @@ import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
 public interface IOStatementGenerator {
-	Map<String, IOStatementGenerator> Registry = new HashMap<String, IOStatementGenerator>();
+	Map<String, Class<? extends IOStatementGenerator>> Registry = new HashMap<String, Class<? extends IOStatementGenerator>>();
 
 	void setEnvironment(IEnvironment env);
 	void setContext(Context context);
