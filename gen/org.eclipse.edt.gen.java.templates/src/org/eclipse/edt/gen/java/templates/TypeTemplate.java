@@ -273,7 +273,7 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EAny.ezeIsa(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeIsa(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
@@ -297,7 +297,7 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EAny.ezeCast(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);

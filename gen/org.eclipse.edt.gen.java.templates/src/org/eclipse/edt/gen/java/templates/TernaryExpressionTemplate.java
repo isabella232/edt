@@ -25,7 +25,7 @@ public class TernaryExpressionTemplate extends JavaTemplate {
 //			ctx.invoke(genTypeDependentOptions, expr.getEType(), ctx, out);
 //			out.print(")");
 //		} else {
-//			out.print("EAny.ezeIsa(");
+//			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeIsa(");
 //			genExpression(expr.getObjectExpr(), ctx, out);
 //			out.print(", ");
 //			ctx.invoke(genRuntimeTypeName, expr.getEType(), ctx, out, ImplementationKind.EGLImplementation);

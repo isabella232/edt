@@ -33,7 +33,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EList.ezeCast(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EList.ezeCast(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", \"");
 			out.print(type.getTypeSignature());
@@ -53,7 +53,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getClassifier().getTypeSignature())) {
 			out.print("false");
 		} else {
-			out.print("EList.ezeIsa(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EList.ezeIsa(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", \"");
 			out.print(type.getTypeSignature());

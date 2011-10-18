@@ -20,7 +20,7 @@ public class BoxingExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out) {
 		if ( expr.getType() instanceof ArrayType ) {
-			out.print("EList.ezeBox(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EList.ezeBox(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			out.print(", \"");
 			out.print(expr.getType().getTypeSignature());
@@ -34,7 +34,7 @@ public class BoxingExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, expr.getType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("EAny.");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.");
 			ctx.invoke(genBoxingFunctionName, expr.getExpr(), ctx, out);
 			out.print("(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);

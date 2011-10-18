@@ -33,7 +33,7 @@ public class MoveStatementTemplate extends JavaTemplate
 			ctx.invoke( genExpression, targetExpr, ctx, out );
 			out.print( " = (" );
 			ctx.invoke( genRuntimeTypeName, sourceExpr.getType(), ctx, out );
-			out.print( ")org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeDeepCopy(" );
+			out.print( ") org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeDeepCopy(" );
 			ctx.invoke( genExpression, sourceExpr, ctx, out );
 			out.println( ");" );
 			// as this is an expression that also creates a new line with the above println method, it throws off the
