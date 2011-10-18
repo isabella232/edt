@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
-import java.util.List;
-
-import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -21,7 +18,6 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class XMLValueTemplate extends JavaScriptTemplate {
@@ -36,33 +32,13 @@ public class XMLValueTemplate extends JavaScriptTemplate {
 			ctx.invoke(genRuntimeTypeName, kind, ctx, out, TypeNameKind.JavascriptImplementation);
 			out.print(".");
 			ctx.invoke(genName, kind, ctx, out);
-			if("simpleContent".equalsIgnoreCase(((EnumerationEntry)kind).getName())){
-				//simple content 
-				List<Field> fields = part.getFields();
-				if(fields.size() == 0){
-					out.print(", null");
-				}
-				else{
-					for(Field field : fields){
-						if(ctx.invoke(genField, (Type)type, ctx, out, field) != null){
-							break;
-						}
-					}
-				}
-			}
-			else{
-				out.print("null");
-			}
 		}
-	}
-	public Object genField(AnnotationType type, Context ctx, TabbedWriter out, Field field) {
-		Annotation annot = field.getAnnotation(Constants.AnnotationXmlElement);
-		if(annot != null){
-			out.print(", \"");
-			ctx.invoke(genName, field, ctx, out);
-			out.print("\"");
+		else if(kind instanceof Enum){
+			out.print("egl.");
+			out.print(((Enum<?>)kind).getClass().getName());
+			out.print(".");
+			out.print(((Enum<?>)kind).name());
 		}
-		return annot;
 	}
 
 }
