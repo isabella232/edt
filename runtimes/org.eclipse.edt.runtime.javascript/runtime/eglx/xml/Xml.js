@@ -401,7 +401,7 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 			break;
 
 		case 'F':
-			value = egl.eglx.lang.EIFloat64.fromEString(value);
+			value = egl.eglx.lang.EFloat64.fromEString(value);
 			break;
 
 		case 'f':
