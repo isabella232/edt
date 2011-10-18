@@ -164,7 +164,7 @@ egl.eglx.xml.XmlLib["arrayToXML"] = function( /*value*/value, /*map*/namespaces,
 		xmlName = xmlStyle.name;
 		fieldInfo.annotations["XMLStyle"].name = xmlStyle.name;
 	}
-	for (idx = 0; idx < value.length; idx++) {
+	for (var idx = 0; idx < value.length; idx++) {
 		if (value[0] instanceof Array) {
 			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
 		}
@@ -492,7 +492,7 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
 	fieldInfo.annotations["XMLStyle"].name = names[0];
 	var array = new Array();
-	for (idx = 0; idx < arrayElements.length; idx++) {
+	for (var idx = 0; idx < arrayElements.length; idx++) {
 		if (this.isEglArray(fieldInfo)) {
 			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
 		}
