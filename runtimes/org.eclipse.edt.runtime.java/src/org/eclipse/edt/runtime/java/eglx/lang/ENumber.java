@@ -40,7 +40,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(value);
 	}
 
-	public static ENumber ezeBox(ENumber value) {
+	public static eglx.lang.ENumber ezeBox(eglx.lang.ENumber value) {
 		return value;
 	}
 
