@@ -11,21 +11,22 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.lang.AnyException;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.MultiStatus;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
-import org.eclipse.edt.eunit.runtime.MultiStatus;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import eglx.services.ServiceInvocationException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import eglx.services.ServiceInvocationException;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import eglx.lang.SysLib;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.eunit.runtime.Status;
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -132,6 +133,7 @@ public class TestListMgr extends ExecutableBase {
 	public void nextTest() {
 		String testId;
 		testId = getTestIdString();
+		SysLib.writeStdout((("Running test: ") + testId));
 		ms.addStatus(testId);
 		boolean eze$Temp1;
 		eze$Temp1 = (testIndex < EList.getSize(runTestMtds));
