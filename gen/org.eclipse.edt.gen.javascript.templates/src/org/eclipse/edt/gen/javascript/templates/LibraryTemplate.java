@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -52,11 +53,20 @@ public class LibraryTemplate extends JavaScriptTemplate {
 
 	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
 		// TODO sbg consider refactoring into a separate extension
-		out.print("egl.defineRUILibrary(");
+		boolean propLibrary = CommonUtilities.isRUIPropertiesLibrary(library);
+		if (propLibrary) {
+			out.print("egl.defineRUIPropertiesLibrary(");
+		}
+		else {
+			out.print("egl.defineRUILibrary(");
+		}
 		out.print(singleQuoted(library.getPackageName().toLowerCase()));
 		out.print(", ");
 		out.print(singleQuoted(library.getName()));
 		out.println(", ");
+		if (propLibrary) {
+			out.println( "'" + CommonUtilities.getPropertiesFile(library) + "', " );
+		}
 		out.println("{");
 		out.print("'eze$$fileName': ");
 		out.print(singleQuoted(library.getFileName()));
@@ -128,5 +138,34 @@ public class LibraryTemplate extends JavaScriptTemplate {
 	}
 	public void genCloneMethod(Library library, Context ctx, TabbedWriter out) {
 		out.print(".eze$$clone()");
+	}
+	
+	public void genFunctions(Library library, Context ctx, TabbedWriter out) {
+		ctx.invokeSuper(this, genFunctions, library, ctx, out);
+		
+		if (CommonUtilities.isRUIPropertiesLibrary(library)) {
+			genGetProperties(library, ctx, out);
+		}
+	}
+	
+	protected void genGetProperties(Library library, Context ctx, TabbedWriter out) {
+		out.println( "\t," );
+		out.println( "\"eze$$getProperties\": function() {" );
+		out.println( "\t\treturn [" );
+		
+		List<Field> fields = library.getFields();
+		int size = fields.size();
+		for (int i = 0; i < size; i++) {
+			out.print('\'');
+			ctx.invoke( genName, fields.get(i), ctx, out);
+			out.print('\'');
+			if (i < size - 1) {
+				out.print(",");
+			}
+			out.println();
+		}
+		
+		out.println( "\t\t];" );
+		out.println( "}" );
 	}
 }
