@@ -131,24 +131,23 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		
 		// 4) ErrorRoutine must have 1 parm, with a type of AnyException
 		if (isErrorCallback) {
-			if (parms.length != 1) {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), "1"});
-			}
-			else {
+			if( parms.length == 1 ||
+					(parms.length == 2 && lastParmIsIHttp(parms))) {
 				//make sure the parm is AnyException
 				if (Binding.isValidBinding(parms[0]) && Binding.isValidBinding(parms[0].getType()) && !isAnyException(parms[0].getType())) {
 					problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_PARM_MUST_HAVE_TYPE, IMarker.SEVERITY_ERROR, new String[] {"1", expr.getCanonicalString(), getQualAnyExceptionString()});
 				}
+			}
+			else {
+				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), lastParmIsIHttp(parms)? "2" : "1"});
 			}
 		}
 		else {
 			//5) Number of parms in the callback must be correct
 			ITypeBinding[] argTypes = getArgTypesForCallback(invocTarget);
 			
-			if (argTypes.length != parms.length) {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), Integer.toString(argTypes.length)});
-			}
-			else {
+			if(argTypes.length == parms.length ||
+					(argTypes.length == parms.length - 1 && lastParmIsIHttp(parms))) {
 				// 6) parms in the callback function should be move compatible with the out/inout args/return type of the service function
 
 				for (int i = 0; i < argTypes.length; i++) {
@@ -158,10 +157,24 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 				}
 			
 			}
+			else{
+				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? argTypes.length + 1 :argTypes.length)});
+			}
 			
 		}
 		
 	}
+	
+	private boolean lastParmIsIHttp(FunctionParameterBinding[] parms){
+		if(parms.length > 0){
+			//function has 1 extra parameter 
+			//see if it's an IHttp 
+			ITypeBinding lastParm = parms[parms.length - 1].getType();
+			return (InternUtil.intern(new String[]{"eglx", "http"}).equals(lastParm.getPackageName()) && InternUtil.intern("IHttp").equals(lastParm.getName()));
+		}
+		return false;
+	}
+	
 	private ITypeBinding[] getArgTypesForCallback(Expression invocTarget) {
 		FunctionParameterBinding[] parms = getParameters(invocTarget);
 		List<ITypeBinding> list = new ArrayList<ITypeBinding>();
