@@ -32,4 +32,9 @@ public class DelegateTemplate extends JavaScriptTemplate {
 	public void genDefaultValue(Delegate part, Context ctx, TabbedWriter out) {
 		out.print("null");
 	}
+	
+	public Boolean supportsConversion(Delegate part, Context ctx) {
+		return Boolean.FALSE;
+	}
+
 }

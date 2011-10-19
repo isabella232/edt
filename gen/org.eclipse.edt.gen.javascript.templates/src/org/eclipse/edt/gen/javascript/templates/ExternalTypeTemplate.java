@@ -37,4 +37,8 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	public void genQualifier(ExternalType part, Context ctx, TabbedWriter out, NamedElement arg) {
 		// out.print("this.");
 	}
+	
+	public Boolean supportsConversion(ExternalType part, Context ctx) {
+		return Boolean.FALSE;
+	}
 }

@@ -24,4 +24,7 @@ public class EObjectTemplate extends JavaScriptTemplate {
 			object, details, ctx.getLastStatementLocation());
 		ctx.getMessageRequestor().addMessage(message);
 	}
+	public Boolean supportsConversion(EObject part, Context ctx) {
+		return Boolean.TRUE;
+	}
 }

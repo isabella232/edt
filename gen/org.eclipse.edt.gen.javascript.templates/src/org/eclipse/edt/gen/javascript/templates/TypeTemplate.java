@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -378,5 +377,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
 	}
 	public void genCloneMethod(Type type, Context ctx, TabbedWriter out) {
+	}
+	public Boolean supportsConversion(Type type, Context ctx) {
+		return Boolean.TRUE;
 	}
 }

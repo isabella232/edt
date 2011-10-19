@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -124,32 +125,36 @@ public class FieldTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAnnotations(Field field, Context ctx, TabbedWriter out, Integer arg) {
-		out.println("annotations = {};");
-		
-		for(Annotation annot : field.getAnnotations()){
-			ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, field);
-		}
-		
-		out.print("this.fieldInfos[" + arg.toString() + "] =");
-		out.print("new egl.eglx.services.FieldInfo(");
-		Annotation property = CommonUtilities.getPropertyAnnotation(field);
-		if (property != null) {
-			out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
-			out.print(", ");
-			out.print(FieldTemplate.genGetterSetterFunctionName("set", field));
-			out.print(", \"");
-		} else {
-			out.print("\"");
-			ctx.invoke(genName, field, ctx, out);
+		Boolean supportConversion = (Boolean)ctx.invoke(supportsConversion, field.getType(), ctx);
+		if((field.getAccessKind() == null || field.getAccessKind().equals(AccessKind.ACC_PUBLIC)) &&
+				(supportConversion == null || supportConversion.booleanValue())){
+			out.println("annotations = {};");
+			
+			for(Annotation annot : field.getAnnotations()){
+				ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, field);
+			}
+			
+			out.print("this.fieldInfos[" + arg.toString() + "] =");
+			out.print("new egl.eglx.services.FieldInfo(");
+			Annotation property = CommonUtilities.getPropertyAnnotation(field);
+			if (property != null) {
+				out.print(FieldTemplate.genGetterSetterFunctionName("get", field));
+				out.print(", ");
+				out.print(FieldTemplate.genGetterSetterFunctionName("set", field));
+				out.print(", \"");
+			} else {
+				out.print("\"");
+				ctx.invoke(genName, field, ctx, out);
+				out.print("\", ");
+				out.print("\"");
+				ctx.invoke(genName, field, ctx, out);
+				out.print("\", \"");
+			}
+			ctx.invoke(genSignature, field.getType(), ctx, out);
 			out.print("\", ");
-			out.print("\"");
-			ctx.invoke(genName, field, ctx, out);
-			out.print("\", \"");
+			ctx.invoke(genFieldInfoTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+			out.println(", annotations);");
 		}
-		ctx.invoke(genSignature, field.getType(), ctx, out);
-		out.print("\", ");
-		ctx.invoke(genFieldInfoTypeName, field.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
-		out.println(", annotations);");
 	}
 
 }

@@ -73,4 +73,7 @@ public class PartTemplate extends JavaScriptTemplate {
 	public void genFieldInfoTypeName(Part part, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, part, ctx, out, arg);
 	}
+	public Boolean supportsConversion(Part part, Context ctx) {
+		return Boolean.TRUE;
+	}
 }
