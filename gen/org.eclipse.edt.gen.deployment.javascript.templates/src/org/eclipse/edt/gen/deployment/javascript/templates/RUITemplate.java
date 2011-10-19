@@ -45,7 +45,6 @@ import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
-import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
@@ -53,7 +52,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class RUITemplate extends JavaScriptTemplate {	
 	
 	private static final String DEFAULT_THEME = "claro";
-	private PartReferenceCache partReferenceCache= null;
+	private PartReferenceCache partReferenceCache;
 	
 	private static final Map JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap();
 	static{
@@ -81,9 +80,12 @@ public class RUITemplate extends JavaScriptTemplate {
 	};		
 	
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
-			List egldds, HashMap eglParameters, String userMsgLocale,
-			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
-		partReferenceCache = new PartReferenceCache(ctx.getSystemIREnvironment());
+			List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale,
+			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug, PartReferenceCache partRefCache) {
+		this.partReferenceCache = partRefCache;
+		if (this.partReferenceCache == null) {
+			this.partReferenceCache = new PartReferenceCache(ctx.getSystemIREnvironment());
+		}
 		
 		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
@@ -107,7 +109,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		generateEGLNamespace(out);
 		generateEGLLoader(out, isDevelopment);
 		
-		generatePropertiesFiles(handler, ctx, runtimeMsgLocale, userMsgLocale, out);	
+		generatePropertiesFiles(handler, ctx, propFiles, runtimeMsgLocale, out);	
 		
 //		generateRuntimePropertiesFiles(out);			
 		generateBindingFileImports(handler, ctx, out, egldds);
@@ -125,8 +127,9 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("</html>");	
 	}
 	
-	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug){
-		genHTML(true, handler, ctx, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug);		
+	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug,
+			PartReferenceCache partRefCache){
+		genHTML(true, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug, partRefCache);		
 	}	
 	
 	public void preGenComment(TabbedWriter out){
@@ -241,7 +244,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("};");
 	}
 	
-	private void generatePropertiesFiles(Handler handler, Context ctx, String runtimeMsgLocale, String userMsgLocale, TabbedWriter out){
+	private void generatePropertiesFiles(Handler handler, Context ctx, Set<String> propFiles, String runtimeMsgLocale, TabbedWriter out){
 		if(runtimeMsgLocale == null){
 			runtimeMsgLocale = "en_US";
 		}
@@ -249,22 +252,14 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/"  + ruiPropFile.generateIncludeStatement() + "\");");
 		// Add support for RUI Property file
 		
-		LinkedHashSet<String> propFiles = new LinkedHashSet<String>();
-		
-		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler);
-		for(Part refPart:refParts){
-			if(refPart instanceof Library){
-				ctx.invoke(genPropFiles, refPart, propFiles);
+		if (propFiles != null && propFiles.size() > 0) {
+			ArrayList<String> propFileList = new ArrayList<String>(propFiles);
+			Collections.reverse(propFileList);
+			
+			for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
+				String propertiesFile = (String)iter.next();
+				out.println("RUI_DEPENDENT_JAVASCRIPT_FILES.push(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propertiesFile + "\");");
 			}
-		}
-		
-		ArrayList<String> propFileList = new ArrayList<String>(propFiles);
-		Collections.reverse(propFileList);
-		
-		for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
-			String propertiesFile = (String)iter.next();
-			PropertiesFileUtil propFile = new PropertiesFileUtil(propertiesFile, userMsgLocale);
-			out.println("RUI_DEPENDENT_JAVASCRIPT_FILES.push(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propFile.generateIncludeStatement() + "\");");
 		}
 	}
 	
@@ -337,7 +332,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		
 		ArrayList<String> dependentFileList = new ArrayList<String>(dependentFiles);		
 		Collections.reverse(dependentFileList);		
-		out.println("var RUI_DEPENDENT_JAVASCRIPT_FILES = [");		
+		out.println("RUI_DEPENDENT_JAVASCRIPT_FILES = RUI_DEPENDENT_JAVASCRIPT_FILES.concat([");		
 		for (Iterator<String> iter = dependentFileList.iterator(); iter.hasNext();) {
 			out.print( (String)iter.next());
 			if(isDevelopment){
@@ -347,7 +342,7 @@ public class RUITemplate extends JavaScriptTemplate {
 				out.print(", ");
 			}
 		}
-		out.println("];");
+		out.println("]);");
 	}
 	
 	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
