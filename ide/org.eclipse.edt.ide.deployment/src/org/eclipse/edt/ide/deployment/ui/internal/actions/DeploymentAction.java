@@ -100,7 +100,7 @@ public class DeploymentAction implements IActionDelegate {
 				// TODO only for testing, can remove later
 				List egldds = new ArrayList();
 				egldds.add( "testdd" );
-				Generator generator = new DeploymentHTMLGenerator(cmd, egldds, null, "en_US", "en_US", environment.getSystemEnvironment());
+				Generator generator = new DeploymentHTMLGenerator(cmd, egldds, null, null, "en_US", "en_US", environment.getSystemEnvironment());
 				cmd.generate(part, generator, environment.getIREnvironment());
 			}
 		} catch (PartNotFoundException e) {
