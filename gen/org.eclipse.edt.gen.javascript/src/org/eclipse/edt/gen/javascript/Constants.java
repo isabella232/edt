@@ -46,6 +46,7 @@ public class Constants {
 	public static final String Annotation_Property = "eglx.lang.Property";
 	public static final String Annotation_PropertyGetter = "getMethod";
 	public static final String Annotation_PropertySetter = "setMethod";
+	public static final String RUI_PROPERTIES_LIBRARY = "eglx.ui.rui.RUIPropertiesLibrary";
 	
 	public static final String GetterPrefix = "get";
 	public static final String SetterPrefix = "set";

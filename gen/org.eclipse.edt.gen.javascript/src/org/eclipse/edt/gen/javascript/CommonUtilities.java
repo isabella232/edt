@@ -30,6 +30,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
@@ -42,6 +43,7 @@ import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -327,12 +329,33 @@ public class CommonUtilities {
 	}
 
 
-	public static boolean isRUIPropertiesLibrary(Object obj) {
-		if (obj instanceof EGLClass) {
-			return ((EGLClass) obj).getAnnotation("RUIPropertiesLibrary") != null;// TODO sbg need correct annotation name
+	public static boolean isRUIPropertiesLibrary( Object obj )
+	{
+		if ( obj instanceof Element )
+		{
+			return ((Element)obj).getAnnotation( Constants.RUI_PROPERTIES_LIBRARY ) != null;
 		}
 
 		return false;
+	}	
+	
+	public static String getPropertiesFile( Library ruiPropertiesLibrary) 
+	{
+		// Do not Alias the name of this library for the properties file - it is referenced as a string at runtime
+		String result = null;
+		Annotation annotation = ruiPropertiesLibrary.getAnnotation(InternUtil.intern(Constants.RUI_PROPERTIES_LIBRARY));
+		
+		if(annotation != null){
+			String value = (String)annotation.getValue(InternUtil.intern("propertiesFile"));
+			if(value != null && value.length() > 0){
+				result = value;
+			}
+		}
+		
+		if(result == null){
+			result = ruiPropertiesLibrary.getId();
+		}
+		return result;
 	}
 
 	public static Annotation getPropertyAnnotation(Element element) {
