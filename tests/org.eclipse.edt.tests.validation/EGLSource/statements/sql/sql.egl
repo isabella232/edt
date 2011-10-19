@@ -8,10 +8,8 @@ externalType nonEntity type Entity
 end  
 	
 library sql
-  
 	a string;
 	b int;
-	
 	ds SqlDataSource?;
 	stmt SqlStatement?;
 	rs SqlResultSet?;  
@@ -102,15 +100,15 @@ library sql
 		// WITH expr must be STRING
 		expr2 int;
 		prepare ps from ds with expr2; //1
-		
 	end
 	
 	function validateForeach()
-		foreach (a from rs) end //1 not in table type
+		foreach (a from rs) end //0
+		foreach (a, parent.id from rs) end //0
 		foreach (parent.id from ds) end //1 wrong data source type
 		foreach (from rs) end //1 missing target
 		foreach (parent.id from rs) end //0
-		foreach (parent.id, child.name from rs) end //1 different parents
+		foreach (parent.id, child.name from rs) end //0
 		foreach (parent.orphan from rs) end //1 association not yet supported
 		foreach (parent.id, parent.id from rs) end //0
 		foreach (parent from rs into a) end //1 INTO not allowed
@@ -125,10 +123,11 @@ library sql
 		get parent.child from ds; //1 no @Id on child
 		get parent from ds; //0
 		get parent.child from ds using a; //0
-		get basic from ds; //1 no @Id
+		get a, b from ds using a; //1 WITH required when not mapped to single table
+		get a, b from ds using a with #sql{}; //0
+		get basic from ds; //1 no @Id 
 		get basic from ds using a; //0
 		get basic from ds with #sql{}; //0
-
 		get dict from ds using a; //1 - dictionary not yet supported
 		get array from ds using a; //0
 		get invalidArray from ds using a; //1
@@ -136,11 +135,15 @@ library sql
 	end
 	
 	function validateAdd()
-		add myEntity to ds;//0 
+		add myEntity to ds;//0
 		add myEntity, myEntity to ds;//1 
-		add a to ds;//1
+		add a to ds;//1 need FOR when not mapped to single table
+		add a, parent.id to ds;//1 need FOR when not mapped to single table
+		add a to ds for parent;//0
+		add a, parent.id to ds for parent;//0 
 		add parent.id to ds;//0 
-		add parent.id, child.name to ds;//1 
+		add parent.id, child.name to ds;//1 must be single table 
+		add parent.id, child.name to ds for parent;//1 must be single table 
 		add parent.id, parent.id to ds;//0
 		add myEntity to ds for myEntity;//0 
 		add myEntity to rs for myEntity;//1 no FOR when using result set
