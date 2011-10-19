@@ -119,6 +119,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 
 	//get functions
 	public static final String getCallbackFunction = "getCallbackFunction";
+	public static final String supportsConversion = "supportsConversion";
 
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
