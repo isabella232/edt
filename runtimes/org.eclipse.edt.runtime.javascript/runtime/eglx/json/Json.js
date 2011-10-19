@@ -236,18 +236,18 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 			
 			case 'N':
 				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromAnyNum(jsonObject, 
+				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
 						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			
 			case 'd':
 				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromAnyNum(jsonObject, 
+				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
 								egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 								egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			case '9':
 				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromAnyNum(jsonObject,
+				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(),
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 		}
@@ -274,7 +274,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
 	}
 	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDecimal){
-		return egl.eglx.lang.EDecimal.fromAnyNumber(jsonObject);
+		return new egl.javascript.BigDecimal( jsonObject.toString() );
 	}
 	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EBoolean){
 		return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);

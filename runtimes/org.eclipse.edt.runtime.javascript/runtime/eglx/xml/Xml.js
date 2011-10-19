@@ -414,20 +414,20 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 
 		case 'N':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.EDecimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;
 
 		case 'd':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.EDecimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;
 		case '9':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.Decimal.fromEString(value, 
+			value = egl.eglx.lang.EDecimal.fromEString(value, 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
 							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
 			break;
