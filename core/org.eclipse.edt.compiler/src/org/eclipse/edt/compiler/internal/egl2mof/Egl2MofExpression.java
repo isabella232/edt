@@ -781,7 +781,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			processNewArray(newExpression.getType(), expr);
 		}
 		if (newExpression.getSettingsBlock() != null && newExpression.getSettingsBlock().getSettings().size() > 0) {
-			SetValuesExpression sve = processSettings(expr, mofType, newExpression.getSettingsBlock());
+			SetValuesExpression sve = processSettings(expr, newExpression, mofType, newExpression.getSettingsBlock());
 			setElementInformation(newExpression, sve);
 			stack.push(sve);
 		}
@@ -823,13 +823,13 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				targetType = (Type) obj;
 			}
 		}
-		SetValuesExpression sve = processSettings((Expression)stack.pop(), targetType, setValuesExpression.getSettingsBlock());
+		SetValuesExpression sve = processSettings((Expression)stack.pop(), setValuesExpression.getExpression(), targetType, setValuesExpression.getSettingsBlock());
 		setElementInformation(setValuesExpression, sve);
 		stack.push(sve);
 		return false;
 	}
 	
-	private SetValuesExpression processSettings(Expression target, Type targetType, SettingsBlock settings) {
+	private SetValuesExpression processSettings(Expression target, org.eclipse.edt.compiler.core.ast.Expression targetNode, Type targetType, SettingsBlock settings) {
 		if (!localStack.isEmpty() && target instanceof LHSExpr) {
 			
 			if (!sveTypeStack.isEmpty() && TypeUtils.isDynamicType(sveTypeStack.peek())) {
@@ -862,10 +862,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			decl = factory.createField();	
 			decl.setName("eze$SettingTarget" + sveStack.size());
 			decl.setType(targetType);
-			setElementInformation(settings, decl);
+			setElementInformation(targetNode, decl);
 			declExpr.getFields().add(decl);
 			local.setExpression(declExpr);
-			setElementInformation(settings, local);
+			setElementInformation(targetNode, local);
 			Assignment assignExpr = factory.createAssignment();
 			localRef = factory.createMemberName();
 			localRef.setId(decl.getName());
@@ -876,9 +876,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			assignExpr.setRHS(target);
 			StatementBlock initializer = factory.createStatementBlock();
 			AssignmentStatement stmt = createAssignmentStatement(assignExpr);
-			setElementInformation(settings, stmt);
+			setElementInformation(targetNode, stmt);
 			initializer.getStatements().add(stmt);
-			setElementInformation(settings, initializer);
+			setElementInformation(targetNode, initializer);
 			decl.setInitializerStatements(initializer);
 			decl.setContainer(initializer.getContainer());
 			block.getStatements().add(local);
