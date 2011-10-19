@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentHTMLGenerator;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
@@ -29,6 +30,8 @@ import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
+import org.eclipse.edt.ide.rui.utils.FileLocator;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -48,14 +51,18 @@ public class GenerateHTMLFile{
 	private String userMsgLocale;
 	private final String runtimeMsgLocale;
 	private List egldds;
+	private final PartReferenceCache partRefCache;
+	private FileLocator fileLocator;
 
 	public GenerateHTMLFile(IFile eglFile, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, List egldds){
+			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator, PartReferenceCache partRefCache){
 		this.eglFile = eglFile;
 		this.eglParameters = eglParameters;
 		this.runtimeMsgLocale = runtimeMsgLocale;
 		this.userMsgLocale = userMsgLocale;
 		this.egldds = egldds;
+		this.fileLocator = fileLocator;
+		this.partRefCache = partRefCache;
 	}
 
 	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws Exception {
@@ -126,7 +133,9 @@ public class GenerateHTMLFile{
 			
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
-				Generator generator = new DeploymentHTMLGenerator(cmd, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment() );
+				Generator generator = new DeploymentHTMLGenerator(cmd, egldds,
+						Util.findPropertiesFiles(part, partRefCache, userMsgLocale, fileLocator),
+						eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment(), partRefCache);
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}

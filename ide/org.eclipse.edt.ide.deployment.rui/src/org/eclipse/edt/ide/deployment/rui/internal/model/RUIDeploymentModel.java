@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.rui.internal.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -28,10 +31,19 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
+import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.search.PartInfo;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.deployment.core.IDeploymentConstants;
@@ -44,9 +56,15 @@ import org.eclipse.edt.ide.deployment.rui.internal.preferences.HandlerLocalesLis
 import org.eclipse.edt.ide.deployment.rui.internal.util.DeployLocale;
 import org.eclipse.edt.ide.deployment.rui.internal.util.GenerateHTMLFile;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
+import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.resources.egldd.Parameter;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.Environment;
 
 /**
  *
@@ -182,8 +200,10 @@ public class RUIDeploymentModel {
 	private IDeploymentResultsCollector resultsCollector;
 
 	List<PartInfo> allHandlers = new ArrayList<PartInfo>();
-	IEGLSearchScope projSearchScope = null;
-	private List egldds = null;
+	IEGLSearchScope projSearchScope;
+	private List egldds;
+	
+	private PartReferenceCache partRefCache;
 	
 	/**
 	 * Constructor
@@ -196,6 +216,7 @@ public class RUIDeploymentModel {
 		this.contextRoot = contextRoot;
 		this.resultsCollector = resultsCollector;
 		this.egldds = egldds;
+		this.partRefCache = new PartReferenceCache(ProjectEnvironmentManager.getInstance().getProjectEnvironment(sourceProject).getSystemEnvironment().getIREnvironment());
 
 		startAllHandlerGeneration();
 		
@@ -338,6 +359,7 @@ public class RUIDeploymentModel {
 		 * Read in the runtime properties files. These are the same for all locales.
 		 * These files have nothing to do with the runtime messages
 		 */
+//TODO EDT runtime properties
 //		RuntimePropertiesFileGenerator gen = new RuntimePropertiesFileGenerator();
 //		for (Iterator<String> it = XmlDeployFileUtil.getAllRuntimePropertiesFiles(relatedDeployFiles).iterator(); it.hasNext() && !monitor.isCanceled(); ) {
 //			String propertiesFile = it.next();
@@ -357,54 +379,64 @@ public class RUIDeploymentModel {
 //				}
 //			}
 //		}
-//		
-//		/**
-//		 * generate an HTML file and .js properties files for each handler locale selected by the user
-//		 */
+		
+		/**
+		 * generate an HTML file and .js properties files for each handler locale selected by the user
+		 */
+		Set<String> propertiesFiles = null;
 		for (Iterator<DeployLocale> localeIterator = handlerLocales.iterator(); localeIterator.hasNext() && !monitor.isCanceled();) {
-//			boolean errorLocaleProcessing = false;
+			boolean errorLocaleProcessing = false;
 			DeployLocale locale = localeIterator.next();
 			String userLocaleCode = locale.getCode();
-//			/**
-//			 * deal with the properties file(s). We need to find them and then generate a .js file for them
-//			 */
-//			Set<String> propertiesFiles = XmlDeployFileUtil.getAllPropertiesFiles(relatedDeployFiles);
-//			for (Iterator<String> propertiesFileIterator = propertiesFiles.iterator(); propertiesFileIterator.hasNext();) {
-//				String propertiesFileName = propertiesFileIterator.next();
-//				/**
-//				 * build the properties file name
-//				 */
-//				PropertiesFileUtil propFile = new PropertiesFileUtil(propertiesFileName, userLocaleCode);
-//				errorLocaleProcessing = true;
-//				String[] propFileNames = propFile.generatePropertiesFileNames();
-//				for ( int i = 0; i < propFileNames.length && !monitor.isCanceled(); i++ ) {
-//					String name = propFileNames[ i ];
-//					IFile propertiesFile = iFileLocator.findFile( IConstants.PROPERTIES_FOLDER_NAME + File.separator + name  ); 
-//					if ( propertiesFile != null && propertiesFile.exists() ) {
-//						errorLocaleProcessing = false;
-//						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
-//						byte[] bytes = generator.generatePropertiesFile(propertiesFile, propFile.getBundleName());
-//						if( bytes != null ){
-//							propertiesFileByteArrays.put(name, new DeployableFile(bytes));
-//						}
-//						else {
-//							messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
-//									EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_NLS_FILE, 
-//									null,
-//									new String[] { name }));
-//						}
-//						break;
-//					}
-//				}
-//				
-//				if ( errorLocaleProcessing ) {
-//					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
-//							EGLMessage.EGL_DEPLOYMENT_LOCALE_PROCESSING_FAILED, 
-//							null,
-//							new String[] { propFileNames[0] }));
-//				}
-//			}
-//			
+			
+			/**
+			 * deal with the properties file(s). We need to find them and then generate a .js file for them
+			 */
+			if (propertiesFiles == null) { // Only process this once.
+				propertiesFiles = findPropertiesFiles(ruiHandler, messageRequestor);
+			}
+			for (Iterator<String> propertiesFileIterator = propertiesFiles.iterator(); propertiesFileIterator.hasNext();) {
+				String propertiesFileName = propertiesFileIterator.next();
+				/**
+				 * build the properties file name
+				 */
+				PropertiesFileUtil propFile = new PropertiesFileUtil(propertiesFileName, userLocaleCode);
+				errorLocaleProcessing = true;
+				String[] propFileNames = propFile.generatePropertiesFileNames();
+				for ( int i = 0; i < propFileNames.length && !monitor.isCanceled(); i++ ) {
+					String name = propFileNames[ i ];
+					IFile propertiesFile = iFileLocator.findFile( IConstants.PROPERTIES_FOLDER_NAME + File.separator + name  ); 
+					if ( propertiesFile != null && propertiesFile.exists() ) {
+						errorLocaleProcessing = false;
+						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
+						byte[] bytes;
+						try {
+							bytes = generator.generatePropertiesFile(propertiesFile.getContents(), propFile.getBundleName());
+						}
+						catch (CoreException ce) {
+							bytes = null;
+						}
+						if( bytes != null ){
+							propertiesFileByteArrays.put(name, new DeployableFile(bytes));
+						}
+						else {
+							messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+									EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_NLS_FILE, 
+									null,
+									new String[] { name }));
+						}
+						break;
+					}
+				}
+				
+				if ( errorLocaleProcessing && propFileNames != null && propFileNames.length > 0 ) {
+					messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+							EGLMessage.EGL_DEPLOYMENT_LOCALE_PROCESSING_FAILED, 
+							null,
+							new String[] { propFileNames[0] }));
+				}
+			}
+			
 //			List<String> deployedDDFiles = new ArrayList<String>();
 //			try{
 //				for (int i = 0; i < relatedDeployFiles.length && !monitor.isCanceled(); i++) {
@@ -443,7 +475,7 @@ public class RUIDeploymentModel {
 //						null,
 //						new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 //			}
-//
+
 			if(sourceRUIHandlers.contains(ruiHandler)){
 				if (!messageRequestor.isError() && !monitor.isCanceled()) {
 					/**
@@ -454,7 +486,8 @@ public class RUIDeploymentModel {
 					eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, locale.getRuntimeLocaleCode());
 					byte[] htmlFile;
 					try {
-						htmlFile = generateHandlerHTML(ruiHandler, eglProperties, userLocaleCode, locale.getRuntimeLocaleCode(), egldds, messageRequestor);
+						htmlFile = generateHandlerHTML(ruiHandler, eglProperties, userLocaleCode, locale.getRuntimeLocaleCode(), egldds,
+								fileLocator, messageRequestor, partRefCache);
 						/**
 						 * store the html file bytes into a map for retrieval
 						 */
@@ -473,6 +506,73 @@ public class RUIDeploymentModel {
 	}
 	
 	/**
+	 * This is a different from {@link Util#findPropertiesFiles(Part, PartReferenceCache, String, FileLocator)}
+	 * in that it returns all the propertiesFiles settings from all the referenced RUIPropertiesLibraries.
+	 * With the other method, it returns the specific files that should be included (e.g. file-en.properties instead of file.properties).
+	 * 
+	 * @param file
+	 * @param messageRequestor
+	 * @return
+	 */
+	private Set<String> findPropertiesFiles(IFile file, DeploymentResultMessageRequestor messageRequestor) {
+		Set<String> propFiles = new LinkedHashSet<String>();
+		ProjectEnvironment environment = null;
+		try {
+			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(file.getProject());
+			Environment.pushEnv(environment.getIREnvironment());			
+			environment.getIREnvironment().initSystemEnvironment(environment.getSystemEnvironment()); 
+			
+			IEGLElement element = EGLCore.create(file);
+			if (element instanceof IEGLFile) {
+				String[] pkg;
+				IPackageDeclaration[] pkgs = ((IEGLFile)element).getPackageDeclarations();
+				if (pkgs.length > 0) {
+					pkg = pkgs[0].getElementName().split("\\.");;
+				}
+				else {
+					pkg = new String[0];
+				}
+				
+				String name = ((IEGLFile)element).getElementName();
+				int lastDot = name.lastIndexOf('.');
+				if (lastDot != -1) {
+					name = name.substring(0, lastDot);
+				}
+				
+				Part part = environment.findPart(InternUtil.intern(pkg), InternUtil.intern(name));
+				if (part != null) {
+					findPropertiesFiles(part, propFiles);
+				}
+			}
+		}
+		catch (Exception e) {
+			messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
+					EGLMessage.EGL_DEPLOYMENT_FAILED_LOCATE_NLS_FILE, 
+					null,
+					new String[] {file.getFullPath().toString()}));
+			messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
+					EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
+					null,
+					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
+		}
+		finally {
+			if (environment != null) {
+				Environment.popEnv();
+			}
+		}
+		
+		return propFiles;
+	}
+	
+	private void findPropertiesFiles(Part part, Set<String> propFiles) {
+		for (Part p : partRefCache.getReferencedPartsFor(part)) {
+			if (p instanceof Library && CommonUtilities.isRUIPropertiesLibrary(p)) {
+				propFiles.add(CommonUtilities.getPropertiesFile((Library)p));
+			}
+		}
+	}
+	
+	/**
 	 * Generates the passed RUI handler into the passed output file. The output being an HTML file that contains the JavaScript 
 	 * generated to support the functionality of the RUI handler
 	 * 
@@ -484,8 +584,10 @@ public class RUIDeploymentModel {
 	 * @throws CoreException
 	 */
 	public static final byte[] generateHandlerHTML(IFile input, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, List egldds, IGenerationMessageRequestor messageRequestor) throws Exception  {
-		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds);
+			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator,
+			IGenerationMessageRequestor messageRequestor,
+			PartReferenceCache partRefCache) throws Exception  {
+		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds, fileLocator, partRefCache);
 		return op.execute(messageRequestor);
 	}
 	
