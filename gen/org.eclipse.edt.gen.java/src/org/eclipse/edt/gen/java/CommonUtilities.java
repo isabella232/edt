@@ -408,7 +408,7 @@ public class CommonUtilities {
 			ctx.getSmapExtension().append("F:" + function.getName() + ";" + JavaAliaser.getAlias(function.getName()) + ";(");
 			for (int i = 0; i < function.getParameters().size(); i++) {
 				FunctionParameter decl = function.getParameters().get(i);
-				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
+				if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
 					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/AnyBoxedObject;");
 				else if (decl.getType() instanceof Delegate)
 					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/Delegate;");
