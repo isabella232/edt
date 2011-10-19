@@ -346,6 +346,12 @@ public class EString extends AnyBoxedObject<String> {
 		return op1 + op2;
 	}
 
+	public static int compareTo(String op1, String op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2);
+	}
+
 	public static boolean equals(String op1, String op2) throws AnyException {
 		if (op1 == null && op2 == null)
 			return true;
