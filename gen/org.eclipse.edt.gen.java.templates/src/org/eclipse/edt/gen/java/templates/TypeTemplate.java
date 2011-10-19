@@ -263,6 +263,14 @@ public class TypeTemplate extends JavaTemplate {
 				out.print(" == null ? false : true)");
 			} else
 				out.print("true");
+		} else if (arg.getObjectExpr().getType().getClassifier() != null && 
+			arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+			if (arg.getObjectExpr().isNullable()) {
+				out.print("(");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(" == null ? false : true)");
+			} else
+				out.print("true");
 		} else if (arg.getObjectExpr().getType().getClassifier() != null && arg.getEType().getClassifier() != null
 			&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getClassifier().getTypeSignature())) {
 			out.print("false");
