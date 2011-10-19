@@ -2618,7 +2618,7 @@ Array.prototype.getType = function () { return this.type; };
 Array.prototype.assign = function Array_assign(other) {
 	this.length = 0;
 	for (var n=0; n<other.length; n++) this.push(other[n]);
-}
+};
 
 Array.prototype.appendAll = function Array_appendAll(other) {
 	for (var n=0; n<other.length; n++) this.push(other[n]);
@@ -2658,7 +2658,7 @@ Array.prototype.insertElement = function Array_insertElement(val, index) {
 	}
 	this.splice( index-1, 0, val );
 	return this;
-}
+};
 
 Array.prototype.removeAll = function Array_removeAll(val) {
 	this.length = 0;
@@ -2775,7 +2775,7 @@ egl.resizeAll = function egl_resizeAll(array, sizes) {
 	{
 		throw egl.createRuntimeException( "CRRUI2035E", null );
 	}
-}
+};
 
 egl.move = function egl_move(source, target, byName, byPosition, forAll, count) {
 	for (f in source) {
@@ -2789,7 +2789,7 @@ egl.move = function egl_move(source, target, byName, byPosition, forAll, count) 
 		}
 	}
 	return source;
-}
+};
 
 Array.prototype.resizeAll = function Array_resizeAll(sizes) {
 	egl.resizeAll(this, sizes);
@@ -2819,7 +2819,7 @@ Array.prototype.setMaxSizes = function Array_setMaxSizes(sizes) {
 
 Array.prototype.eze$$getName = function() {
 	return "";
-}
+};
 
 //Wrapper for internal validators that need extra parameters.
 egl.defineClass(
@@ -3016,16 +3016,16 @@ egl.timeStampEquals = function(/*timestamp*/ a, /*timestamp*/ b, falseAnswer) {
 		// Delegates pointing at the same function are equal
 		d.eq=function(o) {
 			return this.f === o.f;
-		}
+		};
 		
 		// add methods for debug
 		d.toString=function() {
 		  return this.n;
-		}
+		};
 		
 		d.eze$$getChildVariables=function() {
 			return [];	
-		}
+		};
 		
 		return d;
 	};
@@ -3219,7 +3219,7 @@ egl.clone = function egl_clone(source) {
 		}
 	}
 	return target;
-}
+};
 
 egl.insert = function egl_insert(target, key, value) {
 	if (typeof(value)=="object") {
@@ -3272,7 +3272,7 @@ egl.isUserField = function(object, field) {
 	return typeof(object[field]) != "function" && 
 			!field.match(/^[0-9]*$/) && 
 			!field.match(egl.internalFieldMatcher);
-}
+};
 	
 String.prototype.splice = function( first, last, instr ) {
 	if ( last > this.length )
@@ -3317,7 +3317,7 @@ String.prototype.cmp = function(s2,eq) {
 	s2 = (s2 && s2.toString()) || "";
 	if (eq) return (this==s2) ? 0 : 1;
 	return (this<s2) ? -1 : (this>s2) ? 1 : 0;
-}
+};
 	
 String.prototype.eq = function(s) {
 	return this.cmp(s,true) == 0;
@@ -3367,7 +3367,7 @@ egl.javascriptRegExpAlias = function(ch) {
 	default:
 		return ch;
 	}
-}
+};
 	
 String.prototype.like = function(pattern, escape) {	
 	//EGL 'like' is similar to SQL regular expressions.
@@ -3577,14 +3577,14 @@ egl.formatMessage = function( msg, inserts )
 	var formattedText = msg;
 	if ( inserts != null )
 	{
-		for ( i = 0; i < inserts.length ; i++ )
+		for ( var i = 0; i < inserts.length ; i++ )
 		{
 			var pattern = "{" + i + "}";
 			formattedText = formattedText.replace( pattern, inserts[i] );
 		}
 	}
 	return formattedText;
-}
+};
 
 egl.getRuntimeMessage = function( rscKey, inserts ) 	
 {
@@ -3618,10 +3618,10 @@ egl.getRuntimeMessage = function( rscKey, inserts )
 		rscString = "[" + rscKey + "] " + rscString; 
 	}
 	return rscString;
-}
+};
 
 egl.defineClass(
-		'egl.ui.rui', 'RUIPropertiesLibrary',
+		'eglx.ui.rui', 'RUIPropertiesLibrary',
 		{
 		"constructor" : function() {
 			this.normalizedKeys = {};
