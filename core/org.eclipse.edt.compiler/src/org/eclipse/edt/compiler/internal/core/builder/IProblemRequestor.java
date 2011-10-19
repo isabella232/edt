@@ -1910,4 +1910,5 @@ public interface IProblemRequestor {
     public static final int SQL_SINGLE_TABLE_REQUIRED = 8515;
     public static final int SQL_DELETE_FOR_OR_WITH = 8516;
     public static final int SQL_NO_WITH_USING = 8517;
+    public static final int SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE = 8518;
 }

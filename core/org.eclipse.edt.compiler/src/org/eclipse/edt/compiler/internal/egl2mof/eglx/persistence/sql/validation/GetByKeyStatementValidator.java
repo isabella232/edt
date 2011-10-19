@@ -13,7 +13,9 @@ package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validatio
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -79,16 +81,25 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 			}
 		}
 		
-		if (!isDataExpr && !mapsToColumns(targets, problemRequestor)) {
+		if (!isDataExpr && !mapsToColumns(targets)) {
 			int[] offsets = getOffsets(targets);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
 					IProblemRequestor.SQL_TARGET_MUST_BE_DATA_EXPR_OR_COLUMNS,
 					new String[] {});
+			return;
+		}
+		else if (!isDataExpr && withExpression == null && withInline == null && !mapsToSingleTable(targets)) {
+			// WITH required when the columns do not map to a single table.
+			int[] offsets = getOffsets(targets);
+			problemRequestor.acceptProblem(offsets[0], offsets[1],
+					IProblemRequestor.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
+					new String[] {IEGLConstants.KEYWORD_WITH});
+			return;
 		}
 		
 		if (using == null && withExpression == null && withInline == null) {
 			// When no USING or WITH, a field in the type of the target must have @Id.
-			ITypeBinding targetType = getTargetType(targets);
+			ITypeBinding targetType = getTargetType(isDataExpr);
 			if (Binding.isValidBinding(targetType) && !hasID(targetType)) {
 				int[] offsets = getOffsets(targets);
 				problemRequestor.acceptProblem(offsets[0], offsets[1],
@@ -97,6 +108,27 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 				return;
 			}
 		}
+	}
+	
+	private ITypeBinding getTargetType(boolean isDataExpr) {
+		ITypeBinding type = null;
+		List targets = statement.getTargets();
+		if (isDataExpr || mapsToSingleTable(targets)) {
+			Expression e = (Expression)targets.get(0);
+			type = e.resolveTypeBinding();
+			if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
+				IDataBinding data = e.resolveDataBinding();
+				if (Binding.isValidBinding(data)) {
+					type = data.getDeclaringPart();
+				}
+			}
+		}
+		
+		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			type = ((ArrayTypeBinding)type).getElementType();
+		}
+		
+		return type;
 	}
 	
 	private void validateFrom() {

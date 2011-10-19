@@ -13,11 +13,14 @@ package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validatio
 
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -46,12 +49,47 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 	}
 	
 	private void validateTarget() {
-		List targets = statement.getTargets();
-		validateIsEntityOrMapsToColumns(targets, problemRequestor);
+		List exprs = statement.getTargets();
+		boolean isEntity = false;
 		
-		ITypeBinding targetType = getTargetType(targets);
+		// target can be a single Entity, or a scalar list of primitives that map to table columns.
+		if (exprs.size() == 1) {
+			Object o = exprs.get(0);
+			if (o instanceof Expression) {
+				Expression expr = (Expression)o;
+				ITypeBinding type = expr.resolveTypeBinding();
+				if (isEntity(type)) {
+					// Associations are not yet supported.
+					if (isAssociationExpression(expr)) {
+						problemRequestor.acceptProblem(expr,
+								IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
+								new String[] {});
+						return;
+					}
+					isEntity = true;
+				}
+			}
+		}
+		
+		if (!isEntity && !mapsToColumns(exprs)) {
+			int[] offsets = getOffsets(exprs);
+			problemRequestor.acceptProblem(offsets[0], offsets[1],
+					IProblemRequestor.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
+					new String[] {});
+			return;
+		}
+		else if (!isEntity && forExpression == null && !mapsToSingleTable(exprs)) {
+			// FOR required when the columns do not map to a single table.
+			int[] offsets = getOffsets(exprs);
+			problemRequestor.acceptProblem(offsets[0], offsets[1],
+					IProblemRequestor.SQL_STMT_REQUIRED_FOR_NON_SINGLE_TABLE,
+					new String[] {IEGLConstants.KEYWORD_FOR});
+			return;
+		}
+		
+		ITypeBinding targetType = getTargetType();
 		if (Binding.isValidBinding(targetType) && !isSingleTable(targetType)) {
-			int[] offsets = getOffsets(targets);
+			int[] offsets = getOffsets(exprs);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
 					IProblemRequestor.SQL_SINGLE_TABLE_REQUIRED,
 					new String[]{});
@@ -86,7 +124,7 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 				}
 				
 				// The type of the expression must match exactly the type of the action target.
-				ITypeBinding targetType = getTargetType(statement.getTargets());
+				ITypeBinding targetType = getTargetType();
 				if (Binding.isValidBinding(targetType) && !targetType.equals(type)) {
 					problemRequestor.acceptProblem(forExpression.getExpression(),
 							IProblemRequestor.SQL_FOR_AND_TARGET_TYPES_MUST_MATCH,
@@ -95,6 +133,31 @@ public class AddStatementValidator extends AbstractSqlStatementValidator {
 				}
 			}
 		}
+	}
+	
+	private ITypeBinding getTargetType() {
+		ITypeBinding type = null;
+		List targets = statement.getTargets();
+		int size = targets.size();
+		if (size > 0) {
+			Expression e = (Expression)targets.get(0);
+			type = e.resolveTypeBinding();
+			if (Binding.isValidBinding(type) && (size != 1 || !isEntity(type))) {
+				type = null;
+				if (mapsToSingleTable(targets)) {
+					IDataBinding data = e.resolveDataBinding();
+					if (Binding.isValidBinding(data)) {
+						type = data.getDeclaringPart();
+					}
+				}
+			}
+		}
+		
+		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			type = ((ArrayTypeBinding)type).getElementType();
+		}
+		
+		return type;
 	}
 	
 	private void initialize() {

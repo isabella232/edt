@@ -12,9 +12,7 @@
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
@@ -27,7 +25,6 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class AbstractSqlStatementValidator {
@@ -112,6 +109,10 @@ public class AbstractSqlStatementValidator {
 		
 		List<IDataBinding> fields = null;
 		
+		while (type != null && type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			type = ((ArrayTypeBinding)type).getElementType();
+		}
+		
 		switch (type.getKind()) {
 			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
 				fields = ((FlexibleRecordBinding)type).getDeclaredFields();
@@ -122,7 +123,6 @@ public class AbstractSqlStatementValidator {
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				fields = ((ExternalTypeBinding)type).getDeclaredAndInheritedData();
 				break;
-	
 			default:
 				break;
 		}
@@ -192,40 +192,17 @@ public class AbstractSqlStatementValidator {
 	
 	protected boolean isScalar(Expression expr) {
 		ITypeBinding type = expr.resolveTypeBinding();
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		
-		if (Binding.isValidBinding(type) && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind()) {
-			IDataBinding data = expr.resolveDataBinding();
-			if (Binding.isValidBinding(data)) {
-				IPartBinding parent = data.getDeclaringPart();
-				if (Binding.isValidBinding(parent)) {
-					switch (parent.getKind()) {
-						case ITypeBinding.HANDLER_BINDING:
-						case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-						case ITypeBinding.EXTERNALTYPE_BINDING:
-							return true;
-					}
-				}
-			}
-		}
-		return false;
+		return Binding.isValidBinding(type) && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind();
 	}
 	
-	protected boolean mapsToColumns(List exprs, IProblemRequestor problemRequestor) {
-		// To map to a column, the expression must be a primitive type inside a record, handler, or external type.
-		// All the expressions must have the same parent.
-		Set<IPartBinding> parents = new HashSet<IPartBinding>();
+	protected boolean mapsToColumns(List exprs) {
+		// To map to a column, the expression must be a primitive type.
 		int size = exprs.size();
 		for (int i = 0; i < size; i++) {
 			Node n = (Node)exprs.get(i);
 			if (n instanceof Expression) {
 				Expression expr = (Expression)n;
-				if (isScalar(expr)) {
-					parents.add(expr.resolveDataBinding().getDeclaringPart());
-				}
-				else {
+				if (!isScalar(expr)) {
 					return false;
 				}
 			}
@@ -234,7 +211,36 @@ public class AbstractSqlStatementValidator {
 			}
 		}
 		
-		return parents.size() < 2;
+		return true;
+	}
+	
+	/**
+	 * @return true if every expr maps to the same table.
+	 */
+	protected boolean mapsToSingleTable(List<Expression> exprs) {
+		IPartBinding firstParent = null;
+		for (Expression e : exprs) {
+			IDataBinding binding = e.resolveDataBinding();
+			if (Binding.isValidBinding(binding)) {
+				IPartBinding parent = binding.getDeclaringPart();
+				if (parent == null) {
+					// If even 1 column has no table then we return false.
+					return false;
+				}
+				
+				if (firstParent == null) {
+					firstParent = parent;
+				}
+				else if (!firstParent.equals(parent)) {
+					return false;
+				}
+			}
+		}
+		
+		if (firstParent == null) {
+			return false;
+		}
+		return isEntity(firstParent) && isSingleTable(firstParent);
 	}
 	
 	protected int[] getOffsets(Collection<Node> nodes) {
@@ -251,63 +257,6 @@ public class AbstractSqlStatementValidator {
 			}
 		}
 		return new int[]{startOffset, endOffset};
-	}
-	
-	protected void validateIsEntityOrMapsToColumns(List exprs, IProblemRequestor problemRequestor) {
-		// target can be a single Entity, or a scalar list of primitives that map to table columns.
-		if (exprs.size() == 1) {
-			Object o = exprs.get(0);
-			if (o instanceof Expression) {
-				Expression expr = (Expression)o;
-				ITypeBinding type = expr.resolveTypeBinding();
-				if (isEntity(type)) {
-					// Associations are not yet supported.
-					if (isAssociationExpression(expr)) {
-						problemRequestor.acceptProblem(expr,
-								IProblemRequestor.SQL_ENTITY_ASSOCIATIONS_NOT_SUPPORTED,
-								new String[] {});
-					}
-					return;
-				}
-			}
-		}
-		
-		if (!mapsToColumns(exprs, problemRequestor)) {
-			int[] offsets = getOffsets(exprs);
-			problemRequestor.acceptProblem(offsets[0], offsets[1],
-					IProblemRequestor.SQL_TARGET_MUST_BE_ENTITY_OR_COLUMNS,
-					new String[] {});
-		}
-	}
-	
-	protected ITypeBinding getTargetType(List targets) {
-		// The action target can be either a single Entity or a list of fields inside a record, handler, or external type.
-		// When not an Entity, this assumes that the expressions are all inside the same part.
-		if (targets.size() > 0) {
-			Object target = targets.get(0);
-			if (target instanceof Expression) {
-				ITypeBinding targetType = ((Expression)target).resolveTypeBinding();
-				if (!isEntity(targetType) || targets.size() > 1) {
-					// Use the type of the expression declarer when matching with columns.
-					targetType = null;
-					IDataBinding data = ((Expression)target).resolveDataBinding();
-					if (Binding.isValidBinding(data)) {
-						IPartBinding parent = data.getDeclaringPart();
-						if (Binding.isValidBinding(parent)) {
-							switch (parent.getKind()) {
-								case ITypeBinding.HANDLER_BINDING:
-								case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-								case ITypeBinding.EXTERNALTYPE_BINDING:
-									targetType = parent;
-									break;
-							}
-						}
-					}
-				}
-				return targetType;
-			}
-		}
-		return null;
 	}
 	
 	protected boolean isSingleTable(ITypeBinding type) {
