@@ -25,3 +25,12 @@ Record RUIWidget type Annotation {
 	includeFile String;
 	cssFile String;
 end
+
+Record RUIPropertiesLibrary type Annotation
+{
+	targets = [ElementKind.libraryPart],
+	@Stereotype{defaultSuperType=NLSLibrary},
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RUIPropertiesLibraryAnnotationTypeBinding"
+}
+	propertiesFile String;
+end

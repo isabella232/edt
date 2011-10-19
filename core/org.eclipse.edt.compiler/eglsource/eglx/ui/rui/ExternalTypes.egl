@@ -644,8 +644,10 @@ ExternalType View type JavaScriptObject { relativePath = "eglx/ui/rui"	}
 	static function $NEQ(lvalue View in, rvalue View in) returns(EBoolean) {@Operation{"!="}};
 	
 	static function asView(value View in) returns(View) {@Operation{"widen"}};
-	
+end
 
+ExternalType NLSLibrary type JavaScriptObject {relativePath = "eglx/ui/rui", ExternalName = "RUIPropertiesLibrary"}
+	function getMessage(s string in, array string[] in) returns(string);
 end
 
 Delegate EffectCallback()

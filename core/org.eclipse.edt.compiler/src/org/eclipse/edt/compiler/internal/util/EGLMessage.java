@@ -535,6 +535,7 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 	public static final String EGL_DEPLOYMENT_FAILED_CREATE_PROPERTIES_FOLDER = "8325"; //$NON-NLS-1$
 	public static final String EGL_DEPLOYMENT_LOCALE_PROCESSING_FAILED = "8326"; //$NON-NLS-1$
 	public static final String EGL_DEPLOYMENT_MISSING_IMPORT_EXCEPTION = "8327"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_FAILED_FIND_NLS_FILES = "8328"; //$NON-NLS-1$
 	
 	//9000-    : Used for misc validation
 	public static final String EGLMESSAGE_GENERATABLE_NOT_FOUND = "9000"; //$NON-NLS-1$
