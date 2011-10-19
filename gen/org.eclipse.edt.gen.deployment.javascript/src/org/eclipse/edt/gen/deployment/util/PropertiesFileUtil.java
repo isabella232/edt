@@ -25,6 +25,28 @@ public class PropertiesFileUtil {
 		this.userMessageLocale = userMessageLocale;		
 	}
 	
+	public PropertiesFileUtil(String includeStatement){
+		String temp = includeStatement;
+		
+		// Remove file extension.
+		int lastDot = temp.lastIndexOf('.');
+		if (lastDot != -1) {
+			temp = temp.substring(0, lastDot);
+		}
+		
+		int sepIndex = temp.indexOf(BUNDLE_SEPARATOR);
+		if ( sepIndex != -1 )
+		{
+			this.propertiesFileName = temp.substring(temp.lastIndexOf("/") + 1, sepIndex);
+			this.userMessageLocale = temp.substring(sepIndex + 1, temp.length());
+		}
+		else
+		{
+			this.propertiesFileName = temp.substring(temp.lastIndexOf("/") + 1);
+			this.userMessageLocale = "";
+		}
+	}
+	
 	public String getBundleName(){
 		return propertiesFileName;
 	}
@@ -67,5 +89,15 @@ public class PropertiesFileUtil {
 		}
 		names[ count ] = propertiesFileName + ".properties";
 		return names;
+	}
+	
+	public static String convertToProperitesFile(String includeStatement){
+		// Remove file extension and append '.properties'
+		int lastDot = includeStatement.lastIndexOf('.');
+		if (lastDot != -1) {
+			includeStatement = includeStatement.substring(0, lastDot);
+		}
+		
+		return includeStatement + ".properties";
 	}
 }

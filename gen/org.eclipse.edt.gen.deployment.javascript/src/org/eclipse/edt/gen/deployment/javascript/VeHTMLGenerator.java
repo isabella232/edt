@@ -13,16 +13,16 @@ package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 
 public abstract class VeHTMLGenerator extends ContextAwareHTMLGenerator {
 
-	public VeHTMLGenerator(AbstractGeneratorCommand processor, List egldds,
-			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
-		super(processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv);
+	public VeHTMLGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles,
+			HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, PartReferenceCache partRefCache) {
+		super(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache);
 	}
-
-
 }

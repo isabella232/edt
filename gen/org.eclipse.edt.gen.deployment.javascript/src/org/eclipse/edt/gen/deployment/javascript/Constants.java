@@ -100,7 +100,6 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/TestListMgr.js"); //$NON-NLS-1$
 		
 	}
-	public static final String RUI_PROPERTIES_LIBRARY = "RUIPropertiesLibrary";
 	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
 	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
 	

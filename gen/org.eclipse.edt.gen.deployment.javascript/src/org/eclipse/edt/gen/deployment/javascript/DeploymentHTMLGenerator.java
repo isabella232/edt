@@ -13,22 +13,24 @@ package org.eclipse.edt.gen.deployment.javascript;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.deployment.javascript.templates.JavaScriptTemplate;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 import org.eclipse.edt.mof.egl.Part;
 
 public class DeploymentHTMLGenerator extends ValidHTMLGenerator {
 	
-	// TODO Need to be removed
-	public DeploymentHTMLGenerator(AbstractGeneratorCommand processor, ISystemEnvironment sysEnv) {
-		super(processor, null, sysEnv);
+	public DeploymentHTMLGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv) {
+		this(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, null);
 	}
 	
-	public DeploymentHTMLGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv ) {
-		super(processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv);
+	public DeploymentHTMLGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv,
+			PartReferenceCache partRefCache) {
+		super(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache);
 	}
 	
 	@Override
