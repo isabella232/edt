@@ -9,17 +9,6 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-/*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.ide.rui.utils;
 
 import java.util.ArrayList;
@@ -35,6 +24,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
@@ -55,6 +47,8 @@ import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.rui.document.utils.AssignmentLocator;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -340,5 +334,32 @@ public class Util {
 		}
 		return false;
 	}
-
+	
+	public static Set<String> findPropertiesFiles(Part part, PartReferenceCache cache, String locale, FileLocator resourceLocator) {
+		Set<String> propFiles = new LinkedHashSet<String>();
+		for (Part p : cache.getReferencedPartsFor(part)) {
+			if (p instanceof Library && CommonUtilities.isRUIPropertiesLibrary(p)) {
+				String file = CommonUtilities.getPropertiesFile((Library)p);
+				PropertiesFileUtil util = new PropertiesFileUtil(file, locale);
+				
+				String valid = null;
+				String[] fileNames = util.generatePropertiesFileNames();
+				for ( int i = 0; i < fileNames.length; i++ )
+				{
+					EGLResource resource = resourceLocator.findResource( IConstants.PROPERTIES_FOLDER_NAME + "/" + fileNames[ i ] );
+					if ( resource != null )
+					{
+						valid = fileNames[i];
+						break;
+					}
+				}
+				
+				if (valid != null) {
+					String jsPropFileName = valid.substring( 0, valid.length() - 10 ) + "js"; // "properties".length()
+					propFiles.add(jsPropFileName);
+				}
+			}
+		}
+		return propFiles;
+	}
 }

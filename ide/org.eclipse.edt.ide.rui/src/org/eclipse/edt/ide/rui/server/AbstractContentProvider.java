@@ -9,17 +9,6 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-/*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.edt.ide.rui.server;
 
 import java.io.BufferedInputStream;
@@ -27,21 +16,22 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.ISystemEnvironment;
-import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
+import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
@@ -55,6 +45,7 @@ import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -96,7 +87,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				is.close();
 			}else{
 				// If the file is a .js file, try to find the file as a properties file
-//TODO EDT NLS				
+//TODO EDT runtime properties			
 //				if (uri.endsWith(RuntimePropertiesFileUtil.JS_SUFFIX)) {
 //					// It's a runtime properties file.
 //					IFile ifile = findRequiredFile(RuntimePropertiesFileUtil.convertToPropertiesFile(uri), projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
@@ -104,9 +95,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 //						bytes = new RuntimePropertiesFileGenerator().generatePropertiesFile(ifile, RuntimePropertiesFileUtil.getBundleName(uri));
 //					}
 //				}
-//TODO EDT deployment		
 //				else
-				//FIXME using default specified on the project for now. also need a constant for -bnd.js
 				if (uri.endsWith("-bnd.js")) {
 					DeploymentDesc model = null;
 					try {
@@ -122,16 +111,16 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 						bytes = new DeploymentDescGenerator().generateBindFile(model);
 					}
 				}
-//TODO EDT NLS				
-//				else if(uri.endsWith(".js")){
-//					// Attempt to load this file as a properties file for NLS
-//					IFile ifile = findRequiredFile(PropertiesFileUtil.convertToProperitesFile(uri), projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
-//					if(ifile != null && ifile.exists()){	
-//						PropertiesFileUtil propFileUtil = new PropertiesFileUtil(uri);
-//						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
-//						bytes = generator.generatePropertiesFile(ifile, propFileUtil.getBundleName());
-//					}
-//				}
+				else if(uri.endsWith(".js")){
+					// Attempt to load this file as a properties file for NLS
+					//TODO look for .properties without the locale too
+					IFile ifile = findRequiredFile(PropertiesFileUtil.convertToProperitesFile(uri), projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
+					if(ifile != null && ifile.exists()){	
+						PropertiesFileUtil propFileUtil = new PropertiesFileUtil(uri);
+						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
+						bytes = generator.generatePropertiesFile(ifile.getContents(), propFileUtil.getBundleName());
+					}
+				}
 			}
 			if(bytes == null && uri.endsWith(".html")){ //$NON-NLS-1$
 				// Generate HTML file
@@ -163,27 +152,26 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 		return resource;
 	}
 	
-//TODO EDT NLS
-//	private IFile findRequiredFile(String uri, String projectName, IFileLocator locator){
-//		IFile file = null;
-//		String projectRelativePath = uri.substring(uri.indexOf(projectName) + projectName.length() + 1, uri.length());
-//		String applicationLocation = ""; //$NON-NLS-1$
-//		String resourceName  = applicationLocation.length() > 0 ? projectRelativePath.substring(applicationLocation.length() + 1, projectRelativePath.length()) : projectRelativePath;
-//	
-//		while(resourceName != ""){ //$NON-NLS-1$
-//			file = locator.findFile(resourceName);
-//			if(file != null && file.exists()){
-//				break; // we found a file
-//			}else if(projectRelativePath.indexOf('/', applicationLocation.length() + 1) == -1){
-//				resourceName = ""; // we have reached the end of the URI and could not find a file //$NON-NLS-1$
-//			}else{
-//				// shift part of the resource name to the application location and try again
-//				applicationLocation = projectRelativePath.substring(0, projectRelativePath.indexOf("/", applicationLocation.length() + 1)); //$NON-NLS-1$
-//				resourceName = projectRelativePath.substring(applicationLocation.length() + 1, projectRelativePath.length());
-//			}
-//		}
-//		return file;
-//	}
+	private IFile findRequiredFile(String uri, String projectName, IFileLocator locator){
+		IFile file = null;
+		String projectRelativePath = uri.substring(uri.indexOf(projectName) + projectName.length() + 1, uri.length());
+		String applicationLocation = ""; //$NON-NLS-1$
+		String resourceName  = applicationLocation.length() > 0 ? projectRelativePath.substring(applicationLocation.length() + 1, projectRelativePath.length()) : projectRelativePath;
+	
+		while(resourceName != ""){ //$NON-NLS-1$
+			file = locator.findFile(resourceName);
+			if(file != null && file.exists()){
+				break; // we found a file
+			}else if(projectRelativePath.indexOf('/', applicationLocation.length() + 1) == -1){
+				resourceName = ""; // we have reached the end of the URI and could not find a file //$NON-NLS-1$
+			}else{
+				// shift part of the resource name to the application location and try again
+				applicationLocation = projectRelativePath.substring(0, projectRelativePath.indexOf("/", applicationLocation.length() + 1)); //$NON-NLS-1$
+				resourceName = projectRelativePath.substring(applicationLocation.length() + 1, projectRelativePath.length());
+			}
+		}
+		return file;
+	}
 	
 	protected byte[] generateHTMLFile( FileLocator locator, String resourceName, String projectName) throws IOException, SAXException{
 		IEnvironment environment = null;
@@ -206,12 +194,17 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				eglProperties.put(IConstants.HTML_FILE_LOCALE, getHandlerMessageLocale());
 				eglProperties.put(IConstants.DEFAULT_LOCALE_PARAMETER_NAME, getRuntimeMessageLocale());
 				
-				//FIXME using default specified on the project for now
 				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
 				List<String> egldds = EclipseUtilities.getDependentDescriptors(project);
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
-				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
-						ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment());
+				
+				ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
+				PartReferenceCache partRefCache = new PartReferenceCache(sysEnv.getIREnvironment());
+				
+				Set<String> propFiles = Util.findPropertiesFiles(part, partRefCache, getHandlerMessageLocale(), getFileLocator(project));
+				
+				Generator generator = getDevelopmentGenerator(cmd, egldds, propFiles, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
+						sysEnv, partRefCache);
 				String result = cmd.generate(part, generator, environment);
 				return result.getBytes();
 			}
@@ -235,7 +228,8 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 	protected abstract FileLocator getFileLocator(IProject project)throws CoreException;
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	
-	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv);
+	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale,
+			ISystemEnvironment sysEnv, PartReferenceCache partRefCache);
 
 	
 	protected String getRuntimeMessageLocale() {
