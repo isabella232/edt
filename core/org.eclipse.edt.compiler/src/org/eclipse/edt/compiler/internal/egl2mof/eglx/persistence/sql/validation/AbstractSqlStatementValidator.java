@@ -181,12 +181,13 @@ public class AbstractSqlStatementValidator {
 			return false;
 		}
 		
+		//TODO Once generation supports dictionaries, uncomment the next couple lines.
 		if (type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
 			ITypeBinding elementType = ((ArrayTypeBinding)type).getElementType();
-			return Binding.isValidBinding(elementType) && (elementType.getKind() == ITypeBinding.DICTIONARY_BINDING || isEntity(elementType));
+			return Binding.isValidBinding(elementType) && (/*elementType.getKind() == ITypeBinding.DICTIONARY_BINDING ||*/ isEntity(elementType));
 		}
 		
-		return type.getKind() == ITypeBinding.DICTIONARY_BINDING || isScalar(expr) || isEntity(type) || isAssociationExpression(expr);
+		return /*type.getKind() == ITypeBinding.DICTIONARY_BINDING ||*/ isScalar(expr) || isEntity(type) || isAssociationExpression(expr);
 	}
 	
 	protected boolean isScalar(Expression expr) {
