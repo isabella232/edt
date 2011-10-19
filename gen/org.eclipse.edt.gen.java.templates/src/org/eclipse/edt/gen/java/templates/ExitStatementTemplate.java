@@ -54,10 +54,16 @@ public class ExitStatementTemplate extends JavaTemplate {
 					out.print("return ");
 					if (stmt.getReturnExpr() != null)
 						ctx.invoke(genExpression, stmt.getReturnExpr(), ctx, out);
-				} else
+				} else {
+					if (label.getFlag() != null)
+						out.println(label.getFlag() + " = false;");
 					out.print("break " + label.getName());
-			} else
+				}
+			} else {
+				if (label.getFlag() != null)
+					out.println(label.getFlag() + " = false;");
 				out.print("break " + label.getName());
+			}
 		}
 	}
 
