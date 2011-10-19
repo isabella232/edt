@@ -573,7 +573,7 @@ public class IRUtils {
 		StructPart class1 = (StructPart)type1.getClassifier();
 		StructPart class2 = (StructPart)type2.getClassifier();
 		StructPart result = null;
-		if (class2.isSubtypeOf(class1)) {
+		if (class1.equals(class2) || class2.isSubtypeOf(class1)) {
 			result = class1;
 		}
 		else {
