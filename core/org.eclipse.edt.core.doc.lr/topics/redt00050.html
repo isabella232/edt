@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Any and EAny types"></meta>
-<meta name="abstract" content="The EGL Any type lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny."></meta>
-<meta name="description" content="The EGL Any type lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny."></meta>
+<meta name="abstract" content="The EGL Any type is a reference type that lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny."></meta>
+<meta name="description" content="The EGL Any type is a reference type that lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny."></meta>
+<meta name="DC.subject" content="EGL types, Any, EGL type"></meta>
+<meta name="keywords" content="EGL types, Any, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -24,8 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Any type lets you create a variable
-whose data type is not fixed. The EDT implementation of Any is EAny.</p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Any type is a reference type that lets
+you create a variable whose data type is not fixed. The EDT implementation
+of Any is EAny.</p>
 
 <a name="redt00050__main"><!-- --></a><dl id="redt00050__main">
 <dt class="dlterm"><a name="redt00050__package"><!-- --></a>EGL package name</dt>
@@ -45,7 +48,11 @@ myAny ANY = myInt;
 
 <dt class="dlterm"><a name="redt00050__detail"><!-- --></a>Type detail</dt>
 
-<dd><pre class="codeblock">   /*********************************************************************
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available and that the specified
+function name is not. For example, use “==” to compare two values,
+not “$EQ”. Two exceptions are the widen and narrow operations, which
+are invoked automatically during data conversions. <pre class="codeblock">   /*********************************************************************
    * The supertype of all other types; can reference any type of value. *
    *********************************************************************/
 externalType EAny type ClassType
@@ -81,9 +88,9 @@ at a later time. <anchor id="comments_more"></anchor></dd>
 <div class="tablenoborder"><a name="redt00050__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00050__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d14296e90">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d13445e102">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d14296e93">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d13445e105">Issue</th>
 
 </tr>
 
@@ -92,17 +99,17 @@ at a later time. <anchor id="comments_more"></anchor></dd>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00050__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d14296e90 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13445e102 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14296e93 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13445e105 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00050__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d14296e90 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13445e102 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14296e93 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d13445e105 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

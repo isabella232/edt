@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Interface classifier overview"></meta>
-<meta name="abstract" content="The capabilities of the Interface classifier are made available when you code a Interface part, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
-<meta name="description" content="The capabilities of the Interface classifier are made available when you code a Interface part, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
+<meta name="abstract" content="The capabilities of the Interface classifier are made available when you code a Interface type, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
+<meta name="description" content="The capabilities of the Interface classifier are made available when you code a Interface type, which has prototypes for some or all of the operations provided by a service. That part is the basis of a service-access variable, which is used in the statement that invokes the service."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00019.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -25,7 +25,7 @@
 
 
 <div><p>The capabilities of the Interface classifier are made available
-when you code a <dfn class="term">Interface part</dfn>, which has prototypes
+when you code a <dfn class="term">Interface type</dfn>, which has prototypes
 for some or all of the operations provided by a service. That part
 is the basis of a <dfn class="term">service-access variable</dfn>, which is used
 in the statement that invokes the service.</p>
@@ -39,30 +39,30 @@ in the statement that invokes the service.</p>
 </div>
 </div>
 <div class="nested1" xml:lang="en-us" id="theinterfacepartasanaccessassistant"><a name="theinterfacepartasanaccessassistant"><!-- --></a>
-<h2 class="topictitle2">The Interface part as a custom type</h2>
+<h2 class="topictitle2">The Interface type as a custom type</h2>
 
 <div>
 <p>If you accessing a service written in a language other than EGL,
 you must use an Interface part to declare the service-access variable.
 If you are accessing a service written in EGL, you can use either
-an Interface part or the related Service part to declare the variable. </p>
+an Interface type or the related Service type to declare the variable. </p>
 
 <div class="p">If you are writing an EGL service and want to distribute details
 to those who are developing a service requester, you might distribute
-an Interface part to avoid disclosing the logic inside the service:<ul>
+an Interface type to avoid disclosing the logic inside the service:<ul>
 <li>You might want to hide the source code from developers outside
 of your organization. In particular, you might ship EGL Interface
 parts to customers, along with the Java classes
-that were generated from the Service part.</li>
+that were generated from the Service type.</li>
 
-<li>You might want to reduce complexity. The Interface part helps
+<li>You might want to reduce complexity. The Interface type helps
 developers focus on the service operations rather than on the internal
 logic.</li>
 
 </ul>
 </div>
 
-<div class="p">Here is an example Interface part, which is based on the service
+<div class="p">Here is an example Interface type, which is based on the service
 shown in “The Service classifier”:<pre class="codeblock">Interface IMyService
    Function calculate(theList INT[] IN) 
             returns(BIN (4,2));
@@ -112,24 +112,24 @@ protocol. The binding can be in the deployment descriptor, and that
 practice provides the greatest flexibility. If you are invoking a
 web service, you can set the binding in the code itself.</p>
 
-<p>An Interface part does not include a stereotype.</p>
+<p>An Interface type does not include a stereotype.</p>
 
 </div>
 
 </div>
 
 <div class="nested1" xml:lang="en-us" id="theinterfacepartasadesigntool"><a name="theinterfacepartasadesigntool"><!-- --></a>
-<h2 class="topictitle2">The Interface part as a design tool</h2>
+<h2 class="topictitle2">The Interface type as a design tool</h2>
 
 <div>
-<p>You can also use an Interface part to describe the functionality
+<p>You can also use an Interface type to describe the functionality
 that you want to see coded in an EGL service. After the Interface
-part is complete, you or others can code the service, which is said
+type is complete, you or others can code the service, which is said
 to <em>implement the interface</em>. The meaning of that phrase is that
-the service contains every function described in the Interface part.
-The part provides a kind of contract that the service must fulfill.</p>
+the service contains every function described in the Interface type.
+The type provides a kind of contract that the service must fulfill.</p>
 
-<div class="p">Using an Interface part as a design tool has the following benefits:<ul>
+<div class="p">Using an Interface type as a design tool has the following benefits:<ul>
 <li>Helps developers and business analysts think clearly about what
 operations are needed in a service before service development begins.</li>
 
@@ -141,6 +141,8 @@ is under development.</li>
 
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 </div>
 

@@ -5,28 +5,271 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="INT type"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Int and EInt types"></meta>
+<meta name="abstract" content="The EGL Int type is a value type that lets you create an eight-byte value that ranges from -2,147,483,648 to 2,147,483,647, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Int is EInt."></meta>
+<meta name="description" content="The EGL Int type is a value type that lets you create an eight-byte value that ranges from -2,147,483,648 to 2,147,483,647, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Int is EInt."></meta>
+<meta name="DC.subject" content="EGL types, Int, EGL type"></meta>
+<meta name="keywords" content="EGL types, Int, EGL type"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00057"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>INT type</title>
+<title>Int and EInt types</title>
 </head>
 <body id="redt00057"><a name="redt00057"><!-- --></a>
 
 
-<h1 class="topictitle1">INT type</h1>
+<h1 class="topictitle1">Int and EInt types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Int type is a value type that lets you
+create an eight-byte value that ranges from -2,147,483,648 to 2,147,483,647,
+inclusive, with no decimal places. In Eclipse IDE for EGL Developers,
+the type definition for Int is EInt.</p>
+
+<a name="redt00057__main"><!-- --></a><dl id="redt00057__main">
+<dt class="dlterm"><a name="redt00057__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00057__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00057__detail"><!-- --></a>Type detail</dt>
+
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available and that the specified
+function name is not. For example, use “==” to compare two values,
+not “$EQ”. Two exceptions are the widen and narrow operations, which
+are invoked automatically during data conversions. <pre class="codeblock">externalType EInt extends ENumber type ClassType
+/**
+	 * {@Operation +} A unary plus (has no effect on the numeric value).
+	 */
+static function $Plus(value EInt in) returns (EInt) {@Operation{"+"}};
+
+/**
+	 * {@Operation +} Adds two numbers.
+	 */
+static function $Plus(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"+"}};
+
+/**
+	 * {@Operation -} Negates the value.
+	 */
+static function $Minus(value EInt in) returns (EInt) {@Operation{"-"}};
+
+/**
+	 * {@Operation -} Subtracts one number from another.
+	 */
+static function $Minus(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"-"}};
+
+	/**
+	 * {@Operation *} Multiplies two numbers.
+	 */
+static function $Multiply(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"*"}};
+
+/**
+	 * {@Operation /} Divides one number by another.
+	 */
+static function $Divide(lvalue EInt in, rvalue EInt in) 
+       returns (EDecimal) {@Operation{"/"}};
+
+/**
+	 * {@Operation %} Computes the remainder of dividing one number by another.
+	 */
+static function $Modulo(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"%"}};
+
+/**
+	 * {@Operation **} Computes lvalue to the power of rvalue.
+	 */
+static function $PowerOf(lvalue EInt in, rvalue EInt in) 
+       returns (EFloat) {@Operation{"**"}};
+
+/**
+	 * {@Operation &amp;} Computes the bitwise AND of two numbers.
+	 */
+static function $BitAnd(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"&amp;"}};
+
+/**
+	 * {@Operation |} Computes the bitwise OR of two numbers.
+	 */
+static function $BitOr(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"|"}};
+
+/**
+	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 */
+static function $BitXor(lvalue EInt in, rvalue EInt in) 
+       returns (EInt) {@Operation{"xor"}};
+
+/**
+	 * {@Operation &lt;} Compares two numbers.
+	 */
+static function $LT(lvalue EInt in, rvalue EInt in) 
+       returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+	 * {@Operation &gt;} Compares two numbers.
+	 */
+static function $GT(lvalue EInt in, rvalue EInt in) 
+       returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+	 * {@Operation &lt;=} Compares two numbers.
+	 */
+static function $LTE(lvalue EInt in, rvalue EInt in) 
+       returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+	 * {@Operation &gt;=} Compares two numbers.
+	 */
+static function $GTE(lvalue EInt in, rvalue EInt in) 
+       returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+	 * {@Operation ==} Compares two numbers.
+	 */
+static function $EQ(lvalue EInt in, rvalue EInt in) 
+       returns(EBoolean) {@Operation{"=="}};
+
+/**
+	 * {@Operation !=} Compares two numbers.
+	 */
+static function $NEQ(lvalue EInt in, rvalue EInt in) 
+       returns(EBoolean) {@Operation{"!="}};
+
+/**
+	 * {@Operation narrow} Converts a string to an int.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  Nothing may follow the
+	 * digits.  The digits in the string must be within the valid range for an int.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into an int.
+	 */
+static function asInt(value EString in) 
+       returns(EInt) {@Operation{"narrow"}};
+	
+/**
+	 * {@Operation widen} Converts an int to a smallint.
+	 */
+static function asInt(value ESmallint in) 
+       returns(EInt) {@Operation{"widen"}};
+
+/**
+	 * {@Operation narrow} Converts a smallfloat to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the smallfloat is out of range for an int.
+	 */
+static function asInt(value ESmallfloat in) 
+       returns(EInt) {@Operation{"narrow"}};
+
+/**
+	 * {@Operation narrow} Converts a decimal to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the decimal is out of range for an int.
+	 */
+static function asInt(value EDecimal in) 
+       returns(EInt) {@Operation{"narrow"}};
+
+/**
+	 * {@Operation narrow} Converts a float to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the float is out of range for an int.
+	 */
+static function asInt(value EFloat in) 
+       returns(EInt) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a bigint to an int.
+	 *
+	 * @throws TypeCastException if the bigint is out of range for an int.
+	 */
+static function asInt(value EBigint in) 
+       returns(EInt) {@Operation{"narrow"}};
+
+/**
+	 * {@Operation narrow} Converts a number to an int.  Digits after the
+	 * decimal point are discarded.
+	 *
+	 * @throws TypeCastException if the number is out of range for an int.
+	 */
+static function asInt(value ENumber in) 
+       returns(EInt) {@Operation{"narrow"}};
+	
+/**
+	 * {@Operation widen} Converts an int to a number.
+	 */
+static function asNumber(value EInt in) 
+       returns(ENumber) {@Operation{"widen"}};
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00057__comments"><!-- --></a>Comments</dt>
+
+<dd> <anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00057__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00057__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00057__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d14649e93">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d14649e96">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00057__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d14649e93 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14649e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00057__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d14649e93 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14649e96 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

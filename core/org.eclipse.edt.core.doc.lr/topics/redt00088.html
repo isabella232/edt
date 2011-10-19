@@ -5,28 +5,281 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="JSONName annotation"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="List and EList types"></meta>
+<meta name="abstract" content="The EGL List type is a reference type that provides a type-specific dynamic array. In Eclipse IDE for EGL Developers, the type definition for List is EList."></meta>
+<meta name="description" content="The EGL List type is a reference type that provides a type-specific dynamic array. In Eclipse IDE for EGL Developers, the type definition for List is EList."></meta>
+<meta name="DC.subject" content="EGL types, List, EGL type"></meta>
+<meta name="keywords" content="EGL types, List, EGL type"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00088"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>JSONName annotation</title>
+<title>List and EList types</title>
 </head>
 <body id="redt00088"><a name="redt00088"><!-- --></a>
 
 
-<h1 class="topictitle1">JSONName annotation</h1>
+<h1 class="topictitle1">List and EList types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL List type is a reference type that provides
+a type-specific dynamic array. In Eclipse IDE for EGL Developers,
+the type definition for List is EList.</p>
+
+<a name="redt00088__main"><!-- --></a><dl id="redt00088__main">
+<dt class="dlterm"><a name="redt00088__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00088__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00088__detail"><!-- --></a>Type detail</dt>
+
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available and that the specified
+function name is not. For example, use “==” to compare two values,
+not “$EQ”. Two exceptions are the widen and narrow operations, which
+are invoked automatically during data conversions. <pre class="codeblock">/**
+ * EList defines the API of lists (dynamically-sized arrays) in EGL.  
+ * Lists have a size, which is the number of elements they contain.  
+ * The size may be zero.
+ */
+externalType EList type ClassType {  
+   typeParameters = ["E"] }
+
+/**
+	 * {@Operation +} Creates a new list consisting of the first operand's elements
+	 * followed by the second operand.  The assigning form of the operator (+=) does 
+	 * not create a new list: the appendElement function is used to add the second 
+	 * operand to the end of the first operand.
+	 */
+static function $Plus(lvalue EList in, rvalue EAny in) 
+       returns (EList) {@Operation{"+"}};
+
+/**
+	 * {@Operation ::} Creates a new list consisting of the first operand's elements
+	 * followed by the second operand.  The assigning form of the operator (::=) does 
+	 * not create a new list: the appendElement function is used to add the second 
+	 * operand to the end of the first operand.
+	 */
+static function $Concat(value EList in, rvalue EAny in) 
+       returns (EList) {@Operation{"::"}};
+
+/**
+	 * {@Operation +} Creates a new list consisting of the first operand followed 
+	 * by the second operand's elements.  The assigning form of the operator (+=) does
+	 * not create a new list: the insertElement function is used to add the second
+	 * operand to the front of the first operand.
+	 */
+static function $Plus(lvalue EAny in, rvalue EList in) 
+       returns (EList) {@Operation{"+"}};
+
+/**
+	 * {@Operation ::} Creates a new list consisting of the first operand followed 
+	 * by the second operand's elements.  The assigning form of the operator (::=) does
+	 * not create a new list: the insertElement function is used to add the second
+	 * operand to the front of the first operand.
+	 */
+static function $Concat(value EAny in, rvalue EList in) 
+       returns (EList) {@Operation{"::"}};
+
+/**
+	 * {@Operation +} Creates a new list consisting of the first operand's elements
+	 * followed by the second operand's elements.  The assigning form of the operator
+	 * (+=) does not create a new list: the appendAll function is used to add the 
+	 * second operand's elements to the end of the first operand.
+	 */
+static function $Plus(lvalue EList in, rvalue EList in) 
+       returns (EList) {@Operation{"+"}};
+
+/**
+	 * {@Operation ::} Creates a new list consisting of the first operand's elements
+	 * followed by the second operand's elements.  The assigning form of the operator
+	 * (::=) does not create a new list: the appendAll function is used to add the 
+	 * second operand's elements to the end of the first operand.
+	 */
+static function $Concat(value EList in, rvalue EList in) 
+       returns (EList) {@Operation{"::"}};
+
+/**
+	 * {@Operation []} Returns the element at the specified index.
+	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
+	 */
+static function $Get(value EList in, index EInt in) 
+       returns(EAny) {@Operation{"[]"}};
+	
+/**
+	 * Adds an element to the end of this list.
+	 *
+	 * @param element  the new element.
+	 * @return this list, after the new element has been added.
+	 */
+function appendElement(element EAny in) returns(EList);
+	
+/**
+	 * Adds the elements of the specified list to the end of this list.
+	 *
+	 * @param other  the other list.
+	 * @return this list, after the new elements have been added.
+	 */
+function appendAll(other EList in) returns(EList);
+	
+/**
+	 * Inserts an element into this list at a specified position.  Any elements
+	 * at or beyond the specified index are shifted toward the end.
+	 *
+	 * The index may be any valid position within this list.  It may also be 
+	 * zero, indicating that the new element goes at the front, or it may be one
+	 * more than the current size, indicating that the new element goes at the 
+	 * end (as if appendElement had been called). 
+	 *
+	 * @param element  the new element.
+	 * @param index  where the element should be added.
+	 * @throws InvalidIndexException  if the index is negative or greater than 1 plus the size.
+	 */
+function insertElement(element EAny in, index EInt in);
+	
+/**
+	 * Removes the element at a specified position from this list.  Any elements
+	 * at or beyond the specified index are shifted toward the front.
+	 *
+	 * @param index  where the element should be removed.
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+function removeElement(index EInt in);
+
+/**
+	 * Returns the index of the first ocurrance of the specified value within 
+	 * the list.  The search begins at the specified index and stops at the
+	 * end of the list.
+	 * 
+	 * @param value  the value to find.
+	 * @param index  the index of the element to examine first. 
+	 * @return the index of the value, or 0 if it was not found.
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+function indexOfElement(value EAny in, index EInt in) returns(EInt);
+
+/**
+	 * This is equivalent to indexOfElement(element, 1).
+	 * 
+	 * @param value the value to find.
+	 * @return the index of the value, or 0 if it was not found.
+	 */
+function indexOfElement(value EAny in) returns(EInt);
+	
+/**
+	 * Removes all elements from the list.
+	 */
+function removeAll();
+	
+/**
+	 * Sets the value of an element.
+	 *
+	 * @param value  the value for the specified element.
+	 * @param index  the index of the element to be updated. 
+	 * @throws InvalidIndexException  if the index isn't a valid subscript.
+	 */
+function setElement(value EAny in, index EInt in);
+
+/**
+	 * Returns the current size of the list.
+	 *
+	 * @return the current size of the list.
+	 */
+function getSize() returns(EInt);
+
+/**
+	 * Changes the size of the list.  If the new size is greater than the current
+	 * size, new elements are added at the end of the list.  If the new size is
+	 * smaller than the current size, elements at the end are removed. 
+	 *
+	 * @param size  the new size.
+	 * @throws InvalidSizeException  if the specified size is negative.
+	 */
+function resize(size EInt in);
+
+/**
+	 * Sorts the elements of the list in order from smallest to largest.
+	 *
+	 * @param sortFunction  a function capable of comparing two elements.
+	 * @throws InvocationException when the sort function can't be called.
+	 */
+function sort(sortFunction SortFunction in);
+end
+
+/**
+ * The delegate used by EList.sort() to compare elements.
+ *
+ * @param a  the first value.
+ * @param b  the second value.
+ * @return zero if a == b, a positive number if a &gt; b, or a negative number if a &lt; b.
+ */
+Delegate
+   SortFunction(a any in, b any in) returns (int)
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00088__comments"><!-- --></a>Comments</dt>
+
+<dd>The array has an identity independent of its elements.<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00088__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00088__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00088__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d23670e93">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d23670e96">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00088__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d23670e93 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d23670e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00088__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d23670e93 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d23670e96 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

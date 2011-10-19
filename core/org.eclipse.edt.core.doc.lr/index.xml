@@ -8,7 +8,6 @@
 <topic href="topics/cedt00039.html#cedt00039" title="Delegate classifier overview"/>
 <topic href="topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
 <topic href="topics/cedt00032.html#cedt00032" title="Enumeration classifier overview"/>
-<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
 <topic href="topics/cedt00030.html#cedt00030" title="DataItem classifier overview"/>
 <topic href="topics/cedt00011.html#cedt00011" title="Run units"/>
 <topic href="topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
@@ -22,7 +21,6 @@
 <topic href="topics/cedt00025.html#cedt00025" title="Boxing and unboxing conversions"/>
 <topic href="topics/cedt00033.html#cedt00033" title="Program classifier overview"/>
 <topic href="topics/cedt00019.html#cedt00019" title="Overview of classifiers"/>
-<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
 <topic href="topics/cedt00028.html#cedt00028" title="Classifiers for defining prototype parts"/>
 <topic href="topics/cedt00029.html#cedt00029" title="Class classifier overview"/>
 </entry>
@@ -45,6 +43,9 @@
 <entry keyword="annotations">
 <entry keyword="EventListener">
 <topic href="topics/redt00083.html#redt00083" title="EventListener annotation"/>
+</entry>
+<entry keyword="Resource">
+<topic href="topics/redt00087.html#redt00087" title="Resource annotation"/>
 </entry>
 <entry keyword="XMLArray">
 <topic href="topics/redt00260.html#redt00260" title="XMLArray annotation"/>
@@ -71,6 +72,9 @@
 <topic href="topics/redt00261.html#redt00261" title="XMLValue annotation"/>
 </entry>
 </entry>
+<entry keyword="Any">
+<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+</entry>
 <entry keyword="asin EGL function">
 <topic href="topics/redt00208.html#redt00208" title="MathLib.asin function"/>
 </entry>
@@ -79,6 +83,17 @@
 </entry>
 <entry keyword="atan2 EGL function">
 <topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 function"/>
+</entry>
+<entry keyword="BasicProgram">
+<topic href="topics/redt00102.html#redt00102" title="BasicProgram stereotype"/>
+</entry>
+<entry keyword="BigintAny">
+<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
+</entry>
+<entry keyword="Boolean type">
+<entry keyword="EGL">
+<topic href="topics/redt00176.html#redt00176" title="Boolean and EBoolean types"/>
+</entry>
 </entry>
 <entry keyword="callCmd EGL function">
 <topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
@@ -124,6 +139,11 @@
 <entry keyword="cosh EGL function">
 <topic href="topics/redt00213.html#redt00213" title="MathLib.cosh function"/>
 </entry>
+<entry keyword="Date">
+<entry keyword="EGL type">
+<topic href="topics/redt00052.html#redt00052" title="Date and EDate types"/>
+</entry>
+</entry>
 <entry keyword="date and time types">
 <entry keyword="EGL">
 <topic href="topics/cedt00022.html#cedt00022" title="EGL date-and-time types"/>
@@ -157,11 +177,24 @@
 <topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 </entry>
 </entry>
+<entry keyword="Decimal">
+<entry keyword="EGL type">
+<topic href="topics/redt00059.html#redt00059" title="Decimal and EDecimal types"/>
+</entry>
+</entry>
 <entry keyword="decimals EGL function">
 <topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
 </entry>
+<entry keyword="Dictionary type">
+<entry keyword="EGL">
+<topic href="topics/redt00048.html#redt00048" title="Dictionary and EDictionary types"/>
+</entry>
+</entry>
 <entry keyword="dojo.widgets EGL package">
 <topic href="topics/redt00258.html#redt00258" title="dojo.widgets"/>
+</entry>
+<entry keyword="dynamic types">
+<topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
 </entry>
 <entry keyword="EGL external types">
 <entry keyword="DateTimeLib">
@@ -384,6 +417,11 @@
 <topic href="topics/redt00031.html#redt00031" title="org.eclipse.edt.rui.widgets package"/>
 </entry>
 </entry>
+<entry keyword="EGL stereotypes">
+<entry keyword="BasicProgram">
+<topic href="topics/redt00102.html#redt00102" title="BasicProgram stereotype"/>
+</entry>
+</entry>
 <entry keyword="EGL system functions">
 <entry keyword="DateTimeLib">
 <topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
@@ -397,22 +435,75 @@
 <topic href="topics/redt00073.html#redt00073" title="HTTPLib external type"/>
 </entry>
 </entry>
+<entry keyword="EGL type">
+<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
+<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
+<topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
+<topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
+<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
+<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
+<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
+<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
+<topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
+<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+</entry>
 <entry keyword="EGL types">
+<entry keyword="Any">
+<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+</entry>
+<entry keyword="Bigint">
+<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
+</entry>
+<entry keyword="Boolean">
+<topic href="topics/redt00176.html#redt00176" title="Boolean and EBoolean types"/>
+</entry>
 <entry keyword="character">
 <topic href="topics/cedt00020.html#cedt00020" title="EGL character types"/>
+</entry>
+<entry keyword="Date">
+<topic href="topics/redt00052.html#redt00052" title="Date and EDate types"/>
 </entry>
 <entry keyword="date and time">
 <topic href="topics/cedt00022.html#cedt00022" title="EGL date-and-time types"/>
 </entry>
+<entry keyword="Decimal">
+<topic href="topics/redt00059.html#redt00059" title="Decimal and EDecimal types"/>
+</entry>
+<entry keyword="Dictionary">
+<topic href="topics/redt00048.html#redt00048" title="Dictionary and EDictionary types"/>
+</entry>
+<entry keyword="Float">
+<topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
+</entry>
+<entry keyword="Int">
+<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
+</entry>
 <entry keyword="large object">
 <topic href="topics/cedt00023.html#cedt00023" title="EGL large-object types"/>
 </entry>
+<entry keyword="List">
+<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
+</entry>
 <entry keyword="miscellaneous">
-<topic href="topics/redt00176.html#redt00176" title="BOOLEAN type"/>
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
+</entry>
+<entry keyword="NullType">
+<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
+</entry>
+<entry keyword="Number">
+<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
 </entry>
 <entry keyword="numeric">
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
+</entry>
+<entry keyword="Smallfloat">
+<topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
+</entry>
+<entry keyword="Smallint">
+<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
+</entry>
+<entry keyword="String">
+<topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
 </entry>
 </entry>
 <entry keyword="eglx.http EGL package">
@@ -420,6 +511,11 @@
 </entry>
 <entry keyword="eglx.json EGL package">
 <topic href="topics/redt00035.html#redt00035" title="eglx.json package"/>
+</entry>
+<entry keyword="eglx.lang">
+<entry keyword="Exception Record types">
+<topic href="topics/redt00080.html#redt00080" title="Exception Record types in eglx.lang"/>
+</entry>
 </entry>
 <entry keyword="eglx.lang EGL package">
 <topic href="topics/redt00032.html#redt00032" title="eglx.lang package"/>
@@ -444,8 +540,16 @@
 <entry keyword="EventListener EGL annotation">
 <topic href="topics/redt00083.html#redt00083" title="EventListener annotation"/>
 </entry>
+<entry keyword="Exception Record types">
+<entry keyword=" eglx.lang">
+<topic href="topics/redt00080.html#redt00080" title="Exception Record types in eglx.lang"/>
+</entry>
+</entry>
 <entry keyword="exp EGL function">
 <topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
+</entry>
+<entry keyword="Float">
+<topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
 </entry>
 <entry keyword="floor EGL function">
 <topic href="topics/redt00216.html#redt00216" title="MathLib.floor function"/>
@@ -493,6 +597,9 @@
 <topic href="topics/redt00073.html#redt00073" title="HTTPLib external type"/>
 </entry>
 </entry>
+<entry keyword="Int">
+<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
+</entry>
 <entry keyword="JSON strings">
 <entry keyword="copying to EGL">
 <topic href="topics/redt00253.html#redt00253" title="Correspondence between a JSON string and an EGL variable"/>
@@ -516,6 +623,9 @@
 </entry>
 <entry keyword="ldexp EGL function">
 <topic href="topics/redt00218.html#redt00218" title="MathLib.ldexp function"/>
+</entry>
+<entry keyword="List">
+<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
 </entry>
 <entry keyword="log EGL function">
 <topic href="topics/redt00219.html#redt00219" title="MathLib.log function"/>
@@ -623,12 +733,17 @@
 </entry>
 <entry keyword="miscellaneous types">
 <entry keyword="EGL">
-<topic href="topics/redt00176.html#redt00176" title="BOOLEAN type"/>
 <topic href="topics/cedt00024.html#cedt00024" title="BOOLEAN type"/>
 </entry>
 </entry>
 <entry keyword="modf EGL function">
 <topic href="topics/redt00223.html#redt00223" title="MathLib.modf function"/>
+</entry>
+<entry keyword="NullType">
+<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
+</entry>
+<entry keyword="Number">
+<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
 </entry>
 <entry keyword="numeric types">
 <entry keyword="EGL">
@@ -647,8 +762,16 @@
 <entry keyword="precision EGL function">
 <topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
 </entry>
+<entry keyword="Program classifier">
+<entry keyword="BasicProgram stereotype">
+<topic href="topics/redt00102.html#redt00102" title="BasicProgram stereotype"/>
+</entry>
+</entry>
 <entry keyword="random EGL function">
 <topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
+</entry>
+<entry keyword="Resource EGL annotation">
+<topic href="topics/redt00087.html#redt00087" title="Resource annotation"/>
 </entry>
 <entry keyword="REST services">
 <entry keyword="Copying JSON strings">
@@ -663,6 +786,13 @@
 </entry>
 <entry keyword="round EGL function">
 <topic href="topics/redt00227.html#redt00227" title="MathLib.round function"/>
+</entry>
+<entry keyword="runtime">
+<entry keyword="variables">
+<entry keyword="accessing">
+<topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
+</entry>
+</entry>
 </entry>
 <entry keyword="ServiceLib EGL external type">
 <entry keyword="completeBind">
@@ -687,6 +817,12 @@
 <entry keyword="sinh EGL function">
 <topic href="topics/redt00229.html#redt00229" title="MathLib.sinh function"/>
 </entry>
+<entry keyword="Smallfloat">
+<topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
+</entry>
+<entry keyword="Smallint">
+<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
+</entry>
 <entry keyword="spaces EGL function">
 <topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
 </entry>
@@ -695,6 +831,9 @@
 </entry>
 <entry keyword="startCmd EGL function">
 <topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd function"/>
+</entry>
+<entry keyword="String">
+<topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
 </entry>
 <entry keyword="StringLib EGL external type">
 <entry keyword="format">
@@ -761,6 +900,16 @@
 </entry>
 <entry keyword="tanh EGL function">
 <topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
+</entry>
+<entry keyword="types">
+<entry keyword="dynamic runtime checks">
+<topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
+</entry>
+</entry>
+<entry keyword="variables">
+<entry keyword="dynamic runtime checks">
+<topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
+</entry>
 </entry>
 <entry keyword="wait EGL function">
 <topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>

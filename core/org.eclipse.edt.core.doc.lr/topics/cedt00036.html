@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Handler classifier overview"></meta>
-<meta name="abstract" content="The capabilities of the Handler classifier are made available when you code a handler. The part defines a series of interactions with the user or with other EGL logic, as necessary to support one or another user interface technology. Different kinds of handlers have different structure and use."></meta>
-<meta name="description" content="The capabilities of the Handler classifier are made available when you code a handler. The part defines a series of interactions with the user or with other EGL logic, as necessary to support one or another user interface technology. Different kinds of handlers have different structure and use."></meta>
+<meta name="abstract" content="The capabilities of the Handler classifier are made available when you code a handler. The type defines a series of interactions with the user or with other EGL logic, as necessary to support one or another user interface technology. Different kinds of handlers have different structure and use."></meta>
+<meta name="description" content="The capabilities of the Handler classifier are made available when you code a handler. The type defines a series of interactions with the user or with other EGL logic, as necessary to support one or another user interface technology. Different kinds of handlers have different structure and use."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00019.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -25,21 +25,21 @@
 
 
 <div><p>The capabilities of the Handler classifier are made available
-when you code a <dfn class="term">handler</dfn>. The part defines a series of
+when you code a <dfn class="term">handler</dfn>. The type defines a series of
 interactions with the user or with other EGL logic, as necessary to
 support one or another user interface technology. Different kinds
 of handlers have different structure and use.</p>
 
 <p>The next table lists the stereotypes that are available for a Handler
-part.</p>
+type.</p>
 
 <div class="p">
 <div class="tablenoborder"><a name="cedt00036__stereo_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00036__stereo_table" frame="border" border="1" rules="all">
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="22.613065326633166%" id="d6005e42">Stereotype</th>
+<th class="cellrowborder" valign="bottom" width="22.613065326633166%" id="d6207e42">Stereotype</th>
 
-<th class="cellrowborder" valign="bottom" width="77.38693467336684%" id="d6005e45">Purpose</th>
+<th class="cellrowborder" valign="bottom" width="77.38693467336684%" id="d6207e45">Purpose</th>
 
 </tr>
 
@@ -48,11 +48,13 @@ part.</p>
 <tbody>
 <anchor id="stereo_rows_start"></anchor>
 <tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6005e42 ">none specified</td>
+<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6207e42 ">none specified</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6005e45 ">To build an EGL <dfn class="term">text report</dfn>, which
-is a character-based output that you can develop quickly. <div class="p">An EGL
-program or other logic might act as follows:<ul>
+<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6207e45 ">To provide an object that might include both
+fields and functions.<div class="p">You can used the handler to build an EGL <dfn class="term">text
+report</dfn>, which is a character-based output that you can develop
+quickly. In this case, an EGL program or other logic might act as
+follows:<ul>
 <li>Declare a variable based on the handler.</li>
 
 <li>Use the variable to invoke a set of functions, one after the next,
@@ -66,15 +68,15 @@ so as to structure the report and to embed business data into it.</li>
 
 <anchor id="stereo_rows_post_basichandler"></anchor>
 <tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6005e42 ">BIRTHandler</td>
+<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6207e42 ">BIRTHandler</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6005e45 ">To customize a Business Intelligence and Reporting
+<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6207e45 ">To customize a Business Intelligence and Reporting
 Tools (BIRT) report, which is a graphically sophisticated output whose
 structure is based on a pre-specified design file. For details on
 BIRT, see <a href="http://www.eclipse.org/birt" target="_blank">http://www.eclipse.org/birt</a>.<div class="p">An
 EGL program or other logic might act as follows:<ul>
 <li>Declare a handler; that is, a variable that is based on the Handler
-part.</li>
+type.</li>
 
 <li>Use EGL syntax to create a BIRT report engine (a Java object) and to provide to that engine a
 reference to the design file and to the handler.</li>
@@ -90,10 +92,12 @@ reference to the design file and to the handler.</li>
 </tr>
 
 <anchor id="stereo_rows_post_birthandler"></anchor>
+<anchor id="stereo_rows_post_birthandler"></anchor>
+<anchor id="stereo_rows_post_entity"></anchor>
 <tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6005e42 ">RUIHandler</td>
+<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6207e42 ">RUIHandler</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6005e45 ">To provide client-side web applications.<p>In brief, the
+<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6207e45 ">To provide client-side web applications.<p>In brief, the
 handler places EGL and Dojo widgets on a web page and responds to
 events such as a user's button click. The technology supports
 data validation, access of remote services, and quick update of sections
@@ -109,9 +113,9 @@ second.</p>
 
 <anchor id="stereo_rows_post_ruihandler"></anchor>
 <tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6005e42 ">RUIWidget</td>
+<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6207e42 ">RUIWidget</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6005e45 ">To define a new widget for use by other EGL
+<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6207e45 ">To define a new widget for use by other EGL
 Rich UI developers.</td>
 
 </tr>
@@ -125,11 +129,9 @@ Rich UI developers.</td>
 
 </div>
 
+<anchor id="related_links"></anchor>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
 
 </body>
 </html>

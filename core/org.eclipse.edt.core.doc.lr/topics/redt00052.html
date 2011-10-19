@@ -5,28 +5,185 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="DATE type"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Date and EDate types"></meta>
+<meta name="abstract" content="The EGL Date type is a value type that lets you create a date value. In Eclipse IDE for EGL Developers, the type definition for Date is EDate."></meta>
+<meta name="description" content="The EGL Date type is a value type that lets you create a date value. In Eclipse IDE for EGL Developers, the type definition for Date is EDate."></meta>
+<meta name="DC.subject" content="EGL types, Date, EGL type"></meta>
+<meta name="keywords" content="EGL types, Date, EGL type"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00052"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>DATE type</title>
+<title>Date and EDate types</title>
 </head>
 <body id="redt00052"><a name="redt00052"><!-- --></a>
 
 
-<h1 class="topictitle1">DATE type</h1>
+<h1 class="topictitle1">Date and EDate types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>The EGL Date type is a value type that lets you create
+a date value. In Eclipse IDE for EGL Developers, the type definition
+for Date is EDate.</p>
+
+<a name="redt00052__main"><!-- --></a><dl id="redt00052__main">
+<dt class="dlterm"><a name="redt00052__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00052__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00052__detail"><!-- --></a>Type detail</dt>
+
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available and that the specified
+function name is not. For example, use “==” to compare two values,
+not “$EQ”.<pre class="codeblock">/**
+ * A date stores a day, month, and year.
+ */
+externalType EDate extends AnyValue type ClassType
+/**
+	 * {@Operation &lt;} Compares two dates.
+	 */
+static function $LT(lvalue EDate in, rvalue EDate in) 
+       returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+	 * {@Operation &gt;} Compares two dates.
+	 */
+static function $GT(lvalue EDate in, rvalue EDate in) 
+       returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+	 * {@Operation &lt;=} Compares two dates.
+*/
+static function $LTE(lvalue EDate in, rvalue EDate in) 
+       returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+	 * {@Operation &gt;=} Compares two dates.
+*/
+static function $GTE(lvalue EDate in, rvalue EDate in) 
+       returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+	 * {@Operation ==} Compares two dates.
+*/
+static function $EQ(lvalue EDate in, rvalue EDate in) 
+       returns(EBoolean) {@Operation{"=="}};
+
+/**
+ * {@Operation !=} Compares two dates.
+*/
+static function $NEQ(lvalue EDate in, rvalue EDate in) 
+       returns(EBoolean) {@Operation{"!="}};
+
+/**
+	 * {@Operation narrow} Converts a string to a date.  The string is parsed
+	 * by searching for the month, then the day, then the year.  One or two digits
+	 * can be specified for the month and day.  The year requires a minimum of one
+	 * digit and a maximum of at least four digits (in other words, some implementations
+	 * can support years beyond 9999).  One separator character is required between
+	 * the month and day, and another between the day and year.  The separator 
+	 * character can be anything, even a digit (though that's probably a bad idea)
+	 * and the two separator characters don't have to be identical.  
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a date.
+	 */
+static function asDate(value EString in) 
+       returns (EDate) {@Operation{"narrow"}};
+	
+	// this replaces date-time math: date - date = int
+	/**
+	 * Returns the number of days between two dates.  The result is positive when
+	 * this date is later than the other date, and negative when the other date
+	 * is later than this date.
+	 *
+	 * @param other  the other date.
+	 * @return how many days the two days differ.
+	 */
+function daysDifferent(other EDate in) returns(EInt);
+
+// this replaces date-time math: number + date = date, data +/- number = date
+/**
+	 * Returns a new date representing this date plus a given number of days.
+	 * Use negative numbers to subtract days instead of adding them. 
+	 *
+	 * @param days  the number of days to add.
+	 * @return a new date.
+	 */
+function addDays(days EInt in) returns(EDate);
+
+/**
+	 * Creates a timestamp from a date.
+	 *
+	 * @param timeSpanPattern  the desired pattern for the timestamp.
+	 * @return a new timestamp.
+*/
+function extend(timeSpanPattern EString in) returns(ETimestamp);
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00052__comments"><!-- --></a>Comments</dt>
+
+<dd> .<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00052__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00052__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00052__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d14000e93">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d14000e96">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00052__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d14000e93 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14000e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00052__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d14000e93 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d14000e96 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

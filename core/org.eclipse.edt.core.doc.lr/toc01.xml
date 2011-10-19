@@ -36,13 +36,12 @@
          <topic label="ForEach statement" href="topics/redt00018.html"/>
          <topic label="FreeSQL statement" href="topics/redt00029.html"/>
          <topic label="Get statement" href="topics/redt00024.html"/>
+         <topic label="Prepare statement" href="topics/redt00027.html"/>
          <topic label="Replace statement" href="topics/redt00025.html"/>
          <topic label="Transfer statement" href="topics/redt00010.html"/>
          <topic label="Use statement" href="topics/redt00005.html"/>
          <topic label="While statement" href="topics/redt00016.html"/>
       </topic>
-      <topic label="Types table" href="topics/redt00033.html"/>
-      <topic label="Types table" href="topics/redt00033.html"/>
    </topic>
    <topic label="Packages">
       <topic label="dojo.widgets" href="topics/redt00258.html">
@@ -98,9 +97,11 @@
       </topic>
       <topic label="eglx.lang package" href="topics/redt00032.html">
          <topic label="Any and EAny types" href="topics/redt00050.html"/>
+         <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
          <topic label="Bigint and EBigint types" href="topics/redt00058.html"/>
+         <topic label="Boolean and EBoolean types" href="topics/redt00176.html"/>
          <topic label="Constants library" href="topics/redt00240.html"/>
-         <topic label="EGLProperty" href="topics/redt00262.html"/>
+         <topic label="Date and EDate types" href="topics/redt00052.html"/>
          <topic label="DateTimeLib external type" href="topics/redt00069.html">
             <topic label="DateTimeLib.dateFromGregorian system function"
                    href="topics/redt00244.html"/>
@@ -108,7 +109,14 @@
             <topic label="DateTimeLib.dateFromJulian system function" href="topics/redt00241.html"/>
             <topic label="DateTimeLib.mdy system function" href="topics/redt00243.html"/>
          </topic>
+         <topic label="Decimal and EDecimal types" href="topics/redt00059.html"/>
+         <topic label="Dictionary and EDictionary types" href="topics/redt00048.html"/>
+         <topic label="EGLProperty" href="topics/redt00262.html"/>
          <topic label="EventListener annotation" href="topics/redt00083.html"/>
+         <topic label="Exception Record types in eglx.lang" href="topics/redt00080.html"/>
+         <topic label="Float and EFloat types" href="topics/redt00060.html"/>
+         <topic label="Int and EInt types" href="topics/redt00057.html"/>
+         <topic label="List and EList types" href="topics/redt00088.html"/>
          <topic label="MathLib external type" href="topics/redt00067.html">
             <topic label="MathLib.abs function" href="topics/redt00206.html"/>
             <topic label="MathLib.acos function" href="topics/redt00207.html"/>
@@ -138,6 +146,12 @@
             <topic label="MathLib.tan function" href="topics/redt00231.html"/>
             <topic label="MathLib.tanh function" href="topics/redt00232.html"/>
          </topic>
+         <topic label="NullType external type" href="topics/redt00263.html"/>
+         <topic label="Number and ENumber type" href="topics/redt00062.html"/>
+         <topic label="Resource annotation" href="topics/redt00087.html"/>
+         <topic label="Smallfloat and ESmallfloat types" href="topics/redt00061.html"/>
+         <topic label="Smallint and ESmallint types" href="topics/redt00056.html"/>
+         <topic label="String and EString types" href="topics/redt00051.html"/>
          <topic label="StringLib external type" href="topics/redt00068.html">
             <topic label="StringLib.format function" href="topics/redt00233.html"/>
             <topic label="StringLib.fromCharCode function" href="topics/redt00236.html"/>
@@ -157,6 +171,7 @@
             <topic label="SysLib.writeStdError function" href="topics/redt00203.html"/>
             <topic label="SysLib.writeStdOut function" href="topics/redt00204.html"/>
          </topic>
+         <topic label="TIMESTAMP type" href="topics/redt00053.html"/>
       </topic>
       <topic label="eglx.rbd package and its StrLib library" href="topics/redt00239.html"/>
       <topic label="eglx.services package" href="topics/redt00065.html">
@@ -213,10 +228,8 @@
    </topic>
    <topic label="Supplemental details">
       <topic label="Action statements" href="topics/redt00026.html"/>
-      <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
       <topic label="BIRTHandler stereotype" href="topics/redt00084.html"/>
       <topic label="BLOB type" href="topics/redt00054.html"/>
-      <topic label="BOOLEAN type" href="topics/redt00176.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
       <topic label="CLOB type" href="topics/redt00055.html"/>
       <topic label="Column annotation" href="topics/redt00174.html"/>
@@ -225,20 +238,12 @@
       <topic label="Correspondence between an XML string and an EGL variable"
              href="topics/redt00254.html"/>
       <topic label="DataSource type" href="topics/redt00164.html"/>
-      <topic label="DATE type" href="topics/redt00052.html"/>
-      <topic label="DECIMAL type" href="topics/redt00059.html"/>
-      <topic label="Delegate classifier detail" href="topics/redt00038.html"/>
-      <topic label="Dictionary part" href="topics/redt00048.html"/>
+      <topic label="Dynamic types and access" href="topics/redt00264.html"/>
       <topic label="Entity stereotype" href="topics/redt00081.html"/>
-      <topic label="Enumeration classifier detail" href="topics/redt00046.html"/>
       <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
-      <topic label="Exception stereotype" href="topics/redt00079.html">
-         <topic label="Exception records provided in EDT" href="topics/redt00080.html"/>
-      </topic>
+      <topic label="Exception stereotype" href="topics/redt00079.html"/>
       <topic label="Exit statement" href="topics/redt00019.html"/>
       <topic label="Expressions" href="topics/redt00095.html"/>
-      <topic label="ExternalType classifier detail" href="topics/redt00041.html"/>
-      <topic label="FLOAT type" href="topics/redt00060.html"/>
       <topic label="For statement" href="topics/redt00017.html"/>
       <topic label="Function invocation statement" href="topics/redt00008.html"/>
       <topic label="Function syntax" href="topics/redt00036.html"/>
@@ -248,28 +253,16 @@
       <topic label="ID annotation" href="topics/redt00166.html"/>
       <topic label="If statement" href="topics/redt00015.html"/>
       <topic label="In operator" href="topics/redt00100.html"/>
-      <topic label="Interface classifier detail" href="topics/redt00045.html"/>
-      <topic label="INT type" href="topics/redt00057.html"/>
-      <topic label="JavaObject stereotype" href="topics/redt00078.html"/>
-      <topic label="JavaScriptObject stereotype" href="topics/redt00077.html"/>
-      <topic label="JSONLib system library" href="topics/redt00072.html"/>
-      <topic label="JSONName annotation" href="topics/redt00088.html"/>
       <topic label="Label statement" href="topics/redt00009.html"/>
-      <topic label="Library classifier detail" href="topics/redt00043.html"/>
       <topic label="Like operator" href="topics/redt00098.html"/>
       <topic label="List part" href="topics/redt00049.html"/>
       <topic label="Literals" href="topics/redt00096.html"/>
       <topic label="Logical unit of work" href="topics/cedt00042.html"/>
-      <topic label="ManyToMany annotation" href="topics/redt00168.html"/>
-      <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
       <topic label="Matches operator" href="topics/redt00099.html"/>
       <topic label="Menu widget" href="topics/redt00181.html"/>
       <topic label="Move statement" href="topics/redt00006.html"/>
       <topic label="Naming conventions" href="topics/redt00106.html"/>
       <topic label="NativeType stereotype" href="topics/redt00085.html"/>
-      <topic label="NUMBER type" href="topics/redt00062.html"/>
-      <topic label="OneToMany annotation" href="topics/redt00170.html"/>
-      <topic label="OneToOne annotation" href="topics/redt00171.html"/>
       <topic label="Open statement" href="topics/redt00028.html"/>
       <topic label="Operators and precedence" href="topics/redt00097.html"/>
       <topic label="org.eclipse.edt.gen.java package" href="topics/redt00194.html"/>
@@ -279,12 +272,8 @@
              href="topics/redt00196.html"/>
       <topic label="Pattern characters used to format non-string values to strings"
              href="topics/redt00238.html"/>
-      <topic label="Prepare statement" href="topics/redt00027.html"/>
-      <topic label="Program classifier detail" href="topics/redt00047.html"/>
       <topic label="Property annotation" href="topics/redt00076.html"/>
-      <topic label="Record classifier detail" href="topics/redt00040.html"/>
       <topic label="Reserved words" href="topics/redt00103.html"/>
-      <topic label="Resource annotation" href="topics/redt00087.html"/>
       <topic label="Return statement" href="topics/redt00007.html"/>
       <topic label="Run units" href="topics/cedt00011.html"/>
       <topic label="RUIHandler stereotype" href="topics/redt00082.html"/>
@@ -294,19 +283,14 @@
       <topic label="SecondaryTables annotation" href="topics/redt00173.html"/>
       <topic label="Service classifier detail" href="topics/redt00044.html"/>
       <topic label="Set-values blocks" href="topics/redt00105.html"/>
-      <topic label="SMALLINT type" href="topics/redt00056.html"/>
-      <topic label="SMALLFLOAT type" href="topics/redt00061.html"/>
       <topic label="Special characters" href="topics/redt00104.html"/>
       <topic label="SQLDataSource type" href="topics/redt00162.html"/>
       <topic label="SQLLib system library" href="topics/redt00075.html"/>
       <topic label="SQLResultSet type" href="topics/redt00163.html"/>
       <topic label="SQLStatement type" href="topics/redt00177.html"/>
-      <topic label="STRING type" href="topics/redt00051.html"/>
       <topic label="Table annotation" href="topics/redt00172.html"/>
       <topic label="this keyword" href="topics/redt00002.html"/>
       <topic label="Throw statement" href="topics/redt00011.html"/>
-      <topic label="TIME type" href="topics/redt00187.html"/>
-      <topic label="TIMESTAMP type" href="topics/redt00053.html"/>
       <topic label="Transient annotation" href="topics/redt00167.html"/>
       <topic label="Tree widget" href="topics/redt00120.html"/>
       <topic label="Try blocks" href="topics/redt00013.html"/>

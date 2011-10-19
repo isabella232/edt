@@ -5,29 +5,290 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Dictionary part"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="DC.Title" content="Dictionary and EDictionary types"></meta>
+<meta name="abstract" content="The EGL Dictionary type is a reference type that lets you create an instance that is composed of a set of keys and their related values. In Eclipse IDE for EGL Developers, the type definition for Dictionary is EDictionary."></meta>
+<meta name="description" content="The EGL Dictionary type is a reference type that lets you create an instance that is composed of a set of keys and their related values. In Eclipse IDE for EGL Developers, the type definition for Dictionary is EDictionary."></meta>
+<meta name="DC.subject" content="EGL types, Dictionary, Dictionary type, EGL"></meta>
+<meta name="keywords" content="EGL types, Dictionary, Dictionary type, EGL"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00048"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Dictionary part</title>
+<title>Dictionary and EDictionary types</title>
 </head>
 <body id="redt00048"><a name="redt00048"><!-- --></a>
 
 
-<h1 class="topictitle1">Dictionary part</h1>
+<h1 class="topictitle1">Dictionary and EDictionary types</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div><p>The EGL Dictionary type is a reference type that lets you
+create an instance that is composed of a set of keys and their related
+values. In Eclipse IDE for EGL Developers, the type definition for
+Dictionary is EDictionary.</p>
+
+<a name="redt00048__main"><!-- --></a><dl id="redt00048__main">
+<dt class="dlterm"><a name="redt00048__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00048__use"><!-- --></a>Example use</dt>
+
+<dd><div class="p">Here is a dictionary declaration:<pre class="codeblock">myRef Dictionary 
+{
+   ID        = 5,
+   lastName  = "Twain",
+   firstName = "Mark"
+};</pre>
+</div>
+<p>When you include entries in the declaration,
+each key name is an EGL identifier that must be consistent with EGL
+naming conventions. When you add entries at run time, you have greater
+flexibility; see "Dynamic types and dynamic access."</p>
+<div class="p">The following
+assignments that add new key/value pairs to the dictionary:<pre class="codeblock">myRef.age = 30;
+myRef["Credit"] = 700;</pre>
+</div>
+<div class="p">If you attempt to assign
+a key that already exists, you override the existing key/value entry.
+The following assignment is valid and replaces "Twain" with "Clemens": <pre class="codeblock">myRef.lastname = "Clemens";</pre>
+</div>
+<div class="p">You
+can also use assignments to retrieve data: <pre class="codeblock">lastname STRING
+age, credit INT;
+
+lastname = myRef.lastname; 
+age = myRef["age"];
+credit = myRef.credit;</pre>
+</div>
+<p>The value in a key/value
+entry is ANY type, so you can put different kinds of information into
+a single dictionary. You can put any value into a dictionary entry. </p>
+<div class="p">Adding
+a variable to a dictionary assigns a copy of the variable. Consider
+the following Record type: <pre class="codeblock">Record ExampleRecord
+   x int;
+end
+</pre>
+</div>
+<p>The next example places an <samp class="codeph">ExampleRecord</samp> variable
+into the dictionary, then changes the value of the original variable:</p>
+<div class="p"><pre class="codeblock">testValue int;
+
+myRecord ExampleRecord;
+
+// sets a variable value and places
+// a copy of the variable into the dictionary.
+myRecord.x = 4; 
+myRef Dictionary {
+    theRecord = myRecord
+};
+	
+// Places a new value in the original record.
+myRecord.x = 700;
+
+// Accesses the dictionary's copy of the record, 
+// assigning 4 to testValue.
+testValue = myRef.theRecord.x;
+</pre>
+</div>
+<div class="p">Assigning one dictionary to another replaces the
+target content with the source content and overrides the fields of
+the target dictionary. For example, the conditional statement in the
+following code is true:<pre class="codeblock">  myRef Dictionary { age = 30 };
+  newRef Dictionary { age = 50 };
+  newRef = myRef;
+
+  // resolves to true
+  if (newRef.age == 30)
+    ;
+  end
+</pre>
+</div>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00048__detail"><!-- --></a>Type detail</dt>
+
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available and that the specified
+function name is not. For example, use “==” to compare two values,
+not “$EQ”. Two exceptions are the widen and narrow operations, which
+are invoked automatically during data conversions. <pre class="codeblock">/**
+ * An EDictionary, the class for EGL's dictionary type, stores named values.
+ * The name of a value -- its key -- is used to access that value.  The keys are
+ * strings and the values are of type Any.
+ *
+ * Two annotations are commonly used on dictionaries.  CaseSensitive tells the
+ * dictionary if its keys are case-sensitive.  The default is false.  Ordering
+ * determines how the getKeys and getValues functions populate the lists they 
+ * return.  Its value comes from the OrderingKind enumeration.  byKey means the 
+ * elements of those lists are in alphabetical order of the keys.  byInsertion
+ * means the elements of those lists are in the order that keys were added to
+ * the dictionary.  And none (the default) means the elements of those lists 
+ * may be in any order whatsoever.
+ *
+ */
+externalType EDictionary extends EAny type ClassType
+
+	/**
+	 * {@Operation ['} Returns the value with the given key.
+	 * @throws DynamicAccessException  if there's no key with the given name.
+	 */
+static function $Lookup(dict EDictionary in, key EString in) 
+       returns(EAny) {@Operation{"['"}};
+
+	/**
+	 * Default constructor
+	 */
+	constructor();
+
+	/**
+	 * Constructor used to set the value of case sensitivity and ordering
+	 *
+	 * @param caseSensitive  set if the dictionary is case sensitive
+	 * @param ordering  set the order maintained in the dictionary.
+	 */
+	constructor(caseSensitive boolean in, ordering OrderingKind in);
+
+	/**
+	 * Tells if there's a value stored with the given key.
+	 *
+	 * @param key  the key.
+	 * @return true if the key is in this dictionary.
+	 */
+	function containsKey(key EString in) returns(EBoolean);
+	
+	/**
+	 * Returns a list containing all of the keys, in the order specified by
+	 * the ordering annotation.
+	 *
+	 * @return the keys.
+	 */
+	function getKeys() returns(EString[]);
+	
+	/**
+	 * Returns a list containing all of the values, in the order specified by
+	 * the ordering annotation.
+	 *
+	 * @return the values.
+	 */
+	function getValues() returns(EAny[]);
+
+	/**
+	 * Puts all of the key-value pairs from one dictionary into this dictionary.
+	 *
+	 * @param other  the source of the new key-value pairs.
+	 */
+	function insertAll(other EDictionary in);
+
+	/**
+	 * Removes all of the key-value pairs from this dictionary.
+	 */
+	function removeAll();
+
+	/**
+	 * Removes the key-value pair which uses the specified key.
+	 *
+	 * @param key  the key.
+	 * @throws DynamicAccessException  if there's no key-value pair with the given key.
+	 */
+	function removeElement(key EString in);
+	
+	/**
+	 * Returns the number of key-value pairs in this dictionary.
+	 *
+	 * @return the size.
+	 */
+	function size() returns( EInt );
+
+	/**
+	 * Returns true if the dictionary is case sensitive.
+	 *
+	 * @return the case sensitivity.
+	 */
+	function getCaseSensitive() returns( EBoolean );
+
+	/**
+	 * Returns the order maintained in the dictionry.
+	 *
+	 * @return OrderingKind.
+	 */
+	function getOrdering() returns( OrderingKind );
+end
+
+
+/**
+ * OrderingKind provides values for the Ordering annotation.  See the
+ * documentation of EDictionary for more information.
+ */
+enumeration OrderingKind
+   byKey = 1,
+   byInsertion = 2,
+   none = 3
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00048__comments"><!-- --></a>Comments</dt>
+
+<dd><anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00048__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00048__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00048__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d13015e129">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d13015e132">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00048__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d13015e129 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d13015e132 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00048__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d13015e129 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d13015e132 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
 
+<div>
+<div class="familylinks">
+</div>
+</div>
 
 </body>
 </html>
