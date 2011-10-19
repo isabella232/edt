@@ -129,10 +129,10 @@ library sql
 		get basic from ds using a; //0
 		get basic from ds with #sql{}; //0
 
-		get dict from ds using a; //0
+		get dict from ds using a; //1 - dictionary not yet supported
 		get array from ds using a; //0
 		get invalidArray from ds using a; //1
-		get dict from ds into a; //1 INTO not allowed
+		get array from ds into a; //1 INTO not allowed
 	end
 	
 	function validateAdd()
@@ -190,7 +190,7 @@ library sql
 		delete basic from ds with a; //0 
 		delete basic from ds with #sql{}; //0
 		delete basic from ds using a; //0
-		delete dict from ds using a; //0
+		delete dict from ds using a; //1 - dictionary not yet supported
 		delete array from ds using a; //0
 		delete invalidArray from ds using a; //1
 		delete parent from ds for a; //1 FOR is not an entity
@@ -209,7 +209,7 @@ library sql
 		replace a to ds; //1 target not data expr
 		replace parent.id to ds; //0
 		replace multi to ds; //1 no multiple tables
-		replace dict to ds with a; //0
+		replace dict to ds with a; //1 - dictionary not yet supported
 		replace array to ds with a; //0
 		replace invalidArray to ds using a; //1
 	end
