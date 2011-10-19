@@ -75,8 +75,9 @@ public class MemberNameTemplate extends JavaTemplate {
 	public void genMemberName(MemberName expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		// check to see if we are copying boxed function parameters
-		if ( expr.getMember() instanceof FunctionParameter
-				&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType( (FunctionParameter)expr.getMember(), ctx ) )
+		if (expr.getMember() instanceof FunctionParameter && 
+			org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType( (FunctionParameter)expr.getMember(), ctx ) &&
+			!((FunctionParameter)expr.getMember()).isConst())
 		{
 			out.print(".ezeUnbox()");
 		}
