@@ -76,6 +76,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 	private static final String PROPERTY_CURRENCYSYMBOL = MVC_PACKAGE + "currencySymbol";
 	private static final String PROPERTY_NUMERICSEPARATOR = MVC_PACKAGE + "numericSeparator";
 	private static final Object MVC_ANNOTATION = MVC_PACKAGE + "MVC";
+	private static final String MVC_VIEW_ANNOTATION = "eglx.ui.rui.MVCView";
 	private static final String PROPERTY_VALIDATIONPROPERTIESLIBRARY = "validationPropertiesLibrary";
 
 
@@ -196,7 +197,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				
 				//use mvcview annotation to determine getters and setters method of widgets.
 				Type widgetView = view.getType();
-				Annotation annoMvcView = widgetView.getAnnotation("MVCView");
+				Annotation annoMvcView = widgetView.getAnnotation(MVC_VIEW_ANNOTATION);
 				Name PublishMethodName = null;
 				Name retrieveViewHelperMethodName = null;
 				Name retrieveValidStateHelperMethodName = null;
@@ -218,7 +219,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 
 				if(null != annoMvcView && null != PublishMethodName){
 					out.print(".");
-					ctx.invoke(genExpression, PublishMethodName, ctx, out);  // NOGO sbg Verify with test;  may need to alias the qualifier
+					ctx.invoke(genName, PublishMethodName.getNamedElement(), ctx, out);  // NOGO sbg Verify with test;  may need to alias the qualifier
 //					PublishMethodName.getMember().accept( context.getAliaser() );
 					out.print("(s);" );
 				}else{
@@ -240,7 +241,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				//else use getText
 				if(null != annoMvcView && null != retrieveViewHelperMethodName){
 					out.print(".");
-					ctx.invoke(genExpression, retrieveViewHelperMethodName, ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     retrieveViewHelperMethodName.getMember().accept( context.getAliaser() );
+					ctx.invoke(genName, retrieveViewHelperMethodName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     retrieveViewHelperMethodName.getMember().accept( context.getAliaser() );
 					out.print("();");
 				}else{
 					out.print(".getText();");
