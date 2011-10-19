@@ -374,6 +374,37 @@ public class TemplateContext extends HashMap<Object, Object> {
 					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
 				case 9:
 					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+				case 10:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+				case 11:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+				case 12:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11]);
+				case 13:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12]);
+				case 14:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13]);
+				case 15:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14]);
+				case 16:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14], args[15]);
+				case 17:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14], args[15], args[16]);
+				case 18:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14], args[15], args[16], args[17]);
+				case 19:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14], args[15], args[16], args[17], args[18]);
+				case 20:
+					return method.invoke(template, object, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10],
+							args[11], args[12], args[13], args[14], args[15], args[16], args[17], args[18], args[19]);
 				default:
 					return method.invoke(template, object, args);
 			}
