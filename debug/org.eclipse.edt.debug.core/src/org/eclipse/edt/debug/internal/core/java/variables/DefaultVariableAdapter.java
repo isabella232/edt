@@ -61,7 +61,15 @@ public class DefaultVariableAdapter implements IVariableAdapter
 			}
 			else
 			{
-				type = variable.getReferenceTypeName();
+				// The type might not be loaded yet. If that's the case, we can't adapt it since the type is unknown.
+				try
+				{
+					type = variable.getReferenceTypeName();
+				}
+				catch ( DebugException e )
+				{
+					return null;
+				}
 			}
 			
 			if ( getSimpleTypeMap().containsKey( type ) )
