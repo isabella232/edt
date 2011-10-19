@@ -19,6 +19,7 @@ import java.util.Stack;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.DynamicDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
@@ -627,7 +628,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			name.setId(id);
 		}
 		else {
-			name.setId(binding.getCaseSensitiveName());
+			if (binding instanceof DynamicDataBinding) {
+				name.setId(node.getCaseSensitiveIdentifier());
+			}
+			else {
+				name.setId(binding.getCaseSensitiveName());
+			}
 		}
 		
 		IDataBinding qualifier = (IDataBinding) node.getAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING);
