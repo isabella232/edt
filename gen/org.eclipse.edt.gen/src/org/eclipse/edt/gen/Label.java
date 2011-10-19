@@ -13,6 +13,7 @@ package org.eclipse.edt.gen;
 
 public class Label {
 	private String name;
+	private String flag;
 	public static final String LABEL_NAME = "EzeLabel_";
 	private int type;
 	public static final int LABEL_TYPE_GENERIC = 0;
@@ -34,5 +35,13 @@ public class Label {
 
 	public int getType() {
 		return type;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 }
