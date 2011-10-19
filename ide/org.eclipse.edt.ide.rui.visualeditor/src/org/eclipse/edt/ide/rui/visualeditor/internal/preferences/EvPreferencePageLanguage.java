@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.rui.internal.nls.ILocalesListViewer;
 import org.eclipse.edt.ide.rui.internal.nls.Locale;
 import org.eclipse.edt.ide.rui.internal.nls.LocaleUtility;
@@ -47,7 +47,7 @@ public class EvPreferencePageLanguage extends Composite implements IEvPreference
 	protected LocalesList	_localesList				= LocalesList.getLocalesList();
 	protected Combo			_runtimeMessageLocaleCombo	= null;
 	
-	IPreferenceStore 		_baseEGLStore 				= EGLBasePlugin.getPlugin().getPreferenceStore();
+	IPreferenceStore 		_baseEGLStore 				= EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
 	HashMap					_handlerLocaleDisplayToCode = new HashMap();
 
 	/**
