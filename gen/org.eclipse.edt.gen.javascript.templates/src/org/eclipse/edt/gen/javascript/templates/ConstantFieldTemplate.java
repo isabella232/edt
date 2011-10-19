@@ -14,6 +14,8 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Part;
 
 public class ConstantFieldTemplate extends JavaScriptTemplate {
 
@@ -24,7 +26,9 @@ public class ConstantFieldTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInitialization, field, ctx, out);
 		out.println(";");
 		
-		ctx.invoke(genInitializeStatement, field.getContainer(), ctx, out, field);
+		Container cnr = field.getContainer();
+		if (cnr instanceof Part) 
+			ctx.invoke(genInitializeStatement, field.getContainer(), ctx, out, field);
 	}
 
 	public void genSetter(ConstantField field, Context ctx, TabbedWriter out) {

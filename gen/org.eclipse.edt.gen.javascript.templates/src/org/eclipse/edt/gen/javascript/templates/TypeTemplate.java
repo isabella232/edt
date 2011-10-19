@@ -233,8 +233,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 			operator = arg.getOperator();
 		}
 		// For compound assignments like lhs += rhs, we unravel them into lhs = lhs + rhs in JavaScript
-		if ((operator != null) && (operator.length() == 2) && ("=".equals(operator.substring(1, 2)))) { 
-			String op = operator.substring(0,1);
+		if ((operator != null) && (operator.length() > 1) && (operator.endsWith("="))) { 
+			String op = operator.substring(0,operator.length()-1);
 			BinaryExpression binExpr = IrFactory.INSTANCE.createBinaryExpression();
 			binExpr.setLHS(arg.getLHS());
 			binExpr.setOperator(op);

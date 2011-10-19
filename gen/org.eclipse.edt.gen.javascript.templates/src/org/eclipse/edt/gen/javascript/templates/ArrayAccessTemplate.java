@@ -52,7 +52,7 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 	}
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
-		if (((ArrayType) expr.getArray().getType()).elementsNullable()) {
+		if ((expr instanceof ArrayType) && ((ArrayType) expr.getArray().getType()).elementsNullable()) {
 			out.print("egl.nullableCheckIndex(");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(", ");
