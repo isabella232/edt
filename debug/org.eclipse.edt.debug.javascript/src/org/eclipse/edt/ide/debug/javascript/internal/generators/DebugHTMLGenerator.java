@@ -13,17 +13,19 @@ package org.eclipse.edt.ide.debug.javascript.internal.generators;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.ContextAwareHTMLGenerator;
+import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 
 public class DebugHTMLGenerator extends ContextAwareHTMLGenerator
 {
-	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv )
+	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
+			ISystemEnvironment sysEnv, PartReferenceCache partRefCache )
 	{
-		super( processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv );
+		super( processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache );
 	}
 	
 	@Override
