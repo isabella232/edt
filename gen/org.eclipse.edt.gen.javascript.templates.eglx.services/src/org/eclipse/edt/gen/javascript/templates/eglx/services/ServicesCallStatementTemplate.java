@@ -446,8 +446,10 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		out.print("[");
 		if(callbackFunction != null){
 			boolean isFirst = true;
-			for(FunctionParameter param : callbackFunction.getParameters()){
-				if(param.getParameterKind() == ParameterKind.PARM_IN){
+			for(int idx = 0; idx < callbackFunction.getParameters().size(); idx++){
+				FunctionParameter param = callbackFunction.getParameters().get(idx);
+				if(param.getParameterKind() == ParameterKind.PARM_IN &&
+						!((idx == (callbackFunction.getParameters().size() - 1)) && isIHttp(param))){
 					if(!isFirst)
 						out.print(", ");
 					
@@ -458,7 +460,11 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 			}
 		}
 		out.println("], ");
-	}	
+	}
+	private boolean isIHttp(FunctionParameter param){
+		Type type = param.getType();
+		return "eglx.http.IHttp".equals(type.getTypeSignature());
+	}
 	private void printQuotedString(String val, TabbedWriter out){
 		out.print(val == null ? "null" : quoted(val));
 	}
