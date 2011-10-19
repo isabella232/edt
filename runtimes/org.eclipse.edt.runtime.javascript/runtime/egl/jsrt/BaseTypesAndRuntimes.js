@@ -2250,7 +2250,7 @@ egl.convertAnyToString = function( any, nullable )
 				return any.eze$$value;
 			
 			case 'K':
-				return egl.eglx.lang.StringLib.format(any.eze$$value,egl.eglx.lang.Constants['$inst'].usaDateFormat);
+				return egl.eglx.lang.StringLib.format(any.eze$$value,"MM/dd/yyyy");
 			
 //unsupported 0.7			case 'L':
 //				return egl.egl.core.$StrLib.formatTime(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultTimeFormat);
