@@ -15,7 +15,9 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class FunctionParameterTemplate extends JavaTemplate {
 
@@ -23,7 +25,10 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(decl, ctx);
 		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
-			out.print("AnyBoxedObject<? extends ");
+			out.print("AnyBoxedObject<");
+			if (decl.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Any) ||
+				decl.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))
+				out.print("? extends ");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
