@@ -34,4 +34,8 @@ public class StatementTemplate extends JavaTemplate {
 	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out) {
 		out.println(";");
 	}
+	
+	public Boolean requiresWrappedParameters(Statement stmt, Context ctx){
+		return Boolean.TRUE;
+	}
 }
