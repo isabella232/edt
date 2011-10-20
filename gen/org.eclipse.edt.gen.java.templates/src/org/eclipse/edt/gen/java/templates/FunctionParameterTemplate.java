@@ -16,7 +16,6 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FunctionParameterTemplate extends JavaTemplate {
 
@@ -25,8 +24,6 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		CommonUtilities.generateSmapExtension(decl, ctx);
 		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
 			out.print("AnyBoxedObject<");
-			if (TypeUtils.isReferenceType(decl.getType()))
-				out.print("? extends ");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
