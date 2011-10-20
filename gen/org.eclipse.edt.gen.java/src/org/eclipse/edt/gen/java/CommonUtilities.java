@@ -333,9 +333,12 @@ public class CommonUtilities {
 	}
 
 	public static boolean isBoxedOutputTemp(Expression expr, Context ctx) {
-		return expr instanceof MemberName
-			&& ctx.getAttribute(((MemberName) expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(((MemberName) expr).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN;
+		return expr instanceof MemberName && isBoxedOutputTemp(((MemberName) expr).getMember(), ctx);
+	}
+
+	public static boolean isBoxedOutputTemp(Member member, Context ctx) {
+		return ctx.getAttribute(member, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
+			&& ctx.getAttribute(member, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN;
 	}
 
 	@SuppressWarnings("unchecked")
