@@ -381,4 +381,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public Boolean supportsConversion(Type type, Context ctx) {
 		return Boolean.TRUE;
 	}
+	public void genServiceInvocationInParam(Type type, Context ctx, TabbedWriter out, Expression arg){
+		ctx.invoke(genExpression, arg, ctx, out);
+	}
 }
