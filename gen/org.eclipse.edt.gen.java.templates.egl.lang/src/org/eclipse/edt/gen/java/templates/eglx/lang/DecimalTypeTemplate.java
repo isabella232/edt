@@ -14,23 +14,11 @@ package org.eclipse.edt.gen.java.templates.eglx.lang;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.FixedPrecisionType;
-import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Type;
 
 public class DecimalTypeTemplate extends JavaTemplate {
 
-	// this method gets invoked when there is a specific fixed precision needed
-	public void genDefaultValue(FixedPrecisionType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	// this method gets invoked when there is a generic (unknown) fixed precision needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
 		out.print(".ZERO");
 	}

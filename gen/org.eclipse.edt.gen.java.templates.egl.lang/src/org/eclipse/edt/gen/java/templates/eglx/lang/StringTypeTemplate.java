@@ -17,29 +17,16 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.ParameterizableType;
-import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
 
 public class StringTypeTemplate extends JavaTemplate {
 
-	// this method gets invoked when there is a limited string needed
-	public void genDefaultValue(SequenceType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	// this method gets invoked when there is a string needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		out.print("\"\"");
 	}
 
-	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
 		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || getNativeStringOperation(arg).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
@@ -60,7 +47,7 @@ public class StringTypeTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
+	public void genContainerBasedInvocation(Type type, Context ctx, TabbedWriter out, InvocationExpression expr) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
