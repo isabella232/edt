@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
 import org.eclipse.edt.ide.core.internal.search.PartInfoRequestor;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -64,30 +65,48 @@ public class EGLUseStatementProposalHandler extends EGLAbstractProposalHandler {
 		}
 		for (Iterator iter = types.iterator(); iter.hasNext();) {
 			PartDeclarationInfo part = (PartDeclarationInfo) iter.next();
-			String partTypeName;
-			switch (part.getPartType()) {
-				case IEGLSearchConstants.TABLE :
-					partTypeName = IEGLConstants.KEYWORD_DATATABLE;
-					break;
-				case IEGLSearchConstants.FORMGROUP :
-					partTypeName = IEGLConstants.KEYWORD_FORMGROUP;
-					break;
-				case IEGLSearchConstants.LIBRARY :
-					partTypeName = IEGLConstants.KEYWORD_LIBRARY;
-					break;
-				case IEGLSearchConstants.FORM :
-					partTypeName = IEGLConstants.KEYWORD_FORM;
-					break;
-				case IEGLSearchConstants.HANDLER :
-					partTypeName = IEGLConstants.KEYWORD_HANDLER;
-					break;
-				default :
-					partTypeName = ""; //$NON-NLS-1$
-					break;
-			}
-			proposals.add(createPartProposal(part, partTypeName));
+			
+			if(canBeUsedByActivePart(part)){
+				String partTypeName;
+				switch (part.getPartType()) {
+					case IEGLSearchConstants.TABLE :
+						partTypeName = IEGLConstants.KEYWORD_DATATABLE;
+						break;
+					case IEGLSearchConstants.FORMGROUP :
+						partTypeName = IEGLConstants.KEYWORD_FORMGROUP;
+						break;
+					case IEGLSearchConstants.LIBRARY :
+						partTypeName = IEGLConstants.KEYWORD_LIBRARY;
+						break;
+					case IEGLSearchConstants.FORM :
+						partTypeName = IEGLConstants.KEYWORD_FORM;
+						break;
+					case IEGLSearchConstants.HANDLER :
+						partTypeName = IEGLConstants.KEYWORD_HANDLER;
+						break;
+					default :
+						partTypeName = ""; //$NON-NLS-1$
+						break;
+				}
+				proposals.add(createPartProposal(part, partTypeName));
+			}	
+
 		}
 		return proposals;
+	}
+	
+	private boolean canBeUsedByActivePart(PartDeclarationInfo partDeclareInfo){
+		
+		IEGLDocument document = (IEGLDocument) viewer.getDocument();
+		if(null  == ((EGLDocument)document).getNewModelEGLFile().getPackageDeclaration()){
+			return true;
+		}
+		//Part not in default package can't use library in default package.
+		if(null != partDeclareInfo.getPackageName() && partDeclareInfo.getPackageName().length() > 0){
+			return true;
+		}
+		
+		return false;
 	}
 
 	private int getTypes(int documentOffset, ITextViewer viewer) {
