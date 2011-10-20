@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Member;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberTemplate extends JavaTemplate {
@@ -31,9 +31,8 @@ public class MemberTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			out.print("void");
-		else if (ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(mbr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
-			out.print("AnyBoxedObject<");
+		else if (CommonUtilities.isBoxedOutputTemp(mbr, ctx)) {
+			out.print("AnyBoxedObject<? extends ");
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))

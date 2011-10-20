@@ -23,7 +23,7 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(decl, ctx);
 		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
-			out.print("AnyBoxedObject<");
+			out.print("AnyBoxedObject<? extends ");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
