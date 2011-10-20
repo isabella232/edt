@@ -41,8 +41,8 @@ public class ServiceTemplate extends JavaTemplate {
 	}
 	
 	public void genImports(Service service, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genImports, service, ctx, out);
 		out.println("import org.eclipse.edt.javart.services.*;");
+		ctx.invokeSuper(this, genImports, service, ctx, out);
 	}
 
 	public void genFunction(Service service, Context ctx, TabbedWriter out, Function arg) {
