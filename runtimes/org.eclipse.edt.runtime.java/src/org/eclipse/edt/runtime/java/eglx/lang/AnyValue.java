@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.eglx.lang;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import eglx.lang.AnyException;
@@ -40,6 +41,21 @@ public abstract class AnyValue extends EAny implements eglx.lang.AnyValue {
 				target = source.ezeNewValue();
 			}
 			target.ezeCopy(source);
+		}
+		return target;
+	}
+	
+	public static <V extends eglx.lang.AnyValue> V ezeCopyTo(AnyBoxedObject<? extends eglx.lang.AnyValue> source, V target) throws AnyException {
+		if (source == null || source.ezeUnbox() == null) {
+			if (target != null) {
+				target.ezeSetEmpty();
+			}
+		}
+		else {
+			if (target == null) {
+				target = source.ezeUnbox().ezeNewValue();
+			}
+			target.ezeCopy(source.ezeUnbox());
 		}
 		return target;
 	}
