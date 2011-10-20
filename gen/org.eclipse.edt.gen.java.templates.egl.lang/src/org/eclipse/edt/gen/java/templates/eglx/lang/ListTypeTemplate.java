@@ -17,8 +17,12 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.gen.java.templates.TimestampTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.*;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.NewExpression;
+import org.eclipse.edt.mof.egl.TimestampType;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ListTypeTemplate extends JavaTemplate 
@@ -60,8 +64,6 @@ public class ListTypeTemplate extends JavaTemplate
 
 	public void genContainerBasedInvocation( Type type, Context ctx, TabbedWriter out, InvocationExpression expr )
 	{
-		IRUtils.makeCompatible( expr );
-
 		ctx.invoke( genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation );
 		out.print( '.' );
 		ctx.invoke( genName, expr.getTarget(), ctx, out );
