@@ -454,6 +454,9 @@ public class IRUtils {
 		
 		//special case for Any...we must make a boxing expression 
 		if (isAny(type.getClassifier())) {
+			if (exprType == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)) {
+				return expr;
+			}
 			BoxingExpression box = factory.createBoxingExpression();
 			box.setExpr(expr);
 			return box;
@@ -463,7 +466,8 @@ public class IRUtils {
 				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
 				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
-			return expr;
+			return createAsExpression(expr, type);
+		
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			 //Conversions from value types to Number, Decimal, TimeStamp, String do not need to be boxed
 			if (!(type instanceof ParameterizableType) && !(type == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
