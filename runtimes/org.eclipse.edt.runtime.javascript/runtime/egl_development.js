@@ -237,31 +237,33 @@ egl.loadURL = function(url, handler, synchronous, sendAsContent) {
 egl.handleIDEEvent = function() {
 	if(egl.canSendEventToIDE()){
 		egl.loadIDEURL('___getevent', function(event) {
-			var print = null;
-			try {
-				print = egl.print;
-				if (event != "") {
-					egl.print = function() {};
-					eval(event);
-				}
-	   		}
-	   		catch (e) {
+			if("context terminated" != event){
+				var print = null;
+				try {
+					print = egl.print;
+					if (event != "") {
+						egl.print = function() {};
+						eval(event);
+					}
+		   		}
+		   		catch (e) {
+		   			egl.print = print;	
+		   			if (egl && !egl.ptCrash) { // make sure the page is not destructed yet
+		   				if (egl.egl.debug && e instanceof egl.egl.debug.DebugTermination) {
+		   					if (e.msg) egl.println(e.msg);
+		   				}
+		   				else {
+		   					if (event.match(/egl.partialTerminateSession().*/))
+		   						document.location = document.location;
+		   					else
+		   						egl.printError(egl.getRuntimeMessage( "CRRUI2092E", [event]), e);
+		   				}
+		   			}
+		   		}
 	   			egl.print = print;	
-	   			if (egl && !egl.ptCrash) { // make sure the page is not destructed yet
-	   				if (egl.egl.debug && e instanceof egl.egl.debug.DebugTermination) {
-	   					if (e.msg) egl.println(e.msg);
-	   				}
-	   				else {
-	   					if (event.match(/egl.partialTerminateSession().*/))
-	   						document.location = document.location;
-	   					else
-	   						egl.printError(egl.getRuntimeMessage( "CRRUI2092E", [event]), e);
-	   				}
-	   			}
-	   		}
-   			egl.print = print;	
-	   		if (window.setTimeout)
-	   			window.setTimeout("if (window.egl) egl.handleIDEEvent()", 10);
+		   		if (window.setTimeout)
+		   			window.setTimeout("if (window.egl) egl.handleIDEEvent()", 10);
+			}
 		}, false);
 	}
 };
