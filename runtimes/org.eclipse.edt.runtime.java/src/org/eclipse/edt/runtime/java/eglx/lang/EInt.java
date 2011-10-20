@@ -241,20 +241,20 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		return result;
 	}
 
-	public static Integer asInt(ENumber value) throws AnyException {
+	public static Integer asInt(eglx.lang.ENumber value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
-				result = value.ezeUnbox().intValue();
+				result = ((Number) value.ezeUnbox()).intValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		else
-			result = value.ezeUnbox().intValue();
+			result = ((Number) value.ezeUnbox()).intValue();
 		return result;
 	}
 

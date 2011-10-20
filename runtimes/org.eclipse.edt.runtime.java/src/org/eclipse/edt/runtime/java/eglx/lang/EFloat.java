@@ -131,10 +131,10 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 		return value.doubleValue();
 	}
 
-	public static Double asFloat(ENumber value) {
+	public static Double asFloat(eglx.lang.ENumber value) {
 		if (value == null)
 			return null;
-		return value.ezeUnbox().doubleValue();
+		return ((Number) value.ezeUnbox()).doubleValue();
 	}
 
 	public static Double asFloat(String value) throws AnyException {

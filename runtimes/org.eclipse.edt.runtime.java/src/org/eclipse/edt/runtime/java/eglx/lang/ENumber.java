@@ -36,7 +36,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return EString.asString(object);
 	}
 
-	public static ENumber ezeBox(Number value) {
+	public static eglx.lang.ENumber ezeBox(Number value) {
 		return new ENumber(value);
 	}
 
@@ -50,7 +50,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return ezeCast(value, args);
 	}
 
-	public static ENumber ezeCast(Object value) throws AnyException {
+	public static eglx.lang.ENumber ezeCast(Object value) throws AnyException {
 		return (ENumber) EAny.ezeCast(value, "asNumber", ENumber.class, null, null);
 	}
 
@@ -58,85 +58,85 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return value instanceof eglx.lang.ENumber || value instanceof Number;
 	}
 
-	public static ENumber asNumber(Short value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(Short value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(ESmallint value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(ESmallint value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(Integer value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(Integer value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(EInt value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(EInt value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(Long value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(Long value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(EBigint value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(EBigint value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(Float value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(Float value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(ESmallfloat value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(ESmallfloat value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(Double value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(Double value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(EFloat value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(EFloat value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(BigDecimal value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(BigDecimal value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(ENumber value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(ENumber value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static ENumber asNumber(BigInteger value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(BigInteger value) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
 	}
 
-	public static ENumber asNumber(String value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(String value) throws AnyException {
 		if (value == null)
 			return null;
 		// Parse the string as a float if it contains an exponent. Parse it as
@@ -171,13 +171,13 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return ezeBox(number);
 	}
 
-	public static ENumber asNumber(EString value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(EString value) throws AnyException {
 		if (value == null)
 			return null;
 		return asNumber(value.ezeUnbox());
 	}
 
-	public static ENumber plus(Object op1, Object op2) {
+	public static eglx.lang.ENumber plus(Object op1, Object op2) {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
@@ -312,7 +312,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(0);
 	}
 
-	public static ENumber minus(Object op1, Object op2) {
+	public static eglx.lang.ENumber minus(Object op1, Object op2) {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
@@ -447,7 +447,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(0);
 	}
 
-	public static ENumber divide(Object op1, Object op2) {
+	public static eglx.lang.ENumber divide(Object op1, Object op2) {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
@@ -582,7 +582,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(0);
 	}
 
-	public static ENumber multiply(Object op1, Object op2) {
+	public static eglx.lang.ENumber multiply(Object op1, Object op2) {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
@@ -717,7 +717,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(0);
 	}
 
-	public static ENumber remainder(Object op1, Object op2) {
+	public static eglx.lang.ENumber remainder(Object op1, Object op2) {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		if (unboxed1 instanceof Double || unboxed2 instanceof Double) {
@@ -852,13 +852,13 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(0);
 	}
 
-	public static ENumber power(Object op1, Object op2) throws AnyException {
+	public static eglx.lang.ENumber power(Object op1, Object op2) throws AnyException {
 		Number unboxed1 = (Number) (op1 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op1).ezeUnbox() : op1);
 		Number unboxed2 = (Number) (op2 instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op2).ezeUnbox() : op2);
 		return new ENumber(StrictMath.pow(unboxed1.doubleValue(), unboxed2.doubleValue()));
 	}
 
-	public static ENumber negate(Object op) {
+	public static eglx.lang.ENumber negate(Object op) {
 		Number unboxed = (Number) (op instanceof eglx.lang.ENumber ? ((eglx.lang.ENumber) op).ezeUnbox() : op);
 		if (unboxed instanceof Double)
 			return new ENumber(-unboxed.doubleValue());

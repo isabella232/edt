@@ -170,7 +170,7 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(String.valueOf(value), length);
 	}
 
-	public static String asString(ENumber value, Integer... length) {
+	public static String asString(eglx.lang.ENumber value, Integer... length) {
 		if (value == null)
 			return null;
 		return asString(String.valueOf(value.ezeUnbox()), length);

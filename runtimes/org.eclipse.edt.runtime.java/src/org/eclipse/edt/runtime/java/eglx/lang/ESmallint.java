@@ -262,20 +262,20 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		return result;
 	}
 
-	public static Short asSmallint(ENumber value) throws AnyException {
+	public static Short asSmallint(eglx.lang.ENumber value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
-				result = value.ezeUnbox().shortValue();
+				result = ((Number) value.ezeUnbox()).shortValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		} else
-			result = value.ezeUnbox().shortValue();
+			result = ((Number) value.ezeUnbox()).shortValue();
 		return result;
 	}
 

@@ -131,10 +131,10 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 		return value.floatValue();
 	}
 
-	public static Float asSmallfloat(ENumber value) {
+	public static Float asSmallfloat(eglx.lang.ENumber value) {
 		if (value == null)
 			return null;
-		return value.ezeUnbox().floatValue();
+		return ((Number) value.ezeUnbox()).floatValue();
 	}
 
 	public static Float asSmallfloat(String value) throws AnyException {

@@ -461,13 +461,13 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 			return BigDecimal.valueOf(value.doubleValue());
 	}
 
-	public static BigDecimal asDecimal(ENumber value, Integer... args) throws AnyException {
+	public static BigDecimal asDecimal(eglx.lang.ENumber value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		if (args.length == 2)
-			return asDecimal(BigDecimal.valueOf(value.ezeUnbox().doubleValue()), args[0], args[1]);
+			return asDecimal(BigDecimal.valueOf(((Number) value.ezeUnbox()).doubleValue()), args[0], args[1]);
 		else
-			return BigDecimal.valueOf(value.ezeUnbox().doubleValue());
+			return BigDecimal.valueOf(((Number) value.ezeUnbox()).doubleValue());
 	}
 
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {

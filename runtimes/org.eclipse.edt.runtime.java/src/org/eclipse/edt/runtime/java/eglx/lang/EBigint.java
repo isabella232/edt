@@ -226,20 +226,20 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		return result;
 	}
 
-	public static Long asBigint(ENumber value) throws AnyException {
+	public static Long asBigint(eglx.lang.ENumber value) throws AnyException {
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {
-				result = value.ezeUnbox().longValue();
+				result = ((Number) value.ezeUnbox()).longValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		else
-			result = value.ezeUnbox().longValue();
+			result = ((Number) value.ezeUnbox()).longValue();
 		return result;
 	}
 
