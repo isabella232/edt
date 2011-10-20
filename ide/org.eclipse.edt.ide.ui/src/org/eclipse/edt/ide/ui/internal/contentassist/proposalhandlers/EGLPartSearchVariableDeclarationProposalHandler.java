@@ -64,6 +64,7 @@ public class EGLPartSearchVariableDeclarationProposalHandler extends EGLPartSear
 		else {
 			buffer.append(partName);
 		}
+		buffer.append("?");
 		buffer.append(bindServiceString);
 		if(includeSemiInReplacement) {
 			buffer.append(";"); //$NON-NLS-1$
