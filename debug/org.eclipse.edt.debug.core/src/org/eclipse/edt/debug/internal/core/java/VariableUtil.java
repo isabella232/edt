@@ -207,7 +207,6 @@ public class VariableUtil
 	
 	/**
 	 * @return true if the variable is an instance of <code>typeName</code>
-	 * @throws DebugException
 	 */
 	public static boolean isInstanceOf( IJavaVariable variable, String typeName )
 	{
