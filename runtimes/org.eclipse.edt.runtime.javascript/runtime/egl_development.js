@@ -425,16 +425,11 @@ egl.tweakTypeForDebug = function(type, variableInfo){
 		return type;
 	}
 	
-	var parent;
 	if (type == "any" || type == "number" || type == "number?") {
-		parent = egl.resolveAnyValue(variableInfo.value);
 		var valueObjectType = egl.resolveAnyType(variableInfo.value);
 		if (valueObjectType) {
 			type += ": " + valueObjectType; // any: string
 		}
-	}
-	else {
-		parent = variableInfo.value;
 	}
 	
 	if (type == "eglx.lang.AnyException") {
@@ -995,41 +990,13 @@ egl.getVariableValue = function(response) {
 				try {
 					var type = frame.variableInfos[variableIndex].type;
 					if (type == "eglx.lang.EDate") {
-						varValue = egl.dateToString(value, egl.eglx.rbd.StrLib[$inst].defaultDateFormat);
+						varValue = egl.eglx.lang.EString.fromEDate(value);
 					}
 //unsupported 0.7					else if (type == "eglx.lang.ETime") {
-//						varValue = egl.timeToString(value, egl.eglx.rbd.StrLib[$inst].defaultTimeFormat);
+//						varValue = egl.eglx.lang.EString.fromETime(value);
 //					}
 					else {
-						var charsToClip = 0;
-						var format = egl.eglx.rbd.StrLib[$inst].defaultTimeStampFormat;
-						if (!format) {
-							var start = type.indexOf("(") + 1;
-							var end = type.indexOf(")");
-							if (start >= 0 && end > start) {
-								format = type.substring(start, end).replace(/f/g, "S");
-								if (format == "null") {
-									format = "yyyyMMddHHmmss";
-								}
-								else {
-									var idx = format.indexOf("S");
-									if (idx != -1) {
-										// Make sure there's 6 so the formatter doesn't throw an error
-										while (format.length - idx < 6) {
-											charsToClip++;
-											format += "S";
-										}
-									}
-								}
-							}
-							else {
-								format = "yyyyMMddHHmmss";
-							}
-						}
-						varValue = egl.timeStampToString(value, format);
-						if (charsToClip > 0) {
-							varValue = varValue.substring(0, varValue.length - charsToClip);
-						}
+						varValue = egl.eglx.lang.EString.fromETimestamp(value);
 					}
 				}
 				catch(e) {
@@ -1156,7 +1123,7 @@ egl.getDebugVariablesString = function(response) {
 	// Array elements should retain type and name info from the parent.
 	var type = frame.variableInfos[variableIndex].type;
 	if (type && type.indexOf("eglx.lang.EList<") == 0 && type.charAt(type.length-1) == ">") {
-		type = type.substring(17, type.length-1);
+		type = type.substring(16, type.length-1);
 		for (var i=0; i<children.length; i++) {
 			children[i].type = type;
 			children[i].name = "[" + (i+1) + "]";
