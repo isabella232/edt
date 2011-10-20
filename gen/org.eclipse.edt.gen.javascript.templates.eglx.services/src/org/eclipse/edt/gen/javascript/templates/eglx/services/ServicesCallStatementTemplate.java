@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -18,6 +17,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -88,16 +88,13 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		genRequestConfig(out);
 		genResponseConfig(out);
 		out.println("),");
-//		genTimeoutParams(serviceTimeout);
 		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
-		@SuppressWarnings("unchecked")
-		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
 		Function callbackFunction = null;
 		if(stmt.getCallback() != null){
 			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
 		}
 		
-		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
+		genInParamVals(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
@@ -114,17 +111,17 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 			Annotation deleteRest, Context ctx, TabbedWriter out) {
 //		genTimeoutParams(serviceTimeout);
 //		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
-		@SuppressWarnings("unchecked")
-		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
+//		@SuppressWarnings("unchecked")
+//		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
 		Function callbackFunction = null;
 		if(stmt.getCallback() != null){
 			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
 		}
 
-		genRestParameters(stmt, serviceInterfaceFunction, tempArgs, getRest, putRest, postRest, deleteRest, ctx, out);
+		genRestParameters(stmt, serviceInterfaceFunction, stmt.getArguments(), getRest, putRest, postRest, deleteRest, ctx, out);
 		out.println(",");
 		
-		genInParamVals(serviceInterfaceFunction, tempArgs, ctx, out);
+		genInParamVals(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genInParamSignature(serviceInterfaceFunction, stmt.getArguments(), ctx, out);
 		genParamOrders(serviceInterfaceFunction, ctx, out);
 		genCallbackArgs(callbackFunction, ctx, out);			
@@ -135,10 +132,6 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		out.println(");");
 		out.popIndent();
 		out.popIndent();
-//		if (context.getGenerationMode() == EGLGenerationModeSetting.DEVELOPMENT_GENERATION_MODE) {
-//			out.popIndent();
-//			out.println("}");
-//		}	*/	
 	}
 
 	private void genCallbackAccesor(Expression callBack, Context ctx, TabbedWriter out){
@@ -209,7 +202,6 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		String uriTemplate = (String)methodRestAnnotation.getValue("uriTemplate");
 		
 		out.print(", uri : ");
-//		out.println(uriTemplate);
 		genURITemplate(uriTemplate, false, funcParams, ctx, out);
 		out.println("");
 		
@@ -244,7 +236,6 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 	
 	private void genFormatKind(Object formatEnum, Type eglType, final Context ctx, TabbedWriter out) {
 		if(formatEnum instanceof Expression){
-			//String id = fieldAccess.getId();
 			ctx.invoke(genExpression, formatEnum, ctx, out);
 		}
 		else{
@@ -366,16 +357,14 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 	{
 		out.print("[");		
 		boolean isFirst = true;
-		for (int idx=0; idx<serviceInterfaceFunction.getParameters().size(); idx++){
-			//Expression arg = args[i];
-						
+		for (int idx=0; idx<serviceInterfaceFunction.getParameters().size(); idx++){						
 			if(serviceInterfaceFunction.getParameters().get(idx).getParameterKind() != ParameterKind.PARM_OUT){
 				if(!isFirst)
 					out.print(", ");
 				
 				isFirst = false;
 				//get the temp var name
-				ctx.invoke(genExpression, args.get(idx), ctx, out);
+				ctx.invoke(genServiceInvocationInParam, args.get(idx).getType(), ctx, out, args.get(idx));
 			}				
 		}
 		out.println("], ");		
@@ -461,11 +450,17 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		}
 		out.println("], ");
 	}
+	
 	private boolean isIHttp(FunctionParameter param){
 		Type type = param.getType();
 		return "eglx.http.IHttp".equals(type.getTypeSignature());
 	}
+	
 	private void printQuotedString(String val, TabbedWriter out){
 		out.print(val == null ? "null" : quoted(val));
+	}
+	
+	public Boolean requiresWrappedParameters(Statement stmt, Context ctx){
+		return Boolean.FALSE;
 	}
 }
