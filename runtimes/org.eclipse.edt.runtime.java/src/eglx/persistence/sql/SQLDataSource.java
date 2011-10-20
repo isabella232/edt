@@ -62,6 +62,17 @@ public class SQLDataSource implements RecoverableResource {
 		}
 	}
 
+	public void close() throws SQLException {
+		if (conn != null) {
+			try {
+				conn.close();
+				conn = null;
+			} catch (java.sql.SQLException e) {
+				throw JavartUtil.makeEglException(e);
+			}
+		}
+	}
+
 	public Connection getConnection() throws SQLException {
 		if (conn == null) {
 			try {
@@ -215,7 +226,12 @@ public class SQLDataSource implements RecoverableResource {
 	
 	public boolean isClosed() throws SQLException {
 		try {
-			return getConnection().isClosed();
+			if(conn != null){
+				return getConnection().isClosed();
+			}
+			else{
+				return true;
+			}
 		} catch (java.sql.SQLException e) {
 			throw JavartUtil.makeEglException(e);
 		}

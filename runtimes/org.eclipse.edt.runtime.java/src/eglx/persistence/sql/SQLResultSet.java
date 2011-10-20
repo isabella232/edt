@@ -35,6 +35,17 @@ public class SQLResultSet {
 		return resultSet;
 	}
 
+	public void close() throws SQLException {
+		if (resultSet != null) {
+			try {
+				resultSet.close();
+				resultSet = null;
+			} catch (java.sql.SQLException e) {
+				throw JavartUtil.makeEglException(e);
+			}
+		}
+	}
+
 	public void setUpdateFieldNames(String[] updateFieldNames) {
 		this.updateFieldNames = updateFieldNames;
 	}
