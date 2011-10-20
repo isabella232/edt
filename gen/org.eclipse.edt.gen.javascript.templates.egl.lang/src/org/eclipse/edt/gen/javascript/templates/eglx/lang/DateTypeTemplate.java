@@ -74,4 +74,11 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
+	public void genServiceInvocationInParam(EGLClass type, Context ctx, TabbedWriter out, Expression arg){
+		out.print("egl.eglx.lang.EAny.fromEAny(");
+		ctx.invoke(genExpression, arg, ctx, out);
+		out.print(", \"");
+		ctx.invoke(genSignature, type, ctx, out);
+		out.print("\")");
+	}
 }

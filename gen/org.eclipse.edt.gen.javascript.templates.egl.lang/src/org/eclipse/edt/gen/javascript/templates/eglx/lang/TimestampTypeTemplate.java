@@ -28,12 +28,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a specific timestamp needed
-	public void genDefaultValue(TimestampType type, Context ctx, TabbedWriter out) {
-		processDefaultValue(type, ctx, out);
-	}
-
-	// this method gets invoked when there is a generic (unknown) timestamp needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		processDefaultValue(type, ctx, out);
 	}
 
@@ -44,14 +39,10 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	public void genContainerBasedNewExpression(TimestampType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
+	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
 		processNewExpression(type, ctx, out, arg);
 	}
 
-	public void genContainerBasedNewExpression(ParameterizableType type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
-		processNewExpression(type, ctx, out, arg);
-	}
-	
 	public void genContainerBasedInvocation(EGLClass type, Context ctx, TabbedWriter out, InvocationExpression expr) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".");
@@ -84,11 +75,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 //		out.print(")");
 	}
 
-	public void genBinaryExpression(TimestampType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		processBinaryExpression(type, ctx, out, arg);
-	}
-
-	public void genBinaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		processBinaryExpression(type, ctx, out, arg);
 	}
 
@@ -127,4 +114,13 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 			pattern = type.getPattern();
 		out.print(quoted(pattern));
 	}
+	
+	public void genServiceInvocationInParam(Type type, Context ctx, TabbedWriter out, Expression arg){
+		out.print("egl.eglx.lang.EAny.fromEAny(");
+		ctx.invoke(genExpression, arg, ctx, out);
+		out.print(", \"");
+		ctx.invoke(genSignature, type, ctx, out);
+		out.print("\")");
+	}
+
 }
