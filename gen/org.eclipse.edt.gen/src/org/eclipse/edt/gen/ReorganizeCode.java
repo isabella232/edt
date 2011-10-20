@@ -259,13 +259,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(CallStatement object) {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		if (object.getInvocationTarget() instanceof MemberAccess && ((MemberAccess) object.getInvocationTarget()).getMember() instanceof Function) {
-			Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
-			FunctionInvocation invocation = factory.createFunctionInvocation();
-			invocation.setTarget(serviceInterfaceFunction);
-			invocation.setId(serviceInterfaceFunction.getId());
-			invocation.getArguments().addAll(object.getArguments());
-			processInvocation(invocation);
-			ctx.putAttribute(object, Constants.SubKey_callStatementTempVariables, invocation.getArguments());
+			if((Boolean)ctx.invoke(Constants.requiresWrappedParameters, object, ctx)){
+				Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
+				FunctionInvocation invocation = factory.createFunctionInvocation();
+				invocation.setTarget(serviceInterfaceFunction);
+				invocation.setId(serviceInterfaceFunction.getId());
+				invocation.getArguments().addAll(object.getArguments());
+				processInvocation(invocation);
+			}
 		}
 		return true;
 	}

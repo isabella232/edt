@@ -32,7 +32,7 @@ public class Constants {
 	public static final String SubKey_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
 	public static final String SubKey_functionHasReturnStatement = "functionHasReturnStatement";
 	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
-	public static final String SubKey_callStatementTempVariables = "callStatementTempVariables";
+	public static final String requiresWrappedParameters = "requiresWrappedParameters";
 	public static final String SubKey_functionParameterIsConst = "functionParameterIsConst";
 	public static final String SubKey_statementHasBeenReorganized = "statementHasBeenReorganized";
 
