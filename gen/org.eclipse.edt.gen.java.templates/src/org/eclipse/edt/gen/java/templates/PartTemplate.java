@@ -82,6 +82,7 @@ public class PartTemplate extends JavaTemplate {
 				out.println("import " + type + ";");
 			}
 		}
+		out.println("@SuppressWarnings(\"unused\")");
 	}
 
 	@SuppressWarnings("unchecked")
