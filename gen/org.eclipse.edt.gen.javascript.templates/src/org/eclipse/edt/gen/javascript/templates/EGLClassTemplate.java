@@ -268,21 +268,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(genInstantiation, part, ctx, out);
 		out.println(";");
 
-//		out.print(temp2);
-//		out.println(".eze$$isNull = this.eze$$isNull;");
-
-//		out.print(temp2);
-//		out.println(".eze$$isNullable = this.eze$$isNullable;");
-
 		// clone fields
 		for (Field field : part.getFields()) {
 			ctx.invoke(genCloneMethod, part, ctx, out, field);
 		}
-
-//		out.print(temp2);
-//		out.print(".setNull(");
-//		out.print(temp1);
-//		out.println("eze$$isNull);");
 
 		out.print("return ");
 		out.print(temp2);
