@@ -30,6 +30,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -614,6 +615,19 @@ public class EvServer implements IClientProxy {
 					}
 				}
 			}
+			while (!eventQueue.isEmpty()) {
+				Event event = (Event)eventQueue.remove();
+				if(event.ps != null){
+					event.ps.close();
+				}
+				if(event.socket != null){
+					try {
+						event.socket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 
 		/**
@@ -625,7 +639,7 @@ public class EvServer implements IClientProxy {
 			event.ps.print(content);
 			event.ps.flush();
 			if (event.ps.checkError()) {
-				debug("sendEvent: error in send - content: " + content);
+				debug("sendEvent: error in send context:"+ context.getKey()+  ", content: " + content);
 			} else {
 				//debug("sendEvent: no error - content: " + content);
 			}
@@ -729,7 +743,7 @@ public class EvServer implements IClientProxy {
 	}
 
 	private void debug(String string) {
-//		System.out.println(string);
+//		System.err.println(new Date() + string);
 	}
 
 	public void fail(PrintStream ps) throws InterruptedException {
@@ -815,6 +829,7 @@ public class EvServer implements IClientProxy {
 				}
 				if (xmlRequest != null) {
 					url = xmlRequest.getURL();
+					debug("-->EvServer.handleBrowserEvent :" + url + " | ctx="+xmlRequest.getArguments().get("contextKey"));
 					
 					// Proxy and test server must be checked first since the context key is passed along for debug.
 					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
@@ -874,6 +889,7 @@ public class EvServer implements IClientProxy {
 									//
 									//debug(xmlRequest.getURL());
 									//
+									debug("handleBrowserEvent: Add event to Q("+intContextKey+"):"+event.url);
 									q.addEvent(event);
 								}
 								else {
@@ -889,6 +905,10 @@ public class EvServer implements IClientProxy {
 										catch (UnsupportedEncodingException uee) {
 											ps.write(msg.getBytes());
 										}
+									}else if(url.indexOf("___getevent") >0){
+										System.err.println("__getevent : terminated");
+										ps.print("terminated");
+										ps.flush();
 									}
 									ps.close();
 								}
