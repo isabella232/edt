@@ -32,7 +32,9 @@ public class MemberTemplate extends JavaTemplate {
 		if (mbr.getType() == null)
 			out.print("void");
 		else if (CommonUtilities.isBoxedOutputTemp(mbr, ctx)) {
-			out.print("AnyBoxedObject<? extends ");
+			out.print("AnyBoxedObject<");
+			if (TypeUtils.isReferenceType(mbr.getType()))
+				out.print("? extends ");
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
