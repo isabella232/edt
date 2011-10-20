@@ -907,7 +907,7 @@ public class EvServer implements IClientProxy {
 										}
 									}else if(url.indexOf("___getevent") >0){
 										System.err.println("__getevent : terminated");
-										ps.print("terminated");
+										ps.print("context terminated");
 										ps.flush();
 									}
 									ps.close();
