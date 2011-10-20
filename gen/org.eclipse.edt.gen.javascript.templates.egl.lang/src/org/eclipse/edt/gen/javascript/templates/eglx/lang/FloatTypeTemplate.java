@@ -131,7 +131,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_NE))
 			return "";
 		if (op.equals(expr.Op_MODULO))
-			return "egl.remainder(";
+			return "egl.remainder";
 		return "";
 	}
 
@@ -186,7 +186,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_GE))
 			return "";
 		if (op.equals(expr.Op_MODULO))
-			return ")";
+			return "";
 		return "";
 	}
 
