@@ -91,6 +91,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genSignature = "genSignature";
 	public static final String genStatement = "genStatement";
 	public static final String genStatementNoBraces = "genStatementNoBraces";
+	public static final String genServiceInvocationInParam = "genServiceInvocationInParam";
 	public static final String genSetEmptyMethod = "genSetEmptyMethod";
 	public static final String genSetEmptyMethodBody = "genSetEmptyMethodBody";
 	public static final String genSetEmptyMethods = "genSetEmptyMethods";
