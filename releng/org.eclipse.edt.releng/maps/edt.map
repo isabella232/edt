@@ -6,7 +6,7 @@ plugin@org.eclipse.edt.core.doc.cr=v201108251003,:pserver:anonymous@dev.eclipse.
 plugin@org.eclipse.edt.core.doc.lr=v201110191440,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.lr
 plugin@org.eclipse.edt.core.doc.pg=v201110141825,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.pg
 plugin@org.eclipse.edt.core.doc.top=v201108241450,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.top
-plugin@org.eclipse.edt.debug.core=v201110191331,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.core
+plugin@org.eclipse.edt.debug.core=v201110201253,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.core
 plugin@org.eclipse.edt.debug.javascript=v201110191040,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.javascript
 plugin@org.eclipse.edt.debug.ui=v201110111354,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.ui
 plugin@org.eclipse.edt.gen=v201110201109,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen
@@ -50,7 +50,7 @@ plugin@org.eclipse.edt.mof.egl=v201110191449,:pserver:anonymous@dev.eclipse.org:
 plugin@org.eclipse.edt.mof.eglx.persistence.sql=v201110141530,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.persistence.sql
 plugin@org.eclipse.edt.mof.eglx.services=v201109211409,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.services
 plugin@org.eclipse.edt.runtime.java=v201110201055,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
-plugin@org.eclipse.edt.runtime.javascript=v201110200602,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
+plugin@org.eclipse.edt.runtime.javascript=v201110201253,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
 feature@org.eclipse.edt.tests.feature=v201109281105,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests=v201109281105,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
