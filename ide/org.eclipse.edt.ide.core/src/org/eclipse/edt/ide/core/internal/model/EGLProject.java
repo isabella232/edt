@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -35,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
@@ -2428,5 +2430,54 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 		}
 
     	return false;
+	}
+	
+	@Override
+	public IEGLProject[] getReferencingProjects() throws EGLModelException {
+		IProject[] projects = fProject.getWorkspace().getRoot().getProjects(IContainer.INCLUDE_HIDDEN);
+		List<IEGLProject> result = new ArrayList<IEGLProject>(projects.length);
+		
+		for (IProject project : projects) {
+			if (!project.isAccessible() || (project.equals(fProject))) {
+				 continue;
+			}
+			
+			IEGLProject eglProject = EGLCore.create(project);
+			String[] referencedProjectNames = eglProject.getRequiredProjectNames();
+			if(referencedProjectNames == null || (referencedProjectNames.length == 0)) {
+				continue;
+			}
+			for(String eglProjectName : referencedProjectNames) {
+				if(fProject.getName().equals(eglProjectName)) {
+					result.add(eglProject);
+					break;
+				}
+			}
+		}
+		return result.toArray(new IEGLProject[result.size()]);
+	}
+	
+	@Override
+    public boolean isRuiProject() {
+		boolean isRuiProject = false;
+		IEGLPathEntry[] entries = null;
+		
+		try {
+			entries = getRawEGLPath();
+		} catch(EGLModelException ex) {
+			
+		}
+		
+		if(entries != null) {
+			for(IEGLPathEntry entry : entries) {
+				if(entry.toString().contains("org.eclipse.edt.rui.widgets")
+						|| entry.toString().contains("org.eclipse.edt.rui.dojo")) {
+					isRuiProject = true;
+					break;
+				}
+			}
+		}
+		
+		return isRuiProject;
 	}
 }

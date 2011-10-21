@@ -599,4 +599,21 @@ public interface IEGLProject extends IParent, IEGLElement, IOpenable {
 	 * @throws EGLModelException
 	 */
 	public IEGLPathEntry[] getExpandedEGLPath(boolean ignoreUnresolvedVariable) throws EGLModelException;
+	
+	/**
+	 * Returns the list of all open projects which reference
+	 * this project. This project may or may not exist. Returns
+	 * an empty array if there are no referencing projects.
+	 *
+	 * @return a list of open projects referencing this project
+	 */
+	public IEGLProject[] getReferencingProjects() throws EGLModelException;
+	
+	/**
+	 * Check whether this is a basic project or an RUI one
+	 * @return
+	 *     true   RUI project
+	 *     false  basic project
+	 */
+	public boolean isRuiProject();
 }
