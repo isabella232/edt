@@ -1,5 +1,10 @@
 package org.eclipse.edt.eunit.runtime;
 
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.lang.SysLib;
+import eglx.services.ServiceInvocationException;
+
 delegate runTestMethod()	
 end
 
@@ -62,7 +67,7 @@ Library TestListMgr
 	end		
 	
 	//helper functions to handle asynchronize call exceptions
-	function handleCallBackException(exp AnyException in)		
+	function handleCallBackException(exp AnyException in, http IHttp in)		
 		str String = "Caught service exception: " + exp.messageID + ": " + exp.message;
 		if(exp isa ServiceInvocationException)
 			sexp ServiceInvocationException = exp as ServiceInvocationException;
@@ -73,6 +78,8 @@ Library TestListMgr
 			str = str + s1 + ConstantsLib.NEWLINE;
 			str = str + s2 + ConstantsLib.NEWLINE;
 			str = str + s3 + ConstantsLib.NEWLINE;
+			str = str + "Original request body: " + http.getRequest().body + ConstantsLib.NEWLINE;
+			str = str + "Raw response body: " + http.getResponse().body + ConstantsLib.NEWLINE;
 		end
 		LogResult.error(str);
 		testId String = TestListMgr.testMethodNames[TestListMgr.testIndex];
@@ -81,9 +88,7 @@ Library TestListMgr
 	
 	function caughtFailedAssertion(exp AssertionFailedException in)
 		//prepend the assertion failure error message to Status
-		assertMsg String = "Assertion failed for: "; 
-		s Status = LogResult.getStatus();				
-		s.reason = assertMsg + s.reason;			
+		sysLib.writeStdOut("AssertionFail - " + exp.message);		
 	end	
 	
 	function caughtAnyException(exp AnyException in)
