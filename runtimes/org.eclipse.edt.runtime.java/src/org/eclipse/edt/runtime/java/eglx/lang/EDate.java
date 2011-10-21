@@ -279,6 +279,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		Calendar newDate = ezeClone(aDate);
 		newDate.setLenient(true);
 		newDate.add(Calendar.DATE, amount);
+		newDate.setLenient(false);
 		return newDate;
 	}
 
