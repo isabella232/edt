@@ -226,9 +226,11 @@ public class EString extends AnyBoxedObject<String> {
 		return asString(cal, new Integer[0]);
 	}
 
-	public static String asString(Calendar cal, Integer... length) {
-		if (cal == null)
+	public static String asString(Calendar original, Integer... length) {
+		if (original == null)
 			return null;
+		// copy the incoming calendar, as some of the methods cause the isSet attributes to be turned on
+		Calendar cal = ETimestamp.ezeClone(original, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;

@@ -151,23 +151,56 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	public static Calendar ezeClone(Calendar original, int startCode, int endCode) {
 		if (original == null)
 			return null;
+		// save the original
+		boolean yearSet = original.isSet(Calendar.YEAR);
+		boolean monthSet = original.isSet(Calendar.MONTH);
+		boolean dateSet = original.isSet(Calendar.DATE);
+		boolean hourSet = original.isSet(Calendar.HOUR_OF_DAY);
+		boolean minuteSet = original.isSet(Calendar.MINUTE);
+		boolean secondSet = original.isSet(Calendar.SECOND);
+		boolean milliSet = original.isSet(Calendar.MILLISECOND);
+		int yearValue = original.get(Calendar.YEAR);
+		int monthValue = original.get(Calendar.MONTH);
+		int dateValue = original.get(Calendar.DATE);
+		int hourValue = original.get(Calendar.HOUR_OF_DAY);
+		int minuteValue = original.get(Calendar.MINUTE);
+		int secondValue = original.get(Calendar.SECOND);
+		int milliValue = original.get(Calendar.MILLISECOND);
+		// create the cloned
 		Calendar cloned = defaultValue();
 		cloned.clear();
-		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE && original.isSet(Calendar.YEAR))
-			cloned.set(Calendar.YEAR, original.get(Calendar.YEAR));
-		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE && original.isSet(Calendar.MONTH))
-			cloned.set(Calendar.MONTH, original.get(Calendar.MONTH));
-		if (startCode <= DAY_CODE && endCode >= DAY_CODE && original.isSet(Calendar.DATE))
-			cloned.set(Calendar.DATE, original.get(Calendar.DATE));
-		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE && original.isSet(Calendar.HOUR_OF_DAY))
-			cloned.set(Calendar.HOUR_OF_DAY, original.get(Calendar.HOUR_OF_DAY));
-		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE && original.isSet(Calendar.MINUTE))
-			cloned.set(Calendar.MINUTE, original.get(Calendar.MINUTE));
-		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE && original.isSet(Calendar.SECOND))
-			cloned.set(Calendar.SECOND, original.get(Calendar.SECOND));
-		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE && original.isSet(Calendar.MILLISECOND))
-			cloned.set(Calendar.MILLISECOND, original.get(Calendar.MILLISECOND));
+		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE && yearSet)
+			cloned.set(Calendar.YEAR, yearValue);
+		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE && monthSet)
+			cloned.set(Calendar.MONTH, monthValue);
+		if (startCode <= DAY_CODE && endCode >= DAY_CODE && dateSet)
+			cloned.set(Calendar.DATE, dateValue);
+		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE && hourSet)
+			cloned.set(Calendar.HOUR_OF_DAY, hourValue);
+		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE && minuteSet)
+			cloned.set(Calendar.MINUTE, minuteValue);
+		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE && secondSet)
+			cloned.set(Calendar.SECOND, secondValue);
+		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE && milliSet)
+			cloned.set(Calendar.MILLISECOND, milliValue);
 		cloned.getTimeInMillis();
+		// we need to restore the original, because the .get method clobbers the flags set in the calendar object
+		original.clear();
+		if (yearSet)
+			original.set(Calendar.YEAR, yearValue);
+		if (monthSet)
+			original.set(Calendar.MONTH, monthValue);
+		if (dateSet)
+			original.set(Calendar.DATE, dateValue);
+		if (hourSet)
+			original.set(Calendar.HOUR_OF_DAY, hourValue);
+		if (minuteSet)
+			original.set(Calendar.MINUTE, minuteValue);
+		if (secondSet)
+			original.set(Calendar.SECOND, secondValue);
+		if (milliSet)
+			original.set(Calendar.MILLISECOND, milliValue);
+		original.getTimeInMillis();
 		return cloned;
 	}
 	
@@ -309,9 +342,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp((Calendar) timestamp, startCode, endCode);
 	}
 
-	public static Calendar asTimestamp(Calendar date, int startCode, int endCode) {
-		if (date == null)
+	public static Calendar asTimestamp(Calendar original, int startCode, int endCode) {
+		if (original == null)
 			return null;
+		Calendar date = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		Calendar result = DateTimeUtil.getBaseCalendar();
 		// Get values for the full set of fields. Fields that we need will be
 		// set from the calendar. The others will be set to reasonable defaults.
@@ -745,7 +779,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the day of a timestamp
 	 */
-	public static int dayOf(Calendar aTimestamp) throws AnyException {
+	public static int dayOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(Calendar.DATE))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -757,7 +792,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the month of a timestamp
 	 */
-	public static int monthOf(Calendar aTimestamp) throws AnyException {
+	public static int monthOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(Calendar.MONTH))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -769,7 +805,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the year of a timestamp
 	 */
-	public static int yearOf(Calendar aTimestamp) throws AnyException {
+	public static int yearOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(Calendar.YEAR))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -781,7 +818,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the weekday of a timestamp
 	 */
-	public static int weekdayOf(Calendar aTimestamp) throws AnyException {
+	public static int weekdayOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(DAY_CODE))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -793,7 +831,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the date of a timestamp
 	 */
-	public static Calendar dateOf(Calendar aTimestamp) throws AnyException {
+	public static Calendar dateOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -805,7 +844,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	/**
 	 * Returns the time of a timestamp
 	 */
-	public static Calendar timeOf(Calendar aTimestamp) throws AnyException {
+	public static Calendar timeOf(Calendar original) throws AnyException {
+		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
 		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();

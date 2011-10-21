@@ -41,7 +41,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static EDate ezeBox(Calendar value) {
 		Calendar clone = null;
 		if (value != null) {
-			clone = ezeClone(value);
+			clone = ETimestamp.ezeClone(value, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		}
 		return new EDate(clone);
 	}
@@ -78,52 +78,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return cal;
 	}
 
-	public static Calendar ezeClone(Calendar original) {
-		if (original == null)
-			return null;
-		Calendar cloned = defaultValue();
-		cloned.clear();
-		if (original.isSet(Calendar.YEAR))
-			cloned.set(Calendar.YEAR, original.get(Calendar.YEAR));
-		if (original.isSet(Calendar.MONTH))
-			cloned.set(Calendar.MONTH, original.get(Calendar.MONTH));
-		if (original.isSet(Calendar.DATE))
-			cloned.set(Calendar.DATE, original.get(Calendar.DATE));
-		if (original.isSet(Calendar.HOUR_OF_DAY))
-			cloned.set(Calendar.HOUR_OF_DAY, original.get(Calendar.HOUR_OF_DAY));
-		if (original.isSet(Calendar.MINUTE))
-			cloned.set(Calendar.MINUTE, original.get(Calendar.MINUTE));
-		if (original.isSet(Calendar.SECOND))
-			cloned.set(Calendar.SECOND, original.get(Calendar.SECOND));
-		if (original.isSet(Calendar.MILLISECOND))
-			cloned.set(Calendar.MILLISECOND, original.get(Calendar.MILLISECOND));
-		cloned.getTimeInMillis();
-		return cloned;
-	}
-	
-	public static Calendar ezeClone(Calendar original, int startCode, int endCode) {
-		if (original == null)
-			return null;
-		Calendar cloned = defaultValue();
-		cloned.clear();
-		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE && original.isSet(Calendar.YEAR))
-			cloned.set(Calendar.YEAR, original.get(Calendar.YEAR));
-		if (startCode <= ETimestamp.MONTH_CODE && endCode >= ETimestamp.MONTH_CODE && original.isSet(Calendar.MONTH))
-			cloned.set(Calendar.MONTH, original.get(Calendar.MONTH));
-		if (startCode <= ETimestamp.DAY_CODE && endCode >= ETimestamp.DAY_CODE && original.isSet(Calendar.DATE))
-			cloned.set(Calendar.DATE, original.get(Calendar.DATE));
-		if (startCode <= ETimestamp.HOUR_CODE && endCode >= ETimestamp.HOUR_CODE && original.isSet(Calendar.HOUR_OF_DAY))
-			cloned.set(Calendar.HOUR_OF_DAY, original.get(Calendar.HOUR_OF_DAY));
-		if (startCode <= ETimestamp.MINUTE_CODE && endCode >= ETimestamp.MINUTE_CODE && original.isSet(Calendar.MINUTE))
-			cloned.set(Calendar.MINUTE, original.get(Calendar.MINUTE));
-		if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.SECOND_CODE && original.isSet(Calendar.SECOND))
-			cloned.set(Calendar.SECOND, original.get(Calendar.SECOND));
-		if (startCode <= ETimestamp.FRACTION1_CODE && endCode >= ETimestamp.FRACTION1_CODE && original.isSet(Calendar.MILLISECOND))
-			cloned.set(Calendar.MILLISECOND, original.get(Calendar.MILLISECOND));
-		cloned.getTimeInMillis();
-		return cloned;
-	}
-	
 	/**
 	 * {@Operation narrow} Converts a string to a date. The string is parsed by searching for the month, then the day, then
 	 * the year. One or two digits can be specified for the month and day. The year requires a minimum of one digit and a
@@ -276,7 +230,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the adds days to a date
 	 */
 	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
-		Calendar newDate = ezeClone(aDate);
+		Calendar newDate = ETimestamp.ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		newDate.setLenient(true);
 		newDate.add(Calendar.DATE, amount);
 		newDate.setLenient(false);
@@ -295,6 +249,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 			startCode = mask.getStartCode();
 			endCode = mask.getEndCode();
 		}
-		return new ETimestamp(ezeClone(aDate, startCode, endCode), startCode, endCode).ezeUnbox();
+		return new ETimestamp(ETimestamp.ezeClone(aDate, startCode, endCode), startCode, endCode).ezeUnbox();
 	}
 }
