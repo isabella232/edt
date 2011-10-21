@@ -39,7 +39,7 @@ egl.eglx.json.JsonLib["validateJSONObject"] = function(/* recordOrDictionary */o
 		throw egl.createRuntimeException("CRRUI2107E", [ field ]);
 	}
 };
-egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ validateUnspportedTypes) {
+egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fieldInfo) {
 	try {
 		if (object === undefined || object === null) {
 			return "null";
@@ -51,6 +51,87 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 		if (maxDepth && depth > maxDepth) {
 			return '" Max Recursion '+maxDepth+' reached"';
 		}
+		if((typeof(object) == "object" && object.eze$$signature) ||
+				(fieldInfo != undefined && fieldInfo != null)){
+			var kind = "";
+			if (fieldInfo != undefined && fieldInfo != null) {
+				var firstCharIdx = 0;
+				var firstChar = fieldInfo.eglSignature.charAt(0);
+				if (firstChar !== '?') {
+					kind = firstChar;
+				} else {
+					kind = fieldInfo.eglSignature.charAt(1);
+					firstCharIdx = 1;
+				}
+			}
+			else{
+			   var sig = object.eze$$signature;
+			   if (sig != null) {
+			       var kind = sig.charAt(0) === '?' ? sig.charAt(1) : sig.charAt(0);
+			   }
+			}
+			switch (kind) {
+				case 'S':
+				case 's':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'K':
+					object = egl.unboxAny( object );
+					if(object === undefined || object === null ){
+						return egl.eglx.json.toJSONString(object, depth, maxDepth);
+					}
+					else{
+						return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd") + '"';
+					}
+					
+				case 'L':
+					object = egl.unboxAny( object );
+					if(object === undefined || object === null ){
+						return egl.eglx.json.toJSONString(object, depth, maxDepth);
+					}
+					else{
+						return '"' + egl.eglx.lang.StringLib.format(object, "HH:mm:ss") + '"' ;
+					}
+				
+				case 'J':
+					object = egl.unboxAny( object );
+					if(object === undefined || object === null ){
+						return egl.eglx.json.toJSONString(object, depth, maxDepth);
+					}
+					else{
+						return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd HH:mm:ss") + '"' ;
+					}
+				
+				case 'I':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'i':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case '0':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'F':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'f':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'B':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'N':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				
+				case 'd':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				case '9':
+					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+			}
+		   	if("eze$$value" in object){
+		   		return egl.eglx.json.toJSONString(egl.unboxAny( object ));
+			}
+		}
 		if (typeof(object) == "string") {
 			return '"' + egl.eglx.json.convertStringToJson(object) + '"';
 		}
@@ -59,24 +140,6 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 		}
 		if (typeof(object) == "boolean") {
 			return Boolean(object);
-		}
-		if (typeof(object) == "object" && object.eze$$signature) {
-		   var sig = object.eze$$signature;
-		   if (sig != null) {
-		       var kind = sig.charAt(0) === '?' ? sig.charAt(1) : sig.charAt(0);
-		   }
-		   if (kind == 'K') {
-		     return '"' + egl.eglx.lang.StringLib.format(egl.unboxAny( object ), "yyyy-MM-dd") + '"';
-		   }
-//unsupported 0.7		   else if (kind == 'L') {
-//		     return '"' + egl.egl.core.$StrLib.formatTime(object, "HH:mm:ss") + '"';//function does not exist
-//		   }
-		   else if (kind == 'J') {
-			   return '"' + egl.eglx.lang.StringLib.format(egl.unboxAny( object ), "yyyy-MM-dd HH:mm:ss") + '"' ;
-		   }
-		   	else if("eze$$value" in object){
-		   		return egl.eglx.json.toJSONString(egl.unboxAny( object ));
-			}
 		}
 		if (object instanceof egl.javascript.BigDecimal) {
 			return object.toString();
@@ -87,12 +150,16 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 		if (typeof object === "object" && object instanceof Array) {
 			try {
 				var s = [];
+				if(fieldInfo !== undefined && fieldInfo !== null){
+					fieldInfo = egl.clone(fieldInfo);
+					fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
+				}
 				s.push("[");
 				var needComma = false;
 				for (var n=0; n<object.length; n++) {
 					if (typeof(object[n]) != 'function') {
 						if (needComma) s.push(",");
-						s.push(egl.eglx.json.toJSONString(object[n], depth+1, maxDepth));
+						s.push(egl.eglx.json.toJSONString(object[n], depth+1, maxDepth, fieldInfo));
 						needComma = true;
 					}
 				}
@@ -120,7 +187,7 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*boolean*/ valid
 					} else {
 						fieldValue = object[fieldInfos[idx].getterFunction];
 					}
-					s.push(egl.eglx.json.toJSONString(egl.unboxAny( fieldValue ), depth+1, maxDepth));
+					s.push(egl.eglx.json.toJSONString(egl.unboxAny( fieldValue ), depth+1, maxDepth, fieldInfos[idx]));
 					needComma = true;
 				}
 			}
@@ -237,65 +304,90 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 			case 'N':
 				var colon = fieldInfo.eglSignature.indexOf(':');
 				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
-						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
-						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
+						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			
 			case 'd':
 				var colon = fieldInfo.eglSignature.indexOf(':');
 				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
-								egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
-								egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
+						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			case '9':
 				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(),
-							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';')), 
-							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon))));
+				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 		}
 	}
 	if ((eglObject == undefined || eglObject == null) && fieldInfo != null) {
 		eglObject = new fieldInfo.eglType();
 	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.Enumeration){
-		return egl.eglx.services.$ServiceRT.convertToEnum(jsonObject, fieldInfo.eglType);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt64){
-		return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt32){
-		return egl.eglx.lang.EInt32.fromEString(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt16){
-		return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat64){
-		return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat32){
-		return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDecimal){
-		return new egl.javascript.BigDecimal( jsonObject.toString() );
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EBoolean){
-		return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDate){
-		return egl.stringToDate(jsonObject, "yyyy-MM-dd");
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.ETimestamp){
-		return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
-	}
-	if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EString){
-		return jsonObject.toString();
-	}
-	if (typeof(jsonObject) == "string") {
-		return jsonObject;
-	}
-	if ( typeof(jsonObject) == "number") {
-		return jsonObject;
-	}
-	if (typeof(jsonObject) == "boolean") {
-		return jsonObject;
+	if(!(typeof jsonObject === "object" && jsonObject instanceof Array)){
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.Enumeration){
+			return egl.eglx.services.$ServiceRT.convertToEnum(jsonObject, fieldInfo.eglType);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt64){
+			return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt32){
+			return egl.eglx.lang.EInt32.fromEString(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EInt16){
+			return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat64){
+			return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EFloat32){
+			return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDecimal){
+			return new egl.javascript.BigDecimal( jsonObject.toString() );
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EBoolean){
+			return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EDate){
+			return egl.stringToDate(jsonObject, "yyyy-MM-dd");
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.ETimestamp){
+			return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
+		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EString){
+			return jsonObject.toString();
+		}
+		if (typeof(jsonObject) == "string") {
+			return jsonObject;
+		}
+		if ( typeof(jsonObject) == "number") {
+			return jsonObject;
+		}
+		if (typeof(jsonObject) == "boolean") {
+			return jsonObject;
+		}
+		if (eglObject !== null && typeof jsonObject === "object" && "eze$$getFieldInfos" in eglObject){
+			var fieldInfos = eglObject.eze$$getFieldInfos();
+			if (fieldInfos) {
+				for ( var idx = 0; idx < fieldInfos.length; idx++) {
+					var key = fieldInfos[idx].annotations["JsonName"].name;
+					var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx], cleanDictionary);
+					if (fieldInfos[idx].setterFunction instanceof Function) {
+						fieldInfos[idx].setterFunction.apply(value);
+					} else {
+						eglObject[fieldInfos[idx].setterFunction] = value;
+					}
+				}
+			}
+			return eglObject;
+		}
+		if(typeof jsonObject === "object" && eglObject === undefined || eglObject === null){
+			eglObject = new egl.eglx.lang.EDictionary();
+		}
+		else if(eglObject !== undefined && eglObject !== null && 
+				eglObject instanceof egl.eglx.lang.EDictionary &&
+				(cleanDictionary === undefined || cleanDictionary === true)){
+			eglObject.removeAll();
+		}
 	}
 	if (typeof jsonObject === "object" && typeof fieldInfo === "object" && fieldInfo != null && fieldInfo.eglSignature.indexOf("[") > -1) {
 		//for each array element create a new element
@@ -307,42 +399,32 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		}
 		return ary;
 	}
-	if(eglObject !== null && typeof jsonObject === "object" && "eze$$value" in eglObject && "eze$$signature" in eglObject){
-		this.populateObjectFromJsonObject(jsonObject, egl.unboxAny( eglObject ), undefined, cleanDictionary);
-		return eglObject;
-	}
-	if (eglObject !== null && typeof jsonObject === "object" && "eze$$getFieldInfos" in eglObject){
-		var fieldInfos = eglObject.eze$$getFieldInfos();
-		if (fieldInfos) {
-			for ( var idx = 0; idx < fieldInfos.length; idx++) {
-				var key = fieldInfos[idx].annotations["JsonName"].name;
-				var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx], cleanDictionary);
-				if (fieldInfos[idx].setterFunction instanceof Function) {
-					fieldInfos[idx].setterFunction.apply(value);
-				} else {
-					eglObject[fieldInfos[idx].setterFunction] = value;
-				}
-			}
-		}
-		return eglObject;
-	}
-	if(typeof jsonObject === "object" && eglObject === undefined || eglObject === null){
-		eglObject = new egl.eglx.lang.EDictionary();
-	}
-	else if(eglObject !== undefined && eglObject !== null && 
-			eglObject instanceof egl.eglx.lang.EDictionary &&
-			(cleanDictionary === undefined || cleanDictionary === true)){
-		eglObject.removeAll();
-	}
 	if (typeof jsonObject === "object" && jsonObject instanceof Array){
 		//for each array element create a new element
 		var ary = new Array();
 		for ( var idx = 0; idx < jsonObject.length; idx++) {
-			ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], idx < eglObject.length ? eglObject[idx] : null, null, cleanDictionary);
+			if(typeof eglObject === "object" && eglObject instanceof Array){
+				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], idx < eglObject.length ? eglObject[idx] : null, null, cleanDictionary);
+			}
+			else if(eglObject !== undefined && eglObject !== null){
+				var aryObj = eglObject;
+				if("eze$$clone" in eglObject){
+					aryObj = eglObject.eze$$clone();
+				}
+				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], aryObj, null, cleanDictionary);
+			}
+			else{
+				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, null, cleanDictionary);
+			}
+
 		}
 		return ary;
 	}
-	else if(typeof jsonObject === "object"){
+	if(eglObject !== null && typeof jsonObject === "object" && "eze$$value" in eglObject && "eze$$signature" in eglObject){
+		this.populateObjectFromJsonObject(jsonObject, egl.unboxAny( eglObject ), undefined, cleanDictionary);
+		return eglObject;
+	}
+	if(typeof jsonObject === "object"){
 		for (f in jsonObject) {
 			if(typeof jsonObject[f] !== "function"){
 				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
