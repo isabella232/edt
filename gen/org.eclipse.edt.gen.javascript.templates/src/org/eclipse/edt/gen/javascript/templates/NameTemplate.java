@@ -59,9 +59,13 @@ public class NameTemplate extends JavaScriptTemplate {
 						ctx.invoke(genQualifier, expr.getNamedElement(), ctx, out);
 					}
 					out.print( propertyFunction );
+					//When the LHS memeber field is processed
+					if ((ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) != null) && (ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) == Boolean.TRUE)){
+						ctx.putAttribute(expr.getNamedElement(), Constants.EXPR_LHS, false);
+					}
 					out.print( '(' );
 					ctx.invoke( genExpression, arg1, ctx, out );
-					out.print( ')' );
+					out.print( ')' );					
 				}
 			}
 		}

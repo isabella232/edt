@@ -28,8 +28,12 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 			out.print( propertyFunction );
 			out.print( "()" );
 		}
-		else {
+		else {			
 			genName(element, ctx, out);
+			//When the LHS memeber field is processed
+			if ((ctx.getAttribute(element, Constants.EXPR_LHS) != null) && (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.TRUE)){
+				ctx.putAttribute(element, Constants.EXPR_LHS, false);
+			}
 		}
 	}
 

@@ -46,7 +46,6 @@ public class AssignmentTemplate extends JavaScriptTemplate {
 		if (field != null && field.getContainer() != null && field.getContainer() instanceof Type) {
 			ctx.putAttribute(field, Constants.EXPR_LHS, isLHS); // TODO sbg do we need to clear / remove this?
 			ctx.invoke(genContainerBasedAssignment, (Type) field.getContainer(), ctx, out, expr, field);
-			ctx.putAttribute(field, Constants.EXPR_LHS, false); // TODO sbg do we need to clear / remove this?
 		} else
 			genAssignment(expr, ctx, out);
 
