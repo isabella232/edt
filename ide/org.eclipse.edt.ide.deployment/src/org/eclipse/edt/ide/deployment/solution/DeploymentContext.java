@@ -140,7 +140,7 @@ public class DeploymentContext {
 	public void showMessage( String messageID ) {
 		  DeploymentDesc model = getDeploymentDesc();
 		  IProject project = getSourceProject();
-		  IFile tempFile = (IFile)project.findMember("EGLSource"+ IPath.SEPARATOR + model.getName() + ".egldd");
+		  IFile tempFile = (IFile)project.findMember("EGLSource"+ IPath.SEPARATOR + model.getEGLDDFileName() + ".egldd");
 	      String tempMessage = Messages.bind(messageID, new String[]{tempFile.getFullPath().makeRelative().toOSString()});
 			
 	      final String message = tempMessage;
