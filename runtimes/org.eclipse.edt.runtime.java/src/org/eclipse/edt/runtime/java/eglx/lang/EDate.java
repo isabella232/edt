@@ -203,6 +203,12 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 	}
 
+	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2);
+	}
+
 	public static boolean equals(Calendar op1, Calendar op2) {
 		if (op1 == null && op2 == null)
 			return true;

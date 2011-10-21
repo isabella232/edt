@@ -445,6 +445,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return result;
 	}
 
+	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2);
+	}
+
 	public static boolean equals(Calendar op1, Calendar op2) {
 		if (op1 == null && op2 == null)
 			return true;
