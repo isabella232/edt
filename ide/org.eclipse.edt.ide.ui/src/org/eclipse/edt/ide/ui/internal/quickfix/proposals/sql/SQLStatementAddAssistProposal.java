@@ -101,7 +101,9 @@ public class SQLStatementAddAssistProposal extends
 		sqlStatement = null;
 		if (statementFactory != null) {
 			sqlStatement = statementFactory.buildDefaultSQLStatement();
-			
+			if(!info.isUsingExisted()) {
+				usingClause = statementFactory.getEglUsingClause();
+			}
 			
 			if (isGetByPositionStatement()) {
 				sqlStatement = null;

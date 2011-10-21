@@ -81,6 +81,7 @@ public abstract class  AbstractSQLStatementProposal extends
 	protected EGLEditor editor;
 	protected String sqlStatement;
 	protected String intoClause;
+	protected String usingClause;
 	boolean isExecuteStatement = false;
 	boolean isForUpdateStatement = false;
 	protected boolean addIntoClause = false;
@@ -102,6 +103,7 @@ public abstract class  AbstractSQLStatementProposal extends
 	protected void initialize() {
 		messages = null;
 		sqlStatement = null;
+		usingClause = null;
 		intoClause = null;
 		actionFailed = false;
 		hasDynamicArrayError = false;
@@ -568,6 +570,11 @@ public abstract class  AbstractSQLStatementProposal extends
 			}
 			if (!isExecuteStatement) {
 				buffer.append(" "); //$NON-NLS-1$
+				if(usingClause != null) {
+					usingClause = trimTrailingCRLF(usingClause);
+					buffer.append(usingClause);
+					buffer.append(" "); //$NON-NLS-1$
+				}
 				buffer.append(IEGLConstants.KEYWORD_WITH);
 			}
 			if (!(isExecuteStatement && isResetAction())) {

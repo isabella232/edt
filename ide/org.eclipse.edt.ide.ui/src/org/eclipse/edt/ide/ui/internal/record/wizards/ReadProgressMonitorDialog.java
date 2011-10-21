@@ -60,7 +60,7 @@ public class ReadProgressMonitorDialog extends ProgressMonitorDialog {
 						try {
 							input.append(readFromStream(url.openStream(), monitor));
 						} catch (Exception ex) {
-							error(ex.getMessage());
+							error(ex.toString());
 						}
 					} else {
 						try {

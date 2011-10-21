@@ -43,6 +43,7 @@ public class SQLIOStatementActionInfo {
 	boolean isOpenWithSelectStatement;
 	boolean isGetNext;
 	boolean isNoCursor;
+	boolean isUsingExisted;
 	ICompilerOptions compilerOption;
 
 	public String getIOObjectName() {
@@ -203,5 +204,13 @@ public class SQLIOStatementActionInfo {
 
 	public void setCompilerOption(ICompilerOptions compilerOption) {
 		this.compilerOption = compilerOption;
+	}
+	
+	public boolean isUsingExisted() {
+		return isUsingExisted;
+	}
+	
+	public void setUsingExisted(boolean usingExisted) {
+		isUsingExisted = usingExisted;
 	}
 }

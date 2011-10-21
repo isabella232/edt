@@ -36,10 +36,22 @@ public class RecordFromXMLSchemaWizard extends AbstractRecordFromInputWizard imp
 			if (conv.convert((RecordSource)input)) {
 				setParts(conv.getResultParts());
 			}
-			if (!conv.isOK())
+			
+			boolean containingValidValue = false;
+			if(conv.getErrors() != null) {
+				for(String error: conv.getErrors()) {
+					if(error != null && !error.equalsIgnoreCase("null")) {
+						containingValidValue = true;
+						break;
+					}
+				}
+			}
+			
+			if (!conv.isOK() && containingValidValue) {
 				setMessages(conv.getErrors());
-			else
+			} else {
 				setMessages(conv.getMessages());	
+			}
 			
 			ret = conv.isOK();
 		}

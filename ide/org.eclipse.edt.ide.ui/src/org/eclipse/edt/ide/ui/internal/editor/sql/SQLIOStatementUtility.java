@@ -11,17 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor.sql;
 
-import java.util.List;
-
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForUpdateClause;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
@@ -30,6 +25,7 @@ import org.eclipse.edt.compiler.core.ast.NoCursorClause;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
+import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithIDClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
@@ -114,6 +110,11 @@ public class SQLIOStatementUtility {
 				}
 				public boolean visit(UsingKeysClause keysClause) {
 					info.setUsingKeysNode(keysClause);
+					return false;
+				}
+				
+				public boolean visit(UsingClause keysClause) {
+					info.setUsingExisted(true);
 					return false;
 				}
 			});

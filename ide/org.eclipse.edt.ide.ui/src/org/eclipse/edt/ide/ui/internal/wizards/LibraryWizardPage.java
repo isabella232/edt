@@ -43,11 +43,7 @@ public class LibraryWizardPage extends EGLPartWizardPage {
 
 	private StringDialogField fLibraryDialogField;
 	private StatusInfo fLibraryStatus;
-	
 	private Group fLibraryTypeGroup;
-//	private Button fBasicLibraryButton;
-//	private Button fNativeLibraryButton;
-	//private Button fServiceBindingLibraryButton;
 
 	private LibraryFieldAdapter adapter = new LibraryFieldAdapter();
 
@@ -107,8 +103,6 @@ public class LibraryWizardPage extends EGLPartWizardPage {
 		modifyFileListeners();
 		createLibraryTypeControls(composite);
 		
-//		createTemplateSelectionControls(composite);
-		
 		setControl(composite);
 		
 		validatePage();	
@@ -154,15 +148,15 @@ public class LibraryWizardPage extends EGLPartWizardPage {
 		fLibraryTypeGroup.setLayout(groupLayout);
 		fLibraryTypeGroup.setLayoutData(gd);
 		
-		createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeBasic, LibraryConfiguration.BASIC_LIBRARY);
-		createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeNative, LibraryConfiguration.NATIVE_LIBRARY);
-		
-		if(EGLBasePlugin.isRUI()){
+		//createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeNative, LibraryConfiguration.NATIVE_LIBRARY);
+		boolean isRuiProject = getPackageFragmentRoot().getEGLProject().isRuiProject();
+		//if(EGLBasePlugin.isRUI()){
+		if(isRuiProject){
+			createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeBasic, LibraryConfiguration.BASIC_LIBRARY);
 			createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeRUIProp, LibraryConfiguration.RUIPROP_LIBRARY);
+		} else {
+			libraryTypeComposite.setVisible(false);
 		}
-
-		//Remove this line when NativeLibrary and RUIpropertiesLibrary are supported 
-		libraryTypeComposite.setVisible(false);
 	}
 	
 	private Button createLibraryChoiceButton(Composite grp, String btnLabel, final int libType){
