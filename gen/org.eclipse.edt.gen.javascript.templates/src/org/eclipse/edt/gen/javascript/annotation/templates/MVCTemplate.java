@@ -258,7 +258,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 					out.print( "return " );
 					genWithQualifier(ctx, view, out);			
 					out.print( "." );
-					ctx.invoke(genExpression, retrieveValidStateHelperMethodName, ctx, out);  // NOGO sbg Verify with test; possibly alias qualifier     retrieveValidStateHelperMethodName.getMember().accept( context.getAliaser() );
+					ctx.invoke(genName, retrieveValidStateHelperMethodName.getNamedElement(), ctx, out);  // NOGO sbg Verify with test; possibly alias qualifier     retrieveValidStateHelperMethodName.getMember().accept( context.getAliaser() );
 					out.print( "();" );
 					genCatchBlock(ctx, "retrieveValidStateHelper", model, out);
 				}
@@ -272,7 +272,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 					out.print(", function(/*String*/ s ) { try { " );
 					genWithQualifier(ctx, view, out);
 					out.print(".");
-					ctx.invoke(genExpression, publishMessageHelperMethodName, ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
+					ctx.invoke(genName, publishMessageHelperMethodName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
 					out.print( "(s);" );
 					genCatchBlock(ctx, "publishMessageHelper", model, out);
 				}
