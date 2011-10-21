@@ -384,4 +384,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genServiceInvocationInParam(Type type, Context ctx, TabbedWriter out, Expression arg){
 		ctx.invoke(genExpression, arg, ctx, out);
 	}
+	public void genServiceCallbackArgType(Type type, Context ctx, TabbedWriter out){
+		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+	}
 }

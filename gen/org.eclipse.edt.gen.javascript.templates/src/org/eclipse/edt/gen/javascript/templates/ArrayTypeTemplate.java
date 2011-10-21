@@ -153,4 +153,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genSignature, etType, ctx, out, arg);
 		out.print("\")");
 	}
+	public void genServiceCallbackArgType(ArrayType type, Context ctx, TabbedWriter out){
+		ctx.invoke(genRuntimeTypeName, type.getElementType(), ctx, out, TypeNameKind.EGLImplementation);
+	}
 }
