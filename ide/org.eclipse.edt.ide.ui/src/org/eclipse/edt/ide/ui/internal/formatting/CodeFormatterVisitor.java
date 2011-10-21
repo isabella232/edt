@@ -2338,23 +2338,24 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		push2ContextPath(forEachStatement);
 		
 		final CodeFormatterVisitor thisVisitor = this;		
-		final Expression sqlRerdExpr = forEachStatement.hasSQLRecord() ? forEachStatement.getSQLRecord() : null;
+//		final Expression sqlRerdExpr = forEachStatement.hasSQLRecord() ? forEachStatement.getSQLRecord() : null;
 //		final IntoClause intoClause = forEachStatement.hasIntoClause() ? forEachStatement.getIntoClause() : null;
 		final List stmts = forEachStatement.getStmts();
 		final Node firstStmt = (stmts != null && !stmts.isEmpty()) ? (Node)stmts.get(0) : null;
 		
 		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
 			public void format(Symbol prevToken, Symbol currToken) {
-				if(sqlRerdExpr != null && currToken.left == sqlRerdExpr.getOffset()){
-					setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_FOREACH), 
-							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);					
-					sqlRerdExpr.accept(thisVisitor);					
-				}
+//				if(sqlRerdExpr != null && currToken.left == sqlRerdExpr.getOffset()){
+//					setGlobalFormattingSettings(-1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_FOREACH), 
+//							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);					
+//					sqlRerdExpr.accept(thisVisitor);					
+//				}
 //				else if(intoClause != null && currToken.left == intoClause.getOffset()){
 //					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 //					intoClause.accept(thisVisitor);
 //				}
-				else if(firstStmt != null && currToken.left == firstStmt.getOffset()){
+//				else 
+				if(firstStmt != null && currToken.left == firstStmt.getOffset()){
 					indent();
 					formatStatements(stmts);
 					unindent();
@@ -2375,7 +2376,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 					
 					switch(currToken.sym){
 					case NodeTypes.FROM:
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_FOREACH);
+						addSpace = true;
 						break;
 					case NodeTypes.RPAREN:
 						addSpace =getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_FOREACH);
@@ -2597,6 +2598,31 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
+	public boolean visit(WithExpressionClause withExpressionClause) {
+		// ::= WITH:with1 inlineSQLStatement:inlineSQLStatement1
+		// {: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left,
+		// inlineSQLStatement1right); :}
+		// inlineSQLStatement
+		// ::= SQLSTMTLIT:sqlStatement
+		// {: RESULT = sqlStatement; :}
+		push2ContextPath(withExpressionClause);
+
+		// print with
+		printStuffBeforeNode(withExpressionClause.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
+
+		Expression expr = withExpressionClause.getExpression();
+		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+		expr.accept(this);
+
+//		printStuffBeforeToken(
+//				NodeTypes.SEMI,
+//				-1,
+//				getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
+
+		popContextPath();
+		return false;
+	}
+	
 	public boolean visit(WithInlineSQLClause withInlineSQLClause) {
 //		::=	WITH:with1 inlineSQLStatement:inlineSQLStatement1
 //		{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
@@ -2705,19 +2731,23 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
 		expr.accept(this);
 		
-		List delOptions = deleteStatement.getOptions();
-		if(delOptions != null && !delOptions.isEmpty()){
-			int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);			
+		List delOptions = new ArrayList();
+		delOptions.add(deleteStatement.getDataSource());
+		delOptions.addAll(deleteStatement.getOptions());
+
+		if (delOptions != null && !delOptions.isEmpty()) {
+			int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);
 			int wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);
 			indent(numOfIndents4Wrapping);
-			
-			for(Iterator it=delOptions.iterator(); it.hasNext();){
-				Node delOption = (Node)it.next();
+
+			for (Iterator it = delOptions.iterator(); it.hasNext();) {
+				Node delOption = (Node) it.next();
 				setGlobalFormattingSettings(-1, true, wrappingPolicy);
-				delOption.accept(this);				
+				delOption.accept(this);
 			}
 			unindent(numOfIndents4Wrapping);
 		}
+		
 		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
 
 		popContextPath();
@@ -2734,7 +2764,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			public void format(Symbol prevToken, Symbol currToken) {
 				int numOfBlankLines = -1;
 				boolean addSpace = false;
-				if(prevToken.sym == NodeTypes.FROM)
+				if(prevToken.sym == NodeTypes.FROM || prevToken.sym == NodeTypes.TO)
 					addSpace = true;
 				printToken(prevToken, currToken, numOfBlankLines, addSpace);
 			}
@@ -2937,6 +2967,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 						
 					switch(prevToken.sym){
 					case NodeTypes.EXECUTE:
+					case NodeTypes.ID:
 						addSpace = true;
 						indent(numOfIndents4Wrapping);
 						break;
@@ -3346,40 +3377,30 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		{: RESULT = new PrepareStatement(preparedStmtID, prepareOptions1, prepare1left, semi1right); :}		
 		push2ContextPath(prepareStatement);
 		
-		final CodeFormatterVisitor thisVisitor = this;		
-		final int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);			
-		final int wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);		
+		// print PREPARE
+		printStuffBeforeNode(prepareStatement.getOffset(), fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
+
+		int wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_IOSTMT);		
+		setGlobalFormattingSettings(-1, true, wrappingPolicy);
 		
-//		final List prepareOpts = prepareStatement.getPrepareOptions();
-//		final Node firstPrepareOpt = (prepareOpts != null && !prepareOpts.isEmpty()) ? (Node)prepareOpts.get(0) : null;
+		int numOfIndents4Wrapping = getIntPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_NUMINDENTS);			
+			
+		indent(numOfIndents4Wrapping);				
+
+		if ( prepareStatement.getSqlStmt() != null ) {
+			prepareStatement.getSqlStmt().accept(this);
+		}
+
+		if ( prepareStatement.getDataSource() != null ) {
+			prepareStatement.getDataSource().accept(this);
+		}
 		
-		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
-			public void format(Symbol prevToken, Symbol currToken) {
-//				if(firstPrepareOpt != null && currToken.left == firstPrepareOpt.getOffset()){
-//					indent(numOfIndents4Wrapping);
-//					for(Iterator it = prepareOpts.iterator(); it.hasNext();){
-//						Node prepareOpt = (Node)it.next();
-//						setGlobalFormattingSettings(-1, true, wrappingPolicy);
-//						prepareOpt.accept(thisVisitor);						
-//					}
-//					unindent(numOfIndents4Wrapping);
-//				}
-//				else
-//				{
-					int numOfBlankLines = -1;
-					boolean addSpace = false;
-					
-					if(prevToken.sym == NodeTypes.PREPARE)
-						addSpace = true;
-					
-					if(currToken.sym == NodeTypes.SEMI)
-						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);
-					printToken(prevToken, currToken, numOfBlankLines, addSpace);
-				}
-				
-//			}
-		};
-		formatNode(prepareStatement, callbackFormatter, fGlobalNumOfBlankLines, fGlobalAddSpace, fCurrentWrappingPolicy);
+		if ( prepareStatement.getWithClause() != null ) {
+			prepareStatement.getWithClause().accept(this);
+		}
+		unindent(numOfIndents4Wrapping);
+
+		printStuffBeforeToken(NodeTypes.SEMI, -1, getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT));
 		
 		popContextPath();
 		return false;

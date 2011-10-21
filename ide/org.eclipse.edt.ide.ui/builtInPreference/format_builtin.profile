@@ -106,7 +106,7 @@ end"/>
         </pref>
         <pref altDisplay="%Data.%Data_declarations_class_and_local.%Before_comma" display="%Comma.%Before_comma.%Data_declarations_class_and_local" id="beforeComma.dataDecl" value="false">
           <preview code="
-Library myhandler type RUIhandler
+Library myhandler
 aText, bText, cText, dText String;  //Class data declaration &#13;
 private const c1, c2 int = 4;
 
@@ -147,7 +147,7 @@ end
         <pref altDisplay="%Statements.%Foreach.%Before_comma" display="%Comma.%Before_comma.%Foreach" id="beforeComma.forEach" value="false">
           <preview code="
 function foo8()
-foreach( from myResultSetID into a, b, c ) //into clause in a forEach statement &#13;
+foreach(x from myResultSetID) //into clause in a forEach statement &#13;
 end 
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
@@ -343,7 +343,7 @@ end"/>
         <pref altDisplay="%Statements.%Foreach.%Before_opening_parenthesis_" display="%Parenthesis_.%Before_opening_parenthesis_.%Foreach" id="beforeLParen.forEach" value="false">
           <preview code="
 function foo5(i int in)
-forEach (from selectEmp) //ForEach statement &#13;
+forEach (j from selectEmp) //ForEach statement &#13;
 i = i + 1;
 continue;
 end 
@@ -658,13 +658,7 @@ end"/>
           <preview ref="whiteSpace.beforeComma.useStatement"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
-        <pref display="%EGL_language.%Move_statement" id="moveStmt" value="1">
-          <preview code="
-function fooM()
-    move a + b to t [5 : 6] byName byPosition for expr1; //Move statement &#13;
-end"/>
-          <egl:control.ref ref="wsTreeControl"/>
-        </pref>
+       
         <pref display="%EGL_language.%For_statement" id="forStmt" value="1">
           <preview ref="whiteSpace.beforeLParen.for"/>
           <egl:control.ref ref="wsTreeControl"/>
@@ -676,6 +670,31 @@ function fooCallStmts()
 call svr1.foo(param1, param2) returning to myCallbackFunc onException myErrorCallbackFunc {timeout=15000};
 end"/>
            <egl:control.ref ref="wsTreeControl"/>
+        </pref>
+        <pref display="%EGL_language.%IO_statement" id="ioStmt" value="2">
+          <preview code="
+function fooIOStmts()
+
+&#13;&#13;//Add statement &#13;
+add offering to ds;
+
+&#13;&#13;//Delete statement &#13;
+delete customer from ds;
+
+&#13;&#13;//Execute statement &#13;
+execute from fromclause;
+
+&#13;&#13;//Get statement &#13;
+get action_target1 from ds;
+
+&#13;&#13;//Open statement &#13;
+open sqlstatement from ds; 
+
+&#13;&#13;//Prepare statement &#13;
+prepare sqlStatement from ds with sqlLiteral;
+
+end"/>
+          <egl:control.ref ref="wsTreeControl"/>
         </pref>
         <pref display="%EGL_language.%Data_declarations_class_and_local" id="varDelcaration" value="1">
           <preview ref="whiteSpace.beforeComma.dataDecl"/>
@@ -696,9 +715,6 @@ case (i)
 when (i + 5, 7) //Expression list in when clause in a case statement &#13;
 end&#13;&#13;
 
-//Expression list in into clause in a forEach statement &#13;
-foreach( from myResultSetID into a, b, c )
-end&#13;&#13;
 end"/>
           <egl:control.ref ref="wsTreeControl"/>
         </pref>
