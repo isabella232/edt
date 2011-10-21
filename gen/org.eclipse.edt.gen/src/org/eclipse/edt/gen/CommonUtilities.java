@@ -8,10 +8,8 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 
@@ -92,23 +90,14 @@ public class CommonUtilities {
 
 	public static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx) {
 		if (parameter.getParameterKind() == ParameterKind.PARM_INOUT) {
-			if (TypeUtils.isReferenceType(parameter.getType()) && 
-				(parameter.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Any) ||
-				parameter.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)))
-				return false;
 			if (TypeUtils.isReferenceType(parameter.getType()))
 				return true;
 			if (ctx.mapsToPrimitiveType(parameter.getType()))
 				return true;
 			if (parameter.isNullable())
 				return true;
-		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT) {
-			if (TypeUtils.isReferenceType(parameter.getType()) && 
-				(parameter.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Any) ||
-				parameter.getType() == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)))
-				return false;
+		} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT)
 			return true;
-		}
 		return false;
 	}
 
