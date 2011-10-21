@@ -443,7 +443,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 						out.print(", ");
 					
 					//get the temp var name
-					ctx.invoke(genRuntimeTypeName, param.getType(), ctx, out, TypeNameKind.EGLImplementation);
+					ctx.invoke(genServiceCallbackArgType, param.getType(), ctx, out);
 					isFirst = false;				
 				}
 			}
