@@ -114,7 +114,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	public static ETimestamp ezeBox(Calendar value, int startCode, int endCode) {
 		Calendar clone = null;
 		if (value != null) {
-			clone = (Calendar) value.clone();
+			clone = ezeClone(value, startCode, endCode);
 		}
 		return new ETimestamp(clone, startCode, endCode);
 	}
@@ -148,6 +148,29 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return EString.asString(object);
 	}
 
+	public static Calendar ezeClone(Calendar original, int startCode, int endCode) {
+		if (original == null)
+			return null;
+		Calendar cloned = defaultValue();
+		cloned.clear();
+		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE && original.isSet(Calendar.YEAR))
+			cloned.set(Calendar.YEAR, original.get(Calendar.YEAR));
+		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE && original.isSet(Calendar.MONTH))
+			cloned.set(Calendar.MONTH, original.get(Calendar.MONTH));
+		if (startCode <= DAY_CODE && endCode >= DAY_CODE && original.isSet(Calendar.DATE))
+			cloned.set(Calendar.DATE, original.get(Calendar.DATE));
+		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE && original.isSet(Calendar.HOUR_OF_DAY))
+			cloned.set(Calendar.HOUR_OF_DAY, original.get(Calendar.HOUR_OF_DAY));
+		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE && original.isSet(Calendar.MINUTE))
+			cloned.set(Calendar.MINUTE, original.get(Calendar.MINUTE));
+		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE && original.isSet(Calendar.SECOND))
+			cloned.set(Calendar.SECOND, original.get(Calendar.SECOND));
+		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE && original.isSet(Calendar.MILLISECOND))
+			cloned.set(Calendar.MILLISECOND, original.get(Calendar.MILLISECOND));
+		cloned.getTimeInMillis();
+		return cloned;
+	}
+	
 	public static Calendar asTimestamp(EDate timestamp) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -679,8 +702,14 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
-			cal.get(Calendar.SECOND));
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int date = cal.get(Calendar.DATE);
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int minute = cal.get(Calendar.MINUTE);
+		int second = cal.get(Calendar.SECOND);
+		cal.clear();
+		cal.set(year, month, date, hour, minute, second);
 		return cal;
 	}
 
@@ -688,22 +717,28 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis(now);
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE),
-			cal.get(Calendar.SECOND));
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int date = cal.get(Calendar.DATE);
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		int minute = cal.get(Calendar.MINUTE);
+		int second = cal.get(Calendar.SECOND);
+		int fraction = cal.get(Calendar.MILLISECOND);
+		cal.clear();
 		if (startCode <= YEAR_CODE && endCode >= YEAR_CODE)
-			cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+			cal.set(Calendar.YEAR, year);
 		if (startCode <= MONTH_CODE && endCode >= MONTH_CODE)
-			cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+			cal.set(Calendar.MONTH, month);
 		if (startCode <= DAY_CODE && endCode >= DAY_CODE)
-			cal.set(Calendar.DATE, cal.get(Calendar.DATE));
+			cal.set(Calendar.DATE, date);
 		if (startCode <= HOUR_CODE && endCode >= HOUR_CODE)
-			cal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+			cal.set(Calendar.HOUR_OF_DAY, hour);
 		if (startCode <= MINUTE_CODE && endCode >= MINUTE_CODE)
-			cal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+			cal.set(Calendar.MINUTE, minute);
 		if (startCode <= SECOND_CODE && endCode >= SECOND_CODE)
-			cal.set(Calendar.SECOND, cal.get(Calendar.SECOND));
+			cal.set(Calendar.SECOND, second);
 		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE)
-			cal.set(Calendar.MILLISECOND, cal.get(Calendar.MILLISECOND));
+			cal.set(Calendar.MILLISECOND, fraction);
 		return asTimestamp(cal, startCode, endCode);
 	}
 
@@ -764,7 +799,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "dateOf", "yyyyMMdd" );
 		}
-		return new ETimestamp((Calendar) aTimestamp.clone(), YEAR_CODE, DAY_CODE).ezeUnbox();
+		return new ETimestamp(ezeClone(aTimestamp, YEAR_CODE, DAY_CODE), YEAR_CODE, DAY_CODE).ezeUnbox();
 	}
 
 	/**
@@ -776,7 +811,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "timeOf", "HHmmss" );
 		}
-		return new ETimestamp((Calendar) aTimestamp.clone(), HOUR_CODE, SECOND_CODE).ezeUnbox();
+		return new ETimestamp(ezeClone(aTimestamp, HOUR_CODE, SECOND_CODE), HOUR_CODE, SECOND_CODE).ezeUnbox();
 	}
 
 	/**
@@ -791,6 +826,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			startCode = mask.getStartCode();
 			endCode = mask.getEndCode();
 		}
-		return new ETimestamp((Calendar) aTimestamp.clone(), startCode, endCode).ezeUnbox();
+		return new ETimestamp(ezeClone(aTimestamp, startCode, endCode), startCode, endCode).ezeUnbox();
 	}
 }
