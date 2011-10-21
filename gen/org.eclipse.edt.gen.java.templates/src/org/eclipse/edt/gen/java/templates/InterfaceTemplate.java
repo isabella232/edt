@@ -11,21 +11,66 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class InterfaceTemplate extends JavaTemplate {
 
 	public void preGen(Type type, Context ctx) {}
-	
+
 	public void preGenClassBody(Interface part, Context ctx) {}
 
-	public void genPart(Interface part, Context ctx, TabbedWriter out) {}
+	public void genClassHeader(Interface part, Context ctx, TabbedWriter out) {
+		out.print("public interface ");
+		ctx.invoke(genClassName, part, ctx, out);
+		List<StructPart> extndsAry = part.getSuperTypes();
+		if (extndsAry != null) {
+			out.print(" extends");
+			String sep = " ";
+			for (StructPart extend : extndsAry) {
+				out.print(sep + extend.getFullyQualifiedName());
+				sep = ", ";
+			}
+		}
+		out.println(" {");
+	}
 
-	public void genClassBody(Interface part, Context ctx, TabbedWriter out) {}
+	public void genClassBody(Interface part, Context ctx, TabbedWriter out) {
+		// Add this part's file to the smap files list, so that this part is always the first file listed.
+		String file = IRUtils.getQualifiedFileName(part);
+		ctx.setCurrentFile(file);
+		if (ctx.getSmapFiles().indexOf(file) < 0) {
+			ctx.getSmapFiles().add(file);
+		}
 
-	public void genClassHeader(Interface part, Context ctx, TabbedWriter out) {}
+		ctx.invoke(genFields, part, ctx, out);
+		ctx.invoke(genFunctions, part, ctx, out);
+	}
 
+	public void genFields(Interface part, Context ctx, TabbedWriter out) {
+		for (Field field : part.getFields()) {
+			ctx.invoke(genField, part, ctx, out, field);
+		}
+	}
+
+	public void genField(Interface part, Context ctx, TabbedWriter out, Field arg) {
+		ctx.invoke(genDeclaration, arg, ctx, out);
+	}
+
+	public void genFunction(Interface part, Context ctx, TabbedWriter out, Function arg) {
+		ctx.invoke(genRuntimeTypeName, arg, ctx, out, TypeNameKind.JavaPrimitive);
+		out.print(" ");
+		ctx.invoke(genName, arg, ctx, out);
+		out.print("(");
+		ctx.foreach(arg.getParameters(), ',', genDeclaration, ctx, out);
+		out.println(");");
+	}
 }
