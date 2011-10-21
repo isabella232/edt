@@ -12,6 +12,7 @@ package eglx.json;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -20,9 +21,26 @@ import org.eclipse.edt.javart.json.NameValuePairNode;
 import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.json.StringNode;
 import org.eclipse.edt.javart.json.ValueNode;
-import org.eclipse.edt.javart.services.*;
+import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.javart.services.FunctionParameter;
+import org.eclipse.edt.javart.services.FunctionParameterKind;
+import org.eclipse.edt.javart.services.FunctionSignature;
+import org.eclipse.edt.javart.services.ServiceUtilities;
+import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartUtil;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
 import eglx.lang.AnyException;
 
@@ -135,7 +153,77 @@ public class JsonUtilities {
 			FunctionParameter functionParameter = signature.parameters()[idx];
 			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
 				try {
-					parameters.add(EAny.ezeWrap(functionParameter.parameterType().newInstance()));
+					Class<?> fieldType = functionParameter.parameterType();
+					Object newValue = null;
+					if(functionParameter.arrayDimensions() > 0){
+						newValue = EList.ezeNew(fieldType);
+					}
+					else if(fieldType.equals(EBigint.class)){
+						newValue = EBigint.asBigint(0);
+			        }
+					else if(fieldType.equals(EBoolean.class)){
+			        	newValue = EBoolean.asBoolean(false);
+			        }
+					else if(fieldType.equals(EDate.class)){
+			    		Calendar cal = DateTimeUtil.getBaseCalendar();
+			    		cal.get(Calendar.YEAR);
+			    		newValue = EDate.asDate(cal);
+			        }
+					else if(fieldType.equals(EDecimal.class)){
+			        	if(functionParameter.asOptions() != null && functionParameter.asOptions().length > 1){
+				        	int length = Integer.parseInt(functionParameter.asOptions()[0]);
+				        	int decimal = Integer.parseInt(functionParameter.asOptions()[1]);
+				        	newValue = EDecimal.asDecimal(0, length, decimal);
+			        	}
+			        	else{
+			        		newValue = EDecimal.asDecimal(0);
+			        	}
+			        }
+					else if(fieldType.equals(EFloat.class)){
+			        	newValue = EFloat.asFloat(0);
+			        }
+					else if(fieldType.equals(EInt.class)){
+			        	newValue = EInt.asInt(0);
+			        }
+			        else if(fieldType.equals(ESmallfloat.class)){
+			        	newValue = ESmallfloat.asSmallfloat(0);
+			        }
+			        else if(fieldType.equals(ESmallint.class)){
+			        	newValue = ESmallint.asSmallint(0);
+			        }
+			        else if(fieldType.equals(EString.class)){
+			        	newValue = "";
+			        }
+			        else if(fieldType.equals(ETimestamp.class)){
+		        		int start = ETimestamp.YEAR_CODE;
+		        		int end = ETimestamp.SECOND_CODE;
+			        	if(functionParameter.asOptions() != null && functionParameter.asOptions().length > 1){
+			        		start = getETimestampStaticField(functionParameter.asOptions()[0]);
+			        		end = getETimestampStaticField(functionParameter.asOptions()[1]);
+			        	}
+			    		Calendar cal = DateTimeUtil.getBaseCalendar();
+			    		cal.get(Calendar.YEAR);
+			        	newValue = ETimestamp.asTimestamp(cal, start, end);
+			        }
+			        else if(AnyValue.class.isAssignableFrom(fieldType)){
+		        		newValue =  fieldType.newInstance();
+			        }
+			        else if(ExecutableBase.class.isAssignableFrom(fieldType)){
+			        	newValue =  fieldType.newInstance();
+			        }
+			        else if(fieldType.equals(Enum.class)){
+			        	for(Object enumConstant : fieldType.getEnumConstants()){
+			        		if(enumConstant instanceof Enum){
+			        			newValue = enumConstant;
+			        			break;
+			        		}
+			        	}
+			        }
+
+					if(method.getParameterTypes()[idx].equals(AnyBoxedObject.class)){
+						newValue = EAny.ezeWrap(newValue);
+					}
+					parameters.add(newValue);
 				} catch (Exception e) {
 					JavartUtil.makeEglException(e);
 				}
@@ -151,5 +239,44 @@ public class JsonUtilities {
 		}
 
 		return parameters.toArray(new Object[parameters.size()]);
+	}
+	static int getETimestampStaticField(String fieldName){
+		if("YEAR_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.YEAR_CODE;
+		}
+		else if("SECOND_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.SECOND_CODE;
+		}
+		else if("MONTH_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.MONTH_CODE;
+		}
+		else if("MINUTE_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.MINUTE_CODE;
+		}
+		else if("HOUR_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.HOUR_CODE;
+		}
+		else if("FRACTION6_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION6_CODE;
+		}
+		else if("FRACTION5_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION5_CODE;
+		}
+		else if("FRACTION4_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION4_CODE;
+		}
+		else if("FRACTION3_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION3_CODE;
+		}
+		else if("FRACTION2_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION2_CODE;
+		}
+		else if("FRACTION1_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.FRACTION1_CODE;
+		}
+		else if("DAY_CODE".equalsIgnoreCase(fieldName)){
+			return ETimestamp.DAY_CODE;
+		}
+		return 0;
 	}
 }

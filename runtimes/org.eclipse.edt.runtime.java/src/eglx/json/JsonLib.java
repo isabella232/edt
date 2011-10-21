@@ -23,12 +23,37 @@ import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.json.*;
+import org.eclipse.edt.javart.json.ArrayNode;
+import org.eclipse.edt.javart.json.BooleanNode;
+import org.eclipse.edt.javart.json.DecimalNode;
+import org.eclipse.edt.javart.json.FloatingPointNode;
+import org.eclipse.edt.javart.json.IntegerNode;
+import org.eclipse.edt.javart.json.Json;
+import org.eclipse.edt.javart.json.JsonParser;
 import org.eclipse.edt.javart.json.JsonUtilities;
+import org.eclipse.edt.javart.json.NameValuePairNode;
+import org.eclipse.edt.javart.json.NullNode;
+import org.eclipse.edt.javart.json.ObjectNode;
+import org.eclipse.edt.javart.json.ParseException;
+import org.eclipse.edt.javart.json.StringNode;
+import org.eclipse.edt.javart.json.ValueNode;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.util.DateTimeUtil;
-import org.eclipse.edt.runtime.java.eglx.lang.*;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.NullType;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
@@ -285,8 +310,8 @@ public class JsonLib {
         		int start = ETimestamp.YEAR_CODE;
         		int end = ETimestamp.SECOND_CODE;
 	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 1){
-	        		start = getETimestampStaticField(fieldTypeOptions[0]);
-	        		end = getETimestampStaticField(fieldTypeOptions[1]);
+	        		start = eglx.json.JsonUtilities.getETimestampStaticField(fieldTypeOptions[0]);
+	        		end = eglx.json.JsonUtilities.getETimestampStaticField(fieldTypeOptions[1]);
 	        	}
         		return ETimestamp.asTimestamp(cal, start, end);
 	        }
@@ -351,9 +376,6 @@ public class JsonLib {
 		throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, field, jsonValue );
 	}
 
-	private static int getETimestampStaticField(String fieldName){
-		return 0;
-	}
     private static EDictionary convertObject(EDictionary dictionary, ObjectNode objectNode)
 	    throws AnyException
 	{
