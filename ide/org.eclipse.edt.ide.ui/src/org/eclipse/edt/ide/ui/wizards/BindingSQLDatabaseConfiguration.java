@@ -142,31 +142,7 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		Binding sqlBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(sqlBinding);
 		sqlBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL);
-		String bindingName = getBindingName();
-		
-		int length = bindingName.length();
-		StringBuilder validName = new StringBuilder(length);
-		for (int i = 0; i < length; i++) {
-			if (Character.isJavaIdentifierPart(bindingName.charAt(i))) {
-				validName.append(bindingName.charAt(i));
-			}
-		}
-		
-		if (validName.length() > 0) {
-			bindingName = validName.toString();
-		}
-		
-		Binding binding = EGLDDRootHelper.getBindingByName(getEGLDeploymentRoot(), bindingName);
-		int incrementIndex = 1;
-		while(binding != null) {
-			binding = EGLDDRootHelper.getBindingByName(getEGLDeploymentRoot(),bindingName + incrementIndex);
-			incrementIndex++;
-		}
-		
-		if(incrementIndex > 1) {
-			incrementIndex--;
-			bindingName = bindingName + incrementIndex;
-		}
+		String bindingName =  getValidBindingName(getBindingName());
 		sqlBinding.setName(bindingName);
 		
 		if (useUri()) {

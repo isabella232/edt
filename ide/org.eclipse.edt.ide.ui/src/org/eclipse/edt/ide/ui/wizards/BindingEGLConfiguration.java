@@ -239,4 +239,31 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 		return alias[0];
 	}
 	
+	protected String getValidBindingName(String bindingName) {
+		int length = bindingName.length();
+		StringBuilder validName = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			if (Character.isJavaIdentifierPart(bindingName.charAt(i))) {
+				validName.append(bindingName.charAt(i));
+			}
+		}
+		
+		if (validName.length() > 0) {
+			bindingName = validName.toString();
+		}
+		
+		Binding binding = EGLDDRootHelper.getBindingByName(getEGLDeploymentRoot(), bindingName);
+		int incrementIndex = 1;
+		while(binding != null) {
+			binding = EGLDDRootHelper.getBindingByName(getEGLDeploymentRoot(),bindingName + incrementIndex);
+			incrementIndex++;
+		}
+		
+		if(incrementIndex > 1) {
+			incrementIndex--;
+			bindingName = bindingName + incrementIndex;
+		}
+		
+		return bindingName;
+	}
 }

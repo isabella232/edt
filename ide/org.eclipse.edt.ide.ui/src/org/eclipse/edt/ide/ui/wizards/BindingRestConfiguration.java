@@ -72,8 +72,9 @@ public class BindingRestConfiguration extends BindingEGLConfiguration {
 		Binding restBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(restBinding);
 		
+		String bindingName =  getValidBindingName(getBindingName());
+		restBinding.setName(bindingName);
 		restBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_SERVICE_REST);
-		restBinding.setName(getBindingName());
 		restBinding.setUri(getBaseUri());
 		restBinding.setUseURI(true);
 		
