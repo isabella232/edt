@@ -5,11 +5,10 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']) return egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']=this;
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","Status" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","AssertionFailedException" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","MultiStatus" );
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			this.eze$$setInitial();
@@ -79,10 +78,6 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("LibraryStartTests", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("LibraryStartTests");
 				this.fieldInfos[6] =new egl.eglx.services.FieldInfo("LibraryStartTests", "LibraryStartTests", "[org.eclipse.edt.eunit.runtime.runTestMethod", "", annotations);
-				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("libIndex", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("libIndex");
-				this.fieldInfos[7] =new egl.eglx.services.FieldInfo("libIndex", "libIndex", "I;", Number, annotations);
 			}
 			return this.fieldInfos;
 		}
@@ -167,9 +162,10 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 			}
 		}
 		,
-		"handleCallBackException": function(exp) {
+		"handleCallBackException": function(exp, http) {
 			try { egl.enter("handleCallBackException",this,arguments);
 				egl.addLocalFunctionVariable("exp", exp, "eglx.lang.AnyException", "exp");
+				egl.addLocalFunctionVariable("http", http, "eglx.http.IHttp", "http");
 				var str = "";
 				egl.addLocalFunctionVariable("str", str, "eglx.lang.EString", "str");
 				str = (((((("Caught service exception: ") + egl.checkNull(exp).messageID)) + ": ")) + egl.checkNull(exp).message);
@@ -200,6 +196,10 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 						egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
 						str = ((((str) + s3)) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
 						egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
+						str = (((egl.eglx.lang.EString.plus(((str) + "Original request body: "), egl.checkNull(http.getRequest()).body))) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+						egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
+						str = (((egl.eglx.lang.EString.plus(((str) + "Raw response body: "), egl.checkNull(http.getResponse()).body))) + egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE);
+						egl.setLocalFunctionVariable("str", str, "eglx.lang.EString");
 					}finally{egl.exitBlock();}
 				}
 				var eze$Temp8 = null;
@@ -222,15 +222,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"caughtFailedAssertion": function(exp) {
 			try { egl.enter("caughtFailedAssertion",this,arguments);
 				egl.addLocalFunctionVariable("exp", exp, "org.eclipse.edt.eunit.runtime.AssertionFailedException", "exp");
-				var assertMsg = "";
-				egl.addLocalFunctionVariable("assertMsg", assertMsg, "eglx.lang.EString", "assertMsg");
-				assertMsg = "Assertion failed for: ";
-				egl.setLocalFunctionVariable("assertMsg", assertMsg, "eglx.lang.EString");
-				var s = new egl.org.eclipse.edt.eunit.runtime.Status();
-				egl.addLocalFunctionVariable("s", s, "org.eclipse.edt.eunit.runtime.Status", "s");
-				s = egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].getStatus();
-				egl.setLocalFunctionVariable("s", s, "org.eclipse.edt.eunit.runtime.Status");
-				s.reason = ((assertMsg) + s.reason);
+				egl.eglx.lang.SysLib.writeStdout((("AssertionFail - ") + egl.checkNull(exp).message));
 				if (!egl.debugg) egl.leave();
 			} finally {
 				if (!egl.debugg){
@@ -260,7 +252,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"getBindingTypeString": function(bType) {
 			try { egl.enter("getBindingTypeString",this,arguments);
 				egl.addLocalFunctionVariable("bType", bType, "org.eclipse.edt.eunit.runtime.ServiceBindingType", "bType");
-				if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED)) {
+				if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 					try{egl.enterBlock();
 						if (!egl.debugg) egl.leave();
 						return "DEDICATED_BINDING";
@@ -268,7 +260,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 				}
 				else {
 					try{egl.enterBlock();
-						if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEVELOP)) {
+						if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEVELOP, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 							try{egl.enterBlock();
 								if (!egl.debugg) egl.leave();
 								return "DEVELOP_BINDING";
@@ -276,7 +268,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 						}
 						else {
 							try{egl.enterBlock();
-								if ((bType == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEPLOYED)) {
+								if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEPLOYED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 									try{egl.enterBlock();
 										if (!egl.debugg) egl.leave();
 										return "DEPLOYED_BINDING";
