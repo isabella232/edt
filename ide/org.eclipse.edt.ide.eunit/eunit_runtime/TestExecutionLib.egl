@@ -64,11 +64,9 @@ library TestExecutionLib
 			try
 				sysLib.writeStdOut("Running test: " + testId);
 				runTestMtd[i]();
-			onException (assertion AssertionFailedException)
+			onException (assertion AssertionFailedException)		
 				//prepend the assertion failure error message to Status
-				assertMsg String = "Assertion failed for: " + testId; 
-				s Status = LogResult.getStatus();				
-				s.reason = assertMsg + s.reason;
+				sysLib.writeStdOut("AssertionFail - " + assertion.message);
 			onException (testException AnyException)
 				//caught the exception from the test
 				expMsg String = "uncaught exception for: " + testId; 
