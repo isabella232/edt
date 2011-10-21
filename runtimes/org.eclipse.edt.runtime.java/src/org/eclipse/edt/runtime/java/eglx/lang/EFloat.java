@@ -18,6 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
+import eglx.java.JavaObjectException;
 import eglx.lang.AnyException;
 import eglx.lang.TypeCastException;
 
@@ -188,6 +189,11 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	}
 
 	public static double divide(double op1, double op2) throws AnyException {
+		if (op2 == 0.0) {
+			JavaObjectException jox = new JavaObjectException();
+			jox.exceptionType = EFloat.class.getCanonicalName();
+			throw jox;
+		}
 		return op1 / op2;
 	}
 

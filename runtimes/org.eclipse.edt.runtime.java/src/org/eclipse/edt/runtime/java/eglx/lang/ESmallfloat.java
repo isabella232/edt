@@ -18,6 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
+import eglx.java.JavaObjectException;
 import eglx.lang.AnyException;
 import eglx.lang.TypeCastException;
 
@@ -188,6 +189,11 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	}
 
 	public static float divide(float op1, float op2) throws AnyException {
+		if (op2 == 0.0) {
+			JavaObjectException jox = new JavaObjectException();
+			jox.exceptionType = ESmallfloat.class.getCanonicalName();
+			throw jox;
+		}
 		return op1 / op2;
 	}
 
