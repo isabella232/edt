@@ -277,7 +277,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
 		Calendar newDate = ezeClone(aDate);
-		newDate.roll(Calendar.DAY_OF_YEAR, amount);
+		newDate.setLenient(true);
+		newDate.add(Calendar.DATE, amount);
 		return newDate;
 	}
 
