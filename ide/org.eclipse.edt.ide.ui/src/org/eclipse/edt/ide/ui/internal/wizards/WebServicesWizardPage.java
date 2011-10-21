@@ -122,6 +122,8 @@ public class WebServicesWizardPage extends EGLElementWizardPage {
 		
 		if(!getConfiguration().isGenAsSOAP() && !getConfiguration().isGenAsRest()){
 			fWSGenTypeStatus.setError(NewWizardMessages.errMustSelectOneTypeWS2Gen); 
+		} else if(fWSListViewer.getTable().getItemCount() < 1) {
+			fWSGenTypeStatus.setError(NewWizardMessages.errMustSelectOneTypeWS2Gen);
 		}
 				
 		updateStatus(new IStatus[]{fWSGenTypeStatus});
