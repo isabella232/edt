@@ -33,6 +33,8 @@ public class DeploymentDesc extends RuntimeDeploymentDesc{
 
 	private DeploymentTarget target;
 	
+	private String eglddFileName;
+	
 
 	public static DeploymentDesc createDeploymentDescriptor(String filepath) throws Exception
 	{
@@ -67,6 +69,15 @@ public class DeploymentDesc extends RuntimeDeploymentDesc{
 			}
 		}
 		return restServices;
+	}
+	
+	public void setName( String name ) {
+		eglddFileName = name;
+		super.setName( name );
+	}
+	
+	public String getEGLDDFileName() {
+		return eglddFileName;
 	}
 
 	public RUIApplication getRUIApplication() {
