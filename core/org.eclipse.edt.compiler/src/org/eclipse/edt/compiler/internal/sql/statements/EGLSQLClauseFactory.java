@@ -378,6 +378,24 @@ public class EGLSQLClauseFactory {
 
 		return valuesClause + SQLConstants.RPAREN + SQLConstants.CRLF;
 	}
+	
+	public static String createEglUsingClauseForGet(String[][] keyItemAndColumnNames, String ioObjectName) {
+		if (keyItemAndColumnNames == null) {
+			return null;
+		}
+
+		String usingClause = SQLConstants.USING + SQLConstants.LPAREN;
+		
+		for (int i = 0; i < keyItemAndColumnNames.length; i++) {
+			if(i > 0) {
+				usingClause = usingClause + SQLConstants.COMMA;
+			} 
+			
+			usingClause = usingClause + ioObjectName + SQLConstants.QUALIFICATION_DELIMITER + keyItemAndColumnNames[i][0];
+		}
+		
+		return usingClause + SQLConstants.RPAREN + SQLConstants.CRLF;
+	}
 
 	public static String createDefaultWhereClause(
 		String defaultSelectConditions,

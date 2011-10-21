@@ -587,6 +587,9 @@ public abstract class EGLSQLStatementFactory {
     }
 
     public abstract String getSQLStatementType();
+    public  String getEglUsingClause() {
+    	return null;
+    }
 
     protected ITypeBinding getSQLRecordTypeBinding() {
         if (sqlRecordTypeBinding == null && SQLUtility.isValid(sqlRecordData)) {

@@ -40,6 +40,7 @@ public interface SQLConstants {
 	public final static String SELECT = "select"; //$NON-NLS-1$
 	public final static String SET = "set"; //$NON-NLS-1$
 	public final static String UPDATE = "update"; //$NON-NLS-1$
+	public final static String USING = "using"; //$NON-NLS-1$
 	public final static String VALUES = "values"; //$NON-NLS-1$
 	public final static String WHERE = "where"; //$NON-NLS-1$
     public final static String LIMITED_STRING = "limited string"; //$NON-NLS-1$

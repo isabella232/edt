@@ -27,6 +27,7 @@ public abstract class EGLSQLDeclareStatementFactory extends EGLSQLStatementFacto
 	String intoClause = null;
 	String fromClause = null;
 	String whereClause = null;
+	String eglUsingClause = null;
 	List userDefinedIntoItemNames;
 	boolean addIntoClauseToStatement = true;
 	boolean buildIntoClause = true;
@@ -92,6 +93,7 @@ public abstract class EGLSQLDeclareStatementFactory extends EGLSQLStatementFacto
 				useRecordKeys);
 		if (whereClause != null) {
 			sqlStatement = sqlStatement + whereClause;
+			eglUsingClause = EGLSQLClauseFactory.createEglUsingClauseForGet(keyItemAndColumnNames, ioObjectName);
 		}
 
 		return sqlStatement;
@@ -111,6 +113,11 @@ public abstract class EGLSQLDeclareStatementFactory extends EGLSQLStatementFacto
 
 	public String getWhereClause() {
 		return whereClause;
+	}
+	
+	@Override
+	public  String getEglUsingClause() {
+	    return eglUsingClause;
 	}
 
 	protected boolean isIoObjectValid() {
