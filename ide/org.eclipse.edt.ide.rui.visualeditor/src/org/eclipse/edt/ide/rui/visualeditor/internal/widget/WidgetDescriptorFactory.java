@@ -40,6 +40,7 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.ImageData;
@@ -108,6 +109,8 @@ public class WidgetDescriptorFactory {
 	public WidgetDescriptorFactory( IProject project ) {
 		this.project = project;
 		this.environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment( project );
+		this.environment.getIREnvironment().initSystemEnvironment(this.environment.getSystemEnvironment()); 
+		Environment.pushEnv(this.environment.getIREnvironment());
 	}
 
 	/**
