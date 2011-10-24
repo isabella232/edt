@@ -212,7 +212,7 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MODULO))
 			return ")";
 		if (op.equals(expr.Op_POWER))
-			return ")";
+			return ",egl.javascript.BigDecimal.prototype.eglMC)";
 		return "";
 	}
 }

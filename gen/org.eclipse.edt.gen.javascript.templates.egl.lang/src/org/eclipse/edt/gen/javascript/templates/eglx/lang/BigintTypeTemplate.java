@@ -46,6 +46,8 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
+		if (op.equals(expr.Op_POWER))
+			return "egl.eglx.lang.EInt64.pow";
 		return "";
 	}
 
@@ -79,6 +81,8 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_POWER))
+			return ",";
 		return "";
 	}
 

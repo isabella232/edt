@@ -132,6 +132,8 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 			return "";
 		if (op.equals(expr.Op_MODULO))
 			return "egl.remainder";
+		if (op.equals(expr.Op_POWER))
+			return "egl.eglx.lang.EFloat64.pow";
 		return "";
 	}
 
@@ -166,6 +168,8 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
 		if (op.equals(expr.Op_MODULO))
+			return ",";
+		if (op.equals(expr.Op_POWER))
 			return ",";
 		return "";
 	}

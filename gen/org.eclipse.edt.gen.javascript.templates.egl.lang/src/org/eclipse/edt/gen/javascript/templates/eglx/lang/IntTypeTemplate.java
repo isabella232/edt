@@ -76,6 +76,8 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return "egl.remainder";
 		if (op.equals(expr.Op_DIVIDE))
 			return "new egl.javascript.BigDecimal(egl.divide";
+		if (op.equals(expr.Op_POWER))
+			return "egl.eglx.lang.EInt32.pow";
 		return "";
 	}
 
@@ -111,6 +113,14 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return " + ";
 		if (op.equals(expr.Op_MODULO))
 			return ",";
+		if (op.equals(expr.Op_POWER))
+			return ",";
+		if (op.equals(expr.Op_BITAND))
+			return " & ";
+		if (op.equals(expr.Op_BITAND))
+			return " | ";
+		if (op.equals(expr.Op_BITAND))
+			return " ^ ";
 		return "";
 	}
 

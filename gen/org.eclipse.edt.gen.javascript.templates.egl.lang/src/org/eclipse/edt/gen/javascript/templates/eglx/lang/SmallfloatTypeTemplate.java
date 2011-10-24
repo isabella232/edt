@@ -74,6 +74,8 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 			return "";
 		if (op.equals(expr.Op_MODULO))
 			return "egl.remainder";
+		if (op.equals(expr.Op_POWER))
+			return "egl.eglx.lang.EFloat32.pow";
 		return "";
 	}
 
@@ -108,6 +110,8 @@ public class SmallfloatTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
 		if (op.equals(expr.Op_MODULO))
+			return ",";
+		if (op.equals(expr.Op_POWER))
 			return ",";
 		return "";
 	}
