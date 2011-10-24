@@ -409,6 +409,7 @@ public class EvServer implements IClientProxy {
 					String user = null;
 					String pass = null;
 					String schema = null;
+					String className = null;
 					String profileName = xmlRequest.getContentArguments().get("connectionProfile");
 					IConnectionProfile profile = EGLSQLUtility.getConnectionProfile(profileName);
 					if (profile != null) {
@@ -416,6 +417,7 @@ public class EvServer implements IClientProxy {
 						user = EGLSQLUtility.getSQLUserId(profile);
 						pass = EGLSQLUtility.getSQLPassword(profile);
 						schema = EGLSQLUtility.getDefaultSchema(profile);
+						className = EGLSQLUtility.getSQLJDBCDriverClassPreference(profile);
 					}
 					
 					if (url == null) {
@@ -430,15 +432,19 @@ public class EvServer implements IClientProxy {
 					if (schema == null) {
 						schema = "";
 					}
+					if (className == null) {
+						className = "";
+					}
 					
 					String info;
 					try {
 						info = URLEncoder.encode(url, "UTF-8") + ';' + URLEncoder.encode(user, "UTF-8") + ';'
-								 + URLEncoder.encode(pass, "UTF-8") + ';' + URLEncoder.encode(schema, "UTF-8");
+								 + URLEncoder.encode(pass, "UTF-8") + ';' + URLEncoder.encode(schema, "UTF-8") + ';'
+								 + URLEncoder.encode(className, "UTF-8");
 					}
 					catch (UnsupportedEncodingException e) {
 						// Shouldn't happen.
-						info = url + ';' + user + ';' + pass + ';' + schema;
+						info = url + ';' + user + ';' + pass + ';' + schema + ';' + className;
 					}
 					
 					ps.print(getGoodResponseHeader(urlString, getContentType(urlString), false));
