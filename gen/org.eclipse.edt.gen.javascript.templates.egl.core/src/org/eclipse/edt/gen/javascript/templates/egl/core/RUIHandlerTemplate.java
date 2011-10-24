@@ -44,6 +44,7 @@ public class RUIHandlerTemplate extends JavaScriptTemplate {
 		out.print(quoted("constructor"));
 		out.println(": function() {");
 		ctx.invoke(genLibraries, type, ctx, out);
+		ctx.invoke(genFields, type, ctx, out);
 		out.println("this.eze$$setInitial();");
 
 		Stereotype stereotype = type.getStereotype();
