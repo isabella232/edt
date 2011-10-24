@@ -31,6 +31,7 @@ public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 		for (Object column : columns) {
 			ctx.invoke(genColumn, (Object)column, ctx, out);	
 		}		
+		
 		out.println("end");
 		out.println("");
 	}

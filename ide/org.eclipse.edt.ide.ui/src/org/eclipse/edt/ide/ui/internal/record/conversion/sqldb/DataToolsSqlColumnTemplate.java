@@ -112,7 +112,6 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			if (isPartOfPK) {
 				builder.append("}");
 			}
-			
 			builder.append(";");
 			out.println(builder.toString());
 		}
