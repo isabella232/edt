@@ -29,8 +29,10 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	
 	public void genColumn(Column column, EglSourceContext ctx, TabbedWriter out){
-		if(isUnsupportedColumnTpe(column.getContainedType().getName())){
-			IMessageHandler messageHandler = (IMessageHandler)ctx.get(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER);
+		IMessageHandler messageHandler = (IMessageHandler)ctx.get(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER);
+		if(column.getContainedType() == null) {
+			messageHandler.addMessage("Cannot get valid message from column metadata.");
+		} else if(isUnsupportedColumnTpe(column.getContainedType().getName())){
 			StringBuilder builder = new StringBuilder();
 			builder.append("Column Type: ");
 			builder.append(column.getContainedType().getName());
