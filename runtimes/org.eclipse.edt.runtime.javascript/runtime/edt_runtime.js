@@ -114,6 +114,9 @@ egl.eglx.lang.EInt16.fromEString = function (x) {
 egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
 	return egl.convertAnyToSmallint(x, nullable);    
 };
+egl.eglx.lang.EInt16.pow = function (x, exp) {
+	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
+};
 
 
 /****************************************************************************
@@ -157,6 +160,9 @@ egl.eglx.lang.EInt32.fromEString = function (x) {
 egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
 	return egl.convertAnyToInt(x, nullable);   
 };
+egl.eglx.lang.EInt32.pow = function (x, exp) {
+	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
+};
 
 /****************************************************************************
  * EFloat32 covers the egl type "smallfloat" and is represented as a native 
@@ -190,6 +196,9 @@ egl.eglx.lang.EFloat32.fromEString = function (x){
 };
 egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
 	return egl.convertAnyToSmallfloat(x, nullable);    
+};
+egl.eglx.lang.EFloat32.pow = function (x, exp) {
+	return Math.pow(x, exp); 
 };
 
 
@@ -295,8 +304,9 @@ egl.eglx.lang.EInt64.fromEFloat32 = function (x) {
 egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
 	return egl.convertAnyToBigint(x, nullable);    
 };
-
-
+egl.eglx.lang.EInt64.pow = function (x, exp) {
+	return x.pow(exp); 
+};
 
 /****************************************************************************
  * EFloat64 covers the egl type "float" and is represented as a JavaScript Number).
@@ -321,6 +331,9 @@ egl.eglx.lang.EFloat64.fromEString = function (x){
 };
 egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
 	return egl.convertAnyToFloat(x, nullable);    
+};
+egl.eglx.lang.EFloat64.pow = function (x, exp) {
+	return Math.pow(x, exp); 
 };
 
 
