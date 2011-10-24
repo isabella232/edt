@@ -67,7 +67,7 @@ public class EGLSQLRetrieveUtility {
 	private static EGLSQLRetrieveUtility INSTANCE = new EGLSQLRetrieveUtility();
 	
 	public static EGLSQLRetrieveUtility getInstance() {
-		 return INSTANCE;
+		 return INSTANCE ;
 	}
 	
 	/*public EGLSQLRetrieveResults retrieveColumnInformation(
