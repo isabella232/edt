@@ -82,7 +82,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	private boolean started;
 	private ILaunch launch;
 	private List<TerminationListener> terminationListeners;
-	private String[] resolvedClasspath; // Used to determine when a classpath has changed.
+	private String[] latestCheckedClasspath; // Used to determine when a classpath has changed.
 	
 	private String currentDefaultDDName;
 	private Map<String,RestServiceMapping> currentServiceMappings;
@@ -152,7 +152,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 			
 			launch = copy.launch(debugMode ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE, monitor);
-			resolvedClasspath = delegate.getClasspath(launch.getLaunchConfiguration());
+			latestCheckedClasspath = delegate.getClasspath(launch.getLaunchConfiguration());
 			
 			if (waitForServerToStart) {
 				// Wait up to 10 seconds for the server to start.
@@ -502,6 +502,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			return false;
 		}
 		
+		boolean result = false;
 		try {
 			// Create a launch configuration in the same way as when launching the server, but only set the attributes that would affect the classpath.
 			ILaunchConfigurationType type = DebugPlugin.getDefault().getLaunchManager().getLaunchConfigurationType(
@@ -517,12 +518,13 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			String[] newResolvedClasspath = delegate.getClasspath(copy);
 			
 			// Order DOES matter in a classpath, in the case of duplicate qualified class names. The arrays must be exactly equal to be considered unchanged.
-			return !Arrays.equals(resolvedClasspath, newResolvedClasspath);
+			result = !Arrays.equals(latestCheckedClasspath, newResolvedClasspath);
+			latestCheckedClasspath = newResolvedClasspath;
 		}
 		catch (CoreException ce) {
 		}
 		
-		return false;
+		return result;
 	}
 	
 	/**
