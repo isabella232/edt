@@ -4,29 +4,156 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Editing the EGL build path for a project"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Type" content="task"></meta>
+<meta name="DC.Title" content="Editing the EGL build path"></meta>
+<meta name="abstract" content="This topic tells how to edit the EGL build path. For background information, see The EGL build path."></meta>
+<meta name="description" content="This topic tells how to edit the EGL build path. For background information, see The EGL build path."></meta>
+<meta name="DC.subject" content="builds, paths, editing in EGL, projects, EGL build path"></meta>
+<meta name="keywords" content="builds, paths, editing in EGL, projects, EGL build path"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt00523"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Editing the EGL build path for a project</title>
+<title>Editing the EGL build path</title>
 </head>
 <body id="tedt00523"><a name="tedt00523"><!-- --></a>
 
 
-<h1 class="topictitle1">Editing the EGL build path for a project</h1>
 
 
-<div><p></p>
+<h1 class="topictitle1">Editing the EGL build path</h1>
 
-<p></p>
+
+
+<div id="body"><a name="body"><!-- --></a><p>This topic tells how to edit the EGL build path.
+For background information, see <span class="q">"The EGL build path."</span></p>
+
+<div class="section">To include projects in the EGL build path, do as follows:</div>
+
+<ol><li class="stepexpand"><span>In the Project Explorer view, right-click the name of a
+project that you want to link to other projects and then click <span class="uicontrol">Properties</span>.</span>
+ The Properties window opens.</li>
+<li class="stepexpand"><span>Select the <span class="uicontrol">EGL Build Path</span> properties
+page.</span> A list of all other projects in your workspace
+is displayed on the <span class="uicontrol">Projects</span> page. 
+</li>
+<li class="stepexpand"><span>Select the check box beside the name of each project that
+you want to add to the project's build path. For example, if you want
+to access a project that includes the EGLAR file, specify the project
+on the <span class="uicontrol">Projects</span> page.</span></li>
+<li class="stepexpand"><span>If you want to access a stand-alone EGLAR file, specify
+it on the <span class="uicontrol">EGLAR file</span> page:</span>
+<ul>
+<li>If the file is in a nonbinary project, do as follows: <ol type="a">
+<li>Click <span class="uicontrol">Add EGLAR files</span>. The EGL Selection
+page is displayed with a list of all the projects that hold EGLAR
+files.</li>
+
+<li>Expand the project names and click the names of the EGLAR files
+of interest. You can select multiple names by holding down the Ctrl
+key during name selection.</li>
+
+<li>Click <span class="uicontrol">OK</span>.</li>
+
+</ol>
+</li>
+
+<li>If the file is in the file system, do as follows:<ol type="a">
+<li>Click <span class="uicontrol">Add External EGLAR files</span>. The EGL
+Selection page is displayed for you to find one or more files in the
+file system.</li>
+
+<li>Click the names of the EGLAR files of interest. You can select
+multiple names by holding down the Ctrl key during name selection.</li>
+
+<li>Click <span class="uicontrol">OK</span>.</li>
+
+</ol>
+</li>
+
+</ul>
+
+</li>
+<li class="stepexpand"><span>To place projects and EGLAR files in a different order
+or to export any of them, click the <span class="uicontrol">Order and Export</span> tab
+and do as follows:</span>
+<ul>
+<li>To change the position of a project in the build-path order,
+select the project name and click the <span class="uicontrol">Up</span> and <span class="uicontrol">Down</span> buttons.</li>
+
+<li>To export a project or EGLAR file, select the related check
+box. To handle all the resources at once, click the <span class="uicontrol">Select
+All</span> or <span class="uicontrol">Deselect All</span> button.</li>
+
+</ul>
+
+</li>
+<li class="stepexpand"><span>Click <strong>OK</strong>.</span></li>
+</ol>
+
+<div class="section"><p>If you are generating to Java and
+want to reference other Java code,
+you can add a project or JAR file to the Java build
+path of the project that receives the EGL-generated Java output.</p>
+<p>To add a project to the Java build path of a project:</p>
+<ol>
+<li>In the Project Explorer view, right-click the name of a project
+that you want to link to other projects, and then click <span class="uicontrol">Properties</span>.
+The Properties window opens.</li>
+
+<li>Select the <span class="uicontrol">Java Build Path</span> properties page.</li>
+
+<li>On the Java Build Path page,
+click <span class="uicontrol">Projects</span> tab.</li>
+
+<li>Click <span class="uicontrol">Add</span>,</li>
+
+<li>Select the check boxes next to the projects that you want to add
+and then click <span class="uicontrol">OK</span>.</li>
+
+<li>Click <span class="uicontrol">OK</span> again.</li>
+
+</ol>
+<p>To add a referenced project as a JAR file:</p>
+<ol>
+<li>Right-click the name of the project that you want to use in your
+project, and then click <span class="uicontrol">Export</span>.</li>
+
+<li>In the <span class="wintitle">Export</span> window, expand <span class="uicontrol">Java</span> and
+click <span class="uicontrol">JAR file</span>.</li>
+
+<li>Click <span class="uicontrol">Next</span>.</li>
+
+<li>Under <span class="uicontrol">Select the resources to export</span>, select
+the check box next to the project that you want to export.</li>
+
+<li>In the <span class="uicontrol">JAR file</span> field, set the location
+for the JAR file.</li>
+
+<li>Click <span class="uicontrol">Finish</span>.</li>
+
+<li>Right-click the name of the project in which you want to use the
+referenced project, and then click <span class="uicontrol">Properties</span>.</li>
+
+<li>In the <span class="wintitle">Properties</span> window, click <span class="uicontrol">Java
+Build Path</span>.</li>
+
+<li>Go to the <span class="uicontrol">Libraries</span> tab.</li>
+
+<li>Click <span class="uicontrol">Add external JARs</span>.</li>
+
+<li>Select the JAR file that you exported and click <span class="uicontrol">Open</span>.</li>
+
+<li>Click <span class="uicontrol">OK</span>.</li>
+
+</ol>
+</div>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

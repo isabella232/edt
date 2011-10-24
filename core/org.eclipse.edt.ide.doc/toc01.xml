@@ -5,8 +5,8 @@
    <topic label="Setting EDT preferences">
       <topic label="Setting EGL general preferences" href="topics/tedt00507.html"/>
       <topic label="Setting EGL compiler preferences" href="topics/tedt00508.html"/>
-      <topic label="Setting EGL general editor preferences" href="topics/tedt00509.html"/>
-      <topic label="Setting EGL preferences for content assist" href="topics/tedt00510.html"/>
+      <topic label="Setting EGL editor general preferences" href="topics/tedt00509.html"/>
+      <topic label="Setting EGL content-assist preferences" href="topics/tedt00510.html"/>
       <topic label="Setting EGL folding preferences" href="topics/tedt00511.html"/>
       <topic label="Setting EGL formatter preferences" href="topics/tedt00512.html"/>
       <topic label="Setting EGL preferences for organizing imports"
@@ -14,11 +14,16 @@
       <topic label="Setting EGL preferences for coloring syntax"
              href="topics/tedt00514.html"/>
       <topic label="Setting EGL template preferences" href="topics/tedt00515.html"/>
-      <topic label="Setting EGL preferences for Rich UI" href="topics/tedt00516.html"/>
+      <topic label="Setting EGL preferences for Rich UI" href="topics/tedt00516.html">
+         <topic label="Setting preferences for EGL Rich UI appearance"
+                href="topics/tedt00575.html"/>
+         <topic label="Setting preferences for EGL Rich UI deployment"
+                href="topics/tedt00576.html"/>
+      </topic>
    </topic>
    <topic label="Creating and maintaining an EGL project">
       <topic label="Creating an EGL project" href="topics/tedt00517.html"/>
-      <topic label="Editing the EGL build path for a project" href="topics/tedt00523.html"/>
+      <topic label="Editing the EGL build path" href="topics/tedt00523.html"/>
       <topic label="Creating an EGL source folder" href="topics/tedt00501.html"/>
       <topic label="Creating an EGL package" href="topics/tedt00521.html"/>
       <topic label="Creating an EGL source file" href="topics/tedt00500.html"/>
@@ -74,19 +79,18 @@
    </topic>
    <topic label="Editing an EGL deployment descriptor in the EDT IDE"
           href="topics/tedt00535.html">
-      <topic label="Adding web service deployment details to the EGL deployment descriptor"
+      <topic label="Adding web-service deployment details to the EGL deployment descriptor"
              href="topics/tedt00536.html"/>
       <topic label="Adding Rich UI deployment details to the EGL deployment descriptor"
              href="topics/tedt00537.html"/>
-      <topic label="Adding a sharable protocol" href="topics/tedt00542.html"/>
       <topic label="Adding a SOAP binding to the EGL deployment descriptor"
              href="topics/tedt00538.html"/>
       <topic label="Adding a REST binding to the EGL deployment descriptor"
              href="topics/tedt00539.html"/>
-      <topic label="Adding an EGL binding to the EGL deployment descriptor"
+      <topic label="Adding an SQL binding to the EGL deployment descriptor"
+             href="topics/tedt00542.html"/>
+      <topic label="Adding a non-web protocol binding to the EGL deployment descriptor"
              href="topics/tedt00540.html"/>
-      <topic label="Adding a native binding to the EGL deployment descriptor"
-             href="topics/tedt00541.html"/>
    </topic>
    <topic label="Debugging EGL source code in the EDT IDE" href="topics/tedt00504.html">
       <topic label="Preparing to run code in the EGL debugger" href="topics/tedt00543.html"/>

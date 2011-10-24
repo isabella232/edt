@@ -1,3 +1,210 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <index>
+<entry keyword="builds">
+<entry keyword="paths">
+<entry keyword="editing in EGL">
+<topic href="topics/tedt00523.html#tedt00523" title="Editing the EGL build path"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="code">
+<entry keyword="templates">
+<entry keyword="creating">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="disabling">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="editing">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="enabling">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="exporting">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="importing">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="removing">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="restoring defaults">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="deployment">
+<entry keyword="EGL Rich UI">
+<entry keyword="preferences">
+<topic href="topics/tedt00576.html#tedt00576" title="Setting preferences for EGL Rich UI deployment"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="deployment descriptors">
+<entry keyword="options">
+<entry keyword="services">
+<topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="editors">
+<entry keyword="EGL">
+<entry keyword="core preferences">
+<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor general preferences"/>
+</entry>
+<entry keyword="folding preferences">
+<topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
+</entry>
+<entry keyword="formatting preferences">
+<topic href="topics/tedt00512.html#tedt00512" title="Setting EGL formatter preferences"/>
+</entry>
+<entry keyword="imports preferences">
+<topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="EGL deployment descriptors">
+<entry keyword="creating in EDT IDE">
+<topic href="topics/tedt00502.html#tedt00502" title="Creating an EGL deployment descriptor in the EDT IDE"/>
+</entry>
+</entry>
+<entry keyword="EGL preferences">
+<entry keyword="setting for content assist">
+<topic href="topics/tedt00510.html#tedt00510" title="Setting EGL content-assist preferences"/>
+</entry>
+</entry>
+<entry keyword="EGL projects">
+<entry keyword="creating">
+<topic href="topics/tedt00517.html#tedt00517" title="Creating an EGL project"/>
+</entry>
+</entry>
+<entry keyword="folding (EGL editor)">
+<topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
+</entry>
+<entry keyword="generation">
+<entry keyword="services">
+<entry keyword="deployment options">
+<topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="import statements">
+<entry keyword="organizing">
+<topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
+</entry>
+</entry>
+<entry keyword="preferences">
+<entry keyword="EGL">
+<entry keyword="overview">
+<topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+</entry>
+<entry keyword="text">
+<topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
+</entry>
+</entry>
+<entry keyword="EGL editor">
+<entry keyword="folding">
+<topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
+</entry>
+<entry keyword="formatter">
+<topic href="topics/tedt00512.html#tedt00512" title="Setting EGL formatter preferences"/>
+</entry>
+<entry keyword="import organization">
+<topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor general preferences"/>
+</entry>
+<entry keyword="source styles">
+<topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
+</entry>
+</entry>
+<entry keyword="Rich UI">
+<entry keyword="appearance">
+<topic href="topics/tedt00575.html#tedt00575" title="Setting preferences for EGL Rich UI appearance"/>
+</entry>
+<entry keyword="deployment">
+<topic href="topics/tedt00576.html#tedt00576" title="Setting preferences for EGL Rich UI deployment"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/tedt00516.html#tedt00575" title="Setting EGL preferences for Rich UI"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="projects">
+<entry keyword="EGL build path">
+<topic href="topics/tedt00523.html#tedt00523" title="Editing the EGL build path"/>
+</entry>
+<entry keyword="EGL preferences">
+<topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+</entry>
+</entry>
+<entry keyword="Rich UI">
+<entry keyword="appearance">
+<topic href="topics/tedt00575.html#tedt00575" title="Setting preferences for EGL Rich UI appearance"/>
+</entry>
+<entry keyword="deployment">
+<entry keyword="preferences">
+<topic href="topics/tedt00576.html#tedt00576" title="Setting preferences for EGL Rich UI deployment"/>
+</entry>
+</entry>
+<entry keyword="EGL preferences">
+<topic href="topics/tedt00516.html#tedt00575" title="Setting EGL preferences for Rich UI"/>
+</entry>
+</entry>
+<entry keyword="services">
+<entry keyword="deployment descriptor options">
+<entry keyword="list">
+<topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="source style">
+<entry keyword="preferences">
+<topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
+</entry>
+</entry>
+<entry keyword="templates">
+<entry keyword="creating in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="disabling in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="editing in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="enabling in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="exporting from EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="importing in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="removing in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+<entry keyword="restoring defaults in EGL">
+<topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+</entry>
+<entry keyword="text">
+<entry keyword="preferences (EGL)">
+<topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
+</entry>
+</entry>
+<entry keyword="VisualAge Generator">
+<entry keyword="compatibility preferences">
+<topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+</entry>
+</entry>
+<entry keyword="web services">
+<entry keyword="deployment descriptor options">
+<topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
 </index>
