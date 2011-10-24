@@ -588,7 +588,7 @@ egl.eglx.lang.EDate.fromEDate = function (x) {
 	return x;  // TODO sbg bug in generator -- delete this fn when fixed
 };
 egl.eglx.lang.EDate.fromEString = function (x) {   
-    return egl.stringToDate( x, egl.eglx.lang.Constants['$inst'].usaDateFormat ); // TODO need dateformat as arg?
+    return egl.stringToDate( x, "MM/dd/yyyy" ); 
 };
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
