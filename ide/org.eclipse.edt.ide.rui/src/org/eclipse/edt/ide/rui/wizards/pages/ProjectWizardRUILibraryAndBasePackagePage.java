@@ -85,6 +85,7 @@ public class ProjectWizardRUILibraryAndBasePackagePage extends ProjectWizardRUIL
 				} else {
 					setErrorMessage(null);
 				}
+			    getWizard().getContainer().updateButtons();
 			}	
 		});
 	}
