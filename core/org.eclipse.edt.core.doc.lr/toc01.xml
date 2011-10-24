@@ -5,7 +5,7 @@
    <topic label="EGL core">
       <topic label="Assignment and reference compatibility" href="topics/cedt00041.html"/>
       <topic label="Boxing and unboxing conversions" href="topics/cedt00025.html"/>
-      <topic label="Overview of classifiers" href="topics/cedt00019.html">
+      <topic label="Classifiers">
          <topic label="Class classifier overview" href="topics/cedt00029.html"/>
          <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
          <topic label="Delegate classifier overview" href="topics/cedt00039.html"/>
@@ -32,7 +32,7 @@
          <topic label="Continue statement" href="topics/redt00020.html"/>
          <topic label="Case statement" href="topics/redt00014.html"/>
          <topic label="Delete statement" href="topics/redt00023.html"/>
-         <topic label="Action statements" href="topics/redt00026.html"/>
+         <topic label="Execute statement" href="topics/redt00026.html"/>
          <topic label="ForEach statement" href="topics/redt00018.html"/>
          <topic label="FreeSQL statement" href="topics/redt00029.html"/>
          <topic label="Get statement" href="topics/redt00024.html"/>
@@ -227,7 +227,7 @@
       </topic>
    </topic>
    <topic label="Supplemental details">
-      <topic label="Action statements" href="topics/redt00026.html"/>
+      <topic label="Execute statement" href="topics/redt00026.html"/>
       <topic label="BIRTHandler stereotype" href="topics/redt00084.html"/>
       <topic label="BLOB type" href="topics/redt00054.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
