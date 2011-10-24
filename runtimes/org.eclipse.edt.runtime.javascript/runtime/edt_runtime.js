@@ -786,3 +786,29 @@ egl.eglx.lang.NullType.fromAnyObject = function(obj, sig) {
 	return {eze$$value : obj, eze$$signature : sig};
 };
 
+/****************************************************************************
+ * AnyEnumeration
+ ****************************************************************************/
+egl.defineClass( "eglx.lang", "AnyEnumeration",
+{
+}
+);
+egl.eglx.lang.AnyEnumeration.equals = function(object1, object2){
+	var unboxedOp1 = egl.unboxAny(object1);
+	var unboxedOp2 = egl.unboxAny(object2);
+	if (unboxedOp1 == null && unboxedOp2 == null)
+		return true;
+	if (unboxedOp1 == null || unboxedOp2 == null)
+		return false;
+	return unboxedOp1 == unboxedOp2;
+};
+
+egl.eglx.lang.AnyEnumeration.notEquals = function(object1, object2){
+	var unboxedOp1 = egl.unboxAny(object1);
+	var unboxedOp2 = egl.unboxAny(object2);
+	if (unboxedOp1 == null && unboxedOp2 == null)
+		return false;
+	if (unboxedOp1 == null || unboxedOp2 == null)
+		return true;
+	return !(unboxedOp1==unboxedOp2);
+};
