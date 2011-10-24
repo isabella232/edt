@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -54,6 +55,29 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
      */
     public List getDeclaredFields() {
         return fields;
+    }
+    
+    /**
+     * @return A list of classFieldBinding Objects representing the fields
+     * 		   declared inside of this flexible record and super record 
+     */
+    public List getDeclaredFields(boolean includeDefaultSuperType){
+    	if(!includeDefaultSuperType){
+    		return(getDeclaredFields());
+    	}
+
+    	List retList = new LinkedList();
+    	retList.addAll(fields);
+    	
+		//get supertype's declared data
+		IPartBinding spBinding = this.getDefaultSuperType();
+		if(spBinding instanceof FunctionContainerBinding){
+			retList.addAll(((FunctionContainerBinding)spBinding).getDeclaredData(includeDefaultSuperType));
+		}else if(spBinding instanceof ExternalTypeBinding){
+			retList.addAll(((ExternalTypeBinding)spBinding).getDeclaredAndInheritedData());
+		}
+		
+    	return retList;
     }
 
     public int getKind() {

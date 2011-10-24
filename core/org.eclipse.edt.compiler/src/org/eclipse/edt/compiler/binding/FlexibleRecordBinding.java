@@ -20,6 +20,7 @@ import java.util.List;
 public abstract class FlexibleRecordBinding extends PartBinding implements IRecordBinding {
 	
 	public abstract List getDeclaredFields();
+	public abstract List getDeclaredFields(boolean includeDefaultSuperType);
 	public abstract boolean containsReferenceTo(FlexibleRecordBinding record);
 	public abstract void addField(FlexibleRecordFieldBinding fieldBinding);
 	public abstract void addField(FlexibleRecordFieldBinding fieldBinding, int index);
