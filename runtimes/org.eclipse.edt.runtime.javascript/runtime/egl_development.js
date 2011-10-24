@@ -1733,7 +1733,7 @@ egl.getWidgetInfo = function() {
 		result[1] = "empty";
 	}
 	// covert the result object into a JSON string
-	var jsonStr = egl.toJSONString(result);
+	var jsonStr = egl.toJSONString(result, 0, 100);
 	return jsonStr;
 };	
 
