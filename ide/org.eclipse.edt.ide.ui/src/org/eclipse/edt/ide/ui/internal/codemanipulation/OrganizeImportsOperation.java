@@ -332,7 +332,7 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 		super();
 		feglfile = file;
 		this.needSave = needSave;
-//		this.fChooseImportQuery = query;
+		this.fChooseImportQuery = query;
 
 		fNumberOfImportsAdded= 0;
 		fNumberOfImportsRemoved= 0;		
