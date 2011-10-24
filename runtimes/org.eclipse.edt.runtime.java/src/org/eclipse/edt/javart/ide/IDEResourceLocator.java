@@ -98,6 +98,7 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 							String user = null;
 							String pass = null;
 							String schema = null;
+							String className = null;
 							
 							if (tokens.length > 1) {
 								user = tokens[1].trim();
@@ -107,6 +108,9 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 							}
 							if (tokens.length > 3) {
 								schema = tokens[3].trim();
+							}
+							if (tokens.length > 4) {
+								className = tokens[4].trim();
 							}
 							
 							try {
@@ -119,6 +123,9 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 								}
 								if (schema != null) {
 									schema = URLDecoder.decode(schema, "UTF-8");
+								}
+								if (className != null) {
+									className = URLDecoder.decode(className, "UTF-8");
 								}
 							}
 							catch (UnsupportedEncodingException e) {
@@ -137,6 +144,16 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 							if (schema != null && schema.length() > 0) {
 								ds.setCurrentSchema(schema);
 							}
+							
+							if (className != null && className.length() > 0) {
+								// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
+								try {
+									Class.forName(className);
+								}
+								catch (Throwable t) {
+								}
+							}
+							
 							return ds;
 						}
 					}

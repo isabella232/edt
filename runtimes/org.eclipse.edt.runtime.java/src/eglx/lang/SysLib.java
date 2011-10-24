@@ -287,6 +287,16 @@ public class SysLib extends ExecutableBase {
 				if (schema != null && (schema = schema.trim()).length() > 0) {
 					((SQLDataSource)resource).setCurrentSchema(schema);
 				}
+				
+				String className = sqlBinding.getSqlJDBCDriverClass();
+				if (className != null && className.length() > 0) {
+					// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
+					try {
+						Class.forName(className);
+					}
+					catch (Throwable t) {
+					}
+				}
 			}
 		}
 		return resource;
