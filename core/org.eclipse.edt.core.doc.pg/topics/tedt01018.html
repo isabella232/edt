@@ -32,9 +32,12 @@ can use the <span class="synph"><span class="kwd">Resource</span></span> annotat
 that the binding detail for service access is in the resource binding
 section of the EGL deployment descriptor.</p>
 
-<div class="p">This example shows a variable declaration, as described in “Accessing
-a service”: <pre class="codeblock">myService MyInterfacePart {@Resource{bindingKey="MyBinding"}};</pre>
+<div class="p">This example shows a variable declaration: <pre class="codeblock">myService MyInterfacePart {@Resource{bindingKey="MyBinding"}};</pre>
 </div>
+
+<p>For details on the Resource annotation, see the topic named “EGL
+support for SOA.” Also available is a Language Reference entry for
+that annotation, which is in the eglx.lang package.</p>
 
 <p>If you are accessing a SOAP service, note that a SOAP service invocation
 uses a new HTTP session, and no session information is retained from

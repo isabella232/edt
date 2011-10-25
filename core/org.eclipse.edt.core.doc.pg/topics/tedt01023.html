@@ -206,12 +206,17 @@ in the callback function.</p>
 <div class="p">In general, the rules for designing the <span class="synph"><span class="kwd">callback</span></span> function
 for a web SOAP service or an EGL REST-RPC service are as follows: <ul>
 <li>The function has a series of parameters that are in the same order
-as the OUT and INOUT parameters in the service invocation</li>
+as the OUT and INOUT parameters in the service invocation.</li>
 
 <li>If the service invocation has a return value, the <span class="synph"><span class="kwd">callback</span></span> function
-includes an additional, last parameter to accept the return value</li>
+includes an additional parameter to accept the return value.</li>
 
-<li>Each parameter in the function has the IN modifier</li>
+<li>The <span class="synph"><span class="kwd">callback</span></span> function can include an
+optional final parameter that provides access to the HTTP request
+and response data. The parameter is of type <span class="synph"><span class="kwd">Ihttp</span></span>,
+as described in the language reference topic named “eglx.http package.”</li>
+
+<li>Each parameter in the function has the IN modifier.</li>
 
 </ul>
 </div>

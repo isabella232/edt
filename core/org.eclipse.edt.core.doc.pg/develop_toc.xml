@@ -11,6 +11,27 @@
       <topic label="Service-location details for web service access"
              href="topics/cedt01008.html"/>
       <topic label="EGL support for accessing SOAP headers" href="topics/cedt01009.html"/>
+      <topic label="Accessing a service" href="topics/tedt01002.html">
+         <topic label="Declaring a variable to access a dedicated or local EGL service"
+                href="topics/tedt01017.html"/>
+         <topic label="Declaring a variable to access a remote service"
+                href="topics/tedt01018.html"/>
+         <topic label="Editing the EGL deployment descriptor manually"
+                href="topics/tedt01043.html"/>
+         <topic label="Binding an access variable dynamically" href="topics/tedt01019.html"/>
+         <topic label="Creating an Interface part to access a REST service"
+                href="topics/tedt01020.html"/>
+         <topic label="Creating an Interface part to access a SOAP service"
+                href="topics/tedt01016.html"/>
+         <topic label="Invoking a service asynchronously from a Rich UI application"
+                href="topics/tedt01023.html"/>
+         <topic label="Invoking a service synchronously from outside of Rich UI"
+                href="topics/tedt01024.html"/>
+         <topic label="Using a provided Interface part for a 3rd-party REST service"
+                href="topics/tedt01025.html"/>
+         <topic label="Accessing an IBM i program as a web service"
+                href="topics/tedt01042.html"/>
+      </topic>
    </topic>
    <topic label="EGL support for Rich Internet Applications" href="topics/cedt01002.html">
       <topic label="Rich UI widgets" href="topics/cedt01013.html">
@@ -42,38 +63,15 @@
          <topic label="Rich UI memory management for Microsoft Internet Explorer"
                 href="topics/cedt01025.html"/>
       </topic>
-   </topic>
-   <topic label="Developing units of logic">
-      <topic label="Developing a service or program" href="topics/tedt01000.html">
-         <topic label="Creating a linkage properties file for Java run time"
-                href="topics/tedt01045.html"/>
-      </topic>
       <topic label="Developing a Rich UI application" href="topics/tedt01001.html">
          <topic label="Preparing to use the EGL Dojo widgets" href="topics/tedt01037.html"/>
       </topic>
    </topic>
+   <topic label="Developing a service or program" href="topics/tedt01000.html">
+      <topic label="Creating a linkage properties file for Java run time"
+             href="topics/tedt01045.html"/>
+   </topic>
    <topic label="Accessing data and transferring control">
-      <topic label="Accessing a service" href="topics/tedt01002.html">
-         <topic label="Declaring a variable to access a dedicated or local EGL service"
-                href="topics/tedt01017.html"/>
-         <topic label="Declaring a variable to access a remote service"
-                href="topics/tedt01018.html"/>
-         <topic label="Editing the EGL deployment descriptor manually"
-                href="topics/tedt01043.html"/>
-         <topic label="Binding an access variable dynamically" href="topics/tedt01019.html"/>
-         <topic label="Creating an Interface part to access a REST service"
-                href="topics/tedt01020.html"/>
-         <topic label="Creating an Interface part to access a SOAP service"
-                href="topics/tedt01016.html"/>
-         <topic label="Invoking a service asynchronously from a Rich UI application"
-                href="topics/tedt01023.html"/>
-         <topic label="Invoking a service synchronously from outside of Rich UI"
-                href="topics/tedt01024.html"/>
-         <topic label="Using a provided Interface part for a 3rd-party REST service"
-                href="topics/tedt01025.html"/>
-         <topic label="Accessing an IBM i program as a web service"
-                href="topics/tedt01042.html"/>
-      </topic>
       <topic label="Accessing a relational database" href="topics/tedt01012.html"/>
       <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
       <topic label="Accessing a program or transaction from generated code">
