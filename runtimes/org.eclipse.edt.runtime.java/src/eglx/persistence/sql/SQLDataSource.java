@@ -118,9 +118,9 @@ public class SQLDataSource implements RecoverableResource {
 					}
 				}
 			}
-			if(conn != null){
-				conn.close();
-			}
+			close();
+			statements.clear();
+			ru.getResourceManager().getResourceList().remove(this);
 		} catch (java.sql.SQLException e) {
 			throw JavartUtil.makeEglException(e);
 		}
@@ -139,9 +139,9 @@ public class SQLDataSource implements RecoverableResource {
 						}
 					}
 				}
-				if(conn != null){
-					conn.close();
-				}
+				close();
+				statements.clear();
+				ru.getResourceManager().getResourceList().remove(this);
 			} catch (java.sql.SQLException e) {
 				throw JavartUtil.makeEglException(e);
 			}
