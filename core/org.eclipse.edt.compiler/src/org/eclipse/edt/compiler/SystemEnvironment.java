@@ -33,7 +33,6 @@ import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
-import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ContentAssistPartManager;
@@ -182,9 +181,13 @@ public class SystemEnvironment implements ISystemEnvironment {
         
         if (part.getKind() == ITypeBinding.LIBRARY_BINDING){
         	getSystemLibraryManager().addSystemLibrary((LibraryBinding)part);
-		} else if (part.getKind() == ITypeBinding.EXTERNALTYPE_BINDING
-				&& null != part.getAnnotation(IEGLConstants.EGLX_LANG_PACKAGE,IEGLConstants.ContentAssist)) {
-        	getContentAssistPartsManager().addContentAssistPart((ExternalTypeBinding)part);
+		} 
+        else if (part.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+        	if(ContentAssistPartManager.isLibraryType((ExternalTypeBinding)part)){
+        		getContentAssistPartsManager().addExternalTypeLibrary((ExternalTypeBinding)part);
+        	}else if(ContentAssistPartManager.isExceptionType((ExternalTypeBinding)part)){
+        		getContentAssistPartsManager().addExternalTypeException((ExternalTypeBinding)part);
+        	}
         }
         else if (part.getKind() == ITypeBinding.ENUMERATION_BINDING) {
         	if(enumerationIsImplicitlyUsed(part)) {

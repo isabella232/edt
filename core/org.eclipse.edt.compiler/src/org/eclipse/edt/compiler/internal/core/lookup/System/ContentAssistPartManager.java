@@ -13,25 +13,64 @@
 package org.eclipse.edt.compiler.internal.core.lookup.System;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.IEGLConstants;
 
 public class ContentAssistPartManager {
-	private Map contentAssistParts = new HashMap();
+	private Map externalTypeLibraries = new HashMap();
+	private Map externalTypeException = new HashMap();
 
 	public ContentAssistPartManager(ContentAssistPartManager parent) {
 		if (null != parent) {
-			contentAssistParts.putAll(parent.contentAssistParts);
+			externalTypeLibraries.putAll(parent.externalTypeLibraries);
+			externalTypeException.putAll(parent.externalTypeException);
 		}
 	}
 
-	public Map getContentAssistParts() {
-		return contentAssistParts;
+	public Map getExternalTypeLibraries() {
+		return externalTypeLibraries;
 	}
 
-	public void addContentAssistPart(ExternalTypeBinding contentAssistPart) {
-		contentAssistParts.put(contentAssistPart.getName(), contentAssistPart);
+	public void addExternalTypeLibrary(ExternalTypeBinding contentAssistPart) {
+		externalTypeLibraries.put(contentAssistPart.getName(), contentAssistPart);
+	}
+	
+	public Map getExternalTypeException(){
+		return externalTypeException;
 	}
 
+	public void addExternalTypeException(ExternalTypeBinding exception){
+		externalTypeException.put(exception.getName(), exception);
+	}
+	
+	/*
+	 * If a externalType extends AnyException, it will be considerate as a Exception type
+	 */
+	public static boolean isExceptionType(ExternalTypeBinding externalPart){
+		if(externalPart.getBaseType().getName().equalsIgnoreCase("AnyException")){
+			return true;
+		}
+		
+		List extendedTypes = externalPart.getExtendedTypes();
+		for (Iterator iterator = extendedTypes.iterator(); iterator.hasNext();) {
+			ITypeBinding extendType = (ITypeBinding) iterator.next();
+
+			if(extendType.getName().equalsIgnoreCase("AnyException")){
+				return(true);
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean isLibraryType(ExternalTypeBinding externalPart){
+		return (null != externalPart.getAnnotation(
+				IEGLConstants.EGLX_LANG_PACKAGE, IEGLConstants.ContentAssist));
+	}
+	
 }
