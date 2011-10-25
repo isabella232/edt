@@ -13,7 +13,10 @@ package org.eclipse.edt.mof.impl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -21,6 +24,11 @@ import org.eclipse.edt.mof.EVisitor;
 
 
 public class AbstractVisitor implements EVisitor {
+	
+	private static final Object UNRESOLVED_METHOD = new Object();
+	private static final int CACHE_MAX;
+	private static Map<Class<?>, Map<Class<?>, Map<String, Object>>> methodsByClass = new HashMap<Class<?>, Map<Class<?>, Map<String, Object>>>();
+	
 	private boolean allowRevisit = true;
 	private boolean trackParent = false;
 	private Set<Object> visited;
@@ -28,6 +36,23 @@ public class AbstractVisitor implements EVisitor {
 	private Stack<Object> parents;
 	private Stack<Integer> slotIndices;
 	private Object returnData;
+	
+	static {
+		int value = -1;
+		String max = System.getProperty("edt.mof.visitor.cache.max", null);
+		if (max != null) {
+			try {
+				value = Integer.parseInt(max);
+			}
+			catch (Exception e) {
+			}
+		}
+		
+		if (value == -1) {
+			value = 1000;
+		}
+		CACHE_MAX = value;
+	}
 	
 	public Set<Object> getVisited() {
 		return visited;
@@ -143,22 +168,56 @@ public class AbstractVisitor implements EVisitor {
 	}
 	
 	private Method primGetMethod(String methodName, Class<?> clazz) {
-        Method method = null;
-        try {
-            Method[] methods = this.getClass().getMethods();
-            for (Method nextMethod : methods) {
-                if(nextMethod.getName().equals(methodName)){
-                    if(nextMethod.getParameterTypes().length == 1){
-                        if(nextMethod.getParameterTypes()[0].equals(clazz)){
-                            method = nextMethod;
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (SecurityException e) {
-            throw new RuntimeException(e);
-        } 
+		Method method = null;
+		// Get the method cache for the current class, which are cached by parameter type
+		Map<Class<?>, Map<String, Object>> methodsForThisClassByParameterType = methodsByClass.get(this.getClass());
+		
+		if(methodsForThisClassByParameterType == null){
+			methodsForThisClassByParameterType = new LinkedHashMap<Class<?>, Map<String,Object>>() {
+				private static final long serialVersionUID = 1L;
+				@Override
+				protected boolean removeEldestEntry(java.util.Map.Entry<Class<?>, Map<String, Object>> eldest) {
+					return size() > CACHE_MAX;
+				}
+			};
+			methodsByClass.put(this.getClass(), methodsForThisClassByParameterType);
+		}
+		
+		// Get all of the methods with the specified parameter type from this class, which are cached again by name
+		Map<String, Object> methodsByName = methodsForThisClassByParameterType.get(clazz);
+        
+        if(methodsByName == null){
+        	methodsByName = new HashMap<String, Object>(2); // We only use 2 names
+        	methodsForThisClassByParameterType.put(clazz, methodsByName);
+        }
+        
+        Object mapValue = methodsByName.get(methodName);
+        if(mapValue == null){
+        	// We have never tried to resolve this method before
+    		try {
+	            Method[] classMethods = this.getClass().getMethods();
+	            for (Method nextMethod : classMethods) {
+	                if(nextMethod.getParameterTypes().length == 1){
+	                    if(nextMethod.getParameterTypes()[0].equals(clazz)){
+	                    	if(nextMethod.getName().equals(methodName)){
+	                            method = nextMethod;
+	                            methodsByName.put(methodName, method);
+	                            break;
+	                        }
+	                    }
+	                }
+	            }
+	            if(method == null){
+	            	methodsByName.put(methodName, UNRESOLVED_METHOD);
+	            }
+	        } catch (SecurityException e) {
+	            throw new RuntimeException(e);
+	        } 
+    	}else if(mapValue != UNRESOLVED_METHOD){
+    		// Assign the method that we resolved in the past
+    		method = (Method)mapValue;
+    	}
+        
         return method;
     }
 	
