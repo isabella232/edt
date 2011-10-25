@@ -171,7 +171,7 @@
             <topic label="SysLib.writeStdError function" href="topics/redt00203.html"/>
             <topic label="SysLib.writeStdOut function" href="topics/redt00204.html"/>
          </topic>
-         <topic label="TIMESTAMP type" href="topics/redt00053.html"/>
+         <topic label="Timestamp and ETimestamp types" href="topics/redt00053.html"/>
       </topic>
       <topic label="eglx.rbd package and its StrLib library" href="topics/redt00239.html"/>
       <topic label="eglx.services package" href="topics/redt00065.html">

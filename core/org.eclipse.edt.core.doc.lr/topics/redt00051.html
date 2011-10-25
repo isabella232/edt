@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="String and EString types"></meta>
-<meta name="abstract" content="The EGL String type is a reference type that.... In Eclipse IDE for EGL Developers, the type definition for String is EString."></meta>
-<meta name="description" content="The EGL String type is a reference type that.... In Eclipse IDE for EGL Developers, the type definition for String is EString."></meta>
+<meta name="abstract" content="The EGL String type is an instantiable reference type and can be declared with or without a length parameter. (However, in version .7, the type is a value type if it is declared without a length parameter.) In Eclipse IDE for EGL Developers, the type definition for String is EString."></meta>
+<meta name="description" content="The EGL String type is an instantiable reference type and can be declared with or without a length parameter. (However, in version .7, the type is a value type if it is declared without a length parameter.) In Eclipse IDE for EGL Developers, the type definition for String is EString."></meta>
 <meta name="DC.subject" content="EGL types, String, EGL type"></meta>
 <meta name="keywords" content="EGL types, String, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,9 +26,11 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL String type is a reference type that....
-In Eclipse IDE for EGL Developers, the type definition for String
-is EString.</p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL String type is an instantiable reference
+type and can be declared with or without a length parameter. (However,
+in version .7, the type is a value type if it is declared without
+a length parameter.) In Eclipse IDE for EGL Developers, the type definition
+for String is EString.</p>
 
 <a name="redt00051__main"><!-- --></a><dl id="redt00051__main">
 <dt class="dlterm"><a name="redt00051__package"><!-- --></a>EGL package name</dt>
@@ -45,10 +47,326 @@ is EString.</p>
 <dt class="dlterm"><a name="redt00051__detail"><!-- --></a>Type detail</dt>
 
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
-indicates that the specified operation is available and that the specified
-function name is not. For example, use “==” to compare two values,
-not “$EQ”. Two exceptions are the widen and narrow operations, which
-are invoked automatically during data conversions. <pre class="codeblock"></pre>
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">externalType EString extends AnyText type ParameterizableType {
+   parameterizedType = SequenceType }
+
+/**
+  * {@Operation +} Concatenates two strings.
+  */
+   static function $Plus(lvalue EString in, rvalue EString in) 
+          returns(EString) {@Operation{"+"}};
+
+/**
+  * {@Operation ::} Concatenates two strings.
+  */
+   static function $Concat(value EString in, rvalue EString in) 
+          returns (EString) {@Operation{"::"}};
+
+/**
+  * {@Operation ?:} Concatenates two strings.  
+  * If either is null then null is returned.
+  */
+   static function $ConcatNull(value EString in, rvalue EString in) 
+          returns(EString) {@Operation{"?:"}};
+
+/**
+  * {@Operation &lt;} Compares two strings.
+  */
+   static function $LT(lvalue EString in, rvalue EString in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+  * {@Operation &gt;} Compares two strings.
+  */
+   static function $GT(lvalue EString in, rvalue EString in) 
+          returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+  * {@Operation &lt;=} Compares two strings.
+  */
+   static function $LTE(lvalue EString in, rvalue EString in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+  * {@Operation &gt;=} Compares two strings.
+  */
+   static function $GTE(lvalue EString in, rvalue EString in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+  * {@Operation ==} Compares two strings.
+  */
+   static function $EQ(lvalue EString in, rvalue EString in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+/**
+  * {@Operation !=} Compares two strings.
+  */
+   static function $NEQ(lvalue EString in, rvalue EString in) 
+          returns(EBoolean) {@Operation{"!="}};
+
+/**
+  * {@Operation [:} Returns the substring starting 
+  * at fromIndex and ending at toIndex.
+  * @throws InvalidIndexException  if index is out of range or 
+  * if fromIndex is &gt; toIndex.
+  */
+   static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in)
+          returns(EString) {@Operation{"[:"}};
+
+   static function asNumber(value EString in) 
+          returns(ENumber) {@Operation{"narrow"}};
+
+   static function asString(value ENumber in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a bigint to a string.  
+  * The string will consist of one or more digit characters.  
+  * It will begin with a - sign if the value is negative.
+  */
+   static function asString(value EBigint in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation{"widen"} Converts a boolean to "true" or "false".
+  */
+   static function asString(value EBoolean in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
+  * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
+  * converted to "04/01/0009".
+  */
+   static function asString(value EDate in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a decimal to a string.  
+  * The string will consist of one or more digit characters, 
+  * with a period used for a decimal point.  The string
+  * will begin with a - sign if the value is negative.
+  */
+   static function asString(value EDecimal in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a float to a string.  
+  * The string will consist of one or more digit characters, 
+  * with a period used for a decimal point.  The string will begin with 
+  * a - sign if the value is negative.  It may end with an exponent,
+  * which is the letter e or E, followed by an optional negative sign, 
+  * followed by one or more digit characters.
+  */
+   static function asString(value EFloat in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts an int to a string.  
+  * The string will consist of one or more digit characters.  
+  * It will begin with a - sign if the value is negative.
+  */
+   static function asString(value EInt in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a smallfloat to a string.  
+  * The string will consist of one or more digit characters, 
+  * with a period used for a decimal point.  The string will begin 
+  * with a - sign if the value is negative.  It may end with an exponent,
+  * which is the letter e or E, followed by an optional negative sign, 
+  * followed by one or more digit characters.
+  */
+   static function asString(value ESmallfloat in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a smallint to a string.  
+  * The string will consist of one or more digit characters.  
+  * It will begin with a - sign if the value is negative.
+  */
+   static function asString(value ESmallint in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * {@Operation widen} Converts a timestamp to a string.  
+  * The 26-character result will include all possible fields 
+  * of a timestamp, from years down to fractions of seconds, 
+  * in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
+  * included in each field of the string when necessary, e.g. January is 
+  * represented as "01" not "1". 
+  */
+   static function asString(value ETimestamp in) 
+          returns (EString) {@Operation{"widen"}};
+
+/**
+  * A pattern-matching function which compares this string to a pattern using
+  * the rules of SQL's LIKE operator.  There are three special characters:
+  *   _ matches any one character 
+  *   % matches zero or more characters
+  *   \ is the escape character 
+  *
+  * @param value  the pattern to compare with this string.
+  * @return true if this string matches the pattern.
+  * @throws InvalidPatternException if the pattern is invalid.
+  */
+   function isLike(value EString in) 
+            returns(EBoolean);
+
+/**
+  * A pattern-matching function which compares this string to a pattern using
+  * the rules of SQL's LIKE operator.  There are three special characters:
+  *   _ matches any one character 
+  *   % matches zero or more characters
+  *   the escape character from the second parameter 
+  *
+  *
+  * @param value  the pattern to compare with this string.
+  * @param esc    the escape character for the pattern.
+  * @return true if this string matches the pattern.
+  * @throws InvalidPatternException if the pattern is invalid.
+  */
+   function isLike(value EString in, esc EString in) 
+            returns(EBoolean);
+
+/**
+  * A pattern-matching function which compares this string to a pattern using
+  * the rules of Informix's MATCHES operator.
+  *
+  *
+  * @param value  the pattern to compare with this string.
+  * @return true if this string matches the pattern.
+  * @throws InvalidPatternException if the pattern is invalid.
+  */
+   function matchesPattern(value EString in) returns(EBoolean);
+
+/**
+  * A pattern-matching function which compares this string to a pattern using
+  * the rules of Informix's MATCHES operator.
+  *
+  *
+  * @param value  the pattern to compare with this string.
+  * @param esc    the escape character for the pattern.
+  * @return true if this string matches the pattern.
+  * @throws InvalidPatternException if the pattern is invalid.
+  */
+   function matchesPattern(value EString in, esc EString in) 
+            returns(EBoolean);
+
+/**
+  * Returns the number of characters in this string.
+  *
+  * @return the length of this string.
+  */
+   function length() returns(EInt);
+
+/**
+  * Returns this string minus any trailing blanks.
+  *
+  * @return the clipped string.
+  */
+   function clip() returns(EString);
+
+/**
+  * Returns this string minus any leading blanks.
+  *
+  * @return the clipped string.
+  */
+   function clipLeading() returns(EString);
+
+/**
+  * Returns this string minus any trailing and trailing blanks.
+  *
+  * @return the trimmed string.
+  */
+   function trim() returns(EString);
+
+/**
+  * Returns this string with its characters converted to upper case.
+  *
+  * @return the uppercased string.
+  */
+   function toUpperCase() returns(EString);
+
+/**
+  * Returns this string with its characters converted to lower case.
+  *
+  * @return the lowercased string.
+  */
+   function toLowerCase() returns(EString);
+
+/**
+  * Searches for a substring within this string, starting at index 1,
+  * and returns the index of its first character.
+  *
+  * @param substr  the substring to find.
+  * @return the index of the substring, or 0 if it wasn't found.
+  */
+   function indexOf(substr EString in) returns (EInt);
+
+/**
+  * Searches for a substring within this string, starting at the given index,
+  * and returns the index of its first character.
+  *
+  * @param substr      the substring to find.
+  * @param startIndex  where to start the search.
+  * @return the index of the substring, or 0 if it wasn't found.
+  * @throws InvalidIndexException if startIndex is less than 1 or greater 
+  *    than the length of this string.
+  */
+   function indexOf(substr EString in, startIndex EInt in) 
+            returns (EInt);
+
+/**
+  * Searches for a substring within this string, 
+  * starting at the end, and returns the index of its first character.
+  *
+  * @param substr  the substring to find.
+  * @return the index of the substring, or 0 if it wasn't found.
+  */
+   function lastIndexOf(substr EString in) returns (EInt);
+
+/**
+  * Tells if this string ends with the given substring.
+  *
+  * @param suffix  the suffix to find.
+  * @return true if the substring appears at the end of this string.
+  */
+   function endsWith(suffix EString in) returns(EBoolean);
+
+/**
+  * Tells if this string starts with the given substring.
+  *
+  * @param prefix  the prefix to find.
+  * @return true if the substring appears at the front of this string.
+  */
+   function startsWith(prefix EString in) returns(EBoolean);
+
+/**
+  * Returns a string created by replacing all occurances of one substring with
+  * another.  The target substring and its replacement may have different lengths.
+  *
+  * @param target       the substring to find.
+  * @param replacement  the replacement for the target substring.
+  * @return this string, with replacements.
+  */
+   function replaceStr(target EString in, replacement EString in) 
+            returns(EString);
+
+/**
+  * Returns the Unicode codepoint of the given character, as an int.
+  *
+  * @param index  the index of the character.
+  * @return the Unicode codepoint of the given character, as an int.
+  * @throws InvalidIndexException if index is less than 1 or greater 
+  *    than the length of this string.
+  */
+   function charCodeAt(index EInt in) returns(EInt);
+end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
@@ -63,9 +381,9 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <div class="tablenoborder"><a name="redt00051__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00051__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d13310e92">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d13310e93">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d13310e95">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d13310e96">Issue</th>
 
 </tr>
 
@@ -74,17 +392,17 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00051__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d13310e92 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13310e93 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13310e95 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13310e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00051__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d13310e92 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d13310e93 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13310e95 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d13310e96 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Number and ENumber type"></meta>
-<meta name="abstract" content="The EGL Number type is a reference type that.... In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
-<meta name="description" content="The EGL Number type is a reference type that.... In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
+<meta name="abstract" content="The EGL Number type is a non-instantiable reference type that can refer to any numeric value. In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
+<meta name="description" content="The EGL Number type is a non-instantiable reference type that can refer to any numeric value. In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
 <meta name="DC.subject" content="EGL types, Number, EGL type"></meta>
 <meta name="keywords" content="EGL types, Number, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,9 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Number type is a reference type that....
-In Eclipse IDE for EGL Developers, the type definition for Number
-is ENumber.</p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Number type is a non-instantiable reference
+type that can refer to any numeric value. In Eclipse IDE for EGL Developers,
+the type definition for Number is ENumber.</p>
 
 <a name="redt00062__main"><!-- --></a><dl id="redt00062__main">
 <dt class="dlterm"><a name="redt00062__package"><!-- --></a>EGL package name</dt>
@@ -45,10 +45,136 @@ is ENumber.</p>
 <dt class="dlterm"><a name="redt00062__detail"><!-- --></a>Type detail</dt>
 
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
-indicates that the specified operation is available and that the specified
-function name is not. For example, use “==” to compare two values,
-not “$EQ”. Two exceptions are the widen and narrow operations, which
-are invoked automatically during data conversions. <pre class="codeblock"></pre>
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">externalType ENumber extends AnyValue type ClassType
+   /**
+    * {@Operation +} A unary plus (has no effect on the numeric value).
+    */
+   static function $Plus(value ENumber in) 
+          returns (ENumber) {@Operation{"+"}};
+
+   /**
+    * {@Operation +} Adds two numbers.
+    */
+   static function $Plus(lvalue ENumber in, rvalue ENumber in) 
+          returns (ENumber) {@Operation{"+"}};
+
+   /**
+    * {@Operation -} Negates the value.
+    */
+   static function $Minus(value ENumber in) 
+          returns (ENumber) {@Operation{"-"}};
+
+   /**
+    * {@Operation -} Subtracts one number from another.
+    */
+   static function $Minus(lvalue ENumber in, rvalue ENumber in) 
+          returns (ENumber) {@Operation{"-"}};
+
+   /**
+    * {@Operation *} Multiplies two numbers.
+    */
+   static function $Multiply(lvalue ENumber in, rvalue ENumber in) 
+          returns (ENumber) {@Operation{"*"}};
+
+   /**
+    * {@Operation /} Divides one number by another.
+    */
+   static function $Divide(lvalue ENumber in, rvalue ENumber in) 
+          returns (ENumber) {@Operation{"/"}};
+
+   /**
+    * {@Operation %} Computes the remainder of dividing one number by another.
+    */
+	  static function $Modulo(lvalue ENumber in, rvalue ENumber in)
+          returns (ENumber) {@Operation{"%"}};
+
+   /**
+    * {@Operation **} Computes lvalue to the power of rvalue.
+    */
+   static function $PowerOf(lvalue ENumber in, rvalue ENumber in) 
+          returns (ENumber) {@Operation{"**"}};
+
+   /**
+    * {@Operation &lt;} Compares two numbers.
+    */
+   static function $LT(lvalue ENumber in, rvalue ENumber in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+   /**
+    * {@Operation &gt;} Compares two numbers.
+    */
+   static function $GT(lvalue ENumber in, rvalue ENumber in) 
+          returns (EBoolean) {@Operation{"&gt;"}};
+
+   /**
+    * {@Operation &lt;=} Compares two numbers.
+    */
+   static function $LTE(lvalue ENumber in, rvalue ENumber in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+   /**
+    * {@Operation &gt;=} Compares two numbers.
+    */
+   static function $GTE(lvalue ENumber in, rvalue ENumber in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+   /**
+    * {@Operation ==} Compares two numbers.
+    */
+   static function $EQ(lvalue ENumber in, rvalue ENumber in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+   /**
+    * {@Operation !=} Compares two numbers.
+    */
+   static function $NEQ(lvalue ENumber in, rvalue ENumber in) 
+          returns(EBoolean) {@Operation{"!="}};
+
+   /**
+    * {@Operation{"widen"} Converts a bigint to a number.
+    */
+   static function asNumber(value EBigint in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"widen"} Converts a decimal to a number.
+    */
+   static function asNumber(value EDecimal in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"widen"} Converts a float to a number.
+    */
+   static function asNumber(value EFloat in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"widen"} Converts an int to a number.
+    */
+   static function asNumber(value EInt in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"widen"} Converts a smallfloat to a number.
+    */
+   static function asNumber(value ESmallfloat in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"widen"} Converts a smallint to a number.
+    */
+   static function asNumber(value ESmallint in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   /**
+    * {@Operation{"narrow"} Converts a string to a number.
+    */
+   static function asNumber(value EString in) 
+          returns(ENumber) {@Operation{"narrow"}};
+end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
@@ -63,9 +189,9 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <div class="tablenoborder"><a name="redt00062__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00062__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d15555e92">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d15802e93">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d15555e95">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d15802e96">Issue</th>
 
 </tr>
 
@@ -74,17 +200,17 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00062__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d15555e92 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15802e93 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d15555e95 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15802e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00062__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d15555e92 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15802e93 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d15555e95 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d15802e96 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

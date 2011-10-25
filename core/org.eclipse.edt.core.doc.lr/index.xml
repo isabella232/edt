@@ -440,6 +440,7 @@
 <topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
 <topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
 <topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
+<topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
 <topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
 <topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
 </entry>
@@ -500,6 +501,9 @@
 </entry>
 <entry keyword="String">
 <topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
+</entry>
+<entry keyword="Timestamp">
+<topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
 </entry>
 </entry>
 <entry keyword="eglx.http EGL package">
@@ -896,6 +900,9 @@
 </entry>
 <entry keyword="tanh EGL function">
 <topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
+</entry>
+<entry keyword="Timestamp">
+<topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
 </entry>
 <entry keyword="types">
 <entry keyword="dynamic runtime checks">

@@ -5,9 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="TIMESTAMP type"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Timestamp and ETimestamp types"></meta>
+<meta name="abstract" content="The EGL Timestamp type is a value type if declared with a mask and is a non-instantiable reference type if declared without a mask. The type lets you create timestamp values. In Eclipse IDE for EGL Developers, the type definition for Timestamp is ETimestamp."></meta>
+<meta name="description" content="The EGL Timestamp type is a value type if declared with a mask and is a non-instantiable reference type if declared without a mask. The type lets you create timestamp values. In Eclipse IDE for EGL Developers, the type definition for Timestamp is ETimestamp."></meta>
+<meta name="DC.subject" content="EGL types, Timestamp, EGL type"></meta>
+<meta name="keywords" content="EGL types, Timestamp, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,24 +17,170 @@
 <meta name="DC.Identifier" content="redt00053"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>TIMESTAMP type</title>
+<title>Timestamp and ETimestamp types</title>
 </head>
 <body id="redt00053"><a name="redt00053"><!-- --></a>
 
 
-<h1 class="topictitle1">TIMESTAMP type</h1>
+<h1 class="topictitle1">Timestamp and ETimestamp types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Timestamp type is a value type if declared
+with a mask and is a non-instantiable reference type if declared without
+a mask. The type lets you create timestamp values. In Eclipse IDE
+for EGL Developers, the type definition for Timestamp is ETimestamp.</p>
+
+<a name="redt00053__main"><!-- --></a><dl id="redt00053__main">
+<dt class="dlterm"><a name="redt00053__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00053__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00053__detail"><!-- --></a>Type detail</dt>
+
+<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">externalType ETimestamp extends AnyValue type ParameterizableType {
+   parameterizedType = TimestampType
+}
+
+/**
+  * {@Operation &lt;} Compares two timestamps.
+  */
+   static function $LT(lvalue ETimestamp in, rvalue ETimestamp in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+  * {@Operation &gt;} Compares two timestamps.
+  */
+    static function $GT(lvalue ETimestamp in, rvalue ETimestamp in) 
+           returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+  * {@Operation &lt;=} Compares two timestamps.
+  */
+   static function $LTE(lvalue ETimestamp in, rvalue ETimestamp in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+  * {@Operation &gt;=} Compares two timestamps.
+  */
+   static function $GTE(lvalue ETimestamp in, rvalue ETimestamp in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+  * {@Operation ==} Compares two timestamps.
+  */
+   static function $EQ(lvalue ETimestamp in, rvalue ETimestamp in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+/**
+  * {@Operation !=} Compares two timestamps.
+  */
+   static function $NEQ(lvalue ETimestamp in, rvalue ETimestamp in) 
+          returns(EBoolean) {@Operation{"!="}};
+
+/**
+  * {@Operation narrow} Converts a string to a timestamp.  
+  * The string is parsed by searching for the timestamp fields 
+  * specified in the pattern, in order from years down 
+  * to fractions of seconds.  Each field from the pattern must
+  * be present in the string.  Years must be represented with four digits,
+  * fractions of seconds with six digits, and other fields with two digits.
+  * One separator character must appear in between each field.  Any character
+  * may be used as a separator, and the separators do not have to match.
+  *
+  * @throws TypeCastException if the string can't be parsed into a timestamp 
+  * or the pattern is invalid.
+  */
+   static function asTimestamp(value EString in, pattern EString in) 
+          returns (ETimestamp) {@Operation{"narrow"}};
+
+/**
+  * {@Operation widen} Converts any timestamp to a timestamp 
+  * with the specified pattern.
+  */
+   static function asTimestamp(value ETimestamp in, pattern EString in) 
+          returns (ETimestamp) {@Operation{"widen"}};
+
+   function dayOf() returns(EInt);
+
+   function monthOf() returns(EInt);
+
+   function yearOf() returns(EInt);
+
+   function weekdayOf() returns(EInt);
+
+   function dateOf() returns(EDate);
+
+   //TODO this really should return ETimestamp("hhmmss").
+   function timeOf() returns(ETimestamp);
+
+   function extend(timeSpanPattern EString in) returns(ETimestamp);
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00053__comments"><!-- --></a>Comments</dt>
+
+<dd> <anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00053__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00053__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d13840e94">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d13840e97">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00053__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d13840e94 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d13840e97 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00053__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d13840e94 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d13840e97 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

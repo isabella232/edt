@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Smallint and ESmallint types"></meta>
-<meta name="abstract" content="The EGL Smallint type is a value type that.... In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
-<meta name="description" content="The EGL Smallint type is a value type that.... In Eclipse IDE for EGL Developers, the type definition for Number is ENumber."></meta>
+<meta name="abstract" content="The EGL Smallint type is a value type that lets you create a four-byte value that ranges from -32,768 to 32,767, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Smallint is ESmallint."></meta>
+<meta name="description" content="The EGL Smallint type is a value type that lets you create a four-byte value that ranges from -32,768 to 32,767, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Smallint is ESmallint."></meta>
 <meta name="DC.subject" content="EGL types, Smallint, EGL type"></meta>
 <meta name="keywords" content="EGL types, Smallint, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,9 +26,10 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Smallint type is a value type that....
-In Eclipse IDE for EGL Developers, the type definition for Number
-is ENumber.</p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL Smallint type is a value type that lets
+you create a four-byte value that ranges from -32,768 to 32,767, inclusive,
+with no decimal places. In Eclipse IDE for EGL Developers, the type
+definition for Smallint is ESmallint.</p>
 
 <a name="redt00056__main"><!-- --></a><dl id="redt00056__main">
 <dt class="dlterm"><a name="redt00056__package"><!-- --></a>EGL package name</dt>
@@ -45,10 +46,163 @@ is ENumber.</p>
 <dt class="dlterm"><a name="redt00056__detail"><!-- --></a>Type detail</dt>
 
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
-indicates that the specified operation is available and that the specified
-function name is not. For example, use “==” to compare two values,
-not “$EQ”. Two exceptions are the widen and narrow operations, which
-are invoked automatically during data conversions. <pre class="codeblock"></pre>
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">externalType ESmallint extends ENumber type ClassType
+
+/**
+  * {@Operation +} A unary plus (has no effect on the numeric value).
+  */
+   static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};
+
+/**
+  * {@Operation +} Adds two numbers.
+  */
+   static function $Plus(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EInt) {@Operation{"+"}};
+
+/**
+  * {@Operation -} Negates the value.
+  */
+   static function $Minus(value ESmallint in) 
+          returns (EInt) {@Operation{"-"}};
+
+/**
+  * {@Operation -} Subtracts one number from another.
+  */
+  static function $Minus(lvalue ESmallint in, rvalue ESmallint in) 
+         returns (EInt) {@Operation{"-"}};
+
+/**
+  * {@Operation *} Multiplies two numbers.
+  */
+  static function $Multiply(lvalue ESmallint in, rvalue ESmallint in) 
+         returns (EInt) {@Operation{"*"}};
+
+/**
+  * {@Operation /} Divides one number by another.
+  */
+   static function $Divide(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EDecimal) {@Operation{"/"}};
+
+/**
+  * {@Operation %} Computes the remainder of dividing one number by another.
+  */
+   static function $Modulo(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EInt) {@Operation{"%"}};
+
+   /**
+     * {@Operation **} Computes lvalue to the power of rvalue.
+     */
+   static function $PowerOf(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EFloat) {@Operation{"**"}};
+
+/**
+  * {@Operation &lt;} Compares two numbers.
+  */
+   static function $LT(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+  * {@Operation &gt;} Compares two numbers.
+  */
+   static function $GT(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+  * {@Operation &lt;=} Compares two numbers.
+  */
+   static function $LTE(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+  * {@Operation &gt;=} Compares two numbers.
+  */
+   static function $GTE(lvalue ESmallint in, rvalue ESmallint in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+  * {@Operation ==} Compares two numbers.
+  */
+   static function $EQ(lvalue ESmallint in, rvalue ESmallint in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+/**
+  * {@Operation !=} Compares two numbers.
+  */
+   static function $NEQ(lvalue ESmallint in, rvalue ESmallint in) 
+          returns(EBoolean) {@Operation{"!="}};
+
+/**
+  * {@Operation widen} Converts a smallint to a number.
+  */
+   static function asNumber(value ESmallint in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+/**
+  * {@Operation narrow} Converts a decimal to a smallint.  Digits after the
+  * decimal point are discarded.
+  *
+  * @throws TypeCastException if the decimal is out of range for a smallint.
+  */
+   static function asSmallint(value EDecimal in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts a float to a smallint.  Digits after the
+  * decimal point are discarded.
+  *
+  * @throws TypeCastException if the float is out of range for a smallint.
+  */
+   static function asSmallint(value EFloat in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts an int to a smallint.
+  *
+  * @throws TypeCastException if the int is out of range for a smallint.
+  */
+   static function asSmallint(value EInt in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts a string to a smallint.  The string is parsed
+  * as follows: It may begin with an optional + or - sign.  After the sign there
+  * must be a sequence of one or more digit characters.  Nothing may follow the
+  * digits.  The digits in the string must be within the valid range for a smallint.
+  *
+  * @throws TypeCastException if the string can't be parsed into a smallint.
+  */
+   static function asSmallint(value EString in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts a smallfloat to a smallint.  Digits after the
+  * decimal point are discarded.
+  *
+  * @throws TypeCastException if the smallfloat is out of range for a smallint.
+  */
+   static function asSmallint(value ESmallfloat in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts a bigint to a smallint.
+  *
+  * @throws TypeCastException if the bigint is out of range for a smallint.
+  */
+   static function asSmallint(value EBigint in)
+          returns(ESmallint) {@Operation{"narrow"}};
+
+/**
+  * {@Operation narrow} Converts a number to a smallint.  Digits after the
+  * decimal point are discarded.
+  *
+  * @throws TypeCastException if the number is out of range for a smallint.
+  */
+   static function asSmallint(value ENumber in) 
+          returns(ESmallint) {@Operation{"narrow"}};
+end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
@@ -63,9 +217,9 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <div class="tablenoborder"><a name="redt00056__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00056__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d13959e93">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14181e94">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d13959e96">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14181e97">Issue</th>
 
 </tr>
 
@@ -74,17 +228,17 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00056__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d13959e93 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14181e94 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13959e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14181e97 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00056__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d13959e93 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14181e94 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13959e96 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d14181e97 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

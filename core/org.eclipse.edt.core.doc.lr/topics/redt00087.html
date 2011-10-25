@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Resource annotation"></meta>
-<meta name="abstract" content="Resource lets you..."></meta>
-<meta name="description" content="Resource lets you..."></meta>
+<meta name="abstract" content="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor."></meta>
+<meta name="description" content="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor."></meta>
 <meta name="DC.subject" content="Resource EGL annotation, annotations, Resource"></meta>
 <meta name="keywords" content="Resource EGL annotation, annotations, Resource"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,7 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Resource</span></span> lets you... </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Resource</span></span> causes an
+annotated variable to reference an object that holds values from a
+specified entry in the EGL deployment descriptor.</p>
 
 <a name="redt00087__main"><!-- --></a><dl id="redt00087__main">
 <dt class="dlterm"><a name="redt00087__package"><!-- --></a>EGL package name</dt>
@@ -37,7 +39,9 @@
 
 <dt class="dlterm"><a name="redt00087__use"><!-- --></a>Example use</dt>
 
-<dd><p></p>
+<dd><div class="p">The following declaration indicates that access details are
+in the EGL deployment descriptor entry named “myBinding”:<pre class="codeblock">myService IMyService?{@Resource{bindingKey = "myBinding"}};</pre>
+</div>
 <anchor id="use_more"></anchor></dd>
 
 
@@ -58,12 +62,20 @@ end</pre>
 <dd><dl>
 <dt class="dlterm"><span class="synph"><span class="kwd">bindingKey</span></span></dt>
 
-<dd></dd>
+<dd>The name of the entry in an EGL deployment descriptor. The default
+value of <span class="synph"><span class="kwd">bindingKey</span></span> is the name of the variable
+being annotated. The name in the previous example is <samp class="codeph">myService</samp>.</dd>
 
 
 <dt class="dlterm"><span class="synph"><span class="kwd">propertyFileName</span></span></dt>
 
-<dd></dd>
+<dd>The name of the EGL deployment descriptor that contains the binding.
+The default value of <span class="synph"><span class="kwd">propertyFileName</span></span> is
+the name of the deployment descriptor that is used at deployment time.<p>When
+you set the <span class="synph"><span class="kwd">propertyFileName</span></span> annotation
+field, do not include a file extension. The name of the file that
+is accessed at run time includes the following suffix: -bind.xml.</p>
+</dd>
 
 </dl>
 <anchor id="annofields_more"></anchor></dd>
@@ -81,9 +93,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00087__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00087__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22898e121">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23157e143">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22898e124">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23157e146">Issue</th>
 
 </tr>
 
@@ -92,17 +104,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00087__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22898e121 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23157e143 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22898e124 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23157e146 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00087__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22898e121 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23157e143 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22898e124 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d23157e146 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

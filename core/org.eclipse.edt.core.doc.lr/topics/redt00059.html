@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Decimal and EDecimal types"></meta>
-<meta name="abstract" content="The EGL Decimal type is a value type that lets you create a packed decimal value. In Eclipse IDE for EGL Developers, the type definition for Decimal is EDecimal."></meta>
-<meta name="description" content="The EGL Decimal type is a value type that lets you create a packed decimal value. In Eclipse IDE for EGL Developers, the type definition for Decimal is EDecimal."></meta>
+<meta name="abstract" content="The EGL Decimal type is a value type if declared with parameters and is a non-instantiable reference type if declared without parameters. The type lets you create a packed decimal value. In Eclipse IDE for EGL Developers, the type definition for Decimal is EDecimal."></meta>
+<meta name="description" content="The EGL Decimal type is a value type if declared with parameters and is a non-instantiable reference type if declared without parameters. The type lets you create a packed decimal value. In Eclipse IDE for EGL Developers, the type definition for Decimal is EDecimal."></meta>
 <meta name="DC.subject" content="EGL types, Decimal, EGL type"></meta>
 <meta name="keywords" content="EGL types, Decimal, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,9 +26,10 @@
 
 
 
-<div><p>The EGL Decimal type is a value type that lets you create
-a packed decimal value. In Eclipse IDE for EGL Developers, the type
-definition for Decimal is EDecimal.</p>
+<div><p>The EGL Decimal type is a value type if declared with parameters
+and is a non-instantiable reference type if declared without parameters.
+The type lets you create a packed decimal value. In Eclipse IDE for
+EGL Developers, the type definition for Decimal is EDecimal.</p>
 
 <a name="redt00059__main"><!-- --></a><dl id="redt00059__main">
 <dt class="dlterm"><a name="redt00059__package"><!-- --></a>EGL package name</dt>
@@ -39,16 +40,20 @@ definition for Decimal is EDecimal.</p>
 
 <dt class="dlterm"><a name="redt00059__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd><div class="p">After the following code runs, the value of <em>result</em> is
+10.43, and the value of <em>result02</em> is 10:<pre class="codeblock">result   Decimal(4,2) = 10.43;
+result02 Decimal(4)   = 10.43;</pre>
+</div>
+<anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00059__detail"><!-- --></a>Type detail</dt>
 
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
-indicates that the specified operation is available and that the specified
-function name is not. For example, use “==” to compare two values,
-not “$EQ”. Two exceptions are the widen and narrow operations, which
-are invoked automatically during data conversions. <pre class="codeblock">/**
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">/**
  * EDecimal defines the EGL decimal type.
  */
 externalType EDecimal extends ENumber type ParameterizableType {
@@ -258,9 +263,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00059__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00059__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d14754e93">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14976e103">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d14754e96">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14976e106">Issue</th>
 
 </tr>
 
@@ -269,17 +274,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00059__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d14754e93 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14976e103 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14754e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14976e106 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00059__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d14754e93 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14976e103 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14754e96 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d14976e106 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

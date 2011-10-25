@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Smallfloat and ESmallfloat types"></meta>
-<meta name="abstract" content="The EGL Smallfloat type is a value type that.... In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat."></meta>
-<meta name="description" content="The EGL Smallfloat type is a value type that.... In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat."></meta>
+<meta name="abstract" content="The EGL Smallfloat type is a value type that is the basis of a 32-bit single-precision floating-point value. In Java output, positive values range from 1.40239846e-45 to 3.40282347e+38. In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat."></meta>
+<meta name="description" content="The EGL Smallfloat type is a value type that is the basis of a 32-bit single-precision floating-point value. In Java output, positive values range from 1.40239846e-45 to 3.40282347e+38. In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat."></meta>
 <meta name="DC.subject" content="EGL types, Smallfloat, EGL type"></meta>
 <meta name="keywords" content="EGL types, Smallfloat, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00032.html"></meta>
@@ -26,7 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Smallfloat type is a value type that....
+<div id="body"><a name="body"><!-- --></a><p>The EGL Smallfloat type is a value type that
+is the basis of a 32-bit single-precision floating-point value. In
+Java output, positive values range from 1.40239846e-45 to 3.40282347e+38.
 In Eclipse IDE for EGL Developers, the type definition for Smallfloat
 is ESmallfloat.</p>
 
@@ -45,10 +47,127 @@ is ESmallfloat.</p>
 <dt class="dlterm"><a name="redt00061__detail"><!-- --></a>Type detail</dt>
 
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
-indicates that the specified operation is available and that the specified
-function name is not. For example, use “==” to compare two values,
-not “$EQ”. Two exceptions are the widen and narrow operations, which
-are invoked automatically during data conversions. <pre class="codeblock"></pre>
+indicates that the specified operation is available. For example,
+use “==” to compare two values, not “$EQ”. Two exceptions are the
+widen and narrow operations, which are invoked automatically during
+data conversions. <pre class="codeblock">externalType ESmallfloat extends ENumber type ClassType
+/**
+ * {@Operation +} A unary plus (has no effect on the numeric value).
+ */
+   static function $Plus(value ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"+"}};
+
+/**
+  * {@Operation +} Adds two numbers.
+  */
+   static function $Plus(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"+"}};
+
+/**
+  * {@Operation -} Negates the value.
+  */
+   static function $Minus(value ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"-"}};
+/**
+  * {@Operation -} Subtracts one number from another.
+  */
+   static function $Minus(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"-"}};
+
+/**
+  * {@Operation *} Multiplies two numbers.
+  */
+   static function $Multiply(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"*"}};
+
+/**
+  * {@Operation /} Divides one number by another.
+  */
+   static function $Divide(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"/"}};
+
+/**
+  * {@Operation %} Computes the remainder of dividing one number by another.
+  */
+   static function $Modulo(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (ESmallfloat) {@Operation{"%"}};
+
+/**
+  * {@Operation **} Computes lvalue to the power of rvalue.
+  */
+   static function $PowerOf(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (EFloat) {@Operation{"**"}};
+
+/**
+  * {@Operation &lt;} Compares two numbers.
+  */
+   static function $LT(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (EBoolean) {@Operation{"&lt;"}};
+
+/**
+  * {@Operation &gt;} Compares two numbers.
+  */
+   static function $GT(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (EBoolean) {@Operation{"&gt;"}};
+
+/**
+  * {@Operation &lt;=} Compares two numbers.
+  */
+   static function $LTE(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (EBoolean) {@Operation{"&lt;="}};
+
+/**
+  * {@Operation &gt;=} Compares two numbers.
+  */
+   static function $GTE(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns (EBoolean) {@Operation{"&gt;="}};
+
+/**
+  * {@Operation ==} Compares two numbers.
+  */
+   static function $EQ(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns(EBoolean) {@Operation{"=="}};
+
+/**
+  * {@Operation !=} Compares two numbers.
+  */
+   static function $NEQ(lvalue ESmallfloat in, rvalue ESmallfloat in) 
+          returns(EBoolean) {@Operation{"!="}};
+
+   static function asNumber(value ESmallfloat in) 
+          returns(ENumber) {@Operation{"widen"}};
+
+   static function asSmallfloat(value EDecimal in) 
+          returns(ESmallfloat) {@Operation{"widen"}};
+
+/**
+  * {@Operation narrow} Converts a string to a smallfloat.  The string is parsed
+	 * as follows: It may begin with an optional + or - sign.  After the sign there
+	 * must be a sequence of one or more digit characters.  They may be followed by
+	 * a decimal point (a period) and one or more digit characters.  It may end with
+	 * an exponent, which is the letter e or E, followed by an optional negative sign,
+	 * followed by one or more digit characters.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a smallfloat.
+	 */
+   static function asSmallfloat(value EString in) 
+          returns(ESmallfloat) {@Operation{"narrow"}};
+
+   static function asSmallfloat(value ESmallint in) 
+          returns(ESmallfloat) {@Operation{"widen"}};
+
+   static function asSmallfloat(value EInt in) 
+          returns(ESmallfloat) {@Operation{"narrow"}};
+
+   static function asSmallfloat(value EFloat in) 
+          returns(ESmallfloat) {@Operation{"narrow"}};
+
+   static function asSmallfloat(value EBigint in) 
+          returns(ESmallfloat) {@Operation{"narrow"}};
+
+   static function asSmallfloat(value ENumber in) 
+          returns(ESmallfloat) {@Operation{"narrow"}};
+end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
@@ -63,9 +182,9 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <div class="tablenoborder"><a name="redt00061__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00061__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d15290e93">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d15537e94">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d15290e96">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d15537e97">Issue</th>
 
 </tr>
 
@@ -74,17 +193,17 @@ are invoked automatically during data conversions. <pre class="codeblock"></pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00061__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d15290e93 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15537e94 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d15290e96 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15537e97 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00061__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d15290e93 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d15537e94 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d15290e96 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d15537e97 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>
