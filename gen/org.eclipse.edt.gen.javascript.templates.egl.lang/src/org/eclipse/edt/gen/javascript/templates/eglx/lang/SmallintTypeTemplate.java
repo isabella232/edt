@@ -76,6 +76,8 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 			return "egl.remainder";
 		if (op.equals(expr.Op_POWER))
 			return "egl.eglx.lang.EInt16.pow";
+		if (op.equals(expr.Op_DIVIDE))
+			return "new egl.javascript.BigDecimal(egl.divide";
 		return "";
 	}
 
@@ -90,7 +92,7 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return " * ";
 		if (op.equals(expr.Op_DIVIDE))
-			return " / ";
+			return ",";
 		if (op.equals(expr.Op_EQ))
 			return " == ";
 		if (op.equals(expr.Op_NE))
@@ -133,6 +135,8 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 			return "";
 		if (op.equals(expr.Op_MODULO))
 			return "";
+		if (op.equals(expr.Op_DIVIDE))
+			return ")";
 		return "";
 	}
 	
