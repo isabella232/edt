@@ -32,7 +32,7 @@ public class NameTemplate extends JavaScriptTemplate {
 		if ( propertyFunction != null )
 		{
 			// First, is this a reference within the setter's definition?
-			if (CommonUtilities.isCurrentFunction(ctx, propertyFunction)) {
+			if (CommonUtilities.isCurrentFunction(ctx, propertyFunction, expr.getNamedElement())) {
 				genAsAssignment = false;
 				if (expr.getQualifier() != null) {
 					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
@@ -59,7 +59,7 @@ public class NameTemplate extends JavaScriptTemplate {
 						ctx.invoke(genQualifier, expr.getNamedElement(), ctx, out);
 					}
 					out.print( propertyFunction );
-					//When the LHS memeber field is processed
+					//When the LHS memeber field is just processed
 					if ((ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) != null) && (ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) == Boolean.TRUE)){
 						ctx.putAttribute(expr.getNamedElement(), Constants.EXPR_LHS, false);
 					}
