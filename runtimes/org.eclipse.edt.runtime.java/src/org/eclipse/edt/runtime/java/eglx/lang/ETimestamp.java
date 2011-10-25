@@ -491,7 +491,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			}
 			while (i < length && !('0' <= ch && ch <= '9'));
 			// Read in the number of years.
-			if (i <= length && startCode == YEAR_CODE) {
+			if (i == 4 && i <= length && startCode == YEAR_CODE) {
 				years = 0;
 				for (int j = 0; '0' <= ch && ch <= '9' && j < 4; j++) {
 					years = years * 10 + ch - '0';
