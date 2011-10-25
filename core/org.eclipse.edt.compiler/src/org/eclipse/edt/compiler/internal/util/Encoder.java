@@ -90,52 +90,52 @@ public class Encoder {
  */
 public static String decode(String encodedText)
     throws IllegalArgumentException {
-
-    if (!isEncoded(encodedText)) {
-
-        throw new IllegalArgumentException("Text is not encoded."); //$NON-NLS-1$
-    }
-
-    //If string was encoded using the old encoding, need to decode using old encoding for migration purposes.
-    if (encodedText.startsWith(OLD_ENCODED_PREFIX)) {
-        byte[] data8 = EGLOldDecoder.decode(encodedText.substring(OLD_ENCODED_PREFIX.length()));
-        int length8 = data8.length;
-        if (length8 % 8 != 0) {
-
-    	    throw new IllegalArgumentException("Encoded text has wrong length."); //$NON-NLS-1$
-        }
-        
-        int length = length8 / 8;
-        byte[] data = new byte[length];
-        int[] mask = {1, 2, 4, 8, 16, 32, 64, 128};
-        for (int i = 0; i < length; i++) {
-    	    for (int j = 0; j < 8; j++) {
-
-    		    int k = j * length + i;
-    		    byte value = data8[k];
-    		    value ^= k;
-    		    if ((value & mask[j]) != value) {
-
-    			    throw new IllegalArgumentException("Encoded text has illegal value."); //$NON-NLS-1$
-    		    }
-    		    data[i] += value;
-    	    }
-        }
-        
-        String clearText;
-        try {
-            clearText = new String(data, CHARACTER_ENCODING);
-        } catch (UnsupportedEncodingException uee) {
-
-            throw new IllegalArgumentException(uee.getLocalizedMessage());
-        }
-        return clearText;
-    }
-    //Use new encryption
-    else {
-        String result = new TeaEncrypter().decrypt(encodedText.substring(ENCODED_PREFIX.length()));
-        return result;
-    }
+	return encodedText;
+//    if (!isEncoded(encodedText)) {
+//
+//        throw new IllegalArgumentException("Text is not encoded."); //$NON-NLS-1$
+//    }
+//
+//    //If string was encoded using the old encoding, need to decode using old encoding for migration purposes.
+//    if (encodedText.startsWith(OLD_ENCODED_PREFIX)) {
+//        byte[] data8 = EGLOldDecoder.decode(encodedText.substring(OLD_ENCODED_PREFIX.length()));
+//        int length8 = data8.length;
+//        if (length8 % 8 != 0) {
+//
+//    	    throw new IllegalArgumentException("Encoded text has wrong length."); //$NON-NLS-1$
+//        }
+//        
+//        int length = length8 / 8;
+//        byte[] data = new byte[length];
+//        int[] mask = {1, 2, 4, 8, 16, 32, 64, 128};
+//        for (int i = 0; i < length; i++) {
+//    	    for (int j = 0; j < 8; j++) {
+//
+//    		    int k = j * length + i;
+//    		    byte value = data8[k];
+//    		    value ^= k;
+//    		    if ((value & mask[j]) != value) {
+//
+//    			    throw new IllegalArgumentException("Encoded text has illegal value."); //$NON-NLS-1$
+//    		    }
+//    		    data[i] += value;
+//    	    }
+//        }
+//        
+//        String clearText;
+//        try {
+//            clearText = new String(data, CHARACTER_ENCODING);
+//        } catch (UnsupportedEncodingException uee) {
+//
+//            throw new IllegalArgumentException(uee.getLocalizedMessage());
+//        }
+//        return clearText;
+//    }
+//    //Use new encryption
+//    else {
+//        String result = new TeaEncrypter().decrypt(encodedText.substring(ENCODED_PREFIX.length()));
+//        return result;
+//    }
 }
 /**
  * Encodes a clear text string.
@@ -145,23 +145,23 @@ public static String decode(String encodedText)
  * @exception IllegalArgumentException if the input text is already encoded
  */
 public static String encode(String clearText) throws IllegalArgumentException {
-
-    if (isEncoded(clearText)) {
-
-        throw new IllegalArgumentException("Text is already encoded."); //$NON-NLS-1$
-    }
-
-    /**
-     * RATLC01173258
-     * Don't encode an empty string 
-     */
-    if (clearText.length() == 0) {
-    	return clearText;
-    }
-    
-    String base64 = new TeaEncrypter().encrypt(clearText);
-
-    return ENCODED_PREFIX + base64;
+	return clearText;
+//    if (isEncoded(clearText)) {
+//
+//        throw new IllegalArgumentException("Text is already encoded."); //$NON-NLS-1$
+//    }
+//
+//    /**
+//     * RATLC01173258
+//     * Don't encode an empty string 
+//     */
+//    if (clearText.length() == 0) {
+//    	return clearText;
+//    }
+//    
+//    String base64 = new TeaEncrypter().encrypt(clearText);
+//
+//    return ENCODED_PREFIX + base64;
 }
 public String getAction() {
 	return action;
