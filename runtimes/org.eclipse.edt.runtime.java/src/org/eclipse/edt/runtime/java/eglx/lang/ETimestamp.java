@@ -468,7 +468,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static Calendar convert(String timestamp, int startCode, int endCode) {
-		Calendar result;
 		// Try to parse the string by hand, looking for each field (years, months,
 		// etc.) that this ETimestamp stores.
 		int years = -1;
@@ -703,8 +702,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
 		}
-		result = cal;
-		return result;
+		return cal;
 	}
 
 	public static Calendar convert(String timestamp, String format) throws ParseException {

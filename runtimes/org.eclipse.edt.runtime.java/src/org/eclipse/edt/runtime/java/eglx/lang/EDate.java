@@ -176,6 +176,17 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		cal.set(Calendar.YEAR, years);
 		cal.set(Calendar.MONTH, months - 1);
 		cal.set(Calendar.DATE, days);
+		// Verify that the values are valid.
+		try {
+			cal.getTimeInMillis();
+		}
+		catch (Exception ex) {
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			tcx.initCause( ex );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
 		return cal;
 	}
 
