@@ -113,7 +113,6 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				}
 				else if(uri.endsWith(".js")){
 					// Attempt to load this file as a properties file for NLS
-					//TODO look for .properties without the locale too
 					IFile ifile = findRequiredFile(PropertiesFileUtil.convertToProperitesFile(uri), projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
 					if(ifile != null && ifile.exists()){	
 						PropertiesFileUtil propFileUtil = new PropertiesFileUtil(uri);
