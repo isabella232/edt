@@ -48,6 +48,7 @@ public class DeploymentContext {
 	private ProjectEnvironment environment;
 	private IProgressMonitor monitor;
 	private List<DeploymentDesc> dependentModels;
+	private IFile eglddFile;
 
 	private Shell shell;
 	
@@ -77,8 +78,9 @@ public class DeploymentContext {
 		this.targetProject = targetProject;
 	}
 
-	public DeploymentContext( DeploymentDesc model ) {
+	public DeploymentContext( DeploymentDesc model, IFile eglddFile ) {
 		this.model = model;
+		this.eglddFile = eglddFile;
 	}
 
 	public void init() {
@@ -140,7 +142,7 @@ public class DeploymentContext {
 	public void showMessage( String messageID ) {
 		  DeploymentDesc model = getDeploymentDesc();
 		  IProject project = getSourceProject();
-		  IFile tempFile = (IFile)project.findMember("EGLSource"+ IPath.SEPARATOR + model.getEGLDDFileName() + ".egldd");
+		  IFile tempFile = eglddFile;
 	      String tempMessage = Messages.bind(messageID, new String[]{tempFile.getFullPath().makeRelative().toOSString()});
 			
 	      final String message = tempMessage;
