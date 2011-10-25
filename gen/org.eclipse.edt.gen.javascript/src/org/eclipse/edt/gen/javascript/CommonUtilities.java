@@ -465,9 +465,14 @@ public class CommonUtilities {
 		return result;
 	}
 	
-	public static boolean isCurrentFunction(Context ctx, String functionName){
+	public static boolean isCurrentFunction(Context ctx, String functionName, NamedElement element) {
 		Function currentFunction = ctx.getCurrentFunction();
-		return ((currentFunction != null) && currentFunction.getName().equals(functionName));
+		if(currentFunction != null && element instanceof Field){
+			if(!(currentFunction.getContainer().equals(((Field)element).getContainer()))){
+				return false;
+			}
+		}
+		return ((currentFunction != null) && currentFunction.getName().equals(functionName) );
 	}
 	
 		
@@ -642,5 +647,5 @@ public class CommonUtilities {
 		}
 		
 		return result.toString();
-	}
+	}	
 }
