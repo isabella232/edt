@@ -12,22 +12,6 @@
 <plugin>
    <extension-point id="org.eclipse.edt.ide.deployment.deploymentSolution" name="deploymentSolution" schema="schema/deploymentSolution.exsd"/>
    <extension-point id="org.eclipse.edt.ide.deployment.deploymentOperation" name="deploymentOperation" schema="schema/deploymentOperation.exsd"/>
-
-   <extension
-         point="org.eclipse.ui.popupMenus">
-         <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            adaptable="true"
-            nameFilter="*.egl"
-            id="org.eclipse.edt.ide.deployementpopupmenu">
-			<action
-         		label="%Deploy"
-         		class="org.eclipse.edt.ide.deployment.ui.internal.actions.DeploymentAction"
-          		enablesFor="*"
-         		id="org.eclipse.edt.ide.ui.deployment">
-         	</action>       
-		</objectContribution>
-   </extension>
       
    <extension point="org.eclipse.ui.popupMenus">
       <!--objectContribution
