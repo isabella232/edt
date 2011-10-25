@@ -146,7 +146,6 @@ public class EDate extends AnyBoxedObject<Calendar> {
 			if (ch < '0' || ch > '9') {
 				break PARSE;
 			}
-			int actualDigits = 1; 
 			years = ch - '0';
 			i++;
 			for (int digits = 0; i < length && digits < 5; digits++, i++) {
@@ -155,11 +154,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 					break PARSE;
 				}
 				years = years * 10 + ch - '0';
-				actualDigits++;
 			}
 
-			// Make sure we didn't get too many or too few digits for the year.
-			if (actualDigits != 4 || i < length) {
+			// Make sure we didn't get too many digits for the year.
+			if (i < length) {
 				years = -1;
 			}
 		}
