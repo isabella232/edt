@@ -23,8 +23,7 @@ public class TeaEncrypter
 {
 	private Tea tea;
 	private byte encKey[] =
-		new BigInteger( "687d44e4a3a912230909823be3e2455", 16 ).toByteArray(); //$NON-NLS-1$
-	
+		new BigInteger( "2342abc2342ddee987efefd3a4bb192", 16 ).toByteArray(); //$NON-NLS-1$
 	
 	public TeaEncrypter()
 	{
