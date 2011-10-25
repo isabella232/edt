@@ -133,9 +133,6 @@ egl.defineClass( "eglx.lang", "EInt32"
 }
 );
 egl.eglx.lang.EInt32.ZERO = 0;
-egl.eglx.lang.EInt32.fromEString = function (x) {
-	return egl.convertNumberToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
-};
 egl.eglx.lang.EInt32.fromEDecimal = function (x) {
 	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
