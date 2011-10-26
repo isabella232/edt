@@ -750,7 +750,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				return setTimeFormatterProperties( member, properties, fastCheck );
 			}
 */
-			else if ((TypeUtils.Type_TIMESTAMP.equals(type))) {
+			else if ((TypeUtils.Type_TIMESTAMP.equals(type.getClassifier()))) {
 				return setTimestampFormatterProperties(ctx, member, properties, fastCheck );
 			}
 			else if (TypeUtils.isNumericType(type)) {
@@ -871,25 +871,26 @@ public class MVCTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	
-	/**
-	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
-	 *                   Should not be set to true when generating the field's declaration. Prevents
-	 *                   slowing down the generator or duplicating code.
-	 */
-	private String setTimeFormatterProperties(Context ctx, Member member, List<String> properties, boolean fastCheck) {
-		if (!fastCheck) {
-			Annotation annot;
-			if ((annot = getAnnotation(member, PROPERTY_TIMEFORMAT)) != null) {
-				properties.add(getDatetimeFormat(ctx, annot.getValue()));
-			}
-			else {
-				properties.add("\"\"");
-			}
-		}
-		
-		return MVC_PACKAGE + "InternalTimeFormatter";
-	}
+
+// TODO sbg !070
+//	/**
+//	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
+//	 *                   Should not be set to true when generating the field's declaration. Prevents
+//	 *                   slowing down the generator or duplicating code.
+//	 */
+//	private String setTimeFormatterProperties(Context ctx, Member member, List<String> properties, boolean fastCheck) {
+//		if (!fastCheck) {
+//			Annotation annot;
+//			if ((annot = getAnnotation(member, PROPERTY_TIMEFORMAT)) != null) {
+//				properties.add(getDatetimeFormat(ctx, annot.getValue()));
+//			}
+//			else {
+//				properties.add("\"\"");
+//			}
+//		}
+//		
+//		return MVC_PACKAGE + "InternalTimeFormatter";
+//	}
 	
 	/**
 	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
@@ -921,20 +922,6 @@ public class MVCTemplate extends JavaScriptTemplate {
 		Annotation annot;
 		
 		if (!fastCheck) {
-			if ((annot = getAnnotation(member, PROPERTY_DATEFORMAT)) != null) {
-				properties.add(getDatetimeFormat(ctx, annot.getValue()));
-			}
-			else {
-				properties.add("\"\"");
-			}
-			
-			if ((annot = getAnnotation(member, PROPERTY_TIMEFORMAT)) != null) {
-				properties.add(getDatetimeFormat(ctx, annot.getValue()));
-			}
-			else {
-				properties.add("\"\"");
-			}
-			
 			if ((annot = getAnnotation(member, PROPERTY_ISBOOLEAN)) != null) {
 				if (((Boolean)(annot.getValue())).booleanValue()) {
 					properties.add("true");
