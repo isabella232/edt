@@ -71,6 +71,7 @@ import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EClassifier;
 import org.eclipse.edt.mof.EEnum;
+import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EMetadataObject;
@@ -97,6 +98,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.MofConversion;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
@@ -1567,6 +1569,13 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	protected void eSet(EObject target, EField field, Object value) {
 		Object convertedValue = mofValueFrom(value);
+		
+		if (field.getEType() instanceof EEnum && convertedValue instanceof Name) {
+			EEnumLiteral lit = ((EEnum)field.getEType()).getEEnumLiteral(((Name)convertedValue).getId());
+			if (lit != null) {
+				convertedValue = lit;
+			}
+		}
 		target.eSet(field, convertedValue);
 	}
 	
