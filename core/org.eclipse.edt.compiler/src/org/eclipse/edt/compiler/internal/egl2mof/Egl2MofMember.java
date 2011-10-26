@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
+import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -425,24 +426,23 @@ class Egl2MofMember extends Egl2MofPart {
 	
 	@Override
 	public boolean visit(EnumerationField enumField) {
-		IDataBinding binding = enumField.getName().resolveDataBinding();
-		Integer value = 0;
-		if (enumField.getConstantValue() != null) {
-			value = (Integer)evaluateExpression(enumField.getConstantValue());
-		}
-		if (inMofContext) {
-			EEnumLiteral literal = (EEnumLiteral)mof.getEEnumLiteralClass().newInstance();
-			literal.setName(binding.getCaseSensitiveName());
-			literal.setValue(value);
-			stack.push(literal);
-		}
-		else {
-			EnumerationEntry entry = factory.createEnumerationEntry();
-			entry.setName(binding.getCaseSensitiveName());
-			entry.setValue(value);
-			eObjects.put(binding, entry);
-			setElementInformation(enumField, entry);
-			stack.push(entry);
+		if (Binding.isValidBinding(enumField.getName().resolveDataBinding())) {
+			EnumerationDataBinding binding = (EnumerationDataBinding)enumField.getName().resolveDataBinding();
+			Integer value = binding.geConstantValue();
+			if (inMofContext) {
+				EEnumLiteral literal = (EEnumLiteral)mof.getEEnumLiteralClass().newInstance();
+				literal.setName(binding.getCaseSensitiveName());
+				literal.setValue(value);
+				stack.push(literal);
+			}
+			else {
+				EnumerationEntry entry = factory.createEnumerationEntry();
+				entry.setName(binding.getCaseSensitiveName());
+				entry.setValue(value);
+				eObjects.put(binding, entry);
+				setElementInformation(enumField, entry);
+				stack.push(entry);
+			}
 		}
 		return false;
 	}
@@ -689,13 +689,19 @@ class Egl2MofMember extends Egl2MofPart {
 			value = ((BooleanLiteral)expr).booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES ? Boolean.TRUE : Boolean.FALSE;
 		}
 		else if (expr instanceof IntegerLiteral) {
-			value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+			try {
+				value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+			} catch (NumberFormatException e) {
+			}
 		}
 		else if (expr instanceof StringLiteral) {
 			value = ((StringLiteral)expr).getValue();
 		}
 		else if (expr instanceof FloatLiteral) {
-			value = Float.parseFloat(((FloatLiteral)expr).getValue());
+			try {
+				value = Float.parseFloat(((FloatLiteral)expr).getValue());
+			} catch (NumberFormatException e) {
+			}
 		}
 		else if (expr instanceof AnnotationExpression) {
 			ITypeBinding typeBinding = ((AnnotationExpression)expr).resolveTypeBinding();
@@ -747,7 +753,7 @@ class Egl2MofMember extends Egl2MofPart {
 								field = target.getEClass().getEField(names[i]);
 							}
 						}
-						target.eSet(field, source);
+						eSet(target, field, source);
 					}
 				}
 				else if (setting instanceof SetValuesExpression) {
