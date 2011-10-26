@@ -31,11 +31,9 @@ public class MemberTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Member mbr, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		if (mbr.getType() == null)
 			out.print("void");
-		else if (CommonUtilities.isBoxedOutputTemp(mbr, ctx)) {
-			out.print("AnyBoxedObject<");
-			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
-			out.print(">");
-		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
+		else if (CommonUtilities.isBoxedOutputTemp(mbr, ctx))
+			out.print("AnyBoxedObject<Object>");
+		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive);
 		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);

@@ -22,11 +22,9 @@ public class FunctionParameterTemplate extends JavaTemplate {
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(decl, ctx);
-		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
-			out.print("AnyBoxedObject<");
-			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
-			out.print(">");
-		} else
+		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
+			out.print("AnyBoxedObject<Object>");
+		else
 			ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, decl, ctx, out);
@@ -61,7 +59,6 @@ public class FunctionParameterTemplate extends JavaTemplate {
 	
 	public void genRuntimeClassTypeName( FunctionParameter parameter, Context ctx, TabbedWriter out, TypeNameKind kind )
 	{
-		ctx.invoke( genRuntimeTypeName, parameter.getType(), ctx, out, kind );
-		out.print( ".class" );
+		ctx.invoke( genRuntimeClassTypeName, parameter.getType(), ctx, out, kind );
 	}
 }
