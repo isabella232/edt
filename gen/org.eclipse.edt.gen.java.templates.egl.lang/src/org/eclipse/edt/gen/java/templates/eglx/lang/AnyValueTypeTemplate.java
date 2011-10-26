@@ -15,7 +15,9 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.Type;
 
 public class AnyValueTypeTemplate extends JavaTemplate {
 
@@ -25,32 +27,42 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
 			out.print(arg.getConversionOperation().getName());
 			out.print("(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			unboxCheck( arg.getObjectExpr(), ctx, out );
+			if (CommonUtilities.isBoxedOutputTemp(arg.getObjectExpr(), ctx)) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, arg.getObjectExpr().getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(")");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(".ezeUnbox()");
+			} else
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			unboxCheck( arg.getObjectExpr(), ctx, out );
+			if (CommonUtilities.isBoxedOutputTemp(arg.getObjectExpr(), ctx)) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, arg.getObjectExpr().getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(")");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(".ezeUnbox()");
+			} else
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else {
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(");
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			unboxCheck( arg.getObjectExpr(), ctx, out );
+			if (CommonUtilities.isBoxedOutputTemp(arg.getObjectExpr(), ctx)) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, arg.getObjectExpr().getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(")");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(".ezeUnbox()");
+			} else
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(", ");
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
 			out.print(")");
-		}
-	}
-
-	private void unboxCheck( Expression expr, Context ctx, TabbedWriter out )
-	{
-		if ( CommonUtilities.isBoxedOutputTemp( expr, ctx ) )
-		{
-			out.print(".ezeUnbox()");
 		}
 	}
 }
