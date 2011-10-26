@@ -75,8 +75,8 @@ externalType EDate extends AnyValue type ClassType
 	/**
 	 * Creates a timestamp from a date.
 	 *
-	 * @param timeSpanPattern  the desired pattern for the timestamp.
+	 * @param timeSpanMask  the desired mask for the timestamp.
 	 * @return a new timestamp.
 	 */
-	function extend(timeSpanPattern EString in) returns(ETimestamp);
+	function extend(timeSpanMask EString in) returns(ETimestamp);
 end
