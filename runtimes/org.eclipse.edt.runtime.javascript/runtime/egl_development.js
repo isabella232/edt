@@ -30,6 +30,10 @@ Array.prototype.eze$$getChildVariables = function Array_getChildVaribles_for_deb
 	return childVars;
 };
 
+egl.eglx.lang.AnyException.prototype.eze$$DebugValue = function() {
+	return this.eze$$getName() + " " + this.message;
+};
+
 //egl.trace = true;
 
 egl.binarySearch = function( /*int[]*/ values, /* int */ value ) {
@@ -419,21 +423,16 @@ egl.getVariableInfoString = function(frame) {
 };
 
 egl.tweakTypeForDebug = function(type, variableInfo){
-	// 1. Non-null ANYs can obtain the element type info.
-	// 2. AnyException should display as the actual type rather than declared type.
 	if (!variableInfo) {
 		return type;
 	}
 	
+	// Non-null ANYs can obtain the element type info.
 	if (type == "any" || type == "number" || type == "number?") {
 		var valueObjectType = egl.resolveAnyType(variableInfo.value);
 		if (valueObjectType) {
 			type += ": " + valueObjectType; // any: string
 		}
-	}
-	
-	if (type == "eglx.lang.AnyException") {
-		type = (variableInfo.value.eze$$package ? variableInfo.value.eze$$package + "." : "") + variableInfo.value.eze$$typename;
 	}
 	
 	return type;
@@ -983,7 +982,10 @@ egl.getVariableValue = function(response) {
 	try {
 		value = egl.resolveAnyValue(value); // ANYs
 		if (value != null) {
-			if (value.eze$$getName) {
+			if (value instanceof egl.eglx.lang.AnyException) {
+				varValue = value.eze$$DebugValue();
+			}
+			else if (value.eze$$getName) {
 				varValue = "";
 			}
 			else if (value instanceof Date) {
