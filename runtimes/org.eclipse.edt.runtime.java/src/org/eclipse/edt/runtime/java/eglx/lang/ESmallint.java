@@ -369,4 +369,17 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	public int precision() {
 		return precision;
 	}
+	
+	public static int bitand(short op1, short op2) throws AnyException {
+		return op1 & op2;
+	}
+
+	public static int bitor(short op1, short op2) throws AnyException {
+		return op1 | op2;
+	}
+
+	public static int xor(short op1, short op2) throws AnyException {
+		return op1 ^ op2;
+	}
+
 }
