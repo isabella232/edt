@@ -844,12 +844,26 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar dateOf(Calendar original) throws AnyException {
 		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
-		if (!aTimestamp.isSet(Calendar.YEAR) || !aTimestamp.isSet(Calendar.MONTH) || !aTimestamp.isSet(Calendar.DATE))
+		if (!aTimestamp.isSet(Calendar.YEAR) && !aTimestamp.isSet(Calendar.MONTH) && !aTimestamp.isSet(Calendar.DATE))
 		{
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "dateOf", "yyyyMMdd" );
 		}
-		return new ETimestamp(ezeClone(aTimestamp, YEAR_CODE, DAY_CODE), YEAR_CODE, DAY_CODE).ezeUnbox();
+		int start;
+		if (aTimestamp.isSet(Calendar.YEAR))
+			start = YEAR_CODE;
+		else if (aTimestamp.isSet(Calendar.MONTH))
+			start = MONTH_CODE;
+		else
+			start = DAY_CODE;
+		int end;
+		if (aTimestamp.isSet(Calendar.DATE))
+			end = DAY_CODE;
+		else if (aTimestamp.isSet(Calendar.MONTH))
+			end = MONTH_CODE;
+		else
+			end = YEAR_CODE;
+		return new ETimestamp(ezeClone(aTimestamp, start, end), start, end).ezeUnbox();
 	}
 
 	/**
@@ -857,12 +871,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar timeOf(Calendar original) throws AnyException {
 		Calendar aTimestamp = ezeClone(original, YEAR_CODE, FRACTION1_CODE);
-		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) || !aTimestamp.isSet(Calendar.MINUTE) || !aTimestamp.isSet(Calendar.SECOND))
-		{
+		if (!aTimestamp.isSet(Calendar.HOUR_OF_DAY) && !aTimestamp.isSet(Calendar.MINUTE) && !aTimestamp.isSet(Calendar.SECOND)) {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage( Message.NO_FIELD_IN_TIMESTAMP, "timeOf", "HHmmss" );
 		}
-		return new ETimestamp(ezeClone(aTimestamp, HOUR_CODE, SECOND_CODE), HOUR_CODE, SECOND_CODE).ezeUnbox();
+		int start;
+		if (aTimestamp.isSet(Calendar.HOUR_OF_DAY))
+			start = HOUR_CODE;
+		else if (aTimestamp.isSet(Calendar.MINUTE))
+			start = MINUTE_CODE;
+		else
+			start = SECOND_CODE;
+		int end;
+		if (aTimestamp.isSet(Calendar.SECOND))
+			end = SECOND_CODE;
+		else if (aTimestamp.isSet(Calendar.MINUTE))
+			end = MINUTE_CODE;
+		else
+			end = HOUR_CODE;
+		return new ETimestamp(ezeClone(aTimestamp, start, end), start, end).ezeUnbox();
 	}
 
 	/**
