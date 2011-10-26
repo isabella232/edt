@@ -66,7 +66,7 @@ public class FunctionImpl extends FunctionMemberImpl implements Function {
 	public boolean isSubtypeOf(StructPart part) {
 		if (!getSuperTypes().isEmpty()) {
 			for (StructPart superType : getSuperTypes()) {
-				if (superType == part) {
+				if (superType.equals(part)) {
 					return true;
 				}
 			}
