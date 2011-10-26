@@ -15,6 +15,8 @@ package org.eclipse.edt.compiler.internal.sql.statements;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
@@ -159,7 +161,15 @@ public abstract class EGLSQLDeclareStatementFactory extends EGLSQLStatementFacto
 			for (int i = 0; i < numSQLDataItems; i++) {
 				itemBinding = structureItemBindings[i];
 				itemNames[i] = itemBinding.getName();
-				columnNames[i] = getColumnName(itemBinding);
+				ITypeBinding typeBinding = itemBinding.getType();
+				if(typeBinding != null && typeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING
+						&& typeBinding.getName().equals("string")) {
+					columnNames[i] = IEGLConstants.SQLKEYWORD_RTRIM + SQLConstants.LPAREN +
+							getColumnName(itemBinding) + SQLConstants.RPAREN;
+				} else {
+					columnNames[i] = getColumnName(itemBinding);
+				}
+				
 				if (useRecordKeys && isKeyItem(itemNames[i])) {
 					keyItemAndColumnNames[numKeys][0] = itemNames[i];
 					keyItemAndColumnNames[numKeys][1] = columnNames[i];
