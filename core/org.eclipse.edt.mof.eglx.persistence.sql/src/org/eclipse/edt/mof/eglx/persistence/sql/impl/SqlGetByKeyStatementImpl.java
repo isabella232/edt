@@ -37,7 +37,7 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 	private String generateDefaultSqlString() {
 		if (getPreparedStatement() != null || SQL.isSQLResultSet(getDataSource().getType())) return null;
 		
-		String sql = null;
+		StringBuilder sql = new StringBuilder();
 		if (getTargets().size() == 1) {
 			Expression target = getTargets().get(0);
 			boolean targetIsList = target.getType() instanceof ArrayType;
@@ -49,31 +49,38 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 				targetType = (EGLClass)target.getType().getClassifier();
 			}
 			if (!TypeUtils.isDynamicType(targetType)) {
-				sql = "SELECT ";
+				sql.append("SELECT ");
 				List<Field> idFields = new ArrayList<Field>();
 				boolean doComma = false;
 				for (Field f : targetType.getFields()) {
 					if (SQL.isKeyField(f)) idFields.add(f);
 					if (SQL.isReadable(f)) {
-						if (doComma) sql += ", ";
-						sql += SQL.getColumnName(f);
+						if (doComma) sql.append(", ");
+						if(SQL.isTextType(f.getType().getClassifier())){
+							sql.append("RTRIM(");
+							sql.append(SQL.getColumnName(f));
+							sql.append(")");
+						}
+						else{
+							sql.append(SQL.getColumnName(f));
+						}
 						if (!doComma) doComma = true;
 					}
 				}
-				sql += " FROM ";
-				sql += SQL.getTableName(targetType);
+				sql.append(" FROM ");
+				sql.append(SQL.getTableName(targetType));
 				if (!targetIsList && !idFields.isEmpty()) {
-					sql += " WHERE ";
+					sql.append(" WHERE ");
 					boolean doAnd = false;
 					for (Field f: idFields) {
-						if (doAnd) sql += " AND ";
-						sql += SQL.getColumnName(f) + " = ?";
+						if (doAnd) sql.append(" AND ");
+						sql.append(SQL.getColumnName(f) + " = ?");
 						if (!doAnd) doAnd = true;
 					}
 				}
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 
 }

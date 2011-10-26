@@ -103,6 +103,10 @@ public class SQL {
 		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
 	}
 	
+	public static boolean isTextType(Classifier type) {
+		return type.equals(TypeUtils.Type_STRING);		
+	}
+	
 	public static boolean isSQLDateTimeType(Classifier type) {
 		return type.equals(TypeUtils.Type_DATE) 
 				|| type.equals(TypeUtils.Type_TIME)
