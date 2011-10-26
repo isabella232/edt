@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import java.util.List;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Interface;
-import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
@@ -31,14 +28,10 @@ public class InterfaceTemplate extends JavaTemplate {
 	public void genClassHeader(Interface part, Context ctx, TabbedWriter out) {
 		out.print("public interface ");
 		ctx.invoke(genClassName, part, ctx, out);
-		List<StructPart> extndsAry = part.getSuperTypes();
-		if (extndsAry != null) {
-			out.print(" extends");
-			String sep = " ";
-			for (StructPart extend : extndsAry) {
-				out.print(sep + extend.getFullyQualifiedName());
-				sep = ", ";
-			}
+		String interfaceList = StructPartTemplate.getInterfaces(part, ctx);
+		if (!interfaceList.isEmpty()) {
+			out.print(" extends ");
+			out.print(interfaceList);
 		}
 		out.println(" {");
 	}

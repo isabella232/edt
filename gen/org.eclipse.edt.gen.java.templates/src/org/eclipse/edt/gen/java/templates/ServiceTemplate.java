@@ -50,4 +50,11 @@ public class ServiceTemplate extends JavaTemplate {
 		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 
+	public void genImplements(Service part, Context ctx, TabbedWriter out) {
+		String interfaceList = StructPartTemplate.getInterfaces(part, ctx);
+		if (!interfaceList.isEmpty()) {
+			out.print(" implements ");
+			out.print(interfaceList);
+		}
+	}
 }

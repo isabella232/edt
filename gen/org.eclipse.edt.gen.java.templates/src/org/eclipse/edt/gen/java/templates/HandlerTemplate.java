@@ -48,4 +48,13 @@ public class HandlerTemplate extends JavaTemplate {
 	public void genRuntimeTypeName(Handler type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, type, ctx, out);
 	}
+	
+	public void genImplements(Handler part, Context ctx, TabbedWriter out) {
+		String interfaceList = StructPartTemplate.getInterfaces(part, ctx);
+		if (!interfaceList.isEmpty()) {
+			out.print(" implements ");
+			out.print(interfaceList);
+		}
+	}
+	
 }

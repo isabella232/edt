@@ -90,10 +90,14 @@ public class EGLClassTemplate extends JavaTemplate {
 		ctx.invoke(genClassName, part, ctx, out);
 		out.print(" extends ");
 		ctx.invoke(genSuperClass, part, ctx, out);
+		ctx.invoke(genImplements, part, ctx, out);
 		out.println(" {");
 		ctx.invoke(genSerialVersionUID, part, ctx, out);
 	}
 
+	public void genImplements(EGLClass part, Context ctx, TabbedWriter out) {
+	}
+	
 	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Annotation annot : part.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);

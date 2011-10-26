@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.io.StringWriter;
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.StructPart;
 
 public class StructPartTemplate extends JavaTemplate {
@@ -25,4 +29,24 @@ public class StructPartTemplate extends JavaTemplate {
 		}
 	}
 
+	public static String getInterfaces(StructPart part, Context ctx){
+		TabbedWriter out = new TabbedWriter(new StringWriter());
+		List<StructPart> extndsAry = part.getSuperTypes();
+		boolean appendComma = false;
+		if (extndsAry != null) {
+			for (StructPart extend : extndsAry) {
+				if(extend instanceof Interface){
+					if(appendComma){
+						out.print(", ");
+					}
+					else{
+						appendComma = true;
+					}
+					ctx.invoke(genClassName, extend, ctx, out);
+				}
+			}
+		}
+		out.close();
+		return out.getWriter().toString();
+	}
 }
