@@ -16,7 +16,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 			EGLClass targetType = getTargetType(stmt);
 			int i = 1;
 			for (Field f : targetType.getFields()) {
-				if (!SQL.isAssociationField(f) && !SQL.isKeyField(f) && SQL.isUpdateable(f)) {
+				if (SQL.isUpdateable(f)) {
 					out.print(var_statement);
 					out.print(".setObject(" + i + ", ");
 					genConvertValueStart(targetType, ctx, out);
@@ -43,7 +43,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 				ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 				out.println(".getResultSet();");
 				for (Field f : ((EGLClass)stmt.getTarget().getType()).getFields()) {
-					if (SQL.isPersistable(f) && SQL.isUpdateable(f)) {
+					if (SQL.isUpdateable(f)) {
 						EGLClass type = (EGLClass)f.getType().getClassifier();
 						out.print(var_resultSet);
 						out.print(".");
