@@ -48,6 +48,12 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 		}
 		
 		public boolean visit(final TransferStatement transferStatement) {
+			
+			problemRequestor.acceptProblem(transferStatement,
+					IProblemRequestor.PART_OR_STATEMENT_NOT_SUPPORTED,
+					new String[] {"TRANSFER"});
+			
+			
 			StatementValidator.validateIOTargetsContainer(transferStatement.getIOObjects(),problemRequestor);
 			validateContainer(transferStatement);
 			
