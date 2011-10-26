@@ -465,6 +465,17 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 					}
 					
 					return ;
+				} else if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.getKind() == ITypeBinding.DELEGATE_BINDING) {
+					/**
+					 * stop processing if the invocation is a delegate, since the
+					 * delegate will always be a variable, and should really not be
+					 * found by any search...as we do not have a variable search
+					 */
+					int level = matchSet.isMatchingType(target,typeBinding.isPartBinding()?(IPartBinding)typeBinding : null);
+					if (level == SearchPattern.ACCURATE_MATCH){
+						matchSet.addTrustedMatch(target);
+					}
+					return ;
 				}
 			}
 			
