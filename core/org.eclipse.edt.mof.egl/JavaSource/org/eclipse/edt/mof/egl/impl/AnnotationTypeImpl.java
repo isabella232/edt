@@ -14,17 +14,25 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.EClassifier;
+import org.eclipse.edt.mof.EDataType;
+import org.eclipse.edt.mof.EEnum;
+import org.eclipse.edt.mof.EEnumLiteral;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EClassImpl;
+import org.eclipse.edt.mof.impl.EObjectImpl;
 import org.eclipse.edt.mof.utils.EList;
 
 
@@ -243,6 +251,23 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	@Override
 	public boolean isInstantiable() {
 		return false;
+	}
+	
+	@Override
+	public void initialize(EObject object) {
+		super.initialize(object);
+		
+		if (!(object instanceof EObjectImpl)) {
+			return;
+		}
+		
+		for (EField field : getEFields()) {
+			if (field.getEType() instanceof EEnum && field.getInitialValue() instanceof Name) {
+				EEnumLiteral lit = ((EEnum)field.getEType()).getEEnumLiteral(((Name)field.getInitialValue()).getId());
+				((EObjectImpl)object).slotSet(field, lit);
+			}
+		}
+
 	}
 	
 }
