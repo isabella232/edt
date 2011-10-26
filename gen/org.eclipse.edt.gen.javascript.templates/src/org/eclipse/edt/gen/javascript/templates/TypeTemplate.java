@@ -53,6 +53,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 		return false;
 	}
 
+	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+		// types can override this to cause list reorganization to be done
+		return true;
+	}
+
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptImplementation);
