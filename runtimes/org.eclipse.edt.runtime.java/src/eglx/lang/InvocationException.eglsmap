@@ -1,0 +1,12 @@
+SMAP
+exceptions.java
+egl
+*S egl
+*F
++ 1 exceptions.egl
+eglx/lang/exceptions.egl
+*L
+*E
+71#1;name;name;eglx.lang.EString
+76#1;returnValue;returnValue;eglx.lang.EInt
+*X
