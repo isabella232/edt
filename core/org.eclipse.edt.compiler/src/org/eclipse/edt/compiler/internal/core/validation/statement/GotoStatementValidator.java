@@ -32,6 +32,11 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 		}
 		
 		public boolean visit(final GotoStatement gotoStatement) {
+			
+			problemRequestor.acceptProblem(gotoStatement,
+					IProblemRequestor.PART_OR_STATEMENT_NOT_SUPPORTED,
+					new String[] {"GOTO"});
+
 			EGLNameValidator.validate(gotoStatement.getLabel(), EGLNameValidator.IDENTIFIER, problemRequestor, gotoStatement, compilerOptions);
 
 			return false;
