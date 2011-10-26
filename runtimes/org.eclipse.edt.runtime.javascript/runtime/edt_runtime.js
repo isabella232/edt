@@ -57,7 +57,7 @@ egl.eglx.lang.EAny.unbox = function(obj){
 	return egl.unboxAny(obj);
 };
 egl.eglx.lang.EAny.fromEAny = function(obj, sig){
-	return {eze$$value : obj, eze$$signature : sig};
+	return egl.boxAny(obj,sig);
 };
 
 /****************************************************************************
@@ -236,7 +236,7 @@ egl.eglx.lang.EDecimal.fromEString = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertStringToDecimal(x, decimals, limit);
 	else
-		return egl.convertStringToDecimal(x, 0, decimals);
+		return egl.convertStringToDecimal(x, egl.eglx.lang.EString.textLen(x), decimals);
 };
 egl.eglx.lang.EDecimal.fromAnyNumber = function (x, decimals, limit) {
 	if (limit)
