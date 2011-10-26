@@ -461,6 +461,7 @@ public interface IProblemRequestor {
 
 	public static final int SETTING_NOT_ALLOWED = 3436;
 	public static final int SETTING_NOT_ALLOWED_NULL = 3437;
+	public static final int PROPERTY_OVERRIDES_NOT_SUPPORTED = 3438;
 
 	public static final int TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION = 3440;
 	public static final int DUPLICATE_ONEXCEPTION_EXCEPTION = 3441;
@@ -490,6 +491,10 @@ public interface IProblemRequestor {
 	public static final int SEGMENTS_OR_POSITION_REQUIRED_FOR_CONSOLE_FIELDS = 3467;
 	public static final int MULTIPLE_OVERLOADED_FUNCTIONS_MATCH_ARGUMENTS = 3468;
 
+	public static final int ENUMERATION_CONSTANT_INVALID = 3470;
+	public static final int ENUMERATION_CONSTANT_DUPLICATE= 3471;
+	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
+	
 
 //3896-3999 ARE IN EGLMESSAGES 					
 
