@@ -12,6 +12,7 @@ package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import eglx.lang.AnyException;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="AssertionFailedException")
 public class AssertionFailedException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;

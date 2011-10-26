@@ -45,8 +45,8 @@ public abstract class EAny implements eglx.lang.EAny {
 		return new AnyBoxedObject<R>(object);
 	}
 
-	public static <R extends Object> AnyBoxedObject<R> ezeWrap(R object) {
-		return new AnyBoxedObject<R>(object);
+	public static AnyBoxedObject<Object> ezeWrap(Object object) {
+		return new AnyBoxedObject<Object>(object);
 	}
 
 	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws AnyException {

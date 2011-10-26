@@ -491,7 +491,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			}
 			while (i < length && !('0' <= ch && ch <= '9'));
 			// Read in the number of years.
-			if (i == 4 && i <= length && startCode == YEAR_CODE) {
+			if (i <= length && startCode == YEAR_CODE) {
 				years = 0;
 				for (int j = 0; '0' <= ch && ch <= '9' && j < 4; j++) {
 					years = years * 10 + ch - '0';
@@ -499,9 +499,15 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 						ch = timestamp.charAt(i);
 						i++;
 					} else {
+						// make sure there were 4 digits (when we get here it points exactly)
+						if (i != 4)
+							years = -1;
 						break PARSE;
 					}
 				}
+				// make sure there were 4 digits (when we get here it points past)
+				if (i != 5)
+					years = -1;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
@@ -691,9 +697,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (microseconds != -1)
 			//Calendar only supports miliseconds, so drop the last 3 digits of precision from microseconds
 			cal.set(Calendar.MILLISECOND, microseconds / 1000);
-		// Verify that the values are valid.
+		// Verify that the values are valid. We only do this if year month and date are at least there
 		try {
-			cal.getTimeInMillis();
+			if (years != -1 && months != -1 && days != -1)
+				cal.getTimeInMillis();
 		}
 		catch (Exception ex) {
 			TypeCastException tcx = new TypeCastException();

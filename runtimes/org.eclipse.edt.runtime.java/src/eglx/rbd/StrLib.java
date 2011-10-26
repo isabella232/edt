@@ -11,27 +11,28 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
-import java.lang.Float;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import java.lang.Long;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
-import java.lang.Short;
-import eglx.lang.StringLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import java.lang.Float;
+import eglx.lang.StringLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import java.lang.Short;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -323,14 +324,14 @@ public class StrLib extends ExecutableBase {
 			return eze$Temp62;
 		}
 	}
-	public String getNextToken(AnyBoxedObject<String> source, AnyBoxedObject<Integer> index, String delimiters) {
+	public String getNextToken(AnyBoxedObject<Object> source, AnyBoxedObject<Object> index, String delimiters) {
 		int charIndex;
-		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
-		AnyBoxedObject<Integer> eze$Temp64;
-		eze$Temp64 = EAny.ezeWrap(charIndex);
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(((Integer)index.ezeUnbox()), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
+		AnyBoxedObject<Object> eze$Temp64;
+		eze$Temp64 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(charIndex);
 		String token;
-		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp64, delimiters);
-		charIndex = eze$Temp64.ezeUnbox();
+		token = StringLib.getNextToken(((String)source.ezeUnbox()), eze$Temp64, delimiters);
+		charIndex = ((Integer)eze$Temp64.ezeUnbox());
 		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(token), null))) {
 			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
@@ -341,14 +342,14 @@ public class StrLib extends ExecutableBase {
 		eze$Temp66 = StringLib.getTokenCount(source, delimiters);
 		return eze$Temp66;
 	}
-	public int indexOf(AnyBoxedObject<String> source, String pattern) {
+	public int indexOf(AnyBoxedObject<Object> source, String pattern) {
 		int eze$Temp67;
-		eze$Temp67 = EString.indexOf(source.ezeUnbox(), pattern);
+		eze$Temp67 = EString.indexOf(((String)source.ezeUnbox()), pattern);
 		return eze$Temp67;
 	}
-	public int indexOf(AnyBoxedObject<String> source, String pattern, int startIndex) {
+	public int indexOf(AnyBoxedObject<Object> source, String pattern, int startIndex) {
 		int eze$Temp68;
-		eze$Temp68 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
+		eze$Temp68 = EString.indexOf(((String)source.ezeUnbox()), pattern, startIndex);
 		return eze$Temp68;
 	}
 	public String lowerCase(String characterItem) {

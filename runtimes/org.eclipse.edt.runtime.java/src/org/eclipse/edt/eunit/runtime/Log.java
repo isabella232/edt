@@ -11,9 +11,10 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement()
 public class Log extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	private static final long serialVersionUID = 10L;

@@ -11,15 +11,18 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.Status;
 import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.eunit.runtime.LogResult;
+import eglx.rbd.StrLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.eunit.runtime.Status;
-import eglx.rbd.StrLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="MultiStatus")
 public class MultiStatus extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
@@ -103,9 +106,12 @@ public class MultiStatus extends ExecutableBase {
 				}
 			}
 		}
-		boolean eze$Temp5;
-		eze$Temp5 = ((s.code != eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED) && (eze_Lib_eglx_rbd_StrLib().characterLen(firstFailedTestName) == (int)((short) 0)));
-		if (eze$Temp5) {
+		boolean eze_compound_1;
+		eze_compound_1 = (s.code != eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED);
+		if (eze_compound_1) {
+			eze_compound_1 = (eze_Lib_eglx_rbd_StrLib().characterLen(firstFailedTestName) == (int)((short) 0));
+		}
+		if (eze_compound_1) {
 			firstFailedTestName = testId;
 		}
 	}

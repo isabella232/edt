@@ -11,11 +11,12 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="ConstantsLib")
 public class ConstantsLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;

@@ -1,21 +1,31 @@
+/*******************************************************************************
+ * Copyright (c) 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import eglx.services.ServiceInvocationException;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
-import eglx.lang.SysLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import eglx.lang.AnyException;
+import eglx.lang.SysLib;
 import org.eclipse.edt.eunit.runtime.MultiStatus;
+import eglx.services.ServiceInvocationException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import eglx.lang.AnyException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
@@ -177,10 +187,10 @@ public class TestListMgr extends ExecutableBase {
 			str = (((EString.plus(((str) + "Original request body: "), http.getRequest().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 			str = (((EString.plus(((str) + "Raw response body: "), http.getResponse().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 		}
-		AnyBoxedObject<String> eze$Temp8;
+		AnyBoxedObject<Object> eze$Temp8;
 		eze$Temp8 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(str);
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp8);
-		str = eze$Temp8.ezeUnbox();
+		str = ((String)eze$Temp8.ezeUnbox());
 		String testId;
 		testId = this.testMethodNames.get(this.testIndex - 1);
 		nextTest();
@@ -191,10 +201,10 @@ public class TestListMgr extends ExecutableBase {
 	public void caughtAnyException(AnyException exp) {
 		String expMsg;
 		expMsg = (("uncaught exception for: ") + getTestIdString());
-		AnyBoxedObject<String> eze$Temp9;
+		AnyBoxedObject<Object> eze$Temp9;
 		eze$Temp9 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(expMsg);
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp9);
-		expMsg = eze$Temp9.ezeUnbox();
+		expMsg = ((String)eze$Temp9.ezeUnbox());
 	}
 	public String getBindingTypeString(ServiceBindingType bType) {
 		if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class))) {

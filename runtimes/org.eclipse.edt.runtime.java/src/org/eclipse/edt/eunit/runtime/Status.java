@@ -13,9 +13,10 @@ import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
+@SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="Status")
 public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	private static final long serialVersionUID = 10L;
