@@ -115,6 +115,12 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 			return ",";
 		if (op.equals(expr.Op_POWER))
 			return ",";
+		if (op.equals(expr.Op_BITAND))
+			return " & ";
+		if (op.equals(expr.Op_BITOR))
+			return " | ";
+		if (op.equals(expr.Op_XOR))
+			return " ^ ";
 		return "";
 	}
 
