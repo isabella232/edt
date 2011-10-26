@@ -54,7 +54,7 @@ public class SqlGetByKeyStatementImpl extends SqlIOStatementImpl implements SqlG
 				boolean doComma = false;
 				for (Field f : targetType.getFields()) {
 					if (SQL.isKeyField(f)) idFields.add(f);
-					if (SQL.isPersistable(f)) {
+					if (SQL.isReadable(f)) {
 						if (doComma) sql += ", ";
 						sql += SQL.getColumnName(f);
 						if (!doComma) doComma = true;

@@ -64,10 +64,9 @@ public class SQL {
 		return field.getAnnotation("eglx.persistence.Id") != null;
 	}
 
-	public static boolean isAutoGenKeyField(Field field) {
-		return isKeyField(field) && field.getAnnotation("eglx.persistence.sql.GeneratedValue") != null;
+	private static boolean isGeneratedValue(Field field){
+		return field.getAnnotation("eglx.persistence.sql.GeneratedValue") != null;
 	}
-
 	public static boolean isAssociationField(Field field) {
 		Type type = field.getType();
 		if (type instanceof ArrayType) return true;
@@ -79,26 +78,27 @@ public class SQL {
 	}
 	
 	public static boolean isInsertable(Field field) {
-		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
-		if(column != null){
-			return ((Boolean)column.getValue("insertable")).booleanValue();
-		}
-		return true;
+		return !isGeneratedValue(field) &&
+		 		!isAssociationField(field) &&
+		 		!isTransient(field) &&
+		 		(field.getAnnotation("eglx.persistence.sql.Column") == null ||
+		 				((Boolean)field.getAnnotation("eglx.persistence.sql.Column").getValue("insertable")).booleanValue());
 	}
 	
 	public static boolean isUpdateable(Field field) {
-		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
-		if(column != null){
-			return ((Boolean)column.getValue("updateable")).booleanValue();
-		}
-		return true;
+		return !isGeneratedValue(field) &&
+				!isKeyField(field) &&
+		 		!isAssociationField(field) &&
+		 		!isTransient(field) &&
+		 		(field.getAnnotation("eglx.persistence.sql.Column") == null ||
+		 				((Boolean)field.getAnnotation("eglx.persistence.sql.Column").getValue("updateable")).booleanValue());
 	}
 	
-	public static boolean isPersistable(Field field) {
-		return !isAutoGenKeyField(field) 
-			&& !isAssociationField(field)
+	public static boolean isReadable(Field field) {
+		return !isAssociationField(field)
 			&& !isTransient(field);
 	}
+
 	public static boolean isSQLResultSet(Type datasource) {
 		return datasource.getTypeSignature().equals("eglx.persistence.sql.SQLResultSet");
 	}
