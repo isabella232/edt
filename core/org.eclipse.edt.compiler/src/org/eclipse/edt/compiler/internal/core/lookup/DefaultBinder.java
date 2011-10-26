@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
 import org.eclipse.edt.compiler.binding.AmbiguousFunctionBinding;
@@ -29,6 +30,7 @@ import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
+import org.eclipse.edt.compiler.binding.DataBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
@@ -334,6 +336,19 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return false;
 	}
 
+	public boolean visit(ArrayAccess arrayAccess) {
+		
+		if (arrayAccess.getIndices().size() > 1) {
+			problemRequestor.acceptProblem(
+					arrayAccess,
+					IProblemRequestor.MULTI_INDICES_NOT_SUPPORTED,
+					new String[]{arrayAccess.getCanonicalString()});
+
+		}
+		
+		return true;
+	}
+	
     public void endVisit(ArrayAccess arrayAccess) {
         if (arrayAccess.resolveTypeBinding() != null) {
             return;
@@ -4190,6 +4205,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 			}
 		}
+		if (classDataDeclaration.hasSettingsBlock()) {
+			IDataBinding dbinding = ((Expression)classDataDeclaration.getNames().get(0)).resolveDataBinding();
+			if (Binding.isValidBinding(dbinding)) {
+				issueErrorForPropertyOverrides(dbinding, classDataDeclaration.getSettingsBlockOpt());
+			}
+		}
 	}
 	
 	public void endVisit(final FunctionDataDeclaration functionDataDeclaration) {
@@ -4254,6 +4275,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 
 		}
+		if (functionDataDeclaration.hasSettingsBlock()) {
+			IDataBinding dbinding = ((Expression)functionDataDeclaration.getNames().get(0)).resolveDataBinding();
+			if (Binding.isValidBinding(dbinding)) {
+				issueErrorForPropertyOverrides(dbinding, functionDataDeclaration.getSettingsBlockOpt());
+			}
+		}
+
 	}
 	
 	public void endVisit(FunctionParameter functionParameter) {
@@ -4318,9 +4346,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 						new String[] {type.getCanonicalName()});
 				}
 				//nullable types cannot specify a settings block that contains settings for data in the field
-				if (structureItem.hasSettingsBlock() && Binding.isValidBinding(tBinding) && tBinding.isNullable()) {
+				if (structureItem.hasSettingsBlock() && Binding.isValidBinding(tBinding) && tBinding.isNullable() && structureItem.getName() != null) {
 					issueErrorForInitialization(structureItem.getSettingsBlock(), structureItem.getName().getCanonicalName(), IProblemRequestor.SETTING_NOT_ALLOWED_NULL);
 				}
+			}
+		}
+
+		if (structureItem.hasSettingsBlock() && structureItem.getName() != null) {
+			IDataBinding dbinding = structureItem.getName().resolveDataBinding();
+			if (Binding.isValidBinding(dbinding)) {
+				issueErrorForPropertyOverrides(dbinding, structureItem.getSettingsBlock());
 			}
 		}
 	}	
@@ -4941,6 +4976,80 @@ public abstract class DefaultBinder extends AbstractBinder {
 		IDataBinding fieldBinding = aBinding.findData(fieldName);
 		return IBinding.NOT_FOUND_BINDING == fieldBinding ? null : (IAnnotationBinding) fieldBinding;
 	}
+    
+    
+    private void issueErrorForPropertyOverrides(IDataBinding fieldBinding, SettingsBlock settings) {
+    	if (!(fieldBinding instanceof DataBinding) || ((DataBinding)fieldBinding).getPropertyOverrides().isEmpty()) {
+    		return;
+    	}
+    	
+    	final Stack<IDataBinding> stack = new Stack();
+    	stack.push(fieldBinding);
+		final Node[] errorNode = new Node[1];
+   	
+    	settings.accept(new AbstractASTExpressionVisitor() {
+    		public boolean visit(Assignment assignment) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			
+    			//if this is an annotation assignment
+    			if (Binding.isValidBinding(assignment.resolveBinding())) {
+    				if (stack.size() > 1) {
+    					errorNode[0] = assignment;
+    				}
+    			}
+    			return false;
+    		}
+    		
+    		public boolean visit(AnnotationExpression annotationExpression) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			
+				if (stack.size() > 1) {
+					errorNode[0] = annotationExpression;
+				}
+				return false;
+    		}
+    		
+    		public boolean visit(SetValuesExpression setValuesExpression) {
+    			if (errorNode[0] != null) {
+    				return false;
+    			}
+    			
+    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
+				if (Binding.isValidBinding(dBinding)) {					
+					if (dBinding.getKind() == IDataBinding.ANNOTATION_BINDING) {
+						if (stack.size() > 1) {
+							errorNode[0] = setValuesExpression.getExpression();
+						}
+					}
+					else {
+						stack.push(dBinding);
+						setValuesExpression.getSettingsBlock().accept(this);
+					}
+				}
+				return false; 			
+    		}
+    		
+    		public void endVisit(SetValuesExpression setValuesExpression) {
+    			IDataBinding dBinding = setValuesExpression.getExpression().resolveDataBinding();
+				if (Binding.isValidBinding(dBinding)) {					
+					if (dBinding.getKind() == IDataBinding.ANNOTATION_BINDING) {}
+					else {
+						stack.pop();
+					}
+				}
+    		}
+    		
+    		public boolean visitExpression(Expression expression) {
+    			return false;
+    		}
+    		
+    	});
+		problemRequestor.acceptProblem(errorNode[0], IProblemRequestor.PROPERTY_OVERRIDES_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {fieldBinding.getCaseSensitiveName()});
+    }
     
     private void issueErrorForInitialization(SettingsBlock settings, final String fieldName, int errorNo) {
 		final Node[] errorNode = new Node[1];
