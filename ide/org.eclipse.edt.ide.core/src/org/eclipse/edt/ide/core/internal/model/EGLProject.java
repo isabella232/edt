@@ -2456,28 +2456,4 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 		}
 		return result.toArray(new IEGLProject[result.size()]);
 	}
-	
-	@Override
-    public boolean isRuiProject() {
-		boolean isRuiProject = false;
-		IEGLPathEntry[] entries = null;
-		
-		try {
-			entries = getRawEGLPath();
-		} catch(EGLModelException ex) {
-			
-		}
-		
-		if(entries != null) {
-			for(IEGLPathEntry entry : entries) {
-				if(entry.toString().contains("org.eclipse.edt.rui.widgets")
-						|| entry.toString().contains("org.eclipse.edt.rui.dojo")) {
-					isRuiProject = true;
-					break;
-				}
-			}
-		}
-		
-		return isRuiProject;
-	}
 }

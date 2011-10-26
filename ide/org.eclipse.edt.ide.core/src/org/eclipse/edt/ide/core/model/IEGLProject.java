@@ -608,12 +608,4 @@ public interface IEGLProject extends IParent, IEGLElement, IOpenable {
 	 * @return a list of open projects referencing this project
 	 */
 	public IEGLProject[] getReferencingProjects() throws EGLModelException;
-	
-	/**
-	 * Check whether this is a basic project or an RUI one
-	 * @return
-	 *     true   RUI project
-	 *     false  basic project
-	 */
-	public boolean isRuiProject();
 }
