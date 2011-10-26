@@ -1939,6 +1939,16 @@ public interface IEGLConstants {
 	public static String MIXED_CONSOLEFIELD_STRING = "consoleField";  //$NON-NLS-1$
 	public static String MIXED_DICTIONARY_STRING = "dictionary"; //$NON-NLS-1$
 	
+	//System Service data type
+	public static String MIXED_HTTPREST_STRING = "HttpRest";
+	public static String MIXED_HTTPSOAP_STRING = "HttpSoap";
+	public static String MIXED_IHTTP_STRING = "IHttp";
+	public static String MIXED_REQUEST_STRING = "Request";
+	public static String MIXED_RESPONSE_STRING = "Response";
+	public static String MIXED_JOB_STRING = "Job";
+	public static String MIXED_IRest_STRING = "IRest";
+	public static String MIXED_MULTISTATUS_STRING = "MultiStatus";
+	
 	//System SQL data type
 	public static String MIXED_DATASOURCE_STRING = "DataSource";
 	public static String MIXED_SQLDATASOURCE_STRING = "SQLDataSource";
