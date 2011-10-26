@@ -152,10 +152,9 @@ public static String encode(String clearText) throws IllegalArgumentException {
 //    }
 //
 //    /**
-//     * RATLC01173258
-//     * Don't encode an empty string 
+//     * Don't encode an empty or null string 
 //     */
-//    if (clearText.length() == 0) {
+//    if (clearText == null || clearText.length() == 0) {
 //    	return clearText;
 //    }
 //    
@@ -186,7 +185,7 @@ public Properties getProperties() {
  */
 public static boolean isEncoded(String text) {
 	
-	return text.startsWith(ENCODED_PREFIX)|| text.startsWith(OLD_ENCODED_PREFIX);
+	return text !=  null && (text.startsWith(ENCODED_PREFIX)|| text.startsWith(OLD_ENCODED_PREFIX));
 }
 /**
  * Loads the properties.
