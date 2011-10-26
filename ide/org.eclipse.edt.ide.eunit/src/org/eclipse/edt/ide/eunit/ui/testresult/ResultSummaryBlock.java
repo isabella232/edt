@@ -34,6 +34,9 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 		String rootname;
 		boolean isSuccessful = true;
 		int expectedTotalTestVariationCnt = -1;
+		String startTS = "";
+		String endRunTS = "";
+		String finalTS = "";
 		Element elemRoot;
 		
 		ResultStatisticCnts statisticCnts = new ResultStatisticCnts();		

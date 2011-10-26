@@ -11,22 +11,24 @@ handler CreateResultFile
 	**/ 
 	function createFile(fileDirectory String in, fullFileName String in, fileContent String in)
 		myfile File  = new File(fileDirectory);
-		//if(!etrFile.exists())
-			createdDirs boolean = myfile.mkdirs();
-			if(createdDirs)
-				SysLib.writeStdOut("directories created");			
-			end					
-		//end
+		createdDirs boolean = myfile.mkdirs();
+		if(createdDirs)
+			SysLib.writeStdOut("directories created");			
+		end					
 		
 		outWriter FileWriter?;  
 		try
 			SysLib.writeStdOut (myfile.getAbsolutePath());
 			
 			outWriter = new FileWriter(fullFileName);
-			outWriter.write(fileContent);
+			//try to write out the final timestamp as final as possible
+			replaceStr String = "finalTS=\"";
+			finalTS timestamp("yyyyMMddHHmmssffffff");
+			replaceStr += finalTS;
+			replaceStr += "\"";
+			newFileContent String = fileContent.replaceStr("finalTS=\"\"", replaceStr);
+			outWriter.write(newFileContent);
 			outWriter.close_();
-//		onException (ioExp IOException)
-//			SysLib.writeStdOut("IOException occrred!");
 		onException (exp AnyException)
 			SysLib.writeStdOut(exp.message);
 			SysLib.writeStdOut("Exception occurred!");

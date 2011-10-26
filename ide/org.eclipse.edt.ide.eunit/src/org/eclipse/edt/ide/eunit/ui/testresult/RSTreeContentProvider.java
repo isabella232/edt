@@ -71,6 +71,9 @@ public class RSTreeContentProvider implements ITreeContentProvider{
 		if(map == null){
 			map = new HashMap<String, TestResultPkgNode>();
 			rootNode.expectedTotalTestVariationCnt = Integer.parseInt(rootNode.elemRoot.getAttribute(ConstantUtil.ATTRIB_expCnt));
+			rootNode.startTS = rootNode.elemRoot.getAttribute(ConstantUtil.ATTRIB_startTS);
+			rootNode.endRunTS = rootNode.elemRoot.getAttribute(ConstantUtil.ATTRIB_endRunTS);
+			rootNode.finalTS = rootNode.elemRoot.getAttribute(ConstantUtil.ATTRIB_finalTS);
 			NodeList nl = rootNode.elemRoot.getElementsByTagName(ConstantUtil.ELEM_trSummary);
 			if(nl != null && nl.getLength() > 0) {
 				for(int i = 0 ; i < nl.getLength();i++) {

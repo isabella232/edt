@@ -18,12 +18,18 @@ service TestResultService
 		
 		outWriter FileWriter?;  
 		try
-			absoluteFilePath = myfile.getAbsolutePath();
-			SysLib.writeStdOut (fullFileName);
-						
+			SysLib.writeStdOut (myfile.getAbsolutePath());
+			
 			outWriter = new FileWriter(fullFileName);
-			outWriter.write(fileContent);
+			//try to write out the final timestamp as final as possible
+			replaceStr String = "finalTS=\"";
+			finalTS timestamp("yyyyMMddHHmmssffffff");
+			replaceStr += finalTS;
+			replaceStr += "\"";
+			newFileContent String = fileContent.replaceStr("finalTS=\"\"", replaceStr);
+			outWriter.write(newFileContent);
 			outWriter.close_();
+			
 		onException (exp AnyException)
 			SysLib.writeStdOut(exp.message);
 			SysLib.writeStdOut("Exception occurred!");

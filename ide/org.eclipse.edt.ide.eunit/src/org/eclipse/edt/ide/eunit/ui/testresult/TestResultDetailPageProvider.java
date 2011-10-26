@@ -12,7 +12,7 @@ public class TestResultDetailPageProvider implements IDetailsPageProvider {
 	public IDetailsPage getPage(Object key) {						
 		if(key instanceof TestResultRootNode){
 			TestResultRootNode rootNode = (TestResultRootNode)key;
-			return (new TestResultRootNodeDetailsPage(rootNode.statisticCnts, rootNode.expectedTotalTestVariationCnt));
+			return (new TestResultRootNodeDetailsPage(rootNode));
 		}
 
 		if(key instanceof TestResultPkgNode){

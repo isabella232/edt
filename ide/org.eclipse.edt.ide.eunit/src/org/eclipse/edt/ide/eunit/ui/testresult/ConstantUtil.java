@@ -10,12 +10,19 @@ public class ConstantUtil {
 
 	final static String[] STEXTS  = {"Passed.", "Failed.", "Error.", "Not run.", "Bad."};
 	
-//Record ResultSummaryRoot
-//	expCnt int;	{@XMLAttribute{}};					//expected total number of test variation count	
+
+//Record ResultSummaryRoot {@xmlrootelement {}}
+//	expCnt int{@XMLAttribute{}};					//expected total number of test variation count
+//	startTS String{@XMLAttribute{}};				//starting timestamp
+//	endRunTS String{@XMLAttribute{}};				//ending timestamp for running all the test cases
+//	finalTS String{@XMLAttribute{}};				//after finish running the test case, it will write out result summary, 
+//													//this is the timestamp it finishes everything including writing out result summary 		
 //	trSum ResultSummary[]{};
 //end	
 	public static final String ELEM_trSummary = "trSum";
-	
+	public static final String ATTRIB_startTS = "startTS";
+	public static final String ATTRIB_endRunTS = "endRunTS";
+	public static final String ATTRIB_finalTS = "finalTS";	
 	
 //Record ResultSummary
 //	pkgName String {@XMLAttribute{}};	//package name

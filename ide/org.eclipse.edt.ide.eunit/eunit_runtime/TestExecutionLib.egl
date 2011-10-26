@@ -43,10 +43,13 @@ library TestExecutionLib
 		WriteResultLib.writeResult(s, ms, stdOutLog, td, this.resultRootSum); 			
 	end	
 	
-	function writeResultSummary(expectedTestCnt int in)
+	function writeResultSummary(expectedTestCnt int in, startTS String in)
+		endRunTS timestamp("yyyyMMddHHmmssffffff");
 		this.resultRootSum.expCnt = expectedTestCnt;
+		this.resultRootSum.startTS = startTS;
+		this.resultRootSum.endRunTS = endRunTS;
 		WriteResultLib.persistResultRootSummary(this.resultRootSum);
-	end
+	end	
 	
 	/**
 	* helper function to run test that has mulitple test case methods

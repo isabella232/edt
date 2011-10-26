@@ -34,6 +34,10 @@ end
 
 Record ResultSummaryRoot {@xmlrootelement {}}
 	expCnt int{@XMLAttribute{}};					//expected total number of test variation count
+	startTS String{@XMLAttribute{}};				//starting timestamp
+	endRunTS String{@XMLAttribute{}};				//ending timestamp for running all the test cases
+	finalTS String{@XMLAttribute{}};				//after finish running the test case, it will write out result summary, 
+													//this is the timestamp it finishes everything including writing out result summary 		
 	trSum ResultSummary[]{};
 end
 
