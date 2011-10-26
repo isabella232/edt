@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
@@ -61,22 +62,39 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 			final int constantValueAry[] = new int[] {-1};
 			enumerationField.getConstantValue().accept(new AbstractASTExpressionVisitor() {
 				public void endVisit(IntegerLiteral integerLiteral) {
-					constantValueAry[0] = Integer.parseInt(integerLiteral.getValue());
+					try {
+						constantValueAry[0] = Integer.parseInt(integerLiteral.getValue());
+					} catch (NumberFormatException e) {
+					}
+				}
+				public boolean visit(org.eclipse.edt.compiler.core.ast.UnaryExpression unaryExpression) {
+					return true;
+				}
+				public void endVisit(org.eclipse.edt.compiler.core.ast.UnaryExpression unaryExpression) {
+					if (unaryExpression.getOperator() == Operator.MINUS) {
+						constantValueAry[0] = constantValueAry[0] * -1;
+					}
 				}
 				public void endVisitExpression(Expression expression) {
-					// TODO issue error
 				}
 			});
 			constantValue = constantValueAry[0];
 		}
 		else {
-			constantValue = fieldNames.size();
+			constantValue = fieldNames.size() + 1;
 		}
 		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
 		enumerationField.getName().setBinding(enumDataBinding);
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
-			//TODO: issue error
+    		problemRequestor.acceptProblem(
+    			enumerationField.getName(),
+				IProblemRequestor.DUPLICATE_VARIABLE_NAME,
+				new String[] {
+    				enumerationField.getName().getCanonicalName(),
+					enumerationBinding.getCaseSensitiveName()
+				}
+			);
 		}
 		else {
 			fieldNames.add(enumerationField.getName().getIdentifier());
