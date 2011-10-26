@@ -63,6 +63,9 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT, "The service invocation timed out. exception: Connection read time out error. url:{0}" },
 		{ Message.SOA_E_WS_REST_NO_RESPONSE, "No response was received from the service. URL:{0}" },
 		{ Message.VALUE_OUT_OF_RANGE, "The value {0} is not within the valid range of {1} to {2}." },
+		{ Message.MISSING_RESOURCE_FILE_NAME, "No file name was provided to get resource." },
+		{ Message.RESOURCE_FILE_NOT_FOUND, "The file ({0}) could not be found." },
+		{ Message.ERROR_PARSING_RESOURCE_FILE, "An Exception occurred while parsing the file ({0}). exception:{1}" },
 	};
 	
 	/**

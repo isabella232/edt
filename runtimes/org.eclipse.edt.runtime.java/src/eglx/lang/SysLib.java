@@ -303,6 +303,10 @@ public class SysLib extends ExecutableBase {
 	}
 	
 	private static RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName){
+		if(propertyFileName == null || propertyFileName.length() == 0){
+			AnyException ex = new AnyException();
+			throw ex.fillInMessage( Message.MISSING_RESOURCE_FILE_NAME );
+		}
 		if (resourceLocator != null) {
 			return resourceLocator.getDeploymentDesc(propertyFileName);
 		}
@@ -316,13 +320,15 @@ public class SysLib extends ExecutableBase {
 			}
 			InputStream is = org.eclipse.edt.javart.Runtime.getRunUnit().getClass().getResourceAsStream(propertyFileName);
 			if(is == null){
-				throw new AnyException();//TODO throw some other kind of exception, set the message and ID properly
+				AnyException ex = new AnyException();
+				throw ex.fillInMessage( Message.RESOURCE_FILE_NOT_FOUND, propertyFileName );
 			}
 			else{
 				try {
 					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(propertyFileName, is);
 				} catch (Exception e) {
-					throw new AnyException();//TODO throw some other kind of exception, set the message and ID properly
+					AnyException ex = new AnyException();
+					throw ex.fillInMessage( Message.ERROR_PARSING_RESOURCE_FILE, propertyFileName, e );
 				}
 				deploymentDescs.put(propertyFileName, dd);
 			}

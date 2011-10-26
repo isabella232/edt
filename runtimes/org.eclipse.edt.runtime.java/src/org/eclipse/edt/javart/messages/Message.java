@@ -56,4 +56,7 @@ public class Message
 	public static final String SOA_E_WS_PROXY_SERVICE_TIMEOUT = "EGL0037E";
 	public static final String SOA_E_WS_REST_NO_RESPONSE = "EGL0038E";
 	public static final String VALUE_OUT_OF_RANGE = "EGL0039E";
+	public static final String MISSING_RESOURCE_FILE_NAME = "EGL0040E";
+	public static final String RESOURCE_FILE_NOT_FOUND = "EGL0041E";
+	public static final String ERROR_PARSING_RESOURCE_FILE = "EGL0042E";
 }
