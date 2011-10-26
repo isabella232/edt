@@ -83,6 +83,11 @@ public class TypeTemplate extends JavaTemplate {
 			return false;
 	}
 
+	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+		// types can override this to cause list reorganization to be done
+		return true;
+	}
+
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaImplementation);
@@ -206,12 +211,21 @@ public class TypeTemplate extends JavaTemplate {
 					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
 					out.print(") ");
 				}
-				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-				ctx.invoke(genExpression, arg2, ctx, out);
-				out.print(")");
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
-				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
+				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
+					out.print("((");
+					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+					out.print(")");
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+					ctx.invoke(genExpression, arg2, ctx, out);
+					out.print(")");
 					out.print(".ezeUnbox()");
+					out.print(")");
+				} else {
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+					ctx.invoke(genExpression, arg2, ctx, out);
+					out.print(")");
+				}
 			} else {
 				// if this is a well-behaved assignment, we can avoid the temporary
 				if (IRUtils.hasSideEffects(arg2)) {
@@ -248,10 +262,16 @@ public class TypeTemplate extends JavaTemplate {
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			ctx.invoke(genExpression, arg2, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
+			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
+				out.print("((");
+				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(")");
+				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(".ezeUnbox()");
+				out.print(")");
+			} else
+				ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}
 
