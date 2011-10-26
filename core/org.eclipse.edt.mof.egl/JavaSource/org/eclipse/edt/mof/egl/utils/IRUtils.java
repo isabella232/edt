@@ -685,17 +685,17 @@ public class IRUtils {
 	}
 
 	public static Operation getBinaryOperation(NamedElement lhs, NamedElement rhs, String opSymbol) {
-		
-		Operation result = checkForTextConcatenation(lhs, opSymbol);
-		if (result != null) {
-			return result;
-		}
-		
-		result = primGetBinaryOperation(lhs, rhs, opSymbol);
+				
+		Operation result = primGetBinaryOperation(lhs, rhs, opSymbol);
 		if (result != null) {
 			return result;
 		}
 				
+		result = checkForTextConcatenation(lhs, opSymbol);
+		if (result != null) {
+			return result;
+		}
+
 		result = checkForTextConcatenation(rhs, opSymbol);
 		if (result != null) {
 			return result;
