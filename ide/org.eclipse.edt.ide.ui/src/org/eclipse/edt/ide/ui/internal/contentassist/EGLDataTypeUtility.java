@@ -32,6 +32,14 @@ public interface EGLDataTypeUtility {
 	  		IEGLConstants.MIXED_SQLDATASOURCE_STRING,
 	  		IEGLConstants.MIXED_SQLRESULTSET_STRING,
 	  		IEGLConstants.MIXED_SQLSTATEMENT_STRING,
+	  		IEGLConstants.MIXED_HTTPREST_STRING,
+	  		IEGLConstants.MIXED_HTTPSOAP_STRING,
+	  		IEGLConstants.MIXED_IHTTP_STRING,
+	  		IEGLConstants.MIXED_REQUEST_STRING,
+	  		IEGLConstants.MIXED_RESPONSE_STRING,
+	  		IEGLConstants.MIXED_JOB_STRING,
+	  		IEGLConstants.MIXED_IRest_STRING,
+	  		IEGLConstants.MIXED_MULTISTATUS_STRING,
 			//birt Reports
 //	  		IEGLConstants.EGL_REPORTS_BIRTREPORT,
 			//Report Handler
