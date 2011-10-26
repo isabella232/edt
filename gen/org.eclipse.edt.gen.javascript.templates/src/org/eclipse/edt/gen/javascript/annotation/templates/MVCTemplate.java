@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IValidValuesElement;
-import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
@@ -148,8 +147,9 @@ public class MVCTemplate extends JavaScriptTemplate {
 				{
 					modelMember = ((MemberName)model).getMember();
 				}
-				else if ( model instanceof FieldAccess )
+				else if ( model instanceof MemberAccess )
 				{
+					modelMember = ((MemberAccess)model).getMember();
 				}
 				else if ( model instanceof Field )
 				{
@@ -973,7 +973,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 			
 			String signkind = "LEADING";  // signkind.leading is the default
 			if ((annot = getAnnotation(member, PROPERTY_SIGN)) != null) {
-				signkind = annot.getValue().toString();
+				signkind = annot.getValue().toString();//JZS probably incorrect
 			}
 			PartName pn = IrFactory.INSTANCE.createPartName();
 			pn.setPackageName("eglx.ui");
@@ -1025,23 +1025,15 @@ public class MVCTemplate extends JavaScriptTemplate {
 			
 			// Length, decimals, dataitem type
 			if (rootType instanceof FixedPrecisionType) {
-				int length = 0;
-				if (TypeUtils.Type_FLOAT.equals(rootType) || TypeUtils.Type_SMALLFLOAT.equals(rootType)) {
-					length = 0;  // Don't set the length for float and smallfloat.
-				}
-				else {
-					length = ((FixedPrecisionType)rootType).getLength();
-				}
-				properties.add("" + length);
+				properties.add("" + ((FixedPrecisionType)rootType).getLength());
 				properties.add("" + ((FixedPrecisionType)rootType).getDecimals());
-				properties.add("\"" + rootType.getClassifier() + "\"");
 			}
 			else {
-				// Shouldn't happen.
+				// FLOAT and SMALLFLOAT
 				properties.add("0");
 				properties.add("0");
-				properties.add("\"\"");
 			}
+			properties.add("\"" + rootType.getTypeSignature() + "\"");
 		}
 		
 		return MVC_PACKAGE + "InternalNumericFormatter";
