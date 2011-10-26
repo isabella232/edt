@@ -149,14 +149,8 @@ public class LibraryWizardPage extends EGLPartWizardPage {
 		fLibraryTypeGroup.setLayoutData(gd);
 		
 		//createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeNative, LibraryConfiguration.NATIVE_LIBRARY);
-		boolean isRuiProject = getPackageFragmentRoot().getEGLProject().isRuiProject();
-		//if(EGLBasePlugin.isRUI()){
-		if(isRuiProject){
-			createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeBasic, LibraryConfiguration.BASIC_LIBRARY);
-			createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeRUIProp, LibraryConfiguration.RUIPROP_LIBRARY);
-		} else {
-			libraryTypeComposite.setVisible(false);
-		}
+		createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeBasic, LibraryConfiguration.BASIC_LIBRARY);
+		createLibraryChoiceButton(fLibraryTypeGroup, NewWizardMessages.NewEGLLibraryWizardPageLibraryTypeRUIProp, LibraryConfiguration.RUIPROP_LIBRARY);
 	}
 	
 	private Button createLibraryChoiceButton(Composite grp, String btnLabel, final int libType){
