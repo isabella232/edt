@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.egl.ForStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -159,6 +160,29 @@ public class ReorganizeCode extends AbstractVisitor {
 					object.setRHS(newExpression);
 				} else
 					processArrayLiteral(elementType, (ArrayLiteral) object.getRHS());
+			}
+		}
+		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
+		// appendElement depending on whether the rhs is an array or not
+		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
+			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
+			&& object.getOperator().equals("::=")) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
+				// create the qualified function invocation for appendAll or appendElement
+				QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
+					&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+					invocation.setId("appendAll");
+				else
+					invocation.setId("appendElement");
+				invocation.setQualifier(object.getLHS());
+				invocation.getArguments().add(object.getRHS());
+				// now alter the original assignment
+				object.setRHS(invocation);
+				object.setOperator("=");
 			}
 		}
 		// check to see if this is a compound assignment (something like += or *=, etc). if it is, then call out to the type
@@ -431,27 +455,387 @@ public class ReorganizeCode extends AbstractVisitor {
 		// appendElement depending on whether the rhs is an array or not
 		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
 			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
-			&& (object.getOperator().equals("+") || object.getOperator().equals("::"))) {
-			// create the qualified function invocation
-			QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
-			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-				invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
-			if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
-				&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
-				invocation.setId("appendAll");
-			else
-				invocation.setId("appendElement");
-			Expression lhsExpression = object.getLHS();
-			while (lhsExpression instanceof BinaryExpression) {
-				lhsExpression = ((BinaryExpression) lhsExpression).getRHS();
+			&& object.getOperator().equals("::")) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
+				// create a temporary variable and do a new on the type
+				String temporary = ctx.nextTempName();
+				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				localDeclaration.setContainer(currentStatementContainer);
+				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				ArrayTypeScanner arrayTypeScanner1 = new ArrayTypeScanner();
+				Field field = factory.createField();
+				field.setName(temporary);
+				field.setType(arrayTypeScanner1.scan(object.getLHS()));
+				// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+				// initialization from occurring
+				field.setIsNullable(true);
+				declarationExpression.getFields().add(field);
+				localDeclaration.setExpression(declarationExpression);
+				// add the local variable to the statement block
+				verify(0).getStatements().add(localDeclaration);
+				// create a new expression for the type
+				NewExpression newExpression = factory.createNewExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					newExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				newExpression.setId(field.getType().getTypeSignature());
+				// we need to create the member access for our temporary variable
+				MemberName nameExpression = factory.createMemberName();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				nameExpression.setMember(field);
+				nameExpression.setId(field.getName());
+				// we need to create an assignment statement
+				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setContainer(currentStatementContainer);
+				Assignment assignment = factory.createAssignment();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setAssignment(assignment);
+				assignment.setLHS(nameExpression);
+				assignment.setRHS(newExpression);
+				// add the assignment to the statement block
+				verify(0).getStatements().add(assignmentStatement);
+				// if the expression is a binary expression, then this will be expanded upstream
+				if (object.getLHS() instanceof BinaryExpression) {
+					// create a temporary variable and do a new on the type
+					String temporaryBin = ctx.nextTempName();
+					LocalVariableDeclarationStatement localDeclarationBin = factory.createLocalVariableDeclarationStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						localDeclarationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					localDeclarationBin.setContainer(currentStatementContainer);
+					DeclarationExpression declarationExpressionBin = factory.createDeclarationExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						declarationExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					ArrayTypeScanner arrayTypeScanner2 = new ArrayTypeScanner();
+					Field fieldBin = factory.createField();
+					fieldBin.setName(temporaryBin);
+					fieldBin.setType(arrayTypeScanner2.scan(object.getLHS()));
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+					// initialization from occurring
+					fieldBin.setIsNullable(true);
+					declarationExpressionBin.getFields().add(fieldBin);
+					localDeclarationBin.setExpression(declarationExpressionBin);
+					// add the local variable to the statement block
+					verify(0).getStatements().add(localDeclarationBin);
+					// we need to create the member access for our temporary variable
+					MemberName nameExpressionBin = factory.createMemberName();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					nameExpressionBin.setMember(fieldBin);
+					nameExpressionBin.setId(fieldBin.getName());
+					// we need to create an assignment statement
+					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setContainer(currentStatementContainer);
+					Assignment assignmentBin = factory.createAssignment();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setAssignment(assignmentBin);
+					assignmentBin.setLHS(nameExpressionBin);
+					assignmentBin.setRHS(object.getLHS());
+					// add the assignment to the statement block
+					verify(0).getStatements().add(assignmentStatementBin);
+					// now replace the rhs with the result of the assignment
+					object.setLHS(nameExpressionBin);
+				}
+				// create the qualified function invocation for appendAll
+				QualifiedFunctionInvocation invocationCopy = factory.createQualifiedFunctionInvocation();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					invocationCopy.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				invocationCopy.setId("appendAll");
+				invocationCopy.setQualifier(nameExpression);
+				invocationCopy.getArguments().add(object.getLHS());
+				FunctionStatement functionStatementCopy = factory.createFunctionStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					functionStatementCopy.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				functionStatementCopy.setExpr(invocationCopy);
+				// add the assignment to the statement block
+				verify(0).getStatements().add(functionStatementCopy);
+				// if the expression is a binary expression, then this will be expanded upstream
+				if (object.getRHS() instanceof BinaryExpression) {
+					// create a temporary variable and do a new on the type
+					String temporaryBin = ctx.nextTempName();
+					LocalVariableDeclarationStatement localDeclarationBin = factory.createLocalVariableDeclarationStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						localDeclarationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					localDeclarationBin.setContainer(currentStatementContainer);
+					DeclarationExpression declarationExpressionBin = factory.createDeclarationExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						declarationExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					ArrayTypeScanner arrayTypeScanner2 = new ArrayTypeScanner();
+					Field fieldBin = factory.createField();
+					fieldBin.setName(temporaryBin);
+					fieldBin.setType(arrayTypeScanner2.scan(object.getRHS()));
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+					// initialization from occurring
+					fieldBin.setIsNullable(true);
+					declarationExpressionBin.getFields().add(fieldBin);
+					localDeclarationBin.setExpression(declarationExpressionBin);
+					// add the local variable to the statement block
+					verify(0).getStatements().add(localDeclarationBin);
+					// we need to create the member access for our temporary variable
+					MemberName nameExpressionBin = factory.createMemberName();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					nameExpressionBin.setMember(fieldBin);
+					nameExpressionBin.setId(fieldBin.getName());
+					// we need to create an assignment statement
+					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setContainer(currentStatementContainer);
+					Assignment assignmentBin = factory.createAssignment();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setAssignment(assignmentBin);
+					assignmentBin.setLHS(nameExpressionBin);
+					assignmentBin.setRHS(object.getRHS());
+					// add the assignment to the statement block
+					verify(0).getStatements().add(assignmentStatementBin);
+					// create the qualified function invocation for appendAll or appendElement
+					QualifiedFunctionInvocation invocationBin = factory.createQualifiedFunctionInvocation();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						invocationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
+						&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+						invocationBin.setId("appendAll");
+					else
+						invocationBin.setId("appendElement");
+					invocationBin.setQualifier(nameExpression);
+					invocationBin.getArguments().add(nameExpressionBin);
+					FunctionStatement functionStatementBin = factory.createFunctionStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						functionStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					functionStatementBin.setExpr(invocationBin);
+					// add the assignment to the statement block
+					verify(0).getStatements().add(functionStatementBin);
+					// now replace the rhs with the result of the assignment
+					object.setRHS(nameExpressionBin);
+				} else {
+					// create the qualified function invocation for appendAll or appendElement
+					QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
+						&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+						invocation.setId("appendAll");
+					else
+						invocation.setId("appendElement");
+					invocation.setQualifier(nameExpression);
+					invocation.getArguments().add(object.getRHS());
+					FunctionStatement functionStatement = factory.createFunctionStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						functionStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					functionStatement.setExpr(invocation);
+					// add the assignment to the statement block
+					verify(0).getStatements().add(functionStatement);
+				}
+				// now replace the BinaryExpression argument with the function invocation
+				if (getParent() instanceof List)
+					((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
+				else
+					((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
 			}
-			invocation.setQualifier(lhsExpression);
-			invocation.getArguments().add(object.getRHS());
-			// now replace the BinaryExpression argument with the function invocation
-			if (getParent() instanceof List)
-				((List<EObject>) getParent()).set(getParentSlotIndex(), invocation);
-			else
-				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), invocation);
+			// if the rhs of this binary expression is an array, then we need to convert this to insertElement
+		} else if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
+			&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
+			&& object.getOperator().equals("::")) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getRHS().getType(), ctx)) {
+				// create a temporary variable and do a new on the type
+				String temporary = ctx.nextTempName();
+				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				localDeclaration.setContainer(currentStatementContainer);
+				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				ArrayTypeScanner arrayTypeScanner1 = new ArrayTypeScanner();
+				Field field = factory.createField();
+				field.setName(temporary);
+				field.setType(arrayTypeScanner1.scan(object.getRHS()));
+				// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+				// initialization from occurring
+				field.setIsNullable(true);
+				declarationExpression.getFields().add(field);
+				localDeclaration.setExpression(declarationExpression);
+				// add the local variable to the statement block
+				verify(0).getStatements().add(localDeclaration);
+				// create a new expression for the type
+				NewExpression newExpression = factory.createNewExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					newExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				newExpression.setId(field.getType().getTypeSignature());
+				// we need to create the member access for our temporary variable
+				MemberName nameExpression = factory.createMemberName();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				nameExpression.setMember(field);
+				nameExpression.setId(field.getName());
+				// we need to create an assignment statement
+				AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setContainer(currentStatementContainer);
+				Assignment assignment = factory.createAssignment();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				assignmentStatement.setAssignment(assignment);
+				assignment.setLHS(nameExpression);
+				assignment.setRHS(newExpression);
+				// add the assignment to the statement block
+				verify(0).getStatements().add(assignmentStatement);
+				// if the expression is a binary expression, then this will be expanded upstream
+				if (object.getLHS() instanceof BinaryExpression) {
+					// create a temporary variable and do a new on the type
+					String temporaryBin = ctx.nextTempName();
+					LocalVariableDeclarationStatement localDeclarationBin = factory.createLocalVariableDeclarationStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						localDeclarationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					localDeclarationBin.setContainer(currentStatementContainer);
+					DeclarationExpression declarationExpressionBin = factory.createDeclarationExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						declarationExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					ArrayTypeScanner arrayTypeScanner2 = new ArrayTypeScanner();
+					Field fieldBin = factory.createField();
+					fieldBin.setName(temporaryBin);
+					fieldBin.setType(arrayTypeScanner2.scan(object.getLHS()));
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+					// initialization from occurring
+					fieldBin.setIsNullable(true);
+					declarationExpressionBin.getFields().add(fieldBin);
+					localDeclarationBin.setExpression(declarationExpressionBin);
+					// add the local variable to the statement block
+					verify(0).getStatements().add(localDeclarationBin);
+					// we need to create the member access for our temporary variable
+					MemberName nameExpressionBin = factory.createMemberName();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					nameExpressionBin.setMember(fieldBin);
+					nameExpressionBin.setId(fieldBin.getName());
+					// we need to create an assignment statement
+					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setContainer(currentStatementContainer);
+					Assignment assignmentBin = factory.createAssignment();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setAssignment(assignmentBin);
+					assignmentBin.setLHS(nameExpressionBin);
+					assignmentBin.setRHS(object.getLHS());
+					// add the assignment to the statement block
+					verify(0).getStatements().add(assignmentStatementBin);
+					// create the qualified function invocation for appendAll or appendElement
+					QualifiedFunctionInvocation invocationBin = factory.createQualifiedFunctionInvocation();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						invocationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
+						&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+						invocationBin.setId("appendAll");
+					else
+						invocationBin.setId("appendElement");
+					invocationBin.setQualifier(nameExpression);
+					invocationBin.getArguments().add(nameExpressionBin);
+					FunctionStatement functionStatementBin = factory.createFunctionStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						functionStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					functionStatementBin.setExpr(invocationBin);
+					// add the assignment to the statement block
+					verify(0).getStatements().add(functionStatementBin);
+					// now replace the lhs with the result of the assignment
+					object.setLHS(nameExpressionBin);
+				} else {
+					// create the qualified function invocation for appendElement
+					QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						invocation.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
+						&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST))
+						invocation.setId("appendAll");
+					else
+						invocation.setId("appendElement");
+					invocation.setQualifier(nameExpression);
+					invocation.getArguments().add(object.getLHS());
+					FunctionStatement functionStatement = factory.createFunctionStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						functionStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					functionStatement.setExpr(invocation);
+					// add the assignment to the statement block
+					verify(0).getStatements().add(functionStatement);
+				}
+				// if the expression is a binary expression, then this will be expanded upstream
+				if (object.getRHS() instanceof BinaryExpression) {
+					// create a temporary variable and do a new on the type
+					String temporaryBin = ctx.nextTempName();
+					LocalVariableDeclarationStatement localDeclarationBin = factory.createLocalVariableDeclarationStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						localDeclarationBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					localDeclarationBin.setContainer(currentStatementContainer);
+					DeclarationExpression declarationExpressionBin = factory.createDeclarationExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						declarationExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					ArrayTypeScanner arrayTypeScanner2 = new ArrayTypeScanner();
+					Field fieldBin = factory.createField();
+					fieldBin.setName(temporaryBin);
+					fieldBin.setType(arrayTypeScanner2.scan(object.getRHS()));
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
+					// initialization from occurring
+					fieldBin.setIsNullable(true);
+					declarationExpressionBin.getFields().add(fieldBin);
+					localDeclarationBin.setExpression(declarationExpressionBin);
+					// add the local variable to the statement block
+					verify(0).getStatements().add(localDeclarationBin);
+					// we need to create the member access for our temporary variable
+					MemberName nameExpressionBin = factory.createMemberName();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						nameExpressionBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					nameExpressionBin.setMember(fieldBin);
+					nameExpressionBin.setId(fieldBin.getName());
+					// we need to create an assignment statement
+					AssignmentStatement assignmentStatementBin = factory.createAssignmentStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentStatementBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setContainer(currentStatementContainer);
+					Assignment assignmentBin = factory.createAssignment();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentBin.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatementBin.setAssignment(assignmentBin);
+					assignmentBin.setLHS(nameExpressionBin);
+					assignmentBin.setRHS(object.getRHS());
+					// add the assignment to the statement block
+					verify(0).getStatements().add(assignmentStatementBin);
+					// now replace the lhs with the result of the assignment
+					object.setRHS(nameExpressionBin);
+				}
+				// create the qualified function invocation for appendAll
+				QualifiedFunctionInvocation invocationCopy = factory.createQualifiedFunctionInvocation();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					invocationCopy.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				invocationCopy.setId("appendAll");
+				invocationCopy.setQualifier(nameExpression);
+				invocationCopy.getArguments().add(object.getRHS());
+				FunctionStatement functionStatementCopy = factory.createFunctionStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					functionStatementCopy.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				functionStatementCopy.setExpr(invocationCopy);
+				// add the assignment to the statement block
+				verify(0).getStatements().add(functionStatementCopy);
+				// now replace the BinaryExpression argument with the function invocation
+				if (getParent() instanceof List)
+					((List<EObject>) getParent()).set(getParentSlotIndex(), nameExpression);
+				else
+					((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), nameExpression);
+			}
 		}
 		return true;
 	}
@@ -907,6 +1291,57 @@ public class ReorganizeCode extends AbstractVisitor {
 
 		public boolean visit(Statement object) {
 			return true;
+		}
+	}
+	
+	// this logic will determine the type of an array
+	public class ArrayTypeScanner extends AbstractVisitor {
+		private ArrayType arrType;
+
+		public ArrayType scan(Expression expr) {
+			disallowRevisit();
+			expr.accept(this);
+			return arrType;
+		}
+		
+		public ArrayType getArrayType() {
+			return arrType;
+		}
+		
+		public boolean visit(EObject obj) {
+			return false;
+		}
+		
+		public boolean visit(QualifiedFunctionInvocation inv) {
+			if (arrType == null) {
+				if (inv.getType() instanceof ArrayType)
+					arrType = (ArrayType) inv.getType();
+				else if (isList(inv.getType()))
+					inv.getQualifier().accept(this);
+			}
+			return false;
+		}
+		
+		public boolean visit(Expression expr) {
+			if (arrType == null && expr.getType() instanceof ArrayType)
+				arrType = (ArrayType) expr.getType();
+			return false;
+		}
+		
+		public boolean visit(BinaryExpression binExp) {
+			if (isArrayOrList(binExp.getLHS().getType()))
+				binExp.getLHS().accept(this);
+			else if (isArrayOrList(binExp.getRHS().getType()))
+				binExp.getRHS().accept(this);
+			return false;
+		}
+		
+		private boolean isArrayOrList(Type type) {
+			return (type instanceof ArrayType || isList(type));
+		}
+
+		private boolean isList(Type type) {
+			return type != null && type.equals(TypeUtils.Type_LIST);
 		}
 	}
 }
