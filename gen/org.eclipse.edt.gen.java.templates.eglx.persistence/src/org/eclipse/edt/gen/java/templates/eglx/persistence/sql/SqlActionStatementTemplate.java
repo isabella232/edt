@@ -361,7 +361,6 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			out.print(varName);
 			out.print('.');
 			ctx.invoke(genName, field, ctx, out);
-			genConvertValueEnd(type, ctx, out);
 			out.println("){");
 			out.print(stmt_or_resultSet_var);
 			out.print(".setNull(");
