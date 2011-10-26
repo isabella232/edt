@@ -45,6 +45,21 @@ externalType ESmallint extends ENumber type ClassType
 	static function $PowerOf(lvalue ESmallint in, rvalue ESmallint in) returns (EFloat) {@Operation{"**"}};
 
 	/**
+	 * {@Operation &} Computes the bitwise AND of two numbers.
+	 */
+	static function $BitAnd(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"&"}};
+
+	/**
+	 * {@Operation |} Computes the bitwise OR of two numbers.
+	 */
+	static function $BitOr(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"|"}};
+
+	/**
+	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 */
+	static function $BitXor(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"xor"}};
+
+	/**
 	 * {@Operation <} Compares two numbers.
 	 */
 	static function $LT(lvalue ESmallint in, rvalue ESmallint in) returns (EBoolean) {@Operation{"<"}};
