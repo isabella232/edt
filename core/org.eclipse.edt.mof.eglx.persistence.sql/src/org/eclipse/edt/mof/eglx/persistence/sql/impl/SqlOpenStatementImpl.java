@@ -41,26 +41,33 @@ public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenS
 	// TODO This is a simplified mapping of one type to one table only - handle multiple tables
 	private String generateDefaultSqlString() {
 		
-		String sql = null;
+		StringBuilder sql = new StringBuilder();
 		if (getTargets().size() == 2) {//resultset and a for clause
 			Expression target = getTargets().get(1);
 			EGLClass targetType = (EGLClass)target.getType().getClassifier();
 			if (!TypeUtils.isDynamicType(targetType)) {
-				sql = "SELECT ";
+				sql.append("SELECT ");
 				List<Field> idFields = new ArrayList<Field>();
 				boolean doComma = false;
 				for (Field f : targetType.getFields()) {
 					if (SQL.isKeyField(f)) idFields.add(f);
 					if (SQL.isReadable(f)) {
-						if (doComma) sql += ", ";
-						sql += SQL.getColumnName(f);
+						if (doComma) sql.append(", ");
+						if(SQL.isTextType(f.getType().getClassifier())){
+							sql.append("RTRIM(");
+							sql.append(SQL.getColumnName(f));
+							sql.append(")");
+						}
+						else{
+							sql.append(SQL.getColumnName(f));
+						}
 						if (!doComma) doComma = true;
 					}
 				}
-				sql += " FROM ";
-				sql += SQL.getTableName(targetType);
+				sql.append(" FROM ");
+				sql.append(SQL.getTableName(targetType));
 			}
 		}
-		return sql;
+		return sql.toString();
 	}
 }
