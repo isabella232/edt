@@ -64,8 +64,11 @@ public class ConvertWorkspaceResourceOperation extends AbstractDeploymentOperati
 					sqlBinding.addParameter( new Parameter( SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, 
 							EGLSQLUtility.getSQLUserId(profile) ) );
 
-					sqlBinding.addParameter( new Parameter( SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, 
-							Encoder.encode( EGLSQLUtility.getSQLPassword(profile) ) ) );
+					String password = EGLSQLUtility.getSQLPassword(profile);
+					if (  password != null ) {
+						sqlBinding.addParameter( new Parameter( SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, 
+							Encoder.encode( password ) ) );
+					}
 
 					sqlBinding.addParameter( new Parameter( SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlDB, 
 							EGLSQLUtility.getSQLConnectionURLPreference(profile) ) );
