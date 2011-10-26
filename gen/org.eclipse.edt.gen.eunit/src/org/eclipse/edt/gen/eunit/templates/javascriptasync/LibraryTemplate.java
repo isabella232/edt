@@ -149,8 +149,14 @@ public class LibraryTemplate extends EUnitTemplate {
 		out.println("Handler " + genedHandlerName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" +genedHandlerName + "\"} ");
 		
 		out.pushIndent();	
+		out.println("startTS timestamp?;");
+		out.println();
+		
 		out.println("function start()");
 		out.pushIndent();
+		out.println("ts timestamp(\"yyyyMMddHHmmssffffff\");");
+		out.println("startTS = ts;");
+		out.println("TestListMgr.bindingType = ServiceBindingType.DEDICATED;");		
 		out.println("TestListMgr.LibraryStartTests = new runTestMethod[];");
 		out.println("TestListMgr.LibraryStartTests ::= " + CommonUtilities.getECKGenPartFQName(part) + "." + CommonUtilities.exeTestMethodName + ";");
 		out.println("TestListMgr.LibraryStartTests ::= " + CommonUtilities.endTestMethodName + ";");
@@ -161,7 +167,7 @@ public class LibraryTemplate extends EUnitTemplate {
 		
 		out.println("function " + CommonUtilities.endTestMethodName + "()");
 		out.pushIndent();
-		out.println("TestExecutionLib.writeResultSummary(" + counter.getCount() + ");");
+		out.println("TestExecutionLib.writeResultSummary(" + counter.getCount() + ", startTS);");
 		out.popIndent();
 		out.println("end");
 		out.popIndent();

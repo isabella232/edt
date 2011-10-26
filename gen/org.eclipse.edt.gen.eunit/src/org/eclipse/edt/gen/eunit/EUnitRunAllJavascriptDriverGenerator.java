@@ -24,10 +24,11 @@ public class EUnitRunAllJavascriptDriverGenerator extends
 		out.pushIndent();
 		out.println("function start()");
 		out.pushIndent();
+		out.println("startTS timestamp(\"yyyyMMddHHmmssffffff\");");
 		for(String genLibName : listOfGenedLibs){
 			out.println(genLibName + "." + CommonUtilities.exeTestMethodName + "();");				
 		}
-		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ");");
+		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ", startTS);");
 		out.popIndent();
 		out.println("end");
 		out.popIndent();

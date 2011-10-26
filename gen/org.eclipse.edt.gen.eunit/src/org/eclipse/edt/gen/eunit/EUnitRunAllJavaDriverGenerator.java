@@ -20,11 +20,12 @@ public class EUnitRunAllJavaDriverGenerator extends EUnitRunAllDriverGenerator {
 		out.println("program " + RunAllTest + fDriverPartNameAppend + " type BasicProgram {}");
 		out.pushIndent();
 		out.println("function main()");
-		out.pushIndent();
+		out.pushIndent();		
+		out.println("startTS timestamp(\"yyyyMMddHHmmssffffff\");");		
 		for(String genLibName : listOfGenedLibs){
 			out.println(genLibName + "." + CommonUtilities.exeTestMethodName + "();");				
 		}
-		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ");");
+		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ", startTS);");
 		out.popIndent();
 		out.println("end");
 		out.popIndent();

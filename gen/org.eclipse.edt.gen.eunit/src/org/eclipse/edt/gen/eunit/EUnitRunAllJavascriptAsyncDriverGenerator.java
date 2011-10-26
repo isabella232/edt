@@ -31,9 +31,13 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 
 		String genedPartName = RunAllTest + fDriverPartNameAppend;		
 		out.println("Handler " + genedPartName + " type RUIhandler {initialUI = [], includefile = \"rununit.html\", onConstructionFunction = start, title=\"" + genedPartName + "\"} ");
-		out.pushIndent();
+		out.pushIndent();		
+		out.println("startTS timestamp?;");
+		out.println();
 		out.println("function start()");
 		out.pushIndent();
+		out.println("ts timestamp(\"yyyyMMddHHmmssffffff\");");
+		out.println("startTS = ts;");
 		out.println("TestListMgr.bindingType = ServiceBindingType.DEDICATED;");
 		out.println("TestListMgr.LibraryStartTests = new runTestMethod[];");
 		for(String genLibName : listOfGenedLibs){
@@ -48,7 +52,7 @@ public class EUnitRunAllJavascriptAsyncDriverGenerator extends
 		out.println();
 		out.println("function " + CommonUtilities.endTestMethodName + "()");
 		out.pushIndent();		
-		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ");");
+		out.println("TestExecutionLib.writeResultSummary(" + totalCnts.getCount() + ", startTS);");
 		out.popIndent();
 		out.println("end");
 		out.popIndent();
