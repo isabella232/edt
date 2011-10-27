@@ -20,8 +20,8 @@ import org.eclipse.edt.mof.egl.Part;
 
 public class GenerationErrorHTMLGenerator extends ErrorHTMLGenerator {
 	
-	public GenerationErrorHTMLGenerator(AbstractGeneratorCommand processor, WorkingCopyGenerationResult requestor, ISystemEnvironment sysEnv) {
-		super(processor, requestor, sysEnv);
+	public GenerationErrorHTMLGenerator(AbstractGeneratorCommand processor, WorkingCopyGenerationResult requestor, ISystemEnvironment sysEnv, String message) {
+		super(processor, requestor, sysEnv, message);
 	}
 	
 	@Override

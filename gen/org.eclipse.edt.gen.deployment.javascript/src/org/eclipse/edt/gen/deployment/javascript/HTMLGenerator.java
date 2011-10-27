@@ -54,11 +54,11 @@ public class HTMLGenerator extends Generator {
 		try {
 //			context.putAttribute(context.getClass(), Constants.Annotation_partBeingGenerated, part);
 //			context.validate(JavaScriptTemplate.validatePart, part, context, (Object) null);			
-			if (!context.getMessageRequestor().isError()) {
+//			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				invokeGeneration(part, methodName);
 				out.flush();
-			}
+//			}
 		}
 		catch (IOException e) {
 			throw new GenerationException(e);

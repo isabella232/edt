@@ -19,14 +19,15 @@ import org.eclipse.edt.gen.deployment.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.egl.Part;
 
 public class CompileErrorHTMLGenerator extends ErrorHTMLGenerator {
-
-	public CompileErrorHTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv) {
-		super(processor, null, sysEnv);
+	
+	public CompileErrorHTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv, String message) {
+		super(processor, null, sysEnv, message);
 	}
 	
 	@Override
 	public void generate(Part part) throws GenerationException {
 		this.generate(part, JavaScriptTemplate.genCompileErrorHTML);
 	}
+	
 
 }

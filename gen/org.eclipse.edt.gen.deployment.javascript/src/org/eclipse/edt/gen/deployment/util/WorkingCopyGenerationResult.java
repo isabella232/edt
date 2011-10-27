@@ -37,14 +37,14 @@ import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 
 public class WorkingCopyGenerationResult implements IProblemRequestor, ISyntaxErrorRequestor, IGenerationMessageRequestor {
 
-	private boolean hasError = false;
-	private boolean sendMessagesToGenerationResultsServer;
+	public boolean hasError = false;
+	public boolean sendMessagesToGenerationResultsServer;
 	
-	private List genMessages = Collections.EMPTY_LIST;
-	private int numGenErrors;
-	private int numGenWarnings;
+	public List genMessages = Collections.EMPTY_LIST;
+	public int numGenErrors;
+	public int numGenWarnings;
 	
-	private static final Set EGLMESSAGESTOIGNORE = new HashSet(Arrays.asList(new String[] {
+	public static final Set<String> EGLMESSAGESTOIGNORE = new HashSet<String>(Arrays.asList(new String[] {
 		EGLMessage.EGLMESSAGE_GENERATION_PROGRAM_RESULTS_VIEW_MESSAGE
 	}));
 	
