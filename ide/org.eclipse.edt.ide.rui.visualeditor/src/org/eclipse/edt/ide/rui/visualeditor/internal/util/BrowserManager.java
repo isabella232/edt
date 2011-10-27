@@ -36,6 +36,8 @@ public class BrowserManager {
 	public final static byte WEBKIT = 0X2;
 	public final static byte XULRUNNER = 0X4;
 	
+	public final static int SWT_WEBKIT = 0x10000; // SWT.WEBKIT
+
 	private byte BRWOSERS = 0X0;
 	
 	private byte defaultBrowser;
@@ -57,7 +59,7 @@ public class BrowserManager {
 	
 	private void initializeBrowser() {
 		try {
-			Browser b = new Browser( Display.getCurrent().getShells()[0], SWT.WEBKIT );
+			Browser b = new Browser( Display.getCurrent().getShells()[0], SWT_WEBKIT );
 			BRWOSERS = (byte)(BRWOSERS | WEBKIT);
 			b.dispose();
 		} catch ( Exception e ) {
@@ -98,8 +100,8 @@ public class BrowserManager {
 	
 	private Browser createWebKit( Composite compositeParent ) {
 		try {
-			Browser browser = new Browser( compositeParent, SWT.WEBKIT);
-			initializeBrowser(compositeParent.getDisplay(), browser, SWT.WEBKIT);
+			Browser browser = new Browser( compositeParent, SWT_WEBKIT);
+			initializeBrowser(compositeParent.getDisplay(), browser, SWT_WEBKIT);
 			return browser;
 		} catch( SWTError ex ) {
 			showOutOfResourcesMessage(Messages.NL_XULRunner_Out_of_resources_message);
