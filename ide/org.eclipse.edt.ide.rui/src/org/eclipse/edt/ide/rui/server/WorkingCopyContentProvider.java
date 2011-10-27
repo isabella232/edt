@@ -23,18 +23,30 @@
 package org.eclipse.edt.ide.rui.server;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
+import org.eclipse.edt.gen.deployment.javascript.GenerationErrorHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
+import org.eclipse.edt.ide.rui.internal.nls.EWTPreviewMessages;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
 import org.eclipse.edt.ide.rui.utils.PreviewFileLocator;
 import org.eclipse.edt.ide.rui.utils.WorkingCopyGenerationResult;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.xml.sax.SAXException;
 
 
@@ -62,14 +74,41 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 		HTMLGenerator generator = null;
 		WorkingCopyGenerationResult result = editorProvider.getLastGenerationResult();
 		if(result != null && result.hasError()){
-//TODO EDT generator
-//			if(result.hasGenerationError()){
-//				generator = new GenerationErrorHTMLGenerator(resourceName, result);
-//			}else{
-//				generator = new CompileErrorHTMLGenerator(resourceName);
-//			}
-//			return generator.generate();
-			return null;
+			EGL2HTML4VE cmd = new EGL2HTML4VE();
+			IProject project =  ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			IEnvironment environment = getEnvironmentForGeneration(project);
+			Environment.pushEnv(environment);
+			
+			Part part = null;
+			EObject eObject = null;
+			try {
+				eObject = environment.find(PreviewIREnvironmentManager.makeEGLKey(resourceName.replace("/", ".")));
+			} catch (MofObjectNotFoundException e) {
+				e.printStackTrace();
+			} catch (DeserializationException e) {
+				e.printStackTrace();
+			}
+			
+			if(eObject!=null && eObject instanceof Part){
+				part = (Part)eObject;
+			}			
+			
+			ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
+			
+			if(result.hasGenerationError()){
+				String message = MessageFormat.format(EWTPreviewMessages.GENFAILEDPAGE_HEADERMSG, new Object[] {
+						part.getFullyQualifiedName(),
+						Integer.toString(result.getResult().getNumGenErrors()),
+						Integer.toString(result.getResult().getNumGenWarnings())
+					});
+				generator = new GenerationErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+			}else{
+				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {part.getFullyQualifiedName()});
+				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+			}
+			
+			String strResult = cmd.generate(part, generator, environment);
+			return strResult.getBytes();	
 		}else{
 			return super.generateHTMLFile(locator, resourceName, projectName);
 		}		

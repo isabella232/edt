@@ -60,7 +60,6 @@ import org.eclipse.edt.ide.rui.internal.testserver.TestServerManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
-import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.JSERunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
@@ -931,11 +930,7 @@ public class EvServer implements IClientProxy {
 							ps.close();
 						}
 						else {
-							
 							//debug("no context key: " + url);
-							/*
-							 * 
-							 */
 							// initial load external browser
 							if (url.indexOf(".htm") > 0) {
 								// this would only occur if loading from external browser with no context key
@@ -1150,15 +1145,6 @@ public class EvServer implements IClientProxy {
 		fileName = fileName.substring(projectName.length()+1);
 		byte[] result;
 		
-		result = null;//(byte[])Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.get(fileName);
-		try {
-			if(result != null){
-				ps.write(result);
-				return;
-			}	
-		} catch (Exception e ) {
-			
-		}
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		
 		try{
@@ -1178,7 +1164,6 @@ public class EvServer implements IClientProxy {
 				result = new byte[fileContents.available()];
 				fileContents.read(result);
 				ps.write(result);
-				Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.put(fileName, result);
 			}finally{
 				fileContents.close();
 			}
