@@ -41,13 +41,13 @@ public class FunctionTemplate extends EUnitTemplate {
 		if(paramCnt == 0){
 			Annotation testAnnot = function.getAnnotation(FQ_TESTANNOTATION);
 			if(testAnnot != null){
-				Object targetLangs = testAnnot.getValue("targetLang");
-				if(targetLangs != null){
+//				Object targetLangs = testAnnot.getValue("targetLang");
+//				if(targetLangs != null){
 					//should be EList
 //					if(targetLangs instanceof EList<E>){
 //						//list of enumeration
 //					}
-				}
+//				}
 				
 				functions.add(function.getName());
 				couter.increment();
