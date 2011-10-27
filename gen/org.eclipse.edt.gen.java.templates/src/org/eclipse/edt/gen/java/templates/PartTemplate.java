@@ -64,6 +64,11 @@ public class PartTemplate extends JavaTemplate {
 		for (String imported : typesImported) {
 			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <
 			// ... > being added
+			// strip off any [...] or <...> found
+			if (imported.indexOf("[") >= 0)
+				imported = imported.substring(0, imported.indexOf("["));
+			if (imported.indexOf("<") >= 0)
+				imported = imported.substring(0, imported.indexOf("<"));
 			// if this name starts with a period, then ignore the entry.
 			if (!imported.startsWith(".")) {
 				String type;
