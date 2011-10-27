@@ -90,71 +90,71 @@ library TestExecutionLib
 		retStat Status;
 		summary String;
 		if(ms.testCnt == 0)
-			summary = "No tests cases found ";
+			summary = "No tests cases found " + ConstantsLib.NEWLINE;
 		else
-			summary = "test case: " + ms.testCnt;
+			summary = "test case count: " + ms.testCnt;
 			if(ms.passedCnt > 0)
 				if(ms.passedCnt == ms.testCnt)
-					summary += "; all passed";
+					summary += " - all passed.";
 				else
-					summary += "; passed: " + ms.passedCnt;
+					summary += ConstantsLib.NEWLINE + "passed: " + ms.passedCnt;
 				end
 			end
 			
 			if(ms.failedCnt > 0 )
 				if(ms.failedCnt == ms.testCnt)
-					summary += "; all failed";
+					summary += " - all failed.";
 				else
-					summary += "; failed: " + ms.failedCnt;
+					summary += ConstantsLib.NEWLINE + "failed: " + ms.failedCnt;
 				end
 			end
 			
 			if(ms.errCnt > 0)
 				if(ms.errCnt == ms.testCnt)
-					summary += "; all have error ";
+					summary += " - all have error.";
 				else
-					summary += "; error: " + ms.errCnt;
+					summary += ConstantsLib.NEWLINE + "error: " + ms.errCnt;
 				end
 			end
 			
 			if(ms.notRunCnt > 0)
 				if(ms.notRunCnt == ms.testCnt)
-					summary += "; all tests are skipped";
+					summary += " - all tests are skipped.";
 				else
-					summary += "; skipped: " + ms.notRunCnt;
+					summary += ConstantsLib.NEWLINE + "skipped: " + ms.notRunCnt;
 				end
 			end
 			
 			if(ms.badCnt > 0 )
 				if(ms.badCnt == ms.testCnt)
-					summary += "; all have bad status";
+					summary += " - all have bad status.";
 				else
-					summary += "; bad status: " + ms.badCnt;
+					summary += ConstantsLib.NEWLINE + "bad status: " + ms.badCnt;
 				end
 			end
 		end
 		
 		
 		if(ms.badCnt > 0)
-			summary += "; first bad test case result found: " + ms.firstFailedTestName;
+			summary += ConstantsLib.NEWLINE + "first bad test case result found: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);
 			return (retStat);
 		end
 					
 		if(ms.errCnt > 0 )
-			summary += "; first test case with error: " + ms.firstFailedTestName;
+			summary += ConstantsLib.NEWLINE + "first test case with error: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SERROR, summary);	
 			return (retStat);
 		end	
 		
 		if(ms.failedCnt > 0)
-			summary += "; first test case failure: " + ms.firstFailedTestName;
+			summary += ConstantsLib.NEWLINE + "first test case failure: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SFAILED, summary);	
 			return (retStat);		
 		end
 		
 		if(ms.notRunCnt > 0)
-			summary += "; first test case skipped: " + ms.firstFailedTestName;
+			summary += ConstantsLib.NEWLINE + "first test case skipped: " + ms.firstFailedTestName;
 			setStatusRecordHelper(retStat, ConstantsLib.SNOT_RUN, summary);	
 			return (retStat);				
 		else

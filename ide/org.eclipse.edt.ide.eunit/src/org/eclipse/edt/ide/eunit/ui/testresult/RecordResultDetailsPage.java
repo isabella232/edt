@@ -185,7 +185,7 @@ public class RecordResultDetailsPage extends TestResultPkgNodeDetailsPage {
 				
 				//display a meaningful string for the code value
 				if(nodeName.equals(ConstantUtil.ELEM_code)){					
-					nodeTextContent += " - " + ConstantUtil.STEXTS[Integer.parseInt(nodeTextContent)];
+					nodeTextContent += " => " + ConstantUtil.STEXTS[Integer.parseInt(nodeTextContent)];
 				}
 			
 				if(nodeName.equals(ConstantUtil.ELEM_pkgName)){
