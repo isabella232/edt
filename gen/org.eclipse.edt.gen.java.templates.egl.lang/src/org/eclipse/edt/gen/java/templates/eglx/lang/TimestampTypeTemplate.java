@@ -22,7 +22,9 @@ public class TimestampTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
-		out.print(".defaultValue()");
+		out.print(".defaultValue(");
+		ctx.invoke(genConstructorOptions, type, ctx, out);
+		out.print(")");
 	}
 
 	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
