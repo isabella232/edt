@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
@@ -42,6 +43,8 @@ import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeclareStatementFa
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeleteStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByKeyForUpdateStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByKeyStatementFactory;
+import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLOpenForUpdateStatementFactory;
+import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLOpenStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLReplaceStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
@@ -173,7 +176,7 @@ public abstract class  AbstractSQLStatementProposal extends
 						compileOptions);
 			}
 			isSelectStatement = true;
-		} /*else if (info.getStatement() instanceof OpenStatement) {
+		} else if (info.getStatement() instanceof OpenStatement) {
 			String[][] keyItemAndColumnNames = getKeyItemAndColumnNames(sqlRecordBinding);
 			if (isOpenForUpdateStatement()) {
 				statementFactory =
@@ -183,7 +186,7 @@ public abstract class  AbstractSQLStatementProposal extends
 				statementFactory = new EGLSQLOpenStatementFactory(sqlRecordBinding, info.getIOObjectName(), null, keyItemAndColumnNames, compileOptions);
 			}
 			isSelectStatement = true;
-		}*/ else if (statement instanceof ReplaceStatement) {
+		} else if (statement instanceof ReplaceStatement) {
 			String[][] keyItemAndColumnNames = getKeyItemAndColumnNames(sqlRecordBinding);
 			statementFactory = new EGLSQLReplaceStatementFactory(sqlRecordBinding, info.getIOObjectName(), keyItemAndColumnNames, info.isNoCursor(), compileOptions);
 		} /*else if (statement instanceof GetByPositionStatement) {
@@ -405,6 +408,14 @@ public abstract class  AbstractSQLStatementProposal extends
 		if (info.getIOType().equalsIgnoreCase(SQLConstants.GET_FORUPDATE_IO_TYPE)) {
 			return true;
 		}
+		return false;
+	}
+	
+	protected boolean isOpenForUpdateStatement() {
+		if (info.getIOType().equalsIgnoreCase(SQLConstants.OPEN_FORUPDATE_IO_TYPE)) {
+			return true;
+		}
+
 		return false;
 	}
 	

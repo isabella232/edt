@@ -150,6 +150,11 @@ public class SQLIOStatementUtility {
 					info.setIntoClauseNode(intoClause);
 					return false;
 				}
+				
+				public boolean visit(UsingClause keysClause) {
+					info.setUsingExisted(true);
+					return false;
+				}
 			});
 			if (info.getIOType() == null) {
 				info.setIOType(SQLConstants.OPEN_IO_TYPE.toUpperCase());

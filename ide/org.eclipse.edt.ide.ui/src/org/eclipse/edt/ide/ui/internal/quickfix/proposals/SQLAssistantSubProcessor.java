@@ -13,6 +13,7 @@ import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
 import org.eclipse.edt.ide.ui.editor.IEGLCompletionProposal;
@@ -39,7 +40,8 @@ public class SQLAssistantSubProcessor {
 		if ((astNode instanceof AddStatement)
 				|| (astNode instanceof DeleteStatement)
 				|| (astNode instanceof ReplaceStatement)
-				|| (astNode instanceof GetByKeyStatement)) {
+				|| (astNode instanceof GetByKeyStatement)
+				|| (astNode instanceof OpenStatement)) {
 			isValidStatement = true;
 		}
 
@@ -91,6 +93,9 @@ public class SQLAssistantSubProcessor {
 		} else if (astNode instanceof ReplaceStatement) {
 			ReplaceStatement replaceStatement = (ReplaceStatement) astNode;
 			expressions = replaceStatement.getReplaceOptions();
+		} else if (astNode instanceof OpenStatement) {
+			OpenStatement openStatement = (OpenStatement) astNode;
+			expressions = openStatement.getOpenTargets();
 		}
 
 		if (expressions != null && expressions.size() > 0) {
@@ -103,12 +108,10 @@ public class SQLAssistantSubProcessor {
 		}
 
 		if (dataSource != null) {
-			ITypeBinding typeBinding = dataSource.getExpression()
-					.resolveTypeBinding();
+			ITypeBinding typeBinding = dataSource.getExpression().resolveTypeBinding();
 			if (typeBinding != null
 					&& IEGLConstants.PROPERTY_SQLDATASOURCE
-							.equalsIgnoreCase(typeBinding
-									.getCaseSensitiveName())) {
+							.equalsIgnoreCase(typeBinding.getCaseSensitiveName())) {
 				isDataSource = true;
 			}
 		}
@@ -159,6 +162,14 @@ public class SQLAssistantSubProcessor {
 				}
 			});
 
+		} else if (astNode instanceof OpenStatement) {
+			OpenStatement openStatement = (OpenStatement) astNode;
+			openStatement.accept(new AbstractASTVisitor() {
+				public boolean visit(WithInlineSQLClause inlineSQL) {
+					info.setSqlStatement(inlineSQL.getSqlStmt().getValue());
+					return false;
+				}
+			});
 		}
 
 		if (info.getSqlStatement() != null) {
