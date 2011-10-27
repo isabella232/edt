@@ -21,8 +21,5 @@ externaltype HttpLib type NativeType{@ContentAssist}
 
     static function convertToURLEncoded(eglType string in) returns(string);
     
-    static function setHTTPBasicAuthentication(http eglx.http.IHttp in, userID string in, userPassword string in);
-    
-    static function setProxyBasicAuthentication( userID string in, userPassword string in );        
 end
 
