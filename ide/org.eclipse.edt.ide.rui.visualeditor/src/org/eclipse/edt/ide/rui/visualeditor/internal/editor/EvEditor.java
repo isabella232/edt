@@ -66,6 +66,7 @@ import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.gef.ui.views.palette.PaletteView;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -74,10 +75,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -110,6 +113,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.ui.texteditor.IDocumentProvider;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 
@@ -117,7 +121,7 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 /**
  *
  */
-public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, IEGLModelChangeListener, IEditorSelectAndRevealer, IEvPropertySheetPageAdapter, IPartListener, IPropertyChangeListener, IResourceChangeListener, IResourceDeltaVisitor, ISelectionChangedListener, IWidgetDescriptorRegistryListener, SelectionListener, IEvEditor {
+public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, IEGLModelChangeListener, IEditorSelectAndRevealer, IEvPropertySheetPageAdapter, IPartListener, IPropertyChangeListener, IResourceChangeListener, IResourceDeltaVisitor, ISelectionChangedListener, IWidgetDescriptorRegistryListener, SelectionListener, IEvEditor, ITextEditor {
 
 	protected boolean				_bRuiHandler				= true;
 	protected boolean				_bTranslationTestMode		= false;
@@ -138,7 +142,7 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 	/**
 	 * Closes the editor
 	 */
-	protected void close( final boolean bSave ) {
+	public void close( final boolean bSave ) {
 		Display display = getSite().getShell().getDisplay();
 		display.asyncExec( new Runnable() {
 			public void run() {
@@ -2160,5 +2164,72 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 	@Override
 	public EGLEditor getEGLEditor() {
 		return _pageSource;
+	}
+
+	@Override
+	public boolean isEditable() {
+		return(_pageSource.isEditable());
+	}
+
+	@Override
+	public void doRevertToSaved() {
+		_pageSource.doRevertToSaved();
+		
+	}
+
+	@Override
+	public void setAction(String actionID, IAction action) {
+		_pageSource.setAction(actionID, action);
+	}
+
+	@Override
+	public IAction getAction(String actionId) {
+		return(_pageSource.getAction(actionId));
+	}
+
+	@Override
+	public void setActionActivationCode(String actionId,
+			char activationCharacter, int activationKeyCode,
+			int activationStateMask) {
+		_pageSource.setActionActivationCode(actionId, activationCharacter, activationKeyCode, activationStateMask);
+	}
+
+	@Override
+	public void removeActionActivationCode(String actionId) {
+		_pageSource.removeActionActivationCode(actionId);
+		
+	}
+
+	@Override
+	public boolean showsHighlightRangeOnly() {
+		return(_pageSource.showsHighlightRangeOnly());
+	}
+
+	@Override
+	public void showHighlightRangeOnly(boolean showHighlightRangeOnly) {
+		_pageSource.showHighlightRangeOnly(showHighlightRangeOnly);
+		
+	}
+
+	@Override
+	public void setHighlightRange(int offset, int length, boolean moveCursor) {
+		_pageSource.setHighlightRange(offset, length, moveCursor);
+		
+	}
+
+	@Override
+	public IRegion getHighlightRange() {
+		return(_pageSource.getHighlightRange());
+	}
+
+	@Override
+	public void resetHighlightRange() {
+		_pageSource.resetHighlightRange();
+	}
+
+	@Override
+	public ISelectionProvider getSelectionProvider() {
+		return(_pageSource.getSelectionProvider());
 	} 
+	
 }
