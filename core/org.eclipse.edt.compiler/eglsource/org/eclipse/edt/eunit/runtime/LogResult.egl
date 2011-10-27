@@ -12,10 +12,16 @@ end
 Record AssertionFailedException type Exception
 end
 
+Enumeration targetLangKind
+	JAVA = 1,
+	JAVASCRIPT = 2
+end
+
 Record Test type Annotation
 { 
-	targets = [ ElementKind.functionMbr]
+	targets = [ ElementKind.functionMbr]	
 }
+	targetLang targetLangKind[];
 end
 
 Library LogResult
