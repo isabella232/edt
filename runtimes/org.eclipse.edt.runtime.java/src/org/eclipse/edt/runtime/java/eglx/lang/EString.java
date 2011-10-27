@@ -77,103 +77,103 @@ public class EString extends AnyBoxedObject<String> {
 	public static String asString(Boolean value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(EBoolean value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Short value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(ESmallint value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Integer value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(EInt value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Long value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(EBigint value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Float value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(ESmallfloat value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(Double value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(EFloat value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(BigDecimal value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(EDecimal value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(BigInteger value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(Number value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value));
+		return asString(String.valueOf(value), length);
 	}
 
 	public static String asString(eglx.lang.ENumber value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()));
+		return asString(String.valueOf(value.ezeUnbox()), length);
 	}
 
 	public static String asString(String value, Integer... length) {
@@ -322,7 +322,7 @@ public class EString extends AnyBoxedObject<String> {
 					else
 						formatter.setCentury(1);
 				}
-				return asString(formatter.format(cal.getTime()));
+				return asString(formatter.format(cal.getTime()), length);
 			}
 			catch (IllegalArgumentException iax) {
 				TypeCastException tcx = new TypeCastException();
