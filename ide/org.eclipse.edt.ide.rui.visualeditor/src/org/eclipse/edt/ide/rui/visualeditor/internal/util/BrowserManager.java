@@ -62,7 +62,7 @@ public class BrowserManager {
 			Browser b = new Browser( Display.getCurrent().getShells()[0], SWT_WEBKIT );
 			BRWOSERS = (byte)(BRWOSERS | WEBKIT);
 			b.dispose();
-		} catch ( Exception e ) {
+		} catch ( Throwable e ) {
 			
 		}
 
@@ -70,7 +70,7 @@ public class BrowserManager {
 			Browser b = new Browser( Display.getCurrent().getShells()[0], SWT.MOZILLA );
 			BRWOSERS = (byte)(BRWOSERS | XULRUNNER);
 			b.dispose();
-		} catch ( Exception e ) {
+		} catch ( Throwable e ) {
 			
 		}
 
