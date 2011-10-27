@@ -35,7 +35,12 @@ public class AnyValueTypeTemplate extends JavaTemplate {
 				out.print(".ezeUnbox()");
 			} else
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
-			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
+			// normally, we send in the type dependent options of the target, but in the case where we are using asNumber, we
+			// need to send in the source
+			if (arg.getConversionOperation().getName().equalsIgnoreCase("asNumber"))
+				ctx.invoke(genTypeDependentOptions, arg.getObjectExpr().getType(), ctx, out);
+			else
+				ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
