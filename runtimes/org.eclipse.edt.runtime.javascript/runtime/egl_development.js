@@ -126,7 +126,7 @@ egl.loadScript = function(packageName, className) {
 					egl.eval( responseText );
 		   		}
 		   		catch (e) {
-		   			if ( e != "missing" && egl && !egl.ptCrash) { // make sure the page is not destructed yet
+		   			if (e.name != "SyntaxError" && e != "missing" && egl && !egl.ptCrash) { // make sure the page is not destructed yet
 		   				egl.ptCrash = true;
 		   				document.location = document.location;
    						return;
@@ -258,7 +258,7 @@ egl.handleIDEEvent = function() {
 		   				}
 		   				else {
 		   					if (event.match(/egl.partialTerminateSession().*/))
-		   						document.location = document.location;
+		   						document.location = document.location;	
 		   					else
 		   						egl.printError(egl.getRuntimeMessage( "CRRUI2092E", [event]), e);
 		   				}

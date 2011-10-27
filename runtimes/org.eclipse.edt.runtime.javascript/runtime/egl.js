@@ -1245,7 +1245,7 @@ egl.destroyAllElements = function() {
 		} 
 		egl.elements[i]=null;
 	}
-	egl.elements = null;
+	egl.elements = [];
 };
 egl.destroyWidget = function(widget) {
 	var element = widget.eze$$DOMElement;
