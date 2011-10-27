@@ -87,6 +87,13 @@ public interface EGLDataTypeUtility {
 	}));
 
 	public final static String[] PREDEFINED_SERVICE_FUNCTION_TYPE_STRINGS = {
+  			IEGLConstants.MIXED_DICTIONARY_STRING,
+  			IEGLConstants.MIXED_DATASOURCE_STRING,
+  			IEGLConstants.MIXED_SCROLLABLEDATASOURCE_STRING,
+  			IEGLConstants.MIXED_SQLDATASOURCE_STRING,
+  			IEGLConstants.MIXED_SQLRESULTSET_STRING,
+  			IEGLConstants.MIXED_SQLSTATEMENT_STRING,
+  			IEGLConstants.MIXED_MULTISTATUS_STRING,
 			//birt Reports
 //	  		IEGLConstants.EGL_REPORTS_BIRTREPORT,
 //			//Report Handler
