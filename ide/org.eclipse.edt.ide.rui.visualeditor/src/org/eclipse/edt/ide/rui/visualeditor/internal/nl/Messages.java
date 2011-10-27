@@ -115,6 +115,8 @@ public class Messages {
 	public static String	NL_Widget_creation;
 	public static String	NL_VisualEditor_RenderEngion;
 	public static String	NL_VisualEditor_RenderEngion_Text;
+	public static String	NL_VisualEditor_RenderEngion_DEFAULT;
+	public static String	NL_VisualEditor_RenderEngion_WEBKIT;
 	public static String	NL_VisualEditor_RenderEngion_XULRUNNER;
 	public static String	NL_VisualEditor_RenderEngion_IE;
 	

@@ -302,30 +302,30 @@ public class EvPreviewBrowserManager implements IServerListener, ProgressListene
 	 * Gives the web page URL to the browser to display.
 	 */
 	protected void setBrowserUrl( String url ) {
-		if ( EvEditor._iRenderEngine != EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER ) {
-			try {
-				Class oleAutomationClass = Class.forName( "org.eclipse.swt.ole.win32.OleAutomation" );
-				Class variantClass = Class.forName( "org.eclipse.swt.ole.win32.Variant" );
-	
-				_browser.execute( "try { if (window.egl) egl.terminateSession(); } catch (e) { }" );
-				
-				Object webBrowser = getField( _browser, "webBrowser" );
-				Object auto = getField( webBrowser, "auto" );
-				Method getIDsOfNamesMethod = oleAutomationClass.getMethod( "getIDsOfNames", new Class[] { String[].class } );
-				int[] iaNameIds = (int[])getIDsOfNamesMethod.invoke( auto, new Object[] { new String[] { "Navigate", "Flags", "URL" } } );
-	
-				Object variants = Array.newInstance( variantClass, 2 );
-				Array.set( variants, 0, variantClass.getConstructor( new Class[] { int.class } ).newInstance( new Object[] { new Integer( 0x2 ) } ) ); // 0x2 = NavNoHistory
-				Array.set( variants, 1, variantClass.getConstructor( new Class[] { String.class } ).newInstance( new Object[] { url } ) );
-	
-				Method invokeMethod = oleAutomationClass.getMethod( "invoke", new Class[] { int.class, variants.getClass(), int[].class } );
-				invokeMethod.invoke( auto, new Object[] { new Integer( iaNameIds[ 0 ] ), variants, new int[] { iaNameIds[ 1 ], iaNameIds[ 2 ] } } );
-			} catch( Exception e ) {
-				_browser.setUrl( url );
-			}
-		} else {
+//		if ( EvEditor._iRenderEngine != EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER ) {
+//			try {
+//				Class oleAutomationClass = Class.forName( "org.eclipse.swt.ole.win32.OleAutomation" );
+//				Class variantClass = Class.forName( "org.eclipse.swt.ole.win32.Variant" );
+//	
+//				_browser.execute( "try { if (window.egl) egl.terminateSession(); } catch (e) { }" );
+//				
+//				Object webBrowser = getField( _browser, "webBrowser" );
+//				Object auto = getField( webBrowser, "auto" );
+//				Method getIDsOfNamesMethod = oleAutomationClass.getMethod( "getIDsOfNames", new Class[] { String[].class } );
+//				int[] iaNameIds = (int[])getIDsOfNamesMethod.invoke( auto, new Object[] { new String[] { "Navigate", "Flags", "URL" } } );
+//	
+//				Object variants = Array.newInstance( variantClass, 2 );
+//				Array.set( variants, 0, variantClass.getConstructor( new Class[] { int.class } ).newInstance( new Object[] { new Integer( 0x2 ) } ) ); // 0x2 = NavNoHistory
+//				Array.set( variants, 1, variantClass.getConstructor( new Class[] { String.class } ).newInstance( new Object[] { url } ) );
+//	
+//				Method invokeMethod = oleAutomationClass.getMethod( "invoke", new Class[] { int.class, variants.getClass(), int[].class } );
+//				invokeMethod.invoke( auto, new Object[] { new Integer( iaNameIds[ 0 ] ), variants, new int[] { iaNameIds[ 1 ], iaNameIds[ 2 ] } } );
+//			} catch( Exception e ) {
+//				_browser.setUrl( url );
+//			}
+//		} else {
 			_browser.setUrl( url );
-		}
+//		}
 	}
 
 	/**

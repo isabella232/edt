@@ -129,10 +129,12 @@ public interface EvConstants {
 	// Performance
 	//------------
 	public static final String	PREFERENCE_RENDERENGINE								= PREFERENCE_PREFIX + "RenderEngine";
-	public static final int		PREFERENCE_RENDERENGINE_XULRUNNER					= 0;
-	public static final int		PREFERENCE_RENDERENGINE_IE							= 1;
+	public static final int		PREFERENCE_RENDERENGINE_DEFAULT						= 0;
+	public static final int		PREFERENCE_RENDERENGINE_WEBKIT						= 1;
+	public static final int		PREFERENCE_RENDERENGINE_XULRUNNER					= 2;
+	public static final int		PREFERENCE_RENDERENGINE_IE							= 3;
 	
-	public static final int		PREFERENCE_DEFAULT_RENDERENGINE						= PREFERENCE_RENDERENGINE_IE;
+	public static final int		PREFERENCE_DEFAULT_RENDERENGINE						= PREFERENCE_RENDERENGINE_DEFAULT;
 
 	// Widget creation
 	//----------------

@@ -51,6 +51,8 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 	protected Button				_radioEditorTabSource				= null;
 	protected Button				_radioOptimizeResources				= null;
 	protected Button				_radioOptimizeSpeed					= null;
+	protected Button				_radioRenderEngineDefault			= null;
+	protected Button				_radioRenderEngineWebKit			= null;
 	protected Button				_radioRenderEngineXULRunner			= null;
 	protected Button				_radioRenderEngineIE				= null;
 	protected Button				_radioTransparencyNone				= null;
@@ -296,6 +298,18 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		gridData = new GridData();
 		label.setLayoutData( gridData );
 
+		_radioRenderEngineDefault = new Button( groupRenderEngineTab, SWT.RADIO );
+		gridData = new GridData();
+		gridData.horizontalIndent = 16;
+		_radioRenderEngineDefault.setLayoutData( gridData );
+		_radioRenderEngineDefault.setText( Messages.NL_VisualEditor_RenderEngion_DEFAULT );
+
+		_radioRenderEngineWebKit = new Button( groupRenderEngineTab, SWT.RADIO );
+		gridData = new GridData();
+		gridData.horizontalIndent = 16;
+		_radioRenderEngineWebKit.setLayoutData( gridData );
+		_radioRenderEngineWebKit.setText( Messages.NL_VisualEditor_RenderEngion_WEBKIT );
+		
 		_radioRenderEngineXULRunner = new Button( groupRenderEngineTab, SWT.RADIO );
 		gridData = new GridData();
 		gridData.horizontalIndent = 16;
@@ -307,6 +321,7 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		gridData.horizontalIndent = 16;
 		_radioRenderEngineIE.setLayoutData( gridData );
 		_radioRenderEngineIE.setText( Messages.NL_VisualEditor_RenderEngion_IE );
+		
 		if (!Platform.getOS().equals(Platform.OS_WIN32) ) {
 			_radioRenderEngineIE.setVisible( false );
 		}
@@ -316,6 +331,14 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		int iTabIndex = EvPreferences.getInt( EvConstants.PREFERENCE_RENDERENGINE );
 
 		switch( iTabIndex ){
+			case EvConstants.PREFERENCE_RENDERENGINE_DEFAULT:
+				_radioRenderEngineDefault.setSelection( true );
+				break;
+
+			case EvConstants.PREFERENCE_RENDERENGINE_WEBKIT:
+				_radioRenderEngineWebKit.setSelection( true );
+				break;
+
 			case EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER:
 				_radioRenderEngineXULRunner.setSelection( true );
 				break;
@@ -325,7 +348,7 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 				break;
 
 			default:
-				_radioRenderEngineXULRunner.setSelection( true );
+				_radioRenderEngineDefault.setSelection( true );
 		}
 	}
 	
@@ -552,6 +575,8 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 
 		// Render Engine
 		//------------
+		_radioRenderEngineDefault.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_DEFAULT );
+		_radioRenderEngineWebKit.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT );
 		_radioRenderEngineXULRunner.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER );
 		_radioRenderEngineIE.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_IE );
 
@@ -649,7 +674,11 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		//------------
 		iValue = 0;
 
-		if( _radioRenderEngineXULRunner.getSelection() == true )
+		if( _radioRenderEngineDefault.getSelection() == true )
+			iValue = EvConstants.PREFERENCE_RENDERENGINE_DEFAULT;
+		else if( _radioRenderEngineWebKit.getSelection() == true )
+			iValue = EvConstants.PREFERENCE_RENDERENGINE_WEBKIT;
+		else if( _radioRenderEngineXULRunner.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER;
 		else if( _radioRenderEngineIE.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_IE;

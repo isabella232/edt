@@ -26,7 +26,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
@@ -45,6 +44,7 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.properties.IEvPropertySheet
 import org.eclipse.edt.ide.rui.visualeditor.internal.properties.PropertyChange;
 import org.eclipse.edt.ide.rui.visualeditor.internal.properties.PropertySheetPage;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.BidiUtils;
+import org.eclipse.edt.ide.rui.visualeditor.internal.util.BrowserManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.EvWidgetNameDialog;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.Mnemonics;
 import org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.IPageDataViewPage;
@@ -85,7 +85,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.CloseWindowListener;
 import org.eclipse.swt.browser.OpenWindowListener;
@@ -200,23 +199,7 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 		// Optimize for speed
 		//----------------------------------------------------------
 		if( browser == null ) {
-			if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER && Platform.getOS().equals(Platform.OS_WIN32) ) {
-				try {
-					browser = new Browser( compositeParent, SWT.MOZILLA);
-					initializeBrowser(compositeParent.getDisplay(), browser, SWT.MOZILLA);
-				} catch( SWTError ex ) {
-					showOutOfResourcesMessage(Messages.NL_XULRunner_Out_of_resources_message);
-					browser = null;
-				}
-			}else {
-				try {
-					browser = new Browser( compositeParent, SWT.NONE);
-					initializeBrowser(compositeParent.getDisplay(), browser, SWT.NONE);
-				} catch( SWTError ex ) {
-					showOutOfResourcesMessage(Messages.NL_IE_Out_of_resources_message);
-					browser = null;
-				}
-			}
+			browser = BrowserManager.getInstance().createBrowser(compositeParent);
 		}
 
 		return browser;
@@ -1609,15 +1592,6 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 		});
 		
 	}
-	
-	/**
-	 * Displays a messages box with an ok button recommending that the editor be closed. 
-	 */
-	public void showOutOfResourcesMessage(String message) {
-		String[] straButtons = new String[] { IDialogConstants.OK_LABEL };
-		MessageDialog dialog = new MessageDialog( Display.getDefault().getActiveShell(), Messages.NL_EGL_Rich_UI_Editor, null, message, MessageDialog.WARNING, straButtons, 0 );
-		dialog.open();
-	}
 
 	/**
 	 * Turns to the specified tab folder page where 0 is Design, 1 is Source, 2 is Preview.
@@ -2112,46 +2086,6 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 		}
 	}
 	
-	private static void initializeBrowser(final Display display, Browser browser, final int style) {
-		browser.addOpenWindowListener(new OpenWindowListener() {
-			public void open(WindowEvent event) {
-				if (!event.required) return;
-				Shell shell = new Shell(display);
-				shell.setLayout(new FillLayout());
-				Browser browser = new Browser(shell, style);
-				initializeBrowser(display, browser, style);
-				event.browser = browser;
-			}
-		});
-		browser.addVisibilityWindowListener(new VisibilityWindowListener() {
-			public void hide(WindowEvent event) {
-				Browser browser = (Browser)event.widget;
-				Shell shell = browser.getShell();
-				shell.setVisible(false);
-			}
-			public void show(WindowEvent event) {
-				Browser browser = (Browser)event.widget;
-				final Shell shell = browser.getShell();
-				if (event.location != null) shell.setLocation(event.location);
-				if (event.size != null) {
-					Point size = event.size;
-					shell.setSize(shell.computeSize(size.x, size.y));
-				}
-				shell.open();
-			}
-		});
-		browser.addCloseWindowListener(new CloseWindowListener() {
-			public void close(WindowEvent event) {
-				Browser browser = (Browser)event.widget;
-				Shell shell = browser.getShell();
-				shell.close();
-			}
-		});
-		if ( style == SWT.MOZILLA ) {
-			browser.execute( "try { var ioService = Components.classes['@mozilla.org/network/io-service;1'].getService(Components.interfaces.nsIIOService2); ioService.offline = false; } catch ( e ) {}" );
-		}
-	}
-	
 	protected IEditorSite createSite(IEditorPart editor) {
 		return new MultiPageEditorSite(this, editor) {
 			@Override
@@ -2164,7 +2098,8 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 	@Override
 	public EGLEditor getEGLEditor() {
 		return _pageSource;
-	}
+	} 
+	
 
 	@Override
 	public boolean isEditable() {
