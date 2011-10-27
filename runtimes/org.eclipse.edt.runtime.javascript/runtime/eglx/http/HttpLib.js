@@ -33,23 +33,6 @@ egl.eglx.http.HttpLib["convertFromURLEncoded"] = function(/*String*/urlEncoded) 
 egl.eglx.http.HttpLib["convertToURLEncoded"] = function(/*String*/eglType) {
 	return encodeURIComponent(eglType);
 };
-egl.eglx.http.HttpLib["setHTTPBasicAuthentication"] = function(/*ServiceRefWrapper*/serviceWrapper, /*String*/usr, /*String*/pwd) {
-	var reqHeaders = this.getRestRequestHeaders(serviceWrapper);
-	if (serviceWrapper.f_type == "web") {
-		egl.valueByKey(reqHeaders, "egl_user", egl.Base64.encode(usr), "S;");
-		egl.valueByKey(reqHeaders, "egl_pwd", egl.Base64.encode(pwd), "S;");
-	} else if (serviceWrapper.f_type == "rest") {
-		var usrNpwd = usr + ":" + pwd;
-		var base64encodedVal = egl.Base64.encode(usrNpwd);
-		var value = "Basic " + base64encodedVal;
-		egl.valueByKey(reqHeaders, "Authorization", value, "S;");
-	}
-};
-egl.eglx.http.HttpLib["setProxyBasicAuthentication"] = function(/*String*/usr, /*String*/pwd) {
-	this.eze$$proxyUser = usr;
-	this.eze$$proxyPwd = pwd;
-	egl.eze$$SetProxyAuth = true;
-};
 egl.eglx.http.HttpLib["convertFromFormData"] = function(/*String*/str) {
 	var formdataObj = null;
 	var pairsArray = str.split('&');
