@@ -19,8 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.EEnum;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.EGenericType;
 import org.eclipse.edt.mof.EMemberContainer;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EType;
@@ -137,6 +139,7 @@ public class XMLSerializer implements Serializer {
 		} else {
 			elementName = target.getName();
 		}
+			
 		writeElementStart(elementName, object);
 		List<EField> fields = ((EClass)object.getEClass()).getAllEFields();
 		for (EField field : fields) {
@@ -223,12 +226,26 @@ public class XMLSerializer implements Serializer {
 		for (Object o : list) {
 			if (o instanceof MofSerializable && !field.getContainment()) {
 				writeTypeReference(field, (MofSerializable)o);
-			} else if (o instanceof EObject) {
+			} 
+			else if(o instanceof EEnumLiteral && isFieldArrayOfEEnum(field)) {
+				writer.print('<');
+				writer.print(field.getName());
+				writer.print('>');
+				writer.print(((EEnumLiteral)o).getName());
+				writer.print("</");
+				writer.print(field.getName());
+				writer.print('>');
+			}
+			else if (o instanceof EObject) {
 				writeEObjectValue(field, (EObject)o);
 			} else {
 				writeObjectValue(field, o);
 			}
 		}		
+	}
+	
+	boolean isFieldArrayOfEEnum(EField field) {
+		return field != null && field.getEType() instanceof EGenericType && ((EGenericType)field.getEType()).getETypeArguments().size() > 0 &&  ((EGenericType)field.getEType()).getETypeArguments().get(0) instanceof EEnum;	
 	}
 		
 	void writeElementStart(String name, EObject obj) {
