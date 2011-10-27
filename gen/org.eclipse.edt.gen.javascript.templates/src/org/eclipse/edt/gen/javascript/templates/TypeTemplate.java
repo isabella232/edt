@@ -55,7 +55,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public Boolean isListReorganizationWanted(Type type, Context ctx) {
 		// types can override this to cause list reorganization to be done
-		return true;
+		return false;  //TODO JS gen will require changes before this can be used
 	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
