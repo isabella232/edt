@@ -213,8 +213,10 @@ public class SysLib extends ExecutableBase {
 	 * Write to standard output
 	 */
 	public static void writeStdout(String output) {
-		if (output == null)
-			output = "";
+		if (output == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
 		System.out.println(output);
 	}
 
@@ -222,8 +224,10 @@ public class SysLib extends ExecutableBase {
 	 * Write to standard error
 	 */
 	public static void writeStderr(String output) {
-		if (output == null)
-			output = "";
+		if (output == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
 		System.err.println(output);
 	}
 	/**
