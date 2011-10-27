@@ -634,7 +634,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 				sbPreview.append(")");
 			}
 			if(fieldType.equals(SupportedPrimitiveType.TIMESTAMP)){
-				sbPreview.append("(\"YYYYMMDD\")");
+				sbPreview.append("(\"HHmmss\")");
 			}
 			if(isArray){
 				sbPreview.append("[").append("]");
