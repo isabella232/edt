@@ -31,6 +31,7 @@ import java.util.StringTokenizer;
 
 import javax.xml.namespace.QName;
 
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
@@ -175,11 +176,13 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 					deploymentDescs.put(normalized, dd);
 				}
 				catch (Exception e) {
-					throw new AnyException();//update this when SysLib finishes its corresponding TODO
+					AnyException ex = new AnyException();
+					throw ex.fillInMessage(Message.ERROR_PARSING_RESOURCE_FILE, propertyFileName, e);
 				}
 			}
 			else {
-				throw new AnyException();//update this when SysLib finishes its corresponding TODO
+				AnyException ex = new AnyException();
+				throw ex.fillInMessage(Message.RESOURCE_FILE_NOT_FOUND, propertyFileName);
 			}
 		}
 		return dd;
