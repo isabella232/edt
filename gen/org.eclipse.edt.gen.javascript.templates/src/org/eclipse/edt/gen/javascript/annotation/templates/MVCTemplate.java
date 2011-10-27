@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
@@ -969,7 +970,13 @@ public class MVCTemplate extends JavaScriptTemplate {
 			
 			String signkind = "LEADING";  // signkind.leading is the default
 			if ((annot = getAnnotation(member, PROPERTY_SIGN)) != null) {
-				signkind = annot.getValue().toString();//JZS probably incorrect
+				Object value = annot.getValue();
+				if (value instanceof EnumerationEntry) {
+					signkind = ((EnumerationEntry)value).getId();
+				}
+				else if (value instanceof Enum) {
+					signkind = ((Enum)value).name();
+				}
 			}
 			PartName pn = IrFactory.INSTANCE.createPartName();
 			pn.setPackageName("eglx.ui");
