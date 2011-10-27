@@ -40,7 +40,12 @@ for EGL Developers, the type definition for Timestamp is ETimestamp.</p>
 
 <dt class="dlterm"><a name="redt00053__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd>After the following code runs, the value of <samp class="codeph">result</samp> is
+the current timestamp:<pre class="codeblock">result Timestamp("yyyyMMddHHmm");
+</pre>
+<div class="p">Here is a way to assign a timestamp instance: <pre class="codeblock">result02 Timestamp? = new Timestamp("yyyyMMddHHmm");</pre>
+</div>
+<anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00053__detail"><!-- --></a>Type detail</dt>
@@ -48,8 +53,8 @@ for EGL Developers, the type definition for Timestamp is ETimestamp.</p>
 <dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values, not “$EQ”. Two exceptions are the
-widen and narrow operations, which are invoked automatically during
-data conversions. <pre class="codeblock">externalType ETimestamp extends AnyValue type ParameterizableType {
+widen and narrow operations, which are invoked during data conversions;
+for example, when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">externalType ETimestamp extends AnyValue type ParameterizableType {
    parameterizedType = TimestampType
 }
 
@@ -132,18 +137,71 @@ end</pre>
 
 <dt class="dlterm"><a name="redt00053__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd>Timestamp supports values with fractions of a second to 6 digits.
+However, the precision of the value stored at runtime is platform
+specific, and fewer digits might be supported.<p></p>
+
+<div class="tablenoborder"><a name="redt00053__table_comments"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__table_comments" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. For additional information</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" id="d14118e101">Conversion rules</th>
+
+<th class="cellrowborder" valign="bottom" id="d14118e104">Reference</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" headers="d14118e101 ">To convert a string to a timestamp.</td>
+
+<td class="cellrowborder" valign="top" headers="d14118e104 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d14118e101 ">To convert a timestamp to a string, in the absence
+of a format.</td>
+
+<td class="cellrowborder" valign="top" headers="d14118e104 ">See “String and EString types”; in particular,
+the comments for the <span class="synph"><span class="kwd">asString</span></span> function.
+As suggested in the following example, the <span class="synph"><span class="kwd">as String</span></span> clause
+invokes that function: <pre class="codeblock">result Timestamp("yyyyMMddHHmm") 
+   = "200401241201";
+sysLib.writeStdOut(result as String);</pre>
+<div class="p">Here is the example
+output:<pre class="codeblock">2004-01-24 12:01</pre>
+</div>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d14118e101 ">To convert a timestamp to a string, in the presence
+of a format. </td>
+
+<td class="cellrowborder" valign="top" headers="d14118e104 ">See “StringLib.format.” Also, note the set of
+useful formats in “Constants library.”</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+<anchor id="comments_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00053__compat"><!-- --></a>Compatibility</dt>
 
 <dd>
-<div class="tablenoborder"><a name="redt00053__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<div class="tablenoborder"><a name="redt00053__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d13840e94">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14118e178">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d13840e97">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d14118e181">Issue</th>
 
 </tr>
 
@@ -152,17 +210,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00053__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d13840e94 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14118e178 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13840e97 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14118e181 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00053__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d13840e94 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d14118e178 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d13840e97 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d14118e181 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>
