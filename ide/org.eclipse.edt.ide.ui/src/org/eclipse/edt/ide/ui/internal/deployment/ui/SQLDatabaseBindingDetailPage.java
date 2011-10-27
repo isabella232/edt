@@ -316,15 +316,14 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		
 		//String profileProviderID = "org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile";
 		if(profileName != null) {
-			 String[] profiles = profileName.split(" "); //$NON-NLS-1$
-			 String profileProviderID = EGLSQLUtility.getDBProviderID(profiles[0]);
+			 String profileProviderID = EGLSQLUtility.getConnectionProviderProfile(profileName);
 			 String profileDescription = ""; //$NON-NLS-1$
 			 String parentProfile = ""; //$NON-NLS-1$
 			 boolean isAutoConnect = false;
 			 ConnectionProfile profile = new ConnectionProfile(profileName, profileDescription,
 						profileProviderID, parentProfile, isAutoConnect);
 				
-				profile.setBaseProperties(getProfileProperties(profiles));
+				profile.setBaseProperties(getConnectionProfileProperties());
 
 				//getShell().getDisplay()
 				BusyIndicator.showWhile( Display.getCurrent(), 
@@ -332,7 +331,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		}
 	}
 	
-	private Properties getProfileProperties(String[] profiles) {
+	private Properties getConnectionProfileProperties() {
 		Properties copy = new Properties();
 		
 		copy.put("org.eclipse.datatools.connectivity.db.connectionProperties", ""); //$NON-NLS-1$ //$NON-NLS-2$
