@@ -20,10 +20,11 @@
          <topic label="Setting preferences for EGL Rich UI deployment"
                 href="topics/tedt00576.html"/>
       </topic>
+      <topic label="Setting EGL SQL preferences" href="topics/tedt00577.html"/>
+      <topic label="Setting EGL test server preferences" href="topics/tedt00578.html"/>
    </topic>
    <topic label="Creating and maintaining an EGL project">
       <topic label="Creating an EGL project" href="topics/tedt00517.html"/>
-      <topic label="Editing the EGL build path" href="topics/tedt00523.html"/>
       <topic label="Creating an EGL source folder" href="topics/tedt00501.html"/>
       <topic label="Creating an EGL package" href="topics/tedt00521.html"/>
       <topic label="Creating an EGL source file" href="topics/tedt00500.html"/>
