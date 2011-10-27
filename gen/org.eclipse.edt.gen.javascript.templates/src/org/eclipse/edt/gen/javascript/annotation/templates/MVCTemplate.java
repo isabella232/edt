@@ -468,14 +468,22 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 */
 	private void genWithQualifier(Context ctx, Expression x, TabbedWriter out)
 	{
+		Expression expr = x;
+		while (expr instanceof MemberAccess) {
+			expr = ((MemberAccess)expr).getQualifier();
+		}
+		
 		boolean genExpr = true;
-		if (x instanceof MemberName){
+		if (expr instanceof MemberName){
 			Part currentPart = (Part) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated);
-			Container cnr = ((MemberName) x).getMember().getContainer();
+			Container cnr = ((MemberName) expr).getMember().getContainer();
 			if ((cnr != null) && (cnr instanceof Part)
 			  && ( ((Part)cnr).getFullyQualifiedName().equals(currentPart.getFullyQualifiedName()))){
-				out.print("this.eze$$parent.");
-				ctx.invoke(genName, ((MemberName)x).getMember(), ctx, out);
+				// Change qualifier from "this." to "this.eze$$parent."
+				Object saved = ctx.getAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS);
+				ctx.putAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS, "this.eze$$parent.");
+				ctx.invoke(genExpression, x, ctx, out);
+				ctx.putAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS, saved);
 				genExpr = false;
 			}
 		}
@@ -484,6 +492,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 		{
 			ctx.invoke(genExpression, x, ctx, out);
 		}
+		
 		out.println();
 	}
 	
