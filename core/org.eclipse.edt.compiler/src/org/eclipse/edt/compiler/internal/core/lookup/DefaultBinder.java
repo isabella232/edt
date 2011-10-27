@@ -2180,10 +2180,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 		}
 		
-		if(operator == BinaryExpression.Operator.MODULO) {
-			checkNoFloatInModulo(type1, operand1);
-			checkNoFloatInModulo(type2, operand2);
-		}
 		return result;
 	}
 	
@@ -2361,21 +2357,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return null;
 		
 	}
-	
-	private void checkNoFloatInModulo(ITypeBinding type, Expression operandExpr) {	
-		if(type != null && ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind() &&
-		   Primitive.FLOAT == ((PrimitiveTypeBinding) type).getPrimitive()) {	
-			problemRequestor.acceptProblem(
-				operandExpr,
-				IProblemRequestor.TYPE_NOT_VALID_IN_EXPRESSION,
-				new String[] {
-					Primitive.FLOAT.getName(),
-					operandExpr.getCanonicalString(),
-					BinaryExpression.Operator.MODULO.toString()
-				});
-		}
-	}
-	
+		
 	private static class QualifierBindingGatherer extends DefaultASTVisitor {
 		IDataBinding qualifierDBinding;
 		ITypeBinding qualifierTBinding;
