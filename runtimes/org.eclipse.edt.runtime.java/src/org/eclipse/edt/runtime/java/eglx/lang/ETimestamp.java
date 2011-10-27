@@ -186,8 +186,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE && milliSet)
 			cloned.set(Calendar.MILLISECOND, milliValue);
 		// we intentionally don't set the zone, as this is the flag we use to indicate a date object
-		// process the new object
-		cloned.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			if (yearSet && monthSet && dateSet)
+				cloned.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		// we need to restore the original, because the .get method clobbers the flags set in the calendar object
 		original.clear();
 		if (yearSet)
@@ -207,8 +212,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		// this flag is used by date objects only
 		if (zoneSet)
 			original.set(Calendar.ZONE_OFFSET, zoneValue);
-		// process the original object
-		original.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			if (yearSet && monthSet && dateSet)
+				original.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		return cloned;
 	}
 	

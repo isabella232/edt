@@ -106,8 +106,13 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		// this flag is used by date objects only
 		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.DAY_CODE && zoneSet)
 			cloned.set(Calendar.ZONE_OFFSET, zoneValue);
-		// process the new object
-		cloned.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			if (yearSet && monthSet && dateSet)
+				cloned.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		// we need to restore the original, because the .get method clobbers the flags set in the calendar object
 		original.clear();
 		if (yearSet)
@@ -127,8 +132,13 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		// this flag is used by date objects only
 		if (zoneSet)
 			original.set(Calendar.ZONE_OFFSET, zoneValue);
-		// process the original object
-		original.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			if (yearSet && monthSet && dateSet)
+				original.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		return cloned;
 	}
 	
@@ -325,15 +335,23 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		Calendar newDate = ETimestamp.ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		newDate.setLenient(true);
 		newDate.add(Calendar.DATE, amount);
-		// process the object
-		newDate.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			newDate.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		// as the .add method set all of the flags on, now create a date object from the original 
 		Calendar retDate = ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 		retDate.set(Calendar.YEAR, newDate.get(Calendar.YEAR));
 		retDate.set(Calendar.MONTH, newDate.get(Calendar.MONTH));
 		retDate.set(Calendar.DATE, newDate.get(Calendar.DATE));
-		// process the object
-		retDate.getTimeInMillis();
+		// Verify that the values are valid. We only do this if year month and date are at least there
+		try {
+			retDate.getTimeInMillis();
+		}
+		catch (Exception ex) {
+		}
 		return retDate;
 	}
 
