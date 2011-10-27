@@ -56,6 +56,9 @@ public class ReplaceStatementValidator extends AbstractSqlStatementValidator {
 	private void validateTarget() {
 		Expression target = statement.getRecord();
 		ITypeBinding targetType = target.resolveTypeBinding();
+		if (!Binding.isValidBinding(targetType)) {
+			return;
+		}
 		if (targetType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
 			targetType = target.resolveDataBinding().getDeclaringPart();
 		}
