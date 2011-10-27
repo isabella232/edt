@@ -609,14 +609,7 @@ public class EGLSQLClauseFactory {
 			}
 
 			String columnName = removeEscapeCharactersFromName(keyItemAndColumnNames[0][1]);
-			whereClause = whereClause + columnName + SQLConstants.GREATER_THAN_OR_EQUAL;
-
-			whereClause =
-				whereClause
-					+ SQLConstants.HOST_VARIABLE_INDICATOR
-					+ ioObjectName
-					+ SQLConstants.QUALIFICATION_DELIMITER
-					+ keyItemAndColumnNames[0][0];
+			whereClause = whereClause + columnName + SQLConstants.EQUALS + SQLConstants.SPACE + SQLConstants.PARAMETER_MARKER;
 		}
 
 		return whereClause;
