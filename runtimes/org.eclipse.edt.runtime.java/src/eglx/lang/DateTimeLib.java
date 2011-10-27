@@ -36,6 +36,8 @@ public class DateTimeLib extends ExecutableBase {
 		int date = cal.get(Calendar.DATE);
 		cal.clear();
 		cal.set(year, month, date);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		return cal;
 	}
 
@@ -48,6 +50,8 @@ public class DateTimeLib extends ExecutableBase {
 		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
 		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
 		cal.set(Calendar.DATE, gregorianIntDate % 100);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
 			cal.get(Calendar.YEAR);
 		}
@@ -74,6 +78,8 @@ public class DateTimeLib extends ExecutableBase {
 		// end of workaround
 		cal.set(Calendar.YEAR, julianIntDate / 1000);
 		cal.set(Calendar.DAY_OF_YEAR, julianIntDate % 1000);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
 			cal.get(Calendar.YEAR);
 		}
@@ -96,6 +102,8 @@ public class DateTimeLib extends ExecutableBase {
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);
 		cal.set(Calendar.DATE, day);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
 			cal.get(Calendar.YEAR);
 		}

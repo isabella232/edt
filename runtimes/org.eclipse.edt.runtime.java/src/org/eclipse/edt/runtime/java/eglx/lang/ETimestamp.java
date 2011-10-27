@@ -159,6 +159,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		boolean minuteSet = original.isSet(Calendar.MINUTE);
 		boolean secondSet = original.isSet(Calendar.SECOND);
 		boolean milliSet = original.isSet(Calendar.MILLISECOND);
+		boolean zoneSet = original.isSet(Calendar.ZONE_OFFSET);
 		int yearValue = original.get(Calendar.YEAR);
 		int monthValue = original.get(Calendar.MONTH);
 		int dateValue = original.get(Calendar.DATE);
@@ -166,6 +167,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		int minuteValue = original.get(Calendar.MINUTE);
 		int secondValue = original.get(Calendar.SECOND);
 		int milliValue = original.get(Calendar.MILLISECOND);
+		int zoneValue = original.get(Calendar.ZONE_OFFSET);
 		// create the cloned
 		Calendar cloned = defaultValue();
 		cloned.clear();
@@ -183,6 +185,8 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			cloned.set(Calendar.SECOND, secondValue);
 		if (startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE && milliSet)
 			cloned.set(Calendar.MILLISECOND, milliValue);
+		// we intentionally don't set the zone, as this is the flag we use to indicate a date object
+		// process the new object
 		cloned.getTimeInMillis();
 		// we need to restore the original, because the .get method clobbers the flags set in the calendar object
 		original.clear();
@@ -200,6 +204,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			original.set(Calendar.SECOND, secondValue);
 		if (milliSet)
 			original.set(Calendar.MILLISECOND, milliValue);
+		// this flag is used by date objects only
+		if (zoneSet)
+			original.set(Calendar.ZONE_OFFSET, zoneValue);
+		// process the original object
 		original.getTimeInMillis();
 		return cloned;
 	}
@@ -681,13 +689,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			cal.set(Calendar.MONTH, months - 1);
 		if (days != -1)
 			cal.set(Calendar.DATE, days);
-		else if (months != -1)
-			// No day was specified, but a month was specified. Set the day to
-			// one. Without this we'd default to the current day, which might
-			// be invalid for the month that was specified. For example, this
-			// change was put in on May 30 after setting a timestamp to
-			// Feb 2007: Feb 30 is not a valid date.
-			cal.set(Calendar.DATE, 1);
+//		else if (months != -1)
+//			// No day was specified, but a month was specified. Set the day to
+//			// one. Without this we'd default to the current day, which might
+//			// be invalid for the month that was specified. For example, this
+//			// change was put in on May 30 after setting a timestamp to
+//			// Feb 2007: Feb 30 is not a valid date.
+//			cal.set(Calendar.DATE, 1);
 		if (hours != -1)
 			cal.set(Calendar.HOUR_OF_DAY, hours);
 		if (minutes != -1)

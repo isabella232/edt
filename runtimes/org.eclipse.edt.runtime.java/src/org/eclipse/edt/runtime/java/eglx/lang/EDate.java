@@ -41,7 +41,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static EDate ezeBox(Calendar value) {
 		Calendar clone = null;
 		if (value != null) {
-			clone = ETimestamp.ezeClone(value, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
+			clone = ezeClone(value, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		}
 		return new EDate(clone);
 	}
@@ -52,7 +52,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return ezeCast(value, args);
 	}
 
-	public static Calendar ezeCast(Object value) throws AnyException {
+	public static Calendar ezeCast(Object value, Integer... args) throws AnyException {
 		return (Calendar) EAny.ezeCast(value, "asDate", EDate.class, null, null);
 	}
 
@@ -66,6 +66,72 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return EString.asString(object);
 	}
 
+	public static Calendar ezeClone(Calendar original, int startCode, int endCode) {
+		if (original == null)
+			return null;
+		// save the original
+		boolean yearSet = original.isSet(Calendar.YEAR);
+		boolean monthSet = original.isSet(Calendar.MONTH);
+		boolean dateSet = original.isSet(Calendar.DATE);
+		boolean hourSet = original.isSet(Calendar.HOUR_OF_DAY);
+		boolean minuteSet = original.isSet(Calendar.MINUTE);
+		boolean secondSet = original.isSet(Calendar.SECOND);
+		boolean milliSet = original.isSet(Calendar.MILLISECOND);
+		boolean zoneSet = original.isSet(Calendar.ZONE_OFFSET);
+		int yearValue = original.get(Calendar.YEAR);
+		int monthValue = original.get(Calendar.MONTH);
+		int dateValue = original.get(Calendar.DATE);
+		int hourValue = original.get(Calendar.HOUR_OF_DAY);
+		int minuteValue = original.get(Calendar.MINUTE);
+		int secondValue = original.get(Calendar.SECOND);
+		int milliValue = original.get(Calendar.MILLISECOND);
+		int zoneValue = original.get(Calendar.ZONE_OFFSET);
+		// create the cloned
+		Calendar cloned = defaultValue();
+		cloned.clear();
+		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE && yearSet)
+			cloned.set(Calendar.YEAR, yearValue);
+		if (startCode <= ETimestamp.MONTH_CODE && endCode >= ETimestamp.MONTH_CODE && monthSet)
+			cloned.set(Calendar.MONTH, monthValue);
+		if (startCode <= ETimestamp.DAY_CODE && endCode >= ETimestamp.DAY_CODE && dateSet)
+			cloned.set(Calendar.DATE, dateValue);
+		if (startCode <= ETimestamp.HOUR_CODE && endCode >= ETimestamp.HOUR_CODE && hourSet)
+			cloned.set(Calendar.HOUR_OF_DAY, hourValue);
+		if (startCode <= ETimestamp.MINUTE_CODE && endCode >= ETimestamp.MINUTE_CODE && minuteSet)
+			cloned.set(Calendar.MINUTE, minuteValue);
+		if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.SECOND_CODE && secondSet)
+			cloned.set(Calendar.SECOND, secondValue);
+		if (startCode <= ETimestamp.FRACTION1_CODE && endCode >= ETimestamp.FRACTION1_CODE && milliSet)
+			cloned.set(Calendar.MILLISECOND, milliValue);
+		// this flag is used by date objects only
+		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.DAY_CODE && zoneSet)
+			cloned.set(Calendar.ZONE_OFFSET, zoneValue);
+		// process the new object
+		cloned.getTimeInMillis();
+		// we need to restore the original, because the .get method clobbers the flags set in the calendar object
+		original.clear();
+		if (yearSet)
+			original.set(Calendar.YEAR, yearValue);
+		if (monthSet)
+			original.set(Calendar.MONTH, monthValue);
+		if (dateSet)
+			original.set(Calendar.DATE, dateValue);
+		if (hourSet)
+			original.set(Calendar.HOUR_OF_DAY, hourValue);
+		if (minuteSet)
+			original.set(Calendar.MINUTE, minuteValue);
+		if (secondSet)
+			original.set(Calendar.SECOND, secondValue);
+		if (milliSet)
+			original.set(Calendar.MILLISECOND, milliValue);
+		// this flag is used by date objects only
+		if (zoneSet)
+			original.set(Calendar.ZONE_OFFSET, zoneValue);
+		// process the original object
+		original.getTimeInMillis();
+		return cloned;
+	}
+	
 	public static Calendar defaultValue() {
 		long now = java.lang.System.currentTimeMillis();
 		Calendar cal = DateTimeUtil.getBaseCalendar();
@@ -73,8 +139,11 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH);
 		int date = cal.get(Calendar.DATE);
+		int zone = cal.get(Calendar.ZONE_OFFSET);
 		cal.clear();
 		cal.set(year, month, date);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, zone);
 		return cal;
 	}
 
@@ -176,6 +245,8 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		cal.set(Calendar.YEAR, years);
 		cal.set(Calendar.MONTH, months - 1);
 		cal.set(Calendar.DATE, days);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		// Verify that the values are valid.
 		try {
 			cal.getTimeInMillis();
@@ -211,7 +282,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static Calendar asDate(Calendar date) throws AnyException {
 		if (date == null)
 			return null;
-		return ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+		Calendar cal = ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+		// to indicate this is a date object, we set a field as a flag
+		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
+		return cal;
 	}
 
 	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
@@ -247,11 +321,20 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 * Returns the adds days to a date
 	 */
 	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
+		// we need to use the ETimestamp version of ezeClone here, because we are not creating a date object
 		Calendar newDate = ETimestamp.ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		newDate.setLenient(true);
 		newDate.add(Calendar.DATE, amount);
-		newDate.setLenient(false);
-		return newDate;
+		// process the object
+		newDate.getTimeInMillis();
+		// as the .add method set all of the flags on, now create a date object from the original 
+		Calendar retDate = ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+		retDate.set(Calendar.YEAR, newDate.get(Calendar.YEAR));
+		retDate.set(Calendar.MONTH, newDate.get(Calendar.MONTH));
+		retDate.set(Calendar.DATE, newDate.get(Calendar.DATE));
+		// process the object
+		retDate.getTimeInMillis();
+		return retDate;
 	}
 
 	/**
@@ -266,6 +349,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 			startCode = mask.getStartCode();
 			endCode = mask.getEndCode();
 		}
+		// we need to use the ETimestamp version of ezeClone here, because we are not creating a date object
 		return new ETimestamp(ETimestamp.ezeClone(aDate, startCode, endCode), startCode, endCode).ezeUnbox();
 	}
 }

@@ -77,103 +77,103 @@ public class EString extends AnyBoxedObject<String> {
 	public static String asString(Boolean value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(EBoolean value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(Short value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(ESmallint value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(Integer value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(EInt value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(Long value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(EBigint value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(Float value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(ESmallfloat value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(Double value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(EFloat value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(BigDecimal value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(EDecimal value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(BigInteger value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(Number value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value), length);
+		return asString(String.valueOf(value));
 	}
 
 	public static String asString(eglx.lang.ENumber value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(String.valueOf(value.ezeUnbox()), length);
+		return asString(String.valueOf(value.ezeUnbox()));
 	}
 
 	public static String asString(String value, Integer... length) {
@@ -230,74 +230,99 @@ public class EString extends AnyBoxedObject<String> {
 		if (original == null)
 			return null;
 		// copy the incoming calendar, as some of the methods cause the isSet attributes to be turned on
+		// we need to use the timestamp version of the ezeClone to preserve the zone offset flag, but 
+		// not set it in the cal object
 		Calendar cal = ETimestamp.ezeClone(original, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;
-		if (cal.isSet(Calendar.YEAR)) {
-			format += "yyyy";
-			separator = "-";
-		}
-		if (cal.isSet(Calendar.MONTH)) {
-			if (separator != null) {
-				format += separator;
+		// if the zone offset is set, then this is a date object
+		if (original.isSet(Calendar.ZONE_OFFSET)) {
+			if (cal.isSet(Calendar.MONTH)) {
+				format += "MM";
+				separator = "/";
 			}
-			format += "MM";
-			separator = "-";
-		}
-		if (cal.isSet(Calendar.DATE)) {
-			if (separator != null) {
-				format += separator;
+			if (cal.isSet(Calendar.DATE)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "dd";
+				separator = "/";
 			}
-			format += "dd";
-			separator = " ";
-		}
-		if (cal.isSet(Calendar.HOUR_OF_DAY)) {
-			if (separator != null) {
-				format += separator;
+			if (cal.isSet(Calendar.YEAR)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "yyyy";
+				separator = " ";
 			}
-			format += "HH";
-			separator = ":";
-		}
-		if (cal.isSet(Calendar.MINUTE)) {
-			if (separator != null) {
-				format += separator;
+		} else {
+			if (cal.isSet(Calendar.YEAR)) {
+				format += "yyyy";
+				separator = "-";
 			}
-			format += "mm";
-			separator = ":";
-		}
-		if (cal.isSet(Calendar.SECOND)) {
-			if (separator != null) {
-				format += separator;
+			if (cal.isSet(Calendar.MONTH)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "MM";
+				separator = "-";
 			}
-			format += "ss";
-			separator = ".";
-		}
-		if (cal.isSet(Calendar.MILLISECOND)) {
-			if (separator != null) {
-				format += separator;
+			if (cal.isSet(Calendar.DATE)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "dd";
+				separator = " ";
 			}
-			format += "SSSSSS";
+			if (cal.isSet(Calendar.HOUR_OF_DAY)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "HH";
+				separator = ":";
+			}
+			if (cal.isSet(Calendar.MINUTE)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "mm";
+				separator = ":";
+			}
+			if (cal.isSet(Calendar.SECOND)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "ss";
+				separator = ".";
+			}
+			if (cal.isSet(Calendar.MILLISECOND)) {
+				if (separator != null) {
+					format += separator;
+				}
+				format += "SSSSSS";
+			}
 		}
 		// Get a formatter for the value, set it up, and run it.
-		boolean reset = false;
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
 			if (cal.isSet(Calendar.SECOND) && cal.isSet(Calendar.MILLISECOND)) {
 				int micros = cal.get(Calendar.MILLISECOND) * 1000;
 				if (micros < 0) {
-					reset = true;
 					cal.add(Calendar.SECOND, -1);
 					micros += DateTimeUtil.MICROSECONDS_PER_SECOND;
 				}
 				formatter.setMicrosecond(micros);
 			}
 			try {
-				if (cal.isSet(Calendar.YEAR))
-					formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
-				else
-					formatter.setCentury(1);
-				return asString(formatter.format(cal.getTime()), length);
+				// if this is a date, don't set the century
+				if (!original.isSet(Calendar.ZONE_OFFSET)) {
+					if (cal.isSet(Calendar.YEAR))
+						formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
+					else
+						formatter.setCentury(1);
+				}
+				return asString(formatter.format(cal.getTime()));
 			}
 			catch (IllegalArgumentException iax) {
 				TypeCastException tcx = new TypeCastException();
@@ -306,10 +331,6 @@ public class EString extends AnyBoxedObject<String> {
 															// Calendar is a date or timestamp
 				tcx.initCause( iax );
 				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
-			}
-			finally {
-				if (reset)
-					cal.add(Calendar.SECOND, 1);
 			}
 		}
 	}
