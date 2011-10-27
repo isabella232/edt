@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.internal.sql.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -55,23 +56,51 @@ public class EGLSQLUtility {
 	 * as values for the connectionProfileID attribute of the driverDefinitionMapping property 
 	 * to the com.ibm.datatools.connection.ui.driverMapping extension point.
 	 */
-	public static String[] profileIds;
+	public static Map<String,String> profileIds = new HashMap<String,String>(20);
 	
 	static {
-		ArrayList<String> profiles = new ArrayList<String>();
-		profiles.add("org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.mysql.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
-		profiles.add("org.eclipse.datatools.enablement.oracle.connectionProfile");
-		profiles.add("com.ibm.etools.egl.db2.zvse.ui.names.connectionProfile");
-		if (SQLUtility.isTerraDataSupported()) {
-			profiles.add("org.eclipse.datatools.connectivity.db.generic.connectionProfile");
-		}
-		profileIds = profiles.toArray(new String[profiles.size()]);
+	    //For DB2
+		profileIds.put(SQLConstants.DB2UDB_NAME_EXPANSION, "org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
+		profileIds.put(SQLConstants.DB2ZOS_NAME, "org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
+		profileIds.put(SQLConstants.DB2IOS_NAME, "org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
+		
+		//For Derby
+		profileIds.put(SQLConstants.DERBY_NAME,"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
+		profileIds.put(SQLConstants.EMBEDDED_DERBY_NAME,"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
+		
+		//For Generic JDBC
+		profileIds.put(SQLConstants.GENERIC_JDBC_NAME, "org.eclipse.datatools.connectivity.db.generic.connectionProfile");
+		
+		//For HSQLDB
+		profileIds.put(SQLConstants.HSQLDB_NAME, "org.eclipse.datatools.enablement.hsqldb.connectionProfile");
+		
+		//For Ingres
+		profileIds.put(SQLConstants.INGRES_NAME, "org.eclipse.datatools.enablement.ingres.connectionProfile");
+		
+		//For Informix
+		profileIds.put(SQLConstants.INFORMIX_NAME, "org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
+		
+		//For MaxDB
+		profileIds.put(SQLConstants.MAXDB_NAME, "org.eclipse.datatools.enablement.sap.maxdb.connectionProfile");
+		
+		//For MySQL
+		profileIds.put(SQLConstants.MYSQL_NAME, "org.eclipse.datatools.enablement.mysql.connectionProfile");
+		
+		//For Oracle
+		profileIds.put(SQLConstants.ORACLE_NAME, "org.eclipse.datatools.enablement.oracle.connectionProfile");
+		
+		//For PostgreSQL
+		profileIds.put(SQLConstants.POSTGRESQL_NAME, "org.eclipse.datatools.enablement.postgresql.connectionProfile");
+		
+		//For SQL Server
+		profileIds.put(SQLConstants.MSSQLSERVER_NAME, "org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
+		
+		//For SQLite
+		profileIds.put(SQLConstants.SQLITE_NAME, "org.eclipse.datatools.enablement.sqlite.connectionProfile");
+		
+		//For Sybase
+		profileIds.put(SQLConstants.SYBASE_ASA_NAME, "org.eclipse.datatools.enablement.sybase.asa.connectionProfile");
+		profileIds.put(SQLConstants.SYBASE_ASE_NAME, "com.sybase.stf.servers.jdbc.ase2.embedded.connectionProfile");
 	}
 	
 	public static boolean isEqualIdentifiers(String id1, String id2, String vendorType) {
@@ -288,6 +317,10 @@ public class EGLSQLUtility {
 		 return profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_VERSION_PROP_ID);
 	 }
 	 
+	 public static String getDBProfileProviderName(IConnectionProfile profile) {
+		 return profile.getProviderName();
+	 }
+	 
 	 public static String getDBNameProperty(IConnectionProfile profile) {
 		 return profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_NAME_PROP_ID);
 	 }
@@ -349,10 +382,8 @@ public class EGLSQLUtility {
 							CPWizardNode wizardNode = (CPWizardNode)element;
 							if (wizardNode.getProvider() instanceof ProfileWizardProvider) {
 								String profile = ((ProfileWizardProvider)wizardNode.getProvider()).getProfile();
-								for (int i = 0; i < profileIds.length; i++) {
-									if (profileIds[i].equals(profile)) {
-										return true;
-									}
+								if(profileIds.values().contains(profile)) {
+									return true;
 								}
 							}
 							return false;
@@ -369,9 +400,8 @@ public class EGLSQLUtility {
 		ConnectionDisplayProperty[] properties = new ConnectionDisplayProperty[SQLConstants.DATABASE_PROFILE_PROPERTY_LENGTH];
 
 		properties[0] = new ConnectionDisplayProperty(
-				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,
-				EGLSQLUtility.getSQLVendorProperty(profile) + " "
-						+ EGLSQLUtility.getSQLProductVersion(profile));
+				SQLNlsStrings.SQL_CONNECTION_DATABASE_PROPERTY,EGLSQLUtility.getDBProfileProviderName(profile));
+				//EGLSQLUtility.getSQLVendorProperty(profile) + " " + EGLSQLUtility.getSQLProductVersion(profile));
 		properties[1] = new ConnectionDisplayProperty(
 				SQLNlsStrings.SQL_CONNECTION_DBNAME_PROPERTY,
 				EGLSQLUtility.getDBNameProperty(profile));
@@ -422,13 +452,7 @@ public class EGLSQLUtility {
 		return null;
 	}
 	
-	public static String getDBProviderID(String productName) {
-		for(int i=0; i< profileIds.length; i++) {
-			if(profileIds[i].contains(productName.toLowerCase())) {
-				return profileIds[i];
-			}
-		}
-		
-		return null;
+	public static String getConnectionProviderProfile(String profileName) {
+		return profileIds.get(profileName);
 	}
 }

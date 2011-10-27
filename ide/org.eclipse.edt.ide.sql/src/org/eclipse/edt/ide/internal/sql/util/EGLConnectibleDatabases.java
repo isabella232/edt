@@ -28,14 +28,30 @@ public class EGLConnectibleDatabases {
 		validVendors.add(SQLConstants.DB2UDB_NAME);
 		validVendors.add(SQLConstants.DB2UDBAS400_NAME);
 		validVendors.add(SQLConstants.DB2UDBOS390_NAME);
-		validVendors.add(SQLConstants.INFORMIX_NAME);
-		validVendors.add(SQLConstants.ORACLE_NAME);
-		validVendors.add(SQLConstants.MSSQLSERVER_NAME);
+		validVendors.add(SQLConstants.DB2UDB_NAME_EXPANSION);
+		validVendors.add(SQLConstants.DB2ZOS_NAME);
+		validVendors.add(SQLConstants.DB2IOS_NAME);
+		
 		validVendors.add(SQLConstants.DERBY_NAME);
+		validVendors.add(SQLConstants.EMBEDDED_DERBY_NAME);
 		validVendors.add(SQLConstants.GENERIC_JDBC_NAME);
-		validVendors.add(SQLConstants.DB2UDBVSE_NAME);
-		validVendors.add(SQLConstants.DB2_ALIAS_NAME);
+		validVendors.add(SQLConstants.HSQLDB_NAME); 
+		validVendors.add(SQLConstants.INGRES_NAME); 
+		
+		validVendors.add(SQLConstants.INFORMIX_NAME);
+		validVendors.add(SQLConstants.MAXDB_NAME);
 		validVendors.add(SQLConstants.MYSQL_NAME);
+		validVendors.add(SQLConstants.ORACLE_NAME);
+		validVendors.add(SQLConstants.POSTGRESQL_NAME);
+		
+		validVendors.add(SQLConstants.MSSQLSERVER_NAME);
+		validVendors.add(SQLConstants.MSSQLSERVER_NAME);
+		validVendors.add(SQLConstants.SQLITE_NAME);
+		validVendors.add(SQLConstants.SYBASE_ASA_NAME);
+		validVendors.add(SQLConstants.SYBASE_ASE_NAME);
+		
+		validVendors.add(SQLConstants.DB2_ALIAS_NAME);
+		
 		
 		DatabaseDefinitionRegistry dbDefReg = RDBCorePlugin.getDefault()
 				.getDatabaseDefinitionRegistry();

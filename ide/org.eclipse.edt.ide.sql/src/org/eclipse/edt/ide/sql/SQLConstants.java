@@ -24,19 +24,32 @@ public class SQLConstants {
 	public static final int DB2UDBVSE = 9;
 
 	public static final String DB2UDB_NAME = "DB2 UDB";					//$NON-NLS-1$
+	public static final String DB2UDB_NAME_EXPANSION = "DB2 for Linux, UNIX, and Windows";//$NON-NLS-1$
 	public static final String DB2UDBAS400_NAME = "DB2 UDB iSeries"; 	//$NON-NLS-1$
 	public static final String DB2UDBOS390_NAME = "DB2 UDB zSeries";	//$NON-NLS-1$
-	public static final String DB2UDBVSE_NAME = "DB2 UDB zVSE";			//$NON-NLS-1$
-	public static final String INFORMIX_NAME = "Informix";				//$NON-NLS-1$
-	public static final String ORACLE_NAME = "Oracle";					//$NON-NLS-1$
-	public static final String MSSQLSERVER_NAME = "SQL Server";			//$NON-NLS-1$
-	public static final String CLOUDSCAPE_NAME = "Cloudscape";			//$NON-NLS-1$
-	public static final String DERBY_NAME = "Derby";					//$NON-NLS-1$
-	public static final String MYSQL_NAME = "MySql";					//$NON-NLS-1$
-	public static final String SYBASE_NAME = "Sybase";					//$NON-NLS-1$
-	public static final String GENERIC_JDBC_NAME = "Generic JDBC";		//$NON-NLS-1$
-	public static final String DB2_ALIAS_NAME = "DB2 ALIAS";			//$NON-NLS-1$
+	public static final String DB2ZOS_NAME = "DB2 for z/OS";	       //$NON-NLS-1$
+	public static final String DB2IOS_NAME = "DB2 for i5/OS";	       //$NON-NLS-1$
+	public static final String DB2UDBVSE_NAME = "DB2 UDB zVSE";		   //$NON-NLS-1$
 	
+	public static final String DERBY_NAME = "Derby";					//$NON-NLS-1$
+	public static final String EMBEDDED_DERBY_NAME = "Derby Embedded Database"; //$NON-NLS-1$
+	public static final String GENERIC_JDBC_NAME = "Generic JDBC";		//$NON-NLS-1$
+	public static final String HSQLDB_NAME = "HSQLDB";				    //$NON-NLS-1$ 
+	public static final String INGRES_NAME = "Ingres";				    //$NON-NLS-1$
+	public static final String INFORMIX_NAME = "Informix";				//$NON-NLS-1$
+	public static final String MAXDB_NAME = "MaxDB";				    //$NON-NLS-1$
+	public static final String MYSQL_NAME = "MySql";					//$NON-NLS-1$
+	public static final String ORACLE_NAME = "Oracle";					//$NON-NLS-1$
+	public static final String POSTGRESQL_NAME = "PostgreSQL";					//$NON-NLS-1$
+	public static final String MSSQLSERVER_NAME = "SQL Server";			//$NON-NLS-1$
+	public static final String SQLITE_NAME = "SQLite";			//$NON-NLS-1$
+	public static final String CLOUDSCAPE_NAME = "Cloudscape";			//$NON-NLS-1$
+
+	public static final String SYBASE_NAME = "Sybase";					//$NON-NLS-1$
+	public static final String SYBASE_ASA_NAME = "Sybase ASA";			//$NON-NLS-1$
+	public static final String SYBASE_ASE_NAME = "Sybase ASE";			//$NON-NLS-1$
+	
+	public static final String DB2_ALIAS_NAME = "DB2 ALIAS";			//$NON-NLS-1$
 	public static final String DB2UDB_V_7_2= "V7.2";				//$NON-NLS-1$
 	
 	public static final String EGL_CUSTOM_PROPERTIES = "EGL_CUSTOM_PROPERTIES";
