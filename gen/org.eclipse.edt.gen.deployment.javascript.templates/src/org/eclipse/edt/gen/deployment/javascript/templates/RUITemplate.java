@@ -454,24 +454,15 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println( "  		egl.startup();" ); //$NON-NLS-1$
 	}
 	
-	public void genErrorHTML(Handler handler, Context ctx, TabbedWriter out /*,WorkingCopyGenerationResult problemRequestor*/) {
+	public void genErrorHTML(Handler handler, Context ctx, TabbedWriter out , String msg) {
 		WorkingCopyGenerationResult problemRequestor = (WorkingCopyGenerationResult)(ctx.getMessageRequestor());
 		out.println( "<html>");
 		
-		generateEGLNamespace(out);
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, org.eclipse.edt.gen.deployment.javascript.Constants.EGLMESSAGE_GENERATION_FAILED,
 				null, null, null);
 		out.println( "<body>");
 		out.println( "<h2>" + message.getBuiltMessage() + "</h2>");
-		out.println(
-		// TODO Need to figure out how to get the message	
-//			MessageFormat.format(EWTPreviewMessages.GENFAILEDPAGE_HEADERMSG, new Object[] {
-//				handler.getFullyQualifiedName(),
-//				Integer.toString(problemRequestor.getNumGenErrors()),
-//				Integer.toString(problemRequestor.getNumGenWarnings())
-//			}) +
-			"<br>"
-		);
+		out.println( msg + "<br>");
 		out.println( "<hr/>");
 		out.println("<div style=\"color:red\">Generation Error</div>");
 		for(Iterator iter = problemRequestor.getMessages().iterator(); iter.hasNext();) {
@@ -522,18 +513,12 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println( "</html>");
 	}
 	
-	public void genCompileErrorHTML(Handler handler, Context ctx, TabbedWriter out){
+	public void genCompileErrorHTML(Handler handler, Context ctx, TabbedWriter out, String message){
 		out.println("<html>");
 		out.println("<body>");
-		out.println(
-		// TODO A task, cannot test now
-//			MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {
-//				qualifiedPartName}) +
-			"<br>"
-		);
-		
-		out.println( "</body>");
-		out.println( "</html>");
+		out.println(message);
+		out.println("</body>");
+		out.println("</html>");
 	}		
 	
 	private void generateDevelopmentRootHandler( Handler part, TabbedWriter out ) {
