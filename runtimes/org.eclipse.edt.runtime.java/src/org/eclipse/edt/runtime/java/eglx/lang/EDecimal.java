@@ -496,13 +496,16 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
 	 * go into the class related to the argument instead
 	 */
-	public static EDecimal asNumber(BigDecimal value) throws AnyException {
+	public static EDecimal asNumber(BigDecimal value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
-		return EDecimal.ezeBox(value);
+		if (args.length == 2)
+			return EDecimal.ezeBox(value, args[0], args[1]);
+		else
+			return EDecimal.ezeBox(value);
 	}
 
-	public static EDecimal asNumber(EDecimal value) throws AnyException {
+	public static EDecimal asNumber(EDecimal value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		return value;

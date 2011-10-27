@@ -118,10 +118,16 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 		return new ENumber(value.ezeUnbox());
 	}
 
-	public static eglx.lang.ENumber asNumber(BigDecimal value) throws AnyException {
+	public static eglx.lang.ENumber asNumber(BigDecimal value, Integer... args) throws AnyException {
 		if (value == null)
 			return null;
 		return new ENumber(value);
+	}
+
+	public static eglx.lang.ENumber asNumber(EDecimal value, Integer... args) throws AnyException {
+		if (value == null)
+			return null;
+		return new ENumber(value.ezeUnbox());
 	}
 
 	public static eglx.lang.ENumber asNumber(ENumber value) throws AnyException {
