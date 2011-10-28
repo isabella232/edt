@@ -48,6 +48,7 @@ public class ProjectWizardRUILibraryAndBasePackagePage extends ProjectWizardRUIL
 		c.setLayoutData( new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout layout = new GridLayout(2,false);
 //		layout.verticalSpacing = layout.verticalSpacing * 2;
+		layout.marginWidth = 0;
 		c.setLayout(layout);
 		
 		this.basePackageLabel = new Label(c, SWT.NULL);
@@ -67,11 +68,11 @@ public class ProjectWizardRUILibraryAndBasePackagePage extends ProjectWizardRUIL
 		String defaultBasePackageName = ((NewEGLProjectWizard)((WebClientProjectTemplateWizard)getWizard()).getParentWizard()).getModel().getBasePackageName();
 		if(defaultBasePackageName != null && !defaultBasePackageName.isEmpty()){
 			basePackage.setText(defaultBasePackageName);
-		}else{
-			basePackage.setMessage(BASE_PACKAGE_HINT);
-		}		
+		}
 		
 		hookListenerPackageName(basePackage);
+		new Label(c, SWT.NULL).setText(NewWizardMessages.EGLProjectWizardTypePage_BasePackage_Example);
+		new Label(c, SWT.NULL).setText(BASE_PACKAGE_HINT);
 	}
 	
 	private void hookListenerPackageName(Text text) {
