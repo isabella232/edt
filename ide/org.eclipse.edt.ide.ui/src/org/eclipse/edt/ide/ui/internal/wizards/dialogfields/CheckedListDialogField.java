@@ -249,9 +249,37 @@ public class CheckedListDialogField extends ListDialogField {
 	 */
 	protected boolean getManagedButtonState(ISelection sel, int index) {
 		if (index == fCheckAllButtonIndex) {
-			return !fElements.isEmpty();
+
+			if(fElements.isEmpty()){
+				return false;
+			}
+			int validElementNum = fElements.size();
+			for(int i = 0; i < fElements.size(); i++){
+				if(fGrayedElements.contains(fElements.get(i))){
+					validElementNum --;
+				}
+			}
+			if(validElementNum == 0){
+				return false;
+			}else{
+				return true;
+			}
 		} else if (index == fUncheckAllButtonIndex) {
-			return !fElements.isEmpty();
+
+			if(fElements.isEmpty()){
+				return false;
+			}
+			int validElementNum = fElements.size();
+			for(int i = 0; i < fElements.size(); i++){
+				if(fGrayedElements.contains(fElements.get(i))){
+					validElementNum --;
+				}
+			}
+			if(validElementNum == 0){
+				return false;
+			}else{
+				return true;
+			}
 		}
 		return super.getManagedButtonState(sel, index);
 	}	

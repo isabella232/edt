@@ -353,8 +353,18 @@ public class SourceProjectWizardCapabilityPage extends ContainerWizardPage {
 		// inits the dialog field
 		fBuildPathDialogField.setText(outputLocation.makeRelative().toString());
 		fBuildPathDialogField.enableButton(projectExists);
+
+		for (int i= 0; i < exportedEntries.size(); i++) {
+			PPListElement currEGL= (PPListElement) exportedEntries.get(i);
+			if (currEGL.isExported() || currEGL.getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
+				fClassPathList.setGrayedWithoutUpdate(currEGL, true);
+			}
+		}
+		
 		fClassPathList.setElements(newEGLPath);
 		fClassPathList.setCheckedElements(exportedEntries);
+
+		
 		fClassPathList.refresh();
 
 		if (fProjectsPage != null) {
