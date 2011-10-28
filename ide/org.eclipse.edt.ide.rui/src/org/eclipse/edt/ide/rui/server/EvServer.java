@@ -911,7 +911,7 @@ public class EvServer implements IClientProxy {
 											ps.write(msg.getBytes());
 										}
 									}else if(url.indexOf("___getevent") >0){
-										System.err.println("__getevent : terminated");
+										debug("__getevent : terminated");
 										ps.print("context terminated");
 										ps.flush();
 									}
@@ -1380,8 +1380,7 @@ public class EvServer implements IClientProxy {
 			QueueProcessor q = (QueueProcessor)findQueueProcessor(context.getKey());
 			q.setEventPending("egl.getWidgetPositions();");
 		} else {
-			System.out
-					.println("requestWidgetPosition: context key found no queue");
+			debug("requestWidgetPosition: context key found no queue");
 		}
 	}
 
