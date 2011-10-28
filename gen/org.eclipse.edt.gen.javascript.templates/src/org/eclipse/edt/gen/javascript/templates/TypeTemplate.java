@@ -58,6 +58,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 		return false;  //TODO JS gen will require changes before this can be used
 	}
 
+	public Boolean isMathLibDecimalBoxingWanted(Type type, Context ctx) {
+		// types can override this to cause/prevent mathlib decimals/precision boxing to be done
+		return false;
+	}
+
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavascriptImplementation);
