@@ -20,6 +20,7 @@ import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.Constants;
 import org.eclipse.edt.gen.eunit.Context;
 import org.eclipse.edt.gen.eunit.TestCounter;
+import org.eclipse.edt.gen.eunit.TestDriverTargetLanguageKind;
 import org.eclipse.edt.mof.codegen.api.AbstractTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
@@ -45,10 +46,10 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 	public static final String preGenClassBody = "preGenClassBody";
 
 	@SuppressWarnings("unchecked")
-	protected void collectTestFunctions(Library part, Context ctx, TestCounter couter) {
+	protected void collectTestFunctions(Library part, Context ctx, TestCounter couter, TestDriverTargetLanguageKind driverTargetLang) {
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted, new ArrayList<String>());
 		for (Function function : part.getFunctions()) {
-			ctx.invoke(preGen, function, ctx, couter);
+			ctx.invoke(preGen, function, ctx, couter, driverTargetLang);
 		}
 		// if there aren't any functions in the partFunctionsWanted list, then I should skip the partGeneration
 		List<String> wantedFunctions = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partFunctionsWanted);

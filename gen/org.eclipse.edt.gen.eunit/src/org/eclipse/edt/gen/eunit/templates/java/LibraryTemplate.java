@@ -15,6 +15,7 @@ package org.eclipse.edt.gen.eunit.templates.java;
 import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.Context;
 import org.eclipse.edt.gen.eunit.TestCounter;
+import org.eclipse.edt.gen.eunit.TestDriverTargetLanguageKind;
 import org.eclipse.edt.gen.eunit.templates.EUnitTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Library;
@@ -26,7 +27,7 @@ public class LibraryTemplate extends EUnitTemplate {
 	}
 
 	public void preGenFunctions(Library part, Context ctx, TestCounter counter) {
-		collectTestFunctions(part, ctx, counter);
+		collectTestFunctions(part, ctx, counter, TestDriverTargetLanguageKind.JAVA);
 	}
 	
 	public void genImports(Library part, Context ctx, TabbedWriter out) {
