@@ -100,7 +100,6 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 		// if no FROM clause is specified the WITH clause must be specified and must be 
 		// referencing an expression of type SQLStatement.  In other words if a prepared 
 		// statement is available there is no need for referencing the explicit datasource
-				
 		if (from == null && !isSqlStatement) {
 			problemRequestor.acceptProblem(statement,
 					IProblemRequestor.SQL_WITH_STMT_REQUIRED,
@@ -110,8 +109,8 @@ public class OpenStatementValidator extends AbstractSqlStatementValidator{
 	
 	private void validateFor() {
 		if (forExpression != null) {
-			//If no USING or WITH clause is specified the FOR clause can be specified 
-			if (using != null || withExpression != null || withInline != null) {
+			//If no WITH clause is specified the FOR clause can be specified 
+			if (withExpression != null || withInline != null) {
 				problemRequestor.acceptProblem(forExpression,
 						IProblemRequestor.SQL_FOR_NOT_ALLOWED,
 						new String[] {});
