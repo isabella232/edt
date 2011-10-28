@@ -927,6 +927,7 @@ public class NewWizardMessages extends NLS {
 	public static String EGLProjectWizardTypePage_1;
 	public static String EGLProjectWizardTypePage_2;
 	public static String EGLProjectWizardTypePage_BasePackage;
+	public static String EGLProjectWizardTypePage_BasePackage_Example;
 	public static String ProjectContentFragment_0;
 	public static String ProjectContentFragment_1;
 	public static String ProjectContentFragment_2;
