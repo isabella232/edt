@@ -100,7 +100,7 @@ public class SourceProjectContentFragment extends ProjectContentFragment {
 		browseDirectory.setEnabled(false);
 	}
 
-	private void validateProjectLocation() {
+	public boolean isValidateProjectLocation() {
 		locationInfo.setOK();
 		String projectLocation = config.getCustomProjectLocation();
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -128,6 +128,12 @@ public class SourceProjectContentFragment extends ProjectContentFragment {
 				}
 			}
 		}
+		return locationInfo.isOK();
+	}
+	
+
+	public void validateProjectLocation() {
+		isValidateProjectLocation();
 		getParentPage().setPageComplete(locationInfo.isOK());
 		getParentPage().setErrorMessage(locationInfo.getMessage());
 	}

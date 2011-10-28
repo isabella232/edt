@@ -313,16 +313,13 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 			return false;
 		} else {
 			contentFragment.specifyProjectDirectory.setEnabled(true);
-			
+			if(!contentFragment.isValidateProjectLocation()){
+				return false;
+			}
 			Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
 			if (o instanceof IProjectTemplate) {
 				IProjectTemplate template = (IProjectTemplate) o;
 				ProjectTemplateWizardNode wizNode = (ProjectTemplateWizardNode) template.getWizardNode();
-
-				//handleSelectedTemplate();
-
-				//boolean b = (wizNode != null && ( wizNode.getTemplate().canFinish() || ( wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish())));
-				//return b;
 				return true;
 			} else {
 				return false;
