@@ -399,7 +399,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		}		
 
 		if(!includeFiles.isEmpty()){
-			out.println("var isLastFile = false; var currentFile = \"\"");
+			out.println("var isLastFile = false; var currentFile = \"\";");
 			out.println("var htmlString = \"\";");
 			out.println("function runHandler() {");
 			out.println("   var currentFileType = currentFile.indexOf(\".\") >=0 ? currentFile.substring(currentFile.lastIndexOf(\".\") + 1, currentFile.length) : \"\";");
@@ -439,9 +439,8 @@ public class RUITemplate extends JavaScriptTemplate {
 				out.println("		currentFile = '" + includeFilestring + "';");
 				out.println("		xmlhttp.open( 'POST', currentFile, false );");
 				out.println("		xmlhttp.send( null );");
-			}
-
-			out.println("	runHandler();");
+				out.println("		runHandler();");
+			}			
 			out.println("}");
 		}else{
 			out.println("egl.load(RUI_RUNTIME_JAVASCRIPT_FILES, function(){egl.startupInit();})");
