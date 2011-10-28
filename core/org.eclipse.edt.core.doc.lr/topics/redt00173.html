@@ -5,28 +5,189 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="SecondaryTables annotation"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="SecondaryTables annotation and related types"></meta>
+<meta name="abstract" content="SecondaryTables ..."></meta>
+<meta name="description" content="SecondaryTables ..."></meta>
+<meta name="DC.subject" content="SecondaryTables EGL annotation, annotations, SecondaryTables, SecondaryTable EGL annotation, SecondaryTable, PrimaryKeyJoinColumns EGL annotation, PrimaryKeyJoinColumns, PrimaryKeyJoinColumn EGL annotation, PrimaryKeyJoinColumn"></meta>
+<meta name="keywords" content="SecondaryTables EGL annotation, annotations, SecondaryTables, SecondaryTable EGL annotation, SecondaryTable, PrimaryKeyJoinColumns EGL annotation, PrimaryKeyJoinColumns, PrimaryKeyJoinColumn EGL annotation, PrimaryKeyJoinColumn"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00173"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>SecondaryTables annotation</title>
+<title>SecondaryTables annotation and related types</title>
 </head>
 <body id="redt00173"><a name="redt00173"><!-- --></a>
 
 
-<h1 class="topictitle1">SecondaryTables annotation</h1>
+<h1 class="topictitle1">SecondaryTables annotation and related types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SecondaryTables</span></span> ... </p>
+
+<a name="redt00173__main"><!-- --></a><dl id="redt00173__main">
+<dt class="dlterm"><a name="redt00173__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.persistence.sql</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00173__use"><!-- --></a>Example use</dt>
+
+<dd><div class="p"><pre class="codeblock"></pre>
+</div>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00173__annorec"><!-- --></a>Annotation detail</dt>
+
+<dd><pre class="codeblock">Record SecondaryTables type Annotation {
+   targets=[RecordPart, HandlerPart, ExternalTypePart]
+   }
+   value SecondaryTable[];
+end
+
+Record SecondaryTable type Annotation {
+   targets=[RecordPart, HandlerPart, ExternalTypePart]
+   }
+   name string;
+   catalog string;
+   schema string;
+   pkJoinColumns PrimaryKeyJoinColumn[];
+end
+
+Record PrimaryKeyJoinColumns type Annotation {
+   targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
+   }
+   value PrimaryKeyJoinColumn[];
+end
+
+Record PrimaryKeyJoinColumn type Annotation {
+   targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
+   }
+   name string;
+   referencedColumnName string;
+end
+</pre>
+<anchor id="annorec_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00173__annofields"><!-- --></a>Annotation fields</dt>
+
+<dd><div class="p">For the <span class="synph"><span class="kwd">SecondaryTables</span></span> annotation:<dl>
+
+<dt class="dlterm">value</dt>
+
+<dd></dd>
+
+</dl>
+</div>
+<div class="p">For the <span class="synph"><span class="kwd">SecondaryTable</span></span> annotation:<dl>
+
+<dt class="dlterm">name</dt>
+
+<dd></dd>
+
+
+<dt class="dlterm">referencedColumnName</dt>
+
+<dd></dd>
+
+
+<dt class="dlterm">unique</dt>
+
+<dd></dd>
+
+
+<dt class="dlterm">insertable</dt>
+
+<dd></dd>
+
+
+<dt class="dlterm">table</dt>
+
+<dd></dd>
+
+</dl>
+</div>
+<div class="p">For the <span class="synph"><span class="kwd">PrimaryKeyJoinColumns</span></span> annotation:<dl>
+
+<dt class="dlterm">value</dt>
+
+<dd></dd>
+
+</dl>
+</div>
+<div class="p">For the <span class="synph"><span class="kwd">PrimaryKeyJoinColumn</span></span> annotation:<dl>
+
+<dt class="dlterm">name</dt>
+
+<dd></dd>
+
+
+<dt class="dlterm">referencedColumnName</dt>
+
+<dd></dd>
+
+</dl>
+</div>
+<anchor id="annofields_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00173__comments"><!-- --></a>Comments</dt>
+
+<dd><anchor id="annocomments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00173__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00173__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00173__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d34340e217">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d34340e220">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00173__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d34340e217 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d34340e220 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00173__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d34340e217 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d34340e220 ">Database access is not supported.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

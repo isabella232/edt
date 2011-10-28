@@ -5,28 +5,117 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="SQLResultSet type"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="SQLResultSet external type"></meta>
+<meta name="abstract" content="SQLResultSet is"></meta>
+<meta name="description" content="SQLResultSet is"></meta>
+<meta name="DC.subject" content="EGL types, SQLResultSet, EGL type"></meta>
+<meta name="keywords" content="EGL types, SQLResultSet, EGL type"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00163"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>SQLResultSet type</title>
+<title>SQLResultSet external type</title>
 </head>
 <body id="redt00163"><a name="redt00163"><!-- --></a>
 
 
-<h1 class="topictitle1">SQLResultSet type</h1>
+<h1 class="topictitle1">SQLResultSet external type</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p><strong>SQLResultSet</strong> is </p>
+
+<a name="redt00163__main"><!-- --></a><dl id="redt00163__main">
+<dt class="dlterm"><a name="redt00163__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.persistence.sql</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00163__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00163__detail"><!-- --></a>Type detail</dt>
+
+<dd><pre class="codeblock">externalType SQLResultSet extends ScrollableDataSource type NativeType
+
+   private constructor();
+   static CONCUR_READ_ONLY int;
+   static CONCUR_UPDATABLE int;
+   static HOLD_CURSORS_OVER_COMMIT int;
+   static CLOSE_CURSORS_AT_COMMIT int;
+   static TYPE_FORWARD_ONLY int;
+   static TYPE_SCROLL_INSENSITIVE int;
+   static TYPE_SCROLL_SENSITIVE int;
+
+   function cancelRowUpdates();
+   function deleteRow();
+   function getHoldability() returns(int);
+   function getWarnings() returns(SQLWarning?);
+   function refreshRow();
+   function rowDeleted() returns(boolean);
+   function rowUpdated() returns(boolean);
+   function setFetchSize(size int in);
+   function updateRow();
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00163__comments"><!-- --></a>Comments</dt>
+
+<dd> <anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00163__compat"><!-- --></a>Compatibility</dt>
+
+<dd>
+<div class="tablenoborder"><a name="redt00163__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00163__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d31425e91">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d31425e94">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00163__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d31425e91 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d31425e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00163__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d31425e91 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d31425e94 ">Database access is not supported.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>

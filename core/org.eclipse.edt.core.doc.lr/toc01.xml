@@ -173,6 +173,32 @@
          </topic>
          <topic label="Timestamp and ETimestamp types" href="topics/redt00053.html"/>
       </topic>
+      <topic label="eglx.persistence package" href="topics/redt00265.html">
+         <topic label="DataSource external type" href="topics/redt00164.html"/>
+         <topic label="Entity stereotype" href="topics/redt00081.html"/>
+         <topic label="ID annotation" href="topics/redt00166.html"/>
+         <topic label="ManyToMany annotation" href="topics/redt00168.html"/>
+         <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
+         <topic label="OneToMany annotation" href="topics/redt00170.html"/>
+         <topic label="OneToOne annotation" href="topics/redt00171.html"/>
+         <topic label="ScrollableDataSource type" href="topics/redt00165.html"/>
+         <topic label="Transient annotation" href="topics/redt00167.html"/>
+      </topic>
+      <topic label="eglx.persistence.sql package" href="topics/redt00266.html">
+         <topic label="Column annotation" href="topics/redt00174.html"/>
+         <topic label="GeneratedValue annotation" href="topics/redt00175.html"/>
+         <topic label="JoinColumn annotation" href="topics/redt00267.html"/>
+         <topic label="SecondaryTables annotation and related types"
+                href="topics/redt00173.html"/>
+         <topic label="SQLDataSource external type" href="topics/redt00162.html"/>
+         <topic label="SQLException external type" href="topics/redt00268.html"/>
+         <topic label="SQLResultSet external type" href="topics/redt00163.html"/>
+         <topic label="SQLResultSetControl annotation and related types"
+                href="topics/redt00075.html"/>
+         <topic label="SQLStatement external type" href="topics/redt00177.html"/>
+         <topic label="SQLWarning external type" href="topics/redt00269.html"/>
+         <topic label="Table annotation" href="topics/redt00172.html"/>
+      </topic>
       <topic label="eglx.rbd package and its StrLib library" href="topics/redt00239.html"/>
       <topic label="eglx.services package" href="topics/redt00065.html">
          <topic label="ServiceLib external type" href="topics/redt00071.html">
@@ -232,14 +258,11 @@
       <topic label="BLOB type" href="topics/redt00054.html"/>
       <topic label="BYTES type" href="topics/redt00063.html"/>
       <topic label="CLOB type" href="topics/redt00055.html"/>
-      <topic label="Column annotation" href="topics/redt00174.html"/>
       <topic label="Correspondence between a JSON string and an EGL variable"
              href="topics/redt00253.html"/>
       <topic label="Correspondence between an XML string and an EGL variable"
              href="topics/redt00254.html"/>
-      <topic label="DataSource type" href="topics/redt00164.html"/>
       <topic label="Dynamic types and access" href="topics/redt00264.html"/>
-      <topic label="Entity stereotype" href="topics/redt00081.html"/>
       <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
       <topic label="Exception stereotype" href="topics/redt00079.html"/>
       <topic label="Exit statement" href="topics/redt00019.html"/>
@@ -247,10 +270,8 @@
       <topic label="For statement" href="topics/redt00017.html"/>
       <topic label="Function invocation statement" href="topics/redt00008.html"/>
       <topic label="Function syntax" href="topics/redt00036.html"/>
-      <topic label="GeneratedValue annotation" href="topics/redt00175.html"/>
       <topic label="Handler classifier detail" href="topics/redt00042.html"/>
       <topic label="HostProgram stereotype" href="topics/redt00086.html"/>
-      <topic label="ID annotation" href="topics/redt00166.html"/>
       <topic label="If statement" href="topics/redt00015.html"/>
       <topic label="In operator" href="topics/redt00100.html"/>
       <topic label="Label statement" href="topics/redt00009.html"/>
@@ -279,19 +300,11 @@
       <topic label="RUIHandler stereotype" href="topics/redt00082.html"/>
       <topic label="RUILib system library" href="topics/redt00070.html"/>
       <topic label="RUIWidget stereotype" href="topics/redt00101.html"/>
-      <topic label="ScrollableDataSource type" href="topics/redt00165.html"/>
-      <topic label="SecondaryTables annotation" href="topics/redt00173.html"/>
       <topic label="Service classifier detail" href="topics/redt00044.html"/>
       <topic label="Set-values blocks" href="topics/redt00105.html"/>
       <topic label="Special characters" href="topics/redt00104.html"/>
-      <topic label="SQLDataSource type" href="topics/redt00162.html"/>
-      <topic label="SQLLib system library" href="topics/redt00075.html"/>
-      <topic label="SQLResultSet type" href="topics/redt00163.html"/>
-      <topic label="SQLStatement type" href="topics/redt00177.html"/>
-      <topic label="Table annotation" href="topics/redt00172.html"/>
       <topic label="this keyword" href="topics/redt00002.html"/>
       <topic label="Throw statement" href="topics/redt00011.html"/>
-      <topic label="Transient annotation" href="topics/redt00167.html"/>
       <topic label="Tree widget" href="topics/redt00120.html"/>
       <topic label="Try blocks" href="topics/redt00013.html"/>
       <topic label="Type conversions" href="topics/redt00064.html"/>
