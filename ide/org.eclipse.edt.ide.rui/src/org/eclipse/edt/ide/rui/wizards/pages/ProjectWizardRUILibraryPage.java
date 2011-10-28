@@ -266,6 +266,11 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		for(Object element : selectedLib){
 			// New element has conflict with the current selected library, stop adding it
 			fTableViewer.setChecked(element, true);
+
+			if(((LibraryNode)element).getId().equals(RUI_WIDGET_LIBRARY_ID)){
+				fTableViewer.setGrayed(element, true);
+			}
+			
 			setSelectedWidgetLibrary((LibraryNode) element);
 		}
 	}
