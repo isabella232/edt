@@ -40,6 +40,7 @@ public class Constants {
 	public static final String isAssignmentBreakupWanted = "isAssignmentBreakupWanted";
 	public static final String isAssignmentArrayMatchingWanted = "isAssignmentArrayMatchingWanted";
 	public static final String isListReorganizationWanted = "isListReorganizationWanted";
+	public static final String isMathLibDecimalBoxingWanted = "isMathLibDecimalBoxingWanted";
 
 	// part names
 	public static final String AnnotationXmlAttribute = "eglx.xml.binding.annotation.xmlAttribute";

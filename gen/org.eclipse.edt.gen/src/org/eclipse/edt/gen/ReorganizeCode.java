@@ -13,6 +13,7 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Container;
@@ -40,6 +41,7 @@ import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
@@ -165,8 +167,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
 		// appendElement depending on whether the rhs is an array or not
 		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
-			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
-			&& object.getOperator().equals("::=")) {
+			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::=")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
 			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
 				// create the qualified function invocation for appendAll or appendElement
@@ -283,7 +284,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(CallStatement object) {
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		if (object.getInvocationTarget() instanceof MemberAccess && ((MemberAccess) object.getInvocationTarget()).getMember() instanceof Function) {
-			if((Boolean)ctx.invoke(Constants.requiresWrappedParameters, object, ctx)){
+			if ((Boolean) ctx.invoke(Constants.requiresWrappedParameters, object, ctx)) {
 				Function serviceInterfaceFunction = (Function) ((MemberAccess) object.getInvocationTarget()).getMember();
 				FunctionInvocation invocation = factory.createFunctionInvocation();
 				invocation.setTarget(serviceInterfaceFunction);
@@ -454,8 +455,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
 		// appendElement depending on whether the rhs is an array or not
 		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
-			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
-			&& object.getOperator().equals("::")) {
+			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
 			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
 				// create a temporary variable and do a new on the type
@@ -471,8 +471,8 @@ public class ReorganizeCode extends AbstractVisitor {
 				Field field = factory.createField();
 				field.setName(temporary);
 				field.setType(arrayTypeScanner1.scan(object.getLHS()));
-				// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-				// initialization from occurring
+				// we always made this nullable as it will be assigned to by the set values block. this prevents an
+				// unnecessary initialization from occurring
 				field.setIsNullable(true);
 				declarationExpression.getFields().add(field);
 				localDeclaration.setExpression(declarationExpression);
@@ -517,8 +517,8 @@ public class ReorganizeCode extends AbstractVisitor {
 					Field fieldBin = factory.createField();
 					fieldBin.setName(temporaryBin);
 					fieldBin.setType(arrayTypeScanner2.scan(object.getLHS()));
-					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-					// initialization from occurring
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an
+					// unnecessary initialization from occurring
 					fieldBin.setIsNullable(true);
 					declarationExpressionBin.getFields().add(fieldBin);
 					localDeclarationBin.setExpression(declarationExpressionBin);
@@ -574,8 +574,8 @@ public class ReorganizeCode extends AbstractVisitor {
 					Field fieldBin = factory.createField();
 					fieldBin.setName(temporaryBin);
 					fieldBin.setType(arrayTypeScanner2.scan(object.getRHS()));
-					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-					// initialization from occurring
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an
+					// unnecessary initialization from occurring
 					fieldBin.setIsNullable(true);
 					declarationExpressionBin.getFields().add(fieldBin);
 					localDeclarationBin.setExpression(declarationExpressionBin);
@@ -646,8 +646,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			}
 			// if the rhs of this binary expression is an array, then we need to convert this to insertElement
 		} else if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
-			&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null
-			&& object.getOperator().equals("::")) {
+			&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
 			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getRHS().getType(), ctx)) {
 				// create a temporary variable and do a new on the type
@@ -663,8 +662,8 @@ public class ReorganizeCode extends AbstractVisitor {
 				Field field = factory.createField();
 				field.setName(temporary);
 				field.setType(arrayTypeScanner1.scan(object.getRHS()));
-				// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-				// initialization from occurring
+				// we always made this nullable as it will be assigned to by the set values block. this prevents an
+				// unnecessary initialization from occurring
 				field.setIsNullable(true);
 				declarationExpression.getFields().add(field);
 				localDeclaration.setExpression(declarationExpression);
@@ -709,8 +708,8 @@ public class ReorganizeCode extends AbstractVisitor {
 					Field fieldBin = factory.createField();
 					fieldBin.setName(temporaryBin);
 					fieldBin.setType(arrayTypeScanner2.scan(object.getLHS()));
-					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-					// initialization from occurring
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an
+					// unnecessary initialization from occurring
 					fieldBin.setIsNullable(true);
 					declarationExpressionBin.getFields().add(fieldBin);
 					localDeclarationBin.setExpression(declarationExpressionBin);
@@ -788,8 +787,8 @@ public class ReorganizeCode extends AbstractVisitor {
 					Field fieldBin = factory.createField();
 					fieldBin.setName(temporaryBin);
 					fieldBin.setType(arrayTypeScanner2.scan(object.getRHS()));
-					// we always made this nullable as it will be assigned to by the set values block. this prevents an unnecessary
-					// initialization from occurring
+					// we always made this nullable as it will be assigned to by the set values block. this prevents an
+					// unnecessary initialization from occurring
 					fieldBin.setIsNullable(true);
 					declarationExpressionBin.getFields().add(fieldBin);
 					localDeclarationBin.setExpression(declarationExpressionBin);
@@ -928,6 +927,19 @@ public class ReorganizeCode extends AbstractVisitor {
 					if (object.getArguments().get(i) instanceof ArrayLiteral)
 						processArrayLiteral(elementType, (ArrayLiteral) object.getArguments().get(i));
 				}
+			}
+		}
+		// check to see if this is the mathlib.precision or mathlib.decimals function, and if so,
+		// we need to box the argument if it is type decimal
+		if ((object.getId().equalsIgnoreCase("decimals") || object.getId().equalsIgnoreCase("precision")) && object.getQualifier() instanceof PartName
+			&& ((PartName) object.getQualifier()).getId().equalsIgnoreCase("MathLib") && object.getArguments().size() == 1
+			&& !(object.getArguments().get(0) instanceof BoxingExpression)
+			&& object.getArguments().get(0).getType().getClassifier().equals(TypeUtils.Type_DECIMAL)) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isMathLibDecimalBoxingWanted, object.getQualifier().getType(), ctx)) {
+				BoxingExpression boxingExpression = factory.createBoxingExpression();
+				boxingExpression.setExpr(object.getArguments().get(0));
+				object.getArguments().set(0, boxingExpression);
 			}
 		}
 		processInvocation(object);
@@ -1293,7 +1305,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			return true;
 		}
 	}
-	
+
 	// this logic will determine the type of an array
 	public class ArrayTypeScanner extends AbstractVisitor {
 		private ArrayType arrType;
@@ -1303,15 +1315,15 @@ public class ReorganizeCode extends AbstractVisitor {
 			expr.accept(this);
 			return arrType;
 		}
-		
+
 		public ArrayType getArrayType() {
 			return arrType;
 		}
-		
+
 		public boolean visit(EObject obj) {
 			return false;
 		}
-		
+
 		public boolean visit(QualifiedFunctionInvocation inv) {
 			if (arrType == null) {
 				if (inv.getType() instanceof ArrayType)
@@ -1321,13 +1333,13 @@ public class ReorganizeCode extends AbstractVisitor {
 			}
 			return false;
 		}
-		
+
 		public boolean visit(Expression expr) {
 			if (arrType == null && expr.getType() instanceof ArrayType)
 				arrType = (ArrayType) expr.getType();
 			return false;
 		}
-		
+
 		public boolean visit(BinaryExpression binExp) {
 			if (isArrayOrList(binExp.getLHS().getType()))
 				binExp.getLHS().accept(this);
@@ -1335,7 +1347,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				binExp.getRHS().accept(this);
 			return false;
 		}
-		
+
 		private boolean isArrayOrList(Type type) {
 			return (type instanceof ArrayType || isList(type));
 		}
