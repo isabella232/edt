@@ -212,5 +212,7 @@ public class NewHandlerWizard extends EGLFileWizard {
 			}
 		}
 
-	
+		protected boolean canRunForked() {
+			return false;
+		}	
 }
