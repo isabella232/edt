@@ -186,7 +186,6 @@ public class Messages extends NLS {
 	public static String deployment_error_skip;
 	public static String deployment_no_target_found;
 	public static String deployment_action_no_model_found;
-	public static String deployment_no_parts_found;
 	public static String deployment_save_prompt_title;
 	public static String deployment_save_prompt_msg;
 	public static String deployment_save_prompt_ok_button_label;
