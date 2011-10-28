@@ -304,7 +304,7 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		return op1 % op2;
 	}
 
-	public static Double power(long op1, long op2) throws AnyException {
+	public static double power(long op1, long op2) throws AnyException {
 		return StrictMath.pow(op1, op2);
 	}
 

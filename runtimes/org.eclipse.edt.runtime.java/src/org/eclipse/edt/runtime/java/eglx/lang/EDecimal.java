@@ -531,7 +531,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		return op1.remainder(op2);
 	}
 
-	public static Double power(BigDecimal op1, BigDecimal op2) throws AnyException {
+	public static double power(BigDecimal op1, BigDecimal op2) throws AnyException {
 		return StrictMath.pow(op1.doubleValue(), op2.doubleValue());
 	}
 
