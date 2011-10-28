@@ -19,7 +19,6 @@ import org.eclipse.edt.javart.resources.egldd.Parameter;
 public class RUIApplication
 {
 	private boolean deployAllHandlers;
-	private boolean supportDynamicLoading;
 	private String name;
 	private List<RUIHandler> handlers;
 	private List<Parameter> parameters;
@@ -30,12 +29,6 @@ public class RUIApplication
 		this.deployAllHandlers = string2Boolean( deployAllHandlers );
 		this.handlers = new ArrayList<RUIHandler>();
 		this.parameters = new ArrayList<Parameter>();
-	}
-	
-	public RUIApplication(String name, String deployAllHandlers, String supportDynamicLoading)
-	{
-		this( name, deployAllHandlers );
-		this.supportDynamicLoading = string2Boolean( supportDynamicLoading );
 	}
 
 	private static boolean string2Boolean( String value )
@@ -59,17 +52,7 @@ public class RUIApplication
 	{
 		this.deployAllHandlers = deployAllHandlers;
 	}
-	
-	public boolean isSupportDynamicLoading()
-	{
-		return supportDynamicLoading;
-	}
-	
-	public void setSupportDynamicLoading( boolean supportDynamicLoading )
-	{
-		this.supportDynamicLoading = supportDynamicLoading;
-	}
-	
+
 	public String getName() {
 		return name;
 	}

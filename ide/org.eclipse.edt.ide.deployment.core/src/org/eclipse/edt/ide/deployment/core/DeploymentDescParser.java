@@ -59,8 +59,7 @@ public class DeploymentDescParser extends RuntimeDeploymentDescParser {
 		else if (localName.equals("ruiapplication")) {
 			currentRuiApplication = new RUIApplication(
 					attributes.getValue("name"),
-					attributes.getValue("deployAllHandlers"),
-					attributes.getValue("supportDynamicLoading")
+					attributes.getValue("deployAllHandlers")
 					);
 			((DeploymentDesc)desc).setRUIApplication(currentRuiApplication);
 		}
