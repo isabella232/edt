@@ -18,6 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
 import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 
 public class MathLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -198,6 +199,10 @@ public class MathLib extends ExecutableBase {
 	 */
 	public static int decimals(BigDecimal numericField) {
 		return numericField.scale();
+	}
+
+	public static int decimals(EDecimal numericField) {
+		return numericField.getDecimals();
 	}
 
 	/**
@@ -413,6 +418,10 @@ public class MathLib extends ExecutableBase {
 
 	public static int precision(BigDecimal numericField) {
 		return numericField.precision() - numericField.scale();
+	}
+
+	public static int precision(EDecimal numericField) {
+		return numericField.getPrecision();
 	}
 
 	/**
