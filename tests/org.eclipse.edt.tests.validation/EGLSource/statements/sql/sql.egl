@@ -51,7 +51,7 @@ library sql
 		replace parent to ds using a using b; //1
 	end
 	
-	function validateOpenTarget()
+	function validateOpen()
 		//verify that the type of the target is a resultSet
 		open rs from ds;  //0		
 		open a from ds;  //1
@@ -69,8 +69,9 @@ library sql
 		open rs with #sql{stuff};  //1
 		open rs using a,b;	//1
 		
-		//the FOR can be specified if no using or with is specified
-		open rs using a,b from ds for myentity; //1 
+		open rs using a,b from ds for myentity; //0 
+		
+		//the FOR can be specified if no WITH is specified
 		open rs with stmt for parent;  //1
 		
 		//the FOR must be an entity expr or an association expr
