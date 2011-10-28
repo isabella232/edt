@@ -477,10 +477,15 @@ public class ListDialogField extends DialogField {
 		if (fButtonControls != null) {
 			ISelection sel= fTable.getSelection();
 			for (int i= 0; i < fButtonControls.length; i++) {
-				Button button= fButtonControls[i];
+				final Button button= fButtonControls[i];
+				final boolean isEnable = isButtonEnabled(sel, i);
 				if (isOkToUse(button)) {
-					button.setEnabled(isButtonEnabled(sel, i));
-				}				
+					button.getShell().getDisplay().asyncExec( new Runnable() {
+                        public void run() {
+                            button.setEnabled(isEnable);
+                          }
+                      });
+                  }
 			}
 		}
 	}
