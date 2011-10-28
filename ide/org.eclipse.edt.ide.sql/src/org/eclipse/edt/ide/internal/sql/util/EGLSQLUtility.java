@@ -60,47 +60,47 @@ public class EGLSQLUtility {
 	
 	static {
 	    //For DB2
-		profileIds.put(SQLConstants.DB2UDB_NAME_EXPANSION, "org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
-		profileIds.put(SQLConstants.DB2ZOS_NAME, "org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
-		profileIds.put(SQLConstants.DB2IOS_NAME, "org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
+		profileIds.put(SQLConstants.DB2UDB_NAME_EXPANSION.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
+		profileIds.put(SQLConstants.DB2ZOS_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
+		profileIds.put(SQLConstants.DB2IOS_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
 		
 		//For Derby
-		profileIds.put(SQLConstants.DERBY_NAME,"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
-		profileIds.put(SQLConstants.EMBEDDED_DERBY_NAME,"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
+		profileIds.put(SQLConstants.DERBY_NAME.toLowerCase(),"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
+		profileIds.put(SQLConstants.EMBEDDED_DERBY_NAME.toLowerCase(),"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
 		
 		//For Generic JDBC
-		profileIds.put(SQLConstants.GENERIC_JDBC_NAME, "org.eclipse.datatools.connectivity.db.generic.connectionProfile");
+		profileIds.put(SQLConstants.GENERIC_JDBC_NAME.toLowerCase(), "org.eclipse.datatools.connectivity.db.generic.connectionProfile");
 		
 		//For HSQLDB
-		profileIds.put(SQLConstants.HSQLDB_NAME, "org.eclipse.datatools.enablement.hsqldb.connectionProfile");
+		profileIds.put(SQLConstants.HSQLDB_NAME.toLowerCase(), "org.eclipse.datatools.enablement.hsqldb.connectionProfile");
 		
 		//For Ingres
-		profileIds.put(SQLConstants.INGRES_NAME, "org.eclipse.datatools.enablement.ingres.connectionProfile");
+		profileIds.put(SQLConstants.INGRES_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ingres.connectionProfile");
 		
 		//For Informix
-		profileIds.put(SQLConstants.INFORMIX_NAME, "org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
+		profileIds.put(SQLConstants.INFORMIX_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
 		
 		//For MaxDB
-		profileIds.put(SQLConstants.MAXDB_NAME, "org.eclipse.datatools.enablement.sap.maxdb.connectionProfile");
+		profileIds.put(SQLConstants.MAXDB_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sap.maxdb.connectionProfile");
 		
 		//For MySQL
-		profileIds.put(SQLConstants.MYSQL_NAME, "org.eclipse.datatools.enablement.mysql.connectionProfile");
+		profileIds.put(SQLConstants.MYSQL_NAME.toLowerCase(), "org.eclipse.datatools.enablement.mysql.connectionProfile");
 		
 		//For Oracle
-		profileIds.put(SQLConstants.ORACLE_NAME, "org.eclipse.datatools.enablement.oracle.connectionProfile");
+		profileIds.put(SQLConstants.ORACLE_NAME.toLowerCase(), "org.eclipse.datatools.enablement.oracle.connectionProfile");
 		
 		//For PostgreSQL
-		profileIds.put(SQLConstants.POSTGRESQL_NAME, "org.eclipse.datatools.enablement.postgresql.connectionProfile");
+		profileIds.put(SQLConstants.POSTGRESQL_NAME.toLowerCase(), "org.eclipse.datatools.enablement.postgresql.connectionProfile");
 		
 		//For SQL Server
-		profileIds.put(SQLConstants.MSSQLSERVER_NAME, "org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
+		profileIds.put(SQLConstants.MSSQLSERVER_NAME.toLowerCase(), "org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
 		
 		//For SQLite
-		profileIds.put(SQLConstants.SQLITE_NAME, "org.eclipse.datatools.enablement.sqlite.connectionProfile");
+		profileIds.put(SQLConstants.SQLITE_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sqlite.connectionProfile");
 		
 		//For Sybase
-		profileIds.put(SQLConstants.SYBASE_ASA_NAME, "org.eclipse.datatools.enablement.sybase.asa.connectionProfile");
-		profileIds.put(SQLConstants.SYBASE_ASE_NAME, "com.sybase.stf.servers.jdbc.ase2.embedded.connectionProfile");
+		profileIds.put(SQLConstants.SYBASE_ASA_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sybase.asa.connectionProfile");
+		profileIds.put(SQLConstants.SYBASE_ASE_NAME.toLowerCase(), "com.sybase.stf.servers.jdbc.ase2.embedded.connectionProfile");
 	}
 	
 	public static boolean isEqualIdentifiers(String id1, String id2, String vendorType) {
@@ -453,6 +453,11 @@ public class EGLSQLUtility {
 	}
 	
 	public static String getConnectionProviderProfile(String profileName) {
-		return profileIds.get(profileName);
+		if(profileName == null) {
+			return null;
+		} else {
+			return profileIds.get(profileName.toLowerCase());
+		}
+		
 	}
 }
