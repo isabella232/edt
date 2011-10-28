@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.util;
 
+import org.eclipse.core.internal.runtime.PlatformActivator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
@@ -37,6 +38,8 @@ public class BrowserManager {
 	public final static byte XULRUNNER = 0X4;
 	
 	public final static int SWT_WEBKIT = 0x10000; // SWT.WEBKIT
+	
+	public boolean ECLIPSE_37 = false;
 
 	private byte BRWOSERS = 0X0;
 	
@@ -59,9 +62,12 @@ public class BrowserManager {
 	
 	private void initializeBrowser() {
 		try {
-			Browser b = new Browser( Display.getCurrent().getShells()[0], SWT_WEBKIT );
-			BRWOSERS = (byte)(BRWOSERS | WEBKIT);
-			b.dispose();
+			ECLIPSE_37 = ((String)PlatformActivator.getContext().getBundle().getHeaders().get( "Bundle-Version")).indexOf( "3.7" ) >= 0;
+			if ( ECLIPSE_37 ) {
+				Browser b = new Browser( Display.getCurrent().getShells()[0], SWT_WEBKIT );
+				BRWOSERS = (byte)(BRWOSERS | WEBKIT);
+				b.dispose();
+			}
 		} catch ( Throwable e ) {
 			
 		}
@@ -80,7 +86,7 @@ public class BrowserManager {
 		int _iRenderEngine = EvPreferences.getInt( EvConstants.PREFERENCE_RENDERENGINE );
 		Browser browser = null;
 		if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_DEFAULT ) {
-			if ( (BRWOSERS & WEBKIT) != 0 ) {
+			if ( (BRWOSERS & WEBKIT) != 0 &&  ECLIPSE_37 ) {
 				return createWebKit( compositeParent );
 			}
 			

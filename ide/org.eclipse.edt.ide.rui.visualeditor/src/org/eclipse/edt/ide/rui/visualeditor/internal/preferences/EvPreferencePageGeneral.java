@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvHelp;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Messages;
+import org.eclipse.edt.ide.rui.visualeditor.internal.util.BrowserManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.ColorSelectorButton;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -304,11 +305,13 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		_radioRenderEngineDefault.setLayoutData( gridData );
 		_radioRenderEngineDefault.setText( Messages.NL_VisualEditor_RenderEngion_DEFAULT );
 
-		_radioRenderEngineWebKit = new Button( groupRenderEngineTab, SWT.RADIO );
-		gridData = new GridData();
-		gridData.horizontalIndent = 16;
-		_radioRenderEngineWebKit.setLayoutData( gridData );
-		_radioRenderEngineWebKit.setText( Messages.NL_VisualEditor_RenderEngion_WEBKIT );
+		if (BrowserManager.getInstance().ECLIPSE_37 ) {
+			_radioRenderEngineWebKit = new Button( groupRenderEngineTab, SWT.RADIO );
+			gridData = new GridData();
+			gridData.horizontalIndent = 16;
+			_radioRenderEngineWebKit.setLayoutData( gridData );
+			_radioRenderEngineWebKit.setText( Messages.NL_VisualEditor_RenderEngion_WEBKIT );
+		}
 		
 		_radioRenderEngineXULRunner = new Button( groupRenderEngineTab, SWT.RADIO );
 		gridData = new GridData();
@@ -316,14 +319,12 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		_radioRenderEngineXULRunner.setLayoutData( gridData );
 		_radioRenderEngineXULRunner.setText( Messages.NL_VisualEditor_RenderEngion_XULRUNNER );
 
-		_radioRenderEngineIE = new Button( groupRenderEngineTab, SWT.RADIO );
-		gridData = new GridData();
-		gridData.horizontalIndent = 16;
-		_radioRenderEngineIE.setLayoutData( gridData );
-		_radioRenderEngineIE.setText( Messages.NL_VisualEditor_RenderEngion_IE );
-		
-		if (!Platform.getOS().equals(Platform.OS_WIN32) ) {
-			_radioRenderEngineIE.setVisible( false );
+		if (Platform.getOS().equals(Platform.OS_WIN32) ) {
+			_radioRenderEngineIE = new Button( groupRenderEngineTab, SWT.RADIO );
+			gridData = new GridData();
+			gridData.horizontalIndent = 16;
+			_radioRenderEngineIE.setLayoutData( gridData );
+			_radioRenderEngineIE.setText( Messages.NL_VisualEditor_RenderEngion_IE );
 		}
 
 		// Reflect the current preference
@@ -336,7 +337,9 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_WEBKIT:
-				_radioRenderEngineWebKit.setSelection( true );
+				if ( _radioRenderEngineWebKit != null ) { 
+					_radioRenderEngineWebKit.setSelection( true );
+				}
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER:
@@ -344,7 +347,9 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_IE:
-				_radioRenderEngineIE.setSelection( true );
+				if ( _radioRenderEngineIE != null ) {
+					_radioRenderEngineIE.setSelection( true );
+				}
 				break;
 
 			default:
@@ -576,9 +581,13 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		// Render Engine
 		//------------
 		_radioRenderEngineDefault.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_DEFAULT );
-		_radioRenderEngineWebKit.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT );
+		if ( _radioRenderEngineWebKit != null ) {
+			_radioRenderEngineWebKit.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT );
+		}
 		_radioRenderEngineXULRunner.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER );
-		_radioRenderEngineIE.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_IE );
+		if ( _radioRenderEngineIE != null ) {
+			_radioRenderEngineIE.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_IE );
+		}
 
 		// Widget name
 		//------------
@@ -676,11 +685,11 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 
 		if( _radioRenderEngineDefault.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_DEFAULT;
-		else if( _radioRenderEngineWebKit.getSelection() == true )
+		else if( _radioRenderEngineWebKit != null && _radioRenderEngineWebKit.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_WEBKIT;
 		else if( _radioRenderEngineXULRunner.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER;
-		else if( _radioRenderEngineIE.getSelection() == true )
+		else if( _radioRenderEngineIE != null && _radioRenderEngineIE.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_IE;
 
 		EvPreferences.setInt( EvConstants.PREFERENCE_RENDERENGINE, iValue );
