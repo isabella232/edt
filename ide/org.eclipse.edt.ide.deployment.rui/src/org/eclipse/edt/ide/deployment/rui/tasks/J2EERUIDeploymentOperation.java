@@ -191,7 +191,7 @@ public class J2EERUIDeploymentOperation {
 				 */
 				if( !monitor.isCanceled() ){
 					monitor.subTask(Messages.J2EEDeploymentOperation_3);
-					deployHandlers(ruiHandler, projectRootFolder, messageRequestor, monitor);
+					deployHandlers(ruiHandler, projectRootFolder, messageRequestor, monitor, resultsCollector);
 					monitor.worked(1);
 				}
 				
@@ -219,7 +219,7 @@ public class J2EERUIDeploymentOperation {
 	
 	}
 	
-	private void deployHandlers(IFile ruiHandler, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor) {
+	private void deployHandlers(IFile ruiHandler, IFolder folder, DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor, IDeploymentResultsCollector resultsCollector) {
 		monitor = SubMonitor.convert(monitor, IProgressMonitor.UNKNOWN);
 		for (Iterator<Entry<String, DeployableFile>> htmlFilesByLocaleIterator = model.getHtmlFileContents().entrySet().iterator(); htmlFilesByLocaleIterator.hasNext() && !monitor.isCanceled();) {
 			Map.Entry<String, DeployableFile> entry = htmlFilesByLocaleIterator.next();
@@ -251,10 +251,7 @@ public class J2EERUIDeploymentOperation {
 									EGLMessage.EGL_DEPLOYMENT_FAILED_CREATE_HTML_FILE, 
 									null,
 									new String[] { htmlFileName, localeCode }));
-					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
-								EGLMessage.EGL_DEPLOYMENT_EXCEPTION, 
-								null,
-								new String[] { DeploymentUtilities.createExceptionMessage(e) }));
+					resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR, Messages.bind(Messages.deployment_invalid_rui_handler_compile_error, ruiHandler.getFullPath().toOSString())));
 				}
 				entry.getValue().setDeployed(true);
 			}
