@@ -32,7 +32,7 @@ public class BasicProjectGeneratorSelectionPage extends ProjectWizardPage {
 		super(pageName);
 		setTitle(NewWizardMessages.GeneratorSelectionPageTitle);
 		setDescription(NewWizardMessages.GeneratorSelectionPageDescription);
-		innerPage = new InnerCompilerGeneratorPage();
+		innerPage = new InnerCompilerGeneratorPage(this);
 	}
 
 	@Override
@@ -63,4 +63,7 @@ public class BasicProjectGeneratorSelectionPage extends ProjectWizardPage {
 		return innerPage.performOk();
 	}
 
+	public boolean isPageComplete() {
+		return super.isPageComplete() && innerPage.isValidPage();
+	}
 }

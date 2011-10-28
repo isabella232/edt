@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.compiler.IGenerator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
@@ -35,6 +36,13 @@ public class InnerCompilerGeneratorPage extends
 		CompilerPropertyAndPreferencePage {
 	
 	private Composite composite;
+	private ProjectWizardPage parentWizardPage;
+	public InnerCompilerGeneratorPage(
+			ProjectWizardPage parentWizardPage) {
+		super();
+		this.parentWizardPage = parentWizardPage;
+	}
+
 	/**
 	 * Returns the id of the compiler that this preference page is for.
 	 */
@@ -58,5 +66,15 @@ public class InnerCompilerGeneratorPage extends
 	
 	protected boolean doPerformOk( final boolean isApply ) {
 		return true;
+	}
+
+	protected void setPreferenceContentStatus(IStatus status) {
+		super.setPreferenceContentStatus(status);
+		parentWizardPage.setErrorMessage(status.getMessage());
+		parentWizardPage.getWizard().getContainer().updateButtons();
+	}
+	
+	public boolean isValidPage(){
+		return this.getPreferenceContentStatus().isOK() && latestStatus.isOK();
 	}
 }
