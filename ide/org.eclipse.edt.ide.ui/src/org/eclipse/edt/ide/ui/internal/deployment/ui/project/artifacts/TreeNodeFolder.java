@@ -28,14 +28,6 @@ public class TreeNodeFolder extends TreeNode {
 	public TreeNodeFolder(TreeNode parent, IResource resource) {
 		super(parent, resource);
 	}
-	
-    public boolean isSupportDynamicLoading() {
-		return supportDynamicLoading;
-	}
-
-	public void setSupportDynamicLoading(boolean supportDynamicLoading) {
-		this.supportDynamicLoading = supportDynamicLoading;
-	}
 
 	/**
      * @return <code>true</code> if this node has any children

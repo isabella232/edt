@@ -56,7 +56,6 @@ public class TreeNodeRoot extends TreeNodeFolder {
 			if (!addedProjects.contains(eglProject)) {
 				addedProjects.add(eglProject);
 				TreeNodeProject node = new TreeNodeProject(this, project);
-				node.setSupportDynamicLoading(isSupportDynamicLoading());
 				node.setDeployable(false);
 				results.add(node);
 			}

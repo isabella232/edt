@@ -70,7 +70,6 @@ public class EGLDDResourcesFormPage extends EGLDDBaseFormPage
 	
 	private void init()
 	{
-		fTreeRoot.setSupportDynamicLoading(isSupportDynamicLoading());
 		fTreeRoot.children = null;
 		initializeArtifactTree();
 		
@@ -128,7 +127,6 @@ public class EGLDDResourcesFormPage extends EGLDDBaseFormPage
 			}
 		} );
 		fTreeRoot = new TreeNodeRoot( null, getEditorProject() );
-		fTreeRoot.setSupportDynamicLoading(isSupportDynamicLoading());
 
 		Composite buttonComposite = toolkit.createComposite( fArtifactSection );
 		layoutColumn = 2;
@@ -225,13 +223,6 @@ public class EGLDDResourcesFormPage extends EGLDDBaseFormPage
 			init();
 			fArtifactTreeViewer.getViewer().getTree().setFocus();
 		}
-	}
-	
-	private boolean isSupportDynamicLoading(){
-		if(null != getModelRoot().getDeployment().getRuiapplication()){
-			return getModelRoot().getDeployment().getRuiapplication().isSupportDynamicLoading();
-		}
-		return false;
 	}
 	
 	protected String getHelpID() {
