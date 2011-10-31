@@ -2048,7 +2048,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 							shouldContinue[0] = false;
 						}
 						else {
-							if (ITypeBinding.PRIMITIVE_TYPE_BINDING == type2.getKind() &&
+							if (Binding.isValidBinding(type2) &&
+								ITypeBinding.PRIMITIVE_TYPE_BINDING == type2.getKind() &&
 								((PrimitiveTypeBinding)type2).getPrimitive() == Primitive.BOOLEAN) {
 								problemRequestor.acceptProblem(
 										operand2,
