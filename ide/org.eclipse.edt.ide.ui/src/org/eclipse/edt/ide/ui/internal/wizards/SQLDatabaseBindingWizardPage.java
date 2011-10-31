@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.eclipse.datatools.connectivity.IConnectionProfile;
+import org.eclipse.datatools.connectivity.ProfileManager;
 import org.eclipse.datatools.connectivity.ui.ProfileImageRegistry;
 import org.eclipse.datatools.connectivity.ui.actions.ViewPropertyAction;
 import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
@@ -222,7 +223,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 	 * Initializes states of the controls from the preference store.
 	 */
 	private void initializeValues() {
-		IConnectionProfile[] profiles = EGLSQLUtility.getProfilesToDisplay();
+		IConnectionProfile[] profiles = ProfileManager.getInstance().getProfiles();
 
 		if (profiles != null && profiles.length > 0) {
 			updateTreeData();
@@ -309,7 +310,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 	private void updateTreeData() {
 		IConnectionProfile currentSelection = getSelectedConnection();
 		existingConnectionsList.getTree().removeAll();
-		IConnectionProfile[] profiles = EGLSQLUtility.getProfilesToDisplay();
+		IConnectionProfile[] profiles = ProfileManager.getInstance().getProfiles();
 		existingConnections = new Hashtable();
 		Iterator connections = Arrays.asList(profiles).iterator();
 		IConnectionProfile connection;

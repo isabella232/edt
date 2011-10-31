@@ -24,8 +24,10 @@ import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Parameters;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.ModifyEvent;
@@ -312,22 +314,28 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	}
 	
 	protected void testConnection() {
-		String profileName = fDbms.getText();
+		String vendorName = fDbms.getText();
 		
-		//String profileProviderID = "org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile";
-		if(profileName != null) {
-			 String profileProviderID = EGLSQLUtility.getConnectionProviderProfile(profileName);
-			 String profileDescription = ""; //$NON-NLS-1$
-			 String parentProfile = ""; //$NON-NLS-1$
-			 boolean isAutoConnect = false;
-			 ConnectionProfile profile = new ConnectionProfile(profileName, profileDescription,
+		String profileProviderID = null;
+		if(vendorName != null && vendorName.length() > 0) {
+			profileProviderID = EGLSQLUtility.getConnectionProviderProfile(vendorName);
+		}
+		
+		// The data tools 'test connection' operation will throw an NPE if there is no provider ID.
+		if (profileProviderID != null) {
+			String profileDescription = ""; //$NON-NLS-1$
+			String parentProfile = ""; //$NON-NLS-1$
+			boolean isAutoConnect = false;
+			ConnectionProfile profile = new ConnectionProfile(vendorName, profileDescription,
 						profileProviderID, parentProfile, isAutoConnect);
 				
-				profile.setBaseProperties(getConnectionProfileProperties());
+			profile.setBaseProperties(getConnectionProfileProperties());
 
-				//getShell().getDisplay()
-				BusyIndicator.showWhile( Display.getCurrent(), 
-				        createTestConnectionRunnable( profile ) );	
+			BusyIndicator.showWhile( Display.getCurrent(), createTestConnectionRunnable( profile ) );	
+		}
+		else {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), SOAMessages.SQLDataBaseBindingTestConnectionNoVendorTitle,
+					NLS.bind(SOAMessages.SQLDataBaseBindingTestConnectionNoVendorMsg, vendorName == null ? "" : vendorName));
 		}
 	}
 	
