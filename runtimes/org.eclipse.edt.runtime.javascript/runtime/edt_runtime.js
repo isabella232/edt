@@ -102,8 +102,9 @@ egl.eglx.lang.EInt16.fromEInt32 = function (x) {
 egl.eglx.lang.EInt16.fromEDecimal = function (x) {   
 	return egl.convertDecimalToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.EInt16.fromAnyNumber = function (x) {   
-	return egl.convertDecimalToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+egl.eglx.lang.EInt16.fromENumber = function (x, nullable) {  
+	nullable = nullable || false;  // TODO nullability should be generated
+	return egl.convertAnyToSmallint(x, nullable);
 };
 egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallint(x);
@@ -118,6 +119,9 @@ egl.eglx.lang.EInt16.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
 };
 
+egl.eglx.lang.EInt16.asNumber= function (x) {
+	return egl.boxAny(x, "I;");
+};
 
 /****************************************************************************
  * EInt32 covers the egl type "int" and is represented as a native JavaScript 
@@ -136,8 +140,9 @@ egl.eglx.lang.EInt32.ZERO = 0;
 egl.eglx.lang.EInt32.fromEDecimal = function (x) {
 	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.EInt32.fromAnyNumber = function (x) {
-	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+egl.eglx.lang.EInt32.fromENumber = function (x, nullable) {  
+	nullable = nullable || false;  // TODO nullability should be generated
+	return egl.convertAnyToInt(x, nullable);
 };
 egl.eglx.lang.EInt32.fromAnyObject = function (x) {
 	return egl.convertAnyToInt(x,false);  //TODO sbg avoid hardcoding the boolean flag
@@ -159,6 +164,9 @@ egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
 };
 egl.eglx.lang.EInt32.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
+};
+egl.eglx.lang.EInt32.asNumber= function (x) {
+	return egl.boxAny(x, "I;");
 };
 
 /****************************************************************************
@@ -196,6 +204,13 @@ egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
 };
 egl.eglx.lang.EFloat32.pow = function (x, exp) {
 	return Math.pow(x, exp); 
+};
+egl.eglx.lang.EFloat32.fromENumber = function (x, nullable) {
+	nullable = nullable || false;  // TODO nullability should be generated
+	return egl.convertFloatToSmallfloat(egl.convertAnyToFloat(x, nullable));
+};
+egl.eglx.lang.EFloat32.asNumber= function (x) {
+	return egl.boxAny(x, "f;");
 };
 
 
@@ -238,11 +253,11 @@ egl.eglx.lang.EDecimal.fromEString = function (x, decimals, limit) {
 	else
 		return egl.convertStringToDecimal(x, egl.eglx.lang.EString.textLen(x), decimals);
 };
-egl.eglx.lang.EDecimal.fromAnyNumber = function (x, decimals, limit) {
+egl.eglx.lang.EDecimal.fromENumber = function (x, decimals, limit) {
 	if (limit)
-		return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
-		return egl.convertDecimalToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+		return egl.convertAnyToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
 egl.eglx.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
 	if (limit)
@@ -261,6 +276,9 @@ egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 		return egl.convertAnyToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
 		return egl.convertAnyToDecimal(x, 0, decimals, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+};
+egl.eglx.lang.EDecimal.asNumber= function (x) {
+	return egl.boxAny(x);
 };
 
 
@@ -292,8 +310,9 @@ egl.eglx.lang.EInt64.fromEDecimal = function (x) {
 egl.eglx.lang.EInt64.fromEFloat64 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.EInt64.fromAnyNumber = function (x) {  
-	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+egl.eglx.lang.EInt64.fromENumber = function (x, nullable) {  
+	nullable = nullable || false;  // TODO nullability should be generated
+	return egl.convertAnyToBigint(x, nullable);
 };
 egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
@@ -304,6 +323,13 @@ egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
 egl.eglx.lang.EInt64.pow = function (x, exp) {
 	return x.pow(exp); 
 };
+egl.eglx.lang.EInt64.fromEInt64 = function (x) {
+	return x;  // TODO sbg This seems likely to be a generation error.....
+}; 
+egl.eglx.lang.EInt64.asNumber= function (x) {
+	return egl.boxAny(x, "B;");
+};
+
 
 /****************************************************************************
  * EFloat64 covers the egl type "float" and is represented as a JavaScript Number).
@@ -326,11 +352,18 @@ egl.eglx.lang.EFloat64.fromEDecimal = function (x) {
 egl.eglx.lang.EFloat64.fromEString = function (x){
 	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.eglx.lang.EFloat64.fromENumber = function (x, nullable) {
+	nullable = nullable || false;  // TODO nullability should be generated
+	return egl.convertAnyToFloat(x, nullable);
+};
 egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
 	return egl.convertAnyToFloat(x, nullable);    
 };
 egl.eglx.lang.EFloat64.pow = function (x, exp) {
 	return Math.pow(x, exp); 
+};
+egl.eglx.lang.EFloat64.asNumber= function (x) {
+	return egl.boxAny(x, "F;");
 };
 
 
@@ -440,6 +473,9 @@ egl.eglx.lang.EString.fromEDecimal = function (x) {
 egl.eglx.lang.EString.fromEBoolean = function (x) {
 	return (x).toString();
 };
+egl.eglx.lang.EString.fromENumber = function (x) {
+	return egl.unboxAny(x).toString();
+};
 egl.eglx.lang.EString.fromETimestamp = function (timestamp) {
 	return egl.timeStampToString(timestamp, "yyyy-MM-dd-HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
@@ -538,6 +574,10 @@ egl.eglx.lang.EString.startsWith = function(s, substr) {
 	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
 	return s.startsWith(substr);
 };
+egl.eglx.lang.EString.asNumber = function (x) {
+	return egl.convertAnyToNumber(egl.boxAny(x, "S;"), false);  //TODO sbg avoid hardcoding the boolean flag
+};
+
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
 String.prototype.length = function() {  //TODO Don't override JavaScript field of the same name
@@ -603,6 +643,10 @@ egl.eglx.lang.EDate.fromEString = function (x) {
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
+egl.eglx.lang.EDate.notEquals = function (x, y) {   
+	return !egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+
 egl.eglx.lang.EDate.addDays = function (x, y) {
 	if ((x === null) || (y === null))
 		throw new egl.eglx.lang.NullValueException();
@@ -737,26 +781,26 @@ egl.eglx.lang.ETimestamp.equals = function (x, y) {
 
 
 /****************************************************************************
- * AnyNumber
+ * ENumber
  ****************************************************************************/
-egl.defineClass( "eglx.lang", "AnyNumber",
+egl.defineClass( "eglx.lang", "ENumber",
 {
 }
 );
-egl.eglx.lang.AnyNumber.fromEInt16 = function (x, decimals, limit) {   
+egl.eglx.lang.ENumber.fromEInt16 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.AnyNumber.fromEInt32 = function (x, decimals, limit) {   
+egl.eglx.lang.ENumber.fromEInt32 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.AnyNumber.fromEDecimal = function (x, decimals, limit) { 
+egl.eglx.lang.ENumber.fromEDecimal = function (x, decimals, limit) { 
 	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
-egl.eglx.lang.AnyNumber.fromEFloat64 = function (x, decimals, limit) { 
+egl.eglx.lang.ENumber.fromEFloat64 = function (x, decimals, limit) { 
 	return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
-egl.eglx.lang.AnyNumber.ezeCast = function(x, nullable, decimals, limit){
+egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
 	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 
