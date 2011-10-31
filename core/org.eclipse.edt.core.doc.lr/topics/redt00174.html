@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Column annotation"></meta>
-<meta name="abstract" content="Column ..."></meta>
-<meta name="description" content="Column ..."></meta>
+<meta name="abstract" content="Column identifies the database column that corresponds to the field."></meta>
+<meta name="description" content="Column identifies the database column that corresponds to the field."></meta>
 <meta name="DC.subject" content="Column EGL annotation, annotations, Column"></meta>
 <meta name="keywords" content="Column EGL annotation, annotations, Column"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -26,7 +26,8 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Column</span></span> ... </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Column</span></span> identifies
+the database column that corresponds to the field.</p>
 
 <a name="redt00174__main"><!-- --></a><dl id="redt00174__main">
 <dt class="dlterm"><a name="redt00174__package"><!-- --></a>EGL package name</dt>
@@ -60,22 +61,25 @@ end</pre>
 <dd><dl>
 <dt class="dlterm">name</dt>
 
-<dd></dd>
+<dd>Name of the database column. The default is the name of the field
+being annotated.</dd>
 
 
 <dt class="dlterm">insertable</dt>
 
-<dd></dd>
+<dd>Specifies whether the value of the field being annotated is inserted
+into the database during an EGL <span class="synph"><span class="kwd">add</span></span> statement.</dd>
 
 
 <dt class="dlterm">updateable</dt>
 
-<dd></dd>
+<dd>Specifies whether the value of the field being annotated is inserted
+into the database during an EGL <span class="synph"><span class="kwd">replace</span></span> statement.</dd>
 
 
 <dt class="dlterm">table</dt>
 
-<dd></dd>
+<dd>The name of the database table in which the column resides.</dd>
 
 </dl>
 <anchor id="annofields_more"></anchor></dd>
@@ -93,9 +97,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00174__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00174__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d34854e132">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d35051e144">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d34854e135">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d35051e147">Issue</th>
 
 </tr>
 
@@ -104,17 +108,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00174__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d34854e132 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d35051e144 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34854e135 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d35051e147 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00174__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d34854e132 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d35051e144 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34854e135 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d35051e147 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

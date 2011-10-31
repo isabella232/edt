@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SQLDataSource external type"></meta>
-<meta name="abstract" content="SQLDataSource is"></meta>
-<meta name="description" content="SQLDataSource is"></meta>
+<meta name="abstract" content="SQLDataSource represents a connection to a database. An instance of this type is used in action statements with which EGL code interacts with a database."></meta>
+<meta name="description" content="SQLDataSource represents a connection to a database. An instance of this type is used in action statements with which EGL code interacts with a database."></meta>
 <meta name="DC.subject" content="EGL types, SQLDataSource, EGL type"></meta>
 <meta name="keywords" content="EGL types, SQLDataSource, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -26,7 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>SQLDataSource</strong> is </p>
+<div id="body"><a name="body"><!-- --></a><p><strong>SQLDataSource</strong> represents a connection
+to a database. An instance of this type is used in action statements
+with which EGL code interacts with a database.</p>
 
 <a name="redt00162__main"><!-- --></a><dl id="redt00162__main">
 <dt class="dlterm"><a name="redt00162__package"><!-- --></a>EGL package name</dt>
@@ -37,35 +39,94 @@
 
 <dt class="dlterm"><a name="redt00162__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd>The following code connects to a database and provides a user
+ID and password:<pre class="codeblock">// the myCustomer variable is based on a custom Record type (not shown)
+myCustomer Customer;
+
+// the data source includes a connection string, as well as
+// security details that are stored in a dictionary.
+connectURL string = "jdbc:derby:SomeDB;create=true;";
+properties Dictionary{user = "MyID", password = "MyPassword"};
+ds SQLDataSource = new SQLDataSource(connectURL, properties);
+
+// get the customer details
+get myCustomer from ds using(1234) with #sql{
+      SELECT * FROM CUSTOMER WHERE id = ?
+   };</pre>
+<anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00162__detail"><!-- --></a>Type detail</dt>
 
 <dd><pre class="codeblock">externalType SQLDataSource extends DataSource type NativeType
 
-static TRANSACTION_ISOLATION_NONE int;
-static TRANSACTION_ISOLATION_READ_UNCOMMITTED int;
-static TRANSACTION_ISOLATION_READ_COMMITTED int;
-static TRANSACTION_ISOLATION_REPEATABLE_READ int;
-static TRANSACTION_ISOLATION_SERIALIZABLE int;
+   private constructor();
 
-private constructor();
-constructor(connectionUrl string in);
-constructor(connectionUrl string in, properties Dictionary in);
+   // security details are optional
+   constructor(connectionUrl string in);
+   constructor(connectionUrl string in, properties Dictionary in);
 
-function getAutoCommit() returns(boolean);
-function getTransactionIsolation() returns(int);
-function getWarnings() returns(SQLWarning?);
+   // ISOLATION LEVELS specify the level of independence 
+   // of one user's database transaction from another user's transaction.
+   // For background details, see the JDBC documentation from Oracle.
+   
+   // This value represents the default isolation level of the JDBC driver.
+   // Driver vendors typically use repeatableRead, 
+   // but check the documentation for your vendor to be sure.
+   static TRANSACTION_ISOLATION_NONE int;
 
-function isClosed() returns(boolean);
-function isReadOnly() returns(boolean);
-function isValid(timeout int in) returns(boolean);
+   // This value represents the most lenient isolation level: read uncommitted.
+   // Your logic runs faster but might not detect the state of the database. 
+   static TRANSACTION_ISOLATION_READ_UNCOMMITTED int;
 
-function setAutoCommit(autoCommit boolean in);
-function setCurrentSchema(schemaName string in);
-function setTransactionIsolation(level int in);
-function supportsTransactionIsolationLevel(level int in) returns(boolean);
+   // This value represents a less lenient isolation level: read committed.
+   static TRANSACTION_ISOLATION_READ_COMMITTED int;
+
+   // This value represents a stricter isolation level: repeatable read.
+   static TRANSACTION_ISOLATION_REPEATABLE_READ int;
+
+   // This value represents the strictest isolation level: serializable.
+   // The program is slower but detects the changes 
+   // made by other programs that run at the same time. 
+   static TRANSACTION_ISOLATION_SERIALIZABLE int;
+
+   // End ISOLATION LEVELS
+
+   // returns a boolean that indicates 
+   // whether database changes are being committed immediately.
+   function getAutoCommit() returns(boolean);
+
+   // returns the isolation level.
+   // possible return values were shown earlier. 
+   function getTransactionIsolation() returns(int);
+
+   // retrieves an object from which you can access warning details.
+   // each warning is structured as an exception record.
+   function getWarnings() returns(SQLWarning?);
+
+   // indicates whether the connection is closed
+   function isClosed() returns(boolean);
+
+   // indicates whether the connection allows only reads from the database.
+   function isReadOnly() returns(boolean);
+
+   // returns true if the input value is less than 
+   // the timeout value in effect for the current transaction. [???]
+   function isValid(timeout int in) returns(boolean);
+
+   // indicates whether updates are committed immediately.
+   // a false value typically results in faster processing.
+   function setAutoCommit(autoCommit boolean in);
+
+   // specifies the schema name
+   function setCurrentSchema(schemaName string in);
+
+   // sets the isolation level.  options were shown earlier.
+   function setTransactionIsolation(level int in);
+
+   // returns a Boolean value to indicate whether a 
+   // specified isolation level is supported. options were shown earlier.
+   function supportsTransactionIsolationLevel(level int in) returns(boolean);
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
@@ -81,9 +142,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00162__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00162__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d31166e91">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31186e94">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d31166e94">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31186e97">Issue</th>
 
 </tr>
 
@@ -92,17 +153,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00162__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d31166e91 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31186e94 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31166e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31186e97 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00162__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d31166e91 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31186e94 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31166e94 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d31186e97 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Table annotation"></meta>
-<meta name="abstract" content="Table ..."></meta>
-<meta name="description" content="Table ..."></meta>
+<meta name="abstract" content="Table represents the primary database table to which you are relating an external type, Record type, or Handler type."></meta>
+<meta name="description" content="Table represents the primary database table to which you are relating an external type, Record type, or Handler type."></meta>
 <meta name="DC.subject" content="Table EGL annotation, annotations, Table"></meta>
 <meta name="keywords" content="Table EGL annotation, annotations, Table"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -26,7 +26,9 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Table</span></span> ... </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Table</span></span> represents the
+primary database table to which you are relating an external type,
+Record type, or Handler type.</p>
 
 <a name="redt00172__main"><!-- --></a><dl id="redt00172__main">
 <dt class="dlterm"><a name="redt00172__package"><!-- --></a>EGL package name</dt>
@@ -37,7 +39,10 @@
 
 <dt class="dlterm"><a name="redt00172__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p"><pre class="codeblock"></pre>
+<dd><div class="p"><pre class="codeblock">Record Customer {@Table{name = "CUSTOMER_TABLE"}}
+   identifier STRING {@ID};
+   corporateName STRING;
+end</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -60,24 +65,27 @@ end</pre>
 <dd><dl>
 <dt class="dlterm">name</dt>
 
-<dd></dd>
+<dd>The table name. The default is the name of the type that is being
+annotated. The default name in the previous example would be “Customer”.</dd>
 
 
 <dt class="dlterm">shortName</dt>
 
-<dd></dd>
+<dd>The table-name alias, as might be used in a SELECT statement.</dd>
 
 
 <dt class="dlterm">catalog</dt>
 
-<dd></dd>
+<dd>The name of the database catalog that holds metadata about the
+table.</dd>
 
 
 <dt class="dlterm">schema</dt>
 
-<dd></dd>
+<dd>The schema name used when referring to the table.</dd>
 
 </dl>
+<p>All of those fields are optional.</p>
 <anchor id="annofields_more"></anchor></dd>
 
 
@@ -93,9 +101,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00172__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00172__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d33984e132">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d34175e139">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d33984e135">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d34175e142">Issue</th>
 
 </tr>
 
@@ -104,17 +112,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00172__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d33984e132 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34175e139 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d33984e135 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34175e142 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00172__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d33984e132 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34175e139 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d33984e135 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d34175e142 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

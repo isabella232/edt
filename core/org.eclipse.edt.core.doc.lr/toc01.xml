@@ -97,6 +97,7 @@
       </topic>
       <topic label="eglx.lang package" href="topics/redt00032.html">
          <topic label="Any and EAny types" href="topics/redt00050.html"/>
+         <topic label="AnyException type" href="topics/redt00270.html"/>
          <topic label="BasicProgram stereotype" href="topics/redt00102.html"/>
          <topic label="Bigint and EBigint types" href="topics/redt00058.html"/>
          <topic label="Boolean and EBoolean types" href="topics/redt00176.html"/>
@@ -181,7 +182,7 @@
          <topic label="ManyToOne annotation" href="topics/redt00169.html"/>
          <topic label="OneToMany annotation" href="topics/redt00170.html"/>
          <topic label="OneToOne annotation" href="topics/redt00171.html"/>
-         <topic label="ScrollableDataSource type" href="topics/redt00165.html"/>
+         <topic label="ScrollableDataSource external type" href="topics/redt00165.html"/>
          <topic label="Transient annotation" href="topics/redt00167.html"/>
       </topic>
       <topic label="eglx.persistence.sql package" href="topics/redt00266.html">

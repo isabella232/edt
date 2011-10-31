@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="ID annotation"></meta>
-<meta name="abstract" content="ID ..."></meta>
-<meta name="description" content="ID ..."></meta>
+<meta name="abstract" content="ID marks a field to indicate that the field value represents part of a primary key."></meta>
+<meta name="description" content="ID marks a field to indicate that the field value represents part of a primary key."></meta>
 <meta name="DC.subject" content="ID EGL annotation, annotations, ID"></meta>
 <meta name="keywords" content="ID EGL annotation, annotations, ID"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00265.html"></meta>
@@ -26,7 +26,8 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">ID</span></span> ... </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">ID</span></span> marks a field to
+indicate that the field value represents part of a primary key.</p>
 
 <a name="redt00166__main"><!-- --></a><dl id="redt00166__main">
 <dt class="dlterm"><a name="redt00166__package"><!-- --></a>EGL package name</dt>
@@ -37,7 +38,10 @@
 
 <dt class="dlterm"><a name="redt00166__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p"><pre class="codeblock"></pre>
+<dd><div class="p"><pre class="codeblock">Record Customer {@Table{name = "CUSTOMER_TABLE"}}
+   identifier STRING {@ID};
+   corporateName STRING;
+end</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -68,9 +72,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00166__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00166__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d32202e104">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d32261e105">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d32202e107">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d32261e108">Issue</th>
 
 </tr>
 
@@ -79,17 +83,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00166__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d32202e104 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32261e105 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d32202e107 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32261e108 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00166__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d32202e104 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32261e105 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d32202e107 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d32261e108 ">Access of persisted data is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

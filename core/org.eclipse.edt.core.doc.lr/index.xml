@@ -116,6 +116,9 @@
 <entry keyword="Any">
 <topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
 </entry>
+<entry keyword="AnyException">
+<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
+</entry>
 <entry keyword="asin EGL function">
 <topic href="topics/redt00208.html#redt00208" title="MathLib.asin function"/>
 </entry>
@@ -501,11 +504,12 @@
 <topic href="topics/redt00269.html#redt00269" title="SQLWarning external type"/>
 <topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
 <topic href="topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
+<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
 <topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
 <topic href="topics/redt00164.html#redt00164" title="DataSource external type"/>
 <topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
 <topic href="topics/redt00268.html#redt00268" title="SQLException external type"/>
-<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource type"/>
+<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
 <topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
 <topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
 <topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
@@ -514,6 +518,9 @@
 <entry keyword="EGL types">
 <entry keyword="Any">
 <topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+</entry>
+<entry keyword="AnyException">
+<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
 </entry>
 <entry keyword="Bigint">
 <topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
@@ -564,7 +571,7 @@
 <topic href="topics/cedt00021.html#cedt00021" title="EGL numeric types"/>
 </entry>
 <entry keyword="ScrollableDataSource">
-<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource type"/>
+<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
 </entry>
 <entry keyword="Smallfloat">
 <topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
@@ -934,7 +941,7 @@
 </entry>
 </entry>
 <entry keyword="ScrollableDataSource">
-<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource type"/>
+<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
 </entry>
 <entry keyword="SecondaryTable EGL annotation">
 <topic href="topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>

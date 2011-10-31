@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SQLResultSet external type"></meta>
-<meta name="abstract" content="SQLResultSet is"></meta>
-<meta name="description" content="SQLResultSet is"></meta>
+<meta name="abstract" content="SQLResultSet represents a result set that is returned from the execution of an SQL query."></meta>
+<meta name="description" content="SQLResultSet represents a result set that is returned from the execution of an SQL query."></meta>
 <meta name="DC.subject" content="EGL types, SQLResultSet, EGL type"></meta>
 <meta name="keywords" content="EGL types, SQLResultSet, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -26,7 +26,8 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>SQLResultSet</strong> is </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SQLResultSet</span></span> represents
+a result set that is returned from the execution of an SQL query.</p>
 
 <a name="redt00163__main"><!-- --></a><dl id="redt00163__main">
 <dt class="dlterm"><a name="redt00163__package"><!-- --></a>EGL package name</dt>
@@ -45,22 +46,56 @@
 <dd><pre class="codeblock">externalType SQLResultSet extends ScrollableDataSource type NativeType
 
    private constructor();
+
+   // The result set cannot be updated.
    static CONCUR_READ_ONLY int;
+
+   // The result set is updatable.
    static CONCUR_UPDATABLE int;
+
+   // After a commit, cursors remain open with their positions retained.
    static HOLD_CURSORS_OVER_COMMIT int;
+
+   // After a commit, cursors are closed. 
    static CLOSE_CURSORS_AT_COMMIT int;
+
+   // The cursor can only go forward.
    static TYPE_FORWARD_ONLY int;
+
+   // The result set is not sensitive to changes made by other users.
    static TYPE_SCROLL_INSENSITIVE int;
+
+   // The result is sensitive to changes made by other users.
    static TYPE_SCROLL_SENSITIVE int;
 
+   // Cancels row updates made since the previous invocation 
+   // of the updateRow function.
    function cancelRowUpdates();
+
+   // Deletes the row in the database.
    function deleteRow();
+
+   // Retrieves the hold status, 
+   // whether HOLD_CURSORS_AT_COMMIT or CLOSE_CURSORS_AT_COMMIT.
    function getHoldability() returns(int);
+
+   // retrieves an object from which you can access warning details.
+   // each warning is structured as an exception record.
    function getWarnings() returns(SQLWarning?);
+
+   // retrieves the current row again to include changes from other users.
    function refreshRow();
+
+   // indicates whether the current row was deleted since it was retrieved.
    function rowDeleted() returns(boolean);
+
+   // indicates whether the current row was updated since it was retrieved.
    function rowUpdated() returns(boolean);
+
+   // suggests how many rows to retrieve at a time, when necessary.
    function setFetchSize(size int in);
+
+   // updates the row in the database.
    function updateRow();
 end</pre>
 <anchor id="detail_more"></anchor></dd>
@@ -68,7 +103,9 @@ end</pre>
 
 <dt class="dlterm"><a name="redt00163__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd>For a list of functions that position the cursor and that identify
+the current position, see the documentation for the eglx.persistence.ScrollableDataSource
+external type.<anchor id="comments_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00163__compat"><!-- --></a>Compatibility</dt>
@@ -77,9 +114,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00163__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00163__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d31425e91">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31452e92">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d31425e94">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d31452e95">Issue</th>
 
 </tr>
 
@@ -88,17 +125,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00163__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d31425e91 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31452e92 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31425e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31452e95 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00163__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d31425e91 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d31452e92 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31425e94 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d31452e95 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

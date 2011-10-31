@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="ScrollableDataSource type"></meta>
-<meta name="abstract" content="ScrollableDataSource is"></meta>
-<meta name="description" content="ScrollableDataSource is"></meta>
+<meta name="DC.Title" content="ScrollableDataSource external type"></meta>
+<meta name="abstract" content="ScrollableDataSource lists functions for scrolling through a result set."></meta>
+<meta name="description" content="ScrollableDataSource lists functions for scrolling through a result set."></meta>
 <meta name="DC.subject" content="EGL types, ScrollableDataSource, EGL type"></meta>
 <meta name="keywords" content="EGL types, ScrollableDataSource, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00265.html"></meta>
@@ -17,16 +17,17 @@
 <meta name="DC.Identifier" content="redt00165"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>ScrollableDataSource type</title>
+<title>ScrollableDataSource external type</title>
 </head>
 <body id="redt00165"><a name="redt00165"><!-- --></a>
 
 
-<h1 class="topictitle1">ScrollableDataSource type</h1>
+<h1 class="topictitle1">ScrollableDataSource external type</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>ScrollableDataSource</strong> is </p>
+<div id="body"><a name="body"><!-- --></a><p><strong>ScrollableDataSource</strong> lists functions
+for scrolling through a result set.</p>
 
 <a name="redt00165__main"><!-- --></a><dl id="redt00165__main">
 <dt class="dlterm"><a name="redt00165__package"><!-- --></a>EGL package name</dt>
@@ -44,14 +45,45 @@
 
 <dd><pre class="codeblock">externalType ScrollableDataSource extends DataSource type NativeType
    private constructor();
+
+   // identifies the current position in a result set.  the first is 1.
    function getPosition() returns (int);
+
+   // indicates whether the current position is position 1.
    function isFirst() returns (boolean);
-   function isLast() returns (boolean); 
+
+   // indicates whether the current position is the last.
+   function isLast() returns (boolean);
+
+   // sets the current position by number. the first position is 1.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the invocation references a non-existent position. 
    function setAbsolute(row int in) returns (boolean);
+
+   // sets the position to the first row in the result set.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the result set is empty.
    function setFirst() returns (boolean);
+
+   // sets the position to the last row in the result set.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the result set is empty.
    function setLast() returns (boolean);
+
+   // sets the position to the row subsequent to the current position.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the invocation references a non-existent position. 
    function setNext() returns (boolean);
+
+   // sets the position to the row previous to the current position.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the invocation references a non-existent position. 
    function setPrevious() returns (boolean);
+
+   // sets a position relative to the current one.  
+   // the function argument can be positive or negative.
+   // returns a value that indicates whether the setting was successful.
+   // returns false if the invocation references a non-existent position. 
    function setRelative(rows int in) returns (boolean);
 end</pre>
 <anchor id="detail_more"></anchor></dd>
@@ -59,7 +91,9 @@ end</pre>
 
 <dt class="dlterm"><a name="redt00165__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd>A subtype of ScrollableDataSource is eglx.persistence.sql.SQLScrollableDataSource.
+A value based on SQLScrollableDataSource represents a result set that
+was returned from an SQL query.<anchor id="comments_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00165__compat"><!-- --></a>Compatibility</dt>
@@ -68,9 +102,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00165__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00165__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d31943e91">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d32002e91">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d31943e94">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d32002e94">Issue</th>
 
 </tr>
 
@@ -79,17 +113,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00165__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d31943e91 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32002e91 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31943e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32002e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00165__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d31943e91 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d32002e91 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d31943e94 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d32002e94 ">Access of persisted data is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

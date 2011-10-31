@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SQLWarning external type"></meta>
-<meta name="abstract" content="SQLWarning is"></meta>
-<meta name="description" content="SQLWarning is"></meta>
+<meta name="abstract" content="SQLWarning is a set of error-type details that result from an interaction with a relational database. In some cases warnings are thrown like other errors, but in other cases you must access the error object by invoking the getWarnings function of either the SQL data source or the SQL result set. A warning is less significant than another kind of error."></meta>
+<meta name="description" content="SQLWarning is a set of error-type details that result from an interaction with a relational database. In some cases warnings are thrown like other errors, but in other cases you must access the error object by invoking the getWarnings function of either the SQL data source or the SQL result set. A warning is less significant than another kind of error."></meta>
 <meta name="DC.subject" content="EGL types, SQLWarning, EGL type"></meta>
 <meta name="keywords" content="EGL types, SQLWarning, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -26,7 +26,12 @@
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>SQLWarning</strong> is </p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SQLWarning</span></span> is a set
+of error-type details that result from an interaction with a relational
+database. In some cases warnings are thrown like other errors, but
+in other cases you must access the error object by invoking the <span class="synph"><span class="kwd">getWarnings</span></span> function
+of either the SQL data source or the SQL result set. A warning is
+less significant than another kind of error.</p>
 
 <a name="redt00269__main"><!-- --></a><dl id="redt00269__main">
 <dt class="dlterm"><a name="redt00269__package"><!-- --></a>EGL package name</dt>
@@ -50,7 +55,8 @@ end</pre>
 
 <dt class="dlterm"><a name="redt00269__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd>This exception includes the fields that are documented in relation
+to eglx.persistence.sql.SQLException and eglx.lang.AnyException. <anchor id="comments_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00269__compat"><!-- --></a>Compatibility</dt>
@@ -59,9 +65,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00269__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00269__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d69800e91">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d70046e96">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d69800e94">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d70046e99">Issue</th>
 
 </tr>
 
@@ -70,17 +76,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00269__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d69800e91 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d70046e96 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69800e94 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d70046e99 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00269__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d69800e91 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d70046e96 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69800e94 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d70046e99 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>
