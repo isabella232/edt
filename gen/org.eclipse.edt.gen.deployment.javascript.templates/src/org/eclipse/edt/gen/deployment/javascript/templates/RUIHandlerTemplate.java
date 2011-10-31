@@ -16,20 +16,20 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Handler;
 
 public class RUIHandlerTemplate extends RUITemplate {
 	
 	public void genDeploymentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			PartReferenceCache partRefCache) {		
-		genHTML(handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, partRefCache);
+			RUIDependencyList dependencyList) {		
+		genHTML(handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, dependencyList);
 	}
 	
 	private void genHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			PartReferenceCache partRefCache){
-		genHTML(false, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, false, false, false, partRefCache);
+			RUIDependencyList dependencyList){
+		genHTML(false, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, false, false, false, dependencyList);
 	}
 	
 }

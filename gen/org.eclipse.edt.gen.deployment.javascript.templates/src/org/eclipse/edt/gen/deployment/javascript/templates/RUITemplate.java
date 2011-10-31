@@ -33,7 +33,7 @@ import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.gen.deployment.util.RuntimePropertiesFileUtil;
 import org.eclipse.edt.gen.deployment.util.WorkingCopyGenerationResult;
@@ -52,7 +52,7 @@ import org.eclipse.edt.mof.egl.Type;
 public class RUITemplate extends JavaScriptTemplate {	
 	
 	private static final String DEFAULT_THEME = "claro";
-	private PartReferenceCache partReferenceCache;
+	private RUIDependencyList dependencyList;
 	
 	private static final Map JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap();
 	static{
@@ -81,11 +81,8 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
 			List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale,
-			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug, PartReferenceCache partRefCache) {
-		this.partReferenceCache = partRefCache;
-		if (this.partReferenceCache == null) {
-			this.partReferenceCache = new PartReferenceCache(ctx.getSystemIREnvironment());
-		}
+			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug, RUIDependencyList dependencyList) {
+		this.dependencyList = dependencyList;
 		
 		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
@@ -128,8 +125,8 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug,
-			PartReferenceCache partRefCache){
-		genHTML(true, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug, partRefCache);		
+			RUIDependencyList dependencyList){
+		genHTML(true, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug, dependencyList);		
 	}	
 	
 	public void preGenComment(TabbedWriter out){
@@ -179,7 +176,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> cssFiles = new LinkedHashSet<String>();
 		genCSSFiles(handler, cssFiles);
 
-		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler);
+		Set<Part> refParts = getDependencyList(handler, ctx).get();
 		for(Part refPart:refParts){
 			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart)){
 				genCSSFiles((Handler)refPart, cssFiles);
@@ -324,7 +321,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> dependentFiles = new LinkedHashSet<String>();
 		ctx.invoke(genOutputFileName, handler, dependentFiles);
 
-		Set<Part> refParts = this.partReferenceCache.getReferencedPartsFor(handler);
+		Set<Part> refParts = getDependencyList(handler, ctx).get();
 		for(Part refPart:refParts){
 			if((refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) ) || refPart instanceof Enumeration)
 				ctx.invoke(genOutputFileName, refPart, dependentFiles);
@@ -391,7 +388,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		LinkedHashSet<String> includeFiles = new LinkedHashSet<String>();
 		ctx.invoke(genIncludeFiles, handler, includeFiles);
 		
-		Set<Part> refParts = partReferenceCache.getReferencedPartsFor(handler);
+		Set<Part> refParts = getDependencyList(handler, ctx).get();
 		for(Part refPart:refParts){
 			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart) || refPart instanceof ExternalType){
 				ctx.invoke(genIncludeFiles, refPart, includeFiles);
@@ -672,5 +669,12 @@ public class RUITemplate extends JavaScriptTemplate {
 				includeFiles.add(fileName);
 			}
 		}
+	}
+	
+	protected RUIDependencyList getDependencyList(Part part, Context ctx) {
+		if (dependencyList == null) {
+			dependencyList = new RUIDependencyList(ctx.getSystemIREnvironment(), part);
+		}
+		return dependencyList;
 	}
 }
