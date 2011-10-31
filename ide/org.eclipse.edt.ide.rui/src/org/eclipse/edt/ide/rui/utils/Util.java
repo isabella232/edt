@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
@@ -335,9 +335,9 @@ public class Util {
 		return false;
 	}
 	
-	public static Set<String> findPropertiesFiles(Part part, PartReferenceCache cache, String locale, FileLocator resourceLocator) {
+	public static Set<String> findPropertiesFiles(Part part, RUIDependencyList dependencyList, String locale, FileLocator resourceLocator) {
 		Set<String> propFiles = new LinkedHashSet<String>();
-		for (Part p : cache.getReferencedPartsFor(part)) {
+		for (Part p : dependencyList.get()) {
 			if (p instanceof Library && CommonUtilities.isRUIPropertiesLibrary(p)) {
 				String file = CommonUtilities.getPropertiesFile((Library)p);
 				PropertiesFileUtil util = new PropertiesFileUtil(file, locale);

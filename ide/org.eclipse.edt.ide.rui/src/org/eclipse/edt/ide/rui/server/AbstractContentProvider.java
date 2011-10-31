@@ -30,7 +30,7 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
@@ -198,12 +198,12 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
 				
 				ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
-				PartReferenceCache partRefCache = new PartReferenceCache(sysEnv.getIREnvironment());
+				RUIDependencyList dependencyList = new RUIDependencyList(sysEnv.getIREnvironment(), part);
 				
-				Set<String> propFiles = Util.findPropertiesFiles(part, partRefCache, getHandlerMessageLocale(), getFileLocator(project));
+				Set<String> propFiles = Util.findPropertiesFiles(part, dependencyList, getHandlerMessageLocale(), getFileLocator(project));
 				
 				Generator generator = getDevelopmentGenerator(cmd, egldds, propFiles, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
-						sysEnv, partRefCache);
+						sysEnv, dependencyList);
 				String result = cmd.generate(part, generator, environment);
 				return result.getBytes();
 			}
@@ -228,7 +228,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	
 	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv, PartReferenceCache partRefCache);
+			ISystemEnvironment sysEnv, RUIDependencyList dependencyList);
 
 	
 	protected String getRuntimeMessageLocale() {

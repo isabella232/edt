@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.PreviewPaneHTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 
 
 /**
@@ -32,7 +32,7 @@ public class PreviewPaneContentProvider extends WorkingCopyContentProvider {
 	}
 
 	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv, PartReferenceCache partRefCache) {
-		return new PreviewPaneHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache);
+			ISystemEnvironment sysEnv, RUIDependencyList dependencyList) {
+		return new PreviewPaneHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
 	}
 }

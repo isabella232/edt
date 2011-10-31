@@ -21,7 +21,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NoContextHTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
@@ -41,8 +41,8 @@ public class SavedContentProvider extends AbstractContentProvider {
 	}
 	
 	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles,
-			HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, PartReferenceCache partRefCache) {
-		return new NoContextHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache);
+			HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList) {
+		return new NoContextHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
 	}
 
 	@Override
