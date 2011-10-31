@@ -65,7 +65,11 @@ public class NewNameQueries implements INewNameQueries {
 	}
 
 	public INewNameQuery createNewEGLFileNameQuery(IEGLFile cu, String initialSuggestedName) {
-		String[] keys= new String[] {cu.getElementName()};
+		String elementName = cu.getElementName();
+		if(elementName != null && elementName.lastIndexOf(".egl") != -1) {
+			elementName = elementName.substring(0, elementName.length() - 4);
+		}
+		String[] keys= new String[] {elementName};
 		String message= MessageFormat.format(NewWizardMessages.CopyFilesAndFoldersOperation_inputDialogMessage, keys); 
 		return createStaticQuery(createCompilationUnitNameValidator(cu), message, initialSuggestedName, getShell());
 	}

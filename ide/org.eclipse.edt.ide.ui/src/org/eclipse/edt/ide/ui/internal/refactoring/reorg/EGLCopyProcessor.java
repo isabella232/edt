@@ -172,7 +172,7 @@ public final class EGLCopyProcessor extends org.eclipse.ltk.core.refactoring.par
 	}
 	
 	private String[] getAffectedProjectNatures() throws CoreException {
-		return new String[]{"com.ibm.etools.egl.model.eglnature"};
+		return new String[]{"org.eclipse.edt.ide.core.eglnature"};
 	}
 	
 	/**
