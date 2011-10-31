@@ -513,6 +513,30 @@ public class CommonUtilities {
 	}
 	
 	
+	public static String getOpName(Context ctx, Operation op) {
+		String result = op.getName();
+		
+		//TODO shouldn't have to special case asNumber 
+		if (result.startsWith("as") && (!"asNumber".equalsIgnoreCase(result))) {
+			StringBuffer alias = new StringBuffer("from");
+			String delim = "";
+			List<FunctionParameter> args = op.getParameters();
+			alias.append(delim);
+			
+			String sep = "";
+			for (FunctionParameter arg : args){
+				Type type = arg.getType();
+				alias.append(sep);
+				alias.append(ctx.getNativeTypeName(type));
+				sep = delim;
+			}
+			result = alias.toString();
+		}
+			
+		return result;
+	}	
+	
+	
 	
 	/* TODO sbg isOverloaded is part of https://bugs.eclipse.org/bugs/show_bug.cgi?id=358329, however,
 	 * it should eventually be removed when we implement 
