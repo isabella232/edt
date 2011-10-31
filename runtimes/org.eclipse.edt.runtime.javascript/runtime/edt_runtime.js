@@ -477,7 +477,7 @@ egl.eglx.lang.EString.fromENumber = function (x) {
 	return egl.unboxAny(x).toString();
 };
 egl.eglx.lang.EString.fromETimestamp = function (timestamp) {
-	return egl.timeStampToString(timestamp, "yyyy-MM-dd-HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	return egl.timeStampToString(timestamp, "yyyy-MM-dd HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
 	return egl.dateToString(d, "MM/dd/yyyy"); 
