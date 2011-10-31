@@ -34,7 +34,7 @@ load("runtime", "",  ["egl", "egl_development", "egl_mathcontext", "egl_bigdecim
 load("runtime", "egl.jsrt", ["BaseTypesAndRuntimes"]);
 load("runtime", "eglx.lang", ["AnyException", "DynamicAccessException", "Enumeration",
                              "InvalidArgumentException", "InvalidIndexException", "InvalidPatternException",
-                             "InvocationException", "JavaObjectException", "NullValueException",
+                             "InvocationException", "NullValueException",
                              "NumericOverflowException", "TypeCastException", ]);
 load("runtime", "eglx.lang", ["Constants", "DateTimeLib", "Dictionary", "OrderingKind", "MathLib", "StringLib", "SysLib"]);
 load("runtime", "eglx.ui.rui", ["Widget", "Document", "Event", "View"]);
