@@ -103,8 +103,7 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 		if ((arg.getConversionOperation() != null) && TypeUtils.isNumericType(fromType)) {
 			if (needsConversion(fromType, toType) && CommonUtilities.proceedWithConversion(ctx, arg.getConversionOperation())) {
 				out.print(ctx.getNativeImplementationMapping(toType) + '.');
-				out.print("from");
-				out.print(ctx.getNativeTypeName(fromType));
+				out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
 				out.print("(");
 				Expression objectExpr = arg.getObjectExpr();
 				if (objectExpr instanceof BoxingExpression){
@@ -129,7 +128,9 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
 			result = false;
-		if (TypeUtils.isNumericType(fromType) && (TypeUtils.Type_DECIMAL.equals(fromType) || TypeUtils.Type_MONEY.equals(fromType)))
+		if (toType.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+			result = true;
+		else if (TypeUtils.isNumericType(fromType) && (TypeUtils.Type_DECIMAL.equals(fromType) || TypeUtils.Type_MONEY.equals(fromType)))
 			result = conOp.isNarrowConversion();
 		return result;
 	}

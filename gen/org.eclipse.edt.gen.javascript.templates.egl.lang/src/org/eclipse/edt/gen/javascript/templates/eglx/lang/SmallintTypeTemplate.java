@@ -40,7 +40,9 @@ public class SmallintTypeTemplate extends JavaScriptTemplate {
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
 			result = false;
-		if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
+		if (toType.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+			result = true;
+		else if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
 			result = conOp.isNarrowConversion();
 		return result;
 	}

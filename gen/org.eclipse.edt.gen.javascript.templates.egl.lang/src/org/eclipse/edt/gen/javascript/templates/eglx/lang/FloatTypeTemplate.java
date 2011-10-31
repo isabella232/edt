@@ -45,7 +45,9 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		// don't convert matching types
 		if (CommonUtilities.getEglNameForTypeCamelCase(toType).equals(CommonUtilities.getEglNameForTypeCamelCase(fromType)))
 			result = false;
-		if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
+		if (toType.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+			result = true;
+		else if (TypeUtils.isNumericType(fromType) && CommonUtilities.isJavaScriptNumber(fromType))
 			result = conOp.isNarrowConversion();
 		return result;
 	}
@@ -72,8 +74,7 @@ public class FloatTypeTemplate extends JavaScriptTemplate {
 		if ((arg.getConversionOperation() == null) && TypeUtils.isNumericType(fromType)) {
 			if (needsConversion(fromType, toType)) {
 				out.print(ctx.getNativeImplementationMapping(toType) + '.');
-				out.print("from");
-				out.print(ctx.getNativeTypeName(fromType));
+				out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
 				out.print("(");
 				Expression objectExpr = arg.getObjectExpr();
 				if (objectExpr instanceof BoxingExpression){
