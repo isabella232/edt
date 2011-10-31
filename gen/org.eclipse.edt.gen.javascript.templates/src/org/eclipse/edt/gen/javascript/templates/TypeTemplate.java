@@ -187,18 +187,18 @@ public class TypeTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
-		//NOGO sbg Copied from AnyTypeTemplate
 		if (arg.getConversionOperation() != null) {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
-			out.print("from");
-			out.print(ctx.getNativeTypeName(arg.getConversionOperation().getParameters().get(0).getType()));
+			out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
 			out.print("(");
 			Expression objectExpr = arg.getObjectExpr();
 			if (objectExpr instanceof BoxingExpression){
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
 			}
 			ctx.invoke(genExpression, objectExpr, ctx, out);
-			if (ctx.getPrimitiveMapping(arg.getObjectExpr().getType().getClassifier().getTypeSignature()) == null) {
+			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();
+			//TODO shouldn't have to special case ENumber
+			if ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");
