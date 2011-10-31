@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.deployment.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.mof.egl.Part;
 
 public class DeploymentHTMLGenerator extends ValidHTMLGenerator {
@@ -29,8 +29,8 @@ public class DeploymentHTMLGenerator extends ValidHTMLGenerator {
 	}
 	
 	public DeploymentHTMLGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv,
-			PartReferenceCache partRefCache) {
-		super(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, partRefCache);
+			RUIDependencyList dependencyList) {
+		super(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
 	}
 	
 	@Override
