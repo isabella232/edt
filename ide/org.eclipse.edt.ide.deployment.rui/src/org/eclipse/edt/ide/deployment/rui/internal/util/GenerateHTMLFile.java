@@ -22,7 +22,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentHTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
@@ -51,18 +51,18 @@ public class GenerateHTMLFile{
 	private String userMsgLocale;
 	private final String runtimeMsgLocale;
 	private List egldds;
-	private final PartReferenceCache partRefCache;
+	private final RUIDependencyList dependencyList;
 	private FileLocator fileLocator;
 
 	public GenerateHTMLFile(IFile eglFile, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator, PartReferenceCache partRefCache){
+			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator, RUIDependencyList dependencyList){
 		this.eglFile = eglFile;
 		this.eglParameters = eglParameters;
 		this.runtimeMsgLocale = runtimeMsgLocale;
 		this.userMsgLocale = userMsgLocale;
 		this.egldds = egldds;
 		this.fileLocator = fileLocator;
-		this.partRefCache = partRefCache;
+		this.dependencyList = dependencyList;
 	}
 
 	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws Exception {
@@ -134,8 +134,8 @@ public class GenerateHTMLFile{
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
 				Generator generator = new DeploymentHTMLGenerator(cmd, egldds,
-						Util.findPropertiesFiles(part, partRefCache, userMsgLocale, fileLocator),
-						eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment(), partRefCache);
+						Util.findPropertiesFiles(part, dependencyList, userMsgLocale, fileLocator),
+						eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment(), dependencyList);
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}

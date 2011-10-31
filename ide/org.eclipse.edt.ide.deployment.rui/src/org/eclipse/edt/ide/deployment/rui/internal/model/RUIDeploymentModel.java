@@ -32,8 +32,8 @@ import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
-import org.eclipse.edt.gen.deployment.util.PartReferenceCache;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
@@ -203,7 +203,7 @@ public class RUIDeploymentModel {
 	IEGLSearchScope projSearchScope;
 	private List egldds;
 	
-	private PartReferenceCache partRefCache;
+	private RUIDependencyList dependencyList;
 	
 	/**
 	 * Constructor
@@ -216,7 +216,6 @@ public class RUIDeploymentModel {
 		this.contextRoot = contextRoot;
 		this.resultsCollector = resultsCollector;
 		this.egldds = egldds;
-		this.partRefCache = new PartReferenceCache(ProjectEnvironmentManager.getInstance().getProjectEnvironment(sourceProject).getSystemEnvironment().getIREnvironment());
 
 		startAllHandlerGeneration();
 		
@@ -487,7 +486,7 @@ public class RUIDeploymentModel {
 					byte[] htmlFile;
 					try {
 						htmlFile = generateHandlerHTML(ruiHandler, eglProperties, userLocaleCode, locale.getRuntimeLocaleCode(), egldds,
-								fileLocator, messageRequestor, partRefCache);
+								fileLocator, messageRequestor, dependencyList);
 						/**
 						 * store the html file bytes into a map for retrieval
 						 */
@@ -506,7 +505,7 @@ public class RUIDeploymentModel {
 	}
 	
 	/**
-	 * This is a different from {@link Util#findPropertiesFiles(Part, PartReferenceCache, String, FileLocator)}
+	 * This is a different from {@link Util#findPropertiesFiles(Part, RUIDependencyList, String, FileLocator)}
 	 * in that it returns all the propertiesFiles settings from all the referenced RUIPropertiesLibraries.
 	 * With the other method, it returns the specific files that should be included (e.g. file-en.properties instead of file.properties).
 	 * 
@@ -565,7 +564,7 @@ public class RUIDeploymentModel {
 	}
 	
 	private void findPropertiesFiles(Part part, Set<String> propFiles) {
-		for (Part p : partRefCache.getReferencedPartsFor(part)) {
+		for (Part p : getDependencyList(part).get()) {
 			if (p instanceof Library && CommonUtilities.isRUIPropertiesLibrary(p)) {
 				propFiles.add(CommonUtilities.getPropertiesFile((Library)p));
 			}
@@ -586,7 +585,7 @@ public class RUIDeploymentModel {
 	public static final byte[] generateHandlerHTML(IFile input, HashMap eglParameters, 
 			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator,
 			IGenerationMessageRequestor messageRequestor,
-			PartReferenceCache partRefCache) throws Exception  {
+			RUIDependencyList partRefCache) throws Exception  {
 		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds, fileLocator, partRefCache);
 		return op.execute(messageRequestor);
 	}
@@ -743,5 +742,12 @@ public class RUIDeploymentModel {
 	
 	public Map<IResource, String> getHTMLFileNames(){
 		return htmlFileNames;
+	}
+	
+	protected RUIDependencyList getDependencyList(Part part) {
+		if (dependencyList == null) {
+			dependencyList = new RUIDependencyList(ProjectEnvironmentManager.getInstance().getProjectEnvironment(sourceProject).getSystemEnvironment().getIREnvironment(), part);
+		}
+		return dependencyList;
 	}
 }
