@@ -12,23 +12,17 @@
 package org.eclipse.edt.ide.internal.sql.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.datatools.connectivity.ConnectionProfileConstants;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
+import org.eclipse.datatools.connectivity.IConnectionProfileProvider;
 import org.eclipse.datatools.connectivity.ProfileManager;
 import org.eclipse.datatools.connectivity.drivers.DriverInstance;
 import org.eclipse.datatools.connectivity.drivers.DriverManager;
 import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionConstants;
-import org.eclipse.datatools.connectivity.internal.ui.wizards.CPWizardNode;
-import org.eclipse.datatools.connectivity.internal.ui.wizards.ProfileWizardProvider;
+import org.eclipse.datatools.connectivity.internal.ConnectionProfileManager;
 import org.eclipse.datatools.connectivity.ui.actions.AddProfileViewAction;
 import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
 import org.eclipse.datatools.modelbase.sql.schema.Database;
@@ -36,107 +30,13 @@ import org.eclipse.datatools.modelbase.sql.schema.Schema;
 import org.eclipse.datatools.modelbase.sql.schema.helper.DatabaseHelper;
 import org.eclipse.datatools.modelbase.sql.schema.helper.SchemaHelper;
 import org.eclipse.datatools.modelbase.sql.tables.Table;
-import org.eclipse.edt.compiler.internal.sql.util.SQLUtility;
 import org.eclipse.edt.compiler.internal.util.Encoder;
 import org.eclipse.edt.ide.sql.SQLConstants;
 import org.eclipse.edt.ide.sql.SQLNlsStrings;
 import org.eclipse.edt.ide.sql.SQLPlugin;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 
 public class EGLSQLUtility {
-	public static final IEGLEDTSQLUtil eglEDTSQLUtil = createEDTSQLUtil();
-	private static final String EDT_SQL_UTIL_EXTENSION_ID = "eglEDTSQLUtil";
 	
-	
-	/*
-	 * These are the ids for all of the supported EGL database connection types. They are a 
-	 * subset of those supported by Eclipse/RAD datatools. The source of these strings is 
-	 * the plugin.xml file for the plugin com.ibm.datatools.connection.ui. They can be found 
-	 * as values for the connectionProfileID attribute of the driverDefinitionMapping property 
-	 * to the com.ibm.datatools.connection.ui.driverMapping extension point.
-	 */
-	public static Map<String,String> profileIds = new HashMap<String,String>(20);
-	
-	static {
-	    //For DB2
-		profileIds.put(SQLConstants.DB2UDB_NAME_EXPANSION.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.luw.connectionProfile");
-		profileIds.put(SQLConstants.DB2ZOS_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.zseries.connectionProfile");
-		profileIds.put(SQLConstants.DB2IOS_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.db2.iseries.connectionProfile");
-		
-		//For Derby
-		profileIds.put(SQLConstants.DERBY_NAME.toLowerCase(),"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
-		profileIds.put(SQLConstants.EMBEDDED_DERBY_NAME.toLowerCase(),"org.eclipse.datatools.connectivity.db.derby.embedded.connectionProfile");
-		
-		//For Generic JDBC
-		profileIds.put(SQLConstants.GENERIC_JDBC_NAME.toLowerCase(), "org.eclipse.datatools.connectivity.db.generic.connectionProfile");
-		
-		//For HSQLDB
-		profileIds.put(SQLConstants.HSQLDB_NAME.toLowerCase(), "org.eclipse.datatools.enablement.hsqldb.connectionProfile");
-		
-		//For Ingres
-		profileIds.put(SQLConstants.INGRES_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ingres.connectionProfile");
-		
-		//For Informix
-		profileIds.put(SQLConstants.INFORMIX_NAME.toLowerCase(), "org.eclipse.datatools.enablement.ibm.informix.connectionProfile");
-		
-		//For MaxDB
-		profileIds.put(SQLConstants.MAXDB_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sap.maxdb.connectionProfile");
-		
-		//For MySQL
-		profileIds.put(SQLConstants.MYSQL_NAME.toLowerCase(), "org.eclipse.datatools.enablement.mysql.connectionProfile");
-		
-		//For Oracle
-		profileIds.put(SQLConstants.ORACLE_NAME.toLowerCase(), "org.eclipse.datatools.enablement.oracle.connectionProfile");
-		
-		//For PostgreSQL
-		profileIds.put(SQLConstants.POSTGRESQL_NAME.toLowerCase(), "org.eclipse.datatools.enablement.postgresql.connectionProfile");
-		
-		//For SQL Server
-		profileIds.put(SQLConstants.MSSQLSERVER_NAME.toLowerCase(), "org.eclipse.datatools.enablement.msft.sqlserver.connectionProfile");
-		
-		//For SQLite
-		profileIds.put(SQLConstants.SQLITE_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sqlite.connectionProfile");
-		
-		//For Sybase
-		profileIds.put(SQLConstants.SYBASE_ASA_NAME.toLowerCase(), "org.eclipse.datatools.enablement.sybase.asa.connectionProfile");
-		profileIds.put(SQLConstants.SYBASE_ASE_NAME.toLowerCase(), "com.sybase.stf.servers.jdbc.ase2.embedded.connectionProfile");
-	}
-	
-	public static boolean isEqualIdentifiers(String id1, String id2, String vendorType) {
-
-		switch (Integer.parseInt(vendorType)) {
-			case SQLConstants.MSSQLSERVER:
-				//Schema object identifiers are case insensitive for MS SQL Server 
-				return getIdentifierString(id1, vendorType).equalsIgnoreCase(getIdentifierString(id2, vendorType));
-			default:
-				return getIdentifierString(id1, vendorType).equals(getIdentifierString(id2, vendorType));
-		}
-	}
-
-	/*
-	 * Generate a vendor specific rendered string identifiers for the given name
-	 */
-	public static String generateIdentifier(String name, String vendorType) {
-		// do not change a delimited name
-		if (isDelimitedIdentifier(name))
-			return name;
-
-		switch (Integer.parseInt(vendorType)) {
-			case SQLConstants.DB2UDB:				
-			case SQLConstants.DB2UDBAS400:	
-			case SQLConstants.DB2UDBOS390:
-			case SQLConstants.ORACLE:
-			case SQLConstants.DERBY:
-			case SQLConstants.GENERIC:
-				return name.toUpperCase();
-			case SQLConstants.INFORMIX:
-				return name.toLowerCase();
-			default:
-				return name;
-		}
-	}
-
 	public static String[] tokenizeName(String name) {
 
 		char[] nameChars = name.toCharArray();
@@ -205,28 +105,21 @@ public class EGLSQLUtility {
 		return DatabaseHelper.findSchema(database, schemaName);
 	}
 	
-	 private static String getIdentifierString(String name, String vendorType) {
-		 if(isDelimitedIdentifier(name)) {
-			 return name.substring(1, name.length() - 1);
-		 }
-		 return generateIdentifier(name, vendorType);
-     }
+	public static IConnectionProfile getCurrentConnectionProfile() {
+		String conName = SQLPlugin.getPlugin().getNamedConnection();
+		return getConnectionProfile(conName);
+	}
 	 
-	 public static IConnectionProfile getCurrentConnectionProfile() {
-		 	String conName = SQLPlugin.getPlugin().getNamedConnection();
-		 	return getConnectionProfile(conName);
-	 }
-	 
-	 public static IConnectionProfile getConnectionProfile(String connectionName) {
-		 	IConnectionProfile profile = null;
-		 	if (connectionName != null && !connectionName.equals("")) {
-				profile = ProfileManager.getInstance().getProfileByName(connectionName);
-		 	}
-		 	return profile;
-	 }
+	public static IConnectionProfile getConnectionProfile(String connectionName) {
+		IConnectionProfile profile = null;
+		if (connectionName != null && connectionName.length() > 0) {
+			profile = ProfileManager.getInstance().getProfileByName(connectionName);
+		}
+		return profile;
+	}
 	 
 	public static List<String> getExistingConnectionNamesList() {
-		IConnectionProfile[] profiles = getProfilesToDisplay();
+		IConnectionProfile[] profiles = ProfileManager.getInstance().getProfiles();
 		List<String> nameList = new ArrayList<String>(profiles.length);
 		for (int i = 0, n = profiles.length; i < n; i++) {
 			if (!nameList.contains(profiles[i].getName())) {
@@ -236,30 +129,6 @@ public class EGLSQLUtility {
 		return nameList;
 	}
 	
-	public static IConnectionProfile[] getProfilesToDisplay() {
-		IConnectionProfile[] profiles = ProfileManager.getInstance().getProfiles();
-		List<IConnectionProfile> filteredProfiles = new ArrayList<IConnectionProfile>();	
-		int totalProfiles = profiles.length;
-		for (int profileCount = 0 ; profileCount < totalProfiles ; profileCount++) {
-			IConnectionProfile profile = profiles[profileCount];
-			Map factories =  profiles[profileCount].getProvider().getConnectionFactories();
-			if ((factories == null) || (!factories.containsKey("java.sql.Connection"))) {
-				continue;
-			}
-			String name = profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_VENDOR_PROP_ID);
-			String version = profile.getBaseProperties().getProperty(IJDBCDriverDefinitionConstants.DATABASE_VERSION_PROP_ID);
-			if (!EGLConnectibleDatabases.isSupportedProduct(name))
-				continue;
-			if (name.equals(SQLConstants.DB2UDB_NAME) && version.equals(SQLConstants.DB2UDB_V_7_2))
-				continue;
-			if (name.equals(SQLConstants.GENERIC_JDBC_NAME) && !SQLUtility.isTerraDataSupported()) {
-				continue;
-			}
-			filteredProfiles.add(profile);
-		}
-		return filteredProfiles.toArray(new IConnectionProfile[filteredProfiles.size()]);
-	}
-	 
 	 public static String getSQLDatabaseVendorPreference(IConnectionProfile profile) {
 		 String name = "";
 		 if (profile != null) {
@@ -369,29 +238,7 @@ public class EGLSQLUtility {
 	}
 	
 	public static IConnectionProfile createNewProfile() {
-		// The RBD wizard is a little better - use it if it's available.
-		if ( eglEDTSQLUtil != null ) {
-			return eglEDTSQLUtil.createNewProfile();
-		}
-		
-		AddProfileViewAction action = new AddProfileViewAction() {
-			protected ViewerFilter[] getWizardSelectionFilters() {
-				return new ViewerFilter[] {
-					new ViewerFilter() {
-						public boolean select(Viewer viewer, Object parentElement, Object element) {
-							CPWizardNode wizardNode = (CPWizardNode)element;
-							if (wizardNode.getProvider() instanceof ProfileWizardProvider) {
-								String profile = ((ProfileWizardProvider)wizardNode.getProvider()).getProfile();
-								if(profileIds.values().contains(profile)) {
-									return true;
-								}
-							}
-							return false;
-						}
-					}
-				};
-			}
-		};
+		AddProfileViewAction action = new AddProfileViewAction();
 		action.run();
 		return action.getAddedProfile();
 	}
@@ -431,33 +278,14 @@ public class EGLSQLUtility {
 		return properties;
 	}
 	
-	private static IEGLEDTSQLUtil createEDTSQLUtil() {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(SQLPlugin.PLUGIN_ID, EDT_SQL_UTIL_EXTENSION_ID);
-		if ( extensionPoint != null ) {
-			IExtension[] extensions = extensionPoint.getExtensions();
-			for ( int i = 0; i < extensions.length; i++ ) {
-				IExtension extension = extensions[ i ];
-				IConfigurationElement[] elements = extension.getConfigurationElements();
-				for ( int j = 0; j < elements.length; j++ ) {
-					IConfigurationElement element = elements[j];
-					try {
-						// Go with the first one.
-						return (IEGLEDTSQLUtil)element.createExecutableExtension("class"); //$NON-NLS-1$
-					} catch ( Exception e ) {
-						e.printStackTrace();
-					}
-				}
+	public static String getConnectionProviderProfile(String vendorName) {
+		for (Object next : ConnectionProfileManager.getInstance().getProviders().values()) {
+			IConnectionProfileProvider provider = (IConnectionProfileProvider)next;
+			if (provider != null && vendorName.equals(provider.getName())) {
+				return provider.getId();
 			}
-    	}
-		return null;
-	}
-	
-	public static String getConnectionProviderProfile(String profileName) {
-		if(profileName == null) {
-			return null;
-		} else {
-			return profileIds.get(profileName.toLowerCase());
 		}
 		
+		return null;
 	}
 }

@@ -209,15 +209,9 @@ public class SQLPlugin extends AbstractUIPlugin {
 				// When a profile is created, and we don't have a profile selected,
 				// and the new profile is a supported type, select it.
 				if ( EGLSQLUtility.getCurrentConnectionProfile() == null ) {
-					IConnectionProfile[] supportedProfiles = EGLSQLUtility.getProfilesToDisplay();
-					for ( int i = 0; i < supportedProfiles.length; i++ ) {
-						if ( supportedProfiles[ i ].equals( profile ) ) {
-							getPreferenceStore().setValue(
-									ISQLPreferenceConstants.SQL_CONNECTION_NAMED_CONNECTION,
-									profile.getName() );
-							break;
-						}
-					}
+					getPreferenceStore().setValue(
+							ISQLPreferenceConstants.SQL_CONNECTION_NAMED_CONNECTION,
+							profile.getName() );
 				}
 			}
 			public void profileDeleted( IConnectionProfile profile ) {
@@ -361,7 +355,7 @@ public class SQLPlugin extends AbstractUIPlugin {
 			// Set the logger to log all messages:
 			logger.setLevel(Level.ALL);
 		} catch (Throwable t) {
-			System.out.println("ERROR - EGL UI Plugin - getting logger unsuccessfully!"); //$NON-NLS-1$
+			System.out.println("ERROR - EGL SQL Plugin - getting logger unsuccessfully!"); //$NON-NLS-1$
 			System.out.println("REASON: " + t.getMessage()); //$NON-NLS-1$
 		}
 		return logger;
