@@ -35,7 +35,7 @@ public class SQL {
 	
 	public static String getColumnName(Field field) {
 		Annotation column = field.getAnnotation("eglx.persistence.sql.Column");
-		String name = column == null ? field.getName() : (String)column.getValue("name");
+		String name = column != null && column.getValue("name") != null && !((String)column.getValue("name")).isEmpty()  ? (String)column.getValue("name") : field.getName();
 		// Determine table alias prefix if necessary
 		EGLClass entity = (EGLClass)field.getContainer();
 		Annotation secTables = entity.getAnnotation("eglx.persistence.sql.SecondaryTables");
