@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.java.templates;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -41,6 +42,11 @@ public class StructPartTemplate extends JavaTemplate {
 					}
 					else{
 						appendComma = true;
+					}
+					String pkg = CommonUtilities.packageName(extend);
+					if(pkg != null && !pkg.isEmpty()){
+						out.print(pkg);
+						out.print(".");
 					}
 					ctx.invoke(genClassName, extend, ctx, out);
 				}
