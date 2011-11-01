@@ -773,6 +773,9 @@ egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extensio
 
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
+	if(pattern == null){
+		pattern = "yyyy-MM-dd HH.mm.ss";
+	}
 	return egl.convertAnyToTimestamp(x, nullable, pattern);  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
