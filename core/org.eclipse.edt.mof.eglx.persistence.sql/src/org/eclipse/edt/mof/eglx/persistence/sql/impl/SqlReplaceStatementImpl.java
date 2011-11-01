@@ -57,7 +57,7 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 		}
 		sql += " WHERE ";
 		for (Field f : targetType.getFields()) {
-			if (SQL.isKeyField(f) && SQL.isUpdateable(f)) {
+			if (SQL.isKeyField(f)) {
 				sql += SQL.getColumnName(f);
 				sql += " = ?";
 			}
