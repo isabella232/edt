@@ -46,6 +46,7 @@ public class EGLWidgetDefinitionDeleteStragegy {
 	
 	private static final String CONTROLLER_TYPE_NAME = InternUtil.intern("Controller");
 	private static final String FORM_FIELD_TYPE_NAME = InternUtil.intern("FormField");
+	private static final String FORM_FIELD_TYPE_FULL_NAME = InternUtil.intern("org.eclipse.edt.rui.mvc.FormField");
 	private static final String FORM_MANAGER_TYPE_NAME = InternUtil.intern("FormManager");
 	
 	private IEGLDocument currentDocument;
@@ -227,7 +228,8 @@ public class EGLWidgetDefinitionDeleteStragegy {
 		}
 		
 		public boolean visit(ClassDataDeclaration classDataDeclaration) {
-			if(classDataDeclaration.getType().getCanonicalName().equalsIgnoreCase(FORM_FIELD_TYPE_NAME) && classDataDeclaration.hasSettingsBlock()){
+			String theFormFieldName = classDataDeclaration.getType().getCanonicalName();
+			if((theFormFieldName.equalsIgnoreCase(FORM_FIELD_TYPE_NAME) || theFormFieldName.equalsIgnoreCase(FORM_FIELD_TYPE_FULL_NAME)) && classDataDeclaration.hasSettingsBlock()){
 				SettingsBlock settingsBlockOpt = classDataDeclaration.getSettingsBlockOpt();
 				// get controller property
 				AssignmentLocator controllerAssignmentLocator = new AssignmentLocator(CONTROLLER_PROPERTY_NAME);
