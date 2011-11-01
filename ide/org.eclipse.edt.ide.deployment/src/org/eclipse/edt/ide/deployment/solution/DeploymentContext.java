@@ -85,12 +85,15 @@ public class DeploymentContext {
 
 	public void init() {
 		String targetProjectName = DeploymentUtilities.getDeploymentTargetId(model.getDeploymentTarget(), null, model.getName());
-		if ( targetProjectName == null ) {
+		if ( targetProjectName != null ) {
+			targetProject = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProjectName);
+		}
+
+		if ( targetProjectName == null || targetProject == null || !targetProject.exists() ) {
 			showMessage( Messages.deployment_action_no_target_found );
 			this.status = STATUS_STOP;
 			return;
 		}
-		targetProject = ResourcesPlugin.getWorkspace().getRoot().getProject(targetProjectName);
 	}
 	
 	public IProject getSourceProject() {
