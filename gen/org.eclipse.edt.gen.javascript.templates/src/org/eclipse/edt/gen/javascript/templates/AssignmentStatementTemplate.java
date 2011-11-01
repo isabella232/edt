@@ -20,4 +20,8 @@ public class AssignmentStatementTemplate extends JavaScriptTemplate {
 	public void genStatementBody(AssignmentStatement stmt, Context ctx, TabbedWriter out) {
 		ctx.invoke(genExpression, stmt.getAssignment(), ctx, out);
 	}
+	
+	public void genStatementEnd(AssignmentStatement stmt, Context ctx, TabbedWriter out) {
+		out.println(";");
+	}
 }
