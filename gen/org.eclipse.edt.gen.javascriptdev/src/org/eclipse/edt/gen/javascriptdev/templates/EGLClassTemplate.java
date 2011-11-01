@@ -125,8 +125,7 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 			//TODO Need figure out a dynamic way to determine a type is in Runtime.
 			String packageName = refPart.getPackageName();
 			if ( !refPart.equals( part ) && refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) && 
-					!(refPart instanceof Program) && !packageName.startsWith( "eglx." ) && !packageName.startsWith( "eglx." )
-					&& !packageName.startsWith( "org.eclipse.edt.eunit.runtime" ) ) {
+					!(refPart instanceof Program) && !packageName.startsWith( "eglx." ) && !packageName.startsWith( "egl." ) ) {
 				if ( refPart instanceof ExternalType ) {
 					ctx.invoke(Constants.genLoadScript4DependentParts, refPart, ctx, out);
 				}
