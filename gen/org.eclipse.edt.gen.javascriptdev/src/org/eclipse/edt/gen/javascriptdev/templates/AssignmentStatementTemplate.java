@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.AssignmentStatement;
 public class AssignmentStatementTemplate extends org.eclipse.edt.gen.javascript.templates.AssignmentStatementTemplate {
 	
 	public void genStatementEnd(AssignmentStatement stmt, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genStatementEnd, stmt, ctx, out);
+		super.genStatementEnd(stmt, ctx, out);
 		ctx.invoke(Constants.genSetLocalFunctionVariable, stmt.getAssignment().getLHS(), ctx, out);
 	}
 }
