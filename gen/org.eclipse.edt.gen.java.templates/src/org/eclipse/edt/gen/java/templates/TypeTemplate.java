@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -336,6 +337,10 @@ public class TypeTemplate extends JavaTemplate {
 			ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.JavaImplementation);
 			out.print(")");
 		}
+	}
+
+	public void genReturnStatement(Type type, Context ctx, TabbedWriter out, ReturnStatement arg) {
+		ctx.invoke(genReturnStatement, arg, ctx, out);
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {

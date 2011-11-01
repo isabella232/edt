@@ -18,8 +18,10 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -208,6 +210,21 @@ public class RecordTemplate extends JavaTemplate {
 			out.print(" = ");
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
+	}
+
+	public void genReturnStatement(Record type, Context ctx, TabbedWriter out, ReturnStatement arg) {
+		if (TypeUtils.isValueType(type) && arg.getExpression() != null) {
+			String temporary = ctx.nextTempName();
+			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
+			out.println(" " + temporary + " = null;");
+			out.print("return (org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType()), ctx, out);
+			out.print(", ");
+			out.print(temporary);
+			out.print(")");
+			out.print(")");
+		} else
+			ctx.invoke(genReturnStatement, arg, ctx, out);
 	}
 
 	public void genGetterSetter(Record part, Context ctx, TabbedWriter out, Field arg) {

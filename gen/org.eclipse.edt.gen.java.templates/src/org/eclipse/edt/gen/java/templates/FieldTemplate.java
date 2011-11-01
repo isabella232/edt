@@ -16,11 +16,16 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.ReturnStatement;
+import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -134,33 +139,58 @@ public class FieldTemplate extends JavaTemplate {
 
 	public void genGetter(Field field, Context ctx, TabbedWriter out) {
 		ctx.invoke(genAnnotations, field, ctx, out);
-		out.print("public ");
-		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
-		out.print(" get");
-		genMethodName(field, ctx, out);
-		out.println("() {");
-		out.print("return (");
-		ctx.invoke(genName, field, ctx, out);
-		out.println(");");
-		out.println("}");
+		Function function = factory.createFunction();
+		StatementBlock statementBlock = factory.createStatementBlock();
+		MemberName nameExpression = factory.createMemberName();
+		nameExpression.setMember(field);
+		nameExpression.setId(field.getName());
+		ReturnStatement returnStatement = factory.createReturnStatement();
+		returnStatement.setContainer(function);
+		returnStatement.setExpression(nameExpression);
+		statementBlock.setContainer(function);
+		statementBlock.getStatements().add(returnStatement);
+		function.setType(field.getType());
+		function.setStatementBlock(statementBlock);
+		function.setReturnField(field);
+		function.setName("get" + genMethodName(field));
+		// write out the function
+		ctx.invoke(genDeclaration, function, ctx, out);
 	}
 
 	public void genSetter(Field field, Context ctx, TabbedWriter out) {
-		out.print("public void set");
-		genMethodName(field, ctx, out);
-		out.print("( ");
-		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
-		out.println(" ezeValue ) {");
-		out.print("this.");
-		ctx.invoke(genName, field, ctx, out);
-		out.println(" = ezeValue;");
-		out.println("}");
+		Function function = factory.createFunction();
+		StatementBlock statementBlock = factory.createStatementBlock();
+		FunctionParameter functionParameter = factory.createFunctionParameter();
+		functionParameter.setContainer(function);
+		functionParameter.setName("ezeValue");
+		functionParameter.setParameterKind(ParameterKind.PARM_IN);
+		functionParameter.setType(field.getType());
+		AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+		assignmentStatement.setContainer(function);
+		Assignment assignment = factory.createAssignment();
+		assignmentStatement.setAssignment(assignment);
+		MemberName nameExpression1 = factory.createMemberName();
+		nameExpression1.setMember(field);
+		nameExpression1.setId(field.getName());
+		MemberName nameExpression2 = factory.createMemberName();
+		nameExpression2.setMember(functionParameter);
+		nameExpression2.setId(functionParameter.getName());
+		assignment.setLHS(nameExpression1);
+		assignment.setRHS(nameExpression2);
+		statementBlock.setContainer(function);
+		statementBlock.getStatements().add(assignmentStatement);
+		function.setStatementBlock(statementBlock);
+		function.getParameters().add(functionParameter);
+		function.setName("set" + genMethodName(field));
+		// write out the function
+		ctx.invoke(genDeclaration, function, ctx, out);
 	}
 
-	protected void genMethodName(Field field, Context ctx, TabbedWriter out) {
-		out.print(field.getName().substring(0, 1).toUpperCase());
+	protected String genMethodName(Field field) {
+		String ret = field.getName().substring(0, 1).toUpperCase();
 		if (field.getName().length() > 1)
-			out.print(field.getName().substring(1));
+			ret = ret + field.getName().substring(1);
+		return ret;
 	}
 
 	protected void transientOption(Field field, TabbedWriter out) {
