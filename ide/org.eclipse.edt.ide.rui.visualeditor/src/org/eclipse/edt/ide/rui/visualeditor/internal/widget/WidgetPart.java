@@ -345,6 +345,9 @@ public class WidgetPart {
 	 * Sets the name of this widget's declared variable name. 
 	 */
 	public void setVariableName( String strVariableName ){
+		if ( strVariableName != null && strVariableName.startsWith( "eze$" ) ) {//this is an internal name, skip it.
+			return;
+		}
 		_strVariableName = strVariableName;
 	}
 	
