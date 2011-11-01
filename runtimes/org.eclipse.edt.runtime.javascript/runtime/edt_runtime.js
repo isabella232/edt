@@ -476,8 +476,11 @@ egl.eglx.lang.EString.fromEBoolean = function (x) {
 egl.eglx.lang.EString.fromENumber = function (x) {
 	return egl.unboxAny(x).toString();
 };
-egl.eglx.lang.EString.fromETimestamp = function (timestamp) {
-	return egl.timeStampToString(timestamp, "yyyy-MM-dd HH.mm.ss.SSSSSS"); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+egl.eglx.lang.EString.fromETimestamp = function (timestamp, format) {
+	if(null == format){
+		format = "yyyy-MM-dd HH.mm.ss.SSSSSS";
+	}
+	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
 	return egl.dateToString(d, "MM/dd/yyyy"); 
@@ -780,6 +783,9 @@ egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+egl.eglx.lang.ETimestamp.fromEString = function (time) {   
+	return egl.stringToTime(time, "yyyy-MM-dd HH.mm.ss.SSSSSS");  
 };
 
 
