@@ -354,6 +354,9 @@ public class RUIDeploymentModel {
 			IFileLocator iFileLocator, org.eclipse.edt.ide.rui.utils.FileLocator fileLocator, HashMap<String, String> eglProperties, 
 			DeploymentResultMessageRequestor messageRequestor, IProgressMonitor monitor) {
 		
+		// Reset in case we're deploying multiple handlers.
+		this.dependencyList = null;
+		
 		/**
 		 * Read in the runtime properties files. These are the same for all locales.
 		 * These files have nothing to do with the runtime messages
