@@ -249,7 +249,19 @@ public class CompoundConditionExpander  extends AbstractVisitor{
 	}
 	
 	public void endVisit(StatementBlock block) {
-		blockStack.pop();
+		StatementBlock newBlock = blockStack.pop();
+		if ((getParent() instanceof List) 
+				&& (getGrandParent() instanceof StatementBlock)
+				&& !blockStack.isEmpty()) {
+			addStatementToBlock(newBlock, blockStack.peek());
+		}
+	}
+	
+	private Object getGrandParent() {
+		if (getParents().size() > 1) {
+			return getParents().get(getParents().size() - 2);
+		}
+		return null;
 	}
 	
 	public boolean visit(IfStatement stmt) {
