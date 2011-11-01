@@ -92,7 +92,8 @@ if(egl.IE){
 }
 egl.IPhone = !egl.IE && (window.navigator.userAgent.indexOf("iPhone") >= 0);
 egl.Firefox = !egl.IE && (window.navigator.userAgent.indexOf("Firefox") >= 0);
-egl.XulRunner = !egl.Firefox && (window.navigator.userAgent.indexOf("Gecko") >= 0);
+egl.WebKit = !egl.IE && (window.navigator.userAgent.indexOf("WebKit") >= 0);
+egl.XulRunner = !egl.Firefox && !egl.WebKit && (window.navigator.userAgent.indexOf("Gecko") >= 0);
 egl.Opera = !egl.Firefox && (window.navigator.userAgent.indexOf("Opera") >= 0);
 egl.Chrome = !egl.Opera && (window.navigator.userAgent.indexOf("Chrome") >= 0);
 
@@ -121,6 +122,8 @@ if (!Array.prototype.forEach) {
 		}
 	};
 }
+
+egl.loadScript = function() {};
 
 egl.print = function(s) {
 	if(egl.canPrintToConsole){
