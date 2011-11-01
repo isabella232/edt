@@ -94,8 +94,13 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 		out.println("if (!egl.debugg) egl.leave();");
 		out.println("} finally { ");
 		out.println("if (!egl.debugg){ ");
-		
-//TODO sbg Implement?		processReferencedWidgets();
+		List widgetsAccess = (List)ctx.get( Constants.REFERENCES_WIDGETS );
+		if( widgetsAccess != null && widgetsAccess.size() > 0 ) {
+			for ( int i = 0; i < widgetsAccess.size(); i ++ ) {
+				ctx.invoke("genReferencedWidgets", widgetsAccess.get(i), ctx, out);
+			}
+			widgetsAccess.clear();
+		}
 		
 		out.println("} else { egl.leave(); } ");
 		out.println("}");

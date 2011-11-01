@@ -58,8 +58,14 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 		
 		out.println("\t\t if (!egl.debugg){ ");
 		
-//TODO sbg Implement?		processReferencedWidgets();
-		
+		List widgetsAccess = (List)ctx.get( Constants.REFERENCES_WIDGETS );
+		if( widgetsAccess != null && widgetsAccess.size() > 0 ) {
+			for ( int i = 0; i < widgetsAccess.size(); i ++ ) {
+				ctx.invoke("genReferencedWidgets", widgetsAccess.get(i), ctx, out);
+			}
+			widgetsAccess.clear();
+		}
+
 		out.println("\t\t  } else { egl.leave(); } ");
 		out.println("}");
 	}

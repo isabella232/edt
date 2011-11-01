@@ -27,6 +27,14 @@ public class LibraryTemplate extends org.eclipse.edt.gen.javascript.templates.Li
 	}
 
 	@Override
+	public void genClassHeader(Library library, Context ctx, TabbedWriter out) {
+		String name = library.getFullyQualifiedName();
+		out.println("if (egl.eze$$userLibs) egl.eze$$userLibs.push('" + name + "');" );
+		out.println("else egl.eze$$userLibs = ['" + name + "'];");
+		super.genClassHeader(library, ctx, out);
+	}
+	
+	@Override
 	public void genContainerBasedAccessorArgs(Library library, Context ctx, TabbedWriter out, Function arg) {
 		super.genContainerBasedAccessorArgs(library, ctx, out, arg);
 		out.print(", \"");

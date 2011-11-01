@@ -56,7 +56,7 @@ public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.Fiel
 	}
 	
 	public void genSetWidgetLocation(Field field, Boolean isLocalField, Context ctx, TabbedWriter out){
-		if(CommonUtilities.isRUIWidget(field.getType())){
+		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(field.getType())){
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null){
 				Integer offset = (Integer)annotation.getValue(IEGLConstants.EGL_PARTOFFSET);

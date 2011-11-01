@@ -38,4 +38,7 @@ public class Constants {
 	public static final String genSetWidgetLocation = "genSetWidgetLocation";
 	public static final String genLoadScript4DependentParts = "genLoadScript4DependentParts";
 	public static final String genLoadCSS = "genLoadCSS";
+	
+	public static final String VE_ENABLE_EDITING = "VE_ENABLE_EDITING";
+	public static final String REFERENCES_WIDGETS = "REFERENCES_WIDGETS";
 }

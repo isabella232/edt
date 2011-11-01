@@ -11,13 +11,54 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.PartName;
 
 public class MemberAccessTemplate extends org.eclipse.edt.gen.javascript.templates.MemberAccessTemplate {
 	
+
 	public void genSetLocalFunctionVariable(MemberAccess access, Context ctx, TabbedWriter out) {
 		// No need to update - it's still the same object
+	}
+	
+	@Override
+	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
+		super.genMemberAccess(expr, ctx, out);
+		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(expr.getMember().getType())){
+			List references = (List)ctx.get( Constants.REFERENCES_WIDGETS );
+			if ( references == null ) {
+				references = new ArrayList();
+				ctx.put( Constants.REFERENCES_WIDGETS, references );
+			}
+			references.add( expr );
+		}
+	}
+	
+	public void genReferencedWidgets(MemberAccess expr, Context ctx, TabbedWriter out) {
+		String idName = null;
+		if ( expr.getQualifier() instanceof MemberName ) {
+			idName = ((MemberName)expr.getQualifier()).getId();
+		} else if ( expr.getQualifier() instanceof PartName ) {
+			idName = ((PartName)expr.getQualifier()).getId();
+		}
+		if ( idName != null ) {
+			out.print("(function(x){ if ( x !== null ) egl.setWidgetMoveable( x.");
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+			out.print(", \"");
+			out.print( idName );
+			out.print( ".");
+			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+			out.print( "\" );}( ");
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			out.println(" )); ");
+		}
 	}
 }
