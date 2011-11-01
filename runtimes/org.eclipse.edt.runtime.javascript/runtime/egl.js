@@ -123,8 +123,6 @@ if (!Array.prototype.forEach) {
 	};
 }
 
-egl.loadScript = function() {};
-
 egl.print = function(s) {
 	if(egl.canPrintToConsole){
 		if (egl.console === null) {
@@ -1160,6 +1158,7 @@ egl.enterBlock = function() {};
 egl.exitBlock = function() {};
 egl.showEditingFeedback = function() { };
 egl.setWidgetLocation = function() {};
+egl.loadScript = function() {};
 
 egl.startNewWork = function() {
 	//if (egl.debugg) return;
