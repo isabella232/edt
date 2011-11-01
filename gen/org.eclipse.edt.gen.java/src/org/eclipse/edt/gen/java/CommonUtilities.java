@@ -72,7 +72,9 @@ public class CommonUtilities {
 	 */
 	public static ExternalType getJavaExternalType(Type type) {
 		if (type instanceof ExternalType) {
-			if (type.getAnnotation("eglx.java.JavaObject") != null || type.getAnnotation("eglx.lang.NativeType") != null) {
+			if (type.getAnnotation("eglx.java.JavaObject") != null ||
+				type.getAnnotation("eglx.java.RootJavaObject") != null ||
+				type.getAnnotation("eglx.lang.NativeType") != null) {
 				return (ExternalType) type;
 			} else {
 				return null;
@@ -80,7 +82,9 @@ public class CommonUtilities {
 		} else if (type instanceof Part) {
 			Part member = (Part) type;
 			if (member instanceof ExternalType) {
-				if (member.getAnnotation("eglx.java.JavaObject") != null || member.getAnnotation("eglx.lang.NativeType") != null) {
+				if (member.getAnnotation("eglx.java.JavaObject") != null ||
+					member.getAnnotation("eglx.java.RootJavaObject") != null ||
+					member.getAnnotation("eglx.lang.NativeType") != null) {
 					return (ExternalType) member;
 				} else {
 					return null;
@@ -108,18 +112,29 @@ public class CommonUtilities {
 		Annotation annot = et.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
 			String name = et.getName();
-			if (((String) annot.getValue("externalName")).length() > 0) {
+			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0) {
 				name = (String) annot.getValue("externalName");
 			}
-
 			if ("Serializable".equals(name)) {
 				String pkg = et.getPackageName();
 				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 					pkg = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
 				}
-
 				if ("java.io".equals(pkg)) {
 					return true;
+				}
+			}
+		} else {
+			annot = et.getAnnotation("eglx.java.RootJavaObject");
+			if (annot != null) {
+				if ("Serializable".equals(et.getName())) {
+					String pkg = et.getPackageName();
+					if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
+						pkg = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME);
+					}
+					if ("java.io".equals(pkg)) {
+						return true;
+					}
 				}
 			}
 		}
