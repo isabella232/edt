@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
-import org.eclipse.edt.gen.java.templates.TimestampTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
