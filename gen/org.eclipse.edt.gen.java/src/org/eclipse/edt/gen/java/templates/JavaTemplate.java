@@ -82,6 +82,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genPackageStatement = "genPackageStatement";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
+	public static final String genReturnStatement = "genReturnStatement";
 	public static final String genRuntimeConstraint = "genRuntimeConstraint";
 	public static final String genRuntimeTypeName = "genRuntimeTypeName";
 	public static final String genRuntimeClassTypeName = "genRuntimeClassTypeName";
