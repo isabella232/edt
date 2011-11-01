@@ -97,6 +97,10 @@ public class AbstractVisitor implements EVisitor {
 		return parents.peek();
 	}
 	
+	public Stack<Object> getParents() {
+		return parents;
+	}
+	
 	public void pushSlotIndex(int index) {
 		slotIndices.push(index);
 	}
