@@ -353,6 +353,11 @@ public class IRUtils {
 
 	}
 	public static void makeCompatible(BinaryExpression expr, Type type1, Type type2) {
+
+		if (isNull(type1) || isNull(type2)) {
+			return;
+		}
+	
 		Operation op = expr.getOperation();
 		Expression asExpr;
 		Type parmType1 = op.getParameters().get(0).getType();
@@ -408,6 +413,14 @@ public class IRUtils {
 	}
 
 		
+	private static boolean isNull(Type type) {
+		if (type == null || type.getMofSerializationKey() == null) {
+			return false;
+		}
+			
+			return type.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLNullType);
+	}
+
 	private static boolean isAny(Classifier clazz) {
 		if (clazz != null) {
 			return (clazz.getMofSerializationKey().equalsIgnoreCase(MofConversion.Type_EGLAny));
@@ -427,6 +440,11 @@ public class IRUtils {
 		if (expr instanceof NullLiteral) {
 			return expr;
 		}
+		
+		if (isNull(type)) {
+			return expr;
+		}
+		
 		if (exprType.equals(type) || exprType.getClassifier().equals(type)) {
 			return expr;
 		}
