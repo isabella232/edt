@@ -215,7 +215,7 @@ public abstract class EAny implements eglx.lang.EAny {
 		if (value == null)
 			return null;
 		if (value instanceof eglx.lang.EAny)
-			return (EAny) value;
+			return (eglx.lang.EAny) value;
 		return ezeBox(value);
 	}
 
