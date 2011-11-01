@@ -154,6 +154,7 @@ public class WorkingCopyGenerationOperation {
 								return outputLocation.toOSString();
 							}
 						};
+						jsDevGenerator.setEditingMode( true );
 						jsDevGenerator.generate(file.getFullPath().toOSString(), part, environment, generationMessageRequestor);
 					}
 				} catch (PartNotFoundException e) {
@@ -184,10 +185,5 @@ public class WorkingCopyGenerationOperation {
 		return qualifiedName.toString();
 	}
 	
-	/**
-	 * Sets the editing mode.
-	 */
-	public void setEditingMode( boolean editingMode ){
-		this.editingMode = editingMode;
-	}
+
 }

@@ -118,7 +118,6 @@ public class JavaScriptPreviewGenerator {
 						}
 					} );
 	
-					genOp.setEditingMode( true );
 					genOp.generate();
 				}
 				catch( Exception e ) {
