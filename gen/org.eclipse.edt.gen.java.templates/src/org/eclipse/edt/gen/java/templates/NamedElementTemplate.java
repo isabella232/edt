@@ -36,8 +36,12 @@ public class NamedElementTemplate extends JavaTemplate {
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
 		if (element instanceof Member && ((Member) element).getContainer() instanceof ExternalType) {
 			Member member = (Member) element;
-			if (CommonUtilities.isJavaExternalType((ExternalType) member.getContainer()) && member.getAnnotation("eglx.lang.ExternalName") != null) {
-				out.print((String) member.getAnnotation("eglx.lang.ExternalName").getValue());
+			if (CommonUtilities.isJavaExternalType((ExternalType) member.getContainer())) {
+				// for java external types, either use the given external name or the name as is
+				if (member.getAnnotation("eglx.lang.ExternalName") != null)
+					out.print((String) member.getAnnotation("eglx.lang.ExternalName").getValue());
+				else
+					out.print(element.getName());
 				return;
 			}
 		}

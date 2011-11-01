@@ -41,21 +41,30 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
 			String shortName = part.getName();
-			if (((String) annot.getValue("externalName")).length() > 0) {
+			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0) {
 				shortName = (String) annot.getValue("externalName");
 			}
-
 			String fullName = shortName;
 			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
 				fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
 			} else if (part.getPackageName().length() > 0) {
 				fullName = part.getPackageName() + '.' + fullName;
 			}
-
 			CommonUtilities.processImport(fullName, ctx);
 		} else {
-			// process anything else the superclass needs to do
-			ctx.invokeSuper(this, preGen, part, ctx);
+			annot = part.getAnnotation("eglx.java.RootJavaObject");
+			if (annot != null) {
+				String fullName = part.getName();
+				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0) {
+					fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+				} else if (part.getPackageName().length() > 0) {
+					fullName = part.getPackageName() + '.' + fullName;
+				}
+				CommonUtilities.processImport(fullName, ctx);
+			} else {
+				// process anything else the superclass needs to do
+				ctx.invokeSuper(this, preGen, part, ctx);
+			}
 		}
 	}
 
@@ -75,7 +84,7 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
 		if (annot != null) {
 			String shortName = part.getName();
-			if (((String) annot.getValue("externalName")).length() > 0)
+			if (annot.getValue("externalName") != null && ((String) annot.getValue("externalName")).length() > 0)
 				shortName = (String) annot.getValue("externalName");
 			String fullName = shortName;
 			if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0)
@@ -92,12 +101,24 @@ public class ExternalTypeTemplate extends JavaTemplate {
 				}
 			}
 			out.print(fullName);
-		} else
-			ctx.invoke(genPartName, part, ctx, out);
+		} else {
+			annot = part.getAnnotation("eglx.java.RootJavaObject");
+			if (annot != null) {
+				String fullName = part.getName();
+				if (((String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME)).length() > 0)
+					fullName = (String) annot.getValue(IEGLConstants.PROPERTY_PACKAGENAME) + '.' + fullName;
+				else if (part.getPackageName().length() > 0)
+					fullName = part.getPackageName() + '.' + fullName;
+				out.print(fullName);
+			} else
+				ctx.invoke(genPartName, part, ctx, out);
+		}
 	}
 
 	public void genContainerBasedAssignment(ExternalType part, Context ctx, TabbedWriter out, Assignment assignment, Field field) {
 		Annotation annot = part.getAnnotation("eglx.java.JavaObject");
+		if (annot == null)
+			annot = part.getAnnotation("eglx.java.RootJavaObject");
 		if (annot != null) {
 			Annotation eventListener = field.getAnnotation("eglx.lang.EventListener");
 			if (eventListener != null) {
@@ -119,7 +140,6 @@ public class ExternalTypeTemplate extends JavaTemplate {
 				return;
 			}
 		}
-
 		ctx.invokeSuper(this, genContainerBasedAssignment, part, ctx, out, assignment, field);
 	}
 }
