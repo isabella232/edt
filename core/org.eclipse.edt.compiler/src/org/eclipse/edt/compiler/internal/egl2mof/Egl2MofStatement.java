@@ -13,6 +13,7 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -70,6 +71,9 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IOStatementGenerator.Registry.put("eglx.persistence.sql", SQLActionStatementGenerator.class);
 		IOStatementGenerator.Registry.put("eglx.services", ServicesActionStatementGenerator.class);
 	}
+	
+	Stack<LabelStatement> caseLabelStack = new Stack<LabelStatement>();
+	int caseLabelCounter = 0;
 	
 	Egl2MofStatement(IEnvironment env) {
 		super(env);
@@ -213,6 +217,17 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CaseStatement caseStatement) {
 		IfStatement stmt = null;
 		Expression criterion = null;
+		
+		//need to create a statement block to hold the label statement and if statement
+		StatementBlock block = factory.createStatementBlock();
+		LabelStatement label = factory.createLabelStatement();
+		label.setLabel("eze_CaseLabel_" + caseLabelCounter);
+		caseLabelCounter = caseLabelCounter + 1;
+		caseLabelStack.push(label);
+		setElementInformation(caseStatement, label);
+		block.getStatements().add(label);
+
+		
 		if (caseStatement.hasCriterion()) {
 			caseStatement.getCriterion().accept(this);
 			criterion = (Expression)stack.pop();
@@ -238,9 +253,14 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			caseStatement.getDefaultClause().accept(this);			
 			current.setFalseBranch((Statement)stack.pop());
 		}
-		stack.push(stmt);
+		block.getStatements().add(stmt);
+		stack.push(block);
 		setElementInformation(caseStatement, stmt);
 		return false;
+	}
+	
+	public void endVisit(org.eclipse.edt.compiler.core.ast.CaseStatement caseStatement) {
+		caseLabelStack.pop();
 	}
 
 
@@ -355,7 +375,12 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		ExitStatement ext = factory.createExitStatement();
 		ext.setLabel(node.getLabel());
 		if (node.isExitCase()) {
-			ext.setExitStatementType(ExitStatement.EXIT_CASE);
+			if (caseLabelStack.isEmpty()) { //should never happen
+				ext.setExitStatementType(ExitStatement.EXIT_CASE);
+			}
+			else {
+				ext.setLabel(caseLabelStack.peek().getLabel());
+			}
 		} else if (node.isExitFor()) {
 			ext.setExitStatementType(ExitStatement.EXIT_FOR);
 		} else if (node.isExitForEach()) {
