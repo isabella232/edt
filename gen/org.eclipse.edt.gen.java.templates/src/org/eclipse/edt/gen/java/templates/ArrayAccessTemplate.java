@@ -41,15 +41,22 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				out.print(temporary + ".get(");
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
-				out.print(" - 1)");
+				out.print(" - 1, ");
+				out.print(temporary);
+				out.print(")");
+				out.print(")");
 				out.print(")");
 				out.print(")");
 			} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print(".set(");
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
+				ctx.invoke(genExpression, expr.getArray(), ctx, out);
+				out.print("), ");
 				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
 					out.print("(");
 					ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
@@ -62,8 +69,11 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			} else {
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print(".set(");
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
+				ctx.invoke(genExpression, expr.getArray(), ctx, out);
+				out.print("), ");
 				CommonUtilities.genEzeCopyTo(arg1, ctx, out);
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
@@ -74,8 +84,11 @@ public class ArrayAccessTemplate extends JavaTemplate {
 		} else if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".set(");
+			out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1, ");
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+			out.print("), ");
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
 				out.print("(");
 				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
@@ -107,15 +120,19 @@ public class ArrayAccessTemplate extends JavaTemplate {
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genExpression, expr.getArray(), ctx, out);
-		if ( expr.getArray().getType().equals( TypeUtils.Type_ANY ) )
-		{
+		if (expr.getArray().getType().equals(TypeUtils.Type_ANY)) {
 			out.print(".ezeGet(");
-		}
-		else
-		{
+			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
+			out.print(" - 1");
+			out.print(")");
+		} else {
 			out.print(".get(");
+			out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
+			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
+			out.print(" - 1, ");
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+			out.print(")");
+			out.print(")");
 		}
-		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
-		out.print(" - 1)");
 	}
 }
