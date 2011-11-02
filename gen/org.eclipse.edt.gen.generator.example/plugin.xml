@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+<!--
     <extension point="org.eclipse.edt.ide.core.generators">
 		<provider
 			id="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
@@ -19,4 +20,6 @@
 			class="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorTabProvider">
 		</generatorTab>
    	</extension>
+   	
+-->   	
 </plugin>
