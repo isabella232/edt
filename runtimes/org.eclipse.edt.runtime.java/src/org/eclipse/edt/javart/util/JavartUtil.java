@@ -14,6 +14,7 @@ package org.eclipse.edt.javart.util;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -244,6 +245,24 @@ public class JavartUtil
 			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
 		}
 		return o;
+	}
+	/**
+	 * utility to check to see if an index is out of bounds and if it is, then throw 
+	 * a InvalidIndexException, otherwise return the index
+	 */
+	public static int checkIndex(int index, List<?> list) throws InvalidIndexException {
+		if (list == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if (index < 0 || index >= list.size())
+		{
+			InvalidIndexException iix = new InvalidIndexException();
+			iix.index = index;
+			throw iix.fillInMessage( Message.LIST_INDEX_OUT_OF_BOUNDS, index, list.size() );
+		}
+		return index;
 	}
 	/**
 	 * Returns an AnyException for the given Throwable.  If the Throwable is
