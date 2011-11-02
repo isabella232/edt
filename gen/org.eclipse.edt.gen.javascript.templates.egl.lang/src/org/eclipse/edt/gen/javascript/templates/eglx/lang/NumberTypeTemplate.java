@@ -159,6 +159,9 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 			if (TypeUtils.Type_Number.equals(type.getTypeSignature())) {
 				out.print("egl.is(");
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				if (arg.getObjectExpr().getType().getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
+					out.print(".eze$$value");
+				}
 				out.print(", \"NUMERIC\",egl.isnumeric)");
 			}
 			else {
