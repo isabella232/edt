@@ -418,12 +418,6 @@
         	class="org.eclipse.edt.ide.ui.internal.handlers.OrganizeImportsHandler"
         	commandId="org.eclipse.edt.ide.ui.source.importGroup.organizeImports">
   		</handler>
-<!-- Uncomment when callback function is ready  		
-  		<handler
-  			class="org.eclipse.edt.ide.ui.internal.handlers.FixCallbackFunctionHandler"
-  			commandId="org.eclipse.edt.ide.ui.source.createGroup.callbackFunction">
-		</handler>  
--->					
   		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.FindProjectReferencesHandler"
         	commandId="org.eclipse.edt.ide.ui.search.findProjectReferences">
@@ -447,13 +441,7 @@
    		<handler
         	class="org.eclipse.edt.ide.ui.internal.handlers.FindWorkspaceDeclarationsHandler"
         	commandId="org.eclipse.edt.ide.ui.search.findWorkspaceDeclarations">
-   		</handler>
-<!-- Uncomment when SQL support is ready 		
-  		<handler
-        	class="org.eclipse.edt.ide.ui.internal.handlers.AddSQLStatementHandler"
-        	commandId="org.eclipse.edt.ide.ui.source.sqlGroup.addSQLStatement">
-  		</handler>
--->  		
+   		</handler> 		
   		<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingExpandAllHandler"
         	commandId="org.eclipse.edt.ide.ui.ruler.folding.expandAll"/>
   		<handler class="org.eclipse.edt.ide.ui.internal.handlers.folding.FoldingCollapseAllHandler"
@@ -499,13 +487,13 @@
             	id="org.eclipse.edt.ide.ui.newProgramAction">
         	</action>
         	<action
-            	definitionId="org.eclipse.edt.ide.ui.newRuiHandlerWizard"
-            	label="%RUIHandlerAction.label"
+            	definitionId="org.eclipse.edt.ide.ui.newHandlerWizard"
+            	label="%HandlerAction.label"
             	icon="icons/ctool16/newruihandler_wiz.gif"
-            	tooltip="%RUIHandlerAction.tooltip"
-            	class="org.eclipse.edt.ide.ui.internal.actions.NewRUIHandlerAction"
+            	tooltip="%HandlerAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewHandlerAction"
             	toolbarPath="EGLMain"
-            	id="org.eclipse.edt.ide.ui.newRUIHandlerAction">
+            	id="org.eclipse.edt.ide.ui.newHandlerAction">
         	</action>
         	<action
             	definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
@@ -840,41 +828,6 @@ Templates
  		        	</or>         					
 				</enablement>
 			</commonWizard>
-			<!-- TODO Remove this			
-			<commonWizard
-				type="new"
-				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
-				wizardId="org.eclipse.edt.ide.ui.newRuiHandlerWizard">
-				<enablement>
- 		        	<or>
-	 					<adapt
-								type="org.eclipse.core.resources.IProject" >
-							<test
-								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
-						</adapt>
-						<instanceof
-								value="org.eclipse.edt.ide.core.model.IEGLElement" />
- 		        	</or>         					
-				</enablement>
-			</commonWizard>	
-			<commonWizard
-				type="new"
-				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
-				wizardId="org.eclipse.edt.ide.ui.newRuiWidgetWizard">
-				<enablement>
- 		        	<or>
-	 					<adapt
-								type="org.eclipse.core.resources.IProject" >
-							<test
-								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
-						</adapt>
-						<instanceof
-								value="org.eclipse.edt.ide.core.model.IEGLElement" />
- 		        	</or>         					
-				</enablement>
-			</commonWizard> -->
 			<commonWizard
 				type="new"
 				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
@@ -1022,21 +975,6 @@ Templates
             class="org.eclipse.edt.ide.ui.internal.handlers.wizards.NewHandlerWizard"
             id="org.eclipse.edt.ide.ui.newHandlerWizard">
  		</wizard>
-		<!--	TODO Remove these code and corresponding classed if they are not needed
-		<wizard
-            name="%RUIHandler"
-            icon="icons/ctool16/newruihandler_wiz.gif"
-            category="org.eclipse.edt.ide.ui.wizards.new.category"
-            class="org.eclipse.edt.ide.ui.internal.wizards.RUIHandlerWizard"
-            id="org.eclipse.edt.ide.ui.newRuiHandlerWizard">
- 		</wizard>
-      	<wizard
-            name="%RUIWidget"
-            icon="icons/ctool16/newruiwidget_wiz.gif"
-            category="org.eclipse.edt.ide.ui.wizards.new.category"
-            class="org.eclipse.edt.ide.ui.internal.wizards.RUIWidgetWizard"
-            id="org.eclipse.edt.ide.ui.newRuiWidgetWizard">
-		</wizard> -->
         <wizard
             name="%EGLSourceFolder"
             icon="icons/ctool16/newsrc_wiz.gif"

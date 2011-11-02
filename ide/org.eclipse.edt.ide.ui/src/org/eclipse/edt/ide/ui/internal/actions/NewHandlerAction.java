@@ -11,19 +11,19 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.actions;
 
-import org.eclipse.edt.ide.ui.internal.wizards.RUIHandlerWizard;
+import org.eclipse.edt.ide.ui.internal.handlers.wizards.NewHandlerWizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 
-public class NewRUIHandlerAction extends AbstractOpenWizardWorkbenchAction {
+public class NewHandlerAction extends AbstractOpenWizardWorkbenchAction {
 
-	public NewRUIHandlerAction() {
+	public NewHandlerAction() {
 	}
-	public NewRUIHandlerAction(IWorkbench workbench, String label, Class[] acceptedTypes) {
+	public NewHandlerAction(IWorkbench workbench, String label, Class[] acceptedTypes) {
 		super(workbench, label, acceptedTypes, false);
 	}
 	protected Wizard createWizard() {  
-		return new RUIHandlerWizard();
+		return new NewHandlerWizard();
 	}
 	protected boolean shouldAcceptElement(Object obj) { 
 		return true;
