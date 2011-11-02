@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -200,7 +201,7 @@ public class RecordTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(arg3);
 			}
-			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
 			ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
@@ -217,7 +218,8 @@ public class RecordTemplate extends JavaTemplate {
 			String temporary = ctx.nextTempName();
 			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
 			out.println(" " + temporary + " = null;");
-			out.print("return (org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+			out.print("return (");
+			CommonUtilities.genEzeCopyTo(arg.getExpression(), ctx, out);
 			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType()), ctx, out);
 			out.print(", ");
 			out.print(temporary);
