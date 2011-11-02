@@ -96,7 +96,7 @@ public class RecordTemplate extends JavaTemplate {
 				} else if (field.isNullable()) {
 					out.print("if (");
 					ctx.invoke(genName, field, ctx, out);
-					out.println(" == null)");
+					out.println(" != null)");
 					out.print("this.");
 					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeCopy(");
@@ -143,7 +143,7 @@ public class RecordTemplate extends JavaTemplate {
 				} else if (field.isNullable()) {
 					out.print("if (");
 					ctx.invoke(genName, field, ctx, out);
-					out.println(" == null)");
+					out.println(" != null)");
 					out.print("this.");
 					ctx.invoke(genName, field, ctx, out);
 					out.print(".ezeSetEmpty(");
