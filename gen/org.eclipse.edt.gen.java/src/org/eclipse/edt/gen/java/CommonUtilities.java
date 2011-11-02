@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.*;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -345,6 +346,13 @@ public class CommonUtilities {
 			return 5;
 		else
 			return -1;
+	}
+
+	public static void genEzeCopyTo(Expression expr, Context ctx, TabbedWriter out) {
+		out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+		// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+		if (expr instanceof NullLiteral)
+			out.print("(eglx.lang.AnyValue) ");
 	}
 
 	public static boolean isBoxedOutputTemp(Expression expr, Context ctx) {
