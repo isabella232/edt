@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -91,7 +92,7 @@ public class ListTypeTemplate extends JavaTemplate
 			}
 			else
 			{
-				out.print( "org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(" );
+				CommonUtilities.genEzeCopyTo(arg0, ctx, out);
 				ctx.invoke( genExpression, arg0, ctx, out );
 				out.print( ", " );
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
@@ -111,7 +112,7 @@ public class ListTypeTemplate extends JavaTemplate
 			}
 			else
 			{
-				out.print( "org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(" );
+				CommonUtilities.genEzeCopyTo(arg0, ctx, out);
 				ctx.invoke( genExpression, arg0, ctx, out );
 				out.print( ", " );
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
