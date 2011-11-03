@@ -1853,7 +1853,11 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	public void setUpEglTypedElement(TypedElement obj, IDataBinding edtObj) {
-		Type type = (Type)mofTypeFromTypedElement(edtObj);
+		EObject mofType = mofTypeFromTypedElement(edtObj);
+		if (!(mofType instanceof Type)) {
+			return;
+		}
+		Type type = (Type)mofType;
 		if (type != null && type.getTypeSignature().equals(Type_Any)) {
 			// TODO This is the default way generic types are referenced in current
 			// EGL: by having a convention that a single typed parameter name is 
