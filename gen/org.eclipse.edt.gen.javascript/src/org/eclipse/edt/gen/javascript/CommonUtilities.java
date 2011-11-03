@@ -317,7 +317,8 @@ public class CommonUtilities {
 	public static boolean isRUIWidget(Object obj) {
 		if (obj instanceof EGLClass) {
 			EGLClass eglClass = (EGLClass)obj;
-			if(eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null){ // TODO sbg need constant
+			if(eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null
+					|| eglClass.getTypeSignature().equalsIgnoreCase("eglx.ui.rui.Widget")){ // TODO sbg need constant
 				return true;
 			}
 		}
