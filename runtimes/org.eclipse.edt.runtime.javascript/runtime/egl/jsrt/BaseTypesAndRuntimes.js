@@ -3299,7 +3299,7 @@ egl.isblanks = function(s) {
 };
 egl.isnumeric = function(s) {
 	if (s == null) return true;
-	return (s.length!=0 && s.match(/[^0-9]+/)==null);
+	return !isNaN(parseFloat(s)) && isFinite(s);
 };
 
 egl.trim = function(s) {
