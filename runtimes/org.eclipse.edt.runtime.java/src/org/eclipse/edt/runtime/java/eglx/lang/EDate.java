@@ -56,10 +56,9 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return (Calendar) EAny.ezeCast(value, "asDate", EDate.class, null, null);
 	}
 
-	public static boolean ezeIsa(Object value) {
+	public static boolean ezeIsa(Object value, Integer... args) {
 		return value instanceof EDate
-			|| (value instanceof Calendar && !((Calendar) value).isSet(Calendar.HOUR) && !((Calendar) value).isSet(Calendar.MINUTE)
-				&& !((Calendar) value).isSet(Calendar.SECOND) && !((Calendar) value).isSet(Calendar.MILLISECOND));
+			|| (value instanceof Calendar && ((Calendar) value).isSet(Calendar.ZONE_OFFSET));
 	}
 
 	public String toString() {
@@ -292,9 +291,117 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static Calendar asDate(Calendar date) throws AnyException {
 		if (date == null)
 			return null;
-		Calendar cal = ETimestamp.convert(EString.asString(date), ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
+		Calendar cal = convert(EString.asString(date));
 		// to indicate this is a date object, we set a field as a flag
 		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
+		return cal;
+	}
+
+	public static Calendar convert(String date) {
+		// Try to parse the string by hand, looking for each field
+		int years = -1;
+		int months = -1;
+		int days = -1;
+		int length = date.length();
+		PARSE: if (length > 0) {
+			// ch is the character we're currently looking at. i is the index of
+			// the next character after ch.
+			char ch;
+			int i = 0;
+			// Locate the first digit.
+			do {
+				ch = date.charAt(i);
+				i++;
+			}
+			while (i < length && !('0' <= ch && ch <= '9'));
+			// Read in the number of months.
+			if (i <= length) {
+				months = ch - '0';
+				if (i < length) {
+					ch = date.charAt(i);
+					i++;
+					if ('0' <= ch && ch <= '9') {
+						months = months * 10 + ch - '0';
+						if (i < length) {
+							ch = date.charAt(i);
+							i++;
+						} else {
+							break PARSE;
+						}
+					}
+				} else {
+					break PARSE;
+				}
+			}
+			// Skip ahead to the next digit.
+			while (i < length && !('0' <= ch && ch <= '9')) {
+				ch = date.charAt(i);
+				i++;
+			}
+			// Read in the number of days.
+			if (i <= length) {
+				days = ch - '0';
+				if (i < length) {
+					ch = date.charAt(i);
+					i++;
+					if ('0' <= ch && ch <= '9') {
+						days = days * 10 + ch - '0';
+						if (i < length) {
+							ch = date.charAt(i);
+							i++;
+						} else {
+							break PARSE;
+						}
+					}
+				} else {
+					break PARSE;
+				}
+			}
+			// Skip ahead to the next digit.
+			while (i < length && !('0' <= ch && ch <= '9')) {
+				ch = date.charAt(i);
+				i++;
+			}
+			// Read in the number of years.
+			if (i <= length) {
+				years = 0;
+				for (int j = 0; '0' <= ch && ch <= '9' && j < 4; j++) {
+					years = years * 10 + ch - '0';
+					if (i < length) {
+						ch = date.charAt(i);
+						i++;
+					} else {
+						break PARSE;
+					}
+				}
+			}
+		}
+		// Make sure all required fields were found.
+		if (years == -1 || months == -1 || days == -1)
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
+		// The last thing to do is put the values into a calendar and DateData.
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		if (years != -1)
+			cal.set(Calendar.YEAR, years);
+		if (months != -1)
+			cal.set(Calendar.MONTH, months - 1);
+		if (days != -1)
+			cal.set(Calendar.DATE, days);
+		try {
+			cal.getTimeInMillis();
+		}
+		catch (Exception ex) {
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			tcx.initCause( ex );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
 		return cal;
 	}
 

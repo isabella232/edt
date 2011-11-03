@@ -139,7 +139,34 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			if (args.length == 2)
 				isa = ((ETimestamp) value).startCode == args[0] && ((ETimestamp) value).endCode == args[1];
 		} else {
-			isa = value instanceof Calendar;
+			isa = value instanceof Calendar && !((Calendar) value).isSet(Calendar.ZONE_OFFSET);
+			if (isa) {
+				if (args.length == 2) {
+					int startCode = args[0];
+					int endCode = args[1];
+					boolean yearSet = ((Calendar) value).isSet(Calendar.YEAR);
+					boolean monthSet = ((Calendar) value).isSet(Calendar.MONTH);
+					boolean dateSet = ((Calendar) value).isSet(Calendar.DATE);
+					boolean hourSet = ((Calendar) value).isSet(Calendar.HOUR_OF_DAY);
+					boolean minuteSet = ((Calendar) value).isSet(Calendar.MINUTE);
+					boolean secondSet = ((Calendar) value).isSet(Calendar.SECOND);
+					boolean milliSet = ((Calendar) value).isSet(Calendar.MILLISECOND);
+					if ((startCode <= YEAR_CODE && endCode >= YEAR_CODE) != yearSet)
+						isa = false;
+					if ((startCode <= MONTH_CODE && endCode >= MONTH_CODE) != monthSet)
+						isa = false;
+					if ((startCode <= DAY_CODE && endCode >= DAY_CODE) != dateSet)
+						isa = false;
+					if ((startCode <= HOUR_CODE && endCode >= HOUR_CODE) != hourSet)
+						isa = false;
+					if ((startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) != minuteSet)
+						isa = false;
+					if ((startCode <= SECOND_CODE && endCode >= SECOND_CODE) != secondSet)
+						isa = false;
+					if ((startCode <= FRACTION1_CODE && endCode >= FRACTION1_CODE) != milliSet)
+						isa = false;
+				}
+			}
 		}
 		return isa;
 	}
