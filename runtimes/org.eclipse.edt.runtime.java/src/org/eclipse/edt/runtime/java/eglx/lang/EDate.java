@@ -41,7 +41,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static EDate ezeBox(Calendar value) {
 		Calendar clone = null;
 		if (value != null) {
-			clone = ezeClone(value, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
+			clone = ezeClone(value, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE);
 		}
 		return new EDate(clone);
 	}
@@ -100,7 +100,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 			cloned.set(Calendar.MINUTE, minuteValue);
 		if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.SECOND_CODE && secondSet)
 			cloned.set(Calendar.SECOND, secondValue);
-		if (startCode <= ETimestamp.FRACTION1_CODE && endCode >= ETimestamp.FRACTION1_CODE && milliSet)
+		if (startCode <= ETimestamp.FRACTION6_CODE && endCode >= ETimestamp.FRACTION1_CODE && milliSet)
 			cloned.set(Calendar.MILLISECOND, milliValue);
 		// this flag is used by date objects only
 		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.DAY_CODE && zoneSet)
@@ -440,7 +440,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	 */
 	public static Calendar addDays(Calendar aDate, int amount) throws AnyException {
 		// we need to use the ETimestamp version of ezeClone here, because we are not creating a date object
-		Calendar newDate = ETimestamp.ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
+		Calendar newDate = ETimestamp.ezeClone(aDate, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE);
 		newDate.setLenient(true);
 		newDate.add(Calendar.DATE, amount);
 		// Verify that the values are valid. We only do this if year month and date are at least there

@@ -232,7 +232,7 @@ public class EString extends AnyBoxedObject<String> {
 		// copy the incoming calendar, as some of the methods cause the isSet attributes to be turned on
 		// we need to use the timestamp version of the ezeClone to preserve the zone offset flag, but 
 		// not set it in the cal object
-		Calendar cal = ETimestamp.ezeClone(original, ETimestamp.YEAR_CODE, ETimestamp.FRACTION1_CODE);
+		Calendar cal = ETimestamp.ezeClone(original, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE);
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;
