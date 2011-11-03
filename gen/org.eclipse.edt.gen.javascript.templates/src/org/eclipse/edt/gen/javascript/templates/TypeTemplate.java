@@ -308,7 +308,6 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genRuntimeTypeName, isaType, ctx, out, TypeNameKind.JavascriptObject);
 			out.print(")");
 		}
-
 		else if (lhsTypeSig.equalsIgnoreCase(isaTypeSig)) {
 			if (lhs.isNullable()) {
 				out.print("(");
@@ -317,6 +316,14 @@ public class TypeTemplate extends JavaScriptTemplate {
 			} else
 				out.print("true");
 		}
+		else if (lhsType.getClassifier() != null && lhsType.getClassifier().getTypeSignature().equalsIgnoreCase(isaTypeSig)) {
+			if (lhs.isNullable()) {
+				out.print("(");
+				ctx.invoke(genExpression, lhs, ctx, out);
+				out.print(" == null ? false : true)");
+			} else
+				out.print("true");
+		} 
 		else if (lhsType.getClassifier() != null && isaType.getClassifier() != null
 			&& lhsType.getClassifier().getTypeSignature().equalsIgnoreCase(isaType.getClassifier().getTypeSignature())) {
 			out.print("false");
