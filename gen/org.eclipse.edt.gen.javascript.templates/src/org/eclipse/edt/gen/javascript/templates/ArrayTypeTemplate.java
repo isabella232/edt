@@ -59,15 +59,20 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genContainerBasedNewExpression( ArrayType type, Context ctx, TabbedWriter out, NewExpression expr ) {
-		int arraySize = 0;
 		List<Expression> arguments = expr.getArguments();
-		if ((arguments != null) && (arguments.size() == 1)) {
-			try {
-				arraySize = Integer.valueOf(((IntegerLiteral)arguments.get(0)).getValue()); 
+		genContainerBasedNewExpressionArguments( type, ctx, out, arguments, 0 );
+	}
+	
+	private void genContainerBasedNewExpressionArguments( ArrayType type, Context ctx, TabbedWriter out, List<Expression> arguments, int next ) {
+		int arraySize = 0;
+		try {
+			if ( arguments.size() > 0 ) {
+				Expression argument = arguments.get( next );
+				arraySize = Integer.valueOf(((IntegerLiteral)argument).getValue());
 			}
-			catch (Exception e) {
-				arraySize = 0;
-			}
+		}
+		catch (Exception e) {
+			arraySize = 0;
 		}
 		ArrayType generic = (ArrayType)type;
 		String temporary = ctx.nextTempName();
@@ -85,12 +90,18 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		out.print("[i] = ");
 		if (generic.elementsNullable())
 			out.print("null");
-		else
-			ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+		else {
+			if ( next < arguments.size() - 1 ) {
+				genContainerBasedNewExpressionArguments( type, ctx, out, arguments, next + 1 );
+			} else {
+				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+			}
+		}
 		out.println(";}");
 		out.print("return ");
 		out.print(temporary);
 		out.print(";})()");
+
 	}
 
 
