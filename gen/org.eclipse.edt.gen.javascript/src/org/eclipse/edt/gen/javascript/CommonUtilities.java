@@ -20,6 +20,8 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.EGLClass;
@@ -32,6 +34,7 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
@@ -39,6 +42,7 @@ import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
@@ -671,5 +675,21 @@ public class CommonUtilities {
 		}
 		
 		return result.toString();
-	}	
+	}
+	
+	/**
+	 * isWidgetPropertyArrayAssignment inspects the specified statement and indicates whether the statement is an assignment statement
+	 * for the array type widget properties (such as widget.onClick ::= delegate)
+	 * @param stmt
+	 * @return boolean
+	 */
+	public static boolean isWidgetPropertyArrayAssignment(Statement stmt) {
+		if(!(stmt instanceof AssignmentStatement))
+			return false;
+		Assignment object = (Assignment)((AssignmentStatement)stmt).getExpr();
+		if(object.getLHS() instanceof MemberAccess && isRUIWidget(object.getLHS().getQualifier().getType())){
+			return true;
+		}
+		return false;
+	}
 }
