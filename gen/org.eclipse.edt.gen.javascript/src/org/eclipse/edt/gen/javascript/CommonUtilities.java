@@ -44,6 +44,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
@@ -315,14 +316,31 @@ public class CommonUtilities {
 	}
 
 	public static boolean isRUIWidget(Object obj) {
-		if (obj instanceof EGLClass) {
+		if (obj instanceof ExternalType) {
+			return isWidget((ExternalType)obj);
+		}
+		else if (obj instanceof EGLClass) {
 			EGLClass eglClass = (EGLClass)obj;
-			if(eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null
-					|| eglClass.getTypeSignature().equalsIgnoreCase("eglx.ui.rui.Widget")){ // TODO sbg need constant
+			if (eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null) { // TODO sbg need constant
 				return true;
 			}
 		}
-
+		
+		return false;
+	}
+	
+	public static boolean isWidget(ExternalType et) {
+		if (et.getName().equalsIgnoreCase("Widget") && et.getPackageName().equalsIgnoreCase("eglx.ui.rui")) {
+			return true;
+		}
+		
+		// Check super types.
+		for (StructPart struct : et.getSuperTypes()) {
+			if (struct instanceof ExternalType && isWidget((ExternalType)struct)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
