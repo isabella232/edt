@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
@@ -173,8 +174,22 @@ public class SystemEnvironment implements ISystemEnvironment {
     	}    	
     }
     
+    private boolean shouldAddToUnqualified(IPartBinding part) {
+    	if (Binding.isValidBinding(part)) {
+    		String name = part.getPackageQualifiedName().toUpperCase().toLowerCase();
+    		if (name.startsWith("org.eclipse.edt.mof.")) {
+    			return false;
+    		}
+    	}
+    	
+    	return true;
+    }
+    
     private void addSystemEntry(IPartBinding part) {
-        this.getUnqualifiedSystemParts().put(part.getName(), part);
+    	
+    	if (shouldAddToUnqualified(part)) {
+    		this.getUnqualifiedSystemParts().put(part.getName(), part);
+    	}
         
         Map map = getPackageParts(part.getPackageName());
         map.put(part.getName(), part);
@@ -204,10 +219,10 @@ public class SystemEnvironment implements ISystemEnvironment {
 	}
 
 	private Map getPackageParts(String[] packageName) {
-        Map map = (Map)systemPackages.get(packageName);
+        Map map = (Map)getSystemPackages().get(packageName);
         if (map == null) {
             map = new HashMap();
-            systemPackages.put(packageName, map);
+            getSystemPackages().put(packageName, map);
         }
         return map;
     }
