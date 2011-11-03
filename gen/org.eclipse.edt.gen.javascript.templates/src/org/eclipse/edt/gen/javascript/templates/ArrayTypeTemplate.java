@@ -34,6 +34,14 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		// the arg contains the operation being asked about
 		return false;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
 	}
+	
+	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+		// types can override this to cause list reorganization to be done
+		if((Boolean) ctx.get(Constants.EXPR_WIDGET_QUALIFIER)){
+			return false;
+		}
+		return true;
+	}
 
 	public void genDefaultValue(ArrayType generic, Context ctx, TabbedWriter out, Field arg) {
 		if (arg.isNullable()) 

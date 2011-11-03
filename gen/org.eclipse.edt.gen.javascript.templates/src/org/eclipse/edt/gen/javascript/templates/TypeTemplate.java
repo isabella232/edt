@@ -50,12 +50,15 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
 		// types can override this to cause an compound assignment expression to be broken up 
 		// the arg contains the operation being asked about
-		return false;
+		if (arg.equals("**=") || arg.equals("?:=") || arg.equals("::="))
+			return true;
+		else
+			return false;
 	}
 
 	public Boolean isListReorganizationWanted(Type type, Context ctx) {
 		// types can override this to cause list reorganization to be done
-		return false;  //TODO JS gen will require changes before this can be used
+		return true;  //TODO JS gen will require changes before this can be used
 	}
 
 	public Boolean isMathLibDecimalBoxingWanted(Type type, Context ctx) {
