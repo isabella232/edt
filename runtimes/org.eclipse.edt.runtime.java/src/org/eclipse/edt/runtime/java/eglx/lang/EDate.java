@@ -291,9 +291,10 @@ public class EDate extends AnyBoxedObject<Calendar> {
 	public static Calendar asDate(Calendar date) throws AnyException {
 		if (date == null)
 			return null;
-		Calendar cal = convert(EString.asString(date));
+		Calendar cal = ezeClone(date, ETimestamp.YEAR_CODE, ETimestamp.DAY_CODE);
 		// to indicate this is a date object, we set a field as a flag
 		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
+		cal = convert(EString.asString(cal));
 		return cal;
 	}
 
