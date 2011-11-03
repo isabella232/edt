@@ -93,7 +93,7 @@ public class PrimitiveTypeValidator {
 			 && passedPrimitiveType.hasPrimLength() ) {
 			problemRequestor.acceptProblem(passedPrimitiveType,
 					IProblemRequestor.LENGTH_NOT_ALLOWED,
-					new String[] { Integer.toString(passedPrimitiveType.getLength()) });
+					new String[] {});
 	
 		}		
 
@@ -164,7 +164,7 @@ public class PrimitiveTypeValidator {
                     if (passedPrimitiveType.hasPrimLength()) {
                     	problemRequestor.acceptProblem(passedPrimitiveType,
                     			IProblemRequestor.LENGTH_NOT_ALLOWED ,
-								new String[] { Integer.toString(passedPrimitiveType.getLength()) });
+								new String[] {});
  
                     }
                 }
