@@ -1484,11 +1484,53 @@ egl.getTypename = function(object) {
 };
 
 egl.getOuterWidthInPixels = function(element){
-	return parseInt(egl.getWidthInPixels(element));
+	return egl.getWidthInPixels(element);
+};
+
+egl.getOuterWidthInPixels2 = function(element){
+	if(egl.IE){
+		var outerWidth = egl.getWidthInPixels(element)
+					+ egl.getStyleValueForIE(element, "paddingLeft")
+					+ egl.getStyleValueForIE(element, "paddingRight")
+					+ egl.getStyleValueForIE(element, "borderLeftWidth")
+					+ egl.getStyleValueForIE(element, "borderRightWidth");
+		return outerWidth;
+	}else{
+		return egl.getWidthInPixels(element);
+	}
 };
 
 egl.getOuterHeightInPixels = function(element){
-	return parseInt(egl.getHeightInPixels(element));
+	return egl.getHeightInPixels(element);
+};
+
+egl.getOuterHeightInPixels2 = function(element){
+	if(egl.IE){
+		var outerHeight = egl.getHeightInPixels(element)
+						+ egl.getStyleValueForIE(element, "paddingTop")
+						+ egl.getStyleValueForIE(element, "paddingBottom")
+						+ egl.getStyleValueForIE(element, "borderTopWidth")
+						+ egl.getStyleValueForIE(element, "borderBottomWidth");
+		return outerHeight;
+	}
+	return egl.getHeightInPixels(element);
+};
+
+egl.getStyleValueForIE = function(element, key){
+	if(!element.currentStyle || !element.currentStyle[key]){
+		return 0;
+	}
+	
+	var w = ("" + element.currentStyle[key]).toUpperCase();
+	if( w.substr(w.length-2) == "PX" ){
+		w = w.substr(0, w.length-2);
+	}
+	
+	if (w != "" && !isNaN(w)){
+		return parseInt(w);
+	}else{
+		return 0;
+	}
 };
 
 /*
@@ -1568,6 +1610,14 @@ egl.getWidgetInfo = function() {
 				this.y = -1;
 			}				
 		},
+		isContainer: function(ele){
+			if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName
+					&& ele.eze$$DOMElement.children[0].tagName.toUpperCase() == "TABLE"){
+				return true;
+			}else{
+				return false;
+			}
+		},
 		/*
 		 * Set the elements width and height
 		 */
@@ -1577,8 +1627,13 @@ egl.getWidgetInfo = function() {
 				this.width = -1;
 				this.height = -1;
 			} else {
-				this.width = egl.getOuterWidthInPixels(ele.eze$$DOMElement);
-				this.height = egl.getOuterHeightInPixels(ele.eze$$DOMElement);
+				if(this.isContainer(ele)){
+					this.width = egl.getOuterWidthInPixels(ele.eze$$DOMElement);
+					this.height = egl.getOuterHeightInPixels(ele.eze$$DOMElement);
+				}else{
+					this.width = egl.getOuterWidthInPixels2(ele.eze$$DOMElement);
+					this.height = egl.getOuterHeightInPixels2(ele.eze$$DOMElement);
+				}
 				if (isNaN(this.width) || isNaN(this.height)) {
 					this.width = -1;
 					this.height = -1;
