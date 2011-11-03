@@ -1854,7 +1854,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	public void setUpEglTypedElement(TypedElement obj, IDataBinding edtObj) {
 		EObject mofType = mofTypeFromTypedElement(edtObj);
-		if (!(mofType instanceof Type)) {
+		if (mofType != null && !(mofType instanceof Type)) {
 			return;
 		}
 		Type type = (Type)mofType;
