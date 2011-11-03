@@ -100,7 +100,7 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 	/**
 	 * Boxes a list.
 	 */
-	public static <T> AnyBoxedObject<List<T>> ezeBox( List<T> object, String signature )
+	public static <T> EList<T> ezeBox( List<T> object, String signature )
 	{
 		return new EList( object, signature );
 	}
