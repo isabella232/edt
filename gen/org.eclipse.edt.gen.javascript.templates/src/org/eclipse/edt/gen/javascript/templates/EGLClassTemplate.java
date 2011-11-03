@@ -211,7 +211,18 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		out.println("this."+DEFAULTS_FUNCTION + "();");
+		
 		for (Field field : part.getFields()) {
+			// Need to generate annotations before the initializers, in case the annotation offers a default value
+			// that gets overridden by the initializers.
+			for (Annotation annot : field.getAnnotations()) {
+				try {
+					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
+				}
+				catch (TemplateException ex) {
+					//NOGO sbg Seems bogus, but apparently we lack templates for some annotations?
+				}
+			}
 			ctx.invoke(genInitializeMethod, part, ctx, out, field);
 		}
 
@@ -222,20 +233,6 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		if (part.getInitializerStatements() != null) {
 			ctx.invoke(genStatementNoBraces, part.getInitializerStatements(), ctx, out);
 		}
-		
-		
-		// Gen field-level annotations that want to participate in initialization
-		for (Field field : part.getFields()) {
-			for (Annotation annot : field.getAnnotations()) {
-				try {
-					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
-				}
-				catch (TemplateException ex) {
-					//NOGO sbg Seems bogus, but apparently we lack templates for some annotations?
-				}
-			}
-		}
-
 	}
 	
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
