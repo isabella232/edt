@@ -535,7 +535,9 @@ public class ProjectSettingsUtility {
 	public static void replaceWorkspaceSettings(IPath oldPath, IPath newPath) throws BackingStoreException {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : projects) {
-			replaceWorkspaceSettings(project, oldPath, newPath);
+			if (project.isAccessible()) {
+				replaceWorkspaceSettings(project, oldPath, newPath);
+			}
 		}
 	}
     public static void replaceWorkspaceSettings(IProject project, IPath oldPath, IPath newPath) throws BackingStoreException {
@@ -570,16 +572,18 @@ public class ProjectSettingsUtility {
 	    	            key = key.replace( oldKey, keyFor(newPath));
 	    	            nextNode.put(key, value);
 	    	        }
-
 	    	    }
 	    	}
+	    	prefs.flush();
     	}
     }
     
 	public static void removeWorkspaceSettings(IPath path) throws BackingStoreException {
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : projects) {
-			removeWorkspaceSettings(project, path);
+			if (project.isAccessible()) {
+				removeWorkspaceSettings(project, path);
+			}
 		}
 	}
 	
