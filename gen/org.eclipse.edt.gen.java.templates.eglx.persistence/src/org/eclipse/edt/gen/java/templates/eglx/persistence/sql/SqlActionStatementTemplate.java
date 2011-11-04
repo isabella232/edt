@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.DummyExpression;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
@@ -127,7 +128,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	
 	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
 		TabbedWriter newOut = new TabbedWriter(new StringWriter());
-		genGetColumnValueByIndex((EGLClass)target.getType().getClassifier(), var_resultSet, columnIndex, ctx, newOut);
+		genGetColumnValueByIndex(target.getType(), var_resultSet, columnIndex, ctx, newOut);
 		genSetTargetFromResultSet(target, newOut.getCurrentLine(), var_resultSet, ctx, out);
 	}
 	
@@ -233,16 +234,22 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				}
 			}
 			int i = 1;
-			for (Expression uexpr : stmt.getUsingExpressions()) {
-				genSetColumnValue(uexpr, var_stmt, i, ctx, out);
-				out.println(";");
-				i++;
+			if(stmt.getUsingExpressions() != null && stmt.getUsingExpressions().size() > 0 ){
+				for (Expression uexpr : stmt.getUsingExpressions()) {
+					genSetColumnValue(stmt, uexpr, var_stmt, i, ctx, out);
+					i++;
+				}
+			}
+			else{
+				genUsingForClause(stmt, var_stmt, ctx, out);
 			}
 		}
 		return isCall;
 	}
 	
-	
+	protected void genUsingForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+		
+	}
 	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
 		genSqlStatementSetup(stmt, ctx, out, var_statement);
 	}
@@ -311,37 +318,56 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 	
-	public void genGetColumnValueEnd(Classifier type, TabbedWriter out) {
-		if (SQL.isSQLDateTimeType(type)) {
-			out.print(')');
-		}
-	}
-	
-	public void genGetColumnValueByIndex(Classifier type, String resultSetName, int columnIndex, Context ctx, TabbedWriter out) {
-		genGetColumnValue(type, resultSetName, ctx, out);
-		out.print("(" + columnIndex + ")");
-		genGetColumnValueEnd(type, out);
-	}
-
-	// Handles conversion of EGL values from SQL values in places where the default mapping
-	// is not sufficient, i.e. dates and timestamps need to become SQL dates and timestamps
-	// TODO only handles date and time SQL types so far
-	public void genGetColumnValue(Classifier type, String resultSetName, Context ctx, TabbedWriter out) {
-		if (SQL.isSQLDateTimeType(type)) {
-			out.print("org.eclipse.edt.javart.util.DateTimeUtil.getNewCalendar(");
+	protected void genGetColumnValueByIndex(Type type, String resultSetName, int columnIndex, Context ctx, TabbedWriter out) {
+		Classifier typeClassifier = type.getClassifier();
+		if (typeClassifier.equals(TypeUtils.Type_TIMESTAMP)) {
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.ETimestamp.asTimestamp(org.eclipse.edt.javart.util.DateTimeUtil.getNewCalendar(");
 			out.print(resultSetName);
 			out.print('.');
-			genSqlGetValueMethodName(type, ctx, out);
+			genSqlGetValueMethodName(typeClassifier, ctx, out);
+			out.print("(" + columnIndex + "))");
+			ctx.invoke(genTypeDependentOptions, type, ctx, out);
+			out.print(")");
+		}
+		else if(typeClassifier.equals(TypeUtils.Type_DATE)){
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EDate.asDate(org.eclipse.edt.javart.util.DateTimeUtil.getNewCalendar(");
+			out.print(resultSetName);
+			out.print('.');
+			genSqlGetValueMethodName(typeClassifier, ctx, out);
+			out.print("(" + columnIndex + ")))");
 		}
 		else {
 			out.print(resultSetName);
 			out.print('.');
-			genSqlGetValueMethodName(type, ctx, out);
+			genSqlGetValueMethodName(typeClassifier, ctx, out);
+			out.print("(" + columnIndex + ")");
 		}
 	}
-	
-	public void genSetColumnValue(Expression expr, String stmt_or_resultSet_var, int columnIndex, Context ctx, TabbedWriter out) {
+	public boolean isNullable(SqlActionStatement stmt, Context ctx, MemberAccess expr) {
+		return expr.getMember().isNullable();
+	}
+	public Boolean isNullable(SqlActionStatement stmt, Context ctx, MemberName expr) {
+		return expr.getMember().isNullable();
+	}
+	public Boolean isNullable(SqlActionStatement stmt, Context ctx, Expression expr) {
+		return Boolean.FALSE;
+	}
+	public void genSetColumnValue(SqlActionStatement stmt, Expression expr, String stmt_or_resultSet_var, int columnIndex, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)expr.getType().getClassifier();
+		Boolean isNullable = (Boolean)ctx.invoke("isNullable", stmt, ctx, expr);
+		if(isNullable != null && isNullable){
+			out.print("if(null == ");
+			ctx.invoke(genExpression, expr, ctx, out);
+			out.println("){");
+			out.print(stmt_or_resultSet_var);
+			out.print(".setNull(");
+			out.print(columnIndex);
+			out.print(", ");
+			out.print(SQL.getSQLTypeConstant(type));
+			out.println(");");
+			out.println("}");
+			out.println("else{");
+		}
 		out.print(stmt_or_resultSet_var);
 		out.print('.');
 		genSqlSetValueMethodName(type, ctx, out);
@@ -351,7 +377,10 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		genConvertValueStart(type, ctx, out);
 		ctx.invoke(genExpression, expr, ctx, out);
 		genConvertValueEnd(type, ctx, out);
-		out.print(')');
+		out.println(");");
+		if(isNullable != null && isNullable){
+			out.println("}");
+		}
 	}
 	
 	public void genSetColumnValue(Field field, String stmt_or_resultSet_var, String varName, int columnIndex, Context ctx, TabbedWriter out) {
