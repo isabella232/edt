@@ -59,6 +59,9 @@ egl.eglx.lang.EAny.unbox = function(obj){
 egl.eglx.lang.EAny.fromEAny = function(obj, sig){
 	return egl.boxAny(obj,sig);
 };
+egl.eglx.lang.EAny.equals = function(obj1, obj2){
+	return (obj1.eze$$value == obj2.eze$$value);
+};
 
 /****************************************************************************
  * AnyBoxedObject
