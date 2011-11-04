@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizardPage;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
@@ -54,8 +55,8 @@ public class NewHandlerWizard extends EGLFileWizard {
 
 	public NewHandlerWizard() {
 		super();
-
 		setWindowTitle(NewHandlerWizardMessages.NewHandlerWizard_title);
+		setDefaultPageImageDescriptor(PluginImages.DESC_WIZBAN_NEWRUIHANDLER);
 	}
 
 	/**

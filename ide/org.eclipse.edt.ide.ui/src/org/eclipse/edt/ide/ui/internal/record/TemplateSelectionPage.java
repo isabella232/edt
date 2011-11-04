@@ -51,7 +51,6 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 
 		setTitle(NewRecordWizardMessages.TemplateSelectionPage_title);
 		setDescription(NewRecordWizardMessages.TemplateSelectionPage_description);
-		//setImageDescriptor(EDTUIPlugin.imageDescriptorFromPlugin(EDTUIPlugin.PLUGIN_ID, "icons/wizban/newxsltemplate_wiz.gif"));
 		setImageDescriptor(PluginImages.DESC_WIZBAN_NEWTEMPLATESELECTION);
 	}
 

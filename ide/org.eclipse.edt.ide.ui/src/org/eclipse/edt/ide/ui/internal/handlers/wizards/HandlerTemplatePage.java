@@ -48,8 +48,7 @@ public class HandlerTemplatePage extends WizardSelectionPage implements	ISelecti
 
 		setTitle(NewHandlerWizardMessages.HandlerTemplatePage_title);
 		setDescription(NewHandlerWizardMessages.HandlerTemplatePage_description);
-		// TODO #jiyong# Change the image descriptor
-		setImageDescriptor(PluginImages.DESC_WIZBAN_NEWTEMPLATESELECTION);
+		setImageDescriptor(PluginImages.DESC_WIZBAN_NEWRUIWIDGET);
 	}
 
 	protected TableViewer templateViewer;
