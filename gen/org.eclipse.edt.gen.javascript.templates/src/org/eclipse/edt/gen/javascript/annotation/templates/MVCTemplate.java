@@ -203,12 +203,14 @@ public class MVCTemplate extends JavaScriptTemplate {
 				Name retrieveViewHelperMethodName = null;
 				Name retrieveValidStateHelperMethodName = null;
 				Name publishMessageHelperMethodName = null;
+				Name showErrorStateName = null;
 				
 				if(null != annoMvcView){
 					PublishMethodName = (Name) annoMvcView.getValue("publishHelper");			
 					retrieveViewHelperMethodName = (Name) annoMvcView.getValue("retrieveViewHelper");
 					retrieveValidStateHelperMethodName = (Name) annoMvcView.getValue("retrieveValidStateHelper");
 					publishMessageHelperMethodName = (Name) annoMvcView.getValue("publishMessageHelper");
+					showErrorStateName = (Name) annoMvcView.getValue("showErrorState");
 				}
 
 				//function publishHelper(s String in) view.setText(s);	end
@@ -276,6 +278,19 @@ public class MVCTemplate extends JavaScriptTemplate {
 					ctx.invoke(genName, publishMessageHelperMethodName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
 					out.print( "(s);" );
 					genCatchBlock(ctx, "publishMessageHelper", model, out);
+				}
+				
+				//function showErrorState(Boolean in) end
+				if (null != annoMvcView && null != showErrorStateName) {
+					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
+					out.print( ".showErrorState = new egl.egl.jsrt.Delegate(");
+					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
+					out.print(", function(/*Boolean*/ b ) { try { " );
+					genWithQualifier(ctx, view, out);
+					out.print(".");
+					ctx.invoke(genName, showErrorStateName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
+					out.print( "(b);" );
+					genCatchBlock(ctx, "showErrorState", model, out);
 				}
 				
 /* NOGO sbg Not sure I need this, given the way I'm generating				
