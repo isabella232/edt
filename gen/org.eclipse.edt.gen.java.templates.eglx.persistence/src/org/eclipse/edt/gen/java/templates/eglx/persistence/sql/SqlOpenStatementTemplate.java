@@ -2,9 +2,13 @@ package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlOpenStatement;
+import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
 public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 
@@ -21,8 +25,7 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 					varName = getExprString(stmt.getPreparedStatement(), ctx);
 				}
 				for (Expression uexpr : stmt.getUsingExpressions()) {
-					genSetColumnValue(uexpr, varName, i, ctx, out);
-					out.println(";");
+					genSetColumnValue(stmt, uexpr, varName, i, ctx, out);
 					i++;
 				}
 			}
@@ -41,6 +44,22 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 		ctx.invoke(genInstantiation, resultSet.getType(), ctx, out, var_resultSet);
 		out.println(";");
 		genSqlStatementEnd(stmt, ctx, out);
+	}
+	protected void genUsingForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+		if (stmt.getTargets().size() == 2) {//resultset and a for clause
+			Expression target = stmt.getTargets().get(1);
+			EGLClass targetType = (EGLClass)target.getType().getClassifier();
+			if (!TypeUtils.isDynamicType(targetType)) {
+				int i = 1;
+				for (Field f : targetType.getFields()) {
+					if (SQL.isKeyField(f)){
+						genSetColumnValue(f, var_stmt, getExprString(stmt.getTargets().get(1), ctx), i, ctx, out);
+						out.println(";");
+						i++;
+					}
+				}
+			}
+		}
 	}
 	@Override
 	protected Expression getResultSet(SqlActionStatement stmt) {
