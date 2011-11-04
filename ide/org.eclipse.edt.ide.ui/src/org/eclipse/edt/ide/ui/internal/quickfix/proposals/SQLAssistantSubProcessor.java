@@ -95,7 +95,10 @@ public class SQLAssistantSubProcessor {
 			expressions = replaceStatement.getReplaceOptions();
 		} else if (astNode instanceof OpenStatement) {
 			OpenStatement openStatement = (OpenStatement) astNode;
-			expressions = openStatement.getOpenTargets();
+			List ioObjects = openStatement.getIOObjects();
+			if(ioObjects != null && ioObjects.size() > 0) {//Only provide proposal for OPEN statement when it contains FOR clause.
+			   expressions = openStatement.getOpenTargets();
+			}
 		}
 
 		if (expressions != null && expressions.size() > 0) {
