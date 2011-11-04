@@ -314,7 +314,7 @@ egl.defineClass(
     	try {
 	    	if(errCallbackFunc){
 	    		if (egl.debugg) {
-	    			egl.debugCallback(handler, errCallbackFunc, exception, http);
+	    			egl.debugCallback(handler, errCallbackFunc, [exception, http]);
 	    		}
 	    		else {
 	    			errCallbackFunc.call(handler, exception, http);
