@@ -14,11 +14,14 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
 
 public class BoxingExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(BoxingExpression expr, Context ctx, TabbedWriter out) {
+		
 		out.print("{");
 		out.print(eze$$value);
 		out.print(" : ");
@@ -26,9 +29,17 @@ public class BoxingExpressionTemplate extends JavaScriptTemplate {
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");
-		out.print("\"");
-		ctx.invoke(genSignature, (Type) expr.getExpr().getType(), ctx, out, expr.getExpr());
-		out.print("\"");
-		out.print("}");
+		// TODO the decimal type should be boxed
+		// If the expr is function parameter, the signature should be determine at runtime
+		if( expr.getExpr() instanceof MemberName && ((MemberName)expr.getExpr()).getMember() instanceof FunctionParameter){
+			out.print("egl.inferSignature(");
+			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
+			out.print(")");
+		}else{
+			out.print("\"");
+			ctx.invoke(genSignature, (Type) expr.getExpr().getType(), ctx, out, expr.getExpr());
+			out.print("\"");
+		}	
+		out.print("}");		
 	}
 }
