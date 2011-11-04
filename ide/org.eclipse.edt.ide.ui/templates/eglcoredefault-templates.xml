@@ -13,6 +13,7 @@
 -->
 
 <templates>
+<!-- comment unsupport dataitem in 0.7
 <template name="dataItem" description="%Templates.string_data_item" id="org.eclipse.edt.ide.ui.templates.string_data_item" context = "egl-core" enabled="true">// string dataItem
 dataItem ${dataItemName} string
 end
@@ -22,7 +23,7 @@ end
 dataItem ${dataItemName} decimal(4, 2)
 end
 </template>
-
+-->
 <!-- DataTables aren't supported in EDT 0.7
 <template name="dataTable" description="%Templates.basic_table" id="org.eclipse.edt.ide.ui.templates.basic_table" context = "egl-core" enabled="true">// basic dataTable
 //
@@ -454,19 +455,18 @@ end</template>
 else
 	// EGL statements
 end</template>
-
+<!--  
+Move isn't supported in EDT 0.7
 <template name="move" description="%Templates.move_statement" id="org.eclipse.edt.ide.ui.templates.move_statement" context = "egl-core" enabled="true">move ${source} to ${target};</template>
 
-<!--  Move by position isn't supported in EDT 0.7
 <template name="move" description="%Templates.move_by_position" id="org.eclipse.edt.ide.ui.templates.move_by_position" context = "egl-core" enabled="true">move ${source} to ${target} byPosition;</template>
--->
 
 <template name="move" description="%Templates.move_by_name" id="org.eclipse.edt.ide.ui.templates.move_by_name" context = "egl-core" enabled="true">move ${source} to ${target} byName;</template>
 
 <template name="move" description="%Templates.move_for_all" id="org.eclipse.edt.ide.ui.templates.move_for_all" context = "egl-core" enabled="true">move ${source} to ${target} for all;</template>
 
 <template name="move" description="%Templates.move_for_count" id="org.eclipse.edt.ide.ui.templates.move_for_count" context = "egl-core" enabled="true">move ${source} to ${target} for ${count};</template>
-
+-->
 <template name="return" description="%Templates.return_statement" id="org.eclipse.edt.ide.ui.templates.return_statement" context = "egl-core" enabled="true">return;</template>
 
 <template name="return" description="%Templates.return_statement_with_return_code" id="org.eclipse.edt.ide.ui.templates.return_statement_with_return_code" context = "egl-core" enabled="true">return (${returnValue});</template>

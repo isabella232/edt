@@ -66,7 +66,7 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FROM, IEGLConstants.KEYWORD_FROM));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.FUNCTION, IEGLConstants.KEYWORD_FUNCTION));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.GET, IEGLConstants.KEYWORD_GET));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.GOTO, IEGLConstants.KEYWORD_GOTO));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.GOTO, IEGLConstants.KEYWORD_GOTO));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.GROUP, IEGLConstants.KEYWORD_GROUP));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.HANDLER, IEGLConstants.KEYWORD_HANDLER));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.HOLD, IEGLConstants.KEYWORD_HOLD));
@@ -80,7 +80,7 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.LANGUAGEBUNDLE, IEGLConstants.KEYWORD_LANGUAGEBUNDLE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.LAST, IEGLConstants.KEYWORD_LAST));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.LIBRARY, IEGLConstants.KEYWORD_LIBRARY));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.MOVE, IEGLConstants.KEYWORD_MOVE));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.MOVE, IEGLConstants.KEYWORD_MOVE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.NEXT, IEGLConstants.KEYWORD_NEXT));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.NOCURSOR, IEGLConstants.KEYWORD_NOCURSOR));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.OF, IEGLConstants.KEYWORD_OF));
@@ -104,14 +104,14 @@ public class EGLDefinedKeywordCompletions {
 			completionList.add(new EGLKeywordCompletion(NodeTypes.RUNUNIT, IEGLConstants.KEYWORD_RUNUNIT));
 //			completionList.add(new EGLKeywordCompletion(NodeTypes.SCROLL, IEGLConstants.KEYWORD_SCROLL));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.SERVICE, IEGLConstants.KEYWORD_SERVICE));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.SET, IEGLConstants.KEYWORD_SET));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.SET, IEGLConstants.KEYWORD_SET));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.SINGLEROW, IEGLConstants.KEYWORD_SINGLEROW));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.STACK, IEGLConstants.KEYWORD_STACK));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.STATIC, IEGLConstants.KEYWORD_STATIC));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.THROW, IEGLConstants.KEYWORD_THROW));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TO, IEGLConstants.KEYWORD_TO));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TRANSACTION, IEGLConstants.KEYWORD_TRANSACTION));
-			completionList.add(new EGLKeywordCompletion(NodeTypes.TRANSFER, IEGLConstants.KEYWORD_TRANSFER));
+//			completionList.add(new EGLKeywordCompletion(NodeTypes.TRANSFER, IEGLConstants.KEYWORD_TRANSFER));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TRY, IEGLConstants.KEYWORD_TRY));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.TYPE, IEGLConstants.KEYWORD_TYPE));
 			completionList.add(new EGLKeywordCompletion(NodeTypes.UPDATE, IEGLConstants.KEYWORD_UPDATE));
