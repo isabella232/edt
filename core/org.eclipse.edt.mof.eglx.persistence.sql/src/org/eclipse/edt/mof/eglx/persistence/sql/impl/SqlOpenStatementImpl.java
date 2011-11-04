@@ -66,6 +66,15 @@ public class SqlOpenStatementImpl extends SqlIOStatementImpl implements SqlOpenS
 				}
 				sql.append(" FROM ");
 				sql.append(SQL.getTableName(targetType));
+				if (!idFields.isEmpty()) {
+					sql.append(" WHERE ");
+					boolean doAnd = false;
+					for (Field f: idFields) {
+						if (doAnd) sql.append(" AND ");
+						sql.append(SQL.getColumnName(f) + " = ?");
+						if (!doAnd) doAnd = true;
+					}
+				}
 			}
 		}
 		return sql.toString();
