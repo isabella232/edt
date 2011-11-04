@@ -17,14 +17,7 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 			int i = 1;
 			for (Field f : targetType.getFields()) {
 				if (SQL.isUpdateable(f)) {
-					out.print(var_statement);
-					out.print(".setObject(" + i + ", ");
-					genConvertValueStart(targetType, ctx, out);
-					ctx.invoke(genExpression, stmt.getTarget(), ctx, out);
-					out.print('.');
-					ctx.invoke(genName, f, ctx, out);
-					genConvertValueEnd(targetType, ctx, out);
-					out.println(");");
+					genSetColumnValue(f, var_statement, getExprString(stmt.getTarget(), ctx), i, ctx, out);
 					i++;
 				}
 			}
@@ -44,6 +37,19 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 				out.println(".getResultSet();");
 				for (Field f : ((EGLClass)stmt.getTarget().getType()).getFields()) {
 					if (SQL.isUpdateable(f)) {
+						if(f.isNullable()){
+							out.print("if(null == ");
+							out.print(getExprString(stmt.getTarget(), ctx));
+							out.print('.');
+							ctx.invoke(genName, f, ctx, out);
+							out.println("){");
+							out.print(var_resultSet);
+							out.print(".updateNull(");
+							out.print(quoted(SQL.getColumnName(f)));
+							out.println(");");
+							out.println("}");
+							out.println("else{");
+						}
 						EGLClass type = (EGLClass)f.getType().getClassifier();
 						out.print(var_resultSet);
 						out.print(".");
@@ -57,6 +63,9 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 						ctx.invoke(genName, f, ctx, out);
 						genConvertValueEnd(type, ctx, out);
 						out.println(");");
+						if(f.isNullable()){
+							out.println("}");
+						}
 					}
 				}
 				ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
