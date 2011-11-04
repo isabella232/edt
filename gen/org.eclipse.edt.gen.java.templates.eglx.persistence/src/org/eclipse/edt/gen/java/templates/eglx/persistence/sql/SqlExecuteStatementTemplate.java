@@ -36,8 +36,7 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 			int idx = 1;
 			if(stmt.getUsingExpressions() != null){
 				for (Expression uexpr : stmt.getUsingExpressions()) {
-					genSetColumnValue(uexpr, stmtVar, idx++, ctx, out);
-					out.println(";");
+					genSetColumnValue(stmt, uexpr, stmtVar, idx++, ctx, out);
 				}
 			}
 			out.print(stmtVar);
@@ -54,7 +53,7 @@ public class SqlExecuteStatementTemplate extends SqlActionStatementTemplate {
 				out.println("if (ezeParmMode == java.sql.ParameterMetaData.parameterModeOut || ezeParmMode == java.sql.ParameterMetaData.parameterModeInOut) {");
 				ctx.invoke(genExpression, uexpr, ctx, out);
 				out.print(" = ");
-				genGetColumnValueByIndex(uexpr.getType().getClassifier(), "((java.sql.CallableStatement)" + stmtVar + ")", i, ctx, out);
+				genGetColumnValueByIndex(uexpr.getType(), "((java.sql.CallableStatement)" + stmtVar + ")", i, ctx, out);
 				out.println(";");
 				out.println("}");
 				i++;
