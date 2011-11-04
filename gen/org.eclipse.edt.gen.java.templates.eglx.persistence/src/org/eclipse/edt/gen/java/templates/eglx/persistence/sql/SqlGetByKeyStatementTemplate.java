@@ -24,8 +24,15 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 		String var_resultSet = ctx.nextTempName();
 		if (hasPreparedStmt) {
 			out.println("try {");
-			out.print(class_ResultSet + " " + var_resultSet + " = ");
-			ctx.invoke(genExpression, stmt.getPreparedStatement(), ctx, out);
+			int i = 1;
+			String prepareStatementName = getExprString(stmt.getPreparedStatement(), ctx);
+			if(stmt.getUsingExpressions() != null && stmt.getUsingExpressions().size() > 0 ){
+				for (Expression uexpr : stmt.getUsingExpressions()) {
+					genSetColumnValue(stmt, uexpr, prepareStatementName, i, ctx, out);
+					i++;
+				}
+			}
+			out.print(class_ResultSet + " " + var_resultSet + " = " + prepareStatementName);
 			out.println(".executeQuery();");
 		}
 		else if (!isResultSet) {
