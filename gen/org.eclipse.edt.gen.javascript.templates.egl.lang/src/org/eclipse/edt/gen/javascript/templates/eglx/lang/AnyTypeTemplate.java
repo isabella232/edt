@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
+import org.eclipse.edt.gen.GenerationException;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -22,7 +25,20 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 	/* WARNING:   Template methods in this class should use an if/else convention to ensure
 	 * that they only process the Any type, otherwise, they should defer to ctx.invokeSuper.
 	 */
-
+	
+	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
+		// for number type, always use the runtime
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			out.print(", ");
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
+		} else
+			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
+	}
 	
 	public void genSignature(Type type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
