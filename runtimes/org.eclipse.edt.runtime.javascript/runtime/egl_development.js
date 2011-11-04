@@ -1487,7 +1487,7 @@ egl.getOuterWidthInPixels = function(element){
 	return egl.getWidthInPixels(element);
 };
 
-egl.getOuterWidthInPixels2 = function(element){
+egl.getOuterWidthInPixelsNonTable = function(element){
 	if(egl.IE){
 		var outerWidth = egl.getWidthInPixels(element)
 					+ egl.getStyleValueForIE(element, "paddingLeft")
@@ -1504,7 +1504,7 @@ egl.getOuterHeightInPixels = function(element){
 	return egl.getHeightInPixels(element);
 };
 
-egl.getOuterHeightInPixels2 = function(element){
+egl.getOuterHeightInPixelsNonTable = function(element){
 	if(egl.IE){
 		var outerHeight = egl.getHeightInPixels(element)
 						+ egl.getStyleValueForIE(element, "paddingTop")
@@ -1610,7 +1610,7 @@ egl.getWidgetInfo = function() {
 				this.y = -1;
 			}				
 		},
-		isContainer: function(ele){
+		isTable: function(ele){
 			if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName
 					&& ele.eze$$DOMElement.children[0].tagName.toUpperCase() == "TABLE"){
 				return true;
@@ -1627,12 +1627,12 @@ egl.getWidgetInfo = function() {
 				this.width = -1;
 				this.height = -1;
 			} else {
-				if(this.isContainer(ele)){
+				if(this.isTable(ele)){
 					this.width = egl.getOuterWidthInPixels(ele.eze$$DOMElement);
 					this.height = egl.getOuterHeightInPixels(ele.eze$$DOMElement);
 				}else{
-					this.width = egl.getOuterWidthInPixels2(ele.eze$$DOMElement);
-					this.height = egl.getOuterHeightInPixels2(ele.eze$$DOMElement);
+					this.width = egl.getOuterWidthInPixelsNonTable(ele.eze$$DOMElement);
+					this.height = egl.getOuterHeightInPixelsNonTable(ele.eze$$DOMElement);
 				}
 				if (isNaN(this.width) || isNaN(this.height)) {
 					this.width = -1;
