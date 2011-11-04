@@ -1487,7 +1487,7 @@ egl.getOuterWidthInPixels = function(element){
 	return egl.getWidthInPixels(element);
 };
 
-egl.getOuterWidthInPixelsNonTable = function(element){
+egl.getOuterWidthInPixelsNonIESpecialWidget = function(element){
 	if(egl.IE){
 		var outerWidth = egl.getWidthInPixels(element)
 					+ egl.getStyleValueForIE(element, "paddingLeft")
@@ -1504,7 +1504,7 @@ egl.getOuterHeightInPixels = function(element){
 	return egl.getHeightInPixels(element);
 };
 
-egl.getOuterHeightInPixelsNonTable = function(element){
+egl.getOuterHeightInPixelsNonIESpecialWidget = function(element){
 	if(egl.IE){
 		var outerHeight = egl.getHeightInPixels(element)
 						+ egl.getStyleValueForIE(element, "paddingTop")
@@ -1611,12 +1611,44 @@ egl.getWidgetInfo = function() {
 			}				
 		},
 		isTable: function(ele){
-			if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName
-					&& ele.eze$$DOMElement.children[0].tagName.toUpperCase() == "TABLE"){
+			var tagName;
+			
+			if(ele.eze$$DOMElement && ele.eze$$DOMElement.tagName){
+				tagName = ele.eze$$DOMElement.tagName.toUpperCase();
+			}else if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName){
+				tagName = ele.eze$$DOMElement.children[0].tagName.toUpperCase();
+			}
+			
+			if(tagName && (tagName == "TABLE" || tagName == "DIV")){
 				return true;
 			}else{
 				return false;
 			}
+		},
+		isIESpecialWidget: function(ele){
+			//widgets that render to a div which must with padding in css
+			if ( this.package == "org.eclipse.edt.rui.widgets" && this.type == "Box" ) {
+				return true;
+			}
+			if ( this.package == "dojo.widgets" && this.type == "DojoBorderContainer" ) {
+				return true;
+			}
+			if( this.package == "dojo.widgets" && this.type == "DojoContentPane" ) {
+				return true;
+			}
+			
+			//widgets that render to a table
+			var tagName;
+			if(ele.eze$$DOMElement && ele.eze$$DOMElement.tagName){
+				tagName = ele.eze$$DOMElement.tagName.toUpperCase();
+			}else if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName){
+				tagName = ele.eze$$DOMElement.children[0].tagName.toUpperCase();
+			}
+			if(tagName && (tagName == "TABLE")){
+				return true;
+			}
+			
+			return false;
 		},
 		/*
 		 * Set the elements width and height
@@ -1627,12 +1659,14 @@ egl.getWidgetInfo = function() {
 				this.width = -1;
 				this.height = -1;
 			} else {
-				if(this.isTable(ele)){
+				if(this.isIESpecialWidget(ele)){
+//					alert("1");
 					this.width = egl.getOuterWidthInPixels(ele.eze$$DOMElement);
 					this.height = egl.getOuterHeightInPixels(ele.eze$$DOMElement);
 				}else{
-					this.width = egl.getOuterWidthInPixelsNonTable(ele.eze$$DOMElement);
-					this.height = egl.getOuterHeightInPixelsNonTable(ele.eze$$DOMElement);
+//					alert("2");
+					this.width = egl.getOuterWidthInPixelsNonIESpecialWidget(ele.eze$$DOMElement);
+					this.height = egl.getOuterHeightInPixelsNonIESpecialWidget(ele.eze$$DOMElement);
 				}
 				if (isNaN(this.width) || isNaN(this.height)) {
 					this.width = -1;
@@ -1717,11 +1751,11 @@ egl.getWidgetInfo = function() {
 		if (typeof(ele.getEGLDOMElement) != "undefined") {
 			if( ele.eze$$isSynthetic == undefined) {
 				eglEle.setIdOffsetLength(ele);
-				eglEle.setXY(ele);
-				eglEle.setWidthHeight(ele);
 				eglEle.setVariableName(ele);
 				eglEle.setMoveable(ele);
 				eglEle.setPackageName(ele);
+				eglEle.setXY(ele);
+				eglEle.setWidthHeight(ele);
 				eglEle.setExtraInfo(ele);
 			}
 		}
