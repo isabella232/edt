@@ -6,6 +6,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
@@ -28,12 +29,25 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 				genAddSingleValue(targetType, var_listElement, ctx, out);
 				out.println("}");
 			}
-			else {
+			else if (addStmt.getTargets().size() > 1) {
+				int i = 1;
+				for(Expression target : addStmt.getTargets()){
+					genSetColumnValue(addStmt, target, var_statement, i, ctx, out);
+					i++;
+				}
+				out.println(var_statement + ".execute();");
+			}
+			else{
 				targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
-				TabbedWriter temp = new TabbedWriter(new StringWriter());
-				ctx.invoke(genExpression, addStmt.getTarget(), ctx, temp);
-				String targetVar = temp.getCurrentLine();
-				genAddSingleValue(targetType, targetVar, ctx, out);
+				if(SQL.isMappedSQLType(targetType)){
+					genSetColumnValue(addStmt, addStmt.getTarget(), var_statement, 1, ctx, out);
+				}
+				else{
+					TabbedWriter temp = new TabbedWriter(new StringWriter());
+					ctx.invoke(genExpression, addStmt.getTarget(), ctx, temp);
+					genAddSingleValue(targetType, temp.getCurrentLine(), ctx, out);
+				}
+				out.println(var_statement + ".execute();");
 			}
 			
 			genSqlStatementEnd(addStmt, ctx, out);
@@ -42,8 +56,8 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 			out.println(err_noSqlGenerated);
 		}
 	}
-	
-	public void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
+
+	private void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
 		int i = 1;
 		for (Field f : type.getFields()) {
 			if (SQL.isInsertable(f)) {
@@ -51,7 +65,5 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 				i++;
 			}
 		}
-		out.println(var_statement + ".execute();");
-
 	}
 }
