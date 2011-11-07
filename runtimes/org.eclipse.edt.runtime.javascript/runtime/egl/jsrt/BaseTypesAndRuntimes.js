@@ -63,7 +63,9 @@ egl.padWithLeadingZeros = function(s, totChars)
 egl.getDateInfo = function( d )
 {
 	var day = egl.padWithLeadingZeros("" + d.getDate(),2);
+	var dayWithoutLeadingZeros = d.getDate();
 	var month = egl.padWithLeadingZeros("" + (d.getMonth()+1),2);
+	var monthWithoutLeadingZeros = d.getMonth()+1;
 	var year = egl.padWithLeadingZeros("" + Math.min( 9999,d.getFullYear() ), 4 );
 	var twoDigitYear = year.substr(2,2);
 	
@@ -72,6 +74,8 @@ egl.getDateInfo = function( d )
 	result[1] = twoDigitYear;
 	result[2] = month;
 	result[3] = day;
+	result[4] = monthWithoutLeadingZeros;
+	result[5] = dayWithoutLeadingZeros;
 	return result;
 };
 
@@ -80,13 +84,13 @@ egl.dateToString = function( d, format )
 	var dateInfo = egl.getDateInfo(d);
 	var result = "";
 	
-	var validCheck = format.replace(/yyyy|yy|MM|dd|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/yyyy|yy|MM|dd|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|M|dd|d|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -102,9 +106,17 @@ egl.dateToString = function( d, format )
 		{
 			result += dateInfo[2];
 		}
+		else if(tokens[i] == "M")
+		{
+			result += dateInfo[4];
+		}
 		else if(tokens[i] == "dd")
 		{
 			result += dateInfo[3];
+		}
+		else if(tokens[i] == "d")
+		{
+			result += dateInfo[5];
 		}
 		else if(tokens[i] == "''")
 		{
@@ -313,7 +325,24 @@ egl.stringToDateInternal = function(s, format, strict)
 	{
 		s = s.replace(/[^0-9]/g, "");
 	}
-	
+
+	//The Year must be set first, otherwize the leap year is wrong ,such as 2000/2/29 will be 2000/3/1
+	var yearResult = new Date(1970, 0, 1);
+	var tempS = s;
+	for(var i = 0; i < numTokens; i++ )
+	{
+		tempS = egl.processToken(tokens[i], tempS, yearResult, strict);
+		if(tempS == null)
+		{
+			return null;
+		}
+		if( yearResult.getFullYear() != result.getFullYear() )
+		{
+			result.setFullYear( yearResult.getFullYear() );
+			break;
+		}
+	}
+
 	for(var i = 0; i < numTokens; i++ )
 	{
 		s = egl.processToken(tokens[i], s, result, strict);
@@ -606,13 +635,13 @@ egl.timeStampToString = function( ts, format )
 	var timeParts = egl.getTimeInfo(ts);
 	var result = "";
 	
-	var validCheck = format.replace(/yyyy|yy|MM|dd|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -628,9 +657,17 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += dateParts[2];
 		}
+		else if(tokens[i] == "M")
+		{
+			result += dateParts[4];
+		}
 		else if(tokens[i] == "dd")
 		{
 			result += dateParts[3];
+		}
+		else if(tokens[i] == "d")
+		{
+			result += dateParts[5];
 		}
 		else if(tokens[i] == "HH")
 		{
@@ -713,6 +750,23 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	if(!strict)
 	{
 		s = s.replace(/[^0-9]/g, "");
+	}
+	
+	//The Year must be set first, otherwize the leap year is wrong ,such as 2000/2/29 will be 2000/3/1
+	var yearResult = new Date(0, 0, 1);
+	var tempS = s;
+	for(var i = 0; i < numTokens; i++ )
+	{
+		tempS = egl.processToken(tokens[i], tempS, yearResult, strict);
+		if(tempS == null)
+		{
+			return null;
+		}
+		if( yearResult.getFullYear() != result.getFullYear() )
+		{
+			result.setFullYear( yearResult.getFullYear() );
+			break;
+		}
 	}
 	
 	for(var i = 0; i < numTokens; i++ )
@@ -1839,7 +1893,7 @@ egl.unboxAny = function( any )
 		if ( any.eze$$signature.search( /1+A;/ ) !== -1 )
 		{
 			val = egl.unboxElements( val, any.eze$$signature );
-		}
+		} 
 		return val;
 	}
 };
