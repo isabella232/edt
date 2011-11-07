@@ -159,7 +159,7 @@ externalType TypeParameter extends NamedElement type MofClass
 	bounds EGLType[];
 end
 
-externalType StructPart extends Part type MofClass
+externalType StructPart extends Part, Container type MofClass
 	superTypes StructPart[];
 	interfaces EGLInterface[];
 	structuredFields StructuredField[] {containment=true};
@@ -301,7 +301,7 @@ end
 externalType StructuredRecord extends StructPart, StructuredContainer type MofClass 
 end
 
-externalType LogicAndDataPart extends StructPart, Container type MofClass {isAbstract=true}
+externalType LogicAndDataPart extends StructPart type MofClass {isAbstract=true}
 	fields EGLField[] {containment=true};
 	usedParts Part[];
 	
