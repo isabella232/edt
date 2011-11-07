@@ -56,6 +56,16 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 */
 	static function asTimestamp(value ETimestamp in, mask EString in) returns (ETimestamp) {@Operation{"widen"}};
 
+	/**
+	 * {@Operation widen} Converts a date to a timestamp.
+	 */
+	static function asTimestamp(value EDate in) returns (ETimestamp) {@Operation{"widen"}};
+
+	/**
+	 * {@Operation narrow} Converts a string to a timestamp.
+	 */
+	static function asTimestamp(value EString in) returns (ETimestamp) {@Operation{"narrow"}};
+
 	function dayOf() returns(EInt);
 
 	function monthOf() returns(EInt);
