@@ -111,7 +111,7 @@ public class BaseCompiler implements ICompiler {
 	}
 		
 	@Override
-	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
+	public synchronized ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
 		if (systemEnvironment == null) {
 			systemEnvironment = createSystemEnvironment(notifier);
 		}
