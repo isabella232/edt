@@ -42,7 +42,9 @@ import org.eclipse.edt.mof.utils.EList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 
 public class XMLDeserializer extends DefaultHandler implements Deserializer {
@@ -52,7 +54,7 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 	private static final String Attr_href = "href";
 	private static final String Element_entry = "entry";
 
-	SAXParser parser;
+	XMLReader parser;
 	MofFactory mof = MofFactory.INSTANCE;
 	Object object;
 	Stack<Object> stack = new Stack<Object>();
@@ -73,20 +75,19 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 	public EObject deserialize() throws DeserializationException {
 		if (input == null) { throw new DeserializationException("No input to process"); }
 			parser = createParser();
+			parser.setContentHandler(this);
+			parser.setErrorHandler(this);
 		try {
-			parser.parse(input, this);
+			parser.parse(input);
 		} catch (Exception e) {
 			throw new DeserializationException(e);
 		}
 		return (EObject)object;
 	}
 	
-	private SAXParser createParser() {
-		SAXParserFactory factory = SAXParserFactory.newInstance();
+	private XMLReader createParser() {
 		try {
-			return factory.newSAXParser();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			return XMLReaderFactory.createXMLReader();
 		} catch (SAXException e) {
 			e.printStackTrace();
 		}
