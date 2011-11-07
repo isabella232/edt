@@ -16,7 +16,16 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.BinaryExpression;
+import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.InvocationExpression;
+import org.eclipse.edt.mof.egl.IsAExpression;
+import org.eclipse.edt.mof.egl.NewExpression;
+import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.Type;
 
 public class DateTypeTemplate extends JavaTemplate {
 
@@ -53,10 +62,52 @@ public class DateTypeTemplate extends JavaTemplate {
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
+		// do a callout to allow certain source types to decide to create a boxing expression
+		ctx.invoke(genContainerBasedInvocationBoxing, type, ctx, out, expr);
+		// then process the expression
 		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
+	}
+
+	public void genAsExpressionBoxing(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
+		if (!(arg.getObjectExpr() instanceof BoxingExpression)) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(arg.getObjectExpr());
+			arg.setObjectExpr(box);
+		}
+	}
+
+	public void genIsaExpressionBoxing(EGLClass type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		if (!(arg.getObjectExpr() instanceof BoxingExpression)) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(arg.getObjectExpr());
+			arg.setObjectExpr(box);
+		}
+	}
+
+	public void genContainerBasedInvocationBoxing(Type type, Context ctx, TabbedWriter out, QualifiedFunctionInvocation arg) {
+		if (!(arg.getQualifier() instanceof BoxingExpression)) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(arg.getQualifier());
+			arg.setQualifier(box);
+		}
+		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
+			// check each of the arguments and box if necessary
+			for (int i = 0; i < arg.getArguments().size(); i++) {
+				// do a callout to allow certain source types to decide to create a boxing expression
+				ctx.invoke(genInvocationArgumentBoxing, arg.getArguments().get(i).getType(), ctx, out, arg, new Integer(i));
+			}
+		}
+	}
+
+	public void genInvocationArgumentBoxing(Type type, Context ctx, TabbedWriter out, QualifiedFunctionInvocation arg1, Integer arg2) {
+		if (!(arg1.getArguments().get(arg2) instanceof BoxingExpression)) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(arg1.getArguments().get(arg2));
+			arg1.getArguments().set(arg2, box);
+		}
 	}
 }
