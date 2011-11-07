@@ -1879,9 +1879,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions).checkOperands(currentScope.getPartBinding(), operand1, operand2, binaryExpression);
 		
 		if(type1 != null) {
-			if((operator == BinaryExpression.Operator.CONCAT ||
-				operator == BinaryExpression.Operator.NULLCONCAT ||
-			    operator == BinaryExpression.Operator.PLUS) &&
+			if((operator == BinaryExpression.Operator.CONCAT) &&
 				(ITypeBinding.ARRAY_TYPE_BINDING == type1.getKind() ||
 				 type2 != null && ITypeBinding.ARRAY_TYPE_BINDING == type2.getKind())) {
 				//Array concatentation
@@ -1891,6 +1889,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 				else if(type2 != null && ITypeBinding.ARRAY_TYPE_BINDING == type2.getKind()) {
 					binaryExpression.setTypeBinding(type2);
 				}
+			}
+			else if ((isStringType(type1) || isStringType(type2)) &&
+					(operator == BinaryExpression.Operator.PLUS || 
+					   operator == BinaryExpression.Operator.CONCAT ||
+					   operator == BinaryExpression.Operator.NULLCONCAT	)) {
+				//this is string concatenation , so this is allowed
+				binaryExpression.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.STRING));
 			}
 			else if(operator == BinaryExpression.Operator.PLUS && (isStringType(type1)) ||
 			   operator == BinaryExpression.Operator.CONCAT ||
@@ -2093,24 +2098,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 									new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
 								return;
 							}
-							else {
-								//If one of the operands is dynamic and the other is a value type, do not allow == or !=
-								if ((type1.isDynamic() && !type2.isDynamic() && !type2.isReference()) || (type2.isDynamic() && !type1.isDynamic() && !type1.isReference())) {
-									if (operator == BinaryExpression.Operator.EQUALS ||
-											operator == BinaryExpression.Operator.NOT_EQUALS) {	
-										
-										String insert = operand1.getCanonicalString();
-										if (type2.isDynamic()) {
-											insert = operand2.getCanonicalString();
-										}
-										problemRequestor.acceptProblem(operand1,
-												IProblemRequestor.DISCOURAGED_ARITHMETIC_COMPARISON,
-												IMarker.SEVERITY_WARNING,
-												new String[] {operand1.getCanonicalString(), operand2.getCanonicalString(), insert});
-											return;
-									}
-								}
-							}
+							else {}
 						}												
 					}					
 				}
@@ -2209,31 +2197,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		if(Binding.isValidBinding(rhType) && Binding.isValidBinding(lhType)) {
 			Operator operator = assignment.getOperator();
 			if(Assignment.Operator.PLUS == operator) {
-				if(isStringType(lhType)) {
-					if(rhType.getKind() != ITypeBinding.PRIMITIVE_TYPE_BINDING && !rhType.isDynamic()) {
-						problemRequestor.acceptProblem(
-							rightHandSide,
-							IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION,
-							new String[] {rightHandSide.getCanonicalString()});
-					}
-					else if(!rhType.isDynamic()) {
-						if(!TypeCompatibilityUtil.isMoveCompatible(
-							(PrimitiveTypeBinding) lhType,
-							(PrimitiveTypeBinding) rhType) &&
-							Primitive.BOOLEAN != ((PrimitiveTypeBinding) rhType).getPrimitive()) {
-								problemRequestor.acceptProblem(
-										rightHandSide,
-									IProblemRequestor.EXPRESSIONS_INCOMPATIBLE,
-									new String[] {leftHandSide.getCanonicalString(), rightHandSide.getCanonicalString()});
-						}
-					}
-				}
-				else if (ITypeBinding.ARRAY_TYPE_BINDING == rhType.getKind()) {					
-				}
-				else {
-					//Handled later by calling validateArithmeticOperation
-					//inferTypeForNumericOperand(rightHandSide, problemRequestor);
-				}
+				//let this fall through to validateArithemeticOperation 
 			}
 			else if(Assignment.Operator.MINUS == operator ||			   
 			   Assignment.Operator.TIMES== operator ||
@@ -2248,10 +2212,18 @@ public abstract class DefaultBinder extends AbstractBinder {
 					Assignment.Operator.XOR == operator) {
 				inferTypeForBitwiseOperand(rightHandSide, problemRequestor);
 			}
-			else if (Assignment.Operator.CONCAT == operator ||
-					Assignment.Operator.NULLCONCAT == operator) {
+			else if (Assignment.Operator.CONCAT == operator) {
 				
 				if (!isStringType(lhType) && !isArrayType(lhType)) {
+					problemRequestor.acceptProblem(
+							leftHandSide,
+							IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION,
+							new String[] {leftHandSide.getCanonicalString()});
+				}
+			}
+			else if (Assignment.Operator.NULLCONCAT == operator) {
+				
+				if (!isStringType(lhType)) {
 					problemRequestor.acceptProblem(
 							leftHandSide,
 							IProblemRequestor.ELEMENT_NOT_VALID_IN_EXPRESSION,
@@ -2283,15 +2255,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 		
 		
 		//The next 2 if statements are to short circuit the arithmetic operator checking
-		if((binOperator == BinaryExpression.Operator.CONCAT ||
-				binOperator == BinaryExpression.Operator.NULLCONCAT ||
-				binOperator == BinaryExpression.Operator.PLUS) &&
+		if((binOperator == BinaryExpression.Operator.CONCAT ) &&
 				((Binding.isValidBinding(lhType) && ITypeBinding.ARRAY_TYPE_BINDING == lhType.getKind()) ||
 				 (Binding.isValidBinding(rhType) && ITypeBinding.ARRAY_TYPE_BINDING == rhType.getKind()))) {
 				return false;
 		}
 		
-		if(binOperator == BinaryExpression.Operator.PLUS && Binding.isValidBinding(lhType) && isStringType(lhType) ||
+		if(binOperator == BinaryExpression.Operator.PLUS && (isStringType(lhType) || isStringType(rhType)) ||
 				binOperator == BinaryExpression.Operator.CONCAT ||
 				binOperator == BinaryExpression.Operator.NULLCONCAT) {
 			return false;
@@ -3066,6 +3036,9 @@ public abstract class DefaultBinder extends AbstractBinder {
 	}
 	
 	private static boolean isStringType(ITypeBinding type) {
+		if (!Binding.isValidBinding(type)) {
+			return false;
+		}
 		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
 		       Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive());
 	}
