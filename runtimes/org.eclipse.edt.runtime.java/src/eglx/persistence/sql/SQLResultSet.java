@@ -19,13 +19,13 @@ public class SQLResultSet {
 	private ResultSet resultSet;
 	private String[] updateFieldNames;
 	
-	public static int CONCUR_READ_ONLY = ResultSet.CONCUR_READ_ONLY;
-	public static int CONCUR_UPDATABLE = ResultSet.CONCUR_UPDATABLE;
-	public static int HOLD_CURSORS_OVER_COMMIT = ResultSet.HOLD_CURSORS_OVER_COMMIT;
-	public static int CLOSE_CURSORS_AT_COMMIT = ResultSet.CLOSE_CURSORS_AT_COMMIT;
-	public static int TYPE_FORWARD_ONLY = ResultSet.TYPE_FORWARD_ONLY;
-	public static int TYPE_SCROLL_INSENSITIVE = ResultSet.TYPE_SCROLL_INSENSITIVE;
-	public static int TYPE_SCROLL_SENSITIVE = ResultSet.TYPE_SCROLL_SENSITIVE;
+	public static final int CONCUR_READ_ONLY = ResultSet.CONCUR_READ_ONLY;
+	public static final int CONCUR_UPDATABLE = ResultSet.CONCUR_UPDATABLE;
+	public static final int HOLD_CURSORS_OVER_COMMIT = ResultSet.HOLD_CURSORS_OVER_COMMIT;
+	public static final int CLOSE_CURSORS_AT_COMMIT = ResultSet.CLOSE_CURSORS_AT_COMMIT;
+	public static final int TYPE_FORWARD_ONLY = ResultSet.TYPE_FORWARD_ONLY;
+	public static final int TYPE_SCROLL_INSENSITIVE = ResultSet.TYPE_SCROLL_INSENSITIVE;
+	public static final int TYPE_SCROLL_SENSITIVE = ResultSet.TYPE_SCROLL_SENSITIVE;
 	
 	public SQLResultSet(ResultSet rs) {
 		this.resultSet = rs;
