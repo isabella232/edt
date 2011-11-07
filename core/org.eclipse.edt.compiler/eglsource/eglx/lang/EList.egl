@@ -12,14 +12,6 @@ externalType EList type ClassType {
 }
 
 	/**
-	 * {@Operation +} Creates a new list consisting of the first operand's elements
-	 * followed by the second operand.  The assigning form of the operator (+=) does 
-	 * not create a new list: the appendElement function is used to add the second 
-	 * operand to the end of the first operand.
-	 */
-	static function $Plus(lvalue EList in, rvalue EAny in) returns (EList) {@Operation{"+"}};
-
-	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
 	 * followed by the second operand.  The assigning form of the operator (::=) does 
 	 * not create a new list: the appendElement function is used to add the second 
@@ -28,28 +20,12 @@ externalType EList type ClassType {
 	static function $Concat(value EList in, rvalue EAny in) returns (EList) {@Operation{"::"}};
 
 	/**
-	 * {@Operation +} Creates a new list consisting of the first operand followed 
-	 * by the second operand's elements.  The assigning form of the operator (+=) does
-	 * not create a new list: the insertElement function is used to add the second
-	 * operand to the front of the first operand.
-	 */
-	static function $Plus(lvalue EAny in, rvalue EList in) returns (EList) {@Operation{"+"}};
-
-	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand followed 
 	 * by the second operand's elements.  The assigning form of the operator (::=) does
 	 * not create a new list: the insertElement function is used to add the second
 	 * operand to the front of the first operand.
 	 */
 	static function $Concat(value EAny in, rvalue EList in) returns (EList) {@Operation{"::"}};
-
-	/**
-	 * {@Operation +} Creates a new list consisting of the first operand's elements
-	 * followed by the second operand's elements.  The assigning form of the operator
-	 * (+=) does not create a new list: the appendAll function is used to add the 
-	 * second operand's elements to the end of the first operand.
-	 */
-	static function $Plus(lvalue EList in, rvalue EList in) returns (EList) {@Operation{"+"}};
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
