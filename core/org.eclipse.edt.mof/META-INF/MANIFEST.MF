@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.edt.mof
 Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: Eclipse EGL Development Tools
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Eclipse-BuddyPolicy: dependent
+Eclipse-BuddyPolicy: registered
 Export-Package: org.eclipse.edt.mof,
  org.eclipse.edt.mof.codegen.api,
  org.eclipse.edt.mof.codegen.java,
