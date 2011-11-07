@@ -300,7 +300,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// beware that Widget (an ET) is compatible with RUIWidget (a kind of handler).
 		//TODO expressiongenerator has the impl. for these special caess
 		
-		if ( lhsTypeSig.equals( "egl.lang.AnyException" ) && isaType instanceof NamedElement )
+		if ( lhsTypeSig.equals( "eglx.lang.AnyException" ) && isaType instanceof NamedElement )
 		{
 			out.print("(");
 			ctx.invoke(genExpression, lhs, ctx, out);
