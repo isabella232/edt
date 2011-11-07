@@ -1,7 +1,7 @@
 feature@org.eclipse.edt.sdk.feature=v201106091321,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.sdk.feature
 
 feature@org.eclipse.edt.feature=v201110261630,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature
-plugin@org.eclipse.edt.compiler=v201111071456,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
+plugin@org.eclipse.edt.compiler=v201111071557,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
 plugin@org.eclipse.edt.core.doc.cr=v201108251003,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.cr
 plugin@org.eclipse.edt.core.doc.lr=v201110302118,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.lr
 plugin@org.eclipse.edt.core.doc.pg=v201110242235,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.pg
@@ -32,7 +32,7 @@ plugin@org.eclipse.edt.gen.javascript.templates.egl.lang=v201111040438,:pserver:
 plugin@org.eclipse.edt.gen.javascript.templates.eglx.services=v201110311412,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascript.templates.eglx.services
 plugin@org.eclipse.edt.gen.javascriptdev=v201111071158,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.javascriptdev
 plugin@org.eclipse.edt.ide.compiler=v201110101343,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.compiler
-plugin@org.eclipse.edt.ide.core=v201111070610,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.core
+plugin@org.eclipse.edt.ide.core=v201111071557,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.core
 plugin@org.eclipse.edt.ide.deployment=v201111010141,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment
 plugin@org.eclipse.edt.ide.deployment.core=v201110280157,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment.core
 plugin@org.eclipse.edt.ide.deployment.rui=v201111011433,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ide/org.eclipse.edt.ide.deployment.rui
