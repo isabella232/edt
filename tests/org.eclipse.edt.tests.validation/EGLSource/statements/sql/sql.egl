@@ -195,7 +195,7 @@ library sql
 		delete basic from ds with #sql{}; //0
 		delete basic from ds using a; //0
 		delete dict from ds using a; //1 - dictionary not yet supported
-		delete array from ds using a; //0
+		delete array from ds using a; //1 - array not yet supported in delete
 		delete invalidArray from ds using a; //1
 		delete parent from ds for a; //1 FOR is not an entity
 	end
@@ -214,7 +214,7 @@ library sql
 		replace parent.id to ds; //0
 		replace multi to ds; //1 no multiple tables
 		replace dict to ds with a; //1 - dictionary not yet supported
-		replace array to ds with a; //0
+		replace array to ds with a; //1 - array not yet supported in replace
 		replace invalidArray to ds using a; //1
 	end
 end
