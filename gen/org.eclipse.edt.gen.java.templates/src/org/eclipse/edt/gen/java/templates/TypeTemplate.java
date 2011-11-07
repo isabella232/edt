@@ -217,17 +217,12 @@ public class TypeTemplate extends JavaTemplate {
 					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
 					out.print(") ");
 				}
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				ctx.invoke(genExpression, arg2, ctx, out);
+				out.print(")");
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
-				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
-					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-					ctx.invoke(genExpression, arg2, ctx, out);
-					out.print(")");
+				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 					out.print(".ezeUnbox()");
-				} else {
-					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-					ctx.invoke(genExpression, arg2, ctx, out);
-					out.print(")");
-				}
 			} else {
 				// if this is a well-behaved assignment, we can avoid the temporary
 				if (IRUtils.hasSideEffects(arg2)) {
@@ -264,12 +259,10 @@ public class TypeTemplate extends JavaTemplate {
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
+			ctx.invoke(genExpression, arg2, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
-				ctx.invoke(genExpression, arg2, ctx, out);
+			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 				out.print(".ezeUnbox()");
-			} else
-				ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}
 

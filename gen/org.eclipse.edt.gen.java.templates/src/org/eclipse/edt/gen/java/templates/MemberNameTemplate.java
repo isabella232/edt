@@ -34,24 +34,20 @@ public class MemberNameTemplate extends JavaTemplate {
 				out.print(".ezeUnbox()");
 				out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
 			}
+			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-				ctx.invoke(genExpression, arg1, ctx, out);
+			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 				out.print(".ezeUnbox()");
-			} else
-				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (CommonUtilities.isBoxedOutputTemp(expr, ctx)) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(");
+			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
-			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-				ctx.invoke(genExpression, arg1, ctx, out);
+			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 				out.print(".ezeUnbox()");
-			} else
-				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
