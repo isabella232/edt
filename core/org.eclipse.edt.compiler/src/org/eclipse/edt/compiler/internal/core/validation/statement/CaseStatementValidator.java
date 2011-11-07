@@ -104,7 +104,7 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 									ITypeBinding binding = expr.resolveTypeBinding();
 									if (binding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING){
 										Primitive type = ((PrimitiveTypeBinding)binding).getPrimitive();
-										if (type != Primitive.BOOLEAN && !Primitive.isNumericType(type) && !criterionExisits){
+										if (type != Primitive.BOOLEAN  && !criterionExisits){
 											problemRequestor.acceptProblem(expr,
 													IProblemRequestor.CASE_WHEN_MUST_BE_BOOLEAN_EXPRESSION);
 											return false;

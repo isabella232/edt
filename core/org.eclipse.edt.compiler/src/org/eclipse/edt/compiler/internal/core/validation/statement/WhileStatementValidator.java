@@ -36,9 +36,7 @@ public class WhileStatementValidator extends DefaultASTVisitor {
 		if(type != null) {
 			boolean validType =
 			   PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == type ||
-			   PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN).getNullableInstance() == type ||
-			   ITypeBinding.PRIMITIVE_TYPE_BINDING == type.getKind() &&
-			   Primitive.isNumericType(((PrimitiveTypeBinding) type).getPrimitive());
+			   PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN).getNullableInstance() == type;
 			
 			if(!validType) {
 				problemRequestor.acceptProblem(
