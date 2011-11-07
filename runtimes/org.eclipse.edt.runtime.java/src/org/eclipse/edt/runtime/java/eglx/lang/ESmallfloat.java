@@ -224,10 +224,6 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	}
 
 	public static boolean notEquals(Float op1, Float op2) {
-		if (op1 == null && op2 == null)
-			return false;
-		if (op1 == null || op2 == null)
-			return true;
-		return op1.compareTo(op2) != 0;
+		return !equals(op1, op2);
 	}
 }

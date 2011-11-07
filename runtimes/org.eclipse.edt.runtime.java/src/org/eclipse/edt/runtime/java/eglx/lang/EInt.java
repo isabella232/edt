@@ -358,10 +358,6 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	}
 
 	public static boolean notEquals(Integer op1, Integer op2) {
-		if (op1 == null && op2 == null)
-			return false;
-		if (op1 == null || op2 == null)
-			return true;
-		return op1.compareTo(op2) != 0;
+		return !equals(op1, op2);
 	}
 }

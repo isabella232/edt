@@ -550,10 +550,6 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static boolean notEquals(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null && op2 == null)
-			return false;
-		if (op1 == null || op2 == null)
-			return true;
-		return op1.compareTo(op2) != 0;
+		return !equals(op1, op2);
 	}
 }

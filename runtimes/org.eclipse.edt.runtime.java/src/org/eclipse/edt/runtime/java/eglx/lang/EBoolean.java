@@ -85,10 +85,6 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 	}
 
 	public static boolean notEquals(Boolean op1, Boolean op2) {
-		if (op1 == null && op2 == null)
-			return false;
-		if (op1 == null || op2 == null)
-			return true;
-		return !op1.equals(op2);
+		return !equals(op1, op2);
 	}
 }

@@ -111,8 +111,8 @@ public class StringLib extends ExecutableBase {
 	 * updated with the token's ending position. The exception eglx.lang.InvalidIndexException is thrown if the index is less than
 	 * 1 or greater than the length of the source String.
 	 */
-	public static String getNextToken(String source, AnyBoxedObject<Object> index, String delimiters) throws AnyException {
-		int start = (Integer) index.ezeUnbox();
+	public static String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) throws AnyException {
+		int start = index.ezeUnbox();
 		int searchEnd = source.length();
 		// Validate the substring index.
 		if (start < 1 || start > searchEnd) {

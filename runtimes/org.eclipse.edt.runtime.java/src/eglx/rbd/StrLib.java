@@ -192,14 +192,14 @@ public class StrLib extends ExecutableBase {
 			return eze$Temp40;
 		}
 	}
-	public String getNextToken(AnyBoxedObject<Object> source, AnyBoxedObject<Object> index, String delimiters) {
+	public String getNextToken(AnyBoxedObject<String> source, AnyBoxedObject<Integer> index, String delimiters) {
 		int charIndex;
-		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(((Integer)index.ezeUnbox()), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
-		AnyBoxedObject<Object> eze$Temp42;
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)((short) 2))), EDecimal.asDecimal((short) 1))));
+		AnyBoxedObject<Integer> eze$Temp42;
 		eze$Temp42 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(charIndex);
 		String token;
-		token = StringLib.getNextToken(((String)source.ezeUnbox()), eze$Temp42, delimiters);
-		charIndex = ((Integer)eze$Temp42.ezeUnbox());
+		token = StringLib.getNextToken(source.ezeUnbox(), eze$Temp42, delimiters);
+		charIndex = eze$Temp42.ezeUnbox();
 		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(EString.ezeBox(token), null))) {
 			index.ezeCopy((((charIndex - (int)((short) 1)) * (int)((short) 2)) + (int)((short) 1)));
 		}
@@ -210,14 +210,14 @@ public class StrLib extends ExecutableBase {
 		eze$Temp44 = StringLib.getTokenCount(source, delimiters);
 		return eze$Temp44;
 	}
-	public int indexOf(AnyBoxedObject<Object> source, String pattern) {
+	public int indexOf(AnyBoxedObject<String> source, String pattern) {
 		int eze$Temp45;
-		eze$Temp45 = EString.indexOf(((String)source.ezeUnbox()), pattern);
+		eze$Temp45 = EString.indexOf(source.ezeUnbox(), pattern);
 		return eze$Temp45;
 	}
-	public int indexOf(AnyBoxedObject<Object> source, String pattern, int startIndex) {
+	public int indexOf(AnyBoxedObject<String> source, String pattern, int startIndex) {
 		int eze$Temp46;
-		eze$Temp46 = EString.indexOf(((String)source.ezeUnbox()), pattern, startIndex);
+		eze$Temp46 = EString.indexOf(source.ezeUnbox(), pattern, startIndex);
 		return eze$Temp46;
 	}
 	public String lowerCase(String characterItem) {

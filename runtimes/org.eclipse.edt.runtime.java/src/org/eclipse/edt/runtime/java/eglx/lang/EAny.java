@@ -45,8 +45,8 @@ public abstract class EAny implements eglx.lang.EAny {
 		return new AnyBoxedObject<R>(object);
 	}
 
-	public static AnyBoxedObject<Object> ezeWrap(Object object) {
-		return new AnyBoxedObject<Object>(object);
+	public static <R extends Object> AnyBoxedObject<R> ezeWrap(R object) {
+		return new AnyBoxedObject<R>(object);
 	}
 
 	public static <T extends Object> T ezeCast(Object value, Class<T> clazz) throws AnyException {
@@ -79,6 +79,30 @@ public abstract class EAny implements eglx.lang.EAny {
 	@SuppressWarnings("unchecked")
 	public static Object ezeCast(Object value, String conversionMethod, Class clazz, Class[] parameterTypes, Object[] args) throws AnyException {
 		try {
+			// first try finding the method if it is boxed
+			if (value instanceof eglx.lang.EAny) {
+				Method method = null;
+				Class[] parmTypes = new Class[parameterTypes == null ? 1 : parameterTypes.length + 1];
+				parmTypes[0] = value.getClass();
+				if (parameterTypes != null)
+					java.lang.System.arraycopy(parameterTypes, 0, parmTypes, 1, parameterTypes.length);
+				try {
+					method = clazz.getMethod(conversionMethod, parmTypes);
+				}
+				catch (NoSuchMethodException ex) {
+					try {
+						method = value.getClass().getMethod(conversionMethod, parmTypes);
+					}
+					catch (Exception ex1) {
+					}
+				}
+				if (method != null) {
+					if (args == null)
+						return method.invoke(null, value);
+					else
+						return method.invoke(null, value, args);
+				}
+			}
 			// Conversion operation needs to be invoked
 			Object unboxed = value instanceof eglx.lang.EAny ? ((eglx.lang.EAny) value).ezeUnbox() : value;
 			if (unboxed == null) {
@@ -226,11 +250,8 @@ public abstract class EAny implements eglx.lang.EAny {
 			return true;
 		if (unboxedOp1 == null || unboxedOp2 == null)
 			return false;
-		
-		if (object1 instanceof eglx.lang.ENumber && object2 instanceof eglx.lang.ENumber) {
+		if (object1 instanceof eglx.lang.ENumber && object2 instanceof eglx.lang.ENumber)
 			return ENumber.equals(object1, object2);
-		}
-		
 		return unboxedOp1.equals(unboxedOp2);
 	}
 

@@ -30,11 +30,7 @@ public class NullType extends EAny {
 	}
 
 	public static <R extends Object> boolean notEquals(AnyBoxedObject<R> s1, AnyBoxedObject<R> s2) {
-		if ((s1 == null || s1.ezeUnbox() == null) && (s2 == null || s2.ezeUnbox() == null))
-			return false;
-		if (s1 == null || s2 == null)
-			return true;
-		return !s1.equals(s2);
+		return !equals(s1, s2);
 	}
 
 	public static eglx.lang.NullType asNullType(eglx.lang.EAny source) {

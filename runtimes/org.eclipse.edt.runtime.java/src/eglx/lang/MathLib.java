@@ -232,7 +232,7 @@ public class MathLib extends ExecutableBase {
 	 * Breaks <code>numericField</code> into its mantissa, which is stored in <code>result</code>, and its exponent, which is
 	 * stored in <code>exponent</code>.
 	 */
-	public static double frexp(double numericField, AnyBoxedObject<Object> exponent) {
+	public static double frexp(double numericField, AnyBoxedObject<Integer> exponent) {
 		// Get the number to be split.
 		double value = numericField;
 		// Extract the exponent.
@@ -367,7 +367,7 @@ public class MathLib extends ExecutableBase {
 	/**
 	 * Stores the integral part of <code>op1</code> in <code>op2</code> and the fractional part in <code>result</code>
 	 */
-	public static double modf(double numericField1, AnyBoxedObject<Object> numericField2) {
+	public static double modf(double numericField1, AnyBoxedObject<Long> numericField2) {
 		// Get the number and split it.
 		BigDecimal bd = new BigDecimal(numericField1);
 		BigInteger intPart = bd.toBigInteger();

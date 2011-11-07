@@ -31,13 +31,6 @@ public class DateTimeLib extends ExecutableBase {
 	public static Calendar dateFromInt(int dateint) {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		cal.setTimeInMillis((long) dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH);
-		int date = cal.get(Calendar.DATE);
-		cal.clear();
-		cal.set(year, month, date);
-		// to indicate this is a date object, we set a field as a flag
-		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		return cal;
 	}
 
@@ -46,14 +39,11 @@ public class DateTimeLib extends ExecutableBase {
 	 */
 	public static Calendar dateFromGregorian(int gregorianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.clear();
 		cal.set(Calendar.YEAR, gregorianIntDate / 10000);
 		cal.set(Calendar.MONTH, ((gregorianIntDate % 10000) / 100) - 1);
 		cal.set(Calendar.DATE, gregorianIntDate % 100);
-		// to indicate this is a date object, we set a field as a flag
-		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
-			cal.get(Calendar.YEAR);
+			cal.setTimeInMillis(cal.getTimeInMillis());
 		}
 		catch (IllegalArgumentException e) {
 			TypeCastException tcx = new TypeCastException();
@@ -70,7 +60,6 @@ public class DateTimeLib extends ExecutableBase {
 	 */
 	public static Calendar dateFromJulian(int julianIntDate) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.clear();
 		// This is a workaround for a problem seen in Java 1.5 but not in 1.4.
 		// It forces the Calendar to recompute its internal values. If we don't do it, the Calendar won't let us set
 		// DAY_OF_YEAR because the MONTH and DAY_OF_MONTH don't jive with the new DAY_OF_YEAR.
@@ -78,10 +67,8 @@ public class DateTimeLib extends ExecutableBase {
 		// end of workaround
 		cal.set(Calendar.YEAR, julianIntDate / 1000);
 		cal.set(Calendar.DAY_OF_YEAR, julianIntDate % 1000);
-		// to indicate this is a date object, we set a field as a flag
-		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
-			cal.get(Calendar.YEAR);
+			cal.setTimeInMillis(cal.getTimeInMillis());
 		}
 		catch (IllegalArgumentException e) {
 			TypeCastException tcx = new TypeCastException();
@@ -98,14 +85,11 @@ public class DateTimeLib extends ExecutableBase {
 	 */
 	public static Calendar mdy(int month, int day, int year) throws AnyException {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.clear();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month - 1);
 		cal.set(Calendar.DATE, day);
-		// to indicate this is a date object, we set a field as a flag
-		cal.set(Calendar.ZONE_OFFSET, DateTimeUtil.getBaseCalendar().get(Calendar.ZONE_OFFSET));
 		try {
-			cal.get(Calendar.YEAR);
+			cal.setTimeInMillis(cal.getTimeInMillis());
 		}
 		catch (IllegalArgumentException e) {
 			InvalidArgumentException ex = new InvalidArgumentException();

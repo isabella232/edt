@@ -187,10 +187,10 @@ public class TestListMgr extends ExecutableBase {
 			str = (((EString.plus(((str) + "Original request body: "), http.getRequest().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 			str = (((EString.plus(((str) + "Raw response body: "), http.getResponse().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 		}
-		AnyBoxedObject<Object> eze$Temp8;
+		AnyBoxedObject<String> eze$Temp8;
 		eze$Temp8 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(str);
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp8);
-		str = ((String)eze$Temp8.ezeUnbox());
+		str = eze$Temp8.ezeUnbox();
 		String testId;
 		testId = this.testMethodNames.get(this.testIndex - 1);
 		nextTest();
@@ -201,10 +201,10 @@ public class TestListMgr extends ExecutableBase {
 	public void caughtAnyException(AnyException exp) {
 		String expMsg;
 		expMsg = (("uncaught exception for: ") + getTestIdString());
-		AnyBoxedObject<Object> eze$Temp9;
+		AnyBoxedObject<String> eze$Temp9;
 		eze$Temp9 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(expMsg);
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp9);
-		expMsg = ((String)eze$Temp9.ezeUnbox());
+		expMsg = eze$Temp9.ezeUnbox();
 	}
 	public String getBindingTypeString(ServiceBindingType bType) {
 		if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class))) {

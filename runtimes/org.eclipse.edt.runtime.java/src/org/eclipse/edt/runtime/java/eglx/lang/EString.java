@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
@@ -193,120 +192,124 @@ public class EString extends AnyBoxedObject<String> {
 			return value.ezeUnbox();
 	}
 
-	/**
-	 * TODO This method gets called for two reasons: converting date to string and converting timestamp to string. But it
-	 * can't do both properly, based on the specs below. The Calendar object from a date will look exactly like the Calendar
-	 * object from a timestamp("yyyyMMdd"). Right now this method does the conversion from timestamp. {@Operation
-	 *  widen} Converts a date to a string in the format "MM/dd/yyyy". Leading zeros are included in the string,
-	 * so April 1st in the year 9 A.D. is converted to "04/01/0009". {@Operation widen} Converts a timestamp to a
-	 * string. The 26-character result will include all possible fields of a timestamp, from years down to fractions of
-	 * seconds, in the format "yyyy-MM-dd HH:mm:ss.SSSSSS". Leading zeros are included in each field of the string when
-	 * necessary, e.g. January is represented as "01" not "1".
-	 */
 	public static String asString(EDate value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(value.ezeUnbox(), length);
+		return asString(asStringDate(value.ezeUnbox()), length);
+	}
+
+	protected static String asStringDate(Calendar original) {
+		if (original == null)
+			return null;
+		Calendar cal = (Calendar) original.clone();
+		// Get the format pattern to use.
+		String format = "MM/dd/yyyy";
+		// Get a formatter for the value, set it up, and run it.
+		synchronized (DateTimeUtil.LOCK) {
+			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
+			try {
+				return formatter.format(cal.getTime());
+			}
+			catch (IllegalArgumentException iax) {
+				TypeCastException tcx = new TypeCastException();
+				tcx.castToName = "string";
+				tcx.actualTypeName = "date";
+				tcx.initCause( iax );
+				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
+			}
+		}
+	}
+
+//	public static String asString(ETime value, Integer... length) {
+//		if (value == null)
+//			return null;
+//		return asString(asStringTime(value.ezeUnbox()), length);
+//	}
+
+	protected static String asStringTime(Calendar original) {
+		if (original == null)
+			return null;
+		Calendar cal = (Calendar) original.clone();
+		// Get the format pattern to use.
+		String format = "HH:mm:ss";
+		// Get a formatter for the value, set it up, and run it.
+		synchronized (DateTimeUtil.LOCK) {
+			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
+			try {
+				return formatter.format(cal.getTime());
+			}
+			catch (IllegalArgumentException iax) {
+				TypeCastException tcx = new TypeCastException();
+				tcx.castToName = "string";
+				tcx.actualTypeName = "time";
+				tcx.initCause( iax );
+				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
+			}
+		}
 	}
 
 	public static String asString(ETimestamp value, Integer... length) {
 		if (value == null)
 			return null;
-		return asString(value.ezeUnbox(), length);
+		return asString(asStringTimestamp(value.ezeUnbox(), value.getStartCode(), value.getEndCode()), length);
 	}
 
-	public static String asString(GregorianCalendar value, Integer... length) {
-		if (value == null)
-			return null;
-		return asString((Calendar) value, length);
-	}
-	
-	// This version exists so that it's much easier/faster for debug to invoke it.
-	public static String asString(Calendar cal) {
-		return asString(cal, new Integer[0]);
-	}
-
-	public static String asString(Calendar original, Integer... length) {
+	protected static String asStringTimestamp(Calendar original, int startCode, int endCode) {
 		if (original == null)
 			return null;
-		// copy the incoming calendar, as some of the methods cause the isSet attributes to be turned on
-		// we need to use the timestamp version of the ezeClone to preserve the zone offset flag, but 
-		// not set it in the cal object
-		Calendar cal = ETimestamp.ezeClone(original, ETimestamp.YEAR_CODE, ETimestamp.FRACTION6_CODE);
+		Calendar cal = (Calendar) original.clone();
 		// Get the format pattern to use.
 		String format = "";
 		String separator = null;
-		// if the zone offset is set, then this is a date object
-		if (original.isSet(Calendar.ZONE_OFFSET)) {
-			if (cal.isSet(Calendar.MONTH)) {
-				format += "MM";
-				separator = "/";
+		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE) {
+			format += "yyyy";
+			separator = "-";
+		}
+		if (startCode <= ETimestamp.MONTH_CODE && endCode >= ETimestamp.MONTH_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-			if (cal.isSet(Calendar.DATE)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "dd";
-				separator = "/";
+			format += "MM";
+			separator = "-";
+		}
+		if (startCode <= ETimestamp.DAY_CODE && endCode >= ETimestamp.DAY_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-			if (cal.isSet(Calendar.YEAR)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "yyyy";
-				separator = " ";
+			format += "dd";
+			separator = " ";
+		}
+		if (startCode <= ETimestamp.HOUR_CODE && endCode >= ETimestamp.HOUR_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-		} else {
-			if (cal.isSet(Calendar.YEAR)) {
-				format += "yyyy";
-				separator = "-";
+			format += "HH";
+			separator = ":";
+		}
+		if (startCode <= ETimestamp.MINUTE_CODE && endCode >= ETimestamp.MINUTE_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-			if (cal.isSet(Calendar.MONTH)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "MM";
-				separator = "-";
+			format += "mm";
+			separator = ":";
+		}
+		if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.SECOND_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-			if (cal.isSet(Calendar.DATE)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "dd";
-				separator = " ";
+			format += "ss";
+			separator = ".";
+		}
+		if (startCode <= ETimestamp.FRACTION6_CODE && endCode >= ETimestamp.FRACTION1_CODE) {
+			if (separator != null) {
+				format += separator;
 			}
-			if (cal.isSet(Calendar.HOUR_OF_DAY)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "HH";
-				separator = ":";
-			}
-			if (cal.isSet(Calendar.MINUTE)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "mm";
-				separator = ":";
-			}
-			if (cal.isSet(Calendar.SECOND)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "ss";
-				separator = ".";
-			}
-			if (cal.isSet(Calendar.MILLISECOND)) {
-				if (separator != null) {
-					format += separator;
-				}
-				format += "SSSSSS";
-			}
+			format += "SSSSSS";
 		}
 		// Get a formatter for the value, set it up, and run it.
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
-			if (cal.isSet(Calendar.SECOND) && cal.isSet(Calendar.MILLISECOND)) {
+			if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.FRACTION1_CODE) {
 				int micros = cal.get(Calendar.MILLISECOND) * 1000;
 				if (micros < 0) {
 					cal.add(Calendar.SECOND, -1);
@@ -315,20 +318,16 @@ public class EString extends AnyBoxedObject<String> {
 				formatter.setMicrosecond(micros);
 			}
 			try {
-				// if this is a date, don't set the century
-				if (!original.isSet(Calendar.ZONE_OFFSET)) {
-					if (cal.isSet(Calendar.YEAR))
-						formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
-					else
-						formatter.setCentury(1);
-				}
-				return asString(formatter.format(cal.getTime()), length);
+				if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE)
+					formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
+				else
+					formatter.setCentury(1);
+				return formatter.format(cal.getTime());
 			}
 			catch (IllegalArgumentException iax) {
 				TypeCastException tcx = new TypeCastException();
 				tcx.castToName = "string";
-				tcx.actualTypeName = "date or timestamp"; // TODO see the TODO in the method comment: need to know if the
-															// Calendar is a date or timestamp
+				tcx.actualTypeName = "timestamp";
 				tcx.initCause( iax );
 				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
 			}
@@ -384,11 +383,7 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static boolean notEquals(String op1, String op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return false;
-		if (op1 == null || op2 == null)
-			return true;
-		return !op1.equals(op2);
+		return !equals(op1, op2);
 	}
 
 	public static String substring(String str, int start, int end) throws AnyException {
@@ -568,6 +563,11 @@ public class EString extends AnyBoxedObject<String> {
 				// escape it so that it is treated as a literal character
 				regex.append("\\\\");
 			} else if (ch == escapeChar) {
+				if (i + 1 >= pattern.length()) {
+					InvalidPatternException ex = new InvalidPatternException();
+					ex.pattern = pattern;
+					throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+				}
 				char nch = pattern.charAt(i + 1);
 				if (nch == '_' || nch == '%') {
 					regex.append(nch);
@@ -635,6 +635,11 @@ public class EString extends AnyBoxedObject<String> {
 				// escape it so that it is treated as a literal character
 				regex.append("\\\\");
 			} else if (ch == escapeChar) {
+				if (i + 1 >= pattern.length()) {
+					InvalidPatternException ex = new InvalidPatternException();
+					ex.pattern = pattern;
+					throw ex.fillInMessage( Message.INVALID_MATCH_PATTERN, pattern );
+				}
 				char nch = pattern.charAt(i + 1);
 				if (nch == '*' || nch == '?' || nch == '[' || nch == ']' || nch == '^') {
 					regex.append("\\" + nch);
