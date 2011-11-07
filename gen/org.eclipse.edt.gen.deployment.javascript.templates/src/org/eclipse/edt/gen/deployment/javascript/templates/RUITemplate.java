@@ -364,7 +364,6 @@ public class RUITemplate extends JavaScriptTemplate {
 		}else{
 			generateRootHandler(part,out);
 		}
-		String fullPartName = part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName();
 		out.println("		} catch (e) {");
 		if (isDebug) {
 			out.println("			if (e instanceof egl.egl.debug.DebugTermination) {" );
@@ -372,8 +371,8 @@ public class RUITemplate extends JavaScriptTemplate {
 			out.println("			} else {");
 		}
 		out.println("			egl.crashTerminateSession();");
-		out.println("			if (!egl." + fullPartName +"){");
-		out.println("				egl.println('Internal generation error. Found no definition for " + fullPartName + ". Try <b>Project > Clean...</b>', e);");
+		out.println("			if (!egl." + getFullPartName(part) +"){");
+		out.println("				egl.println('Internal generation error. Found no definition for " + getFullPartName(part) + ". Try <b>Project > Clean...</b>', e);");
 		out.println("			}else{ egl.printError('Could not render UI', e); throw e;}");
 		if (isDebug) {
 			out.println("			}");
@@ -381,6 +380,16 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("		}");
 		out.println("	});");
 		out.println("};");
+	}
+
+	private String getFullPartName(Handler part) {
+		String packageName = part.getPackageName().replace('/', '.').toLowerCase();
+		if(packageName != null && !(packageName.isEmpty())){
+			packageName +=".";
+		}else{
+			packageName = "";
+		}
+		return packageName + part.getName();
 	}
 	
 	private void generateIncludeFiles(Handler handler, Context ctx, TabbedWriter out) {					
@@ -445,7 +454,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	private void generateRootHandler( Handler part, TabbedWriter out ) {
-		out.println("			egl.rootHandler = new egl." + part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName() + "();");
+		out.println("			egl.rootHandler = new egl." + getFullPartName(part) + "();");
 		out.println( "  		egl.rootHandler.setParent(egl.Document);" ); //$NON-NLS-1$
 		out.println( "  		egl.startup();" ); //$NON-NLS-1$
 	}
@@ -519,7 +528,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void generateDevelopmentRootHandler( Handler part, TabbedWriter out ) {
 		out.println("			egl.handleIDEEvent();");
-		out.println("			egl.rootHandler = new egl." + part.getPackageName().replace('/', '.').toLowerCase() + "." + part.getName() + "();");
+		out.println("			egl.rootHandler = new egl." + getFullPartName(part) + "();");
 		out.println("			if ( egl.rootHandler.targetWidget || !egl.rootHandler.egl$isWidget ) {");
 		out.println("				egl.rootHandler.setParent(egl.Document);");
 		out.println("			} else {");
