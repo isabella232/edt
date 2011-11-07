@@ -64,7 +64,10 @@ public class ReplaceStatementValidator extends AbstractSqlStatementValidator {
 		}
 		
 		// Target must be a data expression.
-		if (!isDataExpr(target)) {
+		if (!isDataExpr(target)
+				//TODO arrays for replace not yet supported.
+				|| (Binding.isValidBinding(targetType) && targetType.getKind() == ITypeBinding.ARRAY_TYPE_BINDING)
+				) {
 			problemRequestor.acceptProblem(target,
 					IProblemRequestor.SQL_TARGET_NOT_DATA_EXPR,
 					new String[] {});
