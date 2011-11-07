@@ -35,6 +35,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
 	public static final String genArrayAccess = "genArrayAccess";
+	public static final String genAsExpressionBoxing = "genAsExpressionBoxing";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
 	public static final String genBoxingFunctionName = "genBoxingFunctionName";
@@ -70,7 +71,9 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genInitializeStatement = "genInitializeStatement";
 	public static final String genInstantiation = "genInstantiation";
 	public static final String genInvocation = "genInvocation";
+	public static final String genInvocationArgumentBoxing = "genInvocationArgumentBoxing";
 	public static final String genIsaExpression = "genIsaExpression";
+	public static final String genIsaExpressionBoxing = "genIsaExpressionBoxing";
 	public static final String genLibraryAccessMethod = "genLibraryAccessMethod";
 	public static final String genLibraryAccessMethods = "genLibraryAccessMethods";
 	public static final String genLibrary = "genLibrary";
@@ -109,6 +112,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genContainerBasedMemberName = "genContainerBasedMemberName";
 	public static final String genContainerBasedNewExpression = "genContainerBasedNewExpression";
 	public static final String genContainerBasedInvocation = "genContainerBasedInvocation";
+	public static final String genContainerBasedInvocationBoxing = "genContainerBasedInvocationBoxing";
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGen = "preGen";
