@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript;
 
 import java.io.StringWriter;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.gen.GenerationException;
@@ -33,6 +34,7 @@ import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
@@ -704,11 +706,19 @@ public class CommonUtilities {
 	 * @return boolean
 	 */
 	public static boolean isWidgetPropertyArrayAssignment(Statement stmt) {
-		if(!(stmt instanceof AssignmentStatement))
-			return false;
-		Assignment object = (Assignment)((AssignmentStatement)stmt).getExpr();
-		if(object.getLHS() instanceof MemberAccess && isRUIWidget(object.getLHS().getQualifier().getType())){
-			return true;
+		if(stmt instanceof AssignmentStatement){
+			Assignment object = (Assignment)((AssignmentStatement)stmt).getExpr();
+			if(object.getLHS() instanceof MemberAccess && isRUIWidget(object.getLHS().getQualifier().getType())){
+				return true;
+			}
+		}else if(stmt instanceof LocalVariableDeclarationStatement){
+			List<Field> fieldList = ((LocalVariableDeclarationStatement) stmt).getExpression().getFields();			
+			for(Iterator<Field> iter = fieldList.iterator(); iter.hasNext();){
+				Field field = iter.next();
+				if(isRUIWidget(field.getType())){
+					return true;
+				}				
+			}
 		}
 		return false;
 	}
