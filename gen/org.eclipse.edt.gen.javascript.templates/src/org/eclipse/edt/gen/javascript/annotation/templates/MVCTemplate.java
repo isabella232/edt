@@ -352,10 +352,17 @@ public class MVCTemplate extends JavaScriptTemplate {
 		out.print( ".retrieveModelHelper = new egl.egl.jsrt.Delegate(");
 		ctx.invoke(genQualifier, field, ctx, out); 	ctx.invoke(genAccessor, field, ctx, out);
 		out.println(", function() { try { " );
-
-		out.print("return ");
 		
 		ctx.putAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS, "this.eze$$parent."); // NOGO sbg Should probably be more targeted
+		out.print("return ");
+		
+		// retriever returns a non-null string. Null values cannot be converted to non-nullable strings, jsgen will throw a NullValueException.
+		// Do manual checking for null and return blank if so.
+		if (model.isNullable()) {
+			ctx.invoke(genExpression, model, ctx, out);
+			out.print(" == null ? \"\" : ");
+		}
+		
 		if (!model.getType().equals(TypeUtils.Type_STRING)) { 
 			AsExpression asExpr = IRUtils.createAsExpression(model, TypeUtils.Type_STRING);
 			ctx.invoke(genExpression, asExpr, ctx, out);
