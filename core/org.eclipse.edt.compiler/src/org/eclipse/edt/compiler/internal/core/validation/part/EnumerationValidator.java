@@ -34,6 +34,7 @@ public class EnumerationValidator extends AbstractASTVisitor {
 	protected IProblemRequestor problemRequestor;
 	private ICompilerOptions compilerOptions;
 	private List<Integer> alreadySeenValues;
+	private boolean[] foundField = new boolean[1];
 	
 	public EnumerationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
@@ -42,10 +43,26 @@ public class EnumerationValidator extends AbstractASTVisitor {
 	
 	public boolean visit(Enumeration enumeration) {
 		alreadySeenValues = new ArrayList<Integer>();
+		foundField = new boolean[1];
+		
 		return true;
 	}
 	
+	public void endVisit(Enumeration enumeration) {
+		if (!foundField[0]) {
+			problemRequestor.acceptProblem(
+					enumeration,
+					IProblemRequestor.ENUMERATION_NO_FIELDS,
+					new String[] {
+							enumeration.getIdentifier()
+					}
+			);
+		}
+	}
+	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.EnumerationField enumerationField) {
+		
+		foundField[0] = true;
 		if (!validateValue(enumerationField)) {
 			return false;
 		}

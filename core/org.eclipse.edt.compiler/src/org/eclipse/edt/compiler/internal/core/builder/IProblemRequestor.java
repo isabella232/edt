@@ -494,6 +494,7 @@ public interface IProblemRequestor {
 	public static final int ENUMERATION_CONSTANT_INVALID = 3470;
 	public static final int ENUMERATION_CONSTANT_DUPLICATE= 3471;
 	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
+	public static final int ENUMERATION_NO_FIELDS= 3473;
 	
 
 //3896-3999 ARE IN EGLMESSAGES 					
