@@ -21,7 +21,7 @@ externalType EString extends AnyText type ParameterizableType {
 	/**
 	 * {@Operation ?:} Concatenates two strings.  If either is null then null is returned.
 	 */
-	static function $ConcatNull(value EString in, rvalue EString in) returns(EString) {@Operation{"?:"}};
+	static function $ConcatNull(value EString? in, rvalue EString? in) returns(EString?) {@Operation{"?:"}};
 
 	/**
 	 * {@Operation <} Compares two strings.
