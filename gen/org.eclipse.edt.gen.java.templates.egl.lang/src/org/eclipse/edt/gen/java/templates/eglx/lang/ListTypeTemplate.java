@@ -84,6 +84,9 @@ public class ListTypeTemplate extends JavaTemplate
 		else if ( expr.getId().equalsIgnoreCase( "appendElement" ) )
 		{
 			out.print( ", " );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			Expression arg0 = expr.getArguments().get( 0 );
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
@@ -98,12 +101,18 @@ public class ListTypeTemplate extends JavaTemplate
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
 				out.print( ')' );
 			}
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+				out.print( ')' );
 			out.print( ')' );
 		}
 		else if ( expr.getId().equalsIgnoreCase( "insertElement" )
 					|| expr.getId().equalsIgnoreCase( "setElement" ) )
 		{
 			out.print( ", " );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			Expression arg0 = expr.getArguments().get( 0 );
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
@@ -118,6 +127,9 @@ public class ListTypeTemplate extends JavaTemplate
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
 				out.print( ')' );
 			}
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+				out.print( ')' );
 			out.print( ", " );
 			ctx.invoke( genExpression, expr.getArguments().get( 1 ), ctx, out );
 			out.print( ')' );
