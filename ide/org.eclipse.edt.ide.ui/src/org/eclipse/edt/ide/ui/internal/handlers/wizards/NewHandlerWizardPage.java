@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.handlers.wizards;
 
-import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizardPage;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLTemplateWizardPage;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -19,7 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class NewHandlerWizardPage extends EGLPartWizardPage {
+public class NewHandlerWizardPage extends EGLTemplateWizardPage {
 
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
@@ -35,8 +35,6 @@ public class NewHandlerWizardPage extends EGLPartWizardPage {
 	 */
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NULL);
-		// TODO #jiyong# Change help
-//		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, IUIHelpConstants.EGL_NEW_RECORD_WIZARD_PAGE);
 
 		GridLayout layout = new GridLayout(5, false);
 		container.setLayout(layout);
@@ -45,6 +43,7 @@ public class NewHandlerWizardPage extends EGLPartWizardPage {
 		createPackageControls(container);
 		createSeparator(container, 5);
 		createEGLFileControls(container);
+		createTemplateArea(container,5);
 
 		initialize();
 		dialogChanged();
@@ -65,4 +64,7 @@ public class NewHandlerWizardPage extends EGLPartWizardPage {
 		// / updateStatus(null);
 	}
 
+	protected String getTemplateID() {
+		return "org.eclipse.edt.ide.ui.handlers";
+	}
 }

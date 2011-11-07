@@ -9,10 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.internal.record;
+package org.eclipse.edt.ide.ui.internal.wizards;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.edt.ide.ui.internal.record.NewRecordWizardMessages;
 import org.eclipse.edt.ide.ui.templates.ITemplate;
 import org.eclipse.edt.ide.ui.templates.TemplateManager;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
@@ -28,62 +32,77 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.IWizardContainer2;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-public class TemplateSelectionPage extends WizardSelectionPage implements ISelectionChangedListener, IDoubleClickListener {
-
+public abstract class EGLTemplateWizardPage extends EGLPartWizardPage 
+       implements ISelectionChangedListener, IDoubleClickListener{
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
-
-	public TemplateSelectionPage(String pageName) {
+	
+	public EGLTemplateWizardPage(String pageName) {
 		super(pageName);
-
-		setTitle(NewRecordWizardMessages.TemplateSelectionPage_title);
-		setDescription(NewRecordWizardMessages.TemplateSelectionPage_description);
-		setImageDescriptor(PluginImages.DESC_WIZBAN_NEWTEMPLATESELECTION);
 	}
-
-	public void createControl(Composite parent) {
-		Composite container = new Composite(parent, 0);
-		
+	
+	protected abstract String getTemplateID();
+	
+	protected void createTemplateArea(Composite container, int nColumns) {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, IUIHelpConstants.EGL_NEW_RECORD_TEMPLATE_SELECTION_PAGE);
 
-		container.setLayout(new GridLayout(2, true));
-
-		Label label = new Label(container, 0);
+		Group ownerInfo = new Group(container, SWT.NONE);
+		ownerInfo.setText(NewWizardMessages.ProjectWizardMainPage_1);
+		GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = nColumns;
+		ownerInfo.setLayout(gridLayout);
+		GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+		gridData.horizontalSpan = nColumns;
+		ownerInfo.setLayoutData(gridData);
+		
+		int templateCol = nColumns % 2;
+		int descriptionCol = nColumns - templateCol;
+		
+		Label label = new Label(ownerInfo, 0);
 		label.setText(NewRecordWizardMessages.TemplateSelectionPage_templatesLabel);
+		GridData gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gd.horizontalSpan= templateCol;
+		label.setLayoutData(gd);
 
-		label = new Label(container, 0);
+		label = new Label(ownerInfo, 0);
 		label.setText(NewRecordWizardMessages.TemplateSelectionPage_descriptionLabel);
+		gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+		gd.horizontalSpan= descriptionCol;
+		label.setLayoutData(gd);
 
-		templateViewer = new TableViewer(container, SWT.BORDER);
+		templateViewer = new TableViewer(ownerInfo, SWT.BORDER);
 		Table control = templateViewer.getTable();
 		GridData data = new GridData(GridData.FILL_BOTH);
-		data.heightHint = 350;
+		data.heightHint = 250;
 		data.widthHint = 250;
+		data.horizontalSpan= templateCol;
 		control.setLayoutData(data);
-
-		ITemplate[] templates = TemplateManager.getInstance().getTemplates("org.eclipse.edt.ide.ui.records");
-
+		
+		String templateID = getTemplateID();
+		ITemplate[] templates = TemplateManager.getInstance().getTemplates(templateID);
+		
 		templateViewer.setContentProvider(new TreeContentProvider());
 		templateViewer.setLabelProvider(new TreeLabelProvider());
 		templateViewer.addSelectionChangedListener(this);
 		templateViewer.setInput(templates);
 		templateViewer.addDoubleClickListener(this);
 		
-		descriptionText = new Text(container, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
-		descriptionText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		descriptionText = new Text(ownerInfo, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
+		data = new GridData(GridData.FILL_BOTH);
+		descriptionText.setLayoutData(data);
+		data.horizontalSpan= descriptionCol;
 		descriptionText.setBackground(control.getBackground());
 		descriptionText.setForeground(control.getForeground());
 
@@ -94,22 +113,18 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 				}
 			}
 		}
-
-		setControl(container);
 	}
-
+	
 	public void selectionChanged(SelectionChangedEvent event) {
 		Object o = ((IStructuredSelection) event.getSelection()).getFirstElement();
 		if (o instanceof ITemplate) {
 			handleSelectedTemplate();
-
 			setTemplateDescription(((ITemplate) o).getDescription());
 		}
-
-		validatePage();
+		validateTemplatePage();
 	}
-
-	protected void validatePage() {
+	
+	protected void validateTemplatePage() {
 		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
 		if (o instanceof ITemplate) {
 			ITemplate template = (ITemplate) o;
@@ -118,13 +133,15 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 			handleSelectedTemplate();
 
 			String templateID = ((ITemplate) o).getCodeTemplateId();
-			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) || templateID != null;
+			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
+					|| (templateID != null && validatePage(true));
 			setPageComplete(b);
+			
 		} else {
 			setPageComplete(false);
 		}
 	}
-
+	
 	/**
 	 * Sets the wizard node, etc, based on the selected template
 	 * 
@@ -142,21 +159,46 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 			}
 		}
 	}
-
+	
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 
 		if (visible) {
-			validatePage();
-			
+			validateTemplatePage();
 			templateViewer.getTable().setFocus();
 		}
 	}
-
+	
 	private void setTemplateDescription(String text) {
 		descriptionText.setText(text != null ? text : "");
 	}
-
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return super.canFlipToNextPage() && validateEGLPartName();
+	}
+	
+	private boolean validateEGLPartName() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IStatus status = workspace.validateName(getFileConfiguration().getFileName(), IResource.FILE);
+		return status.isOK() ? true : false;
+	}
+	
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		if (event.getSource() == templateViewer) {
+			if (getSelectedNode() != null) {
+				IWizard wiz = getWizard();
+				WizardDialog d =(WizardDialog)wiz.getContainer();
+				d.showPage(getNextPage());
+			} else if (getWizard().canFinish()) {
+				if (getWizard().performFinish()) {
+					getWizard().getContainer().getShell().close();
+				}
+			}
+		}		
+	}
+	
 	private class TreeContentProvider implements IStructuredContentProvider {
 
 		public Object[] getElements(Object input) {
@@ -169,9 +211,8 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 
 		}
-
 	}
-
+	
 	public class TreeLabelProvider implements ILabelProvider {
 
 		public Image getImage(Object element) {
@@ -180,7 +221,6 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 					return ((ITemplate) element).getIcon().createImage(); 
 				}
 			}
-
 			return null;
 		}
 
@@ -204,22 +244,5 @@ public class TemplateSelectionPage extends WizardSelectionPage implements ISelec
 
 		public void removeListener(ILabelProviderListener listener) {
 		}
-
-	}
-
-	@Override
-	public void doubleClick(DoubleClickEvent event) {
-		if (event.getSource() == templateViewer) {
-			if (getSelectedNode() != null) {
-				IWizard wiz = getWizard();
-				IWizardContainer2 con =(IWizardContainer2) wiz.getContainer();
-				WizardDialog d =(WizardDialog)wiz.getContainer();
-				d.showPage(getNextPage());
-			} else if (getWizard().canFinish()) {
-				if (getWizard().performFinish()) {
-					getWizard().getContainer().getShell().close();
-				}
-			}
-		}		
-	}
+	} //class TreeLabelProvider
 }

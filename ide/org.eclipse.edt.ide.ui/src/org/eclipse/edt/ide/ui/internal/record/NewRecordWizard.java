@@ -31,12 +31,9 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
 public class NewRecordWizard extends EGLFileWizard {
-	private static final String WIZPAGENAME_TemplateWizardPage = "WIZPAGENAME_TemplateWizardPage"; //$NON-NLS-1$
 	private static final String WIZPAGENAME_RecordWizardPage = "WIZPAGENAME_RecordWizardPage"; //$NON-NLS-1$
 
 	private NewRecordWizardPage mainPage;
-	private TemplateSelectionPage templatePage;
-
 	private ISelection selection;
 	private Object contentObj; // represents
 
@@ -46,22 +43,17 @@ public class NewRecordWizard extends EGLFileWizard {
 		setWindowTitle(NewRecordWizardMessages.NewRecordWizard_title);
 	}
 
-	/**
-	 * Adding the page to the wizard.
-	 */
-
+	@Override
 	public void addPages() {
 		mainPage = new NewRecordWizardPage(selection, WIZPAGENAME_RecordWizardPage);
 		addPage(mainPage);
-
-		templatePage = new TemplateSelectionPage(WIZPAGENAME_TemplateWizardPage);
-		addPage(templatePage);
+	}
+	
+	public boolean needsPreviousAndNextButtons() {
+		return true;
 	}
 
-	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We
-	 * will create an operation and run it using wizard as execution context.
-	 */
+	@Override
 	public boolean performFinish() {
 		if (!super.performFinish())
 			return false;
@@ -71,7 +63,7 @@ public class NewRecordWizard extends EGLFileWizard {
 		// not get displayed. This code ensures this happens.
 		IWizard wizard = getContainer().getCurrentPage().getWizard();
 		if (wizard instanceof NewRecordWizard) {		
-			IWizardNode node = templatePage.getSelectedNode();
+			IWizardNode node = mainPage.getSelectedNode();
 			if (node instanceof TemplateWizardNode) {
 				TemplateWizardNode twn = (TemplateWizardNode) node;
 				if (twn.getTemplate().hasWizard()) {
@@ -147,7 +139,7 @@ public class NewRecordWizard extends EGLFileWizard {
 	protected IRunnableWithProgress getOperation() {
 		String codeTemplateId = null;
 
-		IWizardNode node = templatePage.getSelectedNode();
+		IWizardNode node = mainPage.getSelectedNode();
 		if (node instanceof TemplateWizardNode) {
 			TemplateWizardNode twn = (TemplateWizardNode) node;
 			if (!twn.getTemplate().hasWizard() && twn.getTemplate().getCodeTemplateId() != null) {

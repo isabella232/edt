@@ -12,22 +12,17 @@
 package org.eclipse.edt.ide.ui.internal.record;
 
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizardPage;
-import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.LayoutUtil;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLTemplateWizardPage;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-public class NewRecordWizardPage extends EGLPartWizardPage {
+public class NewRecordWizardPage extends EGLTemplateWizardPage {
 
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
@@ -54,6 +49,7 @@ public class NewRecordWizardPage extends EGLPartWizardPage {
 		createPackageControls(container);
 		createSeparator(container, 5);
 		createEGLFileControls(container);
+		createTemplateArea(container,5);
 
 		initialize();
 		dialogChanged();
@@ -74,5 +70,7 @@ public class NewRecordWizardPage extends EGLPartWizardPage {
 		// / updateStatus(null);
 	}
 			
-	
+	protected String getTemplateID() {
+		return "org.eclipse.edt.ide.ui.records";
+	}
 }

@@ -15,11 +15,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusUtil;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.Separator;
-import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public abstract class EGLElementWizardPage extends WizardPage {
+public abstract class EGLElementWizardPage extends WizardSelectionPage {
 	
 	private IStatus fCurrStatus;
 	private boolean fPageVisible;

@@ -43,13 +43,9 @@ import org.eclipse.ui.ide.IDE;
 
 public class NewHandlerWizard extends EGLFileWizard {
 	private static final String WIZPAGENAME_HandlerWizardPage = "WIZPAGENAME_HandlerWizardPage"; //$NON-NLS-1$
-	private static final String WIZPAGENAME_HandlerTemplatePage = "WIZPAGENAME_HandlerTemplatePage"; //$NON-NLS-1$
-
 	private static String Visual_Editor_Registered_ID = "org.eclipse.edt.ide.rui.visualeditor.EvEditor";   //$NON-NLS-1$
 
 	private NewHandlerWizardPage mainPage;
-	private HandlerTemplatePage templatePage;
-	
 	private ISelection selection;
 	private Object contentObj; // represents
 
@@ -66,15 +62,13 @@ public class NewHandlerWizard extends EGLFileWizard {
 	public void addPages() {
 		mainPage = new NewHandlerWizardPage(WIZPAGENAME_HandlerWizardPage);
 		addPage(mainPage);
-		
-		templatePage = new HandlerTemplatePage(WIZPAGENAME_HandlerTemplatePage);
-		addPage(templatePage);
+	}
+	
+	public boolean needsPreviousAndNextButtons() {
+		return true;
 	}
 
-	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We
-	 * will create an operation and run it using wizard as execution context.
-	 */
+	@Override
 	public boolean performFinish() {
 		if (!super.performFinish())
 			return false;
@@ -82,7 +76,7 @@ public class NewHandlerWizard extends EGLFileWizard {
 		// If a page of the dynamically embedded template wizard is not
 		// currently being displayed, the performFinish() on this wizard will
 		// not get displayed. This code ensures this happens.		
-		IWizardNode node = templatePage.getSelectedNode();
+		IWizardNode node = mainPage.getSelectedNode();
 		if (node instanceof TemplateWizardNode) {
 			TemplateWizardNode twn = (TemplateWizardNode) node;
 			if (twn.getTemplate().hasWizard()) {
@@ -158,7 +152,7 @@ public class NewHandlerWizard extends EGLFileWizard {
 	protected IRunnableWithProgress getOperation() {
 		String codeTemplateId = null;
 
-		IWizardNode node = templatePage.getSelectedNode();
+		IWizardNode node = mainPage.getSelectedNode();
 		if (node instanceof TemplateWizardNode) {
 			TemplateWizardNode twn = (TemplateWizardNode) node;
 			if (!twn.getTemplate().hasWizard() && twn.getTemplate().getCodeTemplateId() != null) {
@@ -178,42 +172,45 @@ public class NewHandlerWizard extends EGLFileWizard {
 	}
 	
 
-		protected void openResource(final IFile resource) {
-	
-			final IWorkbenchPage activePage;
-			IWorkbenchWindow window= PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			if (window == null)
-				activePage = null;
-			else
-				activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-			if (activePage != null) {
-				final Display display= getShell().getDisplay();
-				if (display != null) {
-					display.asyncExec(new Runnable() {
-						public void run() {
-							try {
-								String editorID = null;
-								if(((HandlerConfiguration)configuration).getHandlerType() == HandlerConfiguration.HANDLER_HANDLER){
-									editorID = Visual_Editor_Registered_ID;
-								}else{
-									IEditorDescriptor desc= IDE.getDefaultEditor(resource);
-									if (desc == null){
-										editorID = EDTUIPlugin.getDefault().getWorkbench().getEditorRegistry().findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID).getId();
-									}else{
-										editorID = desc.getId();
-									}
+	protected void openResource(final IFile resource) {
+		final IWorkbenchPage activePage;
+		IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window == null)
+			activePage = null;
+		else
+			activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		
+		if (activePage != null) {
+			final Display display = getShell().getDisplay();
+			if (display != null) {
+				display.asyncExec(new Runnable() {
+					public void run() {
+						try {
+							String editorID = null;
+							if (((HandlerConfiguration) configuration)
+									.getHandlerType() == HandlerConfiguration.HANDLER_HANDLER) {
+								editorID = Visual_Editor_Registered_ID;
+							} else {
+								IEditorDescriptor desc = IDE.getDefaultEditor(resource);
+								if (desc == null) {
+									editorID = EDTUIPlugin.getDefault().getWorkbench()
+											.getEditorRegistry().findEditor(
+													IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID).getId();
+								} else {
+									editorID = desc.getId();
 								}
-								IDE.openEditor(activePage, resource, editorID);
-							} catch (PartInitException e) {
-								EDTUIPlugin.log(e);
 							}
+							IDE.openEditor(activePage, resource, editorID);
+						} catch (PartInitException e) {
+							EDTUIPlugin.log(e);
 						}
-					});
-				}
+					}
+				});
 			}
 		}
+	}
 
-		protected boolean canRunForked() {
-			return false;
-		}	
+	protected boolean canRunForked() {
+		return false;
+	}
 }
