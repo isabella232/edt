@@ -58,9 +58,14 @@ public class PartTemplate extends JavaScriptTemplate {
 	public void genPartName(Part part, Context ctx, TabbedWriter out) {
 		if (ctx.mapsToNativeType(part))
 			out.print(ctx.getNativeImplementationMapping(part));
-		else
-			out.print(eglnamespace + part.getPackageName().toLowerCase() + "." + part.getName()); // TODO Use Aliaser stuff
-																									// from RBD
+		else{
+			// TODO Use Aliaser stuff from RBD
+			String packageName = part.getPackageName().toLowerCase();
+			if(packageName != null && packageName.length() > 0)
+				out.print(eglnamespace + part.getPackageName().toLowerCase() + "." + part.getName()); 
+			else
+				out.print(eglnamespace +  part.getName());
+		}
 	}
 
 	public void genClassName(Part part, Context ctx, TabbedWriter out) {
