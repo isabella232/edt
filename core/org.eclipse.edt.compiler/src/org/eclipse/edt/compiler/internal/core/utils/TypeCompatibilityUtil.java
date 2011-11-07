@@ -767,6 +767,12 @@ public class TypeCompatibilityUtil {
 	}
 	
 	public static boolean isReferenceCompatible(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
+		
+		//value type cannot be passed to a reference type
+		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && !sourceType.isReference() && targetType.isReference()) {
+			return false;
+		}
+		
 		if( targetType == null || sourceType == null ||
 			IBinding.NOT_FOUND_BINDING == sourceType || IBinding.NOT_FOUND_BINDING == targetType) {
 			return true;
@@ -817,6 +823,10 @@ public class TypeCompatibilityUtil {
 			}
 
 			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.DECIMAL && (sourceType.isReference() || targetType.isReference())) {
+				return true;
+			}
+			
+			if (srcPrim == Primitive.NUMBER && Primitive.isNumericType(tgtPrim)) {
 				return true;
 			}
 		}
