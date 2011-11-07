@@ -150,7 +150,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 	}
 
 	@Override
-	public ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
+	public synchronized ISystemEnvironment getSystemEnvironment(IBuildNotifier notifier) {
 		if (systemEnvironment == null) {
 			systemEnvironment = createSystemEnvironment(notifier);
 		}

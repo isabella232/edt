@@ -34,7 +34,7 @@ public class SystemEnvironmentManager {
 	
 	private static Map<String, ISystemEnvironment> systemMap = new HashMap();
 	
-	public static ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier, ICompiler compiler) {
+	public static synchronized ISystemEnvironment getSystemEnvironment(String path, ISystemEnvironment parentEnv, List<String> implicitEnums, IBuildNotifier notifier, ICompiler compiler) {
 		if (systemMap.containsKey(path)) {
 			return systemMap.get(path);
 		}
