@@ -673,6 +673,12 @@ egl.eglx.lang.EDate.compareTo = function (x, y) {
 		return diff == 0 ? 0 : diff > 0 ? 1 : -1;
 	}
 };
+egl.eglx.lang.EDate.extend = function(/*extension*/ date, /*optional mask*/pattern ) {
+	if (date === null)
+		throw new egl.eglx.lang.NullValueException();
+	else
+		return egl.dateTime.extend( "date", date, pattern );
+};
 egl.eglx.lang.EDate.ezeCast = function (any, nullable) {   
 	return egl.convertAnyToDate(any, nullable);
 };

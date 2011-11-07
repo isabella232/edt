@@ -753,7 +753,8 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	}
 	
 	//The Year must be set first, otherwize the leap year is wrong ,such as 2000/2/29 will be 2000/3/1
-	var yearResult = new Date(0, 0, 1);
+	var yearResult = new Date;
+	yearResult.setFullYear(0);
 	var tempS = s;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -914,7 +915,7 @@ egl.convertFloatToDecimal = function( x, decimals, limit, creatx )
 		throw creatx( "CRRUI2018E", [ String( x ), "decimal" ] );
 	}
 
-	x = new egl.javascript.BigDecimal( x.toFixed( decimals ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
+	x = new egl.javascript.BigDecimal( (x*1.0).toFixed( decimals ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
 	return egl.convertDecimalToDecimal( x, decimals, limit, creatx );
 };
 
@@ -1010,7 +1011,7 @@ egl.convertFloatToBigint = function( x, creatx )
 		throw creatx( "CRRUI2018E", [ String( x ), "bigint" ] );
 	}
 
-	x = new egl.javascript.BigDecimal( x.toFixed( 0 ) );
+	x = new egl.javascript.BigDecimal( (x*1.0).toFixed( 0 ) );
 	return egl.convertDecimalToInteger( x, egl.MAX_BIGINT_BD, egl.MIN_BIGINT_BD, creatx );
 };
 
