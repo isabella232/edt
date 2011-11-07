@@ -1,29 +1,29 @@
 package eglx.persistence.sql;
 
-record SecondaryTable type Annotation {
-	targets=[RecordPart, HandlerPart, ExternalTypePart]
-}
-	name string;
-	catalog string;
-	schema string;
-	pkJoinColumns PrimaryKeyJoinColumn[];
-end
-
-record SecondaryTables type Annotation {
-	targets=[RecordPart, HandlerPart, ExternalTypePart]
-}
-	value SecondaryTable[];
-end
-
-record PrimaryKeyJoinColumn type Annotation {
-	targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
-}
-	name string;
-	referencedColumnName string;
-end
-
-record PrimaryKeyJoinColumns type Annotation {
-	targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
-}
-	value PrimaryKeyJoinColumn[];
-end
+//record SecondaryTable type Annotation {
+//	targets=[RecordPart, HandlerPart, ExternalTypePart]
+//}
+//	name string;
+//	catalog string;
+//	schema string;
+//	pkJoinColumns PrimaryKeyJoinColumn[];
+//end
+//
+//record SecondaryTables type Annotation {
+//	targets=[RecordPart, HandlerPart, ExternalTypePart]
+//}
+//	value SecondaryTable[];
+//end
+//
+//record PrimaryKeyJoinColumn type Annotation {
+//	targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
+//}
+//	name string;
+//	referencedColumnName string;
+//end
+//
+//record PrimaryKeyJoinColumns type Annotation {
+//	targets=[RecordPart, HandlerPart, ExternalTypePart, FieldMbr]
+//}
+//	value PrimaryKeyJoinColumn[];
+//end

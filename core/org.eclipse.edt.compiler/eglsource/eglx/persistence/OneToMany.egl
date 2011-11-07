@@ -1,8 +1,8 @@
 package eglx.persistence;
 
-record OneToMany type Annotation {
-	targets=[FieldMbr]
-}
-	mappedBy FieldRef?;
-	joinColumns FieldRef[];
-end
+//record OneToMany type Annotation {
+//	targets=[FieldMbr]
+//}
+//	mappedBy FieldRef?;
+//	joinColumns FieldRef[];
+//end
