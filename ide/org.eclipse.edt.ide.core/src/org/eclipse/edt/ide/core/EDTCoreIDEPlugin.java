@@ -360,6 +360,15 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
 		
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		EGLModelManager manager = EGLModelManager.getEGLModelManager();
+		workspace.addResourceChangeListener(
+			manager.deltaProcessor,
+			IResourceChangeEvent.PRE_BUILD
+				| IResourceChangeEvent.POST_BUILD
+				| IResourceChangeEvent.POST_CHANGE
+				| IResourceChangeEvent.PRE_DELETE
+				| IResourceChangeEvent.PRE_CLOSE);
+
 		workspace.addResourceChangeListener(resourceChangeProcessor, IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE
 				| IResourceChangeEvent.PRE_BUILD | IResourceChangeEvent.POST_CHANGE);
 
@@ -371,15 +380,6 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 		workspace.addResourceChangeListener(SettingUpdateResourceChangeListener.getInstance(), IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
 
 		ProjectSettingsListenerManager.getInstance(); // Make sure existing projects register preference listeners
-		
-		EGLModelManager manager = EGLModelManager.getEGLModelManager();
-		workspace.addResourceChangeListener(
-			manager.deltaProcessor,
-			IResourceChangeEvent.PRE_BUILD
-				| IResourceChangeEvent.POST_BUILD
-				| IResourceChangeEvent.POST_CHANGE
-				| IResourceChangeEvent.PRE_DELETE
-				| IResourceChangeEvent.PRE_CLOSE);
 		
 		// request state folder creation (workaround 19885)
 		EGLCore.getPlugin().getStateLocation();
