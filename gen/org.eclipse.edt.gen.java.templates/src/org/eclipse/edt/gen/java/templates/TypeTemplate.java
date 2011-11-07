@@ -219,14 +219,10 @@ public class TypeTemplate extends JavaTemplate {
 				}
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
 				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
-					out.print("((");
-					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-					out.print(")");
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 					ctx.invoke(genExpression, arg2, ctx, out);
 					out.print(")");
 					out.print(".ezeUnbox()");
-					out.print(")");
 				} else {
 					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 					ctx.invoke(genExpression, arg2, ctx, out);
@@ -270,12 +266,8 @@ public class TypeTemplate extends JavaTemplate {
 			out.print(arg3);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
-				out.print("((");
-				ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(")");
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(".ezeUnbox()");
-				out.print(")");
 			} else
 				ctx.invoke(genExpression, arg2, ctx, out);
 		}
@@ -303,6 +295,9 @@ public class TypeTemplate extends JavaTemplate {
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeIsa(");
+			// do a callout to allow certain source types to decide to create a boxing expression
+			ctx.invoke(genIsaExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);
+			// then process the isa operation
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
@@ -318,15 +313,21 @@ public class TypeTemplate extends JavaTemplate {
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		// check to see if a conversion is required
 		if (arg.getConversionOperation() != null) {
-			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
+			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + ".");
 			out.print(arg.getConversionOperation().getName());
 			out.print("(");
+			// do a callout to allow certain source types to decide to create a boxing expression
+			ctx.invoke(genAsExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);
+			// then process the conversion operation
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
+			// do a callout to allow certain source types to decide to create a boxing expression
+			ctx.invoke(genAsExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);
+			// then process the conversion operation
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");
@@ -339,14 +340,32 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
+	public void genAsExpressionBoxing(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
+		// do nothing
+	}
+
+	public void genIsaExpressionBoxing(Type type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		// do nothing
+	}
+
+	public void genContainerBasedInvocationBoxing(Type type, Context ctx, TabbedWriter out, InvocationExpression arg) {
+		// do nothing
+	}
+
+	public void genInvocationArgumentBoxing(Type type, Context ctx, TabbedWriter out, InvocationExpression arg1, Integer arg2) {
+		// do nothing
+	}
+
 	public void genReturnStatement(Type type, Context ctx, TabbedWriter out, ReturnStatement arg) {
 		ctx.invoke(genReturnStatement, arg, ctx, out);
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaOperation(arg, ctx).length() == 0) {
-			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
+		// if either side of this expression is nullable, or if either side is an array access, 
+		// or if there is no direct java operation, we need to use the runtime
+		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || (arg.getLHS() instanceof ArrayAccess || arg.getRHS() instanceof ArrayAccess)
+			|| CommonUtilities.getNativeJavaOperation(arg, ctx).length() == 0) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + ".");
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(");
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);

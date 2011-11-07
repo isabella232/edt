@@ -57,14 +57,9 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(" - 1, ");
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print("), ");
-				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-					out.print("(");
-					ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-					out.print(")");
-					ctx.invoke(genExpression, arg1, ctx, out);
+				ctx.invoke(genExpression, arg1, ctx, out);
+				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 					out.print(".ezeUnbox()");
-				} else
-					ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(")");
 			} else {
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
@@ -89,14 +84,9 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print(" - 1, ");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print("), ");
-			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-				out.print("(");
-				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(")");
-				ctx.invoke(genExpression, arg1, ctx, out);
+			ctx.invoke(genExpression, arg1, ctx, out);
+			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 				out.print(".ezeUnbox()");
-			} else
-				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 		} else {
 			// non-nullable array

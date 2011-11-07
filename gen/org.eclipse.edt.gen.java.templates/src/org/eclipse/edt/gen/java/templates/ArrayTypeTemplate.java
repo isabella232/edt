@@ -29,6 +29,9 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
 			out.print(arg.getConversionOperation().getName());
 			out.print("(");
+			// do a callout to allow certain source types to decide to create a boxing expression
+			ctx.invoke(genAsExpressionBoxing, arg.getObjectExpr().getType(), ctx, out, arg);
+			// then process the conversion operation
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out);
 			out.print(")");

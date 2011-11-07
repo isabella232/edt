@@ -30,21 +30,14 @@ public class MemberNameTemplate extends JavaTemplate {
 			out.print(".ezeCopy(");
 			// if we are doing some type of complex assignment, we need to place that in the argument
 			if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
-				out.print("(");
-				ctx.invoke(genRuntimeTypeName, expr.getMember().getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(")");
 				ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 				out.print(".ezeUnbox()");
 				out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
 			}
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-				out.print("((");
-				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(")");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(".ezeUnbox()");
-				out.print(")");
 			} else
 				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
@@ -55,12 +48,8 @@ public class MemberNameTemplate extends JavaTemplate {
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
-				out.print("((");
-				ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-				out.print(")");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(".ezeUnbox()");
-				out.print(")");
 			} else
 				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
@@ -68,12 +57,8 @@ public class MemberNameTemplate extends JavaTemplate {
 		} else if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
-			out.print("((");
-			ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
-			out.print(")");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(".ezeUnbox()");
-			out.print(")");
 		} else
 			ctx.invokeSuper(this, genAssignment, expr, ctx, out, arg1, arg2);
 	}
@@ -92,12 +77,8 @@ public class MemberNameTemplate extends JavaTemplate {
 		if (expr.getMember() instanceof FunctionParameter
 			&& org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType((FunctionParameter) expr.getMember(), ctx)
 			&& !((FunctionParameter) expr.getMember()).isConst()) {
-			out.print("((");
-			ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaObject);
-			out.print(")");
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(".ezeUnbox()");
-			out.print(")");
 		} else
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 	}

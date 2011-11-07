@@ -23,6 +23,7 @@ public class IntervalTypeTemplate extends JavaTemplate {
 	}
 
 	public void genTypeDependentOptions(IntervalType type, Context ctx, TabbedWriter out) {
+		out.print(", ");
 		generateOptions(type, ctx, out, true);
 	}
 
