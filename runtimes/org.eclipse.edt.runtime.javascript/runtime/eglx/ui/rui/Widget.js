@@ -1139,3 +1139,11 @@ egl.eglx.ui.rui.Widget.fromWidget = function(x, y) {
 	 */
 	return x;    
 };
+
+egl.eglx.ui.rui.Widget.equals = function(x, y) {
+	return x == y;    
+};
+
+egl.eglx.ui.rui.Widget.notEquals = function(x, y) {
+	return x != y;    
+};
