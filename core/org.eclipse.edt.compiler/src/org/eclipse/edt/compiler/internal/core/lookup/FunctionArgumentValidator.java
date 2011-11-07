@@ -715,13 +715,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		PrimitiveTypeBinding primTypeBinding = (PrimitiveTypeBinding) parmType;
     		Primitive primitive = primTypeBinding.getPrimitive();
             
-            if (primitive == Primitive.NUMBER) {
-                return true;
-            }
             if (primitive == Primitive.CHAR		|| primitive == Primitive.DBCHAR ||
 				primitive == Primitive.MBCHAR	|| primitive == Primitive.STRING ||
 				primitive == Primitive.HEX 		|| primitive == Primitive.UNICODE ||
-				primitive == Primitive.DECIMAL || primitive == Primitive.NUM) {
+				primitive == Primitive.NUM) {
             	return primTypeBinding.getLength() == 0;
             }
             if (primitive == Primitive.INTERVAL) {
@@ -1353,6 +1350,21 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     	}
     	validateNotThis(argExpr);
+    	
+    	//Cannot pass a value type to an reference type OUT parm
+   		if (Binding.isValidBinding(argType) && Binding.isValidBinding(parmType) && !argType.isReference() && parmType.isReference()) {
+    		problemRequestor.acceptProblem(
+	    			argExpr,
+	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
+					new String[] {
+	    				argExpr.getCanonicalString(),
+						funcParmBinding.getCaseSensitiveName(),
+						canonicalFunctionName,
+						StatementValidator.getShortTypeString(argType, true),
+						StatementValidator.getShortTypeString(parmType, true)
+	    			});
+    		return false;
+   		}
     	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
     }
     
@@ -1458,6 +1470,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     		else if(argCompatible && PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == parmType) {
     			argCompatible = PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == argType;
+    		}
+    		//value type cannot be passed to reference type
+    		if (argCompatible && Binding.isValidBinding(argType) && Binding.isValidBinding(parmType) && !argType.isReference() && parmType.isReference()) {
+    			argCompatible = false;
     		}
     	}
     	else {
