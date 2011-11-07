@@ -79,9 +79,15 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 					new String[] {});
 		}
 		
-		if((Assignment.Operator.CONCAT == assignmentOperator ||
-			Assignment.Operator.NULLCONCAT == assignmentOperator ||
-			Assignment.Operator.PLUS == assignmentOperator) &&
+		
+		// string += anything   is always valid
+		if(Assignment.Operator.PLUS == assignmentOperator &&
+				isStringType(lhsBinding)) {
+			return false;
+		}
+
+		
+		if((Assignment.Operator.CONCAT == assignmentOperator) &&
 		   StatementValidator.isValidBinding(lhsBinding) &&
 		   ITypeBinding.ARRAY_TYPE_BINDING == lhsBinding.getKind()) {
 			if(!StatementValidator.isValidBinding(rhsBinding) || ITypeBinding.ARRAY_TYPE_BINDING != rhsBinding.getKind()) {
@@ -290,4 +296,13 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			return error;
 		}
 	}
+	
+	private boolean isStringType(ITypeBinding type) {
+		if (!Binding.isValidBinding(type)) {
+			return false;
+		}
+		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
+		       Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive());
+	}
+
 }
