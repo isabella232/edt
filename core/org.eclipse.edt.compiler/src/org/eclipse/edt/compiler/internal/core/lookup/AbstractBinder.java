@@ -1087,7 +1087,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 								StringTokenizer st = new StringTokenizer(value, ".");
 								int valueNonDecimalLength = st.nextToken().length();
 								int valueDecimals = st.hasMoreTokens() ? st.nextToken().length() : 0;
-								if(valueNonDecimalLength > nonDecimalLength) {
+								if(valueNonDecimalLength > nonDecimalLength && !primTypeBinding.isReference()) {
 									problemRequestor.acceptProblem(
 										nodeForErrors,
 										IProblemRequestor.LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG,
@@ -1098,7 +1098,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 											constantName
 										});
 								}
-								if(valueDecimals > decimals) {
+								if(valueDecimals > decimals && !primTypeBinding.isReference()) {
 									problemRequestor.acceptProblem(
 										nodeForErrors,
 										IProblemRequestor.DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG,
