@@ -319,6 +319,7 @@ public class CommonUtilities {
 		if (obj instanceof ExternalType) {
 			return isWidget((ExternalType)obj);
 		}
+		
 		else if (obj instanceof EGLClass) {
 			EGLClass eglClass = (EGLClass)obj;
 			if (eglClass.getAnnotation("eglx.ui.rui.RUIWidget") != null || eglClass.getAnnotation("eglx.ui.rui.VEWidget") != null) { // TODO sbg need constant
