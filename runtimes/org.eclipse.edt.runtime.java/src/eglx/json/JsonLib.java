@@ -85,6 +85,11 @@ public class JsonLib {
 	{
 	    if(object == null)
 	        return new NullNode();
+	    //EDate and ETimestamp must be done before AnyBoxedObject because they are an AnyBoxedObject
+	    if(object instanceof EDate)
+		    return new StringNode(StringLib.format(((EDate)object).ezeUnbox(), "yyyy-MM-dd"), false);
+	    if(object instanceof ETimestamp)
+		    return new StringNode(StringLib.format(((ETimestamp)object).ezeUnbox(), "yyyy-MM-dd HH:mm:ss"), false);
 	    if(object instanceof AnyBoxedObject<?>)
 	        return process(((AnyBoxedObject<?>)object).ezeUnbox());
 	    if(object instanceof BigDecimal)
@@ -195,15 +200,25 @@ public class JsonLib {
 					}
 				}
 				
+				Class<?> type = null;
+				String[] asOptions = null;
 				if(method != null && Modifier.isPublic(method.getModifiers())){
 					annot = method.getAnnotation(Json.class);
 					if(annot != null){
 						name = ((Json)annot).name();
+						type = ((Json)annot).clazz();
+						asOptions = ((Json)annot).asOptions();
 					}
-					objectNode.addPair(new NameValuePairNode(new StringNode(name, false), process(method.invoke(object, (Object[])null))));
+					objectNode.addPair(new NameValuePairNode(new StringNode(name, false), process(eglx.json.JsonUtilities.wrapCalendar(method.invoke(object, (Object[])null), type, asOptions))));
 				}
 				else if(Modifier.isPublic(field.getModifiers())){
-					objectNode.addPair(new NameValuePairNode(new StringNode(name, false), process(field.get(object))));
+					annot = field.getAnnotation(Json.class);
+					if(annot != null){
+						name = ((Json)annot).name();
+						type = ((Json)annot).clazz();
+						asOptions = ((Json)annot).asOptions();
+					}
+					objectNode.addPair(new NameValuePairNode(new StringNode(name, false), process(eglx.json.JsonUtilities.wrapCalendar(field.get(object), type, asOptions))));
 				}
 			} catch (Throwable t) {
 			    InvalidArgumentException ex = new InvalidArgumentException();

@@ -149,7 +149,7 @@ public class JsonUtilities {
 		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
 		List<Object> parameters = new ArrayList<Object>();
 		int jsonIdx = 0;
-		for(int idx = 0; idx < signature.parameters().length; idx++ ){
+		for(int idx = 0; idx < method.getParameterTypes().length; idx++ ){
 			FunctionParameter functionParameter = signature.parameters()[idx];
 			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
 				try {
@@ -240,7 +240,7 @@ public class JsonUtilities {
 
 		return parameters.toArray(new Object[parameters.size()]);
 	}
-	static int getETimestampStaticField(String fieldName){
+	public static int getETimestampStaticField(String fieldName){
 		if("YEAR_CODE".equalsIgnoreCase(fieldName)){
 			return ETimestamp.YEAR_CODE;
 		}
@@ -279,4 +279,33 @@ public class JsonUtilities {
 		}
 		return 0;
 	}
+	public static Object wrapCalendar(Object field, Class<?> type, String[] asOptions){
+		if(field instanceof AnyBoxedObject<?>){
+			field = ((AnyBoxedObject<?>)field).ezeUnbox();
+		}
+		if(field instanceof List){
+			List<Object> wrappedList = new ArrayList<Object>();
+			for(Object obj : ((List<?>)field)){
+				wrappedList.add(wrapCalendar(obj, type, asOptions));
+			}
+			return wrappedList;
+		}
+		else if(type != null && type.equals(EDate.class)){
+			return new EDate((Calendar)field);
+		}
+		else if(type != null && type.equals(ETimestamp.class)){
+    		int start = ETimestamp.YEAR_CODE;
+    		int end = ETimestamp.SECOND_CODE;
+        	if(asOptions != null && asOptions.length > 1){
+        		start = eglx.json.JsonUtilities.getETimestampStaticField(asOptions[0]);
+        		end = eglx.json.JsonUtilities.getETimestampStaticField(asOptions[1]);
+        	}
+			return new ETimestamp((Calendar)field, start, end);
+		}
+		else{
+			return field;
+		}
+
+	}
+	
 }

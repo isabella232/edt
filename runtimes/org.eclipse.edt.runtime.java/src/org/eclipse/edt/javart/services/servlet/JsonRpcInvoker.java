@@ -25,9 +25,9 @@ import org.eclipse.edt.javart.services.FunctionSignature;
 import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
+import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
-import eglx.http.HttpUtilities;
 import eglx.json.JsonLib;
 import eglx.lang.AnyException;
 import eglx.services.ServiceInvocationException;
@@ -103,13 +103,13 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 	private String convertToJson(Method method, Object[] parameters, Object ret){
 		FunctionSignature signature = method.getAnnotation(FunctionSignature.class);
 		final List<Object> responseParameters = new ArrayList<Object>();
-		for(int idx = 0; idx < signature.parameters().length; idx++){
+		for(int idx = 0; idx < method.getParameterTypes().length; idx++){
 			if(!FunctionParameterKind.IN.equals(signature.parameters()[idx].kind())){
-				responseParameters.add(parameters[idx]);
+				responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(parameters[idx], signature.parameters()[idx].parameterType(), signature.parameters()[idx].asOptions()));
 			}
 		}
 		if(ret != null){
-			responseParameters.add(ret);
+			responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(ret, signature.parameters()[signature.parameters().length - 1].parameterType(), signature.parameters()[signature.parameters().length - 1].asOptions()));
 		}
 		Object response;
 		if(responseParameters.size() == 0){
