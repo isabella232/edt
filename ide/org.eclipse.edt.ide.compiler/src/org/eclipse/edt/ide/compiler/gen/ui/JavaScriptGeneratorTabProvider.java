@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.compiler.gen.ui;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
@@ -100,5 +101,15 @@ public class JavaScriptGeneratorTabProvider extends AbstractGeneratorTabProvider
 		if ( genSettings != null ) {
 			genSettings.removePreferencesForAllResources();
 		}
+	}	
+
+	public void setResource( IResource resource ) {
+		super.setResource(resource);
+		this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID);
+		if(genSettings != null){
+			genSettings.setResource(resource);
+			genSettings.setProjectPrefs(this.projectPreferenceStore);
+		}
+		
 	}
 }
