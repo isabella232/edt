@@ -157,6 +157,7 @@ public class FieldTemplate extends JavaTemplate {
 		function.setType(field.getType());
 		function.setStatementBlock(statementBlock);
 		function.setReturnField(field);
+		function.setIsNullable(field.isNullable());
 		function.setName("get" + genMethodName(field));
 		// write out the function
 		ctx.invoke(genDeclaration, function, ctx, out);
@@ -170,6 +171,7 @@ public class FieldTemplate extends JavaTemplate {
 		functionParameter.setName("ezeValue");
 		functionParameter.setParameterKind(ParameterKind.PARM_IN);
 		functionParameter.setType(field.getType());
+		functionParameter.setIsNullable(field.isNullable());
 		AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
 		assignmentStatement.setContainer(function);
 		Assignment assignment = factory.createAssignment();
