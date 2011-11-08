@@ -1068,6 +1068,13 @@ public class SourceElementParser {
 	private void handleProperty(final Node decl) {
 		decl.accept(new DefaultASTVisitor() {
 
+			public boolean visit(AnnotationExpression annotationExpression) {
+				// e.g. @Propery 
+				Name exprName = annotationExpression.getName();
+				requestor.acceptPropertyLiteralName(exprName.getOffset(), exprName.getOffset() + exprName.getLength(), exprName.getCanonicalString().toCharArray());
+				return false;
+			}
+			
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				Expression expr = setValuesExpression.getExpression();
 				if (expr instanceof AnnotationExpression) {

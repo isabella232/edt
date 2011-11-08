@@ -109,6 +109,10 @@ public class MatchVisitor extends AbstractASTExpressionVisitor {
 	private void handleProperty(final Node decl) {
 		decl.accept(new DefaultASTVisitor() {
 
+			public boolean visit(AnnotationExpression annotationExpression) {
+				matchName(annotationExpression.getName());
+				return false;
+			}
 			public boolean visit(SetValuesExpression setValuesExpression) {
 				Expression expr = setValuesExpression.getExpression();
 				if (expr instanceof AnnotationExpression) {
