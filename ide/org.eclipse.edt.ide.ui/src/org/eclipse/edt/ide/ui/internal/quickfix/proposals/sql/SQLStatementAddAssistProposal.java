@@ -10,8 +10,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.quickfix.proposals.sql;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeclareStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLGetByPositionStatementFactory;
@@ -63,10 +68,29 @@ public class SQLStatementAddAssistProposal extends
 			
 			createDefault(info.getStatement());
 			
+			//Remove For clause within OPEN statement
+			if (info.getSqlStatementNode() == null && (sqlNode instanceof OpenStatement)) {
+				OpenStatement openStatement = (OpenStatement) sqlNode;
+				
+				ForExpressionClause nodeToRemove = null;
+				List openTargets = openStatement.getOpenTargets();
+				if(openTargets != null) {
+					for(Object target : openTargets) {
+						if(target instanceof ForExpressionClause) {
+							nodeToRemove = (ForExpressionClause) target;
+							break;
+						}
+					}
+				}
+				
+				if(nodeToRemove != null)
+				      rewrite.removeNode(nodeToRemove);
+			}
+			
 			if (sqlStatement != null) {
 				rewrite.completeIOStatement( sqlNode, getStatementText());
 			} else {
-				sqlStatement = CorrectionMessages.SQLExceptionMessage;
+				sqlStatement = " " + CorrectionMessages.SQLExceptionMessage;
 				rewrite.completeIOStatement( sqlNode, sqlStatement );
 			}
 			

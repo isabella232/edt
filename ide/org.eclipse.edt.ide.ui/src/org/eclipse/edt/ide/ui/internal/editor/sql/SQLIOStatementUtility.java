@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.ast.AddStatement;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
 import org.eclipse.edt.compiler.core.ast.DeleteStatement;
 import org.eclipse.edt.compiler.core.ast.ExecuteStatement;
+import org.eclipse.edt.compiler.core.ast.ForExpressionClause;
 import org.eclipse.edt.compiler.core.ast.ForUpdateClause;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
@@ -128,6 +129,10 @@ public class SQLIOStatementUtility {
 			openStatement.accept(new AbstractASTVisitor() {
 				public boolean visit(ForUpdateClause forUpdate) {
 					info.setIOType(SQLConstants.OPEN_FORUPDATE_IO_TYPE.toUpperCase());
+					return false;
+				}
+				public boolean visit(ForExpressionClause forExpressionClause) {
+					info.setForExpressionClause(forExpressionClause);
 					return false;
 				}
 				public boolean visit(WithIDClause prepareID) {

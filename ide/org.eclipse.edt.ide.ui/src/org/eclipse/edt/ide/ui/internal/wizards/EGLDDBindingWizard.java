@@ -33,7 +33,7 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 	protected final int PATH_REST = 5;
 	protected final int PATH_SQL = 6;
 	
-	protected int fPagePath = PATH_WS_GEN;
+	protected int fPagePath = PATH_REST;
 	
 	protected IWizardPage[] PAGES_WS_GEN;
 	protected IWizardPage[] PAGES_WS_USE;

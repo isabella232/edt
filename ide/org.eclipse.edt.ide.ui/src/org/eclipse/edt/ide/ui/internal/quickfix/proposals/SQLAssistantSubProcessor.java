@@ -169,7 +169,7 @@ public class SQLAssistantSubProcessor {
 			OpenStatement openStatement = (OpenStatement) astNode;
 			openStatement.accept(new AbstractASTVisitor() {
 				public boolean visit(WithInlineSQLClause inlineSQL) {
-					info.setSqlStatement(inlineSQL.getSqlStmt().getValue());
+					//info.setSqlStatement(inlineSQL.getSqlStmt().getValue());
 					return false;
 				}
 			});

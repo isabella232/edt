@@ -277,4 +277,17 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 		dialog.setMessage(message);
 		return dialog;
 	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		if(getWizard().getStartingPage() == this) {
+		   return true;
+		} else {
+			return super.canFlipToNextPage();
+		}
+	}
+	
+	public IWizardPage getNextPage() {
+		return getWizard().getNextPage(this);
+	}
 }

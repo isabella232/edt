@@ -35,6 +35,7 @@ public class SQLIOStatementActionInfo {
 	Node sqlStatementNode;
 	Node intoClauseNode;
 	Node usingKeysClause;
+	Node forExpressionClause;
 	boolean hasPreparedStatementReference;
 	boolean hasGeneratedStatementType;
 	boolean isGetByKeyWithNoUpdateStatement;
@@ -188,6 +189,14 @@ public class SQLIOStatementActionInfo {
 
 	public void setUsingKeysNode(Node usingClauseNode) {
 		this.usingKeysClause = usingClauseNode;
+	}
+	
+	public Node getForExpressionClause() {
+		return forExpressionClause;
+	}
+
+	public void setForExpressionClause(Node forExpressionClause) {
+		this.forExpressionClause = forExpressionClause;
 	}
 
 	public boolean isNoCursor() {
