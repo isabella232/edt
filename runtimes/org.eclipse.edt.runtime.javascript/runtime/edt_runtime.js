@@ -801,8 +801,11 @@ egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
-egl.eglx.lang.ETimestamp.fromEString = function (time) {   
-	return egl.stringToTime(time, "yyyy-MM-dd HH.mm.ss.SSSSSS");  
+egl.eglx.lang.ETimestamp.fromEString = function (time, format) {  
+	if(format == null){
+		format = "yyyy-MM-dd HH.mm.ss";
+	}
+	return egl.stringToTimeStamp(time, format);  
 };
 
 
