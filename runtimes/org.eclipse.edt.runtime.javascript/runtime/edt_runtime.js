@@ -479,10 +479,8 @@ egl.eglx.lang.EString.fromEBoolean = function (x) {
 egl.eglx.lang.EString.fromENumber = function (x) {
 	return egl.unboxAny(x).toString();
 };
-egl.eglx.lang.EString.fromETimestamp = function (timestamp, format) {
-	if(null == format){
-		format = "yyyy-MM-dd HH:mm:ss.ffffff";
-	}
+egl.eglx.lang.EString.fromETimestamp = function (timestamp, startCode, endCode) {
+	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(startCode, endCode);	
 	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
@@ -712,6 +710,20 @@ egl.defineClass( "eglx.lang", "ETimestamp"
 	}
 }
 );
+egl.eglx.lang.ETimestamp.CodeKind = {
+	YEAR_CODE:		0,
+	MONTH_CODE:		1,
+	DAY_CODE:		2,
+	HOUR_CODE:		3,
+	MINUTE_CODE:	4,
+	SECOND_CODE:	5,
+	FRACTION1_CODE:	6,
+	FRACTION2_CODE:	7,
+	FRACTION3_CODE:	8,
+	FRACTION4_CODE:	9,
+	FRACTION5_CODE:	10,
+	FRACTION6_CODE:	11
+};
 egl.eglx.lang.ETimestamp["currentTimeStamp"] = function (pattern) {
 	// returns a new Date object
 	// timestamp keeps every field
@@ -791,6 +803,56 @@ egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extensio
 	return dateCopy;
 };
 
+egl.eglx.lang.ETimestamp.getFormatFromPattern = function(startCode, endCode){
+	var format = "";
+	var separator = null;
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE) {
+		format += "yyyy";
+		separator = "-";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "MM";
+		separator = "-";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "dd";
+		separator = " ";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "HH";
+		separator = ":";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "mm";
+		separator = ":";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "ss";
+		separator = ".";
+	}
+	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.FRACTION6_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.FRACTION1_CODE) {
+		if (separator != null) {
+			format += separator;
+		}
+		format += "ffffff";
+	}
+	return format;
+};
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
 	if(pattern == null){
