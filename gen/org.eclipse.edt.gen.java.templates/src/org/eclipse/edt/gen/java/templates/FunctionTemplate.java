@@ -123,7 +123,9 @@ public class FunctionTemplate extends JavaTemplate {
 		out.print("\", parameters={");
 		ctx.foreach(function.getParameters(), ',', genFunctionParametersSignature, ctx, out);
 		if(function.getReturnType() != null){
-			out.print(", ");
+			if(function.getParameters() != null && function.getParameters().size() > 0){
+				out.print(", ");
+			}
 			FunctionParameter ret = ctx.getFactory().createFunctionParameter();
 			ret.setType(function.getReturnType());
 			ret.setName("return");
