@@ -27,7 +27,7 @@ public class FunctionParameterTemplate extends JavaTemplate {
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
 		} else
-			ctx.invoke(genRuntimeTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
+			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 		out.print(" ");
 		ctx.invoke(genName, decl, ctx, out);
 	}

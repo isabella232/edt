@@ -56,8 +56,13 @@ public class MemberNameTemplate extends JavaTemplate {
 		} else if (CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
+			// if the LHS is not a nullable, we need to do a check
+			if (!expr.isNullable())
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(".ezeUnbox()");
+			if (!expr.isNullable())
+				out.print(")");
 		} else
 			ctx.invokeSuper(this, genAssignment, expr, ctx, out, arg1, arg2);
 	}

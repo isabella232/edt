@@ -91,7 +91,7 @@ public class FunctionTemplate extends JavaTemplate {
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
-			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
 				out.print("AnyBoxedObject.class");
 			else
 				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);
@@ -110,7 +110,7 @@ public class FunctionTemplate extends JavaTemplate {
 		for (int i = 0; i < function.getParameters().size(); i++) {
 			FunctionParameter decl = function.getParameters().get(i);
 			out.print(", ");
-			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx))
+			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
 				out.print("AnyBoxedObject.class");
 			else
 				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);

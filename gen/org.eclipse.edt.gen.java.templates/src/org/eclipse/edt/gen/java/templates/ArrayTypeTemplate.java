@@ -86,7 +86,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 	}
 
 	public void genRuntimeClassTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, TypeNameKind.EGLImplementation);
+		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		out.print(".class");
 	}
 
