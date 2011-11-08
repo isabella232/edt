@@ -83,6 +83,8 @@ public class FieldTemplate extends JavaTemplate {
 				// if the field type is any, then we need to cast
 				if (field.getType().getTypeSignature().equalsIgnoreCase("eglx.lang.EAny"))
 					out.print("(eglx.lang.EAny) ");
+				if (field.getType().getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
+					out.print("(eglx.lang.ENumber) ");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 				else
