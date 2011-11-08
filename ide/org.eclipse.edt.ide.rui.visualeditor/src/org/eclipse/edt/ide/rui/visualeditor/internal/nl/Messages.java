@@ -31,6 +31,7 @@ public class Messages {
 	public static String	NL_Source;
 	public static String	NL_IE_Out_of_resources_message;
 	public static String	NL_XULRunner_Out_of_resources_message;
+	public static String	NL_WEBKIT_Out_of_resources_message;
 	
 	// Overlay
 	//--------

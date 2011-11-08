@@ -110,7 +110,7 @@ public class BrowserManager {
 			initializeBrowser(compositeParent.getDisplay(), browser, SWT_WEBKIT);
 			return browser;
 		} catch( SWTError ex ) {
-			showOutOfResourcesMessage(Messages.NL_XULRunner_Out_of_resources_message);
+			showOutOfResourcesMessage(Messages.NL_WEBKIT_Out_of_resources_message);
 		}
 		return null;
 	}
@@ -132,7 +132,7 @@ public class BrowserManager {
 			initializeBrowser(compositeParent.getDisplay(), browser, SWT.NONE);
 			return browser;
 		} catch( SWTError ex ) {
-			showOutOfResourcesMessage(Messages.NL_XULRunner_Out_of_resources_message);
+			showOutOfResourcesMessage(Messages.NL_IE_Out_of_resources_message);
 		}
 		return null;
 	}
