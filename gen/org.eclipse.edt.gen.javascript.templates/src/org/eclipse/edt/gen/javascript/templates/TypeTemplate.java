@@ -163,6 +163,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// no default
 	}
 	
+	public void genTypeDependentPatterns(Type type, Context ctx, TabbedWriter out) {
+		// no default
+	}
+	
 	public void genInitializeStatement(Type type, Context ctx, TabbedWriter out, Field arg) {
 		if (arg.getInitializerStatements() != null) {
 			ctx.invoke(genStatementNoBraces, arg.getInitializerStatements(), ctx, out);
@@ -198,7 +202,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
 			}
 			ctx.invoke(genExpression, objectExpr, ctx, out);
-			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();
+			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
+			
+			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
 			//TODO shouldn't have to special case ENumber
 			if ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) {
 				out.print(",\"");
