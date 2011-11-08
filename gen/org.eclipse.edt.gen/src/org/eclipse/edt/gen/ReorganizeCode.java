@@ -1100,6 +1100,31 @@ public class ReorganizeCode extends AbstractVisitor {
 					object.getArguments().set(i, nameExpression);
 				} else if (parameter.getParameterKind() == ParameterKind.PARM_OUT) {
 					// we need to create a local variable for the boxing
+					String temporaryWork = ctx.nextTempName();
+					LocalVariableDeclarationStatement localDeclarationWork = factory.createLocalVariableDeclarationStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						localDeclarationWork.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					localDeclarationWork.setContainer(currentStatementContainer);
+					DeclarationExpression declarationExpressionWork = factory.createDeclarationExpression();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						declarationExpressionWork.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					Field fieldWork = factory.createField();
+					fieldWork.setName(temporaryWork);
+					fieldWork.setType(object.getArguments().get(i).getType());
+					fieldWork.setIsNullable(object.getArguments().get(i).isNullable());
+					// we need to create the member access
+					MemberName nameExpressionWork = factory.createMemberName();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						nameExpressionWork.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					nameExpressionWork.setMember(fieldWork);
+					nameExpressionWork.setId(fieldWork.getName());
+					// add the field to the declaration expression
+					declarationExpressionWork.getFields().add(fieldWork);
+					// connect the declaration expression to the local declaration
+					localDeclarationWork.setExpression(declarationExpressionWork);
+					// add the local variable to the statement block
+					verify(0).getStatements().add(localDeclarationWork);
+					// we need to create a local variable for the boxing
 					String temporary = ctx.nextTempName();
 					LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -1119,6 +1144,24 @@ public class ReorganizeCode extends AbstractVisitor {
 						nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					nameExpression.setMember(field);
 					nameExpression.setId(field.getName());
+					// now do the assignment of the original to this temporary variable
+					AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatement.setContainer(currentStatementContainer);
+					Assignment assignment = factory.createAssignment();
+					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+						assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+					assignmentStatement.setAssignment(assignment);
+					assignment.setLHS(nameExpression);
+					assignment.setRHS(nameExpressionWork);
+					// add the assignment to the declaration statement block
+					StatementBlock declarationBlock = factory.createStatementBlock();
+					declarationBlock.setContainer(currentStatementContainer);
+					declarationBlock.getStatements().add(assignmentStatement);
+					// add the declaration statement block to the field
+					field.setInitializerStatements(declarationBlock);
+					field.setHasSetValuesBlock(true);
 					// add the field to the declaration expression
 					declarationExpression.getFields().add(field);
 					// connect the declaration expression to the local declaration
@@ -1128,11 +1171,11 @@ public class ReorganizeCode extends AbstractVisitor {
 					// now handle the post processing if it is lhsexpr compatible
 					if (object.getArguments().get(i) instanceof LHSExpr) {
 						// we need to create an assignment statement of the local variable to the original
-						AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+						assignmentStatement = factory.createAssignmentStatement();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setContainer(currentStatementContainer);
-						Assignment assignment = factory.createAssignment();
+						assignment = factory.createAssignment();
 						if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 							assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 						assignmentStatement.setAssignment(assignment);
