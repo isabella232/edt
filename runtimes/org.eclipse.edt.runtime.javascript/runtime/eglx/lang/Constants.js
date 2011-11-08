@@ -32,9 +32,9 @@ egl.defineRUILibrary('eglx.lang', 'Constants',
 			this.jisTimeFormat = "";
 			this.jisTimeFormat = "HH:mm:ss";
 			this.db2TimeStampFormat = "";
-			this.db2TimeStampFormat = "yyyy-MM-dd-HH.mm.ss.SSSSSS";
+			this.db2TimeStampFormat = "yyyy-MM-dd-HH.mm.ss.ffffff";
 			this.odbcTimeStampFormat = "";
-			this.odbcTimeStampFormat = "yyyy-MM-dd HH:mm:ss.SSSSSS";
+			this.odbcTimeStampFormat = "yyyy-MM-dd HH:mm:ss.ffffff";
 			this.eze$$setInitial();
 		}
 		,

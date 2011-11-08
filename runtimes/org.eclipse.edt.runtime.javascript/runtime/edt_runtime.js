@@ -481,7 +481,7 @@ egl.eglx.lang.EString.fromENumber = function (x) {
 };
 egl.eglx.lang.EString.fromETimestamp = function (timestamp, format) {
 	if(null == format){
-		format = "yyyy-MM-dd HH.mm.ss.SSSSSS";
+		format = "yyyy-MM-dd HH:mm:ss.ffffff";
 	}
 	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
@@ -806,6 +806,9 @@ egl.eglx.lang.ETimestamp.fromEString = function (time, format) {
 		format = "yyyy-MM-dd HH.mm.ss";
 	}
 	return egl.stringToTimeStamp(time, format);  
+};
+egl.eglx.lang.ETimestamp.fromEDate = function (date, format){
+	egl.dateTime.extend("date",date,format);
 };
 
 

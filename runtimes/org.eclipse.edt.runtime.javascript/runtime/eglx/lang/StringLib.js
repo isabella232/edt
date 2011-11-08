@@ -89,7 +89,7 @@ egl.eglx.lang.StringLib["spaces"] = function(/*integer*/i) {
 
 
 egl.eglx.lang.StringLib.defaultDateFormat = "MM/dd/yyyy";
-egl.eglx.lang.StringLib.db2TimestampFormat  = "yyyy-MM-dd-HH.mm.ss.SSSSSS";
+egl.eglx.lang.StringLib.db2TimestampFormat  = "yyyy-MM-dd-HH.mm.ss.ffffff";
 
 /* "Dispatcher" that looks at type a and fwds to the correct variant.
  * TODO sbg this is temporary;  it should be removed when we have a

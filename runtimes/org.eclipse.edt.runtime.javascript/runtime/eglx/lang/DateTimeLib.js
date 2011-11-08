@@ -124,7 +124,7 @@ egl.formatTimeStampPattern = function( mask ) {
 	mask = mask.replace(/f/g, "S");
 
 	// Masks can be any subset of "yyyyMMddHHmmssffffff" (though they can't start or stop in the middle of a character block).
-	// We want to return the corresponding subset of the format "yyyy-MM-dd HH:mm:ss.SSSSSS" (the odbc timestamp format)
+	// We want to return the corresponding subset of the format "yyyy-MM-dd HH:mm:ss.ffffff" (the odbc timestamp format)
 	// that matches the subset of characters in the mask (i.e. if the mask is "MMddHH", we want to return the corresponding
 	// substring of the pattern: "MM-dd HH".
 	var firstCharInMask = mask.charAt(0);

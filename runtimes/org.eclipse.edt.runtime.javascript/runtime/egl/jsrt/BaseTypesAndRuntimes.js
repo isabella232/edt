@@ -569,7 +569,7 @@ egl.processToken = function(token, s, result, strict)
 			return null;
 		}
 	}
-	else if(token == "SSSSSS")
+	else if(token == "ffffff")
 	{
 		if(s.length < 6)
 		{
@@ -635,13 +635,13 @@ egl.timeStampToString = function( ts, format )
 	var timeParts = egl.getTimeInfo(ts);
 	var result = "";
 	
-	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -689,7 +689,7 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += timeParts[4];
 		}
-		else if(tokens[i] == "SSSSSS")
+		else if(tokens[i] == "ffffff")
 		{
 			result += (egl.padWithLeadingZeros("" + ts.getMilliseconds(),3) + "000");
 		}
@@ -744,7 +744,7 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	result.setSeconds(0);
 	result.setMilliseconds(0);
 
-	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|SSSSSS|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	
 	if(!strict)
@@ -1635,7 +1635,7 @@ egl.inferSignature = function( x )
 				}
 				else if ( x instanceof Date )
 				{
-					return "J'yyyyMMddHHmmssSSSSSS';";
+					return "J'yyyyMMddHHmmssffffff';";
 				}
 				else if ( x instanceof Array )
 				{
