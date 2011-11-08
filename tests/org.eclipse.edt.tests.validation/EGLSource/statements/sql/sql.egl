@@ -133,6 +133,7 @@ library sql
 		get array from ds using a; //0
 		get invalidArray from ds using a; //1
 		get array from ds into a; //1 INTO not allowed
+		get rs from ds with #sql{}; //1 rs is nullable but has no default constructor
 	end
 	
 	function validateAdd()
