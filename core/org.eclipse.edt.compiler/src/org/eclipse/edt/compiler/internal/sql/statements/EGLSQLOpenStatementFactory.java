@@ -40,7 +40,7 @@ public class EGLSQLOpenStatementFactory extends EGLSQLGetByKeyStatementFactory {
 
 		if (sqlStatement != null) {
 			// The order by clause is an optional clause that is only built if there are key columns.
-			orderByClause = EGLSQLClauseFactory.createDefaultOrderByClause(keyItemAndColumnNames);
+			//orderByClause = EGLSQLClauseFactory.createDefaultOrderByClause(keyItemAndColumnNames);
 			if (orderByClause != null) {
 				sqlStatement = sqlStatement + orderByClause;
 			}
