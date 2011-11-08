@@ -97,7 +97,7 @@ public abstract class FileLocator {
 	}
 	
 	protected static final String WEB_CONTENT = "WebContent";
-	private static Map RUI_JAVASCRIPT_FILES = getRUIJavaScriptFiles();
+	public static Map RUI_JAVASCRIPT_FILES = getRUIJavaScriptFiles();
 	private List eglProjectPath;
 	protected IProject project;
 	private String[] resourceLocations;

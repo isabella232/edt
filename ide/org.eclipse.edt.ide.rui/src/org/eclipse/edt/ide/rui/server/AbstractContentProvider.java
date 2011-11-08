@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
@@ -55,17 +56,28 @@ import org.xml.sax.SAXException;
 
 
 public abstract class AbstractContentProvider implements IServerContentProvider {
+	public static SoftLRUCache RUI_JS_RUNTIME_FILE_CACHE = new SoftLRUCache();
 	
 	private IPreferenceStore store = EDTCoreIDEPlugin.getPlugin().getPreferenceStore();
 
+	private String getRUIJSRuntimeFilePath(String uri){
+		if(uri.contains("/runtime/")){ //$NON-NLS-1$
+			String filePath = uri.substring(uri.lastIndexOf("/runtime/") + 9); //$NON-NLS-1$
+			if(FileLocator.RUI_JAVASCRIPT_FILES.containsKey(filePath)){
+				return filePath;
+			}
+		}
+		return null;
+	}
+	
 	public byte[] loadContent(String uri) throws IOException, SAXException, CoreException {
 		byte[] bytes = null;
-		int index = uri.indexOf('/');
+		int index = uri.indexOf('/'); //$NON-NLS-1$
 		String projectName;
 		if (index == -1) {
-			projectName = "";
+			projectName = ""; //$NON-NLS-1$
 		}
-		else {
+		else {			
 			try {
 				// This uri is only a path.  We never expect a protocol, port, query, or fragment
 				uri = new URI(uri).getPath();
@@ -76,15 +88,31 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 		}
 		
 		if(projectName != ""){ //$NON-NLS-1$
+			//first get RUI JS Runtime file from cache
+			String filePath = getRUIJSRuntimeFilePath(uri);
+			if(filePath != null){
+				//first find in cache
+				bytes = (byte[])RUI_JS_RUNTIME_FILE_CACHE.get(filePath);
+				if(bytes != null){
+					return bytes;
+				}
+			}
+			
+			//if can not find in cache, go on to find in file system
 			FileLocator locator = getFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName));
 			
 			EGLResource file = findRequiredFile(uri, projectName, locator);	
 			if(file!=null){
-				//TODO - Check cache for loaded file
 				DataInputStream is = new DataInputStream(new BufferedInputStream(file.getInputStream()));
 				bytes = new byte[is.available()];
 				is.readFully(bytes);
 				is.close();
+				
+				//save RUI JS Runtime file in cache
+				String filePath2 = getRUIJSRuntimeFilePath(uri);
+				if(filePath2 != null && RUI_JS_RUNTIME_FILE_CACHE.get(filePath2) == null){
+					RUI_JS_RUNTIME_FILE_CACHE.put(filePath2, bytes);
+				}
 			}else{
 				// If the file is a .js file, try to find the file as a properties file
 //TODO EDT runtime properties			

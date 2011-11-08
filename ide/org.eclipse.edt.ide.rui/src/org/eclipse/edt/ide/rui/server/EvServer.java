@@ -29,8 +29,8 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -60,6 +60,7 @@ import org.eclipse.edt.ide.rui.internal.testserver.TestServerManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
+import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.javart.JSERunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
@@ -833,7 +834,7 @@ public class EvServer implements IClientProxy {
 					return;
 				}
 				if (xmlRequest != null) {
-					url = xmlRequest.getURL();
+					url = xmlRequest.getURL();					
 					debug("-->EvServer.handleBrowserEvent :" + url + " | ctx="+xmlRequest.getArguments().get("contextKey"));
 					
 					// Proxy and test server must be checked first since the context key is passed along for debug.
@@ -1140,10 +1141,22 @@ public class EvServer implements IClientProxy {
 	private void loadScript(String fileName, PrintStream ps) {
 		if (fileName.charAt(0) == '/')
 			fileName = fileName.substring(1);
-		debug("open File "+fileName);
+		debug("load Script "+fileName);
 		String projectName = fileName.substring(0, fileName.indexOf("/"));
 		fileName = fileName.substring(projectName.length()+1);
 		byte[] result;
+		
+		//first read from cache
+		result = (byte[])Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.get(fileName);
+		try {
+			if(result != null){
+				ps.write(result);
+				System.out.print("=>Forest load: " + fileName);
+				return;
+			}	
+		} catch (Exception e ) {
+			
+		}
 		
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		
@@ -1164,6 +1177,7 @@ public class EvServer implements IClientProxy {
 				result = new byte[fileContents.available()];
 				fileContents.read(result);
 				ps.write(result);
+				Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.put(fileName, result);
 			}finally{
 				fileContents.close();
 			}
