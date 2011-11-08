@@ -15,6 +15,10 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
+import org.eclipse.edt.compiler.binding.DictionaryBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
+import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -76,6 +80,15 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 								new String[] {});
 						return;
 					}
+					
+					// If it's a nullable entity, it must have a public default constructor.
+					if (expr.resolveTypeBinding().isNullable() && isEntity(expr.resolveTypeBinding()) && !hasDefaultConstructor(expr.resolveTypeBinding())) {
+						problemRequestor.acceptProblem(expr,
+								IProblemRequestor.SQL_NULLABLE_TARGET_MISSING_DEFAULT_CONSTRUCTOR,
+								new String[] {expr.getCanonicalString(), expr.resolveTypeBinding().getPackageQualifiedName()});
+						return;
+					}
+					
 					isDataExpr = true;
 				}
 			}
@@ -108,6 +121,33 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 				return;
 			}
 		}
+	}
+	
+	private boolean hasDefaultConstructor(ITypeBinding binding) {
+		List<ConstructorBinding> constructors = null;
+		switch (binding.getKind()) {
+			case ITypeBinding.EXTERNALTYPE_BINDING:
+				constructors = ((ExternalTypeBinding)binding).getConstructors();
+				break;
+			case ITypeBinding.HANDLER_BINDING:
+				constructors = ((HandlerBinding)binding).getConstructors();
+				break;
+			case ITypeBinding.DICTIONARY_BINDING:
+				constructors = ((DictionaryBinding)binding).getConstructors();
+				break;
+			default:
+				return true;
+		}
+		
+		if (constructors != null) {
+			for (ConstructorBinding con : constructors) {
+				if (!con.isPrivate() && con.getParameters().size() == 0) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	private ITypeBinding getTargetType(boolean isDataExpr) {
