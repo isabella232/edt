@@ -767,6 +767,10 @@ public class TypeCompatibilityUtil {
 	}
 	
 	public static boolean isReferenceCompatible(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
+
+		if(getEquivalentType(sourceType, compilerOptions) == getEquivalentType(targetType, compilerOptions)) {
+			return true;
+		}
 		
 		//value type cannot be passed to a reference type
 		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && !sourceType.isReference() && targetType.isReference()) {
@@ -795,9 +799,7 @@ public class TypeCompatibilityUtil {
 		if(sourceType == NilBinding.INSTANCE) {
 			return targetType.isReference() || targetType.isNullable();
 		}
-		if(getEquivalentType(sourceType, compilerOptions) == getEquivalentType(targetType, compilerOptions)) {
-			return true;
-		}
+
 		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind() &&
 		   ((PrimitiveTypeBinding) sourceType).getLength() == -1) {
 			//-1 means that the length cannot be determined until runtime. In
