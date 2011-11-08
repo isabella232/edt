@@ -103,6 +103,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genSubstringAccess = "genSubstringAccess";
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
+	public static final String genTypeDependentPatterns = "genTypeDependentPatterns";
 	public static final String genToString = "genToString";
 	public static final String genUnaryExpression = "genUnaryExpression";
 	// constants that allow type based processing. each of these will attempt to find the user provided type based
