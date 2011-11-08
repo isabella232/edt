@@ -196,7 +196,7 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 				List<Expression> expressions = ((ArrayLiteral)rightEP).getExpressions();
 				for (Expression expression : expressions) {
 					if(expression instanceof SimpleName){
-						if(((SimpleName)expression).getOffset() == errorOffset){
+						if(((SimpleName)expression).getOffset() <= errorOffset && errorOffset <=((SimpleName)expression).getLength() + ((SimpleName)expression).getOffset()){
 							functionName = ((SimpleName)expression).getCanonicalName().trim();
 						}
 					}
