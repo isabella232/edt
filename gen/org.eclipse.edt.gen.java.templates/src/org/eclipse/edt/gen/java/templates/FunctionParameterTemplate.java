@@ -54,8 +54,11 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		else if(ParameterKind.PARM_OUT.equals(parameterKind)){
 			return "OUT";
 		}
-		else{
+		else if(ParameterKind.PARM_INOUT.equals(parameterKind)){
 			return "INOUT";
+		}
+		else{
+			return "RETURN";
 		}
 	}
 	

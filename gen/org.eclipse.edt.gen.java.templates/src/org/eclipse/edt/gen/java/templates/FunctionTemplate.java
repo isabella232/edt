@@ -85,7 +85,7 @@ public class FunctionTemplate extends JavaTemplate {
 		if ( Boolean.TRUE.equals( ctx.get( ExternalTypeTemplate.DELEGATE_IN_INNER_CLASS ) ) )
 		{
 			ctx.invoke(genRuntimeTypeName, ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated), ctx, out);
-			out.print('.');
+			out.print(".");
 		}
 		out.print("this");
 		for (int i = 0; i < function.getParameters().size(); i++) {
@@ -122,6 +122,13 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.invoke(genName, function, ctx, out);
 		out.print("\", parameters={");
 		ctx.foreach(function.getParameters(), ',', genFunctionParametersSignature, ctx, out);
+		if(function.getReturnType() != null){
+			out.print(", ");
+			FunctionParameter ret = ctx.getFactory().createFunctionParameter();
+			ret.setType(function.getReturnType());
+			ret.setName("return");
+			ctx.invoke(genFunctionParametersSignature, ret, ctx, out);
+		}
 		out.println("})");
 	}	
 }
