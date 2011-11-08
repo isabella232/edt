@@ -22,8 +22,14 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaTemplate {
 
+	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny"))
+			out.print("null");
+	else
+		ctx.invokeSuper(this, genInstantiation, type, ctx, out);
+	}
+
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		// for number type, always use the runtime
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
