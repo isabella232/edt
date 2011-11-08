@@ -29,7 +29,6 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1151,7 +1150,6 @@ public class EvServer implements IClientProxy {
 		try {
 			if(result != null){
 				ps.write(result);
-				System.out.print("=>Forest load: " + fileName);
 				return;
 			}	
 		} catch (Exception e ) {
