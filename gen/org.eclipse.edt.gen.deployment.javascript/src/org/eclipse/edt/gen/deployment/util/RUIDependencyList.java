@@ -56,7 +56,7 @@ public class RUIDependencyList {
 		}
 		list.add(part);
 		for (Part refPart: IRUtils.getReferencedPartsFor(part)) {
-			if (!(part instanceof Service) && !IRUtils.isSystemPart(refPart.getFullyQualifiedName(), sysIREnv)) {
+			if (!(refPart instanceof Service) && !IRUtils.isSystemPart(refPart.getFullyQualifiedName(), sysIREnv)) {
 				getReferencedParts(refPart);
 			}
 		}
