@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate.TypeNameKind;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public class ExternalTypeTemplate extends JavaScriptTemplate {
 
@@ -31,7 +35,26 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genRuntimeTypeName(ExternalType part, Context ctx, TabbedWriter out, TypeNameKind arg) {
-		ctx.invoke(genPartName, part, ctx, out);
+		if (ctx.mapsToNativeType(part))
+			out.print(ctx.getNativeImplementationMapping(part));
+		else{
+			Annotation annotation = part.getAnnotation(Constants.Annotation_JavaScriptObject);
+			if(annotation != null){
+				String packageName = (String) annotation.getValue(InternUtil.intern("relativePath"));
+				if(packageName != null && !(packageName.isEmpty())){
+					packageName = packageName.replace('/', '.');
+					packageName = packageName.replace('\\', '.');
+					packageName += ".";
+				}else{
+					packageName = "";
+				}
+				String partName = (String) annotation.getValue(InternUtil.intern("externalName"));
+				if(partName == null || partName.isEmpty()){
+					partName = part.getName();
+				}
+				out.print(eglnamespace + packageName.toLowerCase() + partName);
+			}
+		}
 	}
 
 	public void genQualifier(ExternalType part, Context ctx, TabbedWriter out, NamedElement arg) {
