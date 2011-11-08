@@ -477,6 +477,24 @@
             description="%EGLProjectWizardActionSet.description"
             visible="false"
             id="org.eclipse.edt.ide.ui.EGLProjectWizardActionSet">
+            <action
+            	definitionId="org.eclipse.edt.ide.ui.newLibraryWizard"
+            	label="%LibraryAction.label"
+            	icon="icons/ctool16/newlib_wiz.gif"
+            	tooltip="%LibraryAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewEGLLibraryAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newEGLLibraryAction">
+        	</action>
+        	<action
+            	definitionId="org.eclipse.edt.ide.ui.newRecordWizard"
+            	label="%RecordAction.label"
+            	icon="icons/ctool16/newrec_wiz.gif"
+            	tooltip="%RecordAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewEGLRecordAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newEGLRecordAction">
+        	</action>
  			<action
          	   	definitionId="org.eclipse.edt.ide.ui.newProgramWizard"
            		label="%ProgramAction.label"
@@ -497,12 +515,12 @@
         	</action>
         	<action
             	definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
-            	label="%SourceFileAction.label"
-            	icon="icons/ctool16/newfle_wiz.gif"
-            	tooltip="%SourceFileAction.tooltip"
-            	class="org.eclipse.edt.ide.ui.internal.actions.NewSourceFileAction"
+            	label="%ServiceAction.label"
+            	icon="icons/etool16/nsvc_wiz.gif"
+            	tooltip="%ServiceAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewServiceAction"
             	toolbarPath="EGLMain"
-            	id="org.eclipse.edt.ide.ui.newSourceFileAction">
+            	id="org.eclipse.edt.ide.ui.NewServiceAction">
         	</action>
         	<action
             	definitionId="org.eclipse.edt.ide.ui.newProjectWizard"
