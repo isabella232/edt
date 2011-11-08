@@ -1314,4 +1314,14 @@ public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage
 		}
 		return false;
 	}
+	
+
+	protected boolean useProjectSettings() {
+		if(generatorOverrideCheckbox!= null && generatorOverrideCheckbox.getSelection()){
+			return true;
+		}else{
+			return super.useProjectSettings();
+		}
+	}
+	
 }

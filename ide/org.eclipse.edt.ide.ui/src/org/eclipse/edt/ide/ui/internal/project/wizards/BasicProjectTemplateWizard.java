@@ -24,7 +24,7 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 	private BasicProjectGeneratorSelectionPage generatorPage;
 	
 	public void addPages() {
-		this.generatorPage = new BasicProjectGeneratorSelectionPage(NewWizardMessages.GeneratorSelectionPage);
+		this.generatorPage = new BasicProjectGeneratorSelectionPage(NewWizardMessages.GeneratorSelectionPage, this);
 		addPage(generatorPage);
 		super.addPages();
 	}
@@ -34,9 +34,12 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 			String[] genIds = getGeneratorIds();
 			if(genIds != null)
 				((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedGenerators(genIds);
-			return generatorPage.performOK();
 		}
 		return true;
+	}
+	
+	public boolean proecssGenerationDirectorySetting() {
+		return generatorPage.performOK();
 	}
 
 	private String[] getGeneratorIds() {

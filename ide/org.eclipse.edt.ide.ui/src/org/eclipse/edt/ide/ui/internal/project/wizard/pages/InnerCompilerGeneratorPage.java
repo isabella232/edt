@@ -12,25 +12,22 @@
 package org.eclipse.edt.ide.ui.internal.project.wizard.pages;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.edt.compiler.IGenerator;
-import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.EDTCorePreferenceConstants;
-import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
-import org.eclipse.edt.ide.ui.internal.preferences.CompilerSelectionPreferencePage;
+import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.project.wizards.BasicProjectTemplateWizard;
+import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.preferences.CompilerPropertyAndPreferencePage;
 import org.eclipse.edt.ide.ui.preferences.IGeneratorTabProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
-import org.osgi.service.prefs.BackingStoreException;
 
 public class InnerCompilerGeneratorPage extends
 		CompilerPropertyAndPreferencePage {
@@ -41,6 +38,7 @@ public class InnerCompilerGeneratorPage extends
 			ProjectWizardPage parentWizardPage) {
 		super();
 		this.parentWizardPage = parentWizardPage;
+		updateResource();
 	}
 
 	/**
@@ -64,13 +62,32 @@ public class InnerCompilerGeneratorPage extends
 		return super.getSelectedGenerators();
 	}
 	
+	public void updateResource(){
+		String projName = ((NewEGLProjectWizard)((BasicProjectTemplateWizard)this.parentWizardPage.getWizard()).getParentWizard()).getModel().getProjectName();
+		
+		IWorkspaceRoot fWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project= fWorkspaceRoot.getProject(projName);
+
+		this.resource = project;
+	}
+	
 	protected boolean doPerformOk( final boolean isApply ) {
-		return true;
+		updateResource();
+		for ( IGeneratorTabProvider currProvider : currTabProviders ) {
+			currProvider.setResource(this.resource);
+		}
+
+		return super.doPerformOk(isApply);	
 	}
 
 	protected void setPreferenceContentStatus(IStatus status) {
 		super.setPreferenceContentStatus(status);
-		parentWizardPage.setErrorMessage(status.getMessage());
+		if(!status.isOK()){
+			parentWizardPage.setErrorMessage(status.getMessage());
+		}else{
+			parentWizardPage.setErrorMessage(null);
+			parentWizardPage.setMessage(status.getMessage());
+		}
 		parentWizardPage.getWizard().getContainer().updateButtons();
 	}
 	

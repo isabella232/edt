@@ -28,8 +28,10 @@ public class BasicProjectGeneratorSelectionPage extends ProjectWizardPage {
 	// Currently selected generator names
 	private List<String> selectedGenerators = new ArrayList<String>();
 	
-	public BasicProjectGeneratorSelectionPage(String pageName) {
+	public BasicProjectGeneratorSelectionPage(String pageName,
+			BasicProjectTemplateWizard basicProjectTemplateWizard) {
 		super(pageName);
+		this.setWizard(basicProjectTemplateWizard);
 		setTitle(NewWizardMessages.GeneratorSelectionPageTitle);
 		setDescription(NewWizardMessages.GeneratorSelectionPageDescription);
 		innerPage = new InnerCompilerGeneratorPage(this);

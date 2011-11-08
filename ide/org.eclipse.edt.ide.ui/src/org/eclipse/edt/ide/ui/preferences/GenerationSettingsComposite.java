@@ -48,9 +48,10 @@ import org.osgi.service.prefs.Preferences;
 
 public class GenerationSettingsComposite extends Composite {
 	
-	protected final IResource resource;
+	protected IResource resource;
 	protected final IPreferenceStore prefStore;
-	protected final IEclipsePreferences projectPrefs;
+	protected IEclipsePreferences projectPrefs;
+
 	protected final String dirPropertyID;
 	protected final String argPropertyID;
 	protected final String preferenceID;
@@ -308,14 +309,7 @@ public class GenerationSettingsComposite extends Composite {
 		}
 		else {
 			try {
-				String value;
-				
-				value = genInsideDirectory.getText();
-				if (value.equals(resource.getProject().getFullPath().toString())) {
-					// just use an indicator for 'this project'
-					value = ""; //$NON-NLS-1$
-				}
-
+				String value = getGenerationDiretory();
 				//rebuild project if generation directory is changed
 				if(!value.equalsIgnoreCase(originalGenDir)){
 					ProjectSettingsUtility.setBuildFlag(resource);
@@ -324,8 +318,10 @@ public class GenerationSettingsComposite extends Composite {
 				value = EclipseUtilities.convertToInternalPath(value);
 				ProjectSettingsUtility.setGenerationDirectory(resource, value, projectPrefs, dirPropertyID);
 				
-				String argValue = genArguments.getText().trim();
-				ProjectSettingsUtility.setGenerationArgument(resource, argValue, projectPrefs, argPropertyID);
+				String argValue = getArgValue();
+				if(argValue != null){
+					ProjectSettingsUtility.setGenerationArgument(resource, argValue, projectPrefs, argPropertyID);
+				}
 
 			}
 			catch (BackingStoreException e) {
@@ -337,6 +333,7 @@ public class GenerationSettingsComposite extends Composite {
 		return true;
 	}
 	
+
 	/**
 	 * Remove any preferences that this tab previously stored in a 
 	 * resource's preference store.
@@ -384,4 +381,45 @@ public class GenerationSettingsComposite extends Composite {
 	public void performAddition(){
 		genInsideDirectory.setText(genInsideDirectory.getText());
 	}
+
+	public String getGenerationDiretory(){
+		String value;
+		
+		value = genInsideDirectory.getText();
+		if (value.equals(resource.getProject().getFullPath().toString())) {
+			// just use an indicator for 'this project'
+			value = ""; //$NON-NLS-1$
+		}
+
+		return value;
+	}
+	
+	public String getArgValue(){
+		if(genArguments == null){
+			return null;
+		}
+		return genArguments.getText().trim();
+	}	
+	
+	public String getDirPropertyID() {
+		return dirPropertyID;
+	}
+
+	public String getArgPropertyID() {
+		return argPropertyID;
+	}
+	
+
+	public IResource getResource() {
+		return resource;
+	}
+
+	public void setResource(IResource resource) {
+		this.resource = resource;
+	}
+
+	public void setProjectPrefs(IEclipsePreferences projectPrefs) {
+		this.projectPrefs = projectPrefs;
+	}
+	
 }

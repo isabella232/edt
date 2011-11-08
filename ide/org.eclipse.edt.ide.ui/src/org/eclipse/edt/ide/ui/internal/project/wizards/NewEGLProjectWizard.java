@@ -90,6 +90,15 @@ public class NewEGLProjectWizard extends Wizard
 					getContainer().run(true, true, op);
 				}
 			}
+
+			if (twn.getTemplate().hasWizard()) {
+				if (twn.getWizard() instanceof BasicProjectTemplateWizard) {
+					if(!((BasicProjectTemplateWizard) twn.getWizard()).proecssGenerationDirectorySetting()){
+						return false;
+					}
+				}
+			}
+			
 			// Remember base package name
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
 			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());
