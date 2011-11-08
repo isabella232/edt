@@ -44,6 +44,9 @@ public class MemberNameTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(");
+			// if the field type is any, then we need to cast
+			if (expr.getType().getTypeSignature().equalsIgnoreCase("eglx.lang.EAny"))
+				out.print("(eglx.lang.EAny) ");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))

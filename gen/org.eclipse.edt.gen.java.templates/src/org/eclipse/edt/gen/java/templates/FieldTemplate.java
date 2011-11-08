@@ -80,6 +80,9 @@ public class FieldTemplate extends JavaTemplate {
 			// otherwise it is to be defaulted to null (INOUT parm), as there is an assignment already created
 			if (ctx.getAttribute(field, org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) == ParameterKind.PARM_OUT) {
 				out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(");
+				// if the field type is any, then we need to cast
+				if (field.getType().getTypeSignature().equalsIgnoreCase("eglx.lang.EAny"))
+					out.print("(eglx.lang.EAny) ");
 				if (ctx.mapsToNativeType(field.getType()) || ctx.mapsToPrimitiveType(field.getType()))
 					ctx.invoke(genDefaultValue, field.getType(), ctx, out, field);
 				else
