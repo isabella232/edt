@@ -160,7 +160,7 @@ public class SQL {
 		else if (type.equals(TypeUtils.Type_SMALLFLOAT)) constant += "FLOAT";
 		else if (type.equals(TypeUtils.Type_BIGINT)) constant += "BIGINT";
 		else if (type.equals(TypeUtils.Type_INT)) constant += "INTEGER";
-		else if (type.equals(TypeUtils.Type_SMALLINT)) constant += "SHORT";
+		else if (type.equals(TypeUtils.Type_SMALLINT)) constant += "SMALLINT";
 		else if (type.equals(TypeUtils.Type_DECIMAL)) constant += "DECIMAL";
 		else if (type.equals(TypeUtils.Type_STRING)) constant += "VARCHAR";
 		return constant;		
