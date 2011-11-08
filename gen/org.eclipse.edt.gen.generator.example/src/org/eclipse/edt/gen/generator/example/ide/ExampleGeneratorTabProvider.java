@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.generator.example.ide;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.ui.preferences.AbstractGeneratorTabProvider;
 import org.eclipse.edt.ide.ui.preferences.GenerationSettingsComposite;
 import org.eclipse.swt.SWT;
@@ -98,4 +100,12 @@ public class ExampleGeneratorTabProvider extends AbstractGeneratorTabProvider {
 			genSettings.removePreferencesForAllResources();
 		}
 	}
+	public void setResource( IResource resource ) {
+		super.setResource(resource);
+		this.projectPreferenceStore = new ProjectScope(getResource().getProject()).getNode(EDTCompilerIDEPlugin.PLUGIN_ID);
+		if(genSettings != null){
+			genSettings.setResource(resource);
+		}
+	}
+	
 }
