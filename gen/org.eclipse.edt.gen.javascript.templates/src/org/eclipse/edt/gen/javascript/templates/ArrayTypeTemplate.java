@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import java.util.List;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -35,9 +36,9 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		return false;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
 	}
 	
-	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression arg) {
+	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression expr) {
 		// types can override this to cause list reorganization to be done
-		if((Boolean) ctx.get(Constants.EXPR_WIDGET_QUALIFIER)){
+		if(expr instanceof Assignment && ((Assignment)expr).getLHS() instanceof MemberAccess && CommonUtilities.isRUIWidget(((Assignment)expr).getLHS().getQualifier().getType())){
 			return false;
 		}
 		return true;
