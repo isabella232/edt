@@ -61,8 +61,6 @@ public class Util {
 	public static final String RUIWIDGET = InternUtil.intern("RUIWIdget"); //$NON-NLS-1$
 	public static final String	WIDGET_ID_SEPARATOR	= "@@";
 	
-	public static SoftLRUCache RUI_RUNTIME_JAVASCRIPT_FILE_CACHE = new SoftLRUCache();
-	
 	public static boolean useCompression = true;
 	public static String[] excludedCompression = new String[]{"com.ibm.egl.rui.dojo.runtime.local_1.6"};
 	

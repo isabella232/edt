@@ -1145,17 +1145,6 @@ public class EvServer implements IClientProxy {
 		fileName = fileName.substring(projectName.length()+1);
 		byte[] result;
 		
-		//first read from cache
-		result = (byte[])Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.get(fileName);
-		try {
-			if(result != null){
-				ps.write(result);
-				return;
-			}	
-		} catch (Exception e ) {
-			
-		}
-		
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		
 		try{
@@ -1175,7 +1164,6 @@ public class EvServer implements IClientProxy {
 				result = new byte[fileContents.available()];
 				fileContents.read(result);
 				ps.write(result);
-				Util.RUI_RUNTIME_JAVASCRIPT_FILE_CACHE.put(fileName, result);
 			}finally{
 				fileContents.close();
 			}
