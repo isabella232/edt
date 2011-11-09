@@ -412,12 +412,7 @@ public final class RefactoringExecutionStarter {
 						EGLDDRootHelper.releaseSharedWorkingModel(eglddFile, false);
 				}
 			}
-			
-			if(isResourceFound) {
-				break;
-			}
 		}
-		
 	}
 	
 	private static boolean renameDDServices(Services services, String oldServiceImpl,
