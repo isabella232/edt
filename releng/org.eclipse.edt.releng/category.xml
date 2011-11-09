@@ -19,7 +19,7 @@
         <!-- ${category.name} -->
         <category-def label="EGL Development Tools (EDT) ${version}" name="${category.name}">
                 <description>
-${category.label}: contains all features in this build.
+EGL Development Tools (EDT) ${version}: contains all features in this build.
                 </description>
         </category-def>
  
