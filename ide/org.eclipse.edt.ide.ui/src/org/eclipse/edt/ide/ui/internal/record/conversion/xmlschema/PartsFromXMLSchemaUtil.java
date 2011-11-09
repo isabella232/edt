@@ -124,6 +124,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 				if (type == null) { // simple type hasn't been defined as a
 									// dataitem
 					type = getPrimitiveType(xsObject, xsSimpleType, xsElement.getName());
+					if(WSDLUtil.isTimeStamp(xsSimpleType)) 
+						  type.setNullable(true);
 				} else {
 					type = (Type) type.clone();
 				}
@@ -131,6 +133,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 		} else if (xsObject instanceof XSAttributeDeclaration) {
 			XSAttributeDeclaration xsAttr = (XSAttributeDeclaration) xsObject;
 			type = getPrimitiveType(xsObject, (XSSimpleTypeDefinition) xsAttr.getTypeDefinition(), xsAttr.getName());
+			if(WSDLUtil.isTimeStamp(xsAttr.getTypeDefinition()))
+				   type.setNullable(true);
 		} else {
 			System.out.println("Don't know what type this is" + xsObject.toString());//$NON-NLS-1$
 		}
@@ -353,7 +357,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 			Field field = new Field();
 			field.setName(fieldName);
 			Type type = processElement(xsAttrDecl, wrapRec, recs, types);
-			type.setNullable(!xsAttrUse.getRequired());
+			if(!type.isNullable())
+			      type.setNullable(!xsAttrUse.getRequired());
 			field.setType(type);
 
 			Annotation annotation = new Annotation();
@@ -414,7 +419,6 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 				continue;
 			}
 			if (!(xsParticle.getTerm() instanceof XSElementDeclaration)) {
-				// TODO handle this case?
 				continue;
 			}
 			XSElementDeclaration xsElement = (XSElementDeclaration) xsParticle.getTerm();
@@ -429,8 +433,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 				ArrayType aType = new ArrayType();
 				aType.setElementType(type);
 				type = aType;
-			} else {
-				type.setNullable((xsParticle.getMinOccurs() == 0 || xsElement.getNillable() || isChoice)
+			} else if(!type.isNullable()) {
+				type.setNullable((xsParticle.getMinOccurs() == 0 || xsElement.getNillable() || isChoice )
 						&& !WSDLUtil.isSpecialArrayType(xsElement.getTypeDefinition()));
 			}
 			field.setType(type);
@@ -508,7 +512,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 		} else if (WSDLUtil.isUnicode(simpleType)) {
 			type.setName("unicode(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
 		} else if (WSDLUtil.isLimitedString(simpleType)) {
-			type.setName("string(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
+			//type.setName("string(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
+			type.setName("string");//$NON-NLS-1$
 		}
 		// turn an xsd integer (not an int) into a NUM
 		else if (XSConstants.INTEGER_DT == simpleType.getBuiltInKind()) {

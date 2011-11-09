@@ -67,6 +67,10 @@ public class WSDLUtil {
 	private static boolean isString(int length, int maxLength) {
 		return length == -1 && maxLength == -1;
 	}
+	
+	public static boolean isTimeStamp(XSSimpleTypeDefinition simpleType) {
+		return XSConstants.DATETIME_DT == simpleType.getBuiltInKind();
+	}
 
 	public static boolean isUnicode(XSSimpleTypeDefinition simpleType) {
 		// no collapse and a length or a max with a min
