@@ -205,8 +205,8 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 		return op1 % op2;
 	}
 
-	public static float power(float op1, float op2) throws AnyException {
-		return (float) StrictMath.pow(op1, op2);
+	public static double power(float op1, float op2) throws AnyException {
+		return StrictMath.pow(op1, op2);
 	}
 
 	public static int compareTo(Float op1, Float op2) throws AnyException {
