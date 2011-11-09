@@ -224,12 +224,10 @@ public class CommonUtilities {
 	@SuppressWarnings("static-access")
 	public static String getNativeJavaOperation(BinaryExpression expr, Context ctx) {
 		String op = expr.getOperator();
+		// we must not use the equals or notequals from java, as the Object versions of these simply compare the 
+		// object and not the values. we need to pass equals and notequals to the edt runtime instead 
 		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
 		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
-			if (op.equals(expr.Op_EQ))
-				return " == ";
-			if (op.equals(expr.Op_NE))
-				return " != ";
 			if (op.equals(expr.Op_LT))
 				return " < ";
 			if (op.equals(expr.Op_GT))
@@ -262,10 +260,6 @@ public class CommonUtilities {
 			return " * ";
 		if (op.equals(expr.Op_MODULO))
 			return " % ";
-		if (op.equals(expr.Op_EQ))
-			return " == ";
-		if (op.equals(expr.Op_NE))
-			return " != ";
 		if (op.equals(expr.Op_LT))
 			return " < ";
 		if (op.equals(expr.Op_GT))
