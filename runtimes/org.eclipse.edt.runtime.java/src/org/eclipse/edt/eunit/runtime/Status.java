@@ -13,9 +13,9 @@ import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="Status")
 public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
@@ -58,16 +58,16 @@ public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	}
 	@org.eclipse.edt.javart.json.Json(name="code", clazz=EInt.class, asOptions={})
 	public int getCode() {
-		return (code);
+		return code;
 	}
-	public void setCode( int ezeValue ) {
-		this.code = ezeValue;
+	public void setCode(Integer ezeValue) {
+		code = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="reason", clazz=EString.class, asOptions={})
 	public String getReason() {
-		return (reason);
+		return reason;
 	}
-	public void setReason( String ezeValue ) {
-		this.reason = ezeValue;
+	public void setReason(String ezeValue) {
+		reason = ezeValue;
 	}
 }

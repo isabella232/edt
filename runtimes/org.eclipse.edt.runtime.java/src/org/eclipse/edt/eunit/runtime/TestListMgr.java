@@ -11,21 +11,21 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import eglx.lang.SysLib;
-import org.eclipse.edt.eunit.runtime.MultiStatus;
-import eglx.services.ServiceInvocationException;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import eglx.lang.AnyException;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import eglx.services.ServiceInvocationException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import eglx.lang.SysLib;
+import org.eclipse.edt.eunit.runtime.MultiStatus;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
@@ -46,8 +46,8 @@ public class TestListMgr extends ExecutableBase {
 	public List<org.eclipse.edt.javart.Delegate> LibraryStartTests;
 	@javax.xml.bind.annotation.XmlTransient
 	private int libIndex;
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public TestListMgr() {
 		super();
 		ezeInitialize();
@@ -59,76 +59,76 @@ public class TestListMgr extends ExecutableBase {
 		testLibName = "";
 		LibraryStartTests = EList.ezeNew(org.eclipse.edt.javart.Delegate.class);
 		bindingType = ServiceBindingType.DEDICATED;
-		testIndex = (int)((short) 1);
-		libIndex = (int)((short) 1);
+		testIndex = (int)(short)((short) 1);
+		libIndex = (int)(short)((short) 1);
 	}
 	@org.eclipse.edt.javart.json.Json(name="bindingType", clazz=ServiceBindingType.class, asOptions={})
 	public ServiceBindingType getBindingType() {
-		return (bindingType);
+		return bindingType;
 	}
-	public void setBindingType( ServiceBindingType ezeValue ) {
-		this.bindingType = ezeValue;
+	public void setBindingType(ServiceBindingType ezeValue) {
+		bindingType = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="ms", clazz=MultiStatus.class, asOptions={})
 	public MultiStatus getMs() {
-		return (ms);
+		return ms;
 	}
-	public void setMs( MultiStatus ezeValue ) {
-		this.ms = ezeValue;
+	public void setMs(MultiStatus ezeValue) {
+		ms = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="testIndex", clazz=EInt.class, asOptions={})
 	public int getTestIndex() {
-		return (testIndex);
+		return testIndex;
 	}
-	public void setTestIndex( int ezeValue ) {
-		this.testIndex = ezeValue;
+	public void setTestIndex(Integer ezeValue) {
+		testIndex = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="testMethodNames", clazz=EString.class, asOptions={})
 	public List<String> getTestMethodNames() {
-		return (testMethodNames);
+		return testMethodNames;
 	}
-	public void setTestMethodNames( List<String> ezeValue ) {
-		this.testMethodNames = ezeValue;
+	public void setTestMethodNames(List<String> ezeValue) {
+		testMethodNames = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="runTestMtds", clazz=org.eclipse.edt.javart.Delegate.class, asOptions={})
 	public List<org.eclipse.edt.javart.Delegate> getRunTestMtds() {
-		return (runTestMtds);
+		return runTestMtds;
 	}
-	public void setRunTestMtds( List<org.eclipse.edt.javart.Delegate> ezeValue ) {
-		this.runTestMtds = ezeValue;
+	public void setRunTestMtds(List<org.eclipse.edt.javart.Delegate> ezeValue) {
+		runTestMtds = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="testLibName", clazz=EString.class, asOptions={})
 	public String getTestLibName() {
-		return (testLibName);
+		return testLibName;
 	}
-	public void setTestLibName( String ezeValue ) {
-		this.testLibName = ezeValue;
+	public void setTestLibName(String ezeValue) {
+		testLibName = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="LibraryStartTests", clazz=org.eclipse.edt.javart.Delegate.class, asOptions={})
 	public List<org.eclipse.edt.javart.Delegate> getLibraryStartTests() {
-		return (LibraryStartTests);
+		return LibraryStartTests;
 	}
-	public void setLibraryStartTests( List<org.eclipse.edt.javart.Delegate> ezeValue ) {
-		this.LibraryStartTests = ezeValue;
+	public void setLibraryStartTests(List<org.eclipse.edt.javart.Delegate> ezeValue) {
+		LibraryStartTests = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="libIndex", clazz=EInt.class, asOptions={})
 	public int getLibIndex() {
-		return (libIndex);
+		return libIndex;
 	}
-	public void setLibIndex( int ezeValue ) {
-		this.libIndex = ezeValue;
-	}
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
-		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
-			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
-		}
-		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	public void setLibIndex(Integer ezeValue) {
+		libIndex = ezeValue;
 	}
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
 			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
 		}
 		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
+	}
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
+		}
+		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	}
 	public void nextTest() {
 		String testId;
@@ -138,8 +138,8 @@ public class TestListMgr extends ExecutableBase {
 		boolean eze$Temp1;
 		eze$Temp1 = (testIndex < EList.getSize(runTestMtds));
 		if (eze$Temp1) {
-			testIndex += (int)((short) 1);
-			runTestMtds.get(testIndex - 1).invoke();
+			testIndex += (int)(short)((short) 1);
+			runTestMtds.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, runTestMtds)).invoke();
 		}
 	}
 	private String getTestIdString() {
@@ -148,10 +148,10 @@ public class TestListMgr extends ExecutableBase {
 		String testId;
 		testId = ((testLibName) + "::");
 		if ((testIndex <= testMethodNamesSize)) {
-			testId += testMethodNames.get(testIndex - 1);
+			testId += testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, testMethodNames));
 		}
 		else {
-			if ((testIndex == (testMethodNamesSize + (int)((short) 1)))) {
+			if ((testIndex == (testMethodNamesSize + (int)(short)((short) 1)))) {
 				testId += "endTest";
 			}
 			else {
@@ -164,8 +164,8 @@ public class TestListMgr extends ExecutableBase {
 		boolean eze$Temp5;
 		eze$Temp5 = (libIndex < EList.getSize(LibraryStartTests));
 		if (eze$Temp5) {
-			libIndex += (int)((short) 1);
-			LibraryStartTests.get(libIndex - 1).invoke();
+			libIndex += (int)(short)((short) 1);
+			LibraryStartTests.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(libIndex - 1, LibraryStartTests)).invoke();
 		}
 	}
 	public void handleCallBackException(AnyException exp, eglx.http.IHttp http) {
@@ -187,12 +187,9 @@ public class TestListMgr extends ExecutableBase {
 			str = (((EString.plus(((str) + "Original request body: "), http.getRequest().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 			str = (((EString.plus(((str) + "Raw response body: "), http.getResponse().body))) + eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE);
 		}
-		AnyBoxedObject<String> eze$Temp8;
-		eze$Temp8 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(str);
-		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp8);
-		str = eze$Temp8.ezeUnbox();
+		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(str);
 		String testId;
-		testId = this.testMethodNames.get(this.testIndex - 1);
+		testId = this.testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(this.testIndex - 1, this.testMethodNames));
 		nextTest();
 	}
 	public void caughtFailedAssertion(AssertionFailedException exp) {
@@ -201,25 +198,24 @@ public class TestListMgr extends ExecutableBase {
 	public void caughtAnyException(AnyException exp) {
 		String expMsg;
 		expMsg = (("uncaught exception for: ") + getTestIdString());
-		AnyBoxedObject<String> eze$Temp9;
-		eze$Temp9 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(expMsg);
-		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(eze$Temp9);
-		expMsg = eze$Temp9.ezeUnbox();
+		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(expMsg);
 	}
 	public String getBindingTypeString(ServiceBindingType bType) {
-		if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class))) {
-			return "DEDICATED_BINDING";
-		}
-		else {
-			if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEVELOP, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class))) {
-				return "DEVELOP_BINDING";
+		{
+			EzeLabel_eze_CaseLabel_0: if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, java.lang.Enum.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, java.lang.Enum.class))) {
+				return "DEDICATED_BINDING";
 			}
 			else {
-				if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEPLOYED, org.eclipse.edt.runtime.java.eglx.lang.AnyEnumeration.class))) {
-					return "DEPLOYED_BINDING";
+				if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, java.lang.Enum.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEVELOP, java.lang.Enum.class))) {
+					return "DEVELOP_BINDING";
 				}
 				else {
-					return "UNKNOWN Binding Type - NOT supported";
+					if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, java.lang.Enum.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEPLOYED, java.lang.Enum.class))) {
+						return "DEPLOYED_BINDING";
+					}
+					else {
+						return "UNKNOWN Binding Type - NOT supported";
+					}
 				}
 			}
 		}
