@@ -38,7 +38,6 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genAsExpressionBoxing = "genAsExpressionBoxing";
 	public static final String genAssignment = "genAssignment";
 	public static final String genBinaryExpression = "genBinaryExpression";
-	public static final String genBoxingFunctionName = "genBoxingFunctionName";
 	public static final String genClassBody = "genClassBody";
 	public static final String genClassHeader = "genClassHeader";
 	public static final String genClassName = "genClassName";
