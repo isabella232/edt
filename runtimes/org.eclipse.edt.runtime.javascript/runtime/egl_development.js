@@ -1495,9 +1495,12 @@ egl.getOuterWidthInPixelsNonIESpecialWidget = function(element){
 					+ egl.getStyleValueForIE(element, "borderLeftWidth")
 					+ egl.getStyleValueForIE(element, "borderRightWidth");
 		return outerWidth;
-	}else{
-		return egl.getWidthInPixels(element);
+	}else if (egl.WebKit){
+		if ( element.nodeName == "SPAN" && element.children && element.children.length == 1 ) {
+			element = element.children[0];
+		}
 	}
+	return egl.getWidthInPixels(element);
 };
 
 egl.getOuterHeightInPixels = function(element){
@@ -1512,6 +1515,10 @@ egl.getOuterHeightInPixelsNonIESpecialWidget = function(element){
 						+ egl.getStyleValueForIE(element, "borderTopWidth")
 						+ egl.getStyleValueForIE(element, "borderBottomWidth");
 		return outerHeight;
+	} else if (egl.WebKit){
+		if ( element.nodeName == "SPAN" && element.children && element.children.length == 1 ) {
+			element = element.children[0];
+		}
 	}
 	return egl.getHeightInPixels(element);
 };
@@ -1696,7 +1703,7 @@ egl.getWidgetInfo = function() {
 							var td = tr.cells[tdi];
 							this.extrainfo += (td.getAttribute( "row") - 1) + ":" + (td.getAttribute( "column") - 1) + ":" + egl.getX( td ) + ":" + egl.getY( td ) + ":" 
 				                           + egl.getOuterWidthInPixels( td ) + ":"+  egl.getOuterHeightInPixels( td ) + ":"
-				                           + ( td.childNodes.length > 0 ? (td.childNodes[0].eze$$widget ? "1" : "0") : "0" ) + ":";
+				                           + ( td.getAttribute( "occupied") == "true" ? "1" : "0" ) + ":";
 					    }
 					}
 					this.extrainfo += ";";
