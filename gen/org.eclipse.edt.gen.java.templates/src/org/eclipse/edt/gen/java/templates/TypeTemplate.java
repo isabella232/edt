@@ -84,7 +84,7 @@ public class TypeTemplate extends JavaTemplate {
 			return false;
 	}
 
-	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression arg) {
 		// types can override this to cause/prevent list reorganization to be done
 		return true;
 	}
