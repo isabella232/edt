@@ -30,18 +30,14 @@ public class BoxingExpressionTemplate extends JavaTemplate {
 			out.print("\")");
 		} else if (ctx.mapsToPrimitiveType(expr.getType())) {
 			ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.EGLImplementation);
-			out.print(".");
-			ctx.invoke(genBoxingFunctionName, expr.getExpr(), ctx, out);
-			out.print("(");
+			out.print(".ezeBox(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			if ((CommonUtilities.isBoxedOutputTemp(expr.getExpr(), ctx)))
 				out.print(".ezeUnbox()");
 			ctx.invoke(genTypeDependentOptions, expr.getType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.");
-			ctx.invoke(genBoxingFunctionName, expr.getExpr(), ctx, out);
-			out.print("(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeBox(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			if ((CommonUtilities.isBoxedOutputTemp(expr.getExpr(), ctx)))
 				out.print(".ezeUnbox()");

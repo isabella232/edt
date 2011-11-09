@@ -11,13 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
-
 public class LiteralTemplate extends JavaTemplate {
 
-	public void genBoxingFunctionName(Expression expr, Context ctx, TabbedWriter out) {
-		out.print("ezeBox");
-	}
 }

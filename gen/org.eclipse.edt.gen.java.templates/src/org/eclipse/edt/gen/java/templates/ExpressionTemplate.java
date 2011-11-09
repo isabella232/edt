@@ -28,12 +28,4 @@ public class ExpressionTemplate extends JavaTemplate {
 			CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
 		ctx.getMessageRequestor().addMessage(message);
 	}
-
-	public void genBoxingFunctionName(Expression expr, Context ctx, TabbedWriter out) {
-		if (ctx.getAttribute(expr, org.eclipse.edt.gen.Constants.SubKey_functionParameterIsConst) != null) {
-			out.print("ezeWrap");
-		} else {
-			out.print("ezeBox");
-		}
-	}
 }
