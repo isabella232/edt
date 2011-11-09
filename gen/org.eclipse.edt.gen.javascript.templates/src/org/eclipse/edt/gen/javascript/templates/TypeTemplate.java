@@ -205,8 +205,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
 			
 			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
-			//TODO shouldn't have to special case ENumber
-			if ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) {
+			//TODO shouldn't have to special case ENumber and Decimal
+			if (((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");
