@@ -388,21 +388,56 @@ egl.adjustYear = function(origDate)
 	
 	if( newDate.getTime() >= range[0].getTime() && newDate.getTime() <= range[1].getTime() )
 	{
+		if ( origDate["eze$$CheckLeap"] )
+		{
+			newDate["eze$$CheckLeap"] = origDate["eze$$CheckLeap"];
+		}
+		if ( !egl.leapYearCheck(newDate,3,4) )
+		{
+			return null;
+		}
 		return newDate;
 	}
 	
 	newDate.setFullYear("" + curTwoDigitPrefix + origTwoDigitYear);
 	if( newDate.getTime() >= range[0].getTime() && newDate.getTime() <= range[1].getTime() )
 	{
+		if ( origDate["eze$$CheckLeap"] )
+		{
+			newDate["eze$$CheckLeap"] = origDate["eze$$CheckLeap"];
+		}
+		if ( !egl.leapYearCheck(newDate,3,4) )
+		{
+			return null;
+		}
 		return newDate;
 	}
 	
 	newDate.setFullYear("" + (curTwoDigitPrefix+1) + origTwoDigitYear);
+	if ( origDate["eze$$CheckLeap"] )
+	{
+		newDate["eze$$CheckLeap"] = origDate["eze$$CheckLeap"];
+	}
+	if ( !egl.leapYearCheck(newDate,3,4) )
+	{
+		return null;
+	}
 	return newDate;
 };
 
 // This is called repeatedly while we're parsing a string for a date, time, or timestamp.
-// For dates and timestamps, the initial 'result' Date object must be set to January 1st.
+// The initial 'result' Date object must be set to January 1st.
+//
+// Properties will be added to 'result' when some processing and/or validation must be
+// completed later.
+//   * eze$$AMPM is set to either "AM" or "PM" when the token is "a".
+//   * When the token is "yy", eze$$adjustdate is set to true, telling us to call adjustYear.
+//   * eze$$CheckLeap is used to validate that February 29th is only accepted in a leap year.
+//     It's a number, used as a bit field to mark which parts of a date have previously
+//     been seen.  Days are bit 1, months are bit 2, and years are bit 3.  We only validate 
+//     that Feb 29 is in a leap year if all three parts of a date have been seen.  We only
+//     set the day bit when the value is 29, and we only set the month bit when the value is
+//     Feb.
 egl.processToken = function(token, s, result, strict)
 {
 	if(token == "yyyy")
@@ -416,6 +451,10 @@ egl.processToken = function(token, s, result, strict)
 		if( egl.isnumeric(sub) )
 		{
 			result.setFullYear(sub);
+			if ( !egl.leapYearCheck(result,3,4) )
+			{
+				return null;
+			}
 			s = s.substr(4);
 		}
 		else
@@ -453,13 +492,20 @@ egl.processToken = function(token, s, result, strict)
 		if( egl.isnumeric(sub) && sub >= 1 && sub <= 12 )
 		{
 			var d = result.getDate();
-			if ( (d > 29 && sub == "02")
+			if ( (d > 29 && sub === "02")
 				|| (d === 31 && (sub === "04" || sub === "06" || sub === "09" || sub === "11")) )
 			{
 				return null;
 			}
 			
-			result.setMonth(sub-1);
+			result.setMonth(sub-1);			
+			if ( sub === "02" )
+			{
+				if ( !egl.leapYearCheck(result,5,2) )
+				{
+					return null;
+				}
+			}
 			s = s.substr(2);
 		}
 		else
@@ -490,6 +536,13 @@ egl.processToken = function(token, s, result, strict)
 					if ( sub === "31" ) return null;
 			}
 			result.setDate(sub);
+			if ( sub === "29" )
+			{
+				if ( !egl.leapYearCheck(result,6,1) )
+				{
+					return null;
+				}
+			}
 			s = s.substr(2);
 		}
 		else
@@ -627,6 +680,43 @@ egl.processToken = function(token, s, result, strict)
 	}
 	
 	return s;
+};
+
+egl.leapYearCheck = function( result, doCheck, bitFlag )
+{
+	if ( result["eze$$CheckLeap"] )
+	{
+		if ( result["eze$$CheckLeap"] === doCheck )
+		{
+			// Verify that it's a leap year, either fail or set the day & month to
+			// Feb 29.  The date will have "rolled forward" to March 1 if the year
+			// wasn't a leap year when we set the day & month in egl.processToken.
+			var year = result.getFullYear();
+			if ( (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0)) )
+			{
+				result.setMonth(1);
+				result.setDate(29);
+			}
+			else
+			{
+				// Error!  There's no Feb 29 in this year!
+				return false;
+			}
+		}
+		else
+		{
+			// All parts of the date haven't been seen yet.  Record the fact that
+			// we've seen another part.
+			result["eze$$CheckLeap"] += bitFlag;
+		}
+	}
+	else
+	{
+		// Record the fact that we've seen the first part of the date.
+		result["eze$$CheckLeap"] = bitFlag;
+	}
+	
+	return true;
 };
 
 egl.timeStampToString = function( ts, format )
@@ -787,7 +877,7 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	{
 		result.setHours(result.getHours() + 12);
 	}
-	else if("AM" == result["egl$AMPM"] && result.getHours() == 12)
+	else if("AM" == result["eze$$AMPM"] && result.getHours() == 12)
 	{
 		result.setHours(result.getHours() - 12);
 	}
@@ -3806,8 +3896,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 
 egl.dateTime.timeStampValueWithPattern = function(/*string*/source, /*optional mask*/timeSpanPattern) {
 	//Returns a TIMESTAMP value that reflects a string and is built based on a timestamp mask that you specify
-	timeSpanPattern = egl.getProperTimeStampPattern( timeSpanPattern );
-	return ( ( source != null ) ? egl.stringToTimeStamp( source, timeSpanPattern ) : null );
+	return ( ( source != null ) ? egl.stringToTimeStamp( source, egl.getProperTimeStampPattern( timeSpanPattern ) ) : null );
 };
 
 
