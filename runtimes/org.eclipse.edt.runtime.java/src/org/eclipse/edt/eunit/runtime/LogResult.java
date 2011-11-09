@@ -1,39 +1,29 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import java.util.Calendar;
-import eglx.lang.MathLib;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import eglx.lang.MathLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
 import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
 import java.lang.Long;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
@@ -162,7 +152,7 @@ public class LogResult extends ExecutableBase {
 	}
 	public void assertBigIntEqual(String message, Long expected, Long actual) {
 		boolean isEqual;
-		isEqual = (expected == actual);
+		isEqual = (EBigint.equals(expected, actual));
 		expectAssertTrue(message, EBigint.ezeBox(expected), EBigint.ezeBox(actual), isEqual);
 	}
 	public void assertBigIntEqual1(Long expected, Long actual) {
@@ -184,7 +174,7 @@ public class LogResult extends ExecutableBase {
 		int actualSize;
 		actualSize = EList.getSize(actual);
 		String failedReason = "";
-		if ((expectedSize == actualSize)) {
+		if ((EInt.equals(expectedSize, actualSize))) {
 			String failedHeader;
 			failedHeader = "Array element No.[";
 			String expectedValues;
@@ -203,7 +193,7 @@ public class LogResult extends ExecutableBase {
 					}
 					expectedValues += expected.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, expected));
 					actualValues += actual.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(i - 1, actual));
-					if ((i != expectedSize)) {
+					if ((EInt.notEquals(i, expectedSize))) {
 						expectedValues += ", ";
 						actualValues += ", ";
 					}
@@ -290,7 +280,7 @@ public class LogResult extends ExecutableBase {
 		delta = (normalExpected - normalActual);
 		delta = MathLib.abs(delta);
 		boolean isEqual;
-		isEqual = ((((signExpected).equals(signActual)) && (mantissaExpected == mantissaActual)) && (delta < deltaLimit));
+		isEqual = ((((signExpected).equals(signActual)) && (EInt.equals(mantissaExpected, mantissaActual))) && (delta < deltaLimit));
 		return isEqual;
 	}
 	private void expectAssertTrue(String message, eglx.lang.EAny expected, eglx.lang.EAny actual, Boolean isEqual) {
@@ -320,7 +310,7 @@ public class LogResult extends ExecutableBase {
 			sign.ezeCopy("-");
 			afloat = (afloat * (double)(short)((short) -1));
 		}
-		if ((afloat != (double)(short)((short) 0))) {
+		if ((EFloat.notEquals(afloat, (double)(short)((short) 0)))) {
 			while ((afloat < (double)(short)((short) 1))) {
 				afloat = (afloat * (double)(short)((short) 10));
 				mantissa.ezeCopy((mantissa.ezeUnbox() - (int)(short)((short) 1)));

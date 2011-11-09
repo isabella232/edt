@@ -1,31 +1,21 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
+import eglx.lang.AnyException;
 import org.eclipse.edt.eunit.runtime.ServiceBindingType;
 import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
 import eglx.services.ServiceInvocationException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import eglx.lang.SysLib;
 import org.eclipse.edt.eunit.runtime.MultiStatus;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
@@ -151,7 +141,7 @@ public class TestListMgr extends ExecutableBase {
 			testId += testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, testMethodNames));
 		}
 		else {
-			if ((testIndex == (testMethodNamesSize + (int)(short)((short) 1)))) {
+			if ((EInt.equals(testIndex, (testMethodNamesSize + (int)(short)((short) 1))))) {
 				testId += "endTest";
 			}
 			else {
