@@ -120,6 +120,7 @@ public class WidgetDropAdapter extends ViewerDropAdapter {
 		}
 		WidgetPart targetWidget = (WidgetPart) target;
 		
+		//can not dnd a widget onto a DojoTree and DojoTreeNode
 		if (targetWidget.getTypeName().equalsIgnoreCase("DojoTree") || targetWidget.getTypeName().equalsIgnoreCase("DojoTreeNode")){
 			return false;
 		}
@@ -127,6 +128,16 @@ public class WidgetDropAdapter extends ViewerDropAdapter {
 		if ( transfer.isSupportedType(type) || TemplateTransfer.getInstance().isSupportedType( type ) ) {
 			int location = getCurrentLocation();
 			if(designPage.getEditor().getEditorProvider().isRUIWidget() && designPage.getWidgetManager().getWidgetRoot().equals(targetWidget.getParent()) && (LOCATION_BEFORE == location || LOCATION_AFTER == location)){
+				return false;
+			}
+			
+			//can not dnd a widget onto DojoBorderContainer, can only dnd a widget into DojoContentPane which is in DojoBorderContainer
+			if (targetWidget.getTypeName().equalsIgnoreCase("DojoContentPane") && targetWidget.getParent() != null 
+					&& (targetWidget.getParent().getTypeName().equalsIgnoreCase("DojoBorderContainer") 
+							|| targetWidget.getParent().getTypeName().equalsIgnoreCase("DojoAccordionContainer") 
+							|| targetWidget.getParent().getTypeName().equalsIgnoreCase("DojoStackContainer")
+							|| targetWidget.getParent().getTypeName().equalsIgnoreCase("DojoTabContainer"))
+					&& (LOCATION_BEFORE == location || LOCATION_AFTER == location)){
 				return false;
 			}
 			

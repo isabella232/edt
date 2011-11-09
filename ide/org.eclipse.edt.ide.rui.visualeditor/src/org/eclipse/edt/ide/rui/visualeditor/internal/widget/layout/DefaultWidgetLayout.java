@@ -46,6 +46,11 @@ public class DefaultWidgetLayout extends AbstractWidgetLayout {
 		if("DojoTreeNode".equalsIgnoreCase(widgetChild.getTypeName())){
 			return;
 		}
+		
+		// can not dnd a widget beside a DojoContentPane
+		if("DojoContentPane".equalsIgnoreCase(widgetChild.getTypeName())){
+			return;
+		}
 
 		if( widgetChild != _widgetDragging ) {
 			Rectangle rectChild = widgetChild.getBounds();			
