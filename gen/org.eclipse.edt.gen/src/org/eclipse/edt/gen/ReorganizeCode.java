@@ -169,7 +169,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
 			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::=")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
-			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx, object)) {
 				// create the qualified function invocation for appendAll or appendElement
 				QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
@@ -457,7 +457,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		if (object.getLHS().getType() != null && object.getLHS().getType().getClassifier() != null
 			&& object.getLHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
-			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx)) {
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getLHS().getType(), ctx, object)) {
 				// create a temporary variable and do a new on the type
 				String temporary = ctx.nextTempName();
 				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
@@ -648,7 +648,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		} else if (object.getRHS().getType() != null && object.getRHS().getType().getClassifier() != null
 			&& object.getRHS().getType().getClassifier().equals(TypeUtils.Type_LIST) && object.getOperator() != null && object.getOperator().equals("::")) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
-			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getRHS().getType(), ctx)) {
+			if ((Boolean) ctx.invoke(Constants.isListReorganizationWanted, object.getRHS().getType(), ctx, object)) {
 				// create a temporary variable and do a new on the type
 				String temporary = ctx.nextTempName();
 				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
