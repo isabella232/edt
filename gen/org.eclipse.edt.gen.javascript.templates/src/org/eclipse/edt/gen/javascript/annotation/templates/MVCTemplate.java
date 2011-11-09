@@ -996,9 +996,6 @@ public class MVCTemplate extends JavaScriptTemplate {
 				if (value instanceof EnumerationEntry) {
 					signkind = ((EnumerationEntry)value).getId();
 				}
-				else if (value instanceof Enum) {
-					signkind = ((Enum)value).name();
-				}
 			}
 			PartName pn = IrFactory.INSTANCE.createPartName();
 			pn.setPackageName("eglx.ui");

@@ -33,12 +33,6 @@ public class XMLValueTemplate extends JavaScriptTemplate {
 			out.print(".");
 			ctx.invoke(genName, kind, ctx, out);
 		}
-		else if(kind instanceof Enum){
-			out.print("egl.");
-			out.print(((Enum<?>)kind).getClass().getName());
-			out.print(".");
-			out.print(((Enum<?>)kind).name());
-		}
 	}
 
 }
