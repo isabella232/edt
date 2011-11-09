@@ -76,7 +76,7 @@ public class Bootstrap {
 		initializeClasses();
 	}
 	
-	void initializeClasses() {
+	synchronized void initializeClasses() {
 		if (!loaded) {
 			System.out.println("Bootstrap initialize...");
 			getEClassClass();
