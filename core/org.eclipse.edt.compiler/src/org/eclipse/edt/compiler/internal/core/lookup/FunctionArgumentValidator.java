@@ -350,9 +350,6 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		else if(parameterBinding.isOutput()) {
 			argMatchesParm = checkArgForOutParameter(argExpr, argType, parameterBinding, parameterType, numArgs);
 		}
-		else if(isLooseType(parameterType)) {
-			argMatchesParm = checkArgForLooseTypeParameter(argExpr, argType, parameterBinding, parameterType);
-		}
 		else {
 			argMatchesParm = checkArgForInOutParameter(argExpr, argType, parameterBinding, parameterType, numArgs);
 		}
@@ -438,7 +435,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 
 	private boolean checkSubstringNotUsedAsArgument(FunctionParameterBinding parm, Expression argExpr) {
 		
-		if (Binding.isValidBinding(parm) && parm.isInputOutput() && argExpr instanceof SubstringAccess) {
+		if (Binding.isValidBinding(parm) && !parm.isInput() && argExpr instanceof SubstringAccess) {
 			problemRequestor.acceptProblem(argExpr,
 					IProblemRequestor.SUBSTRING_IMMUTABLE,
 					new String[] {});
@@ -452,68 +449,11 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		public void endVisit(ParenthesizedExpression parenthesizedExpression) {
 			parenthesizedExpression.getExpression().accept(this);
 		}
-		public void endVisit(AsExpression asExpression) {
-			asExpression.getExpression().accept(this);
-		}
+
 		public void endVisitName(Name name) {}
 		public void endVisit(ArrayAccess arrayAccess) {}
 		public void endVisit(SubstringAccess substringAccess) {}
 		public void endVisit(FieldAccess fieldAccess) {}
-		public void endVisit(NewExpression newExpression) {}
-		public void endVisit(StringLiteral literal) {}
-		public void endVisit(CharLiteral stringLiteral) {}
-		public void endVisit(DBCharLiteral stringLiteral) {}
-		public void endVisit(MBCharLiteral stringLiteral) {}
-		public void endVisit(HexLiteral stringLiteral) {}		
-		public void endVisit(IntegerLiteral literal) {}
-		public void endVisit(FloatLiteral literal) {}
-		public void endVisit(DecimalLiteral literal) {}
-		public void endVisit(ArrayLiteral literal) {}
-		public void endVisit(NullLiteral nilLiteral) {}
-		public void endVisit(BooleanLiteral booleanLiteral) {}
-		public void endVisit(BinaryExpression binaryExpression) {
-			if(binaryExpression.getOperator() != BinaryExpression.Operator.PLUS) {
-				endVisitExpression(binaryExpression);
-			}
-			else {
-				final boolean[] isStringLiteralConcatenation = new boolean[] {true};
-				binaryExpression.getFirstExpression().accept(new AbstractASTExpressionVisitor() {
-					public void endVisit(StringLiteral stringLiteral) {}
-					public void endVisit(CharLiteral stringLiteral) {}
-					public void endVisit(DBCharLiteral stringLiteral) {}
-					public void endVisit(MBCharLiteral stringLiteral) {}
-					public void endVisit(HexLiteral stringLiteral) {}
-					public void endVisitExpression(Expression expression) {
-						isStringLiteralConcatenation[0] = false;
-					}
-				});
-				if(isStringLiteralConcatenation[0]) {
-					binaryExpression.getSecondExpression().accept(new AbstractASTExpressionVisitor() {
-						public void endVisit(StringLiteral stringLiteral) {}
-						public void endVisit(CharLiteral stringLiteral) {}
-						public void endVisit(DBCharLiteral stringLiteral) {}
-						public void endVisit(MBCharLiteral stringLiteral) {}
-						public void endVisit(HexLiteral stringLiteral) {}
-						public void endVisitExpression(Expression expression) {
-							isStringLiteralConcatenation[0] = false;
-						}
-					});
-				}
-				if(!isStringLiteralConcatenation[0]) {
-					endVisitExpression(binaryExpression);
-				}
-			}
-		}
-		public void endVisit(UnaryExpression unaryExpression) {
-			UnaryExpression.Operator op = unaryExpression.getOperator();
-			if(op == UnaryExpression.Operator.PLUS ||
-			   op == UnaryExpression.Operator.MINUS) {
-				unaryExpression.getExpression().accept(this);
-			}
-			else {
-				endVisitExpression(unaryExpression);
-			}
-		}
 		public void endVisitExpression(Expression expression) {
 			handleExpressionThatIsNotNameOrLiteral(expression);
 		}
@@ -561,7 +501,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		
 		if(foundError[0]) return false;
 		
-		if(expressionIsLiteralOrName[0] && parmBinding.isOutput()) {
+		if(expressionIsLiteralOrName[0] && !parmBinding.isInput()) {
 			if(!checkArgNotConstantOrLiteral(argExpr, IProblemRequestor.FUNCTION_ARG_LITERAL_NOT_VALID_WITH_OUT_PARAMETER)) {
 				return false;
 			}
@@ -691,10 +631,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 			public void endVisitName(Name name) {}
 			public void endVisit(ArrayAccess arrayAccess) {}
 			public void endVisit(FieldAccess fieldAccess) {}
-			public void endVisit(AsExpression asExpression) {
-				asExpression.getExpression().accept(this);
-			}
-			
+			public void endVisit(SubstringAccess substringAccess) {}
 			public void endVisitExpression(Expression expression) {
 				problemRequestor.acceptProblem(
 					expression,
@@ -1143,144 +1080,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     private boolean checkArgForSpecialTypeParameter(Expression argExpr, ITypeBinding argType, ITypeBinding parmType, int argNum) {
     	return ((ISpecialSystemFunctionParameterChecker) specialSystemFunctionParameterCheckers.get(parmType)).checkArgument(argExpr, argType, fInvocationNode, functionBinding, problemRequestor, argNum);
     }
-    
-    private boolean checkArgForLooseTypeParameter(Expression argExpr, ITypeBinding argType, final FunctionParameterBinding funcParmBinding, ITypeBinding parmType) {
-    	IDataBinding argDBinding = argExpr.resolveDataBinding();
-    	if(argDBinding != null) {
-    		if(!new RValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr).validate()) {
-    			return false;
-    		}    		
-    		if(!new LValueValidator(problemRequestor, compilerOptions, argDBinding, argExpr, new LValueValidator.DefaultLValueValidationRules() {
-     			public boolean canAssignToConstantVariables() {
-     				return true;
-     			}
-     			public boolean canAssignToFunctionParmConst() {
-    				return funcParmBinding.isConst();
-     			}
-    		}).validate()) {
-    			return false;
-    		}
-    	}
-    	
-    	if(argType.isDynamic()) {
-    		return true;
-    	}
-    	Primitive argPrim = ITypeBinding.PRIMITIVE_TYPE_BINDING == argType.getKind() ?
-			((PrimitiveTypeBinding) argType).getPrimitive() :
-			null;
-			
-		boolean isValid = false;
-		if(argPrim == null) {
-			isValid = true;
-		}
-		else {			
-	    	if(PrimitiveTypeBinding.getInstance(Primitive.NUMBER) == parmType.getBaseType()) {
-	    		isValid = Primitive.isNumericType(argPrim) || Primitive.HEX == argPrim;
-	    		
-	    		if(!isValid) {
-	    			problemRequestor.acceptProblem(
-    					argExpr,
-    					IProblemRequestor.FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_NUMERIC_PARM,
-    					new String[] {
-    						argExpr.getCanonicalString(),
-    						funcParmBinding.getCaseSensitiveName(),
-    						canonicalFunctionName
-    					});
-    				return false;
-	    		}
-	    	}
-	    	else if(PrimitiveTypeBinding.getInstance(Primitive.DECIMAL) == parmType.getBaseType()) {
-    			isValid = argPrim == Primitive.DECIMAL ||
-    		    		  argPrim == Primitive.NUMBER;
-	    	}
-	    	else if(PrimitiveTypeBinding.getInstance(Primitive.INTERVAL) == parmType.getBaseType()) {
-    			isValid = argPrim == Primitive.INTERVAL ||
-    		    		  argPrim == Primitive.SECONDSPAN_INTERVAL ||
-    		    		  argPrim == Primitive.MONTHSPAN_INTERVAL;
-	    	}
-	    	else {
-	    		Primitive parmPrim = ((PrimitiveTypeBinding) parmType).getPrimitive();
-	    		
-	    		if(functionBinding.isSystemFunction() && PrimitiveTypeBinding.getInstance(Primitive.CHAR) == parmType) {
-	    			if(Primitive.STRING == argPrim) {
-	    				//String args can be passed to system function char(0) parameters
-	    				return true;
-	    			}    			   
-	    		}
-	    		
-	    		final boolean[] isStringLiteral = new boolean[] {false};
-	    		if(Primitive.isStringType(argPrim)) {
-	    			argExpr.accept(new DefaultASTVisitor() {
-						public boolean visit(ParenthesizedExpression parenthesizedExpression) {
-							return true;
-						}
-						public boolean visit(StringLiteral stringLiteral) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-						public boolean visit(HexLiteral stringLiteral) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-						public boolean visit(CharLiteral stringLiteral) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-						public boolean visit(DBCharLiteral stringLiteral) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-						public boolean visit(MBCharLiteral stringLiteral) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-						public boolean visit(BinaryExpression binaryExpression) {
-							isStringLiteral[0] = true;
-							return false;
-						}
-	    			});
-	    		}
-	    		if(isStringLiteral[0]) {
-	    			return true;
-	    		}
-	    		
-	    		if(parmPrim == Primitive.HEX && functionBinding.isSystemFunction()) {
-	    			//All value type values are reference compatible with loose HEX type in the context of system function parameters
-	    			isValid = !argType.isReference();
-	    		}
-	    		else {
-	    			isValid = argPrim == parmPrim; 
-	    		}
-	    	}
-    	}
-    	
-    	if(isValid && argType != null) {
-    		if(NilBinding.INSTANCE == argType) {
-    			isValid = parmType.isNullable() && isTypeCompatibleWithNullLiteral(parmType);
-    		}
-    		else if(argType.isNullable()) {
-    			isValid = parmType.isNullable();
-    		}
-    		else {
-				isValid = !parmType.isNullable();
-			}
-		}
-    	
-    	if(!isValid) {
-			problemRequestor.acceptProblem(
-				argExpr,
-				IProblemRequestor.FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_PARM,
-				new String[] {
-					argExpr.getCanonicalString(),
-					funcParmBinding.getCaseSensitiveName(),
-					canonicalFunctionName,
-					StatementValidator.getShortTypeString(parmType)
-				});
-			return false;
-		}    
-    	return true;
-    }
-    
+        
     private boolean checkArgForInOrOutParameter(Expression argExpr, ITypeBinding argType, FunctionParameterBinding funcParmBinding, ITypeBinding parmType, int argNum) {
     	if(isIORecord(parmType) && isRecord(argType)) {
     		return checkArgForIORecordParameter(argExpr, argType, funcParmBinding, parmType);
@@ -1352,7 +1152,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	validateNotThis(argExpr);
     	
     	//Cannot pass a value type to an reference type OUT parm
-   		if (Binding.isValidBinding(argType) && Binding.isValidBinding(parmType) && !argType.isReference() && parmType.isReference()) {
+   		if (!isRefCompatForOutParm(argType, parmType)) {
     		problemRequestor.acceptProblem(
 	    			argExpr,
 	    			IProblemRequestor.FUNCTION_ARG_NOT_REFERENCE_COMPATIBLE_WITH_PARM,
@@ -1366,6 +1166,13 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		return false;
    		}
     	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
+    }
+    
+    private boolean isRefCompatForOutParm(ITypeBinding argType, ITypeBinding parmType) {
+    	if (Binding.isValidBinding(argType) && Binding.isValidBinding(parmType)) {
+    		return argType.isReference() == parmType.isReference();
+    	}
+    	return true;
     }
     
     private static boolean isIORecord(ITypeBinding tBinding) {
@@ -1461,26 +1268,8 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		return true;
     	}
     	
-    	boolean argCompatible = false;
-    	if(isLiteral(argExpr)) {
-    		argCompatible = TypeCompatibilityUtil.isMoveCompatible(parmType, argType, argExpr, compilerOptions);
-    		
-    		if(argCompatible && PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == argType) {
-    			argCompatible = PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == parmType;
-    		}
-    		else if(argCompatible && PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == parmType) {
-    			argCompatible = PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == argType;
-    		}
-    		//value type cannot be passed to reference type
-    		if (argCompatible && Binding.isValidBinding(argType) && Binding.isValidBinding(parmType) && !argType.isReference() && parmType.isReference()) {
-    			argCompatible = false;
-    		}
-    	}
-    	else {
-    		argCompatible = TypeCompatibilityUtil.isReferenceCompatible(argType, parmType, compilerOptions) ||
-    		                argType.isDynamic() ||
+    	boolean argCompatible = TypeCompatibilityUtil.isReferenceCompatible(argType, parmType, compilerOptions) ||
     		                TypeCompatibilityUtil.areCompatibleExceptions(parmType, argType, compilerOptions);
-    	}
     	
     	if(!argCompatible) {
     		if(argType == SystemFunctionParameterSpecialTypeBinding.ANYEGLORASJAVA) {

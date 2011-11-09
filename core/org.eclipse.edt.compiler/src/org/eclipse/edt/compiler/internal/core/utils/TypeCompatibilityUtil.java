@@ -772,10 +772,11 @@ public class TypeCompatibilityUtil {
 			return true;
 		}
 		
-		//value type cannot be passed to a reference type
-		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && !sourceType.isReference() && targetType.isReference()) {
+		//value types are not reference compatible with reference types and vice versa
+		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && sourceType.isReference() != targetType.isReference()) {
 			return false;
 		}
+		
 		
 		if( targetType == null || sourceType == null ||
 			IBinding.NOT_FOUND_BINDING == sourceType || IBinding.NOT_FOUND_BINDING == targetType) {
