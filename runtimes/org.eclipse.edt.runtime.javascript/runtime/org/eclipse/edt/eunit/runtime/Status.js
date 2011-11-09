@@ -15,7 +15,13 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "Status", "egl.jsrt", "Record",
 		}
 		,
 		"eze$$setInitial": function() {
-			this.eze$$setEmpty();
+			try { egl.enter("<init>",this,arguments);
+				this.eze$$setEmpty();
+				if (!egl.debugg) egl.leave();
+			} finally {
+				if (!egl.debugg){
+				} else { egl.leave(); }
+			}
 		}
 		,
 		"eze$$clone": function() {

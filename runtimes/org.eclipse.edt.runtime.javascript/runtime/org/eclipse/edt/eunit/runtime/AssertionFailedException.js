@@ -11,7 +11,13 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', "AssertionFailedException", "eg
 		}
 		,
 		"eze$$setInitial": function() {
-			this.eze$$setEmpty();
+			try { egl.enter("<init>",this,arguments);
+				this.eze$$setEmpty();
+				if (!egl.debugg) egl.leave();
+			} finally {
+				if (!egl.debugg){
+				} else { egl.leave(); }
+			}
 		}
 		,
 		"eze$$clone": function() {

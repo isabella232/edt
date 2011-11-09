@@ -3,9 +3,12 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/MultiStatus.egl',
 	'eze$$runtimePropertiesFile': 'org.eclipse.edt.eunit.runtime.MultiStatus',
 		"constructor": function() {
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","Status" );
+			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			new egl.eglx.rbd.StrLib();
-			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			this.eze$$setInitial();
 		}
 		,
@@ -21,7 +24,13 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 		}
 		,
 		"eze$$setInitial": function() {
-			this.eze$$setEmpty();
+			try { egl.enter("<init>",this,arguments);
+				this.eze$$setEmpty();
+				if (!egl.debugg) egl.leave();
+			} finally {
+				if (!egl.debugg){
+				} else { egl.leave(); }
+			}
 		}
 		,
 		"eze$$clone": function() {
@@ -87,37 +96,93 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 		}
 		,
 		"addStatus": function(testId) {
-			var s = new egl.org.eclipse.edt.eunit.runtime.Status();
-			s = egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].getStatus();
-			var msg = "";
-			msg = ((((testId) + ": ")) + s.reason);
-			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].logStdOut(msg);
-			this.testCnt = ((this.testCnt + 1));
-			if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SPASSED))) {
-				this.passedCnt = ((this.passedCnt + 1));
-			}
-			else {
-				if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SFAILED))) {
-					this.failedCnt = ((this.failedCnt + 1));
-				}
-				else {
-					if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SERROR))) {
-						this.errCnt = ((this.errCnt + 1));
+			try { egl.enter("addStatus",this,arguments);
+				egl.addLocalFunctionVariable("testId", testId, "eglx.lang.EString", "testId");
+				var s = new egl.org.eclipse.edt.eunit.runtime.Status();
+				egl.addLocalFunctionVariable("s", s, "org.eclipse.edt.eunit.runtime.Status", "s");
+				egl.atLine(this.eze$$fileName,22,436,21, this);
+				s = egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].getStatus();
+				egl.setLocalFunctionVariable("s", s, "org.eclipse.edt.eunit.runtime.Status");
+				var msg = "";
+				egl.addLocalFunctionVariable("msg", msg, "eglx.lang.EString", "msg");
+				egl.atLine(this.eze$$fileName,23,474,24, this);
+				msg = ((((testId) + ": ")) + s.reason);
+				egl.setLocalFunctionVariable("msg", msg, "eglx.lang.EString");
+				egl.atLine(this.eze$$fileName,24,502,25, this);
+				egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].logStdOut(msg);
+				egl.atLine(this.eze$$fileName,26,535,13, this);
+				this.testCnt = ((this.testCnt + 1));
+				{
+					egl.atLine(this.eze$$fileName,28,554,255, this);
+					EzeLabel_eze_CaseLabel_0: egl.atLine(this.eze$$fileName,28,554,255, this);
+					if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SPASSED))) {
+						try{egl.enterBlock();
+							egl.atLine(this.eze$$fileName,30,602,15, this);
+							this.passedCnt = ((this.passedCnt + 1));
+						}finally{egl.exitBlock();}
 					}
 					else {
-						if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SNOT_RUN))) {
-							this.notRunCnt = ((this.notRunCnt + 1));
-						}
-						else {
-							this.badCnt = ((this.badCnt + 1));
-						}
+						try{egl.enterBlock();
+							egl.atLine(this.eze$$fileName,31,621,47, this);
+							if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SFAILED))) {
+								try{egl.enterBlock();
+									egl.atLine(this.eze$$fileName,32,653,15, this);
+									this.failedCnt = ((this.failedCnt + 1));
+								}finally{egl.exitBlock();}
+							}
+							else {
+								try{egl.enterBlock();
+									egl.atLine(this.eze$$fileName,33,672,43, this);
+									if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SERROR))) {
+										try{egl.enterBlock();
+											egl.atLine(this.eze$$fileName,34,703,12, this);
+											this.errCnt = ((this.errCnt + 1));
+										}finally{egl.exitBlock();}
+									}
+									else {
+										try{egl.enterBlock();
+											egl.atLine(this.eze$$fileName,35,719,48, this);
+											if (((s.code == egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SNOT_RUN))) {
+												try{egl.enterBlock();
+													egl.atLine(this.eze$$fileName,36,752,15, this);
+													this.notRunCnt = ((this.notRunCnt + 1));
+												}finally{egl.exitBlock();}
+											}
+											else {
+												try{egl.enterBlock();
+													egl.atLine(this.eze$$fileName,38,787,12, this);
+													this.badCnt = ((this.badCnt + 1));
+												}finally{egl.exitBlock();}
+											}
+										}finally{egl.exitBlock();}
+									}
+								}finally{egl.exitBlock();}
+							}
+						}finally{egl.exitBlock();}
 					}
 				}
-			}
-			var eze$Temp5 = false;
-			eze$Temp5 = ((((s.code != egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SPASSED)) && ((egl.eglx.rbd.StrLib['$inst'].characterLen(this.firstFailedTestName) == 0))));
-			if (eze$Temp5) {
-				this.firstFailedTestName = testId;
+				var eze_compound_1 = false;
+				egl.atLine(this.eze$$fileName,41,818,79, this);
+				eze_compound_1 = ((s.code != egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).SPASSED));
+				egl.atLine(this.eze$$fileName,41,818,79, this);
+				if (eze_compound_1) {
+					try{egl.enterBlock();
+						egl.atLine(this.eze$$fileName,41,818,79, this);
+						eze_compound_1 = ((egl.eglx.rbd.StrLib['$inst'].characterLen(this.firstFailedTestName) == 0));
+					}finally{egl.exitBlock();}
+				}
+				egl.atLine(this.eze$$fileName,41,815,122, this);
+				if (eze_compound_1) {
+					try{egl.enterBlock();
+						egl.atLine(this.eze$$fileName,42,902,29, this);
+						this.firstFailedTestName = testId;
+					}finally{egl.exitBlock();}
+				}
+				egl.atLine(this.eze$$fileName,20,359,585, this);
+				if (!egl.debugg) egl.leave();
+			} finally {
+				if (!egl.debugg){
+				} else { egl.leave(); }
 			}
 		}
 		,
@@ -132,8 +197,8 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 		"eze$$getChildVariables": function() {
 			var eze$$parent = this;
 			return [
-			{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
 			{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
+			{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
 			{name: "StrLib", value : egl.eglx.rbd.StrLib['$inst'], type : "eglx.rbd.StrLib", jsName : "egl.eglx.rbd.StrLib['$inst']"},
 			{name: "testCnt", value : eze$$parent.testCnt, type : "eglx.lang.EInt", jsName : "testCnt"},
 			{name: "expectedCnt", value : eze$$parent.expectedCnt, type : "eglx.lang.EInt", jsName : "expectedCnt"},

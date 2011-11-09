@@ -1,3 +1,5 @@
+if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.ConstantsLib');
+else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.ConstantsLib'];
 egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 {
 	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/ConstantsLib.egl',
@@ -6,18 +8,25 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 			if(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']) return egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']=this;
 			this.NEWLINE = "";
+			egl.atLine(this.eze$$fileName,7,138,6, this);
 			this.NEWLINE = "\r\n";
 			this.EXIT_PREFIX = "";
+			egl.atLine(this.eze$$fileName,8,175,10, this);
 			this.EXIT_PREFIX = "STATUS: ";
 			this.SPASSED = 0;
+			egl.atLine(this.eze$$fileName,10,212,1, this);
 			this.SPASSED = 0;
 			this.SFAILED = 0;
+			egl.atLine(this.eze$$fileName,11,237,1, this);
 			this.SFAILED = 1;
 			this.SERROR = 0;
+			egl.atLine(this.eze$$fileName,12,261,1, this);
 			this.SERROR = 2;
 			this.SNOT_RUN = 0;
+			egl.atLine(this.eze$$fileName,13,287,1, this);
 			this.SNOT_RUN = 3;
 			this.SBAD = 0;
+			egl.atLine(this.eze$$fileName,14,309,1, this);
 			this.SBAD = 4;
 			this.eze$$setInitial();
 		}
@@ -26,7 +35,13 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 		}
 		,
 		"eze$$setInitial": function() {
-			this.eze$$setEmpty();
+			try { egl.enter("<init>",this,arguments);
+				this.eze$$setEmpty();
+				if (!egl.debugg) egl.leave();
+			} finally {
+				if (!egl.debugg){
+				} else { egl.leave(); }
+			}
 		}
 		,
 		"eze$$getAnnotations": function() {
