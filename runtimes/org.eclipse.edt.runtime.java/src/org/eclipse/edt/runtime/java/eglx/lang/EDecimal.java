@@ -432,7 +432,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 			// }
 			// else
 			// {
-			result = value.setScale(scale, ROUND_BD);
+			result = value.setScale(scale, TRUNCATE_BD);
 			// }
 		}
 		if (ignoreOverflow)
@@ -520,7 +520,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static BigDecimal divide(BigDecimal op1, BigDecimal op2) {
-		return op1.divide(op2, BIGDECIMAL_RESULT_SCALE, ROUND_BD);
+		return op1.divide(op2, BIGDECIMAL_RESULT_SCALE, TRUNCATE_BD);
 	}
 
 	public static BigDecimal multiply(BigDecimal op1, BigDecimal op2) {
