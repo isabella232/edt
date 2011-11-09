@@ -132,9 +132,9 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 
 			handleSelectedTemplate();
 
-			String templateID = ((ITemplate) o).getCodeTemplateId();
+			String templateID = ((ITemplate) o).getCodeTemplateId();//&& validatePage(true)
 			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
-					|| (templateID != null && validatePage(true));
+					|| (templateID != null );
 			setPageComplete(b);
 			
 		} else {
@@ -165,7 +165,8 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 
 		if (visible) {
 			validateTemplatePage();
-			templateViewer.getTable().setFocus();
+			/**Make Name field the focus since we combine the two page.*/
+			//templateViewer.getTable().setFocus();
 		}
 	}
 	
