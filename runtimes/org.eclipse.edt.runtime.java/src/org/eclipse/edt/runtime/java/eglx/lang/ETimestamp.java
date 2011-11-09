@@ -299,6 +299,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (original == null)
 			return null;
 		Calendar cal = (Calendar) original.clone();
+		cal.setLenient(true);
 		Calendar result = DateTimeUtil.getBaseCalendar();
 		// Get values for the full set of fields. Fields that we need will be
 		// set from the calendar. The others will be set to reasonable defaults.

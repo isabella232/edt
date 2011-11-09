@@ -208,6 +208,7 @@ public class EString extends AnyBoxedObject<String> {
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
 			try {
+				cal.setLenient(true);
 				return formatter.format(cal.getTime());
 			}
 			catch (IllegalArgumentException iax) {
@@ -236,6 +237,7 @@ public class EString extends AnyBoxedObject<String> {
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
 			try {
+				cal.setLenient(true);
 				return formatter.format(cal.getTime());
 			}
 			catch (IllegalArgumentException iax) {
@@ -318,10 +320,7 @@ public class EString extends AnyBoxedObject<String> {
 				formatter.setMicrosecond(micros);
 			}
 			try {
-				if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE)
-					formatter.setCentury(cal.get(Calendar.YEAR) / 100 + 1);
-				else
-					formatter.setCentury(1);
+				cal.setLenient(true);
 				return formatter.format(cal.getTime());
 			}
 			catch (IllegalArgumentException iax) {
