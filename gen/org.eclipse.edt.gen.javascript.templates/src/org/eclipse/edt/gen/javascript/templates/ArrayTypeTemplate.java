@@ -35,7 +35,7 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		return false;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
 	}
 	
-	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression arg) {
 		// types can override this to cause list reorganization to be done
 		if((Boolean) ctx.get(Constants.EXPR_WIDGET_QUALIFIER)){
 			return false;

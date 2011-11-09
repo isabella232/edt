@@ -56,7 +56,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			return false;
 	}
 
-	public Boolean isListReorganizationWanted(Type type, Context ctx) {
+	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression arg) {
 		// types can override this to cause list reorganization to be done
 		return true;  //TODO JS gen will require changes before this can be used
 	}
