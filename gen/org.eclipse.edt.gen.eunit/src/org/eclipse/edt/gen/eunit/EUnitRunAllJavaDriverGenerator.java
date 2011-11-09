@@ -17,7 +17,7 @@ public class EUnitRunAllJavaDriverGenerator extends EUnitRunAllDriverGenerator {
 		
 		genImports();
 		
-		out.println("program " + RunAllTest + fDriverPartNameAppend + " type BasicProgram {}");
+		out.println("program " + RunAllTest + fDriverPartNameAppend);
 		out.pushIndent();
 		out.println("function main()");
 		out.pushIndent();		
