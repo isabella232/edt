@@ -58,7 +58,7 @@ Library LogResult
 	/**
 	*	convinent method to set status
 	*/
-	function passed(str String)
+	function passed(str String in)
 		s.code = ConstantsLib.SPASSED;
 		if(str == null || str == "")
 			str = "OK";
@@ -66,20 +66,20 @@ Library LogResult
 		s.reason = str;
 	end
 	
-	function failed(str String)
+	function failed(str String in)
 		s.code = ConstantsLib.SFAILED;
 		str = "FAILED - " + str;
 		s.reason = str;
 	end
 	
 	//usually used when exception occurs  
-	function error(str String)
+	function error(str String in)
 		s.code = ConstantsLib.SERROR;
 		str = "ERROR - " + str;
 		s.reason = str;
 	end
 	
-	function skipped(str String)
+	function skipped(str String in)
 		s.code = ConstantsLib.SNOT_RUN;
 		str = "SKIPPED - " + str;
 		s.reason = str;
