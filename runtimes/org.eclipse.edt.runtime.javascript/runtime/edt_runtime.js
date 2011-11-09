@@ -280,8 +280,8 @@ egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	else
 		return egl.convertAnyToDecimal(x, 0, decimals, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
-egl.eglx.lang.EDecimal.asNumber= function (x) {
-	return egl.boxAny(x);
+egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
+	return egl.boxAny(x,sig);
 };
 
 
