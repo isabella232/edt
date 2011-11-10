@@ -83,7 +83,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	 * @param ctx
 	 * @param out
 	 */
-	public void genGetSingleRowFromResultSet(List<Expression> targets, String resultSet, Context ctx, TabbedWriter out) {
+	protected void genGetSingleRowFromResultSet(List<Expression> targets, String resultSet, Context ctx, TabbedWriter out) {
 		int i = 1;
 		for (Expression target : targets) {
 			genSetTargetFromResultSet(target, resultSet, i, ctx, out);
@@ -91,7 +91,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 	
-	public void genGetSingleRowFromResultSet(Expression target, String resultSet, Context ctx, TabbedWriter out) {
+	protected void genGetSingleRowFromResultSet(Expression target, String resultSet, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)target.getType().getClassifier();
 
 		if (SQL.isMappedSQLType(type)) { 
@@ -110,14 +110,17 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			}
 			int idx = 1;
 			for (Field field : type.getFields()) {
-				if (!field.isStatic() && field.getAccessKind()!= AccessKind.ACC_PRIVATE && SQL.isReadable(field)) {
+				if (!field.isStatic() && 
+						field.getAccessKind()!= AccessKind.ACC_PRIVATE && 
+						SQL.isReadable(field) &&
+						SQL.isMappedSQLType((EGLClass)field.getType().getClassifier())) {
 					genSetTargetFromResultSet(target, field, resultSet, idx++, ctx, out);
 				}
 			}
 		}
 	}
 	
-	public void genGetSingleRowFromResultSet(EGLClass type, String targetVar, String resultSet, Context ctx, TabbedWriter out) {
+	protected void genGetSingleRowFromResultSet(EGLClass type, String targetVar, String resultSet, Context ctx, TabbedWriter out) {
 		DummyExpression dummy = DummyExpressionDynamicImpl.newInstance();
 		dummy.setExpr(targetVar);
 		dummy.setType(type);
@@ -126,13 +129,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 
 
 	
-	public void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
+	private void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
 		TabbedWriter newOut = new TabbedWriter(new StringWriter());
 		genGetColumnValueByIndex(target.getType(), var_resultSet, columnIndex, ctx, newOut);
 		genSetTargetFromResultSet(target, newOut.getCurrentLine(), var_resultSet, ctx, out);
 	}
 	
-	public void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
+	private void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
 		TabbedWriter newOut = new TabbedWriter(new StringWriter());
 		ctx.invoke(genName, field, ctx, newOut);
 		MemberAccess expr = ctx.getFactory().createMemberAccess();
@@ -352,7 +355,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public Boolean isNullable(SqlActionStatement stmt, Context ctx, Expression expr) {
 		return Boolean.FALSE;
 	}
-	public void genSetColumnValue(SqlActionStatement stmt, Expression expr, String stmt_or_resultSet_var, int columnIndex, Context ctx, TabbedWriter out) {
+	protected void genSetColumnValue(SqlActionStatement stmt, Expression expr, String stmt_or_resultSet_var, int columnIndex, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)expr.getType().getClassifier();
 		Boolean isNullable = (Boolean)ctx.invoke("isNullable", stmt, ctx, expr);
 		if(isNullable != null && isNullable){
@@ -383,7 +386,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 	
-	public void genSetColumnValue(Field field, String stmt_or_resultSet_var, String varName, int columnIndex, Context ctx, TabbedWriter out) {
+	protected void genSetColumnValue(Field field, String stmt_or_resultSet_var, String varName, int columnIndex, Context ctx, TabbedWriter out) {
 		EGLClass type = (EGLClass)field.getType().getClassifier();
 		if(field.isNullable()){
 			out.print("if(null == ");

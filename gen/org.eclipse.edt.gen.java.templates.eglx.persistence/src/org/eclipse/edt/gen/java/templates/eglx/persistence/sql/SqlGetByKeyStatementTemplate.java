@@ -48,7 +48,7 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 					// in the default WHERE clause derived by the order of the key fields in the type
 					int i = 1;
 					for (Field f : ((EGLClass)type).getFields()) {
-						if (SQL.isKeyField(f)) {
+						if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 							// TODO need a generalized way to generate the appropriate
 							// accessor without assuming the field value to accessed is public
 							// and is not an EGLProperty or Property field
@@ -103,7 +103,6 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				}
 				out.println(';');
 				genGetSingleRowFromResultSet(targetType, targetVarName, var_resultSet, ctx, out);
-				out.println(";");
 				out.print("ezeList.add(");
 				out.print(targetVarName);
 				out.println(");");
@@ -134,7 +133,6 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 				if(!isResultSet)
 					out.println("if(" + var_resultSet + ".next()) {");
 				genGetSingleRowFromResultSet(stmt.getTarget(), var_resultSet, ctx, out);
-				out.println(";");
 				if(!isResultSet)
 					out.println('}');
 				

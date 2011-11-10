@@ -60,7 +60,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 	private void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
 		int i = 1;
 		for (Field f : type.getFields()) {
-			if (SQL.isInsertable(f)) {
+			if (SQL.isInsertable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 				genSetColumnValue(f, var_statement, varName, i, ctx, out);
 				i++;
 			}

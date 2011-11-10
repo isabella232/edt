@@ -52,7 +52,7 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 			if (!TypeUtils.isDynamicType(targetType)) {
 				int i = 1;
 				for (Field f : targetType.getFields()) {
-					if (SQL.isKeyField(f)){
+					if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())){
 						genSetColumnValue(f, var_stmt, getExprString(stmt.getTargets().get(1), ctx), i, ctx, out);
 						out.println(";");
 						i++;
