@@ -68,14 +68,14 @@ public class StringLib extends ExecutableBase {
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(float number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
+		return NumberFormatter.fmtNum(number, format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**
 	 * Returns a number as a formatted string using the given formatting pattern.
 	 */
 	public static String format(double number, String format) {
-		return NumberFormatter.fmtNum(new BigDecimal(number), format, Runtime.getRunUnit().getLocalizedText());
+		return NumberFormatter.fmtNum(number, format, Runtime.getRunUnit().getLocalizedText());
 	}
 
 	/**

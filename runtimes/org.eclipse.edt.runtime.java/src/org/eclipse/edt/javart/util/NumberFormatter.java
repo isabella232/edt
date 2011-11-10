@@ -43,6 +43,34 @@ public class NumberFormatter
 		return fmtNum( value.toPlainString(), value.signum(), fmtstring, locText );
 	}
 	
+	public static String fmtNum( Float value, String fmtstring, LocalizedText locText )
+	{
+		if ( fmtstring == null || fmtstring.trim().length() == 0 )
+		{
+			return "";
+		}
+		
+		if (value > 0.0)
+			return fmtNum( value.toString(), 1, fmtstring, locText );
+		else if (value < 0.0)
+			return fmtNum( value.toString(), -1, fmtstring, locText );
+		return fmtNum( value.toString(), 0, fmtstring, locText );
+	}
+	
+	public static String fmtNum( Double value, String fmtstring, LocalizedText locText )
+	{
+		if ( fmtstring == null || fmtstring.trim().length() == 0 )
+		{
+			return "";
+		}
+		
+		if (value > 0.0)
+			return fmtNum( value.toString(), 1, fmtstring, locText );
+		else if (value < 0.0)
+			return fmtNum( value.toString(), -1, fmtstring, locText );
+		return fmtNum( value.toString(), 0, fmtstring, locText );
+	}
+	
 	private static String fmtNum( String valueString, int signum, String fmtstring,
 			LocalizedText locText )
 	{
