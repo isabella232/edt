@@ -13,9 +13,15 @@ package org.eclipse.edt.ide.deployment.services.operation;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
@@ -55,12 +61,22 @@ public class GenerateServiceUriMappingFileOperation extends AbstractDeploymentOp
 		List restServices = ddModel.getRestservices();
 		
 		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
+		IEGLProject eglProject = EGLCore.create(context.getSourceProject());
 
 		for ( int i = 0; i < restServices.size(); i ++ ) {
 			Restservice restService = (Restservice)restServices.get( i );
 			String partName = restService.getImplementation();
 			try {
 				Part service = context.findPart( partName );
+				IPath  path = eglProject.findPart( service.getFullyQualifiedName() ).getEGLFile().getPath();
+				IResource serviceFile = ResourcesPlugin.getWorkspace().getRoot().findMember( path );
+				if ( serviceFile != null && serviceFile.findMaxProblemSeverity(null, false, 1) == IMarker.SEVERITY_ERROR ) {
+					messageRequestor.addMessage(DeploymentUtilities.createEGLDeploymentErrorMessage(
+							EGLMessage.EGL_DEPLOYMENT_FAILED,
+							null,
+							new String[] { service.getFullyQualifiedName() }));
+					return;
+				}
 				if ( service instanceof Service ) {
 					ServiceUriMappingGenerator generator = new ServiceUriMappingGenerator( context );
 					generator.visit( (Service)service, restService );
