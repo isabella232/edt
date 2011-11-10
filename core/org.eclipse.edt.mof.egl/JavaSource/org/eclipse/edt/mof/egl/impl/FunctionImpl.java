@@ -57,7 +57,8 @@ public class FunctionImpl extends FunctionMemberImpl implements Function {
 	public List<StructPart> getSuperTypes() {
 		if (superTypes == null) {
 			superTypes = new ArrayList<StructPart>();
-			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_AnyEnumeration));
+			//TODO really need an AnyFunction type
+			superTypes.add((StructPart)IRUtils.getEGLType(MofConversion.Type_AnyDelegate));
 		}
 		return superTypes;
 	}
