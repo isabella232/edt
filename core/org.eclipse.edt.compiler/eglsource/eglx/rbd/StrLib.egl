@@ -102,7 +102,7 @@ library StrLib
 		end
 	end
 	
-	function getNextToken(source string inout, index int inout, delimiters string in) returns (string?)
+	function getNextToken(source string in, index int inout, delimiters string in) returns (string?)
 		charIndex int = index / 2 + 1;
 		token string? = StringLib.getNextToken( source, charIndex, delimiters );
 		if ( token != null )
@@ -115,11 +115,11 @@ library StrLib
 		return( StringLib.getTokenCount( source, delimiters ) );
 	end
 	
-	function indexOf(source string inout, pattern string in) returns (int)
+	function indexOf(source string in, pattern string in) returns (int)
 		return( source.indexOf( pattern ) );
 	end
 	
-	function indexOf(source string inout, pattern string in, startIndex int in) returns (int)
+	function indexOf(source string in, pattern string in, startIndex int in) returns (int)
 		return( source.indexOf( pattern, startIndex ) );
 	end
 	
