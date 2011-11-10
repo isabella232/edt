@@ -827,8 +827,6 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 {
 	var result = new Date;
 	result.setFullYear(0);
-	result.setMonth(0);
-	result.setDate(1);
 	result.setHours(0);
 	result.setMinutes(0);
 	result.setSeconds(0);
@@ -858,6 +856,9 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 			result.setFullYear( yearResult.getFullYear() );
 			break;
 		}
+	}
+	if( yearResult.getFullYear() == result.getFullYear() ){
+		result.setFullYear((new Date).getFullYear());
 	}
 	
 	for(var i = 0; i < numTokens; i++ )
@@ -3869,13 +3870,17 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	//char in the formatting string appears
 	var leadChar = pattern.charAt( 0 );
 	var i = 0;
+	var indexes = [];
 	while ( i < chars.length && leadChar != chars[ i ][ 0 ] ) {
-		(chars[ i ][ 1 ])( dateCopy );
+		indexes.appendElement(i);
 		i++;
 	}
 	//if the pattern has bad characters, just return the original date
 	if ( i >= chars.length ) {
 		return date;
+	}
+	for(var j = indexes.length - 1; j >= 0; j--){
+		(chars[ indexes[j] ][ 1 ])( dateCopy );
 	}
 	
 	//find the last character and set everything after it to zeros
@@ -3946,4 +3951,29 @@ egl.createTypeCastException = function( /*string*/ messageID, /*string or array*
 	args.push( [ "castToName", arguments[ 2 ] || "" ] );
 	args.push( [ "actualTypeName", arguments[ 3 ] || "" ] );
 	return new egl.eglx.lang.TypeCastException( args );
+};
+
+egl.createTypeCastException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	args.push( [ "castToName", arguments[ 2 ] || "" ] );
+	args.push( [ "actualTypeName", arguments[ 3 ] || "" ] );
+	return new egl.eglx.lang.TypeCastException( args );
+};
+
+egl.createInvalidArgumentException = function( /*string*/ messageID, /*string or array*/ inserts ){
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	return new egl.eglx.lang.InvalidArgumentException( args );
 };

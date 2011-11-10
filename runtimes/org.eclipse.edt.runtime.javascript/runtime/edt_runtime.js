@@ -479,8 +479,9 @@ egl.eglx.lang.EString.fromEBoolean = function (x) {
 egl.eglx.lang.EString.fromENumber = function (x) {
 	return egl.unboxAny(x).toString();
 };
-egl.eglx.lang.EString.fromETimestamp = function (timestamp, startCode, endCode) {
-	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(startCode, endCode);	
+egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern) {
+	if(pattern == null) pattern = "yyyyMMddhhmmss";
+	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);	
 	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
@@ -641,6 +642,13 @@ egl.defineClass( "eglx.lang", "EDate"
 egl.eglx.lang.EDate.fromEDate = function (x) {
 	return x;  // TODO sbg bug in generator -- delete this fn when fixed
 };
+egl.eglx.lang.EDate.fromETimestamp = function (x, pattern) {
+	try{
+		return egl.eglx.lang.ETimestamp.dateOf(x, pattern);
+	}catch(ex){
+		throw egl.createTypeCastException( "CRRUI2017E", [ x, 'timestamp', 'date' ], 'date', 'timestamp' );
+	}
+};
 egl.eglx.lang.EDate.fromEString = function (x) {   
     return egl.stringToDate( x, "MM/dd/yyyy" ); 
 };
@@ -727,83 +735,73 @@ egl.eglx.lang.ETimestamp.CodeKind = {
 egl.eglx.lang.ETimestamp["currentTimeStamp"] = function (pattern) {
 	// returns a new Date object
 	// timestamp keeps every field
-	return egl.eglx.lang.ETimestamp.extend("timestamp", new Date(), pattern);
+	return egl.eglx.lang.ETimestamp.extend( new Date(), pattern);
 };
 
-egl.eglx.lang.ETimestamp["extend"] = function (/*type of date*/ type, /*extension*/ date, /*optional mask*/pattern ) {
-	//Converts a timestamp, time, or date into a longer or shorter timestamp value.
-	if ( !date ) {
-		return null;
-	}
-	
-	//copy is returned if the pattern is invalid
-	var dateCopy = new Date( date );
-	var now = new Date();
-	type = type.toLowerCase();
-	
-	if ( type == "date" ) {
-		date.setHours( 0 );
-		date.setMinutes( 0 );
-		date.setSeconds( 0 );
-		date.setMilliseconds( 0 );
-		if (!pattern || pattern == "" )
-			pattern = "yyyyMMddHHmmss";
-	}
-	else if ( type == "time" ) {
-		date.setFullYear( now.getFullYear() );
-		date.setMonth( now.getMonth() );
-		date.setDate( now.getDate() );
-		if (!pattern || pattern == "" )
-			pattern = "yyyyMMddHHmmss";
-	}
-	else { // ( type == "timestamp" )
-		if (!pattern || pattern == "" )
-			pattern = "yyyyMMddHHmmssffffff";
-	}
-	
-	//enforce the pattern mask
-	//first function is for pattern missing chars on the left side (current)
-	//second function is for pattern missing chars on the right side (zeros)
-	var chars = 
-		[
-		  [ "y", function(d){ d.setFullYear( now.getFullYear() ); }, function(d){ d.setFullYear( 0 ); } ],
-	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
-	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
-	      [ "H", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
-	      [ "m", function(d){ d.setMinutes( now.getMinutes() ); }, function(d){ d.setMinutes( 0 ); } ],
-	      [ "s", function(d){ d.setSeconds( now.getSeconds() ); }, function(d){ d.setSeconds( 0 ); } ], 
-	      [ "f", function(d){ d.setMilliseconds( now.getMilliseconds() ); }, function(d){ d.setMilliseconds( 0 ); } ]
-	    ];
-	
-	//set the new date values to the current time until the first
-	//char in the formatting string appears
-	var leadChar = pattern.charAt( 0 );
-	var i = 0;
-	while ( i < chars.length && leadChar != chars[ i ][ 0 ] ) {
-		(chars[ i ][ 1 ])( dateCopy );
-		i++;
-	}
-	//if the pattern has bad characters, just return the original date
-	if ( i >= chars.length ) {
-		return date;
-	}
-	
-	//find the last character and set everything after it to zeros
-	var lastChar = pattern.charAt( pattern.length - 1 );
-	i = chars.length - 1;
-	while ( i >= 0 && lastChar != chars[ i ][ 0 ] ) {
-		(chars[ i ][ 2 ])( dateCopy );
-		i--;
-	}
-	//if the pattern has bad characters, just return the date
-	if ( i < 0 ) {
-		return date;
-	}
-	
-	return dateCopy;
+egl.eglx.lang.ETimestamp["extend"] = function ( /*extension*/ date, /*optional mask*/pattern ) {
+	return egl.dateTime.extend("timestamp", date, pattern);
 };
 
-egl.eglx.lang.ETimestamp.getFormatFromPattern = function(startCode, endCode){
+egl.eglx.lang.ETimestamp.getStartCode = function(pattern){
+	if(pattern == null) return "";
+	var startsWith = function(str, substr){
+		return str.indexOf(substr) == 0;
+	};	
+	if (startsWith(pattern, "yyyy"))
+		return egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE;
+	else if (startsWith(pattern, "MM"))
+		return egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE;
+	else if (startsWith(pattern, "dd"))
+		return egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE;
+	else if (startsWith(pattern, "HH"))
+		return egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE;
+	else if (startsWith(pattern, "mm"))
+		return egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE;
+	else if (startsWith(pattern, "ss"))
+		return egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE;
+	else if (startsWith(pattern, "f"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION1_CODE;
+	return "";
+};
+
+egl.eglx.lang.ETimestamp.getEndCode = function(pattern){
+	if(pattern == null) return "";
+	var endsWith = function(str, substr){
+		return str.slice(0-substr.length) == substr;
+	};
+	if (endsWith(pattern, "yyyy"))
+		return egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE;
+	else if (endsWith(pattern, "MM"))
+		return egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE;
+	else if (endsWith(pattern, "dd"))
+		return egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE;
+	else if (endsWith(pattern, "HH"))
+		return egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE;
+	else if (endsWith(pattern, "mm"))
+		return egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE;
+	else if (endsWith(pattern, "ss"))
+		return egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE;
+	else if (endsWith(pattern, "ffffff"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION6_CODE;
+	else if (endsWith(pattern, "fffff"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION5_CODE;
+	else if (endsWith(pattern, "ffff"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION4_CODE;
+	else if (endsWith(pattern, "fff"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION3_CODE;
+	else if (endsWith(pattern, "ff"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION2_CODE;
+	else if (endsWith(pattern, "f"))
+		return egl.eglx.lang.ETimestamp.CodeKind.FRACTION1_CODE;
+	return "";
+};
+
+egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
+	if(pattern == null){
+		return "yyyy-MM-dd HH:mm:ss";
+	}
+	var startCode = egl.eglx.lang.ETimestamp.getStartCode(pattern);
+	var endCode = egl.eglx.lang.ETimestamp.getEndCode(pattern);
 	var format = "";
 	var separator = null;
 	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE) {
@@ -855,22 +853,101 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(startCode, endCode){
 };
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
-	if(pattern == null){
-		pattern = "yyyy-MM-dd HH.mm.ss";
-	}
 	return egl.convertAnyToTimestamp(x, nullable, pattern);  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
-egl.eglx.lang.ETimestamp.fromEString = function (time, format) {  
-	if(format == null){
-		format = "yyyy-MM-dd HH.mm.ss";
-	}
-	return egl.stringToTimeStamp(time, format);  
+egl.eglx.lang.ETimestamp.notEquals = function (x, y) {   
+	return !egl.timeStampEquals(x, y, false);
 };
-egl.eglx.lang.ETimestamp.fromEDate = function (date, format){
-	egl.dateTime.extend("date",date,format);
+egl.eglx.lang.ETimestamp.compareTo = function (x, y) {   
+	if ((x === null) || (y === null))
+		throw new egl.eglx.lang.NullValueException();
+	else {
+		return x > y;
+	}
+};
+egl.eglx.lang.ETimestamp.fromEString = function (timestamp, pattern) {  
+	var format;
+	if(pattern == null){
+		format = "yyyy-MM-dd HH:mm:ss";
+	}else{
+		format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);
+	}
+	return egl.stringToTimeStamp(timestamp, format);
+};
+
+egl.eglx.lang.ETimestamp.fromEDate = function (date, pattern){
+	egl.eglx.lang.ETimestamp.extend("date", date, pattern);
+};
+
+egl.eglx.lang.ETimestamp.checkArgument = function(functionName, pattern){
+	var startCode = egl.eglx.lang.ETimestamp.getStartCode(pattern);
+	var endCode = egl.eglx.lang.ETimestamp.getEndCode(pattern);
+	function checkArgs( minCode, maxCode ){
+		return (startCode > minCode || endCode < maxCode);
+	};
+	var checkFuncs = {
+		"dateOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ],
+		"timeOf" : [ egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE, egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE ],
+		"dayOf" : [ egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ],
+		"monthOf" : [ egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE, egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE ],
+		"yearOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE ],
+		"weekdayOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ]
+	};
+	var args = checkFuncs[functionName];
+	return 	checkArgs(args[0], args[1], args[2]);
+};
+
+egl.eglx.lang.ETimestamp.dateOf = function (ts, pattern){
+	if( egl.eglx.lang.ETimestamp.checkArgument("dateOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+//		throw egl.createTypeCastException( "CRRUI2017E", [ x, 'timestamp', 'date' ], 'date', 'timestamp' );
+	}
+	return ts;
+};
+
+egl.eglx.lang.ETimestamp.timeOf = function (ts, pattern){
+	if( egl.eglx.lang.ETimestamp.checkArgument("timeOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+//		throw egl.createTypeCastException( "CRRUI2017E", [ ts, 'timestamp', 'time' ], 'time', 'timestamp' );
+	}
+	var timeCopy = new Date( ts );
+	var now = new Date ();
+	timeCopy.setFullYear( now.getFullYear() );
+	timeCopy.setMonth( now.getMonth() );
+	timeCopy.setDate( now.getDate() );
+	timeCopy.setMilliseconds( 0 );
+	return timeCopy;	
+};
+
+egl.eglx.lang.ETimestamp.dayOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("dayOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getDate() : null );
+};
+
+egl.eglx.lang.ETimestamp.monthOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("monthOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getMonth() + 1 : null );
+};
+
+egl.eglx.lang.ETimestamp.yearOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("yearOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getFullYear() : null );
+};
+
+egl.eglx.lang.ETimestamp.weekdayOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("weekdayOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getDay() : null );
 };
 
 
