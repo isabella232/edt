@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site pack200="true">
-	<!--
-	This template will expand any embedded Ant properties using <expandproperties/>.
-	
-	Rename this file to category.xml for Athena to notice it and use it instead of generating 
-	a default site.xml with all features shown in a single category.
-
- 
-	For any feature id="org.eclipse.foo", set version="${org.eclipse.foo.version}" and
-		url="features/org.eclipse.foo_${org.eclipse.foo.version}"
- 
-	if "${buildAlias}" == "${buildID}"
-		${category.name} == "${zipPrefix} ${version} ${buildID}"
-	else	
-		${category.name} == "${zipPrefix} ${buildAlias} ${buildID}"
-	-->
- 
         <!-- ${category.name} -->
-        <category-def label="EGL Development Tools (EDT) ${version}" name="${category.name}">
+        <category-def label="${projectName} ${version}" name="${category.name}">
                 <description>
-EGL Development Tools (EDT) ${version}: contains all features in this build.
+${projectName} ${version}: contains all features in this build.
                 </description>
         </category-def>
  
