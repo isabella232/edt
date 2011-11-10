@@ -70,7 +70,7 @@ public class SQL {
 	public static boolean isAssociationField(Field field) {
 		Type type = field.getType();
 		if (type instanceof ArrayType) return true;
-		return false;
+		return !SQL.isMappedSQLType((EGLClass)type.getClassifier());
 	}
 	
 	public static boolean isTransient(Field field) {
