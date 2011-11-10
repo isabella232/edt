@@ -384,7 +384,7 @@ public class EGLSQLClauseFactory {
 			return null;
 		}
 
-		String usingClause = SQLConstants.USING + SQLConstants.LPAREN;
+		String usingClause = SQLConstants.USING + SQLConstants.SPACE;
 		
 		for (int i = 0; i < keyItemAndColumnNames.length; i++) {
 			if(i > 0) {
@@ -394,7 +394,7 @@ public class EGLSQLClauseFactory {
 			usingClause = usingClause + ioObjectName + SQLConstants.QUALIFICATION_DELIMITER + keyItemAndColumnNames[i][0];
 		}
 		
-		return usingClause + SQLConstants.RPAREN + SQLConstants.CRLF;
+		return usingClause + SQLConstants.SPACE + SQLConstants.CRLF;
 	}
 
 	public static String createDefaultWhereClause(
