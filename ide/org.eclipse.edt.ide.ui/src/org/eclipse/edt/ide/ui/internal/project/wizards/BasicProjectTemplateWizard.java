@@ -39,7 +39,10 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 	}
 	
 	public boolean proecssGenerationDirectorySetting() {
-		return generatorPage.performOK();
+		if(generatorPage != null){
+			return generatorPage.performOK();
+		}
+		return true;
 	}
 
 	private String[] getGeneratorIds() {
