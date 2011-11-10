@@ -846,7 +846,7 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		}
 	}
 	
-	private static boolean isAnnotationRecord(IBinding binding) {
+	public static boolean isAnnotationRecord(IBinding binding) {
 		if (!Binding.isValidBinding(binding)) {
 			return false;
 		}
