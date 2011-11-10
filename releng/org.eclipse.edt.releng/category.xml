@@ -11,7 +11,7 @@ ${edtProjectName} ${version}: contains all features in this build.
                 <category name="${category.name}"/>
         </feature>
  
-        <feature id="org.eclipse.edt.source" version="${org.eclipse.edt.source.version}" url="features/org.eclipse.edt.source_${org.eclipse.edt.source.version}.jar" patch="false">
+        <feature id="org.eclipse.edt.sdk.feature" version="${org.eclipse.edt.sdk.feature.version}" url="features/org.eclipse.edt.sdk.feature_${org.eclipse.edt.sdk.feature.version}.jar" patch="false">
                 <category name="${category.name}"/>
         </feature>
 </site>
