@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site pack200="true">
         <!-- ${category.name} -->
-        <category-def label="${projectName} ${version}" name="${category.name}">
+        <category-def label="${edtProjectName} ${version}" name="${category.name}">
                 <description>
-${projectName} ${version}: contains all features in this build.
+${edtProjectName} ${version}: contains all features in this build.
                 </description>
         </category-def>
  
