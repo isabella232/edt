@@ -80,20 +80,29 @@ public class DateTimeUtil
 	}
 	
 	public static Calendar getNewCalendar(java.sql.Date date) {
-		Calendar cal = getNewCalendar();
-		cal.setTime(date);
+		Calendar cal = null;
+		if(date != null){
+			cal = getNewCalendar();
+			cal.setTime(date);
+		}
 		return cal;
 	}
 
 	public static Calendar getNewCalendar(Time time) {
-		Calendar cal = getNewCalendar();
-		cal.setTime(time);
+		Calendar cal = null;
+		if(time != null){
+			cal = getNewCalendar();
+			cal.setTime(time);
+		}
 		return cal;
 	}
 	
-	public static Calendar getNewCalendar(Timestamp time) {
-		Calendar cal = getNewCalendar();
-		cal.setTime(time);
+	public static Calendar getNewCalendar(Timestamp timestamp) {
+		Calendar cal = null;
+		if(timestamp != null){
+			cal = getNewCalendar();
+			cal.setTime(timestamp);
+		}
 		return cal;
 	}
 
