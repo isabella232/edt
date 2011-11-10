@@ -23,11 +23,20 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.ElementKind;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.FloatingPointLiteral;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NullLiteral;
+import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.TextTypeLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeParameter;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -266,8 +275,52 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 				EEnumLiteral lit = ((EEnum)field.getEType()).getEEnumLiteral(((Name)field.getInitialValue()).getId());
 				((EObjectImpl)object).slotSet(field, lit);
 			}
+			else if (field.getInitialValue() instanceof Literal) {
+				((EObjectImpl)object).slotSet(field, getLiteralValue((Literal)field.getInitialValue()));
+			}
 		}
 
+	}
+	
+	private Object getLiteralValue(Literal lit) {
+		if (lit instanceof BooleanLiteral) {
+			return ((BooleanLiteral)lit).booleanValue();
+		}
+		
+		if (lit instanceof NullLiteral) {
+			return null;
+		}
+		
+		if (lit instanceof TextTypeLiteral) {
+			return ((TextTypeLiteral)lit).getValue();
+		}
+		
+		if (lit instanceof IntegerLiteral) {
+			return new Integer(((IntegerLiteral)lit).getValue());
+		}
+		
+		if (lit instanceof FloatingPointLiteral) {
+			return new Float(((FloatingPointLiteral)lit).getValue());
+		}
+		
+		if (lit instanceof PrimitiveTypeLiteral) {
+			return ((PrimitiveTypeLiteral)lit).getObjectValue();
+		}
+		
+		if (lit instanceof ArrayLiteral) {
+			EList<Object> list = new EList<Object>();
+			for (Expression exp : ((ArrayLiteral)lit).getEntries()) {
+				if (exp instanceof Literal) {
+					list.add(getLiteralValue((Literal)exp));
+				}
+				else {
+					list.add(exp);
+				}
+			}
+			return list;
+		}
+		return null;
+		
 	}
 	
 }
