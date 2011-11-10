@@ -348,7 +348,7 @@ public class EGLSQLRetrieveUtility {
 			break;
 		}
 		case Types.NUMERIC: {
-			//handleNumericType(type, sqlStructureItem, itemName);
+			//handleNumericType(type, sqlStructureItem, itemName); 
 			//TODO : deal with DB numeric type as decimal type since EDT does not support 'num' yet.
 			handleDecimalType(type, sqlStructureItem, itemName);
 			break;
