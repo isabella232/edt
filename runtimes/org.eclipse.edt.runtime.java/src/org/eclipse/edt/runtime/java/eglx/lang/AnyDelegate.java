@@ -14,6 +14,7 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Delegate;
 
 public class AnyDelegate implements Serializable {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -25,6 +26,13 @@ public class AnyDelegate implements Serializable {
 			return true;
 		if (unboxedOp1 == null || unboxedOp2 == null)
 			return false;
+		if (unboxedOp1 instanceof Delegate && unboxedOp2 instanceof Delegate) {
+			if (((Delegate) unboxedOp1).getMethod().equals(((Delegate) unboxedOp2).getMethod()) &&
+				((Delegate) unboxedOp1).getTarget().equals(((Delegate) unboxedOp2).getTarget()))
+				return true;
+			else
+				return false;
+		}
 		return unboxedOp1.equals(unboxedOp2);
 	}
 

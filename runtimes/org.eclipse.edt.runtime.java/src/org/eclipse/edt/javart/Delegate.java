@@ -27,7 +27,7 @@ public class Delegate {
 	public Delegate(String methodName, Object target, Class... argTypes) {
 		this.target = target;
 		try {
-			this.method = target.getClass().getMethod(methodName, argTypes);
+			this.method = target.getClass().getDeclaredMethod(methodName, argTypes);
 		}
 		catch (Exception ex) {
 			DynamicAccessException dax = new DynamicAccessException();
@@ -38,10 +38,20 @@ public class Delegate {
 	}
 
 	public Object invoke(Object... args) throws AnyException {
+		boolean accessibleSet = true;
 		try {
-			return method.invoke(target, args);
+			accessibleSet = method.isAccessible();
+			if (!accessibleSet) {
+				method.setAccessible(true);
+				Object ret = method.invoke(target, args);
+				method.setAccessible(false);
+				return ret;
+			} else
+				return method.invoke(target, args);
 		}
 		catch (Throwable problem) {
+			if (!accessibleSet)
+				method.setAccessible(false);
 			if ( problem instanceof InvocationTargetException )
 			{
 				problem = ((InvocationTargetException)problem).getTargetException();
@@ -55,5 +65,13 @@ public class Delegate {
 			ix.initCause( problem );
 			throw ix.fillInMessage( Message.EXCEPTION_IN_DELEGATE_INVOKE, ix.name, problem );
 		}
+	}
+
+	public Object getTarget() {
+		return target;
+	}
+
+	public Method getMethod() {
+		return method;
 	}
 }
