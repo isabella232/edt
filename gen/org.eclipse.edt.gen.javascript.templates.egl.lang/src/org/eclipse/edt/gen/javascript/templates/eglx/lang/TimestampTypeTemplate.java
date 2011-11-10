@@ -22,6 +22,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -52,6 +53,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
 		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		ctx.invoke(genTypeDependentPatterns, expr.getQualifier().getType(), ctx, out);
 		out.print(")");
 	}
 
@@ -87,7 +89,24 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+//		if(isTimeType(arg.getLHS())){
+//			out.print(", \"HHmmss\"");
+//		}else{
+//			ctx.invoke(genTypeDependentPatterns, arg.getLHS().getType(), ctx, out);
+//		}
+//		if(isTimeType(arg.getRHS())){
+//			out.print(", \"HHmmss\"");
+//		}else{
+//			ctx.invoke(genTypeDependentPatterns, arg.getRHS().getType(), ctx, out);
+//		}
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
+	}
+
+	private boolean isTimeType(Expression expr) {
+		if(expr instanceof QualifiedFunctionInvocation && ((QualifiedFunctionInvocation)expr).getId().equals("timeof")){
+			return true;
+		}
+		return false;
 	}
 
 	// this method gets invoked when there is a specific timestamp needed
@@ -104,6 +123,10 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 
 	public void genTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
 		generateOptions(type, ctx, out, true);
+	}
+	
+	public void genTypeDependentPatterns(ParameterizableType type, Context ctx, TabbedWriter out) {
+		out.print("," + quoted("yyyyMMddhhmmss"));
 	}
 	
 	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out, boolean needSeparator) {
