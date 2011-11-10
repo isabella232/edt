@@ -236,21 +236,24 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 					i++;
 				}
 			}
-			int i = 1;
 			if(stmt.getUsingExpressions() != null && stmt.getUsingExpressions().size() > 0 ){
-				for (Expression uexpr : stmt.getUsingExpressions()) {
-					genSetColumnValue(stmt, uexpr, var_stmt, i, ctx, out);
-					i++;
-				}
+				genSetStatementsForUsingClause(stmt, var_stmt, ctx, out);
 			}
 			else{
-				genUsingForClause(stmt, var_stmt, ctx, out);
+				genSetStatementsForForClause(stmt, var_stmt, ctx, out);
 			}
 		}
 		return isCall;
 	}
 	
-	protected void genUsingForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+	protected void genSetStatementsForUsingClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+		int i = 1;
+		for (Expression uexpr : stmt.getUsingExpressions()) {
+			genSetColumnValue(stmt, uexpr, var_stmt, i, ctx, out);
+			i++;
+		}
+	}
+	protected void genSetStatementsForForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
 		
 	}
 	public void genSqlStatementSetup(SqlActionStatement stmt, Context ctx, TabbedWriter out) {
@@ -274,23 +277,27 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		}
 	}
 
-	public void genDefaultWhereClauseParameterSettings(EGLClass targetType, Expression targetExpr, String var_statement, int startParmIndex, Context ctx, TabbedWriter out) {
+	public void genWhereClauseParameterSettings(SqlActionStatement stmt, String var_statement, int startParmIndex, Context ctx, TabbedWriter out) {
 		int i = startParmIndex;
-		for (Field f : targetType.getFields()) {
-			if (SQL.isKeyField(f)) {
-				out.print(var_statement);
-				out.print(".setObject(" + i + ", ");
-				if (targetExpr.getType() instanceof ArrayType) {
-					out.print(var_listElement);
+		if(stmt.getUsingExpressions() == null || stmt.getUsingExpressions().size() == 0){
+			Expression targetExpr = stmt.getTarget();
+			EGLClass targetType = getTargetType(stmt);
+			String varName = getExprString(targetExpr, ctx);
+			for (Field f : targetType.getFields()) {
+				if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+					genSetColumnValue(f, var_statement, varName, i, ctx, out);
+					i++;
 				}
-				else {
-					ctx.invoke(genExpression, targetExpr, ctx, out);
-				}
-				out.print('.');
-				ctx.invoke(genName, f, ctx, out);
-				out.println(");");
-				i++;
 			}
+		}
+		else{
+			for (Expression using : stmt.getUsingExpressions()) {
+				if (SQL.isMappedSQLType((EGLClass)using.getType().getClassifier())) {
+					genSetColumnValue(stmt, using, var_statement, i, ctx, out);
+					i++;
+				}
+			}
+			
 		}
 
 	}

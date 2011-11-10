@@ -47,12 +47,12 @@ public class SqlGetByKeyStatementTemplate extends SqlActionStatementTemplate {
 					// The assumption here is that the order of the SQL compare expressions
 					// in the default WHERE clause derived by the order of the key fields in the type
 					int i = 1;
+					String varName = getExprString(stmt.getTarget(), ctx);
 					for (Field f : ((EGLClass)type).getFields()) {
 						if (SQL.isKeyField(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 							// TODO need a generalized way to generate the appropriate
 							// accessor without assuming the field value to accessed is public
 							// and is not an EGLProperty or Property field
-							String varName = getExprString(stmt.getTarget(), ctx);
 							genSetColumnValue(f, var_statement, varName, i, ctx, out);
 							i++;
 						}

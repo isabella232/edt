@@ -45,7 +45,7 @@ public class SqlOpenStatementTemplate extends SqlActionStatementTemplate {
 		out.println(";");
 		genSqlStatementEnd(stmt, ctx, out);
 	}
-	protected void genUsingForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+	protected void genSetStatementsForForClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
 		if (stmt.getTargets().size() == 2) {//resultset and a for clause
 			Expression target = stmt.getTargets().get(1);
 			EGLClass targetType = (EGLClass)target.getType().getClassifier();

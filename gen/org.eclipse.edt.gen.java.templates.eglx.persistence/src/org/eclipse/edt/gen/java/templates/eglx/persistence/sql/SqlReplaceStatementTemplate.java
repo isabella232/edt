@@ -5,6 +5,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlReplaceStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
@@ -16,12 +17,12 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 			EGLClass targetType = getTargetType(stmt);
 			int i = 1;
 			for (Field f : targetType.getFields()) {
-				if (SQL.isUpdateable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
+				if (!SQL.isKeyField(f) && SQL.isUpdateable(f) && SQL.isMappedSQLType((EGLClass)f.getType().getClassifier())) {
 					genSetColumnValue(f, var_statement, getExprString(stmt.getTarget(), ctx), i, ctx, out);
 					i++;
 				}
 			}
-			genDefaultWhereClauseParameterSettings(targetType, stmt.getTarget(), var_statement, i, ctx, out);
+			genWhereClauseParameterSettings(stmt, var_statement, i, ctx, out);
 			out.println(var_statement + ".executeUpdate();");
 			genSqlStatementEnd(stmt, ctx, out);
 		}
@@ -79,5 +80,6 @@ public class SqlReplaceStatementTemplate extends SqlActionStatementTemplate {
 		name += SQL.getSqlSimpleTypeName(type);
 		out.print(name);
 	}
-
+	protected void genSetStatementsForUsingClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
+	}
 }
