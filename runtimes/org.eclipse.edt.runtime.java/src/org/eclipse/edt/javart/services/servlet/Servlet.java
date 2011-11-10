@@ -36,6 +36,7 @@ import org.eclipse.edt.javart.services.ServiceUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
 import eglx.http.HttpUtilities;
+import eglx.http.ServletContext;
 import eglx.json.JsonUtilities;
 import eglx.lang.AnyException;
 import eglx.lang.EDictionary;
@@ -123,6 +124,7 @@ import eglx.services.ServiceKind;
 	private void doHttp(HttpServletRequest httpServletReq, HttpServletResponse httpServletRes)
 	{
 		getRunUnit();
+		ServletContext.setThreadRunUnit(new ServletContext(httpServletReq, httpServletRes));
 		HttpSession session = httpServletReq.getSession();
 		if ( tracer().traceIsOn( Trace.GENERAL_TRACE ) ){
 			trace("HttpServletRequest.getContextPath():" + httpServletReq.getContextPath());
