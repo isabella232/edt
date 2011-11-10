@@ -41,11 +41,11 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLArrayIndexReferenceCompletion());
 			completionList.add(new EGLAssignmentStatementReferenceCompletion());
 			completionList.add(new EGLBooleanExpressionReferenceCompletion());
-			completionList.add(new EGLBooleanExpressionInReferenceCompletion());
+//			completionList.add(new EGLBooleanExpressionInReferenceCompletion());
 			completionList.add(new EGLCallProgramStatementReferenceCompletion());
 			completionList.add(new EGLCallStatementWithCallbackReferenceCompletion());
 			completionList.add(new EGLCaseStatementReferenceCompletion());
-			completionList.add(new EGLConditionalStateLikeMatchesReferenceCompletion());
+//			completionList.add(new EGLConditionalStateLikeMatchesReferenceCompletion());
 			completionList.add(new EGLConditionalStateReferenceCompletion());
 			completionList.add(new EGLConstantTypeReferenceCompletion());
 			completionList.add(new EGLContinueStatementReferenceCompletion());
@@ -61,8 +61,8 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLFunctionParameterTypeReferenceCompletion());
 			completionList.add(new EGLFunctionReturnsReferenceCompletion());
 			completionList.add(new EGLImplementsReferenceCompletion());
-			completionList.add(new EGLMoveStatementReferenceCompletion());
-			completionList.add(new EGLMoveToStatementReferenceCompletion());
+//			completionList.add(new EGLMoveStatementReferenceCompletion());
+//			completionList.add(new EGLMoveToStatementReferenceCompletion());
 			completionList.add(new EGLNewLogicLineReferenceCompletion());
 			completionList.add(new EGLNewReferenceCompletion());
 			completionList.add(new EGLNewSettingsBlockReferenceCompletion());

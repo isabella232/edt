@@ -28,7 +28,7 @@ public class EGLRelationalOperatorReferenceCompletion
 	 */
 	protected void precompileContexts() {
 		addContext("package a; function a() if (a"); //$NON-NLS-1$
-		addContext("package a; function a() if (a[].b"); //$NON-NLS-1$
+		addContext("package a; function a() if (a[c].b"); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -41,12 +41,8 @@ public class EGLRelationalOperatorReferenceCompletion
 		int documentOffset) {
 		
 		List proposals = new ArrayList();
-		if (!isState(parseStack, getState("package a; function a() add")) //$NON-NLS-1$
-			&& !isState(parseStack, getState("package a; function a() close")) //$NON-NLS-1$
-			&& !isState(parseStack, getState("package a; function a() delete")) //$NON-NLS-1$
-			&& !isState(parseStack, getState("package a; function a() replace")) //$NON-NLS-1$
-			&& !isState(parseStack, getState("package a; function a() get")) //$NON-NLS-1$
-		) {
+		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())
+			||isState(parseStack, ((Integer) validStates.get(1)).intValue())){
 			//Get all relational operator proposals
 			proposals =
 				new EGLRelationalOperatorProposalHandler(

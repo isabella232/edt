@@ -30,7 +30,14 @@ public class KeywordProposalComputer extends EGLCompletionProposalComputer {
 		EGLKeywordCompletion[] keywordCompletions;
 		ArrayList result = new ArrayList();
 		// Set up the token stream
-		TokenStream tokenStream = new TokenStream(getPrefix(context.getViewer(), context.getInvocationOffset()));
+		
+		//If the end Character of Prefix String is ".", Keyword proposal will not return any proposals.
+		String prefixString = getPrefix(context.getViewer(), context.getInvocationOffset());
+		if(!canKeyWordBeUsed(prefixString)){
+			return result;
+		}
+		
+		TokenStream tokenStream = new TokenStream(prefixString);
 		tokenStream.skipPrefix();
 		
 		// Compute the prefix
@@ -54,6 +61,16 @@ public class KeywordProposalComputer extends EGLCompletionProposalComputer {
 		}
 		
 		return result;
+	}
+	
+	private boolean canKeyWordBeUsed(String prefixString){
+		String endCharactor = prefixString.substring(prefixString.length() - 1, prefixString.length());
+		
+		if(endCharactor.endsWith(".")){
+			return false;
+		}
+		
+		return true;
 	}
 
 	public List computeContextInformation(EGLContentAssistInvocationContext context, IProgressMonitor monitor) {

@@ -170,6 +170,7 @@ public class EGLCompletionProposalComputer implements IEGLCompletionProposalComp
 		}
 		
 		return partialSource;
+		
 	}
 	
 	protected String getPrefix(List prefixNodes) {

@@ -25,8 +25,9 @@ public class EGLRelationalOperatorProposalHandler extends EGLAbstractProposalHan
 
 	public List getProposals() {
 		String[] strings = new String[] {"==", "!=", ">", "<", ">=", "<=", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-				IEGLConstants.KEYWORD_IN, IEGLConstants.KEYWORD_ISA,
-				IEGLConstants.KEYWORD_LIKE, IEGLConstants.KEYWORD_MATCHES
+				IEGLConstants.KEYWORD_ISA
+//				IEGLConstants.KEYWORD_IN, IEGLConstants.KEYWORD_ISA
+//				,IEGLConstants.KEYWORD_LIKE, IEGLConstants.KEYWORD_MATCHES
 		};
 		return getProposals(strings, UINlsStrings.CAProposal_ConditionalOperator);
 	}

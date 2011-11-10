@@ -36,8 +36,8 @@ public class EGLVariableTypeReferenceCompletion extends EGLAbstractReferenceComp
 	protected void precompileContexts() {
 		addContext("package a; program a var"); //$NON-NLS-1$
 		addContext("package a; function a() var"); //$NON-NLS-1$
-		addContext("package a; form a type b var"); //$NON-NLS-1$
-		addContext("package a; externaltype a var"); //$NON-NLS-1$
+//		addContext("package a; form a type b var"); //$NON-NLS-1$
+		addContext("package a; externaltype a type b var"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {

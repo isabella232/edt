@@ -25,7 +25,7 @@ public class EGLUseStatementReferenceCompletion extends EGLAbstractReferenceComp
 	 */
 	protected void precompileContexts() {
 		addContext("package a; program a use"); //$NON-NLS-1$
-		addContext("package a; FormGroup a use"); //$NON-NLS-1$
+//		addContext("package a; FormGroup a use"); //$NON-NLS-1$
 		addContext("package a; program a use a,"); //$NON-NLS-1$
 
 	}

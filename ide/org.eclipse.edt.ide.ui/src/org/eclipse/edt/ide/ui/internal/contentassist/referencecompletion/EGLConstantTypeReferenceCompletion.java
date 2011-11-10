@@ -27,20 +27,23 @@ public class EGLConstantTypeReferenceCompletion extends EGLAbstractReferenceComp
 	protected void precompileContexts() {
 		addContext("package a; program a const var"); //$NON-NLS-1$
 		addContext("package a; function a() const var"); //$NON-NLS-1$
-		addContext("package a; externaltype const a var"); //$NON-NLS-1$
 	}
 
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		getBoundASTNode(viewer, documentOffset, new String[] {"x; end", "x;", "x", ""}, new CompletedNodeVerifier() {
-			public boolean nodeIsValid(Node astNode) {
-				return astNode != null;
-			}
-		}, new IBoundNodeProcessor() {
-			public void processBoundNode(Node boundNode) {
-				proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());	
-			}
-		});		
+		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())
+			|| isState(parseStack,((Integer) validStates.get(1)).intValue())){
+			getBoundASTNode(viewer, documentOffset, new String[] {"x; end", "x;", "x", ""}, new CompletedNodeVerifier() {
+				public boolean nodeIsValid(Node astNode) {
+					return astNode != null;
+				}
+			}, new IBoundNodeProcessor() {
+				public void processBoundNode(Node boundNode) {
+					proposals.addAll(new EGLPrimitiveProposalHandler(viewer, documentOffset, prefix, boundNode).getProposals());	
+				}
+			});		
+			
+		}
 		return proposals;
 	}
 }
