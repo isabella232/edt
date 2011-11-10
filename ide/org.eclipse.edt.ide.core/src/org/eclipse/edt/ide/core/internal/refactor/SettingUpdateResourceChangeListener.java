@@ -217,58 +217,13 @@ public class SettingUpdateResourceChangeListener implements
 				public void run() {
 					try {
 						ProjectSettingsUtility.removeWorkspaceSettings( path );
-						handleDeletedProject(project, path);
+						//handleDeletedProject(project, path);
 					} catch (BackingStoreException e) {
 					}
 				}
 			};
 			PlatformUI.getWorkbench().getDisplay().asyncExec( op );
 
-		}
-		
-		private void handleDeletedProject(final IProject project, final IPath path) {
-			try {
-				IEGLProject eglProject = EGLCore.create(project);
-				IEGLProject[] referencingProjects = eglProject.getReferencingProjects();
-				
-				if(referencingProjects != null) {
-					for(IEGLProject referencingProject : referencingProjects) {
-						removeEntryFromClasspath(referencingProject,path);
-					}
-				}
-			} catch (EGLModelException e) {
-			}
-		}
-		
-		/*
-		 * Removes the classpath entry equal to the given path from the given project's classpath.
-		 */
-		protected void removeEntryFromClasspath(IEGLProject project, IPath rootPath) throws EGLModelException {
-			
-			IEGLPathEntry[] classpath = project.getRawEGLPath();
-			IEGLPathEntry[] newClasspath = null;
-			int cpLength = classpath.length;
-			int newCPIndex = -1;
-			
-			for (int i = 0; i < cpLength; i++) {
-				IEGLPathEntry entry = classpath[i];
-				if (rootPath.equals(entry.getPath())) {
-					if (newClasspath == null) {
-						newClasspath = new IEGLPathEntry[cpLength];
-						System.arraycopy(classpath, 0, newClasspath, 0, i);
-						newCPIndex = i;
-					}
-				} else if (newClasspath != null) {
-					newClasspath[newCPIndex++] = entry;
-				}
-			}
-			
-			if (newClasspath != null) {
-				if (newCPIndex < newClasspath.length) {
-					System.arraycopy(newClasspath, 0, newClasspath = new IEGLPathEntry[newCPIndex], 0, newCPIndex);
-				}
-				project.setRawEGLPath(newClasspath, null);
-			}
 		}
 
 		// finds the project geven the initial project name
