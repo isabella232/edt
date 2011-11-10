@@ -37,6 +37,7 @@ import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.EnumerationField;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -780,7 +781,15 @@ class Egl2MofMember extends Egl2MofPart {
 	public void setInitialValue(org.eclipse.edt.compiler.core.ast.Expression initializer, SettingsBlock settings, EField field) {
 		Object value = null;
 		if (initializer != null) {
-			value = evaluateExpression(initializer);
+			
+			//Store literal initial values in AnnotationType and StereoTypeType as Literal expressions
+			if (initializer instanceof LiteralExpression && inAnnotationTypeContext && !inEMetadataTypeContext) {
+				initializer.accept(this);
+				value = stack.pop();
+			}
+			else {
+				value = evaluateExpression(initializer);
+			}
 		}
 		else if (settings != null && isInitializer(settings)) {
 			EType type = field.getEType();
