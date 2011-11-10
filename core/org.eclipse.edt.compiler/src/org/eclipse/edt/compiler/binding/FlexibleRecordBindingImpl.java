@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -180,7 +181,8 @@ public class FlexibleRecordBindingImpl extends FlexibleRecordBinding {
     }
     
     public boolean isDeclarablePart() {
-		return true;
+    	
+    	return !isAnnotationRecord();
 	}
 
     public IDataBinding[] getFields() {

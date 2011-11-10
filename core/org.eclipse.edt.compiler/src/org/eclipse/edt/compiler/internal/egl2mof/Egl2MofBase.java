@@ -958,6 +958,12 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		default: {
 			String key = mofSerializationKeyFor(type); 
 			eType = getMofSerializable(key);
+			
+			//When looking for annotations and stereotypes, search using the EGL scheme if we didnt find it as MOF
+			if (eType == null && ! key.startsWith(EGL_KeyScheme) && (isAnnotationType(type) || isStereotypeType(type))) {
+				key = EGL_KeyScheme + key;
+				eType = getMofSerializable(key);
+			}
 			if (eType == null) {
 				if (type instanceof IPartBinding) {
 //					eType = mofTypeFromASTFor((IPartBinding)type);

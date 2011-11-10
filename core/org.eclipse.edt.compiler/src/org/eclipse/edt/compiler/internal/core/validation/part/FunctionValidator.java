@@ -735,7 +735,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
 		preVisitStatement(functionDataDeclaration);
 		if (checkStatementAllowedInContainer(functionDataDeclaration)) {
-			functionDataDeclaration.accept(new FunctionDataDeclarationValidator(problemRequestor, compilerOptions));
+			functionDataDeclaration.accept(new FunctionDataDeclarationValidator(problemRequestor, compilerOptions, enclosingPart));
 		}
 		postVisitStatement(functionDataDeclaration);
 		return false;

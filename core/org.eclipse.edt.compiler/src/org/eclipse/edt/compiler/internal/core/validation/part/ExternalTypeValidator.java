@@ -65,7 +65,7 @@ public class ExternalTypeValidator extends AbstractASTVisitor {
 	}
 	
 	public boolean visit(ClassDataDeclaration classDataDeclaration) {
-		classDataDeclaration.accept(new ClassDataDeclarationValidator(problemRequestor, compilerOptions));
+		classDataDeclaration.accept(new ClassDataDeclarationValidator(problemRequestor, compilerOptions, partBinding));
 		
 //		if(classDataDeclaration.hasInitializer()) {
 //			problemRequestor.acceptProblem(

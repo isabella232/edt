@@ -15,6 +15,7 @@
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -37,10 +38,13 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 		
 		private IProblemRequestor problemRequestor;
         private ICompilerOptions compilerOptions;
+    	private IPartBinding enclosingPart;
+
 		
-		public FunctionDataDeclarationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		public FunctionDataDeclarationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IPartBinding enclosingPart) {
 			this.problemRequestor = problemRequestor;
 			this.compilerOptions = compilerOptions;
+			this.enclosingPart = enclosingPart;
 		}
 		
 		public boolean visit(final FunctionDataDeclaration functionDataDeclaration) {
@@ -82,7 +86,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				
 				protected void validate(String name){
 					String varname = ((Expression)functionDataDeclaration.getNames().get(0)).getCanonicalString();
-					StatementValidator.validateDataDeclarationType(functionDataDeclaration.getType(),problemRequestor);
+					StatementValidator.validateDataDeclarationType(functionDataDeclaration.getType(),problemRequestor, enclosingPart);
 				}
 				
 			});

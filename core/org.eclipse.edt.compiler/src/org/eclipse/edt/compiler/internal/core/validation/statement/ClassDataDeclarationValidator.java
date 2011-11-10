@@ -15,6 +15,7 @@
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -33,10 +34,12 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 		
 		private IProblemRequestor problemRequestor;
         private ICompilerOptions compilerOptions;
+        private IPartBinding declaringPart;
 		
-		public ClassDataDeclarationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		public ClassDataDeclarationValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions, IPartBinding declaringPart) {
 			this.problemRequestor = problemRequestor;
 			this.compilerOptions = compilerOptions;
+			this.declaringPart = declaringPart;
 		}
 		
 		public boolean visit(final ClassDataDeclaration classDataDeclaration) {
@@ -49,7 +52,7 @@ import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 				StatementValidator.validatePrimitiveConstant(classDataDeclaration.getType(),problemRequestor);
 			}
 			
-			StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(), problemRequestor);
+			StatementValidator.validateDataDeclarationType(classDataDeclaration.getType(), problemRequestor, declaringPart);
 			
 			new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(classDataDeclaration);
 			

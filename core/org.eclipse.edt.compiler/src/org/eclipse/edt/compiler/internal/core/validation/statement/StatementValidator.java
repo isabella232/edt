@@ -760,7 +760,7 @@ public class StatementValidator implements IOStatementValidatorConstants{
 		}
 	}
 	
-	public static void validateDataDeclarationType(Type type, final IProblemRequestor problemRequestor){
+	public static void validateDataDeclarationType(Type type, final IProblemRequestor problemRequestor, IPartBinding declaringPart){
 		if (type.isArrayType()){
 			ITypeBinding typeBinding = ((ArrayType)type).resolveTypeBinding();
 			Type thistype = type;
@@ -836,7 +836,31 @@ public class StatementValidator implements IOStatementValidatorConstants{
 					IProblemRequestor.DATA_DECLARATION_HAS_INCORRECT_TYPE,
 					new String[] {typeBinding.getPackageQualifiedName()});
 			}
+			
+			if (isAnnotationRecord(typeBinding) &&
+				!isAnnotationRecord(declaringPart)) {
+				problemRequestor.acceptProblem(type,
+						IProblemRequestor.DATA_DECLARATION_HAS_INCORRECT_TYPE,
+						new String[] {typeBinding.getPackageQualifiedName()});
+			}
 		}
+	}
+	
+	private static boolean isAnnotationRecord(IBinding binding) {
+		if (!Binding.isValidBinding(binding)) {
+			return false;
+		}
+		
+		if (!binding.isTypeBinding()) {
+			return false;
+		}
+		
+		if (((ITypeBinding)binding).getKind() != ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+			return false;
+		}
+		
+		return ((FlexibleRecordBinding)binding).isAnnotationRecord();
+		
 	}
 	
 	public static void validateDeclarationForStereotypeContext(IDataBinding dBinding, IProblemRequestor problemRequestor, Node nodeForErrors) {

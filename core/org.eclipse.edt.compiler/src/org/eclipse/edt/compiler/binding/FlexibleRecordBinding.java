@@ -14,6 +14,8 @@ package org.eclipse.edt.compiler.binding;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeBinding;
+
 /**
  * @author Dave Murray
  */
@@ -66,5 +68,10 @@ public abstract class FlexibleRecordBinding extends PartBinding implements IReco
             }
         }
         return false;
+    }
+    
+    public boolean isAnnotationRecord() {
+    	return (getSubType() == AnnotationAnnotationTypeBinding.getInstance() || getSubType() == StereotypeAnnotationTypeBinding.getInstance());
+
     }
 }
