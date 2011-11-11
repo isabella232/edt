@@ -45,7 +45,8 @@ public abstract class AbstractEGLLaunchShortcut implements ILaunchShortcut2
 	{
 		if ( selection == null || !(selection instanceof IStructuredSelection) )
 		{
-			MessageDialog.openError( DebugUtil.getShell(), EGLLaunchingMessages.launch_error_dialog_title, EGLLaunchingMessages.launch_shortcut_usage );
+			MessageDialog
+					.openError( DebugUtil.getShell(), EGLLaunchingMessages.launch_error_dialog_title, EGLLaunchingMessages.launch_shortcut_usage );
 			return;
 		}
 		
@@ -60,12 +61,13 @@ public abstract class AbstractEGLLaunchShortcut implements ILaunchShortcut2
 				try
 				{
 					IResource file = element.getUnderlyingResource();
-					if (file.getType() == IResource.FILE) {
-					String name = file.getName();
-					if ( DebugUtil.isEGLFileName( name ) )
+					if ( file.getType() == IResource.FILE )
 					{
-						eglFiles.add( (IFile)file );
-					}
+						String name = file.getName();
+						if ( DebugUtil.isEGLFileName( name ) )
+						{
+							eglFiles.add( (IFile)file );
+						}
 					}
 				}
 				catch ( EGLModelException e1 )

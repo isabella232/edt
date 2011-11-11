@@ -70,8 +70,8 @@ public class RunToLineTarget implements IRunToLineTarget
 								IDebugTarget debugTarget = (IDebugTarget)((IAdaptable)target).getAdapter( IDebugTarget.class );
 								if ( debugTarget != null )
 								{
-									int line = eglEditor.getLineAtOffset( BreakpointUtils.getStatementNode( eglEditor,
-											textSelection.getStartLine() ).getOffset() ) + 1;
+									int line = eglEditor.getLineAtOffset( BreakpointUtils.getStatementNode( eglEditor, textSelection.getStartLine() )
+											.getOffset() ) + 1;
 									
 									// Use workspace root instead of the file so that the marker doesn't show up in the editor during the RTL
 									EGLLineBreakpoint bp = new EGLLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), line, -1, -1, false, true );

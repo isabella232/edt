@@ -26,14 +26,7 @@ public class EGLJavaMainApplicationTabGroup extends AbstractLaunchConfigurationT
 	@Override
 	public void createTabs( ILaunchConfigurationDialog dialog, String mode )
 	{
-		setTabs(new ILaunchConfigurationTab[]{
-				new EGLJavaMainApplicationTab(),
-				new JavaArgumentsTab(),
-				new JavaJRETab(),
-				new JavaClasspathTab(),
-				new SourceLookupTab(),
-				new EnvironmentTab(),
-				new CommonTab()
-		});
+		setTabs( new ILaunchConfigurationTab[] { new EGLJavaMainApplicationTab(), new JavaArgumentsTab(), new JavaJRETab(), new JavaClasspathTab(),
+				new SourceLookupTab(), new EnvironmentTab(), new CommonTab() } );
 	}
 }
