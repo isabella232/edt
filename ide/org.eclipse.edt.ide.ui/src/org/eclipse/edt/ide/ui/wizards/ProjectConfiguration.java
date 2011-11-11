@@ -90,6 +90,10 @@ public class ProjectConfiguration {
 		selectedGenerators = new String[]{JAVA_GENERATOR_ID, JAVASCRIPT_GENERATOR_ID, JAVASCRIPT_DEV_GENERATOR_ID};
 	}
 	
+	public void setEmptyCompilerProperty(){
+		selectedGenerators = new String[]{};
+		selectedCompiler = null;
+	}
 	public String getSelectedCompiler() {
 		return selectedCompiler;
 	}

@@ -34,6 +34,8 @@ public class BasicProjectTemplateWizard extends ProjectTemplateWizard {
 			String[] genIds = getGeneratorIds();
 			if(genIds != null)
 				((NewEGLProjectWizard) getParentWizard()).getModel().setSelectedGenerators(genIds);
+		}else{
+			((NewEGLProjectWizard) getParentWizard()).getModel().setEmptyCompilerProperty();
 		}
 		return true;
 	}
