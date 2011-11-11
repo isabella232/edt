@@ -94,6 +94,8 @@ Library TestListMgr
 	function caughtAnyException(exp AnyException in)
 		//caught the exception from the test
 		expMsg String = "uncaught exception for: " + getTestIdString(); 
+		expMsg += ConstantsLib.NEWLINE + "    => " + exp.messageID + ": " + exp.message;				
+		
 		//StatusLib.error(expMsg, s);
 		LogResult.error(expMsg);		
 	end

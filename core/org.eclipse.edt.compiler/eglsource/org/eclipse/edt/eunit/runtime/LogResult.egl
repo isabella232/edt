@@ -263,7 +263,7 @@ Library LogResult
             sign = "-";
             aFloat = aFloat * -1;
         end
-        if(aFloat != 0)
+        if(aFloat != null && aFloat != 0)
             while(aFloat < 1)
                 aFloat = aFloat * 10;
                 mantissa = mantissa - 1;
