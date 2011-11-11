@@ -37,6 +37,9 @@ public class ResourceCopyOperation {
 
 	private static final String WEB_LIB_FOLDER  = "WEB-INF/lib/";
 	private IProject targetProject;
+	private static int javaScriptProgressBaseToPass = 30;
+	private static int javaScriptFolderProgressBase = 10;
+	private static int javascriptFilesProgressBase = 40;
 	
 	public ResourceCopyOperation(final IProject targetProject) {
 		this.targetProject = targetProject;
@@ -47,32 +50,41 @@ public class ResourceCopyOperation {
 	 * @throws EGLRIADeploymentException 
 	 */
 	public void copyModelResources( final ResourceDeploymentModel model, final IProgressMonitor parentMonitor, IDeploymentResultsCollector resultsCollector) {
-		IProgressMonitor monitor = new SubProgressMonitor(parentMonitor,IProgressMonitor.UNKNOWN);
+		IProgressMonitor monitor = new SubProgressMonitor(parentMonitor,50, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		monitor.setTaskName(Messages.J2EEDeploymentSolutionProgress_13);
+		monitor.beginTask("", IProgressMonitor.UNKNOWN);
 		try
 		{
+			parentMonitor.worked(javaScriptFolderProgressBase);
 			IPath targetPath = WebUtilities.getWebModulePath(targetProject);
-			createFolders(model.getJavascriptFolders(), targetPath, monitor, resultsCollector);
-			copyFiles(model.getJavascriptFiles(), targetPath, monitor, resultsCollector);
-
+			createFolders(model.getJavascriptFolders(), targetPath, monitor, resultsCollector, parentMonitor);
+			copyFiles(model.getJavascriptFiles(), targetPath, monitor, resultsCollector, parentMonitor);
+			
 			targetPath = WebUtilities.getWebModulePath(targetProject);
 			targetPath = targetPath.append(WEB_LIB_FOLDER);
-			createFolders(model.getJavaJarFolders(), targetPath, monitor, resultsCollector);
-			copyFiles(model.getJavaJarFiles(), targetPath, monitor, resultsCollector);
-			
+			createFolders(model.getJavaJarFolders(), targetPath, monitor, resultsCollector, null);
+			copyFiles(model.getJavaJarFiles(), targetPath, monitor, resultsCollector, null);
+
 			String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName(targetProject);
 			targetPath = targetProject.getFullPath().append(javaSourceFolder);
-			createFolders(model.getJavaFolders(), targetPath, monitor, resultsCollector);
-			copyFiles(model.getJavaFiles(), targetPath, monitor, resultsCollector);
+			createFolders(model.getJavaFolders(), targetPath, monitor, resultsCollector, null);
+			copyFiles(model.getJavaFiles(), targetPath, monitor, resultsCollector, parentMonitor);
 		}finally{
 			monitor.done();
 		}
 		
 	}
 	
-	private void createFolders(final Map<IFolder, Set<IFolder>> folders2Create, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector )
+	private void createFolders(final Map<IFolder, Set<IFolder>> folders2Create, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector, IProgressMonitor fatherMonitor)
 	{
+		float FoldersNumber = folders2Create.entrySet().size();
+		float incrementer = javaScriptProgressBaseToPass/FoldersNumber;
+		int iterNumber = 0;
 		for( Iterator<Entry<IFolder, Set<IFolder>>> itr1 = folders2Create.entrySet().iterator(); itr1.hasNext() && !monitor.isCanceled(); ) {
+			iterNumber++;
+			if(null != fatherMonitor){
+				fatherMonitor.worked((int)(javaScriptFolderProgressBase + iterNumber * incrementer));
+			}
 			Entry<IFolder, Set<IFolder>> entry = itr1.next();
 			for( Iterator<IFolder> itr2 = entry.getValue().iterator(); itr2.hasNext() && !monitor.isCanceled(); ) {
 				IFolder folder = itr2.next();
@@ -95,9 +107,18 @@ public class ResourceCopyOperation {
 		}
 
 	}
-	private void copyFiles(final Map<IFolder, Set<IFile>> files2Copy, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector )
+	private void copyFiles(final Map<IFolder, Set<IFile>> files2Copy, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector ,IProgressMonitor fatherMonitor)
 	{
+		float FilesNumber = files2Copy.entrySet().size();
+		float incrementer = javaScriptProgressBaseToPass/FilesNumber;
+		int iterNumber = 0;
+		
 		for( Iterator<Entry<IFolder, Set<IFile>>> itr1 = files2Copy.entrySet().iterator(); itr1.hasNext() && !monitor.isCanceled(); ) {
+			iterNumber++;
+			if(null != fatherMonitor){
+				fatherMonitor.worked((int)(javascriptFilesProgressBase + iterNumber * incrementer));
+			}
+			
 			Entry<IFolder, Set<IFile>> entry = itr1.next();
 			for( Iterator<IFile> itr2 = entry.getValue().iterator(); itr2.hasNext() && !monitor.isCanceled(); ) {
 				IFile file = itr2.next();
