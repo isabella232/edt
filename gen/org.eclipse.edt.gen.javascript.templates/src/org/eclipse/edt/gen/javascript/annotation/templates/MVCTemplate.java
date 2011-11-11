@@ -76,7 +76,6 @@ public class MVCTemplate extends JavaScriptTemplate {
 	private static final String PROPERTY_CURRENCY = MVC_PACKAGE + "currency";
 	private static final String PROPERTY_CURRENCYSYMBOL = MVC_PACKAGE + "currencySymbol";
 	private static final String PROPERTY_NUMERICSEPARATOR = MVC_PACKAGE + "numericSeparator";
-	private static final Object MVC_ANNOTATION = MVC_PACKAGE + "MVC";
 	private static final String MVC_VIEW_ANNOTATION = "eglx.ui.rui.MVCView";
 	private static final String PROPERTY_VALIDATIONPROPERTIESLIBRARY = "validationPropertiesLibrary";
 
@@ -90,18 +89,38 @@ public class MVCTemplate extends JavaScriptTemplate {
 	 * @param field
 	 */
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, Field field) {
-		List<Part> implicitReferencedParts = getImplicitReferencedParts(field, ctx);
-		for (Part referencedPart : implicitReferencedParts) {
-			boolean found = false;
-			List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed);
-			for (Library lib : libraries) {
-				if (referencedPart.getTypeSignature().equalsIgnoreCase(lib.getTypeSignature())) {
-					found = true;
-					break;
+		if ("MVC".equals(annot.getEClass().getName())) {
+			Expression model = (Expression)annot.getValue("model");
+			Member modelMember = null;
+			if ( model instanceof MemberName )
+			{
+				modelMember = ((MemberName)model).getMember();
+			}
+			else if ( model instanceof MemberAccess )
+			{
+				modelMember = ((MemberAccess)model).getMember();
+			}
+			else if ( model instanceof Field )
+			{
+				modelMember = (Field)model;
+			}
+			
+			if (modelMember != null) {
+				List<Part> implicitReferencedParts = getImplicitReferencedParts(modelMember, ctx);
+				for (Part referencedPart : implicitReferencedParts) {
+					boolean found = false;
+					List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed);
+					for (Library lib : libraries) {
+						if (referencedPart.getTypeSignature().equalsIgnoreCase(lib.getTypeSignature())) {
+							found = true;
+							break;
+						}
+					}
+					if (!found) {
+						libraries.add((Library) referencedPart);
+					}
 				}
 			}
-			if (!found)
-				libraries.add((Library) referencedPart);
 		}
 	}
 	
