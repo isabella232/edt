@@ -1,21 +1,21 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import eglx.lang.AnyException;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import eglx.services.ServiceInvocationException;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import eglx.lang.SysLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import eglx.services.ServiceInvocationException;
 import org.eclipse.edt.eunit.runtime.MultiStatus;
 import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import eglx.lang.AnyException;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
@@ -36,8 +36,8 @@ public class TestListMgr extends ExecutableBase {
 	public List<org.eclipse.edt.javart.Delegate> LibraryStartTests;
 	@javax.xml.bind.annotation.XmlTransient
 	private int libIndex;
-	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	public TestListMgr() {
 		super();
 		ezeInitialize();
@@ -108,17 +108,17 @@ public class TestListMgr extends ExecutableBase {
 	public void setLibIndex(Integer ezeValue) {
 		libIndex = ezeValue;
 	}
-	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
-		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
-			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
-		}
-		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
-	}
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
 			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
 		}
 		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	}
+	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_LogResult = (LogResult)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.LogResult");
+		}
+		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	}
 	public void nextTest() {
 		String testId;
@@ -188,6 +188,7 @@ public class TestListMgr extends ExecutableBase {
 	public void caughtAnyException(AnyException exp) {
 		String expMsg;
 		expMsg = (("uncaught exception for: ") + getTestIdString());
+		expMsg += ((((((((eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().NEWLINE) + "    => ")) + exp.getMessageID())) + ": ")) + exp.getMessage());
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().error(expMsg);
 	}
 	public String getBindingTypeString(ServiceBindingType bType) {

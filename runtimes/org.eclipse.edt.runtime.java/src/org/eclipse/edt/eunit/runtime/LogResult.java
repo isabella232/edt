@@ -1,29 +1,29 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import java.math.BigDecimal;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import eglx.lang.MathLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
 import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
 import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
-import org.eclipse.edt.eunit.runtime.Log;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import eglx.lang.MathLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
 import java.lang.Long;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
@@ -310,7 +310,7 @@ public class LogResult extends ExecutableBase {
 			sign.ezeCopy("-");
 			afloat = (afloat * (double)(short)((short) -1));
 		}
-		if ((EFloat.notEquals(afloat, (double)(short)((short) 0)))) {
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(afloat, null)) && (EFloat.notEquals(afloat, (double)(short)((short) 0))))) {
 			while ((afloat < (double)(short)((short) 1))) {
 				afloat = (afloat * (double)(short)((short) 10));
 				mantissa.ezeCopy((mantissa.ezeUnbox() - (int)(short)((short) 1)));
