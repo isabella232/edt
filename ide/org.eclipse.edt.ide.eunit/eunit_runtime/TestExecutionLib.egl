@@ -71,8 +71,9 @@ library TestExecutionLib
 				//prepend the assertion failure error message to Status
 				sysLib.writeStdOut("AssertionFail - " + assertion.message);
 			onException (testException AnyException)
-				//caught the exception from the test
+				//caught the exception from the test 
 				expMsg String = "uncaught exception for: " + testId; 
+				expMsg += ConstantsLib.NEWLINE + "    => " + testException.messageID + ": " + testException.message;				
 				//StatusLib.error(expMsg, s);
 				LogResult.error(expMsg);
 			end
