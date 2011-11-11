@@ -136,7 +136,7 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 	{
 		return parentVariable;
 	}
-
+	
 	@Override
 	public SMAPVariableInfo[] getSMAPVariableInfos() throws DebugException
 	{

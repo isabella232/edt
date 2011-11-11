@@ -127,7 +127,7 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 					}
 					break;
 				}
-					
+				
 				case IPackageFragmentRoot.K_SOURCE:
 				{
 					String eglName = type + ".egl"; //$NON-NLS-1$

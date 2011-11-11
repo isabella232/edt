@@ -30,7 +30,8 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class ToStringVariable extends EGLJavaVariable
 {
-	public ToStringVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame, IEGLJavaValue parent )
+	public ToStringVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
+			IEGLJavaValue parent )
 	{
 		super( target, javaVariable, variableInfo, frame, parent );
 	}

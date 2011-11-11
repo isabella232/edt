@@ -71,7 +71,7 @@ public abstract class EGLSourcePathComputerDelegate implements ISourcePathComput
 						}
 						break;
 					}
-						
+					
 					case IEGLPathEntry.CPE_SOURCE:
 					{
 						IPackageFragmentRoot pkgRoot = project.getPackageFragmentRoot( entries[ i ].getPath() );
@@ -97,7 +97,7 @@ public abstract class EGLSourcePathComputerDelegate implements ISourcePathComput
 						}
 						break;
 					}
-						
+					
 					case IEGLPathEntry.CPE_LIBRARY:
 					{
 						// Only add if there was source attachment. The debug 'no source found' editor is better than the egl version - it lets you

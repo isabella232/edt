@@ -27,7 +27,8 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class ChildlessVariable extends EGLJavaVariable
 {
-	public ChildlessVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame, IEGLJavaValue parent )
+	public ChildlessVariable( IDebugTarget target, IJavaVariable javaVariable, SMAPVariableInfo variableInfo, IEGLJavaStackFrame frame,
+			IEGLJavaValue parent )
 	{
 		super( target, javaVariable, variableInfo, frame, parent );
 	}

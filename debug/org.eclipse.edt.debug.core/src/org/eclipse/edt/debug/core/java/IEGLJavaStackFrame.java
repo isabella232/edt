@@ -59,8 +59,8 @@ public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 	public void setSMAPFunctionInfo( SMAPFunctionInfo info );
 	
 	/**
-	 * Returns the corresponding EGL variable given the new variable. Implementations may choose to just
-	 * return the new variable that was passed in, but this allows a frame to reuse an existing variable.
+	 * Returns the corresponding EGL variable given the new variable. Implementations may choose to just return the new variable that was passed in,
+	 * but this allows a frame to reuse an existing variable.
 	 * 
 	 * @param newVariable The new EGL variable.
 	 * @param parent The parent value, possibly null.

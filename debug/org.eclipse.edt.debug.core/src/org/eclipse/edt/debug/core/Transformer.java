@@ -14,8 +14,7 @@ package org.eclipse.edt.debug.core;
 import java.lang.instrument.Instrumentation;
 
 /**
- * Adds instrumentation support for the SMAP files. Put this and {@link SMAPTransformer} in a jar and add the jar to the
- * -javaagent VM argument.
+ * Adds instrumentation support for the SMAP files. Put this and {@link SMAPTransformer} in a jar and add the jar to the -javaagent VM argument.
  * 
  * @see SMAPTransformer
  */
