@@ -865,7 +865,7 @@ egl.eglx.lang.ETimestamp.compareTo = function (x, y) {
 	if ((x === null) || (y === null))
 		throw new egl.eglx.lang.NullValueException();
 	else {
-		return x > y;
+		return x > y ? 1 : x < y ? -1 : 0;
 	}
 };
 egl.eglx.lang.ETimestamp.fromEString = function (timestamp, pattern) {  
@@ -873,13 +873,13 @@ egl.eglx.lang.ETimestamp.fromEString = function (timestamp, pattern) {
 	if(pattern == null){
 		format = "yyyy-MM-dd HH:mm:ss";
 	}else{
-		format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);
+		format = pattern;
 	}
-	return egl.stringToTimeStamp(timestamp, format);
+	return egl.eglx.lang.ETimestamp.extend( egl.stringToTimeStamp(timestamp, format), pattern);
 };
 
 egl.eglx.lang.ETimestamp.fromEDate = function (date, pattern){
-	egl.eglx.lang.ETimestamp.extend("date", date, pattern);
+	return egl.eglx.lang.ETimestamp.extend( date, pattern);
 };
 
 egl.eglx.lang.ETimestamp.checkArgument = function(functionName, pattern){
@@ -915,9 +915,9 @@ egl.eglx.lang.ETimestamp.timeOf = function (ts, pattern){
 	}
 	var timeCopy = new Date( ts );
 	var now = new Date ();
-	timeCopy.setFullYear( now.getFullYear() );
-	timeCopy.setMonth( now.getMonth() );
 	timeCopy.setDate( now.getDate() );
+	timeCopy.setMonth( now.getMonth() );
+	timeCopy.setFullYear( now.getFullYear() );	
 	timeCopy.setMilliseconds( 0 );
 	return timeCopy;	
 };

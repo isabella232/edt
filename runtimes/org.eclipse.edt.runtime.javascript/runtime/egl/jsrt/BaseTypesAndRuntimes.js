@@ -814,7 +814,7 @@ egl.stringToTimeStamp = function(s, format)
 	}
 	
 	if( result != null )
-	{
+	{		
 		return result;
 	}
 	else
@@ -827,6 +827,8 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 {
 	var result = new Date;
 	result.setFullYear(0);
+	result.setMonth(0);
+	result.setDate(1);
 	result.setHours(0);
 	result.setMinutes(0);
 	result.setSeconds(0);
@@ -3829,6 +3831,8 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	
 	//copy is returned if the pattern is invalid
 	var dateCopy = new Date( date );
+	// IE Bug: the milli second is not copied
+	dateCopy.setMilliseconds( date.getMilliseconds() );
 	var now = new Date();
 	type = type.toLowerCase();
 	
@@ -3894,7 +3898,6 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	if ( i < 0 ) {
 		return date;
 	}
-	
 	return dateCopy;
 };
 
