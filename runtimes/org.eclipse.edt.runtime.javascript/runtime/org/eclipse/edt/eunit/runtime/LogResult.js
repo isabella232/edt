@@ -7,10 +7,10 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']) return egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']=this;
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","Log" );
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","AssertionFailedException" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","Status" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","AssertionFailedException" );
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
 			this.ACTUALHEADER = "";
 			egl.atLine(this.eze$$fileName,31,514,17, this);
@@ -779,36 +779,36 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 						egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
 					}finally{egl.exitBlock();}
 				}
-				egl.atLine(this.eze$$fileName,266,8055,288, this);
-				if (((afloat != 0))) {
+				egl.atLine(this.eze$$fileName,266,8055,306, this);
+				if ((((egl.eglx.lang.NullType.notEquals(afloat, null)) && ((afloat != 0))))) {
 					try{egl.enterBlock();
-						egl.atLine(this.eze$$fileName,267,8084,115, this);
+						egl.atLine(this.eze$$fileName,267,8102,115, this);
 						while (((afloat < 1))) {
 							try{egl.enterBlock();
-								egl.atLine(this.eze$$fileName,268,8119,21, this);
+								egl.atLine(this.eze$$fileName,268,8137,21, this);
 								afloat = ((afloat * 10));
 								egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
-								egl.atLine(this.eze$$fileName,269,8158,24, this);
+								egl.atLine(this.eze$$fileName,269,8176,24, this);
 								mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) - 1)));
 								egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 							}finally{egl.exitBlock();}
-							egl.atLine(this.eze$$fileName,267,8084,115, this);
+							egl.atLine(this.eze$$fileName,267,8102,115, this);
 						}
-						egl.atLine(this.eze$$fileName,271,8213,117, this);
+						egl.atLine(this.eze$$fileName,271,8231,117, this);
 						while (((afloat >= 10))) {
 							try{egl.enterBlock();
-								egl.atLine(this.eze$$fileName,272,8250,21, this);
+								egl.atLine(this.eze$$fileName,272,8268,21, this);
 								afloat = ((afloat / 10));
 								egl.setLocalFunctionVariable("afloat", afloat, "eglx.lang.EFloat");
-								egl.atLine(this.eze$$fileName,273,8289,24, this);
+								egl.atLine(this.eze$$fileName,273,8307,24, this);
 								mantissa.ezeCopy(((egl.eglx.lang.EAny.unbox(mantissa) + 1)));
 								egl.setLocalFunctionVariable("mantissa", mantissa, "eglx.lang.EInt");
 							}finally{egl.exitBlock();}
-							egl.atLine(this.eze$$fileName,271,8213,117, this);
+							egl.atLine(this.eze$$fileName,271,8231,117, this);
 						}
 					}finally{egl.exitBlock();}
 				}
-				egl.atLine(this.eze$$fileName,276,8353,15, this);
+				egl.atLine(this.eze$$fileName,276,8371,15, this);
 				if (!egl.debugg) egl.leave();
 				return afloat;
 			} finally {

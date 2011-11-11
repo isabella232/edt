@@ -7,12 +7,12 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"constructor": function() {
 			if(egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']) return egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.TestListMgr['$inst']=this;
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","MultiStatus" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","AssertionFailedException" );
-			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
+			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			this.eze$$setInitial();
 		}
 		,
@@ -278,9 +278,12 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 				egl.atLine(this.eze$$fileName,96,3171,46, this);
 				expMsg = (("uncaught exception for: ") + this.getTestIdString());
 				egl.setLocalFunctionVariable("expMsg", expMsg, "eglx.lang.EString");
-				egl.atLine(this.eze$$fileName,98,3254,24, this);
+				egl.atLine(this.eze$$fileName,97,3222,80, this);
+				expMsg = ((expMsg) + ((((((((egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']).NEWLINE) + "    => ")) + egl.checkNull(exp).messageID)) + ": ")) + egl.checkNull(exp).message));
+				egl.setLocalFunctionVariable("expMsg", expMsg, "eglx.lang.EString");
+				egl.atLine(this.eze$$fileName,100,3344,24, this);
 				egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'].error(expMsg);
-				egl.atLine(this.eze$$fileName,94,3065,220, this);
+				egl.atLine(this.eze$$fileName,94,3065,310, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
 				if (!egl.debugg){
@@ -292,38 +295,38 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 			try { egl.enter("getBindingTypeString",this,arguments);
 				egl.addLocalFunctionVariable("bType", bType, "org.eclipse.edt.eunit.runtime.ServiceBindingType", "bType");
 				{
-					egl.atLine(this.eze$$fileName,102,3366,295, this);
-					EzeLabel_eze_CaseLabel_0: egl.atLine(this.eze$$fileName,102,3366,295, this);
+					egl.atLine(this.eze$$fileName,104,3456,295, this);
+					EzeLabel_eze_CaseLabel_0: egl.atLine(this.eze$$fileName,104,3456,295, this);
 					if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEDICATED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,104,3420,29, this);
+							egl.atLine(this.eze$$fileName,106,3510,29, this);
 							if (!egl.debugg) egl.leave();
 							return "DEDICATED_BINDING";
 						}finally{egl.exitBlock();}
 					}
 					else {
 						try{egl.enterBlock();
-							egl.atLine(this.eze$$fileName,105,3453,64, this);
+							egl.atLine(this.eze$$fileName,107,3543,64, this);
 							if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEVELOP, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,106,3490,27, this);
+									egl.atLine(this.eze$$fileName,108,3580,27, this);
 									if (!egl.debugg) egl.leave();
 									return "DEVELOP_BINDING";
 								}finally{egl.exitBlock();}
 							}
 							else {
 								try{egl.enterBlock();
-									egl.atLine(this.eze$$fileName,107,3521,66, this);
+									egl.atLine(this.eze$$fileName,109,3611,66, this);
 									if ((egl.eglx.lang.EAny.ezeCast({eze$$value : bType, eze$$signature : egl.inferSignature(bType)}, egl.eglx.lang.AnyEnumeration) == egl.eglx.lang.EAny.ezeCast({eze$$value : egl.checkNull(egl.org.eclipse.edt.eunit.runtime.ServiceBindingType).DEPLOYED, eze$$signature : "org.eclipse.edt.eunit.runtime.ServiceBindingType"}, egl.eglx.lang.AnyEnumeration))) {
 										try{egl.enterBlock();
-											egl.atLine(this.eze$$fileName,108,3559,28, this);
+											egl.atLine(this.eze$$fileName,110,3649,28, this);
 											if (!egl.debugg) egl.leave();
 											return "DEPLOYED_BINDING";
 										}finally{egl.exitBlock();}
 									}
 									else {
 										try{egl.enterBlock();
-											egl.atLine(this.eze$$fileName,110,3605,48, this);
+											egl.atLine(this.eze$$fileName,112,3695,48, this);
 											if (!egl.debugg) egl.leave();
 											return "UNKNOWN Binding Type - NOT supported";
 										}finally{egl.exitBlock();}
@@ -333,7 +336,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 						}finally{egl.exitBlock();}
 					}
 				}
-				egl.atLine(this.eze$$fileName,101,3289,379, this);
+				egl.atLine(this.eze$$fileName,103,3379,379, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
 				if (!egl.debugg){
@@ -416,8 +419,8 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'TestListMgr',
 		"eze$$getChildVariables": function() {
 			var eze$$parent = this;
 			return [
-			{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
 			{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
+			{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
 			{name: "bindingType", value : eze$$parent.bindingType, type : "org.eclipse.edt.eunit.runtime.ServiceBindingType", jsName : "bindingType"},
 			{name: "ms", value : eze$$parent.ms, type : "org.eclipse.edt.eunit.runtime.MultiStatus", jsName : "ms"},
 			{name: "testIndex", value : eze$$parent.testIndex, type : "eglx.lang.EInt", jsName : "testIndex"},

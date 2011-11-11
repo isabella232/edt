@@ -3,12 +3,12 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 	'eze$$fileName': 'org/eclipse/edt/eunit/runtime/MultiStatus.egl',
 	'eze$$runtimePropertiesFile': 'org.eclipse.edt.eunit.runtime.MultiStatus',
 		"constructor": function() {
+			egl.loadScript( "org.eclipse.edt.eunit.runtime","Status" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","LogResult" );
 			egl.loadScript( "org.eclipse.edt.eunit.runtime","ConstantsLib" );
-			egl.loadScript( "org.eclipse.edt.eunit.runtime","Status" );
+			new egl.eglx.rbd.StrLib();
 			new egl.org.eclipse.edt.eunit.runtime.LogResult();
 			new egl.org.eclipse.edt.eunit.runtime.ConstantsLib();
-			new egl.eglx.rbd.StrLib();
 			this.eze$$setInitial();
 		}
 		,
@@ -197,9 +197,9 @@ egl.defineClass('org.eclipse.edt.eunit.runtime', 'MultiStatus',
 		"eze$$getChildVariables": function() {
 			var eze$$parent = this;
 			return [
+			{name: "StrLib", value : egl.eglx.rbd.StrLib['$inst'], type : "eglx.rbd.StrLib", jsName : "egl.eglx.rbd.StrLib['$inst']"},
 			{name: "LogResult", value : egl.org.eclipse.edt.eunit.runtime.LogResult['$inst'], type : "org.eclipse.edt.eunit.runtime.LogResult", jsName : "egl.org.eclipse.edt.eunit.runtime.LogResult['$inst']"},
 			{name: "ConstantsLib", value : egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'], type : "org.eclipse.edt.eunit.runtime.ConstantsLib", jsName : "egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']"},
-			{name: "StrLib", value : egl.eglx.rbd.StrLib['$inst'], type : "eglx.rbd.StrLib", jsName : "egl.eglx.rbd.StrLib['$inst']"},
 			{name: "testCnt", value : eze$$parent.testCnt, type : "eglx.lang.EInt", jsName : "testCnt"},
 			{name: "expectedCnt", value : eze$$parent.expectedCnt, type : "eglx.lang.EInt", jsName : "expectedCnt"},
 			{name: "passedCnt", value : eze$$parent.passedCnt, type : "eglx.lang.EInt", jsName : "passedCnt"},
