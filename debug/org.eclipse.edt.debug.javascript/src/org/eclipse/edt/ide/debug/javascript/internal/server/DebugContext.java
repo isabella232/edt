@@ -354,7 +354,8 @@ public class DebugContext extends AbstractContext implements IContext2
 				{
 					try
 					{
-						String relativePath = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( breakpoint.getMarker().getResource() ) );
+						String relativePath = RUIDebugUtil
+								.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( breakpoint.getMarker().getResource() ) );
 						if ( relativePath != null )
 						{
 							sb.append( relativePath );
@@ -548,7 +549,7 @@ public class DebugContext extends AbstractContext implements IContext2
 		}
 		ps.print( EvServer.getInstance().getGoodResponseHeader( "", "text/html", false ) ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-
+	
 	@Override
 	public boolean useTestServer()
 	{

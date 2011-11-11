@@ -22,8 +22,8 @@ import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 
 public class DebugHTMLGenerator extends ContextAwareHTMLGenerator
 {
-	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv, RUIDependencyList dependencyList )
+	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale,
+			String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList )
 	{
 		super( processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList );
 	}

@@ -25,8 +25,8 @@ import org.eclipse.edt.ide.rui.server.SavedContentProvider;
 public class DebugContentProvider extends SavedContentProvider
 {
 	@Override
-	protected HTMLGenerator getDevelopmentGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale,
-			String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList )
+	protected HTMLGenerator getDevelopmentGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties,
+			String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList )
 	{
 		return new DebugHTMLGenerator( processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList );
 	}

@@ -107,7 +107,8 @@ public class RUIDebugUtil
 			start = 0;
 		}
 		
-		if ( DebugUtil.isEGLFileName( filename ) ) {
+		if ( DebugUtil.isEGLFileName( filename ) )
+		{
 			end = filename.length() - 4;
 		}
 		else
