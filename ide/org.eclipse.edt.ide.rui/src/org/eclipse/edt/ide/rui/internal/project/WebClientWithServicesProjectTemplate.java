@@ -14,8 +14,6 @@ package org.eclipse.edt.ide.rui.internal.project;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.ide.ui.wizards.EGLPackageConfiguration;
-import org.eclipse.edt.ide.ui.wizards.EGLPackageOperation;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectGeneratorOperation;
 
@@ -57,21 +55,5 @@ public class WebClientWithServicesProjectTemplate extends
 	protected void setDefaultPackages() {
 		this.setDefaultPackages(new String[]{CLIENT, SERVER, COMMON});
 	}
-	
-	protected void createPackage(final ProjectConfiguration eglProjConfiguration,
-			List listOps, String basePackage, String packageName) {
-		String comboundPackageName;
-		if(packageName != null && packageName.length()>0){
-			if(basePackage !=null && basePackage.length()>0){
-				comboundPackageName = basePackage + "." + packageName;
-			}else{
-				comboundPackageName = packageName;
-			}
-		}else if(basePackage !=null && basePackage.length()>0){
-			comboundPackageName = basePackage;
-		}else{
-			return;
-		}
-		super.createPackage(eglProjConfiguration, listOps, basePackage, comboundPackageName);
-	}
+
 }

@@ -85,7 +85,25 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 
 	@Override
 	protected void setDefaultPackages() {
-		this.setDefaultPackages(new String[]{CLIENT, COMMON});
+		this.setDefaultPackages(new String[]{CLIENT/*, COMMON*/});
+	}
+	
+	@Override
+	protected void createPackage(final ProjectConfiguration eglProjConfiguration,
+			List listOps, String basePackage, String packageName) {
+		String comboundPackageName;
+		if(packageName != null && packageName.length()>0){
+			if(basePackage !=null && basePackage.length()>0){
+				comboundPackageName = basePackage + "." + packageName;
+			}else{
+				comboundPackageName = packageName;
+			}
+		}else if(basePackage !=null && basePackage.length()>0){
+			comboundPackageName = basePackage;
+		}else{
+			return;
+		}
+		super.createPackage(eglProjConfiguration, listOps, basePackage, comboundPackageName);
 	}
 
 }

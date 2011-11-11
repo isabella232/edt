@@ -13,7 +13,7 @@ package org.eclipse.edt.ide.rui.wizards;
 
 import java.util.ArrayList;
 
-import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.rui.internal.wizards.RuiNewWizardMessages;
 import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryPage;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizard;
@@ -26,13 +26,13 @@ public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	
 	public void addPages() {
 		libraryPage = getLibraryPage();
-		libraryPage.setTitle(NewWizardMessages.WebClientProjectTemplateWizard_0);
+		libraryPage.setTitle(RuiNewWizardMessages.WebClientProjectTemplateWizard_0);
 		addPage(libraryPage);
 		super.addPages();
 	}
 	
 	protected ProjectWizardRUILibraryPage getLibraryPage(){
-		return new ProjectWizardRUILibraryPage(NewWizardMessages.RUILibraryPage);
+		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage);
 	}
 
 	public boolean performFinish() {

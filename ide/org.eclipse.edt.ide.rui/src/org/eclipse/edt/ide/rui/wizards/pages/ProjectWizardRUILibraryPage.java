@@ -19,12 +19,21 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
+import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.rui.internal.project.CommonUtilities;
 import org.eclipse.edt.ide.rui.internal.project.IWidgetLibraryConflict;
-import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.rui.internal.wizards.RuiNewWizardMessages;
 import org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard;
+import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardPage;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
+import org.eclipse.edt.ide.ui.internal.project.wizards.ProjectWizardUtils;
+import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.wizards.EGLWizardUtilities.NameValidatorProblemRequestor;
 import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
 import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -64,6 +73,11 @@ import org.eclipse.swt.widgets.Text;
 public class ProjectWizardRUILibraryPage extends ProjectWizardPage {	
 	
 	private static final String RUI_WIDGET_LIBRARY_ID = "org.eclipse.edt.rui.widgets_0.7.0";
+	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.rui", 0, "OK", null); //$NON-NLS-1$
+	private static final String BASE_PACKAGE_HINT = "com.mycompany.myapp"; //$NON-NLS-1$
+	private Label basePackageLabel;
+	protected Text basePackage;
+	
 	/** The table presenting the templates. */
 	private CheckboxTableViewer fTableViewer;
 	private Label fDetailLabel;
@@ -76,8 +90,8 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 
 	public ProjectWizardRUILibraryPage(String pageName) {
 		super(pageName);
-		setTitle(NewWizardMessages.RUILibraryPageTitle);
-		setDescription(NewWizardMessages.RUILibraryPageDescription);
+		setTitle(RuiNewWizardMessages.RUILibraryPageTitle);
+		setDescription(RuiNewWizardMessages.RUILibraryPageDescription);
 		populateLibraryData();
 	}
 	
@@ -98,7 +112,88 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 	}
 	
 	protected void createBasePackageEntry(Composite parent) {
-		// Empty
+		Composite c = new Composite(parent, SWT.NONE);
+		c.setLayoutData( new GridData(GridData.FILL_HORIZONTAL));
+		GridLayout layout = new GridLayout(2,false);
+//		layout.verticalSpacing = layout.verticalSpacing * 2;
+		layout.marginWidth = 0;
+		c.setLayout(layout);
+		
+		this.basePackageLabel = new Label(c, SWT.NULL);
+		this.basePackageLabel.setText(NewWizardMessages.EGLProjectWizardTypePage_BasePackage);
+		this.basePackage = new Text(c, SWT.BORDER);
+		this.basePackage.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				String name = ((Text)e.widget).getText();
+				((NewEGLProjectWizard)((WebClientProjectTemplateWizard)getWizard()).getParentWizard()).getModel().setBasePackageName(name);		
+			}
+			
+		});
+		
+		this.basePackage.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		String defaultBasePackageName = ((NewEGLProjectWizard)((WebClientProjectTemplateWizard)getWizard()).getParentWizard()).getModel().getBasePackageName();
+		if(defaultBasePackageName != null && !defaultBasePackageName.isEmpty()){
+			basePackage.setText(defaultBasePackageName);
+		}
+		
+		hookListenerPackageName(basePackage);
+		new Label(c, SWT.NULL).setText(NewWizardMessages.EGLProjectWizardTypePage_BasePackage_Example);
+		new Label(c, SWT.NULL).setText(BASE_PACKAGE_HINT);
+	}
+	
+	private void hookListenerPackageName(Text text) {
+		text.addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				IStatus status = validatePackageName(basePackage.getText());
+				// Check whether the project name is valid
+				if (status != OK_STATUS) {
+					setErrorMessage(status.getMessage());
+				} else {
+					setErrorMessage(null);
+				}
+			    getWizard().getContainer().updateButtons();
+			}	
+		});
+	}
+	
+	public IStatus validatePackageName(String packageName) {		
+		if(packageName.length() > 0){
+			if(packageName.length() != packageName.trim().length()){
+				return ProjectWizardUtils.createErrorStatus(NewWizardMessages.error_basepackage_spaces);
+			}
+			StatusInfo pkgStatus= new StatusInfo();
+			ICompilerOptions compilerOption = new ICompilerOptions(){
+	            public boolean isVAGCompatible() {
+	            	//TODO EDT Remove isVAGCompatibility	            	
+	            	return false;
+	            }
+				public boolean isAliasJSFNames() {
+					return EGLAliasJsfNamesSetting.isAliasJsfNames();
+				}            
+	        };
+	        NameValidatorProblemRequestor nameValidaRequestor = new NameValidatorProblemRequestor(pkgStatus);
+			EGLNameValidator.validate(packageName, EGLNameValidator.PACKAGE, nameValidaRequestor, compilerOption);
+			if(!pkgStatus.isOK())
+				return ProjectWizardUtils.createErrorStatus(pkgStatus.getMessage());
+		}
+		
+		return OK_STATUS;
+	}
+	
+	public boolean isPageComplete() {
+		return super.isPageComplete() && validatePage();
+	}
+		
+	private boolean validatePage() {
+		// This method is invoked before modifyText listener, so we need to check the project name
+		IStatus status = validatePackageName(basePackage.getText());
+		if(status != OK_STATUS)
+			return false;
+		
+		return true;
 	}
 	
 	private void populateLibraryData() {
@@ -151,7 +246,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		fTableViewer.setContentProvider(new LibraryContentProvider());
 		
 		TableViewerColumn column1= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
-		column1.getColumn().setText(NewWizardMessages.RUILibraryPage_libname_label);
+		column1.getColumn().setText(RuiNewWizardMessages.RUILibraryPage_libname_label);
 		column1.setLabelProvider(new ColumnLabelProvider(){
 			public String getText(Object element) {
 				LibraryNode insertDataNode = (LibraryNode)element;
@@ -161,7 +256,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		columnLayout.addColumnData(new ColumnWeightData(4, 70, true));
 
 		final TableViewerColumn column2= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
-		column2.getColumn().setText(NewWizardMessages.RUILibraryPage_version_label);
+		column2.getColumn().setText(RuiNewWizardMessages.RUILibraryPage_version_label);
 		column2.setEditingSupport(new VersionColumnEditingSupport(fTableViewer));
 		column2.setLabelProvider(new ColumnLabelProvider(){
 			public String getText(Object element) {
@@ -172,7 +267,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		columnLayout.addColumnData(new ColumnWeightData(2, 70, true));
 
 		final TableViewerColumn column3= new TableViewerColumn(fTableViewer, new TableColumn(table, SWT.NONE));
-		column3.getColumn().setText(NewWizardMessages.RUILibraryPage_provider_label);
+		column3.getColumn().setText(RuiNewWizardMessages.RUILibraryPage_provider_label);
 		column3.setLabelProvider(new ColumnLabelProvider(){
 			public String getText(Object element) {
 				LibraryNode insertDataNode = (LibraryNode)element;
@@ -209,7 +304,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 
 	private void createDetailGroup(Composite ancestor) {
 		Group group = new Group(ancestor, SWT.NULL);
-		group.setText(NewWizardMessages.RUILibraryPage_details_label);
+		group.setText(RuiNewWizardMessages.RUILibraryPage_details_label);
 
 		//GridLayout
 		GridLayout layout = new GridLayout(2, false);

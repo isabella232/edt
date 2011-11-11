@@ -11,8 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.wizards;
 
-import org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages;
-import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryAndBasePackagePage;
+import org.eclipse.edt.ide.rui.internal.wizards.RuiNewWizardMessages;
 import org.eclipse.edt.ide.rui.wizards.pages.ProjectWizardRUILibraryPage;
 
 public class WebClientWithServicesProjectTemplateWizard extends
@@ -22,11 +21,11 @@ public class WebClientWithServicesProjectTemplateWizard extends
 	public void addPages() {
 		super.addPages();
 		
-		libraryPage.setTitle(NewWizardMessages.WebClientWithServicesProjectTemplateWizard_0);
+		libraryPage.setTitle(RuiNewWizardMessages.WebClientWithServicesProjectTemplateWizard_0);
 	}
 	
 	protected ProjectWizardRUILibraryPage getLibraryPage(){
-		return new ProjectWizardRUILibraryAndBasePackagePage(NewWizardMessages.RUILibraryPage);
+		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage);
 	}
 
 }

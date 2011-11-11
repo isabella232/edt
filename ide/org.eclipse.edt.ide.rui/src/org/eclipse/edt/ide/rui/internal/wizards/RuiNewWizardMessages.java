@@ -13,16 +13,16 @@ package org.eclipse.edt.ide.rui.internal.wizards;
 
 import org.eclipse.osgi.util.NLS;
 
-public class NewWizardMessages extends NLS {
+public class RuiNewWizardMessages extends NLS {
 
 	private static final String BUNDLE_NAME = "org.eclipse.edt.ide.rui.internal.wizards.NewWizardMessages"; //$NON-NLS-1$
 
-	private NewWizardMessages() {
+	private RuiNewWizardMessages() {
 		// Do not instantiate
 	}
 
 	static {
-		NLS.initializeMessages(BUNDLE_NAME, NewWizardMessages.class);
+		NLS.initializeMessages(BUNDLE_NAME, RuiNewWizardMessages.class);
 	}	
 	
 	public static String RUILibraryPage;
