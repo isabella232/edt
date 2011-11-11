@@ -42,6 +42,7 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
+import org.eclipse.edt.mof.egl.PatternType;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -217,16 +218,16 @@ public class MVCTemplate extends JavaScriptTemplate {
 				ctx.invoke(genQualifier, field, ctx, out); 	 ctx.invoke(genAccessor, field, ctx, out);
 				out.print( ".publishHelper = new egl.egl.jsrt.Delegate(");
 				ctx.invoke(genQualifier, field, ctx, out); 	 ctx.invoke(genAccessor, field, ctx, out);
-				out.print(", function(/*String*/ s ) { try { " );
+				out.println(", function(/*String*/ s ) { try { " );
 				genWithQualifier(ctx, view, out);
 
 				if(null != annoMvcView && null != PublishMethodName){
 					out.print(".");
 					ctx.invoke(genName, PublishMethodName.getNamedElement(), ctx, out);  // NOGO sbg Verify with test;  may need to alias the qualifier
 //					PublishMethodName.getMember().accept( context.getAliaser() );
-					out.print("(s);" );
+					out.println("(s);" );
 				}else{
-					out.print(".setText(s);" );
+					out.println(".setText(s);" );
 				}
 				genCatchBlock(ctx, "publishHelper", model, out);
 				
@@ -245,9 +246,9 @@ public class MVCTemplate extends JavaScriptTemplate {
 				if(null != annoMvcView && null != retrieveViewHelperMethodName){
 					out.print(".");
 					ctx.invoke(genName, retrieveViewHelperMethodName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     retrieveViewHelperMethodName.getMember().accept( context.getAliaser() );
-					out.print("();");
+					out.println("();");
 				}else{
-					out.print(".getText();");
+					out.println(".getText();");
 				}
 				genCatchBlock(ctx, "retrieveViewHelper", model, out);
 				
@@ -262,7 +263,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 					genWithQualifier(ctx, view, out);			
 					out.print( "." );
 					ctx.invoke(genName, retrieveValidStateHelperMethodName.getNamedElement(), ctx, out);  // NOGO sbg Verify with test; possibly alias qualifier     retrieveValidStateHelperMethodName.getMember().accept( context.getAliaser() );
-					out.print( "();" );
+					out.println( "();" );
 					genCatchBlock(ctx, "retrieveValidStateHelper", model, out);
 				}
 
@@ -272,11 +273,11 @@ public class MVCTemplate extends JavaScriptTemplate {
 					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
 					out.print( ".publishMessageHelper = new egl.egl.jsrt.Delegate(");
 					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
-					out.print(", function(/*String*/ s ) { try { " );
+					out.println(", function(/*String*/ s ) { try { " );
 					genWithQualifier(ctx, view, out);
 					out.print(".");
 					ctx.invoke(genName, publishMessageHelperMethodName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
-					out.print( "(s);" );
+					out.println( "(s);" );
 					genCatchBlock(ctx, "publishMessageHelper", model, out);
 				}
 				
@@ -285,11 +286,11 @@ public class MVCTemplate extends JavaScriptTemplate {
 					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
 					out.print( ".showErrorState = new egl.egl.jsrt.Delegate(");
 					ctx.invoke(genQualifier, field, ctx, out);	ctx.invoke(genAccessor, field, ctx, out);
-					out.print(", function(/*Boolean*/ b ) { try { " );
+					out.println(", function(/*Boolean*/ b ) { try { " );
 					genWithQualifier(ctx, view, out);
 					out.print(".");
 					ctx.invoke(genName, showErrorStateName.getNamedElement(), ctx, out); // NOGO sbg Verify with test; possibly alias qualifier     publishMessageHelperMethodName.getMember().accept(context.getAliaser());
-					out.print( "(b);" );
+					out.println( "(b);" );
 					genCatchBlock(ctx, "showErrorState", model, out);
 				}
 				
@@ -363,8 +364,25 @@ public class MVCTemplate extends JavaScriptTemplate {
 			out.print(" == null ? \"\" : ");
 		}
 		
-		if (!model.getType().equals(TypeUtils.Type_STRING)) { 
-			AsExpression asExpr = IRUtils.createAsExpression(model, TypeUtils.Type_STRING);
+		if (!model.getType().equals(TypeUtils.Type_STRING)) {
+			AsExpression asExpr;
+			if (TypeUtils.Type_TIMESTAMP.equals(model.getType().getClassifier())) {
+				// We want it to use the full, default pattern, not what's defined on the field.
+				Expression withoutPattern = (Expression)model.clone();
+				if (withoutPattern instanceof Field) {
+					((Field)withoutPattern).setType(withoutPattern.getType().getClassifier());
+				}
+				else if (withoutPattern instanceof MemberName) {
+					((MemberName)withoutPattern).getMember().setType(withoutPattern.getType().getClassifier());
+				}
+				else if (withoutPattern instanceof MemberAccess) {
+					((MemberAccess)withoutPattern).getMember().setType(withoutPattern.getType().getClassifier());
+				}
+				asExpr = IRUtils.createAsExpression(withoutPattern, TypeUtils.Type_STRING);
+			}
+			else {
+				asExpr = IRUtils.createAsExpression(model, TypeUtils.Type_STRING);
+			}
 			ctx.invoke(genExpression, asExpr, ctx, out);
 		}
 		else 
@@ -430,7 +448,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				out.print( "null" );
 			}
 			else {
-				out.print("egl.eglx.lang.ETimestamp.currentTimeStamp()");
+				ctx.invoke(genDefaultValue, model.getType(), ctx, out);
 			}
 			out.print( " : " );
 		}
@@ -515,8 +533,6 @@ public class MVCTemplate extends JavaScriptTemplate {
 		{
 			ctx.invoke(genExpression, x, ctx, out);
 		}
-		
-		out.println();
 	}
 	
 
@@ -936,7 +952,12 @@ public class MVCTemplate extends JavaScriptTemplate {
 				properties.add(getDatetimeFormat(ctx, annot.getValue()));
 			}
 			else {
-				properties.add("\"\"");
+				Type type = member.getType();
+				String pattern = null;
+				if (type instanceof PatternType) {
+					pattern = ((PatternType)type).getPattern();
+				}
+				properties.add(pattern == null ? "\"\"" : "egl.formatTimeStampPattern(\"" + pattern + "\")");
 			}
 		}
 		
