@@ -514,13 +514,22 @@
             	id="org.eclipse.edt.ide.ui.newHandlerAction">
         	</action>
         	<action
-            	definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
+            	definitionId="org.eclipse.edt.ide.ui.newServiceWizard"
             	label="%ServiceAction.label"
             	icon="icons/etool16/nsvc_wiz.gif"
             	tooltip="%ServiceAction.tooltip"
             	class="org.eclipse.edt.ide.ui.internal.actions.NewServiceAction"
             	toolbarPath="EGLMain"
             	id="org.eclipse.edt.ide.ui.NewServiceAction">
+        	</action>
+        	<action
+            	definitionId="org.eclipse.edt.ide.ui.newSourceFileWizard"
+            	label="%SourceFileAction.label"
+            	icon="icons/ctool16/newfle_wiz.gif"
+            	tooltip="%SourceFileAction.tooltip"
+            	class="org.eclipse.edt.ide.ui.internal.actions.NewSourceFileAction"
+            	toolbarPath="EGLMain"
+            	id="org.eclipse.edt.ide.ui.newSourceFileAction">
         	</action>
         	<action
             	definitionId="org.eclipse.edt.ide.ui.newProjectWizard"
