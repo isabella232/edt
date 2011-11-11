@@ -42,11 +42,13 @@ public class DeployJob extends WorkspaceJob {
 	}
 
 	public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask(Messages.deploy_operation_task_name, IProgressMonitor.UNKNOWN);
+		monitor.beginTask(Messages.deploy_operation_task_name, 100);
 		try {
 			new DeployOperation().deploy(models, monitor);
 		} catch (Exception e) {
 			Activator.getDefault().log("Error running deploy job", e);
+		}finally{
+			monitor.done();
 		}
 
 	  	return Status.OK_STATUS;
