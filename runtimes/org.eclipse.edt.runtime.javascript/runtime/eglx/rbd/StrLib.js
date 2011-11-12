@@ -57,7 +57,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"clip_1_S": function(source) {
-			if ((egl.eglx.lang.NullType.equals({eze$$value : source, eze$$signature : "S;"}, null))) {
+			if ((egl.eglx.lang.NullType.equals(source, null))) {
 				return null;
 			}
 			else {
@@ -68,29 +68,31 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"clip_2_S_I": function(source, clipType) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : source, eze$$signature : "S;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : clipType, eze$$signature : "I;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(source, null)) || (egl.eglx.lang.NullType.equals(clipType, null))))) {
 				return null;
 			}
 			else {
-				if (((clipType == 0))) {
-					var eze$Temp7 = "";
-					eze$Temp7 = egl.eglx.lang.EString.trim(source);
-					return eze$Temp7;
-				}
-				else {
-					if (((clipType == 1))) {
-						var eze$Temp9 = "";
-						eze$Temp9 = egl.eglx.lang.EString.clipLeading(source);
-						return eze$Temp9;
+				{
+					EzeLabel_eze_CaseLabel_0: if (((clipType == 0))) {
+						var eze$Temp7 = "";
+						eze$Temp7 = egl.eglx.lang.EString.trim(source);
+						return eze$Temp7;
 					}
 					else {
-						if (((clipType == 2))) {
-							var eze$Temp11 = "";
-							eze$Temp11 = egl.eglx.lang.EString.clip(source);
-							return eze$Temp11;
+						if (((clipType == 1))) {
+							var eze$Temp9 = "";
+							eze$Temp9 = egl.eglx.lang.EString.clipLeading(source);
+							return eze$Temp9;
 						}
 						else {
-							return source;
+							if (((clipType == 2))) {
+								var eze$Temp11 = "";
+								eze$Temp11 = egl.eglx.lang.EString.clip(source);
+								return eze$Temp11;
+							}
+							else {
+								return source;
+							}
 						}
 					}
 				}
@@ -98,7 +100,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatDate": function(dateValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : dateValue, eze$$signature : "K;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(dateValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -113,7 +115,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_i_S": function(intValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : intValue, eze$$signature : "i;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(intValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -128,7 +130,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_I_S": function(intValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : intValue, eze$$signature : "I;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(intValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -143,7 +145,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_B_S": function(intValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : intValue, eze$$signature : "B;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(intValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -158,7 +160,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_d_S": function(decValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : decValue, eze$$signature : "d;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(decValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -171,7 +173,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_f_S": function(floatValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "f;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(floatValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -186,7 +188,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatNumber_2_F_S": function(floatValue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : floatValue, eze$$signature : "F;"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(floatValue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -201,7 +203,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"formatTimeStamp": function(timestampvalue, format) {
-			if ((((egl.eglx.lang.NullType.equals({eze$$value : timestampvalue, eze$$signature : "J'yyyyMMddHHmmssffffff';"}, null)) || (egl.eglx.lang.NullType.equals({eze$$value : format, eze$$signature : "S;"}, null))))) {
+			if ((((egl.eglx.lang.NullType.equals(timestampvalue, null)) || (egl.eglx.lang.NullType.equals(format, null))))) {
 				return null;
 			}
 			else {
@@ -215,13 +217,13 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		,
 		"getNextToken": function(source, index, delimiters) {
 			var charIndex = 0;
-			charIndex = egl.eglx.lang.EInt32.fromEDecimal((((new egl.javascript.BigDecimal(egl.divide(egl.eglx.lang.EAny.unbox(index),2))).add(egl.eglx.lang.EDecimal.fromEInt16(1, egl.javascript.BigDecimal.prototype.NINES[3])))));
+			charIndex = egl.eglx.lang.EInt32.fromEDecimal((((new egl.javascript.BigDecimal(egl.divide(egl.eglx.lang.EAny.unbox(index),2))).add(egl.eglx.lang.EDecimal.fromEInt16(1, egl.javascript.BigDecimal.prototype.NINES[3])))),"d;");
 			var eze$Temp42 = null;
 			eze$Temp42 = egl.eglx.lang.EAny.ezeWrap(charIndex);
 			var token = null;
-			token = egl.eglx.lang.StringLib.getNextToken(egl.eglx.lang.EAny.unbox(source), eze$Temp42, delimiters);
+			token = egl.eglx.lang.StringLib.getNextToken(source, eze$Temp42, delimiters);
 			charIndex = eze$Temp42.ezeUnbox();
-			if ((egl.eglx.lang.NullType.notEquals({eze$$value : token, eze$$signature : "S;"}, null))) {
+			if ((egl.eglx.lang.NullType.notEquals(token, null))) {
 				index.ezeCopy(((((((charIndex - 1)) * 2)) + 1)));
 			}
 			return token;
@@ -235,18 +237,18 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		,
 		"indexOf_2_S_S": function(source, pattern) {
 			var eze$Temp45 = 0;
-			eze$Temp45 = egl.eglx.lang.EString.indexOf(egl.eglx.lang.EAny.unbox(source), pattern);
+			eze$Temp45 = egl.eglx.lang.EString.indexOf(source, pattern);
 			return eze$Temp45;
 		}
 		,
 		"indexOf_3_S_S_I": function(source, pattern, startIndex) {
 			var eze$Temp46 = 0;
-			eze$Temp46 = egl.eglx.lang.EString.indexOf(egl.eglx.lang.EAny.unbox(source), pattern, startIndex);
+			eze$Temp46 = egl.eglx.lang.EString.indexOf(source, pattern, startIndex);
 			return eze$Temp46;
 		}
 		,
 		"lowerCase": function(characterItem) {
-			if ((egl.eglx.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "S;"}, null))) {
+			if ((egl.eglx.lang.NullType.equals(characterItem, null))) {
 				return null;
 			}
 			else {
@@ -257,7 +259,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"spaces": function(characterCount) {
-			if ((egl.eglx.lang.NullType.equals({eze$$value : characterCount, eze$$signature : "I;"}, null))) {
+			if ((egl.eglx.lang.NullType.equals(characterCount, null))) {
 				return null;
 			}
 			else {
@@ -276,7 +278,7 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		}
 		,
 		"upperCase": function(characterItem) {
-			if ((egl.eglx.lang.NullType.equals({eze$$value : characterItem, eze$$signature : "S;"}, null))) {
+			if ((egl.eglx.lang.NullType.equals(characterItem, null))) {
 				return null;
 			}
 			else {
