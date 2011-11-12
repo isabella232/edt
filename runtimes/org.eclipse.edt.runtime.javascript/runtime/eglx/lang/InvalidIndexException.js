@@ -8,6 +8,19 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+egl.createInvalidIndexException = function( /*string*/ messageID, /*string or array*/ inserts )
+{
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	args.push( [ "indexValue", arguments[ 2 ] || 0 ] );
+	return new egl.eglx.lang.InvalidIndexException( args );
+}
+
 egl.defineClass('eglx.lang', "InvalidIndexException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/lang/Exceptions.egl",
 		"constructor": function() {
