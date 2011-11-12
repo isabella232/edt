@@ -30,10 +30,13 @@ import org.eclipse.edt.mof.egl.Type;
 
 public class ArrayTypeTemplate extends JavaScriptTemplate {
 
-	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType) {
+	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType, Expression expr) {
 		// types can override this to cause an compound assignment expression to be broken up
 		// the arg contains the operation being asked about
-		return false;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
+		if(expr instanceof Assignment && ((Assignment)expr).getLHS() instanceof MemberAccess && CommonUtilities.isRUIWidget(((Assignment)expr).getLHS().getQualifier().getType())){
+			return false;
+		}
+		return true;  ///TODO sbg This should be true but it breaks onChange ::= some_delegate
 	}
 	
 	public Boolean isListReorganizationWanted(Type type, Context ctx, Expression expr) {

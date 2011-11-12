@@ -81,4 +81,10 @@ public class PartTemplate extends JavaScriptTemplate {
 	public Boolean supportsConversion(Part part, Context ctx) {
 		return Boolean.TRUE;
 	}
+	
+	public void genJSSignature(Part type, Context ctx, TabbedWriter out) {
+		out.print("T");
+		out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
+		out.print(";");
+	}
 }

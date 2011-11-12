@@ -44,12 +44,12 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (arg1 instanceof MemberName
 				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+					&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
 				out.print(".ezeUnbox()");
 			out.print(")");
 			// check to see if we are copying LHS boxed temporary variables (inout and out types only)
 		} else if (ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+				&& ctx.getAttribute(expr.getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("eglx.lang.EAny") + ".ezeWrap(");
@@ -57,13 +57,13 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 			if (arg1 instanceof MemberName
 				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
+					&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN)
 				out.print(".ezeUnbox()");
 			out.print(")");
 			// check to see if we are unboxing RHS temporary variables (inout and out types only)
 		} else if (arg1 instanceof MemberName
 			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != null
-			&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
+				&& ctx.getAttribute(((MemberName) arg1).getMember(), org.eclipse.edt.gen.Constants.SubKey_functionArgumentTemporaryVariable) != ParameterKind.PARM_IN) {
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(arg2);
 			ctx.invoke(genExpression, arg1, ctx, out);
@@ -75,10 +75,10 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 	public void genExpression(MemberName expr, Context ctx, TabbedWriter out) {
 		Member member = expr.getMember();
 		if (member != null && member instanceof Function) {
-			ctx.invoke(genCallbackAccesor, expr, ctx, out);
+			ctx.invoke(genCallbackAccesor, expr, ctx, out, null);
 		} else if (member != null && member.getContainer() != null && member.getContainer() instanceof Type) {
 			ctx.invoke(genContainerBasedMemberName, (Type) member.getContainer(), ctx, out, expr, member);
-		} else  {
+		} else {
 			genMemberName(expr, ctx, out);
 		}
 	}
@@ -87,11 +87,21 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		return (Function) ctx.invoke(getCallbackFunction, expr.getMember(), ctx);
 	}
 
-	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out) {
-		out.print("new egl.egl.jsrt.Delegate(this, ");
-		ctx.invoke(genPartName, expr.getMember().getContainer(), ctx, out);
-		out.print(".prototype.");
-		ctx.invoke(genName, expr.getMember(), ctx, out);
+	public void genCallbackAccesor(MemberName expr, Context ctx, TabbedWriter out, Member arg1) {
+		out.print("new egl.egl.jsrt.Delegate(this");
+		if ( arg1 != null ) {
+			out.print(".");
+			ctx.invoke(genName, expr.getMember(), ctx, out);
+			out.print(", this.");
+			ctx.invoke(genName, expr.getMember(), ctx, out);
+			out.print(".");
+			ctx.invoke(genName, arg1, ctx, out);
+		} else {
+			out.print(", ");
+			ctx.invoke(genPartName, expr.getMember().getContainer(), ctx, out);
+			out.print(".prototype.");
+			ctx.invoke(genName, expr.getMember(), ctx, out);
+		}
 		out.print(")");
 	}
 
@@ -110,7 +120,7 @@ public class MemberNameTemplate extends JavaScriptTemplate {
 		ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		unboxEnd(unbox, out);
 	}
-	
+
 	private static boolean isBoxedParameterType(FunctionParameter parameter, EglContext ctx)
 	{
 		/* TODO sbg If the parm type is ANY, then we want to also treat as boxed; this check may get moved

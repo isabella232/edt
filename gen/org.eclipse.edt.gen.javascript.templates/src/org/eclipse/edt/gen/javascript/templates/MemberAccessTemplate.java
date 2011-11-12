@@ -42,7 +42,11 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
 		// if this is a delegate...
 		if (expr.getMember() instanceof Function)
-			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+			if (expr.getQualifier() instanceof MemberName) {
+				ctx.invoke(genCallbackAccesor, expr.getQualifier(), ctx, out, expr.getMember());
+			} else {
+				ctx.invoke(genAccessor, expr.getMember(), ctx, out);
+			}
 		else {
 			if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
 				out.print("egl.checkNull(");

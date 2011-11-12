@@ -22,6 +22,7 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -31,6 +32,7 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -47,7 +49,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		return false;
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType, Expression expr) {
 		// types can override this to cause an compound assignment expression to be broken up 
 		// the arg contains the operation being asked about
 		if (arg.equals("**=") || arg.equals("?:=") || arg.equals("::="))
@@ -305,7 +307,8 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// beware that Widget (an ET) is compatible with RUIWidget (a kind of handler).
 		//TODO expressiongenerator has the impl. for these special caess
 		
-		if ( lhsTypeSig.equals( "eglx.lang.AnyException" ) && isaType instanceof NamedElement )
+		if ( (lhsTypeSig.equals( "eglx.lang.AnyException" ) && isaType instanceof NamedElement) ||
+				(isaType instanceof ExternalType) )
 		{
 			out.print("(");
 			ctx.invoke(genExpression, lhs, ctx, out);
@@ -338,7 +341,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, lhs, ctx, out);
 			out.print(", ");
 			out.print("\"");
-			ctx.invoke(genSignature, isaType, ctx, out); 
+			if ( isaType instanceof Part )
+				ctx.invoke(genJSSignature, isaType, ctx, out);
+			else
+				ctx.invoke(genSignature, isaType, ctx, out); 
 			out.print("\"");
 			out.print(")");
 		}
