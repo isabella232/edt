@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 
@@ -62,10 +63,10 @@ public class NumberTypeTemplate extends JavaTemplate {
 			ctx.invokeSuper(this, genUnaryExpression, type, ctx, out, arg);
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType, Expression expr) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
 			return true;
 		else
-			return (Boolean) ctx.invokeSuper(this, org.eclipse.edt.gen.Constants.isAssignmentBreakupWanted, type, ctx, arg, rhsType);
+			return (Boolean) ctx.invokeSuper(this, org.eclipse.edt.gen.Constants.isAssignmentBreakupWanted, type, ctx, arg, rhsType, expr);
 	}
 }
