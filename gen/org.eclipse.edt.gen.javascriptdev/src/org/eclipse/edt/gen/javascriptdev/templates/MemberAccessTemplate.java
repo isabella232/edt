@@ -50,7 +50,7 @@ public class MemberAccessTemplate extends org.eclipse.edt.gen.javascript.templat
 			idName = ((PartName)expr.getQualifier()).getId();
 		}
 		if ( idName != null ) {
-			out.print("(function(x){ if ( x !== null ) egl.setWidgetMoveable( x.");
+			out.print("(function(x){ if ( x !== null && x !== undefined ) egl.setWidgetMoveable( x.");
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			out.print(", \"");
 			out.print( idName );
