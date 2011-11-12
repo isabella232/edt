@@ -147,7 +147,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 
 	private void genCallbackAccesor(Expression callBack, Context ctx, TabbedWriter out){
 		if(callBack != null){
-			ctx.invoke(genCallbackAccesor, callBack, ctx, out);
+			ctx.invoke(genCallbackAccesor, callBack, ctx, out, null);
 		}
 		else{
 			out.println("null");
