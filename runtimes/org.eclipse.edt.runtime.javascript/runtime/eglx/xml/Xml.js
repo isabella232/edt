@@ -273,7 +273,7 @@ egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
 	xml = egl.trim(xml);
 	var dom = null;
 	try {
-		if (egl.Firefox || egl.XulRunner || egl.Opera || egl.IEVersion >= 9) {
+		if (!egl.IE || egl.IEVersion >= 9) {
 			dom = (new DOMParser()).parseFromString(xml, "application/xml");
 		} else {
 			if (egl.IE) {
