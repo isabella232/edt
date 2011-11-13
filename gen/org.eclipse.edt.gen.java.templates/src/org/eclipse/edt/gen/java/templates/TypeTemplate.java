@@ -75,10 +75,10 @@ public class TypeTemplate extends JavaTemplate {
 		return true;
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType, Expression expr) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
 		// types can override this to cause/prevent an compound assignment expression to be broken up
 		// the arg contains the operation being asked about. we always want certain ones broken up
-		if (arg.equals("**=") || arg.equals("?:=") || arg.equals("::="))
+		if (expr.getOperator() .equals("**=") || expr.getOperator() .equals("?:=") || expr.getOperator() .equals("::="))
 			return true;
 		else
 			return false;

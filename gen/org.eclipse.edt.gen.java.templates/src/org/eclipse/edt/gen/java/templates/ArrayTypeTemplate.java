@@ -17,7 +17,7 @@ import org.eclipse.edt.mof.egl.*;
 
 public class ArrayTypeTemplate extends JavaTemplate {
 
-	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, String arg, Type rhsType, Expression expr) {
+	public Boolean isAssignmentBreakupWanted(ArrayType type, Context ctx, Expression expr) {
 		// types can override this to cause an compound assignment expression to be broken up
 		// the arg contains the operation being asked about
 		return true;
