@@ -1024,3 +1024,26 @@ egl.eglx.lang.AnyEnumeration.notEquals = function(object1, object2){
 		return true;
 	return !(unboxedOp1==unboxedOp2);
 };
+
+/****************************************************************************
+ * AnyDelegate
+ ****************************************************************************/
+egl.defineClass( "eglx.lang", "AnyDelegate",
+{
+}
+);
+egl.eglx.lang.AnyDelegate.equals = function(object1, object2){
+	if (object1 == null && object2 == null)
+		return true;
+	if (object1 == null || object2 == null)
+		return false;
+	return object1.eq( object2 );
+};
+
+egl.eglx.lang.AnyDelegate.notEquals = function(object1, object2){
+	if (object1 == null && object2 == null)
+		return false;
+	if (object1 == null || object2 == null)
+		return true;
+	return !(object1.eq( object2 ));
+};
