@@ -14,7 +14,7 @@ package org.eclipse.edt.gen.java.templates.eglx.lang;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.Type;
 
 public class DecimalTypeTemplate extends JavaTemplate {
@@ -24,7 +24,7 @@ public class DecimalTypeTemplate extends JavaTemplate {
 		out.print(".ZERO");
 	}
 
-	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, String arg, Type rhsType, Expression expr) {
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
 		// the arg contains the operation being asked about
 		return true;
 	}
