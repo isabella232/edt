@@ -28,7 +28,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 	
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// for number type, always use the runtime
-		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny") || type.getTypeSignature().equalsIgnoreCase("eglx.lang.AnyDelegate")) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(");
