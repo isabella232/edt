@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Combo widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI combo widget defines a combo box, which presents one of several selectable options and lets the user temporarily open a dropdown list to select a different option."></meta>
+<meta name="description" content="A Rich UI combo widget defines a combo box, which presents one of several selectable options and lets the user temporarily open a dropdown list to select a different option."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, Combo, Combo Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, Combo, Combo Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,80 @@
 <h1 class="topictitle1">Combo widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI combo widget defines a combo box, which presents
+one of several selectable options and lets the user temporarily open
+a dropdown list to select a different option.</p>
+
+<div class="p">Here is example code:<pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Combo;
+import org.eclipse.edt.rui.widgets.TextField;
+import eglx.ui.rui.Event;
+
+Handler MyHandler Type RUIHandler 
+   { initialUI = [myBox] }
+
+   myBox Box{columns=2, children= [myCombo, myTextField]};
+
+   myCombo Combo
+   {
+      values = ["one", "two", "three", "four"],
+      selection = 2, onChange ::= changeFunction
+   };
+
+   myTextField TextField
+      {text = myCombo.values[myCombo.selection]};
+
+   Function changeFunction(e Event IN)
+      myTextField.text = myCombo.values[myCombo.selection];
+   end
+end </pre>
+</div>
+
+<div class="p">The following fields are supported:<ul>
+<li><span class="synph"><span class="kwd">values</span></span>, which holds an array of strings
+that each represent a selectable option.</li>
+
+<li><span class="synph"><span class="kwd">selection</span></span>, which is integer that represents
+the position of the string in the array. If you set the value of <span class="synph"><span class="kwd">selection</span></span> before
+displaying the combo box, the specified string is displayed initially;
+otherwise, the first string is displayed initially.<p>The first string
+in the array is at position 1, not 0.</p>
+</li>
+
+</ul>
+</div>
+
+<div class="p">The following functions are for general use:<ul>
+<li><span class="synph"><span class="kwd">getValues</span></span>, which takes no parameters
+and returns an array of strings that each represent a selectable option.</li>
+
+<li><span class="synph"><span class="kwd">setValues</span></span>, which takes an array of strings
+that each represent a selectable option. The function does not return
+a value.</li>
+
+</ul>
+</div>
+
+
+<p>The functions <span class="synph"><span class="kwd">getSelection</span></span> and <span class="synph"><span class="kwd">setSelection</span></span> are
+available; but in most cases, retrieve a value or assign a value to
+the <span class="synph"><span class="kwd">selection</span></span> property rather than invoking
+a function.</p>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Combo;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

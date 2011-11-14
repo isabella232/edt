@@ -51,28 +51,49 @@
    validationProxy = "org.eclipse.edt.compiler.binding.annotationType.
                       SQLResultSetControlAnnotationTypeBinding"
    }
+
+   // see enumeration type, later.
    scrollablity SQLResultSetScrollablity? = 
                 SQLResultSetScrollablity.TYPE_FORWARD_ONLY;
 
+   // see enumeration type, later.
    concurrency SQLResultSetConcurrency? = 
                SQLResultSetConcurrency.CONCUR_READ_ONLY;
 
+   // see enumeration type, later.
    holdability SQLResultSetHoldability?;
 end
 
 enumeration SQLResultSetScrollablity
+
+   // The cursor can only go forward.
+   // When the cursor has gone to a later row, 
+   // the database management system can release resources.
    TYPE_FORWARD_ONLY = 1,
+
+   // The result set is not sensitive to changes made by other users.
    TYPE_SCROLL_INSENSITIVE = 2,
+
+   // The result is sensitive to changes made by other users.
    TYPE_SCROLL_SENSITIVE = 3
 end
 
 enumeration SQLResultSetConcurrency
+
+   // The result set cannot be updated.
    CONCUR_READ_ONLY = 1,
+
+   // The result set is updatable. 
+   // Other users cannot change the retrieved rows until the cursor is closed.
    CONCUR_UPDATABLE = 2 
 end
 
 enumeration SQLResultSetHoldability
+   
+   // After a commit, cursors remain open with their positions retained.
    HOLD_CURSORS_OVER_COMMIT = 1,
+
+   // After a commit, cursors are closed.
    CLOSE_CURSORS_AT_COMMIT = 2
 end</pre>
 <anchor id="annorec_more"></anchor></dd>
@@ -116,9 +137,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00075__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00075__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22419e133">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d28083e133">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22419e136">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d28083e136">Issue</th>
 
 </tr>
 
@@ -127,17 +148,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00075__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22419e133 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d28083e133 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22419e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d28083e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00075__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22419e133 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d28083e133 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22419e136 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d28083e136 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

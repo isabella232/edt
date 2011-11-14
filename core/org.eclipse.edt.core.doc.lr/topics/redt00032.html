@@ -11,6 +11,8 @@
 <meta name="DC.subject" content="EGL packages, eglx.lang, eglx.lang EGL package"></meta>
 <meta name="keywords" content="EGL packages, eglx.lang, eglx.lang EGL package"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00050.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00272.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00271.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00270.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00102.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00058.html"></meta>
@@ -63,36 +65,12 @@ the primary language types in Eclipse IDE for EGL Developers.</p>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
-   * The supertype of every Delegate type.                            *
-   *******************************************************************/
-externalType AnyDelegate extends EAny type ClassType
-   static function $EQ(lvalue AnyDelegate in, 
-                       rvalue AnyDelegate in) 
-                   returns(EBoolean) {@Operation{"=="}};
-
-   static function $NEQ(lvalue AnyDelegate in, 
-                        rvalue AnyDelegate in) 
-                   returns(EBoolean) {@Operation{"!="}};
-end</pre>
-</td>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00272.html" title="AnyDelegate is the supertype of every enumeration type.">AnyDelegate type</a></td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
-   * The supertype of every Enumeration type.                         *
-   *******************************************************************/
-externalType AnyEnumeration extends EAny type ClassType
-   static function $EQ(lvalue AnyEnumeration in,
-                       rvalue AnyEnumeration in) 
-                   returns(EBoolean) {@Operation{"=="}};
-
-   static function $NEQ(lvalue AnyEnumeration in, 
-                        rvalue AnyEnumeration in) 
-                   returns(EBoolean) {@Operation{"!="}};
-end</pre>
-</td>
+<td class="cellrowborder" valign="top" width="100%"><a href="redt00271.html" title="AnyEnumeration is the supertype of every enumeration type.">AnyEnumeration type</a></td>
 
 </tr>
 
@@ -339,9 +317,9 @@ end
 <div class="tablenoborder"><a name="redt00032__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00032__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d10787e405">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d16560e417">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d10787e408">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d16560e420">Issue</th>
 
 </tr>
 
@@ -350,17 +328,17 @@ end
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00032__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d10787e405 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d16560e417 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d10787e408 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d16560e420 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00032__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d10787e405 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d16560e417 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d10787e408 ">See type-specific topics.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d16560e420 ">See type-specific topics.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Shadow widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI shadow widget creates a shadow effect for the widgets that are children of a Div, FloatLeft, or FloatRight widget."></meta>
+<meta name="description" content="A Rich UI shadow widget creates a shadow effect for the widgets that are children of a Div, FloatLeft, or FloatRight widget."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, Shadow, Shadow Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, Shadow, Shadow Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,186 @@
 <h1 class="topictitle1">Shadow widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI shadow widget creates a shadow effect for the
+widgets that are children of a Div, FloatLeft, or FloatRight widget.</p>
+
+<div class="p">This topic offers examples for you to try in your workspace. First,
+a simple demonstration: <pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.Shadow;
+import org.eclipse.edt.rui.widgets.TextLabel;
+
+handler MyHandler type RUIHandler{initialUI =[myShadow]}
+
+   myTextLabel TextLabel{text = "Text with a Shadow"};
+   myShadow Shadow{x = 20, y = 20, width = 100,
+                   div = new Div{padding = 5,
+                         backgroundColor = "salmon", children =[myTextLabel]}};
+end</pre>
+</div>
+
+<div class="p">Our second example uses <span class="synph"><span class="kwd">position</span></span> and <span class="synph"><span class="kwd">visibility</span></span> properties
+to help give a visual effect during a drag-and-drop operation: <pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.Shadow;
+import org.eclipse.edt.rui.widgets.TextField;
+import eglx.ui.rui.Widget;
+
+handler MyHandler type RUIHandler{initialUI =[myBox, shadow, myOtherBox]}
+
+   const OTHERBOXX INT = 30;
+   const OTHERBOXY INT = 50;
+
+   myTextField TextField{
+		   text = "What a drag!", 
+		   width = 120, 
+		   backgroundColor = "white", 
+		   onStartDrag = start, onDrag = drag, onDropOnTarget = drop};
+
+   myBox Box { children = [ myTextField{}	]};
+	
+   shadow Shadow { zIndex = 2, position = "absolute", visibility="hidden", 
+                   div = new Div { } };
+    
+   myOtherBox Box {position = "absolute", zIndex = 1, 
+                   x = OTHERBOXX, y = OTHERBOXY, 
+                   width = 200, height = 200, backgroundColor = "blue"};
+    
+   dx, dy int;
+  
+   function start(myWidget Widget in, x int in, y int in) returns(boolean)
+      dx = x - myWidget.x;
+      dy = y - myWidget.y;
+                
+      myTextField.position = "static";
+      shadow.div.children = [ myTextField ];
+      shadow.visibility = "visible";
+      return(true);
+   end
+
+   function drag(myWidget Widget in, drop Widget in, x int in, y int in)
+    	
+      shadow.x = x - dx;
+      shadow.y = y - dy;
+   end
+
+   function drop(widget Widget in, drop Widget in, x int in, y int in)
+        
+      shadow.visibility = "hidden";
+      myTextField.position = "relative";
+      myTextField.x = shadow.x - OTHERBOXX;
+      myTextField.y = shadow.y - OTHERBOXY; 
+            
+      myOtherBox.children = [ myTextField ];
+   end
+end </pre>
+</div>
+
+<div class="p">Our third example shows a way to test the location of a dragged
+widget:<pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.Div;
+import org.eclipse.edt.rui.widgets.Shadow;
+import org.eclipse.edt.rui.widgets.TextField;
+import eglx.ui.rui.Widget;
+
+handler MyHandler type RUIHandler{
+   initialUI =[shadow, myBox, myOtherBox1, myOtherBox2]}
+
+   myTextField TextField{
+      text="What a drag!", width=120, backgroundColor="white",
+      onMouseOver::=mouseOver, onMouseOut::=mouseOut, 
+      onStartDrag=start, onDrag=drag, onDropOnTarget=drop	};
+
+   myBox Box { children=[ 	myTextField{} ]};
+   
+   shadow Shadow { zIndex=2, position="absolute", 
+                   visibility="hidden", div=new Div { } };
+    
+   myOtherBox1 Box {
+      padding=10, margin=10, width=200, height=200, backgroundColor="lightblue", 
+      borderColor="black", borderWidth=2, borderStyle="solid" };
+
+   myOtherBox2 Box { padding=10, margin=10, width=200, height=200, 
+                     backgroundColor="lightyellow", 
+                     borderColor="black", borderWidth=2, borderStyle="solid" };
+    
+   dx, dy int;
+    
+   function mouseOver(e Event in)
+      myTextField.cursor = "move";
+   end
+   
+   function mouseOut(e Event in)
+      myTextField.cursor = "";
+   end
+    
+   function start(myWidget Widget in, x int in, y int in) returns(boolean)
+      dx = x - myWidget.x;
+      dy = y - myWidget.y;                
+      myTextField.position="static";
+      shadow.div.children=[ myTextField ];
+      shadow.visibility="visible";
+      return(true);
+   end
+
+   function drag(myWidget Widget in, drop Widget in, x int in, y int in)
+      shadow.x=x - dx;
+      shadow.y=y - dy;
+
+      if (inside(x, y, myOtherBox1))
+         myOtherBox1.backgroundColor = "lightgreen";
+      else
+        	myOtherBox1.backgroundColor = "lightblue";
+      end
+      
+      if (inside(x, y, myOtherBox2))
+        	myOtherBox2.backgroundColor = "lightgreen";
+      else
+          myOtherBox2.backgroundColor = "lightyellow";
+      end
+   end
+
+   function drop(widget Widget in, drop Widget in, x int in, y int in)
+      shadow.visibility="hidden";
+      myTextField.position="static";
+
+      if (inside(x, y, myOtherBox1))
+         myOtherBox1.children=[ myTextField ];
+      end
+
+      if (inside(x, y, myOtherBox2))
+       		myOtherBox2.children=[ myTextField ];
+      end
+   end
+    
+   function inside(x int in, y int in, widget Widget in) returns(boolean)
+      return (x&gt;=widget.x &amp;&amp; x&lt;=widget.pixelWidth + widget.x &amp;&amp; 
+              y&gt;=widget.y &amp;&amp; y&lt;=widget.pixelHeight + widget.y);
+   end
+end 
+</pre>
+</div>
+
+<p>The main property of the shadow widget is <span class="synph"><span class="kwd">div</span></span>,
+which takes a widget of type Div.</p>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Shadow;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

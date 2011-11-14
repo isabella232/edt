@@ -5,9 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="GridLayout widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="GridLayout widget and related types"></meta>
+<meta name="abstract" content="A Rich UI grid layout is a container with variably spaced rows and columns."></meta>
+<meta name="description" content="A Rich UI grid layout is a container with variably spaced rows and columns."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, GridLayout, GridLayout Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, GridLayout, GridLayout Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,24 +17,306 @@
 <meta name="DC.Identifier" content="redt00112"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>GridLayout widget</title>
+<title>GridLayout widget and related types</title>
 </head>
 <body id="redt00112"><a name="redt00112"><!-- --></a>
 
 
-<h1 class="topictitle1">GridLayout widget</h1>
+<h1 class="topictitle1">GridLayout widget and related types</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI grid layout is a container with variably spaced
+rows and columns.</p>
+
+<p>Each widget embedded in the grid layout has a <span class="synph"><span class="kwd">layoutData</span></span> field,
+and you specify the location of the widget by assigning a value to
+that field. Your <span class="synph"><span class="kwd">layoutData</span></span> settings also
+can align the widget horizontally and vertically within the position
+and can cause the widget to span multiple rows and columns.</p>
+
+<div class="p">The grid layout supports the following fields: <ul>
+<li><span class="synph"><span class="kwd">children</span></span>, which holds an array of widgets,
+as described in “Rich UI widget fields.”</li>
+
+<li><span class="synph"><span class="kwd">columns</span></span>, which holds an integer value
+that identifies the number of columns in the layout.</li>
+
+<li><span class="synph"><span class="kwd">row</span></span>, which holds an integer value that
+identifies the number of rows in the layout.</li>
+
+<li><span class="synph"><span class="kwd">cellPadding</span></span>, which holds an integer
+value that identifies the number of pixels around each child widget.
+A child widget might itself provide a further padding, as noted later.</li>
+
+</ul>
+</div>
+
+<p>Other supported fields are described in “Rich UI widget fields,”
+in the EGL Programmer’s Guide.</p>
+
+<div class="p">A child widget can affect the layout as a whole:<ul>
+<li>The height of a layout row is equal to the height required for
+the tallest widget in the row, including all padding. However, a widget
+that spans multiple rows does not contribute to the calculation of
+any column height.</li>
+
+<li>The width of a layout column is the width required for the widest
+widget in the column, including all padding. However, a widget that
+spans multiple columns does not contribute to the calculation of any
+column width.</li>
+
+</ul>
+</div>
+
+<div class="p">The Rich UI editor gives you a lot of help in working with a grid
+layout. In particular, you can do the following tasks: <ul>
+<li>Drag-and-drop widgets from the palette into specific cells of
+the grid layout.</li>
+
+<li>Move widgets from one cell to another.</li>
+
+<li>Drag-and-drop records from the Data view.</li>
+
+<li>Cause the automatic creation of EGL code that provides form behavior,
+including validation.</li>
+
+</ul>
+</div>
+
+<div class="p">For details on the editor capabilities just mentioned, see the
+following topics:<ul>
+<li>“Introduction to the Rich UI editor”</li>
+
+<li>“Dragging a record onto the Design tab of the Rich UI editor”</li>
+
+<li>“Form processing with Rich UI”</li>
+
+</ul>
+</div>
+
+<div class="p">Use of the grid layout typically requires all of the following
+statements:<pre class="codeblock">import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.GridLayoutLib;
+</pre>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Example</h2><p>Consider the following user interface:</p>
+<p><br></br><img src="../images/redt_ui_richui_layout01.jpg" alt="Rich UI GridLayout example"></img><br></br></p>
+<div class="p">Here is an outline of the
+Rich UI handler that forms the interface:<pre class="codeblock">handler SingleGridlayout type RUIhandler {initialUI = [ myGridLayout ]... }
+
+   myGridLayout GridLayout{ 
+      rows = 4, columns = 4, cellPadding = 4,
+      children = [ Button3, Button1, Button2 ]
+   };
+   ...
+end
+</pre>
+</div>
+<p>The <samp class="codeph">myGridLayout</samp> layout includes
+four rows, four columns, and a four-pixel padding around each cell.
+Three children are specified, and the order in which they are listed
+in the <span class="synph"><span class="kwd">children</span></span> array is not important.
+However, if multiple widgets have <span class="synph"><span class="kwd">layoutData</span></span> values
+that cause the widgets to occupy the same location, the first-listed
+of those widgets is displayed.</p>
+<p>For each widget, the value of
+the <span class="synph"><span class="kwd">layoutData</span></span> field is of type ANY. At
+this time, the field always takes a record of type <span class="synph"><span class="kwd">GridLayoutData</span></span>,
+which is described later.</p>
+<div class="p">The <samp class="codeph">myLayoutData</samp> record
+is assigned to the <span class="synph"><span class="kwd">layoutData</span></span> field of the <samp class="codeph">Button1</samp> button.
+Here is the record declaration:<pre class="codeblock">myLayoutData GridLayoutData{ row = 1, column = 2 };
+</pre>
+</div>
+<p>The record declarations needed for the <span class="synph"><span class="kwd">layoutData</span></span> fields
+of <samp class="codeph">Button2</samp> and <samp class="codeph">Button3</samp> are in the
+widget declarations themselves. Here are the declarations of all three
+buttons:</p>
+<pre class="codeblock">Button1 Button{ layoutData = myLayoutData, text = "Button1", onClick ::= respond };
+Button2 Button{ layoutData = new GridLayoutData{ row = 2, column = 3 },
+                text = "Button2" };
+Button3 Button{ layoutData = new GridLayoutData{ row = 3, column = 4 },
+                text = "Button3" };
+</pre>
+<p>If a record of type <span class="synph"><span class="kwd">GridLayoutData</span></span> is
+assigned to the <span class="synph"><span class="kwd">layoutData</span></span> field of a widget
+that is embedded in a grid layout, the <span class="synph"><span class="kwd">row</span></span> and <span class="synph"><span class="kwd">column</span></span> fields
+of the record must be set, and their values must be appropriate for
+the layout. However, you can assign a null to the <span class="synph"><span class="kwd">layoutData</span></span> field,
+in which case the embedded widget is not displayed and is not included
+in the width and height calculations that customize the layout as
+a whole.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Runtime updates to the layouts</h2><p>You can update
+the layout dynamically. For example, you might want the user's click
+of <samp class="codeph">Button1</samp> to cause the following display:</p>
+<p><br></br><img src="../images/redt_ui_richui_layout03.jpg" alt="Rich UI GridLayout example 2"></img><br></br></p>
+<div class="p">Here is the function that
+causes that display when the user clicks <samp class="codeph">Button1</samp>:<pre class="codeblock">function respond(e Event in)
+   Button2.layoutData = null;
+end	</pre>
+</div>
+<p>After the <samp class="codeph">respond</samp> function
+runs, the height of the second row and the width of the second column
+include only the padding specified in the grid layout definition.
+The third button (<samp class="codeph">Button3</samp>) moves up and to the left,
+but its position relative to <samp class="codeph">Button1</samp> does not change.</p>
+<p>Alternatively,
+you might want the user's click of <samp class="codeph">Button1</samp> to cause
+the following display:</p>
+<p><br></br><img src="../images/redt_ui_richui_layout02.jpg" alt="Rich UI GridLayout example 3"></img><br></br></p>
+<div class="p">Here is a revised <samp class="codeph">respond</samp> function:<pre class="codeblock">function respond(e Event in)
+   myLabel TextLabel {text="replace button 2"};
+   myLabel.layoutData = new GridLayoutData {row=2, column=3};
+   Button2.layoutData = null;
+   myGridLayout.appendChild(myLabel);
+end	</pre>
+</div>
+<p>In this case, the nulling of the <span class="synph"><span class="kwd">layoutData</span></span> field
+of <samp class="codeph">Button2</samp> is necessary to replace the current content
+at row 2, column 3. The new content is wider and shorter than <samp class="codeph">Button2</samp>,
+and the third button moves up and to the right.</p>
+<p>In general,
+always null the <span class="synph"><span class="kwd">layoutData</span></span> field for a widget
+that you are excluding from the grid layout. When you are replacing
+a child widget that spans columns or rows, the nulling of that widget
+can avoid a runtime error.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Example with spanning and alignment</h2><p>Consider
+the following user interface:</p>
+<p><br></br><img src="../images/redt_ui_richui_layout05.jpg" alt="Rich UI GridLayout example 4, preview"></img><br></br></p>
+<p>As shown in the
+Design tab of the Rich UI editor, the grid layout has four rows and
+three columns:</p>
+<p><br></br><img src="../images/redt_ui_richui_layout04.jpg" alt="Rich UI GridLayout example 4, design"></img><br></br></p>
+<div class="p">Consider the following aspects of the interface:<ul>
+<li>In row 1, the label is in the first column, and the text field
+extends horizontally from the second to the third column.</li>
+
+<li>In row 2, the checkbox is in the second column, but extends vertically
+to the third row.</li>
+
+<li>In row 3, the button extends horizontally from the first to the
+second column and is centered in those two columns.</li>
+
+</ul>
+</div>
+<div class="p">Here is the Rich UI handler that forms the interface:<pre class="codeblock">handler SingleGridlayout type RUIhandler {initialUI = [ myGridLayout ]... }
+
+  myGridLayout GridLayout{ 
+      rows = 4, columns = 3, cellPadding = 4,
+      children = [ myLabel, myTextField, myCheckBox, myButton ]
+   };
+
+  myLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column=1},
+                     text = "Label: " };
+
+  myTextField TextField{ layoutData = new GridLayoutData{ row = 1, column = 2,
+                         horizontalSpan = 2 }, text = "Text field"};
+	
+  myCheckBox CheckBox{ layoutData = new GridLayoutData{ row = 2, column = 2, 
+                       verticalSpan = 2 }, text="Check box" };
+
+  myButton Button{ layoutData = new GridLayoutData{ row = 4, column = 1,
+                       horizontalSpan = 2, 
+                       horizontalAlignment = GridLayoutLib.Align_Center }, 
+                       text="Button" };
+end
+</pre>
+</div>
+<p>The next section gives details on the GridLayoutData
+fields.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">GridLayoutData</h2><div class="p">The GridLayoutData fields
+are as follows:<dl>
+<dt class="dlterm"><span class="keyword">row</span></dt>
+
+<dd>An integer that represents the topmost layout row where the widget
+resides.</dd>
+
+
+<dt class="dlterm"><span class="keyword">column</span></dt>
+
+<dd>An integer that represents the leftmost layout column where the
+widget resides. </dd>
+
+
+<dt class="dlterm"><span class="keyword">cellPadding</span></dt>
+
+<dd>An integer that represents the number of pixels that are in the
+top, bottom, left, and right border of the area that the widget reserves
+for itself.</dd>
+
+
+<dt class="dlterm"><span class="keyword">horizontalspan</span></dt>
+
+<dd>The number of columns that the widget takes, including the column
+specified in the <span class="synph"><span class="kwd">column</span></span> field.</dd>
+
+
+<dt class="dlterm"><span class="keyword">verticalspan</span></dt>
+
+<dd>The number of rows that the widget takes, including the row specified
+in the <span class="synph"><span class="kwd">row</span></span> field.</dd>
+
+
+<dt class="dlterm"><span class="keyword">horizontalAlignment</span></dt>
+
+<dd>The widget's horizontal position within the columns that the widget
+reserves for itself. One of the following values: <dl>
+<dt class="dlterm">GridLayoutLib.ALIGN_LEFT</dt>
+
+<dd>At the left of the columns. </dd>
+
+
+<dt class="dlterm">GridLayoutLib.ALIGN_CENTER</dt>
+
+<dd>At the center of the columns. </dd>
+
+
+<dt class="dlterm">GridLayoutLib.ALIGN_RIGHT</dt>
+
+<dd>At the right of the columns. </dd>
+
+</dl>
+</dd>
+
+
+<dt class="dlterm"><span class="keyword">verticalAlignment</span></dt>
+
+<dd>The widget's vertical position within the rows that the widget
+reserves for itself. One of the following values: <dl>
+<dt class="dlterm">GridLayoutLib.VALIGN_TOP</dt>
+
+<dd>At the top of the rows. </dd>
+
+
+<dt class="dlterm">GridLayoutLib.VALIGN_MIDDLE</dt>
+
+<dd>At the middle of the rows. </dd>
+
+
+<dt class="dlterm">GridLayoutLib.VALIGN_BOTTOM</dt>
+
+<dd>At the bottom of the rows.</dd>
+
+</dl>
+</dd>
+
+</dl>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

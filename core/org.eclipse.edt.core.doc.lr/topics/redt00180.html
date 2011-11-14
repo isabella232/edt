@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Listmulti widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="The Rich UI listMulti widget defines a list from which the user can select multiple entries."></meta>
+<meta name="description" content="The Rich UI listMulti widget defines a list from which the user can select multiple entries."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, ListMulti, ListMulti Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, ListMulti, ListMulti Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,55 @@
 <h1 class="topictitle1">Listmulti widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>The Rich UI listMulti widget defines a list from which
+the user can select multiple entries. </p>
+
+<div class="p">The following fields are supported:<ul>
+<li><span class="synph"><span class="kwd">values</span></span>, which holds an array of strings
+that each represent a selectable option.</li>
+
+<li><span class="synph"><span class="kwd">selection</span></span>, which holds an array of integer
+that represent the position of the strings in the <span class="synph"><span class="kwd">values</span></span> array.
+If you set the value of <span class="synph"><span class="kwd">selection</span></span> before
+displaying the list box, the specified strings are displayed in boldface.<p>The
+first string in the array is at position 1, not 0.</p>
+</li>
+
+<li><span class="synph"><span class="kwd">size</span></span>, which holds an integer that indicates
+how many strings to display from the <span class="synph"><span class="kwd">values</span></span> array.
+The default is to display all the strings, with no scroll bar:<ul>
+<li>If the value of <span class="synph"><span class="kwd">size</span></span> is smaller than
+the number of strings, only the specified number of strings is displayed.
+A scroll bar provides access to the other strings. <p>Initially, only
+the last strings are displayed.</p>
+</li>
+
+<li>If the value of <span class="synph"><span class="kwd">size</span></span> is greater than
+the number of strings, additional spaces are added to the bottom of
+the list box. The user cannot select content from one of those spaces,
+which are only for display.</li>
+
+</ul>
+<p>If you do not set the <span class="synph"><span class="kwd">size</span></span> field,
+Internet Explorer 6 displays the widget as a combo box (a combination
+text box and list box).</p>
+ </li>
+
+</ul>
+</div>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Listmulti;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

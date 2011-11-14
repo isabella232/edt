@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Image widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI image widget presents a graphic."></meta>
+<meta name="description" content="A Rich UI image widget presents a graphic."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, Image, Image Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, Image, Image Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,48 @@
 <h1 class="topictitle1">Image widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI image widget presents a graphic.</p>
+
+<div class="p">The following fields are supported:<ul>
+<li><span class="synph"><span class="kwd">src</span></span>, which holds the web address for
+the graphic.</li>
+
+<li><span class="synph"><span class="kwd">text</span></span>, which holds the text shown in
+browsers that cannot display the graphic or when the mouse hovers
+over the image.</li>
+
+</ul>
+</div>
+
+<div class="p">The following example renders a graphic or the string “EGL is here!”: <pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.Image;
+import eglx.ui.rui.RUIHandler;	
+
+Handler MyHandler type RUIHandler {initialUI = [myImage]}
+
+   myImage Image
+   {
+      src = 
+      "http://www.planeteclipse.org/planet/images/planet_header.jpg",
+      text = "EGL is here!"
+   };
+
+end</pre>
+</div>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Image;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

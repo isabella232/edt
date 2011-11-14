@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="TextArea widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI textArea widget defines a rectangle containing one or more lines of text."></meta>
+<meta name="description" content="A Rich UI textArea widget defines a rectangle containing one or more lines of text."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, TextArea, TextArea Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, TextArea, TextArea Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,81 @@
 <h1 class="topictitle1">TextArea widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI textArea widget defines a rectangle containing
+one or more lines of text.</p>
+
+<div class="p">Here is example code:<pre class="codeblock">package client;
+
+import eglx.ui.rui.Event;
+import org.eclipse.edt.rui.widgets.RadioGroup;
+import org.eclipse.edt.rui.widgets.TextArea;
+
+handler MyHandler type RUIHandler{initialUI =[myTextArea, myRadioGroup]}
+
+   myTextArea TextArea{
+      text = "Monday? I'm really busy on Monday. How about Tuesday?", 
+      numColumns = 15, 
+      numRows = 5};
+
+   myRadioGroup RadioGroup{
+      groupName = "abc", 
+      options =["Monday", "Tuesday"], 
+      onClick ::= myRadio};
+
+   function myRadio(e Event in)
+      if (myRadioGroup.selected == "Tuesday")
+         myTextArea.text = "No, on Monday!";
+      else
+         myTextArea.text = "No, on Tuesday!";
+      end
+   end
+end</pre>
+</div>
+
+<div class="p">The following fields are supported:<ul>
+<li><span class="synph"><span class="kwd">numColumns</span></span>, which holds an integer that
+represents the number of columns in the text area</li>
+
+<li><span class="synph"><span class="kwd">numRows</span></span>, which holds an integer that
+represents the number of rows in the text area</li>
+
+<li><span class="synph"><span class="kwd">readOnly</span></span>, which holds a Boolean that
+indicates whether the text area is protected from user input</li>
+
+<li><span class="synph"><span class="kwd">text</span></span>, which holds a string for display
+in the text area</li>
+
+</ul>
+</div>
+
+<div class="p">The following functions are available, none of which returns a
+value:<ul>
+<li><span class="synph"><span class="kwd">append</span></span> adds content to the content already
+in the text area. The only parameter is the string to be added.</li>
+
+<li><span class="synph"><span class="kwd">select</span></span> causes the widget to receive
+focus and, on most browsers, selects the text. The function has no
+parameters.</li>
+
+<li><span class="synph"><span class="kwd">setRedraw</span></span> redraws the text area. The
+only parameter is a Boolean, which indicates whether or not to redraw
+the area.</li>
+
+</ul>
+</div>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.TextArea;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

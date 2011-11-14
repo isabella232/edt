@@ -5,34 +5,168 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Delete statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
+<meta name="DC.Title" content="Delete statement for a relational database"></meta>
+<meta name="DC.subject" content="EGL statements, delete, delete EGL statement, relational database"></meta>
+<meta name="keywords" content="EGL statements, delete, delete EGL statement, relational database"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00023"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Delete statement</title>
+<title>Delete statement for a relational database</title>
 </head>
 <body id="redt00023"><a name="redt00023"><!-- --></a>
 
 
-<h1 class="topictitle1">Delete statement</h1>
+<h1 class="topictitle1">Delete statement for a relational database</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div id="body"><a name="body"><!-- --></a><div><span>You can use the EGL <span class="synph"><span class="kwd">delete</span></span> statement
+to delete one or more rows from a relational database table.</span>
+ </div>
+
+<anchor id="sql_intro_more"></anchor>
+
+<div class="section" id="redt00023__sql_syntax"><a name="redt00023__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00023__sql_syntax_figure"><a name="redt00023__sql_syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_data_sql_delete.gif" alt="Syntax diagram for the delete statement with SQL"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">delStatement</var></dt>
+
+<dd>A single SQL DELETE statement, which is not required to end with
+a semicolon but can. The statement format is as shown for <em>entity</em>.<p>You
+can use a prepared statement in place of #sql{<em>delStmt</em>}.</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">entity</var></dt>
+
+<dd>Name of the entity, which is a variable based on an External type,
+Handler type, or Record type. The values in that entity are used in
+the corresponding SQL DELETE statement. If you specify the SQL data
+source but not an SQL statement, the following default is used: <pre class="codeblock">DELETE from  <em>tableName</em> 
+       where <em>ID_column_1</em> = ? AND 
+             <em>ID_column_2</em> = ? AND... <em>ID_column_n</em> = ?)</pre>
+<p>The
+value of <em>tableName</em> is the value of the <strong>Table</strong> annotation
+that is set on the entity type. If that annotation is missing from
+the type definition, the value of <em>tableName</em> is the type name.</p>
+<p>An <em>ID_column</em> entry
+such as <em>ID_column_1</em> is a name; specifically, the value of the <strong>Column</strong> annotation
+for a field in the type definition. If that annotation is missing
+from the field in the type definition, the name in the statement is
+the name of the field in the type definition.</p>
+<p>The default DELETE
+statement references only the columns <em>key fields</em>, which are
+the entity fields that have an <strong>ID</strong> annotation. The order of
+the column fields in the statement reflects the order of the key fields. </p>
+<div class="p">Each
+question mark in the <strong>values</strong> clause is replaced with a value:<ul>
+<li>For default processing, the behavior is as follows:<ul>
+<li>If you do not specify the <strong>using</strong> clause, the replacement
+value is the corresponding value in the entity.</li>
+
+<li>If you specify a <strong>using</strong> clause, the replacement value is
+the corresponding value in the <strong>using</strong> clause.</li>
+
+</ul>
+</li>
+
+<li>If you specify an entity and a custom SQL DELETE statement, the
+behavior is as follows:<ul>
+<li>If you do not specify the <strong>using</strong> clause, the replacement
+value is the corresponding value in the entity. <p>A question mark
+represents the value of a key field, with the first question mark
+corresponding to the first key field, the second question mark to
+the second key field, and so forth. The statement can include fewer
+question marks than the number of key fields but cannot include more.</p>
+</li>
+
+<li>If you specify a <strong>using</strong> clause, the replacement value is
+the corresponding value in the <strong>using</strong> clause. In this case,
+you can reference fields other than key fields.</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">field</var></dt>
+
+<dd>A value of an EGL simple type that is compatible with the corresponding
+database column. The list of simple values is assigned to the question
+marks in the SQL DELETE statement.</dd>
+
+
+<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+
+<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+connection details or references an EGL deployment descriptor entry
+that provides access to the connection details. <p>If you issue a
+prepared statement, the variable is optional and is ignored if present.</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+
+<dd>An SQL result set that was established by an <strong>open</strong> statement.
+In this case, the <strong>Delete</strong> statement deletes the current row.
+An attempt to delete the row a second time results in an exception.</dd>
+
+</dl>
+<anchor id="sql_syntax_more"></anchor></div>
+
+<div class="example" id="redt00023__sql_example"><a name="redt00023__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<anchor id="sql_example_more"></anchor></div>
+
+<div class="section" id="redt00023__compat"><a name="redt00023__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00023__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00023__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d10181e228">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d10181e231">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00023__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d10181e228 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10181e231 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00023__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d10181e228 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10181e231 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

@@ -5,34 +5,94 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Close statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
+<meta name="DC.Title" content="Close statement for a relational database"></meta>
+<meta name="DC.subject" content="EGL statements, close, close EGL statement, relational database"></meta>
+<meta name="keywords" content="EGL statements, close, close EGL statement, relational database"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00022"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Close statement</title>
+<title>Close statement for a relational database</title>
 </head>
 <body id="redt00022"><a name="redt00022"><!-- --></a>
 
 
-<h1 class="topictitle1">Close statement</h1>
+<h1 class="topictitle1">Close statement for a relational database</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div id="body"><a name="body"><!-- --></a><div><span>You can use the EGL <span class="synph"><span class="kwd">close</span></span> statement
+to close an SQL data source or a result set.</span>
+ </div>
+
+<anchor id="sql_intro_more"></anchor>
+
+<div class="section" id="redt00022__sql_syntax"><a name="redt00022__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00022__sql_syntax_figure"><a name="redt00022__sql_syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_data_sql_close.gif" alt="Syntax diagram for the close statement with SQL"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+
+<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+connection details or references an EGL deployment descriptor entry
+that provides access to the connection details.</dd>
+
+
+<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+
+<dd>An SQL result set that was established by an <strong>open</strong> statement. </dd>
+
+</dl>
+<anchor id="sql_syntax_more"></anchor></div>
+
+<div class="example" id="redt00022__sql_example"><a name="redt00022__sql_example"><!-- --></a><pre class="codeblock">close myConnection;</pre>
+<anchor id="sql_example_more"></anchor></div>
+
+<div class="section" id="redt00022__compat"><a name="redt00022__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00022__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00022__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d9884e115">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d9884e118">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00022__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d9884e115 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d9884e118 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00022__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d9884e115 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d9884e118 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

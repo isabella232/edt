@@ -5,33 +5,199 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Execute statement"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
+<meta name="DC.Title" content="Execute statement for a relational database"></meta>
+<meta name="DC.subject" content="EGL statements, execute, execute EGL statement, relational database"></meta>
+<meta name="keywords" content="EGL statements, execute, execute EGL statement, relational database"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00026"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Execute statement</title>
+<title>Execute statement for a relational database</title>
 </head>
 <body id="redt00026"><a name="redt00026"><!-- --></a>
 
 
-<h1 class="topictitle1">Execute statement</h1>
+<h1 class="topictitle1">Execute statement for a relational database</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p> </p>
+<div id="body"><a name="body"><!-- --></a><div><span>You can use the EGL <span class="synph"><span class="kwd">execute</span></span> statement
+to run either a prepared SQL statement or a set of one or more non-prepared
+SQL statements.</span>
+ </div>
 
-<p></p>
+<div class="p">You can use an <span class="synph"><span class="kwd">execute</span></span> statement to issue
+an SQL statement of any of the following types: <ul compact="compact">
+<li>ALTER</li>
+
+<li>CALL</li>
+
+<li>CREATE ALIAS</li>
+
+<li>CREATE INDEX</li>
+
+<li>CREATE SYNONYM</li>
+
+<li>CREATE TABLE</li>
+
+<li>CREATE VIEW</li>
+
+<li>DECLARE global temporary table</li>
+
+<li>DELETE</li>
+
+<li>DROP INDEX</li>
+
+<li>DROP SYNONYM</li>
+
+<li>DROP TABLE</li>
+
+<li>DROP VIEW</li>
+
+<li>GRANT</li>
+
+<li>INSERT</li>
+
+<li>LOCK</li>
+
+<li>RENAME</li>
+
+<li>REVOKE</li>
+
+<li>SAVEPOINT</li>
+
+<li>SET</li>
+
+<li>SIGNAL</li>
+
+<li>UPDATE</li>
+
+<li>VALUES</li>
+
+</ul>
+</div>
+
+<div class="p">You cannot use an <span class="synph"><span class="kwd">execute</span></span> statement to
+issue an SQL statement that returns a result set or to issue an SQL
+statement of any of the following types: <ul compact="compact">
+<li>CLOSE</li>
+
+<li>COMMIT</li>
+
+<li>CONNECT</li>
+
+<li>CREATE FUNCTION</li>
+
+<li>CREATE PROCEDURE</li>
+
+<li>DECLARE CURSOR</li>
+
+<li>DESCRIBE</li>
+
+<li>DISCONNECT</li>
+
+<li>EXECUTE</li>
+
+<li>EXECUTE IMMEDIATE</li>
+
+<li>FETCH</li>
+
+<li>OPEN</li>
+
+<li>PREPARE</li>
+
+<li>ROLLBACK WORK</li>
+
+<li>SELECT</li>
+
+<li>INCLUDE SQLCA</li>
+
+<li>INCLUDE SQLDA</li>
+
+<li>WHENEVER</li>
+
+</ul>
+</div>
+
+<anchor id="sql_intro_more"></anchor>
+
+<div class="section" id="redt00026__sql_syntax"><a name="redt00026__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00026__sql_syntax_figure"><a name="redt00026__sql_syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_data_sql_execute.gif" alt="Syntax diagram for the add statement with SQL"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">field</var></dt>
+
+<dd>A value of an EGL simple type that is compatible with the corresponding
+database column. The list of simple values is set into the statement
+in a way that matches the list of column entries.</dd>
+
+
+<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+
+<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+connection details or references an EGL deployment descriptor entry
+that provides access to the connection details.<p>If you issue a prepared
+statement, the variable is optional and is ignored if present.</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">stmt</var></dt>
+
+<dd>A set of one or more SQL statements.<p>You can use a prepared
+statement in place of #sql{<em>stmt</em>}.</p>
+</dd>
+
+</dl>
+<anchor id="sql_syntax_more"></anchor></div>
+
+<div class="example" id="redt00026__sql_example"><a name="redt00026__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<anchor id="sql_example_more"></anchor></div>
+
+<div class="section" id="redt00026__compat"><a name="redt00026__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00026__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00026__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d11957e256">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d11957e259">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00026__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d11957e256 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d11957e259 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00026__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d11957e256 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d11957e259 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<anchor id="related_links"></anchor>
 
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

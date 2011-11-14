@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Box widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI box widget defines a box that embeds other widgets."></meta>
+<meta name="description" content="A Rich UI box widget defines a box that embeds other widgets."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, Box, Box Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, Box, Box Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,46 @@
 <h1 class="topictitle1">Box widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI box widget defines a box that embeds other widgets.</p>
+
+<p>You can indicate how many columns are in the box. If the number
+of columns is three, for example, the first three embedded widgets
+are on the first row in the box, the fourth through sixth are on the
+second row, and so forth. If the number of columns is one, all the
+embedded widgets are arranged vertically. In any case, the width of
+a column equals the width of the largest widget in the column, and
+you can indicate whether the embedded widgets in a given column are
+aligned at the column's center, right, or left.</p>
+
+<p>Vertical and horizontal scroll bars appear if necessary to give
+the user access to widgets that are out of sight.</p>
+
+<div class="p">The following fields are supported: <ul>
+<li><span class="synph"><span class="kwd">alignment</span></span>, which holds an integer value
+that indicates how the content is aligned in each column: 0 for left,
+1 for center, or 2 for right</li>
+
+<li><span class="synph"><span class="kwd">children</span></span>, which holds an array of widgets,
+as described in “Rich UI widget fields.”</li>
+
+<li><span class="synph"><span class="kwd">columns</span></span>, which holds an integer that
+identifies the number of columns in the box</li>
+
+</ul>
+</div>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Box;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

@@ -5,34 +5,109 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="ForEach statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
+<meta name="DC.Title" content="ForEach statement for a relational database"></meta>
+<meta name="DC.subject" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
+<meta name="keywords" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00018"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>ForEach statement</title>
+<title>ForEach statement for a relational database</title>
 </head>
 <body id="redt00018"><a name="redt00018"><!-- --></a>
 
 
-<h1 class="topictitle1">ForEach statement</h1>
+<h1 class="topictitle1">ForEach statement for a relational database</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div id="body"><a name="body"><!-- --></a><div><span>The <span class="synph"><span class="kwd">forEach</span></span> statement
+is a control loop that retrieves each row in an SQL result set and
+operates on the retrieved row by running a block of embedded EGL statements.
+After processing all rows, the <span class="synph"><span class="kwd">forEach</span></span> statement
+closes the result set. If an exception occurs, the result set stays
+open.</span>
+ </div>
+
+<anchor id="sql_intro_more"></anchor>
+
+<div class="section" id="redt00018__sql_syntax"><a name="redt00018__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00018__sql_syntax_figure"><a name="redt00018__sql_syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_data_sql_for_each.gif" alt="Syntax diagram for the delete statement with SQL"></img><br></br>
+</div>
+<p></p>
+<dl>
+<dt class="dlterm"><var class="varname">entity</var></dt>
+
+<dd>Name of the entity, which is a variable based on an External type,
+Handler type, or Record type. </dd>
+
+
+<dt class="dlterm"><var class="varname">simpleVar</var></dt>
+
+<dd>A field of an EGL simple type that is compatible with the corresponding
+column in the result set.</dd>
+
+
+<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+
+<dd>An SQL result set that was established by an <strong>open</strong> statement.</dd>
+
+
+<dt class="dlterm"><var class="varname">statement</var></dt>
+
+<dd>An EGL statement.</dd>
+
+</dl>
+<anchor id="sql_syntax_more"></anchor></div>
+
+<div class="example" id="redt00018__sql_example"><a name="redt00018__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<anchor id="sql_example_more"></anchor></div>
+
+<div class="section" id="redt00018__compat"><a name="redt00018__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00018__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00018__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d8584e115">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d8584e118">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00018__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d8584e115 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8584e118 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00018__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d8584e115 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8584e118 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Hyperlink widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A Rich UI hyperlink defines a link that, if clicked, causes presentation of the target content."></meta>
+<meta name="description" content="A Rich UI hyperlink defines a link that, if clicked, causes presentation of the target content."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, Hyperlink, Hyperlink Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, Hyperlink, Hyperlink Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,64 @@
 <h1 class="topictitle1">Hyperlink widget</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>A Rich UI hyperlink defines a link that, if clicked, causes
+presentation of the target content.</p>
+
+<div class="p">The following fields are supported:<ul>
+<li><span class="synph"><span class="kwd">text</span></span> specifies the string displayed
+on the page</li>
+
+<li><span class="synph"><span class="kwd">target</span></span> specifies a string that identifies
+the window in which the new web page opens. Here are the valid values:<ul>
+<li>"_top" opens the page in the current window, taking up the entire
+page. This behavior is also in effect if you specify "_self", "_parent",
+or no value for <span class="synph"><span class="kwd">target</span></span>.</li>
+
+<li>"_blank" opens the page is a different browser or browser window.</li>
+
+</ul>
+</li>
+
+<li><span class="synph"><span class="kwd">href</span></span> specifies the web address of interest</li>
+
+</ul>
+</div>
+
+<div class="p">The following example renders a link to the web site for EGL Development
+Tools, and the displayed text is “Do more with EGL”: <pre class="codeblock">Handler Hyper type RUIHandler {children = [myHyperlink]}
+
+   myHyperlink HyperLink
+   {
+      text = "Do more with EGL",        
+      target = "_blank",
+      href = "http://www.eclipse.org/edt"
+   };
+
+end</pre>
+</div>
+
+<div class="p">If the web page to which you are linking takes up the Preview view,
+you can clear the page as follows:<ul>
+<li>Double-click the <span class="uicontrol">Link Preview with Editor</span> button
+(the two arrows); or</li>
+
+<li>Load an EGL file that contains a different Rich UI handler.</li>
+
+</ul>
+</div>
+
+<p>Other supported fields and functions are described in the following
+topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
+”Rich UI widget functions.”</p>
+
+<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Hyperlink;</pre>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

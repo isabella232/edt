@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Case statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="DC.subject" content="EGL statements, continue, continue EGL statement"></meta>
+<meta name="keywords" content="EGL statements, continue, continue EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +23,150 @@
 <h1 class="topictitle1">Case statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div id="body"><a name="body"><!-- --></a><div><span> The EGL <span class="synph"><span class="kwd">case</span></span> statement
+responds to conditions at run time by executing one set of statements
+rather than another. The behavior is similar to that of a switch statement
+in Java or C.</span>
+</div>
+
+<div class="p">The <strong>case</strong> statement has two forms, each of which includes
+one or more <strong>when</strong> clauses and an optional <strong>otherwise</strong> clause: <ul>
+<li>The first form tests whether a criterion value is the same as
+a value found in one or another <strong>when</strong> clause.</li>
+
+<li>The second form executes the first <strong>when</strong> clause defined
+by a logical expression that resolves to true.</li>
+
+</ul>
+</div>
+
+<p>In either case, the <strong>otherwise</strong> clause, if any, executes only
+if no other clause executes.</p>
+
+<p>At most, one clause executes; control does not “fall through” from
+one clause to the next. </p>
+
+<p>After the case statement completes its run, processing continues
+at the statement after the <strong>case</strong> statement, unless an embedded <strong>continue</strong> statement
+transfers control to a label that resides elsewhere in the function.</p>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00014__sql_syntax"><a name="redt00014__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00014__syntax_figure"><a name="redt00014__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_case.gif" alt="Syntax diagram for the case statement"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">criterion</var></dt>
+
+<dd>A value that is compared against the <em>matchExp</em> values in
+subsequent <strong>when</strong> clauses. The <strong>case</strong> statement runs the
+first clause in which the <em>criterion</em> value matches the <em>matchExp</em>value.</dd>
+
+
+<dt class="dlterm"><var class="varname">label</var></dt>
+
+<dd>A label that is attached to an enclosing <span class="synph"><span class="kwd">for</span></span>, <span class="synph"><span class="kwd">forEach</span></span>,
+or <span class="synph"><span class="kwd">while</span></span> statement. Processing continues
+with the referenced statement.</dd>
+
+
+<dt class="dlterm"><var class="varname">logicalExpr</var></dt>
+
+<dd>A logical expression that, if true, causes the invocation of the
+related set of statements. The <strong>case</strong> statement runs the first
+clause for which the logical expression is true.</dd>
+
+
+<dt class="dlterm"><var class="varname">matchExpr</var></dt>
+
+<dd>A value for comparison with the <em>criterion</em> value.</dd>
+
+
+<dt class="dlterm"><var class="varname">statement</var></dt>
+
+<dd>An EGL statement.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00014__example"><a name="redt00014__example"><!-- --></a><div class="p">The following <span class="synph"><span class="kwd">case</span></span> statement
+includes multiple match expressions in the second <span class="synph"><span class="kwd">when</span></span> clause
+(2, 3, 4): <pre class="codeblock">  case (myRecord.requestID)
+    when (1)
+      myFirstFunction();
+    when (2, 3, 4)
+      try
+        call myProgram;
+      onException(iex InvocationException)
+        myCallFunction(fileEx);
+      end
+    otherwise
+      myDefaultFunction();
+  end  </pre>
+</div>
+<div class="p">After the following <span class="synph"><span class="kwd">case</span></span> statement
+runs, the standard output displays only the message “x passes”: <pre class="codeblock">Program calc3
+  x INT = 3;
+  y INT = 5;
+  z INT = 7;
+  function main()
+    case
+      when (x == 3)
+        SysLib.writeStdOut("x passes");
+      when (y == 5)
+        SysLib.writeStdOut("y passes");
+      when (z == 7)
+        SysLib.writeStdOut("z passes");
+      otherwise
+        SysLib.writeStdErr("You should not see this msg");
+    end
+  end</pre>
+</div>
+<anchor id="example_more"></anchor></div>
+
+<div class="section" id="redt00014__compat"><a name="redt00014__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00014__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00014__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d7856e209">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d7856e212">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00014__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d7856e209 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d7856e212 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00014__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d7856e209 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d7856e212 "><span class="synph"><span class="kwd">continue</span></span> is not supported.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>
