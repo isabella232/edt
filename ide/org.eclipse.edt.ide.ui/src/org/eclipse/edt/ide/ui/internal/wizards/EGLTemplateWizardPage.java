@@ -135,11 +135,16 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 			String templateID = ((ITemplate) o).getCodeTemplateId();//&& validatePage(true)
 			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
 					|| (templateID != null );
+			b = b && isPageComplete();
 			setPageComplete(b);
 			
 		} else {
 			setPageComplete(false);
 		}
+	}
+	
+	public boolean isPageComplete(){
+		return super.isPageComplete() && validateEGLPartName();
 	}
 	
 	/**
