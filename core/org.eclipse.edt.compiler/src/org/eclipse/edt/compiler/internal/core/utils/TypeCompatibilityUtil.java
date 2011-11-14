@@ -961,9 +961,7 @@ public class TypeCompatibilityUtil {
 		if(tBinding == PrimitiveTypeBinding.getInstance(Primitive.BIN, 18)) {
 			return PrimitiveTypeBinding.getInstance(Primitive.BIGINT);
 		}
-		if(tBinding == PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP)) {
-			return PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP, "yyyymmddhhmmss");
-		}
+
 		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == tBinding.getKind()) {
 			PrimitiveTypeBinding primTypeBinding = (PrimitiveTypeBinding) tBinding;
 			if(Primitive.MONEY == primTypeBinding.getPrimitive()) {
@@ -973,7 +971,7 @@ public class TypeCompatibilityUtil {
 				return PrimitiveTypeBinding.getInstance(Primitive.DECIMAL, primTypeBinding.getLength(), primTypeBinding.getDecimals());
 			}
 			
-			if(Primitive.TIMESTAMP == primTypeBinding.getPrimitive()) {
+			if(Primitive.TIMESTAMP == primTypeBinding.getPrimitive() && !primTypeBinding.isReference()) {
 				return PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP, primTypeBinding.getTimeStampOrIntervalPattern().toUpperCase().toLowerCase());
 			}
 
