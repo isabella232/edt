@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.AnnotationTypeBinding.IsStringLiteralChecker;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -30,19 +31,15 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.SystemFunctionParameterSpecialTypeBinding;
 import org.eclipse.edt.compiler.binding.VariableBinding;
-import org.eclipse.edt.compiler.binding.AnnotationTypeBinding.IsStringLiteralChecker;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
-import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
-import org.eclipse.edt.compiler.core.ast.AsExpression;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
@@ -58,7 +55,6 @@ import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -75,8 +71,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-
-import com.sun.xml.internal.ws.api.model.ParameterBinding;
 
 /**
  * @author Dave Murray
@@ -469,7 +463,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     
     private boolean checkArgumentUsedCorrectlyWithInAndOut(final Expression argExpr, final FunctionParameterBinding parmBinding, ITypeBinding parmType) {
     	ITypeBinding argTypeBinding = argExpr.resolveTypeBinding();
-		if(parmType.isReference() && (argTypeBinding == null || argTypeBinding == IBinding.NOT_FOUND_BINDING || argTypeBinding.isReference())) {
+		if(!Binding.isValidBinding(argTypeBinding)) {
     		return true;
     	}
     	
