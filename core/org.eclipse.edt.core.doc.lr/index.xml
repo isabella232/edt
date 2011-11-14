@@ -351,7 +351,7 @@
 <topic href="topics/redt00142.html#redt00142" title="DojoMenu widget"/>
 </entry>
 <entry keyword="DojoPieChart Rich UI widget">
-<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget"/>
+<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget and related type"/>
 </entry>
 <entry keyword="DojoProgressBar Rich UI widget">
 <topic href="topics/redt00147.html#redt00147" title="DojoProgressBar widget"/>
@@ -1265,7 +1265,7 @@
 <topic href="topics/redt00142.html#redt00142" title="DojoMenu widget"/>
 </entry>
 <entry keyword="DojoPieChart">
-<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget"/>
+<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget and related type"/>
 </entry>
 <entry keyword="DojoProgressBar">
 <topic href="topics/redt00147.html#redt00147" title="DojoProgressBar widget"/>

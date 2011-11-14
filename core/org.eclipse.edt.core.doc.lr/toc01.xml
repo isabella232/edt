@@ -32,6 +32,8 @@
          <topic label="Exit statement" href="topics/redt00019.html"/>
          <topic label="For statement" href="topics/redt00017.html"/>
          <topic label="If statement" href="topics/redt00015.html"/>
+         <topic label="Label statement" href="topics/redt00009.html"/>
+         <topic label="Move statement" href="topics/redt00006.html"/>
          <topic label="Return statement" href="topics/redt00007.html"/>
          <topic label="Throw statement" href="topics/redt00011.html"/>
          <topic label="Transfer statement" href="topics/redt00010.html"/>
@@ -39,6 +41,7 @@
          <topic label="Use statement" href="topics/redt00005.html"/>
          <topic label="While statement" href="topics/redt00016.html"/>
       </topic>
+      <topic label="Dynamic types and access" href="topics/redt00264.html"/>
    </topic>
    <topic label="Statements used for relational database access"
           href="topics/redt00044.html">
@@ -78,7 +81,7 @@
          <topic label="DojoLineGraph widget" href="topics/redt00141.html"/>
          <topic label="DojoMenu widget" href="topics/redt00142.html"/>
          <topic label="DojoMenuItem widget" href="topics/redt00143.html"/>
-         <topic label="DojoPieChart widget" href="topics/redt00146.html"/>
+         <topic label="DojoPieChart widget and related type" href="topics/redt00146.html"/>
          <topic label="DojoProgressBar widget" href="topics/redt00147.html"/>
          <topic label="DojoRadioGroup widget" href="topics/redt00148.html"/>
          <topic label="DojoStackContainer widget" href="topics/redt00149.html"/>
@@ -267,48 +270,17 @@
       </topic>
    </topic>
    <topic label="Supplemental details">
-      <topic label="Execute statement for a relational database"
-             href="topics/redt00026.html"/>
-      <topic label="BIRTHandler stereotype" href="topics/redt00084.html"/>
       <topic label="Correspondence between a JSON string and an EGL variable"
              href="topics/redt00253.html"/>
       <topic label="Correspondence between an XML string and an EGL variable"
              href="topics/redt00254.html"/>
-      <topic label="Dynamic types and access" href="topics/redt00264.html"/>
-      <topic label="Enumerations provided in EDT" href="topics/redt00037.html"/>
-      <topic label="Exception stereotype" href="topics/redt00079.html"/>
-      <topic label="Expressions" href="topics/redt00095.html"/>
-      <topic label="Function invocation statement" href="topics/redt00008.html"/>
-      <topic label="Function syntax" href="topics/redt00036.html"/>
-      <topic label="Handler classifier detail" href="topics/redt00042.html"/>
-      <topic label="HostProgram stereotype" href="topics/redt00086.html"/>
       <topic label="In operator" href="topics/redt00100.html"/>
-      <topic label="Label statement" href="topics/redt00009.html"/>
-      <topic label="List part" href="topics/redt00049.html"/>
-      <topic label="Literals" href="topics/redt00096.html"/>
       <topic label="Logical unit of work" href="topics/cedt00042.html"/>
-      <topic label="Menu widget" href="topics/redt00181.html"/>
-      <topic label="Move statement" href="topics/redt00006.html"/>
       <topic label="Naming conventions" href="topics/redt00106.html"/>
-      <topic label="NativeType stereotype" href="topics/redt00085.html"/>
-      <topic label="Operators and precedence" href="topics/redt00097.html"/>
-      <topic label="org.eclipse.edt.gen.java package" href="topics/redt00194.html"/>
-      <topic label="org.eclipse.edt.gen.javascript package" href="topics/redt00195.html"/>
-      <topic label="org.eclipse.edt.gen.java.templates package" href="topics/redt00193.html"/>
-      <topic label="org.eclipse.edt.gen.javascript.templates package"
-             href="topics/redt00196.html"/>
       <topic label="Pattern characters used to format non-string values to strings"
              href="topics/redt00238.html"/>
-      <topic label="Property annotation" href="topics/redt00076.html"/>
       <topic label="Reserved words" href="topics/redt00103.html"/>
       <topic label="Run units" href="topics/cedt00011.html"/>
-      <topic label="RUIHandler stereotype" href="topics/redt00082.html"/>
-      <topic label="RUILib system library" href="topics/redt00070.html"/>
-      <topic label="RUIWidget stereotype" href="topics/redt00101.html"/>
-      <topic label="Set-values blocks" href="topics/redt00105.html"/>
-      <topic label="Special characters" href="topics/redt00104.html"/>
       <topic label="this keyword" href="topics/redt00002.html"/>
-      <topic label="Tree widget" href="topics/redt00120.html"/>
-      <topic label="Type conversions" href="topics/redt00064.html"/>
    </topic>
 </toc>

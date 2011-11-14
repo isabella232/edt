@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="DojoPieChart widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="DojoPieChart widget and related type"></meta>
+<meta name="abstract" content="The DojoPieChart widget creates pie charts by using one or more PieChartData records. Each record describes a section."></meta>
+<meta name="description" content="The DojoPieChart widget creates pie charts by using one or more PieChartData records. Each record describes a section."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoPieChart, DojoPieChart Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoPieChart, DojoPieChart Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00258.html"></meta>
@@ -17,18 +17,76 @@
 <meta name="DC.Identifier" content="redt00146"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>DojoPieChart widget</title>
+<title>DojoPieChart widget and related type</title>
 </head>
 <body id="redt00146"><a name="redt00146"><!-- --></a>
 
 
-<h1 class="topictitle1">DojoPieChart widget</h1>
+<h1 class="topictitle1">DojoPieChart widget and related type</h1>
 
 
 
-<div><p></p>
+<div><p>The DojoPieChart widget creates pie charts by using one
+or more PieChartData records. Each record describes a section.</p>
 
-<p></p>
+<div class="section"><h2 class="sectiontitle">Fields</h2><dl>
+<dt class="dlterm">data</dt>
+
+<dd>A list of PieChartData records that contain data for the pie chart.
+Each record has the following fields:<dl>
+<dt class="dlterm">color</dt>
+
+<dd>The color that is associated with the section of the chart that
+you are defining</dd>
+
+
+<dt class="dlterm">fontColor</dt>
+
+<dd>The color of the font for the text label</dd>
+
+
+<dt class="dlterm">text</dt>
+
+<dd>The text that is to be placed inside the section</dd>
+
+
+<dt class="dlterm">y</dt>
+
+<dd>The numeric value that was used to calculate the amount of space
+this data record occupies in the chart related to the other data records.</dd>
+
+</dl>
+</dd>
+
+
+<dt class="dlterm">fontColor</dt>
+
+<dd>The color of the pie chart. It can be blue, red, cyan, green,
+orange, or purple.</dd>
+
+
+<dt class="dlterm">height</dt>
+
+<dd>The height of the pie chart, in pixels</dd>
+
+
+<dt class="dlterm">labelOffSet</dt>
+
+<dd>The offset of the labels from the center. For a radius of 100,
+a value of value of 40 is optimal.</dd>
+
+
+<dt class="dlterm">radius</dt>
+
+<dd>The radius of the pie chart, in pixels. A value of 100 is optimal.</dd>
+
+
+<dt class="dlterm">width</dt>
+
+<dd>The total width of the pie chart, in pixels</dd>
+
+</dl>
+</div>
 
 <p>Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and

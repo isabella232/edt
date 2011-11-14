@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DojoBorderContainer widget"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="The DojoBorderContainer widget creates a container partitioned into up to five regions: left, right, top, bottom, and center."></meta>
+<meta name="description" content="The DojoBorderContainer widget creates a container partitioned into up to five regions: left, right, top, bottom, and center."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoBorderContainer, DojoBorderContainer Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoBorderContainer, DojoBorderContainer Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00258.html"></meta>
@@ -26,15 +26,62 @@
 
 
 
-<div><p></p>
+<div><p>The DojoBorderContainer widget creates a container partitioned
+into up to five regions: left, right, top, bottom, and center.</p>
 
-<p></p>
+<div class="section"><h2 class="sectiontitle">Fields</h2><dl>
+<dt class="dlterm">borders</dt>
 
-<p>Other supported fields and functions are described in the following
-topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
-”Rich UI widget functions.”</p>
+<dd>A Boolean value that indicates whether the borders should be visible.
+A border line can be drawn around the container and each region (similar
+to table row and column borders). </dd>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import dojo.widgets.DojoBorderContainer;</pre>
+</dl>
+<p>Other supported fields and functions are described
+in the following topics in the EGL Programmer’s Guide: “Rich UI widget
+fields” and ”Rich UI widget functions.”</p>
+<div class="p">Use of this widget requires
+the following statement:<pre class="codeblock">import dojo.widgets.DojoBorderContainer;</pre>
+</div>
+</div>
+
+<div class="example"><h2 class="sectiontitle">Examples</h2><pre class="codeblock">package client;
+
+import org.eclipse.edt.rui.widgets.TextLabel;
+import dojo.widgets.DojoBorderContainer;
+import dojo.widgets.DojoButton;
+import dojo.widgets.DojoContentPane;
+import dojo.widgets.DojoLib;
+import dojo.widgets.DojoTextField;
+import eglx.ui.rui.RUIHandler;
+import eglx.ui.rui.Event;
+
+handler MyHandler type RUIHandler{initialUI =[BorderContainer]}
+
+BorderContainer DojoBorderContainer{ 
+   width = 200, height = 300, borders = true,	
+   children = [
+      new DojoContentPane { region = DojoLib.REGION_CENTER, 
+                            children = [ myButton ] },
+      new DojoContentPane { region = DojoLib.REGION_LEFT, 
+                            children = []},
+      new DojoContentPane { region = DojoLib.REGION_RIGHT, 
+                            children = []},
+      new DojoContentPane { region = DojoLib.REGION_TOP, 
+                            children = [myTextField]},
+      new DojoContentPane { region = DojoLib.REGION_BOTTOM, 
+                            children = [myLabel, myOtherTextField]}
+   	 ]};
+
+   myTextField DojoTextField {text = "Read!", readonly = true};
+   myButton DojoButton{text = "Click!", onClick ::= myButtonResponse};
+   myLabel TextLabel {text = "Write: "};
+   myOtherTextField DojoTextField {readonly = false};
+   
+   function myButtonResponse(e Event in)
+      myTextField.text = myOtherTextField.text;
+   end
+end   </pre>
 </div>
 
 </div>
