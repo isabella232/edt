@@ -20,9 +20,12 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class RecordTemplate extends JavaScriptTemplate {
@@ -133,6 +136,15 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genGetterSetters(Record part, Context ctx, TabbedWriter out) {}
+	
+	public void genReturnStatement(Record type, Context ctx, TabbedWriter out, ReturnStatement arg) {
+		if (TypeUtils.isValueType(type) && arg.getExpression() != null) {
+			out.print("return ");
+			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType()), ctx, out);
+			ctx.invoke(genCloneMethod, type, ctx, out);
+		} else
+			ctx.invoke(genReturnStatement, arg, ctx, out);
+	}
 
 	public void genCloneMethod(Record part, Context ctx, TabbedWriter out) {
 		out.print(".eze$$clone()");

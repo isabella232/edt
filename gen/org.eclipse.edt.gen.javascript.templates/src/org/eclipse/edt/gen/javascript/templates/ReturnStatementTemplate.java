@@ -19,13 +19,20 @@ import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ReturnStatementTemplate extends JavaScriptTemplate {
-
+	
 	public void genStatementBody(ReturnStatement stmt, Context ctx, TabbedWriter out) {
-		out.print("return ");
-		Expression expr = stmt.getExpression();
-		if (expr != null) {
-			expr = IRUtils.makeExprCompatibleToType(expr, ((FunctionMember) stmt.getContainer()).getType());
-			ctx.invoke(genExpression, expr, ctx, out);
+		if (stmt.getExpression() != null)
+			ctx.invoke(genReturnStatement, stmt.getExpression().getType(), ctx, out, stmt);
+		else
+			out.print("return");
+	}
+
+	public void genReturnStatement(ReturnStatement stmt, Context ctx, TabbedWriter out) {
+		out.print("return");
+		if (stmt.getExpression() != null) {
+			out.print(" ");
+			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(stmt.getExpression(), ((FunctionMember) stmt.getContainer()).getType()), ctx, out);
 		}
 	}
+
 }

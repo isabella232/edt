@@ -33,6 +33,7 @@ import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
@@ -264,6 +265,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 		else {
 			ctx.invoke(genAssignment, arg.getLHS(), ctx, out, arg.getRHS(), " " + CommonUtilities.getNativeJavaScriptAssignment(operator) + " ");
 		}
+	}
+
+	public void genReturnStatement(Type type, Context ctx, TabbedWriter out, ReturnStatement arg) {
+		ctx.invoke(genReturnStatement, arg, ctx, out);
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
