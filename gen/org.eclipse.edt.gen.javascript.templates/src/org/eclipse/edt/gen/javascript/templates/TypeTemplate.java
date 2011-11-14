@@ -190,7 +190,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			ctx.invoke(genExpression, arg2, ctx, out);
+			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());
 		}
 	}
 	

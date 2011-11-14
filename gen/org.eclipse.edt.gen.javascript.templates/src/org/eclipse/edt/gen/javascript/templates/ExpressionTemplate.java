@@ -14,10 +14,16 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ExpressionTemplate extends JavaScriptTemplate {
 
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
 		ctx.invoke(genExpression, expr, ctx, out);
 	}
+	
+	public void genTypeBasedExpression(Expression expr, Context ctx, TabbedWriter out, Type arg) {
+		ctx.invoke(genExpression, expr, ctx, out);
+	}
+
 }

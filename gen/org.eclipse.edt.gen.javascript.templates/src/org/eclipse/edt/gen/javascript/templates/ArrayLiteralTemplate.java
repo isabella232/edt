@@ -21,16 +21,23 @@ import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
 	public void genExpression(ArrayLiteral expr, Context ctx, TabbedWriter out) {
+		genExpr(expr, ctx, out, null);
+	}
+	
+	public void genTypeBasedExpression(ArrayLiteral expr, Context ctx, TabbedWriter out, Type arg) {
+		genExpr(expr, ctx, out, arg);
+	}
+
+	private void genExpr(ArrayLiteral expr, Context ctx, TabbedWriter out, Type arg) {
 		out.print("[");
-		Type elementType = ((ArrayType)expr.getType()).getElementType();
-		if(elementType instanceof EGLClass && elementType.getTypeSignature().equalsIgnoreCase("eglx.lang.AnyValue")){
+		if(arg != null && ((ArrayType)arg).getElementType() instanceof EGLClass &&
+				((ArrayType)arg).getElementType().getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")){			
 			List<Expression> objs = expr.getEntries();
 			for(int i=0; i< objs.size(); i++ ){
 				Expression obj = objs.get(i);
