@@ -288,7 +288,109 @@
 </entry>
 </entry>
 <entry keyword="dojo.widgets EGL package">
-<topic href="topics/redt00258.html#redt00258" title="dojo.widgets"/>
+<topic href="topics/redt00258.html#redt00258" title="dojo.widgets package"/>
+</entry>
+<entry keyword="DojoAccordionContainer Rich UI widget">
+<topic href="topics/redt00160.html#redt00160" title="DojoAccordionContainer widget"/>
+</entry>
+<entry keyword="DojoBarGraph Rich UI widget">
+<topic href="topics/redt00161.html#redt00161" title="DojoBarGraph widget"/>
+</entry>
+<entry keyword="DojoBorderContainer Rich UI widget">
+<topic href="topics/redt00126.html#redt00126" title="DojoBorderContainer widget"/>
+</entry>
+<entry keyword="DojoBubbleChart Rich UI widget">
+<topic href="topics/redt00127.html#redt00127" title="DojoBubbleChart widget"/>
+</entry>
+<entry keyword="DojoButton Rich UI widget">
+<topic href="topics/redt00128.html#redt00128" title="DojoButton widget"/>
+</entry>
+<entry keyword="DojoCalendar Rich UI widget">
+<topic href="topics/redt00129.html#redt00129" title="DojoCalendar widget"/>
+</entry>
+<entry keyword="DojoCheckbox Rich UI widget">
+<topic href="topics/redt00130.html#redt00130" title="DojoCheckbox widget"/>
+</entry>
+<entry keyword="DojoColorPalette Rich UI widget">
+<topic href="topics/redt00131.html#redt00131" title="DojoColorPalette widget"/>
+</entry>
+<entry keyword="DojoComboBox Rich UI widget">
+<topic href="topics/redt00132.html#redt00132" title="DojoComboBox widget"/>
+</entry>
+<entry keyword="DojoContentPane Rich UI widget">
+<topic href="topics/redt00133.html#redt00133" title="DojoContentPane"/>
+</entry>
+<entry keyword="DojoContextMenu Rich UI widget">
+<topic href="topics/redt00134.html#redt00134" title="DojoContextMenu widget"/>
+</entry>
+<entry keyword="DojoCurrencyTextBox Rich UI widget">
+<topic href="topics/redt00135.html#redt00135" title="DojoCurrencyTextBox widget"/>
+</entry>
+<entry keyword="DojoDateTextBox Rich UI widget">
+<topic href="topics/redt00136.html#redt00136" title="DojoDateTextBox widget"/>
+</entry>
+<entry keyword="DojoDialog Rich UI widget">
+<topic href="topics/redt00137.html#redt00137" title="DojoDialog widget"/>
+</entry>
+<entry keyword="DojoEditor Rich UI widget">
+<topic href="topics/redt00138.html#redt00138" title="DojoEditor widget"/>
+</entry>
+<entry keyword="DojoGrid Rich UI widget">
+<topic href="topics/redt00139.html#redt00139" title="DojoGrid widget"/>
+</entry>
+<entry keyword="DojoHorizontalSlider Rich UI widget">
+<topic href="topics/redt00140.html#redt00140" title="DojoHorizontalSlider widget"/>
+</entry>
+<entry keyword="DojoLineGraph Rich UI widget">
+<topic href="topics/redt00141.html#redt00141" title="DojoLineGraph widget"/>
+</entry>
+<entry keyword="DojoMenuItem Rich UI widget">
+<topic href="topics/redt00143.html#redt00143" title="DojoMenuItem widget"/>
+</entry>
+<entry keyword="DojoMenuWidget Rich UI widget">
+<topic href="topics/redt00142.html#redt00142" title="DojoMenu widget"/>
+</entry>
+<entry keyword="DojoPieChart Rich UI widget">
+<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget"/>
+</entry>
+<entry keyword="DojoProgressBar Rich UI widget">
+<topic href="topics/redt00147.html#redt00147" title="DojoProgressBar widget"/>
+</entry>
+<entry keyword="DojoRadioGroup Rich UI widget">
+<topic href="topics/redt00148.html#redt00148" title="DojoRadioGroup widget"/>
+</entry>
+<entry keyword="DojoStackContainer Rich UI widget">
+<topic href="topics/redt00149.html#redt00149" title="DojoStackContainer widget"/>
+</entry>
+<entry keyword="DojoTabContainer Rich UI widget">
+<topic href="topics/redt00150.html#redt00150" title="DojoTabContainer widget"/>
+</entry>
+<entry keyword="DojoTextArea Rich UI widget">
+<topic href="topics/redt00151.html#redt00151" title="DojoTextArea widget"/>
+</entry>
+<entry keyword="DojoTextField Rich UI widget">
+<topic href="topics/redt00152.html#redt00152" title="DojoTextField widget"/>
+</entry>
+<entry keyword="DojoTimeTextBox Rich UI widget">
+<topic href="topics/redt00153.html#redt00153" title="DojoTimeTextBox widget"/>
+</entry>
+<entry keyword="DojoTitlePane Rich UI widget">
+<topic href="topics/redt00154.html#redt00154" title="DojoTitlePane widget"/>
+</entry>
+<entry keyword="DojoToggleButton Rich UI widget">
+<topic href="topics/redt00155.html#redt00155" title="DojoToggleButton widget"/>
+</entry>
+<entry keyword="DojoTooltip Rich UI widget">
+<topic href="topics/redt00156.html#redt00156" title="DojoTooltip widget"/>
+</entry>
+<entry keyword="DojoTooltipDialog Rich UI widget">
+<topic href="topics/redt00157.html#redt00157" title="DojoTooltipDialog widget"/>
+</entry>
+<entry keyword="DojoTree Rich UI widget">
+<topic href="topics/redt00158.html#redt00158" title="DojoTree widget"/>
+</entry>
+<entry keyword="DojoTreeNode Rich UI widget">
+<topic href="topics/redt00159.html#redt00159" title="DojoTreeNode widget"/>
 </entry>
 <entry keyword="dynamic types">
 <topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
@@ -487,7 +589,7 @@
 </entry>
 <entry keyword="EGL packages">
 <entry keyword="dojo.widgets">
-<topic href="topics/redt00258.html#redt00258" title="dojo.widgets"/>
+<topic href="topics/redt00258.html#redt00258" title="dojo.widgets package"/>
 </entry>
 <entry keyword="eglx.http">
 <topic href="topics/redt00245.html#redt00245" title="eglx.http package"/>
@@ -1101,6 +1203,108 @@
 </entry>
 <entry keyword="DataGrid">
 <topic href="topics/redt00113.html#redt00113" title="DataGrid widget and related types"/>
+</entry>
+<entry keyword="DojoAccordionContainer">
+<topic href="topics/redt00160.html#redt00160" title="DojoAccordionContainer widget"/>
+</entry>
+<entry keyword="DojoBarGraph">
+<topic href="topics/redt00161.html#redt00161" title="DojoBarGraph widget"/>
+</entry>
+<entry keyword="DojoBorderContainer">
+<topic href="topics/redt00126.html#redt00126" title="DojoBorderContainer widget"/>
+</entry>
+<entry keyword="DojoBubbleChart">
+<topic href="topics/redt00127.html#redt00127" title="DojoBubbleChart widget"/>
+</entry>
+<entry keyword="DojoButton">
+<topic href="topics/redt00128.html#redt00128" title="DojoButton widget"/>
+</entry>
+<entry keyword="DojoCalendar">
+<topic href="topics/redt00129.html#redt00129" title="DojoCalendar widget"/>
+</entry>
+<entry keyword="DojoCheckbox">
+<topic href="topics/redt00130.html#redt00130" title="DojoCheckbox widget"/>
+</entry>
+<entry keyword="DojoColorPalette">
+<topic href="topics/redt00131.html#redt00131" title="DojoColorPalette widget"/>
+</entry>
+<entry keyword="DojoComboBox">
+<topic href="topics/redt00132.html#redt00132" title="DojoComboBox widget"/>
+</entry>
+<entry keyword="DojoContentPane">
+<topic href="topics/redt00133.html#redt00133" title="DojoContentPane"/>
+</entry>
+<entry keyword="DojoContextMenu">
+<topic href="topics/redt00134.html#redt00134" title="DojoContextMenu widget"/>
+</entry>
+<entry keyword="DojoCurrencyTextBox">
+<topic href="topics/redt00135.html#redt00135" title="DojoCurrencyTextBox widget"/>
+</entry>
+<entry keyword="DojoDateTextBox">
+<topic href="topics/redt00136.html#redt00136" title="DojoDateTextBox widget"/>
+</entry>
+<entry keyword="DojoDialog">
+<topic href="topics/redt00137.html#redt00137" title="DojoDialog widget"/>
+</entry>
+<entry keyword="DojoEditor">
+<topic href="topics/redt00138.html#redt00138" title="DojoEditor widget"/>
+</entry>
+<entry keyword="DojoGrid">
+<topic href="topics/redt00139.html#redt00139" title="DojoGrid widget"/>
+</entry>
+<entry keyword="DojoHorizontalSlider">
+<topic href="topics/redt00140.html#redt00140" title="DojoHorizontalSlider widget"/>
+</entry>
+<entry keyword="DojoLineGraph">
+<topic href="topics/redt00141.html#redt00141" title="DojoLineGraph widget"/>
+</entry>
+<entry keyword="DojoMenuItem widget">
+<topic href="topics/redt00143.html#redt00143" title="DojoMenuItem widget"/>
+</entry>
+<entry keyword="DojoMenuWidget">
+<topic href="topics/redt00142.html#redt00142" title="DojoMenu widget"/>
+</entry>
+<entry keyword="DojoPieChart">
+<topic href="topics/redt00146.html#redt00146" title="DojoPieChart widget"/>
+</entry>
+<entry keyword="DojoProgressBar">
+<topic href="topics/redt00147.html#redt00147" title="DojoProgressBar widget"/>
+</entry>
+<entry keyword="DojoRadioGroup">
+<topic href="topics/redt00148.html#redt00148" title="DojoRadioGroup widget"/>
+</entry>
+<entry keyword="DojoStackContainer">
+<topic href="topics/redt00149.html#redt00149" title="DojoStackContainer widget"/>
+</entry>
+<entry keyword="DojoTabContainer">
+<topic href="topics/redt00150.html#redt00150" title="DojoTabContainer widget"/>
+</entry>
+<entry keyword="DojoTextArea">
+<topic href="topics/redt00151.html#redt00151" title="DojoTextArea widget"/>
+</entry>
+<entry keyword="DojoTextField">
+<topic href="topics/redt00152.html#redt00152" title="DojoTextField widget"/>
+</entry>
+<entry keyword="DojoTimeTextBox">
+<topic href="topics/redt00153.html#redt00153" title="DojoTimeTextBox widget"/>
+</entry>
+<entry keyword="DojoTitlePane">
+<topic href="topics/redt00154.html#redt00154" title="DojoTitlePane widget"/>
+</entry>
+<entry keyword="DojoToggleButton">
+<topic href="topics/redt00155.html#redt00155" title="DojoToggleButton widget"/>
+</entry>
+<entry keyword="DojoTooltip">
+<topic href="topics/redt00156.html#redt00156" title="DojoTooltip widget"/>
+</entry>
+<entry keyword="DojoTooltipDialog">
+<topic href="topics/redt00157.html#redt00157" title="DojoTooltipDialog widget"/>
+</entry>
+<entry keyword="DojoTree">
+<topic href="topics/redt00158.html#redt00158" title="DojoTree widget"/>
+</entry>
+<entry keyword="DojoTreeNode">
+<topic href="topics/redt00159.html#redt00159" title="DojoTreeNode widget"/>
 </entry>
 <entry keyword="GridLayout">
 <topic href="topics/redt00112.html#redt00112" title="GridLayout widget and related types"/>
