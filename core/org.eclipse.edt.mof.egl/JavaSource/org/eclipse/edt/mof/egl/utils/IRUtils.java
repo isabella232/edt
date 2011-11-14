@@ -242,6 +242,17 @@ public class IRUtils {
 			return true;
 		}
 		
+		//This visit is here because sometimes a MemberAccess or a QualifiedFunctionInvocation has already resoloved
+		//the referenced member. When this happens, we do not want to start visiting the member if it is contained in
+		//another part
+		public boolean visit(Member member) {
+			if (member.getContainer() instanceof Part && member.getContainer() != root) {
+				member.getContainer().accept(this);
+				return false;
+			}
+			return true;
+		}
+		
 		public Set<Part> getReferencedPartsFor(Part part) {
 			root = part;
 			root.accept(this);
