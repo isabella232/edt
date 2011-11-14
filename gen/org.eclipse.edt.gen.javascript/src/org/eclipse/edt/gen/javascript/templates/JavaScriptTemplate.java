@@ -58,6 +58,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genDeclarationExpression = "genDeclarationExpression";
 	public static final String genDefaultValue = "genDefaultValue";
 	public static final String genExpression = "genExpression";
+	public static final String genTypeBasedExpression = "genTypeBasedExpression";
 	public static final String genField = "genField";
 	public static final String genFieldAnnotations = "genFieldAnnotations";
 	public static final String genFieldInfoTypeName = "genFieldInfoTypeName";
