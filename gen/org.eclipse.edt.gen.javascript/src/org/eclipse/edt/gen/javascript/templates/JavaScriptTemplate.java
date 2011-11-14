@@ -89,6 +89,7 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genPartName = "genPartName";
 	public static final String genQualifier = "genQualifier";
 	public static final String genRuntimeTypeName = "genRuntimeTypeName";
+	public static final String genReturnStatement = "genReturnStatement";
 	public static final String genSignature = "genSignature";
 	public static final String genJSSignature = "genJSSignature";
 	public static final String genStatement = "genStatement";
