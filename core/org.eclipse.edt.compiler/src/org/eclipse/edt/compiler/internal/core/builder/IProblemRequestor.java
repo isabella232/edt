@@ -150,7 +150,7 @@ public interface IProblemRequestor {
 	public static final int WHITESPACE_NOT_ALLOWED = 3066;
 	public static final int STATIC_ARRAY_PARAMETER_DEFINITION = 3067;
 	public static final int PROPERTIES_NOT_ALLOWED_IN_LIST_USE_DECLARATION = 3068;
-	public static final int DYNAMIC_ARRAY_PARAMETER_DEFINITION = 3069;
+	public static final int STATIC_ARRAY_PGM_PARAMETER_DEFINITION = 3069;
 
 	public static final int PROPERTIES_MUTUALLY_EXCLUSIVE = 3070;				
 	public static final int PROPERTY_REQUIRES_SPECIFIC_VALUE_OR_LIST = 3071;				

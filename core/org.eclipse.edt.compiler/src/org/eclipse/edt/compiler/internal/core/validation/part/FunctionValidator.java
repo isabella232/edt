@@ -60,6 +60,7 @@ import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.NullableType;
 import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
@@ -277,12 +278,23 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParmTypeNotStaticArray(FunctionParameter functionParameter, Type parmType) {
-		if(parmType.isArrayType() && ((ArrayType) parmType).hasInitialSize()) {
+
+		if (parmType.isNullableType()) {
+			checkParmTypeNotStaticArray(functionParameter, parmType.getBaseType());
+		}
+		
+		if(parmType.isArrayType()) {
+			if (((ArrayType) parmType).hasInitialSize()) {
         	problemRequestor.acceptProblem(
         		parmType,
 				IProblemRequestor.STATIC_ARRAY_PARAMETER_DEFINITION,
-				new String[] {functionParameter.getName().getCanonicalName(), functionName});        	
+				new String[] {functionParameter.getName().getCanonicalName(), functionName});   
+			}
+			else {
+				checkParmTypeNotStaticArray(functionParameter, ((ArrayType) parmType).getElementType());
+			}
         }
+			
 	}
 	
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, ITypeBinding parmType) {

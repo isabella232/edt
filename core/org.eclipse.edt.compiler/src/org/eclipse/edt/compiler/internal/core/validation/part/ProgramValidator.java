@@ -20,13 +20,16 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
+import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
+import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -56,6 +59,12 @@ public class ProgramValidator extends FunctionContainerValidator {
 		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(program);
 		validateProgramFunctions();
 		validateProgramParameters();
+		
+		if (program.isCallable()) {
+			problemRequestor.acceptProblem(program.getName(),
+					IProblemRequestor.PART_OR_STATEMENT_NOT_SUPPORTED,
+					new String[] {program.getIdentifier()});
+		}
 
 		IAnnotationBinding aBinding = programBinding.getAnnotation(new String[] {"egl", "ui", "webTransaction"}, "VGWebTransaction");
 		if (aBinding != null){
@@ -180,6 +189,8 @@ public class ProgramValidator extends FunctionContainerValidator {
 							}
 						}
 						new ProgramParameterValidator(problemRequestor).validate(typeBinding, programParameter.getType());
+						
+						checkParmTypeNotStaticArray(programParameter, programParameter.getType());
 					}
 					
 				}
@@ -189,6 +200,28 @@ public class ProgramValidator extends FunctionContainerValidator {
 
 		});
 	}
+	
+	
+	private void checkParmTypeNotStaticArray(ProgramParameter parm, Type parmType) {
+
+		if (parmType.isNullableType()) {
+			checkParmTypeNotStaticArray(parm, parmType.getBaseType());
+		}
+		
+		if(parmType.isArrayType()) {
+			if (((ArrayType) parmType).hasInitialSize()) {
+        	problemRequestor.acceptProblem(
+        		parmType,
+				IProblemRequestor.STATIC_ARRAY_PGM_PARAMETER_DEFINITION,
+				new String[] {parm.getName().getCanonicalName()});   
+			}
+			else {
+				checkParmTypeNotStaticArray(parm, ((ArrayType) parmType).getElementType());
+			}
+        }
+			
+	}
+
 	
 	protected void validateProgramFunctions(){
 		program.accept(new AbstractASTVisitor(){
