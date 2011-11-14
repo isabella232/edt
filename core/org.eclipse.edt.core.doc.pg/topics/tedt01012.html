@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Accessing a relational database"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="To access a relational database, you declare one or both of two types of data sources and then use the data source or sources in action statements. Although EGL offers default processing for many kinds of database access, you can write statements in SQL to handle the most complex requirements."></meta>
+<meta name="description" content="To access a relational database, you declare one or both of two types of data sources and then use the data source or sources in action statements. Although EGL offers default processing for many kinds of database access, you can write statements in SQL to handle the most complex requirements."></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -22,9 +22,109 @@
 <h1 class="topictitle1">Accessing a relational database</h1>
 
 
-<div><p></p>
+<div><p>To access a relational database, you declare one or both
+of two types of data sources and then use the data source or sources
+in action statements. Although EGL offers default processing for many
+kinds of database access, you can write statements in SQL to handle
+the most complex requirements.</p>
 
-<p></p>
+<div class="p">The types of data sources are as follows: <ul>
+<li>eglx.persistence.sql.SQLDataSource, which represents a database
+connection.</li>
+
+<li>eglx.persistence.sql.SQLResultSet, which represents a result set
+returned from an SQL query.</li>
+
+</ul>
+</div>
+
+<div class="p">You can introduce yourself to the EGL support for SQL by following
+the examples in this topic, starting with the following definitions:<pre class="codeblock">// The Payment type has the <strong>Table</strong> annotation, which specifies the table name. 
+Record Payment {@Table {name = "Payment_Table"}}
+
+   // The first field in Payment has two annotations:
+   // <strong>GeneratedValue</strong> means that the database management system 
+   // sets the value of the column that corresponds to the first field.
+   // <strong>ID</strong> means that when a record based on the Record type is used in 
+   // an action statement such as add, the field is treated as a key field 
+   // for the purpose of creating the default SQL statement.
+   payment_ID Int {@GeneratedValue, @ID};
+
+   category Int;
+   description String;
+   amount Decimal(10,2);	
+   dueDate Date;
+End
+
+// declare a variable that references connection details
+connectionURL String = "jdbc:derby:C:\\databases\\PaymentDB;create=true";
+ds SQLDataSource = new SQLDataSource(connectionURL);	   
+
+// declare a variable that references a result set
+rs SQLResultSet?;
+
+// declare a record that is based on the Record type shown earlier
+myPayment Payment;
+</pre>
+</div>
+
+
+</div>
+
+<div class="nested1" xml:lang="en-us" id="addstatementexamples"><a name="addstatementexamples"><!-- --></a>
+<h2 class="topictitle2">Add statement examples</h2>
+
+<div>
+<div class="p">The <span class="synph"><span class="kwd">add</span></span> statement adds a single row to
+a database table. The value being added is in one of two categories:<ul>
+<li>A record, handler, or external type; or</li>
+
+<li>A list of values, each of which corresponds to a table column.</li>
+
+</ul>
+</div>
+
+<p>For example, the following code adds four rows to the database
+table:</p>
+
+<pre class="codeblock">// assign values for use with the add statement
+myPayment.category    = 5;
+myPayment.description = "Goods";
+myPayment.amount      = 10.50;
+myPayment.due_date    = "01/25/2012";
+
+// to add the first row, use the entity
+add myPayment to ds;
+
+// to add the second row, use a set of simple values, 
+// and make the SQL INSERT statement explicit
+add 6, "Services", 12.00, myPayment.due_date to ds with
+   #sql{
+      insert into Payment
+         (category, description, amount, due_date)
+      values
+         (?, ? , ?, ?)
+      };
+
+// to add the third row, set the entity fields, use them as simple values
+// in the add statement, and update the SQL INSERT statement.
+myPayment.category = 7;
+myPayment.description = "Repeated payment";
+myPayment.amount = 18000.00;
+
+add myPayment.category, myPayment.description, myPayment.amount to ds with
+   #sql{
+      insert into Payment
+         (category, description, amount)
+      values
+         (?, ? , ?)
+      };
+
+// That last code assumes that the date column in the table is nullable 
+// and without a default value. In that case, the statement adds a row 
+// that includes a null for the date column.</pre>
+
+</div>
 
 </div>
 
