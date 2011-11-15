@@ -80,9 +80,19 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		}
 		
 		
-		// string += anything   is always valid
+		// string += anything   is always compatible
 		if(Assignment.Operator.PLUS == assignmentOperator &&
 				isStringType(lhsBinding)) {
+			
+			
+			if(StatementValidator.isValidBinding(lhsDataBinding)) {
+				new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
+			}
+			
+			if(StatementValidator.isValidBinding(rhsDataBinding)) {
+				new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
+			}
+			
 			return false;
 		}
 
