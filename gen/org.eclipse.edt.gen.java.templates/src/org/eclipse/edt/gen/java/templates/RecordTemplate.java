@@ -197,10 +197,10 @@ public class RecordTemplate extends JavaTemplate {
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		if (TypeUtils.isValueType(type)) {
-			if (arg1.isNullable()) {
-				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3);
-			}
+			// because of initialization logic for field declarations, we must always assign as well as ezecopyto
+			// otherwise, if a null is passed in as the to arg (2nd) and it doesn't get updated on return
+			ctx.invoke(genExpression, arg1, ctx, out);
+			out.print(arg3);
 			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
 			ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(", ");
@@ -208,7 +208,7 @@ public class RecordTemplate extends JavaTemplate {
 			out.print(")");
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}

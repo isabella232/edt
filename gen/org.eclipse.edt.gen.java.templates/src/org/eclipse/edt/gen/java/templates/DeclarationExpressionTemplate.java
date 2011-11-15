@@ -72,8 +72,6 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 						// as this is an expression that also creates a new line with the above println method, it throws off
 						// the smap ending line number by 1. We need to issue a call to correct this
 						ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-						ctx.invoke(genName, field, ctx, out);
-						out.print(" = ");
 						// we need to run the temporary variables separately, otherwise we might not get wraps
 						ctx.invoke(genInitializeStatement, field, ctx, out, true);
 					}
