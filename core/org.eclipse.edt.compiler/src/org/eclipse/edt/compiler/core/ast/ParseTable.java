@@ -25,6 +25,7 @@ public abstract class ParseTable {
     
     public static int[][] LANGUAGE_CONSTRUCTS = new int[][] {
         new int[] { NodeTypes.classContent, NodeTypes.classContent_plus, NodeTypes.classContent_star },
+        new int[] { NodeTypes.handlerContent, NodeTypes.handlerContent_plus, NodeTypes.handlerContent_star },
         new int[] { NodeTypes.functionParameter, NodeTypes.functionParameter_plus, NodeTypes.functionParameter_star },
         new int[] { NodeTypes.importDecl, NodeTypes.importDecl_plus, NodeTypes.importDecl_star },
         new int[] { NodeTypes.interfaceContent, NodeTypes.interfaceContent_plus, NodeTypes.interfaceContent_star },
