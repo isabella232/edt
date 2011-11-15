@@ -41,6 +41,7 @@ import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.ReturnStatement;
@@ -104,6 +105,12 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
+	public boolean visit(Field object){
+		if (object.getContainer() instanceof Part && !object.getContainer().equals(currentStatementContainer))
+			return false;
+		return true;
+	}
+	
 	public boolean visit(Function object) {
 		return false;
 	}
