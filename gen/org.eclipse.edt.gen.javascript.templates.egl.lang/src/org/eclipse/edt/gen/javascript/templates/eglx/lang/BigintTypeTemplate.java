@@ -48,6 +48,10 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_POWER))
 			return "egl.eglx.lang.EInt64.pow";
+		if (op.equals(expr.Op_EQ))
+			return "egl.eglx.lang.EInt64.equals";
+		if (op.equals(expr.Op_NE))
+			return "egl.eglx.lang.EInt64.notEquals";
 		return "";
 	}
 
@@ -64,9 +68,9 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_DIVIDE))
 			return ".divide(";
 		if (op.equals(expr.Op_EQ))
-			return ".compareTo(";
+			return ",";
 		if (op.equals(expr.Op_NE))
-			return ".compareTo(";
+			return ",";
 		if (op.equals(expr.Op_LT))
 			return ".compareTo(";
 		if (op.equals(expr.Op_GT))
@@ -97,10 +101,6 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			return ")";
 		if (op.equals(expr.Op_DIVIDE))
 			return ")";
-		if (op.equals(expr.Op_EQ))
-			return ") == 0";
-		if (op.equals(expr.Op_NE))
-			return ") != 0";
 		if (op.equals(expr.Op_LT))
 			return ") < 0";
 		if (op.equals(expr.Op_GT))

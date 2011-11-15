@@ -147,6 +147,10 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
+		if (op.equals(expr.Op_EQ))
+			return "egl.eglx.lang.EDecimal.equals";
+		if (op.equals(expr.Op_NE))
+			return "egl.eglx.lang.EDecimal.notEquals";
 		return "";
 	}
 
@@ -163,9 +167,9 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_DIVIDE))
 			return ".divide(";
 		if (op.equals(expr.Op_EQ))
-			return ".compareTo(";
+			return ",";
 		if (op.equals(expr.Op_NE))
-			return ".compareTo(";
+			return ",";
 		if (op.equals(expr.Op_LT))
 			return ".compareTo(";
 		if (op.equals(expr.Op_GT))
@@ -198,10 +202,10 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 			return ")";
 		if (op.equals(expr.Op_DIVIDE))
 			return ")";
-		if (op.equals(expr.Op_EQ))
-			return ") == 0";
-		if (op.equals(expr.Op_NE))
-			return ") != 0";
+//		if (op.equals(expr.Op_EQ))
+//			return ") == 0";
+//		if (op.equals(expr.Op_NE))
+//			return ") != 0";
 		if (op.equals(expr.Op_LT))
 			return ") < 0";
 		if (op.equals(expr.Op_GT))
