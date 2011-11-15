@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.PartName;
@@ -32,7 +33,8 @@ public class MemberAccessTemplate extends org.eclipse.edt.gen.javascript.templat
 	@Override
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
 		super.genMemberAccess(expr, ctx, out);
-		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(expr.getMember().getType())){
+		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(expr.getMember().getType()) && 
+				expr.getQualifier() != null && expr.getQualifier() instanceof MemberName && !(((MemberName)expr.getQualifier()).getMember() instanceof FunctionParameter)){
 			List references = (List)ctx.get( Constants.REFERENCES_WIDGETS );
 			if ( references == null ) {
 				references = new ArrayList();
