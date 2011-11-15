@@ -84,10 +84,10 @@ public class EGLSubtypeReferenceCompletion extends EGLAbstractReferenceCompletio
 		final List elementKinds = new ArrayList();
 		
 		eglPart.accept(new DefaultASTVisitor() {
-			public void endVisit(Program program) {
-				additionalInfoText = UINlsStrings.CAProposal_ProgramType;
-				elementKinds.add(ElementKind.PROGRAMPART);
-			}
+//			public void endVisit(Program program) {
+//				additionalInfoText = UINlsStrings.CAProposal_ProgramType;
+//				elementKinds.add(ElementKind.PROGRAMPART);
+//			}
 			
 			public void endVisit(Record record) {
 				additionalInfoText = UINlsStrings.CAProposal_RecordType;

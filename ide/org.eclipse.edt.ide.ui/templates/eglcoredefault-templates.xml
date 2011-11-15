@@ -227,9 +227,9 @@ end
 </template>
 -->
 
-<template name="program" description="%Templates.basic_program" id="org.eclipse.edt.ide.ui.templates.basic_program" context = "egl-core" enabled="true">// basic program
+<template name="program" description="%Templates.basic_program" id="org.eclipse.edt.ide.ui.templates.basic_program" context = "egl-core" enabled="true">// program
 //
-program ${programName} type BasicProgram {}
+program ${programName}
 	
 	// Use Declarations
 	//use usePartReference;
