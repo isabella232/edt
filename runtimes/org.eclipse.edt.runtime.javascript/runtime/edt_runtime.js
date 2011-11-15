@@ -274,6 +274,17 @@ egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	else
 		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
+egl.eglx.lang.EDecimal.equals = function (x, y) {
+	if(!x && !y){
+		return true;
+	}else if(!x || !y){
+		return false;
+	}
+	return (x.compareTo(y) == 0);
+};
+egl.eglx.lang.EDecimal.notEquals = function(x, y) {
+	return !egl.eglx.lang.EDecimal.equals(x, y);
+};
 egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
@@ -319,7 +330,18 @@ egl.eglx.lang.EInt64.fromENumber = function (x, nullable) {
 };
 egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
-}; 
+};
+egl.eglx.lang.EInt64.equals = function (x, y) {
+	if(!x && !y){
+		return true;
+	}else if(!x || !y){
+		return false;
+	}
+	return (x.compareTo(y) == 0);
+};
+egl.eglx.lang.EInt64.notEquals = function(x, y) {
+	return !egl.eglx.lang.EInt64.equals(x, y);
+};
 egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
 	return egl.convertAnyToBigint(x, nullable);    
 };
@@ -417,7 +439,8 @@ egl.defineClass( "eglx.lang", "EString"
 }
 );
 egl.eglx.lang.EString.textLen = function (s) {
-   return ( s === null ) ? 0 : s.length;
+	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
+	return s.length;
 };
 egl.eglx.lang.EString.ezeCast = function (x, nullable) {
 	return egl.convertAnyToString(x, nullable);  
