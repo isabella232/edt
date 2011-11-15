@@ -1339,7 +1339,7 @@ Templates
    </enabledWhen>
    		</page>
    		<page
-            name="%eglDefaultDeploymentDescriptorPropertyPage"
+            name="%eglDevelopmentDeploymentDescriptorPropertyPage"
             class="org.eclipse.edt.ide.ui.internal.property.pages.DefaultDeploymentDescriptorPropertyPage"
            	id="org.eclipse.edt.ide.ui.defaultDeploymentDescriptorPropertyPage">
 			<filter
