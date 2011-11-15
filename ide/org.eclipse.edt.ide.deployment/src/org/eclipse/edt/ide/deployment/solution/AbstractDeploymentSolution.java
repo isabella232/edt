@@ -57,6 +57,7 @@ public class AbstractDeploymentSolution implements IDeploymentSolution {
 		for ( int i = 0; i < operations.size(); i ++ ) {
 			IDeploymentOperation operation = operations.get( i );
 			operation.execute( context, resultsCollector, monitor );
+			monitor.worked(2);
 		}
 	}
 
