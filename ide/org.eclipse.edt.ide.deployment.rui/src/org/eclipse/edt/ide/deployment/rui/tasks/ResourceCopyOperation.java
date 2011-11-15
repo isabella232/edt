@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.deployment.rui.tasks;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,10 +38,6 @@ public class ResourceCopyOperation {
 
 	private static final String WEB_LIB_FOLDER  = "WEB-INF/lib/";
 	private IProject targetProject;
-	private static int javaScriptProgressBaseToPass = 30;
-	private static int javaScriptFolderProgressBase = 10;
-	private static int javascriptFilesProgressBase = 40;
-	
 	public ResourceCopyOperation(final IProject targetProject) {
 		this.targetProject = targetProject;
 	}
@@ -50,41 +47,51 @@ public class ResourceCopyOperation {
 	 * @throws EGLRIADeploymentException 
 	 */
 	public void copyModelResources( final ResourceDeploymentModel model, final IProgressMonitor parentMonitor, IDeploymentResultsCollector resultsCollector) {
-		IProgressMonitor monitor = new SubProgressMonitor(parentMonitor,50, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
+		IProgressMonitor monitor = new SubProgressMonitor(parentMonitor, 70, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK);
 		monitor.setTaskName(Messages.J2EEDeploymentSolutionProgress_13);
-		monitor.beginTask("", IProgressMonitor.UNKNOWN);
+		monitor.beginTask("", calculateFileNumber(model));
 		try
 		{
-			parentMonitor.worked(javaScriptFolderProgressBase);
 			IPath targetPath = WebUtilities.getWebModulePath(targetProject);
-			createFolders(model.getJavascriptFolders(), targetPath, monitor, resultsCollector, parentMonitor);
-			copyFiles(model.getJavascriptFiles(), targetPath, monitor, resultsCollector, parentMonitor);
+			createFolders(model.getJavascriptFolders(), targetPath, monitor, resultsCollector);
+			copyFiles(model.getJavascriptFiles(), targetPath, monitor, resultsCollector);
 			
 			targetPath = WebUtilities.getWebModulePath(targetProject);
 			targetPath = targetPath.append(WEB_LIB_FOLDER);
-			createFolders(model.getJavaJarFolders(), targetPath, monitor, resultsCollector, null);
-			copyFiles(model.getJavaJarFiles(), targetPath, monitor, resultsCollector, null);
-
+			createFolders(model.getJavaJarFolders(), targetPath, monitor, resultsCollector);
+			copyFiles(model.getJavaJarFiles(), targetPath, monitor, resultsCollector);
+			
 			String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName(targetProject);
 			targetPath = targetProject.getFullPath().append(javaSourceFolder);
-			createFolders(model.getJavaFolders(), targetPath, monitor, resultsCollector, null);
-			copyFiles(model.getJavaFiles(), targetPath, monitor, resultsCollector, parentMonitor);
+			createFolders(model.getJavaFolders(), targetPath, monitor, resultsCollector);
+			copyFiles(model.getJavaFiles(), targetPath, monitor, resultsCollector);
 		}finally{
 			monitor.done();
 		}
 		
 	}
 	
-	private void createFolders(final Map<IFolder, Set<IFolder>> folders2Create, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector, IProgressMonitor fatherMonitor)
+	//To get the total file number for subProgressMonitor
+	private int calculateFileNumber(ResourceDeploymentModel model){
+		int totalNumber = 0;
+		Map<IFolder, Set<IFile>> filesToCopy =new HashMap<IFolder, Set<IFile>>();
+		filesToCopy.putAll(model.getJavaFiles());
+		filesToCopy.putAll(model.getJavascriptFiles());
+		filesToCopy.putAll(model.getJavaJarFiles());
+		
+		for( Iterator<Entry<IFolder, Set<IFile>>> itr1 = filesToCopy.entrySet().iterator(); itr1.hasNext(); ) {
+			Entry<IFolder, Set<IFile>> entry = itr1.next();
+			totalNumber += entry.getValue().size();
+		}
+		
+		return totalNumber;
+	}
+	
+	private void createFolders(final Map<IFolder, Set<IFolder>> folders2Create, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector)
 	{
-		float FoldersNumber = folders2Create.entrySet().size();
-		float incrementer = javaScriptProgressBaseToPass/FoldersNumber;
-		int iterNumber = 0;
+
 		for( Iterator<Entry<IFolder, Set<IFolder>>> itr1 = folders2Create.entrySet().iterator(); itr1.hasNext() && !monitor.isCanceled(); ) {
-			iterNumber++;
-			if(null != fatherMonitor){
-				fatherMonitor.worked((int)(javaScriptFolderProgressBase + iterNumber * incrementer));
-			}
+
 			Entry<IFolder, Set<IFolder>> entry = itr1.next();
 			for( Iterator<IFolder> itr2 = entry.getValue().iterator(); itr2.hasNext() && !monitor.isCanceled(); ) {
 				IFolder folder = itr2.next();
@@ -105,19 +112,11 @@ public class ResourceCopyOperation {
 				}
 			}
 		}
-
-	}
-	private void copyFiles(final Map<IFolder, Set<IFile>> files2Copy, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector ,IProgressMonitor fatherMonitor)
-	{
-		float FilesNumber = files2Copy.entrySet().size();
-		float incrementer = javaScriptProgressBaseToPass/FilesNumber;
-		int iterNumber = 0;
 		
+	}
+	private void copyFiles(final Map<IFolder, Set<IFile>> files2Copy, final IPath targetPath, final IProgressMonitor monitor, final IDeploymentResultsCollector resultsCollector)
+	{
 		for( Iterator<Entry<IFolder, Set<IFile>>> itr1 = files2Copy.entrySet().iterator(); itr1.hasNext() && !monitor.isCanceled(); ) {
-			iterNumber++;
-			if(null != fatherMonitor){
-				fatherMonitor.worked((int)(javascriptFilesProgressBase + iterNumber * incrementer));
-			}
 			
 			Entry<IFolder, Set<IFile>> entry = itr1.next();
 			for( Iterator<IFile> itr2 = entry.getValue().iterator(); itr2.hasNext() && !monitor.isCanceled(); ) {
@@ -151,6 +150,8 @@ public class ResourceCopyOperation {
 							targetFile.create(is, true, monitor);
 							targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 						}
+						
+						monitor.worked(1);
 					}catch(Exception e)
 					{
 						resultsCollector.addMessage(DeploymentUtilities.createStatus(IStatus.ERROR, Messages.bind(Messages.J2EEDeploymentSolution_26, new String[]{file.getProjectRelativePath().toOSString(), targetProject.getName()})));
@@ -159,7 +160,7 @@ public class ResourceCopyOperation {
 				}
 			}
 		}
-
+		
 	}
 
 //	void updateFda7Jar(final IProgressMonitor monitor) 
