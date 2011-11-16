@@ -78,7 +78,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 				out.print(" this.");
 				ctx.invoke(genName, field, ctx, out);
 				out.print(".ezeCopy(");
-				out.print("source.");
+				out.print(" source.");
 				ctx.invoke(genName, field, ctx, out);
 				out.println(");");
 			} else {
@@ -154,6 +154,8 @@ public class RecordTemplate extends JavaScriptTemplate {
 	public void genReturnStatement(Record type, Context ctx, TabbedWriter out, ReturnStatement arg) {
 		if (TypeUtils.isValueType(type) && arg.getExpression() != null) {
 			out.print("return ");
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			out.print(" == null ? null : ");
 			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType()), ctx, out);
 			ctx.invoke(genCloneMethod, type, ctx, out);
 		} else

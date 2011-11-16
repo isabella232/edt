@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
@@ -21,6 +22,7 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
@@ -32,7 +34,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
-import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -343,10 +344,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genExpression, lhs, ctx, out);
 			out.print(", ");
 			out.print("\"");
-			if ( isaType instanceof Part )
-				ctx.invoke(genJSSignature, isaType, ctx, out);
-			else
-				ctx.invoke(genSignature, isaType, ctx, out); 
+			ctx.put( Constants.SubKey_isaSignature, "true" );
+			ctx.invoke(genSignature, isaType, ctx, out);
+			ctx.remove( Constants.SubKey_isaSignature );
 			out.print("\"");
 			out.print(")");
 		}
@@ -375,7 +375,13 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genSignature(Type type, Context ctx, TabbedWriter out) {
 		// TODO sbg In RBD, the type may be null which has a runtime signature of "V;" -- do we need to handle that, and if
 		// so, how?
-		out.print(type.getTypeSignature());
+		if ( ctx.get( Constants.SubKey_isaSignature ) != null ) {
+			out.print( "T" );
+			out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
+			out.print( ";" );
+		} else {
+			out.print(type.getTypeSignature());
+		}
 	}
 
 	public void genContainerBasedAccessor(Type type, Context ctx, TabbedWriter out, Function arg) {
