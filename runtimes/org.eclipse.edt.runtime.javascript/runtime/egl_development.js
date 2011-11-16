@@ -1067,7 +1067,7 @@ egl.evTerminateReloadHandler = function() {
 			egl.partialTerminateSession();
 		}
 		egl.reloadHandler(packageName, typeName);
-		egl.startupInit();
+		egl.startupInitCallback();
 		egl.beginWidgetPosition();
 		egl.startVEWidgetTimer();
 		egl.canPrintError = true;
