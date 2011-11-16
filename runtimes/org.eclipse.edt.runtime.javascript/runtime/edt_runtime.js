@@ -38,7 +38,20 @@ egl.defineClass( "eglx.lang", "AnyValue"
 	// TODO sbg In java RT, this is an interface;  do we need any methods on it here?
 }
 );
-
+egl.eglx.lang.AnyValue.ezeCopyTo = function(source, target){
+	if (source == null) {
+		if (target != null) {
+			target.eze$$setEmpty();
+		}
+	}
+	else {
+		if (target == null) {
+			target = source.eze$$clone();
+		}
+		target.ezeCopy(source);
+	}
+	return target;
+};
 
 /****************************************************************************
  * EAny
@@ -330,7 +343,7 @@ egl.eglx.lang.EInt64.fromENumber = function (x, nullable) {
 };
 egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
 	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
-};
+}; 
 egl.eglx.lang.EInt64.equals = function (x, y) {
 	if(!x && !y){
 		return true;
