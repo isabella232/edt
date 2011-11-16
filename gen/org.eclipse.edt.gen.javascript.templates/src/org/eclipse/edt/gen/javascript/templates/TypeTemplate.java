@@ -182,10 +182,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		if (!arg1.isNullable() && arg2.isNullable()) {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			out.print("(function(x){ return x != null ? (x) : ");
-			ctx.invoke(genDefaultValue, type, ctx, out, arg1);
-			out.print("; })");
-			out.print("(");
+			out.print("egl.checkNull(");
 			ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(")");
 		} else {
