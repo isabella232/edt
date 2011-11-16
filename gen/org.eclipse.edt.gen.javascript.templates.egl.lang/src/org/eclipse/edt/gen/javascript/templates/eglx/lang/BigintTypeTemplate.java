@@ -67,6 +67,8 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 			return ".multiply(";
 		if (op.equals(expr.Op_DIVIDE))
 			return ".divide(";
+		if (op.equals(expr.Op_MODULO))
+			return ".remainder(";
 		if (op.equals(expr.Op_EQ))
 			return ",";
 		if (op.equals(expr.Op_NE))
@@ -100,6 +102,8 @@ public class BigintTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return ")";
 		if (op.equals(expr.Op_DIVIDE))
+			return ")";
+		if (op.equals(expr.Op_MODULO))
 			return ")";
 		if (op.equals(expr.Op_LT))
 			return ") < 0";
