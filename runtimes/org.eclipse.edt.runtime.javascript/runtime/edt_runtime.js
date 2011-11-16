@@ -43,6 +43,7 @@ egl.eglx.lang.AnyValue.ezeCopyTo = function(source, target){
 		if (target != null) {
 			target.eze$$setEmpty();
 		}
+		return null;
 	}
 	else {
 		if (target == null) {

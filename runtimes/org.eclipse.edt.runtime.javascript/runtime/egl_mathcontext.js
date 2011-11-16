@@ -629,7 +629,7 @@ egl.javascript.MathContext.prototype.isValidRound = function(testround) {
  egl.javascript.MathContext.prototype.DEFAULT_FORM=egl.javascript.MathContext.prototype.SCIENTIFIC;
  egl.javascript.MathContext.prototype.DEFAULT_DIGITS=9;
  egl.javascript.MathContext.prototype.DEFAULT_LOSTDIGITS=false;
- egl.javascript.MathContext.prototype.DEFAULT_ROUNDINGMODE=egl.javascript.MathContext.prototype.ROUND_HALF_UP;
+ egl.javascript.MathContext.prototype.DEFAULT_ROUNDINGMODE=egl.javascript.MathContext.prototype.ROUND_HALF_DOWN;
  
  /* properties private constant */
  
