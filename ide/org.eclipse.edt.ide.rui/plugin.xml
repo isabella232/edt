@@ -48,6 +48,17 @@ Register the Preference Pages
             templateClass="org.eclipse.edt.ide.rui.internal.project.WebClientWithServicesProjectTemplate"
             wizardClass="org.eclipse.edt.ide.rui.wizards.WebClientWithServicesProjectTemplateWizard">
       </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.projects"
+            default="false"
+            description="%RUIHelloWorldProjectDescription"
+            icon="icons/helloworld.gif"
+            id="org.eclipse.edt.ide.ui.projects.rui.helloworld"
+            name="%RUIHelloWorldProject"
+            templateClass="org.eclipse.edt.ide.rui.internal.project.HelloWorldProjectTemplate" >
+      </template>
+            
    </extension>
 <!--                                                                                 -->
 <!-- Define the widget library provider extension point                              -->
