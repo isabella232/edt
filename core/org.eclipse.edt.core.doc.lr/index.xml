@@ -639,6 +639,9 @@
 <entry keyword="execute">
 <topic href="topics/redt00026.html#redt00026" title="Execute statement for a relational database"/>
 </entry>
+<entry keyword="exit">
+<topic href="topics/redt00019.html#redt00019" title="Exit statement"/>
+</entry>
 <entry keyword="forEach">
 <topic href="topics/redt00018.html#redt00018" title="ForEach statement for a relational database"/>
 </entry>
@@ -843,6 +846,9 @@
 <entry keyword="relational database">
 <topic href="topics/redt00026.html#redt00026" title="Execute statement for a relational database"/>
 </entry>
+</entry>
+<entry keyword="exit EGL statement">
+<topic href="topics/redt00019.html#redt00019" title="Exit statement"/>
 </entry>
 <entry keyword="exp EGL function">
 <topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>

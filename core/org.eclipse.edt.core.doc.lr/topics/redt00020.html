@@ -37,10 +37,10 @@ same function as the containing statement. You cannot get the return
 of control by putting the <span class="synph"><span class="kwd">continue</span></span> statement
 in a function that you call from inside the loop.</p>
 
-<anchor id="sql_intro_more"></anchor>
+<anchor id="intro_more"></anchor>
 
-<div class="section" id="redt00020__sql_syntax"><a name="redt00020__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00020__sql_syntax_figure"><a name="redt00020__sql_syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_core_continue.gif" alt="Syntax diagram for the continue statement with SQL"></img><br></br>
+<div class="section" id="redt00020__syntax"><a name="redt00020__syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00020__syntax_figure"><a name="redt00020__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_continue.gif" alt="Syntax diagram for the continue statement"></img><br></br>
 </div>
 <dl>
 <dt class="dlterm"><var class="varname">statement</var></dt>
@@ -58,10 +58,10 @@ or <span class="synph"><span class="kwd">while</span></span> statement. Processi
 with the referenced statement.</dd>
 
 </dl>
-<anchor id="sql_syntax_more"></anchor></div>
+<anchor id="syntax_more"></anchor></div>
 
-<div class="example" id="redt00020__sql_example"><a name="redt00020__sql_example"><!-- --></a><div class="p">The following example assumes that you
-have coded a print function named <samp class="codeph">printReport</samp>. <pre class="codeblock">for (i from 1 to 100 by 1)
+<div class="example" id="redt00020__example"><a name="redt00020__example"><!-- --></a><div class="p">The following example assumes that you have
+coded a print function named <samp class="codeph">printReport</samp>. <pre class="codeblock">for (i from 1 to 100 by 1)
    printReport(myList[i]);
    if ((i % 10) != 0)
       continue;
@@ -72,15 +72,15 @@ end // for
 </div>
 <p>That code prints the members of a list, inserting
 a blank line between each group of ten.</p>
-<anchor id="sql_example_more"></anchor></div>
+<anchor id="example_more"></anchor></div>
 
 <div class="section" id="redt00020__compat"><a name="redt00020__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
 <div class="tablenoborder"><a name="redt00020__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00020__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d8977e141">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d9843e141">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d8977e144">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d9843e144">Issue</th>
 
 </tr>
 
@@ -89,17 +89,17 @@ a blank line between each group of ten.</p>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00020__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d8977e141 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d9843e141 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d8977e144 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d9843e144 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00020__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d8977e141 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d9843e141 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d8977e144 "><span class="synph"><span class="kwd">continue</span></span> is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d9843e144 "><span class="synph"><span class="kwd">continue</span></span> is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

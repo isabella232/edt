@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Return statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="abstract" content="The EGL return statement exits from a function."></meta>
+<meta name="description" content="The EGL return statement exits from a function."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +23,101 @@
 <h1 class="topictitle1">Return statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
+<div><p>The EGL <span class="synph"><span class="kwd">return</span></span> statement exits
+from a function.</p>
 
-<p>Here...</p>
+<div class="p">If you want the function to return a value, include a returns clause
+in the definition, as shown here: <pre class="codeblock">function myFunction() <strong>returns (int)</strong>
+   returns (0);
+end
+</pre>
+</div>
+
+<p>If a function definition does not include a returns clause, the <strong>return</strong> statement
+is optional and, if present, cannot include a value.</p>
+
+<div class="p">If a function definition includes a returns clause, the returned
+value is the default value of the type in either of the following
+cases: <ul>
+<li>The function returns control from a return statement that has
+no value; or</li>
+
+<li>The function returns control at a statement other than a return
+statement.</li>
+
+</ul>
+</div>
+
+<p>The default value of type ANY is undefined.</p>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00007__sql_syntax"><a name="redt00007__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><br></br><img src="../images/redt_core_return.gif" alt="Syntax diagram for the return statement"></img><br></br><dl>
+<dt class="dlterm"><var class="varname">returnValue</var></dt>
+
+<dd>A value that is compatible with the type specified in the returns
+clause. </dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00007__example"><a name="redt00007__example"><!-- --></a><div class="p">Here is a type definition used in a subsequent
+example:<pre class="codeblock">Record MyType 
+   myField int;
+end</pre>
+</div>
+<div class="p">Here is a function that a returns a value of
+the preceding type:<pre class="codeblock">function myReturnTest() returns(MyType) 
+   myRecord Mytype;
+   myRecord.myField = 2;     
+   return(myRecord);
+end
+</pre>
+</div>
+<anchor id="sql_example_more"></anchor></div>
+
+<div class="section" id="redt00007__compat"><a name="redt00007__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00007__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00007__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d7564e97">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d7564e100">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00007__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d7564e97 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d7564e100 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00007__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d7564e97 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d7564e100 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>
