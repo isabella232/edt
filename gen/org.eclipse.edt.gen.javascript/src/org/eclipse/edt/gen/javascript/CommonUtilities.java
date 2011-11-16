@@ -354,6 +354,9 @@ public class CommonUtilities {
 		return false;
 	}
 
+	public static void genEzeCopyTo(Expression expr, Context ctx, TabbedWriter out) {
+		out.print("egl.eglx.lang.AnyValue.ezeCopyTo(");
+	}
 
 	public static boolean isRUIPropertiesLibrary( Object obj )
 	{
