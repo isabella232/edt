@@ -135,7 +135,14 @@ public class RUITemplate extends JavaScriptTemplate {
 	}
 	
 	private void generateTitle(Part part, TabbedWriter out) {
-		String title = part.getName();
+		String title = null;
+		Annotation annot = part.getAnnotation(CommonUtilities.isRUIHandler(part) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
+		if (annot != null) {
+			title = (String)annot.getValue("title");
+		}
+		if (title == null || title.length() == 0) {
+			title = part.getName();
+		}
 		out.print( "<title>" ); //$NON-NLS-1$
 		out.print( title );
 		out.println( "</title>" ); //$NON-NLS-1$
@@ -292,15 +299,26 @@ public class RUITemplate extends JavaScriptTemplate {
 		}		
 	}
 	
+
 	private void generateRuntimeFilePath(TabbedWriter out) {
-		final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
-		String paths = "";		
-		for (Iterator<String> iterator = Constants.RUI_RUNTIME_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
-			String path = prefix + iterator.next();
-			paths += ("\"" + path + "\",");
+		boolean useAll = false;
+		
+		if (useAll) {
+			final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
+			String paths = "";		
+			for (Iterator<String> iterator = Constants.RUI_RUNTIME_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
+				String path = prefix + iterator.next();
+				paths += ("\"" + path + "\",");
+			}
+			paths = paths.substring(0, paths.length()-1);
+			out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + paths + ");");
 		}
-		paths = paths.substring(0, paths.length()-1);
-		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + paths + ");");
+		else {
+			//Use all in one runtime file
+			final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
+			String path = "\""+ prefix + Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE + "\"";
+			out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + path + ");");
+		}
 	}
 	
 	private void generateDevelopmentRuntimeFilePath(TabbedWriter out) {
