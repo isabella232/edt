@@ -91,7 +91,6 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genRuntimeTypeName = "genRuntimeTypeName";
 	public static final String genReturnStatement = "genReturnStatement";
 	public static final String genSignature = "genSignature";
-	public static final String genJSSignature = "genJSSignature";
 	public static final String genStatement = "genStatement";
 	public static final String genStatementNoBraces = "genStatementNoBraces";
 	public static final String genServiceCallbackArgType = "genServiceCallbackArgType";
