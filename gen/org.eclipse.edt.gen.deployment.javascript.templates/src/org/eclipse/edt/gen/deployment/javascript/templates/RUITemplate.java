@@ -344,21 +344,13 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
 		out.println("egl.startupInit = function() {");		
-		out.println("	egl.load(RUI_DEPENDENT_JAVASCRIPT_FILES, function(){");
+		out.println("	egl.load(RUI_DEPENDENT_JAVASCRIPT_FILES, egl.startupInitCallback);");
+		out.println("};");
+		
+		
+		out.println("egl.startupInitCallback = function(){");
 		generateLocaleInfo(out, userMsgLocale);
-/*FIXME uncomment or delete
- * are these needed for any browsers
- * we now access these as et's statically so they are initialized when th ejs is loaded
-  		out.println("		new egl.eglx.lang.DateTimeLib;");
-		out.println("		new egl.eglx.lang.StrLib();");
-		out.println("		new egl.eglx.lang.SysLib();");
-		out.println("		new egl.eglx.lang.MathLib();");
-		out.println("		new egl.eglx.services.ServiceLib();");
-		out.println("		new egl.eglx.xml.XmlLib();");
-		out.println("		new egl.eglx.json.JsonLib();");
-		out.println("		new egl.eglx.http.HttpLib();");
-		out.println("		new egl.eglx.ui.rui.RUILib();");
-*/		out.println("		try {");
+		out.println("		try {");
 		if(isDevelopment){
 			generateDevelopmentRootHandler(part,out);
 		}else{
@@ -378,8 +370,7 @@ public class RUITemplate extends JavaScriptTemplate {
 			out.println("			}");
 		}
 		out.println("		}");
-		out.println("	});");
-		out.println("};");
+		out.println("};"); 
 	}
 
 	private String getFullPartName(Handler part) {
