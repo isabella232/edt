@@ -46,7 +46,6 @@ import org.eclipse.ui.PlatformUI;
 
 public abstract class EGLTemplateWizardPage extends EGLPartWizardPage 
        implements ISelectionChangedListener, IDoubleClickListener{
-	private static String basicTemplateID = "org.eclipse.edt.ide.ui.templates.flexible_basic_record";
 	protected TableViewer templateViewer;
 	protected Text descriptionText;
 	
@@ -137,10 +136,10 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
 					|| (templateID != null );
 			
-			if(basicTemplateID.equals(templateID)) {
-				b = b && validateEGLPartName();
-			} else {
+			if(template.hasWizard()) {
 				b = b && isPageComplete();
+			} else {
+				b = b && validateEGLPartName();
 			}
 			
 			setPageComplete(b);
