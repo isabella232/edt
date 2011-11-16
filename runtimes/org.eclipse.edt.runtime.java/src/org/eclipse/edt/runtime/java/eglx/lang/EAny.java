@@ -217,7 +217,7 @@ public abstract class EAny implements eglx.lang.EAny {
 				TypeConstraints constraints = ezeTypeConstraints(name);
 				value = constraints.constrainValue(value);
 			} else if (value instanceof AnyBoxedObject) {
-				value = ((AnyBoxedObject<Object>) value).ezeUnbox();
+				value = field.getType().getName().equalsIgnoreCase("eglx.lang.EAny") ? value : ((AnyBoxedObject<Object>) value).ezeUnbox();
 			}
 			field.set(this, value);
 		}
