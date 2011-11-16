@@ -263,6 +263,9 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
 		if (o instanceof IProjectTemplate) {
 			IProjectTemplate template = (IProjectTemplate) o;
+			
+			model.setSelectedProjectTemplate(template);
+			
 			ProjectTemplateWizardNode wizNode = (ProjectTemplateWizardNode) template.getWizardNode();
 			if (wizNode != null) {
 				wizNode.setParentWizard(getWizard());

@@ -29,6 +29,7 @@ import org.eclipse.edt.ide.ui.EDTUIPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardMainPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 import org.eclipse.edt.ide.ui.project.templates.IProjectTemplateClass;
 import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
@@ -73,25 +74,32 @@ public class NewEGLProjectWizard extends Wizard
 			// If a page of the dynamically embedded template wizard is not
 			// currently being displayed, the performFinish() on this wizard will
 			// not get displayed. This code ensures this happens.		
+			
+			IProjectTemplate template = model.getSelectedProjectTemplate();			
+			
 			IWizardNode node = mainPage.getSelectedNode();
-			ProjectTemplateWizardNode twn = (ProjectTemplateWizardNode) node;
-			if (twn.getTemplate().hasWizard()) {
-				if (!twn.getWizard().performFinish()) {
-					return false;
+			ProjectTemplateWizardNode twn = null;			
+			if (node != null && node instanceof ProjectTemplateWizardNode) {
+				twn = (ProjectTemplateWizardNode) node;
+				if (twn.getTemplate().hasWizard()) {
+					if (!twn.getWizard().performFinish()) {
+						return false;
+					}
 				}
 			}
-			List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) twn.getTemplate().getProjectTemplateClass(), model, 0, rule);
-			for(Iterator it = ops.iterator(); it.hasNext();)
-			{
-				Object obj = it.next();
-				if(obj instanceof WorkspaceModifyOperation)
-				{
-					WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
-					getContainer().run(true, true, op);
-				}
-			}
+							
+            List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) template.getProjectTemplateClass(), model, 0, rule);
+            for(Iterator it = ops.iterator(); it.hasNext();)
+            {
+                Object obj = it.next();
+                if(obj instanceof WorkspaceModifyOperation)
+                {
+                    WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
+                    getContainer().run(true, true, op);
+                }
+            }
 
-			if (twn.getTemplate().hasWizard()) {
+			if (twn != null && twn.getTemplate().hasWizard()) {
 				if (twn.getWizard() instanceof BasicProjectTemplateWizard) {
 					if(!((BasicProjectTemplateWizard) twn.getWizard()).proecssGenerationDirectorySetting()){
 						return false;
@@ -102,7 +110,7 @@ public class NewEGLProjectWizard extends Wizard
 			// Remember base package name
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
 			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());
-			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_SELECTEDTEMPLATE, twn.getTemplate().getId());
+			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_SELECTEDTEMPLATE, template.getId());
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.model.PPListElement;
+import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 
 public class ProjectConfiguration {
 	
@@ -76,6 +77,8 @@ public class ProjectConfiguration {
 	private String[] selectedGenerators;	
 
 	private boolean configureEGLPathOnly;
+	
+	private IProjectTemplate selectedProjectTemplate;
 	
 	public void setDefaultAttributes() {
 		useDefaults = true;
@@ -275,5 +278,13 @@ public class ProjectConfiguration {
 
 	public void setBasePackageName(String basePackageName) {
 		this.basePackageName = basePackageName;
+	}
+
+	public IProjectTemplate getSelectedProjectTemplate() {
+		return selectedProjectTemplate;
+	}
+
+	public void setSelectedProjectTemplate(IProjectTemplate selectedProjectTemplate) {
+		this.selectedProjectTemplate = selectedProjectTemplate;
 	}
 }
