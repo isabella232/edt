@@ -71,6 +71,16 @@ public class RecordTemplate extends JavaScriptTemplate {
 				out.print("source.");
 				ctx.invoke(genName, field, ctx, out);
 				out.println(";");
+			} else if (field.isNullable()) {
+				out.print("if (this.");
+				ctx.invoke(genName, field, ctx, out);
+				out.print(" != null)");
+				out.print(" this.");
+				ctx.invoke(genName, field, ctx, out);
+				out.print(".ezeCopy(");
+				out.print("source.");
+				ctx.invoke(genName, field, ctx, out);
+				out.println(");");
 			} else {
 				out.print("this.");
 				ctx.invoke(genName, field, ctx, out);
@@ -122,13 +132,17 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
-		/*
-		 * TODO sbg Java has all of this, but I'm not sure whether it -- or some form of it -- is necessary.... if (
-		 * TypeUtils.isValueType( type ) ) { if (arg1.isNullable()) { ctx.invoke(genExpression, arg1, ctx, out);
-		 * out.print(arg3); } out.print("egl.eglx.lang.AnyValue.ezeCopyTo("); ctx.invoke(genExpression, arg2, ctx, out);
-		 * out.print(", "); ctx.invoke(genExpression, arg1, ctx, out); out.print(")"); } else
-		 */
-		{
+		if (TypeUtils.isValueType(type)) {
+			if (arg1.isNullable()) {
+				ctx.invoke(genExpression, arg1, ctx, out);
+				out.print(arg3);
+			}
+			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
+			ctx.invoke(genExpression, arg2, ctx, out);
+			out.print(", ");
+			ctx.invoke(genExpression, arg1, ctx, out);
+			out.print(")");
+		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(" = ");
 			ctx.invoke(genExpression, arg2, ctx, out);
@@ -136,7 +150,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genGetterSetters(Record part, Context ctx, TabbedWriter out) {}
-	
+
 	public void genReturnStatement(Record type, Context ctx, TabbedWriter out, ReturnStatement arg) {
 		if (TypeUtils.isValueType(type) && arg.getExpression() != null) {
 			out.print("return ");
