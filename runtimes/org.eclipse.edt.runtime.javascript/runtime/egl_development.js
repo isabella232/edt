@@ -238,6 +238,11 @@ egl.loadURL = function(url, handler, synchronous, sendAsContent) {
 	}
 };
 
+egl.startHandleIDEEvent = function(){
+	egl.handleIDEEvent();
+	egl.startHandleIDEEvent = function(){};
+};
+
 egl.handleIDEEvent = function() {
 	if(egl.canSendEventToIDE()){
 		egl.loadIDEURL('___getevent', function(event) {
