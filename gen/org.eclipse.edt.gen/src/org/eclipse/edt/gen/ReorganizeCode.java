@@ -233,7 +233,39 @@ public class ReorganizeCode extends AbstractVisitor {
 		ctx.putAttribute(object.getContainer(), Constants.SubKey_functionHasReturnStatement, new Boolean(true));
 		// There are cases where someone uses a return statement to break out of a function, even though the function does
 		// not return anything
-		if (object.getExpression() != null) {
+		if (object.getExpression() == null) {
+			// if the container of this return statement is a function and it returns a value, then we need to return 
+			// the default of that value
+			if (object.getContainer() instanceof Function && ((Function) object.getContainer()).getType() != null) {
+				// handle the preprocessing
+				String temporary = ctx.nextTempName();
+				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				localDeclaration.setContainer(currentStatementContainer);
+				DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				Field field = factory.createField();
+				field.setName(temporary);
+				field.setType(((Function) object.getContainer()).getType());
+				field.setIsNullable(((Function) object.getContainer()).isNullable());
+				// we need to create the member access
+				MemberName nameExpression = factory.createMemberName();
+				if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+					nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+				nameExpression.setMember(field);
+				nameExpression.setId(field.getName());
+				// add the field to the declaration expression
+				declarationExpression.getFields().add(field);
+				// connect the declaration expression to the local declaration
+				localDeclaration.setExpression(declarationExpression);
+				// add the local variable to the statement list
+				verify(0).getStatements().add(localDeclaration);
+				// now replace the return expression with the temporary variable
+				object.setExpression(nameExpression);
+			}
+		} else {
 			// if the return statement invokes a function that has inout or out parms, then we need to create a local
 			// variable for the return of the function invocation. This is because we need to unbox the inout/out args after
 			// the function is invoked and before the return statement
