@@ -45,9 +45,6 @@ public final class EGLProjectInfoUtility {
 	}
 	
 	private static String[] convertFromInternalPath( String[] internalForlders ) {
-		if ( internalForlders.length == 0 ) {
-			return null;
-		}
 		String[] folders = new String[internalForlders.length];
 		for ( int i = 0; i < internalForlders.length; i ++ ) {
 			folders[i] = EclipseUtilities.convertFromInternalPath(internalForlders[i]);
