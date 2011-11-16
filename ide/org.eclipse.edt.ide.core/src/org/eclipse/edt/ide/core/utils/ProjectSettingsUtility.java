@@ -88,6 +88,10 @@ public class ProjectSettingsUtility {
 	 */
 	public static final String GENERATOR_ID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"; //$NON-NLS-1$
 	
+
+	public static final String GENERATOR_ID_JAVASCRIPT = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
+	
+	
 	private static final Map<ICompiler, String[]> preferenceNodes = new HashMap<ICompiler, String[]>();
 	
 	/**
@@ -196,7 +200,13 @@ public class ProjectSettingsUtility {
 	public static String[] getWorkspaceGeneratorIds() {
 		String genIDs = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.GENERATOR_IDS);
 		if (genIDs != null && (genIDs = genIDs.trim()).length() != 0) {
-			return genIDs.split(",");
+			if( (genIDs.indexOf(GENERATOR_ID_JAVASCRIPT) >= 0) && (genIDs.indexOf(GENERATOR_ID_JAVASCRIPT_DEV) < 0)){
+				if(!genIDs.endsWith(",")){
+					genIDs = genIDs + ",";
+				}
+				genIDs = genIDs + GENERATOR_ID_JAVASCRIPT_DEV;
+			}
+			return genIDs.split(",");	
 		}
 		else {
 			return EMPTY_GENERATOR_IDS;
