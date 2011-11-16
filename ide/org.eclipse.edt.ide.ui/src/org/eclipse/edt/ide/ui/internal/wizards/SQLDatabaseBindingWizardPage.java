@@ -158,6 +158,10 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 				}
 			}
 		});
+		
+		//TODO:
+		jndiRadio.setVisible(false);
+		jndiText.setVisible(false);
 	}
 	
 	private void handleWorkspaceURIRadio() {

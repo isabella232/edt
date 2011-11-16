@@ -124,7 +124,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		// At least on Linux, creating a text in the form draws a border no matter what. Workaround is to put it inside a composite.
 		// In order to keep things aligned, we put just the individual Text controls in composites.
 		toolkit.setBorderStyle(SWT.NULL);
-		l = toolkit.createLabel(parent, SOAMessages.LabelJNDIExample);
+		l = toolkit.createLabel(parent, SOAMessages.LabelWorkspaceExample);
 		gd = new GridData();
 		gd.horizontalIndent = indent;
 		l.setLayoutData(gd);
@@ -141,11 +141,11 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		layout.marginWidth = 0;
 		exampleComposite.setLayout(layout);
 		uriControls.add(exampleComposite);
-		Text example = toolkit.createText(exampleComposite, "jndi://jdbc/SAMPLE", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
+		Text example = toolkit.createText(exampleComposite, "workspace://myConnectionProfile", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
 		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		uriControls.add(example);
 		
-		l = toolkit.createLabel(parent, SOAMessages.LabelWorkspaceExample);
+		/*l = toolkit.createLabel(parent, SOAMessages.LabelJNDIExample);
 		gd = new GridData();
 		gd.horizontalIndent = indent;
 		l.setLayoutData(gd);
@@ -162,11 +162,11 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		layout.marginWidth = 0;
 		exampleComposite.setLayout(layout);
 		uriControls.add(exampleComposite);
-		example = toolkit.createText(exampleComposite, "workspace://myConnectionProfile", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
+		example = toolkit.createText(exampleComposite, "jndi://jdbc/SAMPLE", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
 		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		uriControls.add(example);
 		toolkit.setBorderStyle(borderStyle); // reset previous style
-		
+*/		
 		createSpacer(toolkit, parent, nColumnSpan);
 	}
 	
