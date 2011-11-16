@@ -1500,7 +1500,7 @@ egl.getOuterWidthInPixelsNonIESpecialWidget = function(element){
 			element = element.children[0];
 		}
 	}
-	return egl.getWidthInPixels(element);
+	return egl.getOuterWidthInPixels(element);
 };
 
 egl.getOuterHeightInPixels = function(element){
@@ -1520,7 +1520,7 @@ egl.getOuterHeightInPixelsNonIESpecialWidget = function(element){
 			element = element.children[0];
 		}
 	}
-	return egl.getHeightInPixels(element);
+	return egl.getOuterHeightInPixels(element);
 };
 
 egl.getStyleValueForIE = function(element, key){
@@ -1633,26 +1633,16 @@ egl.getWidgetInfo = function() {
 			}
 		},
 		isIESpecialWidget: function(ele){
-			//widgets that render to a div which must with padding in css
-			if ( this.package == "org.eclipse.edt.rui.widgets" && this.type == "Box" ) {
-				return true;
-			}
-			if ( this.package == "dojo.widgets" && this.type == "DojoBorderContainer" ) {
-				return true;
-			}
-			if( this.package == "dojo.widgets" && this.type == "DojoContentPane" ) {
-				return true;
+			if(this.package == "dojo.widgets"){
+				if(this.type == "DojoBorderContainer" || this.type == "DojoContentPane" || this.type == "DojoCalendar"){
+					return true;
+				}
 			}
 			
-			//widgets that render to a table
-			var tagName;
-			if(ele.eze$$DOMElement && ele.eze$$DOMElement.tagName){
-				tagName = ele.eze$$DOMElement.tagName.toUpperCase();
-			}else if(ele.eze$$DOMElement && ele.eze$$DOMElement.children[0] && ele.eze$$DOMElement.children[0].tagName){
-				tagName = ele.eze$$DOMElement.children[0].tagName.toUpperCase();
-			}
-			if(tagName && (tagName == "TABLE")){
-				return true;
+			if(this.package == "org.eclipse.edt.rui.widgets"){
+				if(this.type == "GridLayout" || this.type == "Box" || this.type == "CheckBox" || this.type == "Combo"){
+					return true;
+				}
 			}
 			
 			return false;
@@ -1667,11 +1657,9 @@ egl.getWidgetInfo = function() {
 				this.height = -1;
 			} else {
 				if(this.isIESpecialWidget(ele)){
-//					alert("1");
 					this.width = egl.getOuterWidthInPixels(ele.eze$$DOMElement);
 					this.height = egl.getOuterHeightInPixels(ele.eze$$DOMElement);
 				}else{
-//					alert("2");
 					this.width = egl.getOuterWidthInPixelsNonIESpecialWidget(ele.eze$$DOMElement);
 					this.height = egl.getOuterHeightInPixelsNonIESpecialWidget(ele.eze$$DOMElement);
 				}
