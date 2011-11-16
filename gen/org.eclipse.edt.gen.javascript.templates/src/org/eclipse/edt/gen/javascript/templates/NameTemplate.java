@@ -64,7 +64,7 @@ public class NameTemplate extends JavaScriptTemplate {
 						ctx.putAttribute(expr.getNamedElement(), Constants.EXPR_LHS, false);
 					}
 					out.print( '(' );
-					ctx.invoke( genExpression, arg1, ctx, out );
+					ctx.invoke(genTypeBasedExpression, arg1, ctx, out, expr.getType());
 					out.print( ')' );					
 				}
 			}
