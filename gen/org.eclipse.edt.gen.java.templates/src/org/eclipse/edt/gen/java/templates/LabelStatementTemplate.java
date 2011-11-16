@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.LabelStatement;
 public class LabelStatementTemplate extends JavaTemplate {
 
 	public void genStatementBody(LabelStatement stmt, Context ctx, TabbedWriter out) {
-		out.print(Label.LABEL_NAME + stmt.getLabel() + ": ");
+		out.print(Label.LABEL_NAME + stmt.getLabel().toLowerCase() + ": ");
 	}
 
 	public void genStatementEnd(LabelStatement stmt, Context ctx, TabbedWriter out) {

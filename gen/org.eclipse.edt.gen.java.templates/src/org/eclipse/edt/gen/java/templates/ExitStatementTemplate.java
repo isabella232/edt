@@ -21,7 +21,7 @@ public class ExitStatementTemplate extends JavaTemplate {
 	public void genStatementBody(ExitStatement stmt, Context ctx, TabbedWriter out) {
 		// see if they specified a label
 		if (stmt.getLabel() != null && stmt.getLabel().length() > 0) {
-			out.print("break " + Label.LABEL_NAME + stmt.getLabel());
+			out.print("break " + Label.LABEL_NAME + stmt.getLabel().toLowerCase());
 		} else {
 			Label label = null;
 			if (stmt.getExitStatementType() == ExitStatement.EXIT_CASE)

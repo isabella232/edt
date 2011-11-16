@@ -21,7 +21,7 @@ public class ContinueStatementTemplate extends JavaTemplate {
 	public void genStatementBody(ContinueStatement stmt, Context ctx, TabbedWriter out) {
 		// see if they specified a label
 		if (stmt.getLabel() != null && stmt.getLabel().length() > 0) {
-			out.print("continue " + stmt.getLabel());
+			out.print("continue " + Label.LABEL_NAME + stmt.getLabel().toLowerCase());
 		} else {
 			Label label = null;
 			if (stmt.getContinueType() == ContinueStatement.CONTINUE_FOR)
