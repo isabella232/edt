@@ -1,5 +1,20 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <index>
+<entry keyword="applications">
+<entry keyword="EGL debugging">
+<entry keyword="code updates">
+<topic href="topics/tedt00546.html#tedt00546" title="Updating code while the EGL debugger runs"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/tedt00504.html#tedt00504" title="Debugging EGL source code in the EDT IDE"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="breakpoints">
+<entry keyword="EGL debugger">
+<topic href="topics/tedt00580.html#tedt00580" title="Using breakpoints in the EGL debugger"/>
+</entry>
+</entry>
 <entry keyword="code">
 <entry keyword="templates">
 <entry keyword="creating">
@@ -25,6 +40,64 @@
 </entry>
 <entry keyword="restoring defaults">
 <topic href="topics/tedt00515.html#tedt00515" title="Setting EGL template preferences"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="code generation">
+<entry keyword="EGL">
+<entry keyword="debugging">
+<topic href="topics/tedt00582.html#debug_invokingdebugger" title="Invoking the EGL debugger from generated Java code"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="commands">
+<entry keyword="EGL debugger">
+<topic href="topics/tedt00543.html#tedt00543" title="Preparing to run code in the EGL debugger"/>
+</entry>
+</entry>
+<entry keyword="debugging">
+<entry keyword="EGL">
+<entry keyword="basic steps">
+<topic href="topics/tedt00579.html#tedt00579" title="Stepping through an application in the EGL debugger"/>
+</entry>
+<entry keyword="breakpoints">
+<topic href="topics/tedt00580.html#tedt00580" title="Using breakpoints in the EGL debugger"/>
+</entry>
+<entry keyword="controls">
+<topic href="topics/tedt00543.html#tedt00543" title="Preparing to run code in the EGL debugger"/>
+</entry>
+<entry keyword="creating a launch configuration">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="creating a Listener launch configuration">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="hotswapping">
+<topic href="topics/tedt00546.html#tedt00546" title="Updating code while the EGL debugger runs"/>
+</entry>
+<entry keyword="invoking from Java">
+<topic href="topics/tedt00582.html#debug_invokingdebugger" title="Invoking the EGL debugger from generated Java code"/>
+</entry>
+<entry keyword="overview">
+<topic href="topics/tedt00504.html#tedt00504" title="Debugging EGL source code in the EDT IDE"/>
+</entry>
+<entry keyword="running code">
+<topic href="topics/tedt00544.html#tedt00544" title="Running code in the EGL debugger"/>
+</entry>
+<entry keyword="services">
+<topic href="topics/tedt00583.html#tedt00583" title="Debugging services with the EGL debugger"/>
+</entry>
+<entry keyword="starting">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="starting programs">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="viewing variables">
+<topic href="topics/tedt00545.html#tedt00545" title="Viewing variables in the EGL debugger"/>
+</entry>
+<entry keyword="watch expressions">
+<topic href="topics/tedt00581.html#tedt00581" title="Creating watch expressions in the EGL debugger"/>
 </entry>
 </entry>
 </entry>
@@ -103,14 +176,39 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="IBM i">
+<entry keyword="web services">
+<entry keyword="keystrokes">
+<topic href="topics/tedt00573.html#tedt00573" title="Accessing IBM i programs as web services: keystroke details"/>
+</entry>
+</entry>
+</entry>
 <entry keyword="import statements">
 <entry keyword="organizing">
 <topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
 </entry>
 </entry>
+<entry keyword="launch configurations">
+<entry keyword="explicit">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="Listener">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+<entry keyword="viewing implicitly created configurations">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+</entry>
 <entry keyword="packages">
 <entry keyword="creating">
 <topic href="topics/tedt00521.html#tedt00521" title="Creating an EGL package"/>
+</entry>
+</entry>
+<entry keyword="PCML">
+<entry keyword="IBM i programs as services">
+<entry keyword="keystrokes">
+<topic href="topics/tedt00573.html#tedt00573" title="Accessing IBM i programs as web services: keystroke details"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="preferences">
@@ -151,7 +249,27 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="Program Call Markup Language (PCML)">
+<entry keyword="IBM i programs as services">
+<entry keyword="keystrokes">
+<topic href="topics/tedt00573.html#tedt00573" title="Accessing IBM i programs as web services: keystroke details"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="programs">
+<entry keyword="EGL debugger">
+<entry keyword="core">
+<topic href="topics/tedt00579.html#tedt00579" title="Stepping through an application in the EGL debugger"/>
+</entry>
+<entry keyword="non-JEE">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
+</entry>
+</entry>
 <entry keyword="projects">
+<entry keyword="debugging in EGL">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+</entry>
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
 </entry>
@@ -170,10 +288,16 @@
 </entry>
 </entry>
 <entry keyword="services">
+<entry keyword="debugging">
+<topic href="topics/tedt00583.html#tedt00583" title="Debugging services with the EGL debugger"/>
+</entry>
 <entry keyword="deployment descriptor options">
 <entry keyword="list">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
+</entry>
+<entry keyword="IBM i">
+<topic href="topics/tedt00573.html#tedt00573" title="Accessing IBM i programs as web services: keystroke details"/>
 </entry>
 </entry>
 <entry keyword="source files">
@@ -227,9 +351,24 @@
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
 </entry>
 </entry>
+<entry keyword="variables">
+<entry keyword="viewing in the EGL debugger">
+<topic href="topics/tedt00545.html#tedt00545" title="Viewing variables in the EGL debugger"/>
+</entry>
+</entry>
 <entry keyword="VisualAge Generator">
 <entry keyword="compatibility preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+</entry>
+</entry>
+<entry keyword="watch expressions">
+<entry keyword="in EGL debugger">
+<topic href="topics/tedt00581.html#tedt00581" title="Creating watch expressions in the EGL debugger"/>
+</entry>
+</entry>
+<entry keyword="web applications">
+<entry keyword="debugging in EGL">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
 </entry>
 </entry>
 <entry keyword="web services">

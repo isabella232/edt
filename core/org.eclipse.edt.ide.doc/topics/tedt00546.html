@@ -4,10 +4,12 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Updating code while the EGL debugger runs"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="The EGL debugger supports hotswapping, which means that the debugger processes the code changes that you make as you step through an application. Hotswapping lets you to test and modify your application at the same time."></meta>
+<meta name="description" content="The EGL debugger supports hotswapping, which means that the debugger processes the code changes that you make as you step through an application. Hotswapping lets you to test and modify your application at the same time."></meta>
+<meta name="DC.subject" content="debugging, EGL, hotswapping, applications, EGL debugging, code updates"></meta>
+<meta name="keywords" content="debugging, EGL, hotswapping, applications, EGL debugging, code updates"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00504.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -20,19 +22,43 @@
 <body id="tedt00546"><a name="tedt00546"><!-- --></a>
 
 
+
+
 <h1 class="topictitle1">Updating code while the EGL debugger runs</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL debugger supports <dfn class="term">hotswapping</dfn>,
+which means that the debugger processes the code changes that you
+make as you step through an application. Hotswapping lets you to test
+and modify your application at the same time.</p>
+
+<div class="section"><div class="note"><span class="notetitle">Note:</span> Hot swapping is not supported on the Rich UI platform.
+Similarly, the EGL debugger does not respond to changes made to variable
+values in the Variables view.</div>
+To take advantage of this feature,
+set the <span class="uicontrol">Enable hotswapping</span> EGL debug preference
+as follows:</div>
+
+<ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
+ &gt; <span class="uicontrol">Preferences</span></span>.</span> The <span class="wintitle">Preferences </span> page
+is displayed.</li>
+<li class="stepexpand"><span>Expand <span class="uicontrol">EGL</span> and click <span class="uicontrol">Debug</span>.</span>
+ The <span class="wintitle">Debug</span> dialog box is displayed.
+</li>
+<li class="stepexpand"><span>Click <span class="uicontrol">Enable hotswapping</span>.</span></li>
+<li class="stepexpand"><span>Click <span class="uicontrol">OK</span> to save the changes and
+exit the page.</span></li>
+</ol>
+
+<div class="section">If hotswapping is enabled and you change a function that is
+on the function stack, the debugging session continues at the first
+line of the changed function.</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

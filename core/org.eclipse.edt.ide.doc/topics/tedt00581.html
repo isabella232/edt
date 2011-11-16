@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="task"></meta>
+<meta name="DC.Title" content="Creating watch expressions in the EGL debugger"></meta>
+<meta name="abstract" content="Use a watch expression to track the value of an expression during debugging."></meta>
+<meta name="description" content="Use a watch expression to track the value of an expression during debugging."></meta>
+<meta name="DC.subject" content="debugging, EGL, watch expressions, in EGL debugger"></meta>
+<meta name="keywords" content="debugging, EGL, watch expressions, in EGL debugger"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00544.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt00581"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Creating watch expressions in the EGL debugger</title>
+</head>
+<body id="tedt00581"><a name="tedt00581"><!-- --></a>
+
+
+
+
+<h1 class="topictitle1">Creating watch expressions in the EGL debugger</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>Use a watch expression to track the value of
+an expression during debugging.</p>
+
+<div class="p">Before you can perform this task you must have the following
+prerequisites:<ul>
+<li>An EGL project</li>
+
+<li>An EGL program or other logic part that needs debugging</li>
+
+</ul>
+</div>
+
+<div class="section">Each time the debugger suspends processing, it evaluates
+all current watch expressions and displays the results in the Expressions
+view.<div class="p">The following cautions and limitations are associated with
+watch expressions:<ul>
+<li>Only a single EGL statement can be evaluated. For example, if
+you enter the following line as a watch expression, only functionA()
+will be run:<pre class="codeblock">functionA(); functionB();</pre>
+<div class="p">However,
+you can have multiple functions within a single <span class="synph"><span class="kwd">if</span></span> statement:<pre class="codeblock">if(myVar &gt; 0)
+  functionA();
+  functionB();
+end</pre>
+</div>
+</li>
+
+<li>Use caution when evaluating statements with side effects, such
+as function calls, which might be evaluated more times than you expect.</li>
+
+<li>Watch expressions are not supported when you are generating JavaScript code.</li>
+
+</ul>
+</div>
+<p>You can create a watch expression in either of two ways:</p>
+</div>
+
+<ul><li><span>In the Variables view of the Debug perspective, right-click
+a variable and click <span class="uicontrol">Watch</span>.</span></li>
+<li><span>In the Expressions view, manually create a new expression.</span>
+</li>
+</ul>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+
+</body>
+</html>

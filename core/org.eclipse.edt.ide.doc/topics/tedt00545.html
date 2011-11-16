@@ -4,10 +4,12 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Viewing variables in the EGL debugger"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="This topic shows you how to view variables in your program while your are debugging your programs."></meta>
+<meta name="description" content="This topic shows you how to view variables in your program while your are debugging your programs."></meta>
+<meta name="DC.subject" content="debugging, EGL, viewing variables, variables, viewing in the EGL debugger"></meta>
+<meta name="keywords" content="debugging, EGL, viewing variables, variables, viewing in the EGL debugger"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00504.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -20,19 +22,240 @@
 <body id="tedt00545"><a name="tedt00545"><!-- --></a>
 
 
+
+
 <h1 class="topictitle1">Viewing variables in the EGL debugger</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>This topic shows you how to view variables in
+your program while your are debugging your programs.</p>
+
+<div class="p"><ul>
+<li>An EGL project</li>
+
+<li>An EGL program or other logic part that needs debugging</li>
+
+</ul>
+</div>
+
+<div class="section"><p>When you are debugging a program, you will probably have
+the debugger stop or pause at certain points in your program. (For
+more information on using breakpoints to make the debugger pause while
+debugging your program, see <a href="tedt00580.html" title="This topic shows you how to use breakpoints in debugging your programs. You can manage breakpoints inside or outside of an EGL debugging session.">Using breakpoints in the EGL debugger</a>.)
+Whenever a program is paused, you can view the current values of the
+variables in the program.</p>
+<div class="note"><span class="notetitle">Note:</span> Hot swapping is not supported on
+the Rich UI platform. Similarly, the EGL debugger does not respond
+to changes made to variable values in the Variables view.</div>
+When
+you are viewing variables in the EGL debugger, you can do the following
+tasks:</div>
+
+<ul><li class="stepexpand"><span>Filtering variables</span> <p>You can display only
+those variables that match certain criteria. You can select variables
+to be excluded by name, or by characteristics of the variable.</p>
+<div class="p">If
+you exclude variables by name, you can use the following wildcard
+characters:<dl>
+<dt class="dlterm">?</dt>
+
+<dd>Matches any single character</dd>
+
+
+<dt class="dlterm">*</dt>
+
+<dd>Matches zero or more characters</dd>
+
+</dl>
+</div>
+<div class="p">If you exclude variables by characteristic,
+you can exclude any of the following:<ul>
+<li>Variables that currently have a null value</li>
+
+<li>Build descriptor options</li>
+
+<li>EGL system variables</li>
+
+</ul>
+</div>
+</li>
+<li class="stepexpand"><span>Displaying and changing values</span> <div class="p">You typically
+use the Variable view to monitor the changing values of your variables.
+To display their values, do one of the following actions:<ul>
+<li>Click the <span class="uicontrol">Options</span> button at the top of
+the view (the triangle), and then click <span class="uicontrol">Layout</span> and
+either <span class="uicontrol">Horizontal View</span> or <span class="uicontrol">Vertical
+View</span>. Also on the Options menu, choose <span class="uicontrol">Detail
+pane</span>. The Variables view will split into two panes, one
+showing the current value of the variable.</li>
+
+<li>Click the <span class="uicontrol">Options</span> button at the top of
+the view (the triangle), then click <span class="menucascade"><span class="uicontrol">Layout</span>
+ &gt; <span class="uicontrol">Show Columns</span></span>. If you do not see
+the Value column, choose <span class="menucascade"><span class="uicontrol">Layout</span>
+ &gt; <span class="uicontrol">Show Columns</span> &gt; <span class="uicontrol">Value</span>
+</span>.</li>
+
+<li>In the Source view of the Debug perspective, hover over the variable
+name to display the current value.</li>
+
+</ul>
+</div>
+<p>To change a value, right-click the value and choose the
+appropriate option from the pop-up menu. The wording of the option
+varies depending on the context.</p>
+<p>For more information, see the
+next task, <span class="q">"Using buttons in the Variables view"</span>.</p>
+</li>
+<li class="stepexpand"><span>Using buttons in the Variables view</span> <p>In the
+Variables view, expand the parts in the navigator to see the variables
+that are associated with them.</p>
+<p>Depending on your options as
+described below, there is also a Detail pane that displays the details
+of a highlighted variable. You can type a value for the variable in
+this pane, highlight that value, right-click, and click <span class="uicontrol">Assign
+Value</span> to assign the value to the variable.</p>
+<div class="p">The Variables
+view provides the following buttons:<dl>
+<dt class="dlterm">Show Type Names</dt>
+
+<dd>This toggle displays or hides the types on which the variables
+are based. This button is not available if you chose to show columns.
+In that case, you can request a column that shows the variable type.</dd>
+
+
+<dt class="dlterm">Collapse All</dt>
+
+<dd>This hides all the variable names and shows only the parts in
+the current program.</dd>
+
+
+<dt class="dlterm">[Options]</dt>
+
+<dd>Click this downward pointing triangle icon to display a list of
+further options:<dl>
+<dt class="dlterm">Layout</dt>
+
+<dd>The following layout options are available for the Variables view:<dl>
+
+<dt class="dlterm">Vertical View Orientation</dt>
+
+<dd>The detail pane is displayed below the variables.</dd>
+
+
+<dt class="dlterm">Horizontal View Orientation</dt>
+
+<dd>The detail pane is displayed to the right of the variables.</dd>
+
+
+<dt class="dlterm">Variables View Only</dt>
+
+<dd>This option closes the detail pane.</dd>
+
+
+<dt class="dlterm">Show Columns</dt>
+
+<dd>This option reformats the view in table form</dd>
+
+
+<dt class="dlterm">Select Columns</dt>
+
+<dd>This option is available only if you select Show Columns. The
+following columns are available:<dl>
+<dt class="dlterm">Name</dt>
+
+<dd>The name of the variable.</dd>
+
+
+<dt class="dlterm">Declared Type</dt>
+
+<dd>The original type of the variable.</dd>
+
+
+<dt class="dlterm">Value</dt>
+
+<dd>The current value of the variable. Click this cell to enter a
+new value for the variable, or right-click and choose <span class="uicontrol">Change
+Value</span> to display a window where you can change the value.</dd>
+
+
+<dt class="dlterm">Actual Type</dt>
+
+<dd>The actual type will differ from the declared type only when the
+variable was originally ANY type and took on another type through
+assignment.</dd>
+
+</dl>
+</dd>
+
+</dl>
+</dd>
+
+
+<dt class="dlterm">EGL</dt>
+
+<dd>The following options are available for variables in an EGL program:<dl>
+
+<dt class="dlterm">Sort</dt>
+
+<dd>You can sort the variables in the view according to the following
+criteria:<dl>
+<dt class="dlterm">by order</dt>
+
+<dd>The order in which the variables are declared in the program</dd>
+
+
+<dt class="dlterm">by name ascending</dt>
+
+<dd>Ascending alphabetic order</dd>
+
+
+<dt class="dlterm">by name descending</dt>
+
+<dd>Descending alphabetic order</dd>
+
+</dl>
+</dd>
+
+
+<dt class="dlterm">Group implicit fields</dt>
+
+<dd>Use this option to group implicit fields (such as <span class="synph"><span class="kwd">message</span></span> and <span class="synph"><span class="kwd">messageID</span></span> for
+exceptions) under the heading "&lt;implicit fields...&gt;" in the variables
+display.</dd>
+
+
+<dt class="dlterm">Filters</dt>
+
+<dd>You can exclude variables on the basis of name or characteristics;
+see <span class="q">"Filtering variables"</span> earlier in this topic.</dd>
+
+</dl>
+</dd>
+
+</dl>
+</dd>
+
+</dl>
+</div>
+<div class="p">The following options do not apply to debugging
+in EGL:<ul>
+<li><span class="uicontrol">Create Watch Expression</span></li>
+
+<li><span class="uicontrol">Show Logical Structure</span></li>
+
+<li><span class="uicontrol">Show All Jython Variables</span></li>
+
+</ul>
+</div>
+</li>
+</ul>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

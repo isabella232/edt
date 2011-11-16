@@ -95,12 +95,17 @@
    </topic>
    <topic label="Debugging EGL source code in the EDT IDE" href="topics/tedt00504.html">
       <topic label="Preparing to run code in the EGL debugger" href="topics/tedt00543.html"/>
-      <topic label="Running code in the EGL debugger" href="topics/tedt00544.html"/>
-      <topic label="Debugging in EGL Rich UI" href="topics/tedt00571.html"/>
+      <topic label="Running code in the EGL debugger" href="topics/tedt00544.html">
+         <topic label="Stepping through an application in the EGL debugger"
+                href="topics/tedt00579.html"/>
+         <topic label="Using breakpoints in the EGL debugger" href="topics/tedt00580.html"/>
+         <topic label="Creating watch expressions in the EGL debugger"
+                href="topics/tedt00581.html"/>
+         <topic label="Starting the EGL debugger for EGL projects" href="topics/tedt00582.html"/>
+         <topic label="Debugging services with the EGL debugger" href="topics/tedt00583.html"/>
+      </topic>
       <topic label="Viewing variables in the EGL debugger" href="topics/tedt00545.html"/>
       <topic label="Updating code while the EGL debugger runs" href="topics/tedt00546.html"/>
-      <topic label="Invoking the EGL debugger from generated Java code"
-             href="topics/tedt00547.html"/>
    </topic>
    <topic label="Accessing a relational database in the EDT IDE"
           href="topics/tedt00505.html">
@@ -125,7 +130,7 @@
    <topic label="Handling other tasks quickly">
       <topic label="Creating an Interface part from a Service or ExternalType part"
              href="topics/tedt00572.html"/>
-      <topic label="Accessing an IBM i program as a web service"
+      <topic label="Accessing IBM i programs as web services: keystroke details"
              href="topics/tedt00573.html"/>
    </topic>
 </toc>

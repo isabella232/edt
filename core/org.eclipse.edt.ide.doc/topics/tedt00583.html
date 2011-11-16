@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="task"></meta>
+<meta name="DC.Title" content="Debugging services with the EGL debugger"></meta>
+<meta name="abstract" content="You can debug your local EGL services similarly to the way that you debug other programs."></meta>
+<meta name="description" content="You can debug your local EGL services similarly to the way that you debug other programs."></meta>
+<meta name="DC.subject" content="services, debugging, EGL"></meta>
+<meta name="keywords" content="services, debugging, EGL"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00544.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt00583"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Debugging services with the EGL debugger</title>
+</head>
+<body id="tedt00583"><a name="tedt00583"><!-- --></a>
+
+
+
+
+<h1 class="topictitle1">Debugging services with the EGL debugger</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>You can debug your local EGL services similarly
+to the way that you debug other programs.</p>
+
+<div class="p"><p>You will need an EGL Service part and a requester that
+has binding information for accessing the service.</p>
+<p>Note that
+before you can debug a web service on WebSphere Application Server you must generate
+the service.</p>
+</div>
+
+<div class="section"><p>The simplest way to debug a service is to call it from
+a program in the same project as the service. You can then pass test
+values to the service and inspect the results.</p>
+<div class="p">The following
+special capabilities are available for EGL-generated services or for
+Service parts that run in the EGL Debugger: <ul>
+<li>Remote access of VSAM files that reside on z/OS</li>
+
+<li>Calls to non-EGL-generated programs, where the <span class="synph"><span class="kwd">callLink</span></span> element
+of the linkage options part has the following settings:<ul>
+<li>The <span class="synph"><span class="kwd">remoteComType</span></span> property set to DISTINCT</li>
+
+<li>The <span class="synph"><span class="kwd">remotePgmType</span></span> property set to EXTERNALLYDEFINED</li>
+
+</ul>
+</li>
+
+<li>Access to the following functions, which run operating system
+commands in the development environment: <span class="synph"><span class="kwd">SysLib.callCmd</span></span> and <span class="synph"><span class="kwd">SysLib.startCmd</span></span>.</li>
+
+</ul>
+</div>
+To debug
+your local EGL services, do as follows:</div>
+
+<ol><li class="stepexpand"><span>Create a new EGL source program.</span></li>
+<li class="stepexpand"><span>In the program, declare a service variable that is based
+on the Service part that you want to test.</span></li>
+<li class="stepexpand"><span>Create a service binding in the deployment descriptor as
+an EGL service (not a web service) with a <span class="q">"local"</span> protocol.</span>
+</li>
+<li class="stepexpand"><span>Using the service binding, bind the variable to the service.</span>
+</li>
+<li class="stepexpand"><span> In the main() function of the program, make at least one
+call to the service using that variable.</span> The easiest
+way is to hard code the input values in the service call and write
+the output values to the console, as in the following example:<pre class="codeblock">program addTestProgram type BasicProgram 	 	
+
+myAddingMachine additionService 
+   {@BindService {bindingKey = "additionService"}};
+
+   function main()
+      sumint int;
+      sumint = myAddingMachine.addInts(5, 12);
+      SysLib.writeStdOut("result = " + sumint);
+   end
+end</pre>
+</li>
+<li class="stepexpand"><span>Set a breakpoint at the service call. See <a href="tedt00580.html" title="This topic shows you how to use breakpoints in debugging your programs. You can manage breakpoints inside or outside of an EGL debugging session.">Using breakpoints in the EGL debugger</a>.</span></li>
+<li class="stepexpand"><span>Set breakpoints in the service, as you would in any logic
+part.</span></li>
+<li class="stepexpand"><span>Debug your new EGL source program. At the breakpoint before
+the service call, step into the service code. The debugger pauses
+at the breakpoints in the service just as in any other logic part.</span>
+</li>
+</ol>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

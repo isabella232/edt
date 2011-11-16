@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="task"></meta>
+<meta name="DC.Title" content="Stepping through an application in the EGL debugger"></meta>
+<meta name="abstract" content="This topic offers guidance on the basic steps of debugging a program in the EGL debugger."></meta>
+<meta name="description" content="This topic offers guidance on the basic steps of debugging a program in the EGL debugger."></meta>
+<meta name="DC.subject" content="debugging, EGL, basic steps, programs, EGL debugger, core"></meta>
+<meta name="keywords" content="debugging, EGL, basic steps, programs, EGL debugger, core"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00544.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt00579"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Stepping through an application in the EGL debugger</title>
+</head>
+<body id="tedt00579"><a name="tedt00579"><!-- --></a>
+
+
+
+<h1 class="topictitle1">Stepping through an application in the EGL debugger</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>This topic offers guidance on the basic steps
+of debugging a program in the EGL debugger.</p>
+
+<div class="p">Before you can perform this task you must have the following
+prerequisites:<ul>
+<li>An EGL project</li>
+
+<li>An EGL program or other logic part that needs debugging</li>
+
+</ul>
+<div class="p">The following example provides a program with a simple error
+that you can use to test the debugger:<pre class="codeblock">program myDebugTestPgm type BasicProgram 
+
+  function main()
+
+    //Provide some initial values for the array of items.
+    customerItems items[3];
+    customerItems[1].itemNumber=1;
+    customerItems[2].itemNumber=2;
+    customerItems[3].itemNumber=3;
+    customerItems[1].itemCost=12.50;
+    customerItems[2].itemCost=200;
+    customerItems[3].itemCost=49.95;
+    customerItems[1].itemQuantity=30;
+    customerItems[2].itemQuantity=10;
+    customerItems[3].itemQuantity=60;
+
+    counter int;
+    orderTotal float=0;
+
+    //Calculate the total cost of the items.
+    //Use the discountPrice function to get the discounted cost of each item.
+    for (counter from 1 to customerItems.getSize() by 1)
+      orderTotal += discountPrice(customerItems[counter].itemCost, 
+                                  customerItems[counter].itemQuantity);
+    end // for loop
+
+    //Write the output to the console.
+    SysLib.writeStderr("The total cost for the order is $" + orderTotal);
+  end // main
+
+  //Return a total price for a group of items 
+  //based on the item price and a quantity discount.
+  function discountPrice(itemCost float in, itemQuantity int in) returns(float)
+    discountRate float=0;
+    quantCost float=0;
+
+    //Determine the discount for each quantity.
+    //Discount 20% for more than 50 items.
+    //Discount 5% for more than 20 items.
+    case
+      when (itemQuantity &gt; 50)
+        discountRate = 1/5;
+     when (itemQuantity &gt; 20 &amp;&amp; itemQuantity &lt;= 50)
+       discountRate = 1/20;
+     otherwise
+       //bug - division by zero
+       discountRate = 1/0;
+     end
+
+    //Multiply the cost of the item, the number of items, 
+    //and the discounted price.
+    quantCost = itemCost*itemQuantity*(1-discountRate); 
+    quantCost = MathLib.round(quantCost, -2);
+
+    return (quantCost);
+  end // function discountPrice
+
+end // program
+
+record items type BasicRecord
+  itemNumber    int;
+  itemCost      float;
+  itemQuantity  int;
+end</pre>
+If you generate this program and run it, EGL will return
+an error pointing to the <samp class="codeph">discountPrice</samp> function and
+the expression <samp class="codeph">1/0</samp>. In this case, the error is easy
+to see, but in other cases you might not be able to find the error
+so easily. Your first step in identifying the source of the error
+might be to run the program in the debugger with breakpoints to find
+where the program fails.</div>
+</div>
+
+<div class="section"><p>Strategies for debugging an application are beyond the
+scope of this documentation, but in general the heart of the debugging
+process is identifying the source of a problem in the code. For example,
+if your program ends abnormally, you can use the debugger to step
+through the code and find the point at which the program fails. If
+the program gives unexpected output, you can use the debugger to track
+the values of variables and find the point at which the output deviates
+from the expected.</p>
+<p>The debugger always starts debugging from
+a program part. If you want to debug another logic part, such as a
+library, you must step into the other logic part from a program. In
+some cases you might benefit from writing a simple program with no
+other function than to call the logic part that you want to debug.</p>
+To
+step through an application in the EGL debugger, do as follows:</div>
+
+<ol><li class="stepexpand"><span>Add one or more breakpoints.</span> <p>You can mark
+one or more lines of code as <em>breakpoints</em>. When the debugger
+encounters a breakpoint, it pauses before running the associated line
+of code. You then have the option of checking the current values of
+program variables before telling the debugger how to proceed. Breakpoints
+do not affect the generated source in any way; they are meaningful
+only during the debugging process.</p>
+<p>To add a breakpoint, double-click
+the gray margin to the left of the code in the EGL editor. In the
+previous example, you might want to add breakpoints throughout the <samp class="codeph">discountPrice</samp> function
+because the error tells you that this function is where the error
+occurred. Breakpoints are marked with blue circles in this gray area:<br></br><img src="../images/tedt00579.jpg" alt="Picture of the blue circles indicating breakpoints in the code."></img><br></br></p>
+<div class="p">You
+can add a breakpoint at most lines of EGL code that conduct logic,
+including the following examples:<ul>
+<li>An assignment statement, such as:<pre class="codeblock">myString = "Hello";</pre>
+ </li>
+
+<li>A variable declaration that includes an assignment, such as this:<pre class="codeblock">myInt int = 5;</pre>
+</li>
+
+<li>A call to a system function or other EGL function, such as this:<pre class="codeblock">SysLib.writeStderr("Hello");</pre>
+</li>
+
+<li>A loop or comparison statement, such as:<pre class="codeblock">if (myInt == 5)</pre>
+</li>
+
+</ul>
+</div>
+<div class="p">However, you cannot add breakpoints at the following lines
+of code:<ul>
+<li>A variable declaration that does not include an assignment.</li>
+
+<li>An <span class="synph"><span class="kwd">end</span></span> statement.</li>
+
+<li>A line of code that begins with <span class="synph"><span class="kwd">function</span></span>,
+or that begins with <span class="synph"><span class="kwd">program</span></span>, <span class="synph"><span class="kwd">package</span></span>,
+or any other line that declares a logic part. However, you can set
+a preference to have the debugger treat the first line of each program
+as though it contained a breakpoint. </li>
+
+<li>Any line within a data part.</li>
+
+<li>A blank line or a line that consists only of a comment.</li>
+
+</ul>
+</div>
+<p>For more instructions on using breakpoints, see <a href="tedt00580.html" title="This topic shows you how to use breakpoints in debugging your programs. You can manage breakpoints inside or outside of an EGL debugging session.">Using breakpoints in the EGL debugger</a>.</p>
+<p>You can debug a program without
+using breakpoints. If you check the preference <span class="menucascade"><span class="uicontrol">Window</span>
+ &gt; <span class="uicontrol">Preferences</span> &gt; <span class="uicontrol">EGL</span> &gt; <span class="uicontrol">Debug</span>
+ &gt; <span class="uicontrol">Stop at first line of a program</span></span>,
+it has the same effect as setting a breakpoint at the first executable
+line inside the <samp class="codeph">main()</samp> function of the program. From
+this point you can step through or around succeeding lines of code,
+that is, execute a single line and pause. For more on the step commands,
+see <a href="tedt00543.html" title="To prepare to run code in the EGL debugger, familiarize yourself with the toolbar buttons and context menu options.">Preparing to run code in the EGL debugger</a>.</p>
+</li>
+<li class="stepexpand"><span>Run a program in the EGL debugger.</span> <p>After
+you have added breakpoints to your program, or set the Stop at first
+line option (see <span class="q">"Add one or more breakpoints"</span> earlier in this
+topic), you can run it in the debugger.</p>
+<div class="p">The
+debugger requires a launch configuration to describe how it will run
+the application. There are two ways to create a launch configuration:<ul>
+<li>Have the debugger to create a launch configuration automatically
+when you start debugging.</li>
+
+<li>Create a launch configuration manually. See <a href="tedt00582.html#debug_createlaunchconfig" title="You can create a launch configuration in the EGL debugger.">Creating a launch configuration in the EGL debugger</a> for more information.</li>
+
+</ul>
+For most programs, you can use the automatically created launch
+configuration.</div>
+<ol type="a">
+<li>In the Project Explorer view, right-click the EGL source program
+that you want to debug and then click <span class="menucascade"><span class="uicontrol">Debug
+as</span> &gt; <span class="uicontrol">EGL Program</span></span>. The
+debugger performs the following tasks:<ul>
+<li>If no launch configuration exists for the program, the debugger
+creates a default launch configuration. You can view this configuration
+by clicking <span class="menucascade"><span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug</span>
+</span>.</li>
+
+<li>Depending on your workbench preferences, the debugger might switch
+to the Debug perspective automatically or prompt you to do so. You
+can switch perspectives manually by clicking <span class="menucascade"><span class="uicontrol">Window</span>
+ &gt; <span class="uicontrol">Open Perspective</span> &gt; <span class="uicontrol">Other</span>
+ &gt; <span class="uicontrol">Debug</span></span>.</li>
+
+<li>The debugger begins running the program.</li>
+
+</ul>
+</li>
+
+<li>After the debugger has started running the program, it continues
+until it encounters a breakpoint, or, if you have set the preference
+for it, finds the first line of executable code. At this point, the
+debugger pauses and displays the following information:<ul>
+<li>The EGL editor highlights the line about to be executed.</li>
+
+<li>The Variables view shows the value of all the variables in the
+current logic part, including the value of system variables. You can
+use this view to track the value of a variable through the program.
+You can also change the value of a variable while the debugger is
+paused at a breakpoint.</li>
+
+<li>The Debug view lists the threads running within the current run
+unit. In simple terms, this view shows which program or logic part
+is currently running. Use this view to resume or stop the debugging
+process.</li>
+
+<li>The Breakpoints view lists the breakpoints in the program. From
+this view, you can disable a breakpoint temporarily by clearing its
+check box.</li>
+
+</ul>
+</li>
+
+<li>When you want the debugger to continue, click the <span class="uicontrol">Resume</span> button
+at the top of the Debug view. The debugger continues to the next breakpoint.
+You can also use one of the Step buttons to see the program execute
+the next line and pause again.<p>In the example program, you can run
+the program from breakpoint to breakpoint until the debugger reaches
+the line <samp class="codeph">discountRate = 1/0;</samp>, at which point the
+debugger returns the same error that you see in the console when running
+the program.</p>
+</li>
+
+<li>When you are finished debugging, click the <span class="uicontrol">Terminate</span> button
+at the top of the Debug view to stop the debugger or click the <span class="uicontrol">Resume</span> button
+to allow the program to finish running.</li>
+
+</ol>
+</li>
+</ol>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>
