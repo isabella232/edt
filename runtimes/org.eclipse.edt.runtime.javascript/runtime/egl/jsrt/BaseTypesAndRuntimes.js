@@ -1277,6 +1277,24 @@ egl.divide = function(var1, var2) {
 	return var1 / var2;
 };
 
+egl.bitand = function(var1, var2) {
+	if (var1 == null || var2 == null)
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	return var1 & var2;
+};
+
+egl.bitor = function(var1, var2) {
+	if (var1 == null || var2 == null)
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	return var1 | var2;
+};
+
+egl.bitxor = function(var1, var2) {
+	if (var1 == null || var2 == null)
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	return var1 ^ var2;
+};
+
 egl.nullabledivide = function(var1, var2) {
 	if (var1 == null || var2 == null)
 		return null;

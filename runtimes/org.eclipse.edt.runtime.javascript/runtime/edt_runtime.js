@@ -135,7 +135,15 @@ egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
 egl.eglx.lang.EInt16.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
 };
-
+egl.eglx.lang.EInt16.bitand = function (x1, x2) {
+	return egl.bitand(x1, x2); 
+};
+egl.eglx.lang.EInt16.bitor = function (x1, x2) {
+	return egl.bitor(x1, x2); 
+};
+egl.eglx.lang.EInt16.bitxor = function (x1, x2) {
+	return egl.bitxor(x1, x2); 
+};
 egl.eglx.lang.EInt16.asNumber= function (x) {
 	return egl.boxAny(x, "I;");
 };
@@ -181,6 +189,15 @@ egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
 };
 egl.eglx.lang.EInt32.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
+};
+egl.eglx.lang.EInt32.bitand = function (x1, x2) {
+	return egl.bitand(x1, x2); 
+};
+egl.eglx.lang.EInt32.bitor = function (x1, x2) {
+	return egl.bitor(x1, x2); 
+};
+egl.eglx.lang.EInt32.bitxor = function (x1, x2) {
+	return egl.bitxor(x1, x2); 
 };
 egl.eglx.lang.EInt32.asNumber= function (x) {
 	return egl.boxAny(x, "I;");
