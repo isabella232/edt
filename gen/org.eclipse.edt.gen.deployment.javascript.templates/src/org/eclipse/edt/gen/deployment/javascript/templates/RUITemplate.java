@@ -136,7 +136,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	
 	private void generateTitle(Part part, TabbedWriter out) {
 		String title = null;
-		Annotation annot = part.getAnnotation(CommonUtilities.isRUIHandler(part) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
+		Annotation annot = part.getAnnotation(Constants.RUI_HANDLER);
 		if (annot != null) {
 			title = (String)annot.getValue("title");
 		}
