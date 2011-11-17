@@ -195,9 +195,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 	
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (arg.getConversionOperation() != null) {
+			out.print("(function(x){ return x == null ? x : ");
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
-			out.print("(");
+			out.print(".apply( this, arguments );})(");
 			Expression objectExpr = arg.getObjectExpr();
 			if (objectExpr instanceof BoxingExpression){
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
