@@ -11,9 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 
@@ -22,6 +25,14 @@ public class FunctionInvocationTemplate extends JavaTemplate {
 	public void genExpression(FunctionInvocation expr, Context ctx, TabbedWriter out) {
 		// first, make this expression's arguments compatible
 		IRUtils.makeCompatible(expr);
+		// check to see if we have the situation for "const in" parameters that really need wrapping instead
+		if (expr.getArguments() != null) {
+			for (int i = 0; i < expr.getArguments().size(); i++) {
+				if (expr.getArguments().get(i) instanceof BoxingExpression && expr.getTarget().getParameters().get(i).isConst()
+					&& expr.getTarget().getParameters().get(i).getParameterKind() == ParameterKind.PARM_IN)
+					ctx.putAttribute(expr.getArguments().get(i), Constants.SubKey_functionArgumentNeedsWrapping, new Boolean(true));
+			}
+		}
 		// delegate to the template associated with the target function's container
 		if (expr.getTarget().getContainer() instanceof Type)
 			ctx.invoke(genContainerBasedInvocation, (Type) expr.getTarget().getContainer(), ctx, out, expr);

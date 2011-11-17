@@ -37,7 +37,11 @@ public class BoxingExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genTypeDependentOptions, expr.getType(), ctx, out);
 			out.print(")");
 		} else {
-			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeBox(");
+			if (ctx.getAttribute(expr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentNeedsWrapping) != null
+				&& ((Boolean) ctx.getAttribute(expr, org.eclipse.edt.gen.Constants.SubKey_functionArgumentNeedsWrapping)).booleanValue())
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(");
+			else
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeBox(");
 			ctx.invoke(genExpression, expr.getExpr(), ctx, out);
 			if ((CommonUtilities.isBoxedOutputTemp(expr.getExpr(), ctx)))
 				out.print(".ezeUnbox()");

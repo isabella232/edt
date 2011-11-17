@@ -35,7 +35,7 @@ public class StatementTemplate extends JavaTemplate {
 		out.println(";");
 	}
 	
-	public Boolean requiresWrappedParameters(Statement stmt, Context ctx){
+	public Boolean isStatementRequiringWrappedParameters(Statement stmt, Context ctx){
 		return Boolean.TRUE;
 	}
 }
