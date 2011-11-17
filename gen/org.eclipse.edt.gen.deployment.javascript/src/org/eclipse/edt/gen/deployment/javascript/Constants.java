@@ -31,8 +31,11 @@ public class Constants {
 	 * Do NOT add a file to this list if you do not want its contents to be added to EVERY HTML file.
 	 * Also note that files are linked in the order they appear here.  Be aware of dependencies!
 	 */
+	public static final String RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE = "edt_runtime_all.js";
 	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>();
 	static{
+		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE);  //$NON-NLS-1$
+
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_mathcontext.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_bigdecimal.js");  //$NON-NLS-1$
