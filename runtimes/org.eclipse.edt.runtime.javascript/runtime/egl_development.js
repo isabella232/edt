@@ -58,7 +58,7 @@ egl.binarySearch = function( /*int[]*/ values, /* int */ value ) {
 };
 
 egl.canSendEventToIDE = function(){
-	return egl.sessionIsValid && egl.contextAware && (egl.enableEditing || egl.debugg);
+	return egl.sessionIsValid && egl.contextAware;
 };
 
 egl.getContextKey = function() {
