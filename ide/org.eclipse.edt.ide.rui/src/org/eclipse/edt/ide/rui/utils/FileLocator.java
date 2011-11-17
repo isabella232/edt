@@ -11,7 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.utils;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -172,6 +177,16 @@ public abstract class FileLocator {
 	}
 	
 	private static Map<String, File> getRUIJavaScriptFiles(){
+		
+		byte[] bytes = null;
+		File allInOneFile = null;
+		FileOutputStream os = null;
+		try {
+			allInOneFile = File.createTempFile("allInOneFile", "js");
+			os = new FileOutputStream(allInOneFile);
+		} catch (IOException e) {
+		}
+		
 		Map<String, File> result = new HashMap<String, File>();
 		for (Iterator<String> iterator = RUI_DEVELOPMENT_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
 			String fileName = (String) iterator.next();
@@ -186,7 +201,26 @@ public abstract class FileLocator {
 			File file = doGetRUIJavaScriptFile(fileName);
 			if(file != null){
 				result.put(fileName, file);
+
+				//append content to allInOneFile
+				if(os != null){
+					try {
+						DataInputStream is = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+						bytes = new byte[is.available()];
+						is.readFully(bytes);
+						is.close();
+						os.write(bytes);
+						os.flush();
+					} catch (FileNotFoundException e) {
+					} catch (IOException e) {
+					}
+				}
 			}
+		}
+
+		//if there's an allInOne file in runtime directory, ignore the temp file
+		if(!result.containsKey(Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE)){
+			result.put(Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE, allInOneFile);
 		}
 		
 		for (Iterator<String> iterator = RUI_RUNTIME_PROPERTIES_FILES.iterator(); iterator.hasNext();) {
