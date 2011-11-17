@@ -80,6 +80,12 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 			return "new egl.javascript.BigDecimal(egl.divide";
 		if (op.equals(expr.Op_POWER))
 			return "egl.eglx.lang.EInt32.pow";
+		if (op.equals(expr.Op_BITAND))
+			return "egl.eglx.lang.EInt32.bitand";
+		if (op.equals(expr.Op_BITOR))
+			return "egl.eglx.lang.EInt32.bitor";
+		if (op.equals(expr.Op_XOR))
+			return "egl.eglx.lang.EInt32.bitxor";
 		return "";
 	}
 
@@ -118,11 +124,11 @@ public class IntTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_POWER))
 			return ",";
 		if (op.equals(expr.Op_BITAND))
-			return " & ";
+			return " , ";
 		if (op.equals(expr.Op_BITOR))
-			return " | ";
+			return " , ";
 		if (op.equals(expr.Op_XOR))
-			return " ^ ";
+			return " , ";
 		return "";
 	}
 
