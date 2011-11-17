@@ -155,7 +155,7 @@ public class WorkingCopyGenerationOperation {
 							}
 						};
 						jsDevGenerator.setEditingMode( true );
-						jsDevGenerator.generate(file.getFullPath().toOSString(), part, environment, generationMessageRequestor);
+						jsDevGenerator.generate(file.getFullPath().toOSString(), (org.eclipse.edt.mof.egl.Part)part.clone(), environment, generationMessageRequestor);
 					}
 				} catch (PartNotFoundException e) {
 					e.printStackTrace();

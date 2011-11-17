@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -80,8 +81,17 @@ public class PreviewIREnvironment extends ProjectIREnvironment implements IEnvir
 		}
 	}
 	
-	private void debug (String msg){
-//		System.out.println("PreviewIREnvironment.DEBUG -- " + msg);
+	@Override
+	protected boolean storeInObjectStoreCache(String key, EObject object) {
+		// The only object store we should ever update is contextStore!
+		String scheme = getKeySchemeFromKey(key);
+		if (contextStore.getKeyScheme().equals(scheme) && contextStore.containsKey(key)) {
+			String storeKey = getDelegateForKey(key).normalizeKey(key);
+			updateProxyReferences(storeKey, object);
+			contextStore.addToCache(storeKey, object);
+			objectCache.remove(storeKey);
+			return true;
+		}
+		return false;
 	}
-	
 }
