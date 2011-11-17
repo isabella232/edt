@@ -42,7 +42,7 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 	
 	public void genSignature(Type type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
-			out.print("T");
+			out.print("A");
 			out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
 			out.print(";");
 		}
