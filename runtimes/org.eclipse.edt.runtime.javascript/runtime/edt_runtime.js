@@ -522,7 +522,7 @@ egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern) {
 	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 };
 egl.eglx.lang.EString.fromEDate = function (d) {
-	return egl.dateToString(d, "MM/dd/yyyy"); 
+	return d == null ? d : egl.dateToString(d, "MM/dd/yyyy"); 
 };
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag

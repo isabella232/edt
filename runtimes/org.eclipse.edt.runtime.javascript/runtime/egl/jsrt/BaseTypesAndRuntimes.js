@@ -296,10 +296,10 @@ egl.stringToDate = function(s, format)
 	{
 		result = egl.stringToDateInternal(s, format, false);
 	}
-	if( result == null && s.length < format.length )
-	{
-		result = egl.stringToDateInternal("0" + s, format, false);
-	}
+//	if( result == null && s.length < format.length )
+//	{
+//		result = egl.stringToDateInternal("0" + s, format, false);
+//	}
 	
 	if( result != null )
 	{
