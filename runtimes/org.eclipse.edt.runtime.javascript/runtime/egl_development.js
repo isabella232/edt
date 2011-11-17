@@ -1917,8 +1917,8 @@ egl.cleanupDebug = function(){
 			egl.suspendReason = null;
 			egl.breakpoints = null;
 			egl.nextDebuggerPoll = null;
-			egl.debugg = false;
 			egl.loadIDEURL("___windowClosed", null, true);
+			egl.debugg = false;
 			egl.contextKey = null;
 		}
 		catch (e) {}
