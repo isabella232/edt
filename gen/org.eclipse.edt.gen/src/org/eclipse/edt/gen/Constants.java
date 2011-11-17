@@ -31,8 +31,8 @@ public class Constants {
 	// these are sub key values used as context hashmap keys
 	public static final String SubKey_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";
 	public static final String SubKey_functionHasReturnStatement = "functionHasReturnStatement";
+	public static final String SubKey_functionArgumentNeedsWrapping = "functionArgumentNeedsWrapping";
 	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
-	public static final String requiresWrappedParameters = "requiresWrappedParameters";
 	public static final String SubKey_statementHasBeenReorganized = "statementHasBeenReorganized";
 
 	// invoke names
@@ -40,6 +40,7 @@ public class Constants {
 	public static final String isAssignmentArrayMatchingWanted = "isAssignmentArrayMatchingWanted";
 	public static final String isListReorganizationWanted = "isListReorganizationWanted";
 	public static final String isMathLibDecimalBoxingWanted = "isMathLibDecimalBoxingWanted";
+	public static final String isStatementRequiringWrappedParameters = "isStatementRequiringWrappedParameters";
 
 	// part names
 	public static final String AnnotationXmlAttribute = "eglx.xml.binding.annotation.xmlAttribute";
