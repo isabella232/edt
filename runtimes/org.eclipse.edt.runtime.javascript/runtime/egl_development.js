@@ -11,6 +11,7 @@
  *******************************************************************************/
 egl.enableEditing = window.egl__enableEditing;
 egl.contextAware = window.egl__contextAware;
+egl.debugg = window.egl__debugg;
 egl.sessionIsValid = true;
 egl.cssFiles = [];
 egl.canPrintError = true;
@@ -57,7 +58,7 @@ egl.binarySearch = function( /*int[]*/ values, /* int */ value ) {
 };
 
 egl.canSendEventToIDE = function(){
-	return egl.sessionIsValid && egl.contextAware;
+	return egl.sessionIsValid && egl.contextAware && (egl.enableEditing || egl.debugg);
 };
 
 egl.getContextKey = function() {
@@ -318,7 +319,6 @@ egl.doWidgetClick = function( x, y ) {
     setTimeout( "egl.getWidgetPositions()", 400 );
 };
 
-egl.debugg = window.egl__debugg;
 egl.traceStartupTime = window.egl__traceStartupTime;
 egl.traceInternals = window.egl__traceInternals;
 if (egl.debugg){egl.nextDebuggerPoll = new Date().getTime() + 1000;}
