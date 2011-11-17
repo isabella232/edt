@@ -115,24 +115,32 @@ public class ProjectIREnvironment extends Environment {
 			objectCache.remove(storeKey);
 		}
 		else {
-			if (!(object instanceof ProxyEObject)) {
-				// See if we should cache it in a store. Otherwise use super's cache.
-				String scheme = getKeySchemeFromKey(key);
-				List<ObjectStore> stores = objectStores.get(scheme);
-				if (stores != null) {
-					String storeKey = getDelegateForKey(key).normalizeKey(key);
-					for (ObjectStore nextStore : stores) {
-						if (nextStore instanceof CachingObjectStore && nextStore.containsKey(key)) {
-							updateProxyReferences(storeKey, object);
-							((CachingObjectStore)nextStore).addToCache(storeKey, object);
-							objectCache.remove(storeKey);
-							return;
-						}
-					}
+			if (object instanceof ProxyEObject || !storeInObjectStoreCache(key, object)) {
+				super.save(key, object, store);
+			}
+		}
+	}
+	
+	/**
+	 * Attempts to store the object in the cache of an object store.
+	 * 
+	 * @return true if the object was stored in an object store's cache, otherwise false.
+	 */
+	protected boolean storeInObjectStoreCache(String key, EObject object) {
+		// See if we should cache it in a store. Otherwise use super's cache.
+		String scheme = getKeySchemeFromKey(key);
+		List<ObjectStore> stores = objectStores.get(scheme);
+		if (stores != null) {
+			String storeKey = getDelegateForKey(key).normalizeKey(key);
+			for (ObjectStore nextStore : stores) {
+				if (nextStore instanceof CachingObjectStore && nextStore.containsKey(key)) {
+					updateProxyReferences(storeKey, object);
+					((CachingObjectStore)nextStore).addToCache(storeKey, object);
+					objectCache.remove(storeKey);
+					return true;
 				}
 			}
-
-			super.save(key, object, store);
 		}
+		return false;
 	}
 }
