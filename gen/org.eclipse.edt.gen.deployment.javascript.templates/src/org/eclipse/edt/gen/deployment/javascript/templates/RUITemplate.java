@@ -306,9 +306,11 @@ public class RUITemplate extends JavaScriptTemplate {
 		if (useAll) {
 			final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
 			String paths = "";		
-			for (Iterator<String> iterator = Constants.RUI_RUNTIME_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
-				String path = prefix + iterator.next();
-				paths += ("\"" + path + "\",");
+			for (String runtimeFile : Constants.RUI_RUNTIME_JAVASCRIPT_FILES) {
+				if(!Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE.equals(runtimeFile)){
+					String path = prefix + runtimeFile;
+					paths += ("\"" + path + "\",");
+				}
 			}
 			paths = paths.substring(0, paths.length()-1);
 			out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + paths + ");");
