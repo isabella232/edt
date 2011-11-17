@@ -183,6 +183,7 @@ public abstract class FileLocator {
 		FileOutputStream os = null;
 		try {
 			allInOneFile = File.createTempFile("allInOneFile", "js");
+			allInOneFile.deleteOnExit();
 			os = new FileOutputStream(allInOneFile);
 		} catch (IOException e) {
 		}
