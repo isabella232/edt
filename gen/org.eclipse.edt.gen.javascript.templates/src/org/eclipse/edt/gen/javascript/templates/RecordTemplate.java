@@ -133,10 +133,8 @@ public class RecordTemplate extends JavaScriptTemplate {
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
 		if (TypeUtils.isValueType(type)) {
-			if (arg1.isNullable()) {
-				ctx.invoke(genExpression, arg1, ctx, out);
-				out.print(arg3);
-			}
+			ctx.invoke(genExpression, arg1, ctx, out);
+			out.print(arg3);
 			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
 			ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(", ");
@@ -144,7 +142,7 @@ public class RecordTemplate extends JavaScriptTemplate {
 			out.print(")");
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
-			out.print(" = ");
+			out.print(arg3);
 			ctx.invoke(genExpression, arg2, ctx, out);
 		}
 	}

@@ -22,11 +22,11 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.Classifier;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.IsAExpression;
@@ -339,6 +339,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 		else if (lhsType.getClassifier() != null && isaType.getClassifier() != null
 			&& lhsType.getClassifier().getTypeSignature().equalsIgnoreCase(isaType.getClassifier().getTypeSignature())) {
 			out.print("false");
+		}
+		else if ( lhs instanceof IntegerLiteral ) {
+			out.print( lhsTypeSig.equalsIgnoreCase(isaTypeSig) ? "true" : "false" );
 		}
 		else {
 			out.print("egl.isa(");
