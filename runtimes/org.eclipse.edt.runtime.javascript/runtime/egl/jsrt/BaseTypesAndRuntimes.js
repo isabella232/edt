@@ -448,7 +448,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 		
 		var sub = s.substr(0,4);
-		if( egl.isnumeric(sub) )
+		if( egl.isdoubledigit(sub) )
 		{
 			result.setFullYear(sub);
 			if ( !egl.leapYearCheck(result,3,4) )
@@ -471,7 +471,7 @@ egl.processToken = function(token, s, result, strict)
 
 		result["eze$$adjustdate"] = true;
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) )
+		if( egl.isdoubledigit(sub) )
 		{
 			result.setFullYear(sub);
 			s = s.substr(2);
@@ -489,7 +489,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 1 && sub <= 12 )
+		if( egl.isdoubledigit(sub) && sub >= 1 && sub <= 12 )
 		{
 			var d = result.getDate();
 			if ( (d > 29 && sub === "02")
@@ -521,7 +521,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 1 && sub <= 31 )
+		if( egl.isdoubledigit(sub) && sub >= 1 && sub <= 31 )
 		{
 			switch(result.getMonth())
 			{
@@ -558,7 +558,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 		
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 0 && sub <= 23 )
+		if( egl.isdoubledigit(sub) && sub >= 0 && sub <= 23 )
 		{
 			result.setHours(sub);
 			s = s.substr(2);
@@ -576,7 +576,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 		
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 1 && sub <= 12 )
+		if( egl.isdoubledigit(sub) && sub >= 1 && sub <= 12 )
 		{
 			result.setHours(sub);
 			s = s.substr(2);
@@ -594,7 +594,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 		
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 0 && sub <= 59 )
+		if( egl.isdoubledigit(sub) && sub >= 0 && sub <= 59 )
 		{
 			result.setMinutes(sub);
 			s = s.substr(2);
@@ -612,7 +612,7 @@ egl.processToken = function(token, s, result, strict)
 		}
 		
 		var sub = s.substr(0,2);
-		if( egl.isnumeric(sub) && sub >= 0 && sub <= 59 )
+		if( egl.isdoubledigit(sub) && sub >= 0 && sub <= 59 )
 		{
 			result.setSeconds(sub);
 			s = s.substr(2);
@@ -2834,6 +2834,19 @@ Array.prototype.removeElement = function Array_removeElement(index) {
 	this.splice( index-1, 1 );
 };
 
+Array.prototype.indexOfElement = function Array_indexOfElement(val) {
+	if(this.indexOf){
+		return this.indexOf(val) + 1;
+	}else{
+		for (var i = 0; i < this.length; i++) {
+			if (this[i] == val) {
+				return i + 1;
+			}
+		}
+		return 0;
+	}
+};
+
 
 egl.initialValueForType = function ( elementType ) 
 {
@@ -3466,6 +3479,12 @@ egl.isblanks = function(s) {
 egl.isnumeric = function(s) {
 	if (s == null) return true;
 	return !isNaN(parseFloat(s)) && isFinite(s);
+};
+egl.isdoubledigit = function(s /*Used for date/time*/) {
+	if(s.charAt(0) < '0' || s.charAt(0) > '9' || s.charAt(1) < '0' || s.charAt(1) > '9'){
+		return false;
+	}
+	return true;	
 };
 
 egl.trim = function(s) {
