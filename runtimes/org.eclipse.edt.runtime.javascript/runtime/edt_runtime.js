@@ -291,19 +291,19 @@ egl.eglx.lang.EDecimal.fromENumber = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
-		return egl.convertAnyToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+		return egl.convertAnyToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
 };
 egl.eglx.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
-		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	if (limit)
 		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 	else
-		return egl.convertFloatToDecimal(x, 0, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
 };
 egl.eglx.lang.EDecimal.equals = function (x, y) {
 	if(!x && !y){

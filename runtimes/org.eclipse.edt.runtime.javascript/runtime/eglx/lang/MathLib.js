@@ -45,7 +45,7 @@ egl.eglx.lang.MathLib["ceiling"] = function(/*float*/value) {
 	return Math.ceil(value);
 };
 egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
-	return ( Math.cos(x));
+	return ( Math.cos(value));
 };
 egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
@@ -102,7 +102,9 @@ egl.eglx.lang.MathLib["frexp"] = function( y, x, assignFunc ) {
 	return y * Math.pow( 2, -x );
 };
 
-//TODO sbg need ldexp()
+egl.eglx.lang.MathLib["ldexp"] = function(/*float*/x, /*int*/ exp) {
+	return x * Math.pow( 2, exp );
+};
 
 egl.eglx.lang.MathLib["log"] = function(/*float*/x) {
 	if (x > 0) {

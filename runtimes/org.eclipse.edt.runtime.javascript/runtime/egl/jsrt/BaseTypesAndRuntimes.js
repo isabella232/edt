@@ -1007,9 +1007,12 @@ egl.convertFloatToDecimal = function( x, decimals, limit, creatx )
 		}
 		throw creatx( "CRRUI2018E", [ String( x ), "decimal" ] );
 	}
-
-	x = new egl.javascript.BigDecimal( (x*1.0).toFixed( decimals ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
-	return egl.convertDecimalToDecimal( x, decimals, limit, creatx );
+	if ( decimals < 0 ) {
+		return  new egl.javascript.BigDecimal( x );
+	} else {
+		x = new egl.javascript.BigDecimal( (x*1.0).toFixed( decimals + 1 ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
+		return egl.convertDecimalToDecimal( x, decimals, limit, creatx );
+	}
 };
 
 egl.convertDecimalToDecimal = function( x, decimals, limit, creatx )
@@ -2057,10 +2060,13 @@ egl.unboxElements = function( array, sig )
 	}
 };
 
-egl.isa = function( any, signature )
+egl.isa = function( any, signature, anySignature )
 {
 	if ( any != null )
 	{
+		if ( anySignature != undefined ) {
+			return signature == anySignature;
+		}
 		return egl.inferSignature( any ) === signature;
 	}
 	else
@@ -3449,7 +3455,6 @@ egl.internalFieldMatcher = /eze\$\$/;
 
 egl.isUserField = function(object, field) {
 	return typeof(object[field]) != "function" && 
-			!field.match(/^[0-9]*$/) && 
 			!field.match(egl.internalFieldMatcher);
 };
 	
