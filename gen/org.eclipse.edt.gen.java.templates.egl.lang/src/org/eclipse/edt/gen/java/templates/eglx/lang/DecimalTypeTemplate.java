@@ -28,4 +28,9 @@ public class DecimalTypeTemplate extends JavaTemplate {
 		// the arg contains the operation being asked about
 		return true;
 	}
+
+	public Boolean isMathLibDecimalBoxingWanted(Type type, Context ctx) {
+		// types can override this to cause/prevent mathlib decimals/precision boxing to be done
+		return true;
+	}
 }
