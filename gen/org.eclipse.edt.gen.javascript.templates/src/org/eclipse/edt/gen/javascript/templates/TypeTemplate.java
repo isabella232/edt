@@ -342,6 +342,18 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 		else if ( lhs instanceof IntegerLiteral ) {
 			out.print( lhsTypeSig.equalsIgnoreCase(isaTypeSig) ? "true" : "false" );
+		} else if (ctx.mapsToPrimitiveType(lhs.getType())) {
+			out.print("egl.isa(");
+			ctx.invoke(genExpression, lhs, ctx, out);
+			out.print(", ");
+			out.print("\"");
+			ctx.put( Constants.SubKey_isaSignature, "true" );
+			ctx.invoke(genSignature, isaType, ctx, out);
+			ctx.remove( Constants.SubKey_isaSignature );
+			out.print("\", \"");
+			ctx.invoke(genSignature, lhsType, ctx, out);
+			out.print("\"");
+			out.print(")");
 		}
 		else {
 			out.print("egl.isa(");
