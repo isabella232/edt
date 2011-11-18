@@ -972,10 +972,9 @@ public class ReorganizeCode extends AbstractVisitor {
 		// we need to box the argument if it is type decimal
 		if ((object.getId().equalsIgnoreCase("decimals") || object.getId().equalsIgnoreCase("precision")) && object.getQualifier() instanceof PartName
 			&& ((PartName) object.getQualifier()).getId().equalsIgnoreCase("MathLib") && object.getArguments().size() == 1
-			&& !(object.getArguments().get(0) instanceof BoxingExpression)
-			&& object.getArguments().get(0).getType().getClassifier().equals(TypeUtils.Type_DECIMAL)) {
+			&& !(object.getArguments().get(0) instanceof BoxingExpression)) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
-			if ((Boolean) ctx.invoke(Constants.isMathLibDecimalBoxingWanted, object.getQualifier().getType(), ctx)) {
+			if ((Boolean) ctx.invoke(Constants.isMathLibDecimalBoxingWanted, object.getArguments().get(0).getType(), ctx)) {
 				BoxingExpression boxingExpression = factory.createBoxingExpression();
 				boxingExpression.setExpr(object.getArguments().get(0));
 				object.getArguments().set(0, boxingExpression);
