@@ -36,11 +36,11 @@ egl.eglx.lang.DateTimeLib["dateFromGregorian"] = function(/*int*/ val){
 egl.eglx.lang.DateTimeLib["dateFromJulian"] = function(/*int*/ val){
 	//Returns a DATE value that corresponds to an integer representation of a Julian date.
 	//julianIntDate is of the form yyyyDDD (DDD = number of total days so far in the year)
-	if (julianIntDate!=null) {
+	if (val!=null) {
 		//taking old code for what it's worth
-				var year = Math.floor(julianIntDate / 1000);
+				var year = Math.floor(val / 1000);
 				var cal = new Date( year, 0, 1 );
-				cal.setTime( cal.getTime() + ( (julianIntDate % 1000) - 1 ) * egl.MS_PER_DAY );
+				cal.setTime( cal.getTime() + ( (val % 1000) - 1 ) * egl.MS_PER_DAY );
 				return cal;
 			}
 			else {
@@ -48,8 +48,8 @@ egl.eglx.lang.DateTimeLib["dateFromJulian"] = function(/*int*/ val){
 			}
 		};
 
-egl.eglx.lang.DateTimeLib["dateFromInt"] = function (/*Integer*/ day ) {
-	//day is an integer, where 0 represents 12/31/1899
+egl.eglx.lang.DateTimeLib["dateFromInt"] = function (/*Integer*/ day, /*Integer*/ year ) {
+	//day is an integer, where 0 represents 12/31/1969
 	//a null day means return the current date
 	var date = null;
 	if ( day != null) {
@@ -58,7 +58,7 @@ egl.eglx.lang.DateTimeLib["dateFromInt"] = function (/*Integer*/ day ) {
 		date.setMinutes( 0 );
 		date.setSeconds( 0 );
 		date.setMilliseconds( 0 );
-		date.setYear( 1899 );
+		date.setYear( year ? year : 1969 );
 		date.setMonth( 11 );
 		date.setDate( 31 + day );		//the critical piece; days adjust schedule
 			}

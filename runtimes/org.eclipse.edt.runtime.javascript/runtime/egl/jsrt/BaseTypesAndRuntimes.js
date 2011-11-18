@@ -2678,7 +2678,7 @@ egl.convertAnyToDate = function( any, nullable )
 
 			case 'I':
 			case 'i':
-				return egl.eglx.lang.DateTimeLib.dateFromInt(any.eze$$value);
+				return egl.convertIntToDate(any.eze$$value);
 
 			case 'F':
 			case 'f':
@@ -2693,7 +2693,7 @@ egl.convertAnyToDate = function( any, nullable )
 			case '9':
 			case 'p':
 			case 'B':
-				return egl.eglx.lang.DateTimeLib.dateFromInt(egl.convertDecimalToInt(any.eze$$value));
+				return egl.convertIntToDate(egl.convertDecimalToInt(any.eze$$value));
 			
 			case 'S':
 			case 's':
@@ -2764,6 +2764,10 @@ egl.convertAnyToTimestamp = function( any, nullable, pattern )
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'timestamp' + (nullable ? '?' : '') ], 'timestamp' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
+};
+
+egl.convertIntToDate = function( day ){
+	return egl.eglx.lang.DateTimeLib.dateFromInt(day, 1899);
 };
 
 Array.prototype.maxSize=2147483647;

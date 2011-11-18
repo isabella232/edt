@@ -717,7 +717,7 @@ egl.eglx.lang.EDate.addDays = function (x, y) {
 	if ((x === null) || (y === null))
 		throw new egl.eglx.lang.NullValueException();
 	else
-		return egl.eglx.lang.DateTimeLib.dateFromInt(egl.convertDateToInt(x) + y);
+		return egl.convertIntToDate(egl.convertDateToInt(x) + y);
 };
 egl.eglx.lang.EDate.daysDifferent = function (x, y) {
 	if ((x === null) || (y === null))
