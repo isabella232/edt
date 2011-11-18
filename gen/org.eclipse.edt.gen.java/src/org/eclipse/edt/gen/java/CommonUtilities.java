@@ -433,9 +433,10 @@ public class CommonUtilities {
 				else if (decl.getType() instanceof Delegate)
 					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/Delegate;");
 				else
-					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx));
+					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx,
+						(decl.getParameterKind() == ParameterKind.PARM_IN)));
 			}
-			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx) + "\n");
+			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx, false) + "\n");
 		}
 	}
 
@@ -468,11 +469,11 @@ public class CommonUtilities {
 		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature() + "\n");
 	}
 
-	private static String generateJavaTypeSignature(Type type, Context ctx) {
+	private static String generateJavaTypeSignature(Type type, Context ctx, boolean inParm) {
 		String signature = "";
 		// if this is an array, we need to handle it specially
 		if (type instanceof ArrayType)
-			signature += "L" + ctx.getRawNativeInterfaceMapping(type.getClassifier()).replaceAll("\\.", "/") + ";";
+			signature += "Ljava/util/List;";
 		else {
 			// get the java primitive, if it exists
 			if (type == null)
@@ -481,24 +482,42 @@ public class CommonUtilities {
 				// do we want the java primitive or the object
 				// now try to match up against the known primitives
 				String value = ctx.getRawPrimitiveMapping(type.getClassifier());
-				if (value.equals("boolean"))
-					signature += "Z";
-				else if (value.equals("byte"))
-					signature += "B";
-				else if (value.equals("char"))
-					signature += "C";
-				else if (value.equals("double"))
-					signature += "D";
-				else if (value.equals("float"))
-					signature += "F";
-				else if (value.equals("int"))
-					signature += "I";
-				else if (value.equals("long"))
-					signature += "J";
-				else if (value.equals("short"))
-					signature += "S";
-				else
-					signature += "L" + value.replaceAll("\\.", "/") + ";";
+				// if this is an in parm, we need the object versions of the primitives
+				if (inParm) {
+					if (value.equals("boolean"))
+						signature += "Ljava/lang/Boolean;";
+					else if (value.equals("double"))
+						signature += "Ljava/lang/Double;";
+					else if (value.equals("float"))
+						signature += "Ljava/lang/Float;";
+					else if (value.equals("int"))
+						signature += "Ljava/lang/Integer;";
+					else if (value.equals("long"))
+						signature += "Ljava/lang/Long;";
+					else if (value.equals("short"))
+						signature += "Ljava/lang/Short;";
+					else
+						signature += "L" + value.replaceAll("\\.", "/") + ";";
+				} else {
+					if (value.equals("boolean"))
+						signature += "Z";
+					else if (value.equals("byte"))
+						signature += "B";
+					else if (value.equals("char"))
+						signature += "C";
+					else if (value.equals("double"))
+						signature += "D";
+					else if (value.equals("float"))
+						signature += "F";
+					else if (value.equals("int"))
+						signature += "I";
+					else if (value.equals("long"))
+						signature += "J";
+					else if (value.equals("short"))
+						signature += "S";
+					else
+						signature += "L" + value.replaceAll("\\.", "/") + ";";
+				}
 			} else
 				signature += "L" + type.getClassifier().getTypeSignature().replaceAll("\\.", "/") + ";";
 		}
