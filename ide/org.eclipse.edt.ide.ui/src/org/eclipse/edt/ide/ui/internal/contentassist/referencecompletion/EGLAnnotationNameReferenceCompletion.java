@@ -165,6 +165,10 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 					case ITypeBinding.INTERFACE_BINDING:
 					case ITypeBinding.SERVICE_BINDING:
 						result.addGatherer(new ForNameAnnotationGatherer(IEGLConstants.PROPERTY_BINDSERVICE, settingsBlock));
+						break;
+					case ITypeBinding.EXTERNALTYPE_BINDING:
+						result.addGatherer(new ForNameAnnotationGatherer(IEGLConstants.PROPERTY_RESOURCE, settingsBlock));
+						break;
 					}
 				}
 				return result;
