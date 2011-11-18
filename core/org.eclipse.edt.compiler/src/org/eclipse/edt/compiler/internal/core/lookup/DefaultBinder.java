@@ -3521,7 +3521,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 			
 			checkSystemFunctionUsedInCorrectLocation(functionBinding, functionInvocation, functionContainerBinding);				
 			
-			functionInvocation.accept(new FunctionArgumentValidator(functionBinding, functionContainerBinding, currentScope, problemRequestor, compilerOptions));
+			functionInvocation.accept(new FunctionArgumentValidator(functionBinding, functionContainerBinding, problemRequestor, compilerOptions));
 		}
 	}
 	

@@ -19,6 +19,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
@@ -67,7 +68,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 			}
 			else {
 				//validate the arguments against the parms
-//FIXME how do I get the scope	callStatement.accept(new FunctionArgumentValidator((IFunctionBinding)dataBinding.getType(), dataBinding.getDeclaringPart(), currentScope, problemRequestor, compilerOptions));
+				callStatement.accept(new FunctionArgumentValidator((IFunctionBinding)dataBinding.getType(), dataBinding.getDeclaringPart(), problemRequestor, compilerOptions));
 			}
 			
 			//check to make sure a callback is specified

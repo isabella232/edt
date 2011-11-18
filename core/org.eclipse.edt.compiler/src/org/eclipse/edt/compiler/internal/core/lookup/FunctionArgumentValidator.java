@@ -223,16 +223,13 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	private int numArgs = 0;
 
 	private ICompilerOptions compilerOptions;
-	
-	private Scope currentScope;
-	
-	public FunctionArgumentValidator(IFunctionBinding functionBinding, IPartBinding functionContainerBinding, Scope scope, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+		
+	public FunctionArgumentValidator(IFunctionBinding functionBinding, IPartBinding functionContainerBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.functionBinding = functionBinding;
 		this.functionContainerBinding = functionContainerBinding;
 		parameterIter = functionBinding.getParameters().iterator();
 		this.problemRequestor = problemRequestor;
 		this.compilerOptions = compilerOptions;
-		this.currentScope = scope;
 	}
 	
 	public boolean visit(FunctionInvocation functionInvocation) {
@@ -322,9 +319,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		if(!checkArgumentUsedCorrectlyWithField(argExpr, parameterBinding)) {
 			return false;
 		}
-		
-		checkArgumentForVGContainerNameVsItemNameWarning(argExpr);
-		
+				
 		IArgumentChecker specialCaseArgChecker = getSpecialCaseArgChecker(functionBinding, numArgs);
 		if(specialCaseArgChecker != null) {
 			specialCaseArgChecker.checkArg(numArgs, argExpr, argType, fInvocationNode, functionContainerBinding, problemRequestor, compilerOptions, functionBinding);
@@ -454,13 +449,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		
 		abstract void handleExpressionThatIsNotNameOrLiteral(Expression expression);
 	} 
-    
-    private void checkArgumentForVGContainerNameVsItemNameWarning(Expression argExpr) {
-		if(functionBinding.isSystemFunction()) {
-			new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions).checkItemRecordNameOverlap(currentScope, argExpr);
-		}
-	}
-    
+        
     private boolean checkArgumentUsedCorrectlyWithInAndOut(final Expression argExpr, final FunctionParameterBinding parmBinding, ITypeBinding parmType) {
     	ITypeBinding argTypeBinding = argExpr.resolveTypeBinding();
 		if(!Binding.isValidBinding(argTypeBinding)) {
