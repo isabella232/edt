@@ -3239,10 +3239,10 @@ egl.valueByKey = function egl_valueByKey( object, key, value, signature )
 	}
 	if (value !== undefined) 
 	{
-		if (value instanceof egl.egl.jsrt.Record)
-		{
-			value = value.eze$$clone();
-		}
+//		if (value instanceof egl.egl.jsrt.Record)
+//		{
+//			value = value.eze$$clone();
+//		}
 		value = egl.boxAny( value, signature );
 		if (objectIsRecord)
 		{
@@ -3538,7 +3538,9 @@ egl.javascriptRegExpAlias = function(ch) {
 String.prototype.like = function(pattern, escape) {	
 	//EGL 'like' is similar to SQL regular expressions.
 	//Change % to .* and _ to . so that we can use RegExp
-	var trimP = pattern.trim();
+//	var trimP = pattern.trim();
+	if(!pattern) return false;
+	var trimP = pattern;
 	var newPattern = "";
 	
 	for ( var i = 0; i < trimP.length; i++ ) {
@@ -3570,11 +3572,12 @@ String.prototype.like = function(pattern, escape) {
 			break;	
 		}
 	}
-	
+	newPattern = "^" + newPattern;
 	return (new RegExp( newPattern )).test( this );		
 };
 	
 String.prototype.matches = function(pattern, escape) {
+	if(!pattern) return false;
 	//converts EGL * ? [^-] symbols to javascript equivalents for matches
 	var newPattern = "";
 	
@@ -3626,7 +3629,7 @@ String.prototype.matches = function(pattern, escape) {
 			break;	
 		}
 	}
-	
+	newPattern = "^" + newPattern;
 	return (new RegExp( newPattern )).test( this );
 };
 
