@@ -240,7 +240,9 @@ egl.loadURL = function(url, handler, synchronous, sendAsContent) {
 };
 
 egl.startHandleIDEEvent = function(){
-	egl.handleIDEEvent();
+	if(egl.canSendEventToIDE() && (egl.enableEditing || egl.debugg)){
+		egl.handleIDEEvent();
+	}
 	egl.startHandleIDEEvent = function(){};
 };
 
