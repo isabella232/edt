@@ -29,10 +29,6 @@
  * 
  */
 
-String.prototype.trim = function() {
-	return this.replace(/^\s+|\s+$/g,"");
-}
-
 egl.defineClass( 'eglx.json', 'JSONParser', {
 	"constructor" : function()
 	{

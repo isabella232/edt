@@ -3499,8 +3499,12 @@ egl.isdoubledigit = function(s /*Used for date/time*/) {
 egl.trim = function(s) {
 	return s.replace(/^\s+|\s+$/g,"");
 };
-	
+
 String.prototype.trim = function() {
+	return this.replace(/^\s+|\s+$/g,"");
+}
+	
+String.prototype.trimRight = function() {
 	var n = this.length;
 	while (egl.isspace(this.charAt(n-1))) 
 		--n;
@@ -3566,9 +3570,8 @@ egl.javascriptRegExpAlias = function(ch) {
 String.prototype.like = function(pattern, escape) {	
 	//EGL 'like' is similar to SQL regular expressions.
 	//Change % to .* and _ to . so that we can use RegExp
-//	var trimP = pattern.trim();
+	var trimP = pattern.trimRight();
 	if(!pattern) return false;
-	var trimP = pattern;
 	var newPattern = "";
 	
 	for ( var i = 0; i < trimP.length; i++ ) {
@@ -3600,9 +3603,12 @@ String.prototype.like = function(pattern, escape) {
 			break;	
 		}
 	}
-	newPattern = "^" + newPattern;
+	if(newPattern == escape){
+		throw egl.createInvalidPatternException('CRRUI2713E', []);
+	}
+	newPattern = "\^" + newPattern + "\$";			
 	try{
-		return (new RegExp( newPattern )).test( this );	
+		return (new RegExp( newPattern )).test( this.trimRight() );	
 	}catch ( oops ){
 		throw egl.createInvalidPatternException('CRRUI2713E', []);
 	}
