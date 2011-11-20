@@ -20,8 +20,8 @@ egl.defineClass('eglx.lang', "TypeCastException", "eglx.lang", "AnyException", {
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.castToName = "";
-			this.actualTypeName = "";
+			this.castToName = this.castToName || "";
+			this.actualTypeName = this.actualTypeName || "";
 		}
 		,
 		"eze$$setInitial": function() {

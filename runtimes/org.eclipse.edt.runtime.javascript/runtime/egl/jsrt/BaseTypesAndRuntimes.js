@@ -2780,7 +2780,7 @@ Array.prototype.appendElement = function Array_appendElement(val) {
 	}
 	else
 	{
-		throw egl.createInvalidIndexException( 'CRRUI2019E', [ val, this.maxSize ] );
+		throw egl.createInvalidIndexException( 'CRRUI2019E', [ val, this.maxSize ], this.maxSize );
 	}
 };	
 
@@ -3601,7 +3601,11 @@ String.prototype.like = function(pattern, escape) {
 		}
 	}
 	newPattern = "^" + newPattern;
-	return (new RegExp( newPattern )).test( this );		
+	try{
+		return (new RegExp( newPattern )).test( this );	
+	}catch ( oops ){
+		throw egl.createInvalidPatternException('CRRUI2713E', []);
+	}
 };
 	
 String.prototype.matches = function(pattern, escape) {
@@ -3658,7 +3662,11 @@ String.prototype.matches = function(pattern, escape) {
 		}
 	}
 	newPattern = "^" + newPattern;
-	return (new RegExp( newPattern )).test( this );
+	try{
+		return (new RegExp( newPattern )).test( this );	
+	}catch ( oops ){
+		throw egl.createInvalidPatternException('CRRUI2713E', []);
+	}
 };
 
 egl.defineClass( "egl.jsrt", "Record", {
@@ -3989,33 +3997,18 @@ egl.makeExceptionFromCaughtObject = function( caught )
 	return egl.createJavaScriptObjectException( 'CRRUI2006E', message, name );
 };
 
-
-
 egl.createTypeCastException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
+	var message = "";
 	if (typeof(inserts) != "string") {
-		inserts = egl.getRuntimeMessage( messageID, inserts );
+		message = egl.getRuntimeMessage( messageID, inserts );
 	}
 	egl.exceptionThrown = true;
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
-	args.push( [ "message", inserts || "" ] );
-	args.push( [ "castToName", arguments[ 2 ] || "" ] );
-	args.push( [ "actualTypeName", arguments[ 3 ] || "" ] );
-	return new egl.eglx.lang.TypeCastException( args );
-};
-
-egl.createTypeCastException = function( /*string*/ messageID, /*string or array*/ inserts )
-{
-	if (typeof(inserts) != "string") {
-		inserts = egl.getRuntimeMessage( messageID, inserts );
-	}
-	egl.exceptionThrown = true;
-	var args = new Array();
-	args.push( [ "messageID", messageID || "" ] );
-	args.push( [ "message", inserts || "" ] );
-	args.push( [ "castToName", arguments[ 2 ] || "" ] );
-	args.push( [ "actualTypeName", arguments[ 3 ] || "" ] );
+	args.push( [ "message", message || "" ] );
+	args.push( [ "castToName", inserts[ 2 ] || "" ] );
+	args.push( [ "actualTypeName", inserts[ 1 ] || "" ] );
 	return new egl.eglx.lang.TypeCastException( args );
 };
 
@@ -4028,4 +4021,15 @@ egl.createInvalidArgumentException = function( /*string*/ messageID, /*string or
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
 	return new egl.eglx.lang.InvalidArgumentException( args );
+};
+
+egl.createInvalidPatternException = function( /*string*/ messageID, /*string or array*/ inserts ){
+	if (typeof(inserts) != "string") {
+		inserts = egl.getRuntimeMessage( messageID, inserts );
+	}
+	egl.exceptionThrown = true;
+	var args = new Array();
+	args.push( [ "messageID", messageID || "" ] );
+	args.push( [ "message", inserts || "" ] );
+	return new egl.eglx.lang.InvalidPatternException( args );
 };

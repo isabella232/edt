@@ -28,8 +28,7 @@ egl.eglx.lang.StringLib["getNextToken"] = function(/*string*/source, /*int*/
 
 	// If we're at the end of the substring, the search failed
 	if (startIndex >= source.length) {
-		throw egl.createInvalidIndexException("CRRUI2021E", [ index ],
-				index);
+		throw egl.createInvalidIndexException("CRRUI2021E", [ index ], index);
 	}
 
 	// Now we know we've found the beginning of a token. Find its end.
@@ -97,7 +96,7 @@ egl.eglx.lang.StringLib.db2TimestampFormat  = "yyyy-MM-dd-HH.mm.ss.ffffff";
  */
 egl.eglx.lang.StringLib["format"] = function(a, b) {
 	if (a == null)
-		throw new eglx.lang.NullValueException();  //TODO sbg need a more specific exception?
+		throw egl.createNullValueException( "CRRUI2005E", [] );  //TODO sbg need a more specific exception?
 	if (a instanceof Date) {
 		return egl.eglx.lang.StringLib.formatTimestamp(a,b);
 	}

@@ -50,6 +50,8 @@ egl.defineClass( "eglx.lang", "AnyException", "egl.jsrt", "Record", {
 		//subclass of Record
 		//call superclass constructor
 		this.eze$$isNullable = true;
+		this.messageID = this.messageID || "";
+		this.message = this.message || "";
 	},
 	
 	"getValue" : function() {

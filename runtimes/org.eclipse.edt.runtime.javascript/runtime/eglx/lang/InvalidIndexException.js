@@ -17,7 +17,7 @@ egl.createInvalidIndexException = function( /*string*/ messageID, /*string or ar
 	var args = new Array();
 	args.push( [ "messageID", messageID || "" ] );
 	args.push( [ "message", inserts || "" ] );
-	args.push( [ "indexValue", arguments[ 2 ] || 0 ] );
+	args.push( [ "index", arguments[ 2 ] || 0 ] );
 	return new egl.eglx.lang.InvalidIndexException( args );
 }
 
@@ -32,7 +32,7 @@ egl.defineClass('eglx.lang', "InvalidIndexException", "eglx.lang", "AnyException
 		}
 		,
 		"eze$$setEmpty": function() {
-			this.index = 0;
+			this.index = this.index || 0;
 		}
 		,
 		"eze$$setInitial": function() {

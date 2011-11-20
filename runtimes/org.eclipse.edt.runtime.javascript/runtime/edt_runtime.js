@@ -463,7 +463,7 @@ egl.defineClass( "eglx.lang", "EString"
 	},
 	"equals" : function(pgm, str1, str2) {
 		if ((str1 == null) || (str2 == null)) {
-			throw new egl.eglx.lang.NullValueException();
+			throw egl.createNullValueException( "CRRUI2005E", [] );
 		}
 		return str1 == str2;
 	}
@@ -496,13 +496,9 @@ egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
 	end = endIndex;
 	max = str.length;
 	if (start < 1 || start > max) {
-		ex = new egl.eglx.lang.InvalidIndexException();
-		ex.index = start;
-		throw ex;
+		throw egl.createInvalidIndexException( 'CRRUI2019E', [ str, max ], start );
 	} else if (end < start || end < 1 || end > max) {
-		ex = new egl.eglx.lang.InvalidIndexException();
-		ex.index = end;
-		throw ex;
+		throw egl.createInvalidIndexException( 'CRRUI2019E', [ str, max ], end );
 	}
 	return str.substring(start-1, end);
 };
@@ -546,21 +542,21 @@ egl.eglx.lang.EString.fromAnyObject = function (x) {
 };
 egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
 	if ((str1 == null) || (str2 == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	esc = esc || "\\";
 	return egl.matches(str1, str2, esc);
 };
 egl.eglx.lang.EString.isLike = function (str1, str2, esc) {
 	if ((str1 == null) || (str2 == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	esc = esc || "\\";
 	return egl.like(str1, str2, esc);
 };
 egl.eglx.lang.EString.indexOf = function (str, pattern, start) {
 	if ((str == null) || (pattern == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	if (!start) {
 		start = 1;
@@ -569,25 +565,25 @@ egl.eglx.lang.EString.indexOf = function (str, pattern, start) {
 };
 egl.eglx.lang.EString.lastIndexOf = function (str, pattern) {
 	if ((str == null) || (pattern == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	return str.lastIndexOf(pattern) + 1;
 };
 egl.eglx.lang.EString.replaceStr = function(str, target, replacement) {
 	if ((str == null) || (target == null) || (replacement == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	return str.replace(new RegExp(target, "g"), replacement);   // TODO should we simply alias replaceStr as replace?
 };
 egl.eglx.lang.EString.charCodeAt = function (str, index) {
 	if ((str == null) || (index == null)) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	return egl.eglx.lang.EString.substring(str, index, index).charCodeAt();
 };
 egl.eglx.lang.EString.trim = function (str) {
 	if (str == null) {
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	return str.clipLeading().clipTrailing();
 };
@@ -715,19 +711,19 @@ egl.eglx.lang.EDate.notEquals = function (x, y) {
 
 egl.eglx.lang.EDate.addDays = function (x, y) {
 	if ((x === null) || (y === null))
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	else
 		return egl.convertIntToDate(egl.convertDateToInt(x) + y);
 };
 egl.eglx.lang.EDate.daysDifferent = function (x, y) {
 	if ((x === null) || (y === null))
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	else
 		return egl.convertDateToInt(x) - egl.convertDateToInt(y);
 };
 egl.eglx.lang.EDate.compareTo = function (x, y) {
 	if ((x === null) || (y === null))
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	else {
 		var diff = egl.convertDateToInt(x) - egl.convertDateToInt(y);
 		return diff == 0 ? 0 : diff > 0 ? 1 : -1;
@@ -735,7 +731,7 @@ egl.eglx.lang.EDate.compareTo = function (x, y) {
 };
 egl.eglx.lang.EDate.extend = function(/*extension*/ date, /*optional mask*/pattern ) {
 	if (date === null)
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	else
 		return egl.dateTime.extend( "date", date, pattern );
 };
@@ -917,7 +913,7 @@ egl.eglx.lang.ETimestamp.notEquals = function (x, y) {
 };
 egl.eglx.lang.ETimestamp.compareTo = function (x, y) {   
 	if ((x === null) || (y === null))
-		throw new egl.eglx.lang.NullValueException();
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	else {
 		return x > y ? 1 : x < y ? -1 : 0;
 	}
