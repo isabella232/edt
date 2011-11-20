@@ -17,12 +17,9 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
@@ -36,23 +33,22 @@ public class ArrayLiteralTemplate extends JavaScriptTemplate {
 
 	private void genExpr(ArrayLiteral expr, Context ctx, TabbedWriter out, Type arg) {
 		out.print("[");
-		if(arg != null && ((ArrayType)arg).getElementType() instanceof EGLClass &&
-				((ArrayType)arg).getElementType().getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")){			
-			List<Expression> objs = expr.getEntries();
-			for(int i=0; i< objs.size(); i++ ){
-				Expression obj = objs.get(i);
-				if (obj.getType() != TypeUtils.Type_ANY) {
-					BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
-					boxingExpr.setExpr(obj);
-					ctx.invoke(genExpression, boxingExpr, ctx, out);					
+		if(arg != null){
+			List<Expression> entries = expr.getEntries();
+			Type elementType = ((ArrayType)arg).getElementType();
+			boolean firstElement = true;
+			for ( Expression element : entries ){
+				if ( firstElement ){
+					firstElement = false;
 				}
-				if(i < objs.size() - 1){
-					out.print(", ");
-				}				
-			}			
+				else{
+					out.print( ", " );
+				}
+				ctx.invoke( genExpression, IRUtils.makeExprCompatibleToType( element, elementType ), ctx, out );
+			}
 		}else{
 			ctx.foreach(expr.getEntries(), ',', genExpression, ctx, out);	
-		}			
+		}		
 		out.print("]");
 		if (!expr.getEntries().isEmpty()) {
 			out.print(".setType(");
