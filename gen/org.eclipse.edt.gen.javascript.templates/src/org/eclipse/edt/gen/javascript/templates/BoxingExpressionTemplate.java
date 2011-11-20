@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Type;
 
 public class BoxingExpressionTemplate extends JavaScriptTemplate {
@@ -26,6 +28,9 @@ public class BoxingExpressionTemplate extends JavaScriptTemplate {
 		out.print(eze$$value);
 		out.print(" : ");
 		ctx.invoke(genExpression, expr.getExpr(), ctx, out);
+		if(expr.getExpr().getType() instanceof Record && Boolean.TRUE.equals(ctx.getAttribute( expr, Constants.SubKey_recordToAnyAssignment))){
+			out.print(".eze$$clone()");
+		}
 		out.print(", ");
 		out.print(eze$$signature);
 		out.print(" : ");

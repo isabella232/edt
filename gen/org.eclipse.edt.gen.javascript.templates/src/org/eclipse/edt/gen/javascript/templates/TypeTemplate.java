@@ -189,7 +189,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());
+			//TODO add this to pass EUnit/ObjectInitialization001, need to reconsider later
+			ctx.putAttribute( arg2, Constants.SubKey_recordToAnyAssignment, true);
+			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());			
+			ctx.putAttribute(arg2, Constants.SubKey_recordToAnyAssignment, false);
 		}
 	}
 	
