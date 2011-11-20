@@ -2857,6 +2857,21 @@ Array.prototype.indexOfElement = function Array_indexOfElement(val) {
 	}
 };
 
+Array.prototype.ezekw$$sort = function Array_sort(func) {
+	var isAny = false;
+	for(var i=0; i < this.length; i++){
+		var val = this[i];
+		if ( val == null || (typeof val === "object" && "eze$$value" in val && "eze$$signature" in val) ){
+			isAny = true;
+		}else{
+			this[i] = egl.boxAny(val);
+		}
+	}
+	this.sort(func);
+	for(var i=0; !isAny && i < this.length; i++){		
+		this[i] = egl.unboxAny(this[i]);
+	}
+};
 
 egl.initialValueForType = function ( elementType ) 
 {
