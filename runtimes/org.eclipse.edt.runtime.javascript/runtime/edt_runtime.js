@@ -114,23 +114,23 @@ egl.defineClass( "eglx.lang", "EInt16"
 }
 );
 egl.eglx.lang.EInt16.fromEInt32 = function (x) {   
-	return egl.convertNumberToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertNumberToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.fromEDecimal = function (x) {   
-	return egl.convertDecimalToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.fromENumber = function (x, nullable) {  
-	nullable = nullable || false;  // TODO nullability should be generated
-	return egl.convertAnyToSmallint(x, nullable);
+	nullable = nullable || false; 
+	return egl.convertAnyToSmallint(x, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
-	return egl.convertFloatToSmallint(x);
+	return egl.convertFloatToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.fromEString = function (x) {
-	return egl.convertStringToSmallint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertStringToSmallint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt16.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallint(x, nullable);    
+	return egl.convertAnyToSmallint(x, nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt16.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -163,29 +163,29 @@ egl.defineClass( "eglx.lang", "EInt32"
 );
 egl.eglx.lang.EInt32.ZERO = 0;
 egl.eglx.lang.EInt32.fromEDecimal = function (x) {
-	return egl.convertDecimalToInt(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromENumber = function (x, nullable) {  
 	nullable = nullable || false;  // TODO nullability should be generated
-	return egl.convertAnyToInt(x, nullable);
+	return egl.convertAnyToInt(x, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromAnyObject = function (x) {
-	return egl.convertAnyToInt(x,false);  //TODO sbg avoid hardcoding the boolean flag
+	return egl.convertAnyToInt(x,false, egl.createNumericOverflowException);  //TODO sbg avoid hardcoding the boolean flag
 };
 egl.eglx.lang.EInt32.fromEInt64 = function (x) {
-	return egl.convertDecimalToInt(x);
+	return egl.convertDecimalToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromEFloat32 = function (x) {
-	return egl.convertFloatToInt(x);
+	return egl.convertFloatToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromEFloat64 = function (x) {
-	return egl.convertFloatToInt(x);
+	return egl.convertFloatToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.fromEString = function (x) {
-	return egl.convertStringToInt(x);
+	return egl.convertStringToInt(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToInt(x, nullable);   
+	return egl.convertAnyToInt(x, nullable, egl.createNumericOverflowException);   
 };
 egl.eglx.lang.EInt32.pow = function (x, exp) {
 	return egl.eglx.lang.EDecimal.fromEInt16(x).pow(egl.eglx.lang.EDecimal.fromEInt16(exp), egl.javascript.BigDecimal.prototype.eglMC); 
@@ -218,30 +218,30 @@ egl.defineClass( "eglx.lang", "EFloat32"
 );
 egl.eglx.lang.EFloat32.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
 egl.eglx.lang.EFloat32.fromEFloat64 = function (x) {
-	return egl.convertFloatToSmallfloat(x,"TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertFloatToSmallfloat(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.fromEInt32  = function (x) {
-	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
+	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()), egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.fromEInt64  = function (x) {
-	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()));
+	return egl.convertFloatToSmallfloat(Number( (new egl.javascript.BigDecimal(x)).toString()), egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
-	return egl.convertFloatToSmallfloat(Number( x.toString()));
+	return egl.convertFloatToSmallfloat(Number( x.toString()), egl.createNumericOverflowException);
 
 };
 egl.eglx.lang.EFloat32.fromEString = function (x){
-	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.ezeCast = function (x, nullable) {
-	return egl.convertAnyToSmallfloat(x, nullable);    
+	return egl.convertAnyToSmallfloat(x, nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat32.pow = function (x, exp) {
 	return Math.pow(x, exp); 
 };
 egl.eglx.lang.EFloat32.fromENumber = function (x, nullable) {
 	nullable = nullable || false;  // TODO nullability should be generated
-	return egl.convertFloatToSmallfloat(egl.convertAnyToFloat(x, nullable));
+	return egl.convertFloatToSmallfloat(egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException), egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat32.asNumber= function (x) {
 	return egl.boxAny(x, "f;");
@@ -262,48 +262,48 @@ egl.defineClass( "eglx.lang", "EDecimal"
 egl.eglx.lang.EDecimal.ZERO = egl.javascript.BigDecimal.prototype.ZERO;
 egl.eglx.lang.EDecimal.fromEInt16 = function (x, decimals, limit) {   
 	if (limit)
-		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
 egl.eglx.lang.EDecimal.fromEInt32 = function (x, decimals, limit) {   
 	if (limit)
-		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
 egl.eglx.lang.EDecimal.fromEInt64 = function (x, decimals, limit) {   
 	if (limit)
-		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 	else
 		return new egl.javascript.BigDecimal(x);
 };
 egl.eglx.lang.EDecimal.fromEDecimal = function (x, decimals, limit) { 
-	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EDecimal.fromEString = function (x, decimals, limit) { 
 	if (limit)
-		return egl.convertStringToDecimal(x, decimals, limit);
+		return egl.convertStringToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
 		return egl.convertStringToDecimal(x, egl.eglx.lang.EString.textLen(x), decimals);
 };
 egl.eglx.lang.EDecimal.fromENumber = function (x, decimals, limit) {
 	if (limit)
-		return egl.convertAnyToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertAnyToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+		return egl.convertAnyToDecimal(x, -1, decimals, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.fromEFloat32 = function (x, decimals, limit) {
 	if (limit)
-		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertFloatToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, -1, decimals, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EDecimal.fromEFloat64 = function (x, decimals, limit) {
 	if (limit)
-		return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 	else
-		return egl.convertFloatToDecimal(x, -1, decimals, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertFloatToDecimal(x, -1, decimals, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EDecimal.equals = function (x, y) {
 	if(!x && !y){
@@ -318,9 +318,9 @@ egl.eglx.lang.EDecimal.notEquals = function(x, y) {
 };
 egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
-		return egl.convertAnyToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertAnyToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, 0, decimals, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/); 
+		return egl.convertAnyToDecimal(x, 0, decimals, nullable, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
 	return egl.boxAny(x,sig);
@@ -347,20 +347,20 @@ egl.eglx.lang.EInt64.fromEInt32 = function (x) {
 	return new egl.javascript.BigDecimal(x);
 };
 egl.eglx.lang.EInt64.fromEString = function (x) {  
-	return egl.convertStringToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertStringToBigint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt64.fromEDecimal = function (x) {  
-	return egl.convertDecimalToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToBigint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt64.fromEFloat64 = function (x) {  
-	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertFloatToBigint(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EInt64.fromENumber = function (x, nullable) {  
 	nullable = nullable || false;  // TODO nullability should be generated
 	return egl.convertAnyToBigint(x, nullable);
 };
 egl.eglx.lang.EInt64.fromEFloat32 = function (x) {  
-	return egl.convertFloatToBigint(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertFloatToBigint(x, egl.createNumericOverflowException);
 }; 
 egl.eglx.lang.EInt64.equals = function (x, y) {
 	if(!x && !y){
@@ -374,7 +374,7 @@ egl.eglx.lang.EInt64.notEquals = function(x, y) {
 	return !egl.eglx.lang.EInt64.equals(x, y);
 };
 egl.eglx.lang.EInt64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToBigint(x, nullable);    
+	return egl.convertAnyToBigint(x, nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EInt64.pow = function (x, exp) {
 	return x.pow(exp); 
@@ -406,14 +406,14 @@ egl.eglx.lang.EFloat64.fromEDecimal = function (x) {
 	return Number(x.toString()); 
 };
 egl.eglx.lang.EFloat64.fromEString = function (x){
-	return egl.convertStringToFloat(x, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat64.fromENumber = function (x, nullable) {
 	nullable = nullable || false;  // TODO nullability should be generated
-	return egl.convertAnyToFloat(x, nullable);
+	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);
 };
 egl.eglx.lang.EFloat64.ezeCast = function (x, nullable) {
-	return egl.convertAnyToFloat(x, nullable);    
+	return egl.convertAnyToFloat(x, nullable, egl.createNumericOverflowException);    
 };
 egl.eglx.lang.EFloat64.pow = function (x, exp) {
 	return Math.pow(x, exp); 
@@ -1009,20 +1009,20 @@ egl.defineClass( "eglx.lang", "ENumber",
 }
 );
 egl.eglx.lang.ENumber.fromEInt16 = function (x, decimals, limit) {   
-		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.fromEInt32 = function (x, decimals, limit) {   
-		return egl.convertIntegerToDecimal(x, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.fromEDecimal = function (x, decimals, limit) { 
-	return egl.convertDecimalToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
 egl.eglx.lang.ENumber.fromEFloat64 = function (x, decimals, limit) { 
-	return egl.convertFloatToDecimal(x, decimals, limit, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
 
 egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
-	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, "TODO: make an exception for this"/*egl.createRuntimeException*/);
+	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
 };
 
 
