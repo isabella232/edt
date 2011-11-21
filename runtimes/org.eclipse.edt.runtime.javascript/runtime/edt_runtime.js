@@ -74,6 +74,9 @@ egl.eglx.lang.EAny.fromEAny = function(obj, sig){
 	return egl.boxAny(obj,sig);
 };
 egl.eglx.lang.EAny.equals = function(obj1, obj2){
+	if ( obj1.eze$$value != null && obj1.eze$$value.equals ) {
+		return obj1.eze$$value.equals( obj2.eze$$value );
+	}
 	return (obj1.eze$$value == obj2.eze$$value);
 };
 
@@ -320,7 +323,7 @@ egl.eglx.lang.EDecimal.ezeCast = function (x, nullable, decimals, limit) {
 	if (limit)
 		return egl.convertAnyToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
 	else
-		return egl.convertAnyToDecimal(x, 0, decimals, nullable, egl.createNumericOverflowException); 
+		return egl.convertAnyToDecimal(x, -1, decimals, nullable, egl.createNumericOverflowException); 
 };
 egl.eglx.lang.EDecimal.asNumber= function (x, sig) {
 	return egl.boxAny(x,sig);

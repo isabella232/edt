@@ -1114,7 +1114,7 @@ egl.convertFloatToDecimal = function( x, decimals, limit, creatx )
 
 egl.convertDecimalToDecimal = function( x, decimals, limit, creatx )
 {
-	if ( x.scale() > decimals )
+	if ( x.scale() > decimals && decimals >= 0)
 	{
 		x = x.setScale( decimals, egl.javascript.BigDecimal.prototype.ROUND_DOWN );
 	}
@@ -2578,6 +2578,7 @@ egl.convertAnyToDecimal = function( any, decimals, limit, nullable, creatx )
 			case 'f':
 				return egl.convertFloatToDecimal(any.eze$$value,decimals,limit,creatx);
 
+			case 'T':
 			case 'O':
 				return egl.convertAnyToDecimal(any.eze$$value,decimals,limit,nullable,creatx);
 

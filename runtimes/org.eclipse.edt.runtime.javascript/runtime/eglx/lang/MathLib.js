@@ -219,6 +219,8 @@ egl.eglx.lang.MathLib["precision"] = function(x) {
 
 egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
 	var rounder;
+	var isBigDecimal = ( v instanceof egl.javascript.BigDecimal );
+
 	if (e > 0) {
 		rounder = 5.0 * Math.pow(10, e - 1);
 	} else {
@@ -241,7 +243,7 @@ egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
 		v = v / Math.pow(10, -e);
 	}
 
-	return v;
+	return isBigDecimal ? new egl.javascript.BigDecimal( String( v ) ) : v;
 };
 
 egl.eglx.lang.MathLib["sin"] = function(/*float*/x) {
