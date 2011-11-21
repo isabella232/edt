@@ -25,6 +25,7 @@
          <topic label="EGL numeric types" href="topics/cedt00021.html"/>
       </topic>
       <topic label="Statements list" href="topics/redt00030.html">
+         <topic label="Syntax diagram for EGL statements" href="topics/cedt00040.html"/>
          <topic label="Assignment statement" href="topics/redt00004.html"/>
          <topic label="Call statement" href="topics/redt00003.html"/>
          <topic label="Case statement" href="topics/redt00014.html"/>
@@ -32,12 +33,11 @@
          <topic label="Exit statement" href="topics/redt00019.html"/>
          <topic label="For statement" href="topics/redt00017.html"/>
          <topic label="If statement" href="topics/redt00015.html"/>
-         <topic label="Label statement" href="topics/redt00009.html"/>
          <topic label="Move statement" href="topics/redt00006.html"/>
          <topic label="Return statement" href="topics/redt00007.html"/>
          <topic label="Throw statement" href="topics/redt00011.html"/>
          <topic label="Transfer statement" href="topics/redt00010.html"/>
-         <topic label="Try blocks" href="topics/redt00013.html"/>
+         <topic label="Try statement" href="topics/redt00013.html"/>
          <topic label="Use statement" href="topics/redt00005.html"/>
          <topic label="While statement" href="topics/redt00016.html"/>
       </topic>
@@ -239,6 +239,11 @@
          <topic label="XMLStructureKind enumeration" href="topics/redt00093.html"/>
          <topic label="XMLType annotation" href="topics/redt00094.html"/>
          <topic label="XMLValue annotation" href="topics/redt00261.html"/>
+      </topic>
+      <topic label="org.eclipse.edt.eunit.runtime package" href="topics/redt00273.html">
+         <topic label="LogResult external type" href="topics/redt00275.html"/>
+         <topic label="TestListManager library" href="topics/redt00276.html"/>
+         <topic label="MultiStatus handler" href="topics/redt00277.html"/>
       </topic>
       <topic label="org.eclipse.edt.rui.widgets package" href="topics/redt00031.html">
          <topic label="BidiTextArea widget" href="topics/redt00121.html"/>

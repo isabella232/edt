@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="While statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="DC.subject" content="EGL statements, while, while EGL statement"></meta>
+<meta name="keywords" content="EGL statements, while, while EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +23,91 @@
 <h1 class="topictitle1">While statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div><div><span> The EGL  <span class="synph"><span class="kwd">while</span></span> statement
+runs a set of statements in a loop. Every iteration of the loop depends
+on whether a logical expression resolves to true.</span>
+</div>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00016__sql_syntax"><a name="redt00016__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00016__syntax_figure"><a name="redt00016__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_while.gif" alt="Syntax diagram for the for statement"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">label</var></dt>
+
+<dd>A label that a <span class="synph"><span class="kwd">continue</span></span> or <span class="synph"><span class="kwd">exit</span></span> statement
+can reference.</dd>
+
+
+<dt class="dlterm"><var class="varname">logicalExpression</var></dt>
+
+<dd>An expression that resolves to true or false.</dd>
+
+
+<dt class="dlterm"><var class="varname">statement</var></dt>
+
+<dd>An EGL statement.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00016__example"><a name="redt00016__example"><!-- --></a><div class="p">After the following code runs, the value
+of <em>sum</em> is 30:<pre class="codeblock">inputList int[] = [2,4,6,8,10];
+sum int = 0;
+counter int = 1;
+numberInList int = inputList.getSize();
+
+while (counter &lt;= numberInList)
+   sum = inputList[counter] + sum;
+   counter = counter + 1;
+end</pre>
+</div>
+<anchor id="example_more"></anchor></div>
+
+<div class="section" id="redt00016__compat"><a name="redt00016__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00016__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00016__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d10249e110">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d10249e113">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00016__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d10249e110 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10249e113 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00016__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d10249e110 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10249e113 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

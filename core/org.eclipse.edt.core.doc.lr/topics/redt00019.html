@@ -51,7 +51,7 @@ causes processing to continue with the referenced statement.</p>
 <dt class="dlterm"><span class="keyword">program</span></dt>
 
 <dd>Use of the <strong>program</strong> keyword indicates that the exit statement
-terminates the program or service.</dd>
+terminates the program. This keyword is available only in a program.</dd>
 
 
 <dt class="dlterm"><var class="varname">returnValue</var></dt>
@@ -63,7 +63,8 @@ integer.</dd>
 <dt class="dlterm"><span class="keyword">rununit</span></dt>
 
 <dd>Use of the <strong>rununit</strong> keyword indicates that the exit statement
-terminates the run unit.</dd>
+terminates the run unit. This keyword is available in a program or
+handler and not in a service.</dd>
 
 
 <dt class="dlterm"><var class="varname">statementType</var></dt>
@@ -106,9 +107,9 @@ end
 <div class="tablenoborder"><a name="redt00019__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00019__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d9211e203">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d11565e203">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d9211e206">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d11565e206">Issue</th>
 
 </tr>
 
@@ -117,17 +118,17 @@ end
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00019__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d9211e203 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11565e203 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d9211e206 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11565e206 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00019__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d9211e203 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11565e203 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d9211e206 ">Support is provided only for following variations
+<td class="cellrowborder" valign="top" width="50%" headers="d11565e206 ">Support is provided only for following variations
 of the <span class="synph"><span class="kwd">exit</span></span> statement: <strong>exit case</strong>, <strong>exit
 for</strong>, <strong>exit if</strong>, and <strong>exit while</strong>. <p class="compat_javascript_more"></p>
 </td>

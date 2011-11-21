@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="LogResult external type"></meta>
+<meta name="abstract" content="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both."></meta>
+<meta name="description" content="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both."></meta>
+<meta name="DC.subject" content="EGL external types, ConstantsLib, ConstantsLib EGL external type, overview"></meta>
+<meta name="keywords" content="EGL external types, ConstantsLib, ConstantsLib EGL external type, overview"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00273.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00275"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>LogResult external type</title>
+</head>
+<body id="redt00275"><a name="redt00275"><!-- --></a>
+
+
+<h1 class="topictitle1">LogResult external type</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">LogResult</span></span> contains
+functions that are invoked by the EUnit test framework, by custom
+test cases that run in the EUnit test framework, or by both.</p>
+
+<a name="redt00275__main"><!-- --></a><dl id="redt00275__main">
+<dt class="dlterm"><a name="redt00275__package"><!-- --></a>Package</dt>
+
+<dd><p>org.eclipse.edt.eunit.runtime</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00275__use"><!-- --></a>Example use</dt>
+
+<dd><anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00275__detail"><!-- --></a>Type detail</dt>
+
+<dd><pre class="codeblock">Library LogResult
+
+   private outR Log;
+   private s Status;	
+
+   private const ACTUALHEADER string = "Actual value = ";
+   private const EXPECTEDHEADER string = "Expected value = ";
+   private const ACTUALSIZEHEADER string = "Actual array size = ";
+   private const EXPECTEDSIZEHEADER string = "Exepcted array size = ";
+
+   /* remove all messages in the log to this point, 
+    * but leave the result data unaffected.
+   function clearResults()
+      outR.msg = "";
+      s.code = -1;
+      s.reason = "";
+   end
+	
+   // used by the EUnit framework; do not use.
+   function getStatus() returns (Status)
+      return (s);
+   end
+	
+   // used by the EUnit framework; do not use.
+   function getLog() returns(Log)
+      return (outR);
+   end
+
+   /**
+    * write a new line to the log
+    */
+   function logStdOut(logmsg String in)
+      outR.msg += ConstantsLib.NEWLINE;
+      outR.msg += logmsg;
+   end
+
+   /**
+     * set status as passed, specifying text that defaults to "OK"
+     */
+   function passed(str String in)
+      s.code = ConstantsLib.SPASSED;
+
+      if(str == null || str == "")
+         str = "OK";
+      end
+      s.reason = str;
+   end
+
+   /**
+     * set status as failed, specifying text that is appended to "Failed"
+     */
+   function failed(str String in)
+      s.code = ConstantsLib.SFAILED;
+      str = "FAILED - " + str;
+      s.reason = str;
+   end
+	
+   // set this to specify a different category of mistake; 
+   // the input string is logged, and the test case ends with an "error"
+   // rather than failure.
+   function error(str String in)
+      s.code = ConstantsLib.SERROR;
+      str = "ERROR - " + str;
+      s.reason = str;
+   end
+
+   // indicates that the test case was skipped
+   function skipped(str String in)
+      s.code = ConstantsLib.SNOT_RUN;
+      str = "SKIPPED - " + str;
+      s.reason = str;
+   end
+
+   private function assertTrueException(
+                             failedReason String in, 
+                             testCondition boolean in, 
+                             throwsFailException boolean in)
+
+      if(testCondition)
+         passed("OK");
+      else
+         failed(failedReason);
+
+         if(throwsFailException)
+            throw new AssertionFailedException{message = s.reason};
+         end
+      end
+   end	
+
+   /**
+     * assertTrue: a particularly useful function that tests a condition 
+     * and throws AssertionFailedException when the condition is false.
+     *
+     * @param failedReason String - if assertion failed, 
+     *                              the failure reason message
+     * 
+     * @param testCondition boolean in - in parameter, assert 
+     *                                   if testCondition is true
+     *
+     * @throws AssertionFailedException when testCondition is false
+     **/
+   function assertTrue(failedReason String in, testCondition boolean in)
+      assertTrueException(failedReason, testCondition, true);
+   end	
+
+   /**
+     * @description method to pass in empty string for the failed reason, 
+                    so the report will only state "FAILED"
+     * @throws AssertionFailedException when testCondition is false
+    **/
+   function assertTrue1(testCondition boolean in)
+      assertTrue("", testCondition);
+   end
+
+   /**
+     * @description - message will be prepended 
+                      to the standard expected and actual messages
+    **/
+   function assertBigIntEqual(message String in, 
+                              expected bigint in, 
+                              actual bigint in)
+      isEqual boolean = (expected == actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+
+   function assertBigIntEqual1(expected bigint in, actual bigint in)
+      assertBigIntEqual("", expected, actual);
+   end
+
+   function assertStringEqual(message String in, 
+                              expected String in, 
+                              actual String in)
+      isEqual boolean = (expected == actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+
+   function assertStringEqual1(expected String in, actual String in)
+      assertStringEqual("", expected, actual);
+   end
+
+   function assertStringArrayEqual(message String in, 
+                                   expected String[] in, 
+                                   actual String[] in)
+
+      isArrayEqual boolean = true;
+      expectedSize int = expected.getSize();
+      actualSize int = actual.getSize();
+      failedReason String;
+
+      if(expectedSize == actualSize)
+         failedHeader String = "Array element No.[";
+         expectedValues String = EXPECTEDHEADER + "[";
+         actualValues String = ACTUALHEADER + "[";
+
+         for(i int from 1 to expectedSize)
+
+            if(expected[i] != actual[i])
+               if(!isArrayEqual)
+                  failedHeader += ", ";
+               end
+
+               isArrayEqual = false;
+               failedHeader += i as String;
+            end
+
+            expectedValues += expected[i];
+            actualValues += actual[i];
+
+            if(i != expectedSize)
+               expectedValues += ", ";
+               actualValues += ", ";
+            end
+         end // for
+
+         failedHeader += "] differs; ";
+         expectedValues += "]; ";
+         actualValues += "] ";
+         failedReason = failedHeader + expectedValues + actualValues;
+      else
+         isArrayEqual = false;
+         failedReason = "Failed: " + EXPECTEDSIZEHEADER + "'" + expectedSize + 
+                        "' " + ACTUALSIZEHEADER + "'" + actualSize + "' ";
+      end
+
+      if(message != null &amp;&amp; message != "");
+         failedReason = message + " - " + failedReason;
+      end
+      
+      assertTrue(failedReason, isArrayEqual);
+   end
+
+   function assertStringArrayEqual1(expected String[] in, actual String[] in)
+      assertStringArrayEqual("", expected, actual);
+   end
+
+   function assertDateEqual(message String in,
+                            expected Date in,
+                            actual Date in)
+      isEqual boolean = (expected == actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+
+   function assertDateEqual1(expected Date in, actual Date in)
+      assertDateEqual("", expected, actual);
+   end
+
+   function assertTimestampEqual(message String in, 
+                                 expected Timestamp in, 
+                                 actual Timestamp in)
+      isEqual boolean = (expected == actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+	
+   function assertTimestampEqual1(expected Timestamp in, actual Timestamp in)
+      assertTimestampEqual("", expected, actual);
+   end
+
+   function assertDecimalEqual(message String in, 
+                               expected decimal in, 
+                               actual decimal in)
+      isEqual boolean = (expected == actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+
+   function assertDecimalEqual1(expected decimal in, actual decimal in)
+      assertDecimalEqual("", expected, actual);
+   end
+
+   function assertFloatEqual(message String in, 
+                             expected float in, 
+                             actual float in)
+
+      isEqual boolean = isFloatEqual(expected, actual);
+      expectAssertTrue(message, expected, actual, isEqual);
+   end
+
+   function assertFloatEqual1(expected float in, actual float in)
+      assertFloatEqual("", expected, actual);
+   end
+
+   //private helper methods
+   private function isFloatEqual(expected float in, 
+                                 actual float in) returns (boolean)
+
+      normalExpected, normalActual, delta float;
+      mantissaExpected, mantissaActual int;
+      signExpected, signActual String;
+      deltaLimit float = 1E-14;
+      normalExpected = normalFloat(expected, mantissaExpected, signExpected);
+      normalActual = normalFloat(actual, mantissaActual, signActual);
+      delta = normalExpected - normalActual;
+      delta = MathLib.abs(delta);
+
+      isEqual boolean = (signExpected == signActual) &amp;&amp;
+                        (mantissaExpected == mantissaActual) &amp;&amp;
+                        (delta &lt; deltaLimit);
+
+      return(isEqual);	
+   end	
+
+   private function expectAssertTrue(message String in, 
+                                     expected any in, 
+                                     actual any in, isEqual boolean in)
+      failedReason String = buildFailedReason(message, expected, actual);
+      assertTrue(failedReason, isEqual);
+   end
+
+   private function buildFailedReason(message String in, 
+                                      expected any in, actual any in) 
+                                      returns (String)
+
+      failedReason String = expect(expected, actual);
+
+      if(message != null &amp;&amp; message != "")
+         failedReason = message + " - " + failedReason;
+      end
+      return (failedReason);
+   end
+
+   private function expect(expected any in, actual any in) returns (String)
+      standardMsg string = "Failed: " + EXPECTEDHEADER + 
+                           "'" + expected + "' " + 
+                           ACTUALHEADER + "'" + actual + "' ";
+      return (standardMsg);
+   end
+
+   private function normalFloat(afloat float in, 
+                                mantissa int out, sign string out) 
+                                returns(float)
+      mantissa = 0;
+
+      if(aFloat &gt;= 0)
+         sign = "+";
+      else
+         sign = "-";
+         aFloat = aFloat * -1;
+      end
+
+      if(aFloat != null &amp;&amp; aFloat != 0)
+
+         while(aFloat &lt; 1)
+            aFloat = aFloat * 10;
+            mantissa = mantissa - 1;
+         end
+
+         while(aFloat &gt;= 10)
+            aFloat = aFloat / 10;
+            mantissa = mantissa + 1;
+         end
+      end
+      return(aFloat);
+   end
+end</pre>
+<anchor id="detail_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00275__comments"><!-- --></a>Comments</dt>
+
+<dd><p>For a description of how to use the framework, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html" title="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package.">Developing and running test cases with EUnit</a>.</p>
+<anchor id="comments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00275__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00275__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00275__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d95200e100">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d95200e103">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00275__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d95200e100 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d95200e103 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00275__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d95200e100 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d95200e103 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

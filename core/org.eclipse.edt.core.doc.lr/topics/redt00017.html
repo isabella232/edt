@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="For statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="DC.subject" content="EGL statements, for, for EGL statement"></meta>
+<meta name="keywords" content="EGL statements, for, for EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +23,127 @@
 <h1 class="topictitle1">For statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div><div><span> The EGL <span class="synph"><span class="kwd">for</span></span> statement
+runs a set of statements in a loop that iterates until a counter reaches
+a specified value. You provide an initial and limiting value for the
+counter, as well as a value for increasing or decreasing the counter
+value after each iteration.</span>
+</div>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00017__sql_syntax"><a name="redt00017__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00017__syntax_figure"><a name="redt00017__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_for.gif" alt="Syntax diagram for the for statement"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">counter</var></dt>
+
+<dd>A integer value for the counter. EGL statements embedded in the <span class="synph"><span class="kwd">for</span></span> statement
+can change the value of <span class="synph"><span class="var">counter</span></span>.<p>You can
+declare a variable for <span class="synph"><span class="var">counter</span></span> in the <span class="synph"><span class="kwd">for</span></span> statement,
+in which case the scope of the variable is the <span class="synph"><span class="kwd">for</span></span> statement.
+A later example demonstrates this usage.</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">delta</var></dt>
+
+<dd>The integer value that EGL uses to change <span class="synph"><span class="var">counter</span></span> at
+the end of each iteration and before testing the <span class="synph"><span class="var">counter</span></span> value.
+The default is 1.<p>EGL statements embedded in the <span class="synph"><span class="kwd">for</span></span> statement
+can change the value of <span class="synph"><span class="var">delta</span></span>.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="keyword">decrement</span></dt>
+
+<dd>The keyword indicates that the value of <span class="synph"><span class="var">counter</span></span> is
+reduced by the value of <span class="synph"><span class="var">delta</span></span> after each
+iteration. By default, EGL increases the value of <span class="synph"><span class="var">counter</span></span> instead.</dd>
+
+
+<dt class="dlterm"><var class="varname">finish</var></dt>
+
+<dd>The final <span class="synph"><span class="var">counter</span></span> value for which a
+loop iteration occurs. The value is of an integer type.<p>EGL statements
+within the <span class="synph"><span class="kwd">for</span></span> statement can change the
+value of <span class="synph"><span class="var">finish</span></span>.</p>
+</dd>
+
+
+<dt class="dlterm"><var class="varname">label</var></dt>
+
+<dd>A label that a <span class="synph"><span class="kwd">continue</span></span> or <span class="synph"><span class="kwd">exit</span></span> statement
+can reference.</dd>
+
+
+<dt class="dlterm"><var class="varname">start</var></dt>
+
+<dd>The initial value of <span class="synph"><span class="var">counter</span></span>. The value
+is of an integer type. The default value is 1.</dd>
+
+
+<dt class="dlterm"><var class="varname">statement</var></dt>
+
+<dd>An EGL statement.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00017__example"><a name="redt00017__example"><!-- --></a><div class="p">After the following code runs, the value
+of <em>sum</em> is 30:<pre class="codeblock">inputList int[] = [2,4,6,8,10];
+sum int = 0;
+numberInList int = inputList.getSize();
+
+for (i int from 1 to numberInList by 1)
+   sum = inputList[i] + sum;
+end</pre>
+</div>
+<anchor id="example_more"></anchor></div>
+
+<div class="section" id="redt00017__compat"><a name="redt00017__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00017__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00017__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d10590e216">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d10590e219">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00017__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d10590e216 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10590e219 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00017__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d10590e216 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d10590e219 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

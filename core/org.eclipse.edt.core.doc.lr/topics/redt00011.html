@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Throw statement"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="abstract" content="The throw statement issues a customized exception."></meta>
+<meta name="description" content="The throw statement issues a customized exception."></meta>
+<meta name="DC.subject" content="EGL statements, throw, throw EGL statement"></meta>
+<meta name="keywords" content="EGL statements, throw, throw EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,125 @@
 <h1 class="topictitle1">Throw statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
 
-<p>Here...</p>
+<div><p>The <span class="synph"><span class="kwd">throw</span></span> statement issues a
+customized exception.</p>
+
+<p>For a description of exception handling in general, see “Try statement.”</p>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00011__sql_syntax"><a name="redt00011__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00011__syntax_figure"><a name="redt00011__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_throw.gif" alt="Syntax diagram for the throw statement"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">exceptionExpression</var></dt>
+
+<dd>A variable of a Record type that was defined with the Exception
+stereotype. You can define the variable by referencing a Record type
+that you create or by referencing a Record type already in use.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00011__example"><a name="redt00011__example"><!-- --></a><div class="p">Consider the following, customized Record
+type:<pre class="codeblock">Record CustomerException type Exception
+   customerNumber INT;
+end</pre>
+</div>
+<div class="p">The Record type includes the following fields,
+which are characteristic of all exceptions:<dl>
+<dt class="dlterm">message</dt>
+
+<dd>A string that describes the exception.</dd>
+
+
+<dt class="dlterm">messageID</dt>
+
+<dd>A string that contains an ID.</dd>
+
+</dl>
+</div>
+<div class="p">The following code throws the exception:<pre class="codeblock">try
+   if (..)
+      throw new CustomerException {
+         message = "Illegal customer number",
+         messageID = "Custom0123",
+         customerNumber = currentNumber };
+   else 
+      ..
+   end
+
+onException(except CustomerException)
+   // handle the exception
+
+onException (except AnyException)
+   // handle other exceptions
+end
+</pre>
+</div>
+<div class="p">Here is code for which the exception type is already
+in use:<pre class="codeblock">nullEx NullValueException;
+
+try
+   if (..)
+      throw nullEx;
+   else
+     ..
+   end
+
+onException(exception NullValueException)
+   // handle the exception
+
+onException (except AnyException)
+   // handle other exceptions
+end
+</pre>
+</div>
+<anchor id="example_more"></anchor></div>
+
+<div class="section" id="redt00011__compat"><a name="redt00011__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00011__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00011__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d8464e108">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d8464e111">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00011__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d8464e108 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8464e111 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00011__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d8464e108 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8464e111 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+
+<anchor id="related_links"></anchor>
 
 </body>
 </html>

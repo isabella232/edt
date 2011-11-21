@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Try blocks"></meta>
-<meta name="abstract" content="The ..."></meta>
-<meta name="description" content="The ..."></meta>
+<meta name="DC.Title" content="Try statement"></meta>
+<meta name="abstract" content="A try statement embeds a set of statements and makes it possible for your code to handle an exception that occurs when those statements run."></meta>
+<meta name="description" content="A try statement embeds a set of statements and makes it possible for your code to handle an exception that occurs when those statements run."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,17 +15,150 @@
 <meta name="DC.Identifier" content="redt00013"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Try blocks</title>
+<title>Try statement</title>
 </head>
 <body id="redt00013"><a name="redt00013"><!-- --></a>
 
 
-<h1 class="topictitle1">Try blocks</h1>
+<h1 class="topictitle1">Try statement</h1>
 
 
-<div><p>The <dfn class="term"></dfn> ...</p>
+<div><p>A <strong>try</strong> statement embeds a set of statements and makes
+it possible for your code to handle an exception that occurs when
+those statements run.</p>
 
-<p>Here...</p>
+<div class="section"><h2 class="sectiontitle">Background on exception handling</h2><div class="p">If a statement
+causes an exception and is embedded in a <strong>try</strong> statement, the
+result is as follows:<ol>
+<li>Processing continues in one of the <strong>onException</strong> blocks that
+is within the <strong>try</strong> statement. Each block handles a particular
+kind of exception, and, at most, only one block runs in response to
+the exception that occurs. <p>In most cases, the first block that
+matches the exception is the block that runs. However, AnyException
+is the most general kind of exception, and any block reserved for
+AnyException is the last to be considered.</p>
+<p>If an <strong>onException</strong> block
+runs, the exception is handled, and processing continues after the <strong>try</strong> block.</p>
+</li>
+
+<li>If the exception does not match any of the <strong>onException</strong> blocks,
+the exception <dfn class="term">propagates</dfn>. The term means that the exception
+is processed as if it had occurred in the function that invoked the
+function where the exception occurred: <ul>
+<li>If the function invocation was itself in a <strong>try</strong> statement,
+processing continues as described in step 1, but in the invoking function. </li>
+
+<li>If the exception does not match any of the <strong>onException</strong> blocks
+in the invoking function, or if the function invocation was not in
+a <strong>try</strong> statement at all, the exception propagates further, to
+the function that invoked the higher-level function.</li>
+
+</ul>
+<div class="p">Propagation continues until the exception is handled or until
+no other functions are in the function stack: <ul>
+<li>If the exception is handled, processing continues at the statement
+that follows the <strong>try</strong> statement that cleared the exception.</li>
+
+<li>Alternatively, if no other functions are in the function stack,
+the run unit terminates.</li>
+
+</ul>
+</div>
+</li>
+
+</ol>
+</div>
+<p>If a statement causes an exception and is not embedded
+in a <strong>try</strong> statement, the exception propagates to the invoking
+function and potentially to yet higher-level functions, as suggested
+earlier.</p>
+<p>If none of the statements in a <strong>try</strong> statement
+cause an exception or invoke a function from which an exception is
+propagated, none of the <strong>onException</strong> blocks in the try block
+run.</p>
+<p>Use of a <strong>try</strong> block slows processing, so you might
+include only statements that are more likely than others to cause
+an exception. Examples include database-access statements and service
+invocations.</p>
+<p>You can code a <strong>throw</strong> statement to explicitly
+cause an exception, which is then processed as any other exception
+is processed. For details, see “throw statement.”</p>
+</div>
+
+<anchor id="intro_more"></anchor>
+
+<div class="section" id="redt00013__sql_syntax"><a name="redt00013__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00013__syntax_figure"><a name="redt00013__syntax_figure"><!-- --></a>
+<br></br><img src="../images/redt_core_try.gif" alt="Syntax diagram for the try statement"></img><br></br>
+</div>
+<dl>
+<dt class="dlterm"><var class="varname">exceptionRecordVariable</var></dt>
+
+<dd>A declaration of a record with the Exception stereotype. The record
+includes the <span class="synph"><span class="kwd">messageID</span></span> and <span class="synph"><span class="kwd">message</span></span> field
+and possible additional fields as well, depending on the Record type.</dd>
+
+
+<dt class="dlterm"><var class="varname">statement</var></dt>
+
+<dd>An EGL statement.</dd>
+
+</dl>
+<anchor id="syntax_more"></anchor></div>
+
+<div class="example" id="redt00013__example"><a name="redt00013__example"><!-- --></a><p>The following <strong>try</strong> statement embeds
+a statement that accesses a database, but could access several statements:</p>
+<pre class="codeblock">try
+   add myPayment to ds;
+
+   onException(ex SQLException)
+     SysLib.writeStdOut(ex.message);
+
+   onException(ex AnyException)
+     SysLib.writeStdOut(ex.message);
+end
+</pre>
+<p>The code responds to the exception by writing a message
+that is provided in the exception record. Other tasks might include
+rolling back a logical unit of work.</p>
+<anchor id="example_more"></anchor></div>
+
+<div class="section" id="redt00013__compat"><a name="redt00013__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><a name="redt00013__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00013__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d8802e178">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d8802e181">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00013__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d8802e178 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8802e181 ">No issues<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00013__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d8802e178 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d8802e181 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+</div>
 
 </div>
 

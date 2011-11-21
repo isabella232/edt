@@ -4,29 +4,147 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="copyright" content="(C) Copyright 2005"></meta>
+<meta name="DC.rights.owner" content="(C) Copyright 2005"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="XMLLib system library"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
-<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Title" content="Property"></meta>
+<meta name="abstract" content="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget."></meta>
+<meta name="description" content="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget."></meta>
+<meta name="DC.subject" content="Property EGL annotation, annotations, Property"></meta>
+<meta name="keywords" content="Property EGL annotation, annotations, Property"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00074"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>XMLLib system library</title>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Property</title>
 </head>
 <body id="redt00074"><a name="redt00074"><!-- --></a>
 
 
-<h1 class="topictitle1">XMLLib system library</h1>
+<h1 class="topictitle1">Property</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Property</span></span>  identifies
+functions that get and set the EGL field values in an external type;
+for example, in an external type that implements a widget.</p>
+
+<a name="redt00074__main"><!-- --></a><dl id="redt00074__main">
+<dt class="dlterm"><a name="redt00074__package"><!-- --></a>EGL package name</dt>
+
+<dd><p>eglx.lang</p>
+<anchor id="package_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00074__use"><!-- --></a>Example use</dt>
+
+<dd><p>If you declare an <samp class="codeph">UpperLimit</samp> field for use
+by EGL developers, you can specify the declaration as follows to indicate
+use of functions that you coded:</p>
+<pre class="codeblock">UpperLimit INT { @Property{ getMethod = getUpper, 
+                               setMethod = setUpper };</pre>
+<div class="p">You
+can avoid specifying function names if the names of the functions
+are specified with the word <em>get</em> or <em>set</em> followed by the
+variable name. For example, if the variable is <samp class="codeph">UpperLimit</samp> and
+a Rich UI Widget type includes functions named <samp class="codeph">getUpperLimit()</samp> and <samp class="codeph">setUpperLimit()</samp>,
+you only need to add the annotation as follows: <pre class="codeblock">UpperLimit INT { @Property{} };</pre>
+</div>
+<anchor id="use_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00074__annorec"><!-- --></a>Annotation detail</dt>
+
+<dd><pre class="codeblock">Record Property type Annotation{
+   targets = [ElementKind.FieldMbr]
+}
+   getMethod String;
+   setMethod String;
+end
+</pre>
+<anchor id="annorec_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00074__annofields"><!-- --></a>Annotation fields</dt>
+
+<dd><dl>
+<dt class="dlterm"><span class="synph"><span class="kwd">getMethod</span></span></dt>
+
+<dd>A reference to the get method for the specified variable. The
+method has no parameters, and its return value is of the same type
+as the field.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">setMethod</span></span></dt>
+
+<dd>A reference to the set method for the specified variable. The
+method has one parameter that has the same type as the field. By convention
+the setMethod does not have a return value, but no error condition
+results if the method returns a value.</dd>
+
+</dl>
+<anchor id="annofields_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00074__comments"><!-- --></a>Comments</dt>
+
+<dd><p>To indicate that a field is read only or write only, you can
+specify only one of the two annotation fields. If the application
+tries to read or write to an application field for which the read
+or write is not supported, an error occurs during compilation.</p>
+<p>An
+annotation that is equivalent to <span class="synph"><span class="kwd">Property</span></span> is
+available for widgets that are implemented as handlers, stereotype <samp class="codeph">RUIWidget</samp>.
+For details, see <a href="redt00262.html" title="EGLProperty identifies functions that get and set the EGL field values. The annotation is useful when you create a widget by authoring a handler, stereotype RUIWidget.">EGLProperty</a>.</p>
+<anchor id="annocomments_more"></anchor></dd>
+
+
+<dt class="dlterm"><a name="redt00074__compat"><!-- --></a>Compatibility</dt>
+
+<dd><p></p>
+
+<div class="tablenoborder"><a name="redt00074__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00074__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" valign="bottom" width="50%" id="d30983e169">Target</th>
+
+<th class="cellrowborder" valign="bottom" width="50%" id="d30983e172">Issue</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<anchor id="compat_rows_start"></anchor>
+<tr id="redt00074__compat_java">
+<td class="cellrowborder" valign="top" width="50%" headers="d30983e169 ">Java</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d30983e172 ">No issues.<anchor id="compat_java_more"></anchor></td>
+
+</tr>
+
+<anchor id="compat_rows_postjava"></anchor>
+<tr id="redt00074__compat_javascript">
+<td class="cellrowborder" valign="top" width="50%" headers="d30983e169 ">JavaScript</td>
+
+<td class="cellrowborder" valign="top" width="50%" headers="d30983e172 ">No issues.<p class="compat_javascript_more"></p>
+</td>
+
+</tr>
+
+<anchor id="compat_rows_postjavascript"></anchor>
+<anchor id="compat_rows_end"></anchor>
+</tbody>
+
+</table>
+</div>
+<anchor id="compat_more"></anchor></dd>
+
+</dl>
 
 </div>
+
+<anchor id="related_links"></anchor>
 
 
 </body>
