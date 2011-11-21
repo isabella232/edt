@@ -38,7 +38,11 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 	}
 
 	public void genName(NamedElement element, Context ctx, TabbedWriter out) {
-		out.print(JavaScriptAliaser.getAlias(element.getName()));
+		if(Boolean.TRUE.equals(ctx.getAttribute(element, Constants.SubKey_isInList)) && element.getName().equalsIgnoreCase("sort")){
+			out.print("ezekw$$sort");
+		}else{
+			out.print(JavaScriptAliaser.getAlias(element.getName()));
+		}		
 	}
 
 	public void genQualifier(NamedElement element, Context ctx, TabbedWriter out) {}
