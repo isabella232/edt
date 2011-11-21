@@ -109,10 +109,19 @@
 </entry>
 </entry>
 <entry keyword="deployment descriptors">
+<entry keyword="EGL overview">
+<topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
+</entry>
 <entry keyword="options">
+<entry keyword="Rich UI">
+<topic href="topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
+</entry>
 <entry keyword="services">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
+</entry>
+<entry keyword="targets">
+<topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
 <entry keyword="editors">
@@ -170,6 +179,14 @@
 <topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
 </entry>
 <entry keyword="generation">
+<entry keyword="deployment descriptor files">
+<topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
+</entry>
+<entry keyword="Rich UI">
+<entry keyword="deployment options">
+<topic href="topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
 <entry keyword="services">
 <entry keyword="deployment options">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
@@ -283,6 +300,12 @@
 <topic href="topics/tedt00576.html#tedt00576" title="Setting preferences for EGL Rich UI deployment"/>
 </entry>
 </entry>
+<entry keyword="deployment descriptor options">
+<topic href="topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
+<entry keyword="list">
+<topic href="topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00516.html#tedt00516" title="Setting EGL preferences for Rich UI"/>
 </entry>
@@ -318,6 +341,11 @@
 <entry keyword="SQL access">
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
+</entry>
+</entry>
+<entry keyword="targets">
+<entry keyword="EGL deployment descriptors">
+<topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
 <entry keyword="templates">
