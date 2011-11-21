@@ -26,6 +26,7 @@ public class Constants {
 	public static final String SubKey_simpleContent = "simpleContent";
 	public static final String SubKey_isaSignature = "isaSignature";
 	public static final String SubKey_recordToAnyAssignment = "recordToAnyAssignment";
+	public static final String SubKey_isInList = "isInList";
 	
 	public static final String EXPR_LHS = "EXPR_LHS";
 	

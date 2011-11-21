@@ -116,8 +116,6 @@ public class JavaScriptAliaser
 		keywordCache.put( "volatile", "ezekw$$volatile" );
 		keywordCache.put( "while", "ezekw$$while" );
 		keywordCache.put( "with", "ezekw$$with" );
-		
-		keywordCache.put( "sort", "ezekw$$sort" );
 	}
 
 	static
