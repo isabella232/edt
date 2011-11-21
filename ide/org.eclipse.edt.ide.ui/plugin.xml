@@ -1509,7 +1509,7 @@ Templates
             category="org.eclipse.edt.ide.ui.projects"
             default="true"
             description="%EGLBasicProjectDescription"
-            icon="icons/ctool16/newegl_wiz.gif"
+            icon="icons/templates/BasicProjectTemplate.gif"
             id="org.eclipse.edt.ide.ui.projects.basic"
             name="%EGLBasicProject"
             templateClass="org.eclipse.edt.ide.ui.project.templates.BasicProjectTemplate"
