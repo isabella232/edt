@@ -50,6 +50,11 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="ConstantsLib EGL external type">
+<entry keyword="overview">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00275.html#redt00275" title="LogResult external type"/>
+</entry>
+</entry>
 <entry keyword="controllers">
 <entry keyword="Rich UI">
 <topic href="topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
@@ -70,13 +75,21 @@
 <entry keyword="EGL">
 <entry keyword="deployment">
 <entry keyword="overview">
-<topic href="topics/tedt01007.html#tedt01007" title="Compiling EGL source and deploying the output internally"/>
+<topic href="topics/tedt01007.html#tedt01007" title="Deploying the EGL output internally"/>
 </entry>
 </entry>
 </entry>
 <entry keyword="overview">
-<topic href="topics/tedt01007.html#tedt01007" title="Compiling EGL source and deploying the output internally"/>
+<topic href="topics/tedt01007.html#tedt01007" title="Deploying the EGL output internally"/>
 </entry>
+</entry>
+</entry>
+<entry keyword="deployment descriptors">
+<entry keyword="EGL overview">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
+</entry>
+<entry keyword="targets">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
 <entry keyword="Dojo">
@@ -100,11 +113,21 @@
 <entry keyword="EGL">
 <entry keyword="generation">
 <entry keyword="overview">
-<topic href="topics/tedt01007.html#tedt01007" title="Compiling EGL source and deploying the output internally"/>
+<topic href="topics/tedt01007.html#tedt01007" title="Deploying the EGL output internally"/>
 </entry>
 </entry>
 <entry keyword="services">
 <topic href="topics/tedt01002.html#tedt01002" title="Accessing a service"/>
+</entry>
+</entry>
+<entry keyword="EGL deployment descriptors">
+<entry keyword="creating in EDT IDE">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00502.html#tedt00502" title="Creating an EGL deployment descriptor in the EDT IDE"/>
+</entry>
+</entry>
+<entry keyword="EGL external types">
+<entry keyword="ConstantsLib">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00275.html#redt00275" title="LogResult external type"/>
 </entry>
 </entry>
 <entry keyword="event handlers">
@@ -133,9 +156,12 @@
 </entry>
 </entry>
 <entry keyword="generation">
+<entry keyword="deployment descriptor files">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
+</entry>
 <entry keyword="EGL">
 <entry keyword="overview">
-<topic href="topics/tedt01007.html#tedt01007" title="Compiling EGL source and deploying the output internally"/>
+<topic href="topics/tedt01007.html#tedt01007" title="Deploying the EGL output internally"/>
 </entry>
 </entry>
 </entry>
@@ -367,6 +393,11 @@
 <entry keyword="system messages">
 <entry keyword="EGL runtime customization">
 <topic href="topics/tedt01034.html#tedt01034" title="Customizing EGL system runtime messages for Java"/>
+</entry>
+</entry>
+<entry keyword="targets">
+<entry keyword="EGL deployment descriptors">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
 <entry keyword="text">

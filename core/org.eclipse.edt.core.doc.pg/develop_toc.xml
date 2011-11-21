@@ -67,12 +67,12 @@
          <topic label="Preparing to use the EGL Dojo widgets" href="topics/tedt01037.html"/>
       </topic>
    </topic>
+   <topic label="EGL support for relational databases" href="topics/cedt01029.html"/>
    <topic label="Developing a service or program" href="topics/tedt01000.html">
       <topic label="Creating a linkage properties file for Java run time"
              href="topics/tedt01045.html"/>
    </topic>
-   <topic label="Accessing data and transferring control">
-      <topic label="Accessing a relational database" href="topics/tedt01012.html"/>
+   <topic label="Transferring control">
       <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
       <topic label="Accessing a program or transaction from generated code">
          <topic label="Calling from generated Java code to Java code"
@@ -96,10 +96,9 @@
       <topic label="Calling generated code from other logic" href="topics/tedt01003.html"/>
       <topic label="Data conversion" href="topics/cedt01028.html"/>
    </topic>
-   <topic label="Writing test cases with the EGLUnit test framework"
+   <topic label="Developing and running test cases with EUnit"
           href="topics/tedt01006.html"/>
-   <topic label="Compiling EGL source and deploying the output internally"
-          href="topics/tedt01007.html">
+   <topic label="Deploying the EGL output internally" href="topics/tedt01007.html">
       <topic label="Compiling and deploying EGL in a headless Eclipse"
              href="topics/tedt01008.html"/>
       <topic label="Compiling EGL source outside of Eclipse" href="topics/tedt01009.html"/>
