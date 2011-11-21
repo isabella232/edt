@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -39,7 +40,9 @@ public class ListTypeTemplate extends JavaScriptTemplate {
 		} else {
 			ctx.invoke(genQualifier, expr.getTarget(), ctx, out);
 		}
+		ctx.putAttribute(expr.getTarget(), Constants.SubKey_isInList, true);
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
+		ctx.putAttribute(expr.getTarget(), Constants.SubKey_isInList, false);
 		out.print("(");
 
 		// Special cases: 1. Pass a factory to resize so it can create new elements.
