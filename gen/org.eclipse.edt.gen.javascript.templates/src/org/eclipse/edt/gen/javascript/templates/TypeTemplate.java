@@ -68,6 +68,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public Boolean isMathLibDecimalBoxingWanted(Type type, Context ctx) {
 		return true;
 	}
+	
+	public Boolean isStringLibFormatBoxingWanted(Type type, Context ctx) {
+		return true;
+	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
@@ -191,7 +195,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print(arg3);
 			//TODO add this to pass EUnit/ObjectInitialization001, need to reconsider later
 			ctx.putAttribute( arg2, Constants.SubKey_recordToAnyAssignment, true);
-			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());			
+			ctx.invoke(genTypeBasedExpression, arg2, ctx, out, arg1.getType());
 			ctx.putAttribute(arg2, Constants.SubKey_recordToAnyAssignment, false);
 		}
 	}
