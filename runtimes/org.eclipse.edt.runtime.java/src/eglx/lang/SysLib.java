@@ -243,6 +243,7 @@ public class SysLib extends ExecutableBase {
 	 * get the resource binding from the egldd
 	 */
 	public static Object getResource(String bindingKey, String propertyFileName)  throws AnyException{
+		propertyFileName = propertyFileName.toLowerCase();
 		if (resourceLocator != null) {
 			return resourceLocator.locateResource(bindingKey, propertyFileName);
 		}
