@@ -40,6 +40,7 @@ public class Constants {
 	public static final String isAssignmentArrayMatchingWanted = "isAssignmentArrayMatchingWanted";
 	public static final String isListReorganizationWanted = "isListReorganizationWanted";
 	public static final String isMathLibDecimalBoxingWanted = "isMathLibDecimalBoxingWanted";
+	public static final String isStringLibFormatBoxingWanted = "isStringLibFormatBoxingWanted";
 	public static final String isStatementRequiringWrappedParameters = "isStatementRequiringWrappedParameters";
 
 	// part names

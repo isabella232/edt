@@ -980,6 +980,18 @@ public class ReorganizeCode extends AbstractVisitor {
 				object.getArguments().set(0, boxingExpression);
 			}
 		}
+		
+		if (object.getId().equalsIgnoreCase("format") && object.getQualifier() instanceof PartName
+			&& ((PartName) object.getQualifier()).getId().equalsIgnoreCase("StringLib") && object.getArguments().size() == 2
+			&& !(object.getArguments().get(0) instanceof BoxingExpression)) {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isStringLibFormatBoxingWanted, object.getArguments().get(0).getType(), ctx)) {
+				BoxingExpression boxingExpression = factory.createBoxingExpression();
+				boxingExpression.setExpr(object.getArguments().get(0));
+				object.getArguments().set(0, boxingExpression);
+			}
+		}
+
 		processInvocation(object);
 		return true;
 	}
