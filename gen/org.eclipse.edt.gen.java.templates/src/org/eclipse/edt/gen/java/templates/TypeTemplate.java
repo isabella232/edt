@@ -93,6 +93,10 @@ public class TypeTemplate extends JavaTemplate {
 		// types can override this to cause/prevent mathlib decimals/precision boxing to be done
 		return false;
 	}
+	
+	public Boolean isStringLibFormatBoxingWanted(Type type, Context ctx) {
+		return false;
+	}
 
 	public void genInstantiation(Type type, Context ctx, TabbedWriter out) {
 		out.print("new ");
