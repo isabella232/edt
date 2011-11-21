@@ -68,6 +68,11 @@ egl.getDateInfo = function( d )
 	var monthWithoutLeadingZeros = d.getMonth()+1;
 	var year = egl.padWithLeadingZeros("" + Math.min( 9999,d.getFullYear() ), 4 );
 	var twoDigitYear = year.substr(2,2);
+	var monthShort = egl.dateConstants.shortMonths[ d.getMonth() ];
+	var dayShort = egl.dateConstants.shortDays[ d.getDay() ];
+	var yearLong = egl.padWithLeadingZeros("" + Math.min( 9999,d.getFullYear() ), 5 );
+	var monthLong = egl.dateConstants.longMonths[ d.getMonth() ];
+	var era = d.getFullYear() > 0 ? "AD" : "BC";
 	
 	var result = new Array();
 	result[0] = year;
@@ -76,7 +81,19 @@ egl.getDateInfo = function( d )
 	result[3] = day;
 	result[4] = monthWithoutLeadingZeros;
 	result[5] = dayWithoutLeadingZeros;
+	result[6] = monthShort;
+	result[7] = dayShort;
+	result[8] = yearLong;
+	result[9] = monthLong;
+	result[10] = era;
 	return result;
+};
+
+egl.dateConstants = {
+	shortMonths: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    longMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    shortDays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    longDays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 };
 
 egl.dateToString = function( d, format )
@@ -84,23 +101,43 @@ egl.dateToString = function( d, format )
 	var dateInfo = egl.getDateInfo(d);
 	var result = "";
 	
-	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/yyyy|yy|MM|M|dd|d|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
-		if(tokens[i] == "yyyy")
+		if(tokens[i] == "GGG")
+		{
+			result += dateInfo[10];
+		}
+		else if(tokens[i] == "G")
+		{
+			result += dateInfo[10];
+		}
+		else if(tokens[i] == "yyyyy")
+		{
+			result += dateInfo[8];
+		}
+		else if(tokens[i] == "yyyy")
 		{
 			result += dateInfo[0];
 		}
 		else if(tokens[i] == "yy")
 		{
 			result += dateInfo[1];
+		}
+		else if(tokens[i] == "MMMMM")
+		{
+			result += dateInfo[9];
+		}
+		else if(tokens[i] == "MMM")
+		{
+			result += dateInfo[6];
 		}
 		else if(tokens[i] == "MM")
 		{
@@ -117,6 +154,10 @@ egl.dateToString = function( d, format )
 		else if(tokens[i] == "d")
 		{
 			result += dateInfo[5];
+		}
+		else if(tokens[i] == "EEE")
+		{
+			result += dateInfo[7];
 		}
 		else if(tokens[i] == "''")
 		{
@@ -172,12 +213,15 @@ egl.getTimeInfo = function( t )
 	hours24 = egl.padWithLeadingZeros("" + hours24,2);
 	hours12 = egl.padWithLeadingZeros("" + hours12,2);
 	
+	timezone = (-t.getTimezoneOffset() < 0 ? '-' : '+') + (Math.abs(t.getTimezoneOffset() / 60) < 10 ? '0' : '') + (Math.abs(t.getTimezoneOffset() / 60)) + '00';
+	
 	var result = new Array();
 	result[0] = hours24;
 	result[1] = hours12;
 	result[2] = minutes;
 	result[3] = seconds;
 	result[4] = amPm;
+	result[5] = timezone;
 	return result;
 };
 
@@ -186,13 +230,13 @@ egl.timeToString = function( t, format )
 	var timeParts = egl.getTimeInfo(t);
 	var result = "";
 	
-	var validCheck = format.replace(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/HH|hh|mm|ss|a|Z|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/HH|hh|mm|ss|a|Z|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -215,6 +259,10 @@ egl.timeToString = function( t, format )
 		else if(tokens[i] == "a")
 		{
 			result += timeParts[4];
+		}
+		else if(tokens[i] == "Z")
+		{
+			result += timeParts[5];
 		}
 		else if(tokens[i] == "''")
 		{
@@ -632,6 +680,19 @@ egl.processToken = function(token, s, result, strict)
 		result.setMilliseconds(s.substr(0,3));
 		s = s.substr(6);
 	}
+	else if(token == "fff")
+	{
+		if(s.length < 3)
+		{
+			return null;
+		}
+		result.setMilliseconds(s.substr(0,3));
+		if(s.length == 6){
+			s = s.substr(6);
+		}else{
+			s = s.substr(3);
+		}			
+	}
 	else if(token == "a")
 	{
 		var amPm = s.substr(0,2).toUpperCase();
@@ -725,23 +786,43 @@ egl.timeStampToString = function( ts, format )
 	var timeParts = egl.getTimeInfo(ts);
 	var result = "";
 	
-	var validCheck = format.replace(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|SSS|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/yyyy|yy|MM|M|dd|d|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|SSS|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
-		if(tokens[i] == "yyyy")
+		if(tokens[i] == "GGG")
+		{
+			result += dateParts[10];
+		}
+		else if(tokens[i] == "G")
+		{
+			result += dateParts[10];
+		}
+		else if(tokens[i] == "yyyyy")
+		{
+			result += dateParts[8];
+		}
+		else if(tokens[i] == "yyyy")
 		{
 			result += dateParts[0];
 		}
 		else if(tokens[i] == "yy")
 		{
 			result += dateParts[1];
+		}
+		else if(tokens[i] == "MMMMM")
+		{
+			result += dateParts[9];
+		}
+		else if(tokens[i] == "MMM")
+		{
+			result += dateParts[6];
 		}
 		else if(tokens[i] == "MM")
 		{
@@ -759,6 +840,10 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += dateParts[5];
 		}
+		else if(tokens[i] == "EEE")
+		{
+			result += dateParts[7];
+		}
 		else if(tokens[i] == "HH")
 		{
 			result += timeParts[0];
@@ -775,6 +860,10 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += timeParts[3];
 		}
+		else if(tokens[i] == "SSS")
+		{
+			result += egl.padWithLeadingZeros("" + ts.getMilliseconds(),3);
+		}
 		else if(tokens[i] == "a")
 		{
 			result += timeParts[4];
@@ -782,6 +871,14 @@ egl.timeStampToString = function( ts, format )
 		else if(tokens[i] == "ffffff")
 		{
 			result += (egl.padWithLeadingZeros("" + ts.getMilliseconds(),3) + "000");
+		}
+		else if(tokens[i] == "fff")
+		{
+			result += egl.padWithLeadingZeros("" + ts.getMilliseconds(),3);
+		}
+		else if(tokens[i] == "Z")
+		{
+			result += timeParts[5];
 		}
 		else if(tokens[i] == "''")
 		{
@@ -834,7 +931,7 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	result.setSeconds(0);
 	result.setMilliseconds(0);
 
-	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|fff|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	
 	if(!strict)
