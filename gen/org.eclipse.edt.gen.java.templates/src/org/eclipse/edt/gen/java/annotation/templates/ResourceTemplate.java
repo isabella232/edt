@@ -33,31 +33,35 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class ResourceTemplate extends JavaTemplate {
 
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		//add an initialzer to the function 
-		AssignmentStatement assignmentStatement = ctx.getFactory().createAssignmentStatement();
-		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-			assignmentStatement.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
-		assignmentStatement.setContainer(field.getContainer());
-		Assignment assignment = factory.createAssignment();
-		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-			assignment.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
-		assignmentStatement.setAssignment(assignment);
-		MemberName nameExpression = factory.createMemberName();
-		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
-			nameExpression.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
-		nameExpression.setMember(field);
-		nameExpression.setId(field.getName());
-		assignment.setLHS(nameExpression);
-		assignment.setRHS(getLibraryInvocation(annot, field));
-		// add the assignment to the declaration statement block
-		StatementBlock declarationBlock = field.getInitializerStatements();
-		if(declarationBlock == null){
-			declarationBlock = factory.createStatementBlock();
-			declarationBlock.setContainer(field.getContainer());
-			field.setInitializerStatements(declarationBlock);
+		Object processed = ctx.getAttribute(field, Constants.SubKey_fieldsProccessed4Resource);
+		if(processed == null){
+			//add an initialzer to the function 
+			AssignmentStatement assignmentStatement = ctx.getFactory().createAssignmentStatement();
+			if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignmentStatement.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setContainer(field.getContainer());
+			Assignment assignment = factory.createAssignment();
+			if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignment.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setAssignment(assignment);
+			MemberName nameExpression = factory.createMemberName();
+			if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				nameExpression.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+			nameExpression.setMember(field);
+			nameExpression.setId(field.getName());
+			assignment.setLHS(nameExpression);
+			assignment.setRHS(getLibraryInvocation(annot, field));
+			// add the assignment to the declaration statement block
+			StatementBlock declarationBlock = field.getInitializerStatements();
+			if(declarationBlock == null){
+				declarationBlock = factory.createStatementBlock();
+				declarationBlock.setContainer(field.getContainer());
+				field.setInitializerStatements(declarationBlock);
+			}
+			declarationBlock.getStatements().add(0, assignmentStatement);
+			// add the declaration statement block to the field
+			ctx.putAttribute(field, Constants.SubKey_fieldsProccessed4Resource, Boolean.TRUE);
 		}
-		declarationBlock.getStatements().add(0, assignmentStatement);
-		// add the declaration statement block to the field
 	}
 	private QualifiedFunctionInvocation getLibraryInvocation( Annotation annot, Field field) {
 		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys).clone();
