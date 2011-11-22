@@ -1640,15 +1640,17 @@ egl.getWidgetInfo = function() {
 			}
 		},
 		isIESpecialWidget: function(ele){
-			if(this.package == "dojo.widgets"){
-				if(this.type == "DojoBorderContainer" || this.type == "DojoContentPane" || this.type == "DojoCalendar"){
-					return true;
+			if(egl.IE){
+				if(this.package == "dojo.widgets"){
+					if(this.type == "DojoBorderContainer" || this.type == "DojoContentPane" || this.type == "DojoCalendar"){
+						return true;
+					}
 				}
-			}
-			
-			if(this.package == "org.eclipse.edt.rui.widgets"){
-				if(this.type == "GridLayout" || this.type == "Box" || this.type == "CheckBox" || this.type == "Combo"){
-					return true;
+				
+				if(this.package == "org.eclipse.edt.rui.widgets"){
+					if(this.type == "Button" || this.type == "GridLayout" || this.type == "Box" || this.type == "CheckBox" || this.type == "Combo"){
+						return true;
+					}
 				}
 			}
 			
