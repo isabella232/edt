@@ -153,14 +153,22 @@ and <span class="synph"><span class="kwd">LogResult.passed</span></span>, as sho
 <p>For details on those functions, see the following EGL Language
 Reference entry: <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00275.html" title="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both.">LogResult external type</a>.</p>
 
+</div>
+
+</div>
+
+<div class="nested1" xml:lang="en-us" id="driving"><a name="driving"><!-- --></a>
+<h2 class="topictitle2">Creating a test driver to run the test cases</h2>
+
+<div>
 <p>A <dfn class="term">test driver</dfn> is a project from which you run the
 test cases. A test driver is language specific, including only the
 test cases that were targeted for a given language. </p>
 
 <div class="p">To specify the target languages for a given test case, assign values
 to the <span class="synph"><span class="kwd">targetLang</span></span> field of the Test annotation,
-as shown in <samp class="codeph">test02</samp> and <samp class="codeph">test05</samp>. Here
-is further detail:<ul>
+as shown earlier in <samp class="codeph">test02</samp> and <samp class="codeph">test05</samp>.
+Here is further detail:<ul>
 <li>The <span class="synph"><span class="kwd">targetLang</span></span> field takes a list of
 enumeration values of type <span class="synph"><span class="kwd">TargetLangKind</span></span>.
 In Eclipse IDE for EGL Developers, the valid values are Java and JavaScript. </li>
@@ -172,14 +180,6 @@ every <span class="synph"><span class="kwd">TargetLangKind</span></span> value.<
 </ul>
 </div>
 
-</div>
-
-</div>
-
-<div class="nested1" xml:lang="en-us" id="driving"><a name="driving"><!-- --></a>
-<h2 class="topictitle2">Creating a test driver to run the test cases</h2>
-
-<div>
 <div class="p">To create a test driver, do as follows:<ol>
 <li>Right click on the project that contains your test cases, or on
 one or more packages that contain test cases, or on one or more source
@@ -281,7 +281,7 @@ link in the middle of the library-specific report.</li>
 </ol>
 </div>
 
-<div class="p">If you running the example code in version .7, the detailed output
+<div class="p">If you run the example code in version .7, the detailed output
 is as follows:<div class="fignone">
 <br></br><div class="imagecenter"><img class="imagecenter" src="../images/tedt_eunit_detail.jpg" alt="Example of a library-specific report"></img></div><br></br>
 </div>
