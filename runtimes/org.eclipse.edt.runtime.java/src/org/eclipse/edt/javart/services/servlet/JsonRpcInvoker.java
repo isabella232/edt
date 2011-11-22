@@ -22,6 +22,7 @@ import org.eclipse.edt.javart.json.ObjectNode;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.services.FunctionParameterKind;
 import org.eclipse.edt.javart.services.FunctionSignature;
+import org.eclipse.edt.javart.services.ServiceBase;
 import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
@@ -85,9 +86,11 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		{
 			Method method = getMethod(methodName);
 			Object[] parameters = eglx.json.JsonUtilities.getParameters(method, (ArrayNode)JsonUtilities.getValueNode(jsonRequest, JSON_RPC_PARAMETER_ID));
-			Object ret = method.invoke(getService(), parameters);
+			ServiceBase service = getService();
+			Runtime.getRunUnit().setActiveExecutable(service);
+			Object ret = method.invoke(service, parameters);
 			returnVal = convertToJson(method, parameters, ret);
-			Runtime.getRunUnit().endRunUnit(getService());
+			Runtime.getRunUnit().endRunUnit(service);
 		}
 		catch (ServiceInvocationException sie)
 		{

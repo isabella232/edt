@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -81,16 +80,11 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	 */
 	private transient ResourceManager resourceManager;
 	
-	/**
-	 * Contains all of the currently active Programs.  The bottom of the stack
-	 * is index zero.
-	 */
-	protected List<Program> programStack;
 
 	/**
-	 * The last program popped off the programStack, if programStack is empty.
+	 * The currently running executable, or null if nothing is running.
 	 */
-	private Program lastProgram;
+	private Executable currentExecutable;
 	
 	/**
 	 * The libraries that have been loaded.
@@ -241,6 +235,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 			{
 				try
 				{
+					currentExecutable = program;
 					program.main();
 					endRunUnit( program );
 					return;
@@ -283,6 +278,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 			resourceManager.exit( this );
 			
 			trace.close();
+			currentExecutable = null;
 		}
 		catch ( Exception ex )
 		{
@@ -339,6 +335,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 		}
 
 		trace.close();
+		currentExecutable = null;
 	}
 
 	/**
@@ -613,58 +610,18 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	}
 
 	/**
-	 * Returns the top of the program stack, or the Dummy Program if the stack is empty.
+	 * @return the active executable, or null if nothing is running.
 	 */
-	public Program activeProgram() throws AnyException
+	@Override
+	public Executable getActiveExecutable() throws AnyException
 	{
-		if ( programStack.isEmpty() )
-		{
-			if ( lastProgram != null )
-			{
-				return lastProgram;
-			}
-		}
-		return (Program)programStack.get( programStack.size() - 1 );
+		return currentExecutable;
 	}
-
-	/**
-	 * Returns the top of the program stack, or null if it's empty.
-	 */
-	public Program peekProgram()
+	
+	@Override
+	public void setActiveExecutable( Executable executable )
 	{
-		if ( programStack.isEmpty() )
-		{
-			return null;
-		}
-		return (Program)programStack.get( programStack.size() - 1 );
-	}
-
-	/**
-	 * Pops the program stack.
-	 *
-	 * @return the Program that had been on top of the program stack.
-	 */
-	public Program popProgram()
-	{
-		Program program = (Program)programStack.remove( programStack.size() - 1 );
-		if ( program != null )
-		{
-			program._cleanup();
-			if ( programStack.isEmpty() )
-			{
-				lastProgram = program;
-			}
-		}
-		return program;
-	}
-
-	/**
-	 * Pushes a program onto the program stack.
-	 */
-	public void pushProgram( Program program )
-	{
-		programStack.add( program );
-		lastProgram = null;
+		this.currentExecutable = executable;
 	}
 
 	/**
@@ -682,8 +639,7 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 		if ( newPropertiesNeeded( trans ) )
 		{
 			String newName = JavartUtil.removePackageName( trans.name );
-			String oldName =
-				((Program)programStack.get( programStack.size() - 1 ))._name();
+			String oldName = currentExecutable._name();
 			if ( !newName.equals( oldName ) )
 			{
 				String newPropertiesFilePath = trans.name.replace( '.', '/' ) + ".properties";
@@ -698,10 +654,8 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 			}
 		}
 	
-		// Create the new Program and pop the previous one off the stack.  The
-		// new Program will be pushed onto the stack later. 
+		// Create the new Program.  The new Program will be set as the active executable later. 
 		Program newProgram = (Program)loadExecutable( trans.name );
-		popProgram();
 	
 		// Initialize the new Program.
 		if ( trans.input != null && newProgram._inputRecord() != null )

@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
@@ -237,7 +238,17 @@ public class SysLib extends ExecutableBase {
 		if (resourceLocator != null) {
 			return resourceLocator.locateResource(bindKey);
 		}
-		return getResource(bindKey, getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY));
+		
+		String defaultDD = null;
+		Executable app = Runtime.getRunUnit().getActiveExecutable();
+		if (app != null) {
+			defaultDD = getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY + "." + app.getClass().getCanonicalName());
+		}
+		if (defaultDD == null) {
+			defaultDD = getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY);
+		}
+		
+		return getResource(bindKey, defaultDD);
 	}
 	/**
 	 * get the resource binding from the egldd

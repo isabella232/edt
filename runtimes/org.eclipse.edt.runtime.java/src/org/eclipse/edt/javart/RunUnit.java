@@ -43,4 +43,6 @@ public interface RunUnit {
 	void switchLocale(Locale loc);
 	LocalizedText getLocalizedText();
 	Trace getTrace();
+	Executable getActiveExecutable() throws AnyException;
+	void setActiveExecutable(Executable executable);
 }
