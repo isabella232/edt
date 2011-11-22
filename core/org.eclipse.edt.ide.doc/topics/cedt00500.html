@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Debugging EGL source code in the EDT IDE"></meta>
+<meta name="abstract" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. During the debugging session, you investigate both the execution paths in your logic and the changing values of variables."></meta>
+<meta name="description" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. During the debugging session, you investigate both the execution paths in your logic and the changing values of variables."></meta>
+<meta name="DC.subject" content="debugging, EGL, overview, applications, EGL debugging"></meta>
+<meta name="keywords" content="debugging, EGL, overview, applications, EGL debugging"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00579.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00580.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00582.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00583.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="cedt00500"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Debugging EGL source code in the EDT IDE</title>
+</head>
+<body id="cedt00500"><a name="cedt00500"><!-- --></a>
+
+
+<h1 class="topictitle1">Debugging EGL source code in the EDT IDE</h1>
+
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>When you run a program, service, or Rich UI
+handler in the EGL debugger, you set a breakpoint to suspend execution
+and then run the code in a controlled way. During the debugging session,
+you investigate both the execution paths in your logic and the changing
+values of variables.</p>
+
+<div class="p">You typically conduct a debugging session at least partly in the
+Debug perspective, where toolbar buttons give you the necessary control.
+The buttons are as follows, and you can access the same capabilities
+by right clicking in the Debug view:<dl>
+<dt class="dlterm">Drop to frame</dt>
+
+<dd>Works with the <dfn class="term">stack</dfn>, which is a list of runtime
+functions that contributed to the current execution status. The command
+lets you return to the first statement in any function in the stack,
+but does not change the values of variables that were changed since
+that first statement ran.</dd>
+
+
+<dt class="dlterm">Resume</dt>
+
+<dd>Continues to run your code until the next breakpoint is found
+or until the run unit ends. </dd>
+
+
+<dt class="dlterm">Step into</dt>
+
+<dd>Runs the next EGL statement and pauses. If you issue this command
+for a function invocation, execution stops at the first statement
+in the function. Similarly, if you issue this command for a service
+call and if the Service type is available in the workspace, execution
+stops at the first statement in the service.<p>If you invoke code
+that is not available in the workspace, the command runs the external
+code and stops execution at the first statement where your logic resumes.
+In Rich UI, where service invocation is asynchronous, execution continues
+at the first statement in the callback function or exception handler.</p>
+<p>If
+you issue this command for a statement that is the last one running
+in the function and if the statement does not explicitly return control
+to the invoker or terminate the logic, the debugger pauses so that
+you can inspect variable values.</p>
+</dd>
+
+
+<dt class="dlterm">Step over</dt>
+
+<dd>Runs the next EGL statement and pauses. If you invoke a function
+or service, the command runs that code and stops execution at the
+first statement where your current logic resumes. In Rich UI, execution
+continues at the first statement in the callback function or exception
+handler for that service. <p>If you issue this command for a statement
+that is the last one running in the function and if the statement
+does not explicitly return control to the invoker or terminate the
+logic, the debugger pauses so that you can inspect variable values.</p>
+</dd>
+
+
+<dt class="dlterm">Step return</dt>
+
+<dd>Runs the statements needed to return to the logic that invoked
+the code that you are debugging. After returning to that logic, the
+command pauses at the statement that receives control.</dd>
+
+
+
+<dt class="dlterm">Suspend</dt>
+
+<dd>Causes the debugger to pause at the next opportunity. This button
+is available only while execution is in progress.</dd>
+
+
+<dt class="dlterm">Terminate</dt>
+
+<dd>Terminates the program without running any further instructions.<p>In
+the Debug view, the <span class="uicontrol">Terminate and Relaunch</span> menu
+option lets you end the run and immediately begin another.</p>
+</dd>
+
+
+<dt class="dlterm">Use step filters</dt>
+
+<dd>Has no effect when you are working with EGL code.</dd>
+
+</dl>
+</div>
+
+<div class="p">If you right click the gray border to the left of a line of code,
+the following debugging options are available in the context menu:<dl>
+
+<dt class="dlterm">Disable breakpoint</dt>
+
+<dd>Retains an existing breakpoint so that you recall its position,
+but disables use of that breakpoint.</dd>
+
+
+<dt class="dlterm">Enable breakpoint</dt>
+
+<dd>Enables a breakpoint that you formerly set and then disabled.</dd>
+
+
+<dt class="dlterm">Show line numbers</dt>
+
+<dd>Displays the line numbers in the code you are debugging.</dd>
+
+
+<dt class="dlterm">Toggle breakpoint</dt>
+
+<dd>Sets or clears a breakpoint. You can accomplish the task without
+opening the context menu, by double clicking on the gray area.</dd>
+
+</dl>
+</div>
+
+<div class="p">If you right click in the code that you are debugging, the following
+debugging option in available in the context menu:<dl>
+<dt class="dlterm">Run to line</dt>
+
+<dd>Runs all statements up to, but not including, the statement on
+a specified line.</dd>
+
+</dl>
+</div>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

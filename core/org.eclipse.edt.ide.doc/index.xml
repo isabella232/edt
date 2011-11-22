@@ -2,11 +2,8 @@
 <index>
 <entry keyword="applications">
 <entry keyword="EGL debugging">
-<entry keyword="code updates">
-<topic href="topics/tedt00546.html#tedt00546" title="Updating code while the EGL debugger runs"/>
-</entry>
 <entry keyword="overview">
-<topic href="topics/tedt00504.html#tedt00504" title="Debugging EGL source code in the EDT IDE"/>
+<topic href="topics/cedt00500.html#cedt00500" title="Debugging EGL source code in the EDT IDE"/>
 </entry>
 </entry>
 </entry>
@@ -50,11 +47,6 @@
 </entry>
 </entry>
 </entry>
-<entry keyword="commands">
-<entry keyword="EGL debugger">
-<topic href="topics/tedt00543.html#tedt00543" title="Preparing to run code in the EGL debugger"/>
-</entry>
-</entry>
 <entry keyword="debugging">
 <entry keyword="EGL">
 <entry keyword="basic steps">
@@ -63,26 +55,17 @@
 <entry keyword="breakpoints">
 <topic href="topics/tedt00580.html#tedt00580" title="Using breakpoints in the EGL debugger"/>
 </entry>
-<entry keyword="controls">
-<topic href="topics/tedt00543.html#tedt00543" title="Preparing to run code in the EGL debugger"/>
-</entry>
 <entry keyword="creating a launch configuration">
 <topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
 </entry>
 <entry keyword="creating a Listener launch configuration">
 <topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
 </entry>
-<entry keyword="hotswapping">
-<topic href="topics/tedt00546.html#tedt00546" title="Updating code while the EGL debugger runs"/>
-</entry>
 <entry keyword="invoking from Java">
 <topic href="topics/tedt00582.html#debug_invokingdebugger" title="Invoking the EGL debugger from generated Java code"/>
 </entry>
 <entry keyword="overview">
-<topic href="topics/tedt00504.html#tedt00504" title="Debugging EGL source code in the EDT IDE"/>
-</entry>
-<entry keyword="running code">
-<topic href="topics/tedt00544.html#tedt00544" title="Running code in the EGL debugger"/>
+<topic href="topics/cedt00500.html#cedt00500" title="Debugging EGL source code in the EDT IDE"/>
 </entry>
 <entry keyword="services">
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging services with the EGL debugger"/>
@@ -92,12 +75,6 @@
 </entry>
 <entry keyword="starting programs">
 <topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-<entry keyword="viewing variables">
-<topic href="topics/tedt00545.html#tedt00545" title="Viewing variables in the EGL debugger"/>
-</entry>
-<entry keyword="watch expressions">
-<topic href="topics/tedt00581.html#tedt00581" title="Creating watch expressions in the EGL debugger"/>
 </entry>
 </entry>
 </entry>
@@ -379,19 +356,9 @@
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
 </entry>
 </entry>
-<entry keyword="variables">
-<entry keyword="viewing in the EGL debugger">
-<topic href="topics/tedt00545.html#tedt00545" title="Viewing variables in the EGL debugger"/>
-</entry>
-</entry>
 <entry keyword="VisualAge Generator">
 <entry keyword="compatibility preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
-</entry>
-</entry>
-<entry keyword="watch expressions">
-<entry keyword="in EGL debugger">
-<topic href="topics/tedt00581.html#tedt00581" title="Creating watch expressions in the EGL debugger"/>
 </entry>
 </entry>
 <entry keyword="web applications">

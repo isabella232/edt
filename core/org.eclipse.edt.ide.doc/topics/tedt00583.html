@@ -6,11 +6,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Debugging services with the EGL debugger"></meta>
-<meta name="abstract" content="You can debug your local EGL services similarly to the way that you debug other programs."></meta>
-<meta name="description" content="You can debug your local EGL services similarly to the way that you debug other programs."></meta>
+<meta name="abstract" content="You can debug your local EGL services similarly to the way that you debug programs."></meta>
+<meta name="description" content="You can debug your local EGL services similarly to the way that you debug programs."></meta>
 <meta name="DC.subject" content="services, debugging, EGL"></meta>
 <meta name="keywords" content="services, debugging, EGL"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00544.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt00500.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -23,13 +23,12 @@
 
 
 
-
 <h1 class="topictitle1">Debugging services with the EGL debugger</h1>
 
 
 
 <div id="body"><a name="body"><!-- --></a><p>You can debug your local EGL services similarly
-to the way that you debug other programs.</p>
+to the way that you debug programs.</p>
 
 <div class="p"><p>You will need an EGL Service part and a requester that
 has binding information for accessing the service.</p>
@@ -41,25 +40,6 @@ the service.</p>
 <div class="section"><p>The simplest way to debug a service is to call it from
 a program in the same project as the service. You can then pass test
 values to the service and inspect the results.</p>
-<div class="p">The following
-special capabilities are available for EGL-generated services or for
-Service parts that run in the EGL Debugger: <ul>
-<li>Remote access of VSAM files that reside on z/OS</li>
-
-<li>Calls to non-EGL-generated programs, where the <span class="synph"><span class="kwd">callLink</span></span> element
-of the linkage options part has the following settings:<ul>
-<li>The <span class="synph"><span class="kwd">remoteComType</span></span> property set to DISTINCT</li>
-
-<li>The <span class="synph"><span class="kwd">remotePgmType</span></span> property set to EXTERNALLYDEFINED</li>
-
-</ul>
-</li>
-
-<li>Access to the following functions, which run operating system
-commands in the development environment: <span class="synph"><span class="kwd">SysLib.callCmd</span></span> and <span class="synph"><span class="kwd">SysLib.startCmd</span></span>.</li>
-
-</ul>
-</div>
 To debug
 your local EGL services, do as follows:</div>
 
@@ -74,10 +54,10 @@ an EGL service (not a web service) with a <span class="q">"local"</span> protoco
 <li class="stepexpand"><span> In the main() function of the program, make at least one
 call to the service using that variable.</span> The easiest
 way is to hard code the input values in the service call and write
-the output values to the console, as in the following example:<pre class="codeblock">program addTestProgram type BasicProgram 	 	
+the output values to the console, as in the following example:<pre class="codeblock">program addTestProgram 	 	
 
 myAddingMachine additionService 
-   {@BindService {bindingKey = "additionService"}};
+   {@Resource {bindingKey = "additionService"}};
 
    function main()
       sumint int;

@@ -24,7 +24,6 @@
 
 
 
-
 <h1 class="topictitle1">Setting preferences for EGL Rich UI appearance</h1>
 
 
@@ -139,13 +138,70 @@ you select the <span class="uicontrol">Design</span> or <span class="uicontrol">
 </li>
 
 <li class="substepexpand"><span>In the <span class="uicontrol">Visual editor render engine</span> section,
-do one of the following tasks:</span> <ul>
-<li>Select <span class="uicontrol">Mozilla XULRunner</span> if you want to
-use the Mozilla rendering engine to display widgets in your visual
-editor. This engine is part of Firefox and other Mozilla applications.
-(Note that Rich UI requires the Firefox version to be 3 or greater.)</li>
+select the technology used to render a web page in the Preview tab
+of the Rich UI editor:</span> <ul>
+<li>If you select <span class="uicontrol">Use default rendering engine</span>,
+the effect varies by operating system:<ul>
+<li>For a Windows platform:<ul>
+<li>If you using Eclipse version 3.7 and have installed Safari, the
+Safari installation was accompanied by WebKit, which is the default
+rendering engine in this case. Incidentally, when Safari is installed
+in Eclipse version 3.7, running Mozilla XULRunner is problematic.
+Install Safari or XULRunner 3.6.2.</li>
 
-<li>Select <span class="uicontrol">Microsoft Internet Explorer</span> if you
+<li>If you are using Eclipse version 3.7 and have not installed Safari,
+or if you are using Eclipse version 3.6, the default is Mozilla XULRunner.
+However, XULRunner is available only if you do as follows:<ol type="i">
+<li>Shut Eclipse.</li>
+
+<li>Use a text editor to open the <span class="filepath">eclipse.ini</span> file,
+which is in the Eclipse installation directory.</li>
+
+<li>Add the following as the last argument in the -vmargs section
+of that file, specifying an installation directory in place of <em>PATH_TO_XULRunnner</em>:<pre class="codeblock">-Dorg.eclipse.swt.browser.XULRunnerPath=<em>PATH_TO_XULRunner</em></pre>
+</li>
+
+<li>Start Eclipse.</li>
+
+</ol>
+<p>Use Mozilla ZULRunner 3.6.2. Also, note that Rich UI requires
+the Mozilla Firefox version to be 3 or greater.</p>
+</li>
+
+<li>If neither WebKit nor XULRunner is available, the default is Internet
+Explorer.</li>
+
+</ul>
+</li>
+
+<li>For Linux:<ul>
+<li>If you using Eclipse version 3.7 and have installed Safari, the
+Safari installation was accompanied by WebKit, which is the default
+rendering engine in this case. Incidentally, when Safari is installed
+in Eclipse version 3.7, running Mozilla XULRunner is problematic.
+Install Safari or XULRunner 3.6.2.</li>
+
+<li>If you are using Eclipse version 3.7 and have not installed Safari,
+or if you are using Eclipse version 3.6, the default is Mozilla XULRunner.
+Use XULRunner 3.6.2.<p>Note that Rich UI requires the Mozilla Firefox
+version to be 3 or greater.</p>
+</li>
+
+</ul>
+</li>
+
+</ul>
+</li>
+
+<li>If you select <span class="uicontrol">Mozilla XULRunner</span> and are
+working on a Windows platform, you must update your <span class="filepath">eclipse.ini</span> file
+as described for the first selection. Note that Rich UI requires the
+Mozilla Firefox version to be 3 or greater.<p>Incidentally, when Safari
+is installed in Eclipse version 3.7, some versions of XULRunner cannot
+be loaded.</p>
+</li>
+
+<li>Select <span class="uicontrol">Trident (Internet Explorer)</span> if you
 want to use the Microsoft Internet
 Explorer rendering engine.</li>
 
