@@ -34,6 +34,7 @@ public class Constants {
 	public static final String SubKey_functionArgumentNeedsWrapping = "functionArgumentNeedsWrapping";
 	public static final String SubKey_statementNeedsLabel = "statementNeedsLabel";
 	public static final String SubKey_statementHasBeenReorganized = "statementHasBeenReorganized";
+	public static final String SubKey_fieldsProccessed4Resource = "fieldsProccessed4Resource";
 
 	// invoke names
 	public static final String isAssignmentBreakupWanted = "isAssignmentBreakupWanted";
