@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SQLDataSource external type"></meta>
-<meta name="abstract" content="SQLDataSource represents a connection to a database. An instance of this type is used in action statements with which EGL code interacts with a database."></meta>
-<meta name="description" content="SQLDataSource represents a connection to a database. An instance of this type is used in action statements with which EGL code interacts with a database."></meta>
+<meta name="abstract" content="SQLDataSource represents a connection to a database. An instance of this type is used in the EGL statements that interact with a database."></meta>
+<meta name="description" content="SQLDataSource represents a connection to a database. An instance of this type is used in the EGL statements that interact with a database."></meta>
 <meta name="DC.subject" content="EGL types, SQLDataSource, EGL type"></meta>
 <meta name="keywords" content="EGL types, SQLDataSource, EGL type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -27,8 +27,8 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p><strong>SQLDataSource</strong> represents a connection
-to a database. An instance of this type is used in action statements
-with which EGL code interacts with a database.</p>
+to a database. An instance of this type is used in the EGL statements
+that interact with a database.</p>
 
 <a name="redt00162__main"><!-- --></a><dl id="redt00162__main">
 <dt class="dlterm"><a name="redt00162__package"><!-- --></a>EGL package name</dt>
@@ -47,7 +47,7 @@ myCustomer Customer;
 // security details that are stored in a dictionary.
 connectURL string = "jdbc:derby:SomeDB;create=true;";
 properties Dictionary{user = "MyID", password = "MyPassword"};
-ds SQLDataSource = new SQLDataSource(connectURL, properties);
+ds SQLDataSource? = new SQLDataSource(connectURL, properties);
 
 // get the customer details
 get myCustomer from ds using(1234) with #sql{
