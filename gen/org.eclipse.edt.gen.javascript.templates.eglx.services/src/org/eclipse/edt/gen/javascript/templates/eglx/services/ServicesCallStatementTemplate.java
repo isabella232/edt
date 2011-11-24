@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.CallStatement;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -246,7 +247,10 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 	}
 	
 	private void genFormatKind(Object formatEnum, Type eglType, final Context ctx, TabbedWriter out) {
-		if(formatEnum instanceof Expression){
+		if(formatEnum instanceof EnumerationEntry){
+			ctx.invoke(genRuntimeTypeName, formatEnum, ctx, out);
+		}
+		else if(formatEnum instanceof Expression){
 			ctx.invoke(genExpression, formatEnum, ctx, out);
 		}
 		else{
