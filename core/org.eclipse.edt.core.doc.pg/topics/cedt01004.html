@@ -33,14 +33,19 @@ interact with the user interface while the requester waits for the
 service to respond.</p>
 
 <div class="section"><div class="p">The following code accesses the implementation that is
-shown in “EGL support for SOA”:<pre class="codeblock">myService MyServicePart{@Resource{bindingKey = "MyBinding"}};
+shown in “EGL support for SOA”:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
+
 call myService.myEcho("world")
      returning to myCallBack
      onException serviceLib.serviceExceptionHandler;</pre>
 </div>
-<p>After
-the invocation, the service does a task and, in most cases, responds
-to the EGL runtime code. The EGL runtime code then invokes a callback
+<p>The
+first statement accesses an instance of a binding that is created
+from the specified entry in an EGL deployment descriptor. The second
+statement uses that binding detail in an invocation.</p>
+<p>After the
+invocation, the service does a task and, in most cases, responds to
+the EGL runtime code. The EGL runtime code then invokes a callback
 function. A callback function is a Rich UI function that you code
 and that you specify in the <span class="synph"><span class="kwd">call</span></span> statement
 that accesses the service. The invocation by the EGL runtime code
@@ -114,11 +119,11 @@ functions, you can access the service from the Preview tab only if
 the service is deployed on a test server. When development is all-but
 complete, you change the service-access variable declaration and then
 deploy all the EGL-generated code:<ol>
-<li>  The initial variable declaration might be as follows:<pre class="codeblock">myService MyServicePart {@Resource{bindingKey = "MyBinding"}};
+<li>  The initial variable declaration might be as follows:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
 </pre>
 </li>
 
-<li>Here is the replacement:<pre class="codeblock">myService MyServicePart{@dedicatedService};</pre>
+<li>Here is the replacement:<pre class="codeblock">myService MyServiceType?{@dedicatedService};</pre>
 </li>
 
 </ol>

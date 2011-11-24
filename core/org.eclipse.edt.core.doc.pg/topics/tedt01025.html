@@ -47,15 +47,15 @@ However, the work required to code the service-invocation statement
 is different. </p>
 
 <div class="p">Here is an example for asynchronous access, as occurs in Rich UI
-applications:<pre class="codeblock">myVar IRest;
-myResource String = ServiceLib.convertToJson(myRec);
+applications:<pre class="codeblock">myVar IRest?;
+myResource String = JSONLib.convertToJson(myRec);
 call myVar.invokePost("http://www.example.com", myResource) 
     returning to myCallbackfunction;</pre>
 </div>
 
 <div class="p">Here is an example for synchronous access, as occurs elsewhere:<pre class="codeblock">myString STRING:
-myVar IRest;
-myResource String = ServiceLib.convertToJson(myRec);
+myVar IRest?;
+myResource String = JSONLib.convertToJson(myRec);
 myString = myVar.invokePost("http://www.example.com", myResource);</pre>
 </div>
 
@@ -66,8 +66,8 @@ values. Here are different ways to construct the URI:<ul>
 <li>You can pass the whole URI, as shown in the examples</li>
 
 <li>You can also specify the whole URI in the variable declaration,
-as shown here:<pre class="codeblock">myVar IRest {@RESTService {baseURI="http://www.example.com"};
-myResource String = ServiceLib.convertToJSON(myRec);
+as shown here:<pre class="codeblock">myVar IRest? {@RESTService {baseURI="http://www.example.com"};
+myResource String = JSONLib.convertToJSON(myRec);
 call myVar.invokePost("", myResource) 
     returning to myCallbackfunction; </pre>
 </li>
