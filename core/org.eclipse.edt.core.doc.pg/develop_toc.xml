@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="Developing EGL applications with EDT" topic="topics/cedt01001.html">
-   <topic label="EGL process from development to run time" href="topics/cedt01001.html"/>
+<toc label="Developing EGL applications" topic="topics/cedt01001.html">
+   <topic label="EGL process from development to run time" href="topics/cedt01001.html">
+      <topic label="Resource bindings" href="topics/cedt01030.html"/>
+      <topic label="EGL test server" href="topics/cedt01031.html"/>
+   </topic>
    <topic label="EGL support for SOA" href="topics/cedt01003.html">
       <topic label="Service access in Rich UI" href="topics/cedt01004.html"/>
       <topic label="Service access outside of Rich UI" href="topics/cedt01005.html"/>

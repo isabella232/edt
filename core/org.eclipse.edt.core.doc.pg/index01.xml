@@ -216,6 +216,9 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="Resource bindings">
+<topic href="topics/cedt01030.html#cedt01030" title="Resource bindings"/>
+</entry>
 <entry keyword="REST services">
 <entry keyword="non-EGL">
 <topic href="topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Resource bindings"></meta>
+<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a set of details for accessing a service or database."></meta>
+<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a set of details for accessing a service or database."></meta>
+<meta name="DC.subject" content="Resource bindings"></meta>
+<meta name="keywords" content="Resource bindings"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="cedt01030"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Resource bindings</title>
+</head>
+<body id="cedt01030"><a name="cedt01030"><!-- --></a>
+
+
+<h1 class="topictitle1">Resource bindings</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>One of the more elegant aspects of EGL is its
+use of <dfn class="term">resource bindings</dfn>, each of which is a set of details
+for accessing a service or database.</p>
+
+<p>You maintain the bindings in an EGL deployment descriptor, which
+is external from your logic. That descriptor is used when you are
+running or deploying your logic and when you are debugging code in
+the EGL debugger.</p>
+
+<div class="section"><h2 class="sectiontitle">Service bindings</h2><div class="p">If the purpose of a resource
+binding is service access, the definition is called a <dfn class="term">service
+binding</dfn>, and the main detail is in one of two formats. <ul>
+<li>If the service is deployed on an application server, you can specify
+a Universal Resource Identifier (URI), as shown in the following example: <ul class="simple">
+<li><samp class="codeph">http://myserver:8080/myproject/restservices/myservice</samp></li>
+
+</ul>
+<p>Although you can run the deployed service during an EGL debugging
+session, the EGL debugger does not step into the service.</p>
+</li>
+
+<li>If the service is available in your workspace and was written
+in EGL, you can use a <dfn class="term">workspace URI</dfn> , which is an identifier
+that points to a workspace location. Here is an example:<ul class="simple">
+<li><samp class="codeph">workspace://mySourceProject/servicepackage.serviceName</samp></li>
+
+</ul>
+<p>In this case, an internal Test Server enables you to debug
+the code.</p>
+</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Database bindings</h2><p>If the purpose of a resource
+binding is database access, the definition is called a <dfn class="term">database
+binding</dfn> and includes connection detail. The binding might include
+details or might reference a connection that you defined in Eclipse. </p>
+<p>At
+this writing, the database bindings in the EGL deployment descriptor
+are not supported. To access a relational database, you include connection
+details directly in your code, in the DataSource object that is referenced
+in database-access statements. </p>
+</div>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

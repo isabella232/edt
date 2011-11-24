@@ -8,6 +8,8 @@
 <meta name="DC.Title" content="EGL process from development to run time"></meta>
 <meta name="abstract" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
 <meta name="description" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01030.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -38,7 +40,8 @@ although that step is typically automatic; second, to generate and
 prepare the code for external deployment; and third, to install the
 code on one or another platform.</p>
 
-<div class="p">Here is an overview of the process: <ol>
+<div class="p">Here is an overview of the first two steps, which are specific
+to EGL technology:<ol>
 
 <li>The <dfn class="term">EGL compiler</dfn> is invoked as you are working on
 a source file. The compiler acts as follows: <ol type="a">
@@ -77,11 +80,13 @@ the pre-generation.</li>
 
 <li>If generation succeeds, the generated output can become an input
 to an <dfn class="term">EGL deployer</dfn>, which readies the generated output
-for deployment on an EGL target platform. <div class="p">You invoke the deployer
+for deployment on an EGL target platform. <p>You invoke the deployer
 after configuring the <dfn class="term">EGL deployment descriptor</dfn>, which
 is an XML file identified by the extension <samp class="codeph">.egldd</samp>.
 The EGL deployment descriptor controls aspects of service deployment,
-JavaScript deployment, and access of resources:<ul>
+JavaScript deployment, and access of resources.</p>
+<div class="p">The EGL deployment
+descriptor is also used when you are debugging code. <ul>
 <li>For an overview of service deployment and access, see <a href="cedt01003.html" title="EGL provides two kinds of support for service-oriented architecture (SOA): service development and service access.">EGL support for SOA</a>.</li>
 
 <li>For an overview of JavaScript deployment, see <a href="cedt01002.html" title="This section gives an overview of EGL support for Rich Internet Applications.">EGL support for Rich Internet Applications</a>.</li>
@@ -124,6 +129,7 @@ time</dfn>.</li>
 
 </div>
 
+<div></div>
 
 </body>
 </html>

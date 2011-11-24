@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Service access outside of Rich UI"></meta>
-<meta name="abstract" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service."></meta>
-<meta name="description" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service."></meta>
+<meta name="abstract" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. Synchronous service access is not available in version .7."></meta>
+<meta name="description" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. Synchronous service access is not available in version .7."></meta>
 <meta name="DC.subject" content="service access, overview, non-Rich UI"></meta>
 <meta name="keywords" content="service access, overview, non-Rich UI"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
@@ -28,7 +28,8 @@
 
 <div><p>Except in a Rich UI handler or library, service access
 in EGL is <dfn class="term">synchronous</dfn>: the requester waits for a response
-from the service.</p>
+from the service. <strong>Synchronous service access is not available in
+version .7</strong>.</p>
 
 <div class="p">For example, the following code accesses the implementation that
 is shown in “EGL support for SOA:”<pre class="codeblock">returnValue String{};
