@@ -4,12 +4,12 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="task"></meta>
-<meta name="DC.Title" content="Starting the EGL debugger for EGL projects"></meta>
-<meta name="abstract" content="To start the debugging process you need a launch configuration. You can create a launch configuration yourself, but the EGL debugger creates one automatically if you do not create one."></meta>
-<meta name="description" content="To start the debugging process you need a launch configuration. You can create a launch configuration yourself, but the EGL debugger creates one automatically if you do not create one."></meta>
-<meta name="DC.subject" content="web applications, debugging in EGL, debugging, EGL, starting, projects, creating a launch configuration, launch configurations, explicit, creating a Listener launch configuration, launch configurations, Listener, starting programs, viewing implicitly created configurations, programs, EGL debugger, non-JEE, code generation, invoking from Java"></meta>
-<meta name="keywords" content="web applications, debugging in EGL, debugging, EGL, starting, projects, creating a launch configuration, launch configurations, explicit, creating a Listener launch configuration, launch configurations, Listener, starting programs, viewing implicitly created configurations, programs, EGL debugger, non-JEE, code generation, invoking from Java"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Starting the EGL debugger"></meta>
+<meta name="abstract" content="To start the debugging process you need a launch configuration, which specifies where your logic resides and aspects of the runtime environment. For simple cases, you can use a launch configuration that is provided automatically."></meta>
+<meta name="description" content="To start the debugging process you need a launch configuration, which specifies where your logic resides and aspects of the runtime environment. For simple cases, you can use a launch configuration that is provided automatically."></meta>
+<meta name="DC.subject" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger, program"></meta>
+<meta name="keywords" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger, program"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00500.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -17,278 +17,104 @@
 <meta name="DC.Identifier" content="tedt00582"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Starting the EGL debugger for EGL projects</title>
+<title>Starting the EGL debugger</title>
 </head>
 <body id="tedt00582"><a name="tedt00582"><!-- --></a>
 
 
-
-<h1 class="topictitle1">Starting the EGL debugger for EGL projects</h1>
+<h1 class="topictitle1">Starting the EGL debugger</h1>
 
 
 
 <div id="body"><a name="body"><!-- --></a><p>To start the debugging process you need a launch
-configuration. You can create a launch configuration yourself, but
-the EGL debugger creates one automatically if you do not create one.</p>
+configuration, which specifies where your logic resides and aspects
+of the runtime environment. For simple cases, you can use a launch
+configuration that is provided automatically.</p>
 
-<div class="p">Before you can perform this task you must have the following
-prerequisites:<ul>
-<li>An EGL project</li>
+<div class="section"><h2 class="sectiontitle">Starting the debugger with a provided launch configuration </h2><div class="p">To
+launch a program with a provided launch configuration:<ol>
+<li>In the Project Explorer view, right-click the EGL source file
+that includes the program to be launched. A menu is displayed.</li>
 
-<li>An EGL program or other logic part that needs debugging</li>
+<li>Click <span class="menucascade"><span class="uicontrol">Debug As</span> &gt; <span class="uicontrol">EGL
+Java Main Application</span></span>. If you are asked
+whether to go into the Debug perspective, click <strong>Yes</strong>. The program
+starts in the EGL debugger.</li>
 
-</ul>
+</ol>
+</div>
+<p>Here is an alternative way to start: Press F11 or use
+the topmost menu, where you click <span class="menucascade"><span class="uicontrol">Run</span>
+ &gt; <span class="uicontrol">Debug</span></span>.</p>
 </div>
 
-<div class="section"><p>To start the EGL debugger and have it create a launch
-configuration for you, see <a href="#debug_startnonj2ee" title="You can start a non-JEE application in the EGL debugger.">Starting a non-JEE application in the EGL debugger</a>.
-To create a launch configuration yourself, see <a href="#debug_createlaunchconfig" title="You can create a launch configuration in the EGL debugger.">Creating a launch configuration in the EGL debugger</a>. If you are debugging an
-EGL application that is called from an EGL-generated Java application or Java wrapper,  you must create a special kind
-of launch configuration called an EGL Listener launch configuration.
-To create one, see <a href="#debug_createlistnerconfig" title="You can create an EGL Listener launch configuration in the EGL debugger.">Creating an EGL Listener launch configuration</a>.</p>
-Some
-of the tasks that pertain to starting the EGL debugger are as follows:</div>
+<div class="section"><h2 class="sectiontitle">Creating a launch configuration and starting the debugger
+with it</h2><div class="p">To create a launch configuration:<ol>
+<li>Click <span class="menucascade"><span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug
+Configurations</span></span>.The Debug Configurations
+dialog is displayed. </li>
 
-<ul><li><span><a href="#debug_createlaunchconfig" title="You can create a launch configuration in the EGL debugger.">Creating a launch configuration in the EGL debugger</a></span><br></br></li>
-<li><span><a href="#debug_createlistnerconfig" title="You can create an EGL Listener launch configuration in the EGL debugger.">Creating an EGL Listener launch configuration</a></span><br></br></li>
-<li><span><a href="#debug_startnonj2ee" title="You can start a non-JEE application in the EGL debugger.">Starting a non-JEE application in the EGL debugger</a></span><br></br></li>
-<li><span><a href="#debug_invokingdebugger" title="You can invoke the EGL debugger from generated Java code.">Invoking the EGL debugger from generated Java code</a></span><br></br></li>
-</ul>
+<li>At the left, right click <span class="uicontrol">EGL Java Main Application</span> and
+click <span class="uicontrol">New</span>. You can now create a configuration
+by using multiple tabs. The main tab is displayed.</li>
+
+<li>In the <span class="uicontrol">Name</span> field, type a name for the
+launch configuration or accept the default. The content of the other
+fields are likely to be acceptable, too.</li>
+
+<li>If you are debugging a program that takes command line arguments,
+click the <span class="uicontrol">Arguments</span> tab. List the arguments
+for the program, in the order that you would use on a command line.</li>
+
+<li>If you need to use a different JRE than the default for this project,
+click the <span class="uicontrol">JRE</span> tab and complete the information
+there.</li>
+
+<li>If you need additional Java classes
+to run the program, specify the paths for those classes on the <span class="uicontrol">Classpath</span> tab.</li>
+
+<li>If you need to add any other source files, specify them on the <span class="uicontrol">Source</span> tab.</li>
+
+<li>To set environment variables for the duration of the debug session,
+type the variable names and values on the <span class="uicontrol">Environment</span> tab.</li>
+
+<li>To define general information, for example about input sources,
+update the <span class="uicontrol">Common</span> tab.</li>
+
+<li>To save your changes, click <span class="uicontrol">Apply</span>. To undo
+your changes, click <span class="uicontrol">Revert</span>.</li>
+
+</ol>
+</div>
+<p>To start the debugger with the new launch configuration,
+click <span class="uicontrol">Debug</span>.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Accessing a launch configuration and starting the
+debugger with it</h2><div class="p">To access an existing launch configuration: <ol>
+<li>Click the arrow next to the Debug button on the toolbar. A popup
+menu is displayed.</li>
+
+<li>Click <span class="uicontrol">Debug Configurations</span>. The Debug Configurations
+dialog is displayed.</li>
+
+<li>At the left, expand <span class="uicontrol">EGL Java Main Applications</span> and
+click the launch configuration of interest. If the launch configuration
+was created for you, the name is the fully qualified type; for example, <samp class="codeph">myPkg.MyProgram</samp>. <p>After
+you select a configuration, the Debug Configurations dialog is displayed.</p>
+</li>
+
+</ol>
+</div>
+<p>You can update the configuration, as described in the
+earlier section on creating one. </p>
+<p>To start the debugger with
+the currently selected configuration, click <span class="uicontrol">Debug</span>.</p>
+</div>
 
 </div>
 
 <anchor id="related_links"></anchor>
-
-<div class="nested1" xml:lang="en-us" id="debug_createlaunchconfig"><a name="debug_createlaunchconfig"><!-- --></a>
-<h2 class="topictitle2">Creating a launch configuration in the EGL debugger</h2>
-
-
-<div><p>You can create a launch configuration in the EGL debugger.</p>
-
-<div class="p"></div>
-
-<div class="section"><p>To start debugging an EGL text program, non-JEE basic
-program, or Rich UI handler in an EGL debugging session, you need
-to establish a launch configuration. You can create a launch configuration
-yourself, or you can have the EGL application create one for you automatically.
-In relation to automatic configurations, see <span class="q">"Starting a non-JEE
-application in the EGL debugger"</span> or <span class="q">"Rich UI debugging."</span></p>
-To
-start a program using a launch configuration that you create yourself,
-do as follows:</div>
-
-<ol><li class="stepexpand"><span>Click <span class="menucascade"><span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug
-Configurations</span></span>.</span> The Debug
-Configurations window opens.</li>
-<li class="stepexpand"><span>In the left pane of the Debug Configurations window, right-click <span class="uicontrol">EGL
-Program</span>, then click <span class="uicontrol">New launch configuration</span> in
-the pop-up menu.</span> A new launch configuration is displayed
-below the <span class="uicontrol">EGL Program</span> heading. The <span class="uicontrol">Launch</span> tab
-is initially displayed.</li>
-<li class="stepexpand"><span>In the <span class="uicontrol">Name</span> field, type a name for
-the launch configuration. By default, the launch configuration has
-the same name as the program, unless a configuration already exists
-for this program.</span></li>
-<li class="stepexpand"><span>In the <span class="uicontrol">Project</span> field of the <span class="uicontrol">Load</span> tab,
-type the name of your project.</span></li>
-<li class="stepexpand"><span>In the <span class="uicontrol">EGL program source file</span> field,
-select the program that you want to debug.</span></li>
-<li class="stepexpand"><span>If you are debugging a program that takes command line
-arguments, click the <span class="uicontrol">Arguments</span> tab. List the
-arguments for the program, in order as you would on the command line.</span>
- <div class="note"><span class="notetitle">Note:</span> To see the arguments for an EGL main or called program,
-use <span class="uicontrol">SysLib.getCmdLineArg()</span> and <span class="uicontrol">SysLib.getCmdLineArgCount()</span>.</div>
-
-</li>
-<li class="stepexpand"><span>If you need to use a different JRE than the default for
-this project, click the <span class="uicontrol">JRE</span> tab and complete
-the information there.</span></li>
-<li class="stepexpand"><span>If you need additional Java classes
-to run the program, specify the paths for those classes on the <span class="uicontrol">Classpath</span> tab.</span>
-</li>
-<li class="stepexpand"><span>Add any needed source files on the <span class="uicontrol">Source</span> tab.</span>
-</li>
-<li class="stepexpand"><span>To set environment variables for the duration of the debug
-session only, type the names and values on the <span class="uicontrol">Environment</span> tab.</span>
-</li>
-<li class="stepexpand"><span>The <span class="uicontrol">Common</span> tab defines general information
-about the launch configuration.  You may choose to store the launch
-configuration in a specific file and specify which perspectives become
-active when the launch configuration is launched.</span></li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Apply</span> to save the launch configuration
-settings.</span> <div class="note"><span class="notetitle">Note:</span> If you have not yet clicked <span class="uicontrol">Apply</span> to
-save the launch configuration settings, clicking <span class="uicontrol">Revert</span> will
-remove all changes that you have made.</div>
-</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Debug</span> to launch the program
-in the EGL debugger.</span></li>
-</ol>
-
-</div>
-
-</div>
-
-<div class="nested1" xml:lang="en-us" id="debug_createlistnerconfig"><a name="debug_createlistnerconfig"><!-- --></a>
-<h2 class="topictitle2">Creating an EGL Listener launch configuration</h2>
-
-
-<div><p>You can create an EGL Listener launch configuration in
-the EGL debugger.</p>
-
-<div class="section"><p>To debug a non-JEE EGL application called from an EGL-generated Java application or wrapper, an
-EGL Listener launch configuration is required. </p>
-To create an EGL
-Listener launch configuration, do as follows: </div>
-
-<ol><li class="stepexpand"><span>Click the arrow next to the Debug button on the toolbar,
-then click <span class="uicontrol">Debug</span>, or select <span class="uicontrol">Debug</span> from
-the Run menu.</span> The Debug dialog box is displayed.
-</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">EGL Listener</span> in the Configurations
-list, then click the <span class="uicontrol">New launch configuration</span> button.</span>
-</li>
-<li class="stepexpand"><span>The Listener launch configuration is named <samp class="codeph">New_configuration</samp>.
- If you want to change the name of the launch configuration, type
-the new name in the Name field.</span></li>
-<li class="stepexpand"><span>If you do not type a port number, the port defaults to
-8346; otherwise, type a port number. Each EGL Listener requires its
-own port.</span></li>
-<li class="stepexpand"><span>If you are debugging a called program that takes arguments,
-click the <span class="uicontrol">Arguments</span> tab. List the arguments
-for the program, in order, as you would in a <span class="synph"><span class="kwd">call</span></span> statement.</span>
-</li>
-<li class="stepexpand"><span>If you need to use a different JRE than the default for
-this project, click the <span class="uicontrol">JRE</span> tab and complete
-the information there.</span></li>
-<li class="stepexpand"><span>If you need additional Java classes
-to run the program, specify the paths for those classes on the <span class="uicontrol">Classpath</span> tab.</span>
-</li>
-<li class="stepexpand"><span>Add any needed source files on the <span class="uicontrol">Source</span> tab.</span>
-</li>
-<li class="stepexpand"><span>To set environment variables for the duration of the debug
-session only, type the names and values on the <span class="uicontrol">Environment</span> tab.</span>
-</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Apply</span> to save the Listener
-launch configuration.</span></li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Debug</span> to launch the EGL Listener.</span>
-</li>
-</ol>
-
-</div>
-
-</div>
-
-<div class="nested1" xml:lang="en-us" id="debug_startnonj2ee"><a name="debug_startnonj2ee"><!-- --></a>
-<h2 class="topictitle2">Starting a non-JEE application in the EGL debugger</h2>
-
-
-<div><p>You can start a non-JEE application in the EGL debugger.</p>
-
-<div class="section"><p>To start debugging an EGL text program or non-JEE basic
-program in an EGL debugging session, a launch configuration is required.
-A launch configuration specifies the location of a program on disk
-and specifies how the program must be launched. You can let the EGL
-application create the launch configuration (implicit creation), or
-you can create one yourself (see <a href="#debug_createlaunchconfig" title="You can create a launch configuration in the EGL debugger.">Creating a launch configuration in the EGL debugger</a>).</p>
-To
-launch a program that uses an implicitly created launch configuration
-and to view the implicitly created launch configuration, do as follows:</div>
-
-<ol><li class="stepexpand"><span>To launch the program:</span>
-<ol type="a">
-<li class="substepexpand"><span>In the Project Explorer view, right-click the EGL source
-file that you want to launch. Alternatively, if the EGL source file
-is open in the EGL editor, you can right-click the program in the
-Outline view.</span> A menu opens.</li>
-
-<li class="substepexpand"><span>Click <span class="menucascade"><span class="uicontrol">Debug As</span>
- &gt; <span class="uicontrol">EGL Program</span></span>.</span> A
-launch configuration is created, and the program is launched in the
-EGL debugger.</li>
-
-</ol>
-
-</li>
-<li class="stepexpand"><span>To view the configuration:</span>
-<ol type="a">
-<li class="substepexpand"><span>Click the arrow next to the Debug button on the toolbar.</span>
- A pop-up menu is displayed.</li>
-
-<li class="substepexpand"><span>Click <span class="uicontrol">Debug</span>.</span> The
-Debug dialog is displayed. The name of the launch configuration is
-displayed in the Name field. Implicitly created launch configurations
-are named according to the project and source file names.
-</li>
-
-</ol>
-
- <div class="note"><span class="notetitle">Note:</span> You can also display the Debug dialog by clicking <span class="menucascade">
-<span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug</span></span>.</div>
-
-</li>
-</ol>
-
-</div>
-
-</div>
-
-<div class="nested1" xml:lang="en-us" id="debug_invokingdebugger"><a name="debug_invokingdebugger"><!-- --></a>
-<h2 class="topictitle2">Invoking the EGL debugger from generated Java code</h2>
-
-
-
-<div><p>You can invoke the EGL debugger from generated Java code.</p>
-
-<div class="section"><p>You can invoke the EGL debugger from an EGL-generated Java program or wrapper, so you
-can use the EGL debugger when you work on a partly deployed application.
-The program needs a call statement that you then associate with the <span class="synph"><span class="kwd">callLink </span></span> element
-of a linkage options part. Similarly, you must associate the wrapper
-with a <span class="synph"><span class="kwd">callLink </span></span> element. In either case,
-the element must specify the <span class="synph"><span class="kwd">remoteComType</span></span> property
-as DEBUG.</p>
-</div>
-
-<ul><li class="stepexpand"><span>Programs running in JEE</span> <p>To invoke the EGL
-debugger from an EGL-generated program or wrapper that runs in JEE,
-do as follows:</p>
-
-<ol>
-
-<li><span>Make sure that the program to be debugged is running
-in the same server as its caller.</span></li>
-
-<li><span>Add the EGL debugger JAR files to the server. Make sure
-the server is running in debug mode.</span></li>
-
-<li><span>Run the program in the debugger.</span></li>
-
-</ol>
-
-</li>
-<li class="stepexpand"><span>Programs not running in JEE</span> <p>Different rules
-apply when the called program to be debugged does not run in JEE.
-When this is the case, the caller of the program might be running
-anywhere, including on a remote system. Do as follows:</p>
-
-<ol>
-<li><span>Start a listener program. Start a listener by using
-an EGL Listener launch configuration that has only one configurable
-setting, a port number. The default port number is 8346.</span></li>
-
-<li><span>If multiple EGL Listeners are running at the same time,
-you must specify a different port for each EGL Listener. You might
-also need to specify a different port if port 8346 is being used by
-another application or if a firewall prevents use of that port. To
-specify a different port number, see <a href="#debug_createlistnerconfig" title="You can create an EGL Listener launch configuration in the EGL debugger.">Creating an EGL Listener launch configuration</a>.</span></li>
-
-</ol>
-
-</li>
-</ul>
-
-</div>
-
-</div>
 
 
 </body>

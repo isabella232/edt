@@ -90,15 +90,12 @@
              href="topics/tedt00539.html"/>
       <topic label="Adding an SQL binding to the EGL deployment descriptor"
              href="topics/tedt00542.html"/>
-      <topic label="Adding a non-web protocol binding to the EGL deployment descriptor"
+      <topic label="Adding an EGL binding to an EGL deployment descriptor"
              href="topics/tedt00540.html"/>
    </topic>
    <topic label="Debugging EGL source code in the EDT IDE" href="topics/cedt00500.html">
-      <topic label="Stepping through an application in the EGL debugger"
-             href="topics/tedt00579.html"/>
-      <topic label="Using breakpoints in the EGL debugger" href="topics/tedt00580.html"/>
-      <topic label="Starting the EGL debugger for EGL projects" href="topics/tedt00582.html"/>
-      <topic label="Debugging services with the EGL debugger" href="topics/tedt00583.html"/>
+      <topic label="Starting the EGL debugger" href="topics/tedt00582.html"/>
+      <topic label="Stepping through code in the EGL debugger" href="topics/tedt00579.html"/>
    </topic>
    <topic label="Accessing a relational database in the EDT IDE"
           href="topics/tedt00505.html">

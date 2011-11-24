@@ -4,10 +4,12 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Adding a SOAP binding to the EGL deployment descriptor"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="A SOAP service binding gives details necessary to access a SOAP service."></meta>
+<meta name="description" content="A SOAP service binding gives details necessary to access a SOAP service."></meta>
+<meta name="DC.subject" content="services, binding, WSDL files, SOAP services, WSDL"></meta>
+<meta name="keywords" content="services, binding, WSDL files, SOAP services, WSDL"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00535.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -20,19 +22,155 @@
 <body id="tedt00538"><a name="tedt00538"><!-- --></a>
 
 
+
+
 <h1 class="topictitle1">Adding a SOAP binding to the EGL deployment descriptor</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div id="body"><a name="body"><!-- --></a><p>A SOAP service binding gives details necessary
+to access a SOAP service.</p>
+
+<div class="p">In your workspace, you must have the following files:<ul>
+<li>A Web Services Description Language (WSDL) file that gives details
+on the service being accessed. </li>
+
+<li>A deployment descriptor. For details about creating the file,
+see <span class="q">"<a href="tedt00502.html" title="The EGL deployment descriptor provides details necessary to deploy a service internally; and provides resource-binding detail when you generate a logical unit that invokes a service or connects to a database.">Creating an EGL deployment descriptor in the EDT IDE</a>."</span></li>
+
+</ul>
+</div>
+
+<div class="section">To add a SOAP service binding, do as follows:</div>
+
+<ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
+the EGL deployment descriptor.</span></li>
+<li class="stepexpand"><span>Click <span class="uicontrol">Service Bindings</span>.</span>
+ The <span class="uicontrol">Service Bindings Configuration</span> tab
+is displayed.</li>
+<li class="stepexpand"><span>Click <span class="uicontrol">Add</span>.</span> The <span class="wintitle">Add
+a Service Binding</span> page is displayed.</li>
+<li class="stepexpand"><span>Click <span class="uicontrol">SOAP service binding</span> and then
+click <span class="uicontrol">Next</span>. </span> The <span class="wintitle">Add
+a REST Service Binding</span> page is displayed.</li>
+<li class="stepexpand"><span>If the WSDL file is not in your project but is elsewhere
+in your workspace, select <span class="uicontrol">Choose WSDL file from workspace
+and copy it to the current project</span>: </span>
+<ul>
+<li>If that check box is selected, click <span class="uicontrol">Browse</span> and
+search your workspace for the file. </li>
+
+<li>If that check box is clear, click <span class="uicontrol">Browse</span> and
+search in the EGL source folders of your project and in the EGL source
+folders of any project in the EGL build path of your project.</li>
+
+</ul>
+
+</li>
+<li class="stepexpand"><span>Under Interface Options, select a way to create or provide
+an Interface part:</span>
+<ul>
+<li>To create the part, click <span class="uicontrol">Generate EGL Interface
+from WSDL file</span>.<p>The part creation is helpful when names
+that are copied from the WSDL file are not valid in EGL or when you
+want to use an EGL package name that is not derived from the WSDL
+file. For details, see <span class="q">"@xml."</span></p>
+</li>
+
+<li>To use an existing part, click <span class="uicontrol">Use existing EGL
+interface</span>, click <span class="uicontrol">Browse</span>, and select
+that part. The purpose is convenience: when you work on the service
+binding in the EGL deployment descriptor editor, you can quickly access
+the part.<p>The Interface part can be a Service part that you will
+use when creating a service-access variable, as if the Service part
+were an Interface part.</p>
+</li>
+
+</ul>
+
+</li>
+<li class="stepexpand"><span>For the SOAP service binding name, either accept the default
+value, which is the name of a portType entry in the WSDL file, or
+type a different name.</span> <p>You specify the name when you
+declare a service-access variable and set the <span class="synph"><span class="kwd">@BindService</span></span> property, <span class="synph"><span class="kwd">bindingKey</span></span> field.</p>
+
+</li>
+<li class="stepexpand"><span>In the <span class="uicontrol">WSDL URI</span> field, accept the
+default value, which is the service-location detail that is specified
+in the WSDL file, or type a different value. The service-location
+detail in the WSDL file is in the soap:address element, in the location
+attribute. </span> <p>You might type the service-location detail
+in the <span class="uicontrol">WSDL URI</span> field to cause runtime access
+of a test version of the service.</p>
+</li>
+<li class="stepexpand"><span>If you selected <span class="uicontrol">Use existing EGL interface</span>,
+click <span class="uicontrol">Finish</span>. Otherwise, click <span class="uicontrol">Next</span> to
+display the first New EGL Interface page.</span></li>
+<li class="stepexpand"><span>Select the web service (that is, the WSDL file port entry)
+from which you want to create Interface parts.</span></li>
+<li class="stepexpand"><span>Click <span class="uicontrol">Next</span> to display the second <span class="uicontrol">New
+EGL Interface</span> page.</span></li>
+<li class="stepexpand"><span>Do as follows for the portType entry related to the selected
+web service: </span>
+<ol type="a">
+<li><span>Accept or update the name of the new Interface part.</span>
+</li>
+
+<li><span>Select or clear check boxes to specify which operations
+in the portType entry will be represented in the new Interface part.</span>
+</li>
+
+</ol>
+
+</li>
+<li class="stepexpand"><span>In the <span class="uicontrol">Source folder</span>, <span class="uicontrol">Package</span>,
+and <span class="uicontrol">EGL source file name</span> fields, specify the
+location and name of the file that will contain the new Interface
+parts.</span></li>
+<li class="stepexpand"><span>If you want to reference the Interface parts in a Rich
+UI application, select <span class="uicontrol">Create the interface and data to
+be compatible with Rich UI applications</span>.</span></li>
+<li class="stepexpand"><span>If you want to overwrite same-named EGL files, select <span class="uicontrol">Overwrite
+existing files</span>.</span></li>
+<li class="stepexpand"><span>Click <span class="uicontrol">Finish</span>.</span> The <span class="uicontrol">Service
+Bindings Configuration</span> tab is available again. 
+</li>
+</ol>
+
+<div class="section">In the future, you can update the service binding that you
+just defined: <ol>
+<li>Open the <span class="uicontrol">Service Bindings Configuration</span> tab.</li>
+
+<li>Select the binding.</li>
+
+<li>Edit the displayed information.</li>
+
+</ol>
+<div class="p">The tab includes the <span class="synph"><span class="kwd">enableGenerate</span></span> check
+box. The purpose of that check box is as follows:<ul>
+<li>For requesters being generated to COBOL, this option specifies
+whether to generate the web service access layer when you generate
+the deployment descriptor. You must generate the web service access
+layer at least once so that EGL will create the code necessary to
+access the service. After you have generated the web service access
+layer, you do not need to generate it again unless you change the
+information in the service binding. Generating the web service access
+layer can be time consuming; therefore you might want to clear this
+check box to save time.</li>
+
+<li>For requesters being generated to Java,
+this option specifies whether to add binding information to the binding
+file in the generated output. This information is required; therefore
+you must select this option for requesters being generated to Java.</li>
+
+</ul>
+</div>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

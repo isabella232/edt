@@ -6,14 +6,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Debugging EGL source code in the EDT IDE"></meta>
-<meta name="abstract" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. During the debugging session, you investigate both the execution paths in your logic and the changing values of variables."></meta>
-<meta name="description" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. During the debugging session, you investigate both the execution paths in your logic and the changing values of variables."></meta>
+<meta name="abstract" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. You can investigate the execution paths in your logic and the changing values of variables."></meta>
+<meta name="description" content="When you run a program, service, or Rich UI handler in the EGL debugger, you set a breakpoint to suspend execution and then run the code in a controlled way. You can investigate the execution paths in your logic and the changing values of variables."></meta>
 <meta name="DC.subject" content="debugging, EGL, overview, applications, EGL debugging"></meta>
 <meta name="keywords" content="debugging, EGL, overview, applications, EGL debugging"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00579.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00580.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00582.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00583.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00579.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -32,21 +30,36 @@
 
 <div id="body"><a name="body"><!-- --></a><p>When you run a program, service, or Rich UI
 handler in the EGL debugger, you set a breakpoint to suspend execution
-and then run the code in a controlled way. During the debugging session,
-you investigate both the execution paths in your logic and the changing
-values of variables.</p>
+and then run the code in a controlled way. You can investigate the
+execution paths in your logic and the changing values of variables.</p>
 
-<div class="p">You typically conduct a debugging session at least partly in the
-Debug perspective, where toolbar buttons give you the necessary control.
-The buttons are as follows, and you can access the same capabilities
-by right clicking in the Debug view:<dl>
+<div class="p">Also during a debugging session, you can do a “hot” code replace: <ol>
+<li>When the debugger suspends execution on a statement, you change
+the code that runs subsequent to the statement.</li>
+
+<li>The subsequent code and the debugger behave as if the changes
+had been in place before the debugging session.</li>
+
+</ol>
+</div>
+
+<div class="p">You do most debugging tasks in the Debug perspective. You can access
+the following capabilities either by pressing the appropriate toolbar
+button or by right clicking in the Debug view and then selecting a
+menu option:<dl>
 <dt class="dlterm">Drop to frame</dt>
 
 <dd>Works with the <dfn class="term">stack</dfn>, which is a list of runtime
-functions that contributed to the current execution status. The command
-lets you return to the first statement in any function in the stack,
-but does not change the values of variables that were changed since
-that first statement ran.</dd>
+functions that contributed to the current execution status. Included
+in that list is the <dfn class="term">initialization function</dfn>, which contains
+the statements that initialize global variables. <p>The <span class="synph"><span class="kwd">Drop
+to frame</span></span> command lets you return to the first statement
+in any function in the stack, but does not change the values of variables
+that were changed since that first statement ran.</p>
+<p>The <span class="synph"><span class="kwd">Drop
+to frame</span></span> command is not available for debugging code
+written for JavaScript.</p>
+</dd>
 
 
 <dt class="dlterm">Resume</dt>

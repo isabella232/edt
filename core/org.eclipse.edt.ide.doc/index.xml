@@ -7,11 +7,6 @@
 </entry>
 </entry>
 </entry>
-<entry keyword="breakpoints">
-<entry keyword="EGL debugger">
-<topic href="topics/tedt00580.html#tedt00580" title="Using breakpoints in the EGL debugger"/>
-</entry>
-</entry>
 <entry keyword="code">
 <entry keyword="templates">
 <entry keyword="creating">
@@ -40,41 +35,22 @@
 </entry>
 </entry>
 </entry>
-<entry keyword="code generation">
-<entry keyword="EGL">
-<entry keyword="debugging">
-<topic href="topics/tedt00582.html#debug_invokingdebugger" title="Invoking the EGL debugger from generated Java code"/>
-</entry>
-</entry>
-</entry>
 <entry keyword="debugging">
 <entry keyword="EGL">
 <entry keyword="basic steps">
-<topic href="topics/tedt00579.html#tedt00579" title="Stepping through an application in the EGL debugger"/>
-</entry>
-<entry keyword="breakpoints">
-<topic href="topics/tedt00580.html#tedt00580" title="Using breakpoints in the EGL debugger"/>
+<topic href="topics/tedt00579.html#tedt00579" title="Stepping through code in the EGL debugger"/>
 </entry>
 <entry keyword="creating a launch configuration">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-<entry keyword="creating a Listener launch configuration">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-<entry keyword="invoking from Java">
-<topic href="topics/tedt00582.html#debug_invokingdebugger" title="Invoking the EGL debugger from generated Java code"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 <entry keyword="overview">
 <topic href="topics/cedt00500.html#cedt00500" title="Debugging EGL source code in the EDT IDE"/>
 </entry>
-<entry keyword="services">
-<topic href="topics/tedt00583.html#tedt00583" title="Debugging services with the EGL debugger"/>
-</entry>
 <entry keyword="starting">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 <entry keyword="starting programs">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 </entry>
 </entry>
@@ -183,14 +159,8 @@
 </entry>
 </entry>
 <entry keyword="launch configurations">
-<entry keyword="explicit">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-<entry keyword="Listener">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-<entry keyword="viewing implicitly created configurations">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+<entry keyword="EGL">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 </entry>
 <entry keyword="packages">
@@ -253,16 +223,16 @@
 <entry keyword="programs">
 <entry keyword="EGL debugger">
 <entry keyword="core">
-<topic href="topics/tedt00579.html#tedt00579" title="Stepping through an application in the EGL debugger"/>
+<topic href="topics/tedt00579.html#tedt00579" title="Stepping through code in the EGL debugger"/>
 </entry>
-<entry keyword="non-JEE">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+<entry keyword="program">
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 </entry>
 </entry>
 <entry keyword="projects">
 <entry keyword="debugging in EGL">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger"/>
 </entry>
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
@@ -287,17 +257,42 @@
 <topic href="topics/tedt00516.html#tedt00516" title="Setting EGL preferences for Rich UI"/>
 </entry>
 </entry>
+<entry keyword="service clients">
+<entry keyword="binding">
+<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
+</entry>
+</entry>
 <entry keyword="services">
-<entry keyword="debugging">
-<topic href="topics/tedt00583.html#tedt00583" title="Debugging services with the EGL debugger"/>
+<entry keyword="binding">
+<entry keyword="REST">
+<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
+<entry keyword="WSDL files">
+<topic href="topics/tedt00538.html#tedt00538" title="Adding a SOAP binding to the EGL deployment descriptor"/>
+</entry>
 </entry>
 <entry keyword="deployment descriptor options">
 <entry keyword="list">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
 </entry>
+<entry keyword="EGL">
+<entry keyword="binding">
+<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
+<entry keyword="client binding">
+<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
+</entry>
+</entry>
 <entry keyword="IBM i">
 <topic href="topics/tedt00573.html#tedt00573" title="Accessing IBM i programs as web services: keystroke details"/>
+</entry>
+</entry>
+<entry keyword="SOAP services">
+<entry keyword="binding">
+<entry keyword="WSDL">
+<topic href="topics/tedt00538.html#tedt00538" title="Adding a SOAP binding to the EGL deployment descriptor"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="source files">
@@ -361,14 +356,26 @@
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
 </entry>
 </entry>
-<entry keyword="web applications">
-<entry keyword="debugging in EGL">
-<topic href="topics/tedt00582.html#tedt00582" title="Starting the EGL debugger for EGL projects"/>
-</entry>
-</entry>
 <entry keyword="web services">
+<entry keyword="binding">
+<entry keyword="EGL services">
+<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
+</entry>
+</entry>
 <entry keyword="deployment descriptor options">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+<entry keyword="Web services">
+<entry keyword="binding">
+<entry keyword="REST">
+<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="WSDL files">
+<entry keyword="binding">
+<topic href="topics/tedt00538.html#tedt00538" title="Adding a SOAP binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
 </index>
