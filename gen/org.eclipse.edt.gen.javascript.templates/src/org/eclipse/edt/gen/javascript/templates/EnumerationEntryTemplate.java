@@ -20,4 +20,10 @@ public class EnumerationEntryTemplate extends JavaScriptTemplate {
 	public void genName(EnumerationEntry element, Context ctx, TabbedWriter out) {
 		out.print(element.getName());
 	}
+	public void genRuntimeTypeName(EnumerationEntry element, Context ctx, TabbedWriter out) {
+		out.print("egl.");
+		ctx.invoke(genRuntimeTypeName, element, ctx, out, TypeNameKind.JavascriptImplementation);
+		out.print(".");
+		ctx.invoke(genName, element, ctx, out);
+	}
 }

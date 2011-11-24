@@ -28,10 +28,7 @@ public class XMLValueTemplate extends JavaScriptTemplate {
 	public void genConstructorOptions(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, EGLClass part) {
 		Object kind = annot.getValue("kind");
 		if(kind instanceof EnumerationEntry){
-			out.print("egl.");
-			ctx.invoke(genRuntimeTypeName, kind, ctx, out, TypeNameKind.JavascriptImplementation);
-			out.print(".");
-			ctx.invoke(genName, kind, ctx, out);
+			ctx.invoke(genRuntimeTypeName, kind, ctx, out);
 		}
 	}
 
