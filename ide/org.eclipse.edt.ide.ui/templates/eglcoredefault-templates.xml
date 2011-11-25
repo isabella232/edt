@@ -758,7 +758,7 @@ end
 </template>
 -->
 
-<template name="call" description="%Templates.call_statement_in_rui_app" id="org.eclipse.edt.ide.ui.templates.call_statement_rui" context = "egl-core" enabled="true">call ${serviceOrInterfaceReferance}.${functionName} returning to ${callbackFunctionName} onException ServiceLib.serviceExceptionHandler;</template>
+<template name="call" description="%Templates.call_statement_in_rui_app" id="org.eclipse.edt.ide.ui.templates.call_statement_rui" context = "egl-core" enabled="true">call ${serviceOrInterfaceReferance}.${functionName} returning to ${callbackFunctionName} onException ${exceptionHandlerFunctionName};</template>
 
 <template name="handler" description="%Templates.ruiHandler" id="org.eclipse.edt.ide.ui.templates.rui_handler" context = "egl-core" enabled="true">// RUI Handler
 
