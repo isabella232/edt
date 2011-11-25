@@ -5,9 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Using the Rich UI editor"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Using the EGL Rich UI editor"></meta>
+<meta name="abstract" content="You can use the EGL Rich UI editor to modify a Rich UI handler and to preview the handler's runtime behavior."></meta>
+<meta name="description" content="You can use the EGL Rich UI editor to modify a Rich UI handler and to preview the handler's runtime behavior."></meta>
+<meta name="DC.subject" content="editors, EGL Rich UI, overview, Rich UI, editor"></meta>
+<meta name="keywords" content="editors, EGL Rich UI, overview, Rich UI, editor"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00574.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00565.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00570.html"></meta>
@@ -17,17 +19,144 @@
 <meta name="DC.Identifier" content="tedt00560"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Using the Rich UI editor</title>
+<title>Using the EGL Rich UI editor</title>
 </head>
 <body id="tedt00560"><a name="tedt00560"><!-- --></a>
 
 
-<h1 class="topictitle1">Using the Rich UI editor</h1>
 
 
-<div><p></p>
+<h1 class="topictitle1">Using the EGL Rich UI editor</h1>
 
-<p>[ from “Introduction to the EGL Rich UI editor” ]</p>
+
+
+<div id="body"><a name="body"><!-- --></a><p>You can use the EGL Rich UI editor to modify
+a Rich UI handler and to preview the handler's runtime behavior.</p>
+
+<p>Here is an example of an open file in the Rich UI editor.</p>
+
+<p><br></br><img src="../images/pegl_richui_editor.jpg" alt="EGL Rich UI editor"></img><br></br></p>
+
+<div class="p">The Rich UI editor includes three views: <ul>
+<li>As shown in the example, the Design surface is a rectangular area
+that shows the displayable content of the Rich UI handler. You can
+drag-and-drop widgets from the palette into the Design surface or
+into the Outline view and then customize those widgets in the Properties
+view. You can also change the placement of widgets by working in the
+Design surface or in the Outline view.</li>
+
+<li>The Source view provides an embedded version of the EGL editor,
+where you update logic and add or update widgets. The Design view
+and Source view are integrated: changes to the Design view are reflected
+in the Source view; and, if possible, changes to the Source view are
+reflected in the Design view. </li>
+
+<li>The Preview view is a browser, internal to the Workbench, where
+you can run your logic. You can easily switch to an external browser
+if you prefer.</li>
+
+</ul>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Using the Design surface to create a DOM tree</h2><p>When
+you drag a widget from the palette to the Design surface, the areas
+that can receive the widget are called <cite>potential drop locations</cite>,
+and the color of those areas is yellow by default. When you hover
+over a potential drop location, the area is called a <cite>selected
+drop location</cite>, and the color of that area is green by default.
+You can customize the colors in the Workbench preferences.</p>
+<p>When
+you first drag a widget to the Design surface, the entire surface
+is a selected drop location, and the effect of the drop is to declare
+the widget and to identify it as the first element in the Rich UI
+handler's <samp class="codeph">initialUI</samp> property. That property accepts
+an array of widgets at development time. The array is ultimately used
+to create a DOM tree, which is a runtime data structure described
+in “Understanding how browsers handle a web application.” Specifically,
+the elements in the Rich UI handler's <samp class="codeph">initialUI</samp> array
+become children of the document element, with the order of <samp class="codeph">initialUI</samp> array
+elements at development time equivalent to the order of sibling DOM
+elements at run time.</p>
+<div class="p">When you drag another widget to the Design
+surface, you have the following choices:<ul>
+<li>You can place the widget adjacent to the initially placed widget.
+The effect on your source code is to declare the second widget and
+to identify it as another element in the <samp class="codeph">initialUI</samp> array.
+Your placement of the new widget is either before or after the first
+widget and indicates where the widget is placed in the array.</li>
+
+<li>If the initially placed widget was a container (for example, a
+box), you can place the second widget inside the first. The effect
+on your source code is to add an element to the <samp class="codeph">children</samp> property
+of the container. The effect is ultimately to add a child element
+to the DOM tree; specifically, to add a child element to the element
+that represents the container.</li>
+
+</ul>
+</div>
+<p>Your subsequent work continues to build the DOM tree.
+You can repeatedly fulfill drag-and-drop operations, with the placement
+of a widget determining what array is affected and where the widget
+is placed in the array. The drag-and-drop operation is an alternative
+to writing a widget declaration and array assignment in the code itself,
+whether in the <span class="uicontrol">Source</span> tab of the Rich UI editor
+or in the EGL editor. </p>
+<p>New widget declarations are added to
+the source code before the declarations that were already there; that
+is, the order of the statements is opposite to the order of the drag-and-drop
+operations.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Using the Outline view to update the Design surface</h2><div class="p">When
+you are using the Design surface, the Outline view has special capabilities: <ul>
+<li>You can drag and drop a widget from the palette to a specific
+position in the Outline view and (therefore) to a specific position
+on the Design surface.</li>
+
+<li>Within the Outline view, you can do as follows:<ul>
+<li>Drag and drop a widget to another position. (If you select a widget
+with descendents, the widget and its descendents can be dragged to
+another position.)</li>
+
+<li>Delete a widget by right-clicking the widget and clicking <span class="uicontrol">Delete</span>.</li>
+
+<li>Update details about the widget by right-clicking the widget,
+clicking <span class="uicontrol">Properties</span>, and following the procedure
+described in <cite>Setting widget properties and events</cite>. </li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Understanding the transparency options</h2><p>The
+Design surface is composed of two layers. The bottom layer is the
+web browser, which displays widgets, including initial text values.
+The top layer is an editing overlay, including angle brackets at each
+corner of each widget.</p>
+<p>The background of the top layer can have
+any of the following characteristics: transparent, a pattern of white
+and transparent dots, or (on Windows platforms)
+a white layer with a varying level of transparency. You can set those
+transparency options by setting a Workbench preference, as described
+in <span class="q">"Setting preferences for Rich UI appearance."</span> When you are
+working in the editor, you can change the transparency options that
+are in use for the editing session.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Combining the EGL Rich UI editor and the EGL editor</h2></div>
+
+<p>You can complement the features in the Rich UI editor by opening
+a single file in both the EGL Rich UI editor and the EGL editor. For
+example, the following screen shot displays the file GridDemo.egl
+in two ways. At the top is the Design tab of the Rich UI editor, along
+with a palette that lists the available Widget types. At the bottom
+is the EGL editor. Your work in either editor affects the same file
+and is reflected in the content displayed in the other editor.</p>
+
+<p><br></br><img src="../images/pegl_richui_editor_combine.jpg" alt="EGL Rich UI and EGL editors combined"></img><br></br></p>
 
 </div>
 

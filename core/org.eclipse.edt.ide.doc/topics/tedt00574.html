@@ -5,9 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Creating a web interface in the EGL Rich UI editor"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="DC.Title" content="Creating a web interface in the Rich UI editor"></meta>
+<meta name="abstract" content="This topic describes how to add, select, move, and delete widgets in the EGL Rich UI editor. In each case, you work on the Design surface, which you access by clicking on the Design tab."></meta>
+<meta name="description" content="This topic describes how to add, select, move, and delete widgets in the EGL Rich UI editor. In each case, you work on the Design surface, which you access by clicking on the Design tab."></meta>
+<meta name="DC.subject" content="editors, EGL Rich UI, creating web interfaces, Rich UI, editor, creating web interfaces"></meta>
+<meta name="keywords" content="editors, EGL Rich UI, creating web interfaces, Rich UI, editor, creating web interfaces"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00560.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00567.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00568.html"></meta>
@@ -19,17 +21,95 @@
 <meta name="DC.Identifier" content="tedt00574"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Creating a web interface in the EGL Rich UI editor</title>
+<title>Creating a web interface in the Rich UI editor</title>
 </head>
 <body id="tedt00574"><a name="tedt00574"><!-- --></a>
 
 
-<h1 class="topictitle1">Creating a web interface in the EGL Rich UI editor</h1>
 
 
-<div><p></p>
+<h1 class="topictitle1">Creating a web interface in the Rich UI editor</h1>
 
-<p></p>
+
+
+<div id="body"><a name="body"><!-- --></a><p>This topic describes how to add, select, move,
+and delete widgets in the EGL Rich UI editor. In each case, you work
+on the Design surface, which you access by clicking on the <span class="uicontrol">Design</span> tab.</p>
+
+<p>To learn the implication of the actions described here, see <span class="q">"Introduction
+to the EGL Rich UI editor."</span></p>
+
+<div class="section"><h2 class="sectiontitle">Adding a widget</h2><div class="p">To add a widget to a Rich
+UI handler:<ol>
+<li>Click a Widget type in the palette and hold the left mouse button</li>
+
+<li>Drag the widget to the Design surface</li>
+
+<li>Use the widget-placement guide to help identify where to drop
+the widget</li>
+
+<li>At the selected drop location, release the mouse button</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Changing the grid layout</h2><div class="p">The grid layout
+is a widget that is provided for you automatically when you use the
+workbench to create a Rich UI editor. To insert or delete cells quickly
+from the grid layout, do as follows: <ol>
+<li>Click a cell in the grid layout.</li>
+
+<li>Right-click that cell.</li>
+
+<li>If you want to insert cells, click <span class="uicontrol">Insert</span> and
+then the option of interest: <span class="uicontrol">Row above</span>, <span class="uicontrol">Row
+below</span>, <span class="uicontrol">Column to the left</span>, or <span class="uicontrol">Column
+to the right</span>.</li>
+
+<li>If you want to delete cells, click <span class="uicontrol">Delete</span> and
+then the option of interest: <span class="uicontrol">Row</span> or <span class="uicontrol">Column</span>.</li>
+
+</ol>
+</div>
+<p>For details on coding the grid layout, see <span class="q">"Rich UI
+GridLayout."</span></p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Selecting a widget when multiple widgets overlap</h2><p>When
+multiple widgets overlap a given area, click the area repeatedly to
+cycle through the available widgets, making each one the current one
+in turn. You can move or delete the current widget as described in
+the next sections.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Moving a widget</h2><div class="p">To move a widget from one
+location to another:<ol>
+<li>Click a widget on the Design surface and hold the left mouse button</li>
+
+<li>Drag the widget to the preferred location</li>
+
+<li>Use the widget-placement guide to help identify where to drop
+the widget</li>
+
+<li>At the selected drop location, release the mouse button</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Deleting a widget</h2><div class="p">To delete a widget:<ul>
+<li>Click the widget and press the <span class="uicontrol">Delete</span> key;
+or</li>
+
+<li>Right-click the widget and, at the popup menu, select <span class="uicontrol">Delete</span>.</li>
+
+</ul>
+</div>
+<p>The deletion removes the reference to the widget in the
+handler-specific <samp class="codeph">initialUI</samp> property or in the container-widget-specific <samp class="codeph">children</samp> property,
+but does not remove the widget declaration from the Rich UI handler.</p>
+</div>
 
 </div>
 

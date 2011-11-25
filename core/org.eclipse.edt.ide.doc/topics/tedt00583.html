@@ -4,12 +4,12 @@
 <html lang="en-us" xml:lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
-<meta name="DC.Type" content="task"></meta>
-<meta name="DC.Title" content="Debugging services with the EGL debugger"></meta>
-<meta name="abstract" content="You can debug your local EGL services similarly to the way that you debug programs."></meta>
-<meta name="description" content="You can debug your local EGL services similarly to the way that you debug programs."></meta>
-<meta name="DC.subject" content="services, debugging, EGL"></meta>
-<meta name="keywords" content="services, debugging, EGL"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Debugging a Rich UI application with the EGL debugger"></meta>
+<meta name="abstract" content="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger."></meta>
+<meta name="description" content="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger."></meta>
+<meta name="DC.subject" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting Rich UI applications, launch configurations, Rich UI, EGL debugger"></meta>
+<meta name="keywords" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting Rich UI applications, launch configurations, Rich UI, EGL debugger"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00500.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -17,63 +17,70 @@
 <meta name="DC.Identifier" content="tedt00583"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Debugging services with the EGL debugger</title>
+<title>Debugging a Rich UI application with the EGL debugger</title>
 </head>
 <body id="tedt00583"><a name="tedt00583"><!-- --></a>
 
 
-
-<h1 class="topictitle1">Debugging services with the EGL debugger</h1>
-
+<h1 class="topictitle1">Debugging a Rich UI application with the EGL debugger</h1>
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can debug your local EGL services similarly
-to the way that you debug programs.</p>
 
-<div class="p"><p>You will need an EGL Service part and a requester that
-has binding information for accessing the service.</p>
-<p>Note that
-before you can debug a web service on WebSphere Application Server you must generate
-the service.</p>
+<div id="body"><a name="body"><!-- --></a><p>When debugging a Rich UI application, you use
+a launch configuration that is created for you and then move back
+and forth between an external browser and the EGL debugger.</p>
+
+<div class="p">You can launch the application in the following ways:<ul>
+<li>Right-click the EGL file that contains the Rich UI handler and
+then click <span class="uicontrol">Debug As</span> <span class="uicontrol">&gt; EGL Rich UI
+application</span>.</li>
+
+<li>If you are working in a source file that contains a Rich UI handler,
+you can do the following procedure instead:<ul>
+<li>Use the workbench toolbar. Either click the Debug icon there or
+click the down-arrow next to the Debug icon and then click <span class="uicontrol">Debug
+As</span> <span class="uicontrol">&gt; EGL Rich UI application</span>.</li>
+
+<li>Alternatively, press F11 or use the topmost menu, where you click <span class="menucascade">
+<span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug</span></span>.</li>
+
+</ul>
+</li>
+
+</ul>
 </div>
 
-<div class="section"><p>The simplest way to debug a service is to call it from
-a program in the same project as the service. You can then pass test
-values to the service and inspect the results.</p>
-To debug
-your local EGL services, do as follows:</div>
+<p>The debugger opens the application in an external browser. At the
+first breakpoint, if a dialog is displayed to ask whether you want
+to go into the Debug perspective, click <strong>Yes</strong>. </p>
 
-<ol><li class="stepexpand"><span>Create a new EGL source program.</span></li>
-<li class="stepexpand"><span>In the program, declare a service variable that is based
-on the Service part that you want to test.</span></li>
-<li class="stepexpand"><span>Create a service binding in the deployment descriptor as
-an EGL service (not a web service) with a <span class="q">"local"</span> protocol.</span>
-</li>
-<li class="stepexpand"><span>Using the service binding, bind the variable to the service.</span>
-</li>
-<li class="stepexpand"><span> In the main() function of the program, make at least one
-call to the service using that variable.</span> The easiest
-way is to hard code the input values in the service call and write
-the output values to the console, as in the following example:<pre class="codeblock">program addTestProgram 	 	
+<div class="p">Your task is twofold: <ul>
+<li>At every breakpoint, you go to the workbench to work with the
+code in the debugger.</li>
 
-myAddingMachine additionService 
-   {@Resource {bindingKey = "additionService"}};
+<li>As necessary, you return to the external browser to type input.</li>
 
-   function main()
-      sumint int;
-      sumint = myAddingMachine.addInts(5, 12);
-      SysLib.writeStdOut("result = " + sumint);
-   end
-end</pre>
-</li>
-<li class="stepexpand"><span>Set a breakpoint at the service call. See <a href="tedt00580.html" title="This topic shows you how to use breakpoints in debugging your programs. You can manage breakpoints inside or outside of an EGL debugging session.">Using breakpoints in the EGL debugger</a>.</span></li>
-<li class="stepexpand"><span>Set breakpoints in the service, as you would in any logic
-part.</span></li>
-<li class="stepexpand"><span>Debug your new EGL source program. At the breakpoint before
-the service call, step into the service code. The debugger pauses
-at the breakpoints in the service just as in any other logic part.</span>
-</li>
-</ol>
+</ul>
+</div>
+
+<div class="p">In relation to Rich UI, the EGL debugger does not respond to changes
+that were made to declarations and logic statements during a debugging
+session. However, the debugger does respond to those changes in the
+following cases:<ul>
+<li>When you debug a service that is invoked from Rich UI and that
+is running in the workbench rather than in an application server;
+or</li>
+
+<li>When you debug a library that is invoked from a service that is
+running in the workbench.</li>
+
+</ul>
+</div>
+
+<p>When you want to end the debugging session, click the Terminate
+button of the debugger and, if you are not in the EGL perspective,
+return to the coding task by clicking the EGL perspective icon at
+the top right of the workbench. </p>
 
 </div>
 

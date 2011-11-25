@@ -11,7 +11,7 @@
 <meta name="DC.subject" content="debugging, EGL, overview, applications, EGL debugging"></meta>
 <meta name="keywords" content="debugging, EGL, overview, applications, EGL debugging"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00582.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00579.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00583.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -33,7 +33,8 @@ handler in the EGL debugger, you set a breakpoint to suspend execution
 and then run the code in a controlled way. You can investigate the
 execution paths in your logic and the changing values of variables.</p>
 
-<div class="p">Also during a debugging session, you can do a “hot” code replace: <ol>
+<div class="p">When you are debugging logic that is outside of Rich UI, you can
+also do a “hot code replace”: <ol>
 <li>When the debugger suspends execution on a statement, you change
 the code that runs subsequent to the statement.</li>
 
@@ -43,10 +44,50 @@ had been in place before the debugging session.</li>
 </ol>
 </div>
 
-<div class="p">You do most debugging tasks in the Debug perspective. You can access
-the following capabilities either by pressing the appropriate toolbar
-button or by right clicking in the Debug view and then selecting a
-menu option:<dl>
+<p>The debugger always starts debugging from the program or Rich UI
+handler that runs initially. If you want to debug a service that is
+available in the workbench or to debug a library, you must step into
+the service or library from the logic that runs initially. In some
+cases, you might want to write a simple program or Rich UI handler
+to call the logic that you want to debug.</p>
+
+<div class="p">This introductory topic includes the following sections:<ul>
+<li><a href="#cedt00500__breakpoints">Breakpoints</a></li>
+
+<li><a href="#cedt00500__debug">The Debug perspective</a></li>
+
+<li><a href="#cedt00500__practice">A short practice session</a></li>
+
+<li><a href="#cedt00500__info">For further information</a></li>
+
+</ul>
+</div>
+
+<div class="section" id="cedt00500__breakpoints"><a name="cedt00500__breakpoints"><!-- --></a><h2 class="sectiontitle">Breakpoints</h2><div class="p">You can add
+a breakpoint at most EGL logic statements, though not at the following
+ones: <ul>
+<li>A variable declaration that does not include an assignment.</li>
+
+<li>A line of code that begins a logical unit or that gives a directive.
+Examples are the <span class="synph"><span class="kwd">package</span></span> declaration or
+the line that begins with <span class="synph"><span class="kwd">program</span></span>. </li>
+
+<li>An <span class="synph"><span class="kwd">end</span></span> statement.</li>
+
+<li>A blank line or a line that consists only of a comment.</li>
+
+</ul>
+</div>
+<p>Breakpoints do not affect the source code or generated
+output, but are meaningful only during the debugging session.</p>
+</div>
+
+<div class="section" id="cedt00500__debug"><a name="cedt00500__debug"><!-- --></a><h2 class="sectiontitle">The Debug perspective</h2><p>The Debug
+perspective gives you the easiest access to the capabilities of the
+EGL debugger. </p>
+<div class="p">In the Debug view, the following capabilities
+are available if you press the appropriate toolbar button or if you
+right click and then select a menu option:<dl>
 <dt class="dlterm">Drop to frame</dt>
 
 <dd>Works with the <dfn class="term">stack</dfn>, which is a list of runtime
@@ -128,10 +169,9 @@ option lets you end the run and immediately begin another.</p>
 
 </dl>
 </div>
-
-<div class="p">If you right click the gray border to the left of a line of code,
-the following debugging options are available in the context menu:<dl>
-
+<div class="p">If you right click the gray border to the left
+of a line of code, the following debugging options are available in
+the context menu:<dl>
 <dt class="dlterm">Disable breakpoint</dt>
 
 <dd>Retains an existing breakpoint so that you recall its position,
@@ -155,15 +195,148 @@ opening the context menu, by double clicking on the gray area.</dd>
 
 </dl>
 </div>
-
-<div class="p">If you right click in the code that you are debugging, the following
-debugging option in available in the context menu:<dl>
+<div class="p">If you right click in the code that you are
+debugging, the following debugging option in available in the context
+menu:<dl>
 <dt class="dlterm">Run to line</dt>
 
 <dd>Runs all statements up to, but not including, the statement on
 a specified line.</dd>
 
 </dl>
+</div>
+<p>As noted in the next section, the Debug perspective
+includes views to see variable values and to quickly enable or disable
+breakpoints.</p>
+</div>
+
+<div class="section" id="cedt00500__practice"><a name="cedt00500__practice"><!-- --></a><h2 class="sectiontitle">A short practice session</h2><div class="p">To
+debug a sample program, do as follows:<ol>
+<li>Create an EGL basic project, create a package named <samp class="codeph">myPkg</samp> and
+copy the following code into a source file in that package:<pre class="codeblock">package common;
+
+program MyProgram 
+
+  function main()
+
+    //Provide some initial values for the array of items.
+    customerItems Items[] = new Items[3];
+    customerItems[1].itemNumber=1;
+    customerItems[2].itemNumber=2;
+    customerItems[3].itemNumber=3;
+    customerItems[1].itemCost=12.50;
+    customerItems[2].itemCost=200;
+    customerItems[3].itemCost=49.95;
+    customerItems[1].itemQuantity=30;
+    customerItems[2].itemQuantity=10;
+    customerItems[3].itemQuantity=60;
+
+    counter int;
+    orderTotal float=0;
+
+    //Calculate the total cost of the items.
+    //Use the discountPrice function to get the discounted cost of each item.
+    for (counter from 1 to customerItems.getSize() by 1)
+      orderTotal += discountPrice(customerItems[counter].itemCost, 
+                                  customerItems[counter].itemQuantity);
+    end // for loop
+
+    //Write the output to the console.
+    SysLib.writeStderr("The total cost for the order is $" + orderTotal);
+  end // main
+
+  //Return a total price for a group of items 
+  //based on the item price and a quantity discount.
+  function discountPrice(itemCost float in, itemQuantity int in) returns(float)
+    discountRate float=0;
+    quantCost float=0;
+
+    //Determine the discount for each quantity.
+    //Discount 20% for more than 50 items.
+    //Discount 5% for more than 20 items.
+    case
+      when (itemQuantity &gt; 50)
+        discountRate = 1/5;
+     when (itemQuantity &gt; 20 &amp;&amp; itemQuantity &lt;= 50)
+       discountRate = 1/20;
+     otherwise
+       //bug - division by zero
+       discountRate = 1/0;
+     end
+
+    //Multiply the cost of the item, the number of items, 
+    //and the discounted price.
+    quantCost = itemCost*itemQuantity*(1-discountRate); 
+    quantCost = MathLib.round(quantCost, -2);
+
+    return (quantCost);
+  end // function discountPrice
+
+end // program
+
+Record Items 
+  itemNumber    int;
+  itemCost      float;
+  itemQuantity  int;
+end</pre>
+</li>
+
+<li>Add breakpoints at four statements in the <samp class="codeph">discountPrice</samp> function,
+as shown here: <br></br><img src="../images/tedt00579.jpg" alt="Breakpoints in the code."></img><br></br>To set a given breakpoint,
+double-click the gray margin to the left of the statement. Each breakpoint
+is marked with a blue circle in that margin.</li>
+
+<li>In the Project Explorer view, right-click the EGL source program
+and click <span class="menucascade"><span class="uicontrol">Debug as</span> &gt; <span class="uicontrol">EGL
+Java Main Application</span></span>. </li>
+
+<li>If you are asked whether to open the Debug perspective, click <span class="uicontrol">Yes</span>.
+The debugger begins running the program.</li>
+
+<li>At the first breakpoint, the debugger suspends the run: <ul>
+<li>The EGL editor highlights the line about to be executed.</li>
+
+<li>The Variables view shows the value of all the variables in the
+current logic. You can use this view to track the value of a variable
+through the program. </li>
+
+<li>The Debug view lists the threads running within the current run
+unit. Use this view to resume or stop the debugging process.</li>
+
+<li>The Breakpoints view lists the breakpoints in the program. From
+this view, you can disable a breakpoint temporarily by clearing its
+check box.</li>
+
+</ul>
+</li>
+
+<li>When you want the debugger to continue, press F11 or click the <span class="uicontrol">Resume</span> button
+at the top of the Debug view. <p>Run the example program from breakpoint
+to breakpoint until the debugger reaches the line <samp class="codeph">discountRate
+= 1/0;</samp>, at which point the run ends with an error.</p>
+</li>
+
+<li>Right click in the Debug view and click <span class="uicontrol">Relaunch</span>.
+When the debugger suspends execution at the first breakpoint, click
+one or the other step button so that the program runs the next line
+and then pauses. Try different options.</li>
+
+<li>When you are finished with the practice session, click the <span class="uicontrol">Terminate</span> button
+at the top of the Debug view and return to the coding task by clicking
+the EGL perspective icon at the top right of the workbench.</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section" id="cedt00500__info"><a name="cedt00500__info"><!-- --></a><h2 class="sectiontitle">For further information</h2><div class="p">The following
+topics are also available:<ul>
+<li><a href="tedt00582.html" title="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you.">Debugging a program with the EGL debugger</a></li>
+
+<li><a href="tedt00583.html" title="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger.">Debugging a Rich UI application with the EGL debugger</a></li>
+
+</ul>
+</div>
 </div>
 
 </div>

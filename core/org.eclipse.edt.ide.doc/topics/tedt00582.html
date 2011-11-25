@@ -5,11 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Starting the EGL debugger"></meta>
-<meta name="abstract" content="To start the debugging process you need a launch configuration, which specifies where your logic resides and aspects of the runtime environment. For simple cases, you can use a launch configuration that is provided automatically."></meta>
-<meta name="description" content="To start the debugging process you need a launch configuration, which specifies where your logic resides and aspects of the runtime environment. For simple cases, you can use a launch configuration that is provided automatically."></meta>
-<meta name="DC.subject" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger, program"></meta>
-<meta name="keywords" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger, program"></meta>
+<meta name="DC.Title" content="Debugging a program with the EGL debugger"></meta>
+<meta name="abstract" content="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you."></meta>
+<meta name="description" content="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you."></meta>
+<meta name="DC.subject" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger"></meta>
+<meta name="keywords" content="debugging, EGL, starting, projects, debugging in EGL, creating a launch configuration, starting programs, launch configurations, programs, EGL debugger"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00500.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -17,36 +17,49 @@
 <meta name="DC.Identifier" content="tedt00582"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Starting the EGL debugger</title>
+<title>Debugging a program with the EGL debugger</title>
 </head>
 <body id="tedt00582"><a name="tedt00582"><!-- --></a>
 
 
-<h1 class="topictitle1">Starting the EGL debugger</h1>
+<h1 class="topictitle1">Debugging a program with the EGL debugger</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>To start the debugging process you need a launch
-configuration, which specifies where your logic resides and aspects
-of the runtime environment. For simple cases, you can use a launch
-configuration that is provided automatically.</p>
+<div id="body"><a name="body"><!-- --></a><p>When debugging a program written in EGL you
+use a launch configuration, which specifies where your logic resides
+and aspects of the runtime environment. In many cases, you can use
+a launch configuration that is provided for you.</p>
 
-<div class="section"><h2 class="sectiontitle">Starting the debugger with a provided launch configuration </h2><div class="p">To
-launch a program with a provided launch configuration:<ol>
-<li>In the Project Explorer view, right-click the EGL source file
-that includes the program to be launched. A menu is displayed.</li>
+<p>The next sections describe how to start debugging a program. In
+any case, when you want to end the debugging session, click the Terminate
+button of the top of the Debug view and, if you are not in the EGL
+perspective, return to the coding task by clicking the EGL perspective
+icon at the top right of the workbench. </p>
 
-<li>Click <span class="menucascade"><span class="uicontrol">Debug As</span> &gt; <span class="uicontrol">EGL
-Java Main Application</span></span>. If you are asked
-whether to go into the Debug perspective, click <strong>Yes</strong>. The program
-starts in the EGL debugger.</li>
+<div class="section"><h2 class="sectiontitle">Starting to debug a program with a provided launch
+configuration </h2><div class="p">You can launch the code in the following
+ways:<ul>
+<li>Right-click the EGL file that contains the program and click <span class="uicontrol">Debug
+As</span> <span class="uicontrol">&gt; EGL Java Main Application</span>.</li>
 
-</ol>
+<li>If you are working in the source file that contains the program,
+you can do the following procedure instead:<ul>
+<li>Use the workbench toolbar. Either click the Debug icon there or
+click the down-arrow next to the Debug icon and then click <span class="uicontrol">Debug
+As</span> <span class="uicontrol">&gt; EGL Main Application</span>.</li>
+
+<li>Alternatively, press F11 or use the topmost menu, where you click <span class="menucascade">
+<span class="uicontrol">Run</span> &gt; <span class="uicontrol">Debug</span></span>.</li>
+
+</ul>
+</li>
+
+</ul>
 </div>
-<p>Here is an alternative way to start: Press F11 or use
-the topmost menu, where you click <span class="menucascade"><span class="uicontrol">Run</span>
- &gt; <span class="uicontrol">Debug</span></span>.</p>
 </div>
+
+<div class="section"></div>
 
 <div class="section"><h2 class="sectiontitle">Creating a launch configuration and starting the debugger
 with it</h2><div class="p">To create a launch configuration:<ol>
