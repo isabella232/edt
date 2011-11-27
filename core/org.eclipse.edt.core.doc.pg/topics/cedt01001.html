@@ -34,14 +34,13 @@ source code.</p>
 </div>
 </div>
 
-<p>The developer's task is threefold: first, to write and test
-source code, which includes the build step illustrated in the figure,
-although that step is typically automatic; second, to generate and
-prepare the code for external deployment; and third, to install the
-code on one or another platform.</p>
-
-<div class="p">Here is an overview of the first two steps, which are specific
-to EGL technology:<ol>
+<div class="section"><h2 class="sectiontitle">The developer’s task</h2><p>The developer's task
+is threefold: first, to write and test source code, which includes
+the build step illustrated in the figure, although that step is typically
+automatic; second, to generate and prepare the code for external deployment;
+and third, to install the code on one or another platform.</p>
+<div class="p">Here
+is an overview of the first two steps, which are specific to EGL technology:<ol>
 
 <li>The <dfn class="term">EGL compiler</dfn> is invoked as you are working on
 a source file. The compiler acts as follows: <ol type="a">
@@ -80,33 +79,63 @@ the pre-generation.</li>
 
 <li>If generation succeeds, the generated output can become an input
 to an <dfn class="term">EGL deployer</dfn>, which readies the generated output
-for deployment on an EGL target platform. <p>You invoke the deployer
-after configuring the <dfn class="term">EGL deployment descriptor</dfn>, which
-is an XML file identified by the extension <samp class="codeph">.egldd</samp>.
-The EGL deployment descriptor controls aspects of service deployment,
-JavaScript deployment, and access of resources.</p>
-<div class="p">The EGL deployment
-descriptor is also used when you are debugging code. <ul>
-<li>For an overview of service deployment and access, see <a href="cedt01003.html" title="EGL provides two kinds of support for service-oriented architecture (SOA): service development and service access.">EGL support for SOA</a>.</li>
-
-<li>For an overview of JavaScript deployment, see <a href="cedt01002.html" title="This section gives an overview of EGL support for Rich Internet Applications.">EGL support for Rich Internet Applications</a>.</li>
-
-<li>For an overview of accessing details on relational database connections,
-see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize for inclusion in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</li>
-
-</ul>
-</div>
-<p>The related keystroke details are here: <a href="../../org.eclipse.edt.ide.doc/topics/tedt00535.html" title="You can specify a target in the EGL deployment descriptor.">Editing an EGL deployment descriptor in the EDT IDE</a>.</p>
-<div class="note"><span class="notetitle">Note:</span> The
-EGL deployment descriptor is different from the Java Platform, Enterprise Edition (JEE) deployment
-descriptors, which are <samp class="codeph">web.xml</samp> (for WAR files) and <samp class="codeph">application.xml</samp> (for
-EAR files). </div>
+for deployment on an EGL target platform and places the completed
+output in a web project.<p>You must explicitly invoke the deployer
+by interacting with an <dfn class="term">EGL deployment descriptor</dfn>. That
+descriptor is a customizable XML file that controls aspects of service
+and JavaScript deployment and includes details on how to access <dfn class="term">resources</dfn>,
+which are the services and databases that your logic requires. The
+EGL deployment descriptor has the extension <samp class="codeph">.egldd</samp> and
+is different from the Java Platform,
+Enterprise Edition (JEE) deployment descriptors. </p>
 </li>
 
 </ol>
 </div>
+</div>
 
-<div class="p">EGL documentation refers to several stages:<ul>
+<div class="section"><h2 class="sectiontitle">Uses of the EGL deployment descriptor</h2><div class="p">The
+EGL deployment descriptor has two uses:<ul>
+<li>To ready the generated output for deployment, as noted earlier. </li>
+
+<li>To provide the resource-access details that are used when you
+are debugging or otherwise running code in the workbench.</li>
+
+</ul>
+</div>
+<div class="p">The resource-access details that are used for deployment
+are likely to be different from the equivalent details that are used
+for running code in the workbench. To handle this issue, you can include
+multiple EGL deployment descriptors in a given project. You make use
+of one or the other with a few keystrokes:<ul>
+<li>At any given time, you assign one descriptor as the <dfn class="term">development
+deployment descriptor</dfn>. This descriptor provides the details
+that are needed to run your application in the workbench. For example,
+the development deployment descriptor might point to a test database
+rather than a production database and might reference an EGL Service
+type that you are developing instead of referencing a deployed service.<p>To
+assign a descriptor as the development deployment descriptor, you
+right click the project, click <span class="uicontrol">Properties</span>,
+and update a list box.</p>
+</li>
+
+<li>Similarly, when you deploy an application, you right click an
+EGL deployment descriptor and click <span class="uicontrol">Deploy EGL Descriptor</span>.</li>
+
+</ul>
+</div>
+<p>When you create an EGL project, a single deployment descriptor
+is included in the EGLSource folder, and the default behavior is for
+that descriptor to be used as the development deployment descriptor
+thereafter, even if you add new ones. One consequence is that, in
+your initial work with EGL, you might not be concerned with the distinction
+between the development deployment descriptor and others.</p>
+<p>For
+further details on working with the EGL deployment descriptor, see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00535.html" title="You can specify a target in the EGL deployment descriptor.">Editing an EGL deployment descriptor in the EDT IDE</a>.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">The stages of development</h2><div class="p">EGL development
+involves several stages:<ul>
 <li>You write the EGL source code at <dfn class="term">development time</dfn>.</li>
 
 <li>The EGL compiler creates the output written to IR files at <dfn class="term">compilation
@@ -125,6 +154,7 @@ runtime environment at <dfn class="term">external-deployment time</dfn>.</li>
 time</dfn>.</li>
 
 </ul>
+</div>
 </div>
 
 </div>

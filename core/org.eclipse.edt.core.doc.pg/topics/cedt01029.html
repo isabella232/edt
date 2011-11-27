@@ -34,7 +34,7 @@ way, regardless of which kind of data store is accessed.</p>
 
 <div class="p">Most of the customized variables that you use for relational database
 access are based on the following types:<ul>
-<li>SQLDataSource, which represents a database connection. </li>
+<li>SQLDataSource, which represents a database connection.</li>
 
 <li>SQLResultSet, which represents a result set returned from an SQL
 query.</li>
@@ -44,6 +44,24 @@ by issuing the EGL <strong>Prepare</strong> statement. This kind of SQL statemen
 is a <dfn class="term">prepared statement</dfn>. It is structured from a string
 at run time and often has characteristics that are known only at run
 time.</li>
+
+</ul>
+</div>
+
+<div class="p">A particularly important point is that you can declare a variable
+of type SQLDataSource either to represent a connection that is specified
+directly in your logic or to reference a database binding in the EGL
+deployment descriptor:<ul>
+<li>Here is an example in which the connection is specified directly
+in the logic:<pre class="codeblock">connectURL string = "jdbc:derby:SomeDB;create=true;";
+properties Dictionary{user = "MyID", password = "MyPassword"};
+ds SQLDataSource? = new SQLDataSource(connectURL, properties);
+</pre>
+</li>
+
+<li>Here is an example of a reference to a deployment descriptor entry
+named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{bindingkey = "MyDatabaseBinding"}};  </pre>
+</li>
 
 </ul>
 </div>
@@ -58,8 +76,6 @@ topics.</li>
 
 </ul>
 </div>
-
-<p>[ resource access ]</p>
 
 
 

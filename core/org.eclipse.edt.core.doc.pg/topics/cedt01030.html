@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Resource bindings"></meta>
-<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a set of details for accessing a service or database."></meta>
-<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a set of details for accessing a service or database."></meta>
+<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. The bindings are maintained in an EGL deployment descriptor, which is external to your logic and provides the access details when you are developing or deploying your application."></meta>
+<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. The bindings are maintained in an EGL deployment descriptor, which is external to your logic and provides the access details when you are developing or deploying your application."></meta>
 <meta name="DC.subject" content="Resource bindings"></meta>
 <meta name="keywords" content="Resource bindings"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
@@ -27,13 +27,16 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p>One of the more elegant aspects of EGL is its
-use of <dfn class="term">resource bindings</dfn>, each of which is a set of details
-for accessing a service or database.</p>
+use of <dfn class="term">resource bindings</dfn>, each of which is a value that
+describes how to access a service or database. The bindings are maintained
+in an EGL deployment descriptor, which is external to your logic and
+provides the access details when you are developing or deploying your
+application.</p>
 
-<p>You maintain the bindings in an EGL deployment descriptor, which
-is external from your logic. That descriptor is used when you are
-running or deploying your logic and when you are debugging code in
-the EGL debugger.</p>
+<p>This use of the deployment descriptor is safe and flexible. You
+can change the details stored there and then redeploy the code without
+changing the access logic and without spending the time to regenerate
+output.</p>
 
 <div class="section"><h2 class="sectiontitle">Service bindings</h2><div class="p">If the purpose of a resource
 binding is service access, the definition is called a <dfn class="term">service
@@ -54,7 +57,7 @@ that points to a workspace location. Here is an example:<ul class="simple">
 
 </ul>
 <p>In this case, an internal Test Server enables you to debug
-the code.</p>
+the code. For further information, see <a href="cedt01031.html" title="EGL uses a test server to invoke services from the workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
 </li>
 
 </ul>
@@ -63,12 +66,10 @@ the code.</p>
 
 <div class="section"><h2 class="sectiontitle">Database bindings</h2><p>If the purpose of a resource
 binding is database access, the definition is called a <dfn class="term">database
-binding</dfn> and includes connection detail. The binding might include
-details or might reference a connection that you defined in Eclipse. </p>
-<p>To
-access a relational database, you include connection details directly
-in your code, in the DataSource object that is referenced in database-access
-statements. </p>
+binding</dfn>. You can place the binding in the EGL deployment descriptor,
+but also have the option to include the binding details directly in
+your code.</p>
+<p>For further details, see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize for inclusion in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</p>
 </div>
 
 </div>
