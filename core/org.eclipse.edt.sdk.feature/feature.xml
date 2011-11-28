@@ -17,6 +17,10 @@
       %license
    </license>
 
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/edt/updates/1.0"/>
+   </url>
+
    <includes
          id="org.eclipse.edt.feature"
          version="0.0.0"/>
