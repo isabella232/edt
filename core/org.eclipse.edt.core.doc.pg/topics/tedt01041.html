@@ -9,6 +9,7 @@
 <meta name="DC.subject" content="text, globalization with Rich UI, Rich UI, globalization, properties files"></meta>
 <meta name="keywords" content="text, globalization with Rich UI, Rich UI, globalization, properties files"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01002.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt01001.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -41,31 +42,30 @@ be used more widely.</li>
 
 <div class="section"><h2 class="sectiontitle">Overriding validation or formatting messages</h2><div class="p">If
 you wish to override validation or formatting messages, do as follows:<ul>
-<li>Ensure that you are using the controller mechanism described in <em>Rich
-UI validation and formatting</em>.</li>
+<li>Ensure that you are using the controller mechanism described in <a href="cedt01020.html">Rich UI validation and formatting</a>.</li>
 
 <li>Create a Rich UI properties library—a library part that has the
-stereotype <strong>RUIProperties</strong>, as described in <em>RUIPropertiesLibrary
-stereotype</em>. For an example that follows, the library name is <samp class="codeph">myLibrary</samp>,
-and the library includes declarations of strings named <samp class="codeph">entryForInputRequired</samp> and <samp class="codeph">entryForOthers</samp>.
-Those variable names are case sensitive.</li>
+stereotype <strong>RUIProperties</strong>. Details are here: <a href="redt01001.html" title="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application.">RUIPropertiesLibrary stereotype</a>.<p>For an example that follows, the
+library name is <samp class="codeph">myLibrary</samp>, and the library includes
+declarations of strings named <samp class="codeph">entryForInputRequired</samp> and <samp class="codeph">entryForOthers</samp>.
+Those variable names are case sensitive.</p>
+</li>
 
-<li>In a Rich UI handler or other code, specify the property <strong>validationPropertiesLibrary</strong> in
-a part definition or variable declaration, along with other validation
-and formatting properties. Here is an example declaration:<pre class="codeblock">name STRING {inputRequired = yes,
+<li>In a Rich UI handler or other code, specify the <strong>validationPropertiesLibrary</strong> field
+in a type definition or variable declaration, along with other validation
+and formatting fields. Here is an example declaration:<pre class="codeblock">name STRING {inputRequired = yes,
              lowercase = yes,
              inputRequiredMsgKey = "entryForInputRequired",
              typeChkMsgKey = "entryForOthers",
              validationPropertiesLibrary=myLibrary };</pre>
 <p>The
-property <strong>validationPropertiesLibrary</strong> is used only when you
-are overriding validation and formatting messages.</p>
+<strong>validationPropertiesLibrary</strong> field is used only when you are
+overriding validation and formatting messages.</p>
 </li>
 
 <li>Set up a properties file and include entries (name-value pairs)
-for which the names match the values of <strong>MsgKey</strong> properties.
-In the current example, the properties file includes the following
-entries:<pre class="codeblock">entryForInputRequired=You must specify a value
+for which the names match the values of <strong>MsgKey</strong> fields. In the
+current example, the properties file includes the following entries:<pre class="codeblock">entryForInputRequired=You must specify a value
 entryForOthers=Your input is incorrect
 someText=Not mentioned
 </pre>
@@ -82,15 +82,15 @@ message "You must specify a value," which is identified by the name <samp class=
 
 <li>An input of an uppercase letter at run time also results in display
 of the message "Your input is incorrect." This outcome occurs because
-the value of the property <strong>typeChkMsgKey</strong> is used in response
-to a variety of errors; in this case, in response to a user input
-(the uppercase letter) that is disallowed by the lowercase property.</li>
+the value of the <strong>typeChkMsgKey</strong> field is used in response to
+a variety of errors; in this case, in response to a user input (the
+uppercase letter) that is disallowed by the lowercase property.</li>
 
 </ul>
 </div>
 <div class="p">Here are the rules that explain the behavior just described:<ul>
 <li>For a given data field, you can override the default messages
-associated with each of the following properties:<ul>
+associated with each of the following fields:<ul>
 <li><strong>inputRequired</strong></li>
 
 <li><strong>minimumInput</strong></li>
@@ -99,11 +99,11 @@ associated with each of the following properties:<ul>
 
 </ul>
 <p>The override relies on one of the following three "MsgKey"
-properties: inputRequiredMsgKey, minimumInputMsgKey, and validValuesMsgKey.</p>
+fields: inputRequiredMsgKey, minimumInputMsgKey, and validValuesMsgKey.</p>
 </li>
 
 <li>Also for a given data field, you can specify a single override
-for errors related to any of the following properties:<ul>
+for errors related to any of the following fields:<ul>
 <li><strong>currency</strong></li>
 
 <li><strong>currencySymbol</strong></li>
@@ -133,7 +133,7 @@ for errors related to any of the following properties:<ul>
 <li><strong>zeroFormat</strong></li>
 
 </ul>
-<p>That single override also relies on the property <strong>typeChkMsgKey</strong>.</p>
+<p>That single override also relies on the <strong>typeChkMsgKey</strong> field.</p>
 </li>
 
 </ul>
@@ -162,8 +162,7 @@ provide inserts to a properties-file entry.</li>
 </ul>
 </div>
 <p>You can also use the library function <span class="synph"><span class="kwd">getMessage</span></span> to
-provide inserts to a string inside your code. For details on using
-inserts, see <em>RUIPropertiesLibrary stereotype</em>.</p>
+provide inserts to a string inside your code. </p>
 </div>
 
 <div class="section"><h2 class="sectiontitle">Displaying text in one or another language</h2><p>A
@@ -216,10 +215,10 @@ from www.example.com, if a German version was deployed there:<pre class="codeblo
 <p>You
 store properties files in the WebContent/properties folder of your
 project. The root of the property file name (for example, <samp class="codeph">myLibrary</samp>)
-must be the name specified in the<strong> propertiesFile</strong> property in
-the Rich UI properties library.</p>
-<div class="p">The EGL deployer ensures that
-the HTML file identifies a properties file for each Rich UI properties
+must be the name specified in the<strong> propertiesFile</strong> annotation
+in the Rich UI properties library.</p>
+<div class="p">The EGL deployer ensures
+that the HTML file identifies a properties file for each Rich UI properties
 library that is referenced in your application. The following rules
 indicate how the file name for a given language is determined:<ul>
 <li>If the name of an available file exactly matches a locale, the

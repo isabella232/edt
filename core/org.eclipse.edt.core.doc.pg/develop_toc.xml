@@ -59,7 +59,9 @@
          <topic label="Form processing with Rich UI" href="topics/cedt01021.html"/>
       </topic>
       <topic label="Using properties files for displayable text in Rich UI"
-             href="topics/tedt01041.html"/>
+             href="topics/tedt01041.html">
+         <topic label="RUIPropertiesLibrary stereotype" href="topics/redt01001.html"/>
+      </topic>
       <topic label="Additional features in Rich UI">
          <topic label="Drag and drop in EGL Rich UI applications" href="topics/cedt01026.html"/>
          <topic label="Browser history" href="topics/cedt01023.html"/>

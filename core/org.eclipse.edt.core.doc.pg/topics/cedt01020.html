@@ -69,8 +69,7 @@ controllers. In such a form, you can display the error messages that
 result from validations and formatting.</p>
 <p>The next sections describe
 the Controller and how to work with it. For details on creating forms,
-see “Form processing with Rich UI,” which uses the mechanisms described
-here.</p>
+see <a href="cedt01021.html" title="Rich UI provides a way to implement the kind of form processing that is traditional in business software. The processing depends on the Rich UI controller, which is a definition that relates a single view—a widget—with a single model—a data field. For details on Rich UI controllers, see “Rich UI validation and formatting.”">Form processing with Rich UI</a> .</p>
 </div>
 
 <div class="section"><h2 class="sectiontitle">The Controller in Rich UI</h2><div class="p">Consider the following
@@ -430,9 +429,9 @@ characters.</li>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Validation and formatting annotations</h2><div class="p">Each
-of the annotations used in Rich UI validation and formatting can be
-categorized with a single letter:<ul>
+<div class="section"><h2 class="sectiontitle">Validation and formatting fields</h2><div class="p">Each of
+the fields used in Rich UI validation and formatting can be categorized
+with a single letter:<ul>
 <li>F is for formatting. An annotation in this category removes formatting
 characters during commit and adds formatting characters during publish.
 Any of these annotations can result in the display of an error message;
@@ -444,7 +443,7 @@ required date format, or if an integer value is a number other than
 
 </ul>
 </div>
-<div class="p">Here are all the annotations:<ul>
+<div class="p">Here are all the fields:<ul>
 <li>currency (F)</li>
 
 <li>currencySymbol (F)</li>
@@ -489,8 +488,7 @@ required date format, or if an integer value is a number other than
 
 </ul>
 </div>
-<div class="p">The following annotations are further described in “Use
-of properties files for displayable text”:<ul>
+<div class="p">The following fields are further described in <a href="tedt01041.html">Using properties files for displayable text in Rich UI</a>:<ul>
 <li>inputRequiredMsgKey (V)</li>
 
 <li>minimumInputMsgKey (V)</li>

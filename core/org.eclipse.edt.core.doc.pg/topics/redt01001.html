@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="RUIPropertiesLibrary stereotype"></meta>
+<meta name="abstract" content="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application."></meta>
+<meta name="description" content="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application."></meta>
+<meta name="DC.subject" content="Library parts, stereotypes, RUIPropertiesLibrary, RUIPropertiesLibrary stereotype, details"></meta>
+<meta name="keywords" content="Library parts, stereotypes, RUIPropertiesLibrary, RUIPropertiesLibrary stereotype, details"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt01041.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt01001"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>RUIPropertiesLibrary stereotype</title>
+</head>
+<body id="redt01001"><a name="redt01001"><!-- --></a>
+
+
+<h1 class="topictitle1">RUIPropertiesLibrary stereotype</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>You set up a Rich UI properties library (stereotype <strong>RUIPropertiesLibrary</strong>)
+if you wish to retrieve displayable text from external files rather
+than hard-coding the text in your Rich UI application. </p>
+
+<p>The overall mechanism is described in <a href="tedt01041.html">Using properties files for displayable text in Rich UI</a>.
+You can also use an implicit function in a Rich UI properties library
+to substitute values in any string.</p>
+
+<div class="p">Here is an example of a Rich UI properties library:<pre class="codeblock">Library myLibrary type RUIPropertiesLibrary {propertiesFile="myFile")
+   entryForInputRequired STRING;
+   entryForOthers STRING;
+   someText STRING;
+end </pre>
+</div>
+
+<p>Any value assigned directly in a declaration (for example, <samp class="codeph">someText
+String = "Click!";</samp>) has no effect. Every runtime value comes
+from an external file, with one exception: if the file does not include
+a particular entry (for example, if the file does not include an entry
+for <samp class="codeph">someText</samp>), the value at run time is the string
+equivalent of the variable name (for example, "someText").</p>
+
+<div class="section"><h2 class="sectiontitle">propertiesFile field</h2><div class="p">The <span class="synph"><span class="kwd">propertiesFile</span></span> field
+refers to the root name of the file. The file (or files, if multiple
+translations are available) must reside directly in the project's
+WebContent/properties directory. Do <em>not</em> include any of the
+following details in the root name: <ul>
+<li>Path information such as "properties/myFile"</li>
+
+<li>Hyphens</li>
+
+<li>Translation-specific information such "en_US"</li>
+
+<li>The file extension, which is necessarily <em>properties</em></li>
+
+</ul>
+</div>
+<p>The default value for <span class="synph"><span class="kwd">propertiesFile</span></span> is
+the name of the library; in this case, "myLibrary".</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Function getMessage</h2><div class="p">Every RUI properties
+library implicitly includes the function <span class="synph"><span class="kwd">getMessage</span></span>,
+which lets you add inserts when selecting a message from the properties
+file or from a string in your code. For example, the following message
+in a properties file requires two inserts: <pre class="codeblock">someText=Promote {0} in the {1} department</pre>
+</div>
+<div class="p">Here
+is example code that writes the string "Promote Jeff in the Sales
+department" to a label: <pre class="codeblock">employeeName, departmentName String;
+employeeName = "Jeff";
+departmentName = "Sales";
+
+myLabel TextLabel {text = 
+   myLibrary.getMessage(myLibrary.someText, [employeeName, departmentName]);</pre>
+</div>
+<div class="p">An
+alternative invocation has the same effect as the previous one but
+does not access a properties file:<pre class="codeblock">myMessage STRING = "Promote {0} in the {1} department";
+myLabel TextLabel {text = 
+   myLibrary.getMessage(myMessage, [employeeName, departmentName]); </pre>
+</div>
+<div class="p">Here
+is the function signature:<pre class="codeblock">getMessage(<em>baseMessage</em> STRING in, <em>inserts</em> STRING[] in) returns (<em>fullMessage</em> STRING);</pre>
+</div>
+<div class="p"><dl>
+
+<dt class="dlterm"><span class="synph"><span class="var">baseMessage</span></span></dt>
+
+<dd>A string or a field in an RUI properties library.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">inserts</span></span></dt>
+
+<dd>An array of strings, with the first element providing an insert
+for the placeholder {0}, the second providing an insert for the placeholder
+{1}, and so on. </dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">fullMessage</span></span></dt>
+
+<dd>The base message with as many placeholders resolved as possible</dd>
+
+</dl>
+</div>
+<div class="p">The inserts are in ascending order, starting
+at 0, and the placeholders in the message may be in any order and
+do not need to be in sequence. If an insert does not match a placeholder
+by number, the insert is unused. If a placeholder is unresolved, the
+placeholder itself is in the returned message. For example, the returned
+message is "Promote Jeff in the {1} department" in the following case:<pre class="codeblock">employeeName STRING = "Jeff";
+myMessage STRING = "Promote {0} in the {1} department";
+myLabel TextLabel {text = 
+   myLibrary.getMessage(myMessage, [employeeName]); </pre>
+</div>
+<p>You
+cannot use the function <span class="synph"><span class="kwd">getMessage</span></span> when
+overriding a validation or formatting message. You cannot pass inserts
+to such a message.</p>
+</div>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>
