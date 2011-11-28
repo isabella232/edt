@@ -23,16 +23,12 @@
 
 
 
-
 <h1 class="topictitle1">Adding a REST binding to the EGL deployment descriptor</h1>
 
 
 
 <div id="body"><a name="body"><!-- --></a><p>A REST service binding gives details necessary
 to access a REST or EGL REST-RPC service. </p>
-
-<div class="p">Before you can perform this task you must have an EGL deployment
-descriptor. If you need to create the file, see <span class="q">"<a href="tedt00502.html" title="The EGL deployment descriptor provides details necessary to deploy a service internally; and provides resource-binding detail when you generate a logical unit that invokes a service or connects to a database.">Creating an EGL deployment descriptor in the EDT IDE</a>."</span></div>
 
 <div class="section">To add a REST binding to an EGL deployment descriptor, do
 as follows:</div>
@@ -64,7 +60,7 @@ of a service-access variable in your code.</span></li>
 </ol>
 
  You specify the service-binding name when you declare a service-access
-variable and set the <span class="synph"><span class="kwd">@BindService</span></span> property, <span class="synph"><span class="kwd">bindingKey</span></span> field.
+variable and set the <span class="synph"><span class="kwd">Resource</span></span> annotation, <span class="synph"><span class="kwd">bindingKey</span></span> field.
 </li>
 <li class="stepexpand"><span>In the <span class="uicontrol">baseURI</span> field, type a string
 to identify the first qualifiers in the URI that is used to access
@@ -83,10 +79,8 @@ as an EGL REST-RPC service. </li>
 requester and service can participate in a multistep conversation.</li>
 
 </ul>
-<p>The value of this field overrides the setting of the <span class="synph"><span class="kwd">defaultSessionCookieID</span></span> build
-descriptor option.</p>
-<p>For background information, see “Accessing IBM i programs as web services:
-overview.”</p>
+<p>For background information, see “Accessing IBM i programs as web services: overview.”</p>
+
 </li>
 <li class="stepexpand"><span>Click <span class="uicontrol">Finish</span>.</span> The <span class="uicontrol">Service
 Bindings Configuration</span> tab is available again.
@@ -102,25 +96,9 @@ just defined: <ol>
 <li>Edit the displayed information.</li>
 
 </ol>
-<div class="p">The tab includes the <span class="synph"><span class="kwd">enableGenerate</span></span> check
-box. The purpose of that check box is as follows:<ul>
-<li>For requesters being generated to COBOL, this option specifies
-whether to generate the web service access layer when you generate
-the deployment descriptor. You must generate the web service access
-layer at least once so that EGL will create the code necessary to
-access the service. After you have generated the web service access
-layer, you do not need to generate it again unless you change the
-information in the service binding. Generating the web service access
-layer can be time-consuming; therefore you might want to clear this
-check box to save time.</li>
-
-<li>For requesters being generated to Java,
-this option specifies whether to add binding information to the binding
-file in the generated output. This information is required; therefore
-you must select this option for requesters being generated to Java.</li>
-
-</ul>
-</div>
+<p>The tab includes the <span class="synph"><span class="kwd">enableGenerate</span></span> check
+box. The purpose of that check box is to specify whether to add binding
+information to the binding file in the generated output. </p>
 </div>
 
 </div>

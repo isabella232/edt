@@ -6,8 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Using content assist"></meta>
-<meta name="abstract" content=""></meta>
-<meta name="description" content=""></meta>
+<meta name="abstract" content="To use content assist,"></meta>
+<meta name="description" content="To use content assist,"></meta>
+<meta name="DC.subject" content="content assist, editors, EGL, source files"></meta>
+<meta name="keywords" content="content assist, editors, EGL, source files"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00558.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,16 +25,72 @@
 <h1 class="topictitle1">Using content assist</h1>
 
 
-<div><p></p>
 
-<p></p>
+<div><p>To use content assist, </p>
+
+<p>The EGL content assist is a tool that you can use to complete programming
+statements without having to type the entire statement. It provides
+a way to quickly insert an EGL keyword, function, variable, property,
+or code template.</p>
+
+<p>When you initiate the content assist, it presents all of the available
+keywords that are legal at that position. You can control the amount
+of information that is displayed when you initiate the content assist.
+You can filter the displayed information by entering the beginning
+characters of the function that you want to insert and then initiate
+the content assist. For example, if you are looking for <span class="synph"><span class="kwd">program</span></span>,
+type <samp class="codeph">pr</samp> and press Ctrl+Space. The displayed list
+will contain those commands, templates, and code statements that begin
+with <samp class="codeph">pr</samp>. You can narrow the list more by increasing
+the number of characters that you type for the search argument (for
+example, type <samp class="codeph">progr</samp>).</p>
+
+<div class="p">To use the content assist, do the following steps:<ol>
+<li>Within an EGL source file, press Ctrl + Space. The content assist
+displays a list of EGL keywords and code templates legal at your current
+position. <p>To reduce the number of items in the list, type at least
+one character of the keyword or template you are searching for before
+or after activating the content assist.</p>
+</li>
+
+<li>Select the desired code from the list by doing one of the following:<ul>
+<li>Use the arrow keys to select an option and press Enter.</li>
+
+<li>Click on an option in the list.</li>
+
+</ul>
+</li>
+
+<li>The code is inserted into the current location of the cursor.
+You can then modify the inserted code.</li>
+
+<li>If you inserted a code template with variables rather than a single
+keyword, those variables are highlighted in the inserted code temporarily.
+Press the Tab key to move to a highlighted variable.</li>
+
+</ol>
+</div>
+
+<div class="p">The content assist is context-sensitive. For example, if you are
+in a set-value block for a program, the content assist offers only
+properties that are valid for programs. You can use the content assist
+to add additional properties as follows: <ol>
+<li>Type a comma (<samp class="codeph">,</samp>) after the last property-value
+pair.</li>
+
+<li>Position the cursor after the comma and press Ctrl+Space to initiate
+the content assist. The resulting list shows properties that are both
+valid for the program and not yet included in the program.</li>
+
+<li>Select the desired code as described above.</li>
+
+</ol>
+</div>
 
 </div>
 
-<div>
-<div class="familylinks">
-</div>
-</div>
+<anchor id="related_links"></anchor>
+
 
 </body>
 </html>

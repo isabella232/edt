@@ -23,7 +23,6 @@
 
 
 
-
 <h1 class="topictitle1">Adding Rich UI deployment details to the EGL deployment descriptor</h1>
 
 
@@ -35,8 +34,7 @@ with details that are needed to deploy Rich UI applications.</p>
 do as follows:</div>
 
 <ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
-an EGL deployment descriptor.</span> For details about creating
-the file, see <span class="q">"<a href="tedt00502.html" title="The EGL deployment descriptor provides details necessary to deploy a service internally; and provides resource-binding detail when you generate a logical unit that invokes a service or connects to a database.">Creating an EGL deployment descriptor in the EDT IDE</a>."</span></li>
+an EGL deployment descriptor.</span> </li>
 <li class="stepexpand"><span>Click the <span class="uicontrol">Rich UI Deployment</span> tab.</span>
  The <span class="uicontrol">Rich UI Deployment</span> page is
 displayed.</li>
@@ -86,8 +84,10 @@ For example, if you specify <kbd class="userinput">myFile.htm</kbd> and,
 as described later, you request an output for the American English
 locale, the deployment step creates the file named <span class="filepath">myFile.htm_en_US.html</span>.
 </li>
-<li class="stepexpand"><span>If you selected a single handler in Step <a href="#tedt00537__checkboxes">5</a>, you can specify which handlers
-the selected handler will download dynamically:</span>
+<li class="stepexpand"><span><strong>This step is not available in version .7. </strong>If you
+selected a single handler in Step <a href="#tedt00537__checkboxes">5</a>,
+you can specify which handlers the selected handler will download
+dynamically:</span>
 <ol type="a">
 <li class="substepexpand"><span>In the section at the bottom left, click <span class="synph"><span class="kwd">Configure</span></span>.</span>
  The <span class="synph"><span class="kwd">Configure Rich UI Dynamic Loading</span></span> page
@@ -134,16 +134,12 @@ from a Rich UI preference, which you can access by clicking <span class="uicontr
 A second preference specifies which locales are selected by default
 on the <span class="uicontrol">Rich UI Deployment</span> tab.</p>
 <div class="p">Here are
-sources of further information about locales, at the Rational Business Developer information
-center (<a href="http://publib.boulder.ibm.com/infocenter/rbdhelp/v8r0m0/index.jsp" target="_blank">http://publib.boulder.ibm.com/infocenter/rbdhelp/v8r0m0/index.jsp</a>):<ul>
-<li>For background, see <span class="q">"Use of properties files for displayable
-text."</span></li>
+sources of further information about locales:<ul>
+<li>For background, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01041.html">Using properties files for displayable text in Rich UI</a>.</li>
 
-<li>For details about setting the list of available locales, see <span class="q">"Setting
-preferences for Rich UI."</span> </li>
+<li>For details about setting the list of available locales, see <a href="tedt00516.html" title="You can set EGL Rich UI preferences for locales, appearance, and deployment.">Setting EGL preferences for Rich UI</a>.</li>
 
-<li>For details about specifying the default locales, see <span class="q">"Setting
-preferences for Rich UI deployment."</span></li>
+<li>For details about specifying the default locales, see <a href="tedt00576.html" title="The deployment preferences affect the Rich UI deployment tab of the EGL Deployment Descriptor editor.">Setting preferences for EGL Rich UI deployment</a>.</li>
 
 </ul>
 </div>

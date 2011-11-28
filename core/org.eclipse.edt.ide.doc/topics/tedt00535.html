@@ -15,7 +15,8 @@
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00538.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00539.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00542.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/tedt00540.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00584.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00585.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -25,7 +26,6 @@
 <title>Editing an EGL deployment descriptor in the EDT IDE</title>
 </head>
 <body id="tedt00535"><a name="tedt00535"><!-- --></a>
-
 
 
 
@@ -42,9 +42,9 @@ file. The following table lists the purpose of each tab in the editor:
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
 <thead align="left">
 <tr>
-<th class="cellrowborder" valign="top" id="d7368e61">Tab</th>
+<th class="cellrowborder" valign="top" id="d7379e57">Tab</th>
 
-<th class="cellrowborder" valign="top" id="d7368e64">Purpose</th>
+<th class="cellrowborder" valign="top" id="d7379e60">Purpose</th>
 
 </tr>
 
@@ -52,11 +52,10 @@ file. The following table lists the purpose of each tab in the editor:
 
 <tbody>
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Overview</td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Overview</td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the deployment target, if any and
-to specify the Java runtime
-code for SOAP services and requesters. <div class="p">The <span class="uicontrol">Overview</span> tab
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To identify the deployment target by a process
+described later in this topic..<div class="p">The <span class="uicontrol">Overview</span> tab
 also summarizes the information on the other tabs:<ul>
 <li>You can collapse or expand a twistie to display or hide a summary
 for a given tab.</li>
@@ -71,51 +70,32 @@ to access that tab.</li>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Rich UI deployment</td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Rich UI deployment</td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the Rich UI handlers being deployed.</td>
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To identify the Rich UI handlers being deployed.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Services deployment</td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Services deployment</td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the EGL REST-RPC and SOAP services
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To identify the EGL REST-RPC and SOAP services
 being deployed.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Service bindings</td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Resource bindings</td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To indicate how to access the following kinds
-of services: <ul>
-<li>EGL</li>
-
-<li>REST, including EGL REST-RPC services</li>
-
-<li>SOAP</li>
-
-<li>IBM i service programs that
-are accessed directly, by way of a native binding</li>
-
-</ul>
-</td>
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To indicate how to access the resources described
+in <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. The bindings are maintained in an EGL deployment descriptor, which is external to your logic and provides the access details when you are developing or deploying your application.">Resource bindings</a>. </td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Sharable protocols</td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Imports</td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the sharable protocols that were
-configured in the deployment descriptor.</td>
-
-</tr>
-
-<tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Imports</td>
-
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the deployment descriptors that
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To identify the deployment descriptors that
 are referenced from the deployment descriptor being defined. The content
 in those files is made available when you generate or deploy the deployment
 descriptor.  </td>
@@ -123,9 +103,9 @@ descriptor.  </td>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d7368e61 ">Resources </td>
+<td class="cellrowborder" valign="top" headers="d7379e57 ">Resources </td>
 
-<td class="cellrowborder" valign="top" headers="d7368e64 ">To identify the files that are deployed from
+<td class="cellrowborder" valign="top" headers="d7379e60 ">To identify the files that are deployed from
 among the deployable files that are accessible to the project. <p>By
 default, files in the project itself are accessible, as are files
 in every project in the EGL build path.</p>
@@ -144,7 +124,7 @@ specify a target in the deployment descriptor, do as follows:</p>
 </div>
 
 <ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
-an EGL deployment descriptor.  If you need to create the file, see <span class="q">"<a href="tedt00502.html" title="The EGL deployment descriptor provides details necessary to deploy a service internally; and provides resource-binding detail when you generate a logical unit that invokes a service or connects to a database.">Creating an EGL deployment descriptor in the EDT IDE</a>."</span> </span> The <span class="uicontrol">EGL
+an EGL deployment descriptor.  If you need to create the file, see <a href="tedt00502.html" title="The EGL deployment descriptor provides the details necessary to deploy a service or Rich UI application; and provides resource-binding detail when you generate a logical unit that invokes a service or connects to a database.">Creating an EGL deployment descriptor in the EDT IDE</a>. </span> The <span class="uicontrol">EGL
 Deployment Descriptor Overview</span> tab is displayed. To display
 this tab later, click the <span class="uicontrol">Overview</span> tab in the
 lower part of the editor.</li>
@@ -166,13 +146,11 @@ qualified directory name or by browsing to the location.</span></li>
 <li class="substepexpand"><span>Specify the target runtime server either by selecting
 from the <span class="uicontrol">Target runtime</span> list or by clicking
 the <span class="uicontrol">New Runtime</span> button.</span> In
-the former case, proceed to Step <a href="#tedt00535__finish_dwp">2.h</a>.
+the former case, proceed to Step <a href="#tedt00535__continue">2.e</a>.
 In the latter case, the <span class="wintitle">New Server Runtime Environment</span> page
-is displayed.</li>
-
-<li class="substepexpand"><span>If you are deploying to an existing Apache Tomcat server,
-do as follows on the <span class="wintitle">New Server Runtime Environment</span> page:</span>
- <ol type="i">
+is displayed.<ul>
+<li>If you are deploying to an existing Apache Tomcat server, do as
+follows on the <span class="wintitle">New Server Runtime Environment</span> page:<ol type="i">
 <li>Expand <span class="uicontrol">Apache</span> and select the Apache Tomcat
 version that is used to configure the new project.</li>
 
@@ -194,42 +172,8 @@ Web Project</span> page.</li>
 </ol>
 </li>
 
-<li class="substepexpand"><span>If you are deploying to an Apache Tomcat to be installed,
-do as follows on the <span class="wintitle">New Server Runtime Environment</span> page:</span>
- <ol type="i">
-<li>Expand <span class="uicontrol">Apache</span> and select the Apache Tomcat
-version that is used to configure the new project.</li>
-
-<li>Click <span class="uicontrol">Next</span>. The <span class="wintitle">Tomcat Server</span> window
-opens.</li>
-
-<li>Click <span class="uicontrol">Download and Install</span> to display the <span class="wintitle">Feature
-License</span> window and begin installing a new version from
-the Apache website.</li>
-
-<li>Select <span class="uicontrol">I accept the terms of the licensing agreement</span>.</li>
-
-<li>Click <span class="uicontrol">Finish</span>, displaying the Browse for
-Folder window.</li>
-
-<li>Select a folder in which to install the new version.</li>
-
-<li>Click <span class="uicontrol">OK</span>.</li>
-
-<li>Specify the Java Runtime
-edition (JRE) to use with Apache Tomcat, either by selecting a specific
-JRE or by selecting the workbench default. To change the workbench
-default, click <span class="uicontrol">Installed JRE</span>. In the Installed
-JREs window, select, add, or search for a different JRE and click <span class="uicontrol">OK</span>.</li>
-
-<li>Click <span class="uicontrol">Finish</span> to return to the <span class="wintitle">Dynamic
-Web Project</span> page.</li>
-
-</ol>
-</li>
-
-<li class="substepexpand"><span>If you are deploying to IBM WebSphere Application Server
-or another application server that is compliant with Java EE, do as follows:</span> <ol type="i">
+<li>If you are deploying to IBM WebSphere Application Server
+or another application server that is compliant with Java EE, do as follows:<ol type="i">
 <li>Expand <span class="uicontrol">IBM</span> and select the version of WebSphere Application Server
 that will be used to configure the new project. If you need to identify
 a previously unspecified installation of WebSphere Application Server, click <span class="uicontrol">Create
@@ -263,7 +207,10 @@ press F1 for help.</li>
 </ol>
 </li>
 
-<li class="substepexpand" id="tedt00535__finish_dwp"><a name="tedt00535__finish_dwp"><!-- --></a><span>In most cases, you can now click <span class="uicontrol">Finish</span> on
+</ul>
+</li>
+
+<li class="substepexpand" id="tedt00535__continue"><a name="tedt00535__continue"><!-- --></a><span>In most cases, you can now click <span class="uicontrol">Finish</span> on
 the <span class="wintitle">Dynamic Web Project</span> page. If you need to
 update other details, such as the context root, do as follows:</span>
  <ol type="i">
@@ -298,21 +245,6 @@ details for web service deployment.”</li>
 </li>
 
 </ol>
-
-</li>
-<li class="stepexpand"><span>If you want to specify the deployment target by specifying
-a build descriptor, select the <span class="uicontrol">Build Descriptor</span> check
-box and do one of the following tasks:</span>
-<ul>
-<li>Select the build descriptor from the menu.</li>
-
-<li>Browse to and select a build descriptor from the EGL build
-path; specifically, from a file in an <span class="uicontrol">EGLSource</span> folder.</li>
-
-<li>To remove the name of a previously selected build descriptor,
-click <span class="uicontrol">Clear</span>.</li>
-
-</ul>
 
 </li>
 </ol>

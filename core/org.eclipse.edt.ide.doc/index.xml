@@ -1,10 +1,57 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <index>
+<entry keyword="add EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00021.html#redt00021" title="Add statement for a relational database"/>
+</entry>
+</entry>
+<entry keyword="annotations">
+<entry keyword="Column">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00174.html#redt00174" title="Column annotation"/>
+</entry>
+<entry keyword="GeneratedValue">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00175.html#redt00175" title="GeneratedValue annotation"/>
+</entry>
+<entry keyword="JoinColumn">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00267.html#redt00267" title="JoinColumn annotation"/>
+</entry>
+<entry keyword="PrimaryKeyJoinColumn">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="PrimaryKeyJoinColumns">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="Resource">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00087.html#redt00087" title="Resource annotation"/>
+</entry>
+<entry keyword="SecondaryTable">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="SecondaryTables">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="SQLResultSetControl">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00075.html#redt00075" title="SQLResultSetControl annotation and related types"/>
+</entry>
+<entry keyword="Table">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00172.html#redt00172" title="Table annotation"/>
+</entry>
+</entry>
 <entry keyword="applications">
 <entry keyword="EGL debugging">
 <entry keyword="overview">
 <topic href="topics/cedt00500.html#cedt00500" title="Debugging EGL source code in the EDT IDE"/>
 </entry>
+</entry>
+</entry>
+<entry keyword="binding">
+<entry keyword="dynamic">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+</entry>
+</entry>
+<entry keyword="close EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00022.html#redt00022" title="Close statement for a relational database"/>
 </entry>
 </entry>
 <entry keyword="code">
@@ -35,6 +82,12 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="Column EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00174.html#redt00174" title="Column annotation"/>
+</entry>
+<entry keyword="content assist">
+<topic href="topics/tedt00528.html#tedt00528" title="Using content assist"/>
+</entry>
 <entry keyword="controllers">
 <entry keyword="Rich UI">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
@@ -61,6 +114,11 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="delete EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00023.html#redt00023" title="Delete statement for a relational database"/>
+</entry>
+</entry>
 <entry keyword="deployment">
 <entry keyword="EGL Rich UI">
 <entry keyword="preferences">
@@ -72,6 +130,9 @@
 <entry keyword="EGL overview">
 <topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
+<entry keyword="importing">
+<topic href="topics/tedt00584.html#tedt00584" title="Importing EGL deployment descriptors"/>
+</entry>
 <entry keyword="options">
 <entry keyword="Rich UI">
 <topic href="topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
@@ -80,12 +141,18 @@
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
 </entry>
+<entry keyword="resources">
+<topic href="topics/tedt00585.html#tedt00585" title="Updating resources in the EGL deployment descriptor"/>
+</entry>
 <entry keyword="targets">
 <topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
 <entry keyword="editors">
 <entry keyword="EGL">
+<entry keyword="content assist">
+<topic href="topics/tedt00528.html#tedt00528" title="Using content assist"/>
+</entry>
 <entry keyword="core preferences">
 <topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor preferences"/>
 </entry>
@@ -129,6 +196,16 @@
 <topic href="topics/tedt00502.html#tedt00502" title="Creating an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
+<entry keyword="EGL functions">
+<entry keyword="getResource">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
+</entry>
+</entry>
+<entry keyword="EGL packages">
+<entry keyword="eglx.persistence.sql">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00266.html#redt00266" title="eglx.persistence.sql package"/>
+</entry>
+</entry>
 <entry keyword="EGL preferences">
 <entry keyword="setting for content assist">
 <topic href="topics/tedt00510.html#tedt00510" title="Setting EGL content-assist preferences"/>
@@ -139,9 +216,70 @@
 <topic href="topics/tedt00517.html#tedt00517" title="Creating an EGL project"/>
 </entry>
 </entry>
+<entry keyword="EGL statements">
+<entry keyword="add">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00021.html#redt00021" title="Add statement for a relational database"/>
+</entry>
+<entry keyword="close">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00022.html#redt00022" title="Close statement for a relational database"/>
+</entry>
+<entry keyword="delete">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00023.html#redt00023" title="Delete statement for a relational database"/>
+</entry>
+<entry keyword="execute">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00026.html#redt00026" title="Execute statement for a relational database"/>
+</entry>
+<entry keyword="forEach">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00018.html#redt00018" title="ForEach statement for a relational database"/>
+</entry>
+<entry keyword="get">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00024.html#redt00021" title="Get statement for a relational database"/>
+</entry>
+<entry keyword="open">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00028.html#redt00028" title="Open statement for a relational database"/>
+</entry>
+<entry keyword="prepare">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00027.html#redt00027" title="Prepare statement for a relational database"/>
+</entry>
+<entry keyword="replace">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00025.html#redt00023" title="Replace statement for a relational database"/>
+</entry>
+</entry>
 <entry keyword="EGL test server">
 <entry keyword="preferences">
 <topic href="topics/tedt00578.html#tedt00578" title="Setting EGL test server preferences"/>
+</entry>
+</entry>
+<entry keyword="EGL type">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00268.html#redt00268" title="SQLException external type"/>
+</entry>
+<entry keyword="EGL types">
+<entry keyword="SQLDataSource">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+</entry>
+<entry keyword="SQLException">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00268.html#redt00268" title="SQLException external type"/>
+</entry>
+<entry keyword="SQLResultSet">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
+</entry>
+<entry keyword="SQLStatement">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
+</entry>
+<entry keyword="SQLWarning">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+</entry>
+</entry>
+<entry keyword="eglx.persistence.sql EGL package">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00266.html#redt00266" title="eglx.persistence.sql package"/>
+</entry>
+<entry keyword="execute EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00026.html#redt00026" title="Execute statement for a relational database"/>
 </entry>
 </entry>
 <entry keyword="extending">
@@ -166,6 +304,11 @@
 <entry keyword="folding (EGL editor)">
 <topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
 </entry>
+<entry keyword="forEach EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00018.html#redt00018" title="ForEach statement for a relational database"/>
+</entry>
+</entry>
 <entry keyword="formats">
 <entry keyword="Rich UI">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
@@ -175,6 +318,9 @@
 <entry keyword="processing (Rich UI)">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01021.html#cedt01021" title="Form processing with Rich UI"/>
 </entry>
+</entry>
+<entry keyword="GeneratedValue EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00175.html#redt00175" title="GeneratedValue annotation"/>
 </entry>
 <entry keyword="generation">
 <entry keyword="deployment descriptor files">
@@ -191,6 +337,19 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="get EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00024.html#redt00021" title="Get statement for a relational database"/>
+</entry>
+</entry>
+<entry keyword="getResource EGL function">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
+</entry>
+<entry keyword="globalization">
+<entry keyword="Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
+</entry>
 <entry keyword="IBM i">
 <entry keyword="web services">
 <entry keyword="keystrokes">
@@ -203,10 +362,25 @@
 <topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
 </entry>
 </entry>
+<entry keyword="JoinColumn EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00267.html#redt00267" title="JoinColumn annotation"/>
+</entry>
 <entry keyword="launch configurations">
 <entry keyword="EGL">
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging a Rich UI application with the EGL debugger"/>
 <topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
+</entry>
+</entry>
+<entry keyword="Library parts">
+<entry keyword="stereotypes">
+<entry keyword="RUIPropertiesLibrary">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/redt01001.html#redt01001" title="RUIPropertiesLibrary stereotype"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="open EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00028.html#redt00028" title="Open statement for a relational database"/>
 </entry>
 </entry>
 <entry keyword="packages">
@@ -269,6 +443,17 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="prepare EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00027.html#redt00027" title="Prepare statement for a relational database"/>
+</entry>
+</entry>
+<entry keyword="PrimaryKeyJoinColumn EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="PrimaryKeyJoinColumns EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
 <entry keyword="Program Call Markup Language (PCML)">
 <entry keyword="IBM i programs as services">
 <entry keyword="keystrokes">
@@ -288,6 +473,27 @@
 </entry>
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+</entry>
+</entry>
+<entry keyword="properties files">
+<entry keyword="Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
+</entry>
+<entry keyword="replace EGL statement">
+<entry keyword="relational database">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00025.html#redt00023" title="Replace statement for a relational database"/>
+</entry>
+</entry>
+<entry keyword="Resource bindings">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01030.html#cedt01030" title="Resource bindings"/>
+</entry>
+<entry keyword="Resource EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00087.html#redt00087" title="Resource annotation"/>
+</entry>
+<entry keyword="resources">
+<entry keyword="deployment descriptors">
+<topic href="topics/tedt00585.html#tedt00585" title="Updating resources in the EGL deployment descriptor"/>
 </entry>
 </entry>
 <entry keyword="retrieve feature">
@@ -347,22 +553,35 @@
 <entry keyword="formatting">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
+<entry keyword="globalization">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
 <entry keyword="handlers">
 <entry keyword="multiple">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01038.html#tedt01038" title="Creating a Rich UI application with multiple handlers"/>
 </entry>
 </entry>
+<entry keyword="properties files">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
 <entry keyword="validation">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
 </entry>
-<entry keyword="service clients">
-<entry keyword="binding">
-<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
+<entry keyword="RUIPropertiesLibrary stereotype">
+<entry keyword="details">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/redt01001.html#redt01001" title="RUIPropertiesLibrary stereotype"/>
 </entry>
+</entry>
+<entry keyword="SecondaryTable EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
+</entry>
+<entry keyword="SecondaryTables EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
 </entry>
 <entry keyword="services">
 <entry keyword="binding">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
 <entry keyword="REST">
 <topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
@@ -383,9 +602,6 @@
 <topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
 <topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
-<entry keyword="client binding">
-<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
-</entry>
 <entry keyword="service-access variables">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
@@ -402,6 +618,9 @@
 </entry>
 </entry>
 <entry keyword="source files">
+<entry keyword="content assist">
+<topic href="topics/tedt00528.html#tedt00528" title="Using content assist"/>
+</entry>
 <entry keyword="creating in EGL">
 <topic href="topics/tedt00500.html#tedt00500" title="Creating an EGL source file"/>
 </entry>
@@ -420,6 +639,32 @@
 <entry keyword="retrieve preferences">
 <topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
 </entry>
+</entry>
+<entry keyword="SQLDataSource">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+</entry>
+<entry keyword="SQLException">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00268.html#redt00268" title="SQLException external type"/>
+</entry>
+<entry keyword="SQLResultSet">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
+</entry>
+<entry keyword="SQLResultSetControl EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00075.html#redt00075" title="SQLResultSetControl annotation and related types"/>
+</entry>
+<entry keyword="SQLStatement">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
+</entry>
+<entry keyword="SQLWarning">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+</entry>
+<entry keyword="SysLib EGL external type">
+<entry keyword="getResource">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
+</entry>
+</entry>
+<entry keyword="Table EGL annotation">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00172.html#redt00172" title="Table annotation"/>
 </entry>
 <entry keyword="targets">
 <entry keyword="EGL deployment descriptors">
@@ -453,6 +698,9 @@
 </entry>
 </entry>
 <entry keyword="text">
+<entry keyword="globalization with Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
 <entry keyword="preferences (EGL)">
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
 </entry>
@@ -463,11 +711,6 @@
 </entry>
 </entry>
 <entry keyword="web services">
-<entry keyword="binding">
-<entry keyword="EGL services">
-<topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
-</entry>
-</entry>
 <entry keyword="deployment descriptor options">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
