@@ -56,7 +56,8 @@ static function getResource(bindingkey string const in,
 The name of the file that is accessed at run time includes the following
 suffix: -bind.xml.</p>
 <p>If you do not specify a <span class="synph"><span class="kwd">propertyFileName</span></span> argument,
-its value is the name of the EGL deployment descriptor that is used
+its value is the name of the EGL deployment descriptor that is currently
+in use, whether the development deployment descriptor or the one used
 at deployment time.</p>
 </dd>
 
@@ -66,16 +67,14 @@ at deployment time.</p>
 
 <dt class="dlterm"><a name="redt00205__use"><!-- --></a>Example use</dt>
 
-<dd>Here is an example: <pre class="codeblock">myService IMyService?{
-   @Resource{bindingKey = "myBinding",
-             propertyFileName = "myDeploymentDescriptor"}};</pre>
+<dd>Here is an example: <pre class="codeblock">myService MyInterfacePart?;
+myService = SysLib.getResource ("MyEnglishBinding", "myDeploymentDescriptor");</pre>
 <anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00205__comments"><!-- --></a>Comments</dt>
 
-<dd>You can update binding details at run time, as shown in “Binding
-an access variable dynamically.” <pre class="codeblock"></pre>
+<dd>For further details, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01019.html" title="You can use dynamic binding to access or update binding details in response to conditions at run time.">Binding an access variable dynamically</a>.<pre class="codeblock"></pre>
 <anchor id="comments_more"></anchor></dd>
 
 
@@ -86,9 +85,9 @@ an access variable dynamically.” <pre class="codeblock"></pre>
 <div class="tablenoborder"><a name="redt00205__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00205__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d62044e124">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d62508e130">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d62044e127">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d62508e133">Issue</th>
 
 </tr>
 
@@ -97,17 +96,17 @@ an access variable dynamically.” <pre class="codeblock"></pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00205__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d62044e124 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62508e130 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d62044e127 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62508e133 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00205__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d62044e124 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62508e130 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d62044e127 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d62508e133 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

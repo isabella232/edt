@@ -153,6 +153,11 @@
 <entry keyword="BigintAny">
 <topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
 </entry>
+<entry keyword="binding">
+<entry keyword="dynamic">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+</entry>
+</entry>
 <entry keyword="Boolean type">
 <entry keyword="EGL">
 <topic href="topics/redt00176.html#redt00176" title="Boolean and EBoolean types"/>
@@ -1440,6 +1445,9 @@
 </entry>
 </entry>
 <entry keyword="services">
+<entry keyword="binding">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+</entry>
 <entry keyword="Rich UI">
 <entry keyword="asynchronous invocation">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01023.html#tedt01023" title="Invoking a service asynchronously from a Rich UI application"/>
