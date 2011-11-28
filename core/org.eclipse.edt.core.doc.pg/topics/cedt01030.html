@@ -57,7 +57,8 @@ that points to a workspace location. Here is an example:<ul class="simple">
 
 </ul>
 <p>In this case, an internal Test Server enables you to debug
-the code. For further information, see <a href="cedt01031.html" title="EGL uses a test server to invoke services from the workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+the code, and the URI is useful only at development time. The Test
+Server is described here: <a href="cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
 </li>
 
 </ul>
@@ -65,11 +66,12 @@ the code. For further information, see <a href="cedt01031.html" title="EGL uses 
 </div>
 
 <div class="section"><h2 class="sectiontitle">Database bindings</h2><p>If the purpose of a resource
-binding is database access, the definition is called a <dfn class="term">database
-binding</dfn>. You can place the binding in the EGL deployment descriptor,
-but also have the option to include the binding details directly in
-your code.</p>
-<p>For further details, see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize for inclusion in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</p>
+binding is to specify the connection used for database access, the
+definition is called a <dfn class="term">database binding</dfn>. You can place
+the binding in the EGL deployment descriptor, but can include the
+connection information directly in your code.</p>
+<p>For further details,
+see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize for inclusion in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</p>
 </div>
 
 </div>

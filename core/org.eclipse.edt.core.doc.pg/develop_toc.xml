@@ -3,9 +3,9 @@
 <toc label="Developing EGL applications" topic="topics/cedt01001.html">
    <topic label="EGL process from development to run time" href="topics/cedt01001.html">
       <topic label="Resource bindings" href="topics/cedt01030.html"/>
-      <topic label="EGL test server" href="topics/cedt01031.html"/>
    </topic>
    <topic label="EGL support for SOA" href="topics/cedt01003.html">
+      <topic label="EGL test server" href="topics/cedt01031.html"/>
       <topic label="Service access in Rich UI" href="topics/cedt01004.html"/>
       <topic label="Service access outside of Rich UI" href="topics/cedt01005.html"/>
       <topic label="Function prototypes for service access" href="topics/cedt01006.html"/>
@@ -14,6 +14,7 @@
       <topic label="Service-location details for web service access"
              href="topics/cedt01008.html"/>
       <topic label="EGL support for accessing SOAP headers" href="topics/cedt01009.html"/>
+      <topic label="EGL REST-RPC message structure" href="topics/cedt01010.html"/>
       <topic label="Accessing a service" href="topics/tedt01002.html">
          <topic label="Declaring a variable to access a dedicated or local EGL service"
                 href="topics/tedt01017.html"/>

@@ -9,7 +9,6 @@
 <meta name="abstract" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
 <meta name="description" content="The following figure illustrates EGL compilation, which is the process by which the EGL technology creates output from your source code."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01030.html"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/cedt01031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -54,8 +53,9 @@ a source file. The compiler acts as follows: <ol type="a">
 <p>When you save your file, the compiler also writes the output
 to files. The compilation and output is called an <dfn class="term">EGL build</dfn>,
 and the output files are called an <dfn class="term">intermediate representation
-(IR) file</dfn> (extension <samp class="codeph">.ir</samp>). In almost every
-case, the IR file is written even if it includes errors.</p>
+(IR) file</dfn>. In almost every case, the IR file is written even
+if it includes errors.</p>
+<p>The file extension for an IR file is <span class="filepath">eglxml</span>.</p>
 </li>
 
 <li>The EGL compiler invokes an <dfn class="term">EGL generator</dfn>, which
@@ -121,6 +121,22 @@ and update a list box.</p>
 
 <li>Similarly, when you deploy an application, you right click an
 EGL deployment descriptor and click <span class="uicontrol">Deploy EGL Descriptor</span>.</li>
+
+<li>At development or deployment time, you can ensure that the source
+of a binding is a specific EGL deployment descriptor. <div class="p">To specify
+a particular descriptor, you code the descriptor name in either of
+two locations:<ul>
+<li>When you include the <span class="uicontrol">Resource</span> annotation
+in the statement that declares a <dfn class="term">resource-access variable</dfn>,
+which is the variable that makes possible the access of a service
+or database.</li>
+
+<li>Alternatively, when you code <span class="synph"><span class="kwd">SysLib.getResource</span></span>,
+which makes a deployment descriptor entry available dynamically.</li>
+
+</ul>
+</div>
+</li>
 
 </ul>
 </div>

@@ -59,20 +59,23 @@ ds SQLDataSource? = new SQLDataSource(connectURL, properties);
 </pre>
 </li>
 
-<li>Here is an example of a reference to a deployment descriptor entry
-named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{bindingkey = "MyDatabaseBinding"}};  </pre>
+<li>Here is an example of a reference to an EGL deployment descriptor
+entry named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{bindingkey = "MyDatabaseBinding"}};  </pre>
 </li>
 
 </ul>
 </div>
 
-<div class="p">Much information on EGL support for relational databases is in
-the EGL Language Reference:<ul>
-<li>For details on the types listed earlier, see the description of
-the eglx.persistence.sql package. </li>
+<div class="p">Additional information is available:<ul>
+<li>For details on the types listed earlier, <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00266.html" title="eglx.persistence.sql  ">eglx.persistence.sql package</a>.</li>
 
-<li>For details on the data-access statements, see the statement-specific
-topics.</li>
+<li>For details on the data-access statements, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00044.html" title="The next table lists the statements used to access a relational database.">Statements used for relational database access</a>.</li>
+
+<li>For details on referencing an EGL deployment descriptor entry,
+see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00087.html" title="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor.">Resource annotation</a>.</li>
+
+<li>For details on dynamically accessing an EGL deployment descriptor
+entry, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00205.html" title="SysLib.getResource returns an object that is based on a specific entry in an EGL deployment descriptor.">SysLib.getResource function</a>.</li>
 
 </ul>
 </div>

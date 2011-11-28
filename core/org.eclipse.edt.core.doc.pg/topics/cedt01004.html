@@ -108,26 +108,9 @@ which is available to the other logic in the Rich UI application.
 That service is local to the Rich UI proxy and runs in the application
 server that transmitted the Rich UI application. <p>You can use the
 dedicated service to do tasks that other EGL-generated Java services can do, such as accessing a database,
-a file system, or a local IBM i
-service program. However, the dedicated service is not available to
-other code unless you redeploy it as a SOAP or EGL REST-RPC service.</p>
-<div class="p">Be
-aware of the following, general restriction: if code requires an HTTP
-session, you cannot access that code unless it is running on an application
-server. In particular, if a dedicated service invokes j2eeLib library
-functions, you can access the service from the Preview tab only if
-the service is deployed on a test server. When development is all-but
-complete, you change the service-access variable declaration and then
-deploy all the EGL-generated code:<ol>
-<li>  The initial variable declaration might be as follows:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
-</pre>
-</li>
-
-<li>Here is the replacement:<pre class="codeblock">myService MyServiceType?{@dedicatedService};</pre>
-</li>
-
-</ol>
-</div>
+or <strong>(in a later version of EDT)</strong> a file system or a local IBM i service program. However,
+the dedicated service is not available to other code unless you redeploy
+it as a SOAP or EGL REST-RPC service.</p>
 </li>
 
 </ul>

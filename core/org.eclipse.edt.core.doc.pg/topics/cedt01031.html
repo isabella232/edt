@@ -6,9 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL test server"></meta>
-<meta name="abstract" content="EGL uses a test server to invoke services from the workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:"></meta>
-<meta name="description" content="EGL uses a test server to invoke services from the workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
+<meta name="abstract" content="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:"></meta>
+<meta name="description" content="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -25,8 +25,9 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p>EGL uses a test server to invoke services from
-the workspace rather than from a deployment site. The server is based
-on Jetty technology, which is described here:</p>
+the service logic in your workspace rather than from a deployment
+site. The server is based on Jetty technology, which is described
+here:</p>
 
 <div class="p"><ul class="simple">
 <li><a href="http://www.eclipse.org/jetty" target="_blank">www.eclipse.org/jetty</a></li>
@@ -34,7 +35,81 @@ on Jetty technology, which is described here:</p>
 </ul>
 </div>
 
-<p></p>
+<div class="p">Two situations cause the server to access service logic in your
+workspace: <ul>
+<li>The test server responds if the service binding in your EGL deployment
+descriptor includes a <dfn class="term">workspace URI</dfn>, which is an identifier
+that points to a workspace location. The format of the workspace URI
+is as follows:<pre class="codeblock">workspace://<em>project_name</em>/<em>fully_qualified_service_name</em></pre>
+<dl>
+
+<dt class="dlterm"><var class="varname">project_name</var></dt>
+
+<dd>The name of the EGL project that contains the EGL Service type.</dd>
+
+
+<dt class="dlterm"><var class="varname">fully_qualified_service_name</var></dt>
+
+<dd>The service name, preceded with a package name and period, if
+the service is in a package.</dd>
+
+</dl>
+<div class="p">Here is an example of a workspace URI:<ul class="simple">
+<li><samp class="codeph">workspace://mySourceProject/servicepackage.serviceName</samp></li>
+
+</ul>
+</div>
+</li>
+
+<li>The test server also responds if your Rich UI application invokes
+a <dfn class="term">dedicated service</dfn>, which is a service that will be
+deployed with the Rich UI application. To indicate that your code
+is accessing a dedicated service, you specify an annotation in the
+logic that references the service, as noted in <a href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
+
+</ul>
+</div>
+
+<p>A test server is specific to the EGL source project from which
+the Service type is accessed. [ true? ] The server relies on the project-specific
+classpath and on the detail in the EGL deployment descriptors that
+are used at development time.</p>
+
+<div class="p">In the workbench (<span class="uicontrol">Window &gt; Preferences &gt; EGL &gt; Test
+Server</span>), you set preferences to indicate what to do in
+the following cases:<ul>
+<li>You change the project classpath. The changes will be in effect
+only if the server process is terminated.</li>
+
+<li>You are debugging a service and do a “hot code replace,” which
+involves the following steps:<ol>
+<li>When the debugger suspends execution on a statement, you change
+the code that runs subsequent to the statement.</li>
+
+<li>The subsequent code and the debugger behave as if the changes
+had been in place before the debugging session.</li>
+
+</ol>
+<p>The Eclipse debug tooling might fail or behave incorrectly
+in response to some kinds of hot code replace.</p>
+</li>
+
+</ul>
+</div>
+
+<p>You do not start a test server manually. However, you might need
+terminate a test server; for example, if your preference settings
+allow the server to continue in the cases just described. </p>
+
+<div class="p">To terminate a test server, do as follows: <ol>
+<li>Go to the Debug view of the EGL debugger.</li>
+
+<li>Identify the test server process, which is named for the project.</li>
+
+<li>Right click the entry for that process and click <span class="uicontrol">Terminate</span>.</li>
+
+</ol>
+</div>
 
 </div>
 
