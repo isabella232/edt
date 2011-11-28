@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Setting EGL compiler preferences"></meta>
-<meta name="abstract" content="You can set preferences for the EGL compiler."></meta>
-<meta name="description" content="You can set preferences for the EGL compiler."></meta>
+<meta name="abstract" content="The EGL compiler preferences identify which compiler and compiler-specific generators are available to you and what to name the folders that will receive generated output. This information sets the default values for the equivalent properties in the project, folder, package, and source file."></meta>
+<meta name="description" content="The EGL compiler preferences identify which compiler and compiler-specific generators are available to you and what to name the folders that will receive generated output. This information sets the default values for the equivalent properties in the project, folder, package, and source file."></meta>
 <meta name="DC.subject" content="EGL compiler, preferences"></meta>
 <meta name="keywords" content="EGL compiler, preferences"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,20 +23,22 @@
 
 
 
-
 <h1 class="topictitle1">Setting EGL compiler preferences</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can set preferences for the EGL compiler.</p>
+<div id="body"><a name="body"><!-- --></a><p>The EGL compiler preferences identify which
+compiler and compiler-specific generators are available to you and
+what to name the folders that will receive generated output. This
+information sets the default values for the equivalent properties
+in the project, folder, package, and source file.</p>
 
-<div class="section"><p>To set EGL compiler preferences, do as follows:</p>
-</div>
+<div class="section">Do as follows:</div>
 
 <ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
  &gt; <span class="uicontrol">Preferences</span></span>. </span> The <span class="wintitle">Preferences</span> window
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> menu, expand <span class="uicontrol">EGL</span>and
+<li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> menu, expand <span class="uicontrol">EGL</span> and
 click <span class="uicontrol">Compiler</span>.</span> The <span class="wintitle">Compiler</span> pane
 is displayed.</li>
 <li class="stepexpand"><span>In the <span class="wintitle">Compiler</span> pane, select a compiler
@@ -45,18 +47,25 @@ from the <span class="uicontrol">Default compiler</span> menu.</span></li>
 click <span class="uicontrol">EDT</span>.</span> The <span class="wintitle">EDT</span> pane
 is displayed.</li>
 <li class="stepexpand"><span>If you want to change the name of the default generation
-folder for the Java generator, type the desired folder name in the <span class="uicontrol">Default
+folder for the Java generator, type the desired name in the <span class="uicontrol">Default
 generation folder</span> field on the <span class="uicontrol">Java Generator</span> tab.</span>
 </li>
 <li class="stepexpand"><span>If you want to change the name of the default generation
-folder for the JavaScript generator, type the desired folder name
-in the <span class="uicontrol">Default generation folder</span> field on the <span class="uicontrol">JavaScript
-Generator</span> tab.</span></li>
+folder for the JavaScript generator, type the desired name in the <span class="uicontrol">Default
+generation folder</span> field on the <span class="uicontrol">JavaScript Generator</span> tab.</span>
+</li>
 <li class="stepexpand"><span>To save the changes and remain in the <span class="wintitle">Preferences</span> window,
 click <span class="uicontrol">Apply</span>. To save the changes and exit the
 window, click <span class="uicontrol">OK</span>. To cancel the changes and
 exit the window, click <span class="uicontrol">Cancel</span>.</span></li>
 </ol>
+
+<div class="section">When you are working in a specific project, you can rename
+an output folder or specify a new default name in an EGL preference
+or subordinate property. In most cases, the effect is to retain a
+version of the files that were in place at the time you made the change.
+Future output is placed in a folder that is named from the preference
+or property that is in effect.</div>
 
 </div>
 

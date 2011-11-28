@@ -35,18 +35,23 @@
 </entry>
 </entry>
 </entry>
+<entry keyword="controllers">
+<entry keyword="Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
+</entry>
+</entry>
 <entry keyword="debugging">
 <entry keyword="EGL">
 <entry keyword="creating a launch configuration">
-<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging a Rich UI application with the EGL debugger"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 </entry>
 <entry keyword="overview">
 <topic href="topics/cedt00500.html#cedt00500" title="Debugging EGL source code in the EDT IDE"/>
 </entry>
 <entry keyword="starting">
-<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging a Rich UI application with the EGL debugger"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 </entry>
 <entry keyword="starting programs">
 <topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
@@ -79,20 +84,10 @@
 <topic href="topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
-<entry keyword="Dojo">
-<entry keyword="widgets">
-<entry keyword="local">
-<topic href="topics/tedt00561.html#tedt00561" title="Loading the local Dojo Toolkit into your workspace"/>
-</entry>
-<entry keyword="remote">
-<topic href="topics/tedt00562.html#tedt00562" title="Accessing a remote Dojo Toolkit"/>
-</entry>
-</entry>
-</entry>
 <entry keyword="editors">
 <entry keyword="EGL">
 <entry keyword="core preferences">
-<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor general preferences"/>
+<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor preferences"/>
 </entry>
 <entry keyword="folding preferences">
 <topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
@@ -110,9 +105,6 @@
 </entry>
 <entry keyword="creating web interfaces">
 <topic href="topics/tedt00574.html#tedt00574" title="Creating a web interface in the Rich UI editor"/>
-</entry>
-<entry keyword="opening">
-<topic href="topics/tedt00564.html#tedt00564" title="Opening the EGL Rich UI editor"/>
 </entry>
 <entry keyword="overview">
 <topic href="topics/tedt00560.html#tedt00560" title="Using the EGL Rich UI editor"/>
@@ -152,6 +144,13 @@
 <topic href="topics/tedt00578.html#tedt00578" title="Setting EGL test server preferences"/>
 </entry>
 </entry>
+<entry keyword="extending">
+<entry keyword="Rich UI widgets">
+<entry keyword="overview">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01039.html#tedt01039" title="Extending the Rich UI widget set"/>
+</entry>
+</entry>
+</entry>
 <entry keyword="Extending">
 <entry keyword="Rich UI">
 <entry keyword="widgets">
@@ -166,6 +165,16 @@
 </entry>
 <entry keyword="folding (EGL editor)">
 <topic href="topics/tedt00511.html#tedt00511" title="Setting EGL folding preferences"/>
+</entry>
+<entry keyword="formats">
+<entry keyword="Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
+</entry>
+</entry>
+<entry keyword="forms">
+<entry keyword="processing (Rich UI)">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01021.html#cedt01021" title="Form processing with Rich UI"/>
+</entry>
 </entry>
 <entry keyword="generation">
 <entry keyword="deployment descriptor files">
@@ -196,8 +205,8 @@
 </entry>
 <entry keyword="launch configurations">
 <entry keyword="EGL">
-<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging a Rich UI application with the EGL debugger"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 </entry>
 </entry>
 <entry keyword="packages">
@@ -237,7 +246,7 @@
 <topic href="topics/tedt00513.html#tedt00513" title="Setting preferences for organizing import statements in the EGL editor"/>
 </entry>
 <entry keyword="overview">
-<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor general preferences"/>
+<topic href="topics/tedt00509.html#tedt00509" title="Setting EGL editor preferences"/>
 </entry>
 <entry keyword="source styles">
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
@@ -252,6 +261,11 @@
 </entry>
 <entry keyword="overview">
 <topic href="topics/tedt00516.html#tedt00516" title="Setting EGL preferences for Rich UI"/>
+</entry>
+</entry>
+<entry keyword="SQL">
+<entry keyword="retrieve">
+<topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
 </entry>
 </entry>
 </entry>
@@ -269,16 +283,26 @@
 </entry>
 <entry keyword="projects">
 <entry keyword="debugging in EGL">
-<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 <topic href="topics/tedt00583.html#tedt00583" title="Debugging a Rich UI application with the EGL debugger"/>
+<topic href="topics/tedt00582.html#tedt00582" title="Debugging a program with the EGL debugger"/>
 </entry>
 <entry keyword="EGL preferences">
 <topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
 </entry>
 </entry>
+<entry keyword="retrieve feature">
+<entry keyword="SQL">
+<entry keyword="preferences">
+<topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
+</entry>
+</entry>
+</entry>
 <entry keyword="Rich UI">
 <entry keyword="appearance">
 <topic href="topics/tedt00575.html#tedt00575" title="Setting preferences for EGL Rich UI appearance"/>
+</entry>
+<entry keyword="controllers">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
 <entry keyword="deployment">
 <entry keyword="preferences">
@@ -298,9 +322,6 @@
 <entry keyword="creating web interfaces">
 <topic href="topics/tedt00574.html#tedt00574" title="Creating a web interface in the Rich UI editor"/>
 </entry>
-<entry keyword="opening">
-<topic href="topics/tedt00564.html#tedt00564" title="Opening the EGL Rich UI editor"/>
-</entry>
 <entry keyword="overview">
 <topic href="topics/tedt00560.html#tedt00560" title="Using the EGL Rich UI editor"/>
 </entry>
@@ -316,6 +337,23 @@
 </entry>
 <entry keyword="extending">
 <topic href="topics/tedt00570.html#tedt00570" title="Creating a widget type with the EGL Rich UI editor"/>
+<entry keyword="overview">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01039.html#tedt01039" title="Extending the Rich UI widget set"/>
+</entry>
+</entry>
+<entry keyword="form processing">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01021.html#cedt01021" title="Form processing with Rich UI"/>
+</entry>
+<entry keyword="formatting">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
+</entry>
+<entry keyword="handlers">
+<entry keyword="multiple">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01038.html#tedt01038" title="Creating a Rich UI application with multiple handlers"/>
+</entry>
+</entry>
+<entry keyword="validation">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
 </entry>
 <entry keyword="service clients">
@@ -342,11 +380,14 @@
 </entry>
 <entry keyword="EGL">
 <entry keyword="binding">
-<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 <topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
+<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="client binding">
 <topic href="topics/tedt00540.html#tedt00540" title="Adding an EGL binding to an EGL deployment descriptor"/>
+</entry>
+<entry keyword="service-access variables">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
 </entry>
 <entry keyword="IBM i">
@@ -375,8 +416,8 @@
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
 </entry>
 </entry>
-<entry keyword="SQL access">
-<entry keyword="EGL preferences">
+<entry keyword="SQL">
+<entry keyword="retrieve preferences">
 <topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
 </entry>
 </entry>
@@ -416,9 +457,9 @@
 <topic href="topics/tedt00514.html#tedt00514" title="Setting EGL preferences for coloring syntax"/>
 </entry>
 </entry>
-<entry keyword="VisualAge Generator">
-<entry keyword="compatibility preferences">
-<topic href="topics/tedt00507.html#tedt00507" title="Setting EGL general preferences"/>
+<entry keyword="validation">
+<entry keyword="Rich UI">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
 </entry>
 <entry keyword="web services">
@@ -438,16 +479,6 @@
 </entry>
 <entry keyword="SQL">
 <topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
-</entry>
-</entry>
-</entry>
-<entry keyword="widgets">
-<entry keyword="Dojo">
-<entry keyword="local">
-<topic href="topics/tedt00561.html#tedt00561" title="Loading the local Dojo Toolkit into your workspace"/>
-</entry>
-<entry keyword="remote">
-<topic href="topics/tedt00562.html#tedt00562" title="Accessing a remote Dojo Toolkit"/>
 </entry>
 </entry>
 </entry>

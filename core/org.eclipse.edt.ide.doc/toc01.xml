@@ -5,7 +5,7 @@
    <topic label="Setting EDT preferences">
       <topic label="Setting EGL general preferences" href="topics/tedt00507.html"/>
       <topic label="Setting EGL compiler preferences" href="topics/tedt00508.html"/>
-      <topic label="Setting EGL editor general preferences" href="topics/tedt00509.html"/>
+      <topic label="Setting EGL editor preferences" href="topics/tedt00509.html"/>
       <topic label="Setting EGL content-assist preferences" href="topics/tedt00510.html"/>
       <topic label="Setting EGL folding preferences" href="topics/tedt00511.html"/>
       <topic label="Setting EGL formatter preferences" href="topics/tedt00512.html"/>
@@ -51,14 +51,11 @@
       <topic label="Using keystroke shortcuts" href="topics/tedt00529.html"/>
       <topic label="Organizing import statements" href="topics/tedt00530.html"/>
       <topic label="Folding blocks of text" href="topics/tedt00531.html"/>
-      <topic label="Commenting and uncommenting source code" href="topics/tedt00532.html"/>
       <topic label="Editing DataItem parts with the source assistant"
              href="topics/tedt00533.html"/>
       <topic label="Using the quick fix capability" href="topics/tedt00534.html"/>
    </topic>
    <topic label="Working with EGL Rich UI">
-      <topic label="Starting to work with EGL Rich UI" href="topics/tedt00559.html"/>
-      <topic label="Opening the EGL Rich UI editor" href="topics/tedt00564.html"/>
       <topic label="Using the EGL Rich UI editor" href="topics/tedt00560.html">
          <topic label="Creating a web interface in the Rich UI editor"
                 href="topics/tedt00574.html">
@@ -73,10 +70,6 @@
          <topic label="Creating a widget type with the EGL Rich UI editor"
                 href="topics/tedt00570.html"/>
       </topic>
-      <topic label="Loading the local Dojo Toolkit into your workspace"
-             href="topics/tedt00561.html"/>
-      <topic label="Accessing a remote Dojo Toolkit" href="topics/tedt00562.html"/>
-      <topic label="Accessing an updated remote Dojo Toolkit" href="topics/tedt00563.html"/>
    </topic>
    <topic label="Editing an EGL deployment descriptor in the EDT IDE"
           href="topics/tedt00535.html">
@@ -104,7 +97,7 @@
              href="topics/tedt00548.html"/>
       <topic label="Editing an SQL database connection" href="topics/tedt00549.html"/>
       <topic label="Deleting an SQL database connection" href="topics/tedt00550.html"/>
-      <topic label="Retrieving SQL table data into a Record part"
+      <topic label="Retrieving SQL table data into a Record type"
              href="topics/tedt00551.html"/>
       <topic label="Viewing implicit SQL statements at development time"
              href="topics/tedt00552.html"/>

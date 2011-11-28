@@ -6,10 +6,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
 <meta name="DC.Title" content="Setting EGL SQL preferences"></meta>
-<meta name="abstract" content="You can set EGL preferences for SQL access."></meta>
-<meta name="description" content="You can set EGL preferences for SQL access."></meta>
-<meta name="DC.subject" content="SQL access, EGL preferences"></meta>
-<meta name="keywords" content="SQL access, EGL preferences"></meta>
+<meta name="abstract" content="When you are developing code, you can use the SQL retrieve feature to create a Record type from the columns of an SQL table."></meta>
+<meta name="description" content="When you are developing code, you can use the SQL retrieve feature to create a Record type from the columns of an SQL table."></meta>
+<meta name="DC.subject" content="preferences, SQL, retrieve, retrieve feature, retrieve preferences"></meta>
+<meta name="keywords" content="preferences, SQL, retrieve, retrieve feature, retrieve preferences"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -22,15 +22,17 @@
 
 
 
-
-
 <h1 class="topictitle1">Setting EGL SQL preferences</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can set EGL preferences for SQL access.</p>
+<div id="body"><a name="body"><!-- --></a><p>When you are developing code, you can use the
+SQL retrieve feature to create a Record type from the columns of an
+SQL table.</p>
 
-<div class="section"><p>To set EGL SQL preferences, do as follows:</p>
+<div class="section"><p>For details on creating the Record type, see <a href="tedt00551.html" title="Use the SQL retrieve feature to create an EGL Record type from the columns of an SQL table.">Retrieving SQL table data into a Record type</a>. </p>
+<p>To set preferences for the SQL
+retrieve feature, do as follows:</p>
 </div>
 
 <ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
@@ -39,24 +41,59 @@ is displayed.</li>
 <li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> menu, expand <span class="uicontrol">EGL</span>and
 click <span class="uicontrol">SQL</span>.</span> The <span class="wintitle">SQL</span> pane
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">SQL</span> pane, select the radio
-button for the option that you want for each of the following values:</span>
+<li class="stepexpand"><span>In the <span class="wintitle">SQL</span> pane, specify the rules
+for creating each record field that the SQL retrieve feature creates: </span>
  <ol type="a">
-<li>Case control rules for naming structure items</li>
+<li>Specify the case of the record field name: <ul>
+<li><strong>Do not change case</strong> (the default) means that the case of
+the record field name is the same as the case of the related table
+column name.</li>
 
-<li>Underscore control rules for naming structure items</li>
+<li><strong>Change to lower case</strong> means that the record field name is
+a lowercase version of the table column name.</li>
 
-<li>EGL type to use for SQL date and timestamp in SQL Retrieve</li>
+<li><strong>Change to lower case and capitalize first letter after underscore</strong> also
+means that the record field name is a lowercase version of the table
+column name, except that a letter in the record field name is rendered
+in uppercase if, in the table column name, the letter immediately
+follows an underscore.</li>
+
+</ul>
+</li>
+
+<li>Specify how the underscores in the table column name are reflected
+in the record field name:<ul>
+<li><span class="uicontrol">Do not change underscores</span> (the default)
+means that underscores in the table column name are included in the
+record field name.</li>
+
+<li><span class="uicontrol">Remove underscores</span> means that underscores
+in the table column name are not included in the record field name.</li>
+
+</ul>
+</li>
+
+<li>Specify which types are specified for the EGL fields that correspond
+to SQL date and timestamp columns:<ul>
+<li><span class="uicontrol">Use EGL date, time, and timestamp</span> is the
+default.</li>
+
+<li><span class="uicontrol">Use EGL type string</span> uses EGL String fields.<p>The
+value <span class="uicontrol">Set sqlDataCode on char, Unicode, and string fields</span> is
+not in use.</p>
+</li>
+
+</ul>
+</li>
 
 </ol>
 </li>
-<li class="stepexpand"><span>In the <span class="wintitle">SQL</span> pane, select or clear the
-following check boxes:</span> <ol type="a">
-<li>Retrieve primary key information from the system catalog</li>
-
-<li>Prompt for SQL user ID and password when needed</li>
-
-</ol>
+<li class="stepexpand"><span>If you want new SQL records to have the <strong>ID</strong> annotation
+set, select <span class="uicontrol">Retrieve primary key information from the system
+catalog</span>.</span></li>
+<li class="stepexpand"><span>If you want to be prompted for a database password if you
+did not supply one when you created the connection in the workbench,
+select <span class="uicontrol">Prompt for SQL user ID and password when needed</span>.</span>
 </li>
 <li class="stepexpand"><span>To save the changes and remain in the <span class="wintitle">Preferences</span> window,
 click <span class="uicontrol">Apply</span>. To save the changes and exit the

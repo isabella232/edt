@@ -47,9 +47,14 @@ had been in place before the debugging session.</li>
 <p>The debugger always starts debugging from the program or Rich UI
 handler that runs initially. If you want to debug a service that is
 available in the workbench or to debug a library, you must step into
-the service or library from the logic that runs initially. In some
-cases, you might want to write a simple program or Rich UI handler
-to call the logic that you want to debug.</p>
+the service or library from other logic. In some cases, you might
+want to write a simple program or Rich UI handler to call the logic
+that you want to debug.</p>
+
+<p>The EGL debugger does not step into code that was deployed and
+is running on an application server. However, when you are debugging
+a service for which the Service type is in your workspace, you gain
+the benefit of a test server, as described in <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
 
 <div class="p">This introductory topic includes the following sections:<ul>
 <li><a href="#cedt00500__breakpoints">Breakpoints</a></li>
@@ -334,6 +339,8 @@ topics are also available:<ul>
 <li><a href="tedt00582.html" title="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you.">Debugging a program with the EGL debugger</a></li>
 
 <li><a href="tedt00583.html" title="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger.">Debugging a Rich UI application with the EGL debugger</a></li>
+
+<li><a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a></li>
 
 </ul>
 </div>
