@@ -18,6 +18,10 @@
       %license
    </license>
 
+   <url>
+      <update label="%updateSiteName" url="http://download.eclipse.org/edt/updates/1.0"/>
+   </url>
+
    <plugin
          id="org.eclipse.edt.compiler"
          download-size="0"
