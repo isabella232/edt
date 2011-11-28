@@ -97,9 +97,8 @@ public class RUITemplate extends JavaScriptTemplate {
 			generateHeader(handler, out, enableEditing, contextAware, isDebug);
 		}
 		generateEGLParameters(out, eglParameters);		
-		out.println("</script>"); //$NON-NLS-1$
+		out.println("</script>"); //$NON-NLS-1$		
 		
-		generateCSSFiles(handler, ctx, out);
 		out.println("</head>");
 		out.println("<body class=\"" + getTheme(handler) + "\">");
 		out.println("<script type=\"text/javascript\">");
@@ -118,8 +117,9 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 		generateDependentFilePath(handler, ctx, out, isDevelopment);
 		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);
-		generateIncludeFiles(handler, ctx, out);						
+		generateIncludeFiles(handler, ctx, out);		
 		out.println("</script>");		
+		generateCSSFiles(handler, ctx, out);
 		out.println("</body>");
 		out.println("</html>");	
 	}
