@@ -1,2 +1,3 @@
+jarprocessor.exclude.pack=true
 jarprocessor.exclude.sign=true
 jarprocessor.exclude.children.sign=true
