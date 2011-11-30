@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="product"
+         name="EGL IDE"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ui.ide.workbench"
+            name="Eclipse IDE for EGL Web Developers">
+         <property
+               name="introTitle"
+               value="Eclipse IDE for EGL Web Developers"/>
+         <property
+               name="introBrandingImage"
+               value="product:intro-eclipse.png"/>
+         <property
+               name="introBrandingImageText"
+       	       value="Eclipse EGL Development Tools"/>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+         <property
+               name="appName"
+               value="Eclipse IDE for EGL Web Developers">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FFFFFF">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,252,445,20">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="0,280,455,15">
+         </property>
+         <property
+               name="windowImages"
+               value="eclipse.png,eclipse32.png,eclipse48.png">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="FFFFFF">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,220,441,20">
+         </property>
+         <property
+               name="buildIdLocation"
+               value="303,190">
+         </property>
+         <property 
+               name="cssTheme"
+               value="org.eclipse.e4.ui.css.theme.e4_default">
+         </property>
+         <property
+               name="applicationCSSResources" 
+               value="platform:/plugin/org.eclipse.platform/images/"> 
+         </property>
+         <property
+               name="aboutImage"
+               value="aboutgears_115x.png">
+         </property>
+         <property
+               name="aboutText"
+               value="Eclipse IDE for EGL Web Developers.&#x0A;&#x0A;Version: 0.7.0&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
+         </property>
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro">
+      <introProductBinding
+            introId="org.eclipse.ui.intro.universal"
+            productId="org.eclipse.epp.package.edt.product">
+      </introProductBinding>
+   </extension>
+</plugin>

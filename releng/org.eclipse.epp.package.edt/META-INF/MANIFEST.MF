@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EDT Web Package
+Bundle-SymbolicName: org.eclipse.epp.package.edt;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Require-Bundle: org.eclipse.platform,
+ org.eclipse.equinox.app,
+ org.eclipse.ui.intro
+Bundle-Vendor: Eclipse EGL Development Tools
