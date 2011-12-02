@@ -4,7 +4,7 @@
 <product name="Eclipse IDE for EGL Web Developers" uid="epp.package.edt" id="org.eclipse.epp.package.edt.product" application="org.eclipse.ui.ide.workbench" version="0.7.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.eclipse.epp.package.edt/aboutgears_115x.png"/>
+      <image path="/org.eclipse.epp.package.edt/about.png"/>
       <text>
          Eclipse IDE for EGL Web Developers.
 
@@ -31,7 +31,7 @@ Visit http://www.eclipse.org/edt
 -XX:MaxPermSize=256m</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.eclipse.epp.package.edt/eclipse.png" i32="/org.eclipse.epp.package.edt/eclipse32.png" i48="/org.eclipse.epp.package.edt/eclipse48.png"/>
+   <windowImages i16="/org.eclipse.epp.package.edt/eclipse.png" i32="/org.eclipse.epp.package.edt/edt32.gif" i48="/org.eclipse.epp.package.edt/eclipse48.png"/>
 
    <splash
       startupProgressRect="0,280,455,15"
