@@ -39,7 +39,7 @@
          </property>
          <property
                name="windowImages"
-               value="eclipse.png,eclipse32.png,eclipse48.png">
+               value="eclipse.png,edt32.gif,eclipse48.png">
          </property>
          <property
                name="startupForegroundColor"
@@ -63,7 +63,7 @@
          </property>
          <property
                name="aboutImage"
-               value="aboutgears_115x.png">
+               value="about.png">
          </property>
          <property
                name="aboutText"
