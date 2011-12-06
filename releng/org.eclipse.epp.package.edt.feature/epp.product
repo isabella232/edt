@@ -6,7 +6,7 @@
    <aboutInfo>
       <image path="/org.eclipse.epp.package.edt/about.png"/>
       <text>
-         Eclipse IDE for EGL Web Developers.
+         Eclipse IDE for EGL Web Developers
 
 Version: 0.7.0
 
@@ -35,8 +35,8 @@ Visit http://www.eclipse.org/edt
 
    <splash
       location="org.eclipse.epp.package.edt"
-      startupProgressRect="7,242,500,15"
-      startupMessageRect="7,220,500,20"
+      startupProgressRect="7,240,498,15"
+      startupMessageRect="7,220,498,20"
       startupForegroundColor="000000" />
    <launcher name="eclipse">
       <solaris/>
@@ -44,6 +44,7 @@ Visit http://www.eclipse.org/edt
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
    </vm>
