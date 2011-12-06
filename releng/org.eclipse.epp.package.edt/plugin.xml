@@ -31,11 +31,11 @@
          </property>
          <property
                name="startupMessageRect"
-               value="7,220,500,20">
+               value="7,220,498,20">
          </property>
          <property
                name="startupProgressRect"
-               value="7,242,500,15">
+               value="7,240,498,15">
          </property>
          <property
                name="windowImages"
@@ -59,7 +59,7 @@
          </property>
          <property
                name="aboutText"
-               value="Eclipse IDE for EGL Web Developers.&#x0A;&#x0A;Version: 0.7.0&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
+               value="Eclipse IDE for EGL Web Developers&#x0A;&#x0A;Version: 0.7.0&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
          </property>
       </product>
    </extension>
