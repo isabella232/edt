@@ -27,27 +27,19 @@
          </property>
          <property
                name="startupForegroundColor"
-               value="FFFFFF">
+               value="000000">
          </property>
          <property
                name="startupMessageRect"
-               value="7,252,445,20">
+               value="7,220,500,20">
          </property>
          <property
                name="startupProgressRect"
-               value="0,280,455,15">
+               value="7,242,500,15">
          </property>
          <property
                name="windowImages"
                value="eclipse.png,edt32.gif,eclipse48.png">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="FFFFFF">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="7,220,441,20">
          </property>
          <property
                name="buildIdLocation"
@@ -70,12 +62,5 @@
                value="Eclipse IDE for EGL Web Developers.&#x0A;&#x0A;Version: 0.7.0&#x0A;&#x0A;(c) Copyright Eclipse contributors and others 2011.  All rights reserved.&#x0A;Visit http://www.eclipse.org/edt">
          </property>
       </product>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro">
-      <introProductBinding
-            introId="org.eclipse.ui.intro.universal"
-            productId="org.eclipse.epp.package.edt.product">
-      </introProductBinding>
    </extension>
 </plugin>
