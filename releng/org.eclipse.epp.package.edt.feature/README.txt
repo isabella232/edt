@@ -7,7 +7,8 @@ To create an Eclipse product for the running platform:
 2. Right-click the epp.product file > Export > Plug-in Development > Eclipse Product.
 
 3. Make sure 'Synchronize before exporting' and 'Generate metadata directory' are both checked,
-   specify the destination Directory, then click Finish.
+   specify the destination Directory, then click Finish (if the destination directory exists from,
+   a previous export, delete it before running another export).
    
    Note: delete any 'juno' update sites in your eclipse workspace before exporting, otherwise for
          some reason they get included. Verify the update sites in the exported package.
