@@ -4,18 +4,23 @@ To create an Eclipse product for the running platform:
    example, you could be using the Eclipse IDE for JEE Developers 3.7.1 build, with EDT 0.7.0
    installed into it. This is the basis for the plug-ins that get packaged.
 
-2. Right-click the epp.product file > Export > Plug-in Development > Eclipse Product.
+2. Update the version of org.eclipse.epp.package.edt and org.eclipse.epp.package.edt.feature, replacing
+   .qualifier with .v<timestamp> (e.g. 0.7.0.v201112071300). Use this same value for every platform being
+   exported. There are four places to update: MANIFEST.MF, feature.xml, and epp.product (Overview tab's version
+   and Dependencies tab feature version).
 
-3. Make sure 'Synchronize before exporting' and 'Generate metadata directory' are both checked,
+3. Right-click the epp.product file > Export > Plug-in Development > Eclipse Product.
+
+4. Make sure 'Synchronize before exporting' and 'Generate metadata directory' are both checked,
    specify the destination Directory, then click Finish (if the destination directory exists from,
    a previous export, delete it before running another export).
    
    Note: delete any 'juno' update sites in your eclipse workspace before exporting, otherwise for
          some reason they get included. Verify the update sites in the exported package.
 
-4. It will take a few minutes and the result will be an eclipse folder and a repository folder.
+5. It will take a few minutes and the result will be an eclipse folder and a repository folder.
 
-5. Zip up the eclipse folder, and then add the repository folder to the 'release' update site.
+6. Zip up the eclipse folder, and then add the repository folder to the 'release' update site.
    Note: If exporting for multiple platforms, you'll need to merge the repository directories for
          each platform into a single repository. Use the 'merge.sh' script to do this (read it first!).
 
