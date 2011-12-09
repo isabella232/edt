@@ -36,7 +36,7 @@ public interface StructPart extends Part, SubType, Container {
 	
 	Function getFunction(String name);
 	
-	void collectMembers(List<Member> members);
+	void collectMembers(List<Member> members, List<StructPart> alreadySeen);
 	
 	StatementBlock getInitializerStatements();
 	

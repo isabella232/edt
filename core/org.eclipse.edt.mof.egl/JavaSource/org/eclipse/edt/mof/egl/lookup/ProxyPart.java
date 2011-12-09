@@ -403,7 +403,7 @@ public class ProxyPart extends ProxyEObject implements Part, DataType, Parameter
 
 
 	@Override
-	public void collectMembers(List<Member> members) {
+	public void collectMembers(List<Member> members, List<StructPart> alreadySeen) {
 		// TODO Auto-generated method stub
 		
 	}

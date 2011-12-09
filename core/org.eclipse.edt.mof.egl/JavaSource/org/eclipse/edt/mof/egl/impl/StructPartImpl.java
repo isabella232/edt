@@ -175,15 +175,22 @@ public class StructPartImpl extends PartImpl implements StructPart {
 	@Override
 	public List<Member> getAllMembers() {
 		List<Member> mbrs = new ArrayList<Member>();
-		collectMembers(mbrs);
+		collectMembers(mbrs, new ArrayList<StructPart>());
 		return mbrs;
 	}
 	
 	@Override
-	public void collectMembers(List<Member> mbrs) {
+	public void collectMembers(List<Member> mbrs, List<StructPart> alreadySeen) {
+		if (alreadySeen.contains(this)) {
+			return;
+		}
+		
+		alreadySeen.add(this);
 		mbrs.addAll(getMembers());
 		if (!getSuperTypes().isEmpty()) {
-			getSuperTypes().get(0).collectMembers(mbrs);
+			for(StructPart superType : getSuperTypes()) {
+				superType.collectMembers(mbrs, alreadySeen);
+			}
 		}
 
 	}
