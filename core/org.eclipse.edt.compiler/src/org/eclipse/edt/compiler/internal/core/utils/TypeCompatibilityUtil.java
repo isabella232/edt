@@ -304,7 +304,7 @@ public class TypeCompatibilityUtil {
 			return true;
 		}
 		
-		if(sourceType == NilBinding.INSTANCE) {
+		if(sourceType == NilBinding.INSTANCE || targetType == NilBinding.INSTANCE) {
 			return true;
 		}
 		
