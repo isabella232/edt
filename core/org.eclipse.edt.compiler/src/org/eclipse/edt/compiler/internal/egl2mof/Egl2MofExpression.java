@@ -288,7 +288,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(fieldAccess, expr);
 			StringLiteral index = factory.createStringLiteral();
-			index.setValue(fieldAccess.getID());
+			index.setValue(fieldAccess.getCaseSensitiveID());
 			expr.setAccess(index);
 			stack.push(expr);
 			fieldAccess.getPrimary().accept(this);
@@ -296,7 +296,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		else {
 			MemberAccess expr = factory.createMemberAccess();
-			expr.setId(fieldAccess.getID());
+			expr.setId(fieldAccess.getCaseSensitiveID());
 			setElementInformation(fieldAccess, expr);
 			stack.push(expr);
 			fieldAccess.getPrimary().accept(this);
@@ -407,7 +407,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 								if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 									// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 									fi = factory.createQualifiedFunctionInvocation();
-									fi.setId(fa.getID());
+									fi.setId(fa.getCaseSensitiveID());
 									ThisExpression thisExpr = factory.createThisExpression();
 									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
 									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);

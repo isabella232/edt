@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.tools.EGL2IR;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 import com.ibm.icu.util.StringTokenizer;
@@ -73,17 +74,25 @@ public abstract class ZipFileBuildPathEntry{
 	}
 		
 	protected String[] getPackageName(String packagename){
+		return getPackageName(packagename, true);
+	}
+
+	protected String[] getPackageName(String packagename, boolean removeLast){
 		ArrayList list = new ArrayList();
 		StringTokenizer tokenizer = new StringTokenizer(packagename,new String("\\/"));
 		while(tokenizer.hasMoreTokens()){
 			String s = tokenizer.nextToken();
 			list.add(s);
 		}
-		//remove last -- partname
-		list.remove(list.size()-1);
+		
+		if (removeLast) {
+			//remove last -- partname
+			list.remove(list.size()-1);
+		}
+		
 		return InternUtil.intern((String[]) list.toArray(new String[list.size()]));
 	}
-	
+
 	protected boolean processEntry(String entry){
 		if (entry.endsWith(getFileExtension())){
 			String partname = getPartName(entry);
@@ -180,4 +189,70 @@ public abstract class ZipFileBuildPathEntry{
 	public HashMap getPartNamesByPackage() {
 		return partNamesByPackage;
 	}
+	
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		List<String> list = new ArrayList<String>();	
+		if (pkg.length() == 0) {
+			list.addAll(getAllEntriesAsKeys(partNamesWithoutPackage));
+			if (includeSubPkgs) {
+				Iterator i = partNamesByPackage.values().iterator();
+				while (i.hasNext()) {
+					Map map = (Map)i.next();
+					list.addAll(getAllEntriesAsKeys(map));
+				}
+			}
+			return list;
+		}
+		
+		String[] pkgName = getPackageName(pkg.replace('.', '/'), false);
+		
+		Iterator i = partNamesByPackage.keySet().iterator();
+		while (i.hasNext()) {
+			String[] key = (String[]) i.next();
+			if (pkgName == key || isSubPkg(key, pkgName)) {
+				Map map = (Map)partNamesByPackage.get(key);
+				list.addAll(getAllEntriesAsKeys(map));
+			}
+		}
+		return list;
+	}
+	
+	private boolean isSubPkg(String[] pkgName, String[] subPkgName) {
+		if (pkgName.length <= subPkgName.length) {
+			return false;
+		}
+		for (int i = 0; i < subPkgName.length; i++) {
+			String pkgFrag = pkgName[i];
+			String subPkgFrag = subPkgName[i];
+			if (!subPkgFrag.equalsIgnoreCase(pkgFrag)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private List<String> getAllEntriesAsKeys(Map map) {
+		List<String> list = new ArrayList<String>();
+		Iterator i = map.values().iterator();
+		while (i.hasNext()) {
+			String entry = (String) i.next();
+			list.add(convertToStoreKey(entry));
+		}
+		return list;
+	}
+	
+	protected String convertToStoreKey(String entry) {
+		//entries are in the form: "pkg1/pkg2/partName.eglxml". Need to convert this to:
+		//"egl:pkg1.pkg2.partName"
+		
+		//strip off the filename extension
+		String value = entry.substring(0, entry.indexOf("."));
+		
+		value = value.replaceAll("/", ".");
+		value = Type.EGL_KeyScheme + ":" + value;
+		
+		return value;
+		
+	}
+
 }

@@ -170,20 +170,6 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 			throw new BuildException(e);
 		}
 	}
-
-	protected String convertToStoreKey(String entry) {
-		//entries are in the form: "pkg1/pkg2/partName.eglxml". Need to convert this to:
-		//"egl:pkg1.pkg2.partName"
-		
-		//strip off the filename extension
-		String value = entry.substring(0, entry.indexOf("."));
-		
-		value = value.replaceAll("/", ".");
-		value = Type.EGL_KeyScheme + ":" + value;
-		
-		return value;
-		
-	}
 	
 	protected void bindingLoaded(IPartBinding partBinding) {
 		//default is to do nothing
