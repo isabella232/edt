@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class FileSystemObjectStore extends AbstractObjectStore implements ObjectStore {
@@ -90,6 +92,69 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		if (!containsPkg(pkg)) {
+			return new ArrayList<String>();
+		}
+		String path = pkg.replace('.', '/');
+		File pkgDir = new File(root, path);
+		return getAllKeysFromPkg(pkgDir, pkg, includeSubPkgs);
+		
+	}
+	
+	private List<String> getAllKeysFromPkg(File pkgDir, String pkg,  boolean includeSubPkgs) {
+
+		List<String> list = new ArrayList<String>();
+		File[] contents = pkgDir.listFiles();
+		if (contents == null) {
+			return list;
+		}
+		for (File file : contents) {
+			if (file.isDirectory()) {
+				if (includeSubPkgs) {
+					String subPkgName;
+					if (pkg.length() > 0) {
+						subPkgName = pkg + "." + file.getName();
+					}
+					else {
+						subPkgName = file.getName();
+					}
+					list.addAll(getAllKeysFromPkg(file, subPkgName, includeSubPkgs));
+				}
+			}
+			else {
+				if (getFileExtension().equals(getFileExtension(file))) {
+					if (pkg.length() > 0)
+						list.add(getScheme() + pkg + "." + getFileName(file));
+					else
+						list.add(getScheme() + getFileName(file));						
+				}
+			}
+		}
+		
+		return list;
+	}
+	
+	private String getFileExtension(File file) {
+		String name = file.getName();
+		int index = name.lastIndexOf(".");
+		if (index < 0) {
+			return null;
+		}
+		
+		return name.substring(index);
+	}
+
+	private String getFileName(File file) {
+		String name = file.getName();
+		int index = name.lastIndexOf(".");
+		if (index < 0) {
+			return name;
+		}
+		
+		return name.substring(0, index);
+	}
 
 	@Override
 	public boolean containsKey(String key) {
@@ -97,6 +162,12 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 		String path = key.replace('.', '/')+ getFileExtension();
 		File file = new File(root, path);
 		return file.exists();
+	}
+	
+	private boolean containsPkg(String pkg) {
+		String path = pkg.replace('.', '/');
+		File file = new File(root, path);
+		return file.exists() && file.isDirectory();
 	}
 	
 	@Override
@@ -111,6 +182,15 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 			return -1;
 		}
 
+	}
+	
+	private String getScheme() {
+		if (getFileExtension().equals(MOFBIN) || getFileExtension().equals(MOFXML))  {
+			return "";
+		}
+		else {
+			return "egl:";
+		}
 	}
 	
 	public String getFileExtension() {

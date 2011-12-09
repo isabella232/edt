@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.serialization;
 
+import java.util.List;
+
 public interface IZipFileEntryManager {
 	public boolean hasEntry(String entry);
+	List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs);
 
 }

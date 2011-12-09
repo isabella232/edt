@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -159,4 +160,9 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 	public void clearCache() {
 		cache.clear();
 	}
+	
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		return entryManager.getAllKeysFromPkg(pkg, includeSubPkgs);
+	}
+
 }

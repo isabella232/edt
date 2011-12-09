@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.serialization;
 
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.serialization.binary.BinarySerializationFactory;
@@ -144,5 +145,7 @@ public abstract class AbstractObjectStore implements ObjectStore {
 	public abstract Deserializer createDeserializer(String key);
 	public abstract void store(String key, Object obj);
 	public abstract void primRemove(String key);
+	public abstract List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs);
+
 
 }

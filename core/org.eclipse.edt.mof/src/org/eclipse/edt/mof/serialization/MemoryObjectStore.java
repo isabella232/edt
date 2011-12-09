@@ -12,7 +12,9 @@
 package org.eclipse.edt.mof.serialization;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -56,6 +58,10 @@ public class MemoryObjectStore extends AbstractObjectStore implements ObjectStor
 	@Override
 	public boolean containsKey(String key) {
 		return bytes.containsKey(key);
+	}
+
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		return new ArrayList<String>();
 	}
 
 }
