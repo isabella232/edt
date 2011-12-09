@@ -17,23 +17,28 @@ import java.util.List;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Stereotype;
@@ -43,6 +48,7 @@ import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
+import org.eclipse.edt.mof.impl.DynamicEObject;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
@@ -374,6 +380,10 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
+			if (!elemAnnotationsAreStructurallyEquivalent((Part)p1, (Part)p2)) {
+				return false;
+			}
+			
 		}
 		if (p1 instanceof Program) {
 			// Only need to check the CALL signature is the same
@@ -469,6 +479,9 @@ public class TypeUtils implements MofConversion {
 					else {
 						return false;
 					}
+					if (!elemAnnotationsAreStructurallyEquivalent(f1, f2)) {
+						return false;
+					}
 				}
 			}
 			if (!areStructurallyEquivalentFunctionMembers(s1.getConstructors(), s2.getConstructors()))
@@ -516,6 +529,153 @@ public class TypeUtils implements MofConversion {
 		}
 		return true;
 	}
+	
+	private static boolean annotationsAreStructurallyEquivalent(Annotation ann1, Annotation ann2) {
+	
+		if (ann1 == null || ann2 == null) {
+			return (ann1 == null && ann2 == null);
+		}
+		
+		if (ann1 instanceof DynamicEObject) {
+			return ann2 instanceof DynamicEObject;
+		}
+		
+		if (ann1.getEClass().getEFields().size() != ann2.getEClass().getEFields().size()) {
+			return false;
+		}
+		
+		for (int i = 0; i < ann1.getEClass().getEFields().size(); i++) {
+			Object val1 = ann1.eGet(ann1.getEClass().getEFields().get(i));
+			Object val2 = ann2.eGet(ann2.getEClass().getEFields().get(i));
+			if (!objectsAreStructurallyEquivalent(val1, val2)) {
+				return false;
+			}
+		}
+		
+		return true;
+		
+	}
+	
+	private static boolean elemAnnotationsAreStructurallyEquivalent(Element elem1, Element elem2) {
+		
+		if (elem1 == null || elem2 == null) {
+			return (elem1 == null && elem2 == null);
+		}
+
+		
+		if (elem1.getAnnotations().size() != elem2.getAnnotations().size()) {
+			return false;
+		}
+		for (Annotation ann1 : elem1.getAnnotations()) {
+			Annotation ann2 = elem2.getAnnotation(ann1.getEClass().getETypeSignature());
+			
+			if (!annotationsAreStructurallyEquivalent(ann1, ann2)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean objectsAreStructurallyEquivalent(Object obj1, Object obj2) {
+		
+		
+		if (obj1 == null || obj2 == null) {
+			return (obj1 == null && obj2 == null);
+		}
+		
+		if (obj1 == obj2) {
+			return true;
+		}
+		
+		if (obj1 instanceof Object[]) {
+			if (obj2 instanceof Object[]) {
+				Object[] arr1 = (Object[]) obj1;
+				Object[] arr2 = (Object[]) obj2;
+				if (arr1.length != arr2.length) {
+					return false;
+				}
+				
+				for(int i = 0; i < arr1.length; i++) {
+					if (!objectsAreStructurallyEquivalent(arr1[i], arr2[i])) {
+						return false;
+					}
+				}
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		if (obj1 instanceof List) {
+			if (obj2 instanceof List) {
+				List<Object> list1 = (List<Object>) obj1;  
+				List<Object> list2 = (List<Object>) obj2;  
+				if (list1.size() != list2.size()) {
+					return false;
+				}
+				for(int i = 0; i < list1.size(); i++) {
+					if (!objectsAreStructurallyEquivalent(list1.get(i), list2.get(i))) {
+						return false;
+					}
+				}
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		if (obj1.getClass() != obj2.getClass()) {
+			return false;
+		}
+		
+		if (obj1 instanceof Member) {
+			Member mbr1 = (Member) obj1;
+			Member mbr2 = (Member) obj2;
+			return (mbr1.getId().equalsIgnoreCase(mbr2.getId()) && objectsAreStructurallyEquivalent(mbr1.getContainer(), mbr2.getContainer()));
+		}
+		
+		if (obj1 instanceof Part) {
+			Part part1 = (Part) obj1;
+			Part part2 = (Part) obj2;
+			return part1.getFullyQualifiedName().equals(part2.getFullyQualifiedName());
+		}
+		
+		if (obj1 instanceof Annotation) {
+			return annotationsAreStructurallyEquivalent((Annotation) obj1, (Annotation) obj2);			
+		}
+		
+		if (obj1 instanceof MemberName) {
+			MemberName mn1 = (MemberName) obj1;
+			MemberName mn2 = (MemberName) obj2;
+			return (mn1.getId().equalsIgnoreCase(mn2.getId()));
+		}
+
+		if (obj1 instanceof MemberAccess) {
+			MemberAccess ma1 = (MemberAccess) obj1;
+			MemberAccess ma2 = (MemberAccess) obj2;
+			return (ma1.getId().equalsIgnoreCase(ma2.getId()) && objectsAreStructurallyEquivalent(ma1.getQualifier(), ma2.getQualifier()));
+		}
+		
+		if (obj1 instanceof PartName) {
+			PartName pn1 = (PartName)obj1;
+			PartName pn2 = (PartName)obj2;			
+			return (pn1.getFullyQualifiedName().equals(pn2.getFullyQualifiedName()));
+		}
+		
+		if (obj1 instanceof EObject) {
+			if (obj2 instanceof EObject) {
+				//TODO add more checking here
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		
+		return obj1.equals(obj2);
+	}
 
 	private static <T extends FunctionMember> boolean areStructurallyEquivalentFunctionMembers(List<T> mbrs1, List<T> mbrs2) {
 		List<T> funcs1 = collectPublicMembers(mbrs1); 
@@ -550,8 +710,14 @@ public class TypeUtils implements MofConversion {
 				}
 				if (f2 == null || f1.getAccessKind() != f2.getAccessKind() || f1.isStatic() != f2.isStatic())
 					return false;
+				
+				if (!elemAnnotationsAreStructurallyEquivalent(f1, f2)) {
+					return false;
+				}
+				
 			}
 		}
+		
 		return true;
 
 	}
