@@ -81,7 +81,7 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 			constantValue = constantValueAry[0];
 		}
 		else {
-			constantValue = fieldNames.size() + 1;
+			constantValue = fieldNames.size();
 		}
 		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
 		enumerationField.getName().setBinding(enumDataBinding);
