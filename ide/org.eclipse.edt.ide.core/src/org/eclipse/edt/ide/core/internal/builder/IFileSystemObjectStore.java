@@ -13,13 +13,18 @@ package org.eclipse.edt.ide.core.internal.builder;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -64,7 +69,7 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	}
 	
 	public Deserializer createDeserializer(String typeSignature) {
-		try {
+		try {			
 			IPath path = root.append(typeSignature.toUpperCase().toLowerCase().replace('.', '/') + getFileExtension());
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			
@@ -213,4 +218,95 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 	public void clearCache() {
 		cache.clear();
 	}
+	
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		if (!containsPkg(pkg)) {
+			return new ArrayList<String>();
+		}
+		IPath path = root.append(pkg.replace('.', '/'));
+		IFolder pkgDir = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
+		return getAllKeysFromPkg(pkgDir, pkg, includeSubPkgs);
+		
+	}
+	
+	private List<String> getAllKeysFromPkg(final IFolder pkgDir, final String pkg,  final boolean includeSubPkgs) {
+
+		final List<String> list = new ArrayList<String>();
+		try {
+			pkgDir.accept(new IResourceVisitor() {
+				
+				@Override
+				public boolean visit(IResource resource) throws CoreException {
+					
+					if (resource.equals(pkgDir)) {
+						return true;
+					}
+					
+					if (resource.getType() == IResource.FOLDER) {
+						if (includeSubPkgs) {
+							String subPkgName;
+							if (pkg.length() > 0) {
+								subPkgName = pkg + "." + resource.getName();
+							}
+							else {
+								subPkgName = resource.getName();
+							}
+							list.addAll(getAllKeysFromPkg((IFolder)resource, subPkgName, includeSubPkgs));
+						}
+					}
+					else {
+						if (resource.getType() == IResource.FILE) {
+							if (getFileExtension().equals(getFileExtension((IFile)resource))) {
+								if (pkg.length() > 0)
+									list.add(getScheme() + pkg + "." + getFileName((IFile)resource));
+								else
+									list.add(getScheme() + getFileName((IFile)resource));						
+							}
+						}
+					}
+					return false;
+				}
+			});
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+						
+		return list;
+	}
+	
+	private String getFileExtension(IFile file) {
+		String name = file.getName();
+		int index = name.lastIndexOf(".");
+		if (index < 0) {
+			return null;
+		}
+		
+		return name.substring(index);
+	}
+
+	private String getFileName(IResource file) {
+		String name = file.getName();
+		int index = name.lastIndexOf(".");
+		if (index < 0) {
+			return name;
+		}
+		
+		return name.substring(0, index);
+	}
+	
+	private boolean containsPkg(String pkg) {
+		IPath path = root.append(pkg.replace('.', '/'));
+		IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder(path);
+		return folder.exists();
+	}
+		
+	private String getScheme() {
+		if (getFileExtension().equals(ZipFileObjectStore.MOFBIN) || getFileExtension().equals(ZipFileObjectStore.MOFXML))  {
+			return "";
+		}
+		else {
+			return "egl:";
+		}
+	}
+	
 }
