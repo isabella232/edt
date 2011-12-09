@@ -4120,9 +4120,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 			ITypeBinding tBinding = classDataDeclaration.getType().resolveTypeBinding();
 			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
 			if (Binding.isValidBinding(tBinding) && !tBinding.isNullable() && tBinding.isReference() && !tBinding.isInstantiable() && currentScope.getPartBinding() != tBinding) {
-				problemRequestor.acceptProblem(type,
-						IProblemRequestor.TYPE_NOT_INSTANTIABLE,
-					new String[] {type.getCanonicalName()});
+				//Don't need to throw error if the field is in an ExternalType
+				if (Binding.isValidBinding(currentScope.getPartBinding()) && currentScope.getPartBinding().getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
+					problemRequestor.acceptProblem(type,
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
+						new String[] {type.getCanonicalName()});
+				}
 			}
 			
 			//nullable types cannot specify a settings block that contains settings for data in the field
