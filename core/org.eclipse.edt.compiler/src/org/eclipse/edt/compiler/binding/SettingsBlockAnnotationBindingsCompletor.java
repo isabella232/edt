@@ -357,6 +357,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 						.intern("TYPEREF");
 				canMixTypesInArrayLiterals = annotationTypeIsTypeRef;
 			}
+			canMixTypesInArrayLiterals = canMixTypesInArrayLiterals || annotationTypeIsAny(annotationType);
 		}
 
 		private boolean annotationTypeIsResolvable(IAnnotationTypeBinding aTypeBinding) {
@@ -371,6 +372,14 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			return false;
 		}
 
+		private boolean annotationTypeIsAny(IAnnotationTypeBinding aTypeBinding) {
+			if (aTypeBinding.hasSingleValue()) {
+				ITypeBinding singleValueType = aTypeBinding.getSingleValueType().getBaseType();
+				return (Binding.isValidBinding(singleValueType) && singleValueType.getNonNullableInstance() == PrimitiveTypeBinding.getInstance(Primitive.ANY));
+			}
+			return false;
+		}
+		
 		protected void handleNameResolutionException(ResolutionException e) {
 			valueIsInvalid = true;
 			IAnnotationTypeBinding annotationType = (IAnnotationTypeBinding) annotation.getType();
