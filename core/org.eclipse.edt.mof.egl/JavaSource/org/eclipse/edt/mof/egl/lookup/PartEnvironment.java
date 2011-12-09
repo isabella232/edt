@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.lookup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -21,6 +22,7 @@ import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.AbstractObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -178,4 +180,19 @@ public class PartEnvironment implements IEnvironment {
 			}
 		}
 	}
+	
+	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
+		
+		List<String> list = new ArrayList<String>();
+		
+		for (List<ObjectStore> osList :  env.getObjectStores().values()) {
+			for (ObjectStore os : osList) {
+				if (os instanceof AbstractObjectStore) {
+					list.addAll(((AbstractObjectStore)os).getAllKeysFromPkg(pkg, includeSubPkgs));
+				}
+			}
+		}
+		return list;
+	}
+
 }
