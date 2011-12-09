@@ -480,17 +480,7 @@ public class IRUtils {
 				}
 			}
 		}
-		
-		//special case for Any...we must make a boxing expression 
-		if (isAny(type.getClassifier())) {
-			if (exprType == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)) {
-				return expr;
-			}
-			BoxingExpression box = factory.createBoxingExpression();
-			box.setExpr(expr);
-			return box;
-		}
-		
+				
 		if (TypeUtils.isReferenceType(exprType) 
 				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
