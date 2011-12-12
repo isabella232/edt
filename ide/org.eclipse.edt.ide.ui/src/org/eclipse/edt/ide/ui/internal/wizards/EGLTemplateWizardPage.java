@@ -132,7 +132,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 
 			handleSelectedTemplate();
 
-			String templateID = ((ITemplate) o).getCodeTemplateId();//&& validatePage(true)
+			String templateID = ((ITemplate) o).getCodeTemplateId();
 			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
 					|| (templateID != null );
 			
@@ -197,8 +197,8 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	
 	@Override
 	public void doubleClick(DoubleClickEvent event) {
-		if (event.getSource() == templateViewer) {
-			if (getSelectedNode() != null) {
+		if (event.getSource() == templateViewer && validatePage(false)) {
+			if (getSelectedNode() != null ) {
 				IWizard wiz = getWizard();
 				WizardDialog d =(WizardDialog)wiz.getContainer();
 				d.showPage(getNextPage());
