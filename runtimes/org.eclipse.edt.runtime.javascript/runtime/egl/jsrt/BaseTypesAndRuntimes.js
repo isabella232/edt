@@ -942,6 +942,8 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 	//The Year must be set first, otherwize the leap year is wrong ,such as 2000/2/29 will be 2000/3/1
 	var yearResult = new Date;
 	yearResult.setFullYear(0);
+	yearResult.setMonth(0);
+	yearResult.setDate(1);
 	var tempS = s;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -957,7 +959,8 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 		}
 	}
 	if( yearResult.getFullYear() == result.getFullYear() ){
-		result.setFullYear((new Date).getFullYear());
+		//If year is not set, set it to a leap year to accept dates "0229"
+		result.setFullYear(2000);
 	}
 	
 	for(var i = 0; i < numTokens; i++ )
@@ -4021,7 +4024,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 			pattern = "yyyyMMddHHmmss";
 	}
 	else if ( type == "time" ) {
-		date.setFullYear( now.getFullYear() );
+		date.setFullYear( 2000 );
 		date.setMonth( now.getMonth() );
 		date.setDate( now.getDate() );
 		if (!pattern || pattern == "" )
@@ -4036,8 +4039,8 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	//first function is for pattern missing chars on the left side (current)
 	//second function is for pattern missing chars on the right side (zeros)
 	var chars = 
-		[
-		  [ "y", function(d){ d.setFullYear( now.getFullYear() ); }, function(d){ d.setFullYear( 0 ); } ],
+		[ // bug 365262, change to leap year 2000 to accept date like "0229"
+		  [ "y", function(d){ d.setFullYear( 2000 ); }, function(d){ d.setFullYear( 0 ); } ],
 	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
 	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
 	      [ "H", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],

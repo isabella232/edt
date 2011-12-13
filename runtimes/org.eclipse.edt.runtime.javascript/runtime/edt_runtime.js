@@ -970,7 +970,7 @@ egl.eglx.lang.ETimestamp.timeOf = function (ts, pattern){
 	var now = new Date ();
 	timeCopy.setDate( now.getDate() );
 	timeCopy.setMonth( now.getMonth() );
-	timeCopy.setFullYear( now.getFullYear() );	
+	timeCopy.setFullYear( 2000 );	
 	timeCopy.setMilliseconds( 0 );
 	return timeCopy;	
 };
