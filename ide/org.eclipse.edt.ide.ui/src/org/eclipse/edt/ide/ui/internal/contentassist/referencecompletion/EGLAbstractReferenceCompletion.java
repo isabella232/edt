@@ -169,7 +169,9 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 		TokenStream stream = new TokenStream(prefix);
 		ParseStack stack = parser.parse(stream);
 		stack.performAllReductions(NodeTypes.ID);
-		validStates.add(new Integer(stack.getCurrentState()));
+		if(!validStates.contains(stack.getCurrentState())){
+			validStates.add(new Integer(stack.getCurrentState()));	
+		}
 	}
 
 	protected void addContext(int stateCode) {
