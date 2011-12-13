@@ -95,10 +95,11 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		if (generic.elementsNullable())
 			out.print("null");
 		else {
+			//arguments are the dimensions' size, next is the current dimension
 			if ( next < arguments.size() - 1 ) {
 				genContainerBasedNewExpressionArguments( type, ctx, out, arguments, next + 1 );
 			} else {
-				ctx.invoke(genDefaultValue, generic.getElementType(), ctx, out);
+				ctx.invoke(genDefaultValue, getArrayElementType(generic), ctx, out);
 			}
 		}
 		out.println(";}");
@@ -107,7 +108,14 @@ public class ArrayTypeTemplate extends JavaScriptTemplate {
 		out.print(";})()");
 
 	}
-
+	
+	private Type getArrayElementType(ArrayType generic){
+		Type type = generic.getElementType();
+		while(type instanceof ArrayType){
+			type = ((ArrayType) type).getElementType();
+		}
+		return type;
+	}
 
 	public void genSignature(ArrayType generic, Context ctx, TabbedWriter out) {
 		if (!generic.getTypeArguments().isEmpty()) {
