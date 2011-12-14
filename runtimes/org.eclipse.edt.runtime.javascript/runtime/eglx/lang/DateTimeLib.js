@@ -119,7 +119,7 @@ egl.getProperTimeStampPattern = function( pattern ) {
 
 egl.formatTimeStampPattern = function( mask ) {
 	new egl.eglx.lang.Constants(); // TODO sbg remove if/when Constants' fields are static
-	
+	var oldMask = mask; //This is used to be printed out in the exception message
 	// Masks specify fractions of seconds with "f", but formatting patterns use "S".
 	mask = mask.replace(/f/g, "S");
 
@@ -139,6 +139,6 @@ egl.formatTimeStampPattern = function( mask ) {
 	}
 	else
 	{
-		throw egl.createRuntimeException( "CRRUI2032E", [ mask ] );
+		throw egl.createRuntimeException( "CRRUI2032E", [ oldMask ] );
 	}
 };
