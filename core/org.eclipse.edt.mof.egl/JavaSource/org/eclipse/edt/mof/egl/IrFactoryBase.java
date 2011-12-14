@@ -130,6 +130,8 @@ public interface IrFactoryBase extends EFactory  {
 	String NullLiteral = packageName+".NullLiteral";
 	String NullType = packageName+".NullType";
 	String NumericLiteral = packageName+".NumericLiteral";
+	String ObjectExpression = packageName+".ObjectExpression";
+	String ObjectExpressionEntry = packageName+".ObjectExpressionEntry";
 	String OpenStatement = packageName+".OpenStatement";
 	String OpenUIStatement = packageName+".OpenUIStatement";
 	String Operation = packageName+".Operation";
@@ -298,6 +300,8 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getNullLiteralEClass();
 	EClass getNullTypeEClass();
 	EClass getNumericLiteralEClass();
+	EClass getObjectExpressionEClass();
+	EClass getObjectExpressionEntryEClass();
 	EClass getOpenStatementEClass();
 	EClass getOpenUIStatementEClass();
 	EClass getOperationEClass();
@@ -443,6 +447,8 @@ public interface IrFactoryBase extends EFactory  {
 	public MoveStatement createMoveStatement();
 	public NewExpression createNewExpression();
 	public NullLiteral createNullLiteral();
+	public ObjectExpression createObjectExpression();
+	public ObjectExpressionEntry createObjectExpressionEntry();
 	public OpenStatement createOpenStatement();
 	public OpenUIStatement createOpenUIStatement();
 	public Operation createOperation();

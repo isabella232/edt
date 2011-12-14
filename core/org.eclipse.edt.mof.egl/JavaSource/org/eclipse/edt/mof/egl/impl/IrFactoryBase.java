@@ -576,7 +576,17 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	public EClass getNumericLiteralEClass() {
 		return (EClass)getTypeNamed(NumericLiteral);
 	}
-	
+
+	@Override
+	public EClass getObjectExpressionEClass() {
+		return (EClass)getTypeNamed(ObjectExpression);
+	}
+
+	@Override
+	public EClass getObjectExpressionEntryEClass() {
+		return (EClass)getTypeNamed(ObjectExpressionEntry);
+	}
+
 	@Override
 	public EClass getOpenStatementEClass() {
 		return (EClass)getTypeNamed(OpenStatement);
@@ -1302,7 +1312,18 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	public NullLiteral createNullLiteral() {
 		return (NullLiteral)getNullLiteralEClass().newInstance();
 	}
-		
+	
+	@Override
+	public ObjectExpression createObjectExpression() {
+		return (ObjectExpression)getObjectExpressionEClass().newInstance();
+	}
+	
+	@Override
+	public ObjectExpressionEntry createObjectExpressionEntry() {
+		return (ObjectExpressionEntry)getObjectExpressionEntryEClass().newInstance();
+	}
+
+	
 	@Override
 	public OpenStatement createOpenStatement() {
 		return (OpenStatement)getOpenStatementEClass().newInstance();
