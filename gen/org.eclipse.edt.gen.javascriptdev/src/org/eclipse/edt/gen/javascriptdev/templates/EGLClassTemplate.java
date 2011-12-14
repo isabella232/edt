@@ -128,8 +128,24 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 					!(refPart instanceof Program) && !packageName.startsWith( "eglx." ) && !packageName.startsWith( "egl." ) ) {
 				if ( refPart instanceof ExternalType ) {
 					ctx.invoke(Constants.genLoadScript4DependentParts, refPart, ctx, out);
+					Annotation annot = refPart.getAnnotation( "eglx.javascript.JavaScriptObject" );
+					if (annot != null) {
+						String pkg = (String)annot.getValue( "relativePath" );
+						String name = (String)annot.getValue( "externalName" );
+						
+						if (pkg == null|| pkg.length() == 0) {
+							pkg = "";
+						} else {
+							pkg = pkg.replace( '/', '.' );
+						}
+						if (name == null || name.length() == 0) {
+							name = refPart.getName();
+						}
+						out.println("egl.loadScript( \"" + pkg + "\",\"" + name + "\" );" );
+					}
+				} else {
+					out.println("egl.loadScript( \"" + refPart.getPackageName() + "\",\"" + refPart.getName() + "\" );" );
 				}
-				out.println("egl.loadScript( \"" + refPart.getPackageName() + "\",\"" + refPart.getName() + "\" );" );
 			}
 		}
 	}
