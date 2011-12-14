@@ -23,7 +23,6 @@ import org.eclipse.edt.compiler.binding.DynamicDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FormGroupBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
@@ -52,7 +51,6 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
 import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.AsExpression;
@@ -68,7 +66,6 @@ import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.ExpressionStatement;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
@@ -78,7 +75,6 @@ import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.HexLiteral;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
-import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.IsNotExpression;
@@ -93,6 +89,8 @@ import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.NumericLiteral;
+import org.eclipse.edt.mof.egl.ObjectExpression;
+import org.eclipse.edt.mof.egl.ObjectExpressionEntry;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
@@ -105,10 +103,8 @@ import org.eclipse.edt.mof.egl.SubstringAccess;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -188,6 +184,25 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 		setElementInformation(node, lit);
 		stack.push(lit);
+		return false;
+	}
+	
+	public boolean visit(org.eclipse.edt.compiler.core.ast.ObjectExpression node) {
+		List<ObjectExpressionEntry> entries = new ArrayList<ObjectExpressionEntry>();
+		Iterator i = node.getEntries().iterator();
+		while (i.hasNext()) {
+			org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry entry =  (org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry) i.next();
+			ObjectExpressionEntry entryIR = factory.createObjectExpressionEntry();
+			entryIR.setId(entry.getId());
+			entry.getExpression().accept(this);
+			entryIR.setExpression((Expression) stack.pop());
+			entries.add(entryIR);
+		}
+		
+		ObjectExpression objExpr = factory.createObjectExpression();
+		objExpr.getEntries().addAll(entries);
+		setElementInformation(node,objExpr);
+		stack.push(objExpr);
 		return false;
 	}
 	

@@ -329,10 +329,18 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(ObjectExpression objExpr) {
+		return false;
+	}
+
+	public boolean visit(ObjectExpressionEntry objExprEntry) {
+		return false;
+	}
+
 	public boolean visit(OnEventBlock onEventBlock) {
 		return false;
 	}
-	
+
 	public boolean visit(OnExceptionBlock onExceptionBlock) {
 		return false;
 	}
@@ -691,8 +699,12 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	
 	public void endVisit(NoCursorClause noCursorClause) {}
 	
+	public void endVisit(ObjectExpression objExpr) {}
+
+	public void endVisit(ObjectExpressionEntry objExprEntry) {}
+
 	public void endVisit(OnEventBlock onEventBlock) {}
-	
+
 	public void endVisit(OnExceptionBlock onExceptionBlock) {}
 	
 	public void endVisit(OpenStatement openStatement) {}

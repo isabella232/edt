@@ -110,6 +110,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
         return visitLiteral(nilLiteral);
     }
     
+    public boolean visit(ObjectExpression objExpr) {
+    	return visitExpression(objExpr);
+    }
+    
     public boolean visit(SQLLiteral sQLLiteral) {
         return visitLiteral(sQLLiteral);
     }
@@ -288,5 +292,9 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public void endVisit(UnaryExpression unaryExpression) {
         endVisitExpression(unaryExpression);
+    }
+    
+    public void endVisit(ObjectExpression objExpr) {
+    	endVisitExpression(objExpr);
     }
 }

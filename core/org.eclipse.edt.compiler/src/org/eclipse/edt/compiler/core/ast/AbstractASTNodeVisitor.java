@@ -333,6 +333,14 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( noCursorClause );
 	}
 	
+	public boolean visit(ObjectExpression objExpr) {
+		return visitNode( objExpr );
+	}
+
+	public boolean visit(ObjectExpressionEntry objExprEntry) {
+		return visitNode( objExprEntry );
+	}
+
 	public boolean visit(OnEventBlock onEventBlock) {
 		return visitNode( onEventBlock );
 	}
@@ -849,6 +857,14 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( noCursorClause );
 	}
 	
+	public void endVisit(ObjectExpression objExpr) {
+		 endVisitNode( objExpr );
+	}
+
+	public void endVisit(ObjectExpressionEntry objExprEntry) {
+		 endVisitNode( objExprEntry );
+	}
+
 	public void endVisit(OnEventBlock onEventBlock) {
 		 endVisitNode( onEventBlock );
 	}

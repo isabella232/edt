@@ -118,6 +118,7 @@ import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.NullableType;
+import org.eclipse.edt.compiler.core.ast.ObjectExpression;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -3229,6 +3230,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	protected boolean canMixTypesInArrayLiterals() {
 		return true;
+	}
+	
+	public void endVisit(ObjectExpression objExpr) {
+		if (objExpr.resolveTypeBinding() == null) {
+			objExpr.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.ANY));
+		}
 	}
 	
 	public void endVisit(ArrayLiteral arrayLiteral) {

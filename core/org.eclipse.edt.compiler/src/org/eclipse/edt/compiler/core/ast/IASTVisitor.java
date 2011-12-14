@@ -250,6 +250,12 @@ public interface IASTVisitor {
 	boolean visit(NoCursorClause noCursorClause);
 	void endVisit(NoCursorClause noCursorClause);
 	
+	boolean visit(ObjectExpression objectExpression);
+	void endVisit(ObjectExpression objectExpression);
+	
+	boolean visit(ObjectExpressionEntry objectExpressionEntry);
+	void endVisit(ObjectExpressionEntry objectExpressionEntry);
+	
 	boolean visit(OnEventBlock onEventBlock);
 	void endVisit(OnEventBlock onEventBlock);
 	

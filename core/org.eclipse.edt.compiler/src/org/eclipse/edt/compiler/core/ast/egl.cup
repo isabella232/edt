@@ -161,6 +161,7 @@ nonterminal foreachOption;
 nonterminal ReturnsDeclaration returnsOpt;
 nonterminal Expression setTarget;
 nonterminal setting;
+nonterminal objExprEntry;
 nonterminal SettingsBlock settingsBlock;
 nonterminal SettingsBlock settingsBlockOpt;
 nonterminal showOption;
@@ -206,6 +207,7 @@ nonterminal List programParameter_star, programParameter_plus;
 nonterminal List replaceOption_star, replaceOption_plus;
 nonterminal List foreachOption_star, foreachOption_plus;
 nonterminal List setting_star, setting_plus;
+nonterminal List objExprEntry_plus;
 nonterminal List settingsBlock_star, settingsBlock_plus;
 nonterminal List showOption_star, showOption_plus;
 nonterminal List stmt_star, stmt_plus;
@@ -1264,7 +1266,14 @@ expr
 	
 	|	name:name1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
 	{: RESULT = new TypeLiteralExpression(new ArrayType(new NameType(name1, name1left, name1right), null, name1left, rbracket1right), name1left, typeKeywordright); :}
+
+	|	LCURLY:lcurly1  RCURLY:rcurly1
+	{: RESULT = new ObjectExpression(new ArrayList(), lcurly1left, rcurly1right); :}
+
+	|	LCURLY:lcurly1 objExprEntry_plus:objExprEntries1 RCURLY:rcurly1
+	{: RESULT = new ObjectExpression(objExprEntries1, lcurly1left, rcurly1right); :}
 	;
+		
 	
 privateAccessModifierOpt
 	::=
@@ -1359,6 +1368,22 @@ setTarget
 	|	name:name1
 	{: RESULT = name1; :}
 	;
+	
+	
+objExprEntry_plus
+	::=	objExprEntry:objExprEntry
+	{: RESULT = new ArrayList(); RESULT.add(objExprEntry); :}
+	|	objExprEntry_plus:objExprEntries COMMA objExprEntry:objExprEntry
+	{: if(objExprEntry != null) objExprEntries.add(objExprEntry); RESULT = objExprEntries; :}
+	;
+
+objExprEntry
+	::=	ID:id1 COLON expr:expr1
+	{: RESULT = new ObjectExpressionEntry(id1, expr1, id1left, expr1right); :}
+	
+	|	STRING:str1 COLON expr:expr1
+	{: RESULT = new ObjectExpressionEntry(str1.getValue(), expr1, str1left, expr1right); :}
+	;	
 
 literal
 	::=	INTEGER:value
