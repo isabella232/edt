@@ -257,3 +257,17 @@ externalType SubstringAccess extends Expression type MofClass
 	_end Expression {containment=true, mofName="end"}; 
 	operation EGLOperation {transient=true};
 end
+
+externalType ObjectExpressionEntry extends Element type MofClass {
+}
+	id string;
+	expression expression {containment=true};
+end
+
+externalType ObjectExpression extends Expression type MofClass {
+}
+	entries ObjectExpressionEntry[] {containment=true};
+end
+
+
+
