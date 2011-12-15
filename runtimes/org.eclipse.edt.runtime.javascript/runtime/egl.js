@@ -480,57 +480,7 @@ egl.setDateSignatures = function(object) {
     }
 };
 
-//TODO print Errors until we have a better framework in place
-egl.printError = function( /*String*/ description, /*Error*/ e ) {
-//	if ( !egl.canPrintError ) {
-//		return;
-//	}
-	try {
-		var error = e && e.message ? e.message : e;
-		error = error || "unknown error";
-		var msg = description;
-		if (e && e.stack) {
-			var s = e.stack.replace(/@/g,'<br>');
-			s = s.replace(/http:\/\/[^\/]*\/[^:]*\//g, '');
-					msg += ("<ul>"+s+"</ul>");
-		}
-		msg += "<br><b><font color=red>" + error + "</font></b><br>";
-		if (egl.debugStack) {
-			if (egl.debugStack.length > 0)
-				msg += egl.getRuntimeMessage( "CRRUI2094E", []) + "<br>";
-			else
-				msg += egl.getRuntimeMessage( "CRRUI2095E", []);
-			for (var n=egl.debugStack.length-1; n>=0; n--) {
-				var stackFrame = egl.debugStack[n];
-				if (stackFrame) {
-					var path = stackFrame.fileName;
-					if (!path) {
-						path = stackFrame.longFunctionName;
-						try {
-							path = stackFrame.obj.eze$$package + "."  + stackFrame.longFunctionName;
-						} catch (e) { }
-					}
-					if (stackFrame.lineNumber != 0)
-						msg += egl.getFileURL(stackFrame.fileName, path, stackFrame.lineNumber);
-				}
-			}
-			msg += "<br>";
-		}
-		if (e && e.fileName && e.lineNumber) {
-			msg += egl.getFileURL(e.fileName, egl.lastFunctionEntered, e.lineNumber);
-		}
-		egl.lastActiveLine = null;
-		egl.println(msg);
-		console.error(msg);
-		egl.sessionIsValid = true; // to make sure the error line number links work
-	}
-	finally {
-		egl.exceptionThrown = false;
-		egl.debugStack = [];
-	}
-};
-
-
+egl.printError = function(){};
 
 egl.eze$$packages = { };
 

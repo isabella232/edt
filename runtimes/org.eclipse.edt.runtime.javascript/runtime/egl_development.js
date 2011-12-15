@@ -144,7 +144,7 @@ egl.loadCSS = function(cssFile) {
 		return;
 	if ( egl.cssFiles[cssFile] ) {	return; }
 	egl.cssFiles[cssFile] = cssFile;
-    var objCSS = document.body.appendChild(document.createElement('link'));
+    var objCSS = document.head.appendChild(document.createElement('link'));
     objCSS.rel = 'stylesheet';
     objCSS.href = cssFile;
     objCSS.type = 'text/css';
@@ -1413,6 +1413,7 @@ egl.printError = function( /*String*/ description, /*Error*/ e ) {
 		}
 		egl.lastActiveLine = null;
 		egl.println(msg);
+		console.error(msg);
 		egl.sessionIsValid = true; // to make sure the error line number links work
 	}
 	finally {
