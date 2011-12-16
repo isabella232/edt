@@ -24,6 +24,7 @@ import org.eclipse.edt.ide.ui.project.templates.AbstractProjectTemplateClass;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.widgetLibProvider.IWidgetLibProvider;
 import org.eclipse.edt.ide.widgetLibProvider.WidgetLibProviderManager;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 	
@@ -49,12 +50,12 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 //		}			
 	}
 	
-	private URL getWidgetProjectURL(String resourcePluginName, String libraryResourceFolder, String projectName ) throws IOException {
-		URL url = FileLocator.resolve(Platform.getBundle(resourcePluginName).getEntry(libraryResourceFolder + projectName + ".zip"));
-		return url;
-	}
-	
-	protected void addMoreOperations(final ProjectConfiguration eglProjConfiguration,ISchedulingRule rule, List listOps) {
+
+	public List<WorkspaceModifyOperation> getImportProjectOperations(
+			ProjectConfiguration eglProjConfiguration, int eglFeatureMask,
+			ISchedulingRule rule) {
+		
+		List listOps = new ArrayList();
 		List dependencyOps = new ArrayList();
 		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
 		
@@ -73,6 +74,8 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 			}
 		}
 		listOps.addAll(dependencyOps);
+		
+		return listOps;
 	}
 
 	@Override

@@ -37,11 +37,13 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 	public HelloWorldProjectTemplate() {
 		super();
 	}
-
-	@Override
-	protected void addMoreOperations(ProjectConfiguration eglProjConfiguration, ISchedulingRule rule, List listOps) {
+	
+	public List<WorkspaceModifyOperation> getImportProjectOperations(
+			ProjectConfiguration eglProjConfiguration, int eglFeatureMask,
+			ISchedulingRule rule) {
+		List listOps = new ArrayList();
 		String[] ids = { "org.eclipse.edt.rui.widgets_0.7.0", "org.eclipse.edt.rui.dojo_0.7.0" };
-		
+
 		List dependencyOps = new ArrayList();
 		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
 		
@@ -66,6 +68,8 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 				
 		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.7.0", eglProjConfiguration.getProjectName() );
 		listOps.add(loadSampleCode);
+
+		return listOps;
 	}
 
 	@Override

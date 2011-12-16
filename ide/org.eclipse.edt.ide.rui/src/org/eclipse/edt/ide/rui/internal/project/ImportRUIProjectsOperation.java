@@ -84,41 +84,54 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 		if (monitor == null) {
 			monitor= new NullProgressMonitor();
 		}
-		monitor.beginTask(RuiNewWizardMessages.ImportTask + projectName, 10);
+		
 		// Only import the widgets project if it doesn't exist
 		if(!widgetsProject.exists()){
 			try{
-				monitor.subTask(RuiNewWizardMessages.ImportTask_Unzip);
-				unzipWidgets( projectName );
-				monitor.worked(6);
+
+				unzipWidgets( projectName, monitor);
 				if(!widgetsProject.exists()){
-					widgetsProject.create(new SubProgressMonitor(monitor, 1));
+					widgetsProject.create(new SubProgressMonitor(monitor, 10));
 				}
 				if(!widgetsProject.isOpen()){
-					widgetsProject.open(new SubProgressMonitor(monitor, 1));
+					widgetsProject.open(new SubProgressMonitor(monitor, 10));
 				}
 				EGLCore.create(widgetsProject);				
 				
-				widgetsProject.refreshLocal(IResource.DEPTH_INFINITE, new SubProgressMonitor(monitor, 1));
+				widgetsProject.refreshLocal(IResource.DEPTH_INFINITE, new SubProgressMonitor(monitor, 10));
 				IWorkspaceDescription description = ResourcesPlugin.getWorkspace().getDescription();
 				if(!description.isAutoBuilding()){
-					widgetsProject.build(IncrementalProjectBuilder.FULL_BUILD, new SubProgressMonitor(monitor, 1));
+					widgetsProject.build(IncrementalProjectBuilder.FULL_BUILD, new SubProgressMonitor(monitor, 10));
 				}
 			} catch (Exception e) {
 				EGLLogger.log(this, e);
 			} finally{
 				monitor.done();
 			}
+		}else{
+			monitor.done();
 		}
 	}
 	
-	private void unzipWidgets( String projectName ) throws IOException{
+	private void unzipWidgets( String projectName, IProgressMonitor monitor) throws IOException{
 		URL url = CommonUtilities.getWidgetProjectURL(resourcePluginName, libraryResourceFolder, projectName);
 			
 		if(url != null) {
 			IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 			
 			ZipFile sampleSource = new ZipFile(url.getFile());
+			
+			//Let the progress bar more sensitive
+			int entryNumber = 0;
+			Enumeration entriesForNumber = sampleSource.entries();
+			while(entriesForNumber.hasMoreElements()){
+				entriesForNumber.nextElement();
+				entryNumber++;
+			}
+			
+			monitor.beginTask(RuiNewWizardMessages.ImportTask + projectName, entryNumber + 40);
+			monitor.subTask(RuiNewWizardMessages.ImportTask_Unzip);
+			
 			try{
 				Enumeration entries = sampleSource.entries();
 				while(entries.hasMoreElements()){
@@ -146,6 +159,7 @@ public class ImportRUIProjectsOperation extends WorkspaceModifyOperation {
 							}								
 						}
 					}
+					monitor.worked(1);
 				}
 			}finally{
 				sampleSource.close();
