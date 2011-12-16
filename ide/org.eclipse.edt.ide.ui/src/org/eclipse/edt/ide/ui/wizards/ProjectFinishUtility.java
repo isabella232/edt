@@ -32,5 +32,9 @@ public class ProjectFinishUtility {
 	public static List<WorkspaceModifyOperation> getCreateProjectFinishOperations(IProjectTemplateClass templateClass, ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule ) {
 		return templateClass.getOperations(eglProjConfiguration, eglFeatureMask, rule);		
 	}
+	
+	public static List<WorkspaceModifyOperation> getImportProjectOperations(IProjectTemplateClass templateClass, ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule ) {
+		return templateClass.getImportProjectOperations(eglProjConfiguration, eglFeatureMask, rule);
+	}
 
 }

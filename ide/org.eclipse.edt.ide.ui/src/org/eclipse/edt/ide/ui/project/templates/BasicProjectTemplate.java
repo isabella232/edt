@@ -11,13 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.project.templates;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
-import org.eclipse.edt.ide.ui.wizards.ProjectGeneratorOperation;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class BasicProjectTemplate extends AbstractProjectTemplateClass {
 
@@ -39,12 +34,6 @@ public class BasicProjectTemplate extends AbstractProjectTemplateClass {
 	@Override
 	protected void setProjectCompilerAndGenerator(ProjectConfiguration eglProjConfiguration) {
 		// Intend to leave blank, has been set in the wizard page
-	}
-
-	@Override
-	protected void addMoreOperations(ProjectConfiguration eglProjConfiguration,
-			ISchedulingRule rule, List listOps) {
-		// Intend to leave blank, nothing more to do
 	}
 
 	@Override

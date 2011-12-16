@@ -21,6 +21,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IContributor;
 import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
@@ -35,6 +36,7 @@ import org.eclipse.edt.ide.ui.project.templates.ProjectTemplateWizardNode;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.ProjectFinishUtility;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardNode;
@@ -88,17 +90,42 @@ public class NewEGLProjectWizard extends Wizard
 				}
 			}
 							
-            List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) template.getProjectTemplateClass(), model, 0, rule);
-            for(Iterator it = ops.iterator(); it.hasNext();)
-            {
-                Object obj = it.next();
-                if(obj instanceof WorkspaceModifyOperation)
-                {
-                    WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
-                    getContainer().run(true, true, op);
-                }
-            }
+            final List ops = ProjectFinishUtility.getCreateProjectFinishOperations((IProjectTemplateClass) template.getProjectTemplateClass(), model, 0, rule);
+   
+//			ops.addAll(opsImport);
+			getContainer().run(true, true, new WorkspaceModifyOperation() {
+				@Override
+				protected void execute(IProgressMonitor monitor)
+						throws CoreException, InvocationTargetException,
+						InterruptedException {
+					
+					for (Iterator it = ops.iterator(); it.hasNext();) {
+						Object obj = it.next();
+						if (obj instanceof WorkspaceModifyOperation) {
+							IRunnableWithProgress runnable = (IRunnableWithProgress) obj;
+							try {
+								runnable.run(monitor);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 
+							if (monitor.isCanceled()) {
+								break;
+							}
+						}
+					}
+				}
+			});
+			
+			List opsImport = ProjectFinishUtility.getImportProjectOperations((IProjectTemplateClass) template.getProjectTemplateClass(), model, 0, rule);
+			for(Iterator it = opsImport.iterator(); it.hasNext();){
+				Object obj = it.next();
+				if(obj instanceof WorkspaceModifyOperation){
+					WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
+					getContainer().run(true, true, op);
+				}
+			} 
+			
 			if (twn != null && twn.getTemplate().hasWizard()) {
 				if (twn.getWizard() instanceof BasicProjectTemplateWizard) {
 					if(!((BasicProjectTemplateWizard) twn.getWizard()).proecssGenerationDirectorySetting()){

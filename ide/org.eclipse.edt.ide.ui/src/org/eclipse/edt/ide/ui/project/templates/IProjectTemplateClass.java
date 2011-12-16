@@ -15,13 +15,13 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
-import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public interface IProjectTemplateClass  {
 	
 	public List<WorkspaceModifyOperation> getOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule);
+	public List<WorkspaceModifyOperation> getImportProjectOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule);
 	public void applyTemplate(IProject project);
 	public boolean canFinish();
 }

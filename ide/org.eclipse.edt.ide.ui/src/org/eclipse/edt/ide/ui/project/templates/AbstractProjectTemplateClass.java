@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.project.templates;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
@@ -66,8 +67,6 @@ public abstract class AbstractProjectTemplateClass implements
 		//TODO <jiyong> add appropriate feature mask
 		EGLFeatureOperationsUtilities.getEGLFeatureOperations(eglProjConfiguration.getProjectName(), listOps, rule, 0, eglFeatureMask, false, false);		
 		
-		addMoreOperations(eglProjConfiguration, rule, listOps);
-		
 		return listOps;
 	}
 
@@ -105,12 +104,17 @@ public abstract class AbstractProjectTemplateClass implements
 		this.defaultPackages = defaultPackages;
 	}
 	
+	public List<WorkspaceModifyOperation> getImportProjectOperations(
+			ProjectConfiguration eglProjConfiguration, int eglFeatureMask,
+			ISchedulingRule rule) {
+
+		return Collections.EMPTY_LIST;
+	}	
+	
 	protected abstract void setDefaultPackages();
 
 	protected abstract void setTargetRuntime(ProjectConfiguration eglProjConfiguration);
 	
 	protected abstract void setProjectCompilerAndGenerator(ProjectConfiguration eglProjConfiguration);
-
-	protected abstract void addMoreOperations(final ProjectConfiguration eglProjConfiguration,ISchedulingRule rule, List listOps);	
 
 }
