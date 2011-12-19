@@ -1,0 +1,9 @@
+package eglx.jtopen.annotations;
+
+Record AS400Date type Annotation
+{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+}
+	ibmiFormat any? = com.ibm.as400.access.AS400Date.FORMAT_ISO;
+	ibmiSeperator string? = "";
+end
+

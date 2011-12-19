@@ -1,0 +1,16 @@
+package eglx.jtopen;
+
+import com.ibm.as400.access.AS400;
+
+externalType AS400ConnectionPool type JavaObject{packageName = "com.ibm.as400.access"}
+	constructor();
+	function _close(){@ExternalName {value = "close"}};
+	function getConnection(systemName string in, userID string in, password string in)returns(AS400);
+	function getConnectedUsers(systemName string in) returns(string[]);
+	function getActiveConnectionCount(systemName string in, userID string in) returns(int);
+	function getAvailableConnectionCount(systemName string in, userID string in) returns(int);
+	function getSystemNames() returns(String[]);
+	function getUsers(systemName string in) returns(String[]);
+	function removeFromPool(systemName string in, userID string in);
+	function returnConnectionToPool(system AS400 in);
+end

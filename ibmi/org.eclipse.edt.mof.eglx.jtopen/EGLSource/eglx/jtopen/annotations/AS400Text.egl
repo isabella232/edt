@@ -1,0 +1,9 @@
+package eglx.jtopen.annotations;
+
+Record AS400Text type Annotation
+{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+}
+	length int?;
+	encoding string?;
+	preserveTrailingSpaces boolean = false;
+end

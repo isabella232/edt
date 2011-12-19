@@ -1,0 +1,8 @@
+package eglx.jtopen.annotations;
+
+Record AS400DecimalPacked type Annotation
+{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+}
+	decimals int?;
+	length int?;
+end

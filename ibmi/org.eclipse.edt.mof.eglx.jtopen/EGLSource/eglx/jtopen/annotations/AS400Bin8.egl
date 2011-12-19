@@ -1,0 +1,6 @@
+package eglx.jtopen.annotations;
+
+Record AS400Bin8 type Annotation
+{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+}
+end

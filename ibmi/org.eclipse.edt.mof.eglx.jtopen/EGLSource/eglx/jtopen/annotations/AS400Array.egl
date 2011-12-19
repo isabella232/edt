@@ -1,0 +1,9 @@
+package eglx.jtopen.annotations;
+
+Record AS400Array type Annotation
+{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+}
+	elementCount int;
+	validElementCountVariable string?;
+	elementTypeAS400Annotation any?;
+end

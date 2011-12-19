@@ -1,0 +1,14 @@
+<project name="BuildPlugin" default="Jarem" basedir="../">
+
+<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
+
+<target name="init">    
+    <echo message="processing ${pluginName}." />
+	<property name="eglBin" value="eglbin"/>
+</target>
+	
+<target name="Jarem" depends="init">	
+	<jar basedir="./${eglBin}" destfile="./egllib/jtopen.mofar"></jar>
+</target>
+	
+</project>

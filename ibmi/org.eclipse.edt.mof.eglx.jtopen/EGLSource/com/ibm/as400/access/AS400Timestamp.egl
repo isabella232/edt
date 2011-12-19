@@ -1,0 +1,5 @@
+package com.ibm.as400.access;
+
+externalType AS400Timestamp type JavaObject{}
+	static FORMAT_DEFAULT  int;
+end

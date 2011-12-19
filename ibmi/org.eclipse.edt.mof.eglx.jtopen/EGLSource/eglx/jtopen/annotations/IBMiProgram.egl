@@ -1,0 +1,15 @@
+package eglx.jtopen.annotations;
+
+Record IBMiProgram type Annotation
+{
+	targets = [ElementKind.FunctionMbr]
+} 
+	programName string;
+	libraryName string;
+	isServiceProgram boolean = false;
+	connectionMethod FunctionMemberRef;
+	resourceName string?;
+	resourceFileName string?;
+	parameterAnnotations any?[];
+end
+
