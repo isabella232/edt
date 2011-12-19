@@ -20,19 +20,7 @@ public interface ServicesFactory extends EFactory  {
 	public String packageName = "org.eclipse.edt.mof.eglx.services";
 	
 	String ServicesCallStatement = packageName+".ServicesCallStatement";
-	String ServicesAddStatement = packageName+".ServicesAddStatement";
-	String ServicesDeleteStatement = packageName+".ServicesDeleteStatement";
-	String ServicesReplaceStatement = packageName+".ServicesReplaceStatement";
-	String ServicesUpdateStatement = packageName+".ServicesUpdateStatement";
 	
 	EClass getServicesCallStatementEClass();
-	EClass getServicesAddStatementEClass();
-	EClass getServicesDeleteStatementEClass();
-	EClass getServicesReplaceStatementEClass();
-	EClass getServicesUpdateStatementEClass();
 	public ServicesCallStatement createServicesCallStatement();
-	public ServicesAddStatement createServicesAddStatement();
-	public ServicesDeleteStatement createServicesDeleteStatement();
-	public ServicesReplaceStatement createServicesReplaceStatement();
-	public ServicesUpdateStatement createServicesUpdateStatement();
 }
