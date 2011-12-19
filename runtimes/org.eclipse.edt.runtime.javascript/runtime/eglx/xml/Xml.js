@@ -103,8 +103,11 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 	fieldValue = (typeof (fieldValue) != "string") ? fieldValue : fieldValue.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 	if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
 		return " " + xmlName + "=\"" + fieldValue + "\"";
-	} else {
+	} else if(fieldInfo.annotations["XMLValue"] === undefined){
 		return "<" + xmlName + ">" + fieldValue + "</" + xmlName + ">";
+	}
+	else{
+		return fieldValue;
 	}
 
 };
@@ -194,6 +197,9 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 			xmlName = partAnntations["XMLRootElement"].name;
 		}
 	}
+	var isSimpleContent = partAnntations["XMLValue"] !== undefined &&
+													partAnntations["XMLValue"] !== null &&
+													partAnntations["XMLValue"].kind == egl.eglx.xml.binding.annotation.XMLStructureKind.simpleContent;
 	xmlName = prefix + xmlName;
 	var fieldInfos = value.eze$$getFieldInfos();
 	var s = [ "<" + xmlName ];
@@ -217,7 +223,16 @@ egl.eglx.xml.XmlLib["eglClassToXML"] = function(/*value*/value, /*map*/namespace
 				} else {
 					fieldValue = value[fieldInfos[idx].getterFunction];
 				}
-				s.push(this.toXML(fieldValue, namespaces, fieldInfos[idx]));
+				if(isSimpleContent){
+					var annotations = new Array();
+					annotations["XMLStyle"] = fieldInfos[idx].annotations["XMLStyle"];
+					annotations["XMLValue"] = partAnntations["XMLValue"];
+					var newFieldInfo = new egl.eglx.services.FieldInfo(fieldInfos[idx].getterFunction, fieldInfos[idx].setterFunction, fieldInfos[idx].eglSignature, fieldInfos[idx].eglType, annotations);
+					s.push(this.toXML(fieldValue, namespaces, newFieldInfo));
+				}
+				else{
+					s.push(this.toXML(fieldValue, namespaces, fieldInfos[idx]));
+				}
 			}
 		}
 
