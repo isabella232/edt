@@ -39,7 +39,43 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 			
 	private ListDialogField fClassPathList;
 	private IEGLProject fCurrJProject;
+	private List<String> ImportProjectList;
+	private List<String> fSelectedImportProjectList;
+	private List<PPListElement> projects;
 	
+	public void setfSelectedImportProjectList(List<String> fSelectedImportProjectList) {
+		this.fSelectedImportProjectList = fSelectedImportProjectList;
+		if(null == ImportProjectList){
+			ImportProjectList = fSelectedImportProjectList;
+		}
+	}
+	
+	public void updateSelectedImportProjectList(List<String> newSelectedImportProjectList){
+		final List<PPListElement> newCheckedList = new ArrayList<PPListElement>();
+		final List<PPListElement> currentCheckedList = fProjectsList.getCheckedElements();
+		if(null != fProjectsList && null !=projects){
+			
+			for (Iterator iterator = projects.iterator(); iterator.hasNext();) {
+				PPListElement prjElement = (PPListElement) iterator.next();
+				String prjName = prjElement.getPath().lastSegment();
+				if(newSelectedImportProjectList.contains(prjName) && !fSelectedImportProjectList.contains(prjName)){
+					newCheckedList.add(prjElement);
+				}
+			}
+			
+			for (Iterator iterator = currentCheckedList.iterator(); iterator.hasNext();) {
+				PPListElement prjElement = (PPListElement) iterator.next();
+				String prjName = prjElement.getPath().lastSegment();
+				if(!(!newSelectedImportProjectList.contains(prjName) && fSelectedImportProjectList.contains(prjName))){
+					newCheckedList.add(prjElement);
+				}
+			}
+			
+			fProjectsList.setCheckedElements(newCheckedList);
+		}
+		
+	}
+
 	private CheckedListDialogField fProjectsList;
 	
 	public ProjectsWorkbookPage(ListDialogField classPathList) {
@@ -70,7 +106,7 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 			IEGLModel jmodel= currJProject.getEGLModel();
 			IEGLProject[] jprojects= jmodel.getEGLProjects();
 			
-			List<PPListElement> projects= new ArrayList<PPListElement>(jprojects.length);
+			projects = new ArrayList<PPListElement>(jprojects.length);
 			
 			final List<PPListElement> checkedProjects= new ArrayList<PPListElement>(jprojects.length);
 			// add the projects-cpentries that are already on the class path
@@ -99,6 +135,13 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 					projects.add(new PPListElement(fCurrJProject, IEGLPathEntry.CPE_PROJECT, proj.getFullPath(), proj));
 				}
 			}	
+			
+			for (Iterator iterator = projects.iterator(); iterator.hasNext();) {
+				PPListElement prjElement = (PPListElement) iterator.next();
+				if(fSelectedImportProjectList.contains(prjElement.getPath().lastSegment())){
+					checkedProjects.add(prjElement);
+				}
+			}
 			
 			fProjectsList.setElements(projects);
 			fProjectsList.setCheckedElements(checkedProjects);

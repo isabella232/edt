@@ -73,6 +73,15 @@ public class SourceProjectWizardCapabilityPage extends ContainerWizardPage {
 	
 	private StatusInfo fClassPathStatus;
 	private StatusInfo fBuildPathStatus;
+	private List<String> fSelectedImportProjectList;
+
+	public void  setfSelectedImportProjectList(List<String> fSelectedImportProjectList) {
+		this.fSelectedImportProjectList = fSelectedImportProjectList;
+		if(fProjectsPage != null){
+			fProjectsPage.updateSelectedImportProjectList(fSelectedImportProjectList);
+			fProjectsPage.setfSelectedImportProjectList(fSelectedImportProjectList);
+		}
+	}
 
 	public SourceProjectWizardCapabilityPage(String pageName) {
 		super(pageName);
@@ -368,6 +377,7 @@ public class SourceProjectWizardCapabilityPage extends ContainerWizardPage {
 		fClassPathList.refresh();
 
 		if (fProjectsPage != null) {
+			fProjectsPage.setfSelectedImportProjectList(fSelectedImportProjectList);
 			fProjectsPage.init(fCurrEProject);
 		}
 		
