@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,6 +31,7 @@ import org.eclipse.edt.ide.rui.internal.wizards.RuiNewWizardMessages;
 import org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.project.wizard.pages.ProjectWizardPage;
+import org.eclipse.edt.ide.ui.internal.project.wizard.pages.SourceProjectWizardCapabilityPage;
 import org.eclipse.edt.ide.ui.internal.project.wizards.NewEGLProjectWizard;
 import org.eclipse.edt.ide.ui.internal.project.wizards.ProjectWizardUtils;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
@@ -54,6 +56,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
@@ -384,6 +387,13 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 				selectedWidgetLibraries.add(((LibraryNode) element).getId());
 		}
 		((NewEGLProjectWizard)((WebClientProjectTemplateWizard)getWizard()).getParentWizard()).getModel().setSelectedWidgetLibraries(selectedWidgetLibraries);
+		updateNextPageBuildPathSelections(selectedWidgetLibraries);
+	}
+	
+	private void updateNextPageBuildPathSelections(List<String> selectedWidgetLibraries){
+		IWizardPage nextPage = getNextPage();
+		SourceProjectWizardCapabilityPage apage = (SourceProjectWizardCapabilityPage)nextPage;
+		apage.setfSelectedImportProjectList(selectedWidgetLibraries);
 	}
 	
 	private void setDetails() {
