@@ -53,6 +53,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genFields = "genFields";
 	public static final String genFieldTypeClassName = "genFieldTypeClassName";
 	public static final String genFunction = "genFunction";
+	public static final String genFunctionBody = "genFunctionBody";
+	public static final String genFunctionHeader = "genFunctionHeader";
 	public static final String genFunctions = "genFunctions";
 	public static final String genFunctionParametersSignature = "genFunctionParametersSignature";
 	public static final String genGetter = "genGetter";
