@@ -14,11 +14,11 @@ package org.eclipse.edt.javart.services;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import org.eclipse.edt.javart.json.Json;
+
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FunctionParameter {
-	String name();
 	FunctionParameterKind kind();
-	Class<?> parameterType();
+	Json jsonInfo();
 	int arrayDimensions() default 0;
-	String[] asOptions() default {};
 }

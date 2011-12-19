@@ -108,11 +108,11 @@ public class JsonRpcInvoker extends LocalServiceInvoker {
 		final List<Object> responseParameters = new ArrayList<Object>();
 		for(int idx = 0; idx < method.getParameterTypes().length; idx++){
 			if(!FunctionParameterKind.IN.equals(signature.parameters()[idx].kind())){
-				responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(parameters[idx], signature.parameters()[idx].parameterType(), signature.parameters()[idx].asOptions()));
+				responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(parameters[idx], signature.parameters()[idx].jsonInfo().clazz(), signature.parameters()[idx].jsonInfo().asOptions()));
 			}
 		}
 		if(ret != null){
-			responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(ret, signature.parameters()[signature.parameters().length - 1].parameterType(), signature.parameters()[signature.parameters().length - 1].asOptions()));
+			responseParameters.add(eglx.json.JsonUtilities.wrapCalendar(ret, signature.parameters()[signature.parameters().length - 1].jsonInfo().clazz(), signature.parameters()[signature.parameters().length - 1].jsonInfo().asOptions()));
 		}
 		Object response;
 		if(responseParameters.size() == 0){

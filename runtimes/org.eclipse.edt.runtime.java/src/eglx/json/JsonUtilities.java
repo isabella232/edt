@@ -153,7 +153,7 @@ public class JsonUtilities {
 			FunctionParameter functionParameter = signature.parameters()[idx];
 			if(functionParameter.kind().equals(FunctionParameterKind.OUT)){
 				try {
-					Class<?> fieldType = functionParameter.parameterType();
+					Class<?> fieldType = functionParameter.jsonInfo().clazz();
 					Object newValue = null;
 					if(functionParameter.arrayDimensions() > 0){
 						newValue = EList.ezeNew(fieldType);
@@ -170,9 +170,9 @@ public class JsonUtilities {
 			    		newValue = EDate.asDate(cal);
 			        }
 					else if(fieldType.equals(EDecimal.class)){
-			        	if(functionParameter.asOptions() != null && functionParameter.asOptions().length > 1){
-				        	int length = Integer.parseInt(functionParameter.asOptions()[0]);
-				        	int decimal = Integer.parseInt(functionParameter.asOptions()[1]);
+			        	if(functionParameter.jsonInfo().asOptions() != null && functionParameter.jsonInfo().asOptions().length > 1){
+				        	int length = Integer.parseInt(functionParameter.jsonInfo().asOptions()[0]);
+				        	int decimal = Integer.parseInt(functionParameter.jsonInfo().asOptions()[1]);
 				        	newValue = EDecimal.asDecimal(0, length, decimal);
 			        	}
 			        	else{
@@ -197,9 +197,9 @@ public class JsonUtilities {
 			        else if(fieldType.equals(ETimestamp.class)){
 		        		int start = ETimestamp.YEAR_CODE;
 		        		int end = ETimestamp.SECOND_CODE;
-			        	if(functionParameter.asOptions() != null && functionParameter.asOptions().length > 1){
-			        		start = getETimestampStaticField(functionParameter.asOptions()[0]);
-			        		end = getETimestampStaticField(functionParameter.asOptions()[1]);
+			        	if(functionParameter.jsonInfo().asOptions() != null && functionParameter.jsonInfo().asOptions().length > 1){
+			        		start = getETimestampStaticField(functionParameter.jsonInfo().asOptions()[0]);
+			        		end = getETimestampStaticField(functionParameter.jsonInfo().asOptions()[1]);
 			        	}
 			    		Calendar cal = DateTimeUtil.getBaseCalendar();
 			    		cal.get(Calendar.YEAR);
@@ -230,7 +230,7 @@ public class JsonUtilities {
 					
 			}
 			else{
-				Object obj = JsonLib.convertToEgl(functionParameter.parameterType(), functionParameter.asOptions(), null, (ValueNode)jsonParameters.getValues().get(jsonIdx++));
+				Object obj = JsonLib.convertToEgl(functionParameter.jsonInfo().clazz(), functionParameter.jsonInfo().asOptions(), null, (ValueNode)jsonParameters.getValues().get(jsonIdx++));
 				if(method.getParameterTypes()[idx].equals(AnyBoxedObject.class)){
 					obj = EAny.ezeWrap(obj);
 				}
