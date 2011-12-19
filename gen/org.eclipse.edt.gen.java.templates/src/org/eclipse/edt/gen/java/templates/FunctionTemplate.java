@@ -30,10 +30,7 @@ public class FunctionTemplate extends JavaTemplate {
 	public void preGen(Function function, Context ctx) {
 		ctx.invoke(preGen, function.getStatementBlock(), ctx);
 	}
-
-	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
-		// write out the debug extension data
-		CommonUtilities.generateSmapExtension(function, ctx);
+	public void genFunctionHeader(Function function, Context ctx, TabbedWriter out) {
 		// process the function
 		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
 		// remember what function we are processing
@@ -44,6 +41,8 @@ public class FunctionTemplate extends JavaTemplate {
 		out.print("(");
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
 		out.println(") {");
+	}
+	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
 		if (function.getType() != null
@@ -72,6 +71,12 @@ public class FunctionTemplate extends JavaTemplate {
 			returnStatement.setExpression(nameExpression);
 			ctx.invoke(genStatement, returnStatement, ctx, out);
 		}
+	}
+	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
+		// write out the debug extension data
+		CommonUtilities.generateSmapExtension(function, ctx);
+		ctx.invoke(genFunctionHeader, function, ctx, out);
+		ctx.invoke(genFunctionBody, function, ctx, out);
 		// we always write out smap data for the final brace, just in case there is no return statement
 		ctx.genSmapEnd(function, out);
 		// write out the method ending brace

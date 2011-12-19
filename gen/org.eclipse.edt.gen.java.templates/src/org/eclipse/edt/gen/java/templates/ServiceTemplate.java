@@ -42,6 +42,7 @@ public class ServiceTemplate extends JavaTemplate {
 	
 	public void genImports(Service service, Context ctx, TabbedWriter out) {
 		out.println("import org.eclipse.edt.javart.services.*;");
+		out.println("import org.eclipse.edt.javart.json.Json;");
 		ctx.invokeSuper(this, genImports, service, ctx, out);
 	}
 

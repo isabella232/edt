@@ -14,11 +14,11 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Container;
-import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
 
 public class ContainerTemplate extends JavaTemplate {
 
-	public void genAnnotations(Container object, Context ctx, TabbedWriter out, Field field) {}
+	public void genAnnotations(Container object, Context ctx, TabbedWriter out, Member member) {}
 
 	public void genXmlTransient(Container object, TabbedWriter out) {}
 }

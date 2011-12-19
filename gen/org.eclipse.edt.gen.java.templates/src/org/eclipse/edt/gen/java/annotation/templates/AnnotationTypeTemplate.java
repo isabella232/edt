@@ -11,13 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.annotation.templates;
 
+import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnnotationTypeTemplate extends JavaTemplate {
@@ -35,20 +36,31 @@ public class AnnotationTypeTemplate extends JavaTemplate {
 		out.print(ctx.getNativeImplementationMapping(type));
 	}
 	
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {}
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {}
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {}
 	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
 		out.print("@");
 		ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
 		out.print("(");
 		ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot);
-		out.println(")");
+		
+		if(ctx.get(Constants.SubKey_keepAnnotationsOnTheSameLine) != null){
+			out.print(") ");
+		}
+		else{
+			out.println(")");
+		}
 	}
-	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+	public void genJavaAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
 		out.print("@");
 		ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
 		out.print("(");
-		ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, field);
-		out.println(")");
+		ctx.invoke(genConstructorOptions, (Type)aType, ctx, out, annot, member);
+		if(ctx.get(Constants.SubKey_keepAnnotationsOnTheSameLine) != null){
+			out.print(") ");
+		}
+		else{
+			out.println(")");
+		}
 	}
 }

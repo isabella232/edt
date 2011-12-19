@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
 public class XMLValueTemplate extends JavaTemplate {
@@ -40,7 +41,7 @@ public class XMLValueTemplate extends JavaTemplate {
 	
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
 	}
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
+	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
 		out.print("@");
 		ctx.invoke(genRuntimeTypeName, (Type)aType, ctx, out, TypeNameKind.JavaObject, annot);
 		out.println();
