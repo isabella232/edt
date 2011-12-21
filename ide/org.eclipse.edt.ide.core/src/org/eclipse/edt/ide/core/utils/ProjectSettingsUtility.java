@@ -191,6 +191,47 @@ public class ProjectSettingsUtility {
 	}
 	
 	/**
+	 * Returns the IGenerators registered for the project and any resources under this project. 
+	 * If there are none, this returns an empty array.
+	 * 
+	 * @param resource  The resource (a file, folder, or project)
+	 * @return a non-null array of the IGenerators for the resource
+	 */
+	public static IGenerator[] getProjectGenerators(IProject resource) {
+		String[] ids = null;
+		try {
+			ids = getChildrenGeneratorIds(resource);
+		} catch ( Exception e ) {
+			
+		}
+		if (ids == null) {
+			// When the project doesn't have its own settings, use the workspace defaults
+			ids = getWorkspaceGeneratorIds();
+		}
+		if (ids != null && ids.length != 0) {
+			IIDECompiler compiler = getCompiler(resource.getProject());
+			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
+			if (gens.length > 0) {
+				List<IGenerator> generators = new ArrayList<IGenerator>(ids.length);
+				for (int i = 0; i < gens.length; i++) {
+					if (gens[i].getCompiler() == compiler) { // only return generators that belong to the resource's compiler
+						String nextId = gens[i].getId();
+						for (int j = 0; j < ids.length; j++) {
+							if (nextId.equals(ids[j].trim())) {
+								generators.add(gens[i]);
+								break;
+							}
+						}
+					}
+				}
+				return generators.toArray(new IGenerator[generators.size()]);
+			}
+		}
+		
+		return EMPTY_GENERATORS;
+	}
+	
+	/**
 	 * @return the default generator IDs from workspace preferences, never null.
 	 */
 	public static String[] getWorkspaceGeneratorIds() {
@@ -233,6 +274,40 @@ public class ProjectSettingsUtility {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Returns the IDs of the generators associated with the resource and its children resources. 
+	 * If there are no generators for the resource, this returns null.
+	 * 
+	 * @param resource  The resource (a file, folder, or project)
+	 * @return an array of the generator IDs, possibly null
+	 */
+	public static String[] getChildrenGeneratorIds(IResource resource) throws BackingStoreException {
+		List<String> generators = new ArrayList<String>(0);
+		IProject project = resource.getProject();
+		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		
+		String resourcePath = keyFor( resource.getFullPath() );
+		
+	    String[] keys = prefs.keys();
+	    for (String key : keys) {
+	    	String setting = prefs.get(key, null);
+	    	String path = EclipseUtilities.convertToInternalPath(key);
+	        if ( pathStartWith( path, resourcePath ) || "<project>".equals( resourcePath ) ) {
+				setting = setting.trim();
+				if (setting.length() != 0) {
+					String[] ids = setting.split(",");
+					// trim each value
+					for (int i = 0; i < ids.length; i++) {
+						generators.add( ids[i].trim() );
+					}
+
+				}
+	        }
+	    }
+		
+		return (String[])generators.toArray();
 	}
 	
 	/**
@@ -514,7 +589,7 @@ public class ProjectSettingsUtility {
 			return new String[0];
 
 		HashSet<String> retValue = new HashSet<String>();
-		IGenerator[] generators = getGenerators(project);
+		IGenerator[] generators = getProjectGenerators(project);
 		
 		for (int i = 0; i < generators.length; i++) {
 			IGenerator generator = generators[i];
