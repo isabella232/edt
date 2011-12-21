@@ -17,7 +17,6 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.utils.EList;
@@ -30,6 +29,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		super.preGen(function, ctx);
 		Annotation ibmiProgram = function.getAnnotation(signature_IBMiProgram);
 		if(ibmiProgram != null){
+			@SuppressWarnings("unchecked")
 			EList<Annotation> parameterAnnotationList = (EList<Annotation>)ibmiProgram.getValue(subKey_parameterAnnotations);
 			if(parameterAnnotationList != null){
 				for(int idx = 0; idx < parameterAnnotationList.size(); idx++){
@@ -96,7 +96,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		}
 		
 		if(function.getType() != null){
-			out.print("return ");
+			out.print("Integer eze$Return = ");
 		}
 		out.print("ezeRunProgram(\"");
 		out.print(programName);
@@ -149,5 +149,15 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		out.print("ezeAS400Conn, \""); 
 		ctx.invoke(genName, function, ctx, out);
 		out.println("\");"); 
+		ctx.invoke(genArrayResize, function, ctx, out);
+		if(function.getType() != null){
+			out.println("return eze$Return;");
+		}
+	}
+	
+	public void genArrayResize(Function function, Context ctx, TabbedWriter out){
+		for(FunctionParameter parameter : function.getParameters()){
+			ctx.invoke(genArrayResize, parameter.getType(), ctx, out, parameter, function);
+		}
 	}
 }

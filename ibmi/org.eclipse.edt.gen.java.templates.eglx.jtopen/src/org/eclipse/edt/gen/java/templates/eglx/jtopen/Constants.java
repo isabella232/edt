@@ -2,6 +2,7 @@ package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
 public interface Constants {
 	//Gen methods
+	static final String genArrayResize = "genArrayResize";
 	static final String genDecimals = "genDecimals";
 	static final String genLength = "genLength";
 	static final String genPattern = "genPattern";
