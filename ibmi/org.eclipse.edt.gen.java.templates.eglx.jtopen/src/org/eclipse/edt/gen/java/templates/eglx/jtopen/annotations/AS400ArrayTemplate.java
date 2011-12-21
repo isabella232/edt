@@ -20,19 +20,9 @@ public class AS400ArrayTemplate extends JavaTemplate implements Constants{
 	public void genConstructorOptions(AnnotationType annotType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
 		if(annot != null){
 			Integer elementCount = (Integer)annot.getValue(subKey_elementCount);
-			boolean addComma = false;
 			if(elementCount != null){
 				out.print("elementCount=");
 				out.print(elementCount.toString());
-				addComma = true;
-			}
-			String validElementCountVariable = (String)annot.getValue(subKey_validElementCountVariable);
-			if(validElementCountVariable != null){
-				if(addComma){
-					out.print(", ");
-				}
-				out.print("validElementCountVariable=");
-				out.print(validElementCountVariable);
 			}
 		}
 	}
