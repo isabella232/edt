@@ -1,5 +1,7 @@
 package eglx.jtopen.annotations;
 
+import eglx.lang.resource;
+
 Record IBMiProgram type Annotation
 {
 	targets = [ElementKind.FunctionMbr]
@@ -8,8 +10,7 @@ Record IBMiProgram type Annotation
 	libraryName string;
 	isServiceProgram boolean = false;
 	connectionMethod FunctionMemberRef;
-	resourceName string?;
-	resourceFileName string?;
+	connectionResource Resource?;
 	parameterAnnotations any?[];
 end
 

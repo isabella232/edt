@@ -4,6 +4,6 @@ Record AS400Array type Annotation
 {	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
 }
 	elementCount int;
-	validElementCountVariable string?;
+	validElementCountVariable any?;
 	elementTypeAS400Annotation any?;
 end
