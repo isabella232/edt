@@ -33,7 +33,7 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 public class ResourceTemplate extends JavaTemplate {
 
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		Object processed = ctx.getAttribute(field, Constants.SubKey_fieldsProccessed4Resource);
+		Object processed = ctx.getAttribute(field, Constants.SubKey_fieldsProcessed4Resource);
 		if(processed == null){
 			//add an initialzer to the function 
 			AssignmentStatement assignmentStatement = ctx.getFactory().createAssignmentStatement();
@@ -60,7 +60,7 @@ public class ResourceTemplate extends JavaTemplate {
 			}
 			declarationBlock.getStatements().add(0, assignmentStatement);
 			// add the declaration statement block to the field
-			ctx.putAttribute(field, Constants.SubKey_fieldsProccessed4Resource, Boolean.TRUE);
+			ctx.putAttribute(field, Constants.SubKey_fieldsProcessed4Resource, Boolean.TRUE);
 		}
 	}
 	private QualifiedFunctionInvocation getLibraryInvocation( Annotation annot, Field field) {
