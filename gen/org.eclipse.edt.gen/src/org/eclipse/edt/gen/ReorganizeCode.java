@@ -945,7 +945,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			else
 				((EObjectImpl) getParent()).slotSet(getParentSlotIndex(), object.getTarget());
 		}
-		return true;
+		return false;
 	}
 
 	public boolean visit(QualifiedFunctionInvocation object) {
