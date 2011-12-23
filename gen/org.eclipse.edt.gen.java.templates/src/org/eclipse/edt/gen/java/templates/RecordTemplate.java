@@ -94,17 +94,19 @@ public class RecordTemplate extends JavaTemplate {
 					ctx.invoke(genName, field, ctx, out);
 					out.println(";");
 				} else if (field.isNullable()) {
-					out.print("if (");
-					ctx.invoke(genName, field, ctx, out);
-					out.println(" != null)");
 					out.print("this.");
 					ctx.invoke(genName, field, ctx, out);
-					out.print(".ezeCopy(");
+					out.print(" = ");
+					out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 					out.print("((");
 					ctx.invoke(genClassName, part, ctx, out);
 					out.print(") source).");
 					ctx.invoke(genName, field, ctx, out);
-					out.println(");");
+					out.print(", ");
+					out.print("this.");
+					ctx.invoke(genName, field, ctx, out);
+					out.print(")");
+					out.println(";");
 				} else {
 					out.print("this.");
 					ctx.invoke(genName, field, ctx, out);
