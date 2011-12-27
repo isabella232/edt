@@ -40,15 +40,15 @@ public class EGLAbstractFunctionReturnsReferenceCompletion extends EGLAbstractRe
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		final int partTypes[] = new int[] {IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.DELEGATE};
+		final int partTypes[] = new int[] {IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.DELEGATE | IEGLSearchConstants.RECORD};
 		Node partNode = getPart(viewer, documentOffset);
 		partNode.accept(new DefaultASTVisitor() {
 			public boolean visit(Service service) {
-				partTypes[0] = IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE;
+				partTypes[0] = IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.RECORD;
 				return false;
 			}
 			public boolean visit(Interface interfacex) {
-				partTypes[0] = IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE;
+				partTypes[0] = IEGLSearchConstants.ITEM | IEGLSearchConstants.SERVICE | IEGLSearchConstants.INTERFACE | IEGLSearchConstants.RECORD;
 				return false;
 			}
 		});
