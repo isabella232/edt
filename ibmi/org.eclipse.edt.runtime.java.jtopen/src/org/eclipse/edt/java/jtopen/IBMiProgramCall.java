@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.json.Json;
+import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.services.FunctionSignature;
-import org.eclipse.edt.javart.services.ServiceBase;
 
 import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400Bin4;
@@ -25,11 +25,11 @@ import com.ibm.as400.access.ServiceProgramCall;
 
 import eglx.lang.InvocationException;
 
-public class IBMiProgramCall extends ServiceBase{
+public class IBMiProgramCall {
 
 	private static final long serialVersionUID = 1L;
-	protected enum ParameterTypeKind{IN, INOUT, OUT};
-	protected Integer ezeRunProgram(final String programName, final String procedureName, final boolean isServiceProgram, final boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, final Object[] parameters, final AS400 as400, final String methodName){
+	public enum ParameterTypeKind{IN, INOUT, OUT};
+	public static Integer ezeRunProgram(final String programName, final String procedureName, final boolean isServiceProgram, final boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, final Object[] parameters, final AS400 as400, final String methodName, final ExecutableBase caller){
 		AS400DataType[] ezeAS400DataConverters = new AS400DataType[parameters.length];
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for(int idx = 0; idx < parameters.length; idx++){
@@ -37,7 +37,7 @@ public class IBMiProgramCall extends ServiceBase{
 		}
 		ProgramCall ezeCall = null;
 		try{
-			List<List<Annotation>> annotations = getParameterAnnotations(methodName, parameterTypes);
+			List<List<Annotation>> annotations = getParameterAnnotations(methodName, parameterTypes, caller);
 			if(isServiceProgram){
 				ezeCall = new ServiceProgramCall(as400);
 				ezeCall.setProgram(programName);
@@ -115,10 +115,8 @@ public class IBMiProgramCall extends ServiceBase{
 		}
 	}
 
-	private List<List<Annotation>> getParameterAnnotations(
-			final String methodName, Class<?>[] parameterTypes)
-			throws NoSuchMethodException {
-		Method method = this.getClass().getMethod(methodName, parameterTypes);
+	private static List<List<Annotation>> getParameterAnnotations(final String methodName, Class<?>[] parameterTypes, final ExecutableBase caller)throws NoSuchMethodException {
+		Method method = caller.getClass().getMethod(methodName, parameterTypes);
 		//get the annotations defined on the parameter
 		//then get the json annotations defined function's FunctionSignature
 		//pass these to the AS400 converter
@@ -137,7 +135,7 @@ public class IBMiProgramCall extends ServiceBase{
 		}
 		return annotations;
 	}
-	protected void throwInvocationException(final String programName, final Exception e){
+	protected static void throwInvocationException(final String programName, final Exception e){
 		InvocationException ex = new InvocationException();
 		ex.setName(programName);
 		ex.setMessage(e.getClass().getName() + ":" + e.getLocalizedMessage());
