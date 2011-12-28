@@ -18,6 +18,10 @@ import org.eclipse.edt.mof.egl.StructPart;
 public class StructPartTemplate extends org.eclipse.edt.gen.java.templates.StructPartTemplate implements Constants{
 
 	public void genImports(StructPart part, Context ctx, TabbedWriter out) {
+		if(ctx.containsKey(PART_HAS_IBMI_FUNCTION)){			
+			out.println("import org.eclipse.edt.javart.services.*;");
+			out.println("import org.eclipse.edt.javart.json.Json;");
+		}
 		genImports(ctx, out);
 		ctx.invokeSuper(this, genImports, part, ctx, out);
 	}
@@ -32,4 +36,5 @@ public class StructPartTemplate extends org.eclipse.edt.gen.java.templates.Struc
 			out.println("import org.eclipse.edt.javart.json.Json;");
 		}
 	}
+
 }

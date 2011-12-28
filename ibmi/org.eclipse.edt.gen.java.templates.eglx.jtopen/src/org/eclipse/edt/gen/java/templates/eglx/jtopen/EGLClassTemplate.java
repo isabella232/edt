@@ -36,6 +36,11 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClas
 		super.preGenFunction(part, ctx, arg);
 	}
 
+	public void genFunction(EGLClass part, Context ctx, TabbedWriter out, Function arg) {
+		ctx.invoke(genFunctionParametersSignature, arg, ctx, out);
+		super.genFunction(part, ctx, out, arg);
+	}
+	
 	public void genArrayResize(EGLClass part, Context ctx, TabbedWriter out, FunctionParameter parameter, Container container){
 		if(!ctx.mapsToPrimitiveType(part)){
 			MemberAccess ma = factory.createMemberAccess();
