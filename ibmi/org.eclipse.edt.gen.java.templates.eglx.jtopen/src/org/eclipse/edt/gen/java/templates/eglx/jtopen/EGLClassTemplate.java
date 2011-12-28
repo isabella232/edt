@@ -18,12 +18,23 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 
 
 public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClassTemplate implements Constants {
+
+	public void preGenFunction(EGLClass part, Context ctx, Function arg) {
+		if(!ctx.containsKey(PART_HAS_IBMI_FUNCTION)){
+			Annotation annot = arg.getAnnotation(signature_IBMiProgram);
+			if(annot != null){
+				ctx.put(PART_HAS_IBMI_FUNCTION, annot);
+			}
+		}
+		super.preGenFunction(part, ctx, arg);
+	}
 
 	public void genArrayResize(EGLClass part, Context ctx, TabbedWriter out, FunctionParameter parameter, Container container){
 		if(!ctx.mapsToPrimitiveType(part)){

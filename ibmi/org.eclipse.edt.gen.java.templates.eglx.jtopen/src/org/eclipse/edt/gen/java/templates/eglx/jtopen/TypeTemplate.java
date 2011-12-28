@@ -15,9 +15,13 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TypeTemplate extends org.eclipse.edt.gen.java.templates.TypeTemplate implements Constants{
 	public void genArrayResize(Type type, Context ctx, TabbedWriter out, Element member, Container container){
+	}
+	public void preGenAS400Annotation(SequenceType type, Context ctx, Member member){
 	}
 }

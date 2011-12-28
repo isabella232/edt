@@ -55,7 +55,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		//convert parameters to AS400 objects
 		out.print("AS400 ");
 		out.print(as400ConnectionName);
-		out.print(" = ");
+		out.print(" = (AS400)");
 
 		MemberName connectionMethod = (MemberName)ibmiProgram.getValue(subKey_connectionMethod);
 		if(connectionMethod != null && connectionMethod.getMember() != null){
@@ -65,19 +65,23 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 			out.println(";");
 		}
 		else{
-			out.print("SysLib.getResource(\"");
-			out.print((String)ibmiProgram.getValue(subKey_resourceName));
-			out.print("\", ");
-			String resourceFile = (String)ibmiProgram.getValue(subKey_resourceFile);
-			if(resourceFile != null && !resourceFile.isEmpty()){
-				out.print("\"");
-				out.print(resourceFile);
-				out.print("\"");
+			Annotation resource = (Annotation)ibmiProgram.getValue(subKey_connectionResource);
+			if(resource != null){
+				out.print("SysLib.getResource(\"");
+				if(resource.getValue("bindingkey") instanceof String && !((String)resource.getValue("bindingkey")).isEmpty()){
+					out.print((String)resource.getValue("bindingkey"));
+				}
+				out.print("\", ");
+				if(resource.getValue("propertyFileName") != null){
+					out.print("\"");
+					out.print((String)resource.getValue("propertyFileName"));
+					out.print("\"");
+				}
+				else{
+					out.print("null");
+				}			
+				out.println(");");
 			}
-			else{
-				out.print("null");
-			}			
-			out.println(");");
 		}
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
 
@@ -98,7 +102,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		if(function.getType() != null){
 			out.print("Integer eze$Return = ");
 		}
-		out.print("ezeRunProgram(\"");
+		out.print("IBMiProgramCall.ezeRunProgram(\"");
 		out.print(programName);
 	    // Set the procedure to call in the service program.
 		if(isServiceProgram){
@@ -122,14 +126,14 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		}
 
 		//new ParameterTypeKind[] {ParameterTypeKind.INOUT, ParameterTypeKind.INOUT, ParameterTypeKind.INOUT
-		out.print("new ParameterTypeKind[] {");
+		out.print("new IBMiProgramCall.ParameterTypeKind[] {");
 		boolean addComma = false;
 		for(FunctionParameter param : function.getParameters()){
 			if(addComma){
-				out.print(", ParameterTypeKind.");
+				out.print(", IBMiProgramCall.ParameterTypeKind.");
 			}
 			else{
-				out.print("ParameterTypeKind.");
+				out.print("IBMiProgramCall.ParameterTypeKind.");
 			}
 			if(param.getParameterKind() == ParameterKind.PARM_IN){
 				out.print("IN");
@@ -145,10 +149,9 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 //		new Object[] {CUST, EOF, COUNT},
 		out.print("}, new Object[] {");
 		ctx.foreach(function.getParameters(), ',', genName, ctx, out);
-		out.print("},");
-		out.print("ezeAS400Conn, \""); 
+		out.print("}, ezeAS400Conn, \""); 
 		ctx.invoke(genName, function, ctx, out);
-		out.println("\");"); 
+		out.println("\", this);"); 
 		ctx.invoke(genArrayResize, function, ctx, out);
 		if(function.getType() != null){
 			out.println("return eze$Return;");
