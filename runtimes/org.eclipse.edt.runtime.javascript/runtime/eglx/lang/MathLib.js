@@ -136,8 +136,9 @@ egl.eglx.lang.MathLib["min"] = function(x, y) {
 	return Math.min(x, y);
 };
 
-egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*int*/ intPart, assignFunc ) {
+egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*any type wrap of EInt64 type*/ intOut, assignFunc ) {
 	var deciPart;
+	var intPart = egl.unboxAny(intOut);
 	var isBigDecimal = ( intPart instanceof egl.javascript.BigDecimal );
 	
 	if ( parseInt( num ) == num ) {
@@ -156,7 +157,9 @@ egl.eglx.lang.MathLib["modf"] = function(/*float*/ num, /*int*/ intPart, assignF
 	
 	if (assignFunc) {
 		assignFunc(intPart);
-	}
+	}else{
+		intOut.eze$$value = intPart;
+	}	
 	return deciPart;
 };
 
