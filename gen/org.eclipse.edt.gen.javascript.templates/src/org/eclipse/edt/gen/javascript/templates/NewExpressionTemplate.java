@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -24,18 +28,34 @@ public class NewExpressionTemplate extends JavaScriptTemplate {
 	}
 
 	public void genNewExpression(NewExpression expr, Context ctx, TabbedWriter out) {
-		out.print("new ");
-		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
-		out.print("(");
-		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
-			String delim = "";
-			for (Expression argument : expr.getArguments()) {
-				out.print(delim);
-				ctx.invoke(genExpression, argument, ctx, out);
-				delim = ", ";
-			}
-		} else
-			ctx.invoke(genConstructorOptions, expr.getType(), ctx, out);
-		out.print(")");
+		if(CommonUtilities.isRUIWidget(expr.getType())){
+			// Create temp variable
+			String name = ctx.nextTempName();
+			Field field = factory.createField();
+			field.setName( name );
+			field.setType( expr.getType() );		
+			field.setHasSetValuesBlock( true );
+			if (expr.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				field.addAnnotation(expr.getAnnotation(IEGLConstants.EGL_LOCATION));
+			out.println("(function () {");	
+			ctx.invoke(genDeclaration, field, ctx, out);
+			out.println("return " + name + ";");
+			out.print("}).call(this)");
+		}else{
+			out.print("new ");
+			ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+			out.print("(");
+			if (expr.getArguments() != null && expr.getArguments().size() > 0) {
+				String delim = "";
+				for (Expression argument : expr.getArguments()) {
+					out.print(delim);
+					ctx.invoke(genExpression, argument, ctx, out);
+					delim = ", ";
+				}
+			} else
+				ctx.invoke(genConstructorOptions, expr.getType(), ctx, out);
+			out.print(")");
+		}
+		
 	}
 }
