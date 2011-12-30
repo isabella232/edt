@@ -781,7 +781,7 @@ public class EvServer implements IClientProxy {
 		return "HTTP/1.0 "
 		+ String.valueOf( status ) + " " + statusMsg
 		+ EOL
-		+ "Server: IBM EGL UI Server"
+		+ "EGL Rich UI Server"
 		+ EOL
 		+ (false ? ("CacheControl: max-age=3600" + EOL
 				+ "Expires: Fri, 30 Oct 2007 14:19:41 GMT" + EOL)
