@@ -294,11 +294,6 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		groupRenderEngineTab.setLayout( gridLayout );
 		groupRenderEngineTab.setText( Messages.NL_VisualEditor_RenderEngion );
 		
-		Label label = new Label( groupRenderEngineTab, SWT.NULL );
-		label.setText( Messages.NL_VisualEditor_RenderEngion_Text );
-		gridData = new GridData();
-		label.setLayoutData( gridData );
-
 		_radioRenderEngineDefault = new Button( groupRenderEngineTab, SWT.RADIO );
 		gridData = new GridData();
 		gridData.horizontalIndent = 16;
