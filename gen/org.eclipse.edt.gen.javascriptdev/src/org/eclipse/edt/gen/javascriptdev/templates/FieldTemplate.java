@@ -48,6 +48,11 @@ public class FieldTemplate extends org.eclipse.edt.gen.javascript.templates.Fiel
 		out.println("()");
 	}
 	
+	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
+		super.genDeclaration(field, ctx, out);
+		ctx.invoke(Constants.genSetWidgetLocation, field, Boolean.TRUE, ctx, out);
+	}
+	
 	public void genSetWidgetLocation(Field field, Boolean isLocalField, Context ctx, TabbedWriter out){
 		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(field.getType())){
 			Annotation annotation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
