@@ -124,17 +124,26 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 		validateTemplatePage();
 	}
 	
-	protected void validateTemplatePage() {
+	protected boolean isValidTemplateToCompletePage(){
+		boolean res = false;
 		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
 		if (o instanceof ITemplate) {
 			ITemplate template = (ITemplate) o;
 			TemplateWizardNode wizNode = (TemplateWizardNode) template.getWizardNode();
 
-			handleSelectedTemplate();
-
 			String templateID = ((ITemplate) o).getCodeTemplateId();
-			boolean b = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
+			res = (wizNode != null && wizNode.isContentCreated() && wizNode.getWizard() != null && wizNode.getWizard().canFinish()) 
 					|| (templateID != null );
+		}
+		return res;
+	}
+	protected void validateTemplatePage() {
+		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
+		if (o instanceof ITemplate) {
+			ITemplate template = (ITemplate) o;
+			handleSelectedTemplate();
+			
+			boolean b = isValidTemplateToCompletePage();
 			
 			if(template.hasWizard()) {
 				b = b && isPageComplete();
@@ -149,7 +158,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	}
 	
 	public boolean isPageComplete(){
-		return super.isPageComplete() && validateEGLPartName();
+		return super.isPageComplete() && validateEGLPartName() && isValidTemplateToCompletePage();
 	}
 	
 	/**

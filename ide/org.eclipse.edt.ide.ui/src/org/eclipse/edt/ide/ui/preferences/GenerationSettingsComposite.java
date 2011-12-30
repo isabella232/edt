@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.preferences;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -26,7 +27,10 @@ import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.FolderSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.wizards.IStatusChangeListener;
+import org.eclipse.edt.ide.ui.internal.wizards.TypedElementSelectionValidator;
+import org.eclipse.edt.ide.ui.internal.wizards.TypedViewerFilter;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
@@ -41,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
@@ -177,6 +182,10 @@ public class GenerationSettingsComposite extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 					FolderSelectionDialog dialog = new FolderSelectionDialog(browseInside.getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
 					dialog.setAllowMultiple(false);
+					
+					Class[] acceptedClasses= new Class[] { IProject.class, IFolder.class };
+					ViewerFilter filter= new TypedViewerFilter(acceptedClasses, null);	
+					dialog.addFilter(filter);
 					
 					String currentValue = genInsideDirectory.getText();
 					if (currentValue.length() > 0) {

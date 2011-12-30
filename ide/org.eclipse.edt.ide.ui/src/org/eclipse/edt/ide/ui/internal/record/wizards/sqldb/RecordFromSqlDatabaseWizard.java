@@ -130,6 +130,9 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 		return new IRunnableWithProgress() {
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				if(messages != null){
+					messages.clear();
+				}
 				final String results = generateRecords(monitor,false);
 
 				Display.getDefault().asyncExec(new Runnable() {
