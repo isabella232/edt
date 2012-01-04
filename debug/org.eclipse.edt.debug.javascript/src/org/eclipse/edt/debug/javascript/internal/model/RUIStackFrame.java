@@ -141,22 +141,17 @@ public class RUIStackFrame extends RUIDebugElement implements IEGLStackFrame
 	public RUIVariable getCorrespondingVariable( RUIVariable newVar, RUIVariable parent )
 	{
 		RUIVariable answer;
-		String name = null;
-		if ( newVar != null )
-		{
-			name = newVar.getName();
-		}
 		String qualifiedName;
 		if ( parent != null )
 		{
-			qualifiedName = parent.getQualifiedName() + "." + name; //$NON-NLS-1$
+			qualifiedName = parent.getQualifiedName() + "." + newVar.getName(); //$NON-NLS-1$
+			newVar.setQualifiedName( qualifiedName );
 		}
 		else
 		{
-			qualifiedName = name;
+			qualifiedName = newVar.getQualifiedName();
 		}
 		
-		newVar.setQualifiedName( qualifiedName );
 		answer = findVariableInOldHash( qualifiedName );
 		if ( answer == null )
 		{

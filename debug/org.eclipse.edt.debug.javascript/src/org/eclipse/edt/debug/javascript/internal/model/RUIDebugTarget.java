@@ -470,7 +470,6 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	
 	public IValue getVariableValue( final RUIVariable variable )
 	{
-		
 		if ( !isSuspended() )
 		{
 			variable.getCurrValue().setValue( "" ); //$NON-NLS-1$
@@ -621,7 +620,6 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	
 	public IEGLVariable[] getVariables( final RUIVariable variable )
 	{
-		
 		if ( !isSuspended() )
 		{
 			return new IEGLVariable[ 0 ];
@@ -759,6 +757,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 					nextFunctionName, nextLineNum );
 			
 			// process the variable info
+			boolean first = true;
 			while ( stackProperties.hasMoreTokens() )
 			{
 				String varName = stackProperties.nextToken();
@@ -768,8 +767,10 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 				String varIndex = stackProperties.nextToken();
 				String varType = getTypeFromTokenizer( stackProperties );
 				boolean kids = Integer.parseInt( stackProperties.nextToken() ) != 0;
-				RUIVariable var = new RUIVariable( newFrame, null, varName, jsName, getterName, setterName, varName, varIndex, varType, kids );
+				RUIVariable var = new RUIVariable( newFrame, null, varName, jsName, getterName, setterName, first
+						? "this" : varName, varIndex, varType, kids ); //$NON-NLS-1$
 				newFrame.addVariable( var );
+				first = false;
 			}
 			
 			if ( (nextLineNum != -1 || fStackFrames.size() != 0) && (nextLineNum != -1 || !"<<undefined>>".equals( nextFile )) ) //$NON-NLS-1$
