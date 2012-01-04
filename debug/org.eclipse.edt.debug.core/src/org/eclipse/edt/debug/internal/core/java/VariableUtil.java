@@ -192,6 +192,11 @@ public class VariableUtil
 			return null;
 		}
 		
+		if ( var instanceof EGLJavaFunctionContainerVariable )
+		{
+			return "this";
+		}
+		
 		IEGLJavaValue parent = var.getParentValue();
 		if ( parent == null || parent.getParentVariable() == null )
 		{
