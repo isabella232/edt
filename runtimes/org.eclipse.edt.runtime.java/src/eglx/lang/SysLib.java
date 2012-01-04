@@ -300,18 +300,20 @@ public class SysLib extends ExecutableBase {
 					props.put("password", password);
 				}
 				resource = new SQLDataSource(sqlBinding.getSqlDB(), props);
-				if (schema != null && (schema = schema.trim()).length() > 0) {
-					((SQLDataSource)resource).setCurrentSchema(schema);
-				}
 				
+				// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
+				// This must be done before any connection is made, such as by invoking setCurrentSchema below.
 				String className = sqlBinding.getSqlJDBCDriverClass();
 				if (className != null && className.length() > 0) {
-					// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
 					try {
 						Class.forName(className);
 					}
 					catch (Throwable t) {
 					}
+				}
+				
+				if (schema != null && (schema = schema.trim()).length() > 0) {
+					((SQLDataSource)resource).setCurrentSchema(schema);
 				}
 			}
 		}

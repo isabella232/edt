@@ -141,18 +141,19 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 								props.put("password", pass);
 							}
 							
-							SQLDataSource ds = new SQLDataSource(url, props);
-							if (schema != null && schema.length() > 0) {
-								ds.setCurrentSchema(schema);
-							}
-							
+							// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
+							// This must be done before any connection is made, such as by invoking setCurrentSchema below.
 							if (className != null && className.length() > 0) {
-								// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
 								try {
 									Class.forName(className);
 								}
 								catch (Throwable t) {
 								}
+							}
+							
+							SQLDataSource ds = new SQLDataSource(url, props);
+							if (schema != null && schema.length() > 0) {
+								ds.setCurrentSchema(schema);
 							}
 							
 							return ds;
