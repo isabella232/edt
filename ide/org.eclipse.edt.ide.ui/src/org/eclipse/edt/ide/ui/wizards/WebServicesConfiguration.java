@@ -175,7 +175,7 @@ public class WebServicesConfiguration extends EGLPartConfiguration {
 				
 				newRS.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST);
 				newRS.setImplementation(fqImpl);
-				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, getValidURI(partinfo.getPartName()));
+				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, EGLDDRootHelper.getValidURI(fDeploymentRoot.getDeployment(), partinfo.getPartName()));
 				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, isGenAsRest());
 				EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_implType, parttype);
 				services.getService().add(newRS);
@@ -185,34 +185,5 @@ public class WebServicesConfiguration extends EGLPartConfiguration {
 		return (newWS==null)? newRS.getImplementation() : newWS.getImplementation();
 	}
 	
-	protected String getValidURI(String uriPrefix) {
-		
-		Deployment deployment = fDeploymentRoot.getDeployment();
-		Services services = deployment.getServices();
-		int maxSuffix = -1;
-		for(Service ser:services.getService()){
-			String uriValue = EGLDDRootHelper.getParameterValue(ser.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_uriFragment);
-			if(uriValue != null){
-				if(maxSuffix < 0 && uriValue.equals(uriPrefix)){
-					maxSuffix = 0;
-				}else if(uriValue.startsWith(uriPrefix)){
-					String suffixStr = uriValue.substring(uriPrefix.length());
-					try{
-						int index = Integer.parseInt(suffixStr);
-						if(index > maxSuffix){
-							maxSuffix = index;
-						}
-					}catch(Exception e){
-						continue;
-					}
-				}
-			}
-		}
 
-		if(maxSuffix < 0){
-			return uriPrefix;
-		}else{
-			return uriPrefix + (maxSuffix + 1);
-		}
-	}
 }

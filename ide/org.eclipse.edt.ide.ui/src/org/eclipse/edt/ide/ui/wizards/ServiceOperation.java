@@ -511,7 +511,7 @@ public class ServiceOperation extends EGLFileOperation {
 							newRS.setType(org.eclipse.edt.ide.deployment.core.model.Service.SERVICE_REST);
 							newRS.setImplementation(fullyQualifiedServiceName);
 							EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_enableGeneration, true);
-							EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, configuration.getServiceName());
+							EGLDDRootHelper.addOrUpdateParameter(params, Restservice.ATTRIBUTE_SERVICE_REST_uriFragment, EGLDDRootHelper.getValidURI(deployment, configuration.getServiceName()));
 							rss.getService().add(newRS);
 						}
 						

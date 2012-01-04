@@ -37,6 +37,7 @@ import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
+import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
@@ -532,5 +533,35 @@ public class EGLDDRootHelper {
 			asStrings.add( ((org.eclipse.edt.ide.ui.internal.deployment.Resource)it.next()).getId() );
 		}
 		return asStrings;
+	}
+	
+	public static String getValidURI(Deployment deployment, String uriPrefix) {
+		
+		Services services = deployment.getServices();
+		int maxSuffix = -1;
+		for(Service ser:services.getService()){
+			String uriValue = EGLDDRootHelper.getParameterValue(ser.getParameters(), Restservice.ATTRIBUTE_SERVICE_REST_uriFragment);
+			if(uriValue != null){
+				if(maxSuffix < 0 && uriValue.equals(uriPrefix)){
+					maxSuffix = 0;
+				}else if(uriValue.startsWith(uriPrefix)){
+					String suffixStr = uriValue.substring(uriPrefix.length());
+					try{
+						int index = Integer.parseInt(suffixStr);
+						if(index > maxSuffix){
+							maxSuffix = index;
+						}
+					}catch(Exception e){
+						continue;
+					}
+				}
+			}
+		}
+
+		if(maxSuffix < 0){
+			return uriPrefix;
+		}else{
+			return uriPrefix + (maxSuffix + 1);
+		}
 	}
 }
