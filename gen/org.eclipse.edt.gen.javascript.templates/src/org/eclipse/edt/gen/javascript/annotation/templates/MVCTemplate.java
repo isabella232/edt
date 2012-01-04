@@ -404,8 +404,9 @@ public class MVCTemplate extends JavaScriptTemplate {
 			}
 			ctx.invoke(genExpression, asExpr, ctx, out);
 		}
-		else 
+		else {
 			ctx.invoke(genExpression, model, ctx, out);
+		}
 		ctx.putAttribute(ctx.getClass(), Constants.QUALIFIER_ALIAS, null);   // NOGO sbg Should probably be more targeted
 
 		
@@ -430,8 +431,8 @@ public class MVCTemplate extends JavaScriptTemplate {
 		genWithQualifier(ctx, model, out);
 		out.print( " = " );
 		
-		
-		Type classifier = model.getType().getClassifier();
+		Type type = model.getType();
+		Type classifier = type.getClassifier();
 		if (TypeUtils.Type_BOOLEAN.equals(classifier)) {
 			out.print("typeof s === \"string\" ? s.toUpperCase() == \"TRUE\" : ");
 		}
@@ -467,7 +468,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 				out.print( "null" );
 			}
 			else {
-				ctx.invoke(genDefaultValue, model.getType(), ctx, out);
+				ctx.invoke(genDefaultValue, type, ctx, out);
 			}
 			out.print( " : " );
 		}
@@ -493,12 +494,19 @@ public class MVCTemplate extends JavaScriptTemplate {
 		nameExpression.setMember(field2);
 		nameExpression.setId(field2.getName());
 	
-		if (!nameExpression.getType().equals(model.getType())) { 
-			AsExpression asExpr = IRUtils.createAsExpression(nameExpression, model.getType().getClassifier());
+		if (!nameExpression.getType().equals(type)) {
+			// Timestamp needs to use the classifier to match what's expected by the internal formatter.
+			Type asType = type;
+			if (TypeUtils.Type_TIMESTAMP.equals(classifier)) {
+				asType = classifier;
+			}
+			
+			AsExpression asExpr = IRUtils.createAsExpression(nameExpression, asType);
 			ctx.invoke(genExpression, asExpr, ctx, out);
 		}
-		else 
+		else {
 			ctx.invoke(genExpression, nameExpression, ctx, out);
+		}
 		out.println( ";" );
 		genCatchBlock(ctx, "commitHelper", model, out);
 	}
@@ -556,8 +564,6 @@ public class MVCTemplate extends JavaScriptTemplate {
 	
 
 	/**
-	 * NOTE: taken from JSFHandlerUtilities in the JavaGen plug-in.
-	 * 
 	 * Get the annotation for a property for a field.  
 	 * If the field is a fixed or flexible record item, the
 	 * field argument should be a WrapperedField.  In this
