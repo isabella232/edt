@@ -176,6 +176,8 @@ public class EvPreviewBrowserManager implements IServerListener, ProgressListene
 		if( _browser == null )
 			return;
 		
+		final String strURLFinal = _strURL;
+
 		Display display = _browser.getDisplay();
 
 		if( !display.isDisposed() ) {
@@ -185,7 +187,11 @@ public class EvPreviewBrowserManager implements IServerListener, ProgressListene
 				public void run() {
 					// Give incremental content to the browser
 					//----------------------------------------
-					EvServer.getInstance().refreshBrowserIncremental(_context);
+//					EvServer.getInstance().refreshBrowserIncremental(_context);
+					
+					//execute JavaScript directly instead of putting it in the event loop
+					_browser.execute( "if (window.egl) { egl.evTerminateReloadHandler(); } else { document.location = \"" + strURLFinal + "\";}" );
+
 				}
 			} );
 		}
