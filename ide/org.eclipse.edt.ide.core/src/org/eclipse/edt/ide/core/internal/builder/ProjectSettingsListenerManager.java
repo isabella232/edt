@@ -177,39 +177,46 @@ public class ProjectSettingsListenerManager {
 									
 									// If it's the originating resource, or its a child resource that inherits settings from the originating resource,
 									// then it should be regenerated if a file, otherwise check its kids.
-									if (resource.equals(source) || ProjectSettingsUtility.findSetting(resource.getFullPath(), prefs, false) == null) {
-										if (resource.getType() == IResource.FILE) {
-											IFileInfo info = FileInfoManager.getInstance().getFileInfo( project, resource.getProjectRelativePath() );
-											if (info != null) {
-												IPath relativeFolderPath = resource.getFullPath().removeFirstSegments(sourceDirSegments).removeLastSegments( 1 );
-												for (Object name : info.getPartNames()) {
-													if (info.getPartType((String)name) == ITypeBinding.FILE_BINDING) {
-														continue;
-													}
-													
-													// We really don't know which extension the IR will have, so check for all known extensions.
-													String relativePath = IRFileNameUtility.toIRFileName(relativeFolderPath.append((String)name).toString());
-													IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML);
-													if (file != null) {
-														file.touch(null);
-													}
-													file = outputFolder.findMember(relativePath + EGL2IR.EGLBIN);
-													if (file != null) {
-														file.touch(null);
-													}
-													file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFXML);
-													if (file != null) {
-														file.touch(null);
-													}
-													file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFBIN);
-													if (file != null) {
-														file.touch(null);
+									try {
+										if (resource.equals(source) || ProjectSettingsUtility.findSetting(resource.getFullPath(), prefs, false) == null) {
+											if (resource.getType() == IResource.FILE) {
+												IFileInfo info = FileInfoManager.getInstance().getFileInfo( project, resource.getProjectRelativePath() );
+												if (info != null) {
+													IPath relativeFolderPath = resource.getFullPath().removeFirstSegments(sourceDirSegments).removeLastSegments( 1 );
+													for (Object name : info.getPartNames()) {
+														if (info.getPartType((String)name) == ITypeBinding.FILE_BINDING) {
+															continue;
+														}
+														
+														// We really don't know which extension the IR will have, so check for all known extensions.
+														String relativePath = IRFileNameUtility.toIRFileName(relativeFolderPath.append((String)name).toString());
+														IResource file = outputFolder.findMember(relativePath + EGL2IR.EGLXML);
+														if (file != null) {
+															file.touch(null);
+														}
+														file = outputFolder.findMember(relativePath + EGL2IR.EGLBIN);
+														if (file != null) {
+															file.touch(null);
+														}
+														file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFXML);
+														if (file != null) {
+															file.touch(null);
+														}
+														file = outputFolder.findMember(relativePath + ZipFileObjectStore.MOFBIN);
+														if (file != null) {
+															file.touch(null);
+														}
 													}
 												}
+												return false; // files don't have kids
 											}
-											return false; // files don't have kids
+											return true;
 										}
-										return true;
+									}
+									catch (IllegalStateException e) {
+										// Happens when blowing over a project with a newer copy, e.g. check out project from CVS
+										// to replace the version in the workspace. Not much we can do here except to NOT regenerate.
+										// That's okay though, a generate will happen after the project is automatically recompiled.
 									}
 									return false;
 								}
