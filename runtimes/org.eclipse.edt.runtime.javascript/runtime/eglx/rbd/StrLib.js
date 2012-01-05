@@ -291,5 +291,15 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 		"toString": function() {
 			return "[StrLib]";
 		}
+		,
+		"eze$$getName": function() {
+			return "StrLib";
+		}
+		,
+		"eze$$getChildVariables": function() {
+			var eze$$parent = this;
+			return [
+			];
+		}
 	}
 );
