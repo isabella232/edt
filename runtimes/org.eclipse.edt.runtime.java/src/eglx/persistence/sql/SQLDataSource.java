@@ -87,7 +87,7 @@ public class SQLDataSource implements RecoverableResource {
 	@Override
 	public void commit(RunUnit ru) throws AnyException {
 		try {
-			if(conn != null){
+			if(conn != null && !conn.getAutoCommit()){
 				conn.commit();
 			}
 		} catch (java.sql.SQLException e) {
@@ -99,7 +99,7 @@ public class SQLDataSource implements RecoverableResource {
 	@Override
 	public void rollback(RunUnit ru) throws AnyException {
 		try {
-			if(conn != null){
+			if(conn != null && !conn.getAutoCommit()){
 				conn.rollback();
 			}
 		} catch (java.sql.SQLException e) {
