@@ -77,7 +77,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 	private static final String PROPERTY_CURRENCYSYMBOL = MVC_PACKAGE + "currencySymbol";
 	private static final String PROPERTY_NUMERICSEPARATOR = MVC_PACKAGE + "numericSeparator";
 	private static final String MVC_VIEW_ANNOTATION = "eglx.ui.rui.MVCView";
-	private static final String PROPERTY_VALIDATIONPROPERTIESLIBRARY = "validationPropertiesLibrary";
+	private static final String PROPERTY_VALIDATIONPROPERTIESLIBRARY = MVC_PACKAGE + "validationPropertiesLibrary";
 
 
 	/**
@@ -178,14 +178,13 @@ public class MVCTemplate extends JavaScriptTemplate {
 				}
 	
 				if (modelMember != null && (annot = getAnnotation(modelMember, PROPERTY_VALIDATIONPROPERTIESLIBRARY)) != null) {
-					if ( annot.getValue() instanceof PartName )
-					{
+					if (annot.getValue() instanceof PartName) {
 						Part p = ((PartName) annot.getValue()).getPart();
 						if (p instanceof Library) {
 							library = (Library)p;
 							
-							// TODO: a hack until I figure this bit out
-							ctx.invoke(genAccessor, library, ctx, out);
+							ctx.invoke(genInstantiation, library, ctx, out);
+							out.println(';');
 						}
 					}
 				}
@@ -738,11 +737,13 @@ public class MVCTemplate extends JavaScriptTemplate {
 			Annotation annot = getAnnotation(field, msgKey);
 			if (annot != null) {
 				String memberName = (String)annot.getValue();
-				if (nlsLibrary.getMembers().contains(memberName)) {  // NOGO sbg Verify -- may not be correct lookup
-					String libName = generateAliasToString(ctx, nlsLibrary) + "['$inst']";
-					returnValue = libName + ".getMessage(" +
-						libName + ".eze$$getValueWithNormalizedKey(\"" + memberName.toLowerCase() + "\") " + ", [  ].setType( \"S;\" ))";
-				}	
+				
+				Field f = nlsLibrary.getField(memberName);
+				if (f != null) {
+					String libName = generateAliasToString(ctx, nlsLibrary);
+					returnValue = libName + ".getMessage(" + libName + ".eze$$getValueWithNormalizedKey(\""
+							+ memberName.toLowerCase() + "\") " + ", [  ].setType( \"S;\" ))";
+				}
 			}
 		}
 		
@@ -760,10 +761,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 	private static String generateAliasToString(Context context, Element member) {
 		StringWriter sw = new StringWriter(100);
 		TabbedWriter tw = new TabbedWriter(sw);
-		TabbedWriter savedWriter = context.getWriter();
-		context.setWriter(tw);
-		context.invoke(genExpression, member, context, savedWriter); //NOGO sbg Need to generate with alias?!	member.accept(new AliasGenerator(context));
-		context.setWriter(savedWriter);
+		context.invoke(genAccessor, member, context, tw);
 		tw.close();
 		return sw.toString().trim();
 	}
