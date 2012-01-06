@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.rui.tasks;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -123,6 +124,7 @@ public class ResourceCopyOperation {
 				IFile file = itr2.next();
 				if( !file.getProject().equals(targetProject) ) {
 					monitor.subTask(file.getProjectRelativePath().toOSString());
+					InputStream is = null;
 					try
 					{
 						IPath relativeSourcePath = file.getProjectRelativePath().removeFirstSegments(entry.getKey().getProjectRelativePath().segmentCount());
@@ -130,7 +132,6 @@ public class ResourceCopyOperation {
 						
 						if( targetFile.exists() ) {
 							if( file.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
-								InputStream is = null;
 //								if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
 									//Compress JavaScript
 //								} else {
@@ -141,7 +142,6 @@ public class ResourceCopyOperation {
 							}
 						}
 						else {
-							InputStream is = null;
 //							if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
 								//Compress JavaScript
 //							} else {
@@ -152,10 +152,17 @@ public class ResourceCopyOperation {
 						}
 						
 						monitor.worked(1);
-					}catch(Exception e)
-					{
+					} catch ( Exception e ) {
 						resultsCollector.addMessage(DeploymentUtilities.createStatus(IStatus.ERROR, Messages.bind(Messages.J2EEDeploymentSolution_26, new String[]{file.getProjectRelativePath().toOSString(), targetProject.getName()})));
 						resultsCollector.addMessage(DeploymentUtilities.createStatus(IStatus.ERROR, Messages.bind(Messages.J2EEDeploymentSolution_Exception, new String[]{DeploymentUtilities.createExceptionMessage(e)})));
+					} finally {
+						try {
+							if ( is != null ) {
+								is.close();
+							}
+						} catch ( IOException ioe ) {
+							//do nothing
+						}
 					}
 				}
 			}

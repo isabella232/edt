@@ -12,6 +12,8 @@
 package org.eclipse.edt.ide.deployment.rui.internal.model;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -412,11 +414,22 @@ public class RUIDeploymentModel {
 						errorLocaleProcessing = false;
 						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
 						byte[] bytes;
+						InputStream is = null; 
 						try {
-							bytes = generator.generatePropertiesFile(propertiesFile.getContents(), propFile.getBundleName());
+							is = propertiesFile.getContents();
+							bytes = generator.generatePropertiesFile(is, propFile.getBundleName());
 						}
 						catch (CoreException ce) {
 							bytes = null;
+						}
+						finally {
+							try {
+								if ( is != null ) {
+									is.close();
+								}
+							} catch ( IOException ioe ) {
+								//do nothing
+							}
 						}
 						if( bytes != null ){
 							propertiesFileByteArrays.put(name, new DeployableFile(bytes));

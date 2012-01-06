@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.deployment.rui.operation;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -72,6 +73,7 @@ public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation
 			IPath path = new Path( RUNTIME_FOLDER + fileName );
 			IPath targetFilePath = projectRootFolder.getFullPath().append( path );
 			CoreUtility.createFolder( ResourcesPlugin.getWorkspace().getRoot().getFolder( targetFilePath.removeLastSegments( 1 ) ), true, true, monitor );
+			InputStream is = null;
 			try {
 				IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
 				
@@ -88,14 +90,24 @@ public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation
 //					}
 //				}
 //				else {
+				is = resource.getInputStream();
 				if( targetFile.exists() ) {
-					targetFile.setContents(resource.getInputStream(), true, true, monitor);
+					targetFile.setContents(is, true, true, monitor);
 				} else {
-					targetFile.create(resource.getInputStream(), true, monitor);
+					targetFile.create(is, true, monitor);
 //					targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 				}
 //				DeploymentUtilities.copyFile(resource.getInputStream(), path.toFile().getPath() );
 			} catch (IOException e) {
+			} finally {
+				try {
+					if ( is != null ) {
+						is.close();
+					}
+				} catch ( IOException ioe ) {
+					// do nothing
+				}
+						
 			}
 		}
 	}
