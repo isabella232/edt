@@ -307,7 +307,7 @@ public class ProjectSettingsUtility {
 	        }
 	    }
 		
-		return (String[])generators.toArray();
+		return (String[])generators.toArray(new String[generators.size()]);
 	}
 	
 	/**
