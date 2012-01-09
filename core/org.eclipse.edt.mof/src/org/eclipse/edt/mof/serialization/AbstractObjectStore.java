@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.serialization;
 
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import org.eclipse.edt.mof.serialization.xml.XMLSerializationFactory;
 
 
 public abstract class AbstractObjectStore implements ObjectStore {	
+	
+	public static final String DEFAULT_ENCODING = "UTF-8";
 	
 	static {
 		SerializationFactory.Registry.INSTANCE.put(BINARY, new BinarySerializationFactory());
@@ -93,7 +96,11 @@ public abstract class AbstractObjectStore implements ObjectStore {
 		Object contents = serializer.getContents();
 		byte[] bytes;
 		if (contents instanceof String) {
-			bytes = ((String)contents).getBytes();
+			try {
+				bytes = ((String)contents).getBytes(DEFAULT_ENCODING);
+			} catch (UnsupportedEncodingException e) {
+				bytes = ((String)contents).getBytes();
+			}
 		}
 		else {
 			bytes = (byte[])contents;

@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.impl.DynamicEClass;
+import org.eclipse.edt.mof.serialization.AbstractObjectStore;
 import org.eclipse.edt.mof.serialization.SerializationException;
 import org.eclipse.edt.mof.serialization.Serializer;
 import org.eclipse.edt.mof.utils.TabbedWriter;
@@ -36,7 +37,7 @@ import org.eclipse.edt.mof.utils.TabbedWriter;
 
 @SuppressWarnings("unchecked")
 public class XMLSerializer implements Serializer {
-	private static final String XMLHeader = "<?xml version=\"1.1\" encoding=\"iso-8859-1\"?>";
+	private static final String XMLHeader = "<?xml version=\"1.1\" encoding=\"" + AbstractObjectStore.DEFAULT_ENCODING + "\"?>";
 	
 	MofFactory mof = MofFactory.INSTANCE;
 	Map<EObject, Integer> written = new HashMap<EObject, Integer>();
