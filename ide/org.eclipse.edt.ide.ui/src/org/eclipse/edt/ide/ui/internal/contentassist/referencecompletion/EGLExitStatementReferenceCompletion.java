@@ -56,10 +56,11 @@ public class EGLExitStatementReferenceCompletion extends EGLAbstractReferenceCom
 					documentOffset - prefixLength,
 					prefixLength,
 					message.length() - 1,
-					EGLCompletionProposal.RELEVANCE_KEYWORD));
+					EGLCompletionProposal.RELEVANCE_KEYWORD,
+					EGLCompletionProposal.STR_IMG_KEYWORD));
 		}
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-			result.addAll(new EGLLabelPrecedingControlStatementProposalHandler(viewer, documentOffset, prefix).getProposals(boundNode, thisReferenceCompletion, EGLCompletionProposal.RELEVANCE_KEYWORD));
+			result.addAll(new EGLLabelPrecedingControlStatementProposalHandler(viewer, documentOffset, prefix).getProposals(boundNode, thisReferenceCompletion, EGLCompletionProposal.RELEVANCE_KEYWORD, EGLCompletionProposal.STR_IMG_KEYWORD));
 		}});
 
 		return result;

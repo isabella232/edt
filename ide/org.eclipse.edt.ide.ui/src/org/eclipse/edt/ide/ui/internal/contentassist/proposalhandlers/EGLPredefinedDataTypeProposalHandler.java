@@ -54,7 +54,8 @@ public class EGLPredefinedDataTypeProposalHandler extends EGLAbstractProposalHan
 						getDocumentOffset() - getPrefix().length(),
 						getPrefix().length(),
 						predefinedString.length(),
-						EGLCompletionProposal.RELEVANCE_PREDEFINED_TYPE));
+						EGLCompletionProposal.RELEVANCE_PREDEFINED_TYPE,
+						EGLCompletionProposal.NO_IMG_KEY));
 			}
 		}
 		return proposals;

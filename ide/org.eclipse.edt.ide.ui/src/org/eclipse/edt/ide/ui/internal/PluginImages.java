@@ -74,6 +74,7 @@ public class PluginImages {
 	public static final String IMG_OBJS_WSDL= NAME_PREFIX + "wsdl_obj.gif"; 				//$NON-NLS-1$	
 	public static final String IMG_OBJS_RECORD= NAME_PREFIX + "record_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_FUNCTION= NAME_PREFIX + "funct_obj.gif"; 			//$NON-NLS-1$
+	public static final String IMG_OBJS_PRIVATE_FUNCTION= NAME_PREFIX + "private_funct_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_DELEGATE= NAME_PREFIX + "delgat_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_EXTERNALTYPE= NAME_PREFIX + "exttyp_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_ENUMERATION= NAME_PREFIX + "enum_obj.gif"; 			//$NON-NLS-1$
@@ -135,8 +136,10 @@ public class PluginImages {
 	public static final String IMG_TOOL_VERTICAL = NAME_PREFIX + "verti_mode.gif"; 				//$NON-NLS-1$
 
 	public static final String IMG_OBJS_TEMPLATE= NAME_PREFIX + "template_obj.gif"; 		//$NON-NLS-1$
+	public static final String IMG_OBJS_ANNOTATION= NAME_PREFIX + "annotation_obj.gif";		//$NON-NLS-1$
 
 	public static final String IMG_OBJS_ENV_VAR= NAME_PREFIX + "envvar_obj.gif"; 			//$NON-NLS-1$
+	public static final String IMG_OBJS_ENV_VAR_PRIVATE= NAME_PREFIX + "private_co.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_JAR= NAME_PREFIX + "jar_obj.gif"; 				//$NON-NLS-1$
 	public static final String IMG_OBJS_FLDR= NAME_PREFIX + "fldr_obj.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_PRJ= NAME_PREFIX + "prj_obj.gif"; 				//$NON-NLS-1$
@@ -193,6 +196,7 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_OBJS_WSDL = createManaged(T_OBJ, IMG_OBJS_WSDL);	
 	public static final ImageDescriptor DESC_OBJS_RECORD= createManaged(T_OBJ, IMG_OBJS_RECORD);
 	public static final ImageDescriptor DESC_OBJS_FUNCTION= createManaged(T_OBJ, IMG_OBJS_FUNCTION);
+	public static final ImageDescriptor DESC_OBJS_PRIVATE_FUNCTION= createManaged(T_OBJ, IMG_OBJS_PRIVATE_FUNCTION);
 	public static final ImageDescriptor DESC_OBJS_DELEGATE= createManaged(T_OBJ, IMG_OBJS_DELEGATE);
 	public static final ImageDescriptor DESC_OBJS_EXTERNALTYPE= createManaged(T_OBJ, IMG_OBJS_EXTERNALTYPE);
 	public static final ImageDescriptor DESC_OBJS_ENUMERATION= createManaged(T_OBJ, IMG_OBJS_ENUMERATION);
@@ -236,6 +240,7 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_OBJS_TRANSFER_TRANSACTION_ELEMENT= createManaged(T_OBJ, IMG_OBJS_TRANSFER_TRANSACTION_ELEMENT);
 	public static final ImageDescriptor DESC_OBJS_CONSOLE_FORM_ELEMENT= createManaged(T_OBJ, IMG_OBJS_CONSOLE_FORM_ELEMENT);
 	public static final ImageDescriptor DESC_OBJS_OBJS_ENV_VAR= createManaged(T_OBJ, IMG_OBJS_ENV_VAR);
+	public static final ImageDescriptor DESC_OBJS_OBJS_ENV_VAR_PRIVATE= createManaged(T_OBJ, IMG_OBJS_ENV_VAR_PRIVATE);
 	public static final ImageDescriptor DESC_OBJS_OBJS_JAR= createManaged(T_OBJ, IMG_OBJS_JAR);
 	public static final ImageDescriptor DESC_OBJS_OBJS_FLDR= createManaged(T_OBJ, IMG_OBJS_FLDR);
 	public static final ImageDescriptor DESC_OBJS_OBJS_PRJ= createManaged(T_OBJ, IMG_OBJS_PRJ);
@@ -248,6 +253,8 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_OBJS_EGLDD = createManaged(T_OBJ, IMG_OBJS_EGLDD);
 	public static final ImageDescriptor DESC_OBJS_COPYEGLDD = createManaged(T_OBJ, IMG_OBJS_COPYEGLDD);
 	public static final ImageDescriptor DESC_OBJS_SOURCE_ATTACHMENT = createManaged(T_OBJ, IMG_SOURCE_ATTACHMENT);
+	public static final ImageDescriptor DESC_OBJS_TEMPLATE = createManaged(T_OBJ, IMG_OBJS_TEMPLATE);
+	public static final ImageDescriptor DESC_OBJS_ANNOTATION = createManaged(T_OBJ, IMG_OBJS_ANNOTATION);
 	
 	
 	public static final ImageDescriptor DESC_ELCL_PARTSREF_TOOL_HIDEDATA= createManaged(T_ELCL, IMG_PARTSREF_TOOL_HIDEDATA);

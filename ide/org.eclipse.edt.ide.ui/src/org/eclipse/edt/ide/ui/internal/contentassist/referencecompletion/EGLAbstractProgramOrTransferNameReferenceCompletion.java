@@ -50,7 +50,8 @@ public abstract class EGLAbstractProgramOrTransferNameReferenceCompletion extend
 			UINlsStrings.CAProposal_SystemVariable,
 			documentOffset - prefix.length(),
 			prefix.length(),
-			proposalString.length());
+			proposalString.length(),
+			EGLCompletionProposal.NO_IMG_KEY);
 	}
 
 }

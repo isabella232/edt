@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.util.ExceptionHandler;
@@ -64,7 +65,8 @@ public class EGLExceptionProposalHandler extends EGLAbstractProposalHandler {
 				getDocumentOffset() - getPrefix().length(),
 				getPrefix().length(),
 				proposalString.length(),
-				EGLCompletionProposal.RELEVANCE_EXCEPTION);
+				EGLCompletionProposal.RELEVANCE_EXCEPTION,
+				PluginImages.IMG_OBJS_RECORD);
 	}
 
 	protected String getProposalString(String exceptionName) {

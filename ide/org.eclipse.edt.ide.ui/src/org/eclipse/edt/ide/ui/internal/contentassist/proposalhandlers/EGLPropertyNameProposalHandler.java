@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.EGLNewPropertiesHandler;
 import org.eclipse.edt.compiler.internal.EGLPropertyRule;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.editor.CodeConstants;
@@ -288,6 +289,7 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 			}
 		}
 		
+		String img_src = isAnnotationSetting ? PluginImages.IMG_OBJS_ANNOTATION : "";
 		return
 			new EGLCompletionProposal(viewer,
 				propertyRule.getName(),
@@ -297,7 +299,8 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 				getPrefix().length(),
 				cursorPosition,
 				EGLCompletionProposal.RELEVANCE_MEDIUM,
-				selectionLength);
+				selectionLength,
+				img_src);
 	}
 
 	/**

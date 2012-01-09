@@ -191,7 +191,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 						strings,
 						additionalInfo,
 						EGLCompletionProposal.RELEVANCE_ITEM_STATE,
-						0);
+						0,
+						EGLCompletionProposal.NO_IMG_KEY);
 
 				strings = getStrings(new String[] { //colors
 					IEGLConstants.MNEMONIC_BLACK,
@@ -209,7 +210,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 						strings,
 						additionalInfo,
 						EGLCompletionProposal.RELEVANCE_ITEM_STATE,
-						0));
+						0,
+						EGLCompletionProposal.NO_IMG_KEY));
 
 				strings = getStrings(new String[] { //extended highlighting
 					IEGLConstants.MNEMONIC_BLINK,
@@ -222,7 +224,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 						strings,
 						additionalInfo,
 						EGLCompletionProposal.RELEVANCE_ITEM_STATE,
-						0));
+						0,
+						EGLCompletionProposal.NO_IMG_KEY));
 
 				strings = getStrings(new String[] { //intensity
 					IEGLConstants.MNEMONIC_BOLD,
@@ -236,7 +239,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 						strings,
 						additionalInfo,
 						EGLCompletionProposal.RELEVANCE_ITEM_STATE,
-						0));
+						0, 
+						EGLCompletionProposal.NO_IMG_KEY));
 
 				strings = getStrings(new String[] { //protection
 					IEGLConstants.MNEMONIC_PROTECT,
@@ -248,7 +252,8 @@ public class EGLSetStateProposalHandler extends EGLAbstractProposalHandler {
 						strings,
 						additionalInfo,
 						EGLCompletionProposal.RELEVANCE_ITEM_STATE,
-						0));
+						0,
+						EGLCompletionProposal.NO_IMG_KEY));
 
 				return proposals;
 		}

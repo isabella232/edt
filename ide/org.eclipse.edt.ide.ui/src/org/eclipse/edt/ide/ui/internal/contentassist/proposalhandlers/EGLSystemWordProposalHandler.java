@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.util.CapabilityFilterUtility;
@@ -136,6 +137,8 @@ public class EGLSystemWordProposalHandler extends EGLAbstractProposalHandler {
 			getDocumentOffset() - getPrefix().length(),			
 			getPrefix().length(),			
 			prefix.length() + proposalString.length(),
-			relevance);
+			relevance,
+			PluginImages.IMG_OBJS_ENV_VAR
+		);
 	}
 }

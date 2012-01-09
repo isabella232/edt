@@ -97,7 +97,8 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 							getDocumentOffset() - getPrefix().length(),
 							getPrefix().length(),
 							primitiveString.length() - curserDelta,
-							EGLCompletionProposal.RELEVANCE_PRIMITIVE));
+							EGLCompletionProposal.RELEVANCE_PRIMITIVE,
+							EGLCompletionProposal.NO_IMG_KEY));
 				}
 			}
 		}

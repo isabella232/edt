@@ -55,7 +55,8 @@ public class EGLSQLWithStatementReferenceCompletion extends EGLAbstractReference
 			result.add(new EGLCompletionProposal(viewer, message, message,
 					UINlsStrings.CAProposal_EGLKeyword, documentOffset
 							- prefixLength, prefixLength, message.length() - 1,
-					EGLCompletionProposal.RELEVANCE_KEYWORD + 1));
+					EGLCompletionProposal.RELEVANCE_KEYWORD + 1,
+					EGLCompletionProposal.NO_IMG_KEY));
 		}
 
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset,

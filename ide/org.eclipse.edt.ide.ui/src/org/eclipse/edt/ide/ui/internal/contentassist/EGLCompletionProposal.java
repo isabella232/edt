@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.util.ImportUtility;
 import org.eclipse.jface.text.Assert;
 import org.eclipse.jface.text.BadLocationException;
@@ -45,6 +46,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 	public static final int RELEVANCE_ENUMERATION = 30;
 	public static final int RELEVANCE_EXCEPTION = 30;
 	public static final int RELEVANCE_TEMPLATE_OTHER = 0;
+	public static final String NO_IMG_KEY = "";
+	public static final String STR_IMG_KEYWORD = "";
 
 	private String importPackageName;
 	private String importPartName;
@@ -58,6 +61,7 @@ public class EGLCompletionProposal implements ICompletionProposal {
 	private int cursorPosition;
 	private int relevance;
 	private int postSelectionLength;
+	private String ImageDescStr;
 	
 	private IContextInformation contextInformation;
 
@@ -70,7 +74,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 		int replacementLength,
 		int cursorPosition,
 		int relevance,
-		int postSelectionLength) {
+		int postSelectionLength,
+		String aImgDescStr) {
 
 		Assert.isNotNull(viewer);
 		Assert.isNotNull(replacementString);
@@ -88,6 +93,7 @@ public class EGLCompletionProposal implements ICompletionProposal {
 		this.cursorPosition = cursorPosition;
 		this.relevance = relevance;
 		this.postSelectionLength = postSelectionLength;
+		this.ImageDescStr = aImgDescStr;
 	}
 
 	public EGLCompletionProposal(
@@ -98,7 +104,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 		int replacementOffset,
 		int replacementLength,
 		int cursorPosition,
-		int relevance) {
+		int relevance,
+		String aImageDesc) {
 		this(
 			textViewer,
 			displayString,
@@ -108,7 +115,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 			replacementLength,
 			cursorPosition,
 			relevance,
-			0);
+			0,
+			aImageDesc);
 	}
 
 	public EGLCompletionProposal(
@@ -118,7 +126,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 		String additionalProposalInfo,
 		int replacementOffset,
 		int replacementLength,
-		int cursorPosition) {
+		int cursorPosition,
+		String aImageDesc) {
 
 			this(
 				textViewer,
@@ -129,7 +138,8 @@ public class EGLCompletionProposal implements ICompletionProposal {
 				replacementLength,
 				cursorPosition,
 				RELEVANCE_MEDIUM,
-				0);
+				0,
+				aImageDesc);
 	}
 
 	/* (non-Javadoc)
@@ -199,7 +209,7 @@ public class EGLCompletionProposal implements ICompletionProposal {
 	 * @see org.eclipse.jface.text.contentassist.ICompletionProposal#getImage()
 	 */
 	public Image getImage() {
-		return null;
+		return(PluginImages.get(ImageDescStr));
 	}
 
 	/* (non-Javadoc)

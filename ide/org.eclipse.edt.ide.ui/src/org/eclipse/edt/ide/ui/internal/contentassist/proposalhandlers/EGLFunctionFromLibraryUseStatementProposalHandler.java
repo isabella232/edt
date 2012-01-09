@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -105,7 +106,8 @@ public class EGLFunctionFromLibraryUseStatementProposalHandler extends EGLAbstra
 						getPrefix().length(),
 						selection.x,
 						EGLCompletionProposal.RELEVANCE_MEDIUM,
-						selection.y);
+						selection.y,
+						PluginImages.IMG_OBJS_FUNCTION);  //We need a function icon from use lib
 	}
 
 }

@@ -590,7 +590,8 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 					prefix.length(),
 					cursorPosition,
 					EGLCompletionProposal.RELEVANCE_MEDIUM,
-					postSelectionLength));
+					postSelectionLength,
+					EGLCompletionProposal.NO_IMG_KEY));
 		}
 		return proposals;
 	}

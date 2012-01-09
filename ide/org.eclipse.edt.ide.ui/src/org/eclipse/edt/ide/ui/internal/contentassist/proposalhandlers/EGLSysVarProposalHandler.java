@@ -49,7 +49,8 @@ public class EGLSysVarProposalHandler extends EGLAbstractProposalHandler {
 								getDocumentOffset() - getPrefix().length(),
 								getPrefix().length(),
 								systemWord.getName().length(),
-								EGLCompletionProposal.RELEVANCE_SYSTEM_WORD));
+								EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
+								EGLCompletionProposal.NO_IMG_KEY));
 				}
 			}
 		}

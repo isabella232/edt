@@ -28,6 +28,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -88,7 +89,8 @@ public class EGLFunctionPartSearchProposalHandler extends EGLPartSearchProposalH
 				//JON60 - temp -1 until get fct parms
 				selection.x-1,
 				EGLCompletionProposal.RELEVANCE_MEDIUM,
-				selection.y);
+				selection.y,
+				PluginImages.IMG_OBJS_FUNCTION);
 
 		//Do not add import if default package
 		if (partDeclarationInfo.getPackageName().length() > 0) {

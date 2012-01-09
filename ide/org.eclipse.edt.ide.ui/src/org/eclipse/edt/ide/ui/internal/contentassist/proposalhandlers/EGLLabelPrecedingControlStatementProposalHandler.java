@@ -37,7 +37,7 @@ public class EGLLabelPrecedingControlStatementProposalHandler extends EGLAbstrac
 		super(viewer, documentOffset, prefix);
 	}
 
-	public List getProposals(Node boundNode, IncludeLabelForTester includeLabelTester, int relevance) {
+	public List getProposals(Node boundNode, IncludeLabelForTester includeLabelTester, int relevance, String img_src) {
 		List labels = new ArrayList();
 		Node parent = boundNode.getParent();
 		while(parent != null) {
@@ -70,7 +70,7 @@ public class EGLLabelPrecedingControlStatementProposalHandler extends EGLAbstrac
 			parent = parent.getParent();
 		}
 		
-		return getProposals((String[]) labels.toArray(new String[0]), null, relevance);
+		return getProposals((String[]) labels.toArray(new String[0]), null, relevance, img_src);
 	}
 
 	private List getStatementBlocks(Node node) {

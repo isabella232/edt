@@ -37,7 +37,8 @@ public class EGLSQLPrepareWithStatementReferenceCompletion extends EGLAbstractRe
 			result.add(new EGLCompletionProposal(viewer, message, message,
 					UINlsStrings.CAProposal_EGLKeyword, documentOffset
 							- prefixLength, prefixLength, message.length() - 1,
-					EGLCompletionProposal.RELEVANCE_KEYWORD + 1));
+					EGLCompletionProposal.RELEVANCE_KEYWORD + 1,
+					EGLCompletionProposal.STR_IMG_KEYWORD));
 		}
 
 		return result;

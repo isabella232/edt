@@ -69,7 +69,8 @@ public class EGLKeywordCompletion {
 						documentOffset - prefix.length(),
 						prefix.length(),
 						keyword.length(),
-						EGLCompletionProposal.RELEVANCE_KEYWORD));
+						EGLCompletionProposal.RELEVANCE_KEYWORD,
+						EGLCompletionProposal.STR_IMG_KEYWORD));
 		}
 		return result;
 	}

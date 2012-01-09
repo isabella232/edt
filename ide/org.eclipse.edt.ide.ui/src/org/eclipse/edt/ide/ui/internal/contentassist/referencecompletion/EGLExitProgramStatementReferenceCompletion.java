@@ -46,7 +46,8 @@ public class EGLExitProgramStatementReferenceCompletion extends EGLAbstractRefer
 					UINlsStrings.CAProposal_ExitProgramStatement,
 					documentOffset - prefixLength,
 					prefixLength,
-					replacementString.length()));
+					replacementString.length(),
+					EGLCompletionProposal.NO_IMG_KEY));
 		}
 
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {

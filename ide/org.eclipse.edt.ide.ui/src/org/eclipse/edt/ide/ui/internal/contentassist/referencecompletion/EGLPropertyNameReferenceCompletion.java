@@ -158,7 +158,7 @@ public class EGLPropertyNameReferenceCompletion extends EGLAbstractPropertyRefer
 					new EGLPropertyNameProposalHandler(
 						viewer,
 						documentOffset,
-						prefix, false).getProposals(location, settingsBlockList));
+						prefix, true).getProposals(location, settingsBlockList));
 			}
 		}
 		return proposals;

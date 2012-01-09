@@ -121,7 +121,7 @@ public class EGLConditionalStateProposalHandler extends EGLAbstractProposalHandl
 				List proposals = getProposals(availableStrings, additionalInfo);
 				availableStrings = KEY_VALUE2_STATE_STRINGS;
 				proposals.addAll(
-					getProposals(availableStrings, additionalInfo, EGLCompletionProposal.RELEVANCE_MEDIUM, 1));
+					getProposals(availableStrings, additionalInfo, EGLCompletionProposal.RELEVANCE_MEDIUM, 1, EGLCompletionProposal.NO_IMG_KEY));
 				return proposals;
 
 			case SYS_VALUE :
@@ -143,7 +143,7 @@ public class EGLConditionalStateProposalHandler extends EGLAbstractProposalHandl
 					IEGLConstants.MNEMONIC_NUMERIC,
 					IEGLConstants.MNEMONIC_TRUNC };
 				additionalInfo = UINlsStrings.CAProposal_ItemState;
-				proposals = getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_ITEM_STATE, 0);
+				proposals = getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_ITEM_STATE, 0, EGLCompletionProposal.NO_IMG_KEY);
 
 				strings = new String[] { //IO error states
 					IEGLConstants.MNEMONIC_DEADLOCK,
@@ -159,7 +159,7 @@ public class EGLConditionalStateProposalHandler extends EGLAbstractProposalHandl
 					IEGLConstants.MNEMONIC_UNIQUE };
 				additionalInfo = UINlsStrings.CAProposal_IOErrorState;
 				proposals.addAll(
-					getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_ITEM_STATE - 1, 0));
+					getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_ITEM_STATE - 1, 0, EGLCompletionProposal.NO_IMG_KEY));
 				return proposals;
 		}
 		return getProposals(availableStrings, additionalInfo);

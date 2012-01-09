@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.util.CapabilityFilterUtility;
@@ -67,7 +68,8 @@ public class EGLSystemLibraryProposalHandler extends EGLAbstractProposalHandler 
 						getDocumentOffset() - getPrefix().length(),
 						getPrefix().length(),
 						primitiveString[0].length() + 1,
-						EGLCompletionProposal.RELEVANCE_SYSTEM_LIBRARY));
+						EGLCompletionProposal.RELEVANCE_SYSTEM_LIBRARY,
+						PluginImages.IMG_OBJS_LIBRARY));
 			}
 		}
 		return proposals;

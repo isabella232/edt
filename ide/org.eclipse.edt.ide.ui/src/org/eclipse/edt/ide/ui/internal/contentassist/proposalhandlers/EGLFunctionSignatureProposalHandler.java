@@ -132,7 +132,8 @@ public class EGLFunctionSignatureProposalHandler extends EGLAbstractProposalHand
 			null,
 			getDocumentOffset() - getPrefix().length(),			
 			0,
-			0);
+			0,
+			EGLCompletionProposal.NO_IMG_KEY);
 		
 		EGLProposalContextInformation contextInformation = new EGLProposalContextInformation(completionProposal, getLParenOffsetAfter(invocationTarget.getOffset()) + 1, proposalSB.toString(), parameterList);
 		

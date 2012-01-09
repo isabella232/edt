@@ -71,7 +71,8 @@ public class EGLTableUseStatementProposalHandler extends EGLAbstractProposalHand
 						getAdditionalInfo(typeBinding),
 						getDocumentOffset() - getPrefix().length(),
 						getPrefix().length(),
-						proposalString.length());
+						proposalString.length(),
+						getPartTypeImgKeyStr(getPartTypeString(typeBinding)));
 	}
 
 

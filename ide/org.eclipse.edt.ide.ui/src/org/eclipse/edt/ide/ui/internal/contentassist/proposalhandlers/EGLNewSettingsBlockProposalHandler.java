@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.binding.FlexibleRecordBindingImpl;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
 
@@ -86,6 +87,7 @@ public class EGLNewSettingsBlockProposalHandler extends EGLAbstractProposalHandl
 				prefix.length(),
 				cursorPosition,
 				EGLCompletionProposal.RELEVANCE_MEDIUM,
-				postSelectionLength);
+				postSelectionLength,
+				PluginImages.IMG_OBJS_ENV_VAR);
 	}
 }

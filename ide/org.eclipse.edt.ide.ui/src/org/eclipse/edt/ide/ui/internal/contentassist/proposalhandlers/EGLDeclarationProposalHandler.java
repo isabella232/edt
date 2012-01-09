@@ -43,6 +43,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -816,6 +817,8 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	private EGLCompletionProposal createDeclarationProposal(IDataBinding variable, String proposalString, int relevance, boolean quoted) {
 		if (quoted)
 			proposalString = "\"" + proposalString + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+	
+		String imgStr = isPrivateField(variable) ? imgStr = PluginImages.IMG_OBJS_ENV_VAR_PRIVATE : PluginImages.IMG_OBJS_ENV_VAR;
 		return new EGLCompletionProposal(viewer,
 				variable.getCaseSensitiveName() + " " + getTypeText(variable) + " (" + getPartTypeString(variable.getType()) + " " + UINlsStrings.CAProposal_Variable + ")", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			proposalString,
@@ -823,7 +826,8 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			getDocumentOffset() - getPrefix().length(),
 			getPrefix().length(),
 			proposalString.length(),
-			relevance);
+			relevance,
+			imgStr);
 	}
 
 	/**

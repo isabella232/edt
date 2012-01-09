@@ -164,7 +164,8 @@ public class EGLFormUseStatementProposalHandler extends EGLAbstractProposalHandl
 						getAdditionalInfo(formBinding),
 						getDocumentOffset() - getPrefix().length(),
 						getPrefix().length(),
-						proposalString.length());
+						proposalString.length(),
+						getPartTypeImgKeyStr(getPartTypeString(formBinding)));
 	}
 
 	protected String getProposalString(FormBinding formBinding, boolean quotes) {

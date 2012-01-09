@@ -128,7 +128,8 @@ public class EGLJavaLibArgumentProposalHandler extends EGLAbstractProposalHandle
 				getDocumentOffset() - getPrefix().length(),
 				getPrefix().length(),
 				proposalString.length(),
-				EGLCompletionProposal.RELEVANCE_PRIMITIVE+1);
+				EGLCompletionProposal.RELEVANCE_PRIMITIVE+1,
+				EGLCompletionProposal.NO_IMG_KEY);
 	}
 
 	private boolean needQuotes() {

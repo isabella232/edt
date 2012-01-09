@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.internal.enumerations.EGLEnumeration;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -49,7 +50,8 @@ public class EGLEnumerationNameProposalHandler extends EGLAbstractProposalHandle
 				getDocumentOffset() - getPrefix().length(),
 				getPrefix().length(),
 				enumerationName.length()+1,
-				EGLCompletionProposal.RELEVANCE_ENUMERATION);
+				EGLCompletionProposal.RELEVANCE_ENUMERATION,
+				PluginImages.IMG_OBJS_ENUMERATION);
 		return eglCompletionProposal;
 	}
 

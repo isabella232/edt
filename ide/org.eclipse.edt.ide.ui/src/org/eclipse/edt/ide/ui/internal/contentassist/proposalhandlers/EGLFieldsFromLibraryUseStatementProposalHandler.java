@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
@@ -83,7 +84,8 @@ public class EGLFieldsFromLibraryUseStatementProposalHandler extends EGLAbstract
 			getAdditionalInfo(dataBinding),
 			getDocumentOffset() - getPrefix().length(),
 			getPrefix().length(),
-			proposalString.length());
+			proposalString.length(),
+			PluginImages.IMG_OBJS_ENV_VAR);
 	}
 
 }

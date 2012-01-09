@@ -28,6 +28,7 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -59,6 +60,7 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLProposalContextInformation;
@@ -254,10 +256,10 @@ public abstract class EGLAbstractProposalHandler {
 	}
 
 	public List getProposals(String[] strings, String additionalInfo) {
-		return getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_MEDIUM, 0);
+		return getProposals(strings, additionalInfo, EGLCompletionProposal.RELEVANCE_MEDIUM, 0, EGLCompletionProposal.NO_IMG_KEY);
 	}
 
-	public List getProposals(String[] strings, String additionalInfo, int relevance) {
+	public List getProposals(String[] strings, String additionalInfo, int relevance, String img_src) {
 		List proposals = new ArrayList();
 		for (int i = 0; i < strings.length; i++) {
 			if (strings[i].toUpperCase().startsWith(getPrefix().toUpperCase())) {
@@ -270,13 +272,14 @@ public abstract class EGLAbstractProposalHandler {
 						getPrefix().length(),
 						0,
 						relevance,
-						strings[i].length()));
+						strings[i].length(),
+						img_src));
 			}
 		}
 		return proposals;
 	}
 	
-	public List getProposals(String[] strings, String additionalInfo, int relevance, int postSelectionLength) {
+	public List getProposals(String[] strings, String additionalInfo, int relevance, int postSelectionLength, String img_src) {
 		List proposals = new ArrayList();
 		for (int i = 0; i < strings.length; i++) {
 			if (strings[i].toUpperCase().startsWith(getPrefix().toUpperCase())) {
@@ -289,7 +292,8 @@ public abstract class EGLAbstractProposalHandler {
 						getPrefix().length(),
 						strings[i].length() - postSelectionLength,
 						relevance,
-						postSelectionLength));
+						postSelectionLength,
+						img_src));
 			}
 		}
 		return proposals;
@@ -333,12 +337,38 @@ public abstract class EGLAbstractProposalHandler {
 				getPartReferenceAdditionalInformation(part.getPackageName(), part, partTypeName),
 				getDocumentOffset() - getPrefix().length(),
 				getPrefix().length(),
-				proposalString.length());
+				proposalString.length(),
+				getPartTypeImgKeyStr(partTypeName));
 
 		eglCompletionProposal.setImportPackageName(importPackageName);
 		eglCompletionProposal.setImportPartName(importPartName);
 		
 		return eglCompletionProposal;
+	}
+	
+	protected String getPartTypeImgKeyStr(String partType){
+		String partTypeImgStr = "";
+		if (IEGLConstants.KEYWORD_RECORD == partType) {
+			partTypeImgStr = PluginImages.IMG_OBJS_RECORD;
+		}else if(IEGLConstants.KEYWORD_HANDLER == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_HANDLER;
+		}else if(IEGLConstants.KEYWORD_INTERFACE == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_INTERFACE;
+		}else if(IEGLConstants.KEYWORD_DELEGATE == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_DELEGATE;
+		}else if(IEGLConstants.KEYWORD_EXTERNALTYPE == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_EXTERNALTYPE;
+		}else if(IEGLConstants.KEYWORD_SERVICE == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_SERVICE;
+		}else if(IEGLConstants.KEYWORD_ENUMERATION == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_ENUMERATION;
+		}else if(IEGLConstants.KEYWORD_PROGRAM == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_PGM;
+		}else if(IEGLConstants.KEYWORD_LIBRARY == partType){
+			partTypeImgStr = PluginImages.IMG_OBJS_LIBRARY;
+		}
+		
+		return partTypeImgStr;
 	}
 
 	private boolean hasImportForPartWithADifferentPackage(final String packageName, final String partName) {
@@ -423,6 +453,13 @@ public abstract class EGLAbstractProposalHandler {
 		return getDisplayString(functionBinding, functionBinding.getParameters().size());
 	}
 	
+	protected boolean isPrivateField(IDataBinding fieldBinding){
+		if(fieldBinding instanceof VariableBinding && ((VariableBinding)fieldBinding).isPrivate()){
+			return(true);
+		}
+		return(false);
+	}
+	
 	protected String getDisplayString(IFunctionBinding functionBinding, int numberOfParameters) {
 		StringBuffer buffer = new StringBuffer(functionBinding.getCaseSensitiveName());
 		buffer.append("("); //$NON-NLS-1$
@@ -503,7 +540,8 @@ public abstract class EGLAbstractProposalHandler {
 						getPrefix().length(),
 						cursorPosition,
 						EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
-						selectionLength));
+						selectionLength,
+						PluginImages.IMG_OBJS_FUNCTION));
 			}
 		}
 		return proposals;
@@ -524,6 +562,8 @@ public abstract class EGLAbstractProposalHandler {
 				String replaceString = upToParensString + "(" + getParmString(function, numberOfArgs) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
 				int selectionLength = numberOfArgs > 0 ? ((IBinding) function.getParameters().get(0)).getName().length() : 0;
 				int cursorPosition = numberOfArgs > 0 ? upToParensString.length()+1 : replaceString.length();
+				String imgStr = function.isPrivate()? PluginImages.IMG_OBJS_PRIVATE_FUNCTION : PluginImages.IMG_OBJS_FUNCTION;
+				
 				EGLCompletionProposal completionProposal = new EGLCompletionProposal(viewer,
 					displayString,
 					replaceString,
@@ -532,7 +572,8 @@ public abstract class EGLAbstractProposalHandler {
 					getPrefix().length(),
 					cursorPosition,
 					relevance,
-					selectionLength);
+					selectionLength,
+					imgStr);
 				EGLProposalContextInformation contextInformation = new EGLProposalContextInformation(completionProposal, getDocumentOffset() - getPrefix().length() + upToParensString.length() + 1, replaceString, getParameterListString(function.getParameters()));				
 				completionProposal.setContextInformation(contextInformation);
 				proposals.add(completionProposal);

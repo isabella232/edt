@@ -26,7 +26,6 @@ import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.internal.EGLNewPropertiesHandler;
@@ -69,7 +68,8 @@ public class EGLSubtypeReferenceCompletion extends EGLAbstractReferenceCompletio
 							additionalInfoText,
 							documentOffset - prefixLength,
 							prefixLength,
-							((String) subTypes.get(i)).length()));
+							((String) subTypes.get(i)).length(),
+							EGLCompletionProposal.NO_IMG_KEY));
 			}
 		}
 					

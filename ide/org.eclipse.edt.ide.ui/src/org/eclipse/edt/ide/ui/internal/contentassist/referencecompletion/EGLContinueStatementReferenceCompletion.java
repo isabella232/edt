@@ -42,7 +42,7 @@ public class EGLContinueStatementReferenceCompletion extends EGLAbstractReferenc
 		final IncludeLabelForTester thisReferenceCompletion = this;
 		
 		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-			proposals.addAll(new EGLLabelPrecedingControlStatementProposalHandler(viewer, documentOffset, prefix).getProposals(boundNode, thisReferenceCompletion, EGLCompletionProposal.RELEVANCE_KEYWORD));
+			proposals.addAll(new EGLLabelPrecedingControlStatementProposalHandler(viewer, documentOffset, prefix).getProposals(boundNode, thisReferenceCompletion, EGLCompletionProposal.RELEVANCE_KEYWORD, EGLCompletionProposal.STR_IMG_KEYWORD));
 		}});
 
 		return proposals;

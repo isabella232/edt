@@ -49,6 +49,7 @@ import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -143,14 +144,14 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 					return result;
 				
 				case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(true), addEquals, includePrivateFields, propertyBlockList));
+					result.addAll(getFieldProposals(((FlexibleRecordBinding) qualifierTypeBinding).getDeclaredFields(true), addEquals, includePrivateFields, propertyBlockList, PluginImages.IMG_OBJS_STRUCTUREITEM));
 					return result;
 
 				case ITypeBinding.FIXED_RECORD_BINDING:
 					Set dBindings = new HashSet();
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getSimpleNamesToDataBindingsMap().values());
 					dBindings.addAll(((FixedRecordBinding) qualifierTypeBinding).getStructureItems());
-					result.addAll(getFieldProposals(dBindings, addEquals, includePrivateFields, propertyBlockList));
+					result.addAll(getFieldProposals(dBindings, addEquals, includePrivateFields, propertyBlockList, PluginImages.IMG_OBJS_STRUCTUREITEM));
 					return result;
 										
 				case ITypeBinding.LIBRARY_BINDING:
@@ -242,8 +243,10 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		return filteredList;
 	}
 
-	private List getFieldProposals(Collection fieldDataBindings, boolean addEquals, boolean includePrivateFields, List propertyBlockList) {
+	private List getFieldProposals(Collection fieldDataBindings, boolean addEquals, boolean includePrivateFields, List propertyBlockList, String ImgKeyStr) {
 		List result = new ArrayList();
+		String fieldImgKeyStr = ImgKeyStr == "" ? PluginImages.IMG_OBJS_ENV_VAR : ImgKeyStr;
+
 		for(Iterator iter = fieldDataBindings.iterator(); iter.hasNext();) {
 			IDataBinding dataBinding = (IDataBinding) iter.next();
 			if(!includePrivateFields && dataBinding instanceof VariableBinding && ((VariableBinding) dataBinding).isPrivate() && !(qualifierExpression instanceof ThisExpression)) {
@@ -270,13 +273,18 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 													getDocumentOffset() - getPrefix().length(),
 													getPrefix().length(),
 													proposalString.length(),
-													EGLCompletionProposal.RELEVANCE_MEDIUM-1));
+													EGLCompletionProposal.RELEVANCE_MEDIUM-1,
+													fieldImgKeyStr));
 						}
 					}
 				}
 			}
 		}
 		return result;
+	}
+	
+	private List getFieldProposals(Collection fieldDataBindings, boolean addEquals, boolean includePrivateFields, List propertyBlockList) {
+		return this.getFieldProposals(fieldDataBindings, addEquals, includePrivateFields, propertyBlockList, "");
 	}
 	
 	private List getFunctionProposals(List functionBindings, String additionalInformation, int relevance) {
@@ -322,7 +330,8 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 								getPrefix().length(),
 								cusorPos,
 								EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
-								getFirstParmLength(systemFunctionBinding)));
+								getFirstParmLength(systemFunctionBinding),
+								PluginImages.IMG_OBJS_FUNCTION));
 				}
 			}
 		}
@@ -344,26 +353,27 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 												getPrefix().length(),
 												cusorPos, 
 												EGLCompletionProposal.RELEVANCE_SYSTEM_WORD,
-												getFirstParmLength((IFunctionBinding) nestedFunctionBinding.getType())));
+												getFirstParmLength((IFunctionBinding) nestedFunctionBinding.getType()),
+												PluginImages.IMG_OBJS_FUNCTION));
 		}
 	}
 
-	private List getResourceAssociationSystemWordProposal() {
-		List proposals = new ArrayList();
-		if (IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION.toUpperCase().startsWith(getPrefix().toUpperCase())) {
-			String displayString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION;
-			String proposalString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION + " = "; //$NON-NLS-1$
-			proposals.add(
-					new EGLCompletionProposal(viewer,
-						displayString,
-						proposalString,
-						UINlsStrings.CAProposal_VariableSystemWord,
-						getDocumentOffset() - getPrefix().length(),
-						getPrefix().length(),
-						proposalString.length(),
-						EGLCompletionProposal.RELEVANCE_SYSTEM_WORD));
-		}
-		return proposals;
-	}
+//	private List getResourceAssociationSystemWordProposal() {
+//		List proposals = new ArrayList();
+//		if (IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION.toUpperCase().startsWith(getPrefix().toUpperCase())) {
+//			String displayString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION;
+//			String proposalString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION + " = "; //$NON-NLS-1$
+//			proposals.add(
+//					new EGLCompletionProposal(viewer,
+//						displayString,
+//						proposalString,
+//						UINlsStrings.CAProposal_VariableSystemWord,
+//						getDocumentOffset() - getPrefix().length(),
+//						getPrefix().length(),
+//						proposalString.length(),
+//						EGLCompletionProposal.RELEVANCE_SYSTEM_WORD));
+//		}
+//		return proposals;
+//	}
 
 }
