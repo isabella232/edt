@@ -548,7 +548,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 				if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
 						String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted));					
+						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));					
 					}
 				}
 			}
@@ -603,7 +603,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 						if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
 							if(includeConstants || IDataBinding.CLASS_FIELD_BINDING != dBinding.getKind() || !((ClassFieldBinding) dBinding).isConstant()) {
 								String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted));
+								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, false));
 							}
 						}
 					}
@@ -649,7 +649,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 						if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
 							if(includeConstants || IDataBinding.LOCAL_VARIABLE_BINDING != dBinding.getKind() || !((LocalVariableBinding) dBinding).isConstant()) {
 								String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted));
+								proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, quoted, true));
 							}
 						}
 					}
@@ -679,7 +679,7 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 				if (dBinding.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(dataBindingFilter.dataBindingPasses(dBinding) && precondition(dBinding)) {
 						String proposalString = getProposalString(dBinding.getCaseSensitiveName());
-						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, false));
+						proposals.add(createDeclarationProposal(dBinding, proposalString, EGLCompletionProposal.RELEVANCE_VARIABLE_CONTAINER, false, true));
 					}
 				}
 			}
@@ -814,13 +814,14 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 	/**
 	 * create the proposal
 	 */
-	private EGLCompletionProposal createDeclarationProposal(IDataBinding variable, String proposalString, int relevance, boolean quoted) {
+	private EGLCompletionProposal createDeclarationProposal(IDataBinding variable, String proposalString, int relevance, boolean quoted, boolean isLocalVariable) {
 		if (quoted)
 			proposalString = "\"" + proposalString + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 	
 		String imgStr = isPrivateField(variable) ? imgStr = PluginImages.IMG_OBJS_ENV_VAR_PRIVATE : PluginImages.IMG_OBJS_ENV_VAR;
+		String displayStr = isLocalVariable ? variable.getCaseSensitiveName() + " : " + getTypeText(variable) : variable.getCaseSensitiveName() + " : " + getTypeText(variable) + " - " + variable.getDeclaringPart().getCaseSensitiveName();
 		return new EGLCompletionProposal(viewer,
-				variable.getCaseSensitiveName() + " " + getTypeText(variable) + " (" + getPartTypeString(variable.getType()) + " " + UINlsStrings.CAProposal_Variable + ")", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			displayStr,
 			proposalString,
 			getAdditionalInfo1(variable),
 			getDocumentOffset() - getPrefix().length(),
