@@ -289,7 +289,7 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 			}
 		}
 		
-		String img_src = isAnnotationSetting ? PluginImages.IMG_OBJS_ANNOTATION : "";
+		String img_src = isAnnotationSetting ? PluginImages.IMG_OBJS_ANNOTATION : PluginImages.IMG_OBJS_ENV_VAR;
 		return
 			new EGLCompletionProposal(viewer,
 				propertyRule.getName(),
