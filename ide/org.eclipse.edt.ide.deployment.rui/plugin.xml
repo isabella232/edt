@@ -47,9 +47,9 @@
           id="org.eclipse.edt.ide.deployment.rui.CopyResourcesOperation">
     </DeploymentOperation>
     <DeploymentOperation
-          class="org.eclipse.edt.ide.deployment.rui.operation.UpdateWebXMLProxyOperation"
+          class="org.eclipse.edt.ide.deployment.rui.operation.UpdateWebXMLOperation"
           deploymentSolutionName="j2ee"
-          id="org.eclipse.edt.ide.deployment.rui.UpdateWebXMLProxyOperation">
+          id="org.eclipse.edt.ide.deployment.rui.UpdateWebXMLOperation">
     </DeploymentOperation>
  </extension>
  

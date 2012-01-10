@@ -31,7 +31,7 @@ import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 
-public class UpdateWebXMLProxyOperation extends AbstractDeploymentOperation {
+public class UpdateWebXMLOperation extends AbstractDeploymentOperation {
 
 	private String targetProjectName;
 	private DeploymentDesc model;
@@ -66,34 +66,24 @@ public class UpdateWebXMLProxyOperation extends AbstractDeploymentOperation {
 		 * register the servlet
 		 */
 		String servletName = IConstants.RUI_PROXY_SERVLET_NAME;
-		String servletClassName = IConstants.RUI_PROXY_SERVLET; //$NON-NLS-1$
-		String mapping = IConstants.RUI_PROXY_MAPPING; //$NON-NLS-1$
+		String servletClassName = IConstants.RUI_PROXY_SERVLET; 
+		String mapping = IConstants.RUI_PROXY_MAPPING; 
 		Map<String, String> parameterList = new HashMap<String, String>();
 		boolean isWebsphere = false; //ServiceUtilities.isWebsphereRuntime(ServiceUtilities.getRuntime(project)); TODO - EDT
 		if( isWebsphere )
 		{
 			parameterList.put("isOnWebSphere","true");
 		}
-/* TODO - EDT		
+	
 		//Add the compression filter into web.xml
-		String filterName = "CompressionFilter";
-		String filterClassName = "com.ibm.javart.util.gzip.CompressionFilter";
-		Map<String, String> initParameterList = new HashMap<String, String>();
-		initParameterList.put("enable_compression", "true");
-		initParameterList.put("compression_threshold", "2048");
-		initParameterList.put("trace_level", "0");
-		initParameterList.put("trace_dev", "0");
-		List<String> urlMappingList = new ArrayList<String>();
-		urlMappingList.add("*.html");
-		urlMappingList.add("*.css");
-		urlMappingList.add("*.js");
-		urlMappingList.add("/___proxy");
-*/
+		String filterName = IConstants.RUI_COMPRESS_FILTER_NAME;
+		String filterClassName = IConstants.RUI_COMPRESS_FILTER_CLASSNAME;
+
 		WebXML util = WebXMLManager.instance.getWebXMLUtil(project);
 		if( util != null )
 		{
 			util.addServlet(servletName, servletClassName, mapping, parameterList);
-//			util.addFilter(filterName, filterClassName, urlMappingList, initParameterList);
+			util.addFilter(filterName, filterClassName, IConstants.urlMappingList, IConstants.initParameterList);
 		}
 
 	}
