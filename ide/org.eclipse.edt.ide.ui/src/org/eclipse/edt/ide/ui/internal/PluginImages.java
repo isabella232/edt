@@ -139,6 +139,7 @@ public class PluginImages {
 	public static final String IMG_OBJS_ANNOTATION= NAME_PREFIX + "annotation_obj.gif";		//$NON-NLS-1$
 
 	public static final String IMG_OBJS_ENV_VAR= NAME_PREFIX + "envvar_obj.gif"; 			//$NON-NLS-1$
+	public static final String IMG_OBJS_ENV_LOCAL_VAR = NAME_PREFIX + "localvariable_obj.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_ENV_VAR_PRIVATE= NAME_PREFIX + "private_co.gif"; 			//$NON-NLS-1$
 	public static final String IMG_OBJS_JAR= NAME_PREFIX + "jar_obj.gif"; 				//$NON-NLS-1$
 	public static final String IMG_OBJS_FLDR= NAME_PREFIX + "fldr_obj.gif"; 			//$NON-NLS-1$
@@ -240,6 +241,7 @@ public class PluginImages {
 	public static final ImageDescriptor DESC_OBJS_TRANSFER_TRANSACTION_ELEMENT= createManaged(T_OBJ, IMG_OBJS_TRANSFER_TRANSACTION_ELEMENT);
 	public static final ImageDescriptor DESC_OBJS_CONSOLE_FORM_ELEMENT= createManaged(T_OBJ, IMG_OBJS_CONSOLE_FORM_ELEMENT);
 	public static final ImageDescriptor DESC_OBJS_OBJS_ENV_VAR= createManaged(T_OBJ, IMG_OBJS_ENV_VAR);
+	public static final ImageDescriptor DESC_OBJS_OBJS_ENV_LOCAL_VAR = createManaged(T_OBJ, IMG_OBJS_ENV_LOCAL_VAR);
 	public static final ImageDescriptor DESC_OBJS_OBJS_ENV_VAR_PRIVATE= createManaged(T_OBJ, IMG_OBJS_ENV_VAR_PRIVATE);
 	public static final ImageDescriptor DESC_OBJS_OBJS_JAR= createManaged(T_OBJ, IMG_OBJS_JAR);
 	public static final ImageDescriptor DESC_OBJS_OBJS_FLDR= createManaged(T_OBJ, IMG_OBJS_FLDR);

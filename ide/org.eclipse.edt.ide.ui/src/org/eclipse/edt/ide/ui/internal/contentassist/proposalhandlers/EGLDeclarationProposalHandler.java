@@ -819,6 +819,9 @@ public class EGLDeclarationProposalHandler extends EGLAbstractProposalHandler {
 			proposalString = "\"" + proposalString + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 	
 		String imgStr = isPrivateField(variable) ? imgStr = PluginImages.IMG_OBJS_ENV_VAR_PRIVATE : PluginImages.IMG_OBJS_ENV_VAR;
+		if(isLocalVariable){
+			imgStr = PluginImages.IMG_OBJS_ENV_LOCAL_VAR;
+		}
 		String displayStr = isLocalVariable ? variable.getCaseSensitiveName() + " : " + getTypeText(variable) : variable.getCaseSensitiveName() + " : " + getTypeText(variable) + " - " + variable.getDeclaringPart().getCaseSensitiveName();
 		return new EGLCompletionProposal(viewer,
 			displayStr,
