@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.internal.IEGLBaseConstants;
+import org.eclipse.edt.ide.core.EGLNature;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.util.SWTUtil;
 import org.eclipse.jface.text.source.AnnotationModelEvent;
@@ -55,7 +56,7 @@ public class ProblemMarkerManager implements IResourceChangeListener, IAnnotatio
 			if (res instanceof IProject && delta.getKind() == IResourceDelta.CHANGED) {
 				try {
 					IProject project = (IProject) res;
-					if (!project.isAccessible() || !project.hasNature(IEGLBaseConstants.EGL_NATURE_ID)) {
+					if (!project.isAccessible() || !project.hasNature(EGLNature.EGL_NATURE_ID)) {
 						// only track open EGL projects
 						return false;
 					}
