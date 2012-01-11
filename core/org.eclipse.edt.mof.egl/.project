@@ -42,12 +42,8 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>com.ibm.etools.egl.core.EGLNature</nature>
-		<nature>com.ibm.etools.egl.model.eglnature</nature>
-		<nature>com.ibm.etools.egl.model.CENature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.pde.PluginNature</nature>
-		<nature>org.eclipse.edt.ide.core.EGLNature</nature>
 		<nature>org.eclipse.edt.ide.core.eglnature</nature>
 	</natures>
 </projectDescription>
