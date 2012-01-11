@@ -21,8 +21,4 @@ public interface IEGLBaseConstants {
 
 	public static final String EGL_VALIDATION_RESOURCE_BUNDLE_NAME = "org.eclipse.edt.compiler.internal.core.builder.EGLValidationResources"; //$NON-NLS-1$
 	public static final String EGL_BASE_RESOURCE_BUNDLE_NAME = "org.eclipse.edt.compiler.internal.EGLBaseResources"; //$NON-NLS-1$
-	// The following constant does not really make sense here as this project does not require the egl.core project.
-	// however, the constant must be defined here to avoid a circular dependency in the required projects
-	public static final String EGL_NATURE_ID = "com.ibm.etools.egl.core.EGLNature"; //$NON-NLS-1$
-
 }

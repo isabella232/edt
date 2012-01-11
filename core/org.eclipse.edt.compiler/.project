@@ -36,7 +36,6 @@
 		<nature>org.eclipse.pde.PluginNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
-		<nature>org.eclipse.edt.ide.core.EGLNature</nature>
 		<nature>org.eclipse.edt.ide.core.eglnature</nature>
 	</natures>
 </projectDescription>
