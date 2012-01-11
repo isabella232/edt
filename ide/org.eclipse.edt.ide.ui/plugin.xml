@@ -596,7 +596,7 @@
 	            <and>
 		            <objectClass name="org.eclipse.core.resources.IProject"/>
 		            <or>
-		            	<objectState name="projectNature" value="org.eclipse.edt.ide.core.EGLNature"/>
+		            	<objectState name="projectNature" value="org.eclipse.edt.ide.core.eglnature"/>
 		            </or>
 	           </and>
          	</enablement>
@@ -664,7 +664,7 @@ Templates
 	<extension point="org.eclipse.ui.ide.projectNatureImages">
       	<image
             icon="icons/ovr16/egl_ovr.gif"
-            natureId="org.eclipse.edt.ide.core.EGLNature"
+            natureId="org.eclipse.edt.ide.core.eglnature"
             id="org.eclipse.edt.ide.ui.eglProjectNatureImage">
       	</image>
 	</extension>	
@@ -684,7 +684,7 @@ Templates
 							type="org.eclipse.core.resources.IProject" >
 						<test
 							property="org.eclipse.core.resources.projectNature"
-							value="org.eclipse.edt.ide.core.EGLNature" />
+							value="org.eclipse.edt.ide.core.eglnature" />
 					</adapt>
 <!--					
 					<instanceof
@@ -743,7 +743,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -760,7 +760,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -777,7 +777,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -794,7 +794,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -811,7 +811,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
                			<and>
 					  		<instanceof value="java.util.Collection"/>
@@ -831,7 +831,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -848,7 +848,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -865,7 +865,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -882,7 +882,7 @@ Templates
 								type="org.eclipse.core.resources.IProject" >
 							<test
 								property="org.eclipse.core.resources.projectNature"
-								value="org.eclipse.edt.ide.core.EGLNature" />
+								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
 								value="org.eclipse.edt.ide.core.model.IEGLElement" />
@@ -1048,7 +1048,7 @@ Templates
            		<not>
       				<objectState
                 		name="projectNature"
-                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+                  		value="org.eclipse.edt.ide.core.eglnature"/>
                  </not>
        	 	</visibility>
 			<action
@@ -1090,7 +1090,7 @@ Templates
          	</action>   
          	<filter
             	name="projectNature"
-               	value="org.eclipse.edt.ide.core.EGLNature">
+               	value="org.eclipse.edt.ide.core.eglnature">
          	</filter>
       	</objectContribution>
 		<objectContribution
@@ -1124,7 +1124,7 @@ Templates
          	</action>   
          	<filter
             	name="projectNature"
-               	value="org.eclipse.edt.ide.core.EGLNature">
+               	value="org.eclipse.edt.ide.core.eglnature">
          	</filter>
       	</objectContribution>
 		<objectContribution
@@ -1159,7 +1159,7 @@ Templates
          	</action>   
          	<filter
             	name="projectNature"
-               	value="org.eclipse.edt.ide.core.EGLNature">
+               	value="org.eclipse.edt.ide.core.eglnature">
          	</filter>
       	</objectContribution>
       	<objectContribution
@@ -1184,7 +1184,7 @@ Templates
            </action>   
            <filter
             	name="projectNature"
-               	value="org.eclipse.edt.ide.core.EGLNature">
+               	value="org.eclipse.edt.ide.core.eglnature">
           </filter>
         </objectContribution>
       	<viewerContribution
@@ -1286,7 +1286,7 @@ Templates
            	id="org.eclipse.edt.ide.ui.EGLProjectBuildPathPropertyPage">
       		<filter
         		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
+        		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
    		</page>
 <!-- Uncomment if we want these to show up
@@ -1298,7 +1298,7 @@ Templates
       		id="org.eclipse.edt.ide.ui.formatterPropertyPage">
       		<filter
         		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
+        		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
       	</page>
      	<page
@@ -1309,7 +1309,7 @@ Templates
       		id="org.eclipse.edt.ide.ui.organizeImportsPropertyPage">
       		<filter
         		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
+        		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
       	</page>
 -->      	
@@ -1319,7 +1319,7 @@ Templates
            	id="org.eclipse.edt.ide.ui.folderCompilerPropertyPage">
 			<filter
         		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
+        		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
    <enabledWhen>
       <or>
@@ -1344,7 +1344,7 @@ Templates
            	id="org.eclipse.edt.ide.ui.defaultDeploymentDescriptorPropertyPage">
 			<filter
         		name="projectNature"
-        		value="org.eclipse.edt.ide.core.EGLNature">
+        		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
             <enabledWhen>
               <or>

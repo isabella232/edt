@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.swt.widgets.Shell;
 
 import org.eclipse.edt.compiler.internal.eglar.EglarAttributes;
+import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.internal.utils.ResourceAndTLFMap;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
@@ -258,7 +259,7 @@ public class NewEglarFileExportOperation extends EglarFileExportOperation {
 	
 	private IResource getSrcFolder(IEGLProject project) {
 		try {
-			if (project.getProject().hasNature("com.ibm.etools.egl.core.EGLNature")) {
+			if (EGLProject.hasEGLNature(project.getProject())) {
 				IEGLPathEntry[] entries = project.getRawEGLPath();
 				for (IEGLPathEntry classpathEntry : entries) {
 					if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {

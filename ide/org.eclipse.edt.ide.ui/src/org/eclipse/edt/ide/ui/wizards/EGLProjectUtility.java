@@ -83,16 +83,8 @@ public final class EGLProjectUtility {
 
 	public static void addEGLNature(IProject project, IProgressMonitor monitor)
 			throws CoreException {
-		boolean hasEGLCoreNatureID = project.hasNature(EGLCore.NATURE_ID);
-		boolean hasEGLNatureID = project.hasNature(EGLNature.EGL_NATURE_ID);
-
-		if (!hasEGLCoreNatureID || !hasEGLNatureID) {
-			if (!hasEGLNatureID) {
-				addNatureToProject(project, EGLNature.EGL_NATURE_ID, monitor);
-			}
-			if (!hasEGLCoreNatureID) {
-				addNatureToProject(project, EGLCore.NATURE_ID, monitor);
-			}
+		if (!project.hasNature(EGLNature.EGL_NATURE_ID)) {
+			addNatureToProject(project, EGLNature.EGL_NATURE_ID, monitor);
 		} else {
 			monitor.worked(1);
 		}
