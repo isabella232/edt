@@ -5,16 +5,6 @@
 	<extension-point id="generators" name="Generators" schema="schema/generators.exsd"/>
 	
 	<extension
-         id="EGLNature"
-         name="EGL Nature"
-         point="org.eclipse.core.resources.natures">
-		<runtime>
-			<run
-               class="org.eclipse.edt.ide.core.EGLNature">
-         	</run>
-      	</runtime>
-	</extension>
-	<extension
          id="eglnature"
          name="EGL"
          point="org.eclipse.core.resources.natures">
