@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.EGLNature;
 import org.eclipse.edt.ide.core.internal.model.Assert;
 import org.eclipse.edt.ide.core.internal.model.BatchOperation;
 import org.eclipse.edt.ide.core.internal.model.BufferManager;
@@ -92,13 +93,13 @@ public final class EGLCore {
 
 	/**
 	 * The identifier for the EGL nature
-	 * (value <code>"com.ibm.etools.egl.internal.model.core.eglnature"</code>).
+	 * (value <code>"org.eclipse.edt.ide.core.eglnature"</code>).
 	 * The presence of this nature on a project indicates that it is 
 	 * EGL-capable.
 	 *
 	 * @see org.eclipse.core.resources.IProject#hasNature(egl.lang.String)
 	 */
-	public static final String NATURE_ID = PLUGIN_ID + ".eglnature"; //$NON-NLS-1$
+	public static final String NATURE_ID = EGLNature.EGL_NATURE_ID; //$NON-NLS-1$
 
 	/**
 	 * Possible  configurable option ID.

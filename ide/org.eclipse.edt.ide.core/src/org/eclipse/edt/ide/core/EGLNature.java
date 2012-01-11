@@ -24,7 +24,7 @@ public class EGLNature implements IProjectNature {
 	 */
 	private IProject project = null;
 
-	public static final String EGL_NATURE_ID = "org.eclipse.edt.ide.core.EGLNature"; //$NON-NLS-1$
+	public static final String EGL_NATURE_ID = "org.eclipse.edt.ide.core.eglnature"; //$NON-NLS-1$
 
 	/**
 	 * EGLNature constructor comment.
