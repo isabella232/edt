@@ -121,7 +121,7 @@
                <iterate>
 	             <and>
 	               <test property="org.eclipse.edt.debug.ui.hasJavaMainProgram" forcePluginActivation="true"/>
-                   <test property="org.eclipse.edt.debug.ui.hasProjectNatures" args="org.eclipse.edt.ide.core.EGLNature" forcePluginActivation="true"/>
+                   <test property="org.eclipse.edt.debug.ui.hasProjectNatures" args="org.eclipse.edt.ide.core.eglnature" forcePluginActivation="true"/>
 	             </and>
                </iterate>
              </with>
