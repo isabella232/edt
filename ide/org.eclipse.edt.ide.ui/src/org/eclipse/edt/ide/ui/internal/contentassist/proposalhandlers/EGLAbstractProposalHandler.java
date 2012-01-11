@@ -478,9 +478,10 @@ public abstract class EGLAbstractProposalHandler {
 		buffer.append(")"); //$NON-NLS-1$
 		ITypeBinding returnType = functionBinding.getReturnType();
 		if(returnType != null) {
-			buffer.append(" - "); //$NON-NLS-1$
+			buffer.append(" : "); //$NON-NLS-1$
 			buffer.append(returnType.getCaseSensitiveName());
 		}
+		buffer.append(" - " + functionBinding.getDeclarer().getCaseSensitiveName());	
 		return buffer.toString();
 	}
 

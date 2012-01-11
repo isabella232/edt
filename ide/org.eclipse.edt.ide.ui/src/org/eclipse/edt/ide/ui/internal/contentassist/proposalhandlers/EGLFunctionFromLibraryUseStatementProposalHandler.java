@@ -99,7 +99,7 @@ public class EGLFunctionFromLibraryUseStatementProposalHandler extends EGLAbstra
 		Point selection = getFirstParmSelection(replacementString);
 
 		return new EGLCompletionProposal(viewer,
-						displayString + " (function)", //$NON-NLS-1$
+						displayString, //$NON-NLS-1$
 						replacementString,
 						getAdditionalInfo(functionBinding),
 						getDocumentOffset() - getPrefix().length(),

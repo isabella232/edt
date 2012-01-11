@@ -79,7 +79,7 @@ public class EGLFieldsFromLibraryUseStatementProposalHandler extends EGLAbstract
 		String proposalString = dataBinding.getCaseSensitiveName();
 
 		return new EGLCompletionProposal(viewer,
-			proposalString + " (" + getPartTypeString(dataBinding.getType()) + ")", //$NON-NLS-1$ //$NON-NLS-2$
+			proposalString + " : " + dataBinding.getType() + " - " + dataBinding.getDeclaringPart().getCaseSensitiveName(), //$NON-NLS-1$ //$NON-NLS-2$
 			proposalString,
 			getAdditionalInfo(dataBinding),
 			getDocumentOffset() - getPrefix().length(),

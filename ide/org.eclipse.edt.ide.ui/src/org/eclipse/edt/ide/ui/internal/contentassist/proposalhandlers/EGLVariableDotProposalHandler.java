@@ -256,7 +256,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 				String proposalString = dataBinding.getCaseSensitiveName();
 				if (proposalString.toUpperCase().startsWith(getPrefix().toUpperCase())) {
 					if(!"*".equals(dataBinding.getName())) { //$NON-NLS-1$
-						String displayString = proposalString + " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
+						String displayString = proposalString + " : " + dataBinding.getType().getCaseSensitiveName() +  " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
 						if (!containsProperty(proposalString, propertyBlockList)) {
 							if (addEquals) {
 								if (dataBinding.getAnnotation(InternUtil.intern(new String[] {"egl", "ui", "rui"}), InternUtil.intern("VEEvent")) != null) {
