@@ -11,12 +11,12 @@ externalType EString extends AnyText type ParameterizableType {
 	/**
 	 * {@Operation +} Concatenates two strings.
 	 */
-	static function $Plus(lvalue EString in, rvalue EString in) returns(EString) {@Operation{"+"}};
+	static function $Plus(lvalue EString? in, rvalue EString? in) returns(EString) {@Operation{"+"}};
 
 	/**
 	 * {@Operation ::} Concatenates two strings.
 	 */
-	static function $Concat(value EString in, rvalue EString in) returns (EString) {@Operation{"::"}};
+	static function $Concat(value EString? in, rvalue EString? in) returns (EString) {@Operation{"::"}};
 
 	/**
 	 * {@Operation ?:} Concatenates two strings.  If either is null then null is returned.
