@@ -1426,7 +1426,7 @@ egl.printError = function( /*String*/ description, /*Error*/ e ) {
 	}
 	finally {
 		egl.exceptionThrown = false;
-		egl.debugStack = [];
+		if (!egl.debugg) egl.debugStack = [];
 	}
 };
 
