@@ -31,15 +31,16 @@ public class Constants {
 	 * Do NOT add a file to this list if you do not want its contents to be added to EVERY HTML file.
 	 * Also note that files are linked in the order they appear here.  Be aware of dependencies!
 	 */
+	public static final String RUI_RUNTIME_BOOTSTRAP_FILE = "edt_core.js";
 	public static final String RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE = "edt_runtime_all.js";
 	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>();
 	static{
+		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_BOOTSTRAP_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE);  //$NON-NLS-1$
-
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_mathcontext.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_bigdecimal.js");  //$NON-NLS-1$
-		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Constants.js");  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Constants.js");  //$NON-NLS-1$		
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("edt_runtime.js");  //$NON-NLS-1$
 //TODO waiting CQ approval bugzilla 5300		RUI_RUNTIME_JAVASCRIPT_FILES.add("webtoolkit.base64.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl/jsrt/BaseTypesAndRuntimes.js");  //$NON-NLS-1$
@@ -105,6 +106,12 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("org/eclipse/edt/eunit/runtime/TestListMgr.js"); //$NON-NLS-1$
 		
 	}
+	
+	public static final List<String> RUI_DEVELOPMENT_JAVASCRIPT_FILES = new ArrayList<String>();
+	static{
+		RUI_DEVELOPMENT_JAVASCRIPT_FILES.add("egl_development.js");  //$NON-NLS-1$
+	};
+	
 	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
 	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
 	
