@@ -33,9 +33,8 @@ import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.gen.deployment.util.CommonUtilities;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
-import org.eclipse.edt.gen.deployment.util.RuntimePropertiesFileUtil;
+import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.WorkingCopyGenerationResult;
 import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -54,7 +53,7 @@ public class RUITemplate extends JavaScriptTemplate {
 	private static final String DEFAULT_THEME = "claro";
 	private RUIDependencyList dependencyList;
 	
-	private static final Map JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap();
+	private static final Map<String, String> JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap<String, String>();
 	static{
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_Arabic_Runtime, "JavaScript \u063a\u064a\u0631 \u0645\u062f\u0639\u0645 \u062d\u0627\u0644\u064a\u0627 \u0623\u0648 \u0644\u0645 \u064a\u062a\u0645 \u0627\u062a\u0627\u062d\u062a\u0647 \u0628\u0648\u0627\u0633\u0637\u0629 \u0628\u0631\u0646\u0627\u0645\u062c \u0627\u0644\u0627\u0633\u062a\u0639\u0631\u0627\u0636 \u0647\u0630\u0627. \u0628\u0631\u062c\u0627\u0621 \u0627\u062a\u0627\u062d\u0629 JavaScript \u0644\u0644\u062d\u0635\u0648\u0644 \u0639\u0644\u0649 \u0627\u0644\u0648\u0638\u0627\u0626\u0641 \u0628\u0627\u0644\u0643\u0627\u0645\u0644.");
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_English, "JavaScript is currently not supported or enabled by this browser.  Please enable JavaScript for full functionality.");
@@ -72,15 +71,10 @@ public class RUITemplate extends JavaScriptTemplate {
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_Polish, "JavaScript nie jest obecnie obs\u0142ugiwany lub w\u0142\u0105czony w tej przegl\u0105darce. W\u0142\u0105cz obs\u0142ug\u0119 JavaScript, aby zapewni\u0107 pe\u0142n\u0105 funkcjonalno\u015b\u0107.");
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_Russian, "\u042d\u0442\u043e\u0442 \u0431\u0440\u0430\u0443\u0437\u0435\u0440 \u0432 \u0434\u0430\u043d\u043d\u044b\u0439 \u043c\u043e\u043c\u0435\u043d\u0442 \u043d\u0435 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0435\u0442 JavaScript, \u0438\u043b\u0438 \u044d\u0442\u0430 \u043f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u0430. \u0414\u043b\u044f \u0434\u043e\u0441\u0442\u0443\u043f\u0430 \u043a\u043e \u0432\u0441\u0435\u043c \u0444\u0443\u043d\u043a\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u044b\u043c \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0441\u0442\u044f\u043c \u043d\u0435\u043e\u0431\u0445\u043e\u0434\u0438\u043c\u043e \u0432\u043a\u043b\u044e\u0447\u0438\u0442\u044c JavaScript.");
 		JAVASCRIPT_NOT_SUPPORTED_STRINGS.put(Constants.Locale_Key_Spanish, "Actualmente este buscador no soporta ni habilita JavaScript.  Habilite JavaScript para obtener todas las funciones.");
-	}
-	
-	public static final List RUI_DEVELOPMENT_JAVASCRIPT_FILES = new ArrayList();
-	static{
-		RUI_DEVELOPMENT_JAVASCRIPT_FILES.add("egl_development.js");  //$NON-NLS-1$
-	};		
+	}	
 	
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
-			List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale,
+			List<String> egldds, Set<String> propFiles, HashMap<String, String> eglParameters, String userMsgLocale,
 			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug, RUIDependencyList dependencyList) {
 		this.dependencyList = dependencyList;
 		
@@ -88,43 +82,39 @@ public class RUITemplate extends JavaScriptTemplate {
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
 		preGenComment(out);
 		out.println( "<html>" ); //$NON-NLS-1$
-		out.println( "<head>" ); 		
-		generateTitle(handler, out);
-		out.println("	<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"/>");
+		out.println( "<head>" );
+		out.pushIndent();
+		out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"/>");
+		generateTitle(handler, out);		
 		generateNoJavaScriptCheck(runtimeMsgLocale, out);
-		out.println("	<script type=\"text/javascript\">"); //$NON-NLS-1$
+		out.println("<script type=\"text/javascript\" src=\"" + Constants.RUNTIME_FOLDER_NAME + "/edt_core.js\" ></script>");
+		out.println("<script type=\"text/javascript\">"); //$NON-NLS-1$
+		out.pushIndent();
 		if(isDevelopment){
 			generateHeader(handler, out, enableEditing, contextAware, isDebug);
 		}
-		generateEGLParameters(out, eglParameters);		
-		out.println("</script>"); //$NON-NLS-1$		
-		
-		out.println("</head>");
-		out.println("<body class=\"" + getTheme(handler) + "\">");
-		out.println("<script type=\"text/javascript\">");
-		generateEGLNamespace(out);
-		generateEGLLoader(out, isDevelopment);
-		
-		generatePropertiesFiles(handler, ctx, propFiles, runtimeMsgLocale, out);	
-		
-//		generateRuntimePropertiesFiles(out);			
-		generateBindingFileImports(handler, ctx, out, egldds);
-		
-		
+		generateEGLParameters(out, eglParameters);
+		generatePropertiesFiles(handler, ctx, propFiles, runtimeMsgLocale, out);				
 		generateRuntimeFilePath(out);
 		if(isDevelopment){
 			generateDevelopmentRuntimeFilePath(out);
-		}
+		}		
 		generateDependentFilePath(handler, ctx, out, isDevelopment);
-		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);
-		generateIncludeFiles(handler, ctx, out);		
+		generateIncludeFiles(handler, ctx, out);
+		generateBindingFileImports(handler, ctx, out, egldds);
+		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);		
+		out.popIndent();
 		out.println("</script>");		
 		generateCSSFiles(handler, ctx, out);
+		out.popIndent();
+		out.println("</head>");
+		out.println("<body class=\"" + getTheme(handler) + "\">");	
 		out.println("</body>");
+		out.popIndent();
 		out.println("</html>");	
 	}
 	
-	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug,
+	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List<String> egldds, Set<String> propFiles, HashMap<String, String> eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug,
 			RUIDependencyList dependencyList){
 		genHTML(true, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug, dependencyList);		
 	}	
@@ -162,22 +152,44 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("egl__debugg=" + isDebug + ";"); //$NON-NLS-1$
 		out.println("egl__enableEditing=" + enableEditing + ";"); //$NON-NLS-1$
 		out.println("egl__contextAware=" + contextAware + ";"); //$NON-NLS-1$
-		out.println("egl__contextKey=(function(){var params = location.search.substring(1).split('&');for(var i in params){var keys = params[i].split('=');if(keys.length == 2 && keys[0] == 'contextKey')return keys[1];}return '';})();"); //$NON-NLS-1$
 	}
 	
-	private void generateEGLParameters(TabbedWriter out, HashMap eglParameters) {
+	private void generateEGLParameters(TabbedWriter out, HashMap<String, String> eglParameters) {
 		/**
 		 * output all the passed egl parameters
 		 */
-		if(eglParameters!=null){
-			for (Iterator iterator = eglParameters.entrySet().iterator(); iterator.hasNext();) {
-				Map.Entry mapEntry = (Map.Entry) iterator.next();
-				out.println((String)mapEntry.getKey() + "=\"" + (String)mapEntry.getValue() + "\";");  //$NON-NLS-1$//$NON-NLS-2$
-			}
-		}		
+//		if(eglParameters!=null){
+//			for (Iterator iterator = eglParameters.entrySet().iterator(); iterator.hasNext();) {
+//				Map.Entry mapEntry = (Map.Entry) iterator.next();
+//				out.println((String)mapEntry.getKey() + "=\"" + (String)mapEntry.getValue() + "\";");  //$NON-NLS-1$//$NON-NLS-2$
+//			}
+//		}
+		
+		String userMsgLocale = (String) eglParameters.get("egl__defaultRuntimeMessagesLocale");
+		String params = "\"" + eglParameters.get("egl__contextRoot") + "\", \"" + eglParameters.get("egl__defaultDeploymentDescriptor") + "\", \"" + userMsgLocale;
+		Locale locale;
+		int idx = userMsgLocale.indexOf('_');
+		if (idx == -1) {
+			locale = new Locale(userMsgLocale);
+		}
+		else {
+			locale = new Locale(userMsgLocale.substring(0, idx), userMsgLocale.substring(idx+1));
+		}
+		
+		String shortMask = getLongGregorianDateMask( DateFormat.SHORT, locale );
+		String mediumMask = getLongGregorianDateMask( DateFormat.MEDIUM, locale );
+		String longMask = getLongGregorianDateMask( DateFormat.LONG, locale );
+		
+		params = params + "\", \"" + getNLSCode(locale) + "\", \"" + shortMask + "\", \"" + mediumMask + "\", \"" + longMask;		
+		
+		NumberFormat formatter = NumberFormat.getNumberInstance(locale);
+		if (formatter instanceof DecimalFormat) {
+			DecimalFormatSymbols symbols = ((DecimalFormat)formatter).getDecimalFormatSymbols();
+			params = params + "\", \"" + symbols.getCurrencySymbol() + "\", \"" + symbols.getDecimalSeparator() + "\", \"" + symbols.getGroupingSeparator() + "\"";
+		}
+		
+		out.println("egl.initParams(" + params + ");");
 	}
-	
-
 	
 	private void generateCSSFiles(Handler handler, Context ctx, TabbedWriter out) {
 		LinkedHashSet<String> cssFiles = new LinkedHashSet<String>();
@@ -198,85 +210,33 @@ public class RUITemplate extends JavaScriptTemplate {
 		}		
 	}	
 	
-	protected void generateEGLNamespace(TabbedWriter out){
-		// instantiate all the system libraries
-		out.println("egl = function() { };");
-		out.println("egl.eze$$rscBundles = {};");
-		out.println("egl.eze$$runtimeProperties = {};");
-		out.println("var RUI_RUNTIME_JAVASCRIPT_FILES = [];");
-		out.println("var RUI_DEPENDENT_JAVASCRIPT_FILES = [];");
-	}
-	
-	private void generateEGLLoader(TabbedWriter out, boolean isDevelopment) {
-		out.println("egl.eze$$loadScript = function(url, callback){");
-		out.println("	var script = document.createElement(\"script\");");
-		out.println("	script.type = \"text/javascript\";");
-		out.println("	if (script.readyState){ //IE");
-		out.println("		script.onreadystatechange = function(){");
-		out.println("			if (script.readyState == \"loaded\" || script.readyState == \"complete\"){");
-		out.println("				script.onreadystatechange = null;");
-		out.println("				callback();");
-		out.println("			}");
-		out.println("		};");
-		out.println("	} else { //Others");
-		out.println("		script.onload = function(){");
-		out.println("			callback();");
-		out.println("		};");
-		out.println("		script.onerror = function(){");
-		out.println("			console.log(\"load \" + this.src + \" fail\");");
-		out.println("		}");
-		out.println("	}");
-		out.println("	script.src = \"/\" + egl__contextRoot + \"/\" + url;");
-		out.println("	document.getElementsByTagName(\"head\")[0].appendChild(script);");
-		out.println("};");
-		out.println("egl.eze$$loadScripts = function(urls, callback){");
-		out.println("	var url = urls.shift();");
-		out.println("	if(url){");
-		out.println("		egl.eze$$loadScript(url, function(){egl.eze$$loadScripts(urls, callback)});");
-		out.println("	}else{");
-		out.println("		callback();");
-		out.println("	}");
-		out.println("};");
-		out.println("egl.load = function(path, callback){");
-		out.println("	if(typeof(path)==\"object\" && typeof(path.sort)==\"function\" && typeof(path.length)==\"number\"){");
-		out.println("		egl.eze$$loadScripts(path, callback);");
-		out.println("	}else if(typeof(path)==\"string\"){");
-		out.println("		egl.eze$$loadScript(path, callback);");
-		out.println("	}else{");
-		out.println("		console.log(\"Cannot load the path \" + path);");
-		out.println("	}");
-		out.println("};");
-	}
-	
 	private void generatePropertiesFiles(Handler handler, Context ctx, Set<String> propFiles, String runtimeMsgLocale, TabbedWriter out){
 		if(runtimeMsgLocale == null){
 			runtimeMsgLocale = "en_US";
 		}
-		PropertiesFileUtil ruiPropFile = new PropertiesFileUtil("RuiMessages", runtimeMsgLocale);
-		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/"  + ruiPropFile.generateIncludeStatement() + "\");");
-		// Add support for RUI Property file
-		
+		// Add support for RUI Property file		
 		if (propFiles != null && propFiles.size() > 0) {
 			ArrayList<String> propFileList = new ArrayList<String>(propFiles);
 			Collections.reverse(propFileList);
 			
 			for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
 				String propertiesFile = (String)iter.next();
-				out.println("RUI_DEPENDENT_JAVASCRIPT_FILES.push(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propertiesFile + "\");");
+				out.println("egl.require(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propertiesFile + "\");");
 			}
 		}
 	}
 	
-	private void generateRuntimePropertiesFiles(TabbedWriter out) {
-		String propertiesFile = "rununit";
-		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + RuntimePropertiesFileUtil.getJavascriptFileName(propertiesFile) + "\");");
-	}
+//	private void generateRuntimePropertiesFiles(TabbedWriter out) {
+//		String propertiesFile = "rununit";
+//		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + RuntimePropertiesFileUtil.getJavascriptFileName(propertiesFile) + "\");");
+//	}
 	
-	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, List egldds){
+	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, List<String> egldds){
 		if (egldds == null || egldds.size() == 0) {
 			return;
 		}
 		
+		@SuppressWarnings("unchecked")
 		List<Type> processedParts = (List<Type>)ctx.get(genBindFiles);
 		if(processedParts == null){
 			processedParts = new ArrayList<Type>();
@@ -284,15 +244,13 @@ public class RUITemplate extends JavaScriptTemplate {
 		}
 		processedParts.add(part);
 		try {
-			out.print("RUI_RUNTIME_JAVASCRIPT_FILES.push(");
-			int size = egldds.size();
 			for ( int i = 0; i < egldds.size(); i ++ ) {
 				String next = (String)egldds.get(i);
 				if (next != null && next.length() > 0) {
-					out.print( "\"" + next + "-bnd.js\"" + (i == size-1 ? "" : ",") );
+					out.println( "egl.includeBind(\"" + next + "\");" );
 				}
 			}
-			out.println(");");
+
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -304,37 +262,37 @@ public class RUITemplate extends JavaScriptTemplate {
 		boolean useAll = false;
 		
 		if (useAll) {
-			final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
-			String paths = "";		
-			for (String runtimeFile : Constants.RUI_RUNTIME_JAVASCRIPT_FILES) {
-				if(!Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE.equals(runtimeFile)){
-					String path = prefix + runtimeFile;
-					paths += ("\"" + path + "\",");
-				}
-			}
-			paths = paths.substring(0, paths.length()-1);
-			out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + paths + ");");
+			generateRuntimeRequire(out, Constants.RUI_RUNTIME_JAVASCRIPT_FILES);
 		}
 		else {
 			//Use all in one runtime file
-			final String prefix = Constants.RUNTIME_FOLDER_NAME + "/";
-			String path = "\""+ prefix + Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE + "\"";
-			out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(" + path + ");");
+			final String prefix = Constants.RUNTIME_FOLDER_NAME + ".";
+			String path = "\""+ prefix + pathToModule(Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE) + "\"";
+			out.println("egl.require(" + path + ");");
+		}
+	}	
+	
+	private void generateDevelopmentRuntimeFilePath(TabbedWriter out) {
+		generateRuntimeRequire(out, Constants.RUI_DEVELOPMENT_JAVASCRIPT_FILES);
+	}
+	
+	private void generateRuntimeRequire(TabbedWriter out, List<String> runtimeList) {
+		final String prefix = Constants.RUNTIME_FOLDER_NAME + ".";	
+		for (String runtimeFile : runtimeList) {
+			if(!Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE.equals(runtimeFile)){
+				String path = prefix + pathToModule(runtimeFile);
+				out.println("egl.require(\"" + path + "\");");
+			}
 		}
 	}
 	
-	private void generateDevelopmentRuntimeFilePath(TabbedWriter out) {
-		final String prefix = "runtime/";
-		String paths = "";
-		out.println("var RUI_DEVELOPMENT_JAVASCRIPT_FILES = [");
-		for (Iterator<String> iterator = RUI_DEVELOPMENT_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
-			String path = prefix + iterator.next();
-			paths += ("\"" + path + "\",");
+	private String pathToModule(String path){
+		int start = 0, offset = 3;
+		if(path.indexOf('\"') == 0){
+			start = 1;
+			offset = 4;
 		}
-		paths = paths.substring(0, paths.length()-1);
-		out.println(paths);
-		out.println("];");
-		out.println("RUI_RUNTIME_JAVASCRIPT_FILES = RUI_RUNTIME_JAVASCRIPT_FILES.concat(RUI_DEVELOPMENT_JAVASCRIPT_FILES);");
+		return path.substring(start, path.length()-offset).replace('/', '.');
 	}
 	
 	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out, boolean isDevelopment) {
@@ -349,48 +307,39 @@ public class RUITemplate extends JavaScriptTemplate {
 		
 		ArrayList<String> dependentFileList = new ArrayList<String>(dependentFiles);		
 		Collections.reverse(dependentFileList);		
-		out.println("RUI_DEPENDENT_JAVASCRIPT_FILES = RUI_DEPENDENT_JAVASCRIPT_FILES.concat([");		
 		for (Iterator<String> iter = dependentFileList.iterator(); iter.hasNext();) {
-			out.print( (String)iter.next());
-			if(isDevelopment){
-				out.print( " + \"?contextKey=\" + egl__contextKey");
-			}
-			if(iter.hasNext()){
-				out.print(", ");
-			}
+			out.println("egl.require(\"" + pathToModule(iter.next()) + "\");");			
 		}
-		out.println("]);");
 	}
 	
 	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
-		out.println("egl.startupInit = function() {");		
-		out.println("	egl.load(RUI_DEPENDENT_JAVASCRIPT_FILES, egl.startupInitCallback);");
-		out.println("};");
-		
-		
-		out.println("egl.startupInitCallback = function(){");
-		generateLocaleInfo(out, userMsgLocale);
-		out.println("		try {");
+		out.println("egl.init(");
+		out.pushIndent();
+		out.println("function(){");
+		out.pushIndent();
 		if(isDevelopment){
 			generateDevelopmentRootHandler(part,out);
 		}else{
 			generateRootHandler(part,out);
 		}
-		out.println("		} catch (e) {");
+		out.popIndent();
+		out.println("}, function(e){");
+		out.pushIndent();
 		if (isDebug) {
-			out.println("			if (e instanceof egl.egl.debug.DebugTermination) {" );
-			out.println("				if (e.msg) egl.println(e.msg);" );
-			out.println("			} else {");
+			out.println("if (e instanceof egl.egl.debug.DebugTermination) {" );
+			out.println("	if (e.msg) egl.println(e.msg);" );
+			out.println("} else {");
 		}
-		out.println("			egl.crashTerminateSession();");
-		out.println("			if (!egl." + getFullPartName(part) +"){");
-		out.println("				egl.println('Internal generation error. Found no definition for " + getFullPartName(part) + ". Try <b>Project > Clean...</b>', e);");
-		out.println("			}else{ egl.printError('Could not render UI', e); throw e;}");
+		out.println("egl.crashTerminateSession();");
+		out.println("if (!egl." + getFullPartName(part) +"){");
+		out.println("	egl.println('Internal generation error. Found no definition for " + getFullPartName(part) + ". Try <b>Project > Clean...</b>', e);");
+		out.println("}else{ egl.printError('Could not render UI', e); throw e;}");
 		if (isDebug) {
-			out.println("			}");
+			out.println("	}");
 		}
-		out.println("		}");
-		out.println("};"); 
+		out.println("}");
+		out.popIndent();
+		out.println(");");
 	}
 
 	private String getFullPartName(Handler part) {
@@ -415,52 +364,12 @@ public class RUITemplate extends JavaScriptTemplate {
 			}
 		}		
 
-		if(!includeFiles.isEmpty()){
-			out.println("var isLastFile = false; var currentFile = \"\";");
-			out.println("var htmlString = \"\";");
-			out.println("function runHandler() {");
-			out.println("   var currentFileType = currentFile.indexOf(\".\") >=0 ? currentFile.substring(currentFile.lastIndexOf(\".\") + 1, currentFile.length) : \"\";");
-			out.println("	if(currentFileType == \"js\")");
-			out.println("		htmlString += \"<script>\" + xmlhttp.responseText + \"<\\/script>\";");
-			out.println("	else if(currentFileType == \"css\")");
-			out.println("		htmlString += \"<style type='text/css'>\" + xmlhttp.responseText + \"<\\/style>\";");
-			out.println("	else");
-			out.println("		htmlString += xmlhttp.responseText;");
-			out.println("	if(isLastFile){");
-			out.println("		document.write(htmlString + \"<script>egl.load(RUI_RUNTIME_JAVASCRIPT_FILES, function(){egl.startupInit();});<\\/script>\");");
-			out.println("		isLastFile = false;");
-			out.println("	}");
-			out.println("}");
-			out.println("var xmlhttp;");
-			out.println("if (typeof (XMLHttpRequest) != \"undefined\") {");
-			out.println("	xmlhttp = new XMLHttpRequest();");
-			out.println("}else if (window.ActiveXObject) {");
-			out.println("	try {");
-			out.println("		xmlhttp = new ActiveXObject( \"Msxml2.XMLHTTP\" );");
-			out.println("	}");
-			out.println("catch( e ) {");
-			out.println("		try {");
-			out.println("			xmlhttp = new ActiveXObject( \"Microsoft.XMLHTTP\" );");
-			out.println("	 	}");
-			out.println("		catch (e) {");
-			out.println("		}");
-			out.println("	}");
-			out.println("}");
-			out.println("if (xmlhttp) {	");			
-			ArrayList includeFileList = new ArrayList(includeFiles);
+		if(!includeFiles.isEmpty()){			
+			ArrayList<String> includeFileList = new ArrayList<String>(includeFiles);
 			Collections.reverse(includeFileList);
-			for (Iterator iter = includeFileList.iterator(); iter.hasNext();) {
-				String includeFilestring = (String)iter.next();
-				if(!iter.hasNext())
-					out.println("	isLastFile = true;");
-				out.println("		currentFile = '" + includeFilestring + "';");
-				out.println("		xmlhttp.open( 'POST', currentFile, false );");
-				out.println("		xmlhttp.send( null );");
-				out.println("		runHandler();");
+			for (Iterator<String> iter = includeFileList.iterator(); iter.hasNext();) {
+				out.println("egl.loadFile(\"" + iter.next() + "\");");
 			}			
-			out.println("}");
-		}else{
-			out.println("egl.load(RUI_RUNTIME_JAVASCRIPT_FILES, function(){egl.startupInit();})");
 		}
 	}
 	
@@ -481,7 +390,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println( msg + "<br>");
 		out.println( "<hr/>");
 		out.println("<div style=\"color:red\">Generation Error</div>");
-		for(Iterator iter = problemRequestor.getMessages().iterator(); iter.hasNext();) {
+		for(Iterator<?> iter = problemRequestor.getMessages().iterator(); iter.hasNext();) {
 			EGLMessage nextMsg = (EGLMessage) iter.next();
 			String colorStart = "", colorEnd = "";
 			String onClickStart = "", onClickEnd = "";
@@ -548,7 +457,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("				egl.rootHandler.eze$$package = package;");
 		out.println("				egl.rootHandler.eze$$typename = typename;");
 		out.println("			}");
-		out.println("			egl.startup();");
+//		out.println("			egl.startup();");
 	}
 
 	private String getTheme(Handler handler) {
@@ -639,35 +548,6 @@ public class RUITemplate extends JavaScriptTemplate {
 			return "CZE";
 		else
 			return "ENU";
-	}
-	
-	private void generateLocaleInfo(TabbedWriter out, String userMsgLocale) {
-		Locale locale;
-		int idx = userMsgLocale.indexOf('_');
-		if (idx == -1) {
-			locale = new Locale(userMsgLocale);
-		}
-		else {
-			locale = new Locale(userMsgLocale.substring(0, idx), userMsgLocale.substring(idx+1));
-		}
-		
-		String shortMask = getLongGregorianDateMask( DateFormat.SHORT, locale );
-		String mediumMask = getLongGregorianDateMask( DateFormat.MEDIUM, locale );
-		String longMask = getLongGregorianDateMask( DateFormat.LONG, locale );
-		
-		out.print("egl.localeInfo = {locale : \"" + userMsgLocale + "\", nlsCode : \""
-				+ getNLSCode(locale) + "\", shortMask : \"" + shortMask + "\", mediumMask : \""
-				+ mediumMask + "\", longMask : \"" + longMask + "\"");
-		
-		NumberFormat formatter = NumberFormat.getNumberInstance(locale);
-		if (formatter instanceof DecimalFormat) {
-			DecimalFormatSymbols symbols = ((DecimalFormat)formatter).getDecimalFormatSymbols();
-			out.print(", currencySymbol : \"" + symbols.getCurrencySymbol() + "\", decimalSeparator : \""
-					+ symbols.getDecimalSeparator() + "\", groupingSeparator : \""
-					+ symbols.getGroupingSeparator() + "\"");
-		}
-		
-		out.println("};");
 	}
 	
 	public void genCSSFiles(Handler handler, LinkedHashSet<String> cssFiles){
