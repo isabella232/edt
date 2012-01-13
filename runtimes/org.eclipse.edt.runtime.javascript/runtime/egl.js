@@ -987,33 +987,6 @@ egl.addEventListener = function(
 	return true;
 };
 
-if (typeof (XMLHttpRequest) != "undefined") {
-	egl.newXMLHttpRequest = function() {
-			return new XMLHttpRequest();
-		};
-		}
-else if (window.ActiveXObject) {
-	try {
-		new ActiveXObject( "Msxml2.XMLHTTP" ); 
-		egl.newXMLHttpRequest = function() {
-			return new ActiveXObject( "Msxml2.XMLHTTP" );
-		};
-	}
-	catch( e ) {
-		try {
-			new ActiveXObject( "Microsoft.XMLHTTP" ); 
-			egl.newXMLHttpRequest = function() {
-				return new ActiveXObject( "Microsoft.XMLHTTP" );
-	 		};
-	 	}
-		catch (e) {
-		}
-	}
-};
-if (!egl.newXMLHttpRequest) {
-	egl.printError(egl.getRuntimeMessage( "CRRUI2088E", []), null);	
-};
-
 egl.makePackage('egl.rui');
 
 egl.getStyle = function(element) {
