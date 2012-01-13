@@ -198,13 +198,13 @@ public abstract class FileLocator {
 		}
 		
 		for (Iterator<String> iterator = Constants.RUI_RUNTIME_JAVASCRIPT_FILES.iterator(); iterator.hasNext();) {
-			String fileName = (String) iterator.next();
+			String fileName = (String) iterator.next();			
 			File file = doGetRUIJavaScriptFile(fileName);
 			if(file != null){
 				result.put(fileName, file);
 
 				//append content to allInOneFile
-				if(os != null){
+				if(os != null && !(fileName.equals(Constants.RUI_RUNTIME_BOOTSTRAP_FILE))){
 					try {
 						DataInputStream is = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
 						bytes = new byte[is.available()];
