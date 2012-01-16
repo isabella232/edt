@@ -138,7 +138,7 @@ public class ProjectsWorkbookPage extends BuildPathBasePage {
 			
 			for (Iterator iterator = projects.iterator(); iterator.hasNext();) {
 				PPListElement prjElement = (PPListElement) iterator.next();
-				if(fSelectedImportProjectList.contains(prjElement.getPath().lastSegment())){
+				if(fSelectedImportProjectList != null && fSelectedImportProjectList.contains(prjElement.getPath().lastSegment())){
 					checkedProjects.add(prjElement);
 				}
 			}
