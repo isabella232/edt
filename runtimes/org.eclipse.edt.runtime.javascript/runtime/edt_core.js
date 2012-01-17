@@ -27,7 +27,7 @@
 		}
 	};
 	if (!egl.newXMLHttpRequest) {
-		egl.printError(egl.getRuntimeMessage( "CRRUI2088E", []), null);	
+		document.write( "Cannot initialize XMLHttpRequest. This browser is not supported by EGL Rich UI");	
 	};
 	
 	egl__contextKey=(function(){
@@ -57,7 +57,7 @@
 				callback();
 			};
 			script.onerror = function(){
-				console.log("load " + this.src + " fail");
+				document.write("load " + this.src + " fail");
 			};
 		}
 		script.src = "/" + egl__contextRoot + "/" + url + (egl__contextKey ? ("?contextKey=" + egl__contextKey) : "");
@@ -77,7 +77,7 @@
 		}else if(typeof(path)=="string"){
 			eze$$loadScript(path, callback);
 		}else{
-			console.log("Cannot load the path " + path);
+			document.write("Cannot load the path " + path);
 		}
 	};
 	function include(files){
@@ -129,10 +129,16 @@
 		load(loadFiles, function(){			
 			try {
 				initFunc();
-				egl.startup();
 			} catch (e) {
-				errorFunc(e);
+				egl.crashTerminateSession();
+				if(e == "eze$$HandlerLoadErr")
+					egl.println('Internal generation error. Found no definition for samples.client.HelloWorldView. Try <b>Project > Clean...</b>');
+				else
+					egl.printError('Could not render UI', e); throw e;
 			}
 		});		
+	};
+	egl.reportHandlerLoadError = function(handler){
+		throw "eze$$HandlerLoadErr";
 	};
 })();
