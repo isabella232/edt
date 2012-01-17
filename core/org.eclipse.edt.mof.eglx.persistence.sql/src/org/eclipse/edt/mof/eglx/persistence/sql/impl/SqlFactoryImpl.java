@@ -12,6 +12,8 @@
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
 import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.egl.GetByPositionStatement;
+import org.eclipse.edt.mof.egl.IrFactoryBase;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlDeleteStatement;
@@ -82,7 +84,11 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory {
 		return (EClass)getTypeNamed(SqlUpdateStatement);
 	}
 	
-
+	@Override
+	public EClass getGetByPositionStatementEClass() {
+		return (EClass)getTypeNamed(IrFactoryBase.GetByPositionStatement);
+	}
+	
 	@Override
 	public SqlAddStatement createSqlAddStatement() {
 		return (SqlAddStatement)getSqlAddStatementEClass().newInstance();
@@ -137,6 +143,11 @@ public class SqlFactoryImpl extends EFactoryImpl implements SqlFactory {
 	@Override
 	public SqlUpdateStatement createSqlUpdateStatement() {
 		return (SqlUpdateStatement)getSqlUpdateStatementEClass().newInstance();
+	}
+
+	@Override
+	public GetByPositionStatement createGetByPositionStatement() {
+		return (GetByPositionStatement)getGetByPositionStatementEClass().newInstance();
 	}
 	
 }
