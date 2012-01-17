@@ -189,9 +189,7 @@ public class InternalEObject implements Cloneable {
 		if (slots[i] == null) {
 			slots[i] = field.isNullable() ? new NullableSlot() : new Slot();
 		}
-		if (!field.isNullable()) {
-			slots[i].set(value);
-		}
+		slots[i].set(value);
 	}
 	
 	public Slot[] getSlots() {
