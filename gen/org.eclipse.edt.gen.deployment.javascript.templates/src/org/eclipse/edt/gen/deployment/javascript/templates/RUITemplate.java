@@ -86,7 +86,6 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.pushIndent();
 		out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"/>");
 		generateTitle(handler, out);		
-		generateNoJavaScriptCheck(runtimeMsgLocale, out);
 		out.println("<script type=\"text/javascript\" src=\"" + Constants.RUNTIME_FOLDER_NAME + "/edt_core.js\" ></script>");
 		out.println("<script type=\"text/javascript\">"); //$NON-NLS-1$
 		out.pushIndent();
@@ -101,14 +100,21 @@ public class RUITemplate extends JavaScriptTemplate {
 		}		
 		generateDependentFilePath(handler, ctx, out, isDevelopment);
 		generateIncludeFiles(handler, ctx, out);
-		generateBindingFileImports(handler, ctx, out, egldds);
-		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);		
+		generateBindingFileImports(handler, ctx, out, egldds);				
 		out.popIndent();
 		out.println("</script>");		
 		generateCSSFiles(handler, ctx, out);
 		out.popIndent();
 		out.println("</head>");
-		out.println("<body class=\"" + getTheme(handler) + "\">");	
+		out.println("<body class=\"" + getTheme(handler) + "\">");
+		out.pushIndent();
+		generateNoJavaScriptCheck(runtimeMsgLocale, out);
+		out.println("<script type=\"text/javascript\">"); //$NON-NLS-1$
+		out.pushIndent();
+		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);
+		out.popIndent();
+		out.println("</script>");//$NON-NLS-1$
+		out.popIndent();
 		out.println("</body>");
 		out.popIndent();
 		out.println("</html>");	
@@ -221,7 +227,7 @@ public class RUITemplate extends JavaScriptTemplate {
 			
 			for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
 				String propertiesFile = (String)iter.next();
-				out.println("egl.require(\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + propertiesFile + "\");");
+				out.println("egl.require(\"" + pathToModule(Constants.PROPERTIES_FOLDER_NAME + "." + propertiesFile) + "\");");
 			}
 		}
 	}
@@ -317,26 +323,20 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.pushIndent();
 		out.println("function(){");
 		out.pushIndent();
+		out.println("if(egl." + getFullPartName(part) + "){");
+		out.pushIndent();
 		if(isDevelopment){
 			generateDevelopmentRootHandler(part,out);
 		}else{
 			generateRootHandler(part,out);
 		}
 		out.popIndent();
-		out.println("}, function(e){");
+		out.println("}else{");
 		out.pushIndent();
-		if (isDebug) {
-			out.println("if (e instanceof egl.egl.debug.DebugTermination) {" );
-			out.println("	if (e.msg) egl.println(e.msg);" );
-			out.println("} else {");
-		}
-		out.println("egl.crashTerminateSession();");
-		out.println("if (!egl." + getFullPartName(part) +"){");
-		out.println("	egl.println('Internal generation error. Found no definition for " + getFullPartName(part) + ". Try <b>Project > Clean...</b>', e);");
-		out.println("}else{ egl.printError('Could not render UI', e); throw e;}");
-		if (isDebug) {
-			out.println("	}");
-		}
+		out.println("egl.reportHandlerLoadError(\"egl." + getFullPartName(part) + "\");");
+		out.popIndent();
+		out.println("}");
+		out.popIndent();
 		out.println("}");
 		out.popIndent();
 		out.println(");");
@@ -457,7 +457,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("				egl.rootHandler.eze$$package = package;");
 		out.println("				egl.rootHandler.eze$$typename = typename;");
 		out.println("			}");
-//		out.println("			egl.startup();");
+		out.println("			egl.startup();");
 	}
 
 	private String getTheme(Handler handler) {
