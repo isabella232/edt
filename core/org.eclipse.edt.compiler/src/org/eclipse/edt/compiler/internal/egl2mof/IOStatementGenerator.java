@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.egl.DeleteStatement;
 import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
 import org.eclipse.edt.mof.egl.OpenStatement;
@@ -58,4 +59,5 @@ public interface IOStatementGenerator {
 	ReplaceStatement genReplaceStatement(org.eclipse.edt.compiler.core.ast.ReplaceStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	ShowStatement genShowStatement(org.eclipse.edt.compiler.core.ast.ShowStatement stmt, Map<IBinding, EObject> bindingToElementMap );
 	void setCurrentPart(MofSerializable currentPart);
+	void setCurrentFunction(FunctionMember currentFunc);
 }

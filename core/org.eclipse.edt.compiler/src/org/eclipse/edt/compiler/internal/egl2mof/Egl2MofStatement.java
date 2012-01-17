@@ -783,6 +783,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			try {
 				IOStatementGenerator generator = generatorClass.newInstance();
 				generator.setCurrentPart(currentPart);
+				generator.setCurrentFunction(currentFunction);
 				generator.setContext(context);
 				generator.setEnvironment(env);
 				return generator;

@@ -26,6 +26,7 @@ import org.eclipse.edt.mof.egl.DeleteStatement;
 import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.ExecuteStatement;
 import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.GetByPositionKind;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
@@ -216,6 +217,11 @@ public class AbstractIOStatementGenerator extends Egl2Mof implements
 	@Override
 	public void setCurrentPart(MofSerializable currentPart) {
 		this.currentPart = currentPart;
+	}
+	
+	@Override
+	public void setCurrentFunction(FunctionMember currentFunc) {
+		this.currentFunction = currentFunc;
 	}
 
 	@Override

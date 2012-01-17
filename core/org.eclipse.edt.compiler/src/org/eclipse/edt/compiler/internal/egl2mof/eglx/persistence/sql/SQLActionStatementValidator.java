@@ -7,6 +7,7 @@ import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ExecuteStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ForEachStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.GetByKeyStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.GetByPositionStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.OpenStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.PrepareStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.validation.ReplaceStatementValidator;
@@ -40,6 +41,11 @@ public class SQLActionStatementValidator extends DefaultStatementValidator {
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByKeyStatement getStatement) {
 		new GetByKeyStatementValidator(getStatement, problemRequestor, compilerOptions).validate();
+		return false;
+	}
+
+	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByPositionStatement getStatement) {
+		new GetByPositionStatementValidator(getStatement, problemRequestor, compilerOptions).validate();
 		return false;
 	}
 

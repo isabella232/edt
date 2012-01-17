@@ -57,7 +57,7 @@ public class DeleteStatementValidator extends AbstractSqlStatementValidator {
 		Expression target = statement.getTarget();
 		if (target != null) {
 			ITypeBinding targetType = target.resolveTypeBinding();
-			if (targetType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
+			if (Binding.isValidBinding(targetType) && targetType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
 				targetType = target.resolveDataBinding().getDeclaringPart();
 			}
 			

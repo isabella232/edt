@@ -75,8 +75,8 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		 
 		if (true) {
 			problemRequestor.acceptProblem(moveStatement,
-					IProblemRequestor.MOVE_NOT_SUPPORTED,
-					new String[] {});
+					IProblemRequestor.STATEMENT_NOT_SUPPORTED,
+					new String[] {"MOVE"});
 			return false;
 		}
 		

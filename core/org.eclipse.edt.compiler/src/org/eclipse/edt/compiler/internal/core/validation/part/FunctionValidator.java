@@ -770,7 +770,12 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(GetByPositionStatement getByPositionStatement) {
 		preVisitStatement(getByPositionStatement);
 		if (checkStatementAllowedInContainer(getByPositionStatement)) {
-			getByPositionStatement.accept(new GetByPositionStatementValidator(problemRequestor, compilerOptions));
+			if (enclosingPart != null && enclosingPart.getEnvironment() != null && enclosingPart.getEnvironment().getCompiler() != null) {
+				org.eclipse.edt.compiler.StatementValidator val = enclosingPart.getEnvironment().getCompiler().getValidatorFor(getByPositionStatement);
+				if (val != null) {
+					val.validateStatement(getByPositionStatement, problemRequestor, compilerOptions);
+				}
+			}
 		}
 		postVisitStatement(getByPositionStatement);
 		return false;
