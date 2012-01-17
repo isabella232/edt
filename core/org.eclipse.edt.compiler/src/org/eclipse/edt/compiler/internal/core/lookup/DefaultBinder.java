@@ -1621,6 +1621,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 		
 		if(newExpression.getType().isArrayType()) {
+			
+			final boolean[] hasInitialSize = new boolean[1];
 			newExpression.getType().accept(new AbstractASTVisitor() {
 				public boolean visit(ArrayType arrayType) {
 					if(arrayType.hasInitialSize()) {
@@ -1632,7 +1634,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 							}
 						});
 						
-						if(!sizeIsValid[0]) {
+						if (sizeIsValid[0]) {
+							hasInitialSize[0] = true;
+						}
+						else {
 							problemRequestor.acceptProblem(
 								arrayType.getInitialSize(),
 								IProblemRequestor.ARRAY_SIZE_LESS_THAN_ZERO,
@@ -1642,6 +1647,37 @@ public abstract class DefaultBinder extends AbstractBinder {
 					return true;
 				}
 			});
+			
+			if (hasInitialSize[0] && newExpression.hasSettingsBlock()) {
+				//Disallow a new expression for an array that specifies an initial size and specifies entries in a settings block:
+				//new int[5] {1,2,3}
+				final Node[] errorNode = new Node[1];
+				newExpression.getSettingsBlock().accept(new AbstractASTExpressionVisitor() {
+		    		public boolean visit(Assignment assignment) {
+		    			return false;
+		    		}
+		    		
+		    		public boolean visit(AnnotationExpression annotationExpression) {
+		    			return false;
+		    		}
+		    		
+		    		public boolean visit(SetValuesExpression setValuesExpression) {
+						return false; 			
+		    		}
+		    		
+		    		public boolean visitExpression(Expression expression) {
+		    			if (errorNode[0] != null) {
+		    				return false;
+		    			}
+		    			errorNode[0] = expression;
+		    			return false;
+		    		}
+		    		
+		    	});
+		    	if (errorNode[0] != null) {
+		    		problemRequestor.acceptProblem(errorNode[0],IProblemRequestor.POSITIONAL_PROPERTY_NOT_ALLOWED_WITH_INITIAL_SIZE, IMarker.SEVERITY_ERROR, new String[] {});
+		    	}
+			}
 		}
 		
 		if(newExpression.hasSettingsBlock()) {
