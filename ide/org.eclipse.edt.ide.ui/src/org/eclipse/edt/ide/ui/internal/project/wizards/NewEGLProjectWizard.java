@@ -122,7 +122,7 @@ public class NewEGLProjectWizard extends Wizard
 				Object obj = it.next();
 				if(obj instanceof WorkspaceModifyOperation){
 					WorkspaceModifyOperation op = (WorkspaceModifyOperation)obj;
-					getContainer().run(true, true, op);
+					getContainer().run(false, true, op);
 				}
 			} 
 			
