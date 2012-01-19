@@ -252,6 +252,8 @@ public abstract class EAny implements eglx.lang.EAny {
 			return false;
 		if (object1 instanceof eglx.lang.ENumber && object2 instanceof eglx.lang.ENumber)
 			return ENumber.equals(object1, object2);
+		if (unboxedOp1 instanceof Number && unboxedOp2 instanceof Number)
+			return ENumber.equals((Number) unboxedOp1, (Number) unboxedOp2);
 		return unboxedOp1.equals(unboxedOp2);
 	}
 
