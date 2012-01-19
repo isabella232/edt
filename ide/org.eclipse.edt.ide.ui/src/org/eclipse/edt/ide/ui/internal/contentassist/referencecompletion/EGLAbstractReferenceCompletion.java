@@ -26,11 +26,14 @@ import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
+import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -41,8 +44,10 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.PrimitiveType;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
+import org.eclipse.edt.compiler.core.ast.TryStatement;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
+import org.eclipse.edt.compiler.core.ast.WhileStatement;
 import org.eclipse.edt.compiler.internal.EGLNewPropertiesHandler;
 import org.eclipse.edt.compiler.internal.EGLPropertyRule;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
@@ -239,6 +244,24 @@ public abstract class EGLAbstractReferenceCompletion implements IReferenceComple
 		while (node != null) {
 			if (node instanceof Statement) {
 				return ((Statement) node).canIncludeOtherStatements();
+			}
+			node = node.getParent();
+		}
+		return false;
+	}
+	
+	protected boolean canIncludeVariableDefinitionStatement(ITextViewer viewer, int documentOffset){
+		Node node = ((IEGLDocument) viewer.getDocument()).getNewModelNodeAtOffset(documentOffset);
+		//look up the chain until the setStatement is found.  If no set statement, use all states
+		while (node != null) {
+			if (node instanceof Statement) {
+				return ((Statement) node).canIncludeOtherStatements() && 
+						((node instanceof IfStatement) ||
+						(node instanceof WhileStatement)||
+						(node instanceof TryStatement) ||
+						(node instanceof ForStatement) ||
+						(node instanceof CaseStatement)
+						);
 			}
 			node = node.getParent();
 		}

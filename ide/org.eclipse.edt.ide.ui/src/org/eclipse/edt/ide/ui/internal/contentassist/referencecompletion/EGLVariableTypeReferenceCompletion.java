@@ -43,7 +43,7 @@ public class EGLVariableTypeReferenceCompletion extends EGLAbstractReferenceComp
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
 		int types = getTypes(viewer, documentOffset);
-		if (types > 0 && !inBlock(viewer, documentOffset)) {
+		if (types > 0 && (!inBlock(viewer, documentOffset) || canIncludeVariableDefinitionStatement(viewer, documentOffset))) {
 			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(types));
 			proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.HANDLER, "", new String[] {IEGLConstants.PROPERTY_RUIWIDGET, IEGLConstants.PROPERTY_RUIHANDLER, IEGLConstants.PROPERTY_ENTITY}));
 			proposals.addAll(new EGLExceptionProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
