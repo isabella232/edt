@@ -85,6 +85,10 @@ public class JsonLib {
 	{
 	    if(object == null)
 	        return new NullNode();
+	    //first check to see if there is a boxed object that is null
+	    if(object instanceof AnyBoxedObject<?> &&
+	    		((AnyBoxedObject<?>)object).ezeUnbox() == null)
+	        return new NullNode();
 	    //EDate and ETimestamp must be done before AnyBoxedObject because they are an AnyBoxedObject
 	    if(object instanceof EDate)
 		    return new StringNode(StringLib.format(((EDate)object).ezeUnbox(), "yyyy-MM-dd"), false);
