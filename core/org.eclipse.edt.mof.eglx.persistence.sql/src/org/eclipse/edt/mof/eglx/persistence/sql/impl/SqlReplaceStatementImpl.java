@@ -56,8 +56,13 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 			}
 		}
 		sql += " WHERE ";
+		boolean addAND = false;
 		for (Field f : targetType.getFields()) {
 			if (SQL.isKeyField(f)) {
+				if(addAND){
+					sql += " AND ";
+				}
+				addAND = true;
 				sql += SQL.getColumnName(f);
 				sql += " = ?";
 			}
