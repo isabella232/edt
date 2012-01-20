@@ -3,6 +3,7 @@ package org.eclipse.edt.gen;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
@@ -67,6 +68,37 @@ public class CommonUtilities {
 				}
 			}
 			return;
+		}
+	}
+
+	public static Expression hasBoxingExpression(Expression expr) {
+		return (new CheckForBoxingExpression()).checkForBoxingExpression(expr);
+	}
+
+	public static class CheckForBoxingExpression extends AbstractVisitor {
+		boolean has = false;
+
+		public Expression checkForBoxingExpression(Expression expr) {
+			disallowRevisit();
+			setReturnData(null);
+			expr.accept(this);
+			return (Expression) getReturnData();
+		}
+
+		public boolean visit(EObject obj) {
+			return false;
+		}
+
+		public boolean visit(Expression expr) {
+			if (has)
+				return false;
+			return true;
+		}
+
+		public boolean visit(BoxingExpression expr) {
+			has = true;
+			setReturnData(expr);
+			return false;
 		}
 	}
 
