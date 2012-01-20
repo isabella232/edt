@@ -49,7 +49,7 @@ plugin@org.eclipse.edt.mof=v201201171421,:pserver:anonymous@dev.eclipse.org:/cvs
 plugin@org.eclipse.edt.mof.egl=v201201111139,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.egl
 plugin@org.eclipse.edt.mof.eglx.persistence.sql=v201201191009,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.persistence.sql
 plugin@org.eclipse.edt.mof.eglx.services=v201112190826,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.mof.eglx.services
-plugin@org.eclipse.edt.runtime.java=v201201191530,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
+plugin@org.eclipse.edt.runtime.java=v201201201506,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
 plugin@org.eclipse.edt.runtime.javascript=v201201170839,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
 feature@org.eclipse.edt.tests.feature=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
