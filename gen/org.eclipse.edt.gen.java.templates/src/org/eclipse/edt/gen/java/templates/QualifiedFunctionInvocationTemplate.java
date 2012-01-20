@@ -11,10 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
@@ -28,9 +29,10 @@ public class QualifiedFunctionInvocationTemplate extends JavaTemplate {
 		// check to see if we have the situation for "const in" parameters that really need wrapping instead
 		if (expr.getArguments() != null) {
 			for (int i = 0; i < expr.getArguments().size(); i++) {
-				if (expr.getArguments().get(i) instanceof BoxingExpression && expr.getTarget().getParameters().get(i).isConst()
+				Expression boxingExpression = CommonUtilities.hasBoxingExpression(expr.getArguments().get(i));
+				if (boxingExpression != null && expr.getTarget().getParameters().get(i).isConst()
 					&& expr.getTarget().getParameters().get(i).getParameterKind() == ParameterKind.PARM_IN)
-					ctx.putAttribute(expr.getArguments().get(i), Constants.SubKey_functionArgumentNeedsWrapping, new Boolean(true));
+					ctx.putAttribute(boxingExpression, Constants.SubKey_functionArgumentNeedsWrapping, new Boolean(true));
 			}
 		}
 		// delegate to the template associated with the target function's container
