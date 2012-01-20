@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.javart;
 
+import java.util.List;
+
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
@@ -52,12 +54,16 @@ public class AnyBoxedObject<R> implements eglx.lang.EAny, BoxedValue {
 
 	@Override
 	public eglx.lang.EAny ezeGet(int index) throws AnyException {
-		TypeCastException tcx = new TypeCastException();
-		tcx.castToName = "list";
 		Object unboxed = ezeUnbox();
-		tcx.actualTypeName = unboxed.getClass().getName();
-		throw tcx.fillInMessage( Message.CONVERSION_ERROR, unboxed, tcx.actualTypeName,
-				tcx.castToName );
+		if (unboxed instanceof List)
+			return EAny.asAny(((List<?>) unboxed).get(index));
+		else {
+			TypeCastException tcx = new TypeCastException();
+			tcx.castToName = "list";
+			tcx.actualTypeName = unboxed.getClass().getName();
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, unboxed, tcx.actualTypeName,
+					tcx.castToName );
+		}
 	}
 
 	@Override
