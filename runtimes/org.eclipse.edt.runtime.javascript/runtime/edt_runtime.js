@@ -71,7 +71,7 @@ egl.eglx.lang.EAny.unbox = function(obj){
 	return egl.unboxAny(obj);
 };
 egl.eglx.lang.EAny.fromEAny = function(obj, sig){
-	return egl.boxAny(obj,sig);
+	return egl.boxAny(obj instanceof egl.eglx.lang.AnyBoxedObject?obj.eze$$value:obj,sig);
 };
 egl.eglx.lang.EAny.equals = function(obj1, obj2){
 	if ( obj1.eze$$value != null && obj1.eze$$value.equals ) {
