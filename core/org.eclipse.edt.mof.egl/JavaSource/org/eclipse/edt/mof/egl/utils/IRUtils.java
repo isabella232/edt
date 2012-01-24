@@ -492,6 +492,12 @@ public class IRUtils {
 			if (!(type instanceof ParameterizableType) && !(type == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
 				BoxingExpression box = factory.createBoxingExpression();
 				box.setExpr(expr);
+				
+				//TODO should not have to have special code for ANY, but
+				//this fixes a JSGen problem
+				if (isAny(type.getClassifier())) {
+					return box;
+				}
 				return createAsExpression(box, type);
 			}
 			
