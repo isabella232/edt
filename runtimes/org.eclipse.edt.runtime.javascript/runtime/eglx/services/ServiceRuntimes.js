@@ -46,16 +46,19 @@ egl.defineClass(
         else{
         	httpResquest.headers = {};
         }
-        if(hasReqContentType == false && httpResquest.contentType === null){
-        	var contentType = "text/html";
-        	if(httpResquest.encoding === egl.eglx.services.Encoding.JSON){
-        		contentType = "application/json";
-        	}
-        	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
-        		contentType = "application/xml";   
-        	}
-        	else if(httpResquest.encoding === egl.eglx.services.Encoding._FORM){
-        		contentType = "application/x-www-form-urlencoded";                    
+        if(hasReqContentType == false){
+        	var contentType = httpResquest.contentType;
+        	if(contentType === null){
+	        	contentType = "text/html";
+	        	if(httpResquest.encoding === egl.eglx.services.Encoding.JSON){
+	        		contentType = "application/json";
+	        	}
+	        	else if(httpResquest.encoding === egl.eglx.services.Encoding.XML){
+	        		contentType = "application/xml";   
+	        	}
+	        	else if(httpResquest.encoding === egl.eglx.services.Encoding._FORM){
+	        		contentType = "application/x-www-form-urlencoded";                    
+	        	}
         	}
         	if(httpResquest.charset === null){
         		contentType += "; charset=UTF-8";
@@ -64,7 +67,6 @@ egl.defineClass(
         		contentType += "; charset=";
         		contentType += httpResquest.charset;
         	}
-            
             egl.valueByKey( httpResquest.headers, egl.HEADER_CONTENT_TYPE, contentType);                    
         }
     },
