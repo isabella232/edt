@@ -55,6 +55,6 @@ public class AnyTypeTemplate extends JavaScriptTemplate {
 			ctx.invoke(genRuntimeTypeName, part, ctx, out, arg);
 		}
 		else 
-			ctx.invokeSuper(this, genRuntimeTypeName, part, ctx, out);
+			ctx.invokeSuper(this, genRuntimeTypeName, part, ctx, out, arg);
 	}
 }
