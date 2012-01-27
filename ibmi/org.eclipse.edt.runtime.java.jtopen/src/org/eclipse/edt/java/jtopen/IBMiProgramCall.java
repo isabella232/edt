@@ -12,7 +12,6 @@ import org.eclipse.edt.javart.json.Json;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.services.FunctionSignature;
 
-import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400Bin4;
 import com.ibm.as400.access.AS400DataType;
 import com.ibm.as400.access.AS400Message;
@@ -23,13 +22,14 @@ import com.ibm.as400.access.ProgramCall;
 import com.ibm.as400.access.ProgramParameter;
 import com.ibm.as400.access.ServiceProgramCall;
 
+import eglx.jtopen.IBMiConnection;
 import eglx.lang.InvocationException;
 
 public class IBMiProgramCall {
 
 	private static final long serialVersionUID = 1L;
 	public enum ParameterTypeKind{IN, INOUT, OUT};
-	public static Integer ezeRunProgram(final String programName, final String procedureName, final boolean isServiceProgram, final boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, final Object[] parameters, final AS400 as400, final String methodName, final ExecutableBase caller){
+	public static Integer ezeRunProgram(final String programName, final String procedureName, final boolean isServiceProgram, final boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, final Object[] parameters, final IBMiConnection connection, final String methodName, final ExecutableBase caller){
 		AS400DataType[] ezeAS400DataConverters = new AS400DataType[parameters.length];
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for(int idx = 0; idx < parameters.length; idx++){
@@ -39,16 +39,16 @@ public class IBMiProgramCall {
 		try{
 			List<List<Annotation>> annotations = getParameterAnnotations(methodName, parameterTypes, caller);
 			if(isServiceProgram){
-				ezeCall = new ServiceProgramCall(as400);
+				ezeCall = new ServiceProgramCall(connection.getAS400());
 				ezeCall.setProgram(programName);
 				((ServiceProgramCall)ezeCall).setProcedureName(procedureName);
 			}
 			else{
-				ezeCall = new ProgramCall(as400);
+				ezeCall = new ProgramCall(connection.getAS400());
 				ezeCall.setProgram(programName);
 			}
 			for(int idx = 0; idx < parameters.length; idx++){
-				ezeAS400DataConverters[idx] = AS400Converter.createAS400DataType(parameters[idx], annotations.get(idx), as400);
+				ezeAS400DataConverters[idx] = AS400Converter.createAS400DataType(parameters[idx], annotations.get(idx), connection.getAS400());
 				if(parameterTypeKinds[idx] == ParameterTypeKind.IN){
 					ezeCall.addParameter(new ProgramParameter(ProgramParameter.PASS_BY_VALUE, ezeAS400DataConverters[idx].toBytes(AS400Converter.convertToObjects(parameters[idx])), 0));
 				}
