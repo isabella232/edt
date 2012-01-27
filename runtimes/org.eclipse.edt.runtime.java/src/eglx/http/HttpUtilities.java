@@ -43,7 +43,7 @@ public class HttpUtilities {
 	public static final String HTTP_METHOD_POST = "POST";
 	public static final String HTTP_METHOD_PUT = "PUT";
 	private static final String HTTP_METHOD_DELETE = "DELETE";
-	public static final String HTTP_RESPONSE_TIMEOUT = "EGL_TIMEOUT";
+	public static final String HTTP_RESPONSE_TIMEOUT = "edt.proxy.invocation.timeout";
 	private static final String EGL_PRIVATE_CALL = "EGLDEDICATED";
 	private static final String CONTENT_TYPE_VALUE_TEXT_PLAIN = "text/plain";
 	public static final String CONTENT_TEXT_KEY = "text";

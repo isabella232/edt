@@ -18,27 +18,26 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.Future;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.ServiceUtilities;
-import org.eclipse.edt.javart.util.JavartUtil;
 
+import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
-import eglx.http.HttpUtilities;
 import eglx.json.JsonUtilities;
 import eglx.lang.EDictionary;
+import eglx.lang.InvocationException;
 import eglx.services.ServiceInvocationException;
 import eglx.services.ServiceKind;
 
@@ -52,120 +51,6 @@ public class HttpServiceHandler
 	private static final String EGL_SESSION_ID = "egl_statefulsessionid";
 	private static final String RESPONSE_CHARSET = "edt.service.response.charset";
 	private static final String COOKIE_ID = "SET-COOKIE";
-	private class HttpStreamReader implements Runnable
-	{
-		private URLConnection connection;
-		private boolean doneReading;
-		private String value;
-		private Throwable t;
-		private String responseCharset;
-
-
-		private HttpStreamReader( URLConnection connection, String responseCharset )
-		{
-			this.connection = connection;
-			doneReading = false;
-			this.responseCharset = responseCharset;
-		}
-
-		public void run()
-		{
-			t = null;
-			InputStream is = null;
-			try
-			{
-				is = connection.getInputStream();
-				value = readStream(is);
-			}
-			catch( Throwable t )
-			{
-				if( is != null )
-				{
-					try
-					{
-						is.close();
-					}
-					catch( IOException ioe ){}
-					is = null;
-				}
-				this.t = t;
-				if(connection instanceof HttpURLConnection){
-					try{
-						is = ((HttpURLConnection)connection).getErrorStream();
-						value = readStream(is);
-					}
-					catch( Throwable t1 ){}
-				}
-			}
-			finally{
-				if( is != null )
-				{
-					try
-					{
-						is.close();
-					}
-					catch( IOException ioe ){}
-					is = null;
-				}
-			}
-			doneReading = true;
-		}
-
-		private String readStream(InputStream is) throws IOException, UnsupportedEncodingException {
-			StringBuilder body = new StringBuilder();
-			BufferedReader reader = null;
-			try{
-				try{
-					if(responseCharset == null){
-						responseCharset = getCharSet(connection.getContentType());
-					}
-					reader = new BufferedReader(new InputStreamReader(is, responseCharset));
-				}
-				catch(Throwable t){}
-				if(reader == null){
-					reader = new BufferedReader(new InputStreamReader(is, ServiceUtilities.UTF8));
-				}
-				int charCnt = 0;
-				for (int nRead = reader.read(); charCnt < RuiBrowserHttpRequest.MAX_NUMBER_CHARS && nRead != -1; nRead = reader.read(), charCnt++ )
-				{
-					body.append((char)nRead);
-				}
-			}
-			finally
-			{
-				if( reader != null )
-				{
-					try
-					{
-						reader.close();
-					}
-					catch( IOException ioe ){}
-					reader = null;
-				}
-			}
-			return body.toString();
-		}
-
-		public boolean exception()
-		{
-			return t != null;
-		}
-		public boolean isDoneReading()
-		{
-			return doneReading;
-		}
-
-		public String getReadValue()
-		{
-			return value;
-		}
-
-		public Throwable getException()
-		{
-			return t;
-		}
-
-	}
 	Response invokeRestService( Request request, HttpURLConnection connection ) throws Throwable
 	{
 		EDictionary headers = request.headers;
@@ -173,7 +58,6 @@ public class HttpServiceHandler
 		try
 		{
 			response = new Response();
-			HttpStreamReader httpsr = null;
 			try
 			{
 				connection.setRequestMethod( HttpUtilities.httpMethodToString(request.method) );
@@ -185,6 +69,7 @@ public class HttpServiceHandler
 
 				String contentType = null;
 				String responseCharset = null;
+				int timeout = 0;
 				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
 				{
 					Map.Entry<String, Object> entry = iter.next();
@@ -199,11 +84,26 @@ public class HttpServiceHandler
 						responseCharset = entryValue.toString();
 						entryValue = null;//don't pass this to the remote service
 					}
+					else if(entry.getKey().equalsIgnoreCase(HttpUtilities.HTTP_RESPONSE_TIMEOUT)){
+						try{
+							timeout = Integer.parseInt( entryValue.toString() );
+						}
+						catch ( Exception e ){}
+						entryValue = null;//don't pass this to the remote service
+					}
 					if(entryValue != null){
 						connection.setRequestProperty( entry.getKey(), entryValue.toString() );
 					}
 				}
 
+				if(timeout > 0){
+					connection.setReadTimeout(timeout * 1000);
+					if(connection.getReadTimeout() != timeout * 1000){
+						InvocationException ix = new InvocationException();
+						throw ix.fillInMessage( Message.SOA_E_WS_HTTP_NO_READ_TIMEOUT, new Object[0] );
+					}
+				}
+				
 				String charset = getCharSet(contentType);
 				byte[] resource = request.body == null ? new byte[0] : request.body.getBytes( charset == null ? ServiceUtilities.UTF8 : charset );
 				connection.setDoInput( true );
@@ -219,48 +119,11 @@ public class HttpServiceHandler
 					os.close();
 				}
 
-				httpsr = new HttpStreamReader( connection, responseCharset == null ? ServiceUtilities.UTF8 : responseCharset );
-				Future<?> threadResult = JavartUtil.getThreadPool().submit( httpsr );
-				Thread.yield();
-				if ( !httpsr.isDoneReading() )
-				{
-					long expireTime = -1;
-					boolean infinite = true;
-					try
-					{
-						expireTime = Integer.parseInt( (String)headers.get( HttpUtilities.HTTP_RESPONSE_TIMEOUT ) );
-						expireTime += System.currentTimeMillis();
-						infinite = false;
-					}
-					catch ( Exception e )
-					{
-					}
-					while ( !httpsr.isDoneReading()
-							&& (infinite || expireTime > System.currentTimeMillis()) )
-					{
-						Thread.sleep( 50 );
-					}
-					if ( !httpsr.isDoneReading() )
-					{
-						threadResult.cancel( true );
-						connection.disconnect();
-						connection = null;
-						ServiceInvocationException six = 
-								ServiceUtilities.buildServiceInvocationException( 
-										Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT, 
-										new String[]{ request.uri }, null, ServiceKind.REST );
-						throw six;
-					}
-					else if ( httpsr.exception() )
-					{
-						throw httpsr.getException();
-					}
-				}
+				response.body = readConnection(connection, responseCharset == null ? ServiceUtilities.UTF8 : responseCharset, request.uri);
 				if ( tracer.traceIsOn( Trace.GENERAL_TRACE ) ) 
 				{
 					tracer.put( "Service response time:" + String.valueOf( System.currentTimeMillis() - startTime ) );
 				}
-				response.body = httpsr.getReadValue();
 				response.status = connection.getResponseCode();
 				response.statusMessage = connection.getResponseMessage();
 				Map<String,List<String>> header = connection.getHeaderFields();
@@ -274,8 +137,7 @@ public class HttpServiceHandler
 				}
 
 			}
-			catch ( IOException ioe )
-			{
+			catch ( Exception e ){
 				boolean useConnection = false;
 				try
 				{
@@ -299,20 +161,9 @@ public class HttpServiceHandler
 								eglException = URLDecoder.decode( eglException, ServiceUtilities.UTF8 );
 								response.body = eglException;
 							}
-							catch ( Exception e )
+							catch ( Exception x )
 							{
 							}
-						}
-						else if (httpsr != null && httpsr.exception() && 
-								httpsr.getReadValue() != null && !httpsr.getReadValue().isEmpty()){
-					    	response.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildInvocationException(
-									Message.SOA_E_WS_PROXY_COMMUNICATION,
-									new String[] { request.uri }, 
-									response.status.toString(), 
-									response.statusMessage,
-									ServiceUtilities.getMessage(ioe) + ":\n" + httpsr.getReadValue(),
-									null,
-									ServiceKind.REST ));
 						}
 					}
 					catch ( IOException ie )
@@ -327,11 +178,22 @@ public class HttpServiceHandler
 					response.status = HttpUtilities.HTTP_STATUS_FAILED;
 					response.statusMessage = HttpUtilities.HTTP_STATUS_MSG_FAILED;
 				}
+				if(e instanceof ServiceInvocationException){
+			    	response.body = eglx.json.JsonUtilities.createJsonAnyException((ServiceInvocationException)e);
+				}
+				if(e instanceof SocketTimeoutException){
+					((HttpURLConnection)connection).disconnect();
+					connection = null;
+			    	response.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
+							Message.SOA_E_WS_PROXY_SERVICE_TIMEOUT,
+							new String[] { request.uri }, null,
+							ServiceKind.REST ));
+				}
 				if((response.body == null || response.body.isEmpty()))
 				{
 			    	response.body = eglx.json.JsonUtilities.createJsonAnyException(ServiceUtilities.buildServiceInvocationException(
 							Message.SOA_E_WS_PROXY_COMMUNICATION,
-							new String[] { request.uri }, ioe,
+							new String[] { request.uri }, e,
 							ServiceKind.REST ));
 				}
 			}
@@ -344,6 +206,77 @@ public class HttpServiceHandler
 			}
 		}
 		return response;
+	}
+	
+	private String readConnection(HttpURLConnection connection, String responseCharset, String uri) throws IOException 
+	{
+		InputStream is = null;
+		try{
+			is = connection.getInputStream();
+			return readStream(is, connection, responseCharset, uri);
+		}
+		finally
+		{
+			if( is != null )
+			{
+				is.close();
+			}
+			try{
+				is = ((HttpURLConnection)connection).getErrorStream();
+				if(is != null){
+					throw ServiceUtilities.buildInvocationException(
+							Message.SOA_E_WS_PROXY_COMMUNICATION,
+							new String[] { uri }, 
+							String.valueOf(((HttpURLConnection)connection).getResponseCode()),
+							((HttpURLConnection)connection).getResponseMessage(),
+							readStream(is, connection, responseCharset, uri),
+							null,
+							ServiceKind.REST );
+				}
+			}
+			finally
+			{
+				if( is != null )
+				{
+					is.close();
+				}
+			}
+		}
+	}
+	
+	private String readStream(InputStream is, HttpURLConnection connection, String responseCharset, String uri) throws IOException, UnsupportedEncodingException {
+		StringBuilder body = new StringBuilder();
+		BufferedReader reader = null;
+		try{
+			try{
+				if(responseCharset == null){
+					responseCharset = getCharSet(connection.getContentType());
+				}
+				reader = new BufferedReader(new InputStreamReader(is, responseCharset));
+			}
+			catch(Throwable t){}
+			if(reader == null){
+				reader = new BufferedReader(new InputStreamReader(is, ServiceUtilities.UTF8));
+			}
+			int charCnt = 0;
+			for (int nRead = reader.read(); charCnt < RuiBrowserHttpRequest.MAX_NUMBER_CHARS && nRead != -1; nRead = reader.read(), charCnt++ )
+			{
+				body.append((char)nRead);
+			}
+		}
+		finally
+		{
+			if( reader != null )
+			{
+				try
+				{
+					reader.close();
+				}
+				catch( IOException ioe ){}
+				reader = null;
+			}
+		}
+		return body.toString();
 	}
 	
 	private void populate( Response response, Map<String,List<String>> header )
