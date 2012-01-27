@@ -24,8 +24,7 @@ public class SQLDatabaseBinding extends Binding {
 
 	public SQLDatabaseBinding (Binding binding)
     {
-    	super(binding.getName(), binding.getType(), binding.getUri(), binding.isUseURI());
-    	parameters = binding.parameters;
+    	super(binding);
     }
 	public int getBindingType()
 	{

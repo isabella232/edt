@@ -139,6 +139,9 @@ public class RuntimeDeploymentDesc {
 		else if(Binding.BINDING_SERVICE_REST.equalsIgnoreCase(binding.getType())){
 			bindings.add(new RestBinding(binding));
 		}
+		else{
+			bindings.add(new Binding(binding));
+		}
 	}
 	
 	public List<Binding> getBindings(){

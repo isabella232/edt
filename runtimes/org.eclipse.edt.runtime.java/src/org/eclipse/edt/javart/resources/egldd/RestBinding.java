@@ -17,8 +17,7 @@ public class RestBinding extends Binding {
 	public static final String ATTRIBUTE_BINDING_REST_enableGeneration = "enableGeneration";
     public RestBinding (Binding binding)
     {
-    	super(binding.getName(), binding.getType(), binding.getUri(), binding.isUseURI());
-    	parameters = binding.parameters;
+    	super(binding);
     }
 
 	public int getBindingType()

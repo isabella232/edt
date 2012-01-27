@@ -42,6 +42,11 @@ public class Binding {
 	
 	protected Map<String, Parameter> parameters = new HashMap<String, Parameter>();
 	
+	public Binding(Binding binding)
+    {
+    	this(binding.getName(), binding.getType(), binding.getUri(), binding.isUseURI());
+    	parameters = binding.parameters;
+    }
 	public Binding(String name, String type, String uri, String useURI)
 	{
 		this.name = name;
