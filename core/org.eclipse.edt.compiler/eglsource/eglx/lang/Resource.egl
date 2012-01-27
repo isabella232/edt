@@ -5,6 +5,5 @@ Record Resource type Annotation
 	targets = [elementKind.fieldMbr]
 //	targetTypes = [InterfacePart, ServicePart]
 }
-  	bindingKey string;
-  	propertyFileName string?;
+  	uri string;
 end
