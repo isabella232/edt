@@ -23,8 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.ide.IDEResourceLocator;
 import org.eclipse.edt.javart.services.servlet.rest.rpc.PreviewServiceServlet;
+
+import resources.edt.binding.IDEBindingResourceProcessor;
 
 
 public class ConfigServlet extends HttpServlet {
@@ -79,11 +80,11 @@ public class ConfigServlet extends HttpServlet {
 	/**
 	 * The resource locator for resource bindings.
 	 */
-	private final IDEResourceLocator resourceLocator;
+	private final IDEBindingResourceProcessor bindingProcessor;
 	
-	public ConfigServlet(PreviewServiceServlet previewServlet, IDEResourceLocator resourceLocator) {
+	public ConfigServlet(PreviewServiceServlet previewServlet, IDEBindingResourceProcessor bindingProcessor) {
 		this.previewServlet = previewServlet;
-		this.resourceLocator = resourceLocator;
+		this.bindingProcessor = bindingProcessor;
 	}
 
 	@Override
@@ -108,7 +109,7 @@ public class ConfigServlet extends HttpServlet {
 		}
 		if (defaultDD != null) {
 			TestServer.log("Default DD changed: " + defaultDD); //$NON-NLS-1$
-			resourceLocator.setDefaultDD(defaultDD);
+			bindingProcessor.setDefaultDD(defaultDD);
 		}
 	}
 	
@@ -149,7 +150,7 @@ public class ConfigServlet extends HttpServlet {
 	}
 	
 	public void parseDDFiles(String ddFiles, boolean added) {
-		List<String[]> parsed = resourceLocator.parseDDArgument(ddFiles, added);
+		List<String[]> parsed = bindingProcessor.getResourceLocator().parseDDArgument(ddFiles, added);
 		for (String[] next : parsed) {
 			if (added) {
 				TestServer.log("DD file added or changed: " + next[0] + ", " + next[1]); //$NON-NLS-1$ //$NON-NLS-2$

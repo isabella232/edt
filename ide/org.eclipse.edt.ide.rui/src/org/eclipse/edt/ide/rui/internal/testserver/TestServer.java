@@ -23,7 +23,7 @@ import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.log.Log;
 import org.mortbay.log.StdErrLog;
 
-import eglx.lang.SysLib;
+import resources.edt.binding.IDEBindingResourceProcessor;
 
 /**
  * Jetty server that's used for testing out services before they're deployed. The services are run directly in their Java project.
@@ -181,11 +181,11 @@ public class TestServer {
 		
 		// Register the resource locator for dynamically finding resource bindings.
 		IDEResourceLocator locator = new IDEResourceLocator(idePort);
-		locator.setDefaultDD(defaultDD);
-		SysLib.setResourceLocator(locator);
+		IDEBindingResourceProcessor bindingProcessor = new IDEBindingResourceProcessor(locator);
+		bindingProcessor.setDefaultDD(defaultDD);
 		
 		// Servlet to handle changes to service mappings
-		ConfigServlet configServlet = new ConfigServlet(previewServlet, locator);
+		ConfigServlet configServlet = new ConfigServlet(previewServlet, bindingProcessor);
 		context.addServlet(new ServletHolder(configServlet), ConfigServlet.SERVLET_PATH);
 		if (serviceMappings != null && serviceMappings.length() > 0) {
 			configServlet.parseMappings(serviceMappings, true);
