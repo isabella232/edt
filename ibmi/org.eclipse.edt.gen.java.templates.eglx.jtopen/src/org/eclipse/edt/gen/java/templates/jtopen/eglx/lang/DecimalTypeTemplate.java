@@ -40,7 +40,10 @@ public class DecimalTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx
 				member.getAnnotation(Constants.signature_AS400DecimalFloat) == null &&
 				member.getAnnotation(Constants.signature_AS400DecimalZoned) == null) {
 			try {
-				member.addAnnotation(getAS400FunctionParameterAnnotation(type, ctx));
+				Annotation annot = getAS400FunctionParameterAnnotation(type, ctx);
+				if(annot != null){
+					member.addAnnotation(annot);
+				}
 			}
 			catch (Exception e) {}
 		}

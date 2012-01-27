@@ -11,30 +11,24 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.StructPart;
 
 public class StructPartTemplate extends org.eclipse.edt.gen.java.templates.StructPartTemplate implements Constants{
 
-	public void genImports(StructPart part, Context ctx, TabbedWriter out) {
+	public void preGenPart(StructPart part, Context ctx) {
+		ctx.invokeSuper(this, preGenPart, part, ctx);
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
+		typesImported.add("org.eclipse.edt.javart.services.*");
+		typesImported.add("org.eclipse.edt.javart.json.Json");
 		if(ctx.containsKey(PART_HAS_IBMI_FUNCTION)){			
-			out.println("import org.eclipse.edt.javart.services.*;");
-			out.println("import org.eclipse.edt.javart.json.Json;");
-		}
-		genImports(ctx, out);
-		ctx.invokeSuper(this, genImports, part, ctx, out);
-	}
-
-	static void genImports(Context ctx, TabbedWriter out) {
-		if(ctx.containsKey(PART_HAS_IBMI_FUNCTION)){			
-			out.println("import eglx.lang.SysLib;");
-			out.println("import com.ibm.as400.access.*;");
-			out.println("import java.beans.PropertyVetoException;");
-			out.println("import java.io.IOException;");
-			out.println("import org.eclipse.edt.java.jtopen.*;");
-			out.println("import org.eclipse.edt.javart.json.Json;");
+			typesImported.add("eglx.lang.SysLib");
+			typesImported.add("com.ibm.as400.access.*");
+			typesImported.add("java.beans.PropertyVetoException");
+			typesImported.add("java.io.IOException");
+			typesImported.add("org.eclipse.edt.java.jtopen.*");
 		}
 	}
-
 }

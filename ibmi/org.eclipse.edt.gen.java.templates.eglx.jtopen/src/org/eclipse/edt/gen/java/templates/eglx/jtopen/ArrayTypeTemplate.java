@@ -56,7 +56,10 @@ public class ArrayTypeTemplate extends org.eclipse.edt.gen.java.templates.ArrayT
 		if (annot != null){
 			if(annot.getValue(subKey_elementTypeAS400Annotation) == null) {
 				try {
-					annot.setValue(subKey_elementTypeAS400Annotation, getAS400FunctionParameterAnnotation(type, ctx));
+					Annotation subKey = getAS400FunctionParameterAnnotation(type, ctx);
+					if(subKey != null){
+						annot.setValue(subKey_elementTypeAS400Annotation, subKey);
+					}
 				}
 				catch (Exception e) {}
 			}

@@ -14,6 +14,7 @@ public interface Constants {
 	static final String signature_ExternalName = "eglx.lang.ExternalName";
 	static final String signature_AS400Array = "eglx.jtopen.annotations.AS400Array";
 	static final String signature_AS400Date = "eglx.jtopen.annotations.AS400Date";
+	static final String signature_IBMiConnection = "eglx.jtopen.IBMiConnection";
 	static final String signature_AS400DecimalFloat = "eglx.jtopen.annotations.AS400DecimalFloat";
 	static final String signature_AS400DecimalPacked = "eglx.jtopen.annotations.AS400DecimalPacked";
 	static final String signature_AS400DecimalZoned = "eglx.jtopen.annotations.AS400DecimalZoned";
@@ -23,6 +24,7 @@ public interface Constants {
 	
 	//Annotation fields
 	static final String subKey_connectionMethod = "connectionMethod";
+	static final String subKey_returnConnectionMethod = "returnConnectionMethod";
 	static final String subKey_parameterAnnotations = "parameterAnnotations";
 	static final String subKey_ibmiFormat = "ibmiFormat";
 	static final String subKey_ibmiSeperator = "ibmiSeperator";
@@ -40,6 +42,6 @@ public interface Constants {
 	public static final String subKey_elementTypeAS400Annotation = "elementTypeAS400Annotation";
 	
 	//Misc constants
-	public static final String as400ConnectionName = "ezeAS400Conn";
+	public static final String as400ConnectionName = "ezeIBMiConn";
 	static final String PART_HAS_IBMI_FUNCTION = "key_PartHasIbmiFunction";
 }

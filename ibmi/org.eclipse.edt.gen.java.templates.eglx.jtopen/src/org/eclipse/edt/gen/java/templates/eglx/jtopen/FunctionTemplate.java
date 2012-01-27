@@ -14,11 +14,14 @@ package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
 
 
@@ -45,7 +48,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 			}
 		}
 	}
-	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
+	public void genFunctionBody(Function function, Context ctx, TabbedWriter out)  {
 		Annotation ibmiProgram = function.getAnnotation(signature_IBMiProgram);
 		if(ibmiProgram == null){
 			super.genFunctionBody(function, ctx, out);
@@ -53,9 +56,9 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		}
 
 		//convert parameters to AS400 objects
-		out.print("AS400 ");
+		out.print("IBMiConnection ");
 		out.print(as400ConnectionName);
-		out.print(" = (AS400)");
+		out.print(" = (IBMiConnection)");
 
 		MemberName connectionMethod = (MemberName)ibmiProgram.getValue(subKey_connectionMethod);
 		if(connectionMethod != null && connectionMethod.getMember() != null){
@@ -68,19 +71,10 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 			Annotation resource = (Annotation)ibmiProgram.getValue(subKey_connectionResource);
 			if(resource != null){
 				out.print("SysLib.getResource(\"");
-				if(resource.getValue("bindingkey") instanceof String && !((String)resource.getValue("bindingkey")).isEmpty()){
-					out.print((String)resource.getValue("bindingkey"));
+				if(resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()){
+					out.print((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
 				}
-				out.print("\", ");
-				if(resource.getValue("propertyFileName") != null){
-					out.print("\"");
-					out.print((String)resource.getValue("propertyFileName"));
-					out.print("\"");
-				}
-				else{
-					out.print("null");
-				}			
-				out.println(");");
+				out.println("\");");
 			}
 		}
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
@@ -149,10 +143,38 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 //		new Object[] {CUST, EOF, COUNT},
 		out.print("}, new Object[] {");
 		ctx.foreach(function.getParameters(), ',', genName, ctx, out);
-		out.print("}, ezeAS400Conn, \""); 
+		out.print("}, "); 
+		out.print(as400ConnectionName);
+		out.print(", \""); 
 		ctx.invoke(genName, function, ctx, out);
 		out.println("\", this);"); 
 		ctx.invoke(genArrayResize, function, ctx, out);
+		
+		MemberName returnConnectionMethod = (MemberName)ibmiProgram.getValue(subKey_returnConnectionMethod);
+		if(returnConnectionMethod != null && returnConnectionMethod.getMember() != null){
+			try {
+				FunctionInvocation invoc = factory.createFunctionInvocation();
+				MemberName arg = factory.createMemberName();
+				Field f = factory.createField();
+				f.setName(as400ConnectionName);
+				f.setType((Type)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_IBMiConnection));
+				arg.setId(f.getName());
+				arg.setMember(f);
+				invoc.setTarget(returnConnectionMethod.getMember());
+				invoc.getArguments().add(arg);
+				ctx.invoke(genExpression, invoc, ctx, out);
+				out.println(";");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else{
+			out.print("eglx.jtopen.JTOpenConnections.getAS400ConnectionPool().returnConnectionToPool(");
+			out.print(as400ConnectionName);
+			out.println(".getAS400());");
+		}
+		
 		if(function.getType() != null){
 			out.println("return eze$Return;");
 		}

@@ -23,7 +23,10 @@ public class DateTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.la
 	public void preGenAS400Annotation(Type type, Context ctx, Member member){
 		if (member.getAnnotation(Constants.signature_AS400Date) == null) {
 			try {
-				member.addAnnotation(getAS400FunctionParameterAnnotation(type, ctx));
+				Annotation annot = getAS400FunctionParameterAnnotation(type, ctx);
+				if(annot != null){
+					member.addAnnotation(annot);
+				}
 			}
 			catch (Exception e) {}
 		}	

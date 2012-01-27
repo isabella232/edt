@@ -25,7 +25,10 @@ public class StringTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.
 	public void preGenAS400Annotation(SequenceType type, Context ctx, Member member){
 		if (member.getAnnotation(Constants.signature_AS400Text) == null) {
 			try {
-				member.addAnnotation(getAS400FunctionParameterAnnotation(type, ctx));
+				Annotation annot = getAS400FunctionParameterAnnotation(type, ctx);
+				if(annot != null){
+					member.addAnnotation(annot);
+				}
 			}
 			catch (Exception e) {}
 		}	
