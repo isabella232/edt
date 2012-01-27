@@ -36,6 +36,9 @@ public class Constants {
 	public static final String SubKey_statementHasBeenReorganized = "statementHasBeenReorganized";
 	public static final String SubKey_fieldsProcessed4Resource = "fieldsProcessed4Resource";
 
+	// these are sub key values used on annotations 
+	public static final String SubKey_uri = "uri";
+
 	// invoke names
 	public static final String isAssignmentBreakupWanted = "isAssignmentBreakupWanted";
 	public static final String isAssignmentArrayMatchingWanted = "isAssignmentArrayMatchingWanted";
