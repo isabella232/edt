@@ -50,6 +50,7 @@ public class Message
 	public static final String SOA_E_WS_REST_WRONG_HTTP_FUNCTION = "EGL0030E";
 	public static final String XML2EGL_ERROR = "EGL0031E";
 	public static final String EGL2XML_ERROR = "EGL0032E";
+	public static final String SOA_E_WS_HTTP_NO_READ_TIMEOUT = "EGL0033E";
 	public static final String CREATE_OBJECT_FAILED = "EGL0034E";
 	public static final String PROPERTIES_FILE_MISSING = "EGL0035E";
 	public static final String UNHANDLED_EXCEPTION = "EGL0036E";
@@ -59,4 +60,9 @@ public class Message
 	public static final String MISSING_RESOURCE_FILE_NAME = "EGL0040E";
 	public static final String RESOURCE_FILE_NOT_FOUND = "EGL0041E";
 	public static final String ERROR_PARSING_RESOURCE_FILE = "EGL0042E";
+	public static final String ERROR_RESOURCE_FACTORY_NOT_FOUND = "EGL0043E";
+	public static final String ERROR_RESOURCE_BINDING_NOT_FOUND = "EGL0044E";
+	public static final String ERROR_NO_RESOURCE_IMPLEMENTATION = "EGL0045E";
+	public static final String ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION = "EGL0046E";
+	public static final String RESOURCE_URI_EXCEPTION = "EGL0047E";
 }

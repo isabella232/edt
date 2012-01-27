@@ -57,6 +57,7 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_REST_WRONG_HTTP_FUNCTION, "An HTTP {0} was recieved. EGL RPC service only operate with an HTTP.POST."},
 		{ Message.XML2EGL_ERROR, "An error occurred while converting from XML string {0}. Error: {1}" },
 		{ Message.EGL2XML_ERROR, "An error occurred while converting to XML. Parameter: {0} Error: {1}" },
+		{ Message.SOA_E_WS_HTTP_NO_READ_TIMEOUT, "The environments HttpURLConnection does not support timeout." },
 		{ Message.CREATE_OBJECT_FAILED, "An error occurred while creating an object of the {0} type. The following error occurred: {1}." },
 		{ Message.PROPERTIES_FILE_MISSING, "The {0} properties file could not be loaded." },
 		{ Message.UNHANDLED_EXCEPTION, "An unhandled error occurred. Error: {0}." },
@@ -66,6 +67,11 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.MISSING_RESOURCE_FILE_NAME, "No file name was provided to get resource." },
 		{ Message.RESOURCE_FILE_NOT_FOUND, "The file ({0}) could not be found." },
 		{ Message.ERROR_PARSING_RESOURCE_FILE, "An Exception occurred while parsing the file ({0}). exception:{1}" },
+		{ Message.ERROR_RESOURCE_FACTORY_NOT_FOUND, "Factory not found for binding name: {0}, type:{1}, binding property file:{2}." },
+		{ Message.ERROR_NO_RESOURCE_IMPLEMENTATION, "There is no resource implementation for binding name: {0}, type:{1}, binding property file:{2}." },
+		{ Message.ERROR_RESOURCE_BINDING_NOT_FOUND, "No resource binding found for for binding name: {0}, binding property file:{1}." },
+		{ Message.ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION, "An exception occurred while getting th eresource implementation for binding found for for binding name: {0}, type:{1}, binding property file:{2}." },
+		{ Message.RESOURCE_URI_EXCEPTION, "The URI {0} is not a valid URI." },
 	};
 	
 	/**

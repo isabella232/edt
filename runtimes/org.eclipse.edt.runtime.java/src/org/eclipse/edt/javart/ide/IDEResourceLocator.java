@@ -37,16 +37,17 @@ import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
+import resources.edt.binding.BindingResourceProcessor;
+import resources.edt.binding.RuntimeResourceLocator;
 import eglx.lang.AnyException;
 import eglx.lang.SysLib;
-import eglx.lang.SysLib.ResourceLocator;
 import eglx.persistence.sql.SQLDataSource;
 
 /**
  * Implements SysLib.ResourceLocator to handle locating deployment descriptors for a Java test environment, as well as
  * supporting special binding URIs such as "workspace://".
  */
-public class IDEResourceLocator extends SysLib implements ResourceLocator {
+public class IDEResourceLocator extends RuntimeResourceLocator {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -61,11 +62,6 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 	private final String ideURL;
 	
 	/**
-	 * The name of the default DD file.
-	 */
-	private String defaultDD;
-	
-	/**
 	 * Constructor.
 	 * 
 	 * @param idePort  The port on which the IDE can be reached.
@@ -75,13 +71,8 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 	}
 	
 	@Override
-	public Object locateResource(String bindingKey) {
-		return locateResource(bindingKey, defaultDD);
-	}
-	
-	@Override
-	public Object locateResource(String bindingKey, String propertyFileName) {
-		return doGetResource(bindingKey, propertyFileName);
+	public Object locateResource(String bindingURI) {
+		return SysLib.getResource(bindingURI);
 	}
 	
 	@Override
@@ -209,10 +200,6 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 		return name.toLowerCase();
 	}
 	
-	public void setDefaultDD(String dd) {
-		this.defaultDD = dd;
-	}
-	
 	public List<String[]> parseDDArgument(String ddFiles, boolean added) {
 		// For simplicity there's just the one delimeter.
 		// name1;path1;name2;path2... using File.pathSeparator
@@ -260,8 +247,8 @@ public class IDEResourceLocator extends SysLib implements ResourceLocator {
 		}
 		
 		// Remove cached resources. Key is a QName whose namespace is the file name.
-		if (resources.size() > 0) {
-			for (Iterator<QName> it = resources.keySet().iterator(); it.hasNext();) {
+		if (BindingResourceProcessor.getBindings().size() > 0) {
+			for (Iterator<QName> it = BindingResourceProcessor.getBindings().keySet().iterator(); it.hasNext();) {
 				QName q = it.next();
 				if (ddName.equals(normalizePropertyFileName(q.getNamespaceURI()))) {
 					it.remove();

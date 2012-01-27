@@ -15,34 +15,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
-import javax.xml.namespace.QName;
 
 import org.eclipse.edt.javart.Constants;
-import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
 import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
-import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 
-import eglx.persistence.sql.SQLDataSource;
+import resources.edt.binding.BindingResourceProcessor;
 
 public class SysLib extends ExecutableBase {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
-	protected static Map<String, RuntimeDeploymentDesc> deploymentDescs = new HashMap<String, RuntimeDeploymentDesc>();
-	protected static Map<QName, Binding> resources = new HashMap<QName, Binding>();
-	private static ResourceLocator resourceLocator;
-	
+	private static BindingResourceProcessor bindingProcessor;
+
 	/**
 	 * Constructor
 	 * @param ru The rununit
@@ -234,164 +227,35 @@ public class SysLib extends ExecutableBase {
 	/**
 	 * get the resource binding from the egldd
 	 */
-	public static Object getResource(String bindKey) throws AnyException{
-		if (resourceLocator != null) {
-			return resourceLocator.locateResource(bindKey);
-		}
-		
-		String defaultDD = null;
-		Executable app = Runtime.getRunUnit().getActiveExecutable();
-		if (app != null) {
-			defaultDD = getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY + "." + app.getClass().getCanonicalName());
-		}
-		if (defaultDD == null) {
-			defaultDD = getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY);
-		}
-		
-		return getResource(bindKey, defaultDD);
-	}
-	/**
-	 * get the resource binding from the egldd
-	 */
-	public static Object getResource(String bindingKey, String propertyFileName)  throws AnyException{
-		propertyFileName = propertyFileName.toLowerCase();
-		if (resourceLocator != null) {
-			return resourceLocator.locateResource(bindingKey, propertyFileName);
-		}
-		return doGetResource(bindingKey, propertyFileName);
-	}
-	
-	protected static Object doGetResource(String bindingKey, String propertyFileName)  throws AnyException{
-		QName resourceId = new QName(propertyFileName, bindingKey);
-		Binding binding = resources.get(resourceId);
-		if(binding == null){
-			RuntimeDeploymentDesc dd = getDeploymentDesc(propertyFileName);
-			binding = getBinding(bindingKey, dd);
-			if(binding == null){
-				binding = getBinding(bindingKey, dd.getIncludedDescs());
+	public static Object getResource(String uriStr)  throws AnyException{
+		try {
+			URI uri = new URI(uriStr);
+			if("resource".equals(uri.getScheme())){
+				String query = uri.getQuery() != null && uri.getQuery().length() > 0 ? "?" + uri.getQuery() :"";
+				String fragment = uri.getFragment() != null && uri.getFragment().length() > 0 ? "#" + uri.getFragment() :"";
+				uri = new URI(uri.getSchemeSpecificPart() + query + fragment);
 			}
-			if(binding != null){
-				resources.put(resourceId, binding);
+			if("binding".equals(uri.getScheme())){
+				return getBindingResourceProcessor().resolve(uri);
 			}
-		}
-		
-		Object resource = null;
-		if (resourceLocator != null) {
-			resource = resourceLocator.convertToResource(binding);
-		}
-		if(resource == null && binding instanceof SQLDatabaseBinding){
-			SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
-			if (sqlBinding.isUseURI()) {
-				String uri = sqlBinding.getUri();
-				if (uri != null && uri.startsWith("jndi://")) {
-					//TODO need to actually support JNDI. This code will not work but serves as a placeholder.
-					resource = new SQLDataSource(uri.substring(7)); // "jndi://".length()
-				}
-			}
-			else {
-				EDictionary props = new org.eclipse.edt.runtime.java.eglx.lang.EDictionary();
-				String user = sqlBinding.getSqlID();
-				String password = sqlBinding.getSqlPassword();
-				String schema = sqlBinding.getSqlSchema();
-				if (user != null) {
-					props.put("user", user);
-				}
-				if (password != null) {
-					props.put("password", password);
-				}
-				resource = new SQLDataSource(sqlBinding.getSqlDB(), props);
-				
-				// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
-				// This must be done before any connection is made, such as by invoking setCurrentSchema below.
-				String className = sqlBinding.getSqlJDBCDriverClass();
-				if (className != null && className.length() > 0) {
-					try {
-						Class.forName(className);
-					}
-					catch (Throwable t) {
-					}
-				}
-				
-				if (schema != null && (schema = schema.trim()).length() > 0) {
-					((SQLDataSource)resource).setCurrentSchema(schema);
-				}
-			}
-		}
-		return resource;
-	}
-	
-	private static RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName){
-		if(propertyFileName == null || propertyFileName.length() == 0){
-			AnyException ex = new AnyException();
-			throw ex.fillInMessage( Message.MISSING_RESOURCE_FILE_NAME );
-		}
-		if (resourceLocator != null) {
-			return resourceLocator.getDeploymentDesc(propertyFileName);
-		}
-		RuntimeDeploymentDesc dd = deploymentDescs.get(propertyFileName);
-		if(dd == null){
-			if(propertyFileName.charAt(0) != '.' && propertyFileName.charAt(0) != '/'){
-				propertyFileName = '/' + propertyFileName;
-			}
-			if(!propertyFileName.endsWith("-bnd.xml")){
-				propertyFileName += "-bnd.xml";
-			}
-			InputStream is = org.eclipse.edt.javart.Runtime.getRunUnit().getClass().getResourceAsStream(propertyFileName);
-			if(is == null){
-				AnyException ex = new AnyException();
-				throw ex.fillInMessage( Message.RESOURCE_FILE_NOT_FOUND, propertyFileName );
-			}
-			else{
-				try {
-					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(propertyFileName, is);
-				} catch (Exception e) {
-					AnyException ex = new AnyException();
-					throw ex.fillInMessage( Message.ERROR_PARSING_RESOURCE_FILE, propertyFileName, e );
-				}
-				deploymentDescs.put(propertyFileName, dd);
-			}
-		}
-		return dd;
-	}
-	
-	private static Binding getBinding(String name, List<String> includes){
-		List<RuntimeDeploymentDesc> includedDDs = new ArrayList<RuntimeDeploymentDesc>();
-		Binding binding = null;
-		for(String ddName : includes){
-			RuntimeDeploymentDesc includedDD = getDeploymentDesc(ddName);
-			binding = getBinding(name, includedDD);
-			if(binding != null){
-				break;
-			}
-			else{
-				includedDDs.add(includedDD);
-			}
-		}
-		for(RuntimeDeploymentDesc includedDD : includedDDs){
-			binding = getBinding(name, includedDD.getIncludedDescs());
-			if(binding != null){
-				break;
-			}
-		}
-		return binding;
-	}
-	private static Binding getBinding(String name, RuntimeDeploymentDesc dd){
-		for(Binding binding : dd.getBindings()){
-			if(name.equalsIgnoreCase(binding.getName())){
-				return binding;
-			}
+		} catch (URISyntaxException e) {
 		}
 		return null;
 	}
 	
-	public static void setResourceLocator(ResourceLocator locator) {
-		resourceLocator = locator;
+	private static BindingResourceProcessor getBindingResourceProcessor(){
+		if(bindingProcessor == null){
+			bindingProcessor = new BindingResourceProcessor();
+		}
+		return bindingProcessor;
+	}
+	public static void setBindingResourceProcessor(BindingResourceProcessor ideBindingProcessor) {
+		bindingProcessor = ideBindingProcessor;
 	}
 	
 	public static interface ResourceLocator {
-		public Object locateResource(String bindingKey);
-		public Object locateResource(String bindingKey, String propFileName);
-		public RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName);
+		public Object locateResource(String bindingURI);
+		public RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileURI);
 		public Object convertToResource(Binding binding);
 	}
 }
