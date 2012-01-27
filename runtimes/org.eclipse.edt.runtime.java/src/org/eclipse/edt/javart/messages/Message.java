@@ -65,4 +65,6 @@ public class Message
 	public static final String ERROR_NO_RESOURCE_IMPLEMENTATION = "EGL0045E";
 	public static final String ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION = "EGL0046E";
 	public static final String RESOURCE_URI_EXCEPTION = "EGL0047E";
+	public static final String RESOURCE_NO_PROCESSOR = "EGL0048E";
+	public static final String MISSING_DEFAULT_DD = "EGL0049E";
 }

@@ -72,6 +72,8 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.ERROR_RESOURCE_BINDING_NOT_FOUND, "No resource binding found for for binding name: {0}, binding property file:{1}." },
 		{ Message.ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION, "An exception occurred while getting th eresource implementation for binding found for for binding name: {0}, type:{1}, binding property file:{2}." },
 		{ Message.RESOURCE_URI_EXCEPTION, "The URI {0} is not a valid URI." },
+		{ Message.RESOURCE_NO_PROCESSOR, "Unable to processor the uri {0} into a resource." },
+		{ Message.MISSING_DEFAULT_DD, "No default deployment descriptor was specified." },
 	};
 	
 	/**

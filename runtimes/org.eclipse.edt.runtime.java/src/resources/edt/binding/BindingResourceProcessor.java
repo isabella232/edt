@@ -110,7 +110,7 @@ public class BindingResourceProcessor {
 		}
 		if (dd == null) {
 			AnyException ae = new AnyException();
-			ae.setMessage("no default file specified");
+			throw ae.fillInMessage( Message.MISSING_DEFAULT_DD );
 		}
 		try {
 			return createFileURI(dd);

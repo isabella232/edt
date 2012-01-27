@@ -240,7 +240,8 @@ public class SysLib extends ExecutableBase {
 			}
 		} catch (URISyntaxException e) {
 		}
-		return null;
+		AnyException ae = new AnyException();
+		throw ae.fillInMessage( Message.RESOURCE_NO_PROCESSOR, uriStr );
 	}
 	
 	private static BindingResourceProcessor getBindingResourceProcessor(){
