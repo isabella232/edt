@@ -30,5 +30,7 @@ Export-Package: eglx.http,
  org.eclipse.edt.javart.services.servlet.proxy,
  org.eclipse.edt.javart.services.servlet.rest.rpc,
  org.eclipse.edt.javart.util,
- org.eclipse.edt.runtime.java.eglx.lang
+ org.eclipse.edt.runtime.java.eglx.lang,
+ resources,
+ resources.edt.binding
 Bundle-Vendor: Eclipse EGL Development Tools
