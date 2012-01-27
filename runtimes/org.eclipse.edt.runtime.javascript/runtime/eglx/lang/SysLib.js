@@ -69,10 +69,30 @@ egl.eglx.lang.SysLib['writeStdout'] = function	(text) {
 	egl.println(text);
 };
 
-egl.eglx.lang.SysLib["getResource"] = function(bindingKey, /*String*/eglddName) {
+egl.eglx.lang.SysLib["getResource"] = function(uri) {
 	var ret = undefined;
-	if(eglddName === undefined || eglddName === null){
+	var idx = uri.indexOf("resource:");
+	if(idx === 0){
+		uri = uri.slice(idx + 9);//pick up everything paste resource:
+	}
+	idx = uri.indexOf("binding:");
+	if(idx === -1){
+		throw egl.eglx.services.createServiceInvocationException("CRRUI3663E", [uri]);  
+	}
+	else{
+		uri = uri.slice(idx + 8);//pick up everything paste binding:
+	}
+	var bindingKey;
+	idx = uri.indexOf("file:");
+	if(idx === -1){
 		eglddName = egl__defaultDeploymentDescriptor;
+		bindingKey = uri;//uri is the binding key
+	}
+	else{
+		uri = uri.slice(idx + 5);//pick up everything paste file:
+		idx = uri.indexOf("#");
+		eglddName = uri.slice(0, idx);//pick up everything up to the first # as the file name:
+		bindingKey = uri.slice(idx + 1);//pick up everything after the first # as the binding key:
 	}
 	var binding = egl.eglx.services.$ServiceBinder.getBinding(eglddName.toLowerCase(), bindingKey);
 	if(binding instanceof egl.eglx.services.RestBinding){
@@ -81,7 +101,7 @@ egl.eglx.lang.SysLib["getResource"] = function(bindingKey, /*String*/eglddName) 
 		ret.restType = egl.eglx.rest.ServiceType.EglRpc;
 	}
 	if(ret === undefined || ret === null){
-		throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [bindingKey, eglddName]);  
+		throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [uri, eglddName]);  
 	}
 	return ret;
 };

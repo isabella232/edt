@@ -183,5 +183,6 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI3659E' : 'Json response parse resulted null, original response is: \'{0}\'',
 		'CRRUI3660E' : 'Exception occurred, could not handle response for \'{0}\', reason: \'{1}\'',
 		'CRRUI3661E' : 'Service binding information is missing for \'{0}\' while trying to invoke service function \'{1}\'.',
-		'CRRUI3662E' : 'The service invocation specified to use the response.Content-Type to decode the response. Unable to determine the response encoding from Content-Type:\'{0}\'.'
+		'CRRUI3662E' : 'The service invocation specified to use the response.Content-Type to decode the response. Unable to determine the response encoding from Content-Type:\'{0}\'.',
+		'CRRUI3663E' : 'getResource requires a URI parameter string. \'{0}\' is not a supported URI.'
 };
