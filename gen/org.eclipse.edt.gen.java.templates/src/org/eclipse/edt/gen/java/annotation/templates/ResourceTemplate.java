@@ -70,18 +70,13 @@ public class ResourceTemplate extends JavaTemplate {
 		partName.setType(serviceLib);
 		invocation.setId("getResource");
 		invocation.setQualifier(partName);
-		StringLiteral bindingKey = factory.createStringLiteral();
-		invocation.getArguments().add(bindingKey);
-		if(annot.getValue("bindingkey") instanceof String && !((String)annot.getValue("bindingkey")).isEmpty()){
-			bindingKey.setValue((String)annot.getValue("bindingkey"));
+		StringLiteral uri = factory.createStringLiteral();
+		invocation.getArguments().add(uri);
+		if(annot.getValue(Constants.SubKey_uri) instanceof String && !((String)annot.getValue(Constants.SubKey_uri)).isEmpty()){
+			uri.setValue((String)annot.getValue(Constants.SubKey_uri));
 		}
 		else{
-			bindingKey.setValue(field.getName());
-		}
-		if(annot.getValue("propertyFileName") != null){
-			StringLiteral deploymentDescriptorName = factory.createStringLiteral();
-			invocation.getArguments().add(deploymentDescriptorName);
-			deploymentDescriptorName.setValue((String)annot.getValue("propertyFileName"));
+			uri.setValue("binding:" + field.getName());
 		}
 		return invocation;
 	}
