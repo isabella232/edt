@@ -364,33 +364,39 @@ public class SOAMessages extends NLS {
 	
 	public static String WebserviceRuntimeSectionDesc;
 
-	public static String SQLDatabaseBindingUseURILabel;
-	
 	public static String SqlDatabaseBindingSpecifyInfoLabel;
 	
 	public static String SQLDatabaseBindingDetailSecDescp;
 
 	public static String SQLDatabaseBindingDetailSecTitle;
 	
-	public static String LabelJNDIExample;
-	
-	public static String LabelWorkspaceExample;
-
 	public static String LabelDbms;
-
-	public static String LabelSqlDB;
 
 	public static String LabelSqlID;
 
 	public static String LabelSqlJDBCDriverClass;
-
-	public static String LabelSqlJNDIName;
 
 	public static String LabelSqlPassword;
 
 	public static String LabelSqlSchema;
 
 	public static String LabelSqlValidationConnectionURL;
+	
+	public static String LabelSqlJndiName;
+	
+	public static String LabelSqlJndiUser;
+	
+	public static String LabelSqlJndiPassword;
+	
+	public static String LabelSqlUseJndi;
+	
+	public static String LabelSqlUseWorkspace;
+	
+	public static String LabelSqlDeployAsJndi;
+	
+	public static String LabelSqlDeployAsJndiDesc;
+	
+	public static String SqlConnectionProfileDoesntExist;
 
 	public static String DefaultDeploymentDescription;
 	

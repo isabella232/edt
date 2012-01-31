@@ -17,6 +17,8 @@ import java.util.Properties;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
+import org.eclipse.datatools.connectivity.IProfileListener1;
+import org.eclipse.datatools.connectivity.ProfileManager;
 import org.eclipse.datatools.connectivity.internal.ConnectionProfile;
 import org.eclipse.datatools.connectivity.ui.PingJob;
 import org.eclipse.edt.compiler.internal.util.Encoder;
@@ -35,8 +37,8 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -45,14 +47,22 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
-
+public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implements IProfileListener1 {
+	
+	private static final int indent = 20;
+	
 	private Binding fSQLDatabaseBinding;
 	
-	private Button fUseURI;
-	private Text fUri;
-	
+	private Button fUseWorkspace;
+	private Button fUseJndi;
 	private Button fUseDefinedInfo;
+	private Button fDeployAsJndi;
+	private Button btnPing;
+	private Combo workspaceCombo;
+	private Text fJndiName;
+	private Text fJndiUser;
+	private Text fJndiPassword;
+	private Text fDeployAsJndiName;
 	private Text fDbms;
 	private Text fSqlDB;
 	private Text fUserId;
@@ -62,18 +72,24 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	private Text fConnLocation;
 //	private Text fSqlValidationConnectionURL;
 	
-	private static final int indent = 20;
-	
-	protected Button btnPing;
-	
-	private List<Control> uriControls;
+	private List<Control> workspaceControls;
+	private List<Control> jndiControls;
 	private List<Control> definedControls;
+	private List<Control> deployAsJndiControls;
 	
-	public SQLDatabaseBindingDetailPage(){
+	/**
+	 * When adding a "<does not exist>" profile to the combo, we need to know the actual profile name.
+	 * Since this is a translated string we can't just substring the combo's value.
+	 */
+	private String nonExistantProfile;
+	
+	public SQLDatabaseBindingDetailPage() {
 		super();
 		nColumnSpan = 3;
-		this.uriControls = new ArrayList<Control>();
+		this.workspaceControls = new ArrayList<Control>();
+		this.jndiControls = new ArrayList<Control>();
 		this.definedControls = new ArrayList<Control>();
+		this.deployAsJndiControls = new ArrayList<Control>();
 	}
 	
 	protected Composite createDetailSection(Composite parent,
@@ -83,90 +99,68 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	}
 	
 	protected void createDetailControls(FormToolkit toolkit, Composite parent) {
-		createURIControls(toolkit, parent);
+		createWorkspaceControls(toolkit, parent);
 		createSQLControls(toolkit, parent);
+		createJNDIControls(toolkit, parent);
+		createDeployAsJNDIControls(toolkit, parent);
+		
+		ProfileManager.getInstance().addProfileListener(this);
 	}
 	
-	private void createURIControls(FormToolkit toolkit, Composite parent) {
-		int borderStyle = toolkit.getBorderStyle();
-		uriControls.clear();
+	@Override
+	public void dispose() {
+		super.dispose();
 		
-		fUseURI = toolkit.createButton(parent, SOAMessages.SQLDatabaseBindingUseURILabel, SWT.RADIO);
+		ProfileManager.getInstance().removeProfileListener(this);
+	}
+	
+	private void createWorkspaceControls(FormToolkit toolkit, Composite parent) {
+		workspaceControls.clear();
+		
+		fUseWorkspace = toolkit.createButton(parent, SOAMessages.LabelSqlUseWorkspace, SWT.RADIO);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = nColumnSpan;
-		fUseURI.setLayoutData(gd);
-		fUseURI.addSelectionListener(new SelectionAdapter() {
+		fUseWorkspace.setLayoutData(gd);
+		fUseWorkspace.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				for (Control c : uriControls) {
-					c.setEnabled(true);
-				}
-				for (Control c : definedControls) {
-					c.setEnabled(false);
-				}
+				workspaceUriSelected();
 				fSQLDatabaseBinding.setUseURI(true);
+				setWorkspaceUriInModel();
 			}
 		});
 		
-		Label l = toolkit.createLabel(parent, SOAMessages.LabelURI);
-		gd = new GridData();
+		workspaceCombo = new Combo(parent, SWT.DROP_DOWN|SWT.READ_ONLY);
+		toolkit.adapt(workspaceCombo);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan - 1;
 		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		uriControls.add(l);
-		fUri = createTextControl(toolkit, parent);
-		fUri.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setUri(fUri.getText());
-			}			
+		workspaceCombo.setLayoutData(gd);
+		workspaceControls.add(workspaceCombo);
+		workspaceCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				setWorkspaceUriInModel();
+			}
 		});
-		uriControls.add(fUri);
 		
-		// At least on Linux, creating a text in the form draws a border no matter what. Workaround is to put it inside a composite.
-		// In order to keep things aligned, we put just the individual Text controls in composites.
-		toolkit.setBorderStyle(SWT.NULL);
-		l = toolkit.createLabel(parent, SOAMessages.LabelWorkspaceExample);
+		Button newConnection = toolkit.createButton(parent, SOAMessages.NewLabel, SWT.PUSH);
 		gd = new GridData();
+		gd.horizontalSpan = 1;
 		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		uriControls.add(l);
-		Composite exampleComposite = toolkit.createComposite(parent);
-		exampleComposite.setFont(parent.getFont());
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = nColumnSpan - 1;
-		exampleComposite.setLayoutData(gd);
-		GridLayout layout = new GridLayout();
-		layout.verticalSpacing = 0;
-		layout.horizontalSpacing = 0;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		exampleComposite.setLayout(layout);
-		uriControls.add(exampleComposite);
-		Text example = toolkit.createText(exampleComposite, "workspace://myConnectionProfile", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
-		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		uriControls.add(example);
+		newConnection.setLayoutData(gd);
+		workspaceControls.add(newConnection);
+		newConnection.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IConnectionProfile newProfile = EGLSQLUtility.createNewProfile();
+				if (newProfile != null) {
+					fSQLDatabaseBinding.setUri("workspace://" + newProfile.getName());
+					updateCombo();
+				}
+			}
+		});
 		
-		/*l = toolkit.createLabel(parent, SOAMessages.LabelJNDIExample);
-		gd = new GridData();
-		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		uriControls.add(l);
-		exampleComposite = toolkit.createComposite(parent);
-		exampleComposite.setFont(parent.getFont());
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = nColumnSpan - 1;
-		exampleComposite.setLayoutData(gd);
-		layout = new GridLayout();
-		layout.verticalSpacing = 0;
-		layout.horizontalSpacing = 0;
-		layout.marginHeight = 0;
-		layout.marginWidth = 0;
-		exampleComposite.setLayout(layout);
-		uriControls.add(exampleComposite);
-		example = toolkit.createText(exampleComposite, "jndi://jdbc/SAMPLE", SWT.READ_ONLY|SWT.SINGLE); //$NON-NLS-1$
-		example.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		uriControls.add(example);
-		toolkit.setBorderStyle(borderStyle); // reset previous style
-*/		
 		createSpacer(toolkit, parent, nColumnSpan);
 	}
 	
@@ -180,12 +174,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fUseDefinedInfo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				for (Control c : definedControls) {
-					c.setEnabled(true);
-				}
-				for (Control c : uriControls) {
-					c.setEnabled(false);
-				}
+				userDefinedSelected();
 				fSQLDatabaseBinding.setUseURI(false);
 			}
 		});
@@ -198,6 +187,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fDbms = createTextControl(toolkit, parent);
 		fDbms.setEditable(false);
 		fDbms.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms, fDbms.getText());
 			}			
@@ -211,6 +201,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		definedControls.add(l);
 		fSqlJDBCDriverClass = createTextControl(toolkit, parent);
 		fSqlJDBCDriverClass.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlJDBCDriverClass, fSqlJDBCDriverClass.getText());
 			}			
@@ -224,6 +215,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		definedControls.add(l);
 		fSqlDB = createTextControl(toolkit, parent);
 		fSqlDB.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlDB, fSqlDB.getText());
 			}			
@@ -237,6 +229,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		definedControls.add(l);
 		fUserId = createTextControl(toolkit, parent);
 		fUserId.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, fUserId.getText());
 			}			
@@ -251,6 +244,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		fSqlPassword = createTextControl(toolkit, parent);
 		fSqlPassword.setEchoChar('*'); //$NON-NLS-1$
 		fSqlPassword.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, Encoder.encode(fSqlPassword.getText()));
 			}			
@@ -264,6 +258,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		definedControls.add(l);
 		fDefaultSchema = createTextControl(toolkit, parent);
 		fDefaultSchema.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlSchema, fDefaultSchema.getText());
 			}			
@@ -277,13 +272,13 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		definedControls.add(l);
 		fConnLocation = createTextControl(toolkit, parent);
 		fConnLocation.addModifyListener(new ModifyListener(){
+			@Override
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jarList, fConnLocation.getText());
 			}
 		});
 		definedControls.add(fConnLocation);
 
-		
 		/*
 		l = toolkit.createLabel(parent, SOAMessages.LabelSqlValidationConnectionURL);
 		gd = new GridData();
@@ -301,7 +296,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		
 		btnPing = new Button(parent, SWT.NONE);
 		btnPing.addSelectionListener(new SelectionAdapter() {
-
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				testConnection();
 			}
@@ -311,6 +306,102 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		btnPing.setLayoutData(pingGD);
 		btnPing.setText(SOAMessages.SQLDatabaseBindingDetailPageTestConnection); //$NON-NLS-1$
 		definedControls.add(btnPing);
+		
+		createSpacer(toolkit, parent, nColumnSpan);
+	}
+	
+	private void createJNDIControls(FormToolkit toolkit, Composite parent) {
+		jndiControls.clear();
+		
+		fUseJndi = toolkit.createButton(parent, SOAMessages.LabelSqlUseJndi, SWT.RADIO);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		fUseJndi.setLayoutData(gd);
+		fUseJndi.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				jndiUriSelected();
+				fSQLDatabaseBinding.setUseURI(true);
+				fSQLDatabaseBinding.setUri("jndi://" + fJndiName.getText());
+			}
+		});
+		
+		Label l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiName);
+		jndiControls.add(l);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		fJndiName = createTextControl(toolkit, parent);
+		fJndiName.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				fSQLDatabaseBinding.setUri("jndi://" + fJndiName.getText());
+			}			
+		});
+		jndiControls.add(fJndiName);
+		
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiUser);
+		jndiControls.add(l);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		fJndiUser = createTextControl(toolkit, parent);
+		fJndiUser.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiUser, fJndiUser.getText());
+			}			
+		});
+		jndiControls.add(fJndiUser);
+		
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiPassword);
+		jndiControls.add(l);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		fJndiPassword = createTextControl(toolkit, parent);
+		fJndiPassword.setEchoChar('*'); //$NON-NLS-1$
+		fJndiPassword.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiPassword, fJndiPassword.getText());
+			}			
+		});
+		jndiControls.add(fJndiPassword);
+		
+		createSpacer(toolkit, parent, nColumnSpan);
+	}
+	
+	private void createDeployAsJNDIControls(FormToolkit toolkit, Composite parent) {
+		deployAsJndiControls.clear();
+		
+		fDeployAsJndi = toolkit.createButton(parent, SOAMessages.LabelSqlDeployAsJndi, SWT.CHECK|SWT.WRAP);
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		fDeployAsJndi.setLayoutData(gd);
+		fDeployAsJndi.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateDeployAsControls();
+			}
+		});
+		
+		Label l = toolkit.createLabel(parent, SOAMessages.LabelSqlDeployAsJndiDesc);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		deployAsJndiControls.add(l);
+		
+		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiName);
+		gd = new GridData();
+		gd.horizontalIndent = indent;
+		l.setLayoutData(gd);
+		deployAsJndiControls.add(l);
+		fDeployAsJndiName = createTextControl(toolkit, parent);
+		fDeployAsJndiName.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e) {
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiName, fDeployAsJndiName.getText());
+			}			
+		});
+		deployAsJndiControls.add(fDeployAsJndiName);
 	}
 	
 	protected void testConnection() {
@@ -359,6 +450,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 		
 		return copy;
 	}
+	
 	protected Runnable createTestConnectionRunnable( final IConnectionProfile profile ) {
         final Job pingJob = new PingJob( Display.getCurrent().getActiveShell(), profile );
         pingJob.schedule();
@@ -375,20 +467,17 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		IStructuredSelection ssel = (IStructuredSelection) selection;
-		if (ssel.size() == 1)
+		if (ssel.size() == 1) {
 			fSQLDatabaseBinding = (Binding) ssel.getFirstElement();
-		else
+		}
+		else {
 			fSQLDatabaseBinding = null;
+		}
 		update();
 	}
 
 	protected void update() {
 		fNameText.setText(fSQLDatabaseBinding.getName() == null ? "" : fSQLDatabaseBinding.getName()); //$NON-NLS-1$
-		
-		String uri = fSQLDatabaseBinding.getUri();
-		if (uri != null) {
-			fUri.setText(fSQLDatabaseBinding.getUri());
-		}
 		
 		Parameters params = fSQLDatabaseBinding.getParameters();
 		if (params != null) {
@@ -427,28 +516,201 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage {
 //			String sqlvalidation = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlValidationConnectionURL);
 //			if (sqlvalidation != null)
 //				fSqlValidationConnectionURL.setText(sqlvalidation);
+			
+			String jndiName = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiName);
+			if(jndiName != null) {
+				fDeployAsJndiName.setText(jndiName);
+			}
+			
+			String jndiUser = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiUser);
+			if(jndiUser != null) {
+				fJndiUser.setText(jndiUser);
+			}
+			
+			String jndiPass = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiPassword);
+			if(jndiPass != null) {
+				fJndiPassword.setText(jndiPass);
+			}
+			
+			fDeployAsJndi.setSelection(EGLDDRootHelper.getBooleanParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi));
 		}
 		
-		if (fSQLDatabaseBinding.isUseURI()) {
-			fUseURI.setSelection(true);
-			fUseDefinedInfo.setSelection(false);
-			
-			for (Control c : definedControls) {
-				c.setEnabled(false);
+		updateDeployAsControls(); // it's possible this doesn't get invoked below
+		
+		String uri = fSQLDatabaseBinding.getUri();
+		if (uri != null) {
+			if (uri.startsWith("workspace://")) {
+				if (fSQLDatabaseBinding.isUseURI()) {
+					fUseWorkspace.setSelection(true);
+					workspaceUriSelected();
+				}
+			}
+			else if (uri.startsWith("jndi://")) {
+				fJndiName.setText(uri.substring(7));
+				if (fSQLDatabaseBinding.isUseURI()) {
+					fUseJndi.setSelection(true);
+					jndiUriSelected();
+				}
 			}
 		}
-		else {
-			fUseURI.setSelection(false);
+			
+		if (!fSQLDatabaseBinding.isUseURI()) {
 			fUseDefinedInfo.setSelection(true);
-			
-			for (Control c : uriControls) {
-				c.setEnabled(false);
-			}
+			userDefinedSelected();
 		}
-	}	
+		
+		updateCombo();
+	}
 	
 	protected void HandleNameChanged() {
 		fSQLDatabaseBinding.setName(fNameText.getText());
 		refreshMainTableViewer();
+	}
+	
+	protected void setWorkspaceUriInModel() {
+		String selection = workspaceCombo.getText();
+		if (nonExistantProfile != null && selection.equals(NLS.bind(SOAMessages.SqlConnectionProfileDoesntExist, nonExistantProfile))) {
+			selection = nonExistantProfile;
+		}
+		fSQLDatabaseBinding.setUri("workspace://" + selection);
+	}
+	
+	protected void updateCombo() {
+		nonExistantProfile = null;
+		
+		IConnectionProfile[] profiles = ProfileManager.getInstance().getProfiles();
+		List <String> names = new ArrayList<String>(profiles.length + 1);
+		for (int i = 0; i < profiles.length; i++) {
+			names.add(profiles[i].getName());
+		}
+		
+		int selectionIndex = -1;
+		String nameToSelect = null;
+		String uri = fSQLDatabaseBinding.getUri();
+		if (uri != null && uri.startsWith("workspace://")) {
+			nameToSelect = uri.substring(12);
+		}
+		
+		if (nameToSelect != null) {
+			for (int i = 0; i < names.size(); i++) {
+				if (nameToSelect.equals(names.get(i))) {
+					selectionIndex = i;
+					break;
+				}
+			}
+			if (selectionIndex == -1) {
+				nonExistantProfile = nameToSelect;;
+				names.add(NLS.bind(SOAMessages.SqlConnectionProfileDoesntExist, nameToSelect));
+				selectionIndex = names.size() - 1;
+			}
+		}
+		
+		workspaceCombo.setItems(names.toArray(new String[names.size()]));
+		if (selectionIndex > -1) {
+			workspaceCombo.select(selectionIndex);
+		}
+		else if (names.size() > 0) {
+			workspaceCombo.select(0);
+		}
+	}
+	
+	private void updateDeployAsControls() {
+		boolean state = fDeployAsJndi.getSelection() && fDeployAsJndi.getEnabled();
+		for (Control c : deployAsJndiControls) {
+			c.setEnabled(state);
+		}
+	}
+	
+	private void workspaceUriSelected() {
+		for (Control c : definedControls) {
+			c.setEnabled(false);
+		}
+		for (Control c : jndiControls) {
+			c.setEnabled(false);
+		}
+		for (Control c : workspaceControls) {
+			c.setEnabled(true);
+		}
+		
+		fDeployAsJndi.setEnabled(true);
+		updateDeployAsControls();
+	}
+	
+	private void jndiUriSelected() {
+		for (Control c : definedControls) {
+			c.setEnabled(false);
+		}
+		for (Control c : jndiControls) {
+			c.setEnabled(true);
+		}
+		for (Control c : workspaceControls) {
+			c.setEnabled(false);
+		}
+		
+		fDeployAsJndi.setEnabled(false);
+		updateDeployAsControls();
+	}
+	
+	private void userDefinedSelected() {
+		for (Control c : definedControls) {
+			c.setEnabled(true);
+		}
+		for (Control c : jndiControls) {
+			c.setEnabled(false);
+		}
+		for (Control c : workspaceControls) {
+			c.setEnabled(false);
+		}
+		
+		fDeployAsJndi.setEnabled(true);
+		updateDeployAsControls();
+	}
+	
+	@Override
+	public void profileAdded(IConnectionProfile profile) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				updateCombo();
+			}
+		});
+	}
+	
+	@Override
+	public void profileDeleted(IConnectionProfile profile) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				updateCombo();
+			}
+		});
+	}
+	
+	@Override
+	public void profileChanged(IConnectionProfile profile) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				updateCombo();
+			}
+		});
+	}
+	
+	@Override
+	public void profileChanged(final IConnectionProfile profile, final String oldName, String oldDesc, Boolean oldAutoConnect) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				// If the model's workspace profile is what changed, update the model.
+				String uri = fSQLDatabaseBinding.getUri();
+				if (uri != null && uri.startsWith("workspace://")) {
+					String name = uri.substring(12);
+					if (name.equals(oldName)) {
+						fSQLDatabaseBinding.setUri("workspace://" + profile.getName());
+					}
+				}
+				updateCombo();
+			}
+		});
 	}
 }

@@ -178,7 +178,6 @@ public class NewWizardMessages extends NLS {
 	public static String SQLBindingDescription;
 	public static String SQLBindingWorkspaceUriLabel;
 	public static String SQLBindingHardcodedLabel;
-	public static String SQLBindingJNDILabel;
 	public static String SQLBindingNoConnectionSelected;
 
 

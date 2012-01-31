@@ -145,14 +145,25 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		String bindingName =  getValidBindingName(getBindingName());
 		sqlBinding.setName(bindingName);
 		
+		Parameters params = null;
+		if (!getUri().startsWith("jndi://")) {
+			params = DeploymentFactory.eINSTANCE.createParameters();
+			sqlBinding.setParameters(params);
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi, true);
+			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiName, "jdbc/" + bindingName);
+		}
+		
 		if (useUri()) {
 			sqlBinding.setUseURI(true);
 			sqlBinding.setUri(getUri());
 		}
 		else {
+			if (params == null) {
+				params = DeploymentFactory.eINSTANCE.createParameters();
+				sqlBinding.setParameters(params);
+			}
+			
 			sqlBinding.setUseURI(false);
-			Parameters params = DeploymentFactory.eINSTANCE.createParameters();
-			sqlBinding.setParameters(params);
 		
 			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms, getDbms());
 			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, getUserName());

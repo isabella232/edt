@@ -26,8 +26,10 @@ import org.eclipse.edt.ide.sql.ISQLPreferenceConstants;
 import org.eclipse.edt.ide.sql.SQLNlsStrings;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
+import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
+import org.eclipse.jface.dialogs.ControlEnableState;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -68,6 +70,9 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 	private Text jndiText;
 	private Button connProfileUriRadio;
 	private Button connProfileInlinedRadio;
+	
+	private Group connectionGroup;
+	private ControlEnableState connectionGroupEnablement;
 	
 	public SQLDatabaseBindingWizardPage(String pageName){
 		super(pageName);
@@ -117,6 +122,11 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleWorkspaceURIRadio();
+				
+				if (connectionGroupEnablement != null) {
+					connectionGroupEnablement.restore();
+					connectionGroupEnablement = null;
+				}
 			}
 		});
 		
@@ -129,11 +139,16 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleInlinedRadio();
+				
+				if (connectionGroupEnablement != null) {
+					connectionGroupEnablement.restore();
+					connectionGroupEnablement = null;
+				}
 			}
 		});
 		
 		jndiRadio = new Button(parent, SWT.RADIO);
-		jndiRadio.setText(NewWizardMessages.SQLBindingJNDILabel);
+		jndiRadio.setText(SOAMessages.LabelSqlUseJndi);
 		gd = new GridData();
 		gd.horizontalSpan = 1;
 		jndiRadio.setLayoutData(gd);
@@ -143,6 +158,10 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 				getConfiguration().setUseUri(true);
 				handleJNDIChanged();
 				determinePageCompletion();
+				
+				if (connectionGroupEnablement == null) {
+					connectionGroupEnablement = ControlEnableState.disable(connectionGroup);
+				}
 			}
 		});
 		
@@ -158,10 +177,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 				}
 			}
 		});
-		
-		//TODO:
-		jndiRadio.setVisible(false);
-		jndiText.setVisible(false);
 	}
 	
 	private void handleWorkspaceURIRadio() {
@@ -196,7 +211,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 		//data.heightHint = 300;
 		groupParent.setLayoutData(data);
 
-		Group connectionGroup = new Group(groupParent, SWT.NONE);
+		connectionGroup = new Group(groupParent, SWT.NONE);
 		GridLayout gl = new GridLayout();
 		gl.numColumns = 2;
 		connectionGroup.setLayout(gl);
