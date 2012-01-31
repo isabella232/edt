@@ -13,11 +13,13 @@ package org.eclipse.edt.ide.deployment.core.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
+import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.Parameter;
 
 public class Service {
-	
 	
 	public static String SERVICE_REST = "edt.service.rest";
 	private String type;
@@ -46,5 +48,24 @@ public class Service {
 	
 	public String getImplementation() {
 		return implementation;
+	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof Service)) {
+			return false;
+		}
+		
+		Service s = (Service)o;
+		if (Binding.equal(type, s.type) && Binding.equal(implementation, s.implementation) && parameters.size() == s.parameters.size()
+				&& getClass().equals(s.getClass())) {
+			Set<Entry<String, Parameter>> entrySet = s.parameters.entrySet();
+			for (Entry<String, Parameter> entry : parameters.entrySet()) {
+				if (!entrySet.contains(entry)) {
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 }
