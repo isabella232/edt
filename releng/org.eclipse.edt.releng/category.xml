@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site pack200="true">
+<site pack200="true" associateSitesURL="site-associates.xml">
         <!-- ${category.name} -->
         <category-def label="${edtProjectName} ${version}" name="${category.name}">
                 <description>

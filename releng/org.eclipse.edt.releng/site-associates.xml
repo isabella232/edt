@@ -1,0 +1,4 @@
+<?xml encoding="ISO-8859-1"?>
+<associateSites>
+	<associateSite url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x" label="Jetty 7.x"/>
+</associateSites>
