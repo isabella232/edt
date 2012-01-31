@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="testServerExtension" name="Test Server Extension" schema="schema/testServerExtension.exsd"/>
+   
+   <!-- Preferences -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.ide.internal.testserver.TestServerPreferencePage"
+            id="org.eclipse.edt.ide.testserver.testServerPreferences"
+            name="%TestServerPreferencePageName">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="org.eclipse.edt.ide.internal.testserver.PreferenceInitializer"/>
+   </extension>
+   
+   <!-- Launching -->
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            id="org.eclipse.edt.ide.testserver.testServerLaunchType"
+            name="%TestServerConfigTypeName"
+            public="false">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.edt.ide.testserver.testServerLaunchType"
+            icon="icons/full/obj16/egl_launch_obj.gif"
+            id="org.eclipse.edt.ide.testserver.testServerLaunchImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.launchDelegates">
+      <launchDelegate
+            delegate="org.eclipse.edt.ide.internal.testserver.TestServerLaunchDelegate"
+            id="org.eclipse.edt.ide.testserver.testServerLaunchDelegate"
+            modes="run,debug"
+            name="%TestServerConfigTypeName"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"
+            type="org.eclipse.edt.ide.testserver.testServerLaunchType">
+         <modeCombination
+               modes="run, debug"
+               perspective="org.eclipse.debug.ui.DebugPerspective">
+         </modeCombination>
+         <modeCombination
+               modes="debug"
+               perspective="org.eclipse.debug.ui.DebugPerspective">
+         </modeCombination>
+      </launchDelegate>
+   </extension>
+</plugin>
