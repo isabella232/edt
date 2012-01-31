@@ -1,0 +1,4 @@
+package eglx.persistence.sql;
+
+externalType SQLJNDIDataSource extends SQLDataSource type NativeType
+end

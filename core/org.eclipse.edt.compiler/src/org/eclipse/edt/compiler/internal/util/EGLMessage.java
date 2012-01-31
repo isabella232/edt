@@ -536,6 +536,11 @@ public class EGLMessage extends Object  implements IGenerationResultsMessage{
 	public static final String EGL_DEPLOYMENT_LOCALE_PROCESSING_FAILED = "8326"; //$NON-NLS-1$
 	public static final String EGL_DEPLOYMENT_MISSING_IMPORT_EXCEPTION = "8327"; //$NON-NLS-1$
 	public static final String EGL_DEPLOYMENT_FAILED_FIND_NLS_FILES = "8328"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_CREATED_RESOURCE_REFS = "8329"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_FAILED_DEFINE_DATASOURCE = "8330"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_FAILED_WRITE_CONTEXTDOTXML = "8331"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_DEFINED_DATASOURCES = "8332"; //$NON-NLS-1$
+	public static final String EGL_DEPLOYMENT_SERVER_NOT_TOMCAT = "8333"; //$NON-NLS-1$
 	
 	//9000-    : Used for misc validation
 	public static final String EGLMESSAGE_GENERATABLE_NOT_FOUND = "9000"; //$NON-NLS-1$
