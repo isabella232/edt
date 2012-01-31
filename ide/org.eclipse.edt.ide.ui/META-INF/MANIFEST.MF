@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT IDE UI
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.ui;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.edt.ide.ui.EDTUIPlugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -90,4 +90,4 @@ Export-Package:
  org.eclipse.edt.ide.ui.templates.wizards,
  org.eclipse.edt.ide.ui.wizards,
  org.eclipse.edt.ide.ui.internal.results.views
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
