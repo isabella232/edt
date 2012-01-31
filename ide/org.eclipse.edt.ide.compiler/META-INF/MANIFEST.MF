@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT Compiler and Generator Contributions
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.compiler;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
@@ -23,4 +23,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.ide.compiler,
  org.eclipse.edt.ide.compiler.gen,
  org.eclipse.edt.ide.compiler.gen.ui
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
