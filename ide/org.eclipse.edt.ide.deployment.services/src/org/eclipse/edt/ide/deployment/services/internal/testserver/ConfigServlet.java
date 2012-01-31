@@ -325,6 +325,7 @@ public class ConfigServlet extends HttpServlet {
 			for (NamingEntry entry : addedDataSources) {
 				if (entry.getJndiName().equals(jndiName)) {
 					addResourceRef(jndiName, DataSource.class);
+					break;
 				}
 			}
 		}
@@ -535,14 +536,12 @@ public class ConfigServlet extends HttpServlet {
 				
 				for (SQLDatabaseBinding binding : bindings) {
 					String jndiName = null;
-					if (binding.isUseURI() && binding.getUri() != null && binding.getUri().startsWith("jndi://")) { //$NON-NLS-1$
-						// JNDI name comes from the URI
-						//TODO not yet supported. Would require the user be able to define the data source somewhere for use by the test server.
-						// If we uncommented this now, there is no corresponding data source.
-//						jndiName = binding.getUri().substring(7); // "jndi://".length()
-					}
-					else if (binding.isDeployAsJndi()) {
+					if (binding.isDeployAsJndi()) {
 						jndiName = binding.getJndiName();
+					}
+					else if (binding.isUseURI() && binding.getUri() != null && binding.getUri().startsWith("jndi://")) { //$NON-NLS-1$
+						// JNDI name comes from the URI
+						jndiName = binding.getUri().substring(7); // "jndi://".length()
 					}
 					
 					if (jndiName != null && (jndiName = jndiName.trim()).length() > 0) {

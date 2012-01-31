@@ -129,7 +129,7 @@ public class DeploymentDescUtil {
 	 * If the binding is not tweaked, it is returned as-is.
 	 */
 	private static Binding tweakBinding(Binding binding, IProject targetProject) {
-		if (binding instanceof SQLDatabaseBinding && ServiceUtilities.isTomcatProject(targetProject)) {
+		if (binding instanceof SQLDatabaseBinding) {
 			SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
 			
 			String uri = sqlBinding.getUri();
