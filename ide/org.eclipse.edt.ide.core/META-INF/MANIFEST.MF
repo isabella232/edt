@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT IDE Core
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.core;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.edt.ide.core.EDTCoreIDEPlugin
 Require-Bundle: org.eclipse.core.resources,
  org.eclipse.core.runtime,
@@ -66,4 +66,4 @@ Export-Package: org.eclipse.edt.ide.core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
