@@ -380,6 +380,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				updateDeployAsControls();
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi, fDeployAsJndi.getSelection());
 			}
 		});
 		
