@@ -28,9 +28,10 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.edt.debug.core.DebugUtil;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
-import org.eclipse.edt.ide.rui.internal.testserver.ClasspathUtil;
-import org.eclipse.edt.ide.rui.internal.testserver.DeploymentDescriptorFinder;
-import org.eclipse.edt.ide.rui.server.EvServer;
+import org.eclipse.edt.ide.deployment.services.internal.testserver.DDUtil;
+import org.eclipse.edt.ide.deployment.services.internal.testserver.DeploymentDescriptorFinder;
+import org.eclipse.edt.ide.testserver.ClasspathUtil;
+import org.eclipse.edt.ide.testserver.TestServerIDEConnector;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeRoot;
@@ -147,9 +148,9 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 			{
 				// set VM args required by the main program launcher class
 				String vmArgs = copy.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "" ); //$NON-NLS-1$
-				vmArgs += "-Degl.main.class.name=\"" + className + "\" -Degl.ide.port=\"" + EvServer.getInstance().getPortNumber() //$NON-NLS-1$ //$NON-NLS-2$
+				vmArgs += "-Degl.main.class.name=\"" + className + "\" -Degl.ide.port=\"" + TestServerIDEConnector.getInstance().getPortNumber() //$NON-NLS-1$ //$NON-NLS-2$
 						+ "\" -Degl.dd.list=\"" //$NON-NLS-1$
-						+ DeploymentDescriptorFinder.toArgumentString( DeploymentDescriptorFinder.findDeploymentDescriptors( project ).values() )
+						+ DeploymentDescriptorFinder.toArgumentString( DeploymentDescriptorFinder.findDeploymentDescriptors( project ) )
 						+ "\" -Degl.default.dd=\"" + DeploymentDescriptorFinder.getDefaultDDName( project ) + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 				copy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, vmArgs );
 				
@@ -167,7 +168,7 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 				ClasspathUtil.addEGLPathToJavaPathIfNecessary( JavaCore.create( javaFile.getProject() ), project, new HashSet<IProject>(), classpath );
 				
 				// Finally, add any JDBC jars that might be required.
-				ClasspathUtil.addJDBCJars( project, new HashSet<IProject>(), new HashSet<IResource>(), classpath );
+				DDUtil.addJDBCJars( project, new HashSet<IProject>(), new HashSet<IResource>(), classpath );
 				
 				String icu = ClasspathUtil.getClasspathEntry( "com.ibm.icu" ); //$NON-NLS-1$
 				if ( icu != null )
