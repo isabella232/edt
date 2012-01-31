@@ -54,14 +54,10 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 	private Binding fSQLDatabaseBinding;
 	
 	private Button fUseWorkspace;
-	private Button fUseJndi;
 	private Button fUseDefinedInfo;
 	private Button fDeployAsJndi;
 	private Button btnPing;
 	private Combo workspaceCombo;
-	private Text fJndiName;
-	private Text fJndiUser;
-	private Text fJndiPassword;
 	private Text fDeployAsJndiName;
 	private Text fDbms;
 	private Text fSqlDB;
@@ -73,7 +69,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 //	private Text fSqlValidationConnectionURL;
 	
 	private List<Control> workspaceControls;
-	private List<Control> jndiControls;
 	private List<Control> definedControls;
 	private List<Control> deployAsJndiControls;
 	
@@ -87,7 +82,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 		super();
 		nColumnSpan = 3;
 		this.workspaceControls = new ArrayList<Control>();
-		this.jndiControls = new ArrayList<Control>();
 		this.definedControls = new ArrayList<Control>();
 		this.deployAsJndiControls = new ArrayList<Control>();
 	}
@@ -101,7 +95,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 	protected void createDetailControls(FormToolkit toolkit, Composite parent) {
 		createWorkspaceControls(toolkit, parent);
 		createSQLControls(toolkit, parent);
-		createJNDIControls(toolkit, parent);
 		createDeployAsJNDIControls(toolkit, parent);
 		
 		ProfileManager.getInstance().addProfileListener(this);
@@ -310,65 +303,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 		createSpacer(toolkit, parent, nColumnSpan);
 	}
 	
-	private void createJNDIControls(FormToolkit toolkit, Composite parent) {
-		jndiControls.clear();
-		
-		fUseJndi = toolkit.createButton(parent, SOAMessages.LabelSqlUseJndi, SWT.RADIO);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = nColumnSpan;
-		fUseJndi.setLayoutData(gd);
-		fUseJndi.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				jndiUriSelected();
-				fSQLDatabaseBinding.setUseURI(true);
-				fSQLDatabaseBinding.setUri("jndi://" + fJndiName.getText());
-			}
-		});
-		
-		Label l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiName);
-		jndiControls.add(l);
-		gd = new GridData();
-		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		fJndiName = createTextControl(toolkit, parent);
-		fJndiName.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				fSQLDatabaseBinding.setUri("jndi://" + fJndiName.getText());
-			}			
-		});
-		jndiControls.add(fJndiName);
-		
-		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiUser);
-		jndiControls.add(l);
-		gd = new GridData();
-		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		fJndiUser = createTextControl(toolkit, parent);
-		fJndiUser.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiUser, fJndiUser.getText());
-			}			
-		});
-		jndiControls.add(fJndiUser);
-		
-		l = toolkit.createLabel(parent, SOAMessages.LabelSqlJndiPassword);
-		jndiControls.add(l);
-		gd = new GridData();
-		gd.horizontalIndent = indent;
-		l.setLayoutData(gd);
-		fJndiPassword = createTextControl(toolkit, parent);
-		fJndiPassword.setEchoChar('*'); //$NON-NLS-1$
-		fJndiPassword.addModifyListener(new ModifyListener(){
-			public void modifyText(ModifyEvent e) {
-				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiPassword, fJndiPassword.getText());
-			}			
-		});
-		jndiControls.add(fJndiPassword);
-		
-		createSpacer(toolkit, parent, nColumnSpan);
-	}
-	
 	private void createDeployAsJNDIControls(FormToolkit toolkit, Composite parent) {
 		deployAsJndiControls.clear();
 		
@@ -523,16 +457,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 				fDeployAsJndiName.setText(jndiName);
 			}
 			
-			String jndiUser = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiUser);
-			if(jndiUser != null) {
-				fJndiUser.setText(jndiUser);
-			}
-			
-			String jndiPass = EGLDDRootHelper.getParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiPassword);
-			if(jndiPass != null) {
-				fJndiPassword.setText(jndiPass);
-			}
-			
 			fDeployAsJndi.setSelection(EGLDDRootHelper.getBooleanParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi));
 		}
 		
@@ -544,13 +468,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 				if (fSQLDatabaseBinding.isUseURI()) {
 					fUseWorkspace.setSelection(true);
 					workspaceUriSelected();
-				}
-			}
-			else if (uri.startsWith("jndi://")) {
-				fJndiName.setText(uri.substring(7));
-				if (fSQLDatabaseBinding.isUseURI()) {
-					fUseJndi.setSelection(true);
-					jndiUriSelected();
 				}
 			}
 		}
@@ -626,9 +543,6 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 		for (Control c : definedControls) {
 			c.setEnabled(false);
 		}
-		for (Control c : jndiControls) {
-			c.setEnabled(false);
-		}
 		for (Control c : workspaceControls) {
 			c.setEnabled(true);
 		}
@@ -637,27 +551,9 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 		updateDeployAsControls();
 	}
 	
-	private void jndiUriSelected() {
-		for (Control c : definedControls) {
-			c.setEnabled(false);
-		}
-		for (Control c : jndiControls) {
-			c.setEnabled(true);
-		}
-		for (Control c : workspaceControls) {
-			c.setEnabled(false);
-		}
-		
-		fDeployAsJndi.setEnabled(false);
-		updateDeployAsControls();
-	}
-	
 	private void userDefinedSelected() {
 		for (Control c : definedControls) {
 			c.setEnabled(true);
-		}
-		for (Control c : jndiControls) {
-			c.setEnabled(false);
 		}
 		for (Control c : workspaceControls) {
 			c.setEnabled(false);

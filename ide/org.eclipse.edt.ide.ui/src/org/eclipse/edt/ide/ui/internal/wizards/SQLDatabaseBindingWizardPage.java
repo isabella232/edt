@@ -26,7 +26,6 @@ import org.eclipse.edt.ide.sql.ISQLPreferenceConstants;
 import org.eclipse.edt.ide.sql.SQLNlsStrings;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
 import org.eclipse.jface.dialogs.ControlEnableState;
@@ -34,8 +33,6 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -49,7 +46,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
@@ -66,8 +62,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 
 	private Hashtable existingConnections;
 	
-	private Button jndiRadio;
-	private Text jndiText;
 	private Button connProfileUriRadio;
 	private Button connProfileInlinedRadio;
 	
@@ -146,37 +140,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 				}
 			}
 		});
-		
-		jndiRadio = new Button(parent, SWT.RADIO);
-		jndiRadio.setText(SOAMessages.LabelSqlUseJndi);
-		gd = new GridData();
-		gd.horizontalSpan = 1;
-		jndiRadio.setLayoutData(gd);
-		jndiRadio.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				getConfiguration().setUseUri(true);
-				handleJNDIChanged();
-				determinePageCompletion();
-				
-				if (connectionGroupEnablement == null) {
-					connectionGroupEnablement = ControlEnableState.disable(connectionGroup);
-				}
-			}
-		});
-		
-		jndiText = new Text(parent, SWT.SINGLE|SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = nColumns - 1;
-		jndiText.setLayoutData(gd);
-		jndiText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (jndiRadio.getSelection()) {
-					handleJNDIChanged();
-				}
-			}
-		});
 	}
 	
 	private void handleWorkspaceURIRadio() {
@@ -189,16 +152,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 		getConfiguration().setUseUri(false);
 		updateConnectionProperties();
 		determinePageCompletion();
-	}
-	
-	private void handleJNDIChanged() {
-		String text = jndiText.getText();
-		getConfiguration().setBindingName(text);
-		
-		if (!text.startsWith("jndi://")) { //$NON-NLS-1$
-			text = "jndi://" + text; //$NON-NLS-1$
-		}
-		getConfiguration().setUri(text);
 	}
 	
 	private void createConnectionGroup(Composite parent) {
