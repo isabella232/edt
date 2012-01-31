@@ -60,7 +60,7 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 
 		try {
-			InputStream is = new ByteArrayInputStream(DeploymentDescUtil.convertToBindXML(ddModel).getBytes("UTF-8"));
+			InputStream is = new ByteArrayInputStream(DeploymentDescUtil.convertToBindXML(ddModel, context.getTargetProject()).getBytes("UTF-8"));
 		
 			IPath targetFilePath = new Path( "/" + context.getTargetProject().getName() + "/" + javaSourceFolder + "/" + ddModel.getName().toLowerCase() + BIND_XML_FILE_SUFFIX ); 
 			

@@ -5,11 +5,6 @@
          point="org.eclipse.edt.ide.deployment.deploymentOperation">
          
       <DeploymentOperation
-            class="org.eclipse.edt.ide.deployment.services.operation.ConvertWorkspaceResourceOperation"
-            deploymentSolutionName="j2ee"
-            id="org.eclipse.edt.ide.deployment.services.operation.ConvertWorkspaceResourceOperation">
-      </DeploymentOperation>
-      <DeploymentOperation
             class="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindXMLFileOperation"
             deploymentSolutionName="j2ee"
             id="org.eclipse.edt.ide.deployment.services.operation.GenerateServiceBindFileOperation">
@@ -39,6 +34,18 @@
             deploymentSolutionName="j2ee"
             id="org.eclipse.edt.ide.deployment.services.operation.ConfigureRuntimePropertiesOperation">
       </DeploymentOperation>
+      <DeploymentOperation
+            class="org.eclipse.edt.ide.deployment.services.operation.ConfigureDataSourcesOperation"
+            deploymentSolutionName="j2ee"
+            id="org.eclipse.edt.ide.deployment.services.operation.ConfigureDataSourcesOperation">
+      </DeploymentOperation>
    </extension>
-
+	
+   <!-- Server Contributions -->
+   <extension
+         point="org.eclipse.edt.ide.testserver.testServerExtension">
+      <provider
+            class="org.eclipse.edt.ide.deployment.services.internal.testserver.ServicesContribution">
+      </provider>
+   </extension>  
 </plugin>

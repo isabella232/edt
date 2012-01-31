@@ -11,11 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.services.generators;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.ide.deployment.core.model.Constants;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.jst.server.core.FacetUtil;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 public class ServiceUtilities {
 	
@@ -51,5 +57,22 @@ public class ServiceUtilities {
 	public static String getRestServiceRoot()
 	{
 		return REST_SERVICE_ROOT_ID_ELEM;
+	}
+	
+	public static boolean isTomcatProject(IProject project) {
+		try {
+			IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+			if (facetedProject != null) {
+				IRuntime primaryRuntime = facetedProject.getPrimaryRuntime();
+				if (primaryRuntime != null) {
+					org.eclipse.wst.server.core.IRuntime runtime = FacetUtil.getRuntime(primaryRuntime);
+					return runtime != null && runtime.getRuntimeType() != null && runtime.getRuntimeType().getName().toLowerCase().contains("tomcat");
+				}
+			}
+		}
+		catch (CoreException ce) {
+			ce.printStackTrace();
+		}
+		return false;
 	}
 }
