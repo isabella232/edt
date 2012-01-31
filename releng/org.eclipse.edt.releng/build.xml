@@ -30,6 +30,16 @@
 		<delete dir="${writableBuildRoot}/${buildType}_OlderBuild" failonerror="false"/>
 		<move file="${writableBuildRoot}/${buildType}_ThisBuild" tofile="${writableBuildRoot}/${buildType}_OlderBuild" failonerror="false"/>
 		<mkdir dir="${buildDir}"/>
+		
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement path="${classpath}" />
+				<pathelement location="${relengCommonBuilderDir}/lib/ant-contrib.jar" />
+				<pathelement location="${relengBuilderDir}/lib/ant-contrib.jar" />
+				<pathelement location="${thirdPartyJarsDir}/ant-contrib.jar" />
+				<pathelement location="/usr/share/java/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
 	</target>
 
 	<target name="run" depends="init">
