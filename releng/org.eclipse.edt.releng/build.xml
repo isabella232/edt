@@ -50,7 +50,7 @@
 		<property name="relengBaseBuilderDir" value="/opt/public/cbi/build/org.eclipse.releng.basebuilder" />
 		<ant antfile="${relengCommonBuilderDir}/buildAll.xml" target="runEclipse" dir="${relengCommonBuilderDir}" />
 
-		<antcall target="add.associate.sites"/>
+		<!--<antcall target="add.associate.sites"/>-->
 		<antcall target="cleanUp" inheritall="true" />
 
 		<ant antfile="promote.xml" />
