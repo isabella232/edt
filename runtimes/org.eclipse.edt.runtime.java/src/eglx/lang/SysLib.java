@@ -25,7 +25,6 @@ import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.javart.resources.Platform;
-import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 
 import resources.edt.binding.BindingResourceProcessor;
@@ -255,8 +254,6 @@ public class SysLib extends ExecutableBase {
 	}
 	
 	public static interface ResourceLocator {
-		public Object locateResource(String bindingURI);
 		public RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileURI);
-		public Object convertToResource(Binding binding);
 	}
 }

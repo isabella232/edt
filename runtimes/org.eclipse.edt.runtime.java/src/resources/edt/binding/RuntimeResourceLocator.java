@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 
 import eglx.java.JavaObjectException;
@@ -29,19 +28,14 @@ import eglx.lang.AnyException;
 import eglx.lang.SysLib.ResourceLocator;
 
 /**
- * Implements SysLib.ResourceLocator to handle locating deployment descriptors for a Java test environment, as well as
- * supporting special binding URIs such as "workspace://".
+ * Implements SysLib.ResourceLocator to handle locating deployment descriptors.
  */
 public class RuntimeResourceLocator implements ResourceLocator {
-	
-	private static final long serialVersionUID = 1L;
 	
 	protected static Map<String, RuntimeDeploymentDesc> deploymentDescs = new HashMap<String, RuntimeDeploymentDesc>();
 	
 	/**
 	 * Constructor.
-	 * 
-	 * @param idePort  The port on which the IDE can be reached.
 	 */
 	public RuntimeResourceLocator() {
 	}
@@ -86,16 +80,5 @@ public class RuntimeResourceLocator implements ResourceLocator {
 			}
 		}
 		return dd;
-	}
-	
-
-	@Override
-	public Object locateResource(String bindingURI) {
-		return null;
-	}
-
-	@Override
-	public Object convertToResource(Binding binding) {
-		return null;
 	}
 }

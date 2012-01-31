@@ -13,6 +13,8 @@ package org.eclipse.edt.javart;
 
 import java.util.Locale;
 
+import javax.naming.NamingException;
+
 import org.eclipse.edt.javart.resources.JavartProperties;
 import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.javart.resources.RecoverableResource;
@@ -45,4 +47,5 @@ public interface RunUnit {
 	Trace getTrace();
 	Executable getActiveExecutable() throws AnyException;
 	void setActiveExecutable(Executable executable);
+	Object jndiLookup(String name) throws NamingException;
 }

@@ -12,12 +12,16 @@
 package org.eclipse.edt.javart.services.servlet.rest.rpc;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.edt.javart.Constants;
 
 public class PreviewServiceServlet extends ServiceServlet {
 
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
+	
+	private List<String> addedUris = new ArrayList<String>();
 	
 	@Override
 	protected RestServiceProjectInfo restServiceProjectInfo() {
@@ -28,10 +32,19 @@ public class PreviewServiceServlet extends ServiceServlet {
 	}
 	
 	public void addServiceMapping(String uri, String className, boolean stateful) {
+		addedUris.add(uri);
 		restServiceProjectInfo().addURI(uri, "POST", className, stateful, false, null, null, null);
 	}
 	
 	public void removeServiceMapping(String uri) {
+		addedUris.remove(uri);
 		restServiceProjectInfo().removeURI(uri, "POST");
+	}
+	
+	public void clearServiceMappings() {
+		for (String uri : addedUris) {
+			restServiceProjectInfo().removeURI(uri, "POST");
+		}
+		addedUris.clear();
 	}
 }

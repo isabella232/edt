@@ -67,4 +67,6 @@ public class Message
 	public static final String RESOURCE_URI_EXCEPTION = "EGL0047E";
 	public static final String RESOURCE_NO_PROCESSOR = "EGL0048E";
 	public static final String MISSING_DEFAULT_DD = "EGL0049E";
+	public static final String JNDI_LOOKUP_ERROR = "EGL0050E";
+	public static final String JNDI_UNKNOWN_TYPE = "EGL0051E";
 }

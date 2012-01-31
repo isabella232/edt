@@ -51,47 +51,7 @@ public class BindingResourceProcessor {
 		}
 		Binding binding = getBinding(name, dd, resourceLocator);
 		if(binding != null && binding.getType() != null){
-			String factoryName;
-			String factoryPackage;
-			int idx = binding.getType().lastIndexOf('.');
-			if(idx > -1){
-				factoryName = binding.getType().substring(idx+1);
-				factoryPackage = binding.getType().substring(0,idx+1);
-			}
-			else{
-				factoryName = binding.getType();
-				factoryPackage = "";
-			}
-			
-			factoryName = new StringBuffer(factoryName).replace(0, 1, String.valueOf(factoryName.charAt(0)).toUpperCase()).toString() + "Factory";
-			
-			String implFactory = "resources." + factoryPackage + factoryName;
-		
-			BindingFactory factory = null;
-			try {
-				Class<?> clazz = Runtime.getRunUnit().getClass().getClassLoader().loadClass(implFactory);
-				factory = (BindingFactory)clazz.newInstance();
-			} catch (Exception e) {
-				DynamicAccessException dax = new DynamicAccessException();
-				dax.key = binding.getName();
-				dax.initCause( e );
-				throw dax.fillInMessage( Message.ERROR_RESOURCE_FACTORY_NOT_FOUND, binding.getName(), binding.getType(), dd );
-			}
-			try {
-				Object resource = factory.createResource(binding);
-				if(resource == null){
-					DynamicAccessException dax = new DynamicAccessException();
-					dax.key = binding.getName();
-					throw dax.fillInMessage( Message.ERROR_NO_RESOURCE_IMPLEMENTATION, binding.getName(), binding.getType(), dd );
-				}
-				return resource;
-			} catch (Exception e) {
-				DynamicAccessException dax = new DynamicAccessException();
-				dax.key = binding.getName();
-				dax.initCause( e );
-				throw dax.fillInMessage( Message.ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION, binding.getName(), binding.getType(), dd );
-			}
-			
+			return getResource(binding, dd);
 		}
 		else{
 			DynamicAccessException dax = new DynamicAccessException();
@@ -99,6 +59,50 @@ public class BindingResourceProcessor {
 			throw dax.fillInMessage( Message.ERROR_RESOURCE_BINDING_NOT_FOUND,name, dd );
 		}
 	}
+	
+	protected Object getResource(Binding binding, URI dd) throws AnyException{
+		String factoryName;
+		String factoryPackage;
+		int idx = binding.getType().lastIndexOf('.');
+		if(idx > -1){
+			factoryName = binding.getType().substring(idx+1);
+			factoryPackage = binding.getType().substring(0,idx+1);
+		}
+		else{
+			factoryName = binding.getType();
+			factoryPackage = "";
+		}
+		
+		factoryName = new StringBuffer(factoryName).replace(0, 1, String.valueOf(factoryName.charAt(0)).toUpperCase()).toString() + "Factory";
+		
+		String implFactory = "resources." + factoryPackage + factoryName;
+	
+		BindingFactory factory = null;
+		try {
+			Class<?> clazz = Runtime.getRunUnit().getClass().getClassLoader().loadClass(implFactory);
+			factory = (BindingFactory)clazz.newInstance();
+		} catch (Exception e) {
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = binding.getName();
+			dax.initCause( e );
+			throw dax.fillInMessage( Message.ERROR_RESOURCE_FACTORY_NOT_FOUND, binding.getName(), binding.getType(), dd );
+		}
+		try {
+			Object resource = factory.createResource(binding);
+			if(resource == null){
+				DynamicAccessException dax = new DynamicAccessException();
+				dax.key = binding.getName();
+				throw dax.fillInMessage( Message.ERROR_NO_RESOURCE_IMPLEMENTATION, binding.getName(), binding.getType(), dd );
+			}
+			return resource;
+		} catch (Exception e) {
+			DynamicAccessException dax = new DynamicAccessException();
+			dax.key = binding.getName();
+			dax.initCause( e );
+			throw dax.fillInMessage( Message.ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION, binding.getName(), binding.getType(), dd );
+		}
+	}
+	
 	protected URI getDefaultDDURI() throws AnyException {
 		Executable app = Runtime.getRunUnit().getActiveExecutable();
 		String dd = "";

@@ -13,7 +13,6 @@ package org.eclipse.edt.javart.ide;
 
 import java.lang.reflect.Method;
 
-import resources.edt.binding.IDEBindingResourceProcessor;
 
 import eglx.lang.SysLib;
 
@@ -52,8 +51,8 @@ public class MainProgramLauncher {
 		}
 		
 		// Used to locate *.egldd files and handle special binding URIs.
-		IDEResourceLocator resourceLocator = new IDEResourceLocator(idePort);
-		IDEBindingResourceProcessor bindingProcessor = new IDEBindingResourceProcessor(resourceLocator);
+		IDEResourceLocator resourceLocator = new IDEResourceLocator();
+		IDEBindingResourceProcessor bindingProcessor = new IDEBindingResourceProcessor(idePort, resourceLocator);
 		
 		// DD files aren't a required setting.
 		String ddFiles = System.getProperty(DD_FILES_ARG, null);

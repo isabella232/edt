@@ -11,16 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.ide;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,16 +28,11 @@ import java.util.StringTokenizer;
 import javax.xml.namespace.QName;
 
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.resources.egldd.Binding;
 import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
-import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
-import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
 import resources.edt.binding.BindingResourceProcessor;
 import resources.edt.binding.RuntimeResourceLocator;
 import eglx.lang.AnyException;
-import eglx.lang.SysLib;
-import eglx.persistence.sql.SQLDataSource;
 
 /**
  * Implements SysLib.ResourceLocator to handle locating deployment descriptors for a Java test environment, as well as
@@ -49,111 +40,38 @@ import eglx.persistence.sql.SQLDataSource;
  */
 public class IDEResourceLocator extends RuntimeResourceLocator {
 	
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * Maps DD names to absolute filesystem paths.
 	 */
 	private Map<String,String> ddPaths = new HashMap<String, String>();
 	
 	/**
-	 * Port on which the IDE server is running.
+	 * An alternate (static) method that parses the DD file. If unspecified then {@link RuntimeDeploymentDesc#createDeploymentDescriptor(String, InputStream)}
+	 * will be used. It MUST have the same signature as {@link RuntimeDeploymentDesc#createDeploymentDescriptor(String, InputStream)}.
 	 */
-	private final String ideURL;
+	private Method ddParserMethod;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param idePort  The port on which the IDE can be reached.
 	 */
-	public IDEResourceLocator(int idePort) {
-		this.ideURL = "http://localhost:" + idePort + "/__testServer"; //$NON-NLS-1$ //$NON-NLS-2$
+	public IDEResourceLocator() {
 	}
 	
-	@Override
-	public Object locateResource(String bindingURI) {
-		return SysLib.getResource(bindingURI);
+	/**
+	 * Sets the alternate (static) method that parses the DD file. If unspecified then {@link RuntimeDeploymentDesc#createDeploymentDescriptor(String, InputStream)}
+	 * will be used. It MUST have the same signature as {@link RuntimeDeploymentDesc#createDeploymentDescriptor(String, InputStream)}.
+	 */
+	public void setDDParser(Method method) {
+		this.ddParserMethod = method;
 	}
 	
+	
+	
 	@Override
-	public Object convertToResource(Binding binding) {
-		if (binding instanceof SQLDatabaseBinding) {
-			SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
-			if (sqlBinding.isUseURI()) {
-				String uri = sqlBinding.getUri();
-				if (uri != null && uri.startsWith("workspace://")) { //$NON-NLS-1$
-					String profileInfo = getConnectionProfileSettings(uri.substring(12)); // "workspace://".length()
-					if (profileInfo != null && profileInfo.length() > 0) {
-						String[] tokens = profileInfo.split(";");
-						if (tokens.length > 0) {
-							String url = tokens[0].trim();
-							String user = null;
-							String pass = null;
-							String schema = null;
-							String className = null;
-							
-							if (tokens.length > 1) {
-								user = tokens[1].trim();
-							}
-							if (tokens.length > 2) {
-								pass = tokens[2].trim();
-							}
-							if (tokens.length > 3) {
-								schema = tokens[3].trim();
-							}
-							if (tokens.length > 4) {
-								className = tokens[4].trim();
-							}
-							
-							try {
-								url = URLDecoder.decode(url, "UTF-8");
-								if (user != null) {
-									user = URLDecoder.decode(user, "UTF-8");
-								}
-								if (pass != null) {
-									pass = URLDecoder.decode(pass, "UTF-8");
-								}
-								if (schema != null) {
-									schema = URLDecoder.decode(schema, "UTF-8");
-								}
-								if (className != null) {
-									className = URLDecoder.decode(className, "UTF-8");
-								}
-							}
-							catch (UnsupportedEncodingException e) {
-								// Shouldn't happen.
-							}
-							
-							EDictionary props = new EDictionary();
-							if (user != null && user.length() > 0) {
-								props.put("user", user);
-							}
-							if (pass != null && pass.length() > 0) {
-								props.put("password", pass);
-							}
-							
-							// Try to load the class so that it registers itself, in case it's not a Type 4 driver.
-							// This must be done before any connection is made, such as by invoking setCurrentSchema below.
-							if (className != null && className.length() > 0) {
-								try {
-									Class.forName(className);
-								}
-								catch (Throwable t) {
-								}
-							}
-							
-							SQLDataSource ds = new SQLDataSource(url, props);
-							if (schema != null && schema.length() > 0) {
-								ds.setCurrentSchema(schema);
-							}
-							
-							return ds;
-						}
-					}
-				}
-			}
-		}
-		return null;
+	public RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileUri) {
+		return getDeploymentDesc(propertyFileUri.toString());
 	}
 	
 	public RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName) {
@@ -164,7 +82,12 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 			if (path != null && path.length() > 0) {
 				try {
 					InputStream is = new FileInputStream(new File(path));
-					dd = RuntimeDeploymentDesc.createDeploymentDescriptor(normalized, is);
+					if (ddParserMethod == null) {
+						dd = RuntimeDeploymentDesc.createDeploymentDescriptor(normalized, is);
+					}
+					else {
+						dd = (RuntimeDeploymentDesc)ddParserMethod.invoke(null, new Object[]{normalized, is});
+					}
 					deploymentDescs.put(normalized, dd);
 				}
 				catch (Exception e) {
@@ -185,6 +108,10 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 			return name;
 		}
 		
+		if (name.startsWith("file:")) { //$NON-NLS-1$
+			name = name.substring(5); // "file:".length()
+		}
+		
 		int lastSlash = name.lastIndexOf('/');
 		if (lastSlash != -1) {
 			name = name.substring(lastSlash + 1);
@@ -193,7 +120,7 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 		if (name.endsWith("-bnd.xml")) { //$NON-NLS-1$
 			name = name.substring(0, name.length() - 8); // "-bnd.xml".length()
 		}
-		else if (name.endsWith(".egldd")) {
+		else if (name.endsWith(".egldd")) { //$NON-NLS-1$
 			name = name.substring(0, name.length() - 6); // ".egldd".length()
 		}
 		
@@ -255,60 +182,5 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * @return the connection settings for the connection profile. A connection to the IDE is used to dynamically obtain this information.
-	 */
-	private String getConnectionProfileSettings(String profileName) {
-		String connectionURL = null;
-		
-		InputStream is = null;
-		try {
-			HttpURLConnection conn = (HttpURLConnection)new URL(ideURL).openConnection(); //$NON-NLS-1$ //$NON-NLS-2$
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Accept-Charset", "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
-			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
-			
-			OutputStream output = null;
-			try {
-			     output = conn.getOutputStream();
-			     output.write(("connectionProfile=" + profileName).getBytes("UTF-8")); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			finally {
-				if (output != null) {
-					try {
-						output.close();
-					}
-					catch (IOException e) {
-					}
-				}
-			}
-			if (conn.getResponseCode() == 200) {
-				is = conn.getInputStream();
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));
-				
-				StringBuilder buf = new StringBuilder( 50 );
-				String line;
-				while ((line = br.readLine()) != null) {
-					buf.append(line);
-				}
-				connectionURL = buf.toString();
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (is != null) {
-				try {
-					is.close();
-				}
-				catch (IOException e) {
-				}
-			}
-		}
-		
-		return connectionURL;
 	}
 }

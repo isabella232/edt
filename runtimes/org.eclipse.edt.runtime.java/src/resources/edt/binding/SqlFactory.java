@@ -5,6 +5,7 @@ import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 
 import eglx.lang.EDictionary;
 import eglx.persistence.sql.SQLDataSource;
+import eglx.persistence.sql.SQLJNDIDataSource;
 
 
 public class SqlFactory extends BindingFactory{
@@ -17,8 +18,23 @@ public class SqlFactory extends BindingFactory{
 			if (sqlBinding.isUseURI()) {
 				String uri = sqlBinding.getUri();
 				if (uri != null && uri.startsWith("jndi://")) {
-					//TODO need to actually support JNDI. This code will not work but serves as a placeholder.
-					resource = new SQLDataSource(uri.substring(7)); // "jndi://".length()
+					// Create a data source that obtains connections via JNDI.
+					String jndiName = uri.substring(7);
+					String user = sqlBinding.getJndiUser();
+					String password = sqlBinding.getJndiPassword();
+					if (user.length() > 0 || password.length() > 0) {
+						EDictionary props = new org.eclipse.edt.runtime.java.eglx.lang.EDictionary();
+						if (user.length() > 0) {
+							props.put("user", user);
+						}
+						if (password.length() > 0) {
+							props.put("password", password);
+						}
+						resource = new SQLJNDIDataSource(jndiName, props);
+					}
+					else {
+						resource = new SQLJNDIDataSource(jndiName);
+					}
 				}
 			}
 			else {

@@ -74,6 +74,8 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.RESOURCE_URI_EXCEPTION, "The URI {0} is not a valid URI." },
 		{ Message.RESOURCE_NO_PROCESSOR, "Unable to processor the uri {0} into a resource." },
 		{ Message.MISSING_DEFAULT_DD, "No default deployment descriptor was specified." },
+		{ Message.JNDI_LOOKUP_ERROR, "An Exception occurred while performing a JNDI lookup. JNDI name: {0}. exception:{1}" },
+		{ Message.JNDI_UNKNOWN_TYPE, "JNDI lookup resulted in unknown data source type: {0}." },
 	};
 	
 	/**

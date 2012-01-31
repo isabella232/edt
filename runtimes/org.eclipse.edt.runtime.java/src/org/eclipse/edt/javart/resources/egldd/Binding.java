@@ -70,6 +70,10 @@ public class Binding {
 	public Collection<Parameter> getParameters() {
 		return parameters.values();
 	}
+	
+	public void setParameters(Map<String, Parameter> newParams) {
+		parameters = newParams;
+	}
 
 	public void addParameter(Parameter parameter) {
 		this.parameters.put(parameter.getName().toLowerCase(), parameter);
@@ -90,6 +94,10 @@ public class Binding {
 
 	public String getUri() {
 		return uri;
+	}
+	
+	public void setUri(String uri) {
+		this.uri = uri;
 	}
 
 	public boolean isUseURI() {

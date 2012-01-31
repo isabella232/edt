@@ -38,10 +38,10 @@ public class SQLDataSource implements RecoverableResource {
 	
 	private PreparedStatement SetSchema = null;
 	
-	private Connection conn;
+	protected Connection conn;
 	private Map<String, List<Statement>> statements;
-	private String connectionUrl;
-	private Properties properties;
+	protected String connectionUrl;
+	protected Properties properties;
 	
 	public SQLDataSource(String connectionUrl) {
 		this(connectionUrl, org.eclipse.edt.javart.Runtime.getRunUnit());
@@ -57,7 +57,7 @@ public class SQLDataSource implements RecoverableResource {
 	public SQLDataSource(String connectionUrl, EDictionary properties) {
 		this(connectionUrl);
 		
-		if (properties != null) {
+		if (properties != null && properties.size() > 0) {
 			this.properties.putAll(properties);
 		}
 	}

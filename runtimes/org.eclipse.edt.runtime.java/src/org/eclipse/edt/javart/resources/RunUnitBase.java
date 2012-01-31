@@ -27,6 +27,9 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.EglExit;
 import org.eclipse.edt.javart.Executable;
@@ -101,6 +104,11 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	 * last Program.
 	 */
 	private int returnCode;
+	
+	/**
+	 * The context used for JNDI lookups.
+	 */
+	protected InitialContext initialContext;
 
 	/**
 	 * Makes a new RunUnit.
@@ -664,6 +672,17 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 		}
 	
 		return newProgram;
+	}
+	
+	@Override
+	public Object jndiLookup( String name ) throws NamingException
+	{
+		if ( initialContext == null )
+		{
+			//TODO provide API so that users can specify parameters to be passed? Or just require they set the appropriate env vars.
+			initialContext = new InitialContext();
+		}
+		return initialContext.lookup( name );
 	}
 	
 	/**
