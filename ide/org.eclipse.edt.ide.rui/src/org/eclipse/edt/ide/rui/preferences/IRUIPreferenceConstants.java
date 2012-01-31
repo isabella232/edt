@@ -25,14 +25,4 @@ public interface IRUIPreferenceConstants {
 	//---------
 	public static final String 	PREFERENCE_RUNTIME_MESSAGES_LOCALE					= PREFIX + "RuntimeLocale"; //$NON-NLS-1$
 	public static final String 	PREFERENCE_HANDLER_LOCALE							= PREFIX + "HandlerLocale"; //$NON-NLS-1$
-	
-	// Test server
-	public static final String PREFERENCE_TESTSERVER_OBSOLETE_METHODS = PREFIX + "ObsoleteMethods"; //$NON-NLS-1$
-	public static final String PREFERENCE_TESTSERVER_HCR_FAILED = PREFIX + "HCRFailed"; //$NON-NLS-1$
-	public static final String PREFERENCE_TESTSERVER_HCR_UNSUPPORTED = PREFIX + "HCRUnsupported"; //$NON-NLS-1$
-	public static final String PREFERENCE_TESTSERVER_CLASSPATH_CHANGED = PREFIX + "ClasspathChanged"; //$NON-NLS-1$
-	// the following are the values for the above preferences, but not preferences themselves
-	public static final int TESTSERVER_PROMPT = 0;
-	public static final int TESTSERVER_TERMINATE = 1;
-	public static final int TESTSERVER_IGNORE = 2;
 }

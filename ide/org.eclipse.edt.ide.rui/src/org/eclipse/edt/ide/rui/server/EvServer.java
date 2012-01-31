@@ -44,22 +44,19 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfoManager;
-import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.rui.editor.IEditorSelectAndRevealer;
 import org.eclipse.edt.ide.rui.internal.Activator;
 import org.eclipse.edt.ide.rui.internal.nls.RUINlsStrings;
-import org.eclipse.edt.ide.rui.internal.testserver.TestServerConfiguration;
-import org.eclipse.edt.ide.rui.internal.testserver.TestServerManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
-import org.eclipse.edt.ide.rui.utils.Util;
+import org.eclipse.edt.ide.testserver.TestServerConfiguration;
+import org.eclipse.edt.ide.testserver.TestServerManager;
 import org.eclipse.edt.javart.JSERunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.json.TokenMgrError;
@@ -110,7 +107,6 @@ public class EvServer implements IClientProxy {
 	private static int START_PORT_NUMBER = 5590;
 	private static int portNumber = START_PORT_NUMBER;
 	private int contextKeyInc = 1;
-	private TestServerManager testServerMgr;
 	
 	public static class Event {
 		public PrintStream ps = null;
@@ -272,11 +268,8 @@ public class EvServer implements IClientProxy {
 					}
 					
 					if (project != null && project.isAccessible()) {
-						TestServerConfiguration config;
-						synchronized(testServerMgr) {
-							config = testServerMgr.getServerConfiguration( project, true );
-							config.start(null, true); // Will no-op if already running
-						}
+						TestServerConfiguration config = TestServerManager.getInstance().getServerConfiguration(project, true);
+						config.start(null, true); // Will no-op if already running
 						
 						String encodedProject = project.getName();
 						try {
@@ -387,83 +380,6 @@ public class EvServer implements IClientProxy {
 				}
 			}
 			return "";
-		}
-	}
-	
-	private class TestServerRequestHander implements Runnable {
-		public PrintStream ps;
-		public RuiBrowserHttpRequest xmlRequest;
-		
-		public TestServerRequestHander( RuiBrowserHttpRequest ruiRequest, final PrintStream ps ) {
-			this.xmlRequest = ruiRequest;
-			this.ps = ps;
-		}
-		
-		@Override
-		public void run() {
-			String urlString = xmlRequest.getURL();
-			try {
-				if (xmlRequest.getContentArguments().containsKey("connectionProfile")) {
-					String url = null;
-					String user = null;
-					String pass = null;
-					String schema = null;
-					String className = null;
-					String profileName = xmlRequest.getContentArguments().get("connectionProfile");
-					IConnectionProfile profile = EGLSQLUtility.getConnectionProfile(profileName);
-					if (profile != null) {
-						url = EGLSQLUtility.getSQLConnectionURLPreference(profile);
-						user = EGLSQLUtility.getSQLUserId(profile);
-						pass = EGLSQLUtility.getSQLPassword(profile);
-						schema = EGLSQLUtility.getDefaultSchema(profile);
-						className = EGLSQLUtility.getSQLJDBCDriverClassPreference(profile);
-					}
-					
-					if (url == null) {
-						url = "";
-					}
-					if (user == null) {
-						user = "";
-					}
-					if (pass == null) {
-						pass = "";
-					}
-					if (schema == null) {
-						schema = "";
-					}
-					if (className == null) {
-						className = "";
-					}
-					
-					String info;
-					try {
-						info = URLEncoder.encode(url, "UTF-8") + ';' + URLEncoder.encode(user, "UTF-8") + ';'
-								 + URLEncoder.encode(pass, "UTF-8") + ';' + URLEncoder.encode(schema, "UTF-8") + ';'
-								 + URLEncoder.encode(className, "UTF-8");
-					}
-					catch (UnsupportedEncodingException e) {
-						// Shouldn't happen.
-						info = url + ';' + user + ';' + pass + ';' + schema + ';' + className;
-					}
-					
-					ps.print(getGoodResponseHeader(urlString, getContentType(urlString), false));
-					ps.write(info.getBytes("utf-8"));
-				}
-			}
-			catch (Throwable t) {
-				System.err.println(urlString);
-				t.printStackTrace();
-				try {
-					fail(ps);
-				} catch (Exception ee) {
-				}
-			}
-			finally {
-				if (ps != null) {
-					ps.flush();
-					ps.close();
-				}
-			}
 		}
 	}
 	
@@ -836,7 +752,7 @@ public class EvServer implements IClientProxy {
 					url = xmlRequest.getURL();					
 					debug("-->EvServer.handleBrowserEvent :" + url + " | ctx="+xmlRequest.getArguments().get("contextKey"));
 					
-					// Proxy and test server must be checked first since the context key is passed along for debug.
+					// Proxy and must be checked first since the context key is passed along for debug.
 					if (url.indexOf("__proxy") != -1 || xmlRequest.getHeaders() != null && xmlRequest.getHeaders().containsKey(ProxyUtilities.EGL_REST_CALL) ){
 						Event event = new Event();
 						event.ps = ps;
@@ -846,11 +762,6 @@ public class EvServer implements IClientProxy {
 						event.arguments = xmlRequest.getArguments();
 						___ProxyHandler hop = new ___ProxyHandler( xmlRequest, ps );
 						Thread thread = new Thread( hop );
-						thread.start();
-					}
-					else if (url.indexOf("__testServer") != -1) {
-						TestServerRequestHander tsrh = new TestServerRequestHander( xmlRequest, ps );
-						Thread thread = new Thread (tsrh);
 						thread.start();
 					}
 					else {
@@ -1407,9 +1318,6 @@ public class EvServer implements IClientProxy {
 			// run with
 			// http://localhost:5498/someURL?arg1=value1&arg2=value2&arg3=value3
 			//
-			if (testServerMgr == null) {
-				testServerMgr = new TestServerManager();
-			}
 			if (Runtime.getRunUnit() == null) {
 				Runtime.setStaticRunUnit( new JSERunUnit( new StartupInfo( "IDERunUnit", "", null ) ) );
 			}
@@ -1432,11 +1340,8 @@ public class EvServer implements IClientProxy {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		testServerMgr.dispose();
-		testServerMgr = null;
 	}
-
+	
 	private synchronized void widgetPositions(String url, Integer intKey, String positionInfo) {
 		IContext context = findContext(intKey);
 		if (context instanceof DesignContext) {

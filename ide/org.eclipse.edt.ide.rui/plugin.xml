@@ -15,16 +15,6 @@ Register the Preference Pages
       		class="org.eclipse.edt.ide.rui.internal.preferences.RUIPreferencePage"
       		id="org.eclipse.edt.ide.rui.ruiPreferences">
       </page>
-      <page
-            category="org.eclipse.edt.ide.ui.preferences"
-            class="org.eclipse.edt.ide.rui.internal.testserver.TestServerPreferencePage"
-            id="org.eclipse.edt.ide.rui.testServerPreferences"
-            name="%TestServerPreferencePageName">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer class="org.eclipse.edt.ide.rui.internal.RUIPReferenceInitializer"/>
    </extension>
    <extension
          point="org.eclipse.edt.ide.ui.projectTemplates">
@@ -110,39 +100,4 @@ Register the Preference Pages
             version_desc="Dojo 1.6.1 Remote">
       </provider>
    </extension>
-   <extension
-         point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
-            id="org.eclipse.edt.ide.rui.testServerLaunchType"
-            name="%TestServerConfigTypeName"
-            public="false">
-      </launchConfigurationType>
-   </extension>
-   <extension
-         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
-      <launchConfigurationTypeImage
-            configTypeID="org.eclipse.edt.ide.rui.testServerLaunchType"
-            icon="icons/full/obj16/egl_launch_obj.gif"
-            id="org.eclipse.edt.ide.rui.testServerLaunchImage">
-      </launchConfigurationTypeImage>
-   </extension>
-   <extension
-         point="org.eclipse.debug.core.launchDelegates">
-      <launchDelegate
-            delegate="org.eclipse.edt.ide.rui.internal.testserver.TestServerLaunchDelegate"
-            id="org.eclipse.edt.ide.rui.testServerLaunchDelegate"
-            modes="run,debug"
-            name="%TestServerConfigTypeName"
-            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer"
-            type="org.eclipse.edt.ide.rui.testServerLaunchType">
-         <modeCombination
-               modes="run, debug"
-               perspective="org.eclipse.debug.ui.DebugPerspective">
-         </modeCombination>
-         <modeCombination
-               modes="debug"
-               perspective="org.eclipse.debug.ui.DebugPerspective">
-         </modeCombination>
-      </launchDelegate>
-   </extension>   
 </plugin>

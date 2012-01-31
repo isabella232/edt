@@ -31,7 +31,5 @@ public interface HelpContextIDs {
 	
 	public static final String RUI_BASE_PREFERENCE_PAGE = PREFIX + "rui0001"; //$NON-NLS-1$
 	
-	public static final String RUI_TEST_SERVER_PREFERENCE_PAGE = PREFIX + "rui0002"; //$NON-NLS-1$
-	
 	public static final String RUI_New_Locale_Wizard = PREFIX + "ruil0001"; //$NON-NLS-1$
 }
