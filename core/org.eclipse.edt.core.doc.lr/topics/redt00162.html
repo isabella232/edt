@@ -16,7 +16,7 @@
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00162"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>SQLDataSource external type</title>
 </head>
 <body id="redt00162"><a name="redt00162"><!-- --></a>
@@ -114,8 +114,9 @@ makes available a database binding in the EGL deployment descriptor:<pre class="
    // indicates whether the connection allows only reads from the database.
    function isReadOnly() returns(boolean);
 
-   // returns true if the input value is less than 
-   // the timeout value in effect for the current transaction. [???]
+   // returns true if a test of the connection succeeds within the 
+   // specified number of seconds. if you specify zero seconds, no 
+   // timeout applies.
    function isValid(timeout int in) returns(boolean);
 
    // indicates whether updates are committed immediately.
@@ -146,9 +147,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00162__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00162__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d52213e102">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d52399e104">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d52213e105">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d52399e107">Issue</th>
 
 </tr>
 
@@ -157,17 +158,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00162__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d52213e102 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d52399e104 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d52213e105 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d52399e107 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00162__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d52213e102 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d52399e104 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d52213e105 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d52399e107 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

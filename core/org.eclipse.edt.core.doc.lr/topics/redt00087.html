@@ -16,7 +16,7 @@
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00087"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Resource annotation</title>
 </head>
 <body id="redt00087"><a name="redt00087"><!-- --></a>
@@ -40,7 +40,7 @@ specified entry in the EGL deployment descriptor.</p>
 <dt class="dlterm"><a name="redt00087__use"><!-- --></a>Example use</dt>
 
 <dd><div class="p">The following declaration indicates that access details are
-in the EGL deployment descriptor entry named “myBinding”:<pre class="codeblock">myService IMyService?{@Resource{bindingKey = "myBinding"}};</pre>
+in the EGL deployment descriptor entry named “myBinding”:<pre class="codeblock">myService IMyService?{@Resource{uri = "binding:myBinding"}};</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -51,8 +51,7 @@ in the EGL deployment descriptor entry named “myBinding”:<pre class="codeblo
 {
    targets = [elementKind.fieldMbr]
 }
-   bindingKey string;
-   propertyFileName string?;
+   uri string;
 end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
@@ -60,31 +59,47 @@ end</pre>
 <dt class="dlterm"><a name="redt00087__annofields"><!-- --></a>Annotation fields</dt>
 
 <dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">bindingKey</span></span></dt>
+<dt class="dlterm"><span class="synph"><span class="kwd">uri</span></span></dt>
 
-<dd>The name of the entry in an EGL deployment descriptor. The default
-value of <span class="synph"><span class="kwd">bindingKey</span></span> is the name of the variable
-being annotated. The name in the previous example is <samp class="codeph">myService</samp>.</dd>
+<dd>A string that refers to the resource being referenced. At this
+writing, you have two options: <pre class="codeblock">binding:<em>DDEntry</em>
+binding:<em>filePath</em>#<em>DD_entry</em></pre>
+<dl>
+<dt class="dlterm"><var class="varname">DDEntry</var></dt>
+
+<dd>Name of an entry in an EGL deployment descriptor.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">propertyFileName</span></span></dt>
+<dt class="dlterm"><var class="varname">fileName</var></dt>
 
-<dd>The name of the EGL deployment descriptor that contains the binding.
-The default value of <span class="synph"><span class="kwd">propertyFileName</span></span> is
-the name of the deployment descriptor that is used at deployment time.<p>When
-you set the <span class="synph"><span class="kwd">propertyFileName</span></span> annotation
-field, do not include a file extension. The name of the file that
-is accessed at run time includes the following suffix: -bind.xml.</p>
+<dd>Name of the EGL deployment descriptor, without a file extension.
+The name of the file that is accessed at run time includes the following
+suffix: -bind.xml.</dd>
+
+</dl>
+<p>If you specify only <span class="synph"><span class="var">DDEntry</span></span>,
+the referenced file is the one that is currently in use. At development
+time, the one currently in use is identified in the following project
+property: <strong>Development Deployment Descriptor</strong>. At deployment
+time, the referenced deployment descriptor is the one that you deploy.</p>
 </dd>
 
 </dl>
+<div class="p">The <span class="synph"><span class="kwd">uri</span></span> annotation
+field is optional and refers by default to a resource binding that
+has the same name as the variable. For example, in the following annotation,
+the missing value for the <span class="synph"><span class="kwd">uri</span></span> field is "binding:myService02":<pre class="codeblock">myService02 IMyService?{@Resource};</pre>
+</div>
 <anchor id="annofields_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00087__comments"><!-- --></a>Comments</dt>
 
-<dd>For details on dynamically accessing a deployment descriptor entry,
-see <a href="redt00205.html" title="SysLib.getResource returns an object that is based on a specific entry in an EGL deployment descriptor.">SysLib.getResource function</a>.<anchor id="annocomments_more"></anchor></dd>
+<dd><p>The format of the <span class="synph"><span class="kwd">uri</span></span> parameter is
+consistent with the Internet Engineering Task Force standard that
+is described here: <a href="http://www.ietf.org/rfc/rfc3986.txt" target="_blank">RTC 3986 (http://www.ietf.org/rfc/rfc3986.txt)</a>.</p>
+<p>For further details on the EGL technology, see <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database.">Resource bindings</a>.</p>
+<anchor id="annocomments_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00087__compat"><!-- --></a>Compatibility</dt>
@@ -94,9 +109,9 @@ see <a href="redt00205.html" title="SysLib.getResource returns an object that is
 <div class="tablenoborder"><a name="redt00087__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00087__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d33573e153">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d33573e190">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d33573e156">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d33573e193">Issue</th>
 
 </tr>
 
@@ -105,17 +120,17 @@ see <a href="redt00205.html" title="SysLib.getResource returns an object that is
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00087__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d33573e153 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d33573e190 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d33573e156 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d33573e193 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00087__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d33573e153 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d33573e190 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d33573e156 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d33573e193 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

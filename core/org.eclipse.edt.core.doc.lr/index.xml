@@ -4,20 +4,20 @@
 <topic href="topics/redt00002.html#redt00002" title="this keyword"/>
 <entry keyword="***">
 <topic href="topics/cedt00002.html#cedt00002" title="EGL language overview"/>
+<topic href="topics/cedt00013.html#cedt00013" title="EGL Syntax"/>
+<topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
+<topic href="topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
+<topic href="topics/cedt00039.html#cedt00039" title="Delegate classifier overview"/>
+<topic href="topics/cedt00030.html#cedt00030" title="DataItem classifier overview"/>
+<topic href="topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
+<topic href="topics/cedt00038.html#cedt00038" title="ExternalType classifier overview"/>
+<topic href="topics/cedt00011.html#cedt00011" title="Run units"/>
+<topic href="topics/cedt00033.html#cedt00033" title="Program classifier overview"/>
+<topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
 <topic href="topics/cedt00025.html#cedt00025" title="Boxing and unboxing conversions"/>
 <topic href="topics/cedt00029.html#cedt00029" title="Class classifier overview"/>
-<topic href="topics/cedt00036.html#cedt00036" title="Handler classifier overview"/>
-<topic href="topics/cedt00013.html#cedt00013" title="EGL Syntax"/>
-<topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
-<topic href="topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
 <topic href="topics/cedt00032.html#cedt00032" title="Enumeration classifier overview"/>
-<topic href="topics/cedt00038.html#cedt00038" title="ExternalType classifier overview"/>
-<topic href="topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
-<topic href="topics/cedt00030.html#cedt00030" title="DataItem classifier overview"/>
-<topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
-<topic href="topics/cedt00011.html#cedt00011" title="Run units"/>
-<topic href="topics/cedt00039.html#cedt00039" title="Delegate classifier overview"/>
-<topic href="topics/cedt00033.html#cedt00033" title="Program classifier overview"/>
+<topic href="topics/cedt00036.html#cedt00036" title="Handler classifier overview"/>
 </entry>
 <entry keyword="parameterized">
 <topic href="topics/cedt00018.html#cedt00018" title="Simple types"/>
@@ -154,8 +154,8 @@
 <topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
 </entry>
 <entry keyword="binding">
-<entry keyword="dynamic">
-<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+<entry keyword="SQL database">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
 <entry keyword="Boolean type">
@@ -213,9 +213,9 @@
 </entry>
 </entry>
 <entry keyword="continue EGL statement">
+<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 <topic href="topics/redt00014.html#redt00014" title="Case statement"/>
 <topic href="topics/redt00020.html#redt00020" title="Continue statement"/>
-<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 </entry>
 <entry keyword="convertFromJSON EGL function">
 <topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
@@ -294,6 +294,13 @@
 <entry keyword="delete EGL statement">
 <entry keyword="relational database">
 <topic href="topics/redt00023.html#redt00023" title="Delete statement for a relational database"/>
+</entry>
+</entry>
+<entry keyword="deployment descriptors">
+<entry keyword="options">
+<entry keyword="services">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="Dictionary type">
@@ -658,9 +665,9 @@
 <topic href="topics/redt00022.html#redt00022" title="Close statement for a relational database"/>
 </entry>
 <entry keyword="continue">
+<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 <topic href="topics/redt00014.html#redt00014" title="Case statement"/>
 <topic href="topics/redt00020.html#redt00020" title="Continue statement"/>
-<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 </entry>
 <entry keyword="delete">
 <topic href="topics/redt00023.html#redt00023" title="Delete statement for a relational database"/>
@@ -721,27 +728,27 @@
 </entry>
 </entry>
 <entry keyword="EGL type">
-<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
-<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
 <topic href="topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
-<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
-<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
-<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
 <topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
+<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
 <topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
-<topic href="topics/redt00272.html#redt00272" title="AnyDelegate type"/>
-<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
-<topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
-<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
-<topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
-<topic href="topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+<topic href="topics/redt00272.html#redt00272" title="AnyDelegate type"/>
+<topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
+<topic href="topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="topics/redt00268.html#redt00268" title="SQLException external type"/>
-<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
 <topic href="topics/redt00271.html#redt00271" title="AnyEnumeration type"/>
-<topic href="topics/redt00164.html#redt00164" title="DataSource external type"/>
-<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
+<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
 <topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
+<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
+<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
+<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
+<topic href="topics/redt00164.html#redt00164" title="DataSource external type"/>
+<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
+<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+<topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
+<topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
 </entry>
 <entry keyword="EGL types">
 <entry keyword="Any">
@@ -927,6 +934,13 @@
 </entry>
 <entry keyword="GeneratedValue EGL annotation">
 <topic href="topics/redt00175.html#redt00175" title="GeneratedValue annotation"/>
+</entry>
+<entry keyword="generation">
+<entry keyword="services">
+<entry keyword="deployment options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
 </entry>
 <entry keyword="get EGL statement">
 <entry keyword="relational database">
@@ -1226,8 +1240,14 @@
 <topic href="topics/redt00025.html#redt00023" title="Replace statement for a relational database"/>
 </entry>
 </entry>
+<entry keyword="Resource bindings">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01030.html#cedt01030" title="Resource bindings"/>
+</entry>
 <entry keyword="Resource EGL annotation">
 <topic href="topics/redt00087.html#redt00087" title="Resource annotation"/>
+</entry>
+<entry keyword="REST binding">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="REST services">
 <entry keyword="Copying JSON strings">
@@ -1446,7 +1466,19 @@
 </entry>
 <entry keyword="services">
 <entry keyword="binding">
-<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+<entry keyword="REST">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
+</entry>
+<entry keyword="deployment descriptor options">
+<entry keyword="list">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+<entry keyword="EGL">
+<entry keyword="service-access variables">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
+</entry>
 </entry>
 <entry keyword="Rich UI">
 <entry keyword="asynchronous invocation">
@@ -1484,6 +1516,9 @@
 <entry keyword="Span Rich UI widget">
 <topic href="topics/redt00118.html#redt00118" title="Span widget"/>
 </entry>
+<entry keyword="SQL database binding">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
+</entry>
 <entry keyword="SQLDataSource">
 <topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
 </entry>
@@ -1519,8 +1554,8 @@
 <topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode function"/>
 </entry>
 <entry keyword="getNextToken">
-<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
 <topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
+<topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
 </entry>
 <entry keyword="spaces">
 <topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
@@ -1624,6 +1659,18 @@
 </entry>
 <entry keyword="wait EGL function">
 <topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
+</entry>
+<entry keyword="web services">
+<entry keyword="deployment descriptor options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+<entry keyword="Web services">
+<entry keyword="binding">
+<entry keyword="REST">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
+</entry>
 </entry>
 <entry keyword="while EGL statement">
 <topic href="topics/redt00016.html#redt00016" title="While statement"/>

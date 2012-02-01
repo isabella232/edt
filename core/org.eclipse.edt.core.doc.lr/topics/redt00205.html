@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="SysLib.getResource function"></meta>
-<meta name="abstract" content="SysLib.getResource returns an object that is based on a specific entry in an EGL deployment descriptor."></meta>
-<meta name="description" content="SysLib.getResource returns an object that is based on a specific entry in an EGL deployment descriptor."></meta>
+<meta name="abstract" content="SysLib.getResource returns an object that is external to your code. At this writing, the object is always based on a binding entry that is defined in an EGL deployment descriptor."></meta>
+<meta name="description" content="SysLib.getResource returns an object that is external to your code. At this writing, the object is always based on a binding entry that is defined in an EGL deployment descriptor."></meta>
 <meta name="DC.subject" content="EGL functions, getResource, getResource EGL function, SysLib EGL external type"></meta>
 <meta name="keywords" content="EGL functions, getResource, getResource EGL function, SysLib EGL external type"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00066.html"></meta>
@@ -16,7 +16,7 @@
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00205"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>SysLib.getResource function</title>
 </head>
 <body id="redt00205"><a name="redt00205"><!-- --></a>
@@ -27,7 +27,9 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.getResource</span></span> returns
-an object that is based on a specific entry in an EGL deployment descriptor.</p>
+an object that is external to your code. At this writing, the object
+is always based on a binding entry that is defined in an EGL deployment
+descriptor.</p>
 
 <a name="redt00205__main"><!-- --></a><dl id="redt00205__main">
 <dt class="dlterm"><a name="redt00205__package"><!-- --></a>Package</dt>
@@ -38,27 +40,32 @@ an object that is based on a specific entry in an EGL deployment descriptor.</p>
 
 <dt class="dlterm"><a name="redt00205__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00205__syntax_block"><a name="redt00205__syntax_block"><!-- --></a>	static function getResource(bindingkey string const in)
+<dd><pre class="codeblock" id="redt00205__syntax_block"><a name="redt00205__syntax_block"><!-- --></a>	static function getResource(uri string const in)
                  returns(any);
-
-static function getResource(bindingkey string const in, 
-                            propertyFileName string const in)
-                returns(any);</pre>
+</pre>
 <a name="redt00205__syntax_list"><!-- --></a><dl id="redt00205__syntax_list">
-<dt class="dlterm"><var class="varname">bindingKey</var></dt>
+<dt class="dlterm"><var class="varname">uri</var></dt>
 
-<dd>Name of an entry in an EGL deployment descriptor.</dd>
+<dd>The resource being referenced. At this writing, you have two options: <pre class="codeblock">binding:<em>DDEntry</em>
+binding:<em>filePath</em>#<em>DD_entry</em></pre>
+<dl>
+<dt class="dlterm"><var class="varname">DDEntry</var></dt>
+
+<dd>Name of an entry in an EGL deployment descriptor. </dd>
 
 
-<dt class="dlterm"><var class="varname">propertyFileName</var></dt>
+<dt class="dlterm"><var class="varname">fileName</var></dt>
 
-<dd><p>Name of the EGL deployment descriptor, without a file extension.
+<dd>Name of the EGL deployment descriptor, without a file extension.
 The name of the file that is accessed at run time includes the following
-suffix: -bind.xml.</p>
-<p>If you do not specify a <span class="synph"><span class="kwd">propertyFileName</span></span> argument,
-its value is the name of the EGL deployment descriptor that is currently
-in use, whether the development deployment descriptor or the one used
-at deployment time.</p>
+suffix: -bind.xml.</dd>
+
+</dl>
+<p>If you specify only <span class="synph"><span class="var">DDEntry</span></span>,
+the referenced file is the one that is currently in use. At development
+time, the one currently in use is identified in the following project
+property: <strong>Development Deployment Descriptor</strong>. At deployment
+time, the referenced deployment descriptor is the one that you deploy.</p>
 </dd>
 
 </dl>
@@ -68,13 +75,17 @@ at deployment time.</p>
 <dt class="dlterm"><a name="redt00205__use"><!-- --></a>Example use</dt>
 
 <dd>Here is an example: <pre class="codeblock">myService MyInterfacePart?;
-myService = SysLib.getResource ("MyEnglishBinding", "myDeploymentDescriptor");</pre>
+myService = SysLib.getResource("binding:MyEnglishBinding");</pre>
 <anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00205__comments"><!-- --></a>Comments</dt>
 
-<dd>For further details, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01019.html" title="You can use dynamic binding to access or update binding details in response to conditions at run time.">Binding an access variable dynamically</a>.<pre class="codeblock"></pre>
+<dd>The format of the <span class="synph"><span class="kwd">uri</span></span> parameter is consistent
+with the Internet Engineering Task Force standard that is described
+here: <a href="http://www.ietf.org/rfc/rfc3986.txt" target="_blank">RTC
+3986 (http://www.ietf.org/rfc/rfc3986.txt)</a>.<p>For further details
+on the EGL technology, see <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database.">Resource bindings</a>.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
@@ -85,9 +96,9 @@ myService = SysLib.getResource ("MyEnglishBinding", "myDeploymentDescriptor");</
 <div class="tablenoborder"><a name="redt00205__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00205__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d62508e130">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d62694e167">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d62508e133">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d62694e170">Issue</th>
 
 </tr>
 
@@ -96,17 +107,17 @@ myService = SysLib.getResource ("MyEnglishBinding", "myDeploymentDescriptor");</
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00205__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d62508e130 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62694e167 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d62508e133 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62694e170 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00205__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d62508e130 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d62694e167 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d62508e133 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d62694e170 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>
