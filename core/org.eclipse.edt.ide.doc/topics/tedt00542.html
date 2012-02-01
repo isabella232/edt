@@ -5,33 +5,33 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
-<meta name="DC.Title" content="Adding an SQL binding to the EGL deployment descriptor"></meta>
-<meta name="abstract" content="An SQL service binding gives details necessary to access an SQL service."></meta>
-<meta name="description" content="An SQL service binding gives details necessary to access an SQL service."></meta>
-<meta name="DC.subject" content="services, binding, SQL, EGL, Web services"></meta>
-<meta name="keywords" content="services, binding, SQL, EGL, Web services"></meta>
+<meta name="DC.Title" content="Adding an SQL database binding to the EGL deployment descriptor"></meta>
+<meta name="abstract" content="An SQL database binding gives details necessary to access an SQL service."></meta>
+<meta name="description" content="An SQL database binding gives details necessary to access an SQL service."></meta>
+<meta name="DC.subject" content="binding, SQL database, SQL database binding"></meta>
+<meta name="keywords" content="binding, SQL database, SQL database binding"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00535.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt00542"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Adding an SQL binding to the EGL deployment descriptor</title>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Adding an SQL database binding to the EGL deployment descriptor</title>
 </head>
 <body id="tedt00542"><a name="tedt00542"><!-- --></a>
 
 
 
-<h1 class="topictitle1">Adding an SQL binding to the EGL deployment descriptor</h1>
+<h1 class="topictitle1">Adding an SQL database binding to the EGL deployment descriptor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>An SQL service binding gives details necessary
+<div id="body"><a name="body"><!-- --></a><p>An SQL database binding gives details necessary
 to access an SQL service. </p>
 
-<div class="section">To add an SQL binding to an EGL deployment descriptor, do
-as follows:</div>
+<div class="section">To add an SQL database binding to an EGL deployment descriptor,
+do as follows:</div>
 
 <ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
 the name of an EGL deployment descriptor.</span></li>
@@ -44,60 +44,47 @@ a Resource Binding</span> page is displayed.</li>
 click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Add
 a SQL Database Binding</span> page is displayed.</li>
 <li class="stepexpand"><span>On the <span class="wintitle">Add a SQL Database Binding</span> page,
-do as follows:</span>
-<ol type="a">
-<li class="substepexpand"><span>Select one of the following radio buttons:</span> <ul>
-<li><span class="uicontrol">Reference the selected workspace connection below (retrieved
-at run time)</span></li>
+you have several options:</span> <ul>
+<li>To specify where the binding details are stored, select one of
+the first three options:<ul>
+<li>To use connection details that are or will be specified in an
+Eclipse connection profile, select the first option. <strong>Reference
+an existing connection profile</strong> or press <strong>New</strong> to define one.
+</li>
 
-<li><span class="uicontrol">Add the information from the selected connection below
-(hard-coded information)</span></li>
+<li>To specify connection details directly in the binding definition,
+select the second option instead.
+</li>
+
+<li>To use an JNDI data source that is or will be defined in the application
+server, select the third option. In this case, the details that you
+specify are the only ones on this page.</li>
 
 </ul>
 </li>
 
-<li class="substepexpand"><span>Click <span class="uicontrol">New</span>.</span> A <span class="wintitle">New
-Connection Profile </span> window is displayed.
+<li>If you intend to deploy your code to the Apache Tomcat server,
+you can configure a JNDI entry:     <ul>
+<li>Define most of the binding details by specifying the first or
+second option. </li>
+
+<li>Also select the fourth option. The JNDI name and other details
+that you specify here are associated with the details from the first
+or second option. The information is packaged during EGL deployment. </li>
+
+</ul>
+<p>The JNDI details result in a container-based authentication,
+which means that the server stores any user ID and password needed
+for database access.</p>
 </li>
 
-</ol>
-
-</li>
-<li class="stepexpand"><span>In the <span class="wintitle">New Connection Profile </span> window
-do as follows:</span>
-<ol type="a">
-<li class="substepexpand"><span>In the Connection Profile Types menu, select the type
-of SQL database that you are using.</span></li>
-
-<li class="substepexpand"><span>In the <span class="uicontrol">Name</span> field, type the name
-that you want to assign to the connection, or accept the default.</span>
-</li>
-
-<li class="substepexpand"><span>Optionally, type a description in the <span class="uicontrol">Description</span> field.</span>
-</li>
-
-<li class="substepexpand"><span>Click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Specify
-a Driver and Connection Details</span> page is displayed.
-</li>
-
-</ol>
-
-</li>
-<li class="stepexpand"><span>On the <span class="wintitle">Specify a Driver and Connection Details</span> page,
-do as follows:</span>
-<ol type="a">
-<li><span>Select a driver from the drop-down list.</span></li>
-
-<li><span>Optionally, clear the <span class="q">"Connect when the wizard completes"</span> check
-box (selected by default).</span></li>
-
-<li><span>Optionally, select the <span class="q">"Connect every time the workbench
-is started"</span> check box (cleared by default).</span></li>
-
-<li><span>Click <span class="uicontrol">Finish</span>.</span></li>
-
-</ol>
-
+</ul>
+<p>
+If you select the first option, any subsequent change to the Eclipse
+connection profile is available to your code at development and deployment
+time. After the EGL deployer has packaged the application, though,
+the changes have no effect on the deployed code unless you redeploy
+the application.</p>
 </li>
 </ol>
 

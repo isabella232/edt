@@ -75,7 +75,7 @@
              href="topics/tedt00538.html"/>
       <topic label="Adding a REST binding to the EGL deployment descriptor"
              href="topics/tedt00539.html"/>
-      <topic label="Adding an SQL binding to the EGL deployment descriptor"
+      <topic label="Adding an SQL database binding to the EGL deployment descriptor"
              href="topics/tedt00542.html"/>
       <topic label="Importing EGL deployment descriptors" href="topics/tedt00584.html"/>
       <topic label="Updating resources in the EGL deployment descriptor"

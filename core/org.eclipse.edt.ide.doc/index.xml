@@ -45,8 +45,8 @@
 </entry>
 </entry>
 <entry keyword="binding">
-<entry keyword="dynamic">
-<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+<entry keyword="SQL database">
+<topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
 <entry keyword="close EGL statement">
@@ -251,10 +251,10 @@
 </entry>
 </entry>
 <entry keyword="EGL type">
-<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
-<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00268.html#redt00268" title="SQLException external type"/>
 </entry>
 <entry keyword="EGL types">
@@ -496,6 +496,9 @@
 <topic href="topics/tedt00585.html#tedt00585" title="Updating resources in the EGL deployment descriptor"/>
 </entry>
 </entry>
+<entry keyword="REST binding">
+<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
 <entry keyword="retrieve feature">
 <entry keyword="SQL">
 <entry keyword="preferences">
@@ -581,12 +584,8 @@
 </entry>
 <entry keyword="services">
 <entry keyword="binding">
-<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
 <entry keyword="REST">
 <topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
-</entry>
-<entry keyword="SQL">
-<topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="WSDL files">
 <topic href="topics/tedt00538.html#tedt00538" title="Adding a SOAP binding to the EGL deployment descriptor"/>
@@ -598,10 +597,6 @@
 </entry>
 </entry>
 <entry keyword="EGL">
-<entry keyword="binding">
-<topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
-<topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
-</entry>
 <entry keyword="service-access variables">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
@@ -639,6 +634,9 @@
 <entry keyword="retrieve preferences">
 <topic href="topics/tedt00577.html#tedt00577" title="Setting EGL SQL preferences"/>
 </entry>
+</entry>
+<entry keyword="SQL database binding">
+<topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="SQLDataSource">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
@@ -719,9 +717,6 @@
 <entry keyword="binding">
 <entry keyword="REST">
 <topic href="topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
-</entry>
-<entry keyword="SQL">
-<topic href="topics/tedt00542.html#tedt00542" title="Adding an SQL binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
 </entry>

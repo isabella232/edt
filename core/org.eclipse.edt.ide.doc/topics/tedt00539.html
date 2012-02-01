@@ -8,15 +8,15 @@
 <meta name="DC.Title" content="Adding a REST binding to the EGL deployment descriptor"></meta>
 <meta name="abstract" content="A REST service binding gives details necessary to access a REST or EGL REST-RPC service."></meta>
 <meta name="description" content="A REST service binding gives details necessary to access a REST or EGL REST-RPC service."></meta>
-<meta name="DC.subject" content="services, binding, REST, EGL, Web services"></meta>
-<meta name="keywords" content="services, binding, REST, EGL, Web services"></meta>
+<meta name="DC.subject" content="services, binding, REST, Web services, REST binding"></meta>
+<meta name="keywords" content="services, binding, REST, Web services, REST binding"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00535.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt00539"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Adding a REST binding to the EGL deployment descriptor</title>
 </head>
 <body id="tedt00539"><a name="tedt00539"><!-- --></a>
@@ -44,42 +44,29 @@ a Resource Binding</span> page is displayed.</li>
 click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Add
 a REST Service Binding</span> page is displayed.</li>
 <li class="stepexpand"><span>In the <span class="uicontrol">REST service binding name</span> field,
-specify the service-binding name, which is also called a key. You
-can type the name or do as follows:</span>
-<ol type="a">
-<li class="substepexpand"><span>Click the <span class="uicontrol">Browse</span> button that
-is next to the <span class="uicontrol">REST service binding name</span> field.</span>
- The Interface Selection window is displayed.
-</li>
-
-<li class="substepexpand"><span>Select the name of the Interface part that is the basis
-of a service-access variable in your code.</span></li>
-
-<li class="substepexpand"><span>Click <span class="uicontrol">OK</span>.</span></li>
-
-</ol>
+specify the service-binding name, which is also called a key. </span>
 
  You specify the service-binding name when you declare a service-access
-variable and set the <span class="synph"><span class="kwd">Resource</span></span> annotation, <span class="synph"><span class="kwd">bindingKey</span></span> field.
+variable and set the <span class="synph"><span class="kwd">Resource</span></span> annotation, <span class="synph"><span class="kwd">uri</span></span> field;
+or when you invoke the <span class="synph"><span class="kwd">SysLib.getResource</span></span> function.
 </li>
-<li class="stepexpand"><span>In the <span class="uicontrol">baseURI</span> field, type a string
-to identify the first qualifiers in the URI that is used to access
-the service. The default value of <span class="uicontrol">baseURI</span> is
-an empty string.</span></li>
-<li class="stepexpand"><span>In the <span class="uicontrol">sessionCookieID</span> field, type
-the name of a session cookie, which is a string that identifies the
-session cookie. The default value is JSESSIONID, which is always the
-session ID when your application runs on Apache Tomcat.</span> The
-setting of <span class="synph"><span class="kwd">sessionCookieID</span></span> is meaningful
-only in the following case:<ul>
-<li>The service is an EGL external type that makes an IBM i called program or service program available
-as an EGL REST-RPC service. </li>
+<li class="stepexpand"><span>In the <span class="uicontrol">baseURI</span> field, specify a
+Universal Resource Identifier (URI):</span> <ul>
+<li>If you are accessing an EGL REST-RPC service, specify the complete
+URI. If you specify a workspace URI, remember to set up the deployment
+detail on the Service Deployment tab.</li>
 
-<li>The service logic is <dfn class="term">stateful</dfn>, which means that the
-requester and service can participate in a multistep conversation.</li>
+<li>If you are accessing a third-party REST service, you might decide
+to include only high-level details and to supplement them with values
+that are stored in an Interface type. Alternatively, you might decide
+to include no details at all. <p>For specifics, see the following
+help topic: "Creating an Interface part to access a REST service."</p>
+</li>
 
 </ul>
-<p>For background information, see “Accessing IBM i programs as web services: overview.”</p>
+</li>
+<li class="stepexpand"><span>The <span class="uicontrol">sessionCookieID</span> field is not
+in use. </span>
 
 </li>
 <li class="stepexpand"><span>Click <span class="uicontrol">Finish</span>.</span> The <span class="uicontrol">Service
@@ -97,8 +84,10 @@ just defined: <ol>
 
 </ol>
 <p>The tab includes the <span class="synph"><span class="kwd">enableGenerate</span></span> check
-box. The purpose of that check box is to specify whether to add binding
-information to the binding file in the generated output. </p>
+box. The purpose of that check box is to specify whether to deploy
+the binding information. If you are using a workspace URI or want
+to keep the binding detail out of the deployed WAR file, clear the
+check box.</p>
 </div>
 
 </div>
