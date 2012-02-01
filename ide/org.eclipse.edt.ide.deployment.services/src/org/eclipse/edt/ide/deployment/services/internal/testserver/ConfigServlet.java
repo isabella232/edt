@@ -125,6 +125,11 @@ public class ConfigServlet extends HttpServlet {
 	private List<NamingEntry> addedDataSources;
 	
 	/**
+	 * Class to use for connection pooling, possibly null.
+	 */
+	private final Class basicDataSourceClass;
+	
+	/**
 	 * Constructor.
 	 */
 	public ConfigServlet(PreviewServiceServlet previewServlet, IDEBindingResourceProcessor bindingProcessor, TestServer server) {
@@ -134,6 +139,27 @@ public class ConfigServlet extends HttpServlet {
 		this.orderedDDNames = new ArrayList<String>();
 		this.addedResourceRefs = new ArrayList<String>();
 		this.addedDataSources = new ArrayList<NamingEntry>();
+		
+		// See if a connection pooling data source is available.
+		Class clazz = null;
+		try {
+			clazz = Class.forName("org.apache.tomcat.dbcp.dbcp.BasicDataSource"); //$NON-NLS-1$
+		}
+		catch (Throwable t) {
+		}
+		if (clazz == null) {
+			try {
+				clazz = Class.forName("org.apache.commons.dbcp.BasicDataSource"); //$NON-NLS-1$
+			}
+			catch (Throwable t) {
+			}
+		}
+		basicDataSourceClass = clazz;
+		
+		if (basicDataSourceClass == null) {
+			TestServer.logWarning("Apache's BasicDataSource class is not on the classpath so connection pooling for JNDI data sources will not be used. " +
+					"To enable connection pooling you can add an Apache Tomcat runtime to your workspace via Preferences > Server > Runtime Environments.");
+		}
 	}
 
 	@Override
@@ -275,21 +301,6 @@ public class ConfigServlet extends HttpServlet {
 		
 		// If Apache's BasicDataSource is available, use it. It supports connection pooling so it's much faster.
 		// If not, use our own basic data source which does not support connection pooling.
-		Class basicDataSourceClass = null;
-		try {
-			basicDataSourceClass = Class.forName("org.apache.tomcat.dbcp.dbcp.BasicDataSource"); //$NON-NLS-1$
-		}
-		catch (Throwable t) {
-		}
-		
-		if (basicDataSourceClass == null) {
-			try {
-				basicDataSourceClass = Class.forName("org.apache.commons.dbcp.BasicDataSource"); //$NON-NLS-1$
-			}
-			catch (Throwable t) {
-			}
-		}
-		
 		Map<String, SQLConnectionInfo> dataSources = getSQLDataSources();
 		for (Entry<String, SQLConnectionInfo> entry : dataSources.entrySet()) {
 			try {
