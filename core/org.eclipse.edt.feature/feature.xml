@@ -20,6 +20,7 @@
 
    <url>
       <update label="%updateSiteName" url="http://download.eclipse.org/edt/updates/1.0"/>
+      <discovery label="%jettyDiscoveryName" url="http://download.eclipse.org/jetty/updates/jetty-bundles-7.x"/>
    </url>
 
    <plugin
