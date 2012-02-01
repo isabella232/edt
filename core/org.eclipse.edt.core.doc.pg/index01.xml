@@ -49,8 +49,8 @@
 </entry>
 </entry>
 <entry keyword="binding">
-<entry keyword="dynamic">
-<topic href="topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+<entry keyword="SQL database">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
 <entry keyword="BIRT reports">
@@ -147,6 +147,9 @@
 <entry keyword="Rich UI">
 <topic href="../org.eclipse.edt.ide.doc/topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
 </entry>
+<entry keyword="services">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
 </entry>
 <entry keyword="targets">
 <topic href="../org.eclipse.edt.ide.doc/topics/tedt00535.html#tedt00535" title="Editing an EGL deployment descriptor in the EDT IDE"/>
@@ -237,10 +240,10 @@
 </entry>
 </entry>
 <entry keyword="EGL type">
-<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
-<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00177.html#redt00177" title="SQLStatement external type"/>
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00268.html#redt00268" title="SQLException external type"/>
 </entry>
 <entry keyword="EGL types">
@@ -313,6 +316,11 @@
 <entry keyword="Rich UI">
 <entry keyword="deployment options">
 <topic href="../org.eclipse.edt.ide.doc/topics/tedt00537.html#tedt00537" title="Adding Rich UI deployment details to the EGL deployment descriptor"/>
+</entry>
+</entry>
+<entry keyword="services">
+<entry keyword="deployment options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
 </entry>
 </entry>
 </entry>
@@ -421,6 +429,9 @@
 </entry>
 <entry keyword="Resource EGL annotation">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00087.html#redt00087" title="Resource annotation"/>
+</entry>
+<entry keyword="REST binding">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="REST services">
 <entry keyword="non-EGL">
@@ -583,10 +594,17 @@
 <topic href="topics/tedt01002.html#tedt01002" title="Accessing a service"/>
 </entry>
 <entry keyword="binding">
-<topic href="topics/tedt01019.html#tedt01019" title="Binding an access variable dynamically"/>
+<entry keyword="REST">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
 </entry>
 <entry keyword="deployment">
 <topic href="topics/cedt01007.html#cedt01007" title="Service-location details for web service deployment"/>
+</entry>
+<entry keyword="deployment descriptor options">
+<entry keyword="list">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
 </entry>
 <entry keyword="EGL">
 <entry keyword="location details">
@@ -620,6 +638,9 @@
 <topic href="topics/tedt01024.html#tedt01024" title="Invoking a service synchronously from outside of Rich UI"/>
 </entry>
 </entry>
+</entry>
+<entry keyword="SQL database binding">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00542.html#tedt00542" title="Adding an SQL database binding to the EGL deployment descriptor"/>
 </entry>
 <entry keyword="SQLDataSource">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
@@ -707,11 +728,21 @@
 </entry>
 </entry>
 <entry keyword="web services">
+<entry keyword="deployment descriptor options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+</entry>
 <entry keyword="service location details">
 <topic href="topics/cedt01008.html#cedt01008" title="Service-location details for web service access"/>
 </entry>
 <entry keyword="types">
 <topic href="topics/cedt01003.html#cedt01003" title="EGL support for SOA"/>
+</entry>
+</entry>
+<entry keyword="Web services">
+<entry keyword="binding">
+<entry keyword="REST">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="widgets">

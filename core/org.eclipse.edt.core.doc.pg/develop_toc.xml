@@ -2,7 +2,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 <toc label="Developing EGL applications" topic="topics/cedt01001.html">
    <topic label="EGL process from development to run time" href="topics/cedt01001.html">
-      <topic label="Resource bindings" href="topics/cedt01030.html"/>
+      <topic label="Resource bindings" href="topics/cedt01030.html">
+         <topic label="Service bindings" href="topics/cedt01032.html"/>
+         <topic label="Database bindings" href="topics/cedt01033.html"/>
+      </topic>
    </topic>
    <topic label="EGL support for SOA" href="topics/cedt01003.html">
       <topic label="EGL test server" href="topics/cedt01031.html"/>
@@ -22,7 +25,6 @@
                 href="topics/tedt01018.html"/>
          <topic label="Editing the EGL deployment descriptor manually"
                 href="topics/tedt01043.html"/>
-         <topic label="Binding an access variable dynamically" href="topics/tedt01019.html"/>
          <topic label="Creating an Interface part to access a REST service"
                 href="topics/tedt01020.html"/>
          <topic label="Creating an Interface part to access a SOAP service"

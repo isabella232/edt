@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Service bindings"></meta>
+<meta name="abstract" content="If the purpose of a resource binding is service access, the definition is called a service binding. The main detail is in one of three categories:"></meta>
+<meta name="description" content="If the purpose of a resource binding is service access, the definition is called a service binding. The main detail is in one of three categories:"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01030.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="cedt01032"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Service bindings</title>
+</head>
+<body id="cedt01032"><a name="cedt01032"><!-- --></a>
+
+
+<h1 class="topictitle1">Service bindings</h1>
+
+
+<div id="body"><a name="body"><!-- --></a><p>If the purpose of a resource binding is service
+access, the definition is called a <dfn class="term">service binding</dfn>. The
+main detail is in one of three categories:</p>
+
+<div class="p"><ul>
+<li>If the service is deployed on an application server, you can specify
+a Universal Resource Identifier (URI) that begins with the http: or
+https: prefix. Here is an example:<ul class="simple">
+<li><samp class="codeph">http://myserver:8080/myproject/restservices/myservice</samp></li>
+
+</ul>
+<p>Although you can run the deployed service during an EGL debugging
+session, the EGL debugger does not step into the service.</p>
+</li>
+
+<li>If the service is available in your workspace and was written
+in EGL, you can use a <dfn class="term">workspace URI</dfn> , which is an identifier
+that points to a workspace location. Here is an example:<ul class="simple">
+<li><samp class="codeph">workspace://mySourceProject/servicepackage.myservice</samp></li>
+
+</ul>
+<p>A workspace URI is useful only at development time, and an
+internal Test Server enables you to debug the code. The Test Server
+is described here: <a href="cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+<div class="p"><div class="note"><span class="notetitle">Note:</span> In
+this case, your task in the EGL Deployment Descriptor editor is twofold:
+to update the Service Deployment tab as well as the Resource Bindings
+tab. You must arrange for service deployment.</div>
+</div>
+</li>
+
+<li>If a Rich UI application includes a Service type that will be
+deployed as a dedicated service, an Internal Test Server enables you
+to debug the code. In this case, the EGL deployment descriptor is
+never used. The only binding detail is the <strong>DedicatedService</strong> annotation,
+which is part of the service-access variable declaration.<div class="p">If a Service
+part named <samp class="codeph">MyServiceType</samp> is a dedicated service,
+the declaration might be as follows: 
+<pre class="codeblock">myService MyServiceType {@DedicatedService};</pre>
+</div>
+</li>
+
+</ul>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Defining a service binding in the EGL deployment descriptor</h2><p>At
+this writing, you can bind to a REST or EGL REST-RPC service. The
+distinctions among the service types are explained here: <a href="http://www.eclipse.org/edt/papers/topics/egl_soa_overview.html " target="_blank">Service-oriented architecture (SOA) for EGL developers
+(http://www.eclipse.org/edt/papers/topics/egl_soa_overview.html)</a>.</p>
+<p>For
+details on defining a service binding in the EGL deployment descriptor,
+see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00539.html" title="A REST service binding gives details necessary to access a REST or EGL REST-RPC service.">Adding a REST binding to the EGL deployment descriptor</a>.</p>
+<p>If
+you are defining a workspace binding, you must also deploy the Service
+type. For details, see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00536.html" title="You can update the EGL deployment descriptor with details that are needed to deploy SOAP and EGL REST-RPC services.">Adding web-service deployment details to the EGL deployment descriptor</a>.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Retrieving one or another service binding in your
+code</h2><div class="p">You can rebind a service-access variable, as shown
+here:<pre class="codeblock">myService MyInterfaceType?; 
+
+   /* that declaration could have included 
+      a Resource annotation, as shown here:
+
+      myService MyInterfaceType? 
+         { @Resource {uri="binding:MyGermanBinding"} };    */
+
+if ( ... )
+   myService = SysLib.getResource("binding:MyEnglishBinding");
+else
+   myService = SysLib.getResource("binding:MyFrenchBinding");
+end
+
+/* here, you can access the service operations of 
+   one or the other service, assuming that the two 
+   have similar interfaces.                             */    </pre>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Retrieving a service binding and changing it in your
+code</h2><div class="p">Here is an example of preparing a variable for later
+use in accessing a third-party REST service:<pre class="codeblock">myService IMyService?; 
+myBinding HttpRest{@Resource};
+myBinding.request.encoding] = Encoding.json;
+myService = servicelib.completeBind(myService, myBinding);</pre>
+</div>
+<div class="p">The
+code acts as follows:
+<ol>
+<li>Declares an access variable. 
+<p>The declaration references an Interface type that typically includes
+one or more uriTemplate annotation ields, each of which is a set of
+lower-level URI qualifiers that are resolved at run time. A resolved
+template might be this: <samp class="codeph">/GetWeatherByZipCode?zipCode=27709</samp></p>
+</li>
+
+<li>Accesses a new instance of an HTTPRest object.<p>That object provides
+a higher-level URI such as <samp class="codeph">http://www.example.com/myproject/restservices/weather_service</samp>.
+
+</p>
+<p>In this case, the object contains details that are retrieved
+from a service binding in the EGL deployment descriptor. If you do
+not specify a <span class="synph"><span class="kwd">uri</span></span> annotation field, the
+name of the service binding is assumed to be the name of the variable.
+In the example, the value of the annotation field defaults to <samp class="codeph">"binding:myBinding"</samp>.
+</p>
+<p>For details on the HttpRest object, see the help topic named
+"eglx.http package."</p>
+</li>
+
+<li>Adds detail to the HTTPRest object; for example, to ensure that
+data is transferred to and from the service in JSON format.</li>
+
+<li>Invokes the <span class="synph"><span class="kwd">ServiceLib.completeBind</span></span> function
+so that the variable references the HTTPRest object.</li>
+
+</ol>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Creating a service binding in your code</h2><div class="p">You
+can create a service binding in your code, in which case the EGL deployment
+descriptor is not involved. For example, you might substitute the
+second statement in the following code for the object declaration
+that was shown in the preceding section:
+<pre class="codeblock">myService IMyService?; 
+http HttpRest = new HttpRest{
+   restType = eglx.rest.ServiceType.TrueRest, 
+   uri = "www.example.com/myproject/restservices/weather_service"};
+myBinding.request.encoding = Encoding.json;
+myService = servicelib.completeBind(myService, myBinding);
+</pre>
+</div>
+<p>For details on the HttpRest object, see the help
+topic named "eglx.http package."</p>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>

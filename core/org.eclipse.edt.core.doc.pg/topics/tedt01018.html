@@ -16,7 +16,7 @@
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt01018"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Declaring a variable to access a remote service</title>
 </head>
 <body id="tedt01018"><a name="tedt01018"><!-- --></a>
@@ -32,7 +32,7 @@ can use the <span class="synph"><span class="kwd">Resource</span></span> annotat
 that the binding detail for service access is in the resource binding
 section of the EGL deployment descriptor.</p>
 
-<div class="p">This example shows a variable declaration: <pre class="codeblock">myService MyInterfaceType? {@Resource{bindingKey="MyBinding"}};</pre>
+<div class="p">This example shows a variable declaration: <pre class="codeblock">myService MyInterfaceType? {@Resource{uri="binding:MyBinding"}};</pre>
 </div>
 
 <p>For details on the Resource annotation, see the topic named “EGL

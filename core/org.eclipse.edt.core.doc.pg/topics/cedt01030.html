@@ -6,17 +6,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Resource bindings"></meta>
-<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. The bindings are maintained in an EGL deployment descriptor, which is external to your logic and provides the access details when you are developing or deploying your application."></meta>
-<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. The bindings are maintained in an EGL deployment descriptor, which is external to your logic and provides the access details when you are developing or deploying your application."></meta>
+<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database."></meta>
+<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database."></meta>
 <meta name="DC.subject" content="Resource bindings"></meta>
 <meta name="keywords" content="Resource bindings"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01032.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01033.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt01030"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Resource bindings</title>
 </head>
 <body id="cedt01030"><a name="cedt01030"><!-- --></a>
@@ -27,51 +29,90 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p>One of the more elegant aspects of EGL is its
-use of <dfn class="term">resource bindings</dfn>, each of which is a value that
-describes how to access a service or database. The bindings are maintained
-in an EGL deployment descriptor, which is external to your logic and
-provides the access details when you are developing or deploying your
-application.</p>
+use of <em>resource bindings</em>, each of which is a value that describes
+how to access a service or database.</p>
 
-<p>This use of the deployment descriptor is safe and flexible. You
-can change the details stored there and then redeploy the code without
-changing the access logic and without spending the time to regenerate
-output.</p>
+<p>In most cases, you maintain bindings in an EGL deployment descriptor,
+which is external to your logic and provides the access details when
+you are developing or deploying your application.  This use of the
+deployment descriptor is safe and flexible. You can change the details
+stored there and redeploy the code without changing the logic and
+without spending the time to regenerate output. </p>
 
-<div class="section"><h2 class="sectiontitle">Service bindings</h2><div class="p">If the purpose of a resource
-binding is service access, the definition is called a <dfn class="term">service
-binding</dfn>, and the main detail is in one of two formats. <ul>
-<li>If the service is deployed on an application server, you can specify
-a Universal Resource Identifier (URI), as shown in the following example: <ul class="simple">
-<li><samp class="codeph">http://myserver:8080/myproject/restservices/myservice</samp></li>
+<div class="section"><h2 class="sectiontitle">The typical process</h2><div class="p">The binding mechanism
+is the same for service and database access. The typical process is
+to write a resource binding in an EGL deployment descriptor and to
+relate a variable to the stored resource binding in either of two
+ways:     <ul>
+<li>By invoking the<strong> SysLib.getResource</strong> function; or</li>
 
-</ul>
-<p>Although you can run the deployed service during an EGL debugging
-session, the EGL debugger does not step into the service.</p>
-</li>
-
-<li>If the service is available in your workspace and was written
-in EGL, you can use a <dfn class="term">workspace URI</dfn> , which is an identifier
-that points to a workspace location. Here is an example:<ul class="simple">
-<li><samp class="codeph">workspace://mySourceProject/servicepackage.serviceName</samp></li>
+<li>By writing a <strong>Resource</strong> annotation.</li>
 
 </ul>
-<p>In this case, an internal Test Server enables you to debug
-the code, and the URI is useful only at development time. The Test
-Server is described here: <a href="cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+  </div>
+<div class="p">Here is an example use of the function, which can be
+invoked only inside an EGL function: <pre class="codeblock">myService MyInterfaceType?;
+myService = SysLib.getResource("binding:myBinding"); </pre>
+</div>
+<div class="p">Here
+is the equivalent annotation, which you can specify anywhere that
+you can declare a variable:<pre class="codeblock">myService MyInterfaceType?{@Resource{uri="binding:myBinding"}};
+
+// another declaration
+myService02 MyOtherInterfaceType?{@Resource};</pre>
+</div>
+<div class="p">The
+uri annotation field is optional and refers by default to a resource
+binding that has the same name as the variable. For example, in the
+preceding annotation, the missing value for the uri field is <samp class="codeph">"binding:myService02"</samp>.
+ Whether you specify the function or annotation:<ul>
+<li>Access to the stored binding occurs at run time, when the generated
+output invokes code that is equivalent to the SysLib.getResource function.</li>
+
+<li>You can explicitly identify an EGL deployment descriptor: <pre class="codeblock">myService MyInterfaceType?;
+myService = SysLib.getResource("binding:myDDFile#myBinding"); 
+
+// equivalent annotation
+myService MyInterfaceType?(@Resource{uri = "binding:myDDFile#myBinding"}};</pre>
 </li>
+
+<li>If you do not identify an EGL deployment descriptor, the referenced
+file is the one that is currently in use. At development time, the
+one currently in use is identified in the following project property: <strong>Development
+Deployment Descriptor</strong>. At deployment time, the referenced deployment
+descriptor is the one that you deploy.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Database bindings</h2><p>If the purpose of a resource
-binding is to specify the connection used for database access, the
-definition is called a <dfn class="term">database binding</dfn>. You can place
-the binding in the EGL deployment descriptor, but can include the
-connection information directly in your code.</p>
-<p>For further details,
-see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize for inclusion in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</p>
+<div class="section"><h2 class="sectiontitle">Bindings in your code</h2><div class="p">A resource binding
+includes a series of fields that are characteristic of a particular
+type of binding. For example, a REST service binding has fields that
+are different from those in an SQL database binding. The existence
+of binding types means that you can go beyond the typical process
+described earlier:<ul>
+<li>You might define a variable that is of the appropriate binding
+type. You can assign field values to that variable and use the variable
+for resource access. In this case, the resource binding is solely
+in your code.</li>
+
+<li>In relation to service bindings, you can initialize the variable
+with values from the EGL deployment descriptor and then update the
+fields in your code.</li>
+
+</ul>
+     </div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">For further information</h2><div class="p">The next topics
+give further details: <ul>
+<li><a href="cedt01032.html" title="If the purpose of a resource binding is service access, the definition is called a service binding. The main detail is in one of three categories:">Service bindings</a></li>
+
+<li><a href="cedt01033.html" title="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding.">Database bindings</a></li>
+
+</ul>
+</div>
 </div>
 
 </div>

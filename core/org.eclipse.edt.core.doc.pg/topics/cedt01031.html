@@ -14,7 +14,7 @@
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt01031"></meta>
 <meta name="DC.Language" content="en-us"></meta>
-<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL test server</title>
 </head>
 <body id="cedt01031"><a name="cedt01031"><!-- --></a>
@@ -70,10 +70,35 @@ logic that references the service, as noted in <a href="tedt01017.html" title="A
 </ul>
 </div>
 
-<p>A test server is specific to the EGL source project from which
-the Service type is accessed. [ true? ] The server relies on the project-specific
-classpath and on the detail in the EGL deployment descriptors that
-are used at development time.</p>
+<div class="p">A test server is specific to an EGL source project:<ul>
+<li>When a workspace URI is in use, the source project is the one
+in which the Service type resides. </li>
+
+<li>When a dedicated service is in use, the source project is the
+top-level project that contains the handler from which the service
+is accessed. Here is an example, which demonstrates that the service
+access can be indirect:<ul>
+<li>MyProject01 includes a Rich UI handler.</li>
+
+<li>That handler embeds and uses a second Rich UI handler, which resides
+in MyProject02.</li>
+
+<li>The second handler invokes a library function that resides in
+MyProject03.</li>
+
+<li>The library function invokes a dedicated service that is defined
+in MyProject04.</li>
+
+</ul>
+<p>The test server in this example is specific to MyProject01.</p>
+</li>
+
+</ul>
+</div>
+
+<p>The server relies on the detail in the EGL deployment descriptors
+that are used at development time.  The server also relies on the
+classpath that is specific to the project.</p>
 
 <div class="p">In the workbench (<span class="uicontrol">Window &gt; Preferences &gt; EGL &gt; Test
 Server</span>), you set preferences to indicate what to do in

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Database bindings"></meta>
+<meta name="abstract" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding."></meta>
+<meta name="description" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt01030.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="cedt01033"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Database bindings</title>
+</head>
+<body id="cedt01033"><a name="cedt01033"><!-- --></a>
+
+
+<h1 class="topictitle1">Database bindings</h1>
+
+
+<div id="body"><a name="body"><!-- --></a><p>If the purpose of a resource binding is to specify
+the connection used for database access, the definition is called
+a <dfn class="term">database binding</dfn>. </p>
+
+<div class="p">You can place the binding in the EGL deployment descriptor or can
+include the connection information directly in your code. Here are
+other capabilities:<ul>
+<li>If you place the binding in the EGL deployment descriptor, you
+can specify the connections details there or use connection details
+that are specified in an Eclipse connection profile. <p>If you reference
+an Eclipse connection profile, any subsequent change to that profile
+is available to your code at development and deployment time. After
+the EGL deployer has packaged the application, though, the changes
+have no effect on the deployed code unless you redeploy the application.</p>
+</li>
+
+<li>You can use an JNDI data source that is or will be defined in
+the application server. If code is running on an application server
+that is compliant with Java Enterprise Edition, JNDI allows for fast
+database access across multiple users.</li>
+
+<li>If you intend to deploy your code to the Apache Tomcat server,
+you can configure a JNDI deployment entry when you define an SQL database
+binding in the EGL deployment descriptor. The entry results in a container-based
+authentication, which means that the server stores any user ID and
+password needed for database access.</li>
+
+</ul>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Defining an SQL database binding in the EGL deployment
+descriptor </h2><p>For details on defining an SQL database binding
+in the EGL deployment descriptor, see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00542.html" title="An SQL database binding gives details necessary to access an SQL service.">Adding an SQL database binding to the EGL deployment descriptor</a>.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Retrieving an SQL database binding in your code </h2><p>You
+enable a future connection to a database by declaring a connection
+variable. The connection itself occurs when you first run a database-access
+statement that uses the variable. 
+</p>
+<div class="p">One way to enable a future connection is to retrieve an SQL
+database binding from the EGL deployment descriptor. For example,
+here is the declaration of a connection variable: 
+<pre class="codeblock">myDataSource SQLDataSource? { @Resource {uri="binding:"MyDatabaseBinding"} }; 
+
+</pre>
+</div>
+<div class="p">That declaration is valid whether the binding is
+for JNDI or not. You can specify a connection variable that is specific
+to a JNDI data source, but will cause a runtime error if the binding
+refers to a non-JNDI data source:
+<pre class="codeblock">myJNDIDataSource SQLJNDIDataSource? { 
+   { @Resource {uri="binding:MyDatabaseJNDIBinding"} };
+</pre>
+</div>
+<p>Your code interacts with either variable in the
+same way, and the use of the SQLDataSource type is sufficient in many
+cases. Here is an exception:  if your subsequent logic uses the EGL <strong>isa</strong> operator
+to test whether a variable is of type SQLDataSource or SQLJNDIDataSource,
+you must use the SQLJNDIDataSource type for JNDI data sources and
+must use the SQLDataSource type for others.</p>
+<div class="p">You can also access
+SQL database bindings in your logic, as shown here:  
+<pre class="codeblock">myDataSource SQLDataSource? = 
+   SysLib.getResource("binding:MyBinding");
+
+myJNDIDataSource SQLDataSource? = 
+   SysLib.getResource("binding:MyJNDIBinding");
+
+myOtherJNDIDataSource SQLJNDIDataSource? = 
+   SysLib.getResource("binding:MyOtherJNDIBinding"); </pre>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Creating an SQL database binding in your code</h2><div class="p">You
+can create an SQL database binding in your code, in which case the
+EGL deployment descriptor is not involved. For example, the following
+code enables a database connection for a non-JNDI data source: 
+<pre class="codeblock">connectURL string = "jdbc:derby:SomeDB;create=true;";
+properties Dictionary{user = "MyID", password = "MyPassword"};
+myDataSource SQLDataSource? = new SQLDataSource(connectURL, properties);
+</pre>
+</div>
+<div class="p">Here is equivalent code that is specifically for
+a JNDI data source:<pre class="codeblock">connectURL string = "jdbc/myDataSource";
+properties Dictionary{user = "MyID", password = "MyPassword"};
+myJNDIDataSource SQLJNDIDataSource? = new SQLJNDIDataSource(connectURL, properties);
+</pre>
+</div>
+<div class="p">As noted earlier, any connection variable can be
+based on the SQLDataSource type.  Here is code that enables a JNDI
+connection in the usual case, when container-managed security is in
+effect: 
+<pre class="codeblock">connectURL string = "jdbc/myDataSource";
+myJNDIDataSource SQLJNDIDataSource? = new SQLJNDIDataSource(connectURL);
+</pre>
+</div>
+<p>For a JNDI connection, if security detail is passed
+to a data source that operates under container-managed security, the
+result is not determined by the generated application or by the EGL
+runtime code. For details on what happens, see the documentation provided
+by the specific Java DataSource class in use.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Using the connection variable for additional purposes</h2><div class="p">You
+can use the connection variable for the following, additional purposes:
+<ul>
+<li>To set or get the <em>isolation level</em>, which specifies the
+level of independence of one user's database transaction from another
+user's database transaction.</li>
+
+<li>To set or get the <em>autoCommit</em> value, which indicates whether
+updates are committed automatically.</li>
+
+<li>To set the database schema to use in SQL statements that are issued
+by your code.</li>
+
+<li>To test whether a connection is still in effect.</li>
+
+<li>To access a set of exception records that give runtime warnings.</li>
+
+</ul>
+</div>
+<p>For details on these capabilities, see the "SQLDataSource
+external type" help topic, which is subordinate to "eglx.persistence.sql.package."
+ The details there apply to both SQLDataSource and SQLJNDIDataSource. </p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">For further information</h2><p>For further details,
+see <a href="cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize and then include in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a>.</p>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>
