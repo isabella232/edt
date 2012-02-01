@@ -33,16 +33,6 @@
 		
 		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng"/>
 		<property name="relengBaseBuilderDir" value="/opt/public/cbi/build/org.eclipse.releng.basebuilder"/>
-		
-		<taskdef resource="net/sf/antcontrib/antlib.xml">
-			<classpath>
-				<pathelement path="${classpath}" />
-				<pathelement location="${relengCommonBuilderDir}/lib/ant-contrib.jar" />
-				<pathelement location="${relengBuilderDir}/lib/ant-contrib.jar" />
-				<pathelement location="${thirdPartyJarsDir}/ant-contrib.jar" />
-				<pathelement location="/usr/share/java/ant-contrib.jar" />
-			</classpath>
-		</taskdef>
 	</target>
 
 	<target name="run" depends="init">
@@ -51,7 +41,6 @@
 		<mkdir dir="${writableBuildRoot}"/>
 		<ant antfile="${relengCommonBuilderDir}/buildAll.xml" target="runEclipse" dir="${relengCommonBuilderDir}"/>
 
-		<antcall target="add.associate.sites"/>
 		<antcall target="cleanUp" inheritall="true" />
 
 		<ant antfile="promote.xml" />
@@ -69,64 +58,5 @@
 				<include name="**/*Master*.zip"/>
 			</fileset>
 		</delete>
-	</target>
-
-	<target name="add.associate.sites" if="associate.sites" depends="init">
-		<!-- Unpack content.jar -->
-		<if>
-			<available file="${buildDir}/content.jar" type="file" />
-			<then>
-				<unzip src="${buildDir}/content.jar" dest="${buildDir}" />
-				<delete file="${buildDir}/content.jar" />
-			</then>
-		</if>
-		
-		<!-- Update content.xml -->
-		<if>
-			<and>
-				<!-- Defined in associate.sites -->
-				<isset property="associate.sites" />
-				<not>
-					<equals arg1="${associate.sites}" arg2="" />
-				</not>
-			</and>
-			<then>
-				<!-- counter variable -->
-				<var name="associate.sites.0" value="" />
-				<for param="associate.site" list="${associate.sites}" delimiter=", 
-		">
-					<sequential>
-						<var name="associate.sites.0" value="${associate.sites.0}00" />
-					</sequential>
-				</for>
-				<length property="associate.sites.length" string="${associate.sites.0}" />
-
-				<loadfile srcfile="${buildDir}/content.xml" property="content.xml">
-					<filterchain>
-						<tailfilter lines="-1" skip="1" />
-					</filterchain>
-				</loadfile>
-				<echo file="${buildDir}/content.xml" message="${content.xml}" />
-				<echo file="${buildDir}/content.xml" append="true">  &lt;references size='${associate.sites.length}'>
-	</echo>
-				<for param="associate.site" list="${associate.sites}" delimiter=", 
-		">
-					<sequential>
-						<!-- insert into content.xml -->
-						<echo file="${buildDir}/content.xml" append="true">    &lt;repository uri='@{associate.site}' url='@{associate.site}' type='0' options='1'/>
-	    &lt;repository uri='@{associate.site}' url='@{associate.site}' type='1' options='1'/>
-	</echo>
-					</sequential>
-				</for>
-				<echo file="${buildDir}/content.xml" append="true">  &lt;/references>
-	&lt;/repository>
-	</echo>
-			</then>
-		</if>
-		
-		<!-- Repack content.jar -->
-		<zip destfile="${buildDir}/content.jar" basedir="${buildDir}" includes="content.xml" />
-		<delete file="${buildDir}/content.xml" />
-		<delete file="${buildDir}/content.old.xml" />
 	</target>
 </project>
