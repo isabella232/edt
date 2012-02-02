@@ -1,4 +1,3 @@
-package org.eclipse.edt.gen.egl;
 /*******************************************************************************
  * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +9,7 @@ package org.eclipse.edt.gen.egl;
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-
+package org.eclipse.edt.gen.egl;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
@@ -22,7 +21,6 @@ import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.egl.templates.EglTemplate;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
-import org.eclipse.edt.mof.egl.Part;
 
 public class EglGenerator extends Generator{
 
@@ -85,10 +83,6 @@ public class EglGenerator extends Generator{
 	public void processFile(String fileName) {
 	}
 
-	@Override
-	public void generate(Part part) throws GenerationException {
-	}
-	
 	public Context getContext() {
 		return context;
 	}
