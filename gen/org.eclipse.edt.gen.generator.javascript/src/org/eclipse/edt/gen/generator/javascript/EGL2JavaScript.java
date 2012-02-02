@@ -12,16 +12,12 @@
 package org.eclipse.edt.gen.generator.javascript;
 
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.JavaScriptGenerator;
 
 public class EGL2JavaScript extends AbstractGeneratorCommand {
 
 	public EGL2JavaScript() {
 		super();
-		// define our local command parameters
-		this.installParameter(false, Constants.parameter_checkOverflow, new String[] { "checkOverflow", "overflow", "co" }, new Boolean[] { false, true },
-			"Overflow must be defined as true or false");
 	}
 
 	public static void main(String[] args) {
@@ -29,26 +25,4 @@ public class EGL2JavaScript extends AbstractGeneratorCommand {
 		EGL2JavaScript genPart = new EGL2JavaScript();
 		genPart.generate(args, new JavaScriptGenerator(genPart), null, null);
 	}
-
-	public String[] getNativeTypePath() {
-		// this defined the locations of the nativeTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.javascript.nativeTypes" };
-	}
-
-	public String[] getPrimitiveTypePath() {
-		// this defined the locations of the primitiveTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.javascript.primitiveTypes" };
-	}
-
-	public String[] getEGLMessagePath() {
-		// this defined the locations of the EGLMessages.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.javascript.EGLMessages" };
-	}
-
-	public String[] getTemplatePath() {
-		return new String[] { "org.eclipse.edt.gen.javascript.templates.eglx.lang.templates", "org.eclipse.edt.gen.javascript.templates.egl.core.templates",
-				"org.eclipse.edt.gen.javascript.templates.eglx.services.templates", "org.eclipse.edt.gen.javascript.templates.templates" };
-	}
-
-
 }
