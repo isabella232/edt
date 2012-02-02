@@ -23,7 +23,6 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.serialization.Environment;
 
 public class HTMLGenerator extends Generator {
 
@@ -89,11 +88,6 @@ public class HTMLGenerator extends Generator {
 		context.invoke(methodName, part, context, out);
 	}
 	
-	@Override
-	public void generate(Part part) throws GenerationException {
-		
-	}
-
 	@Override
 	public void generate(Object objectClass) throws GenerationException {
 		// TODO Auto-generated method stub

@@ -33,9 +33,8 @@ public class DeploymentHTMLGenerator extends ValidHTMLGenerator {
 		super(processor, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
 	}
 	
-	@Override
-	public void generate(Part part) throws GenerationException {
-		this.generate(part, JavaScriptTemplate.genDeploymentHTML);
+	public void generate(Object part) throws GenerationException {
+		this.generate((Part) part, JavaScriptTemplate.genDeploymentHTML);
 	}
 
 }

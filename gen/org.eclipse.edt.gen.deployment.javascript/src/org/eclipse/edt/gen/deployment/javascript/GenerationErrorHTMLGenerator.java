@@ -24,8 +24,7 @@ public class GenerationErrorHTMLGenerator extends ErrorHTMLGenerator {
 		super(processor, requestor, sysEnv, message);
 	}
 	
-	@Override
-	public void generate(Part part) throws GenerationException {
-		this.generate(part, JavaScriptTemplate.genErrorHTML);
+	public void generate(Object part) throws GenerationException {
+		this.generate((Part) part, JavaScriptTemplate.genErrorHTML);
 	}
 }
