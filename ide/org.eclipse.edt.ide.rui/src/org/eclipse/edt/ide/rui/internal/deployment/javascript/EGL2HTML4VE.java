@@ -37,5 +37,4 @@ public class EGL2HTML4VE extends EGL2HTML {
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		//do nothing
 	}
-	
 }
