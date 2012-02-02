@@ -12,17 +12,47 @@
 
 package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
 
-import org.eclipse.edt.ide.ui.internal.record.conversion.AbstractObjectToEglSource;
+import org.eclipse.edt.gen.AbstractGeneratorCommand;
+import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public class DataToolsObjectsToEglSource extends AbstractObjectToEglSource {
+public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
 	
 	public static final String DATA_DEFINITION_OBJECT = "dataDefinition";
 	public static final String TABLE_NAME_QUALIFIED = "tableNameQualified";
 	public static final String DB_MESSAGE_HANDLER = "dbMessageHandler";
 
-	@Override
-	public String[] getTemplatePath() {
-		return new String[] { "org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.templates" };
+	public DataToolsObjectsToEglSource() {
+		super();
 	}
 
+	public void generate(Object[] objects, EglSourceGenerator generator, IEnvironment environment) {
+		try {
+			if (environment != null){
+				Environment.pushEnv(environment);
+			}
+			//this.installOverrides(args);
+			// start up the generator, passing the command processor
+			try {				
+				for (Object obj : objects) {
+					generator.generate(obj);
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				if (generator != null)
+					System.out.print(generator.getResult());
+			}
+			generator.dumpErrorMessages();
+		}
+		catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
+		finally {
+			if (environment != null){
+				Environment.popEnv();
+			}
+		}
+	}
 }
