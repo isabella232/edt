@@ -34,4 +34,15 @@
       </commonFilter>
        
  </extension>
+ <extension
+       point="org.eclipse.edt.gen.configurators">
+    <provider
+          class="org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenConfig"
+          generator_id="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
+          id="JavaScriptDevConfigurator"
+          requires="org.eclipse.edt.gen.javascript.JavaScriptGenConfig"
+          requires_id="JavaScriptConfigurator"
+          version="0.8">
+    </provider>
+ </extension>
 </plugin>
