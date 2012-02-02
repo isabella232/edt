@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.generator.eglsource;
 
 import java.io.StringWriter;
 
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -30,11 +29,8 @@ public class EglSourceGenerator extends Generator {
 
 	public EglSourceGenerator(AbstractGeneratorCommand processor) {
 		this(processor, null);
-
 		generator = processor;
-
 		out = new TabbedWriter(new StringWriter());
-
 		out.setAutoIndent(false);
 	}
 
@@ -71,17 +67,8 @@ public class EglSourceGenerator extends Generator {
 	public void processFile(String fileName) {
 	}
 
-	public void generate(Part part) throws GenerationException {
-
-	}
-
 	@Override
 	public Object getResult() {
 		return out.getWriter().toString();
-	}
-
-	@Override
-	public void generate(org.eclipse.edt.mof.egl.Part part) throws GenerationException {
-
 	}
 }
