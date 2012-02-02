@@ -38,8 +38,11 @@ public abstract class Generator {
 		}
 		// define our template factory to the context
 		context.setTemplateFactory(this.factory);
+	}
+	
+	public void initialize(AbstractGeneratorCommand processor) {
 		// add all of the command processor keys to the context
-		Map<String, CommandParameter> parameterMapping = processor.parameterMapping;
+		Map<String, CommandParameter> parameterMapping = processor.getParameterMapping();
 		for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
 			context.put(entry.getKey(), entry.getValue());
 		}
@@ -53,9 +56,7 @@ public abstract class Generator {
 
 	public abstract EglContext makeContext(AbstractGeneratorCommand processor);
 
-	public abstract void generate(Part part) throws GenerationException;
-
-	public abstract void generate(Object objectClass) throws GenerationException;
+	public abstract void generate(Object object) throws GenerationException;
 
 	public abstract void processFile(String fileName);
 
@@ -63,6 +64,8 @@ public abstract class Generator {
 
 	public abstract void dumpErrorMessages();
 	
+	public abstract String getFileExtension();
+
 	/**
 	 * By default the relative file name will be the same as the source file, with the generator's file extension. This is
 	 * intended to be overridden as necessary.
@@ -71,9 +74,6 @@ public abstract class Generator {
 		return part.getTypeSignature().replaceAll("\\.", "/") + this.getFileExtension();
 	}
 	
-	// the command processor must implement the method for providing the file extension to write files out as
-	public abstract String getFileExtension();
-
 	protected static void writeFileUtil(EglContext context, String fileName, String output, String encoding, String encodingError, String writeError) {
 		File outFile = new File(fileName);
 		try {
@@ -104,7 +104,6 @@ public abstract class Generator {
 			if ((report != null)) {
 				String fn = fileName.substring(0, fileName.lastIndexOf('.')) + Constants.report_fileExtension;
 				String rpt = report.rpt.getWriter().toString();
-
 				writeFileUtil(context, fn, rpt, "UTF-8", encodingError, writeError);
 			}
 		}
@@ -112,5 +111,4 @@ public abstract class Generator {
 			System.err.println("Error writing generation report for " + fileName);
 		}
 	}
-
 }

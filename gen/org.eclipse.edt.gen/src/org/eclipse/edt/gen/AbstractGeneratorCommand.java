@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public abstract class AbstractGeneratorCommand extends CommandProcessor {
+public abstract class AbstractGeneratorCommand extends CommandProcessor implements Configurable {
 
 	private String templates = "";
 	private String nativeTypes = "";
@@ -40,57 +40,41 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 			"Part must identify the part to be generated, which can contain an * for all matching parts");
 		this.installParameter(true, Constants.parameter_root, new String[] { "root", "r" }, new String[] { null },
 			"Root must identify the root location to be used in generation");
-		this.installParameter(false, Constants.parameter_report, new String[] { "report" }, new Boolean[] { false, true },
-			"Report must be defined as true or false");
-
-		// accept the overriden properties file lists
-		String[] templateList = this.getTemplatePath();
-		for (String template : templateList) {
-			templates = templates + template + ";";
-		}
-		String[] nativeTypeList = this.getNativeTypePath();
-		for (String nativeType : nativeTypeList) {
-			nativeTypes = nativeTypes + nativeType + ";";
-		}
-		String[] primitiveTypeList = this.getPrimitiveTypePath();
-		for (String primitiveType : primitiveTypeList) {
-			primitiveTypes = primitiveTypes + primitiveType + ";";
-		}
-		String[] EGLMessageList = this.getEGLMessagePath();
-		for (String EGLMessage : EGLMessageList) {
-			EGLMessages = EGLMessages + EGLMessage + ";";
-		}
+		this.installParameter(true, Constants.parameter_configuration, new String[] { "configuration", "config", "c" }, new Object[] { null },
+			"Configuration must identify the configurator classes used in generation");
 	}
 
 	public String getTemplates() {
+		String[] templateList = getTemplatePath().toArray(new String[getTemplatePath().size()]);
+		for (String template : templateList) {
+			templates = templates + template + ";";
+		}
 		return templates;
 	}
 
 	public String getNativeTypes() {
+		String[] nativeTypeList = getNativeTypePath().toArray(new String[getNativeTypePath().size()]);
+		for (String nativeType : nativeTypeList) {
+			nativeTypes = nativeTypes + nativeType + ";";
+		}
 		return nativeTypes;
 	}
 
 	public String getPrimitiveTypes() {
+		String[] primitiveTypeList = getPrimitiveTypePath().toArray(new String[getPrimitiveTypePath().size()]);
+		for (String primitiveType : primitiveTypeList) {
+			primitiveTypes = primitiveTypes + primitiveType + ";";
+		}
 		return primitiveTypes;
 	}
 
 	public String getEGLMessages() {
+		String[] EGLMessageList = getMessagePath().toArray(new String[getMessagePath().size()]);
+		for (String EGLMessage : EGLMessageList) {
+			EGLMessages = EGLMessages + EGLMessage + ";";
+		}
 		return EGLMessages;
 	}
-
-
-
-	// the command processor must implement the method for providing the location of the nativeTypes.properties files
-	public abstract String[] getNativeTypePath();
-
-	// the command processor must implement the method for providing the location of the primitiveTypes.properties files
-	public abstract String[] getPrimitiveTypePath();
-
-	// the command processor must implement the method for providing the location of the EGLMessages.properties files
-	public abstract String[] getEGLMessagePath();
-
-	// the command processor must implement the method for providing the location of the templates.properties files
-	public abstract String[] getTemplatePath();
 
 	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
 		try {
@@ -98,41 +82,31 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 				Environment.pushEnv(environment);
 				generator.getContext().setEnvironment(environment);
 			}
-			this.installOverrides(args);
-			// start up the generator, passing the command processor
-			try {
-				List<Part> parts = loadEGLParts(compiler);
-				for (Part part : parts) {
-					generator.generate(part);
-					// now try to write out the file, based on the output location and the part's type signature
-					try {
-						// only write the data, if there was some
-						if (generator.getResult() instanceof String && ((String)generator.getResult()).length() > 0)
-							writeFile(part, generator);
-					}
-					catch (Throwable e) {
-						e.printStackTrace();
+			// process the arguments and load the configurators
+			if (initialize(args, generator)) {
+				// start up the generator, passing the command processor
+				try {
+					List<Part> parts = loadEGLParts(compiler);
+					for (Part part : parts) {
+						generator.generate(part);
+						// now try to write out the file, based on the output location and the part's type signature
+						try {
+							// only write the data, if there was some
+							if (generator.getResult() instanceof String && ((String) generator.getResult()).length() > 0)
+								writeFile(part, generator);
+						}
+						catch (Throwable e) {
+							e.printStackTrace();
+						}
 					}
 				}
+				catch (Exception e) {
+					e.printStackTrace();
+					if (generator != null)
+						System.out.print(generator.getResult());
+				}
+				generator.dumpErrorMessages();
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				if (generator != null)
-					System.out.print(generator.getResult());
-			}
-			generator.dumpErrorMessages();
-		}
-		catch (PromptQueryException e) {
-			System.out.print(e.getMessage());
-		}
-		catch (UnknownParameterException e) {
-			System.out.print("This parameter is unknown: " + e.getMessage());
-		}
-		catch (MissingParameterValueException e) {
-			System.out.print("This value for this parameter is missing: " + e.getMessage());
-		}
-		catch (InvalidParameterValueException e) {
-			System.out.print("This value for this parameter is incorrect: " + e.getMessage());
 		}
 		finally {
 			if (environment != null) {
@@ -141,6 +115,36 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		}
 	}
 
+	protected boolean initialize(String[] args, Generator generator) {
+		// process the arguments and load the configurators
+		if (processBase(args)) {
+			// process all of the configuration modules
+			Object[] configurators = (Object[]) getParameter(Constants.parameter_configuration).getValue();
+			for (Object configurator : configurators) {
+				// obtain and load the requested configurator
+				try {
+					// load the configurator class
+					Class<?> clazz = Class.forName((String) configurator, true, getClass().getClassLoader());
+					// process the configuration module by invoking the configure method
+					Configurator config = (Configurator) clazz.newInstance();
+					config.configure(this);
+				}
+				catch (Exception x) {
+					System.out.println("Exception: " + x.getMessage());
+					System.out.println("Unable to load: " + configurator + ". Generation aborted.");
+					return false;
+				}
+			}
+			// now process the non-base (user) command line options
+			if (processUser(args)) {
+				// load the template path and template factories
+				generator.initialize(this);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private void listAllFiles(File parent, List<File> files, String pattern) {
 		if (parent.isDirectory()) {
 			File[] children = parent.listFiles();
@@ -168,8 +172,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 	protected List<Part> loadEGLParts(ICompiler compiler) throws LoadPartException {
 		List<Part> parts = new ArrayList<Part>();
 		// check to see if the part has an asterisk, indicating that all matching files are desired
-		String rootName = (String) parameterMapping.get(Constants.parameter_root).getValue();
-		String partName = (String) parameterMapping.get(Constants.parameter_part).getValue();
+		String rootName = (String) getParameter(Constants.parameter_root).getValue();
+		String partName = (String) getParameter(Constants.parameter_part).getValue();
 		if (partName.indexOf("*") >= 0) {
 			// we need to locate the root ir location and can it's directory for parts matching the pattern defined
 			String totalName;
@@ -192,8 +196,9 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 				if (irFileRelativePath.startsWith(File.separator))
 					irFileRelativePath = irFileRelativePath.substring(File.separator.length());
 				parts
-				//TODO should pass the compiler to IRLoader
-					.add(IRLoader.loadEGLPart(rootName, irFileRelativePath.substring(0, irFileRelativePath.lastIndexOf(".")).replace(File.separatorChar, '.'), null));
+				// TODO should pass the compiler to IRLoader
+					.add(IRLoader.loadEGLPart(rootName, irFileRelativePath.substring(0, irFileRelativePath.lastIndexOf(".")).replace(File.separatorChar, '.'),
+						null));
 			}
 		} else
 			parts.add(IRLoader.loadEGLPart(rootName, partName, compiler));
@@ -201,7 +206,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 	}
 
 	protected void writeFile(Part part, Generator generator) throws Exception {
-		String fileName = ((String) parameterMapping.get(Constants.parameter_output).getValue()).replaceAll("\\\\", "/");
+		String fileName = ((String) getParameter(Constants.parameter_output).getValue()).replaceAll("\\\\", "/");
 		if (!fileName.endsWith("/"))
 			fileName = fileName + "/";
 		fileName = fileName + generator.getRelativeFileName(part);
@@ -215,5 +220,34 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor {
 		generator.processFile(fileName);
 	}
 
+	public void registerCommandOptions(CommandOption[] options) {
+		for (CommandOption option : options) {
+			this.installParameter(option.getParameter().isRequired(), option.getInternalName(), option.getAliases(), option.getParameter().getPossibleValues(),
+				option.getParameter().getPromptText());
+		}
+	}
 
+	public void registerTemplatePath(String[] paths) {
+		for (String path : paths) {
+			getTemplatePath().add(path);
+		}
+	}
+
+	public void registerNativeTypePath(String[] paths) {
+		for (String path : paths) {
+			getNativeTypePath().add(path);
+		}
+	}
+
+	public void registerPrimitiveTypePath(String[] paths) {
+		for (String path : paths) {
+			getPrimitiveTypePath().add(path);
+		}
+	}
+
+	public void registerMessagePath(String[] paths) {
+		for (String path : paths) {
+			getMessagePath().add(path);
+		}
+	}
 }

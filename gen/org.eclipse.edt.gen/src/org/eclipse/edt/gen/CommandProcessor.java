@@ -19,45 +19,111 @@ import java.util.Map.Entry;
 
 public abstract class CommandProcessor {
 
-	protected Map<String, CommandParameter> parameterMapping;
-	protected Map<String, String> aliasMapping;
+	private List<String> templatePath = new ArrayList<String>();
+	private List<String> nativeTypePath = new ArrayList<String>();
+	private List<String> primitiveTypePath = new ArrayList<String>();
+	private List<String> messagePath = new ArrayList<String>();
+	private Map<String, CommandParameter> parameterMapping = new HashMap<String, CommandParameter>();
+	private Map<String, String> aliasMapping = new HashMap<String, String>();
 
 	public CommandProcessor() {
-		this.parameterMapping = new HashMap<String, CommandParameter>();
-		this.aliasMapping = new HashMap<String, String>();
 	}
 
-	public void installOverrides(String[] args) throws PromptQueryException, UnknownParameterException, InvalidParameterValueException,
+	public boolean processBase(String[] args) {
+		try {
+			// apply the command line overrides
+			installOverrides(args, true);
+			return true;
+		}
+		catch (PromptQueryException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+		catch (UnknownParameterException e) {
+			System.out.println("This parameter is unknown: " + e.getMessage());
+			return false;
+		}
+		catch (MissingParameterValueException e) {
+			System.out.println("This value for this parameter is missing: " + e.getMessage());
+			return false;
+		}
+		catch (InvalidParameterValueException e) {
+			System.out.println("This value for this parameter is incorrect: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public boolean processUser(String[] args) {
+		try {
+			// apply the command line overrides
+			installOverrides(args, false);
+			return true;
+		}
+		catch (PromptQueryException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+		catch (UnknownParameterException e) {
+			System.out.println("This parameter is unknown: " + e.getMessage());
+			return false;
+		}
+		catch (MissingParameterValueException e) {
+			System.out.println("This value for this parameter is missing: " + e.getMessage());
+			return false;
+		}
+		catch (InvalidParameterValueException e) {
+			System.out.println("This value for this parameter is incorrect: " + e.getMessage());
+			return false;
+		}
+	}
+
+	private void installOverrides(String[] args, boolean baseMode) throws PromptQueryException, UnknownParameterException, InvalidParameterValueException,
 		MissingParameterValueException {
-		// check to see if we have any prompt queries, that provide help for the various parameters. if there are some,
-		// generate the resulting text and use that as the message for a PromptQueryException. This allows us to prevent the
-		// generation to proceed
-		String prompt = "";
-		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("?")) {
-				// we need to give the prompts for all parameters
-				for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
-					CommandParameter parameter = entry.getValue();
+		// process only if in base mode
+		if (baseMode) {
+			// clean out any previous configurators
+			templatePath.clear();
+			nativeTypePath.clear();
+			primitiveTypePath.clear();
+			messagePath.clear();
+			// now go through every existing option and clear the value
+			for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
+				CommandParameter parameter = entry.getValue();
+				parameter.setValue(null);
+			}
+		}
+		// process only if in user mode
+		if (!baseMode) {
+			// check to see if we have any prompt queries, that provide help for the various parameters. if there are some,
+			// generate the resulting text and use that as the message for a PromptQueryException. This allows us to prevent
+			// the generation to proceed
+			String prompt = "";
+			for (int i = 0; i < args.length; i++) {
+				if (args[i].equals("?")) {
+					// we need to give the prompts for all parameters
+					for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
+						CommandParameter parameter = entry.getValue();
+						// get the prompt value and append
+						prompt = prompt + parameter.getPromptText() + "\n";
+					}
+				} else if (args[i].startsWith("?")) {
+					// we need to get the prompt for this parameter
+					String alias = args[i].substring(1);
+					// we have the alias, so check to make sure it exists
+					String internalName = getAlias(alias);
+					if (internalName == null)
+						throw new UnknownParameterException(alias);
+					// we now have the internal name, which points at the command parameter, make sure everything is okay
+					CommandParameter parameter = getParameter(internalName);
+					if (parameter == null)
+						throw new UnknownParameterException(internalName);
 					// get the prompt value and append
 					prompt = prompt + parameter.getPromptText() + "\n";
 				}
-			} else if (args[i].startsWith("?")) {
-				// we need to get the prompt for this parameter
-				String alias = args[i].substring(1);
-				// we have the alias, so check to make sure it exists
-				String internalName = getAlias(alias);
-				if (internalName == null)
-					throw new UnknownParameterException(alias);
-				// we now have the internal name, which points at the command parameter, make sure everything is okay
-				CommandParameter parameter = getParameter(internalName);
-				if (parameter == null)
-					throw new UnknownParameterException(internalName);
-				// get the prompt value and append
-				prompt = prompt + parameter.getPromptText() + "\n";
 			}
+			if (prompt.length() > 0)
+				throw new PromptQueryException(prompt);
 		}
-		if (prompt.length() > 0)
-			throw new PromptQueryException(prompt);
 		// override with any command line options
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
@@ -65,6 +131,10 @@ public abstract class CommandProcessor {
 				String alias = args[i].substring(1);
 				// we have the alias, so check to make sure it exists
 				String internalName = getAlias(alias);
+				// if we are processing in base mode, skip unknown arguments
+				if (internalName == null && baseMode)
+					continue;
+				// if we didn't find this alias, then throw an error
 				if (internalName == null)
 					throw new UnknownParameterException(alias);
 				// we now have the internal name, which points at the command parameter, make sure everything is okay
@@ -159,11 +229,14 @@ public abstract class CommandProcessor {
 				}
 			}
 		}
-		// now go through every option and make sure that all required options have been defined by the user
-		for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
-			CommandParameter parameter = entry.getValue();
-			if (parameter.isRequired() && parameter.getValue() == null)
-				throw new MissingParameterValueException(entry.getKey());
+		// process only if in user mode
+		if (!baseMode) {
+			// now go through every option and make sure that all required options have been defined by the user
+			for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
+				CommandParameter parameter = entry.getValue();
+				if (parameter.isRequired() && parameter.getValue() == null)
+					throw new MissingParameterValueException(entry.getKey());
+			}
 		}
 	}
 
@@ -201,10 +274,8 @@ public abstract class CommandProcessor {
 		// then an exception will be thrown because the "value3" didn't match any entry in the Object[] definition
 
 		// define the internal name key, with the command parameter information
-		if (getParameter(internalName) != null) {
-			System.out.print("This parameter already exists: " + internalName + ". It has been ignored.");
+		if (getParameter(internalName) != null)
 			return;
-		}
 		CommandParameter parameter = new CommandParameter(required, possibleValues, possibleValues[0], promptText);
 		parameterMapping.put(internalName, parameter);
 		// define each of the aliases to point at the internal name key
@@ -212,7 +283,7 @@ public abstract class CommandProcessor {
 			for (String alias : aliases) {
 				if (alias != null) {
 					if (getAlias(alias) != null) {
-						System.out.print("This alias already exists: " + alias + ". It has been ignored.");
+						System.out.println("This alias already exists: " + alias + ". It has been ignored.");
 						return;
 					}
 					aliasMapping.put(alias.toLowerCase(), internalName);
@@ -225,7 +296,27 @@ public abstract class CommandProcessor {
 		return this.aliasMapping.get(aliasName.toLowerCase());
 	}
 
-	private CommandParameter getParameter(String internalName) {
+	public CommandParameter getParameter(String internalName) {
 		return this.parameterMapping.get(internalName);
+	}
+
+	public Map<String, CommandParameter> getParameterMapping() {
+		return parameterMapping;
+	}
+
+	public List<String> getTemplatePath() {
+		return templatePath;
+	}
+
+	public List<String> getNativeTypePath() {
+		return nativeTypePath;
+	}
+
+	public List<String> getPrimitiveTypePath() {
+		return primitiveTypePath;
+	}
+
+	public List<String> getMessagePath() {
+		return messagePath;
 	}
 }
