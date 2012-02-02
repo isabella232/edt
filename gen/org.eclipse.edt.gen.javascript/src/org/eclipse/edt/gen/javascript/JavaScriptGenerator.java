@@ -41,7 +41,6 @@ public class JavaScriptGenerator extends Generator {
 	public JavaScriptGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
-
 		out = (Boolean.TRUE
 				== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
 			) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
@@ -71,7 +70,7 @@ public class JavaScriptGenerator extends Generator {
 		return false;
 	}
 
-	public void generate(Part part) throws GenerationException {
+	public void generate(Object part) throws GenerationException {
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaScriptTemplate.preGenPart, part, context);
@@ -101,7 +100,7 @@ public class JavaScriptGenerator extends Generator {
 				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			}
-			System.err.println("generating:" + part.getFullyQualifiedName() + "[" + part.getFileName() + "]:(" + startLine + ")" );
+			System.err.println("generating:" + ((Part) part).getFullyQualifiedName() + "[" + ((Part) part).getFileName() + "]:(" + startLine + ")" );
 			// print out the whole stack trace
 			e.printStackTrace();
 		}
@@ -135,11 +134,5 @@ public class JavaScriptGenerator extends Generator {
 
 	public String getFileExtension() {
 		return ".js";
-	}
-
-	@Override
-	public void generate(Object objectClass) throws GenerationException {
-		// TODO Auto-generated method stub
-
 	}
 }

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EDT Javascript Generator
-Bundle-SymbolicName: org.eclipse.edt.gen.javascript
+Bundle-SymbolicName: org.eclipse.edt.gen.javascript;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.edt.gen;bundle-version="0.7.0",

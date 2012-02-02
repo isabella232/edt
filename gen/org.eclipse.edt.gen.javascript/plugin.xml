@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.edt.gen.configurators">
+      <provider
+            class="org.eclipse.edt.gen.javascript.JavaScriptGenConfig"
+            generator="org.eclipse.edt.gen.javascript.JavaScriptGenerator"
+            generator_id="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
+            id="JavaScriptConfigurator"
+            version="0.8">
+      </provider>
+   </extension>
+
+</plugin>
