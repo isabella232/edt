@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension
+         point="org.eclipse.edt.gen.configurators">
+      <provider
+            class="org.eclipse.edt.gen.generator.example.ExampleGenConfig"
+            generator_id="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
+            id="ExampleConfigurator"
+            requires_id="JavaConfigurator"
+            version="0.8">
+      </provider>
+   </extension>
 <!--
     <extension point="org.eclipse.edt.ide.core.generators">
 		<provider
 			id="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
-			class="org.eclipse.edt.gen.generator.example.ide.ExampleGenerator"
+			class="org.eclipse.edt.gen.generator.example.ExampleGenerator"
 			name="%GeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="1.0"

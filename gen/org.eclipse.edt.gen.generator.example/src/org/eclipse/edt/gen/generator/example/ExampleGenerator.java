@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.gen.generator.example.ide;
+package org.eclipse.edt.gen.generator.example;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -17,6 +17,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.gen.generator.example.ide.Activator;
+import org.eclipse.edt.gen.generator.example.ide.EclipseExampleGenerator;
 import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.mof.egl.Part;
