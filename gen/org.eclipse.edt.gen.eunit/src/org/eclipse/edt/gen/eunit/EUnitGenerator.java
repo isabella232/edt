@@ -78,9 +78,9 @@ public class EUnitGenerator extends Generator {
 		context.invoke(EUnitTemplate.genPart, part, context, out, counter);
 	}
 
-	public void generate(Part part) throws GenerationException {
+	public void generate(Object part) throws GenerationException {
 		try {
-			generationNotifier.setTaskName("Generating - " + part.getFileName() + "...");
+			generationNotifier.setTaskName("Generating - " + ((Part) part).getFileName() + "...");
 			generationNotifier.updateProgress(1);
 			if(generationNotifier.isAborted()) {
 				return;
@@ -93,7 +93,7 @@ public class EUnitGenerator extends Generator {
 				if (!context.getMessageRequestor().isError()) {
 					out.getWriter().flush();
 					// pass the test variation count to driver generator
-					ContextInvoke(part, counter);
+					ContextInvoke((Part) part, counter);
 					out.flush();
 				}
 				// add library test variation counts to the total test variation counts for the runAllDriver
@@ -108,12 +108,12 @@ public class EUnitGenerator extends Generator {
 			String[] details1 = new String[] { e.getLocalizedMessage() };
 			EGLMessage message1 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 				Constants.EGLMESSAGE_EXCEPTION_OCCURED, e, details1,
-				org.eclipse.edt.gen.CommonUtilities.includeEndOffset(part.getAnnotation(IEGLConstants.EGL_LOCATION), context));
+				org.eclipse.edt.gen.CommonUtilities.includeEndOffset(((Part) part).getAnnotation(IEGLConstants.EGL_LOCATION), context));
 			context.getMessageRequestor().addMessage(message1);
 			if (e.getCause() != null) {
 				String[] details2 = new String[] { e.getCause().toString() };
 				EGLMessage message2 = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_STACK_TRACE,
-					e, details2, org.eclipse.edt.gen.CommonUtilities.includeEndOffset(part.getAnnotation(IEGLConstants.EGL_LOCATION), context));
+					e, details2, org.eclipse.edt.gen.CommonUtilities.includeEndOffset(((Part) part).getAnnotation(IEGLConstants.EGL_LOCATION), context));
 				context.getMessageRequestor().addMessage(message2);
 			}
 			// print out the whole stack trace
@@ -145,10 +145,5 @@ public class EUnitGenerator extends Generator {
 	public String getFileExtension() {
 		// TODO Auto-generated method stub
 		return ".egl";
-	}
-
-	@Override
-	public void generate(Object objectClass) throws GenerationException {
-
 	}
 }

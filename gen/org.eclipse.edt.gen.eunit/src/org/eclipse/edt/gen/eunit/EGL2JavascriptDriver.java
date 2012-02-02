@@ -31,20 +31,16 @@ public class EGL2JavascriptDriver extends EGL2Base {
 	}
 
 	public static void start(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
-		EGL2JavascriptDriver genPart = new EGL2JavascriptDriver();
-		genPart.startGeneration(args, compiler, eckGenerationNotifier);
-	}	
-
-	public String[] getTemplatePath() {
-		List<String> templates = new ArrayList<String>();
-		templates.add("org.eclipse.edt.gen.eunit.templates.javascript.templates");
-		String[] others = super.getTemplatePath();
-		for (String other : others) {
-			templates.add(other);
+		List<String> arguments = new ArrayList();
+		for (int i = 0; i < args.length; i++) {
+			arguments.add(args[i]);
 		}
-		return (String[]) templates.toArray(new String[templates.size()]);
-	}
-
+		arguments.add("-c");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptDriverGenConfig");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenConfig");
+		EGL2JavascriptDriver genPart = new EGL2JavascriptDriver();
+		genPart.startGeneration(arguments.toArray(new String[arguments.size()]), compiler, eckGenerationNotifier);
+	}	
 
 	@Override
 	protected EUnitDriverGenerator getEckDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req

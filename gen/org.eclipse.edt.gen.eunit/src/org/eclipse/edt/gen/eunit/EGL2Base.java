@@ -19,26 +19,19 @@ import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.Constants;
-import org.eclipse.edt.gen.InvalidParameterValueException;
-import org.eclipse.edt.gen.MissingParameterValueException;
-import org.eclipse.edt.gen.PromptQueryException;
-import org.eclipse.edt.gen.UnknownParameterException;
 import org.eclipse.edt.gen.EGLMessages.AccumulatingGenerationMessageRequestor;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public abstract class EGL2Base extends AbstractGeneratorCommand {
-
 	public static final String ARG_PARM_GENPARTS = "genParts";
 	
 	protected List<String> generatedLibs;
 	protected TestCounter totalCnts;
+
 	public EGL2Base() {
 		super();
-		this.installParameter(false, ARG_PARM_GENPARTS, new String[] { ARG_PARM_GENPARTS }, new String[] { null },
-		"Use this file to load parts to be generated.");
 		generatedLibs = new ArrayList<String>();
 		totalCnts = new TestCounter();
 	}
@@ -47,10 +40,7 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 	abstract protected EUnitRunAllDriverGenerator getEckRunAllDriverGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor req, IEUnitGenerationNotifier eckGenerationNotifier);	
 	
 	public void generateRunAllDriver(String[] args, EUnitRunAllDriverGenerator allDriverGenerator, List<String> genedLibs, TestCounter totalCnts){		
-		try{
-			installOverrides(args);
 			allDriverGenerator.generateRunAllDriver(genedLibs, totalCnts);
-			
 			// now try to write out the file, based on the output location and the part's type signature
 			try {
 				// only write the data, if there was some
@@ -62,55 +52,26 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 			catch (Throwable e) {
 				e.printStackTrace();
 			}
-		}
-		catch (PromptQueryException e) {
-			System.out.print(e.getMessage());
-			e.printStackTrace();
-		}
-		catch (UnknownParameterException e) {
-			System.out.print("This parameter is unknown: " + e.getMessage());
-		}
-		catch (InvalidParameterValueException e) {
-			System.out.print("This value for this parameter is incorrect: " + e.getMessage());
-		}			
-		catch (MissingParameterValueException e) {
-			System.out.print("This value for this parameter is missing: " + e.getMessage());
-		}	
 	}
 	
-	protected void startGeneration(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){		
-		try {			
-			installOverrides(args);			
+	protected void startGeneration(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){
+		// if we are missing the -part argument, then process the ir directory
+		boolean hasPart = false;
+		for(String arg : args) {
+			if (arg.equalsIgnoreCase("-p") || arg.equalsIgnoreCase("-part")) {
+				hasPart = true;
+				break;
+			}
+		}
+		if (!hasPart)
+			startGeneration4AllPartsUnderIRRootDir(args, compiler, eckGenerationNotifier);
+		else {
 			generate(args, new EUnitGenerator(this, generatedLibs, totalCnts, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
 			generate(args, getEckDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), null, compiler);
 			generateRunAllDriver(args, getEckRunAllDriverGenerator(this, new AccumulatingGenerationMessageRequestor(), eckGenerationNotifier), generatedLibs, totalCnts);
 			eckGenerationNotifier.updateProgress(1);
-		} 
-		catch (PromptQueryException e) {
-			System.out.print(e.getMessage());
-			e.printStackTrace();
 		}
-		catch (UnknownParameterException e) {
-			System.out.print("This parameter is unknown: " + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (InvalidParameterValueException e) {
-			System.out.print("This value for this parameter is incorrect: " + e.getMessage());
-			e.printStackTrace();
-		}		
-		catch (MissingParameterValueException e) {	
-			//expect to miss -p (part), which we will build from all the parts under the irRootDir	
-			if(e.getMessage().equalsIgnoreCase(Constants.parameter_part))
-				startGeneration4AllPartsUnderIRRootDir(args, compiler, eckGenerationNotifier);
-			else{
-				System.out.print("This value for this parameter is missing: " + e.getMessage());
-				e.printStackTrace();
-			}
-			
-		} 
-		finally {
-			eckGenerationNotifier.done();
-		}
+		eckGenerationNotifier.done();
 	}
 	
 	private IEnvironment createEnvironment(ICompiler compiler) {
@@ -124,10 +85,8 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 	}
 	
 	protected void startGeneration4AllPartsUnderIRRootDir(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier){
-		
 		//get the parts either from genFile or calculate all from the irRootfolder
-		List<String> parts = getParts2Gen();
-		
+		List<String> parts = getParts2Gen(args);
 		//copy existing args, expect to miss -p (part), which we will build from all the parts under the irRootDir
 		List<String> argList = new ArrayList<String>();		
 		for(String arg : args){
@@ -136,9 +95,8 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		IEnvironment env = createEnvironment(compiler);
 		eckGenerationNotifier.begin(parts.size() * 2 + 1);
 		for(String part: parts){
-			if(eckGenerationNotifier.isAborted()) {
+			if (eckGenerationNotifier.isAborted())
 				return;
-			}
 			//let's build up the command line with -p (part)
 			argList.add("-p");
 			argList.add(part);	
@@ -151,18 +109,15 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		eckGenerationNotifier.updateProgress(1);
 	}
 
-	protected List<String> getParts2Gen(){
-		List<String> parts = new ArrayList<String>();
-		String genFileName = (String) parameterMapping.get(ARG_PARM_GENPARTS).getValue();
-		if(genFileName != null){
-			//get parts from the genFile
-			parts = getPartsFromGenFile(genFileName);
+	protected List<String> getParts2Gen(String[] args){
+		// if we are missing the -genPart argument, then process the ir directory
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			if (arg.equalsIgnoreCase("-" + ARG_PARM_GENPARTS))
+				return getPartsFromGenFile(args[i+1]);
 		}
-		else{
-			//get parts from the irRoot directory
-			parts = getPartsFromIRRootFolder();
-		}		
-		return parts;
+		//get parts from the irRoot directory
+		return getPartsFromIRRootFolder(args);
 	}
 	
 	
@@ -171,21 +126,27 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 		return driverXMLFile.getGenerationEntries();		
 	}
 	
-	private List<String> getPartsFromIRRootFolder() {
+	private List<String> getPartsFromIRRootFolder(String[] args) {
 		List<String> parts = new ArrayList<String>();
-
-		//expect to miss -p (part), which we will build from all the parts under the irRootDir			
-		String irRootDir = (String) parameterMapping.get(Constants.parameter_root).getValue();
-		
+		// get the -root parameter
+		String irRootDir = null;
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
+			if (arg.equalsIgnoreCase("-r") || arg.equalsIgnoreCase("-root")) {
+				//get parts from the genFile
+				irRootDir = args[i+1];
+				break;
+			}
+		}
 		//loop through the irRootDir, then get each parts
 		File irRootDirFile = new File(irRootDir);
 		String irRootDirAbsolutePath = irRootDirFile.getAbsolutePath();
-		int irRootDirAbsoluatePathLen = irRootDirAbsolutePath.length();
+		int irRootDirAbsolutePathLen = irRootDirAbsolutePath.length();
 		List <File> irfiles = new ArrayList<File>();
 		listAllFiles(irRootDirFile, irfiles);
 		for(File irfile : irfiles){
-			String irFileAbsoluatePath = irfile.getAbsolutePath();				
-			String irFileRelativePath = irFileAbsoluatePath.substring(irRootDirAbsoluatePathLen);
+			String irFileAbsolutePath = irfile.getAbsolutePath();				
+			String irFileRelativePath = irFileAbsolutePath.substring(irRootDirAbsolutePathLen);
 			boolean isIRFile = IRUtils.isEGLIRFileName(irFileRelativePath);
 			if(isIRFile){
 				if(irFileRelativePath.startsWith(File.separator))
@@ -210,25 +171,5 @@ public abstract class EGL2Base extends AbstractGeneratorCommand {
 				listAllFiles(child, files);
 			}			
 		}
-	}
-
-	public String[] getNativeTypePath() {
-		// this defined the locations of the nativeTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eunit.nativeTypes" };
-	}
-
-	public String[] getPrimitiveTypePath() {
-		// this defined the locations of the primitiveTypes.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eunit.primitiveTypes" };
-	}
-
-	public String[] getEGLMessagePath() {
-		// this defined the locations of the EGLMessages.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eunit.EGLMessages" };
-	}
-
-	public String[] getTemplatePath() {
-		// this defined the locations of the template.properties files to be loaded and used
-		return new String[] { "org.eclipse.edt.gen.eunit.templates.templates" };
 	}
 }

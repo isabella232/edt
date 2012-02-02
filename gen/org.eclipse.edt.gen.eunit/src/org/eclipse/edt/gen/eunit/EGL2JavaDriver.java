@@ -31,18 +31,15 @@ public class EGL2JavaDriver extends EGL2Base {
 	}
 	
 	public static void start(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
-		EGL2JavaDriver genPart = new EGL2JavaDriver();
-		genPart.startGeneration(args, compiler, eckGenerationNotifier);
-	}
-
-	public String[] getTemplatePath() {
-		List<String> templates = new ArrayList<String>();
-		templates.add("org.eclipse.edt.gen.eunit.templates.java.templates");
-		String[] others = super.getTemplatePath();
-		for (String other : others) {
-			templates.add(other);
+		List<String> arguments = new ArrayList();
+		for (int i = 0; i < args.length; i++) {
+			arguments.add(args[i]);
 		}
-		return (String[]) templates.toArray(new String[templates.size()]);
+		arguments.add("-c");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavaDriverGenConfig");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenConfig");
+		EGL2JavaDriver genPart = new EGL2JavaDriver();
+		genPart.startGeneration(arguments.toArray(new String[arguments.size()]), compiler, eckGenerationNotifier);
 	}
 
 	@Override
