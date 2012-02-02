@@ -22,7 +22,6 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.java.EGL2Java;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
-import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
@@ -49,24 +48,18 @@ public class EclipseEGL2Java extends EGL2Java {
 	}
 
 	protected void writeFile(Part part, Generator generator) throws Exception {
-		String outputFolder = (String) parameterMapping.get(Constants.parameter_output).getValue();
+		String outputFolder = (String) getParameterMapping().get(Constants.parameter_output).getValue();
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
-
 			// write out generation report if there is one
 			GenerationReport.writeFile(part, eglFile, generator);
-			
 			IProject targetProject = outputFile.getProject();
-
 			// make sure it's a source folder
 			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder);
-
 			// Add required runtimes.
 			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider.getRuntimeContainers());
-			
 			// Add the SMAP builder
 			EclipseUtilities.addSMAPBuilder(targetProject);
-
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 		} else {
