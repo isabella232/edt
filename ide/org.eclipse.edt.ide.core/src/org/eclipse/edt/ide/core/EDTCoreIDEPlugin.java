@@ -112,12 +112,15 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * Constants for extension points.
 	 */
+	public static final String PT_CONFIGURATORS = "configurators"; //$NON-NLS-1$
 	public static final String PT_COMPILERS = "compilers"; //$NON-NLS-1$
 	public static final String PT_GENERATORS = "generators"; //$NON-NLS-1$
 	public static final String CLASS = "class"; //$NON-NLS-1$
 	public static final String ID = "id"; //$NON-NLS-1$
 	public static final String NAME = "name"; //$NON-NLS-1$
 	public static final String COMPILER = "compiler"; //$NON-NLS-1$
+	public static final String GENERATOR_ID = "generator_id"; //$NON-NLS-1$
+	public static final String REQUIRES_ID = "requires_id"; //$NON-NLS-1$
 	public static final String PREFERENCE_PAGE_ID = "preferencePageId"; //$NON-NLS-1$
 	public static final String VERSION = "version"; //$NON-NLS-1$
 	public static final String DESCRIPTION = "description"; //$NON-NLS-1$
