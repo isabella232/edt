@@ -22,65 +22,61 @@ public abstract class EGL2HTML extends AbstractGeneratorCommand {
 
 	public EGL2HTML() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String[] getNativeTypePath() {
-		// TODO Auto-generated method stub
-		return new String[0];
-	}
-
-	@Override
-	public String[] getPrimitiveTypePath() {
-		// TODO Auto-generated method stub
-		return new String[0];
-	}
-
-	@Override
-	public String[] getEGLMessagePath() {
-//		return new String[0];
-		return new String[] { "org.eclipse.edt.gen.deployment.javascript.EGLMessages" };
-	}
-
-	@Override
-	public String[] getTemplatePath() {
-		return new String[] { "org.eclipse.edt.gen.deployment.javascript.templates.templates" };
-	}
-	
 	public String generate(Part part, Generator generator, IEnvironment environment) {
 		String result = null;
-		
-		if (environment != null)
-			Environment.pushEnv(environment);
-		try {			
-			generator.generate(part);
-			// now try to write out the file, based on the output location and the part's type signature
-			try {
-				// only write the data, if there was some
-				if (generator.getResult() instanceof String && ((String)generator.getResult()).length() > 0){
-					writeFile(part, generator);
-					result = (String)generator.getResult();
+
+		try {
+			if (environment != null)
+				Environment.pushEnv(environment);
+			// process the arguments and load the configurators
+			if (initialize(buildArgs(), generator)) {
+				generator.generate(part);
+				// now try to write out the file, based on the output location and the part's type signature
+				try {
+					// only write the data, if there was some
+					if (generator.getResult() instanceof String && ((String) generator.getResult()).length() > 0) {
+						writeFile(part, generator);
+						result = (String) generator.getResult();
+					}
 				}
-					
+				catch (Throwable e) {
+					e.printStackTrace();
+				}
+				generator.dumpErrorMessages();
 			}
-			catch (Throwable e) {
-				e.printStackTrace();
-			}						
-			generator.dumpErrorMessages();
 		}
 		catch (GenerationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
-		finally {
-			if (environment != null) {
-				Environment.popEnv();
-			}
 		}
-		
+		finally {
+			if (environment != null)
+				Environment.popEnv();
+		}
 		return result;
 	}
-	
 
+	private String[] buildArgs() {
+		String[] args = new String[8];
+
+		// this isn't used but it's a required parameter.
+		args[0] = "-o";
+		args[1] = "notused";
+
+		// this isn't used but it's a required parameter.
+		args[2] = "-p";
+		args[1] = "notused";
+
+		// this isn't used but it's a required parameter.
+		args[4] = "-r";
+		args[1] = "notused";
+
+		// add the configurator
+		args[6] = "-c";
+		args[7] = "org.eclipse.edt.gen.deployment.javascript.HTMLGenConfig";
+
+		return args;
+	}
 }
