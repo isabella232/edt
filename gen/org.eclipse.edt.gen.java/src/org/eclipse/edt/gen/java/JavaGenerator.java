@@ -42,22 +42,21 @@ public class JavaGenerator extends Generator {
 	public JavaGenerator(AbstractGeneratorCommand processor) {
 		this(processor, null);
 	}
-	
+
 	public JavaGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
 	}
 
 	public String getResult() {
-		if ( out == null )
+		if (out == null)
 			return "";
 		return out.getWriter().toString();
 	}
-	
+
 	@Override
 	public TabbedReportWriter getReport() {
-		return (out instanceof TabbedReportWriter) ? (TabbedReportWriter)out
-												   :  null;
+		return (out instanceof TabbedReportWriter) ? (TabbedReportWriter) out : null;
 	}
 
 	public Context makeContext(AbstractGeneratorCommand processor) {
@@ -65,7 +64,7 @@ public class JavaGenerator extends Generator {
 		return context;
 	}
 
-	public void generate(Part part) throws GenerationException {
+	public void generate(Object part) throws GenerationException {
 		makeWriter();
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
@@ -73,7 +72,7 @@ public class JavaGenerator extends Generator {
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
 				// get the egl file being processed
-				String eglFileName = part.getFileName();
+				String eglFileName = ((Part) part).getFileName();
 				if (eglFileName.indexOf('\\') >= 0)
 					eglFileName = eglFileName.substring(eglFileName.lastIndexOf('\\') + 1);
 				if (eglFileName.indexOf('/') >= 0)
@@ -122,27 +121,24 @@ public class JavaGenerator extends Generator {
 				if (annotation.getValue(IEGLConstants.EGL_PARTLINE) != null)
 					startLine = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
 			}
-			System.err.println("generating:" + part.getFullyQualifiedName() + "[" + part.getFileName() + "]:(" + startLine + ")" );
+			System.err.println("generating:" + ((Part) part).getFullyQualifiedName() + "[" + ((Part) part).getFileName() + "]:(" + startLine + ")");
 			e.printStackTrace();
 		}
 		// close the output
 		out.close();
 	}
-	
-	private void makeWriter()
-	{
-		if ( out == null )
-		{
-			out = Boolean.TRUE.equals( context.getParameter( org.eclipse.edt.gen.Constants.parameter_report ) )
-					?  new TabbedReportWriter( "org.eclipse.edt.gen.java.templates.", new StringWriter() )
-				    :  new TabbedWriter( new StringWriter() );
+
+	private void makeWriter() {
+		if (out == null) {
+			out = Boolean.TRUE.equals(context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) ? new TabbedReportWriter("org.eclipse.edt.gen.java.templates.",
+				new StringWriter()) : new TabbedWriter(new StringWriter());
 		}
 	}
-	
+
 	private String unqualifyFileName(String fileName) {
-		int lastSlash = fileName.lastIndexOf( '/' );
+		int lastSlash = fileName.lastIndexOf('/');
 		if (lastSlash != -1) {
-			return fileName.substring( lastSlash + 1 );
+			return fileName.substring(lastSlash + 1);
 		}
 		return fileName;
 	}
@@ -156,9 +152,7 @@ public class JavaGenerator extends Generator {
 
 	public void processFile(String fileName) {
 		// do any post processing once the file has been written
-		
 		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
-		
 		// if no error was created, update the class file with the accumulated debug info
 		if (!context.getMessageRequestor().isError()) {
 			File outSmapFile = new File(fileName.substring(0, fileName.length() - getFileExtension().length()) + Constants.smap_fileExtension);
@@ -170,8 +164,9 @@ public class JavaGenerator extends Generator {
 			}
 			catch (UnsupportedEncodingException e) {
 				String[] details = new String[] { "UTF-8" };
-				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
+				EGLMessage message = EGLMessage
+					.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details,
+						CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
 				context.getMessageRequestor().addMessage(message);
 			}
 			catch (IOException e) {
@@ -195,14 +190,10 @@ public class JavaGenerator extends Generator {
 		buf.append(JavaAliaser.getAlias(part.getId()));
 		buf.append(getFileExtension());
 		return buf.toString();
-	}	
-	
-	@Override
-	public String getFileExtension() {
-		return ".java";
 	}
 
 	@Override
-	public void generate(Object objectClass) throws GenerationException {
+	public String getFileExtension() {
+		return ".java";
 	}
 }
