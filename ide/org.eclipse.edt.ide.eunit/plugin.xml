@@ -11,7 +11,7 @@
            	<visibility>
       			<objectState
                 		name="projectNature"
-                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+                  		value="org.eclipse.edt.ide.core.eglnature"/>
        	 	</visibility>
        	 	<menu
        	 		label="%GenECKTestDriver"
@@ -48,7 +48,7 @@
            	<visibility>
       			<objectState
                 		name="projectNature"
-                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+                  		value="org.eclipse.edt.ide.core.eglnature"/>
        	 	</visibility>
        	 	<menu
        	 		label="%GenECKTestDriver"
@@ -86,7 +86,7 @@
            	<visibility>
       			<objectState
                 		name="projectNature"
-                  		value="org.eclipse.edt.ide.core.EGLNature"/>
+                  		value="org.eclipse.edt.ide.core.eglnature"/>
        	 	</visibility>
        	 	<menu
        	 		label="%GenECKTestDriver"
