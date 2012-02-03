@@ -104,9 +104,6 @@ public class ServicesContribution extends AbstractTestServerContribution {
 	public String getArgumentAdditions(TestServerConfiguration config) {
 		StringBuilder buf = new StringBuilder(100);
 		
-		buf.append(" -i "); //$NON-NLS-1$
-		buf.append(TestServerIDEConnector.getInstance().getPortNumber());
-		
 		buf.append(" -dd \""); //$NON-NLS-1$
 		List<DDFile> ddFiles = DeploymentDescriptorFinder.findDeploymentDescriptors(config.getProject());
 		buf.append(DeploymentDescriptorFinder.toArgumentString(ddFiles));

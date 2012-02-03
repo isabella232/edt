@@ -30,7 +30,6 @@ import eglx.lang.SysLib;
 
 public class ServicesConfigurator extends AbstractConfigurator {
 	
-	private Integer idePort;
 	private String initialOrderedDDNames;
 	private String initialDDFiles;
 	private String initialDefaultDD;
@@ -62,21 +61,6 @@ public class ServicesConfigurator extends AbstractConfigurator {
 			}
 			currentIndex++;
 		}
-		else if ("-i".equals(arg)) { //$NON-NLS-1$
-			if (currentIndex + 1 < arguments.size()) {
-				try {
-					idePort = Integer.parseInt(arguments.get(currentIndex + 1));
-					currentIndex++;
-				}
-				catch (NumberFormatException e) {
-					TestServer.logWarning("Unable to parse IDE port value \"" + arguments.get(currentIndex + 1) + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-			else {
-				TestServer.logWarning("Missing IDE port value for argument \"" + arg + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			currentIndex++;
-		}
 		else if ("-dd".equals(arg)) { //$NON-NLS-1$
 			if (currentIndex + 1 < arguments.size()) {
 				initialDDFiles = arguments.get(currentIndex + 1).trim();
@@ -103,14 +87,6 @@ public class ServicesConfigurator extends AbstractConfigurator {
 	
 	@Override
 	public void preStartup() throws Exception {
-		if (idePort == null) {
-			throw new Exception("IDE port argument not specified, cannot start the server"); //$NON-NLS-1$
-		}
-		
-		if (idePort < 0) {
-			throw new Exception("IDE port argument \"" + idePort + "\" is invalid, cannot start the server"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		
 		// JNDI requires EnvConfiguration which creates java:comp/env.
 		server.appendConfiguration(new EnvConfiguration());
 	}
@@ -127,7 +103,7 @@ public class ServicesConfigurator extends AbstractConfigurator {
 		context.addServlet(new ServletHolder(new AjaxProxyServlet()), "/___proxy"); //$NON-NLS-1$
 		
 		// Register the resource locator for dynamically finding resource bindings.
-		bindingProcessor = new IDEBindingResourceProcessor(idePort, new IDEResourceLocator());
+		bindingProcessor = new IDEBindingResourceProcessor(server.getIDEPort(), new IDEResourceLocator());
 		bindingProcessor.setDefaultDD(initialDefaultDD);
 		SysLib.setBindingResourceProcessor(bindingProcessor);
 		
