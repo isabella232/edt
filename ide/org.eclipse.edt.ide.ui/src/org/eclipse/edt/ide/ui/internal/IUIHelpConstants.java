@@ -136,6 +136,8 @@ public interface IUIHelpConstants {
 	public static final String EGL_NEW_RECORD_SUMMARY_PAGE = PREFIX + "recwiz0006"; //$NON-NLS-1$
 	public static final String NEW_PROJECT_WIZARD_TYPE_PAGE = PREFIX + "eprj0021"; //$NON-NLS-1$
 	
+	public static final String EGL_NEW_EXTERNALTYPE_WIZARD_PAGE = PREFIX + "extwiz0001"; //$NON-NLS-1$
+	
 	//EGL Editor
 	public static final String EGL_EDITOR = PREFIX + "edit0001"; //$NON-NLS-1$
 	public static final String EGL_EDITOR_PACKAGE_DECLARATION = PREFIX + "kwd_package"; //$NON-NLS-1$

@@ -889,6 +889,23 @@ Templates
  		        	</or>         					
 				</enablement>
 			</commonWizard>
+			<commonWizard
+				type="new"
+				menuGroupId="org.eclipse.edt.ide.ui.wizards.menuGroup"
+				wizardId="org.eclipse.edt.ide.ui.NewExternalTypeWizard">
+				<enablement>
+ 		        	<or>
+	 					<adapt
+								type="org.eclipse.core.resources.IProject" >
+							<test
+								property="org.eclipse.core.resources.projectNature"
+								value="org.eclipse.edt.ide.core.eglnature" />
+						</adapt>
+						<instanceof
+								value="org.eclipse.jdt.core.IJavaElement" />
+ 		        	</or>         					
+				</enablement>
+			</commonWizard>
 	      </navigatorContent>
       <commonFilter
             class="org.eclipse.edt.ide.ui.internal.packageexplorer.EmptyEGLInnerPackageFilter"                  
@@ -1015,6 +1032,13 @@ Templates
             category="org.eclipse.edt.ide.ui.wizards.new.category"
             class="org.eclipse.edt.ide.ui.internal.record.NewRecordWizard"
             id="org.eclipse.edt.ide.ui.NewRecordWizard">
+       </wizard>
+       <wizard
+   		    name="%EGLExternalType"
+   		    icon="icons/ctool16/newrec_wiz.gif"
+            category="org.eclipse.edt.ide.ui.wizards.new.category"
+            class="org.eclipse.edt.ide.ui.internal.externaltype.NewExternalTypeWizard"
+            id="org.eclipse.edt.ide.ui.NewExternalTypeWizard">
        </wizard>
 	</extension>
     	
@@ -1502,6 +1526,19 @@ Templates
             description="%RUIWidgetDescription">
       </template>      
      
+    </extension>
+    
+    <extension point="org.eclipse.edt.ide.ui.eglTemplates">
+    
+       <template
+     		name="%BasicExternalType"
+     		icon="icons/ctool16/newrec_wiz.gif"
+            category="org.eclipse.edt.ide.ui.externaltypes"
+            codeTemplateID="org.eclipse.edt.ide.ui.templates.flexible_basic_externaltype"
+            id="org.eclipse.edt.ide.ui.externaltypes.basic"
+            description="%BasicExternalTypeDescription">
+      </template>
+      
     </extension>
     
     <extension point="org.eclipse.edt.ide.ui.projectTemplates">
