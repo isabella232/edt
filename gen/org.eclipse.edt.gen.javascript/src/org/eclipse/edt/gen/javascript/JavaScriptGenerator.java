@@ -41,9 +41,6 @@ public class JavaScriptGenerator extends Generator {
 	public JavaScriptGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
-		out = (Boolean.TRUE
-				== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
-			) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
 	public String getResult() {
@@ -71,6 +68,7 @@ public class JavaScriptGenerator extends Generator {
 	}
 
 	public void generate(Object part) throws GenerationException {
+		makeWriter();
 		try {
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(JavaScriptTemplate.preGenPart, part, context);
@@ -106,6 +104,12 @@ public class JavaScriptGenerator extends Generator {
 		}
 		// close the output
 		out.close();
+	}
+
+	private void makeWriter() {
+		out = (Boolean.TRUE
+			== (Boolean) context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)
+		) ? new TabbedReportWriter("org.eclipse.edt.gen.javascript.templates.", new StringWriter()) : new TabbedWriter(new StringWriter());
 	}
 
 	public void dumpErrorMessages() {
