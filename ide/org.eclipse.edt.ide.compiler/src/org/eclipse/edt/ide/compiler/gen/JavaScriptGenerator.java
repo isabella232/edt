@@ -27,6 +27,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
  */
 public class JavaScriptGenerator extends AbstractGenerator {
 	
+	public JavaScriptGenerator() {
+		super();
+	}
+	
 	@Override
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));

@@ -32,6 +32,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 public class JavaGenerator extends AbstractGenerator {
 	
 	public JavaGenerator() {
+		super();
 		runtimeContainers = new EDTRuntimeContainer[] { EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER };
 	}
 	
