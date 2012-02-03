@@ -122,6 +122,8 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
 			args.append(" -p "); //$NON-NLS-1$
 			args.append(port);
+			args.append(" -i "); //$NON-NLS-1$
+			args.append(TestServerIDEConnector.getInstance().getPortNumber());
 			args.append(" -c \"/"); //$NON-NLS-1$
 			args.append(project.getName());
 			args.append("\""); //$NON-NLS-1$

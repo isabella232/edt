@@ -37,6 +37,8 @@ public class TestServer {
 	
 	private final Integer port;
 	
+	private final Integer idePort;
+	
 	private final String contextRoot;
 	
 	private final List<AbstractConfigurator> configurators;
@@ -67,6 +69,7 @@ public class TestServer {
 		List<String> remainingArgs = new ArrayList<String>(args.length);
 		String[] contributionClassNames = null;
 		Integer port = null;
+		Integer idePort = null;
 		String contextRoot = null;
 		boolean debug = false;
 		
@@ -85,6 +88,21 @@ public class TestServer {
 				else {
 					logWarning("Missing port value for argument \"" + args[i] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 				}
+			}
+			else if ("-i".equals(args[i])) { //$NON-NLS-1$
+				if (i + 1 < args.length) {
+					try {
+						idePort = Integer.parseInt(args[i+1]);
+						i++;
+					}
+					catch (NumberFormatException e) {
+						TestServer.logWarning("Unable to parse IDE port value \"" + args[i+1] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+				}
+				else {
+					TestServer.logWarning("Missing IDE port value for argument \"" + args[i] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+				i++;
 			}
 			else if ("-c".equals(args[i])) { //$NON-NLS-1$
 				if (i + 1 < args.length) {
@@ -132,7 +150,7 @@ public class TestServer {
 		}
 		
 		// Initialize the test server. This must be done before we invoke any methods in the contributions.
-		TestServer server = new TestServer(port, contextRoot, configurators, debug);
+		TestServer server = new TestServer(port, idePort, contextRoot, configurators, debug);
 		
 		// Let the contributions process the remaining arguments.
 		int size = remainingArgs.size();
@@ -162,8 +180,9 @@ public class TestServer {
 		server.start();
 	}
 	
-	public TestServer(int port, String contextRoot, List<AbstractConfigurator> configurators, boolean debug) {
+	public TestServer(Integer port, Integer idePort, String contextRoot, List<AbstractConfigurator> configurators, boolean debug) {
 		this.port = port;
+		this.idePort = idePort;
 		this.configurators = configurators;
 		
 		// Set up logging.
@@ -199,6 +218,14 @@ public class TestServer {
 		
 		if (port < 0) {
 			throw new Exception("Port argument \"" + port + "\" is invalid, cannot start the server"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		
+		if (idePort == null) {
+			throw new Exception("IDE port argument not specified, cannot start the server"); //$NON-NLS-1$
+		}
+		
+		if (idePort < 0) {
+			throw new Exception("IDE port argument \"" + idePort + "\" is invalid, cannot start the server"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		webApp = new WebAppContext(null, contextRoot);
@@ -288,8 +315,15 @@ public class TestServer {
 	/**
 	 * @return the port on which Jetty is running.
 	 */
-	public int getPort() {
+	public Integer getPort() {
 		return port;
+	}
+	
+	/**
+	 * @return the port on which the IDE can be reached.
+	 */
+	public Integer getIDEPort() {
+		return idePort;
 	}
 	
 	/**
