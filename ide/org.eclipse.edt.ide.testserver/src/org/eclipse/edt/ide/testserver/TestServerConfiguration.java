@@ -130,8 +130,6 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 				args.append(" -d");
 			}
 			
-			//TODO preference change listener
-			
 			// Append the configurators argument.
 			Set<String> configuratorClasses = new HashSet<String>(10);
 			for (AbstractTestServerContribution contrib : contributions) {
