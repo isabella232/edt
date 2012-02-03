@@ -77,13 +77,13 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 	}
 
 	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
-		try {
-			if (environment != null) {
-				Environment.pushEnv(environment);
-				generator.getContext().setEnvironment(environment);
-			}
-			// process the arguments and load the configurators
-			if (initialize(args, generator)) {
+		// process the arguments and load the configurators
+		if (initialize(args, generator)) {
+			try {
+				if (environment != null) {
+					Environment.pushEnv(environment);
+					generator.getContext().setEnvironment(environment);
+				}
 				// start up the generator, passing the command processor
 				try {
 					List<Part> parts = loadEGLParts(compiler);
@@ -107,10 +107,10 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 				}
 				generator.dumpErrorMessages();
 			}
-		}
-		finally {
-			if (environment != null) {
-				Environment.popEnv();
+			finally {
+				if (environment != null) {
+					Environment.popEnv();
+				}
 			}
 		}
 	}

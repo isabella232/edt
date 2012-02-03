@@ -28,8 +28,13 @@ public abstract class Generator {
 
 	protected TemplateFactory factory = new TemplateFactory();
 	protected EglContext context;
+	protected IGenerationMessageRequestor requestor;
 
 	public Generator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+		this.requestor = requestor;
+	}
+	
+	public void initialize(AbstractGeneratorCommand processor) {
 		// create a context based on the generator being driven
 		context = makeContext(processor);
 		// Clients may specify their own message requestor.
@@ -38,9 +43,6 @@ public abstract class Generator {
 		}
 		// define our template factory to the context
 		context.setTemplateFactory(this.factory);
-	}
-	
-	public void initialize(AbstractGeneratorCommand processor) {
 		// add all of the command processor keys to the context
 		Map<String, CommandParameter> parameterMapping = processor.getParameterMapping();
 		for (Entry<String, CommandParameter> entry : parameterMapping.entrySet()) {
