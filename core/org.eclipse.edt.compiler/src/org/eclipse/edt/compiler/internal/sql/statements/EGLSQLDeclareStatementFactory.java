@@ -85,17 +85,19 @@ public abstract class EGLSQLDeclareStatementFactory extends EGLSQLStatementFacto
 
 		// The where clause is an optional clause that is only built if there are default selection
 		// conditions and/or key columns.
-		whereClause =
-			EGLSQLClauseFactory.createDefaultWhereClause(
-				getDefaultSelectConditions(),
-				keyItemAndColumnNames,
-				getIOType(),
-				ioObjectName,
-				isDynamicArrayRecord,
-				useRecordKeys);
-		if (whereClause != null) {
-			sqlStatement = sqlStatement + whereClause;
-			eglUsingClause = EGLSQLClauseFactory.createEglUsingClauseForGet(keyItemAndColumnNames, ioObjectName);
+		if(this.sqlRecordData.getType().getKind() != ITypeBinding.ARRAY_TYPE_BINDING) {
+		  whereClause =
+			  EGLSQLClauseFactory.createDefaultWhereClause(
+				  getDefaultSelectConditions(),
+				  keyItemAndColumnNames,
+				  getIOType(),
+				  ioObjectName,
+				  isDynamicArrayRecord,
+				  useRecordKeys);
+		  if (whereClause != null) {
+			  sqlStatement = sqlStatement + whereClause;
+			  eglUsingClause = EGLSQLClauseFactory.createEglUsingClauseForGet(keyItemAndColumnNames, ioObjectName);
+		  }
 		}
 
 		return sqlStatement;

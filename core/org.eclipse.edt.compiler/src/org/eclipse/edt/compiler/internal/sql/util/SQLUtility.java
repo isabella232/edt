@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.sql.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -213,6 +214,9 @@ public class SQLUtility {
         }
         
         ITypeBinding typeBinding = sqlRecordData.getType();
+        if(typeBinding.getKind() == ITypeBinding.ARRAY_TYPE_BINDING ) {
+        	typeBinding = ((ArrayTypeBinding) typeBinding).getElementType();
+        }
         boolean isValid = typeBinding.isTypeBinding() 
         		&& (typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING 
         		      || (typeBinding.getKind() == ITypeBinding.FIXED_RECORD_BINDING));
