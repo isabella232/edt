@@ -34,11 +34,11 @@ public class Java2EGL extends AbstractGeneratorCommand {
 	}
 
 	public void generate(String[] args, EglGenerator generator, IEnvironment environment) {
-		try {
-			if (environment != null)
-				Environment.pushEnv(environment);
-			// process the arguments and load the configurators
-			if (initialize(args, generator)) {
+		// process the arguments and load the configurators
+		if (initialize(args, generator)) {
+			try {
+				if (environment != null)
+					Environment.pushEnv(environment);
 				// start up the generator, passing the command processor
 				try {
 					List<Class<?>> clazzes = loadClasses();
@@ -62,10 +62,10 @@ public class Java2EGL extends AbstractGeneratorCommand {
 				}
 				generator.dumpErrorMessages();
 			}
-		}
-		finally {
-			if (environment != null)
-				Environment.popEnv();
+			finally {
+				if (environment != null)
+					Environment.popEnv();
+			}
 		}
 	}
 
