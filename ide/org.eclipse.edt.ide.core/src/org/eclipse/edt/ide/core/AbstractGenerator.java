@@ -39,8 +39,14 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	/**
 	 * The runtime configurators.
 	 */
-	protected ConfiguratorEntry[] configurators;
+	protected static ConfiguratorEntry[] configurators;
+	// configurators for this command
+	protected List<ConfiguratorEntry> configuratorsUsed;
 
+	public AbstractGenerator() {
+		registerConfigurators();
+	}
+	
 	public ConfiguratorEntry[] getConfigurators() {
 		return configurators;
 	}
@@ -105,15 +111,15 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 
 	public void registerConfigurators() {
 		// process if we haven't done this before
-		if (this.configurators == null) {
+		if (AbstractGenerator.configurators == null) {
 			// for each of the configurators, we need to add it to a list of class names
 			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_CONFIGURATORS);
 			if (elements != null) {
-				List<ConfiguratorEntry> configurators = new ArrayList();
+				List<ConfiguratorEntry> configurators = new ArrayList<ConfiguratorEntry>();
 				for (int i = 0; i < elements.length; i++) {
 					try {
-						Object command = elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS);
+						elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS);
 						ConfiguratorEntry configurator = new ConfiguratorEntry();
 						configurator.setClassName(elements[i].getAttribute(EDTCoreIDEPlugin.CLASS));
 						configurator.setGeneratorId(elements[i].getAttribute(EDTCoreIDEPlugin.GENERATOR_ID));
@@ -125,9 +131,9 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 						e.printStackTrace();
 					}
 				}
-				this.configurators = configurators.toArray(new ConfiguratorEntry[configurators.size()]);
+				AbstractGenerator.configurators = configurators.toArray(new ConfiguratorEntry[configurators.size()]);
 			} else {
-				this.configurators = new ConfiguratorEntry[0];
+				AbstractGenerator.configurators = new ConfiguratorEntry[0];
 			}
 		}
 	}
@@ -154,12 +160,15 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		if (additionalArgs != null) {
 			numArgs += additionalArgs.length;
 		}
+		// add in the configurator parms
+		if (configuratorsUsed == null) {
+			configuratorsUsed = new ArrayList<ConfiguratorEntry>();
+			AbstractGenerator.determineConfigurators(getId(), configuratorsUsed);
+		}
+		numArgs += configuratorsUsed.size() + 1;
 
-		// configurators for this command
-		List<ConfiguratorEntry> configuratorsUsed = new ArrayList();
-		determineConfigurators(getId(), configuratorsUsed);
-
-		String[] args = new String[numArgs + (configuratorsUsed.size() + 1)];
+		// get the array
+		String[] args = new String[numArgs];
 
 		// Output directory (e.g. JavaSource folder). This is a property on the project, and it might be a directory in some
 		// other folder.
@@ -189,24 +198,23 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		return args;
 	}
 
-	private void determineConfigurators(String generatorId, List<ConfiguratorEntry> configuratorsUsed) {
-		registerConfigurators();
+	public static void determineConfigurators(String generatorId, List<ConfiguratorEntry> configuratorsUsed) {
 		// take the passed generator id and determine the configurator id
-		for (int i = 0; i < this.configurators.length; i++) {
-			ConfiguratorEntry configurator = this.configurators[i];
+		for (int i = 0; i < AbstractGenerator.configurators.length; i++) {
+			ConfiguratorEntry configurator = AbstractGenerator.configurators[i];
 			if (generatorId.equals(configurator.getGeneratorId()))
-				locateConfigurators(configurator.getIdentifier(), configuratorsUsed);
+				AbstractGenerator.locateConfigurators(configurator.getIdentifier(), configuratorsUsed);
 		}
 	}
 
-	private void locateConfigurators(String configuratorId, List<ConfiguratorEntry> configuratorsUsed) {
+	private static void locateConfigurators(String configuratorId, List<ConfiguratorEntry> configuratorsUsed) {
 		// we create a list of configurators here. we first look for all of the configurators
 		// that match a specific id. those get added. then, for each of the ones added, we check
 		// to for all required configurators and add those to the list, then we check each of those.
 		// this ends up giving us a list where each level of configurators is a complete group.
-		List<String> requires = new ArrayList();
-		for (int i = 0; i < this.configurators.length; i++) {
-			ConfiguratorEntry configurator = this.configurators[i];
+		List<String> requires = new ArrayList<String>();
+		for (int i = 0; i < AbstractGenerator.configurators.length; i++) {
+			ConfiguratorEntry configurator = AbstractGenerator.configurators[i];
 			if (configuratorId.equals(configurator.getIdentifier())) {
 				configuratorsUsed.add(configurator);
 				if (configurator.getRequiresId() != null) {
@@ -216,7 +224,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 			}
 		}
 		for (int i = 0; i < requires.size(); i++) {
-			locateConfigurators(requires.get(i), configuratorsUsed);
+			AbstractGenerator.locateConfigurators(requires.get(i), configuratorsUsed);
 		}
 	}
 
