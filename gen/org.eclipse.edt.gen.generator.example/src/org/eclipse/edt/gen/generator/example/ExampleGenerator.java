@@ -27,6 +27,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ExampleGenerator extends AbstractGenerator {
+	
+	public ExampleGenerator() {
+		super();
+	}
 
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
