@@ -26,6 +26,10 @@ public class JavaScriptDevGenerator extends JavaScriptGenerator {
 
 	private boolean editingMode = false;
 	
+	public JavaScriptDevGenerator() {
+		super();
+	}
+	
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 		preprocess(part);
