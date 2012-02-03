@@ -36,7 +36,7 @@ public class MemberAccessTemplate extends org.eclipse.edt.gen.javascript.templat
 		super.genMemberAccess(expr, ctx, out);
 		if( ctx.get( Constants.VE_ENABLE_EDITING ) != null && CommonUtilities.isRUIWidget(expr.getMember().getType()) && expr.getQualifier() != null && 
 				((expr.getQualifier() instanceof MemberName && !(((MemberName)expr.getQualifier()).getMember() instanceof FunctionParameter)) ||
-						((expr.getQualifier() instanceof PartName) && ((PartName)expr.getQualifier()).getPart() instanceof Library)) ){
+						((expr.getQualifier() instanceof PartName) && ((PartName)expr.getQualifier()).getPart() instanceof Library))){
 			List references = (List)ctx.get( Constants.REFERENCES_WIDGETS );
 			if ( references == null ) {
 				references = new ArrayList();
