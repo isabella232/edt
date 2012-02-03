@@ -45,7 +45,6 @@ public class ServicesConfigurator extends AbstractConfigurator {
 	 * <li>-dd &lt;DD files&gt; (a string where the delimiter is File.pathSeparatorChar and each token alternates between a dd name and its absolute path, with
 	 *     the name listed first, e.g. ddName1;/path/to/ddName1.egldd;ddName2;/path/to/ddName2.egldd</li>
 	 * <li>-ddd &lt;default DD name&gt; (the name of the default deployment descriptor)</li>
-	 * <li>-i &lt;ide port&gt; (the port number on which the IDE can be reached)</li>
 	 * </ul>
 	 */
 	@Override
