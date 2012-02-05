@@ -30,7 +30,7 @@ public abstract class EGL2HTML extends AbstractGeneratorCommand {
 		try {
 			if (environment != null)
 				Environment.pushEnv(environment);
-			// process the arguments and load the configurators
+			// process the arguments and load the contributions
 			if (initialize(buildArgs(), generator)) {
 				generator.generate(part);
 				// now try to write out the file, based on the output location and the part's type signature
@@ -73,9 +73,9 @@ public abstract class EGL2HTML extends AbstractGeneratorCommand {
 		args[4] = "-r";
 		args[1] = "notused";
 
-		// add the configurator
+		// add the contribution
 		args[6] = "-c";
-		args[7] = "org.eclipse.edt.gen.deployment.javascript.HTMLGenConfig";
+		args[7] = "org.eclipse.edt.gen.deployment.javascript.HTMLGenerationContribution";
 
 		return args;
 	}
