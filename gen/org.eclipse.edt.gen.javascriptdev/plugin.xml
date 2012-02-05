@@ -35,14 +35,12 @@
        
  </extension>
  <extension
-       point="org.eclipse.edt.gen.configurators">
+       point="org.eclipse.edt.gen.GenerationContributions">
     <provider
-          class="org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenConfig"
-          generator_id="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
-          id="JavaScriptDevConfigurator"
-          requires="org.eclipse.edt.gen.javascript.JavaScriptGenConfig"
-          requires_id="JavaScriptConfigurator"
-          version="0.8">
+          class="org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenerationContribution"
+          provider="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
+          id="JavaScriptDevGenerationContribution"
+          requires="JavaScriptGenerationContribution">
     </provider>
  </extension>
 </plugin>
