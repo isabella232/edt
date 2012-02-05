@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public abstract class AbstractGeneratorCommand extends CommandProcessor implements Configurable {
+public abstract class AbstractGeneratorCommand extends CommandProcessor implements GenerationContributor {
 
 	private String templates = "";
 	private String nativeTypes = "";
@@ -40,8 +40,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 			"Part must identify the part to be generated, which can contain an * for all matching parts");
 		this.installParameter(true, Constants.parameter_root, new String[] { "root", "r" }, new String[] { null },
 			"Root must identify the root location to be used in generation");
-		this.installParameter(true, Constants.parameter_configuration, new String[] { "configuration", "config", "c" }, new Object[] { null },
-			"Configuration must identify the configurator classes used in generation");
+		this.installParameter(true, Constants.parameter_contribution, new String[] { "contribution", "c" }, new Object[] { null },
+			"Contribution must identify the contribution classes used in generation");
 	}
 
 	public String getTemplates() {
@@ -77,7 +77,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 	}
 
 	public void generate(String[] args, Generator generator, IEnvironment environment, ICompiler compiler) {
-		// process the arguments and load the configurators
+		// process the arguments and load the contributions
 		if (initialize(args, generator)) {
 			try {
 				if (environment != null) {
@@ -116,22 +116,22 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 	}
 
 	protected boolean initialize(String[] args, Generator generator) {
-		// process the arguments and load the configurators
+		// process the arguments and load the contributions
 		if (processBase(args)) {
 			// process all of the configuration modules
-			Object[] configurators = (Object[]) getParameter(Constants.parameter_configuration).getValue();
-			for (Object configurator : configurators) {
-				// obtain and load the requested configurator
+			Object[] contributions = (Object[]) getParameter(Constants.parameter_contribution).getValue();
+			for (Object contribution : contributions) {
+				// obtain and load the requested contribution
 				try {
-					// load the configurator class
-					Class<?> clazz = Class.forName((String) configurator, true, getClass().getClassLoader());
+					// load the contribution class
+					Class<?> clazz = Class.forName((String) contribution, true, getClass().getClassLoader());
 					// process the configuration module by invoking the configure method
-					Configurator config = (Configurator) clazz.newInstance();
+					GenerationContribution config = (GenerationContribution) clazz.newInstance();
 					config.configure(this);
 				}
 				catch (Exception x) {
 					System.out.println("Exception: " + x.getMessage());
-					System.out.println("Unable to load: " + configurator + ". Generation aborted.");
+					System.out.println("Unable to load: " + contribution + ". Generation aborted.");
 					return false;
 				}
 			}

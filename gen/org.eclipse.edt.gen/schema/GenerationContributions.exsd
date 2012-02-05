@@ -3,10 +3,10 @@
 <schema targetNamespace="org.eclipse.edt.gen" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.edt.gen" id="configurators" name="Configurators"/>
+         <meta.schema plugin="org.eclipse.edt.gen" id="GenerationContributions" name="GenerationContributions"/>
       </appinfo>
       <documentation>
-         This extension point allows you to contribute configurators.
+         [Enter description of this extension point.]
       </documentation>
    </annotation>
 
@@ -17,9 +17,6 @@
          </appinfo>
       </annotation>
       <complexType>
-         <sequence minOccurs="1" maxOccurs="unbounded">
-            <element ref="provider"/>
-         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -47,57 +44,36 @@
       </complexType>
    </element>
 
-   <element name="provider">
+   <element name="GenerationContribution">
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  The id of the generator
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  The provider class for the configurator
+                  
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.gen.Configurator"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.gen.GenerationContribution"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="name" type="string">
+         <attribute name="provider" type="string" use="required">
             <annotation>
                <documentation>
-                  The name of the configurator
+                  The provider id this contribution is used with
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="version" type="string" use="required">
+         <attribute name="requires" type="string">
             <annotation>
                <documentation>
-                  The version of the configurator
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="description" type="string">
-            <annotation>
-               <documentation>
-                  The description of the configurator
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="generator_id" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The id of the generator this configurator uses
-               </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="requires_id" type="string">
-            <annotation>
-               <documentation>
-                  Specify the configurator id class this configurator requires
+                  The generation contribution this contribution extends
                </documentation>
             </annotation>
          </attribute>

@@ -18,7 +18,7 @@ public class Constants {
 	public static final String parameter_output = "output";
 	public static final String parameter_part = "part";
 	public static final String parameter_root = "root";
-	public static final String parameter_configuration = "configuration";
+	public static final String parameter_contribution = "contribution";
 	public static final String parameter_report = "report";
 	public static final String parameter_report_dir = "reportDir";
 	public static final String parameter_report_dir_default = "genReports/";

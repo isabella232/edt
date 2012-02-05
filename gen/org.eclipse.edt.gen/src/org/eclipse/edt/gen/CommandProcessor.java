@@ -81,7 +81,7 @@ public abstract class CommandProcessor {
 		MissingParameterValueException {
 		// process only if in base mode
 		if (baseMode) {
-			// clean out any previous configurators
+			// clean out any previous contributions
 			templatePath.clear();
 			nativeTypePath.clear();
 			primitiveTypePath.clear();

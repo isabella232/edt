@@ -1,6 +1,6 @@
 package org.eclipse.edt.gen;
 
-public interface Configurable {
+public interface GenerationContributor {
 	public void registerCommandOptions(CommandOption[] options);
 	public void registerTemplatePath(String[] path);
 	public void registerNativeTypePath(String[] path);
