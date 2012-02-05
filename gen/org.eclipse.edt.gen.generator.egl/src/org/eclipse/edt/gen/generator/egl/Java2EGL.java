@@ -34,7 +34,7 @@ public class Java2EGL extends AbstractGeneratorCommand {
 	}
 
 	public void generate(String[] args, EglGenerator generator, IEnvironment environment) {
-		// process the arguments and load the configurators
+		// process the arguments and load the contributions
 		if (initialize(args, generator)) {
 			try {
 				if (environment != null)
