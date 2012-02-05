@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-public class ConfiguratorEntry {
+public class GenerationContributionEntry {
 	private String className;
-	private String generatorId;
+	private String provider;
 	private String identifier;
-	private String requiresId;
+	private String requires;
 
-	public ConfiguratorEntry() {
+	public GenerationContributionEntry() {
 		super();
 	}
 
@@ -29,12 +29,12 @@ public class ConfiguratorEntry {
 		this.className = className;
 	}
 
-	public String getGeneratorId() {
-		return generatorId;
+	public String getProvider() {
+		return provider;
 	}
 
-	public void setGeneratorId(String generatorId) {
-		this.generatorId = generatorId;
+	public void setProvider(String provider) {
+		this.provider = provider;
 	}
 
 	public String getIdentifier() {
@@ -45,11 +45,11 @@ public class ConfiguratorEntry {
 		this.identifier = identifier;
 	}
 
-	public String getRequiresId() {
-		return requiresId;
+	public String getRequires() {
+		return requires;
 	}
 
-	public void setRequiresId(String requiresId) {
-		this.requiresId = requiresId;
+	public void setRequires(String requires) {
+		this.requires = requires;
 	}
 }

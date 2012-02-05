@@ -37,18 +37,18 @@ import org.osgi.service.prefs.Preferences;
 public abstract class AbstractGenerator extends org.eclipse.edt.compiler.AbstractGenerator implements IGenerator {
 
 	/**
-	 * The runtime configurators.
+	 * The runtime contributions.
 	 */
-	protected static ConfiguratorEntry[] configurators;
-	// configurators for this command
-	protected List<ConfiguratorEntry> configuratorsUsed;
+	protected static GenerationContributionEntry[] contributions;
+	// contributions for this command
+	protected List<GenerationContributionEntry> contributionsUsed;
 
 	public AbstractGenerator() {
-		registerConfigurators();
+		registerContributions();
 	}
 	
-	public ConfiguratorEntry[] getConfigurators() {
-		return configurators;
+	public GenerationContributionEntry[] getContributions() {
+		return contributions;
 	}
 
 	/**
@@ -109,31 +109,31 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		return null;
 	}
 
-	public void registerConfigurators() {
+	public void registerContributions() {
 		// process if we haven't done this before
-		if (AbstractGenerator.configurators == null) {
-			// for each of the configurators, we need to add it to a list of class names
+		if (AbstractGenerator.contributions == null) {
+			// for each of the contributions, we need to add it to a list of class names
 			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_CONFIGURATORS);
+				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTIONS);
 			if (elements != null) {
-				List<ConfiguratorEntry> configurators = new ArrayList<ConfiguratorEntry>();
+				List<GenerationContributionEntry> contributions = new ArrayList<GenerationContributionEntry>();
 				for (int i = 0; i < elements.length; i++) {
 					try {
 						elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS);
-						ConfiguratorEntry configurator = new ConfiguratorEntry();
-						configurator.setClassName(elements[i].getAttribute(EDTCoreIDEPlugin.CLASS));
-						configurator.setGeneratorId(elements[i].getAttribute(EDTCoreIDEPlugin.GENERATOR_ID));
-						configurator.setIdentifier(elements[i].getAttribute(EDTCoreIDEPlugin.ID));
-						configurator.setRequiresId(elements[i].getAttribute(EDTCoreIDEPlugin.REQUIRES_ID));
-						configurators.add(configurator);
+						GenerationContributionEntry contribution = new GenerationContributionEntry();
+						contribution.setClassName(elements[i].getAttribute(EDTCoreIDEPlugin.CLASS));
+						contribution.setProvider(elements[i].getAttribute(EDTCoreIDEPlugin.PROVIDER));
+						contribution.setIdentifier(elements[i].getAttribute(EDTCoreIDEPlugin.ID));
+						contribution.setRequires(elements[i].getAttribute(EDTCoreIDEPlugin.REQUIRES));
+						contributions.add(contribution);
 					}
 					catch (CoreException e) {
 						e.printStackTrace();
 					}
 				}
-				AbstractGenerator.configurators = configurators.toArray(new ConfiguratorEntry[configurators.size()]);
+				AbstractGenerator.contributions = contributions.toArray(new GenerationContributionEntry[contributions.size()]);
 			} else {
-				AbstractGenerator.configurators = new ConfiguratorEntry[0];
+				AbstractGenerator.contributions = new GenerationContributionEntry[0];
 			}
 		}
 	}
@@ -160,12 +160,12 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		if (additionalArgs != null) {
 			numArgs += additionalArgs.length;
 		}
-		// add in the configurator parms
-		if (configuratorsUsed == null) {
-			configuratorsUsed = new ArrayList<ConfiguratorEntry>();
-			AbstractGenerator.determineConfigurators(getId(), configuratorsUsed);
+		// add in the contribution parms
+		if (contributionsUsed == null) {
+			contributionsUsed = new ArrayList<GenerationContributionEntry>();
+			AbstractGenerator.determineContributions(getId(), contributionsUsed);
 		}
-		numArgs += configuratorsUsed.size() + 1;
+		numArgs += contributionsUsed.size() + 1;
 
 		// get the array
 		String[] args = new String[numArgs];
@@ -185,7 +185,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		args[idx++] = file.getFullPath().toOSString();
 
 		args[idx++] = "-c";
-		for (ConfiguratorEntry arg : configuratorsUsed) {
+		for (GenerationContributionEntry arg : contributionsUsed) {
 			args[idx++] = arg.getClassName();
 		}
 
@@ -198,33 +198,33 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		return args;
 	}
 
-	public static void determineConfigurators(String generatorId, List<ConfiguratorEntry> configuratorsUsed) {
-		// take the passed generator id and determine the configurator id
-		for (int i = 0; i < AbstractGenerator.configurators.length; i++) {
-			ConfiguratorEntry configurator = AbstractGenerator.configurators[i];
-			if (generatorId.equals(configurator.getGeneratorId()))
-				AbstractGenerator.locateConfigurators(configurator.getIdentifier(), configuratorsUsed);
+	public static void determineContributions(String provider, List<GenerationContributionEntry> contributionsUsed) {
+		// take the passed generator id and determine the contribution id
+		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
+			GenerationContributionEntry contribution = AbstractGenerator.contributions[i];
+			if (provider.equals(contribution.getProvider()))
+				AbstractGenerator.locateContributions(contribution.getIdentifier(), contributionsUsed);
 		}
 	}
 
-	private static void locateConfigurators(String configuratorId, List<ConfiguratorEntry> configuratorsUsed) {
-		// we create a list of configurators here. we first look for all of the configurators
+	private static void locateContributions(String contributionId, List<GenerationContributionEntry> contributionsUsed) {
+		// we create a list of contributions here. we first look for all of the contributions
 		// that match a specific id. those get added. then, for each of the ones added, we check
-		// to for all required configurators and add those to the list, then we check each of those.
-		// this ends up giving us a list where each level of configurators is a complete group.
+		// to for all required contributions and add those to the list, then we check each of those.
+		// this ends up giving us a list where each level of contributions is a complete group.
 		List<String> requires = new ArrayList<String>();
-		for (int i = 0; i < AbstractGenerator.configurators.length; i++) {
-			ConfiguratorEntry configurator = AbstractGenerator.configurators[i];
-			if (configuratorId.equals(configurator.getIdentifier())) {
-				configuratorsUsed.add(configurator);
-				if (configurator.getRequiresId() != null) {
-					if (!requires.contains(configurator.getRequiresId()))
-						requires.add(configurator.getRequiresId());
+		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
+			GenerationContributionEntry contribution = AbstractGenerator.contributions[i];
+			if (contributionId.equals(contribution.getIdentifier())) {
+				contributionsUsed.add(contribution);
+				if (contribution.getRequires() != null) {
+					if (!requires.contains(contribution.getRequires()))
+						requires.add(contribution.getRequires());
 				}
 			}
 		}
 		for (int i = 0; i < requires.size(); i++) {
-			AbstractGenerator.locateConfigurators(requires.get(i), configuratorsUsed);
+			AbstractGenerator.locateContributions(requires.get(i), contributionsUsed);
 		}
 	}
 
