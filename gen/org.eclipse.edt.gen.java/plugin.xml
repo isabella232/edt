@@ -2,13 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.edt.gen.configurators">
+         point="org.eclipse.edt.gen.GenerationContributions">
       <provider
-            class="org.eclipse.edt.gen.java.JavaGenConfig"
-            generator="org.eclipse.edt.gen.java.JavaGenerator"
-            generator_id="org.eclipse.edt.ide.gen.JavaGenProvider"
-            id="JavaConfigurator"
-            version="0.8">
+            class="org.eclipse.edt.gen.java.JavaGenerationContribution"
+            provider="org.eclipse.edt.ide.gen.JavaGenProvider"
+            id="JavaGenerationContribution">
       </provider>
    </extension>
 
