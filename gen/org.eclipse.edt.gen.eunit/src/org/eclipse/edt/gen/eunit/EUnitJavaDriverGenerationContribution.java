@@ -12,10 +12,10 @@
 package org.eclipse.edt.gen.eunit;
 
 import org.eclipse.edt.gen.CommandOption;
-import org.eclipse.edt.gen.Configurable;
-import org.eclipse.edt.gen.Configurator;
+import org.eclipse.edt.gen.GenerationContributor;
+import org.eclipse.edt.gen.GenerationContribution;
 
-public class EUnitJavascriptAsyncDriverGenConfig implements Configurator {
+public class EUnitJavaDriverGenerationContribution implements GenerationContribution {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -29,7 +29,7 @@ public class EUnitJavascriptAsyncDriverGenConfig implements Configurator {
 	// define the list of template directories for this generator
 	static {
 		templatePath = new String[] { 
-			"org.eclipse.edt.gen.eunit.templates.javascriptasync.templates"
+			"org.eclipse.edt.gen.eunit.templates.java.templates"
 		};
 	}
 	// define the list of native type directories for this generator
@@ -48,7 +48,7 @@ public class EUnitJavascriptAsyncDriverGenConfig implements Configurator {
 		};
 	}
 
-	public void configure(Configurable generator) {
+	public void configure(GenerationContributor generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerCommandOptions(commandOptions);

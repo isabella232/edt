@@ -12,10 +12,11 @@
 package org.eclipse.edt.gen.eunit;
 
 import org.eclipse.edt.gen.CommandOption;
-import org.eclipse.edt.gen.Configurable;
-import org.eclipse.edt.gen.Configurator;
+import org.eclipse.edt.gen.CommandParameter;
+import org.eclipse.edt.gen.GenerationContributor;
+import org.eclipse.edt.gen.GenerationContribution;
 
-public class EUnitJavaDriverGenConfig implements Configurator {
+public class EUnitDriverGenerationContribution implements GenerationContribution {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -24,31 +25,36 @@ public class EUnitJavaDriverGenConfig implements Configurator {
 	// define the list of command options for this generator
 	static {
 		commandOptions = new CommandOption[] { 
+			new CommandOption(EGL2Base.ARG_PARM_GENPARTS, new String[] { EGL2Base.ARG_PARM_GENPARTS },
+				new CommandParameter(false, new String[] { null }, false, "Use this file to load parts to be generated"))
 		};
 	}
 	// define the list of template directories for this generator
 	static {
 		templatePath = new String[] { 
-			"org.eclipse.edt.gen.eunit.templates.java.templates"
+			"org.eclipse.edt.gen.eunit.templates.templates"
 		};
 	}
 	// define the list of native type directories for this generator
 	static {
 		nativeTypePath = new String[] { 
+			"org.eclipse.edt.gen.eunit.nativeTypes"
 		};
 	}
 	// define the list of primitive type directories for this generator
 	static {
 		primitiveTypePath = new String[] { 
+			"org.eclipse.edt.gen.eunit.primitiveTypes"
 		};
 	}
 	// define the list of message directories for this generator
 	static {
 		messagePath = new String[] { 
+			"org.eclipse.edt.gen.eunit.EGLMessages"
 		};
 	}
 
-	public void configure(Configurable generator) {
+	public void configure(GenerationContributor generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerCommandOptions(commandOptions);

@@ -36,8 +36,8 @@ public class EGL2JavascriptDriver extends EGL2Base {
 			arguments.add(args[i]);
 		}
 		arguments.add("-c");
-		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptDriverGenConfig");
-		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenConfig");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptDriverGenerationContribution");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenerationContribution");
 		EGL2JavascriptDriver genPart = new EGL2JavascriptDriver();
 		genPart.startGeneration(arguments.toArray(new String[arguments.size()]), compiler, eckGenerationNotifier);
 	}	

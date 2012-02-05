@@ -23,9 +23,9 @@ public class EGL2JavascriptAsyncDriver extends EGL2JavascriptDriver {
 			arguments.add(args[i]);
 		}
 		arguments.add("-c");
-		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptAsyncDriverGenConfig");
-		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptDriverGenConfig");
-		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenConfig");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptAsyncDriverGenerationContribution");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitJavascriptDriverGenerationContribution");
+		arguments.add("org.eclipse.edt.gen.eunit.EUnitDriverGenerationContribution");
 		EGL2JavascriptAsyncDriver genPart = new EGL2JavascriptAsyncDriver();
 		genPart.startGeneration(arguments.toArray(new String[arguments.size()]), compiler, eckGenerationNotifier);
 	}
