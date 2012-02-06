@@ -13,10 +13,10 @@ package org.eclipse.edt.gen.eunit;
 
 import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.CommandParameter;
+import org.eclipse.edt.gen.GenerationRegistry;
 import org.eclipse.edt.gen.GenerationContributor;
-import org.eclipse.edt.gen.GenerationContribution;
 
-public class EUnitDriverGenerationContribution implements GenerationContribution {
+public class EUnitDriverGenerationContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -54,7 +54,7 @@ public class EUnitDriverGenerationContribution implements GenerationContribution
 		};
 	}
 
-	public void configure(GenerationContributor generator) {
+	public void contribute(GenerationRegistry generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerCommandOptions(commandOptions);
