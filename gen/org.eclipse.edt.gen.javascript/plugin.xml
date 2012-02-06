@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.edt.gen.GenerationContributions">
+         point="org.eclipse.edt.gen.GenerationContributors">
       <provider
-            class="org.eclipse.edt.gen.javascript.JavaScriptGenerationContribution"
+            class="org.eclipse.edt.gen.javascript.JavaScriptGenerationContributor"
             provider="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
-            id="JavaScriptGenerationContribution">
+            id="JavaScriptGenerationContributor">
       </provider>
    </extension>
 
