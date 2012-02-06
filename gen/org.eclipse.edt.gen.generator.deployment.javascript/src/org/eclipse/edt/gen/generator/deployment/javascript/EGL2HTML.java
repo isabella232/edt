@@ -67,11 +67,11 @@ public abstract class EGL2HTML extends AbstractGeneratorCommand {
 
 		// this isn't used but it's a required parameter.
 		args[2] = "-p";
-		args[1] = "notused";
+		args[3] = "notused";
 
 		// this isn't used but it's a required parameter.
 		args[4] = "-r";
-		args[1] = "notused";
+		args[5] = "notused";
 
 		// add the contribution
 		args[6] = "-c";
