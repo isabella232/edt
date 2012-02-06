@@ -13,10 +13,10 @@ package org.eclipse.edt.gen.javascriptdev;
 
 import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.CommandParameter;
+import org.eclipse.edt.gen.GenerationRegistry;
 import org.eclipse.edt.gen.GenerationContributor;
-import org.eclipse.edt.gen.GenerationContribution;
 
-public class JavaScriptDevGenerationContribution implements GenerationContribution {
+public class JavaScriptDevGenerationContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -56,7 +56,7 @@ public class JavaScriptDevGenerationContribution implements GenerationContributi
 		};
 	}
 
-	public void configure(GenerationContributor generator) {
+	public void contribute(GenerationRegistry generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerCommandOptions(commandOptions);
