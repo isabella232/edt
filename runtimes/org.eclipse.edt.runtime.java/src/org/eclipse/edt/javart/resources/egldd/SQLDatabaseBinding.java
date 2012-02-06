@@ -22,9 +22,8 @@ public class SQLDatabaseBinding extends Binding {
 	public static final String ATTRIBUTE_BINDING_SQL_sqlValidationConnectionURL = "sqlValidationConnectionURL";
 	public static final String ATTRIBUTE_BINDING_SQL_jarList = "jarList";
 	public static final String ATTRIBUTE_BINDING_SQL_deployAsJndi = "deployAsJndi";
+	public static final String ATTRIBUTE_BINDING_SQL_jndiApplicationAuth = "jndiApplicationAuth";
 	public static final String ATTRIBUTE_BINDING_SQL_jndiName = "jndiName";
-	public static final String ATTRIBUTE_BINDING_SQL_jndiUser = "jndiUser";
-	public static final String ATTRIBUTE_BINDING_SQL_jndiPassword = "jndiPassword";
 
 	public SQLDatabaseBinding (Binding binding)
     {
@@ -71,15 +70,11 @@ public class SQLDatabaseBinding extends Binding {
 		return ParameterUtil.getBooleanValue(getParameter(ATTRIBUTE_BINDING_SQL_deployAsJndi), false);
 	}
 	
+	public boolean isApplicationAuthentication() {
+		return ParameterUtil.getBooleanValue(getParameter(ATTRIBUTE_BINDING_SQL_jndiApplicationAuth), false);
+	}
+	
 	public String getJndiName() {
 		return ParameterUtil.getStringValue(getParameter(ATTRIBUTE_BINDING_SQL_jndiName), "");
-	}
-	
-	public String getJndiUser() {
-		return ParameterUtil.getStringValue(getParameter(ATTRIBUTE_BINDING_SQL_jndiUser), "");
-	}
-	
-	public String getJndiPassword() {
-		return ParameterUtil.getStringValue(getParameter(ATTRIBUTE_BINDING_SQL_jndiPassword), "");
 	}
 }

@@ -20,8 +20,8 @@ public class SqlFactory extends BindingFactory{
 				if (uri != null && uri.startsWith("jndi://")) {
 					// Create a data source that obtains connections via JNDI.
 					String jndiName = uri.substring(7);
-					String user = sqlBinding.getJndiUser();
-					String password = sqlBinding.getJndiPassword();
+					String user = sqlBinding.getSqlID();
+					String password = sqlBinding.getSqlPassword();
 					if (user.length() > 0 || password.length() > 0) {
 						EDictionary props = new org.eclipse.edt.runtime.java.eglx.lang.EDictionary();
 						if (user.length() > 0) {
