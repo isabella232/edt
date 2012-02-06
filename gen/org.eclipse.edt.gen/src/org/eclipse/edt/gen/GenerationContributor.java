@@ -1,9 +1,5 @@
 package org.eclipse.edt.gen;
 
 public interface GenerationContributor {
-	public void registerCommandOptions(CommandOption[] options);
-	public void registerTemplatePath(String[] path);
-	public void registerNativeTypePath(String[] path);
-	public void registerPrimitiveTypePath(String[] path);
-	public void registerMessagePath(String[] path);
+	void contribute(GenerationRegistry generator);
 }

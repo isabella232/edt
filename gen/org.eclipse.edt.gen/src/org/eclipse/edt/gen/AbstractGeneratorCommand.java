@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.egl.utils.LoadPartException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public abstract class AbstractGeneratorCommand extends CommandProcessor implements GenerationContributor {
+public abstract class AbstractGeneratorCommand extends CommandProcessor implements GenerationRegistry {
 
 	private String templates = "";
 	private String nativeTypes = "";
@@ -126,8 +126,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 					// load the contribution class
 					Class<?> clazz = Class.forName((String) contribution, true, getClass().getClassLoader());
 					// process the configuration module by invoking the configure method
-					GenerationContribution config = (GenerationContribution) clazz.newInstance();
-					config.configure(this);
+					GenerationContributor contributor = (GenerationContributor) clazz.newInstance();
+					contributor.contribute(this);
 				}
 				catch (Exception x) {
 					System.out.println("Exception: " + x.getMessage());
