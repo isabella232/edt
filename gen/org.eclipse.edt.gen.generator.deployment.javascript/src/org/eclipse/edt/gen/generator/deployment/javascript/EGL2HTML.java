@@ -75,7 +75,7 @@ public abstract class EGL2HTML extends AbstractGeneratorCommand {
 
 		// add the contribution
 		args[6] = "-c";
-		args[7] = "org.eclipse.edt.gen.deployment.javascript.HTMLGenerationContribution";
+		args[7] = "org.eclipse.edt.gen.deployment.javascript.HTMLGenerationContributor";
 
 		return args;
 	}
