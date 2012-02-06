@@ -151,18 +151,18 @@ public class WebXML {
 		}
 		public void addResourceRef(ResourceRef resourceRef) {
 			EList resourceRefs = webApp.getResourceRefs();
-			boolean found = false;
+			ResourceRef existingRef = null;
 			for ( Iterator it = resourceRefs.iterator(); it.hasNext(); )
 			{
 				ResourceRef ref = (ResourceRef)it.next();
 				if ( ref.getName().equals( resourceRef.getName() ) )
 				{
-					found = true;
+					existingRef = ref;
 					break;
 				}
 			}
 			
-			if ( !found )
+			if ( existingRef == null )
 			{
 				ResourceRef ref = CommonFactory.eINSTANCE.createResourceRef();
 				ref.setName( resourceRef.getName() );
@@ -170,6 +170,12 @@ public class WebXML {
 				ref.setResSharingScope( resourceRef.getResSharingScope() );
 				ref.setAuth( resourceRef.getAuth() );
 				resourceRefs.add( ref );
+			}
+			else
+			{
+				existingRef.setType( resourceRef.getType() );
+				existingRef.setResSharingScope( resourceRef.getResSharingScope() );
+				existingRef.setAuth( resourceRef.getAuth() );
 			}
 		}
 		public void updateAddEnvironmentEntry(EnvEntry newEnvEntry) {
@@ -385,18 +391,18 @@ public class WebXML {
 
 		public void addResourceRef(ResourceRef resourceRef) {
 			List resourceRefs = webApp.getResourceRefs();
-			boolean found = false;
+			org.eclipse.jst.javaee.core.ResourceRef existingRef = null;
 			for ( Iterator it = resourceRefs.iterator(); it.hasNext(); )
 			{
 				org.eclipse.jst.javaee.core.ResourceRef ref = (org.eclipse.jst.javaee.core.ResourceRef)it.next();
 				if ( resourceRef.getName().equals( ref.getResRefName() ) )
 				{
-					found = true;
+					existingRef = ref;
 					break;
 				}
 			}
 			
-			if ( !found )
+			if ( existingRef == null )
 			{
 				org.eclipse.jst.javaee.core.ResourceRef ref = org.eclipse.jst.javaee.core.JavaeeFactory.eINSTANCE.createResourceRef();
 				ref.setResRefName( resourceRef.getName() );
@@ -418,6 +424,26 @@ public class WebXML {
 				}
 				ref.setResType(resourceRef.getType());
 				resourceRefs.add( ref );
+			}
+			else
+			{
+				if( resourceRef.getResSharingScope() == ResSharingScopeType.SHAREABLE_LITERAL )
+				{
+					existingRef.setResSharingScope(org.eclipse.jst.javaee.core.ResSharingScopeType.SHAREABLE_LITERAL);
+				}
+				else if( resourceRef.getResSharingScope() == ResSharingScopeType.UNSHAREABLE_LITERAL )
+				{
+					existingRef.setResSharingScope(org.eclipse.jst.javaee.core.ResSharingScopeType.UNSHAREABLE_LITERAL);
+				}
+				if( resourceRef.getAuth() == ResAuthTypeBase.CONTAINER_LITERAL )
+				{
+					existingRef.setResAuth( org.eclipse.jst.javaee.core.ResAuthType.CONTAINER_LITERAL );
+				}
+				else if( resourceRef.getAuth() == ResAuthTypeBase.APPLICATION_LITERAL )
+				{
+					existingRef.setResAuth( org.eclipse.jst.javaee.core.ResAuthType.APPLICATION_LITERAL );
+				}
+				existingRef.setResType(resourceRef.getType());
 			}
 		}
 		public void updateAddEnvironmentEntry(EnvEntry newEnvEntry) {
