@@ -74,10 +74,10 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 		targetProject = context.getTargetProject();
 		webXML = WebXMLManager.instance.getWebXMLUtil(targetProject);
 		
-		// 1. For jndi binding URIs add a resource-ref
-		addJNDIResourceRefs(context.getDeploymentDesc());
+		// 1. For JNDI bindings add a resource-ref
+		addResourceRefs(context.getDeploymentDesc());
 		for (DeploymentDesc nextDD : context.getDependentModels()) {
-			addJNDIResourceRefs(nextDD);
+			addResourceRefs(nextDD);
 		}
 		
 		// 2. For the other binding types, and the server is tomcat, add/update the data source to context.xml. If
@@ -121,22 +121,22 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 		}
 	}
 	
-	private void addJNDIResourceRefs(DeploymentDesc ddModel) {
+	private void addResourceRefs(DeploymentDesc ddModel) {
 		for (Binding binding : ddModel.getBindings()) {
-			if (binding.isUseURI() && binding instanceof SQLDatabaseBinding) {
-				String uri = binding.getUri();
-				if (uri != null && uri.startsWith("jndi://")) {
-					addResourceRef(uri.substring(7)); // "jndi://".length()
+			if (binding instanceof SQLDatabaseBinding) {
+				SQLDatabaseBinding sqlBinding = (SQLDatabaseBinding)binding;
+				if (sqlBinding.isDeployAsJndi()) {
+					addResourceRef(sqlBinding.getJndiName(), sqlBinding.isApplicationAuthentication());
 				}
 			}
 		}
 	}
 	
-	private void addResourceRef(String name) {
+	private void addResourceRef(String name, boolean applicationAuth) {
 		if (name != null && (name = name.trim()).length() > 0) {
 			ResourceRef ref = CommonFactory.eINSTANCE.createResourceRef();
 			ref.setName(name);
-			ref.setAuth(ResAuthTypeBase.CONTAINER_LITERAL);
+			ref.setAuth(applicationAuth ? ResAuthTypeBase.APPLICATION_LITERAL : ResAuthTypeBase.CONTAINER_LITERAL);
 			ref.setType("javax.sql.DataSource");
 			ref.setResSharingScope(ResSharingScopeType.SHAREABLE_LITERAL);
 			
@@ -155,7 +155,6 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 				}
 				
 				// Must be hardcoded or a workspace:// URI for us to configure the data source.
-				boolean addResourceRef = false;
 				String jndiName = sqlBinding.getJndiName();
 				
 				if (jndiName == null || (jndiName = jndiName.trim()).length() == 0) {
@@ -169,19 +168,15 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 						if (uri != null && uri.startsWith("workspace://")) {
 							IConnectionProfile profile = ProfileManager.getInstance().getProfileByName(uri.substring(12)); // "workspace://".length()
 							if (profile != null) {
-								addResourceRef = configureDataSource(EGLSQLUtility.getSQLUserId(profile),
+								configureDataSource(EGLSQLUtility.getSQLUserId(profile),
 										EGLSQLUtility.getSQLPassword(profile), EGLSQLUtility.getSQLJDBCDriverClassPreference(profile),
-										EGLSQLUtility.getSQLConnectionURLPreference(profile), jndiName);
+										EGLSQLUtility.getSQLConnectionURLPreference(profile), jndiName, sqlBinding.isApplicationAuthentication());
 							}
 						}
 					}
 					else {
-						addResourceRef = configureDataSource(sqlBinding.getSqlID(), sqlBinding.getSqlPassword(), sqlBinding.getSqlJDBCDriverClass(),
-								sqlBinding.getSqlDB(), jndiName);
-					}
-					
-					if (addResourceRef) {
-						addResourceRef(jndiName);
+						configureDataSource(sqlBinding.getSqlID(), sqlBinding.getSqlPassword(), sqlBinding.getSqlJDBCDriverClass(),
+								sqlBinding.getSqlDB(), jndiName, sqlBinding.isApplicationAuthentication());
 					}
 				}
 				catch (Exception e) {
@@ -194,7 +189,7 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 		}
 	}
 	
-	private boolean configureDataSource(String user, String pass, String driverClass, String url, String jndiName) throws Exception {
+	private void configureDataSource(String user, String pass, String driverClass, String url, String jndiName, boolean applicationAuth) throws Exception {
 		if (notEmpty(jndiName) && notEmpty(url) && notEmpty(driverClass)) {
 			if (user == null) {
 				user = "";
@@ -222,53 +217,48 @@ public class ConfigureDataSourcesOperation extends AbstractDeploymentOperation {
 				contextDoc.appendChild(contextNode);
 			}
 			
-			if (true) {
-				boolean found = false;
-				NodeList contextKids = contextNode.getChildNodes();
-				int kidSize = contextKids.getLength();
-				for (int i = 0; !found && i < kidSize; i++) {
-					Node nextKid = contextKids.item(i);
-					String name = nextKid.getNodeName();
-					if ("Resource".equalsIgnoreCase(name)) {
-						NamedNodeMap attrs = nextKid.getAttributes();
-						Node nameAttr = attrs.getNamedItem("name");
-						if (nameAttr != null && jndiName.equals(nameAttr.getNodeValue())) {
-							found = true;
-							
-							// Update any values that might have changed.
-							updateAttr("username", user, attrs);
-							updateAttr("password", pass, attrs);
-							updateAttr("driverClassName", driverClass, attrs);
-							updateAttr("url", url, attrs);
-						}
+			boolean found = false;
+			NodeList contextKids = contextNode.getChildNodes();
+			int kidSize = contextKids.getLength();
+			for (int i = 0; !found && i < kidSize; i++) {
+				Node nextKid = contextKids.item(i);
+				String name = nextKid.getNodeName();
+				if ("Resource".equalsIgnoreCase(name)) {
+					NamedNodeMap attrs = nextKid.getAttributes();
+					Node nameAttr = attrs.getNamedItem("name");
+					if (nameAttr != null && jndiName.equals(nameAttr.getNodeValue())) {
+						found = true;
+						
+						// Update any values that might have changed.
+						updateAttr("username", user, attrs);
+						updateAttr("password", pass, attrs);
+						updateAttr("driverClassName", driverClass, attrs);
+						updateAttr("url", url, attrs);
+						updateAttr("auth", applicationAuth ? "Application" : "Container", attrs);
 					}
 				}
+			}
+			
+			if (!found) {
+				// Add a new entry.
+				Node newChild = contextDoc.createElement("Resource");
+				NamedNodeMap attrs = newChild.getAttributes();
 				
-				if (!found) {
-					// Add a new entry.
-					Node newChild = contextDoc.createElement("Resource");
-					NamedNodeMap attrs = newChild.getAttributes();
-					
-					createAttr("name", jndiName, attrs);
-					createAttr("username", user, attrs);
-					createAttr("password", pass, attrs);
-					createAttr("driverClassName", driverClass, attrs);
-					createAttr("url", url, attrs);
-					createAttr("maxActive", "4", attrs);
-					createAttr("maxIdle", "2", attrs);
-					createAttr("maxWait", "5000", attrs);
-					createAttr("auth", "Container", attrs);
-					createAttr("type", "javax.sql.DataSource", attrs);
-					
-					contextNode.appendChild(newChild);
-					contextDotXMLUpdated = true;
-				}
+				createAttr("name", jndiName, attrs);
+				createAttr("username", user, attrs);
+				createAttr("password", pass, attrs);
+				createAttr("driverClassName", driverClass, attrs);
+				createAttr("url", url, attrs);
+				createAttr("maxActive", "4", attrs);
+				createAttr("maxIdle", "2", attrs);
+				createAttr("maxWait", "5000", attrs);
+				createAttr("auth", applicationAuth ? "Application" : "Container", attrs);
+				createAttr("type", "javax.sql.DataSource", attrs);
 				
-				return true;
+				contextNode.appendChild(newChild);
+				contextDotXMLUpdated = true;
 			}
 		}
-		
-		return false;
 	}
 	
 	private void updateAttr(String name, String value, NamedNodeMap attrs) {

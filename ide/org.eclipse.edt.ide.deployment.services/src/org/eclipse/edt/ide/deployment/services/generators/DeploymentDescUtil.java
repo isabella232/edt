@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.services.generators;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
@@ -80,14 +81,17 @@ public class DeploymentDescUtil {
 		}
 		builder.append(" useURI=\"").append(String.valueOf((binding.isUseURI())));
 		builder.append("\">\n");
-		builder.append(indent3);
-		builder.append("<parameters>\n");
-		for(Parameter parameter : binding.getParameters())
-		{
-			builder.append(toBindXML(parameter));
+		Collection<Parameter> parms = binding.getParameters();
+		if (parms.size() > 0) {
+			builder.append(indent3);
+			builder.append("<parameters>\n");
+			for(Parameter parameter : parms)
+			{
+				builder.append(toBindXML(parameter));
+			}
+			builder.append(indent3);
+			builder.append("</parameters>\n");
 		}
-		builder.append(indent3);
-		builder.append("</parameters>\n");
 		builder.append(indent2);
 		builder.append("</binding>\n");
 		return builder.toString();
@@ -145,6 +149,32 @@ public class DeploymentDescUtil {
 					newBinding.setParameters(new HashMap<String, Parameter>());
 					newBinding.setUseURI(true);
 					newBinding.setUri("jndi://" + jndiName);
+					
+					// Add the username and password when using application authentication.
+					if (sqlBinding.isApplicationAuthentication()) {
+						String user = null;
+						String password = null;
+						
+						if (!sqlBinding.isUseURI()) {
+							user = sqlBinding.getSqlID();
+							password = sqlBinding.getSqlPassword();
+						}
+						else {
+							// Comes from connection profile.
+							IConnectionProfile profile = ProfileManager.getInstance().getProfileByName(uri.substring(12)); // Remove the "workspace://"
+							if (profile != null) {
+								user = EGLSQLUtility.getSQLUserId(profile);
+								password = Encoder.encode(EGLSQLUtility.getSQLPassword(profile));
+							}
+						}
+						
+						if (user != null && (user = user.trim()).length() > 0) {
+							newBinding.addParameter(new Parameter(SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlID, user));
+						}
+						if (password != null && (password = password.trim()).length() > 0) {
+							newBinding.addParameter(new Parameter(SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_sqlPassword, password));
+						}
+					}
 					return newBinding;
 				}
 			}
