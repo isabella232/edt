@@ -13,8 +13,8 @@ package org.eclipse.edt.gen.generator.example;
 
 import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.CommandParameter;
+import org.eclipse.edt.gen.GenerationRegistry;
 import org.eclipse.edt.gen.GenerationContributor;
-import org.eclipse.edt.gen.GenerationContribution;
 
 // this is an example on how to extend the distributed EGLGen command. As part of this example, we will also show how
 // to extend 3 items:
@@ -34,13 +34,13 @@ import org.eclipse.edt.gen.GenerationContribution;
 // the generation command will become this:
 // EGLGen -o C:\myExample -r C:\myExample -p myExampleProgram -extendComments true
 //
-// we need to first create the ExampleGenerationContribution (of course it can be called anything you desire) contribution. This is
+// we need to first create the ExampleGenerationContributor (of course it can be called anything you desire) contribution. This is
 // the example of that. It will be loaded (and any others) by the -c command line option on the EGLGen command. For example:
-// EGLGen -c org.eclipse.edt.gen.generator.example.ExampleGenerationContribution org.eclipse.edt.gen.java.JavaGenerationContribution
+// EGLGen -c org.eclipse.edt.gen.generator.example.ExampleGenerationContributor org.eclipse.edt.gen.java.JavaGenerationContributor
 //
 // it is not necessary to extend another contribution. it will be included vie the -c option
 //
-public class ExampleGenerationContribution implements GenerationContribution {
+public class ExampleGenerationContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -154,7 +154,7 @@ public class ExampleGenerationContribution implements GenerationContribution {
 		};
 	}
 
-	public void configure(GenerationContributor generator) {
+	public void contribute(GenerationRegistry generator) {
 		// register the array of command options for this configuration
 		// if you don't have any, then register the empty array
 		generator.registerCommandOptions(commandOptions);
