@@ -26,12 +26,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.edt.ide.internal.testserver.TestServerUpdateErrorDialog;
+import org.eclipse.edt.ide.internal.testserver.UpdateErrorDialog;
 import org.eclipse.edt.ide.testserver.TestServerConfiguration.TerminationListener;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 
+/**
+ * Keeps track of the test server instances, created new ones when needed. Also handles notifying the user when
+ * the classpath for one or more servers has changed. This class should be used instead of directly instantiating
+ * {@link TestServerConfiguration}.
+ */
 public class TestServerManager implements TerminationListener, IResourceChangeListener {
 	
 	private static TestServerManager INSTANCE;
@@ -176,6 +181,11 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 		}
 	}
 	
+	/**
+	 * We check for classpath changes on all test servers at once so that you don't get several dialogs
+	 * when a classpath change affects multiple servers. Instead, you get one that lists all the affected
+	 * test servers.
+	 */
 	private void handleClasspathChanged() {
 		final List<TestServerConfiguration> configsWithChanges = new ArrayList<TestServerConfiguration>();
 		HashMap<IProject, TestServerConfiguration> mapClone;
@@ -231,7 +241,7 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 								projectsInsert.append(config.getProject().getName());
 							}
 							
-							TestServerUpdateErrorDialog dialog = new TestServerUpdateErrorDialog(
+							UpdateErrorDialog dialog = new UpdateErrorDialog(
 									TestServerPlugin.getShell(), TestServerMessages.ClasspathChangedTitle, null, 
 									new Status(IStatus.WARNING, TestServerPlugin.PLUGIN_ID, NLS.bind(TestServerMessages.ClasspathChangedMsg, projectsInsert) + "\n\n" //$NON-NLS-1$
 											+ (configsWithChanges.size() > 1 ? TestServerMessages.ErrorDialogTerminatePluralMsg : TestServerMessages.ErrorDialogTerminateMsg)),

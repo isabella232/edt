@@ -58,7 +58,7 @@ public class TestServerPreferencePage extends AbstractPreferencePage {
 		loadPreferences();
 		
 		Dialog.applyDialogFont(parent);
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(composite, ITestServerPreferenceConstants.RUI_TEST_SERVER_PREFERENCE_PAGE);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(composite, ITestServerPreferenceConstants.TEST_SERVER_PREFERENCE_PAGE_HELP_ID);
 		
 		return composite;
 	}	

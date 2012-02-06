@@ -28,11 +28,11 @@ import org.eclipse.swt.widgets.Display;
 /**
  * Handles errors due to hot code replace.
  */
-public class TestServerHotCodeReplaceListener implements IJavaHotCodeReplaceListener {
+public class HotCodeReplaceListener implements IJavaHotCodeReplaceListener {
 	
 	private final TestServerConfiguration config;
 	
-	public TestServerHotCodeReplaceListener(TestServerConfiguration config) {
+	public HotCodeReplaceListener(TestServerConfiguration config) {
 		this.config = config;
 	}
 	
@@ -89,7 +89,7 @@ public class TestServerHotCodeReplaceListener implements IJavaHotCodeReplaceList
 						if (display.isDisposed()) {
 							return;
 						}
-						TestServerUpdateErrorDialog dialog = new TestServerUpdateErrorDialog(TestServerPlugin.getShell(), title, null, status, store, prefKey, config);
+						UpdateErrorDialog dialog = new UpdateErrorDialog(TestServerPlugin.getShell(), title, null, status, store, prefKey, config);
 						dialog.setBlockOnOpen(false);
 						dialog.open();
 					}

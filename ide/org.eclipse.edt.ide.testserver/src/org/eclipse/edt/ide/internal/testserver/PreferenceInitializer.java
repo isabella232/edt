@@ -16,6 +16,9 @@ import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.ide.testserver.ITestServerPreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 
+/**
+ * Initializes the default preferences.
+ */
 public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	
 	public void initializeDefaultPreferences() {

@@ -13,6 +13,9 @@ package org.eclipse.edt.ide.testserver;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * Translated messages.
+ */
 public class TestServerMessages extends NLS {
 	
 	private static final String BUNDLE_NAME = "org.eclipse.edt.ide.testserver.TestServerMessages"; //$NON-NLS-1$

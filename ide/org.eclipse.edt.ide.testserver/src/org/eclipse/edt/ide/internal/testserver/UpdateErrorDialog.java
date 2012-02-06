@@ -33,7 +33,7 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 /**
  * Dialog to notify the user about a problem with hot code replace or classpath change on a test server. A button is provided for terminating the server(s).
  */
-public class TestServerUpdateErrorDialog extends ErrorDialog {
+public class UpdateErrorDialog extends ErrorDialog {
 
 	protected static final int BUTTON_ID_TERMINATE_SERVER = IDialogConstants.OK_ID + IDialogConstants.DETAILS_ID + 1;
 	
@@ -46,14 +46,14 @@ public class TestServerUpdateErrorDialog extends ErrorDialog {
 	/**
 	 * Constructor for when a single server is in error.
 	 */
-	public TestServerUpdateErrorDialog(Shell parentShell, String dialogTitle, String message, IStatus status, IPreferenceStore prefStore, String prefKey, TestServerConfiguration config) {
+	public UpdateErrorDialog(Shell parentShell, String dialogTitle, String message, IStatus status, IPreferenceStore prefStore, String prefKey, TestServerConfiguration config) {
 		this(parentShell, dialogTitle, message, status, prefStore, prefKey, new TestServerConfiguration[]{config});
 	}
 	
 	/**
 	 * Constructor for when multiple servers are in error.
 	 */
-	public TestServerUpdateErrorDialog(Shell parentShell, String dialogTitle, String message, IStatus status, IPreferenceStore prefStore, String prefKey, TestServerConfiguration[] configs) {
+	public UpdateErrorDialog(Shell parentShell, String dialogTitle, String message, IStatus status, IPreferenceStore prefStore, String prefKey, TestServerConfiguration[] configs) {
 		super(parentShell, dialogTitle, message, status, IStatus.WARNING | IStatus.ERROR | IStatus.INFO);
 		this.prefStore = prefStore;
 		this.prefKey = prefKey;

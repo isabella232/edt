@@ -50,7 +50,7 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.internal.testserver.DefaultServlet;
-import org.eclipse.edt.ide.internal.testserver.TestServerHotCodeReplaceListener;
+import org.eclipse.edt.ide.internal.testserver.HotCodeReplaceListener;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -77,10 +77,23 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	private List<TerminationListener> terminationListeners;
 	private String[] latestCheckedClasspath; // Used to determine when a classpath has changed.
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param project    The root project for which this server should run.
+	 * @param debugMode  True if the Java process should run in debug mode.
+	 */
 	public TestServerConfiguration(IProject project, boolean debugMode) {
 		this(project, debugMode, -1);
 	}
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param project    The root project for which this server should run.
+	 * @param debugMode  True if the Java process should run in debug mode.
+	 * @param port       The port that the server should run on, or -1 if any available port should be used.
+	 */
 	public TestServerConfiguration(IProject project, boolean debugMode, int port) {
 		this.project = project;
 		this.debugMode = debugMode;
@@ -91,6 +104,14 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 	}
 	
+	/**
+	 * Starts the server; if it's already started this will return immediately. If waitForServerToStart is specified,
+	 * we will wait up to 60 seconds for it to start before throwing an error.
+	 * 
+	 * @param monitor  An optional progress monitor (may be null).
+	 * @param waitForServerToStart  A flag indicating if this method should wait for the server to finish starting before returning.
+	 * @throws CoreException
+	 */
 	public synchronized void start(IProgressMonitor monitor, boolean waitForServerToStart) throws CoreException {
 		if (started) {
 			return;
@@ -206,7 +227,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			for (IDebugTarget target : launch.getDebugTargets()) {
 				IJavaDebugTarget javaTarget = (IJavaDebugTarget)target.getAdapter(IJavaDebugTarget.class);
 				if (javaTarget != null) {
-					javaTarget.addHotCodeReplaceListener(new TestServerHotCodeReplaceListener(this));
+					javaTarget.addHotCodeReplaceListener(new HotCodeReplaceListener(this));
 				}
 			}
 			
@@ -217,28 +238,48 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		}
 	}
 	
+	/**
+	 * @return true if the server is started.
+	 */
 	public boolean isRunning() {
 		return started;
 	}
 	
+	/**
+	 * @return true if the server was started in debug mode.
+	 */
 	public boolean isDebugMode() {
 		return debugMode;
 	}
 	
+	/**
+	 * @return the test server's root project.
+	 */
 	public IProject getProject() {
 		return project;
 	}
 	
+	/**
+	 * @return the port on which the test server is running.
+	 */
 	public int getPort() {
 		return port;
 	}
 	
+	/**
+	 * Terminates the Java process if it's running.
+	 * @throws DebugException
+	 */
 	public void terminate() throws DebugException {
 		if (launch != null) {
 			launch.terminate();
 		}
 	}
 	
+	/**
+	 * Adds a listener to be notified when the server terminates.
+	 * @param listener  The listener.
+	 */
 	public void addTerminationListener(TerminationListener listener) {
 		if (terminationListeners == null) {
 			terminationListeners = new ArrayList<TerminationListener>();
@@ -246,6 +287,10 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		terminationListeners.add(listener);
 	}
 	
+	/**
+	 * Removes a listener from the list to be notified when the server terminates.
+	 * @param listener  The listener.
+	 */
 	public void removeTerminationListener(TerminationListener listener) {
 		if (terminationListeners != null) {
 			terminationListeners.remove(listener);
