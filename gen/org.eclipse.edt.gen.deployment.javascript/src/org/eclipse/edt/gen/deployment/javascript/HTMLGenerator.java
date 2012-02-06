@@ -35,7 +35,6 @@ public class HTMLGenerator extends Generator {
 		super(processor, requestor);		
 		out = new TabbedWriter(new StringWriter());
 		this.sysEnv = sysEnv; 
-		context.sysEnv = sysEnv;
 	}
 
 	@Override
@@ -46,6 +45,7 @@ public class HTMLGenerator extends Generator {
 	@Override
 	public EglContext makeContext(AbstractGeneratorCommand processor) {
 		context = new Context(processor, sysEnv);
+		context.sysEnv = sysEnv;
 		return context;
 	}
 
