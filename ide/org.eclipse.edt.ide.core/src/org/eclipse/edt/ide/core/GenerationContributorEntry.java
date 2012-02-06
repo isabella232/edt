@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-public class GenerationContributionEntry {
+public class GenerationContributorEntry {
 	private String className;
 	private String provider;
 	private String identifier;
 	private String requires;
 
-	public GenerationContributionEntry() {
+	public GenerationContributorEntry() {
 		super();
 	}
 

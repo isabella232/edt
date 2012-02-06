@@ -112,7 +112,7 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	/**
 	 * Constants for extension points.
 	 */
-	public static final String PT_GENERATIONCONTRIBUTIONS = "GenerationContributions"; //$NON-NLS-1$
+	public static final String PT_GENERATIONCONTRIBUTORS = "GenerationContributors"; //$NON-NLS-1$
 	public static final String PT_COMPILERS = "compilers"; //$NON-NLS-1$
 	public static final String PT_GENERATORS = "generators"; //$NON-NLS-1$
 	public static final String CLASS = "class"; //$NON-NLS-1$

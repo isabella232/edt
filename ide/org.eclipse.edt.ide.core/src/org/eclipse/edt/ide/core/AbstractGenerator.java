@@ -39,15 +39,15 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	/**
 	 * The runtime contributions.
 	 */
-	protected static GenerationContributionEntry[] contributions;
+	protected static GenerationContributorEntry[] contributions;
 	// contributions for this command
-	protected List<GenerationContributionEntry> contributionsUsed;
+	protected List<GenerationContributorEntry> contributionsUsed;
 
 	public AbstractGenerator() {
 		registerContributions();
 	}
 	
-	public GenerationContributionEntry[] getContributions() {
+	public GenerationContributorEntry[] getContributions() {
 		return contributions;
 	}
 
@@ -114,13 +114,13 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		if (AbstractGenerator.contributions == null) {
 			// for each of the contributions, we need to add it to a list of class names
 			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTIONS);
+				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTORS);
 			if (elements != null) {
-				List<GenerationContributionEntry> contributions = new ArrayList<GenerationContributionEntry>();
+				List<GenerationContributorEntry> contributions = new ArrayList<GenerationContributorEntry>();
 				for (int i = 0; i < elements.length; i++) {
 					try {
 						elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS);
-						GenerationContributionEntry contribution = new GenerationContributionEntry();
+						GenerationContributorEntry contribution = new GenerationContributorEntry();
 						contribution.setClassName(elements[i].getAttribute(EDTCoreIDEPlugin.CLASS));
 						contribution.setProvider(elements[i].getAttribute(EDTCoreIDEPlugin.PROVIDER));
 						contribution.setIdentifier(elements[i].getAttribute(EDTCoreIDEPlugin.ID));
@@ -131,9 +131,9 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 						e.printStackTrace();
 					}
 				}
-				AbstractGenerator.contributions = contributions.toArray(new GenerationContributionEntry[contributions.size()]);
+				AbstractGenerator.contributions = contributions.toArray(new GenerationContributorEntry[contributions.size()]);
 			} else {
-				AbstractGenerator.contributions = new GenerationContributionEntry[0];
+				AbstractGenerator.contributions = new GenerationContributorEntry[0];
 			}
 		}
 	}
@@ -162,7 +162,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		}
 		// add in the contribution parms
 		if (contributionsUsed == null) {
-			contributionsUsed = new ArrayList<GenerationContributionEntry>();
+			contributionsUsed = new ArrayList<GenerationContributorEntry>();
 			AbstractGenerator.determineContributions(getId(), contributionsUsed);
 		}
 		numArgs += contributionsUsed.size() + 1;
@@ -185,7 +185,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		args[idx++] = file.getFullPath().toOSString();
 
 		args[idx++] = "-c";
-		for (GenerationContributionEntry arg : contributionsUsed) {
+		for (GenerationContributorEntry arg : contributionsUsed) {
 			args[idx++] = arg.getClassName();
 		}
 
@@ -198,23 +198,23 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		return args;
 	}
 
-	public static void determineContributions(String provider, List<GenerationContributionEntry> contributionsUsed) {
+	public static void determineContributions(String provider, List<GenerationContributorEntry> contributionsUsed) {
 		// take the passed generator id and determine the contribution id
 		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
-			GenerationContributionEntry contribution = AbstractGenerator.contributions[i];
+			GenerationContributorEntry contribution = AbstractGenerator.contributions[i];
 			if (provider.equals(contribution.getProvider()))
 				AbstractGenerator.locateContributions(contribution.getIdentifier(), contributionsUsed);
 		}
 	}
 
-	private static void locateContributions(String contributionId, List<GenerationContributionEntry> contributionsUsed) {
+	private static void locateContributions(String contributionId, List<GenerationContributorEntry> contributionsUsed) {
 		// we create a list of contributions here. we first look for all of the contributions
 		// that match a specific id. those get added. then, for each of the ones added, we check
 		// to for all required contributions and add those to the list, then we check each of those.
 		// this ends up giving us a list where each level of contributions is a complete group.
 		List<String> requires = new ArrayList<String>();
 		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
-			GenerationContributionEntry contribution = AbstractGenerator.contributions[i];
+			GenerationContributorEntry contribution = AbstractGenerator.contributions[i];
 			if (contributionId.equals(contribution.getIdentifier())) {
 				contributionsUsed.add(contribution);
 				if (contribution.getRequires() != null) {
