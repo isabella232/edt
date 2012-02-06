@@ -56,6 +56,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 	private Button fUseWorkspace;
 	private Button fUseDefinedInfo;
 	private Button fDeployAsJndi;
+	private Button fApplicationAuth;
 	private Button btnPing;
 	private Combo workspaceCombo;
 	private Text fDeployAsJndiName;
@@ -337,6 +338,20 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 			}			
 		});
 		deployAsJndiControls.add(fDeployAsJndiName);
+		
+		fApplicationAuth = toolkit.createButton(parent, SOAMessages.LabelSqlJndiAppAuth, SWT.CHECK|SWT.WRAP);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = nColumnSpan;
+		gd.horizontalIndent = indent;
+		fApplicationAuth.setLayoutData(gd);
+		fApplicationAuth.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateDeployAsControls();
+				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fSQLDatabaseBinding), SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiApplicationAuth, fApplicationAuth.getSelection());
+			}
+		});
+		deployAsJndiControls.add(fApplicationAuth);
 	}
 	
 	protected void testConnection() {
@@ -458,6 +473,7 @@ public class SQLDatabaseBindingDetailPage extends WebBindingDetailPage implement
 			}
 			
 			fDeployAsJndi.setSelection(EGLDDRootHelper.getBooleanParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi));
+			fApplicationAuth.setSelection(EGLDDRootHelper.getBooleanParameterValue(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_jndiApplicationAuth));
 		}
 		
 		updateDeployAsControls(); // it's possible this doesn't get invoked below

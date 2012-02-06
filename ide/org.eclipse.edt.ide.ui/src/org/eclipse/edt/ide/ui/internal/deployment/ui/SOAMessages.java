@@ -384,6 +384,8 @@ public class SOAMessages extends NLS {
 	
 	public static String LabelSqlJndiName;
 	
+	public static String LabelSqlJndiAppAuth;
+	
 	public static String LabelSqlUseWorkspace;
 	
 	public static String LabelSqlDeployAsJndi;
