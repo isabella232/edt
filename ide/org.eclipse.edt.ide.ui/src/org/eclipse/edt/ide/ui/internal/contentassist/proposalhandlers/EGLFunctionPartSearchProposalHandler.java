@@ -22,9 +22,12 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.Handler;
+import org.eclipse.edt.compiler.core.ast.Library;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 import org.eclipse.edt.ide.core.internal.search.PartDeclarationInfo;
 import org.eclipse.edt.ide.core.search.IEGLSearchConstants;
@@ -51,6 +54,10 @@ public class EGLFunctionPartSearchProposalHandler extends EGLPartSearchProposalH
 		while(!(boundNode instanceof File)) {
 			if(boundNode instanceof NestedFunction) {
 				functionContainerPart = boundNode.getParent();
+			}else if(boundNode instanceof Handler || 
+					boundNode instanceof Service || 
+					boundNode instanceof Library){
+				functionContainerPart = boundNode;
 			}
 			boundNode = boundNode.getParent();
 		}

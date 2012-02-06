@@ -41,6 +41,7 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 	 * ONLY USEFUL IN CODE RUNNING WITHIN SPAN OF PROCESSBOUNDNODE METHOD BELOW
 	 */
 	private Node boundNode = null;
+	private static int invokeInArray = 66;
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.ide.ui.internal.contentassist.EGLAbstractReferenceCompletion#precompileContexts()
@@ -49,6 +50,9 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 		addContext("package a; function a() a="); //$NON-NLS-1$
 		addContext("package a; function a() a=("); //$NON-NLS-1$
 		addContext("package a; function a() a int="); //$NON-NLS-1$
+		addContext("package a; function a() a int=["); //$NON-NLS-1$
+		addContext("package a; program a type b{c=["); //$NON-NLS-1$
+		addContext("package a; program a type b{c="); //$NON-NLS-1$
 	}
 
 	/* (non-Javadoc)
@@ -58,6 +62,7 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 		final List proposals = new ArrayList();
 		final EGLAssignmentStatementReferenceCompletion thisCompletion = this;
 		final boolean[] isDone = new boolean[] {false};
+		final boolean[] isPropertySetting = new boolean[] {false};
 		final boolean[] isStringLiteral = new boolean[]{false};
 
 		if (isState(parseStack, ((Integer) validStates.get(0)).intValue())
@@ -83,15 +88,18 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 								if(lhBinding.isAnnotationBinding()) {
 									//We are completing the rhs of a property value
 									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((IAnnotationBinding) lhBinding));
+									isPropertySetting[0] = true;
 									isDone[0] = true;
-									return;
+//									return;
 								}
 								else if(lhBinding instanceof ClassFieldBinding && 
 										assignmentNode.getParent() != null &&								
-										assignmentNode.getParent() instanceof SettingsBlock) {  //added for RUI widget class fields
+										assignmentNode.getParent() instanceof SettingsBlock &&
+										parseStack.getCurrentState() != invokeInArray) {  //added for RUI widget class fields
 									proposals.addAll(new EGLPropertyValueProposalHandler(viewer, documentOffset, prefix, editor, thisCompletion, parseStack, boundNode).getProposals((ClassFieldBinding) lhBinding));
+									isPropertySetting[0] = true;
 									isDone[0] = true;
-									return;
+//									return;
 								}
 							}
 						}
@@ -129,8 +137,13 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 									boundNode).getProposals(EGLSystemWordProposalHandler.RETURNS, true));
 
 						//Get user function proposals with return value
-						proposals.addAll(
-							new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+						if(!isPropertySetting[0]){
+							proposals.addAll(
+									new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, true, boundNode).getProposals());
+						}else{
+							proposals.addAll(
+									new EGLFunctionPartSearchProposalHandler(viewer, documentOffset, prefix, editor, false, boundNode).getProposals());
+						}
 						
 						thisCompletion.boundNode = null;
 					}
