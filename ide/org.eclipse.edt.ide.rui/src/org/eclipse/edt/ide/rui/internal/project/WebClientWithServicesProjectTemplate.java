@@ -26,12 +26,13 @@ public class WebClientWithServicesProjectTemplate extends
 			final ProjectConfiguration eglProjConfiguration,
 			ISchedulingRule rule, List listOps) {
 		super.addGeneratorOperation(eglProjConfiguration, rule, listOps);
-		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, 
-				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVA_GENERATOR_ID}, rule);
-		listOps.add(op);
-		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, CLIENT), 
-			new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
-		listOps.add(op);
+		//base on design of Bug 362559, will not override the project compiler setting in package level
+//		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, 
+//				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVA_GENERATOR_ID}, rule);
+//		listOps.add(op);
+//		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, CLIENT), 
+//			new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
+//		listOps.add(op);
 	}	
 
 	private String getDefaultFolderName(ProjectConfiguration eglProjConfiguration, String name){
