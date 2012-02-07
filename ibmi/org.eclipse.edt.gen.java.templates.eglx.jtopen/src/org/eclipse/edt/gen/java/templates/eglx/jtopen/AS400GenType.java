@@ -1,6 +1,8 @@
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
+import org.eclipse.edt.gen.java.templates.JavaTemplate.TypeNameKind;
 import org.eclipse.edt.gen.java.templates.eglx.lang.TimestampTypeTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -84,12 +86,14 @@ public class AS400GenType {
 		}
 		else if(type instanceof ArrayType &&
 				(annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Array, ctx)) != null){
-			out.print("com.ibm.as400.access.AS400Array(");
+			out.print("org.eclipse.edt.java.jtopen.access.AS400Array(");
 			if(annot != null){
 				CommonUtilities.addAnntation(member, (Annotation)annot.getValue(Constants.subKey_elementTypeAS400Annotation), ctx);
 			}
 			genAS400Type(member, ((ArrayType)type).getElementType(), ctx, out);
 			out.print(", ");
+			ctx.invoke(JavaTemplate.genRuntimeTypeName, ((ArrayType)type).getElementType(), ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".class, ");
 			Integer elementCount = null;
 			if(annot != null){
 				elementCount = (Integer)annot.getValue(Constants.subKey_elementCount);
