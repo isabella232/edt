@@ -20,6 +20,12 @@ public interface CallStatement extends Statement {
 	
 	List<Expression> getArguments();
 	
+	Expression getUsing();
+	void setUsing(Expression value);
+	
+	LHSExpr getReturns();
+	void setReturns(LHSExpr value);
+	
 	Expression getCallback();
 	
 	void setCallback(Expression value);

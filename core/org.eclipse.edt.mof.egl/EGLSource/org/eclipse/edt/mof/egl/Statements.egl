@@ -38,10 +38,17 @@ externalType SetValuesStatement extends ExpressionStatement type MofClass
 end
 
 externalType CallStatement extends Statement type MofClass
+	function getUsing() returns (Expression);
+	function setUsing(value Expression);
+	function getReturns() returns(LHSExpr);
+	function setReturns(value LHSExpr);
+	
 	invocationTarget Expression {containment=true};
 	arguments Expression[] {containment=true};
+	usingExpression Expression {containment=true};
 	callback MemberAccess {containment=true};
 	errorCallback MemberAccess {containment=true};
+	returnsValue LHSExpr {containment = true};
 end
 
 externalType CaseStatement extends Statement type MofClass
