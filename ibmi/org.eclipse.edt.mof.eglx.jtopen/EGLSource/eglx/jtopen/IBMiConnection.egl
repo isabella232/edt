@@ -1,0 +1,7 @@
+package eglx.jtopen;
+
+import com.ibm.as400.access.AS400;
+
+externalType IBMiConnection type NativeType
+	function getAS400()returns(AS400);
+end

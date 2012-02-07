@@ -4,7 +4,7 @@
 
 <target name="init">    
     <echo message="processing ${pluginName}." />
-	<property name="eglBin" value="eglbin"/>
+	<property name="eglBin" value="EGLBin"/>
 </target>
 	
 <target name="Jarem" depends="init">	

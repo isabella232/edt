@@ -1,0 +1,9 @@
+package eglx.jtopen;
+
+import com.ibm.as400.access.AS400ConnectionPool;
+import com.ibm.as400.access.as400;
+
+externalType JTOpenConnections type JavaObject 
+ 	private constructor();
+ 	static function getAS400ConnectionPool()returns(AS400ConnectionPool);
+end

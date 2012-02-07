@@ -3,6 +3,6 @@ package eglx.jtopen.annotations;
 Record AS400Time type Annotation
 {	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
 }
-	ibmiFormat int = com.ibm.as400.access.AS400Time.FORMAT_ISO;
-	ibmiSeperator string?;
+	ibmiFormat any = com.ibm.as400.access.AS400Time.FORMAT_ISO;
+	ibmiSeparatorChar string?;
 end

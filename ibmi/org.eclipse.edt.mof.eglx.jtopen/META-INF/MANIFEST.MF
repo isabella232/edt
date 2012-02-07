@@ -4,8 +4,10 @@ Bundle-Name: EDT JTOpen MOF
 Bundle-SymbolicName: org.eclipse.edt.mof.eglx.jtopen
 Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-RegisterBuddy: org.eclipse.edt.mof
 Bundle-Vendor: Eclipse EGL Development Tools
-Require-Bundle: org.eclipse.edt.mof;bundle-version="0.7.0",
- org.eclipse.edt.mof.egl;bundle-version="0.7.0",
- org.eclipse.core.runtime;bundle-version="3.6.0"
-Export-Package: org.eclipse.edt.mof.eglx.jtopen
+Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.7.0",
+ org.eclipse.core.runtime;bundle-version="3.6.0",
+ org.eclipse.edt.mof;bundle-version="0.7.0"
+Export-Package: org.eclipse.edt.mof.eglx.jtopen,
+ org.eclipse.edt.mof.eglx.jtopen.impl

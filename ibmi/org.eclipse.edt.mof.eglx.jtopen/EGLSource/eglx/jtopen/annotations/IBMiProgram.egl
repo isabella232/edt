@@ -1,5 +1,6 @@
 package eglx.jtopen.annotations;
 
+import eglx.jtopen.IBMiConnection;
 import eglx.lang.resource;
 
 Record IBMiProgram type Annotation
@@ -9,7 +10,6 @@ Record IBMiProgram type Annotation
 	programName string;
 	libraryName string;
 	isServiceProgram boolean = false;
-	connectionMethod FunctionMemberRef;
 	connectionResource Resource?;
 	parameterAnnotations any?[];
 end
