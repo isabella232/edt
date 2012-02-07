@@ -98,6 +98,10 @@ ExternalType Widget type JavaScriptObject {
 	layoutData any? { @Property { getMethod = "getLayoutData", setMethod = "setLayoutData" } };
 	function getLayoutData() returns (any);
 	function setLayoutData(value any in);
+	
+	userData any? {@Property {getMethod = "getUserData", setMethod = "setUserData" } };
+	function getUserData() returns (any?);
+	function setUserData(value any? in);
 
 	tabIndex int { @Property { getMethod = "getTabIndex", setMethod = "setTabIndex" }, @VEProperty{category = "Accessibility"} };
 	function getTabIndex() returns (int);
