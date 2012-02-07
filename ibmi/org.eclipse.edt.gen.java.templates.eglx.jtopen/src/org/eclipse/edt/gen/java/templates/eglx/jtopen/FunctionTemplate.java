@@ -11,72 +11,57 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
 
 
-public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.FunctionTemplate implements Constants{
+public class FunctionTemplate extends JavaTemplate implements Constants{
 
-	@Override
-	public void preGen(Function function, Context ctx) {
-		super.preGen(function, ctx);
-		Annotation ibmiProgram = function.getAnnotation(signature_IBMiProgram);
-		if(ibmiProgram != null){
-			@SuppressWarnings("unchecked")
-			EList<Annotation> parameterAnnotationList = (EList<Annotation>)ibmiProgram.getValue(subKey_parameterAnnotations);
-			if(parameterAnnotationList != null){
-				for(int idx = 0; idx < parameterAnnotationList.size(); idx++){
-					Object annot = parameterAnnotationList.get(idx);
-					if(annot instanceof Annotation){
-						function.getParameters().get(idx).addAnnotation((Annotation)annot);
-					}
-					else{
-						FunctionParameter parameter = function.getParameters().get(idx);
-						ctx.invoke(preGenAS400Annotation, parameter.getType(), ctx, parameter);
-					}
+	private void addToContext(Context ctx, Function function){
+		//get the parameter annotations
+		@SuppressWarnings("unchecked")
+		EList<Annotation> parameterAnnotationList = (EList<Annotation>)function.getAnnotation(signature_IBMiProgram).getValue(subKey_parameterAnnotations);
+		if(parameterAnnotationList != null){
+			for(int idx = 0; idx < parameterAnnotationList.size(); idx++){
+				Object annot = parameterAnnotationList.get(idx);
+				if(annot instanceof Annotation){
+					CommonUtilities.addAnntation(function.getParameters().get(idx), (Annotation)annot, ctx);
 				}
 			}
 		}
 	}
+
 	public void genFunctionBody(Function function, Context ctx, TabbedWriter out)  {
 		Annotation ibmiProgram = function.getAnnotation(signature_IBMiProgram);
-		if(ibmiProgram == null){
-			super.genFunctionBody(function, ctx, out);
-			return;
-		}
 
+		addToContext(ctx, function);
+		
 		//convert parameters to AS400 objects
-		out.print("IBMiConnection ");
+		out.print("eglx.jtopen.IBMiConnection ");
 		out.print(as400ConnectionName);
-		out.print(" = (IBMiConnection)");
+		out.print(" = ");
 
-		MemberName connectionMethod = (MemberName)ibmiProgram.getValue(subKey_connectionMethod);
-		if(connectionMethod != null && connectionMethod.getMember() != null){
-			FunctionInvocation invoc = factory.createFunctionInvocation();
-			invoc.setTarget(connectionMethod.getMember());
-			ctx.invoke(genExpression, invoc, ctx, out);
-			out.println(";");
+		Annotation resource = (Annotation)ibmiProgram.getValue(subKey_connectionResource);
+		if(resource != null){
+			out.print("(eglx.jtopen.IBMiConnection)eglx.lang.SysLib.getResource(\"");
+			if(resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()){
+				out.print((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
+			}
+			out.print("\")");
 		}
 		else{
-			Annotation resource = (Annotation)ibmiProgram.getValue(subKey_connectionResource);
-			if(resource != null){
-				out.print("SysLib.getResource(\"");
-				if(resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()){
-					out.print((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
-				}
-				out.println("\");");
-			}
+			out.print("null");
 		}
+		out.println(";");
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
 
 		String libraryName = (String)ibmiProgram.getValue(subKey_libraryName);
@@ -96,7 +81,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		if(function.getType() != null){
 			out.print("Integer eze$Return = ");
 		}
-		out.print("IBMiProgramCall.ezeRunProgram(\"");
+		out.print("org.eclipse.edt.java.jtopen.IBMiProgramCall.ezeRunProgram(\"");
 		out.print(programName);
 	    // Set the procedure to call in the service program.
 		if(isServiceProgram){
@@ -120,14 +105,14 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		}
 
 		//new ParameterTypeKind[] {ParameterTypeKind.INOUT, ParameterTypeKind.INOUT, ParameterTypeKind.INOUT
-		out.print("new IBMiProgramCall.ParameterTypeKind[] {");
+		out.print("new org.eclipse.edt.java.jtopen.IBMiProgramCall.ParameterTypeKind[] {");
 		boolean addComma = false;
 		for(FunctionParameter param : function.getParameters()){
 			if(addComma){
-				out.print(", IBMiProgramCall.ParameterTypeKind.");
+				out.print(", org.eclipse.edt.java.jtopen.IBMiProgramCall.ParameterTypeKind.");
 			}
 			else{
-				out.print("IBMiProgramCall.ParameterTypeKind.");
+				out.print("org.eclipse.edt.java.jtopen.IBMiProgramCall.ParameterTypeKind.");
 			}
 			if(param.getParameterKind() == ParameterKind.PARM_IN){
 				out.print("IN");
@@ -144,45 +129,46 @@ public class FunctionTemplate extends org.eclipse.edt.gen.java.templates.Functio
 		out.print("}, new Object[] {");
 		ctx.foreach(function.getParameters(), ',', genName, ctx, out);
 		out.print("}, "); 
+		out.print("new com.ibm.as400.access.AS400DataType[]{"); 
+		addComma = false;
+		for(FunctionParameter parameter : function.getParameters()){
+			if(addComma){
+				out.print(", "); 
+			}
+			AS400GenType.INSTANCE.genAS400Type(parameter, parameter.getType(), ctx, out);
+			addComma = true;
+		}
+		out.print("}, "); 
 		out.print(as400ConnectionName);
 		out.print(", \""); 
 		ctx.invoke(genName, function, ctx, out);
 		out.println("\", this);"); 
-		ctx.invoke(genArrayResize, function, ctx, out);
 		
-		MemberName returnConnectionMethod = (MemberName)ibmiProgram.getValue(subKey_returnConnectionMethod);
-		if(returnConnectionMethod != null && returnConnectionMethod.getMember() != null){
-			try {
-				FunctionInvocation invoc = factory.createFunctionInvocation();
-				MemberName arg = factory.createMemberName();
-				Field f = factory.createField();
-				f.setName(as400ConnectionName);
-				f.setType((Type)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_IBMiConnection));
-				arg.setId(f.getName());
-				arg.setMember(f);
-				invoc.setTarget(returnConnectionMethod.getMember());
-				invoc.getArguments().add(arg);
-				ctx.invoke(genExpression, invoc, ctx, out);
-				out.println(";");
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		else{
-			out.print("eglx.jtopen.JTOpenConnections.getAS400ConnectionPool().returnConnectionToPool(");
-			out.print(as400ConnectionName);
-			out.println(".getAS400());");
-		}
+		out.print("eglx.jtopen.JTOpenConnections.getAS400ConnectionPool().returnConnectionToPool(");
+		out.print(as400ConnectionName);
+		out.println(".getAS400());");
+
+		ctx.invoke(genArrayResize, function, ctx, out);
 		
 		if(function.getType() != null){
 			out.println("return eze$Return;");
 		}
 	}
-	
+	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
+		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
+		@SuppressWarnings("unchecked")
+		List<String> generatedHelpers = (List<String>)ctx.getAttribute(ctx.getClass(), subKey_ibmiGeneratedHelpers);
+		if(generatedHelpers == null){
+			generatedHelpers = new ArrayList<String>();
+			ctx.putAttribute(ctx.getClass(), subKey_ibmiGeneratedHelpers, generatedHelpers);
+		}
+		for(FunctionParameter parameter : function.getParameters()){
+			AS400GenHelper.INSTANCE.genHelperClass(parameter.getType(), ctx, out);
+		}
+	}	
 	public void genArrayResize(Function function, Context ctx, TabbedWriter out){
 		for(FunctionParameter parameter : function.getParameters()){
-			ctx.invoke(genArrayResize, parameter.getType(), ctx, out, parameter, function);
+			AS400GenArrayResize.INSTANCE.genArrayResizeParameter(parameter, ctx, out, function);
 		}
 	}
 }

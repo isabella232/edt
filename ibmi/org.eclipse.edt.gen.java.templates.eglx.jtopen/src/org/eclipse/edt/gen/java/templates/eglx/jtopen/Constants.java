@@ -6,28 +6,37 @@ public interface Constants {
 	static final String genDecimals = "genDecimals";
 	static final String genLength = "genLength";
 	static final String genPattern = "genPattern";
-	static final String preGenAS400Annotation = "preGenAS400Annotation"; 
-	static final String getAS400FunctionParameterAnnotation = "getAS400FunctionParameterAnnotation"; 
+	static final String genHelperClassName = "genHelperClassName"; 
+	static final String genHelperClass = "genHelperClass"; 
+	static final String genAS400Type = "genAS400Type"; 
+	static final String genAS400TypeConstructorOptions = "genAS400TypeConstructorOptions"; 
 	
 	//signatures
 	static final String signature_IBMiProgram = "eglx.jtopen.annotations.IBMiProgram";
 	static final String signature_ExternalName = "eglx.lang.ExternalName";
-	static final String signature_AS400Array = "eglx.jtopen.annotations.AS400Array";
-	static final String signature_AS400Date = "eglx.jtopen.annotations.AS400Date";
 	static final String signature_IBMiConnection = "eglx.jtopen.IBMiConnection";
+	static final String signature_AS400Array = "eglx.jtopen.annotations.AS400Array";
+	static final String signature_AS400Bin1 = "eglx.jtopen.annotations.AS400Bin1";
+	static final String signature_AS400Bin2 = "eglx.jtopen.annotations.AS400Bin2";
+	static final String signature_AS400Bin4 = "eglx.jtopen.annotations.AS400Bin4";
+	static final String signature_AS400Bin8 = "eglx.jtopen.annotations.AS400Bin8";
+	static final String signature_AS400Date = "eglx.jtopen.annotations.AS400Date";
 	static final String signature_AS400DecimalFloat = "eglx.jtopen.annotations.AS400DecimalFloat";
 	static final String signature_AS400DecimalPacked = "eglx.jtopen.annotations.AS400DecimalPacked";
 	static final String signature_AS400DecimalZoned = "eglx.jtopen.annotations.AS400DecimalZoned";
-	static final String signature_AS400Time = "eglx.jtopen.annotations.AS400Time";
+	static final String signature_AS400Float4 = "eglx.jtopen.annotations.AS400Float4";
+	static final String signature_AS400Float8 = "eglx.jtopen.annotations.AS400Float8";
 	static final String signature_AS400Text = "eglx.jtopen.annotations.AS400Text";
+	static final String signature_AS400Time = "eglx.jtopen.annotations.AS400Time";
 	static final String signature_AS400Timestamp = "eglx.jtopen.annotations.AS400Timestamp";
+	static final String signature_AS400UnsignedBin1 = "eglx.jtopen.annotations.AS400UnsignedBin1";
+	static final String signature_AS400UnsignedBin2 = "eglx.jtopen.annotations.AS400UnsignedBin2";
+	static final String signature_AS400UnsignedBin4 = "eglx.jtopen.annotations.AS400UnsignedBin4";
 	
 	//Annotation fields
-	static final String subKey_connectionMethod = "connectionMethod";
-	static final String subKey_returnConnectionMethod = "returnConnectionMethod";
 	static final String subKey_parameterAnnotations = "parameterAnnotations";
 	static final String subKey_ibmiFormat = "ibmiFormat";
-	static final String subKey_ibmiSeperator = "ibmiSeperator";
+	static final String subKey_ibmiSeparatorChar = "ibmiSeparatorChar";
 	static final String subKey_eglPattern = "eglPattern";
 	static final String subKey_connectionResource = "connectionResource";
 	static final String subKey_isServiceProgram = "isServiceProgram";
@@ -38,10 +47,12 @@ public interface Constants {
 	public static final String subKey_preserveTrailingSpaces = "preserveTrailingSpaces";
 	public static final String subKey_decimals = "decimals";
 	public static final String subKey_elementCount = "elementCount";
-	public static final String subKey_validElementCountVariable = "validElementCountVariable";
+	public static final String subKey_validElementCountVariable = "returnCountVariable";
 	public static final String subKey_elementTypeAS400Annotation = "elementTypeAS400Annotation";
+	static final String subKey_ibmiGeneratedHelpers = "ibmiGeneratedHelpers";
+	static final String subKey_ibmiAnnotations = "ibmiAnnotations";
 	
 	//Misc constants
 	public static final String as400ConnectionName = "ezeIBMiConn";
-	static final String PART_HAS_IBMI_FUNCTION = "key_PartHasIbmiFunction";
+	public static final String HELPER_SUFFIX = "_IBMiStructure";
 }
