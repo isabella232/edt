@@ -119,9 +119,14 @@ public class CreateCallbackFunctionHandler extends EGLHandler {
 					Expression serviceFunctionExpr = callStatement.getInvocationTarget();
 					
 					Expression callbackExpr = null, errCallbackExpr =null;
-					CallbackTarget callbackTgt = callStatement.getCallbackTarget();
-					CallbackTarget errCallbackTgt = callStatement.getErrorCallbackTarget();
 					
+					CallbackTarget callbackTgt = null;
+					CallbackTarget errCallbackTgt = null;
+					if (callStatement.getCallSynchronizationValues() != null) {
+						callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+						errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+					}
+
 					if(callbackTgt != null)
 						callbackExpr = callbackTgt.getExpression();				
 					if(errCallbackTgt != null)
@@ -200,9 +205,11 @@ public class CreateCallbackFunctionHandler extends EGLHandler {
 						int endingOffset = callStatement.getOffset() + callStatement.getLength();
 						//only care about the call statement that the user currently has the cursor on
 						if(callStatement.getOffset()<= cursorOffset && cursorOffset<=endingOffset){
-							if(callStatement.getCallbackTarget() != null || callStatement.getErrorCallbackTarget() != null){
-								//only enable this action, if cursor is in call statement and has callback or error call back
-								setEnabled(true);
+							if (callStatement.getCallSynchronizationValues() != null) {
+								if(callStatement.getCallSynchronizationValues().getReturnTo() != null || callStatement.getCallSynchronizationValues().getOnException() != null){
+									//only enable this action, if cursor is in call statement and has callback or error call back
+									setEnabled(true);
+								}
 							}
 						}					
 						return false;

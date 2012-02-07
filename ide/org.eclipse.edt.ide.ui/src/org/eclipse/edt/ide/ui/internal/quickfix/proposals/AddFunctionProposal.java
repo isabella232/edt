@@ -143,10 +143,16 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 				int callEndOffset = callStatement.getOffset() + callStatement.getLength();
 				if(callStatement.getOffset()<= errorOffset && errorOffset<= callEndOffset ){
 					Expression serviceFunctionExpr = callStatement.getInvocationTarget();
-					CallbackTarget callbackTgt = callStatement.getCallbackTarget();
-					Expression callbackExpr = null, errCallbackExpr =null;
-					CallbackTarget errCallbackTgt = callStatement.getErrorCallbackTarget();
+					CallbackTarget callbackTgt = null;
+					CallbackTarget errCallbackTgt = null;
 					
+					if (callStatement.getCallSynchronizationValues() != null) {
+						callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+						errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+					}
+
+					Expression callbackExpr = null, errCallbackExpr =null;
+
 					if(callbackTgt != null){
 						callbackExpr = callbackTgt.getExpression();
 					}
