@@ -453,10 +453,8 @@ public class TypeCompatibilityUtil {
 			typesMatch = ITypeBinding.DELEGATE_BINDING == sourceType.getKind() ||
             			 ITypeBinding.FUNCTION_BINDING == sourceType.getKind();
 		}
-		else if( (ITypeBinding.SERVICE_BINDING == sourceType.getKind() ||
-				  ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) &&
-				 (ITypeBinding.INTERFACE_BINDING == targetType.getKind() ||
-				  ITypeBinding.SERVICE_BINDING == targetType.getKind())) {
+		else if( extendsInterfaces(sourceType) &&
+				 extendsInterfaces(targetType)) {
 			List implementedInterfaces = getExtendedInterfaces(sourceType);
 			
 			for( Iterator iter = implementedInterfaces.iterator(); iter.hasNext() && !typesMatch;) {
@@ -604,6 +602,28 @@ public class TypeCompatibilityUtil {
 	        	 null,
 	        	 compilerOptions);
 	}
+	
+	private static boolean extendsInterfaces(ITypeBinding tBinding) {
+		
+		if (!Binding.isValidBinding(tBinding)) {
+			return false;
+		}
+		
+		if(ITypeBinding.SERVICE_BINDING == tBinding.getKind()) {
+			return true;
+		}
+
+		if(ITypeBinding.HANDLER_BINDING == tBinding.getKind()) {
+			return true;
+		}
+
+		if(ITypeBinding.INTERFACE_BINDING == tBinding.getKind()) {
+			return true;
+		}
+
+		return false;
+	}
+
 	
 	private static List getExtendedInterfaces(ITypeBinding tBinding) {
 		if(ITypeBinding.SERVICE_BINDING == tBinding.getKind()) {
@@ -876,10 +896,8 @@ public class TypeCompatibilityUtil {
 			}
 		}
 
-		if( (ITypeBinding.SERVICE_BINDING == sourceType.getKind() ||
-		     ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) &&
-			 (ITypeBinding.INTERFACE_BINDING == targetType.getKind() ||
-			  ITypeBinding.SERVICE_BINDING == targetType.getKind())) {
+		if( extendsInterfaces(sourceType) &&
+			extendsInterfaces(targetType)) {
 			List implementedInterfaces = getExtendedInterfaces(sourceType);
 			boolean typesMatch = false;
 			
@@ -931,7 +949,46 @@ public class TypeCompatibilityUtil {
 			}
 		}
 		
+		if (compatibilityAnnotationMatches(sourceType, targetType)) {
+			return true;
+		}
+		
+		if (ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() && ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
+			return ArrayElementTypesAreReferenceCompatible(((ArrayTypeBinding)targetType).getElementType(), ((ArrayTypeBinding)sourceType).getElementType(), compilerOptions);
+		}
+		
 		return false;
+	}
+	
+	private static boolean ArrayElementTypesAreReferenceCompatible(ITypeBinding targetType, ITypeBinding sourceType, ICompilerOptions compilerOptions) {
+		
+		//if either is invalid, pretend they are compatible to avoid excess error messages
+		if (!Binding.isValidBinding(targetType) || !Binding.isValidBinding(sourceType)) {
+			return true;
+		}
+		
+		if (ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() && ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
+			return ArrayElementTypesAreReferenceCompatible(((ArrayTypeBinding)targetType).getElementType(), ((ArrayTypeBinding)sourceType).getElementType(), compilerOptions);
+		}
+		
+		// both must be reference types or value types
+		if (targetType.isReference() != sourceType.isReference()) {
+			return false;
+		}
+		
+		//both element types must be nullable or not nullable
+		if (targetType.isNullable() != sourceType.isNullable()) {
+			return false;
+		}
+		
+		if (targetType.isReference()) {		
+			return isReferenceCompatible(sourceType, targetType, compilerOptions);
+		}
+		
+		else {
+			//value types require conversion, so they are not compatible
+			return false;
+		}
 	}
 	
 	public static boolean areCompatibleExceptions(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
