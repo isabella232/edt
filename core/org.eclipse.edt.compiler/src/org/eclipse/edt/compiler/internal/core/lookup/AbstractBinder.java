@@ -91,6 +91,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     protected IDependencyRequestor dependencyRequestor;
     protected IPartBinding currentBinding;
     protected ICompilerOptions compilerOptions;
+    protected boolean bindingCallTarget;
         
     public AbstractBinder(Scope currentScope, IPartBinding currentBinding, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
         this.currentScope = currentScope;
@@ -397,6 +398,10 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         		result = typeBinding.findPublicData(identifier);
         	}
         }
+    	else if (bindingCallTarget && typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING || typeBinding.getKind() == ITypeBinding.SERVICE_BINDING) {
+    		//Call target can reference non-static functions in a static way
+    		result = typeBinding.findData(identifier);;
+    	}
         else if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING ||
         		typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
         	result = typeBinding.findData(identifier);

@@ -68,7 +68,15 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public boolean visit(CallbackTarget callbackTarget) {
 		return false;
 	}
-	
+
+	public boolean visit(CallReturns callReturns) {
+		return false;
+	}
+
+	public boolean visit(CallSynchronizationValues callSync) {
+		return false;
+	}
+
 	public boolean visit(CaseStatement caseStatement) {
 		return false;
 	}
@@ -568,6 +576,10 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(CallStatement callStatement) {}
 	
 	public void endVisit(CallbackTarget callbackTarget) {}
+
+	public void endVisit(CallReturns callReturns) {}
+
+	public void endVisit(CallSynchronizationValues callSync) {}
 	
 	public void endVisit(CaseStatement caseStatement) {}
 	

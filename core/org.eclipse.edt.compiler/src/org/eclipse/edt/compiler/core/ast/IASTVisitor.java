@@ -54,7 +54,13 @@ public interface IASTVisitor {
 	
 	boolean visit(CallbackTarget callbackTarget);
 	void endVisit(CallbackTarget callbackTarget);
-	
+
+	boolean visit(CallReturns callReturns);
+	void endVisit(CallReturns callReturns);
+
+	boolean visit(CallSynchronizationValues callSync);
+	void endVisit(CallSynchronizationValues callsync);
+
 	boolean visit(CaseStatement caseStatement);
 	void endVisit(CaseStatement caseStatement);
 	

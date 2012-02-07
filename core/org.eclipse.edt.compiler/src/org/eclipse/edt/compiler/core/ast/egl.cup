@@ -94,7 +94,10 @@ nonterminal Assignment assignment;
 nonterminal FunctionParameter.AttrType attrTypeOpt;
 nonterminal List bindOpt;
 nonterminal List callParametersOpt;
-nonterminal CallbackTarget callReturnToOpt, callOnExceptionOpt;
+nonterminal CallSynchronizationValues callSynchronizationOpt;
+nonterminal CallbackTarget callReturnTo, callOnException;
+nonterminal Expression callUsingOpt;
+nonterminal CallReturns callReturns;
 nonterminal String charPrimitiveSpecOpt;
 nonterminal classContent;
 nonterminal handlerContent;
@@ -524,11 +527,11 @@ stmt
 	|	name:name1 settingsBlock:settingsBlock1 SEMI:semi1 // Set values statement
 	{: RESULT = new SetValuesStatement(new SetValuesExpression(name1, settingsBlock1, name1left, settingsBlock1right), name1left, semi1right); :}
 	
-	|	CALL:call1 name:expr1 callParametersOpt:parametersOpt callReturnToOpt:callReturnTo callOnExceptionOpt:onExcept1 settingsBlockOpt:settingsBlock SEMI:semi1
-	{: RESULT = new CallStatement(expr1, parametersOpt, settingsBlock, callReturnTo, onExcept1, call1left, semi1right); :}
+	|	CALL:call1 name:expr1 callParametersOpt:parametersOpt callUsingOpt:callUsing callSynchronizationOpt:callSynchronization settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new CallStatement(expr1, parametersOpt, callUsing, callSynchronization, settingsBlock, call1left, semi1right); :}
 	
-	|	CALL:call1 primaryNoNew:expr1 callParametersOpt:parametersOpt callReturnToOpt:callReturnTo callOnExceptionOpt:onExcept1 settingsBlockOpt:settingsBlock SEMI:semi1
-	{: RESULT = new CallStatement(expr1, parametersOpt, settingsBlock, callReturnTo, onExcept1, call1left, semi1right); :}
+	|	CALL:call1 primaryNoNew:expr1 callParametersOpt:parametersOpt callUsingOpt:callUsing callSynchronizationOpt:callSynchronization settingsBlockOpt:settingsBlock SEMI:semi1
+	{: RESULT = new CallStatement(expr1, parametersOpt, callUsing, callSynchronization, settingsBlock, call1left, semi1right); :}
 	
 	|	GOTO:goto1 ID:id1 SEMI:semi1
 	{: RESULT = new GotoStatement(id1, goto1left, semi1right); :}
@@ -713,18 +716,45 @@ stepOpt
 	{: RESULT = new ForStatement.DecrementForStep(expr1); :}
 	;
 
-callReturnToOpt
+callUsingOpt
 	::=
-	| RETURNING:returning1 TO name:expr1
+	| USING expr:expr1
+	{: RESULT = expr1; :}
+	;
+	
+callSynchronizationOpt
+	::=
+	| callReturnTo:callReturnTo1
+	{: RESULT = new CallSynchronizationValues(callReturnTo1, null, null, callReturnTo1left, callReturnTo1right); :}
+
+	| callOnException:callOnException1
+	{: RESULT = new CallSynchronizationValues(null, callOnException1, null, callOnException1left, callOnException1right); :}
+
+	| callReturnTo:callReturnTo1 callOnException:callOnException1
+	{: RESULT = new CallSynchronizationValues(callReturnTo1, callOnException1, null, callReturnTo1left, callOnException1right); :}
+	
+	| callReturns:callReturns1
+	{: RESULT = new CallSynchronizationValues(null, null, callReturns1, callReturns1left, callReturns1right); :}	
+	;
+		
+callReturns
+	::=
+	RETURNS LPAREN:lparen1 lvalue:lvalue1 RPAREN:rparen1
+	{: RESULT =  new CallReturns(lvalue1, lparen1left, rparen1right); :}
+	;
+	
+callReturnTo
+	::=
+	RETURNING:returning1 TO name:expr1
 	{: RESULT = new CallbackTarget(expr1, returning1left, expr1right); :}
 	
 	|	RETURNING:returning1 TO primaryNoNew:expr1
 	{: RESULT = new CallbackTarget(expr1, returning1left, expr1right); :}
 	;
 
-callOnExceptionOpt
+callOnException
 	::=
-	| ONEXCEPTION:onexception1 name:expr1
+	ONEXCEPTION:onexception1 name:expr1
 	{: RESULT = new CallbackTarget(expr1, onexception1left, expr1right); :}
 	
 	| ONEXCEPTION:onexception1 primaryNoNew:expr1

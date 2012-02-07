@@ -180,13 +180,25 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				stmt.getArguments().add((Expression)stack.pop());
 			}
 		}
-		if (callStatement.getCallbackTarget() != null) {
-			callStatement.getCallbackTarget().accept(this);
-			stmt.setCallback((Expression)stack.pop());
+		
+		if (callStatement.getUsing() != null) {
+			callStatement.getUsing().accept(this);
+			stmt.setUsing((Expression)stack.pop());
 		}
-		if (callStatement.getErrorCallbackTarget() != null) {
-			callStatement.getErrorCallbackTarget().accept(this);
-			stmt.setErrorCallback((Expression)stack.pop());
+
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
+				stmt.setCallback((Expression)stack.pop());
+			}
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				callStatement.getCallSynchronizationValues().getOnException().accept(this);
+				stmt.setErrorCallback((Expression)stack.pop());
+			}
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+				callStatement.getCallSynchronizationValues().getReturns().accept(this);
+				stmt.setReturns((LHSExpr)stack.pop());
+			}
 		}
 		setElementInformation(callStatement, stmt);
 		stack.push(stmt);

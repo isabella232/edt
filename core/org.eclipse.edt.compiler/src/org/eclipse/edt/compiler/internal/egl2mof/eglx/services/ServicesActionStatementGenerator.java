@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.egl2mof.AbstractIOStatementGenerator;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -45,13 +46,25 @@ public class ServicesActionStatementGenerator extends AbstractIOStatementGenerat
 				stmt.getArguments().add((Expression)stack.pop());
 			}
 		}
-		if (callStatement.getCallbackTarget() != null) {
-			callStatement.getCallbackTarget().accept(this);
-			stmt.setCallback((Expression)stack.pop());
+
+		if (callStatement.getUsing() != null) {
+			callStatement.getUsing().accept(this);
+			stmt.setUsing((Expression)stack.pop());
 		}
-		if (callStatement.getErrorCallbackTarget() != null) {
-			callStatement.getErrorCallbackTarget().accept(this);
-			stmt.setErrorCallback((Expression)stack.pop());
+		
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
+				stmt.setCallback((Expression)stack.pop());
+			}
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				callStatement.getCallSynchronizationValues().getOnException().accept(this);
+				stmt.setErrorCallback((Expression)stack.pop());
+			}
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+				callStatement.getCallSynchronizationValues().getReturns().accept(this);
+				stmt.setReturns((LHSExpr)stack.pop());
+			}
 		}
 		setElementInformation(callStatement, stmt);
 		stack.push(stmt);

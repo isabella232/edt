@@ -72,7 +72,15 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	public boolean visit(CallbackTarget callbackTarget) {
 		return visitNode( callbackTarget );
 	}
-	
+
+	public boolean visit(CallReturns callReturns) {
+		return visitNode( callReturns );
+	}
+
+	public boolean visit(CallSynchronizationValues callSynch) {
+		return visitNode( callSynch );
+	}
+
 	public boolean visit(CaseStatement caseStatement) {
 		return visitNode( caseStatement );
 	}
@@ -596,7 +604,15 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	public void endVisit(CallbackTarget callbackTarget) {
 		 endVisitNode( callbackTarget );
 	}
-	
+
+	public void endVisit(CallReturns callReturns) {
+		 endVisitNode( callReturns );
+	}
+
+	public void endVisit(CallSynchronizationValues callSynch) {
+		 endVisitNode( callSynch );
+	}
+
 	public void endVisit(CaseStatement caseStatement) {
 		 endVisitNode( caseStatement );
 	}

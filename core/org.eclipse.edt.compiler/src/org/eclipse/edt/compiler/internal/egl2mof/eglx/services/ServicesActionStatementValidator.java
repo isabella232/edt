@@ -42,7 +42,9 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 	private void validateServiceFunctionCall(CallStatement callStatement) {
 		
 		//if a callback or error callback is specified, the target must point to a function
-		if (callStatement.getErrorCallbackTarget() != null || callStatement.getCallbackTarget() != null) {
+		if (callStatement.getCallSynchronizationValues() != null && 
+				(callStatement.getCallSynchronizationValues().getOnException() != null || 
+				 callStatement.getCallSynchronizationValues().getReturnTo() != null)) {
 			ITypeBinding type = callStatement.getInvocationTarget().resolveTypeBinding();
 			if (!Binding.isValidBinding(type) || type.getKind() != ITypeBinding.FUNCTION_BINDING) {
 				//error...target must be a function if callback or error routine specified
@@ -72,17 +74,19 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 			}
 			
 			//check to make sure a callback is specified
-			if (callStatement.getCallbackTarget() == null) {
+			if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
 				problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {});
 			}
 
-			//validate callback/error routine
-			if (callStatement.getCallbackTarget() != null) {
-				validateCallback(callStatement, callStatement.getCallbackTarget().getExpression(), false, callStatement.getInvocationTarget());
+			if (callStatement.getCallSynchronizationValues() != null) {
+				//validate callback/error routine
+				if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+					validateCallback(callStatement, callStatement.getCallSynchronizationValues().getReturnTo().getExpression(), false, callStatement.getInvocationTarget());
+				}
+				if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+					validateCallback(callStatement, callStatement.getCallSynchronizationValues().getOnException().getExpression(), true, callStatement.getInvocationTarget());
+				}		
 			}
-			if (callStatement.getErrorCallbackTarget() != null) {
-				validateCallback(callStatement, callStatement.getErrorCallbackTarget().getExpression(), true, callStatement.getInvocationTarget());
-			}		
 			
 		}
 	}

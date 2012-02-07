@@ -35,12 +35,12 @@ public class CallStatement extends Statement {
 	private Expression expr;
 	private List exprs;	// List of Expressions
 	private SettingsBlock settingsBlockOpt;
-	private CallbackTarget callbackOpt;
-	private CallbackTarget errorCallbackOpt;
+	private Expression usingOpt;
+	private CallSynchronizationValues callSyncOpt;
 	
 	private CallStatementBinding statementBinding;
 
-	public CallStatement(Expression expr, List exprs, SettingsBlock settingsBlockOpt, CallbackTarget callbackOpt, CallbackTarget errorCallbackOpt, int startOffset, int endOffset) {
+	public CallStatement(Expression expr, List exprs, Expression usingOpt, CallSynchronizationValues callSyncOpt, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		/*
@@ -65,16 +65,16 @@ public class CallStatement extends Statement {
 			settingsBlockOpt.setParent(this);
 		}
 		
-		if(callbackOpt != null){
-			this.callbackOpt = callbackOpt;
-			this.callbackOpt.setParent(this);
+		if (usingOpt != null) {
+			this.usingOpt = usingOpt;
+			this.usingOpt.setParent(this);
 		}
 		
-		if(errorCallbackOpt != null){
-			this.errorCallbackOpt = errorCallbackOpt;
-			this.errorCallbackOpt.setParent(this);
+		if(callSyncOpt != null){
+			this.callSyncOpt = callSyncOpt;
+			this.callSyncOpt.setParent(this);
 		}
-		
+				
 	}
 	
 	public Expression getInvocationTarget() {
@@ -111,14 +111,14 @@ public class CallStatement extends Statement {
 		return settingsBlockOpt;
 	}
 	
-	public CallbackTarget getCallbackTarget(){
-		return callbackOpt;
+	public CallSynchronizationValues getCallSynchronizationValues(){
+		return callSyncOpt;
 	}
-	
-	public CallbackTarget getErrorCallbackTarget() {
-		return errorCallbackOpt;
+
+	public Expression getUsing(){
+		return usingOpt;
 	}
-	
+
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -126,14 +126,14 @@ public class CallStatement extends Statement {
 			if(exprs != null) {
 				acceptChildren(visitor, exprs);	
 			}			
+			if(usingOpt != null){
+				usingOpt.accept(visitor);
+			}
+			if(callSyncOpt != null){
+				callSyncOpt.accept(visitor);
+			}
 			if(settingsBlockOpt != null) {
 				settingsBlockOpt.accept(visitor);
-			}
-			if(callbackOpt != null){
-				callbackOpt.accept(visitor);
-			}
-			if(errorCallbackOpt != null){
-				errorCallbackOpt.accept(visitor);
 			}
 		}
 		visitor.endVisit(this);
@@ -142,9 +142,9 @@ public class CallStatement extends Statement {
 	protected Object clone() throws CloneNotSupportedException {
 		List newArguments = exprs != null ? cloneList(exprs) : null;
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
-		CallbackTarget newCallbackOpt = callbackOpt != null ? (CallbackTarget)callbackOpt.clone() : null;
-		CallbackTarget newErrorCallbackOpt = errorCallbackOpt != null ? (CallbackTarget)errorCallbackOpt.clone() : null;
-		return new CallStatement((Expression)expr.clone(), newArguments, newSettingsBlockOpt, newCallbackOpt, newErrorCallbackOpt, getOffset(), getOffset() + getLength());
+		Expression newUsingOpt = usingOpt != null ? (Expression)usingOpt.clone() : null;
+		CallSynchronizationValues newCallSyncOpt = callSyncOpt != null ? (CallSynchronizationValues)callSyncOpt.clone() : null;
+		return new CallStatement((Expression)expr.clone(), newArguments, newUsingOpt, newCallSyncOpt, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 	
 	public CallStatementBinding getStatementBinding() {

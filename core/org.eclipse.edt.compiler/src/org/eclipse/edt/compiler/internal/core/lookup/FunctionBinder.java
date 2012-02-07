@@ -346,9 +346,12 @@ public class FunctionBinder extends DefaultBinder {
         callStatement.setStatementBinding(callStatementBinding);
         
 		try {
+			bindingCallTarget = true;
 			bindInvocationTarget(callStatement.getInvocationTarget(), true);
 		} catch (ResolutionException e) {
 			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+		} finally {
+			bindingCallTarget = false;
 		}
 		
 		if(callStatement.hasArguments()) {
@@ -361,12 +364,22 @@ public class FunctionBinder extends DefaultBinder {
 			callStatement.getSettingsBlock().accept(this);
 		}
 		
-		if (callStatement.getCallbackTarget() != null) {
-			callStatement.getCallbackTarget().accept(this);
+		if (callStatement.getUsing() != null) {
+			callStatement.getUsing().accept(this);
 		}
 		
-		if (callStatement.getErrorCallbackTarget() != null) {
-			callStatement.getErrorCallbackTarget().accept(this);
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+				callStatement.getCallSynchronizationValues().getReturns().accept(this);
+			}
+			
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
+			}
+
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				callStatement.getCallSynchronizationValues().getOnException().accept(this);
+			}
 		}
 		
 		statementBinding = null;
