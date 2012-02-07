@@ -133,10 +133,14 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		out.print("\"");
 	}
 
-	protected void generateOptions(TimestampType type, Context ctx, TabbedWriter out) {
+	public void generateOptions(TimestampType type, Context ctx, TabbedWriter out) {
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
 			pattern = type.getPattern();
+		generateOptions(type, ctx, out, pattern);
+	}
+
+	public void generateOptions(Type type, Context ctx, TabbedWriter out, String pattern) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".");
 		out.print(getStartPattern(pattern));
