@@ -29,15 +29,21 @@ public class IBMiProgramCall {
 
 	private static final long serialVersionUID = 1L;
 	public enum ParameterTypeKind{IN, INOUT, OUT};
-	public static Integer ezeRunProgram(final String programName, final String procedureName, final boolean isServiceProgram, final boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, final Object[] parameters, final IBMiConnection connection, final String methodName, final ExecutableBase caller){
-		AS400DataType[] ezeAS400DataConverters = new AS400DataType[parameters.length];
+	public static Integer ezeRunProgram(final String programName, 
+									final String procedureName, final 
+									boolean isServiceProgram, final 
+									boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, 
+									final Object[] parameters,
+									AS400DataType[] ezeAS400DataConverters,
+									final IBMiConnection connection, 
+									final String methodName, final 
+									ExecutableBase caller){
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for(int idx = 0; idx < parameters.length; idx++){
 			parameterTypes[idx] = parameters[idx].getClass();
 		}
 		ProgramCall ezeCall = null;
 		try{
-			List<List<Annotation>> annotations = getParameterAnnotations(methodName, parameterTypes, caller);
 			if(isServiceProgram){
 				ezeCall = new ServiceProgramCall(connection.getAS400());
 				ezeCall.setProgram(programName);
@@ -48,7 +54,6 @@ public class IBMiProgramCall {
 				ezeCall.setProgram(programName);
 			}
 			for(int idx = 0; idx < parameters.length; idx++){
-				ezeAS400DataConverters[idx] = AS400Converter.createAS400DataType(parameters[idx], annotations.get(idx), connection.getAS400());
 				if(parameterTypeKinds[idx] == ParameterTypeKind.IN){
 					ezeCall.addParameter(new ProgramParameter(ProgramParameter.PASS_BY_VALUE, ezeAS400DataConverters[idx].toBytes(AS400Converter.convertToObjects(parameters[idx])), 0));
 				}

@@ -1,55 +1,16 @@
 package org.eclipse.edt.java.jtopen;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
-import org.eclipse.edt.java.jtopen.access.AS400Date;
-import org.eclipse.edt.java.jtopen.access.AS400Text;
-import org.eclipse.edt.java.jtopen.access.AS400Time;
-import org.eclipse.edt.java.jtopen.access.AS400Timestamp;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
-import org.eclipse.edt.javart.json.Json;
 import org.eclipse.edt.javart.resources.ExecutableBase;
-import org.eclipse.edt.javart.util.TimestampIntervalMask;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
-import com.ibm.as400.access.AS400;
-import com.ibm.as400.access.AS400Array;
-import com.ibm.as400.access.AS400Bin2;
-import com.ibm.as400.access.AS400Bin4;
-import com.ibm.as400.access.AS400Bin8;
-import com.ibm.as400.access.AS400DataType;
-import com.ibm.as400.access.AS400DecFloat;
-import com.ibm.as400.access.AS400Float4;
-import com.ibm.as400.access.AS400Float8;
-import com.ibm.as400.access.AS400PackedDecimal;
-import com.ibm.as400.access.AS400Structure;
-import com.ibm.as400.access.AS400ZonedDecimal;
-
-import eglx.jtopen.annotations.AS400DecimalFloat;
-import eglx.jtopen.annotations.AS400DecimalPacked;
-import eglx.jtopen.annotations.AS400DecimalZoned;
-import eglx.jtopen.annotations.AS400UnsignedBin2;
-import eglx.jtopen.annotations.AS400UnsignedBin4;
 import eglx.lang.AnyException;
 import eglx.lang.AnyValue;
 import eglx.lang.InvalidArgumentException;
@@ -195,156 +156,8 @@ public class AS400Converter {
 		}
 		return convertedFields.toArray(new Object[convertedFields.size()]);
 	}
-	public static AS400DataType createAS400DataType(final Object object, final List<Annotation>annotations,final AS400 connection)throws AnyException
-	{
-		Annotation annotation = null;
-	    if(object instanceof AnyBoxedObject<?>)
-	        return createAS400DataType(((AnyBoxedObject<?>)object).ezeUnbox(), annotations, connection);
-	    if(object instanceof BigDecimal){
-	    	if((annotation = getAnnotation(AS400DecimalFloat.class, annotations)) != null){
-	    		return new AS400DecFloat(((AS400DecimalFloat)annotation).length());
-	    	}
-	    	else if((annotation = getAnnotation(AS400DecimalPacked.class, annotations)) != null){
-	    		return new AS400PackedDecimal(((AS400DecimalPacked)annotation).length(), ((AS400DecimalPacked)annotation).decimals());
-	    	}
-	    	else if((annotation = getAnnotation(AS400DecimalZoned.class, annotations)) != null){
-	    		return new AS400ZonedDecimal(((AS400DecimalZoned)annotation).length(), ((AS400DecimalZoned)annotation).decimals());
-	    	}
-	    }
-	    if(object instanceof BigInteger){
-	    	if((annotation = getAnnotation(AS400UnsignedBin4.class, annotations)) != null){
-	    		return new com.ibm.as400.access.AS400UnsignedBin4();
-	    	}
-	    	else{
-	    		return new AS400Bin8();
-	    	}
-	    }
-	    if(object instanceof Long){
-	    	if((annotation = getAnnotation(AS400UnsignedBin4.class, annotations)) != null){
-	    		return new com.ibm.as400.access.AS400UnsignedBin4();
-	    	}
-	    	else{
-	    		return new AS400Bin8();
-	    	}
-	    }
-	    if(object instanceof Byte){
-    		return new AS400Bin2();
-	    }
-	    if(object instanceof Short){
-	    	return new AS400Bin2();
-	    }
-	    if(object instanceof Integer){
-	    	if((annotation = getAnnotation(AS400UnsignedBin2.class, annotations)) != null){
-	    		return new com.ibm.as400.access.AS400UnsignedBin2();
-	    	}
-	    	else{
-	    		return new AS400Bin4();
-	    	}
-	    }
-	    if(object instanceof Double){
-	    	return new AS400Float8();
-	    }
-	    if(object instanceof Float){
-	    	return new AS400Float4();
-	    }
-	    if(object instanceof String){
-	    	annotation = getAnnotation(eglx.jtopen.annotations.AS400Text.class, annotations);
-	    	if(annotation != null){
-	    		if(((eglx.jtopen.annotations.AS400Text)annotation).encoding() != null && !((eglx.jtopen.annotations.AS400Text)annotation).encoding().isEmpty()){
-	    			return new AS400Text(((eglx.jtopen.annotations.AS400Text)annotation).length(), ((eglx.jtopen.annotations.AS400Text)annotation).encoding(), ((eglx.jtopen.annotations.AS400Text)annotation).preserveTrailingSpaces());
-	    		}
-	    		else{
-	    			return new AS400Text(((eglx.jtopen.annotations.AS400Text)annotation).length(), connection, ((eglx.jtopen.annotations.AS400Text)annotation).preserveTrailingSpaces());
-	    		}
-	    	}
-	    }
-	    if(object instanceof Calendar){
-	    	annotation = getAnnotation(eglx.jtopen.annotations.AS400Date.class, annotations);
-	    	if(annotation != null){
-	    		if(((eglx.jtopen.annotations.AS400Date)annotation).ibmiSeperator().isEmpty()){
-	    			return new AS400Date(((eglx.jtopen.annotations.AS400Date)annotation).ibmiFormat());
-	    		}
-	    		else{
-	    			return new AS400Date(((eglx.jtopen.annotations.AS400Date)annotation).ibmiFormat(), "null".equalsIgnoreCase(((eglx.jtopen.annotations.AS400Date)annotation).ibmiSeperator())? null : ((eglx.jtopen.annotations.AS400Date)annotation).ibmiSeperator().charAt(0));
-	    		}
-	    	}
-	    	annotation = getAnnotation(eglx.jtopen.annotations.AS400Timestamp.class, annotations);
-	    	if(annotation != null){
-	    		TimestampIntervalMask tsMask = new TimestampIntervalMask(((eglx.jtopen.annotations.AS400Timestamp)annotation).eglPattern());
-    			return new AS400Timestamp(((eglx.jtopen.annotations.AS400Timestamp)annotation).ibmiFormat(), tsMask.getStartCode(), tsMask.getEndCode());
-	    	}
-	    	annotation = getAnnotation(eglx.jtopen.annotations.AS400Time.class, annotations);
-	    	if(annotation != null){
-	    		if(((eglx.jtopen.annotations.AS400Time)annotation).ibmiSeperator().isEmpty()){
-	    			return new AS400Time(((eglx.jtopen.annotations.AS400Time)annotation).ibmiFormat());
-	    		}
-	    		else{
-	    			return new AS400Time(((eglx.jtopen.annotations.AS400Time)annotation).ibmiFormat(), "null".equalsIgnoreCase(((eglx.jtopen.annotations.AS400Time)annotation).ibmiSeperator())? null : ((eglx.jtopen.annotations.AS400Time)annotation).ibmiSeperator().charAt(0));
-	    		}
-	    	}
-	    }
-	    if(object instanceof List<?>){
-	    	if((( List<?>)object).size() == 0){
-	    		resizeList(( List<?>)object, annotations);
-	    	}
-	    	if((( List<?>)object).size() > 0){
-	    		AS400DataType arrayType = createAS400DataType((( List<?>)object).get(0), annotations, connection);
-		    	return new AS400Array(arrayType, ((List<?>)object).size());
-	    	}
-	    }
-	    if(object instanceof AnyValue){
-	    	//record
-	    	return createToAS400Structure(object, connection, annotations);
-	    }
-	    if(object instanceof ExecutableBase){
-	    	//handler
-	    	return createToAS400Structure(object, connection, annotations);
-	    }
-	    
-	    InvalidArgumentException ex = new InvalidArgumentException();
-		ex.setMessageID("createAS400DataType");
-		ex.setMessage("Can not determine the type for:" + object.getClass().getName());
-		throw ex;
-	}
-	private static AS400Structure createToAS400Structure(final Object object,final AS400 connection, List<Annotation>annotations)throws AnyException
-	{
-    	List<AS400DataType> structuredFields = new ArrayList<AS400DataType>();
- 		for(Field field : getFields(object.getClass())){
-			String name = field.getName();
-			try {
-				StringBuilder getterName = new StringBuilder(field.getName().substring(0,1).toUpperCase());
-				getterName.append(field.getName().substring(1));
-				Method method = null;
-				try{
-					method = object.getClass().getMethod(new StringBuilder("get").append(getterName).toString(), (Class<?>[])null);
-				}
-				catch(NoSuchMethodException nsme){
-				}
-				if(method == null){
-					try{
-						method = object.getClass().getMethod(new StringBuilder("is").append(getterName).toString(), (Class<?>[])null);
-					}
-					catch(NoSuchMethodException nsme){
-					}
-				}
-				if(method != null && Modifier.isPublic(method.getModifiers())){
-					structuredFields.add(createAS400DataType(method.invoke(object, (Object[])null), new ArrayList<Annotation>(annotationList(method)), connection));
-				}
-				else if(Modifier.isPublic(field.getModifiers())){
-					structuredFields.add(createAS400DataType(field, new ArrayList<Annotation>(annotationList(field)), connection));
-				}
-			} catch (Throwable t) {
-			    InvalidArgumentException ex = new InvalidArgumentException();
-				ex.initCause(t);
-				ex.setMessageID("CreateStructure");
-				ex.setMessage("Error creating AS400Structure field:" + name);
-				throw ex;
-			}
-		}
-	    return new AS400Structure(structuredFields.toArray(new AS400DataType[structuredFields.size()]));
-	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+/*	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void resizeList(List list, List<Annotation> annotations){
 		Annotation annotation = getAnnotation(eglx.jtopen.annotations.AS400Array.class, annotations);
     	if(annotation != null){
@@ -409,7 +222,7 @@ public class AS400Converter {
 			}
 		}
 		return null;
-	}
+	}*/
     private static List<Field> getFields(Class<?> clazz){
     	List<Field> fields = new ArrayList<Field>();
     	do{
