@@ -18,6 +18,12 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 		this.endCode = endCode;
 	}
 
+	public int getStartCode() {
+		return startCode;
+	}
+	public int getEndCode() {
+		return endCode;
+	}
 	@Override
 	public byte[] toBytes(Object object) {
 		if(object instanceof Calendar){

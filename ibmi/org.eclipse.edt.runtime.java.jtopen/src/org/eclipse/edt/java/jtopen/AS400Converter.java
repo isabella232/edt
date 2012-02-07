@@ -7,9 +7,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.edt.java.jtopen.access.AS400Array;
+import org.eclipse.edt.java.jtopen.access.AS400Timestamp;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.resources.ExecutableBase;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+
+import com.ibm.as400.access.AS400DataType;
+import com.ibm.as400.access.AS400Structure;
 
 import eglx.lang.AnyException;
 import eglx.lang.AnyValue;
@@ -97,31 +112,38 @@ public class AS400Converter {
 	    return object;
 	}
 
-	public static Object convertToObjects(Object object){
+	@SuppressWarnings("unchecked")
+	public static Object convertToObjects(Object object, AS400DataType as400Datatype){
 	    if(object instanceof AnyBoxedObject<?>)
-	        return convertToObjects(((AnyBoxedObject<?>)object).ezeUnbox());
-	    else if(object instanceof List<?>){
+	        return convertToObjects(((AnyBoxedObject<?>)object).ezeUnbox(), as400Datatype);
+	    else if(object instanceof List<?> && as400Datatype instanceof AS400Array){
 	    	List<Object> array = new ArrayList<Object>();
+	    	AS400DataType arrayElementsAS400Type = ((AS400Array)as400Datatype).getType();
+	    	if(array.size() != ((AS400Array)as400Datatype).getNumberOfElements()){
+	    		resizeList((List<Object>)object, (AS400Array)as400Datatype);
+	    	}
 	    	for(Object element : (List<?>)object){
-	    		array.add(convertToObjects(element));
+	    		array.add(convertToObjects(element, arrayElementsAS400Type));
 	    	}
 	    	return array.toArray(new Object[array.size()]);
 	    }
-	    else if(object instanceof AnyValue){
+	    else if(object instanceof AnyValue && as400Datatype instanceof AS400Structure){
 	    	//record
-	    	return convertStructureToObjects(object);
+	    	return convertStructureToObjects(object, (AS400Structure)as400Datatype);
 	    }
-	    else if(object instanceof ExecutableBase){
+	    else if(object instanceof ExecutableBase && as400Datatype instanceof AS400Structure){
 	    	//handler
-	    	return convertStructureToObjects(object);
+	    	return convertStructureToObjects(object, (AS400Structure)as400Datatype);
 	    }
 	    else{
 	    	return object;
 	    }
 	}
-	private static Object convertStructureToObjects(final Object object)throws AnyException
+	private static Object convertStructureToObjects(final Object object, AS400Structure as400Datatype)throws AnyException
 	{
 		List<Object> convertedFields = new ArrayList<Object>();
+		AS400DataType[] as400Fields = as400Datatype.getMembers(); 
+		int as400Idx = 0;
 		for(Field field : getFields(object.getClass())){
 			String name = field.getName();
 			try {
@@ -141,10 +163,10 @@ public class AS400Converter {
 					}
 				}
 				if(method != null && Modifier.isPublic(method.getModifiers())){
-					convertedFields.add(convertToObjects(method.invoke(object, (Object[])null)));
+					convertedFields.add(convertToObjects(method.invoke(object, (Object[])null), as400Fields[as400Idx++]));
 				}
 				else if(Modifier.isPublic(field.getModifiers())){
-					convertedFields.add(convertToObjects(field));
+					convertedFields.add(convertToObjects(field, as400Fields[as400Idx++]));
 				}
 			} catch (Throwable t) {
 			    InvalidArgumentException ex = new InvalidArgumentException();
@@ -157,72 +179,49 @@ public class AS400Converter {
 		return convertedFields.toArray(new Object[convertedFields.size()]);
 	}
 	
-/*	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void resizeList(List list, List<Annotation> annotations){
-		Annotation annotation = getAnnotation(eglx.jtopen.annotations.AS400Array.class, annotations);
-    	if(annotation != null){
-			int size = ((eglx.jtopen.annotations.AS400Array)annotation).elementCount();
-			annotation = getAnnotation(Json.class, annotations);
-			if(annotation != null && ((Json)annotation).clazz() != null){
-				if(EBigint.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.BigintFactory);
-				}
-				else if(EDate.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.DateFactory);
-				}
-				else if(EDecimal.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.DecimalFactory);
-				}
-				else if(EFloat.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.FloatFactory);
-				}
-				else if(EInt.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.IntFactory);
-				}
-				else if(ESmallfloat.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.SmallfloatFactory);
-				}
-				else if(ESmallint.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.SmallintFactory);
-				}
-				else if(EString.class.equals( ((Json)annotation).clazz())){
-					EList.resize(list, size, EList.StringFactory);
-				}
-				else if(ETimestamp.class.equals( ((Json)annotation).clazz())){
-			    	annotation = getAnnotation(eglx.jtopen.annotations.AS400Timestamp.class, annotations);
-			    	if(annotation != null){
-			    		TimestampIntervalMask tsMask = new TimestampIntervalMask(((eglx.jtopen.annotations.AS400Timestamp)annotation).eglPattern());
-			    		EList.resize(list, size, new EList.TimestampFactory(tsMask.getStartCode(), tsMask.getEndCode()));
-			    	}
-				}
-				else if(AnyValue.class.isAssignableFrom(((Json)annotation).clazz())){
-		    		EList.resize(list, size, new EList.ElementFactory(((Json)annotation).clazz()));
-				}
-				else if(ExecutableBase.class.isAssignableFrom(((Json)annotation).clazz())){
-		    		EList.resize(list, size, new EList.ElementFactory(((Json)annotation).clazz()));
-				}
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void resizeList(List list, AS400Array as400Array){
+		if(EBigint.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.BigintFactory);
+		}
+		else if(EDate.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.DateFactory);
+		}
+		else if(EDecimal.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.DecimalFactory);
+		}
+		else if(EFloat.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.FloatFactory);
+		}
+		else if(EInt.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.IntFactory);
+		}
+		else if(ESmallfloat.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.SmallfloatFactory);
+		}
+		else if(ESmallint.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.SmallintFactory);
+		}
+		else if(EString.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.StringFactory);
+		}
+		else if(ETimestamp.class.equals(as400Array.getEGLElementType())){
+			AS400DataType elementType = as400Array.getType();
+			while(elementType instanceof AS400Array){
+				elementType = ((AS400Array)elementType).getType();
 			}
-    	}
+	    	if(elementType instanceof AS400Timestamp){
+	    		EList.resize(list, as400Array.getNumberOfElements(), new EList.TimestampFactory(((AS400Timestamp)elementType).getStartCode(), ((AS400Timestamp)elementType).getEndCode()));
+	    	}
+		}
+		else if(AnyValue.class.isAssignableFrom(as400Array.getEGLElementType())){
+    		EList.resize(list, as400Array.getNumberOfElements(), new EList.ElementFactory(as400Array.getEGLElementType()));
+		}
+		else if(ExecutableBase.class.isAssignableFrom(as400Array.getEGLElementType())){
+    		EList.resize(list, as400Array.getNumberOfElements(), new EList.ElementFactory(as400Array.getEGLElementType()));
+		}
 	}
 
-	private static List<Annotation> annotationList(AccessibleObject obj){
-		Annotation[] annotations = obj.getAnnotations();
-		List<Annotation> annotationList = new ArrayList<Annotation>();
-		if(annotations != null){
-			annotationList.addAll(Arrays.asList(annotations));
-		}
-		return annotationList;
-	}
-	private static Annotation getAnnotation(final Class<?> annotationClass, final List<Annotation> annotations){
-		if(annotations != null){
-			for(Annotation annotation : annotations){
-				if(annotationClass.equals(annotation.annotationType())){
-					return annotation;
-				}
-			}
-		}
-		return null;
-	}*/
     private static List<Field> getFields(Class<?> clazz){
     	List<Field> fields = new ArrayList<Field>();
     	do{
