@@ -38,7 +38,7 @@ public interface Constants {
 	static final String subKey_ibmiFormat = "ibmiFormat";
 	static final String subKey_ibmiSeparatorChar = "ibmiSeparatorChar";
 	static final String subKey_eglPattern = "eglPattern";
-	static final String subKey_connectionResource = "connectionResource";
+	static final String subKey_connectionResource = "connectionResourceBindingURI";
 	static final String subKey_isServiceProgram = "isServiceProgram";
 	static final String subKey_libraryName = "libraryName";
 	static final String subKey_programName = "programName";

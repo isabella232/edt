@@ -50,12 +50,10 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		out.print(as400ConnectionName);
 		out.print(" = ");
 
-		Annotation resource = (Annotation)ibmiProgram.getValue(subKey_connectionResource);
-		if(resource != null){
+		String resourceBinding = (String)ibmiProgram.getValue(subKey_connectionResource);
+		if(resourceBinding != null){
 			out.print("(eglx.jtopen.IBMiConnection)eglx.lang.SysLib.getResource(\"");
-			if(resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()){
-				out.print((String)resource.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
-			}
+			out.print(resourceBinding);
 			out.print("\")");
 		}
 		else{
@@ -67,21 +65,22 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		String libraryName = (String)ibmiProgram.getValue(subKey_libraryName);
 		String programName = (String)ibmiProgram.getValue(subKey_programName);
 		if(!programName.isEmpty()){
-			if(libraryName.length() > 0){
-				if(libraryName.charAt(libraryName.length() - 1) != '/'){
-					programName = libraryName + "/" + programName;
-				}
-				else{
-					programName = libraryName + programName;
-				}
-			}
 			programName += (isServiceProgram ? ".SRVPGM" : ".PGM");
 		}
 		
 		if(function.getType() != null){
 			out.print("Integer eze$Return = ");
 		}
-		out.print("org.eclipse.edt.java.jtopen.IBMiProgramCall.ezeRunProgram(\"");
+		out.print("org.eclipse.edt.java.jtopen.IBMiProgramCall.ezeRunProgram(");
+		if(libraryName == null){
+			out.print("null");
+			out.print(", \"");
+		}
+		else{
+			out.print("\"");
+			out.print(libraryName);
+			out.print("\", \"");
+		}
 		out.print(programName);
 	    // Set the procedure to call in the service program.
 		if(isServiceProgram){
