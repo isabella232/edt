@@ -1,9 +1,0 @@
-package com.ibm.as400.access;
-
-externalType AS400Time type JavaObject{}
-	static FORMAT_EUR int;
-	static FORMAT_HMS int;
-	static FORMAT_ISO int;
-	static FORMAT_JIS int;
-	static FORMAT_USA int;
-end

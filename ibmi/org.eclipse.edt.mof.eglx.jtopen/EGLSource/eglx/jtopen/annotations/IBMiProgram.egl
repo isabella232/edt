@@ -10,7 +10,7 @@ Record IBMiProgram type Annotation
 	programName string;
 	libraryName string;
 	isServiceProgram boolean = false;
-	connectionResource Resource?;
+	connectionResourceBindingURI String?;
 	parameterAnnotations any?[];
 end
 
