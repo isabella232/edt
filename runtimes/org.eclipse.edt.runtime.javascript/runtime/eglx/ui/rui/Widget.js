@@ -340,6 +340,13 @@ egl.defineClass(
 			}
 		}
 	},
+	
+	"getUserData" :function(){
+		return(data);
+	},
+	"setUserData":function(value){
+		data = value;
+	},
 	"getID" : function(){
 		return this.eze$$getDOMElement().id;
 	},
