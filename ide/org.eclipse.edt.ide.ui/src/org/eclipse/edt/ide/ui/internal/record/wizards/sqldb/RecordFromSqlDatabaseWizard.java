@@ -16,16 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.IManagedConnection;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.datatools.connectivity.sqm.internal.core.util.ConnectionUtil;
 import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
@@ -181,10 +179,11 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 						monitor.subTask(table.getName());
 
 						EglSourceGenerator generator = new EglSourceGenerator(d);
-						generator.getContext().put(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT, connection.getDatabaseDefinition());
-						generator.getContext().put(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED, config.isQualifiedTableNames());
-						generator.getContext().put(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER, this);
-						generator.generate(table);
+						EglContext context = generator.makeContext(d);
+						context.put(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT, connection.getDatabaseDefinition());
+						context.put(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED, config.isQualifiedTableNames());
+						context.put(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER, this);
+						d.generate(table, generator, null);
 						buffer.append(generator.getResult());
 						
 						monitor.worked(1);

@@ -27,24 +27,25 @@ public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
 		super();
 	}
 
-	public void generate(Object[] objects, EglSourceGenerator generator, IEnvironment environment) {
+	public void generate(Object object, EglSourceGenerator generator, IEnvironment environment) {
 		try {
 			if (environment != null){
 				Environment.pushEnv(environment);
 			}
-			//this.installOverrides(args);
-			// start up the generator, passing the command processor
-			try {				
-				for (Object obj : objects) {
-					generator.generate(obj);
+			
+			// process the arguments and load the contributions
+			if (initialize(buildArgs(), generator)) {
+				// start up the generator, passing the command processor
+				try {				
+					generator.generate(object);
 				}
+				catch (Exception e) {
+					e.printStackTrace();
+					if (generator != null)
+						System.out.print(generator.getResult());
+				}
+				generator.dumpErrorMessages();
 			}
-			catch (Exception e) {
-				e.printStackTrace();
-				if (generator != null)
-					System.out.print(generator.getResult());
-			}
-			generator.dumpErrorMessages();
 		}
 		catch (Exception e) {
 			System.out.print(e.getMessage());
@@ -54,5 +55,27 @@ public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
 				Environment.popEnv();
 			}
 		}
+	}
+	
+	private String[] buildArgs() {
+		String[] args = new String[8];
+
+		// this isn't used but it's a required parameter.
+		args[0] = "-o";
+		args[1] = "notused";
+
+		// this isn't used but it's a required parameter.
+		args[2] = "-p";
+		args[3] = "notused";
+
+		// this isn't used but it's a required parameter.
+		args[4] = "-r";
+		args[5] = "notused";
+
+		// add the contribution
+		args[6] = "-c";
+		args[7] = "org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.DataToolsObjectsToEglContributor";
+
+		return args;
 	}
 }
