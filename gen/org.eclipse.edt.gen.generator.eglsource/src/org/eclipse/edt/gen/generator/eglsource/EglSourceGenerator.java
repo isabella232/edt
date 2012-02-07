@@ -40,7 +40,9 @@ public class EglSourceGenerator extends Generator {
 	}
 
 	public EglContext makeContext(AbstractGeneratorCommand processor) {
-		context = new EglSourceContext(processor);
+		if(context == null){
+			context = new EglSourceContext(processor);
+		}
 		return context;
 	}
 
