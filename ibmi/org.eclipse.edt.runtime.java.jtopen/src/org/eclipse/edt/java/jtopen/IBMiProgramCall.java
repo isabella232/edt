@@ -23,13 +23,15 @@ import com.ibm.as400.access.ProgramParameter;
 import com.ibm.as400.access.ServiceProgramCall;
 
 import eglx.jtopen.IBMiConnection;
+import eglx.jtopen.JTOpenConnection;
 import eglx.lang.InvocationException;
 
 public class IBMiProgramCall {
 
 	private static final long serialVersionUID = 1L;
 	public enum ParameterTypeKind{IN, INOUT, OUT};
-	public static Integer ezeRunProgram(final String programName, 
+	public static Integer ezeRunProgram(final String library,
+									final String programName, 
 									final String procedureName, final 
 									boolean isServiceProgram, final 
 									boolean hasReturn, ParameterTypeKind[] parameterTypeKinds, 
@@ -42,16 +44,38 @@ public class IBMiProgramCall {
 		for(int idx = 0; idx < parameters.length; idx++){
 			parameterTypes[idx] = parameters[idx].getClass();
 		}
+		String hostLibrary = library;
+		if(connection instanceof JTOpenConnection){
+			if(((JTOpenConnection)connection).getLibrary() != null && 
+					!((JTOpenConnection)connection).getLibrary().isEmpty()){
+				hostLibrary = ((JTOpenConnection)connection).getLibrary();
+			}
+		}
+		String slash = hostLibrary != null && !hostLibrary.isEmpty() ? "/" : "";
+		boolean hostLibraryHasSlash = false;
+		if(hostLibrary != null && !hostLibrary.isEmpty() &&
+				hostLibrary.charAt(hostLibrary.length() - 1) == '/'){
+			slash = "";
+			hostLibraryHasSlash = true;
+		}
+		if(programName != null && !programName.isEmpty() &&
+				programName.charAt(0) == '/'){
+			slash = "";
+			if(hostLibraryHasSlash){
+				hostLibrary = hostLibrary.substring(0, hostLibrary.length() - 1);
+			}
+		}
+		hostLibrary += slash;
 		ProgramCall ezeCall = null;
 		try{
 			if(isServiceProgram){
 				ezeCall = new ServiceProgramCall(connection.getAS400());
-				ezeCall.setProgram(programName);
+				ezeCall.setProgram(hostLibrary + programName);
 				((ServiceProgramCall)ezeCall).setProcedureName(procedureName);
 			}
 			else{
 				ezeCall = new ProgramCall(connection.getAS400());
-				ezeCall.setProgram(programName);
+				ezeCall.setProgram(hostLibrary + programName);
 			}
 			for(int idx = 0; idx < parameters.length; idx++){
 				if(parameterTypeKinds[idx] == ParameterTypeKind.IN){

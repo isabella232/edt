@@ -8,15 +8,18 @@ import eglx.jtopen.JTOpenConnections;
 
 
 
-public class IbmiFactory extends BindingFactory{
+public class IbmiconnectionFactory extends BindingFactory{
 
 	@Override
 	public Object createResource(Binding binding) throws Exception{
 		Parameter system = binding.getParameter("system");
-		Parameter userID = binding.getParameter("userid");
+		Parameter userID = binding.getParameter("userId");
 		Parameter password = binding.getParameter("password");
 		Parameter library = binding.getParameter("library");
-		return new JTOpenConnection(JTOpenConnections.getAS400ConnectionPool().getConnection(system.getValue(), userID.getValue(), password.getValue()), library.getValue());
+		return new JTOpenConnection(JTOpenConnections.getAS400ConnectionPool().getConnection((system == null ? null : system.getValue()), 
+						(userID == null ? null : userID.getValue()), 
+						(password == null ? null : password.getValue())), 
+						(library == null ? null : library.getValue()));
 	}
 
 }
