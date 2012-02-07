@@ -25,10 +25,10 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			String pkg = (String)annot.getValue( "relativePath" );
 			String name = (String)annot.getValue( "externalName" );
 			
-			if (pkg == null) {
+			if (pkg == null || pkg.isEmpty()) {
 				pkg = et.getPackageName().replace( '.', '/' );
 			}
-			if (name == null) {
+			if (name == null || name.isEmpty()) {
 				name = et.getName();
 			}
 			String output = "";
