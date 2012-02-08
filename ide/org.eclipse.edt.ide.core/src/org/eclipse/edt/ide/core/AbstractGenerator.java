@@ -161,11 +161,12 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 			numArgs += additionalArgs.length;
 		}
 		// add in the contribution parms
-		if (contributionsUsed == null) {
+		if (contributionsUsed == null && getId() != null) {
 			contributionsUsed = new ArrayList<GenerationContributorEntry>();
 			AbstractGenerator.determineContributions(getId(), contributionsUsed);
 		}
-		numArgs += contributionsUsed.size() + 1;
+		if (contributionsUsed != null)
+			numArgs += contributionsUsed.size() + 1;
 
 		// get the array
 		String[] args = new String[numArgs];
@@ -184,14 +185,16 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		args[idx++] = "-r"; //$NON-NLS-1$
 		args[idx++] = file.getFullPath().toOSString();
 
-		args[idx++] = "-c";
-		for (GenerationContributorEntry arg : contributionsUsed) {
-			args[idx++] = arg.getClassName();
-		}
-
 		if (additionalArgs != null) {
 			for (String arg : additionalArgs) {
 				args[idx++] = arg;
+			}
+		}
+
+		if (contributionsUsed != null) {
+			args[idx++] = "-c";
+			for (GenerationContributorEntry arg : contributionsUsed) {
+				args[idx++] = arg.getClassName();
 			}
 		}
 
