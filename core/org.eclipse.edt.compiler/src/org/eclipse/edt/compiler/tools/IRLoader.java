@@ -29,6 +29,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
@@ -79,6 +80,7 @@ public class IRLoader {
 		try {
 			Environment env = new Environment();
 			Environment.pushEnv(env);
+			Bootstrap.initialize(env);
 			
 			PartEnvironment partEnv = new PartEnvironment(env);
 			PartEnvironment.pushEnv(partEnv);
