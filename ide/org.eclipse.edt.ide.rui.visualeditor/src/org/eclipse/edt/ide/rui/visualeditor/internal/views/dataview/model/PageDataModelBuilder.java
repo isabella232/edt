@@ -85,7 +85,12 @@ public class PageDataModelBuilder {
 											//Single
 											if(typeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING || typeBinding.getKind() == ITypeBinding.DATAITEM_BINDING || typeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){	
 												if(!isAnyType(typeBinding)){
-													DataFieldPageDataNode dataFieldPageDataNode = (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE);
+													DataFieldPageDataNode dataFieldPageDataNode = null;
+													if(classDataDeclaration.isPrivate()){
+														dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PRIVATE);
+													}else{
+														dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PUBLIC);
+													}	
 													dataFieldPageDataNode.setDataBindingName(dataBinding.getCaseSensitiveName());
 													handlerPageDataNode.addChild(dataFieldPageDataNode);
 												}
@@ -96,7 +101,12 @@ public class PageDataModelBuilder {
 												ITypeBinding elementTypeBinding = arrayTypeBinding.getElementType();
 												if(elementTypeBinding.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING || elementTypeBinding.getKind() == ITypeBinding.DATAITEM_BINDING || elementTypeBinding.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING){
 													if(!isAnyType(elementTypeBinding)){
-														DataFieldPageDataNode dataFieldPageDataNode = (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE);
+														DataFieldPageDataNode dataFieldPageDataNode = null;
+														if(classDataDeclaration.isPrivate()){
+															dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PRIVATE);
+														}else{
+															dataFieldPageDataNode= (DataFieldPageDataNode)PageDataNodeFactory.newPageDataNode(getName(dataBinding), PageDataNodeFactory.DATA_FIELD_PAGE_DATA_NODE_PUBLIC);
+														}
 														dataFieldPageDataNode.setDataBindingName(dataBinding.getCaseSensitiveName());
 														handlerPageDataNode.addChild(dataFieldPageDataNode);
 													}

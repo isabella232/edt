@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model;
 
-import org.eclipse.edt.ide.ui.internal.PluginImages;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 
 public class DataFieldPageDataNode extends PageDataNode {
@@ -20,8 +20,8 @@ public class DataFieldPageDataNode extends PageDataNode {
 	public DataFieldPageDataNode(){
 		super();
 	}
-	public DataFieldPageDataNode(String name) {
-		super(name, PluginImages.DESC_OBJS_VARIABLEDECL);
+	public DataFieldPageDataNode(String name, ImageDescriptor img) {
+		super(name, img);	
 	}
 	public String getDataBindingName() {
 		return dataBindingName;

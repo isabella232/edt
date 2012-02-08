@@ -11,17 +11,21 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.visualeditor.internal.views.dataview.model;
 
+import org.eclipse.edt.ide.ui.internal.PluginImages;
 
 public class PageDataNodeFactory {
 	public static final int HANDLER_PAGE_DATA_NODE = 1;
-	public static final int DATA_FIELD_PAGE_DATA_NODE = 2;
+	public static final int DATA_FIELD_PAGE_DATA_NODE_PUBLIC = 2;
+	public static final int DATA_FIELD_PAGE_DATA_NODE_PRIVATE = 3;
 	
 	public static PageDataNode newPageDataNode(String name, int nodeType){
 		switch(nodeType){
 		case HANDLER_PAGE_DATA_NODE:
 			return new HandlerPageDataNode(name);
-		case DATA_FIELD_PAGE_DATA_NODE:
-			return new DataFieldPageDataNode(name);
+		case DATA_FIELD_PAGE_DATA_NODE_PUBLIC:
+			return new DataFieldPageDataNode(name, PluginImages.DESC_OBJS_VARIABLEDECL);
+		case DATA_FIELD_PAGE_DATA_NODE_PRIVATE:
+			return new DataFieldPageDataNode(name, PluginImages.DESC_OBJS_OBJS_ENV_VAR_PRIVATE);
 		default:
 			return null;
 		}
