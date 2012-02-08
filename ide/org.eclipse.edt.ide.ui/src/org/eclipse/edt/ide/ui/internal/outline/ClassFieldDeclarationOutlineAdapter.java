@@ -20,6 +20,7 @@ import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.eclipse.swt.graphics.Image;
 
 public class ClassFieldDeclarationOutlineAdapter extends AbstractOutlineAdapter {
 
@@ -45,4 +46,16 @@ public class ClassFieldDeclarationOutlineAdapter extends AbstractOutlineAdapter 
 		Node nameNode = (Node)iterator.next();
 		return new Region(nameNode.getOffset(), getNameIterationLength(iterator, nameNode.getOffset()));
 	}
+	
+	public Image getImage(Object element) {
+		ClassDataDeclaration field = (ClassDataDeclaration) element;
+		if(field.isPrivate()){
+			nodeIcon = PluginImages.DESC_OBJS_OBJS_ENV_VAR_PRIVATE;
+		}else{
+			nodeIcon = PluginImages.DESC_OBJS_VARIABLEDECL;
+		}
+		
+		return(super.getImage(element));
+	}
+
 }

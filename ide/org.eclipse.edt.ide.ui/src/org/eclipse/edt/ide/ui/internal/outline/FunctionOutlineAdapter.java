@@ -23,6 +23,7 @@ import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.Region;
+import org.eclipse.swt.graphics.Image;
 
 public class FunctionOutlineAdapter extends AbstractOutlineAdapter {
 
@@ -80,4 +81,18 @@ public class FunctionOutlineAdapter extends AbstractOutlineAdapter {
 		}
 		return new Region(funcName.getOffset(), funcName.getLength());
 	}
+	
+	public Image getImage(Object element) {
+		if(element instanceof NestedFunction){
+			NestedFunction field = (NestedFunction) element;
+			if(field.isPrivate()){
+				nodeIcon = PluginImages.DESC_OBJS_PRIVATE_FUNCTION;
+			}else{
+				nodeIcon = PluginImages.DESC_OBJS_FUNCTION;
+			}
+		}
+		
+		return(super.getImage(element));
+	}
+	
 }
