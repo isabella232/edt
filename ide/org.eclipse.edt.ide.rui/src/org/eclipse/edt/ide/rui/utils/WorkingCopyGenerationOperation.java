@@ -153,8 +153,15 @@ public class WorkingCopyGenerationOperation {
 							public String getOutputDirectory(IResource eglFile) {
 								return outputLocation.toOSString();
 							}
+							@Override
+							public String getId() {
+								return "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
+							}
+							@Override
+							public boolean getEditMode() {
+								return true;
+							}
 						};
-						jsDevGenerator.setEditingMode( true );
 						jsDevGenerator.generate(file.getFullPath().toOSString(), (org.eclipse.edt.mof.egl.Part)part.clone(), environment, generationMessageRequestor);
 					}
 				} catch (PartNotFoundException e) {
