@@ -31,7 +31,7 @@ public class EGL2JavaDriver extends EGL2Base {
 	}
 	
 	public static void start(String[] args, ICompiler compiler, IEUnitGenerationNotifier eckGenerationNotifier) {
-		List<String> arguments = new ArrayList();
+		List<String> arguments = new ArrayList<String>();
 		for (int i = 0; i < args.length; i++) {
 			arguments.add(args[i]);
 		}
