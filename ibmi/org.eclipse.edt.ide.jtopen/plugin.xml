@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.edt.ide.ui.eglDDEditorBindingProvider">
+      <provider id="edt.binding.ibmiconnection" description="IBM i Binding"
+         bindingconfigurationClass="org.eclipse.edt.ide.jtopen.wizards.IBMiBindingConnectionConfiguration"
+         bindingdetailsPageClass="org.eclipse.edt.ide.jtopen.pages.IBMiConnectionBindingDetailPage">
+	      <wizardPage
+	            class="org.eclipse.edt.ide.jtopen.wizards.IBMiBindingWizardPageFactory"
+	            id="org.eclipse.edt.ide.jtopen.wizards.IBMiBindingWizardPage"
+	            name="org.eclipse.edt.ide.ui.internal.wizards.IBMiBindingWizardPage">
+	      </wizardPage>
+      </provider>
+   </extension>
+
+</plugin>
