@@ -73,7 +73,7 @@ public class IBMiConnectionBindingDetailPage extends WebBindingDetailPage {
 	}
 
 	private void createPasswordControl(FormToolkit toolkit, Composite parent) {
-		toolkit.createLabel(parent, Messages.LabelUserId);
+		toolkit.createLabel(parent, Messages.LabelPassword);
 		fPasswordField = createTextControl(toolkit, parent);
 		fPasswordField.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {

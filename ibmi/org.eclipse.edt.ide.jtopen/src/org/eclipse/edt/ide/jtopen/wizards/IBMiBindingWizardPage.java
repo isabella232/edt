@@ -158,7 +158,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fPasswordField = new StringDialogField();
 		fPasswordField.setLabelText(Messages.LabelPassword);
-		fPasswordField.setText(getConfiguration().getUserId());
+		fPasswordField.setText(getConfiguration().getPassword());
 		createStringDialogField(composite, fPasswordField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
