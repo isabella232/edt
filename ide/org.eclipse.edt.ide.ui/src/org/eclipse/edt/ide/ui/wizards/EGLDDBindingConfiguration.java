@@ -18,23 +18,17 @@ import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingProviderRegistry;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingWizardProvider;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.ui.IWorkbench;
 
 
 public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 
-	public static final int BINDINGTYPE_WEB = 0;
-	public static final int BINDINGTYPE_REST = 1;	
-	public static final int BINDINGTYPE_EGL = 2;
-	public static final int BINDINGTYPE_NATIVE = 3;
-	public static final int BINDINGTYPE_SQL = 4;
-	
-	private int fBindingType=BINDINGTYPE_REST;
+	private int fBindingType; //=BINDINGTYPE_REST;
 
 	private BindingEGLConfiguration fBindingEGLConfig;
-	private BindingRestConfiguration fBindingRestConfig;
-	private BindingSQLDatabaseConfiguration fBindingSQLConfig;
 	private IWorkbench fWorkbench;
 	private IProject fProj;
 	private EGLDeploymentRoot fDeploymentRoot;
@@ -63,16 +57,15 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 		return fBindingEGLConfig;
 	}
 	
-	public BindingRestConfiguration getBindingRestConfiguration(){
-		if(fBindingRestConfig == null)
-			fBindingRestConfig = new BindingRestConfiguration(fDeploymentRoot, fProj);
-		return fBindingRestConfig;
-	}
-	
-	public BindingSQLDatabaseConfiguration getBindingSQLConfiguration(){
-		if(fBindingSQLConfig == null)
-			fBindingSQLConfig = new BindingSQLDatabaseConfiguration(fDeploymentRoot, fProj);
-		return fBindingSQLConfig;
+	public BindingBaseConfiguration getConfiguration(String providerId){
+		EGLDDBindingWizardProvider[] providers = EGLDDBindingProviderRegistry.singleton.getEGLDDBindingWizardProviders();
+		for ( int i = 0; i < providers.length; i ++ ) {
+			if ( providers[i].id.equals( providerId ) ) {
+				return providers[i].bindingconfigurationClass;
+			}
+		}
+		
+		return null;
 	}
 
 	private Bindings getBindings(){
@@ -86,15 +79,18 @@ public class EGLDDBindingConfiguration extends EGLPartConfiguration {
 		return bindings;
 	}
 	
-	public Object executeAddBinding(IRunnableContext runnableContext) throws InvocationTargetException, InterruptedException{
+	public Object executeAddBinding(IRunnableContext runnableContext) throws InvocationTargetException, InterruptedException {
 		Bindings bindings = getBindings();
 		Object newBinding = null;
-		if(fBindingType == BINDINGTYPE_REST){
-			newBinding = fBindingRestConfig.executeAddRestBinding(bindings);
+		
+		EGLDDBindingWizardProvider[] fproviders = EGLDDBindingProviderRegistry.singleton.getEGLDDBindingWizardProviders();
+		for ( int i = 0; i < fproviders.length; i ++ ) {
+			if ( fproviders[i].bindingId == fBindingType ) {
+				newBinding = fproviders[i].bindingconfigurationClass.executeAddBinding( bindings );
+				break;
+			}
 		}
-		else if(fBindingType == BINDINGTYPE_SQL){
-			newBinding = fBindingSQLConfig.executeAddSQLDatabaseBinding(bindings);
-		}
+
 		return newBinding;
 	}
 	

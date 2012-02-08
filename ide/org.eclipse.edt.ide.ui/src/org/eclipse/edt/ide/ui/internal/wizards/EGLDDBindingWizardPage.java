@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.wizards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -52,11 +55,7 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	
 	public static final String WIZPAGENAME_EGLDDBindingWizardPage = "WIZPAGENAME_EGLDDBindingWizardPage"; //$NON-NLS-1$
 	protected int nColumns = 3;
-	private Button fWSBindingButton;
-	private Button fEGLBindingButton;
-	private Button fNativeBindingButton;
-	private Button fRestBindingButton;
-	private Button fSQLDatabaseBindingButton;
+	private List<Button> bindingButtons = new ArrayList<Button>();
 	
 	protected StringDialogField fNameField;	
 	protected StatusInfo fNameStatus;
@@ -102,36 +101,14 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 		gd.horizontalSpan = nColumns;		
 		grp.setLayout(groupLayout);
 		grp.setLayoutData(gd);
-		
-//		fWSBindingButton = createBindingRadioButton(grp, NewWizardMessages.WebBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_WEB);		
-		fRestBindingButton = createBindingRadioButton(grp, NewWizardMessages.RestBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_REST);		
-//		fEGLBindingButton = createBindingRadioButton(grp, NewWizardMessages.EGLBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_EGL);
-//		fNativeBindingButton = createBindingRadioButton(grp, NewWizardMessages.NativeBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_NATIVE);
-		fSQLDatabaseBindingButton = createBindingRadioButton(grp, NewWizardMessages.SQLDatabaseBindingBtnLabel, EGLDDBindingConfiguration.BINDINGTYPE_SQL);		
-		selectBindingTypeButton(getConfiguration().getBindingType());
-	}
-	
-	private void selectBindingTypeButton(int bindingType)
-	{
-		switch(bindingType){
-		case EGLDDBindingConfiguration.BINDINGTYPE_WEB:
-			fWSBindingButton.setSelection(true);
-			break;
-		case EGLDDBindingConfiguration.BINDINGTYPE_REST:
-			fRestBindingButton.setSelection(true);
-			break;
-		case EGLDDBindingConfiguration.BINDINGTYPE_EGL:
-			fEGLBindingButton.setSelection(true);
-			break;
-		case EGLDDBindingConfiguration.BINDINGTYPE_NATIVE:
-			fNativeBindingButton.setSelection(true);
-			break;
-		case EGLDDBindingConfiguration.BINDINGTYPE_SQL:
-			fSQLDatabaseBindingButton.setSelection(true);
-			break;
+		EGLDDBindingWizardProvider[] providers = EGLDDBindingProviderRegistry.singleton.getEGLDDBindingWizardProviders();
+		for ( int i = 0; i < providers.length; i ++ ) {
+			Button button = createBindingRadioButton(grp, providers[i].description, providers[i].bindingId);
+			bindingButtons.add( button );
 		}
+		
 	}
-	
+
 	private Button createBindingRadioButton(Group grp, String btnText, final int bindingType){
 		Button btn = new Button(grp, SWT.RADIO);
 		btn.setText(btnText);
@@ -151,9 +128,6 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 
 	protected void updateWizardDialogButtons(IWizardPage currWizPage) {
 		IWizard wiz = getWizard();
-		if(wiz instanceof EGLDDBindingWizard){
-			((EGLDDBindingWizard)wiz).updatePagePathAndNextPage(currWizPage);
-		}
 		IWizardContainer wizDlg = getWizard().getContainer();		
 		wizDlg.updateButtons();
 	}

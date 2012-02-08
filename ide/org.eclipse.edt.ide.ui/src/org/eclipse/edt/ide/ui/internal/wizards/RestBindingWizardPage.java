@@ -52,7 +52,7 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		createComponentNameControl(composite, NewWizardMessages.LabelRestBindingName, getEGLDDBindingConfiguration().getBindingRestConfiguration());
+		createComponentNameControl(composite, NewWizardMessages.LabelRestBindingName, getEGLDDBindingConfiguration().getConfiguration( "edt.binding.rest" ));
 		createBaseUriControl(composite);
 		createSessionCookieId(composite);
 		setControl(composite);

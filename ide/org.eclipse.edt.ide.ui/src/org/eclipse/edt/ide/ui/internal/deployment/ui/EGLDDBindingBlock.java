@@ -123,6 +123,8 @@ public class EGLDDBindingBlock extends EGLDDBaseBlock {
 					}
 					else if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL.equals(type)) {
 						return "SQL";  //$NON-NLS-1$
+					} else {
+						return type.substring( type.lastIndexOf( "." ) + 1 ).toUpperCase();
 					}
 				}
 			}

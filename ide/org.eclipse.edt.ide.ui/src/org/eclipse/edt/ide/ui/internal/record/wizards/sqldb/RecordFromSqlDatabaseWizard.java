@@ -235,7 +235,7 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 						}
 						
 						if(!existed) {
-							sqlConfig.executeAddSQLDatabaseBinding(bindings);
+							sqlConfig.executeAddBinding(bindings);
 						}
 						
 						//persist the file if we're the only client 

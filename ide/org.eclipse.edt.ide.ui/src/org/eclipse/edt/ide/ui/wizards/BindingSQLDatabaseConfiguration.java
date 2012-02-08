@@ -45,10 +45,6 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 
 	protected void setDefaultAttributes() {
 	}
-
-	protected int getBindingType() {
-		return EGLDDBindingConfiguration.BINDINGTYPE_SQL;	
-	}
 	
 	public String getDbms(){
 		return dbVendorAndVersion;
@@ -138,7 +134,7 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.defaultSchema = defaultSchema;
 	}
 	
-	public Object executeAddSQLDatabaseBinding(Bindings bindings){
+	public Object executeAddBinding(Bindings bindings){
 		Binding sqlBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(sqlBinding);
 		sqlBinding.setType(org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL);

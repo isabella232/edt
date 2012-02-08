@@ -45,7 +45,7 @@ public class ServiceBindingWizard extends EGLFileWizard {
 	
 	@Override
 	public boolean performFinish() {
-		getBindingEGLConfiguration().executeAddEGLBinding();
+		getBindingEGLConfiguration().executeAddBinding(null);
 		return true;
 	}
 	

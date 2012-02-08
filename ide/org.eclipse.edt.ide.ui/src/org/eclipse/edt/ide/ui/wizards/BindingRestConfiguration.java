@@ -39,10 +39,6 @@ public class BindingRestConfiguration extends BindingEGLConfiguration {
 		fSessionCookieId = "";
 		fPreserveRequestHeader = false;
 	}
-
-	protected int getBindingType() {
-		return EGLDDBindingConfiguration.BINDINGTYPE_REST;	
-	}
 	
 	public String getBaseUri(){
 		return fBaseUri;
@@ -68,7 +64,7 @@ public class BindingRestConfiguration extends BindingEGLConfiguration {
 		fPreserveRequestHeader = newVal;
 	}
 	
-	public Object executeAddRestBinding(Bindings bindings){
+	public Object executeAddBinding(Bindings bindings){
 		Binding restBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(restBinding);
 		

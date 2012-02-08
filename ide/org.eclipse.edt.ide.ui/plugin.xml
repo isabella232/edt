@@ -9,9 +9,32 @@
 	<extension-point id="eglTemplates" name="EGL Record Templates" schema="schema/eglTemplates.exsd"/>
     <extension-point id="eglDDEditorPageContributions" name="EGL Deployment Descriptor Editor Page Contributions" schema="schema/eglDDEditorPageProviders.exsd"/>
     <extension-point id="eglDDEditorToolbarContributions" name="EGL Deployment Descriptor Editor Toolbar Contributions" schema="schema/eglDDEditorToolbarProviders.exsd"/>
+    <extension-point id="eglDDEditorBindingProvider" name="EGL Deployment Descriptor Editor Binding Contributions" schema="schema/eglDDEditorBindingProvider.exsd"/>
 	<extension-point id="quickFixProcessors" name="%QuickFixProcessor" schema="schema/quickFixProcessor.exsd"/>
 	<extension-point id="quickAssistProcessors" name="%QuickAssistProcessor" schema="schema/quickAssistProcessors.exsd"/>   
 	   
+   <extension
+         point="org.eclipse.edt.ide.ui.eglDDEditorBindingProvider">
+      <provider id="edt.binding.rest" description="Rest Binding"
+         bindingconfigurationClass="org.eclipse.edt.ide.ui.wizards.BindingRestConfiguration"
+         bindingdetailsPageClass="org.eclipse.edt.ide.ui.internal.deployment.ui.RestBindingDetailPage">
+	      <wizardPage
+	            class="org.eclipse.edt.ide.ui.internal.wizards.RestBindingWizardPageFactory"
+	            id="org.eclipse.edt.ide.ui.internal.wizards.RestBindingWizardPage"
+	            name="org.eclipse.edt.ide.ui.internal.wizards.RestBindingWizardPage">
+	      </wizardPage>
+      </provider>
+      <provider id="edt.binding.sql" description="SQL Binding"
+         bindingconfigurationClass="org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration"
+         bindingdetailsPageClass="org.eclipse.edt.ide.ui.internal.deployment.ui.SQLDatabaseBindingDetailPage">
+	      <wizardPage
+	            class="org.eclipse.edt.ide.ui.internal.wizards.SQLDatabaseBindingWizardPageFactory"
+	            id="org.eclipse.edt.ide.ui.internal.wizards.SQLDatabaseBindingWizardPage"
+	            name="org.eclipse.edt.ide.ui.internal.wizards.SQLDatabaseBindingWizardPage">
+	      </wizardPage>
+      </provider>
+   </extension>
+   
 	<extension 
 		point="org.eclipse.core.runtime.preferences">
         <initializer class="org.eclipse.edt.ide.ui.internal.EDTUIPreferenceInitializer"/>

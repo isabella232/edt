@@ -104,9 +104,6 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 		
 	}
 	
-	protected int getBindingType(){
-		return EGLDDBindingConfiguration.BINDINGTYPE_EGL;
-	}
 
 	protected void setDefaultAttributes() {
 		fSelectedCommTypeBtnIndex=1;
@@ -143,7 +140,7 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 //		return eglBinding;
 //	}
 	
-	public void executeAddEGLBinding(){
+	public Object executeAddBinding( Bindings abindings ){
 		if(fEGLDDFile != null && !fEGLDDFile.exists()){
 			//need to create egl deployment descriptor
 			String encodingName = EGLBasePlugin.getPlugin().getPreferenceStore().getString(EGLBasePlugin.OUTPUT_CODESET);
@@ -181,6 +178,7 @@ public class BindingEGLConfiguration extends BindingBaseConfiguration {
 			}
 		}
 
+		return null;
 	}
 	
 	public EGLDeploymentRoot getEGLDeploymentRoot(){

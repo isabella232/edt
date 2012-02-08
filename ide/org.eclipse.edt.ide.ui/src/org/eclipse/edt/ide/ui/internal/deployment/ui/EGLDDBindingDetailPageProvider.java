@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
 import org.eclipse.edt.ide.ui.internal.deployment.Binding;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingProviderRegistry;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IDetailsPageProvider;
 
@@ -24,12 +25,7 @@ public class EGLDDBindingDetailPageProvider implements IDetailsPageProvider {
 	public IDetailsPage getPage(Object key) {
 		if (key instanceof Binding) {
 			String type = ((Binding)key).getType();
-			if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_SERVICE_REST.equals(type)) {
-				return new RestBindingDetailPage();
-			}
-			else if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL.equals(type)) {
-				return new SQLDatabaseBindingDetailPage();
-			}
+			return EGLDDBindingProviderRegistry.singleton.getDetailsPageFor( type );
 		}
 		
 		return null;

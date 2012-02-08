@@ -85,7 +85,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		getEGLDDBindingConfiguration().getBindingSQLConfiguration();
+//		getEGLDDBindingConfiguration().getBindingSQLConfiguration();
 		
 		createBindingChoiceSection(composite);
 		createConnectionGroup(composite);
@@ -133,7 +133,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				handleInlinedRadio();
-				
+		
 				if (connectionGroupEnablement != null) {
 					connectionGroupEnablement.restore();
 					connectionGroupEnablement = null;
