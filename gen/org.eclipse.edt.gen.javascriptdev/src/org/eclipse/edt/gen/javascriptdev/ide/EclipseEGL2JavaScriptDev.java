@@ -18,21 +18,21 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
-import org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenerator;
+import org.eclipse.edt.gen.generator.javascript.EGL2JavaScript;
 import org.eclipse.edt.ide.compiler.gen.GenerationReport;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
-public class EclipseJavaScriptDevGenerator extends JavaScriptDevGenerator {
+public class EclipseEGL2JavaScriptDev extends EGL2JavaScript {
 
 	private static final String DEV_MODE_SUFFIX = "_devMode";
 	private final IFile eglFile;
 	private final Part part;
 	private final IGenerator generatorProvider;
 
-	public EclipseJavaScriptDevGenerator(IFile eglFile, Part part, IGenerator generator) {
+	public EclipseEGL2JavaScriptDev(IFile eglFile, Part part, IGenerator generator) {
 		super();
 		this.eglFile = eglFile;
 		this.part = part;

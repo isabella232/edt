@@ -25,8 +25,10 @@ public class JavaScriptDevGenerationContributor implements GenerationContributor
 	// define the list of command options for this generator
 	static {
 		commandOptions = new CommandOption[] { 
-			new CommandOption("noatline", new String[] { "noatline" },
-				new CommandParameter(false, new Boolean[] { false, true }, false, "noatline must be defined as true or false"))
+			new CommandOption(Constants.PARAMETER_NOATLINE, new String[] { "noatline" },
+				new CommandParameter(false, new Boolean[] { false, true }, false, "noatline must be defined as true or false")),
+			new CommandOption(Constants.PARAMETER_VE_ENABLE_EDITING, new String[] { "ve" },
+				new CommandParameter(false, new Boolean[] { false, true }, false, "ve must be defined as true or false"))
 		};
 	}
 	// define the list of template directories for this generator

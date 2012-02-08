@@ -15,6 +15,7 @@ public class Constants {
 	private Constants() {}
 	
 	public static final String PARAMETER_NOATLINE = "noatline";
+	public static final String PARAMETER_VE_ENABLE_EDITING = "ve";
 	
 	public static final String FOR_LOOP_COUNTER_ANNOTATION = "FOR_LOOP_COUNTER_ANNOTATION";
 	public static final String ENTER_BLOCK_ANNOTATION = "ENTER_BLOCK_ANNOTATION";
@@ -39,6 +40,5 @@ public class Constants {
 	public static final String genLoadScript4DependentParts = "genLoadScript4DependentParts";
 	public static final String genLoadCSS = "genLoadCSS";
 	
-	public static final String VE_ENABLE_EDITING = "VE_ENABLE_EDITING";
 	public static final String REFERENCES_WIDGETS = "REFERENCES_WIDGETS";
 }
