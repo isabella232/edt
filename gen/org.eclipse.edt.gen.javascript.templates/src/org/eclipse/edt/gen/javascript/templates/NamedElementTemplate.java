@@ -23,7 +23,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		String propertyFunction = CommonUtilities.getPropertyFunction( element, false, ctx );
 
-		if (((ctx.getAttribute(element, Constants.EXPR_LHS) == null) || (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.FALSE))
+		if (((ctx.getAttribute(element, Constants.EXPR_LHS) == null) || (Boolean.FALSE.equals(ctx.getAttribute(element, Constants.EXPR_LHS))))
 			&& (propertyFunction != null) && !CommonUtilities.isCurrentFunction(ctx, propertyFunction, element)) {
 			out.print( propertyFunction );
 			out.print( "()" );
@@ -31,7 +31,7 @@ public class NamedElementTemplate extends JavaScriptTemplate {
 		else {			
 			genName(element, ctx, out);
 			//When the LHS memeber field is processed
-			if ((ctx.getAttribute(element, Constants.EXPR_LHS) != null) && (ctx.getAttribute(element, Constants.EXPR_LHS) == Boolean.TRUE)){
+			if ((ctx.getAttribute(element, Constants.EXPR_LHS) != null) && (Boolean.TRUE.equals(ctx.getAttribute(element, Constants.EXPR_LHS)))){
 				ctx.putAttribute(element, Constants.EXPR_LHS, false);
 			}
 		}

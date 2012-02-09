@@ -60,7 +60,7 @@ public class NameTemplate extends JavaScriptTemplate {
 					}
 					out.print( propertyFunction );
 					//When the LHS memeber field is just processed
-					if ((ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) != null) && (ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) == Boolean.TRUE)){
+					if ((ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS) != null) && (Boolean.TRUE.equals(ctx.getAttribute(expr.getNamedElement(), Constants.EXPR_LHS)))){
 						ctx.putAttribute(expr.getNamedElement(), Constants.EXPR_LHS, false);
 					}
 					out.print( '(' );
