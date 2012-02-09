@@ -56,12 +56,11 @@ plugin@org.eclipse.edt.runtime.javascript=v201202062136,:pserver:anonymous@dev.e
 feature@org.eclipse.edt.tests.feature=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests=v201109281105,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
 
-feature@org.eclipse.edt.jtopen.feature=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt.jtopen.feature
-plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt.gen.java.templates.eglx.jtopen
-plugin@org.eclipse.edt.runtime.java.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt.runtime.java.jtopen
-plugin@org.eclipse.edt.ide.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt.ide.jtopen
-plugin@org.eclipse.edt.mof.eglx.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt.mof.eglx.jtopen
-
+feature@org.eclipse.edt.jtopen.feature=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.jtopen.feature
+plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.gen.java.templates.eglx.jtopen
+plugin@org.eclipse.edt.runtime.java.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
+plugin@org.eclipse.edt.ide.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.ide.jtopen
+plugin@org.eclipse.edt.mof.eglx.jtopen=v201201021017,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.mof.eglx.jtopen
 
 plugin@org.eclipse.test=v20080313,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 fragment@org.eclipse.ant.optional.junit=v20070202,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
