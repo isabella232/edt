@@ -1147,4 +1147,9 @@ public class UINlsStrings extends NLS {
 	public static String genSettingsValidationDefaultRetlative;
 	public static String genSettingsValidationDefaultInvalid;
 	public static String genArguments;
+	public static String genContributorsLabel;
+	public static String genContributorId;
+	public static String genContributorClass;
+	public static String genContributorProvider;
+	public static String genContributorRequires;
 }

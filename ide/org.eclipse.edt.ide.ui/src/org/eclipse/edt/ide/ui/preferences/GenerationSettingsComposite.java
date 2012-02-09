@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.preferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +23,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.edt.ide.core.AbstractGenerator;
+import org.eclipse.edt.ide.core.GenerationContributorEntry;
 import org.eclipse.edt.ide.core.Logger;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
@@ -27,7 +32,6 @@ import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.FolderSelectionDialog;
 import org.eclipse.edt.ide.ui.internal.wizards.IStatusChangeListener;
-import org.eclipse.edt.ide.ui.internal.wizards.TypedElementSelectionValidator;
 import org.eclipse.edt.ide.ui.internal.wizards.TypedViewerFilter;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -44,8 +48,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
@@ -61,6 +67,7 @@ public class GenerationSettingsComposite extends Composite {
 	protected final String argPropertyID;
 	protected final String preferenceID;
 	protected final IStatusChangeListener statusListener;
+	protected final String generatorID;
 	
 	protected Button browseInside;
 	protected Text genInsideDirectory;
@@ -71,7 +78,7 @@ public class GenerationSettingsComposite extends Composite {
 	private StatusInfo latestStatus = new StatusInfo();
 	
 	public GenerationSettingsComposite(Composite parent, int style, IResource resource, IPreferenceStore prefStore,
-			IEclipsePreferences projectPrefs, String dirPropertyID, String argPropertyID, String preferenceID, IStatusChangeListener statusListener) {
+			IEclipsePreferences projectPrefs, String dirPropertyID, String argPropertyID, String preferenceID, IStatusChangeListener statusListener, String generatorID) {
 		super(parent, style);
 		
 		GridLayout layout = new GridLayout();
@@ -86,6 +93,7 @@ public class GenerationSettingsComposite extends Composite {
 		this.argPropertyID = argPropertyID;
 		this.preferenceID = preferenceID;
 		this.statusListener = statusListener;
+		this.generatorID = generatorID;
 		
 		createContents();
 		init();
@@ -100,7 +108,7 @@ public class GenerationSettingsComposite extends Composite {
 		group.setLayout(layout);
 		group.setFont(getFont());
 
-		GridData data = new GridData(GridData.FILL_BOTH);
+		GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		data.horizontalIndent = 0;
 		group.setLayoutData(data);
 		
@@ -277,6 +285,35 @@ public class GenerationSettingsComposite extends Composite {
 			data.horizontalIndent = 5;
 			genArguments.setLayoutData(data);
 		}
+		
+		createGeneratorContributorTable();
+	}
+	
+	private void createGeneratorContributorTable(){
+		//contributor list
+		Label contributorsLabel = new Label(this, SWT.NONE);
+		contributorsLabel.setText(UINlsStrings.genContributorsLabel);
+		
+		Table contributorTable = new Table(this, SWT.BORDER);
+		contributorTable.setLayoutData(new GridData(GridData.FILL_BOTH));
+		contributorTable.setHeaderVisible(true);
+		
+	    TableColumn contributorIdTableColumn = new TableColumn(contributorTable, SWT.NONE);
+	    contributorIdTableColumn.setText(UINlsStrings.genContributorId);
+	    contributorIdTableColumn.setWidth(250);
+	    TableColumn contributorClassTableColumn = new TableColumn(contributorTable, SWT.NONE);
+	    contributorClassTableColumn.setText(UINlsStrings.genContributorClass);
+	    contributorClassTableColumn.setWidth(500);
+	    TableColumn contributorProviderTableColumn = new TableColumn(contributorTable, SWT.NONE);
+	    contributorProviderTableColumn.setText(UINlsStrings.genContributorProvider);
+	    contributorProviderTableColumn.setWidth(400);
+	    
+	    List<GenerationContributorEntry> contributionsUsed = new ArrayList<GenerationContributorEntry>();
+	    AbstractGenerator.determineContributions(generatorID, contributionsUsed);
+	    for(GenerationContributorEntry entry : contributionsUsed){
+	    	TableItem tableItem = new TableItem(contributorTable, SWT.NONE);
+	    	tableItem.setText(new String[] {entry.getIdentifier(), entry.getClassName(), entry.getProvider()});
+	    }
 	}
 	
 	private void init() {
