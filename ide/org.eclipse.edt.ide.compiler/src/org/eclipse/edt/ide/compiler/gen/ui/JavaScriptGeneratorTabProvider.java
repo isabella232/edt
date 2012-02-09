@@ -53,7 +53,7 @@ public class JavaScriptGeneratorTabProvider extends AbstractGeneratorTabProvider
 			}
 			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, getResource(), EDTCompilerIDEPlugin.getDefault().getPreferenceStore(),
 					this.projectPreferenceStore,
-					EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_DIR,EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_ARGUMENTS, EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY, getStatusChangeListener());
+					EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_DIR,EDTCompilerIDEPlugin.PROPERTY_JAVASCRIPTGEN_ARGUMENTS, EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY, getStatusChangeListener(), getGeneratorId());
 			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));
 		}
 		return getComposite();

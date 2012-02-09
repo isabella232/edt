@@ -54,7 +54,7 @@ public class JavaGeneratorTabProvider extends AbstractGeneratorTabProvider
 			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, 
 					getResource(), EDTCompilerIDEPlugin.getDefault().getPreferenceStore(),
 					this.projectPreferenceStore,
-					EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR, EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_ARGUMENTS,EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener());
+					EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR, EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_ARGUMENTS,EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener(), getGeneratorId());
 			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));		
 
 		}
