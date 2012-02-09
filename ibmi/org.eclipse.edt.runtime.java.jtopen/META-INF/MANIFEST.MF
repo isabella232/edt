@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT JTOpen Java Runtime
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.runtime.java.jtopen
 Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.edt.runtime.java;bundle-version="0.7.0"
