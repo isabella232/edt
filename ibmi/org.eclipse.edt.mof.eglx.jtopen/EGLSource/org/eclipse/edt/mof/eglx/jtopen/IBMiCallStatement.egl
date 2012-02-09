@@ -1,0 +1,6 @@
+package org.eclipse.edt.mof.eglx.jtopen;
+
+
+externalType IBMiCallStatement extends org.eclipse.edt.mof.egl.CallStatement type MofClass
+end
+

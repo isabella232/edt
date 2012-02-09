@@ -1,14 +1,27 @@
-<project name="BuildPlugin" default="Jarem" basedir="../">
+<project name="BuildPlugin" default="JarEglar" basedir="./../../">
 
-<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
+	<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
+	<property name="jtopenpluginName" value="org.eclipse.edt.externaltypes.jtopen"/>
+	<property name="javapluginName" value="org.eclipse.edt.externaltypes.java"/>
+	<property name="jeepluginName" value="org.eclipse.edt.externaltypes.jee"/>
 
 <target name="init">    
+    <echo message="processing ${basedir}." />
     <echo message="processing ${pluginName}." />
 	<property name="eglBin" value="EGLBin"/>
 </target>
 	
-<target name="Jarem" depends="init">	
-	<jar basedir="./${eglBin}" destfile="./egllib/jtopen.mofar"></jar>
+<target name="JarMofar" depends="init">	
+	<jar basedir="${pluginName}/${eglBin}" includes= "**/*.mofxml" destfile="${pluginName}/egllib/jtopen.mofar">
+	</jar>
+</target>
+<target name="JarEglar" depends="JarMofar">	
+	<jar basedir="" includes= "**/*.eglxml" destfile="${pluginName}/egllib/jtopen.eglar">
+		<fileset dir="${pluginName}/${eglBin}"></fileset>
+		<fileset dir="${jtopenpluginName}/${eglBin}"></fileset>
+		<fileset dir="${javapluginName}/${eglBin}"></fileset>
+		<fileset dir="${jeepluginName}/${eglBin}"></fileset>
+</jar>
 </target>
 	
 </project>
