@@ -1,7 +1,5 @@
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
-import java.util.List;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
@@ -15,6 +13,7 @@ public class AS400GenHelper {
 	static AS400GenHelper INSTANCE = new AS400GenHelper();
 
 	static void genHelperClassName(LogicAndDataPart part, TabbedWriter out){
+		out.print(Constants.HELPER_PREFIX);
 		out.print(org.eclipse.edt.gen.java.CommonUtilities.classAlias(part));
 		out.print(Constants.HELPER_SUFFIX);
 	}
@@ -31,10 +30,7 @@ public class AS400GenHelper {
 		}
 	}
 	public void genHelperClass(LogicAndDataPart part, Context ctx, TabbedWriter out){
-		@SuppressWarnings("unchecked")
-		List<String> generatedHelpers = (List<String>)ctx.getAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers);
-		if(!generatedHelpers.contains(part.getTypeSignature())){
-			generatedHelpers.add(part.getTypeSignature());
+		if(CommonUtilities.getGeneratedHelpers(ctx).add(part.getTypeSignature())){
 			out.println();
 			out.print("protected class ");
 			genHelperClassName(part, out);
@@ -66,6 +62,4 @@ public class AS400GenHelper {
 			}
 		}
 	}
-	
-
 }

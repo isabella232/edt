@@ -1,11 +1,19 @@
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.serialization.Environment;
 
 public class CommonUtilities {
 
@@ -32,5 +40,33 @@ public class CommonUtilities {
 			annotation = member.getAnnotation(annotationSignature);
 		}
 		return annotation;
+	}
+	public static Function createProxyFunction(Function function) {
+		Function proxy = (Function)function.clone();
+		proxy.setName(createProxyFunctionName(proxy));
+		//create the connection parameter
+		FunctionParameter conn = JavaTemplate.factory.createFunctionParameter();
+		conn.setIsNullable(true);
+		conn.setParameterKind(ParameterKind.PARM_IN);
+		conn.setName(Constants.as400ConnectionName);
+		try {
+			conn.setType((Type)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_IBMiConnection));
+		} catch (Exception e) {}
+		proxy.addParameter(conn);
+		return proxy;
+	}
+
+	public static String createProxyFunctionName(Function function) {
+		return Constants.FUNCTION_HELPER_PREFIX + function.getName() + Constants.FUNCTION_HELPER_SUFFIX;
+	}
+	
+	public static List<String> getGeneratedHelpers(Context ctx) {
+		@SuppressWarnings("unchecked")
+		List<String> generatedHelpers = (List<String>)ctx.getAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers);
+		if(generatedHelpers == null){
+			generatedHelpers = new ArrayList<String>();
+			ctx.putAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers, generatedHelpers);
+		}
+		return generatedHelpers;
 	}
 }

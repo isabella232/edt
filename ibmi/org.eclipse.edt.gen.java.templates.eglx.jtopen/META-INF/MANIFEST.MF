@@ -12,6 +12,7 @@ Require-Bundle: org.eclipse.edt.gen.java.templates;bundle-version="0.7.0",
  org.eclipse.edt.mof.egl;bundle-version="0.7.0",
  org.eclipse.edt.mof;bundle-version="0.7.0",
  org.eclipse.edt.gen.java.templates.eglx.persistence;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.7.0"
+ org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.7.0",
+ org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.0"
 Export-Package: org.eclipse.edt.gen.java.eglx.jtopen,
  org.eclipse.edt.gen.java.templates.eglx.jtopen

@@ -10,6 +10,9 @@ public interface Constants {
 	static final String genHelperClass = "genHelperClass"; 
 	static final String genAS400Type = "genAS400Type"; 
 	static final String genAS400TypeConstructorOptions = "genAS400TypeConstructorOptions"; 
+	static final String getFunctionAccess = "getFunctionAccess";
+	static final String genUsingClause = "genUsingClause";
+	static final String getUsingArgument = "getUsingArgument";
 	
 	//signatures
 	static final String signature_IBMiProgram = "eglx.jtopen.annotations.IBMiProgram";
@@ -55,4 +58,7 @@ public interface Constants {
 	//Misc constants
 	public static final String as400ConnectionName = "ezeIBMiConn";
 	public static final String HELPER_SUFFIX = "_IBMiStructure";
+	public static final String HELPER_PREFIX = "Eze_";
+	public static final String FUNCTION_HELPER_SUFFIX = "_IBMiProxy";
+	public static final String FUNCTION_HELPER_PREFIX = "eze_";
 }

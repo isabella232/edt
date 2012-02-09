@@ -11,42 +11,40 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.FunctionStatement;
+import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.ReturnStatement;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.utils.EList;
 
 
 public class FunctionTemplate extends JavaTemplate implements Constants{
 
-	private void addToContext(Context ctx, Function function){
-		//get the parameter annotations
-		@SuppressWarnings("unchecked")
-		EList<Annotation> parameterAnnotationList = (EList<Annotation>)function.getAnnotation(signature_IBMiProgram).getValue(subKey_parameterAnnotations);
-		if(parameterAnnotationList != null){
-			for(int idx = 0; idx < parameterAnnotationList.size(); idx++){
-				Object annot = parameterAnnotationList.get(idx);
-				if(annot instanceof Annotation){
-					CommonUtilities.addAnntation(function.getParameters().get(idx), (Annotation)annot, ctx);
-				}
-			}
-		}
+	private MemberName createMember(FunctionParameter parameter){
+		MemberName mn = factory.createMemberName();
+		mn.setId(parameter.getId());
+		mn.setMember(parameter);
+		return mn;
 	}
-
 	public void genFunctionBody(Function function, Context ctx, TabbedWriter out)  {
 		Annotation ibmiProgram = function.getAnnotation(signature_IBMiProgram);
-
-		addToContext(ctx, function);
+		//remove the connection parameter
+		function.getParameters().remove(function.getParameters().size() - 1);
 		
+		out.println("boolean returnConnectionToPool = false;");
 		//convert parameters to AS400 objects
-		out.print("eglx.jtopen.IBMiConnection ");
+		out.print("if(");
+		out.print(as400ConnectionName);
+		out.println(" == null){");
 		out.print(as400ConnectionName);
 		out.print(" = ");
 
@@ -60,6 +58,8 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 			out.print("null");
 		}
 		out.println(";");
+		out.println("returnConnectionToPool = true;");
+		out.println("}");
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
 
 		String libraryName = (String)ibmiProgram.getValue(subKey_libraryName);
@@ -129,13 +129,21 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		ctx.foreach(function.getParameters(), ',', genName, ctx, out);
 		out.print("}, "); 
 		out.print("new com.ibm.as400.access.AS400DataType[]{"); 
-		addComma = false;
+		int idx = 0;
+		@SuppressWarnings("unchecked")
+		EList<Annotation> parameterAnnotationList = (EList<Annotation>)ibmiProgram.getValue(subKey_parameterAnnotations);
 		for(FunctionParameter parameter : function.getParameters()){
-			if(addComma){
+			if(idx > 0){
 				out.print(", "); 
 			}
+			if(parameterAnnotationList != null && idx < parameterAnnotationList.size()){
+				Object annot = parameterAnnotationList.get(idx);
+				if(annot instanceof Annotation){
+					CommonUtilities.addAnntation(parameter, (Annotation)annot, ctx);
+				}
+			}
+			idx++;
 			AS400GenType.INSTANCE.genAS400Type(parameter, parameter.getType(), ctx, out);
-			addComma = true;
 		}
 		out.print("}, "); 
 		out.print(as400ConnectionName);
@@ -143,9 +151,12 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		ctx.invoke(genName, function, ctx, out);
 		out.println("\", this);"); 
 		
+		out.println("if(returnConnectionToPool){");
+
 		out.print("eglx.jtopen.JTOpenConnections.getAS400ConnectionPool().returnConnectionToPool(");
 		out.print(as400ConnectionName);
 		out.println(".getAS400());");
+		out.println("}"); 
 
 		ctx.invoke(genArrayResize, function, ctx, out);
 		
@@ -154,17 +165,55 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		}
 	}
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
-		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
-		@SuppressWarnings("unchecked")
-		List<String> generatedHelpers = (List<String>)ctx.getAttribute(ctx.getClass(), subKey_ibmiGeneratedHelpers);
-		if(generatedHelpers == null){
-			generatedHelpers = new ArrayList<String>();
-			ctx.putAttribute(ctx.getClass(), subKey_ibmiGeneratedHelpers, generatedHelpers);
-		}
+		ctx.invokeSuper(this, genDeclaration, createFunction(function, ctx), ctx, out);
+		ctx.invokeSuper(this, genDeclaration, CommonUtilities.createProxyFunction(function), ctx, out);
 		for(FunctionParameter parameter : function.getParameters()){
 			AS400GenHelper.INSTANCE.genHelperClass(parameter.getType(), ctx, out);
 		}
 	}	
+
+	private Function createFunction(Function function, Context ctx) {
+		Function newFunction = factory.createFunction();
+		newFunction.setName(function.getName());
+		for(FunctionParameter parameter : function.getParameters()){
+			FunctionParameter newParameter = (FunctionParameter)parameter.clone();
+			newParameter.setContainer(newFunction);
+			newFunction.addParameter(newParameter);
+		}
+		newFunction.setType(function.getType());
+		Statement stmt = createFunctionInvocationBody(newFunction);
+		newFunction.setStatementBlock(factory.createStatementBlock());
+		newFunction.getStatementBlock().setContainer(newFunction);
+		newFunction.addStatement(stmt);
+		return newFunction;
+	}
+
+	private Statement createFunctionInvocationBody(Function function)  {
+		//create a function invocation to access the proxy
+		FunctionInvocation invoc = factory.createFunctionInvocation();
+		Function proxy = CommonUtilities.createProxyFunction(function);
+		proxy.setContainer(function.getContainer());
+		invoc.setTarget(proxy);
+		invoc.setId(CommonUtilities.createProxyFunctionName(function));
+		for(FunctionParameter parameter : function.getParameters()){
+			invoc.getArguments().add(createMember(parameter));
+		}
+		NullLiteral nullLit = factory.createNullLiteral();
+		invoc.getArguments().add(nullLit);
+		Statement functionStatement;
+		if(function.getReturnType() == null){
+			functionStatement = factory.createFunctionStatement();
+			functionStatement.setContainer(function);
+			((FunctionStatement)functionStatement).setExpr(invoc);
+		}
+		else{
+			functionStatement = factory.createReturnStatement();
+			functionStatement.setContainer(function);
+			((ReturnStatement)functionStatement).setExpression(invoc);
+		}
+		return functionStatement;
+	}
+
 	public void genArrayResize(Function function, Context ctx, TabbedWriter out){
 		for(FunctionParameter parameter : function.getParameters()){
 			AS400GenArrayResize.INSTANCE.genArrayResizeParameter(parameter, ctx, out, function);
