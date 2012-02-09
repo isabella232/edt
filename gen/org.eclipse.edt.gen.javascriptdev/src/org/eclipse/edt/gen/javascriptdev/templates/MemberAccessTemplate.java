@@ -35,7 +35,7 @@ public class MemberAccessTemplate extends org.eclipse.edt.gen.javascript.templat
 	public void genMemberAccess(MemberAccess expr, Context ctx, TabbedWriter out) {
 		super.genMemberAccess(expr, ctx, out);
 		Object veEdit = ctx.getParameter(Constants.PARAMETER_VE_ENABLE_EDITING);
-		if (veEdit != null && veEdit == Boolean.TRUE && CommonUtilities.isRUIWidget(expr.getMember().getType()) && expr.getQualifier() != null && 
+		if (veEdit != null && Boolean.TRUE.equals(veEdit) && CommonUtilities.isRUIWidget(expr.getMember().getType()) && expr.getQualifier() != null && 
 				((expr.getQualifier() instanceof MemberName && !(((MemberName)expr.getQualifier()).getMember() instanceof FunctionParameter)) ||
 						((expr.getQualifier() instanceof PartName) && ((PartName)expr.getQualifier()).getPart() instanceof Library))){
 			List references = (List)ctx.get( Constants.REFERENCES_WIDGETS );

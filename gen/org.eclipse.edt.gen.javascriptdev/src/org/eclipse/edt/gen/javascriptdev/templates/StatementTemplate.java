@@ -28,7 +28,7 @@ public class StatementTemplate extends org.eclipse.edt.gen.javascript.templates.
 	
 	public void genAtLine(Statement stmt, Context ctx, TabbedWriter out) {
 		Object noatline = ctx.getParameter(Constants.PARAMETER_NOATLINE);
-		if (noatline == null || noatline == Boolean.FALSE) {
+		if (noatline == null || Boolean.FALSE.equals(noatline)) {
 			Annotation annotation = stmt.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null){
 				Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);

@@ -72,7 +72,7 @@ public class FunctionTemplate extends org.eclipse.edt.gen.javascript.templates.F
 	
 	public void genAtLine(Function function, Context ctx, TabbedWriter out) {
 		Object noatline = ctx.getParameter(Constants.PARAMETER_NOATLINE);
-		if (noatline == null || noatline == Boolean.FALSE) {
+		if (noatline == null || Boolean.FALSE.equals(noatline)) {
 			Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
 			if (annotation != null){
 				Integer line = (Integer)annotation.getValue(IEGLConstants.EGL_PARTLINE);
