@@ -102,7 +102,6 @@ public class TestServer {
 				else {
 					TestServer.logWarning("Missing IDE port value for argument \"" + args[i] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				i++;
 			}
 			else if ("-c".equals(args[i])) { //$NON-NLS-1$
 				if (i + 1 < args.length) {
@@ -189,14 +188,16 @@ public class TestServer {
 		Log.setLog(new Logger(Log.getRootLogger()));
 		setDebug(debug);
 		
-		try {
-			// Encode the context but not a leading '/'
-			contextRoot = '/' + URLEncoder.encode(contextRoot.charAt(0) == '/' ? contextRoot.substring(1) : contextRoot, "UTF-8"); //$NON-NLS-1$
-		}
-		catch (UnsupportedEncodingException e) {
-			// Shouldn't happen.
-			if (contextRoot.charAt(0) != '/') {
-				contextRoot = "/" + contextRoot; //$NON-NLS-1$
+		if (contextRoot != null) {
+			try {
+				// Encode the context but not a leading '/'
+				contextRoot = '/' + URLEncoder.encode(contextRoot.charAt(0) == '/' ? contextRoot.substring(1) : contextRoot, "UTF-8"); //$NON-NLS-1$
+			}
+			catch (UnsupportedEncodingException e) {
+				// Shouldn't happen.
+				if (contextRoot.charAt(0) != '/') {
+					contextRoot = "/" + contextRoot; //$NON-NLS-1$
+				}
 			}
 		}
 		this.contextRoot = contextRoot;
