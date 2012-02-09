@@ -29,6 +29,9 @@ public class IDEEDTCompiler extends IDEBaseCompiler {
 		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.persistence.sql", "egllib");
 		path += File.pathSeparator;
 		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.services", "egllib");
+//FIXME JV this need to be extensible 
+		path += File.pathSeparator;
+		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.jtopen", "egllib");
 		return path;
 	}
 
