@@ -18,6 +18,10 @@
       %license
    </license>
 
+   <includes
+         id="org.eclipse.edt.jtopen.feature"
+         version="0.0.0"/>
+
    <plugin
          id="org.eclipse.edt.compiler"
          download-size="0"
