@@ -161,4 +161,16 @@
          properties="hasJavaMainProgram,hasProjectNatures"
          type="java.lang.Object"/>            
    </extension>
+   
+   <!-- SMAP filter -->
+   <extension point="org.eclipse.ui.navigator.navigatorContent">
+       <commonFilter
+             activeByDefault="true"
+             class="org.eclipse.edt.debug.internal.ui.java.SMAPViewerFilter"
+             description="%SMAPFilterDesc"
+             id="org.eclipse.edt.ide.ui.packageexplorer.filter.SMAPViewerFilter"
+             name="%SMAPFilterName"
+             visibleInUI="true">
+       </commonFilter>
+   </extension>
 </plugin>
