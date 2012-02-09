@@ -93,7 +93,12 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 	private void genEglRestInvocation(CallStatement stmt, Function serviceInterfaceFunction, Context ctx, TabbedWriter out) {
 		
 		out.print("egl.eglx.rest.invokeEglService(egl.eglx.rest.configHttp(");  //handler parameter
-		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		if(stmt.getUsing() == null){
+			ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		}
+		else{
+			ctx.invoke(genExpression, stmt.getUsing(), ctx, out);
+		}
 		out.println(",");
 		out.pushIndent();
 		out.pushIndent();
@@ -163,7 +168,12 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		}
 		
 		out.print("egl.eglx.rest.invokeService(egl.eglx.rest.configHttp(");  //handler parameter
-		ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		if(stmt.getUsing() == null){
+			ctx.invoke(genExpression, stmt.getInvocationTarget().getQualifier(), ctx, out);
+		}
+		else{
+			ctx.invoke(genExpression, stmt.getUsing(), ctx, out);
+		}
 		out.println(",");
 		out.pushIndent();
 		out.pushIndent();
