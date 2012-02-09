@@ -12,10 +12,10 @@
 package org.eclipse.edt.compiler.internal.egl2mof;
 
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.FunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -60,6 +60,7 @@ import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -167,11 +168,24 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		return false;
 	}
 
+	private boolean isIBMiCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement callStatement){
+	
 
+		org.eclipse.edt.compiler.core.ast.Expression expr = callStatement.getInvocationTarget();
+		FunctionBinding function = (FunctionBinding)expr.resolveTypeBinding();
+		return function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null;
+	}
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		IOStatementGenerator generator = getGeneratorFor(callStatement);
-		CallStatement stmt = generator.genCallStatement(callStatement, eObjects);
+		//FIXME JV this need to be extensible 
+		CallStatement stmt;
+		if(isIBMiCallStatement(callStatement)){
+			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
+		}
+		else{
+			IOStatementGenerator generator = getGeneratorFor(callStatement);
+			stmt = generator.genCallStatement(callStatement, eObjects);
+		}
 		callStatement.getInvocationTarget().accept(this);
 		stmt.setInvocationTarget((Expression)stack.pop());
 		if (callStatement.hasArguments()) {
