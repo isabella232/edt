@@ -58,7 +58,6 @@ plugin@org.eclipse.edt.compiler.tests=v201109281105,:pserver:anonymous@dev.eclip
 
 feature@org.eclipse.edt.jtopen.feature=v201202091423,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.jtopen.feature
 plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201202091406,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.gen.java.templates.eglx.jtopen
-plugin@org.eclipse.edt.runtime.java.jtopen=v201202091406,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
 plugin@org.eclipse.edt.ide.jtopen=v201202091406,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.ide.jtopen
 plugin@org.eclipse.edt.mof.eglx.jtopen=v201202091406,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.mof.eglx.jtopen
 
