@@ -53,7 +53,7 @@ public class EGLFunctionFromLibraryUseStatementProposalHandler extends EGLAbstra
 			IFunctionBinding function = (IFunctionBinding) ((IDataBinding) iter.next()).getType();
 			
 			if (function.getName().toUpperCase().startsWith(getPrefix().toUpperCase())) {
-				if(!function.isPrivate()) {
+				if(!function.isPrivate() && !containerPartFunctions.contains(function.getName().toLowerCase())) {
 					if (mustHaveReturnCode && function.getReturnType() != null)
 						proposals.add(createProposal(function));
 					if (!mustHaveReturnCode && function.getReturnType() == null)

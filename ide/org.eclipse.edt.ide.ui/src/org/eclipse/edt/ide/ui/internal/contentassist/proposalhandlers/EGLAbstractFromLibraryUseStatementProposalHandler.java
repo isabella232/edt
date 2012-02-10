@@ -33,7 +33,8 @@ import org.eclipse.ui.IEditorPart;
 
 public abstract class EGLAbstractFromLibraryUseStatementProposalHandler extends EGLAbstractProposalHandler {
 	protected boolean mustHaveReturnCode;
-	private Node functionContainerPart;
+	protected Node functionContainerPart;
+	protected Set<String> containerPartFunctions = new HashSet<String>();
 
 	public EGLAbstractFromLibraryUseStatementProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor, boolean mustHaveReturnCode, Node boundNode) {
 		super(viewer, documentOffset, prefix, editor);
@@ -64,6 +65,11 @@ public abstract class EGLAbstractFromLibraryUseStatementProposalHandler extends 
 										}
 									}
 								}
+								return false;
+							}
+							
+							public boolean visit(NestedFunction nestedFunction) {
+								containerPartFunctions.add(nestedFunction.getName().getCaseSensitiveIdentifier().toLowerCase());
 								return false;
 							}
 						});
