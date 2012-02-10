@@ -28,11 +28,20 @@
 		<mkdir dir="${build.result.folder}/widgetzips"/>
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.remote_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets_${edtVersion}"/>
-
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
+		
 		<!-- Store the root of the extracted projects in a property. -->
 		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets"/>
 
+		<!-- Copy the widgets project to a new project named org.eclipse.edt.rui.widgets_${edtVersion} -->
+		<property name="ruiDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.widgets_${edtVersion}"/>
+		<copy todir="${ruiDir}" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.widgets/"/>
+		</copy>
+		
+		<!-- Update .project file for org.eclipse.edt.rui.widgets to include a version number -->
+		<replace file="${ruiDir}/.project" encoding="UTF-8" token="&lt;name&gt;org.eclipse.edt.rui.widgets&lt;/name&gt;" value="&lt;name&gt;org.eclipse.edt.rui.widgets_${edtVersion}&lt;/name&gt;"/>
+	
 		<!-- Make org.eclipse.edt.rui.widgets_${edtVersion}.zip -->
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.widgets_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}" 
@@ -41,23 +50,11 @@
 		<!-- To create the other two zips, we copy files into their directories then zip them up. -->
 		<property name="dojoDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo_${edtVersion}"/>
 		<property name="dojoRemoteDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.remote_${edtVersion}"/>
-		<copy todir="${dojoDir}/EGLSource" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/EGLSource" excludes="**/*.egldd"/>
+		<copy todir="${dojoDir}" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets"/>
 		</copy>
-		<copy todir="${dojoRemoteDir}/EGLSource" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/EGLSource" excludes="**/*.egldd"/>
-		</copy>
-		<copy todir="${dojoDir}/icons" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/icons"/>
-		</copy>
-		<copy todir="${dojoRemoteDir}/icons" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/icons"/>
-		</copy>
-		<copy todir="${dojoDir}/WebContent" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/WebContent"/>
-		</copy>
-		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets_${edtVersion}/WebContent"/>
+		<copy todir="${dojoRemoteDir}" overwrite="true">
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets"/>
 		</copy>
 		<copy todir="${dojoDir}/WebContent" overwrite="true">
 			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion}/WebContent"/>
@@ -65,6 +62,13 @@
 		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
 			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion}/WebContent"/>
 		</copy>
+		
+		<!-- Update .project file for org.eclipse.edt.rui.dojo to include a version number -->
+		<replace file="${dojoDir}/.project" encoding="UTF-8" token="&lt;name&gt;org.eclipse.edt.rui.dojo.widgets&lt;/name&gt;" value="&lt;name&gt;org.eclipse.edt.rui.dojo_${edtVersion}&lt;/name&gt;"/>
+		
+		<!-- Update .project file for org.eclipse.edt.rui.dojo.remote to include a version number -->
+		<replace file="${dojoRemoteDir}/.project" encoding="UTF-8" token="&lt;name&gt;org.eclipse.edt.rui.dojo.widgets&lt;/name&gt;" value="&lt;name&gt;org.eclipse.edt.rui.dojo.remote_${edtVersion}&lt;/name&gt;"/>
+					
 		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}"
 			includes="org.eclipse.edt.rui.dojo_${edtVersion}/**"/>
