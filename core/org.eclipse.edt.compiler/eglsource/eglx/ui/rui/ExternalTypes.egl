@@ -46,20 +46,20 @@ ExternalType Document type JavaScriptObject {
 		relativePath = "eglx/ui/rui"
 	}
 	
-	onKeyDown EventHandler?  { @Property { setMethod="setOnKeyDown" } };
-	onKeyPress EventHandler? { @Property { setMethod="setOnKeyPress" } };
-	onKeyUp EventHandler? { @Property { setMethod="setOnKeyUp" } };
-	onMouseDown EventHandler? { @Property { setMethod="setOnMouseDown" } };
-	onMouseMove EventHandler? { @Property { setMethod="setOnMouseMove" } };
-	onMouseOver EventHandler? { @Property { setMethod="setOnMouseOver" } };
-	onMouseOut EventHandler? { @Property { setMethod="setOnMouseOut" } };
-	onMouseUp EventHandler? { @Property { setMethod="setOnMouseUp" } };
-	onScroll EventHandler? { @Property { setMethod="setOnScroll" } };
-	onChange EventHandler? { @Property { setMethod="setOnChange" } };						
-	onClick EventHandler? { @Property { setMethod="setOnClick" } };
+	onKeyDown EventHandler?  { @Property { getMethod="getOnKeyDown" } };
+	onKeyPress EventHandler? { @Property { getMethod="getOnKeyPress" } };
+	onKeyUp EventHandler? { @Property { getMethod="getOnKeyUp" } };
+	onMouseDown EventHandler? { @Property { getMethod="getOnMouseDown" } };
+	onMouseMove EventHandler? { @Property { getMethod="getOnMouseMove" } };
+	onMouseOver EventHandler? { @Property { getMethod="getOnMouseOver" } };
+	onMouseOut EventHandler? { @Property { getMethod="getOnMouseOut" } };
+	onMouseUp EventHandler? { @Property { getMethod="getOnMouseUp" } };
+	onScroll EventHandler? { @Property { getMethod="getOnScroll" } };
+	onChange EventHandler? { @Property { getMethod="getOnChange" } };						
+	onClick EventHandler? { @Property { getMethod="getOnClick" } };
 
-	onSelectStart EventHandler? { @Property { setMethod="setOnSelecStart" } };
-	onDragStart EventHandler? { @Property { setMethod="setOnDragStart" } };
+	onSelectStart EventHandler? { @Property { getMethod="getOnSelecStart" } };
+	onDragStart EventHandler? { @Property { getMethod="getOnDragStart" } };
 	
 	body Widget;
 	
@@ -455,7 +455,7 @@ ExternalType Widget type JavaScriptObject {
 	onChange
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnChange", setMethod="setOnChange" },
+			{ @Property { getMethod="getOnChange" },
 			@VEEvent{}
 		};
 	function getOnChange() returns (EventHandler[]);
@@ -464,7 +464,7 @@ ExternalType Widget type JavaScriptObject {
 	onClick
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnClick", setMethod="setOnClick" },
+			{ @Property { getMethod="getOnClick" },
 			@VEEvent{}
 		};
 	function getOnClick() returns (EventHandler[]);
@@ -473,7 +473,7 @@ ExternalType Widget type JavaScriptObject {
 	onSelect
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnSelect", setMethod="setOnSelect" },
+			{ @Property { getMethod="getOnSelect" },
 			@VEEvent{}
 		};
 	function getOnSelect() returns (EventHandler[]);
@@ -482,7 +482,7 @@ ExternalType Widget type JavaScriptObject {
 	onFocusGained
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnFocusGained", setMethod="setOnFocusGained" },
+			{ @Property { getMethod="getOnFocusGained" },
 			@VEEvent{}
 		};
 	function getOnFocusGained() returns (EventHandler[]);
@@ -491,7 +491,7 @@ ExternalType Widget type JavaScriptObject {
 	onFocusLost
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnFocusLost", setMethod="setOnFocusLost" },
+			{ @Property { getMethod="getOnFocusLost" },
 			@VEEvent{}
 		};
 	function getOnFocusLost() returns (EventHandler[]);
@@ -500,7 +500,7 @@ ExternalType Widget type JavaScriptObject {
 	onKeyDown
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnKeyDown", setMethod="setOnKeyDown" },		
+			{ @Property { getMethod="getOnKeyDown" },		
 			@VEEvent{}
 		};
 	function getOnKeyDown() returns (EventHandler[]);
@@ -509,7 +509,7 @@ ExternalType Widget type JavaScriptObject {
 	onKeyPress
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnKeyPress", setMethod="setOnKeyPress" },
+			{ @Property { getMethod="getOnKeyPress" },
 			@VEEvent{}
 		};
 	function getOnKeyPress() returns (EventHandler[]);
@@ -518,7 +518,7 @@ ExternalType Widget type JavaScriptObject {
 	onKeyUp
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnKeyUp", setMethod="setOnKeyUp" },
+			{ @Property { getMethod="getOnKeyUp" },
 			@VEEvent{}
 		};
 	function getOnKeyUp() returns (EventHandler[]);
@@ -527,7 +527,7 @@ ExternalType Widget type JavaScriptObject {
 	onMouseDown
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnMouseDown", setMethod="setOnMouseDown" },
+			{ @Property { getMethod="getOnMouseDown" },
 			@VEEvent{}
 		};
 	function getOnMouseDown() returns (EventHandler[]);
@@ -536,7 +536,7 @@ ExternalType Widget type JavaScriptObject {
 	onMouseMove
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnMouseMove", setMethod="setOnMouseMove" },
+			{ @Property { getMethod="getOnMouseMove" },
 			@VEEvent{}
 		};
 	function getOnMouseMove() returns (EventHandler[]);
@@ -545,7 +545,7 @@ ExternalType Widget type JavaScriptObject {
 	onMouseOver
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnMouseOver", setMethod="setOnMouseOver" },
+			{ @Property { getMethod="getOnMouseOver" },
 			@VEEvent{}
 		};
 	function getOnMouseOver() returns (EventHandler[]);
@@ -554,7 +554,7 @@ ExternalType Widget type JavaScriptObject {
 	onMouseOut
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnMouseOut", setMethod="setOnMouseOut" },
+			{ @Property { getMethod="getOnMouseOut" },
 			@VEEvent{}
 		};
 	function getOnMouseOut() returns (EventHandler[]);
@@ -563,7 +563,7 @@ ExternalType Widget type JavaScriptObject {
 	onMouseUp
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnMouseUp", setMethod="setOnMouseUp" },
+			{ @Property { getMethod="getOnMouseUp" },
 			@VEEvent{}
 		};
 	function getOnMouseUp() returns (EventHandler[]);
@@ -572,7 +572,7 @@ ExternalType Widget type JavaScriptObject {
 	onScroll
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnScroll", setMethod="setOnScroll" },
+			{ @Property { getMethod="getOnScroll" },
 			@VEEvent{}
 		};
 	function getOnScroll() returns (EventHandler[]);
@@ -581,7 +581,7 @@ ExternalType Widget type JavaScriptObject {
 	onContextMenu
 			EventHandler[]
 			
-			{ @Property { getMethod="getOnContextMenu", setMethod="setOnContextMenu" },
+			{ @Property { getMethod="getOnContextMenu" },
 			@VEEvent{}
 		};
 	function getOnContextMenu() returns (EventHandler[]);
