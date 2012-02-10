@@ -28,7 +28,7 @@
 		<mkdir dir="${build.result.folder}/widgetzips"/>
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${edtVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
 		
 		<!-- Store the root of the extracted projects in a property. -->
 		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets"/>
