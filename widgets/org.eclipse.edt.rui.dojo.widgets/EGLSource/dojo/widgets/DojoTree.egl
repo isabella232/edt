@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/**
+ * This is a Tree widget.
+ *
+ * For more information on the Dojo widget itself, see http://docs.dojocampus.org/dijit/Tree
+ *
+ */
+ExternalType DojoTree extends DojoContainer type JavaScriptObject{
+		relativePath="dojo/widgets",
+		externalName="DojoTree",		
+		@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{\n" + 
+				"\t\ttext = \"World\", width = \"200\", showRoot = true, /* onClick ::= handleCity, */ children = [\n" +
+				"\t\tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"NA\", text = \"North America\", children = [\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"CA\", text = \"Canada\" },\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"US\", text = \"USA\" }\n" +
+				"\t\t]},\n" +
+				"\t\tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"EU\", text = \"Europe\", children = [\n" +
+				"\t\t \tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"GR\", text = \"Greece\"},\n" +
+				"\t\t \tnew ${typeName:dojo.widgets.DojoTreeNode} { id = \"IT\", text = \"Italy\"}\n" +
+				"\t\t]}\n" +
+				"\t]}",
+			displayName = "Tree",
+			smallIcon = "icons/ctool16/tree_pal16.gif",
+			largeIcon = "icons/ctool24/dojox_dojodata_pal24.gif",
+			container = @VEContainer{},
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "x", "y", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect", "onScroll"],
+			provider = "Dojo"
+		}	
+	}
+
+	/* 
+	 * The ID of the currently selected tree item
+	 */
+	selection String;
+
+	/*
+	 * The label for the top-level tree node
+	 */
+	text String { @Property, @VEProperty };
+	
+	showRoot boolean { @Property, @VEProperty{default = "true"} };	
+	
+	/*
+	 * Function for Bidi operation
+	 */
+	function setBiDiMarkers ();
+end

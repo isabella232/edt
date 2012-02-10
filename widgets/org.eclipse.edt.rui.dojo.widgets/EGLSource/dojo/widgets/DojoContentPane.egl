@@ -1,0 +1,82 @@
+/*******************************************************************************
+ * Copyright � 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * A Dojo container that has children and a title
+ * 
+ * For more detail, see http://docs.dojocampus.org/dijit/layout/ContentPane
+ */
+ExternalType DojoContentPane Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoContentPane",
+		@VEWidget{ 
+			container = @VEContainer{},
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "padding", "paddingLeft", "paddingRight", "paddingTop", "paddingBottom", "position", "x", "y", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect","onScroll","onFocusGained", "onFocusLost", "onKeyDown", "onKeyPress", "onKeyUp"]
+		}
+	}
+	
+	/*
+	 * Set the region, applies only to bordercontainer
+	 */
+	
+	region String? { @VEProperty{
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "center", id = "${typeName:dojo.widgets.DojoLib}.REGION_CENTER"},
+			@VEPropertyChoice {displayName = "top", id = "${typeName:dojo.widgets.DojoLib}.REGION_TOP"},
+			@VEPropertyChoice {displayName = "bottom", id = "${typeName:dojo.widgets.DojoLib}.REGION_BOTTOM"},
+			@VEPropertyChoice {displayName = "leading", id = "${typeName:dojo.widgets.DojoLib}.REGION_LEADING"},
+			@VEPropertyChoice {displayName = "left", id = "${typeName:dojo.widgets.DojoLib}.REGION_LEFT"},
+			@VEPropertyChoice {displayName = "right", id = "${typeName:dojo.widgets.DojoLib}.REGION_RIGHT"}		],
+		default = "${typeName:dojo.widgets.DojoLib}.REGION_CENTER"
+	}};
+
+	/*
+	 * The title for this pane. Used by parents, like DojoTabContainer and DojoAccordionContainer in the way they like
+	 */
+	title String{ @Property{}, @VEProperty{} };
+	
+	/*
+	 * Indicates if this pane can be closed. Used by DojoTabContainer. Ignored by DojoAccordionContainer
+	 */
+	closable boolean{ @Property{}, @VEProperty{} };	
+	
+	/*
+	 *
+	 */
+	 
+	 splitter boolean{ @Property{}, @VEProperty{} };
+	
+	/*
+	 *
+	 */
+	 
+	 function setTitle(val String in);
+	 
+	/*
+	 * Function for Bidi operation
+	 */
+	 function setBiDiMarkers  (textLayout String in, reverseTextDirection String in);
+	
+end

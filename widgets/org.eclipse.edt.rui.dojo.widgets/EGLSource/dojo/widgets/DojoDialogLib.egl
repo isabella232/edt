@@ -1,0 +1,148 @@
+/*******************************************************************************
+ * Copyright � 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
+library DojoDialogLib {}
+
+	const ID_OK String = "OK";
+	const ID_CANCEL String = "CANCEL";
+	const ID_YES String = "YES"; 
+	const ID_NO String = "NO";
+	const ID_RETRY String = "RETRY";  
+
+	function showAlert(message String in) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("OK", ID_OK, null) ];
+		content Widget = createContents( message, null );
+		
+		return(createDialog(RuiLib.getTitle(), message, content, buttons));
+	end	
+
+	function showMessage(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
+		content Widget = createContents( message, null );
+		
+		return(createDialog(title, message, content, buttons));
+	end	
+	
+	function showQuestion(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("Yes", ID_YES, callback), createButton("No", ID_NO, callback) ];
+		content Widget = createContents( message, "utils/dialog/question_32.png" );
+		
+		return(createDialog(title, message, content, buttons));
+	end	
+		
+	function showWarning(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
+		content Widget = createContents( message, "utils/dialog/warning_32.png" );
+		
+		return(createDialog(title, message, content, buttons));
+	end
+
+	function showError(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
+		content Widget = createContents( message, "utils/dialog/error_32.png" );
+		
+		return(createDialog(title, message, content, buttons));	
+	end
+	
+	function showProgress(title String in, message String in, allowCancel boolean in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[];
+		if (allowCancel)
+			buttons = [ createButton("Cancel", ID_CANCEL, callback) ];
+		end
+		content Widget = createContents( message, "utils/dialog/progress_32.gif" );
+		
+		return(createDialog(title, message, content, buttons));			
+	end
+	
+	function showRetryCancel(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+		buttons DojoButton[] = [ createButton("Retry", ID_RETRY, callback), createButton("Cancel", ID_CANCEL, callback) ];
+		content Widget = createContents( message, "utils/dialog/error_32.png" );
+		
+		return(createDialog(title, message, content, buttons));	
+	end
+	
+	private callbacks dialogButtonClicked[];
+	
+	private function createDialog(title string in,message String in, content widget in, buttons DojoButton[] in) returns(DojoDialog)
+		dialog DojoDialog { title = title, children = [ content ], buttons = buttons};
+		
+		//To avoid overlap the 'x' of dialog
+		dialog.style = "min-width:" + title.length() + "em";
+		dialog.showDialog();	
+		
+		return(dialog);
+	end
+		
+	function createButton(text String in, id String in, callback dialogButtonClicked) returns (DojoButton)
+		button DojoButton {value = id, text = text, onClick ::= buttonClicked };
+		button.setAttribute("functionId", id);
+		button.setAttribute("callbackIndex", callbacks.getSize() + 1);
+		if (callback != null)
+			callbacks.appendElement(callback);
+		end
+		
+		return (button);
+	end	
+	
+	function createContents(message String in, imagePath String? in) returns (Widget)
+		cells Widget { tagName = "tr", children = [] };
+		body Widget { tagName = "tbody", children = [ cells ] };
+		table Widget { tagName = "table", class = "EGLDojoDialogLibTable", children = [ body ], style = "max-width: 500px" };
+		table.setAttribute("border", "0");
+						
+		if (imagePath != null) 
+			image Widget { tagName = "img" };
+			image.setAttribute("src", imagePath);
+			cells.appendChild(new Widget { tagName = "td", width = 32, children = [ image ], style = "padding: 4px; vertical-align: middle" });
+		end		
+		cells.appendChild(new Widget { tagName = "td", innerHTML = message, style = "padding: 4px; vertical-align: middle; max-width: 500px" } );
+
+		return (table);
+	end
+	
+	private function buttonClicked(e Event in)
+		button DojoButton = (e.widget as DojoButton);		
+		functionId String = button.getAttribute("functionId");
+		callbackIndex int = button.getAttribute("callbackIndex");
+			
+		dialog DojoDialog = findParentDialog(e.widget);
+		
+		hide boolean = true;
+		
+		if (callbackIndex > 0 && callbackIndex <= callbacks.getSize())
+			if (callbacks[callbackIndex] != null)
+				hide = callbacks[callbackIndex](functionId, e);
+			end						
+		end
+		
+		if (hide)
+			dialog.hideDialog();
+		end				
+	end
+	
+	function findParentDialog(widget Widget in) returns (DojoDialog)
+		parent Widget = widget.parent;
+		while (parent != null && !(parent isa DojoDialog))
+			parent = parent.parent;			
+		end
+		return (parent);
+	end
+	
+end
+
+delegate dialogButtonClicked(buttonId String in, e Event in) returns (boolean)
+	
+end

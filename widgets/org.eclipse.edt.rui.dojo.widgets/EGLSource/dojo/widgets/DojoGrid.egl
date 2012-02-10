@@ -1,0 +1,129 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * This widget shows tabular data in a grid. Columns can be sorted and resized. 
+ * Behaviors can be added to change headers and cells.
+ *
+ * For more detail, see http://docs.dojocampus.org/dojox/grid
+ */
+ExternalType DojoGrid extends DojoBase type JavaScriptObject { 
+        relativePath = "dojo/widgets",
+        externalName = "DojoGrid",
+        @VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{\n" +
+	        	"\t\tbehaviors = [ ],\n" +
+				"\t\theaderBehaviors = [ ],\n" +"\t\tcolumns = [\n" +
+	            "\t\t\tnew ${typeName:dojo.widgets.DojoGridColumn}{name = \"field1\", displayName = \"Column 1 Header\", width=120},\n" +
+	            "\t\t\tnew ${typeName:dojo.widgets.DojoGridColumn}{name = \"field2\", displayName = \"Column 2 Header\", width=120}\n" +
+	            "\t\t],\n\t\tdata = [\n" +
+	            "\t\t\tnew Dictionary { field1 = \"Row 1, Column 1\", field2 = \"Row 1, Column 2\"},\n" +
+	            "\t\t\tnew Dictionary { field1 = \"Row 2, Column 1\", field2 = \"Row 2, Column 2\"}\n" +
+	            "\t\t]\n" +
+	            "\t}", 
+			displayName = "Grid",
+			smallIcon = "icons/ctool16/dojox_grid_pal16.gif",
+			largeIcon = "icons/ctool24/dojox_grid_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "backgroundColor", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect","onScroll"],
+			provider = "Dojo"
+		},
+		@VEDataTemplate{
+			dataTemplates = [
+				@DataTemplate{
+					name = "DojoGrid (read only)",
+					dataMapping = @DataMapping {
+						forArray = true,
+						genChildWidget = false,
+						mappings = [MappingKind.TYPE_RECORD_SIMPLE]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_DISPLAY,
+	                			PurposeKind.FOR_CREATE,
+	                			PurposeKind.FOR_UPDATE
+	                ],
+					genController = false,
+					template = 
+					"${widgetName} ${typeName:dojo.widgets.DojoGrid} {\n" +
+					"\t\tbehaviors = [ ],\n" +
+					"\t\theaderBehaviors = [ ],\n" +
+					"\t\tcolumns = [\n" +
+					"${startRepeat}\n" +
+					"\t\t\t\tnew ${typeName:dojo.widgets.DojoGridColumn} {name = \"${shortBindingName}\", displayName = \"${labelText}\", width = 120}\n" +
+					"${endRepeat}\n" +
+					"\t\t], \n" +
+					"\t\tdata = ${bindingName} as any[]\n" +
+					"\t};"
+				}
+			]
+		}   
+    }
+    
+    /*
+     * The columns to use for this grid. 
+     * Each named column should have a field in the data elements added to this grid later.
+     * Columns are optional. When not specified, the data is inspected and a column is created for each field in the first data record.
+     */
+	columns DojoGridColumn[];
+    
+    /*
+     * Assign the functions to be invoked for each cell that is created by the DojoGrid
+     */
+    behaviors DojoCellBehavior[];
+
+    /*
+     * Assign the functions to be invoked for each header cell that is created by the DojoGrid
+     */	
+	headerBehaviors DojoCellBehavior[];
+    
+    /*
+     * The data to show. Each row should have the same fields. 
+     * When columns are specified, each named column should have a field in the data elements.
+     * Columns are optional. When not specified, the data is inspected and a column is created for each field in the first data record.
+     * Specifiy this field last. Specify columns, behaviors, and headerBehaviors before specifying data.
+     */
+    data any[] { @Property { setMethod="setData", getMethod="getData" } };
+    
+    /*
+     * Add a row after the grid has been initially created with data
+     */
+    function addRow( row any[] );
+    
+    /*
+     * Remove a row from this grid.
+     */
+    function removeRow( rowIndex int in );
+    
+	
+end
+
+Record DojoGridColumn
+	displayName String;		// the label to use in the header of the resulting grid table
+	name String;			// the field name to use in the data array to show in this column
+	width int;				// the requested initial width for this column. Users or behaviors can override this value
+end
+
+Delegate DojoCellBehavior(grid DojoGrid in, cell Widget in, row any in, rowNumber int in, column DojoGridColumn in) 
+	// This behavior is called for each grid cell or header
+end

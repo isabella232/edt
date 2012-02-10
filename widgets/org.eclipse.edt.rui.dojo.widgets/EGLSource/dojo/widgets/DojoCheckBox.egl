@@ -1,0 +1,211 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * A checkbox widget.  You can register for onChange Events.
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/form/CheckBox
+ */
+Handler DojoCheckBox type RUIWidget{ onConstructionFunction = init, targetWidget = div,
+		@VEWidget{ 
+			category = "Display and Input",
+			template = "${typeName}{ text=\"CheckBox\" , selected=true }",
+			displayName = "CheckBox",
+			smallIcon = "icons/ctool16/dijit_checkbox_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_checkbox_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "color", "font", "fontSize", "x", "y", "cursor", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onSelect", "onScroll"],
+			provider = "Dojo"
+		},
+		@MVCView{
+			retrieveViewHelper = getValueAsText,
+			publishHelper = setValueAsText
+		},  
+		@VEDataTemplate{
+			dataTemplates = [
+				@DataTemplate{
+					name = "DojoCheckBox",
+					dataMapping = @DataMapping {
+						forArray = false,
+						isDefault = true,
+						mappings = [MappingKind.TYPE_PRIMITIVE_BOOLEAN]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoCheckBox} { };"
+				},
+				@DataTemplate{
+					name = "DojoCheckBox (read only)",
+					dataMapping = @DataMapping {
+						forArray = false,
+						isDefault = true,
+						mappings = [MappingKind.TYPE_PRIMITIVE_BOOLEAN]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoCheckBox} { disabled = true };"
+				}
+			]
+		}
+	}
+	
+	/*
+	 * The text for the label accompanying this checkbox widget
+	 */
+	text String { @EGLProperty, @VEProperty{} };
+	
+	/**
+	 * Indicates whether the checkbox is checked or not
+	 */ 
+	selected boolean { @EGLProperty, @VEProperty{} };
+
+	onWidgetLoad EventHandler[] {  @VEEvent };
+	private _onChange EventHandler[] = [];
+	private checkBox DojoCheckBoxWithoutLabel { 
+		onChange ::= handleOnChange,
+		onFocusGained ::= handleOnFocusGained,
+		onFocusLost ::= handleOnFocusLost,
+		onWidgetLoad ::= handleOnWidgetLoad
+	};
+	private checkBoxLabel Widget { tagName = "label" };
+	private div Widget{tagName = "div"};
+	
+	function getOnWidgetLoad() returns(EventHandler[])
+		return (onWidgetLoad);
+	end
+	
+	function setDisabled(disabled Boolean in){ }
+		checkBox.disabled = disabled;
+		div.disabled = disabled;
+	end
+	
+	private function init()
+		 div.children = [checkBox, checkBoxLabel];
+	end	
+	/*
+	private div Div { children = [
+		checkBox, checkBoxLabel	
+	]};
+	*/
+	
+	// @Override, cover the event in outer widget, trigger the onChange event from inner widget
+	function getOnChange() returns (EventHandler[])
+		if(this._onChange != null)
+			return (this._onChange);
+		end
+	end	
+		
+	private function handleOnChange(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onChange;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function handleOnFocusGained(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onFocusGained;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function handleOnFocusLost(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onFocusLost;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function handleOnKeyDown(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onKeyDown;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function handleOnKeyPress(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onKeyPress;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	private function handleOnKeyUp(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onKeyUp;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function handleOnWidgetLoad(e Event in)
+		e.widget = this;
+		listeners EventHandler[] = onWidgetLoad;
+		for (n int from 1 to listeners.getSize())
+			listeners[n](e);
+		end
+	end
+	
+	private function setText(text String in)
+		checkBoxLabel.innerHTML = text;
+	end
+	private function getText() returns (String)
+		return(checkBoxLabel.innerHTML);
+	end
+	private function setSelected(selected boolean in)
+		checkBox.selected = selected;
+	end
+	private function getSelected() returns (boolean)
+		return(checkBox.selected);
+	end
+	
+	private function setValueAsText(value String in)
+		if("TRUE" == strlib.upperCase(value))
+			setSelected (true);
+		else
+			setSelected(false);
+		end 
+	end
+	
+	private function getValueAsText() returns(String)
+		if(getSelected())
+			return("TRUE");
+		else
+			return("FALSE");
+		end
+	end
+	
+end
+
+ExternalType DojoCheckBoxWithoutLabel extends DojoBase type JavaScriptObject {
+		relativePath = "dojo/widgets",
+		externalName = "DojoCheckBoxWithoutLabel"
+	}
+	selected boolean {@Property{setMethod="setSelected", getMethod="getSelected"}, @VEProperty{}};
+	
+end

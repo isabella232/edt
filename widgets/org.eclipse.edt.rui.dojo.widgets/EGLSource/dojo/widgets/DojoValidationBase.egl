@@ -1,0 +1,43 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+Delegate ValidPatternProvider(constraints dictionary in) returns (string) end
+Delegate Validator(input String in, constraints dictionary in) returns(string?) end
+/*
+ * This widget serves as an abstraction for a Dojo widget that has validation support.
+ * Subclasses are DojoTextField, DojoDateTextBox, DojoTimeTextBox and DojoCurrencyTextBox etc.
+ * 
+ * This is an internal type. Do not instantiate directly.
+ */ 
+ExternalType DojoValidationBase extends DojoTextBase type JavaScriptObject {
+	relativePath = "dojo/widgets",
+	externalName = "DojoValidationBase"
+}	
+	placeHolder string { @Property, @VEProperty };
+	promptMessage string { @Property, @VEProperty };	
+	inputRequired boolean { @Property, @VEProperty };
+	inputRequiredMessage string { @Property, @VEProperty };	
+	
+	tooltipPosition string[] { @Property };
+	
+	constraints Dictionary { @Property };
+	validators Validator[] { @Property };
+end

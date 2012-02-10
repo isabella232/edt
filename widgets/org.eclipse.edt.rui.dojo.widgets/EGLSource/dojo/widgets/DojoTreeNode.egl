@@ -1,0 +1,32 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+/**
+ * This is a Tree Node widget. It is the child of Tree widget.
+ *
+ * For more information on the dojo widget itself, see http://docs.dojocampus.org/dijit/Tree
+ *
+ */
+ExternalType DojoTreeNode Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoTreeNode"
+	}
+	 
+	text String {@Property{setMethod="setText", getMethod="getText"} };
+	
+	/*
+	 * Function for Bidi operation
+	 */
+	function setBiDiMarkers  (textLayout String in, reverseTextDirection String in);
+			
+end

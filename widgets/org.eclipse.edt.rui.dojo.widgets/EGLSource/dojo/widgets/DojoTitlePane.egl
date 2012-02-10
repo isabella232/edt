@@ -1,0 +1,63 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+/*
+ * A container widget.
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/TitlePane
+ */
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+ExternalType DojoTitlePane Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoTitlePane",
+		@VEWidget{
+			category = "Layout",
+			template = "${typeName}{ title = \"Title Pane\", isOpen=true, duration=1000, width=\"500\", children = [ new ${typeName:org.eclipse.edt.rui.widgets.Div} {} ] }",
+			displayName = "TitlePane",
+			smallIcon = "icons/ctool16/titlepane_pal16.gif",
+			largeIcon = "icons/ctool24/dojox_dojodata_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "backgroundColor", "x", "y", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange","onSelect", "onScroll"],
+			provider = "Dojo"	
+		}
+	}
+
+	/*
+	 * Indicate whether the title pane is open or not
+	 */
+	isOpen Boolean {@Property { getMethod="getOpen", setMethod="setOpen"}, @VEProperty};
+
+	/*
+	 * The title for the title pane. 
+	 */
+	title String {@VEProperty};
+	
+	/*
+	 * Animation duration in milliseconds
+	 */
+	duration int {@VEProperty};
+	
+	/*
+	 * Toggle pane between open and close status
+	 */ 
+	function toggle();
+end

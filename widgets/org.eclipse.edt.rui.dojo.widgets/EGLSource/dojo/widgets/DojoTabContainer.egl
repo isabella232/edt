@@ -1,0 +1,94 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/**
+ * This widget is a container.
+ 
+ * This layout widget can contain only children of type DojoContentPane. 
+ * 
+ * For more information on the Dojo widget itself, see http://docs.dojocampus.org/dijit/layout/TabContainer
+ *
+ */
+ExternalType DojoTabContainer Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoTabContainer",
+		@VEWidget{
+			category = "Layout",
+			template = 
+				"${typeName}{\n"+
+					"\t\twidth = \"600\", height = \"400\", tabPosition = ${typeName:dojo.widgets.DojoLib}.POSITION_TOP, //onTabSelected ::= TabSelected,\n"+
+					"\t\tchildren = [\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 1\", children = [\n"+
+						"\t\t\t] },\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 2\", children = [\n"+
+						"\t\t\t]},\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 3\", children = [\n"+
+						"\t\t\t]}\n"+
+					"\t\t]\n"+
+				"\t}",
+			displayName = "TabContainer",
+			smallIcon = "icons/ctool16/tbcntnt_pal16.gif",
+			largeIcon = "icons/ctool24/dojox_dojodata_pal24.gif",
+			container = @VEContainer{},
+			propertyFilterType  = filterKind.excludeAllExcept,
+			propertyFilter = [ "id", "width", "height", "visible" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange","onSelect", "onScroll"],
+			provider = "Dojo"
+		}   
+	}
+	
+	/*
+	 * Indicate where the tabs should be placed for this tab container
+	 */
+	tabPosition String? { @Property, @VEProperty{
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "top", id = "${typeName:dojo.widgets.DojoLib}.POSITION_TOP"},
+			@VEPropertyChoice {displayName = "bottom", id = "${typeName:dojo.widgets.DojoLib}.POSITION_BOTTOM"},
+			@VEPropertyChoice {displayName = "left", id = "${typeName:dojo.widgets.DojoLib}.POSITION_LEFT"},
+			@VEPropertyChoice {displayName = "right", id = "${typeName:dojo.widgets.DojoLib}.POSITION_RIGHT"}		],
+		default = "${typeName:dojo.widgets.DojoLib}.POSITION_TOP"
+	}};
+	
+	/*
+	 * The number of the currently selected tab
+	 */
+	selection int {@Property, @VEProperty };
+	
+	/*
+	 * Event handler notifying users when a given tab is selected. 
+	 * Use the selection field to find out which one.
+	 */
+	onTabSelected EventHandler[] {@Property, @VEEvent };
+	
+	/*
+	 * Event handler notifying users when a given tab is removed by the user. 
+	 * Use the options field to find out which one.
+	 */
+	onTabRemoved EventHandler[] {@Property, @VEEvent };
+	
+	/*
+	 *tabindex : The index of the tab that you want to remove.
+	 *
+	 */
+	function removeTab(tabindex int in);
+end

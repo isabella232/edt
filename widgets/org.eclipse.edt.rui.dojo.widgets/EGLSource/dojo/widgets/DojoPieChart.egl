@@ -1,0 +1,101 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * This widget shows an array of PieChartData objects as a pie chart. 
+ * This widget implements the attributes offered by DojoChartBase (i.e., minx, miny, maxx, and maxy)
+ *
+ * For more information on Dojo charts, see http://docs.dojocampus.org/dojox/charting 
+ */ 
+ExternalType DojoPieChart extends DojoChartBase type JavaScriptObject {
+		relativePath="dojo/widgets",
+		externalName="DojoPieChart",		
+		@VEWidget{
+			category = "Visualization",
+			template = "${typeName}{\n " +
+				"\t\tradius = 100,\n" +
+				"\t\twidth = \"300\",\n" +
+				"\t\theight = \"300\",\n" +
+				"\t\tlabelOffSet = 50,\n" +
+				"\t\tfontColor = \"white\",\n" +
+				"\t\tdata = [\n " +
+				"\t\t\tnew ${typeName:dojo.widgets.PieChartData}{ y=1, text=\"SUVs\", \t\tcolor=\"#554444\"},\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.PieChartData}{ y=2, text=\"sedans\", \t\tcolor=\"#99ccbb\"},\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.PieChartData}{ y=2, text=\"hybrids\", \t\tcolor=\"#888855\"},\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.PieChartData}{ y=2, text=\"hatchbacks\",	color=\"#332222\"}\n" +
+			"\t]}",
+			displayName = "PieChart",
+			smallIcon = "icons/ctool16/pie_chart_pal16.gif",
+			largeIcon = "icons/ctool24/pie_chart_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "color", "backgroundColor", "font", "x", "y", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex"],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect", "onFocusGained", "onFocusLost", "onKeyDown", "onKeyPress", "onKeyUp", "onScroll"],
+			provider = "Dojo"
+		}   
+	}
+	
+	/*
+	 * The data to show in this piechart
+	 */
+	data PieChartData[] {@Property};
+	
+	/*
+	 * The radius of the entire pie chart (radius which is half the diameter)
+	 */
+	radius int {@VEProperty};			
+	
+	/*
+	 * The offset of the labels, measured from the edge, in pixels. 
+	 */
+	labelOffSet int {@VEProperty};	
+	
+	/*
+	 * The color to use for the labels.
+	 */
+	fontColor String { @VEProperty, @Property };
+				
+end
+
+/*
+ * One data point to add to a pie chart
+ */
+Record PieChartData
+	/*
+	 * The value for the pie chart slice. Called 'y' by Dojo, left as such for completeness
+	 */
+	y int;
+	
+	/*
+	 * Optional. Color to set to this chart slice. If not specified, the overall chart color theme will dictate what color to use
+	 */
+	color String?;
+	
+	/*
+	 * The label to attach to the pie slice
+	 */
+	text String;
+	
+	/*
+	 * The color to use to draw the text label with
+	 */
+	fontColor String?;
+end

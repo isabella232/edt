@@ -1,0 +1,57 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+/*
+ * Show a popup dialog with title bar and close button. 
+ * The dialog can be dragged on the screen and is modal: it blocks all mouse events from going to other widgets
+ * 
+ * For more detail, see http://docs.dojocampus.org/dijit/Dialog
+ */ 
+ExternalType DojoDialog Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+        externalName = "DojoDialog"   
+	}
+	
+	/*
+	 * The tile of the dialog box.
+	 */ 
+	title string;
+	
+	/* 
+	 * This dialog can be dragged by the user
+	 */
+	draggable boolean;
+
+	/*
+	 * Call this function to show the dialog and add it to the document
+	 */
+	function showDialog();
+
+	/*
+	 * Call this function to hide the dialog and remove it from the document
+	 */
+	function hideDialog();
+	
+	/**
+	 * Sets the buttons to show on the dialog	
+	 */	
+	buttons DojoButton[] { @Property {}};
+	
+end

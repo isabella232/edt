@@ -1,0 +1,101 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+private externalType DojoValidatorLib type JavaScriptObject{relativePath = "dojo/widgets", externalName = "DojoValidatorLib", includeFile = "config/includeDojo.html"}
+	function IPValidator(input String in, constraints dictionary in) returns(boolean);
+	function UrlValidator(input String in, constraints dictionary in) returns(boolean);
+	function EmailValidator(input String in, constraints dictionary in) returns(boolean);
+	function TextValidator(input String in, constraints dictionary in) returns(boolean);
+	function RangeValidator(input String in, constraints dictionary in) returns(boolean);
+	function NumberFormatValidator(input String in, constraints dictionary in) returns(boolean);
+	function PatternValidator(input String in, pattern String in) returns(boolean);
+end
+
+library DojoLib{}
+
+	/*
+	 * Region
+	 */
+	const REGION_CENTER String 		= "center";
+	const REGION_TOP String 		= "top";
+	const REGION_BOTTOM String 		= "bottom";
+	const REGION_LEADING String 	= "leading";
+	const REGION_LEFT String 		= "left";
+	const REGION_RIGHT String 		= "right";	
+
+	/*
+	 * TabPosition values for DojoTabContainer.
+	 */
+	const POSITION_LEFT String 		= "left";
+	const POSITION_RIGHT String 	= "right";
+	const POSITION_TOP String 		= "top";
+	const POSITION_BOTTOM String 	= "bottom";
+	
+	/*
+	 * DojoTimeTextBox values for clickableIncrement, visibleIncrement, and visibleRange.
+	 */
+	const TIMEBOX_FIVE_MINUTES String 	= "T00:05";
+	const TIMEBOX_ONE_QUARTER String 	= "T00:15";
+	const TIMEBOX_HALF_HOUR String 		= "T00:30";
+	const TIMEBOX_ONE_HOUR String 		= "T01:00";
+	const TIMEBOX_TWO_HOUR String 		= "T02:00";
+	const TIMEBOX_THREE_HOURS String 	= "T03:00";
+	const TIMEBOX_FIVE_HOURS String 	= "T05:00";
+	const TIMEBOX_TEN_HOURS String 		= "T10:00";
+	const TIMEBOX_TWELVE_HOURS String 	= "T12:00";
+	const TIMEBOX_FULL_DAY String 		= "T24:00";
+	
+	/*
+	 * DojoTimeTextBox values for timePattern
+	 */
+	const TIMEBOX_FORMAT_12HR String	= "hh:mm a";
+	const TIMEBOX_FORMAT_24HR String	= "HH:mm";
+	
+	/*
+	 * DojoDateTextBox values for formatLength
+	 */
+	const DATEBOX_FORMAT_SHORT String	= "short";
+	const DATEBOX_FORMAT_MEDIUM String	= "medium";
+	const DATEBOX_FORMAT_LONG String	= "long";
+	const DATEBOX_FORMAT_FULL String	= "full";
+	
+	/*
+	 *	DojoBarGraph, DojoPieChart, DojoBubbleChart, DojoLineGraph
+	 */
+	const CHART_COLOR_THEME_RED		String	= "red";
+	const CHART_COLOR_THEME_BLUE	String	= "blue";
+	const CHART_COLOR_THEME_GREEN	String	= "green";
+	const CHART_COLOR_THEME_ORANGE	String	= "orange";
+	const CHART_COLOR_THEME_CYAN	String	= "cyan";
+	const CHART_COLOR_THEME_PURPLE	String	= "purple";
+	
+	/*
+	 * DojoTooltip
+	 */
+	
+	const TOOLTIP_BEFORE	String = "before";
+	const TOOLTIP_AFTER		String = "after";
+	const TOOLTIP_ABOVE		String = "above";
+	const TOOLTIP_BELOW		String = "below";
+	
+	/*
+	 * DojoTextBase
+	 */
+	 
+	const UPPER_CASE String = "upper";
+	const LOWER_CASE String = "lower";
+	const PROPER_CASE String = "proper";
+	const CASE_NONE String = "none";
+	
+	VALIDATORS DojoValidatorLib {};
+end

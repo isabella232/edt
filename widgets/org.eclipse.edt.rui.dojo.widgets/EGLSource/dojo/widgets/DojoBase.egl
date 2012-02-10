@@ -1,0 +1,68 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * This type is used by all Dojo widgets, and simplifies the life cycle challenges 
+ * offered by loading both the EGL Rich UI framework and the Dojo framework.
+ * 
+ * This is an internal type. Do not instantiate directly.
+ * 
+ */
+ExternalType DojoBase extends Widget type JavaScriptObject {
+	relativePath = "dojo/widgets",
+	externalName = "DojoBase",
+	
+	includeFile = "config/includeDojo.html"
+	
+}
+	
+	/*
+	 * Get the Dojo widget id
+	 */
+	function getID() returns(String);
+	
+	/*
+	 * Event handler to be notified when Dojo widget finished loading
+	 */
+	onWidgetLoad EventHandler[] {@Property, @VEEvent };
+
+	/*
+	 * Destroy the widget
+	 */
+	function destroy();
+	
+	/*
+	 * The Dojo theme
+	 */
+	 theme String;
+	 
+	 /*
+	  * Dojo base class
+	  */
+	 baseClass String;
+	 
+	 /*
+	  * The following two are Bidi-specific properties
+	  */
+	 symmetricSwap String;
+	 numericSwap String;	 
+	 
+end

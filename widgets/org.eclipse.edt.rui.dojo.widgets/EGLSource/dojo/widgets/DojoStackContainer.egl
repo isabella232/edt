@@ -1,0 +1,86 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/**
+ * This widget is a container.
+ 
+ * This layout widget can contain only children of type DojoContentPane. 
+ *
+ * For more information on the Dojo widget itself, see http://docs.dojocampus.org/dijit/layout/StackContainer
+ *
+ */
+ExternalType DojoStackContainer Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoStackContainer",
+		@VEWidget{
+			category = "Layout",
+			template = 
+				"${typeName}{\n"+
+					"\t\twidth = \"600\", height = \"400\", //onStackSelected ::= StackSelected,\n"+
+					"\t\tchildren = [\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 1\", children = [\n"+
+						"\t\t\t] },\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 2\", children = [\n"+
+						"\t\t\t]},\n"+
+						"\t\t\tnew ${typeName:dojo.widgets.DojoContentPane} { title = \"Topic 3\", children = [\n"+
+						"\t\t\t]}\n"+
+					"\t\t]\n"+
+				"\t}",
+			displayName = "StackContainer",
+			smallIcon = "icons/ctool16/dijit_stackcontainer_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_stackcontainer_pal24.gif",
+			container = @VEContainer{},
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "backgroundColor", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect", "onScroll"],
+			provider = "Dojo"
+		}   
+	}
+	 
+	
+	/*
+	 * The controller for the stack
+	 */
+	controller Widget { tagName = "div" };
+	
+	/*
+	 * The number of the currently selected stack
+	 */
+	selection int {@Property, @VEProperty };
+	
+	/*
+	 * Event handler notifying users when a given stack is selected. 
+	 * Use the selection field to find out which one.
+	 */
+	onStackSelected EventHandler[] {@Property, @VEEvent };
+	
+	/*
+	 * Move to the previous stack
+	 */
+	function previousStack();
+	
+	/*
+	 * Move to the next stack
+	 */
+	function nextStack();
+	
+end

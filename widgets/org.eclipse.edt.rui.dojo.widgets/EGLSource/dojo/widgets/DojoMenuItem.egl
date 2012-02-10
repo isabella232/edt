@@ -1,0 +1,41 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+/*
+ * This widget implements a menu item to be shown as part of a DojoMenu. 
+ * A menu item has a label, optional icon classes, and handles the onClick event
+ * A menu item can have only child, a DojoMenu, in which case it represents a nested menu. 
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/MenuItem
+ */
+ExternalType DojoMenuItem Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoMenuItem"
+	}
+	
+	/**
+	 * The label shows for this menu item
+	 */
+	text String {@Property{}, @VEProperty{}};
+	
+	/**
+	 * The class name that Dojo will assign to the icon portion of this menu item
+	 */ 
+	iconClass String;
+	
+	/*
+	 * Function for Bidi operation
+	 */
+	function setBiDiMarkers  (textLayout String in, reverseTextDirection String in);
+			
+end

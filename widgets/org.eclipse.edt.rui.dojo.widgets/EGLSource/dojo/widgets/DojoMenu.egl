@@ -1,0 +1,72 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+
+/* 
+ * This widget implements a Dojo menu with a label. Children have to of type DojoMenuItem.
+ * Each individual menu item should handle the onClick event to react to user input.
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/Menu
+ */ 
+ExternalType DojoMenu Extends DojoContainer type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoMenu",
+		@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ text = \"Change Menu Name\", children = [\n" +
+				"\t\tnew ${typeName:dojo.widgets.DojoMenuItem} {\n" + 
+		        "\t\t\ttext = \"Item 1, please set onClick\", iconClass = \"dijitEditorIcon dijitEditorIconCut\"\n" + 
+		        "\t\t},\n" +
+		        "\t\tnew ${typeName:dojo.widgets.DojoMenuItem} {\n" + 
+		        "\t\t\ttext = \"Item 2, please set iconClass\", iconClass = \"dijitEditorIcon dijitEditorIconCopy\"\n" + 
+		        "\t\t},\n" +
+		        "\t\tnew ${typeName:dojo.widgets.DojoMenuItem} {\n" + 
+		        "\t\t\ttext = \"The next item is a separator\"\n" + 
+		        "\t\t},\n" +
+		        "\t\tnew ${typeName:dojo.widgets.DojoMenuItem} { },\n" + 
+				"\t\tnew ${typeName:dojo.widgets.DojoMenuItem} {\n" + 
+		        "\t\t\ttext = \"Item 3, this one is disabled\", disabled = true\n" + 
+		        "\t\t}\n" +
+				"\t]}",
+			displayName = "Menu",
+			smallIcon = "icons/ctool16/dijit_menubar_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_menubar_pal24.gif",
+			container = @VEContainer{},
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "backgroundColor", "x", "y", "cursor", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect", "onKeyDown", "onKeyPress", "onKeyUp", "onScroll"],
+			provider = "Dojo"
+		}   
+	}
+		
+	/* 
+	 * The label to place on the menu's activation button
+	 */
+	text String { @Property { setMethod="setText" , getMethod="getText" }, @VEProperty };
+
+	
+	/*
+	 * Function for Bidi operation
+	 */
+	function setBiDiMarkers ();
+	
+end

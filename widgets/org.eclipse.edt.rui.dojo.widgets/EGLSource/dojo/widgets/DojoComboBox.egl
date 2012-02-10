@@ -1,0 +1,82 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * A combo box widget..
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/form/ComboBox
+ */
+ExternalType DojoComboBox Extends DojoBase type JavaScriptObject{
+		relativePath = "dojo/widgets",
+        externalName = "DojoComboBox",
+        @VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ values = [\"value1\",\"value2\",\"value3\"], value = \"value2\" }",
+			displayName = "ComboBox",
+			smallIcon = "icons/ctool16/dijit_combobox_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_combobox_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "color", "x", "y", "cursor", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onSelect","onScroll"],
+			provider = "Dojo"
+		},	
+		@MVCView{
+			retrieveViewHelper = getValueAsText,
+			publishHelper = setValueAsText
+		},
+		@VEDataTemplate{
+			dataTemplates = [
+				@DataTemplate{
+					name = "DojoComboBox",
+					dataMapping = @DataMapping {
+						forArray = false,
+						mappings = [MappingKind.TYPE_PRIMITIVE_ALL]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoComboBox} { values = [] };"
+				}
+			]
+		}
+	}
+
+	/*
+	 * the value of the input field
+	 */ 
+	value String { @Property{ setMethod = "setValue" , getMethod = "getValue" }, @VEProperty{}  };
+
+	/*
+	 * the options the user can choose from
+	 */
+	values String[] { @Property { getMethod= "getValues", setMethod= "setValues" }, @VEProperty{} };
+
+	/*
+	 * the maximum number of options to show when the user activates the combo
+	 */ 
+	pageSize int {@VEProperty};
+	
+	editable boolean {@Property};
+
+	private function getValueAsText() returns(String);
+	private function setValueAsText(str String in);
+
+end

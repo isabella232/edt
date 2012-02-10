@@ -1,0 +1,56 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/*
+ * This widget lets the user choice a color from a set of choices.  You can register for onChange Events.
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/ColorPalette
+ */
+ 
+ExternalType DojoColorPalette extends DojoBase type JavaScriptObject {
+		relativePath = "dojo/widgets",
+		externalName = "DojoColorPalette",
+		@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{  }",
+			displayName = "ColorPalette",
+			smallIcon = "icons/ctool16/dijit_colorpalette_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_colorpalette_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "color", "font", "fontSize", "fontWeight", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onSelect","onScroll"],
+			provider = "Dojo"
+		}   
+	}
+	
+	/*
+	 * When small is true, this widget uses a small grid (3x7) instead of a large grid (7x10))
+	 */
+	small boolean {@VEProperty{}};
+	
+	/*
+	 * The currently selected value
+	 */
+	value string {@Property};
+	
+	
+end

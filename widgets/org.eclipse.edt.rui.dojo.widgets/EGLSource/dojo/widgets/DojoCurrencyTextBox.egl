@@ -1,0 +1,87 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/* 
+ * An input field for currency values (also known as money)
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/form/CurrencyTextBox
+ */
+ExternalType DojoCurrencyTextBox Extends DojoValidationBase type JavaScriptObject{
+		relativePath = "dojo/widgets",
+        externalName = "DojoCurrencyTextBox",
+        @VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ currency = \"USD\", value = \"100\", width =\"100\", errorMessage=\"Amount is not valid.\" }",
+			displayName = "CurrencyTextBox",
+			smallIcon = "icons/ctool16/dijit_currtextbx_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_currtextbx_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "color", "x", "y", "cursor", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onSelect","onScroll"],
+			provider = "Dojo"
+		},
+		@MVCView{
+			retrieveValidStateHelper = getValidState,
+			publishMessageHelper = showErrorMessage,
+			showErrorState = showErrorIndicator
+		},
+		@VEDataTemplate{
+			dataTemplates = [
+				@DataTemplate{
+					name = "DojoCurrencyTextBox (read only)",
+					dataMapping = @DataMapping {
+						forArray = false,
+						mappings = [MappingKind.TYPE_PRIMITIVE_MONEY]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoCurrencyTextBox} { readonly = true, currency = \"USD\", value = ${bindingName}, width =\"100\", errorMessage=\"Amount is not valid.\" };"
+				},
+				@DataTemplate{
+					name = "DojoCurrencyTextBox",
+					dataMapping = @DataMapping {
+						forArray = false,
+						mappings = [MappingKind.TYPE_PRIMITIVE_MONEY]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoCurrencyTextBox} { currency = \"USD\", value = ${bindingName}, width =\"100\", errorMessage=\"Amount is not valid.\" };"
+				}
+			]
+		}   
+	}
+
+	/*
+	 * The value of the input field
+	 */ 
+	value String { @Property{ setMethod = "setValue" , getMethod = "getValue" }, @VEProperty };	
+	/*
+	 * The 3-letter currency code for the currency sign to be used, see http://en.wikipedia.org/wiki/ISO_4217
+	 * Note that not all country codes are supported by this Dojo widget.
+	 */
+	currency String {@VEProperty};	
+	errorMessage string { @Property, @VEProperty };
+	
+	function getValidState() returns (string?);
+	function showErrorMessage(msg string in);
+	function showErrorIndicator(aboolean boolean in);
+end

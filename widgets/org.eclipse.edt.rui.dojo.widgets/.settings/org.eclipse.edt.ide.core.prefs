@@ -1,0 +1,4 @@
+#Tue Aug 30 13:40:10 CST 2011
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1

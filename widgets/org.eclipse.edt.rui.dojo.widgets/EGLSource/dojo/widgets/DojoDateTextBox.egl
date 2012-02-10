@@ -1,0 +1,105 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+
+/*
+ * An input text field for entering dates. 
+ *
+ * For more detail, see http://docs.dojocampus.org/dijit/form/DateTextBox
+ */
+ExternalType DojoDateTextBox Extends DojoValidationBase type JavaScriptObject{
+		relativePath = "dojo/widgets",
+		externalName = "DojoDateTextBox",
+		@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ formatLength = ${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_LONG, value = new Date{} }",
+			displayName = "DateTextBox",
+			smallIcon = "icons/ctool16/dijit_datetextbx_pal16.gif",
+			largeIcon = "icons/ctool24/dijit_datetextbx_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "class", "color", "x", "y", "cursor", "ariaLive", "ariaRole", "tabIndex" ],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onSelect","onScroll"],
+			provider = "Dojo"
+		},
+		@MVCView{
+			retrieveViewHelper = getValueAsText,
+			publishHelper = setValueAsText,
+			retrieveValidStateHelper = getValidState,
+			publishMessageHelper = showErrorMessage,
+			showErrorState = showErrorIndicator
+		},
+		@VEDataTemplate{
+			dataTemplates = [
+				@DataTemplate{
+					name = "DojoDateTextBox (read only)",
+					dataMapping = @DataMapping {
+						forArray = false,
+						isDefault = true,
+						mappings = [MappingKind.TYPE_PRIMITIVE_DATE]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoDateTextBox} { readonly = true, formatLength = ${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_LONG, value = ${bindingName} };"
+				},
+				@DataTemplate{
+					name = "DojoDateTextBox",
+					dataMapping = @DataMapping {
+						forArray = false,
+						isDefault = true,
+						mappings = [MappingKind.TYPE_PRIMITIVE_DATE]
+					},
+					genController = true,
+					purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+					template = "${widgetName} ${typeName:dojo.widgets.DojoDateTextBox} { formatLength = ${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_LONG, value = ${bindingName} };"
+				}
+			]
+		}   		
+}
+
+	/*
+	 * Clear the current value
+	 */
+	function clear();
+
+	/*
+	 * The value of the date entered.
+	 */
+	value Date? { @Property };
+
+	/*
+	 * The format in which the date should appear. Value should be one of:
+	 *
+	 *      DojoLib.DATEBOX_FORMAT_LONG    "long"
+	 *      DojoLib.DATEBOX_FORMAT_SHORT   "short"
+	 *      DojoLib.DATEBOX_FORMAT_MEDIUM  "medium"
+	 *      DojoLib.DATEBOX_FORMAT_FULL    "full"
+	 */
+	formatLength String { @Property, @VEProperty{
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "short", id = "${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_SHORT"},		
+			@VEPropertyChoice {displayName = "medium", id = "${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_MEDIUM"},
+			@VEPropertyChoice {displayName = "long", id = "${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_LONG"},
+			@VEPropertyChoice {displayName = "full", id = "${typeName:dojo.widgets.DojoLib}.DATEBOX_FORMAT_FULL"}			
+		]
+	} };
+	errorMessage string { @Property, @VEProperty };
+	
+	private function getValueAsText() returns(String);
+	private function setValueAsText(str String in);
+	function getValidState() returns (string?);
+	function showErrorMessage(msg string in);
+	function showErrorIndicator(aboolean boolean in);
+end

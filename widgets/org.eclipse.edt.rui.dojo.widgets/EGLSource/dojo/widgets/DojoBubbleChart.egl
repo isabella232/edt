@@ -1,0 +1,118 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package dojo.widgets;
+
+import eglx.javascript.javascriptobject;
+import eglx.lang.property;
+import eglx.ui.rui.eventhandler;
+import eglx.ui.rui.ruilib;
+import eglx.ui.rui.veevent;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vewidget;
+
+/**
+ * This is a bubble chart to present multi-dimensional numeric data in a graphical form.
+ *
+ * The data has to be an array of BubbleChartData. 
+ *
+ * For more information on the Dojo widget itself, see http://docs.dojocampus.org/dojox/charting
+ *
+ */
+ExternalType DojoBubbleChart extends DojoChartBase type JavaScriptObject{
+	relativePath="dojo/widgets",
+	externalName="DojoBubbleChart",	
+	@VEWidget{
+			category = "Visualization",
+			template = 
+				"${typeName}{\n" +
+				"\t\tthemeColor = ${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_BLUE,\n" +
+				"\t\tminX = \"0\", maxX = \"7\", minY = \"0\", maxY = \"11\", width = \"400\", height = \"300\",\n" +
+				"\t\tdata = [\n" +
+				"\t\t\tnew ${typeName:dojo.widgets.BubbleChartData} { x=0.5, y=5,   size=1.4, color=\"red\", tooltip=\"Gas\" },\n" + 
+				"\t\t\tnew ${typeName:dojo.widgets.BubbleChartData} { x=1.5, y=2.5, size=2.5, color=\"green\", tooltip=\"Mortgage\" },\n" + 
+				"\t\t\tnew ${typeName:dojo.widgets.BubbleChartData} { x=2,   y=9,   size=1.5, color=\"blue\", tooltip=\"Electric\" },\n" + 
+				"\t\t\tnew ${typeName:dojo.widgets.BubbleChartData} { x=5,   y=4.3, size=0.8, color=\"orange\", tooltip=\"Cable\" }\n" +
+				"\t\t]\n" +
+				"\t}",
+			displayName = "BubbleChart",
+			smallIcon = "icons/ctool16/bubble_chart_pal16.gif",
+			largeIcon = "icons/ctool24/bubble_chart_pal24.gif",
+			propertyFilterType  = filterKind.includeAllExcept,
+			propertyFilter = [ "color", "backgroundColor", "font", "fontSize", "fontWeight", "x", "y", "opacity", "disabled", "ariaLive", "ariaRole", "tabIndex"],
+			eventFilterType  = filterKind.includeAllExcept,
+       		eventFilter  = ["onChange", "onSelect", "onFocusGained", "onFocusLost", "onKeyDown", "onKeyPress", "onKeyUp", "onScroll"],
+			provider = "Dojo"
+		}   
+	}
+	
+	/*
+	 * Provide the theme color to use for drawing the chart. Has to one of the available Dojo charting color themes.
+	 * As of Dojo 1.3.1, the choices are:
+	 * 
+	 *	DojoLib.CHART_COLOR_THEME_RED		String	= "red";
+	 *	DojoLib.CHART_COLOR_THEME_BLUE		String	= "blue";
+	 *	DojoLib.CHART_COLOR_THEME_GREEN		String	= "green";
+	 *	DojoLib.CHART_COLOR_THEME_ORANGE	String	= "orange";
+	 *	DojoLib.CHART_COLOR_THEME_CYAN		String	= "cyan";
+	 *	DojoLib.CHART_COLOR_THEME_PURPLE	String	= "purple";
+	 *
+	 * Check out http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/charting/themes/PlotKit/ for the latest color themes.
+	 */ 
+	themeColor String { @VEProperty {
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "red", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_RED"},
+			@VEPropertyChoice {displayName = "blue", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_BLUE"},
+			@VEPropertyChoice {displayName = "green", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_GREEN"},
+			@VEPropertyChoice {displayName = "orange", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_ORANGE"},
+			@VEPropertyChoice {displayName = "cyan", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_CYAN"},
+			@VEPropertyChoice {displayName = "purple", id = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_PURPLE"}
+		],
+		default = "${typeName:dojo.widgets.DojoLib}.CHART_COLOR_THEME_BLUE"
+	}};
+	
+	/**
+	 * The data for this chart. Each time this field gets set, the chart is rerendered
+	 */
+	data BubbleChartData[] {@Property{setMethod="setData", getMethod="getData"}};
+	
+	/** the minimum value for the x (horizontal) axis */
+	minX float { @VEProperty{} };
+	
+	/** the maximum value for the x (horizontal) axis */
+	maxX float { @VEProperty{} };
+	
+	/** the minimum value for the y (vertical) axis */
+	minY float { @VEProperty{} };
+	
+	/** the maximum value for the y (vertical) axis */
+	maxY float { @VEProperty{} };
+	
+end
+
+Record BubbleChartData
+
+	/** the size of this bubble */
+	size float;
+	
+	/** the value of the x-coordinate (horizontal direction) */
+	x float;
+	
+	/** the value of the y-coordinate (vertical direction) */
+	y float;
+	
+	/** the color to fill this bubble with */
+	color String;
+
+	/** the tooltip to present when the user hovers over a bubble */
+	tooltip String?;
+end
