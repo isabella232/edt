@@ -1,0 +1,213 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler RadioGroup type RUIWidget {tagName ="div",cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{options = [ \"soda\", \"coffee\", \"tea\" ], groupName = \"groupName\", selected = \"coffee\"}",
+		displayName = "RadioGroup",
+		smallIcon = "icons/ctool16/radiogroup.gif",
+		largeIcon = "icons/ctool24/radiogroup.gif"
+	},
+	@MVCView{
+		retrieveViewHelper = getValueAsText,
+		publishHelper = setValueAsText
+	}
+}
+
+	groupName String{@EGLProperty{setMethod = setGroupName, getMethod = getGroupName}, @VEProperty{}};
+	options string[]{@EGLProperty{setMethod = setOptions, getMethod = getOptions}, @VEProperty{}};
+	selected string{@EGLProperty{setMethod = setSelected, getMethod = getSelected}, @VEProperty{}};
+
+	private optionsList Widget[];
+
+	private reverseTextDirectionThis String = "";
+	private textLayoutThis String = "";
+	private widgetOrientationThis String = "";
+	
+	private optionsBox Box{ columns = 2 };
+	
+	function setGroupName(groupName string in)
+		this.groupName = groupName;
+		if(groupName.indexOf(" ") >= 1)
+			//TODO: Replace runtime message with translated string
+			messageValue string = UtilLib.getMessage("CRRUI0006E", [this.groupName]);
+			throw new AnyException {message = messageValue, messageId = "CRRUI0006E"}; 
+		end
+		if (options != null)
+			setOptions(options);
+		end
+	end
+	
+	function getGroupName() returns (string)
+		return (groupName);
+	end
+	
+	function setOptions(opts string[] in)
+		options = opts;
+		if (groupName == null || groupName == "")
+			return;
+		end
+		removeChildren();
+		optionsList.removeAll();
+		optionsBox.removeChildren();
+		appendChild(optionsbox);
+		for (index int from 1 to options.getSize() by 1)
+			newOption Widget{tagName = "input type=radio name=" + groupName};
+			newOption.setAttribute("value", options[index]);
+			newOption.onClick ::= setSelectedEvent;
+			newOption.onChange ::= setChangeEvent;
+			optionName TextLabel{text = options[index], class = "EglRuiRadioGroupOptionName"};
+			optionName.setAttribute("dir", "ltr");
+			optionName.style = "display: inline-block";
+
+			optionsList.appendElement(newOption);
+			optionsBox.appendChild(newOption);
+			optionsBox.appendChild(optionName);     
+		end
+		
+		if(textLayoutThis == "Visual" || reverseTextDirectionThis == "Yes")
+			setBiDiStyles();
+		end		
+		
+		if (selected != "")
+			setSelected(selected);
+		end
+	end
+	
+	function getOptions() returns (string[])
+		return (options);
+	end
+	
+	function setSelected(select string in)
+		selected = select;
+		for (opt int from 1 to optionsList.getSize() by 1)
+			if (optionsList[opt].getAttribute("value") as string == select)
+				selectedOption = optionsList[opt];
+				new Job { runFunction = doSetSelected }.schedule();
+			else
+				optionsList[opt].removeAttribute("checked");
+			end
+		end
+	end
+	
+	function setDisabled(disabled Boolean in)
+		for (opt int from 1 to optionsList.getSize() by 1)
+			optionsList[opt].disabled = disabled;
+		end
+		if ( disabled )
+			optionsBox.setAttribute("disabled", disabled);
+		else
+			optionsBox.removeAttribute("disabled");
+		end
+	end
+	
+	function getDisabled() returns (boolean) 
+		return (optionsBox.getAttribute("disabled") as boolean);
+	end
+	
+	private selectedOption Widget;
+	private function doSetSelected()
+		selectedOption.setAttribute("checked", "true");
+	end
+	
+	private function setChangeEvent(e Event in)
+		if (selectedOption != e.widget)
+			selectedOption = e.widget;
+			selected = e.widget.getAttribute("value") as string;
+			e.widget = this; 
+			for (index int from 1 to this.onChange.getSize() by 1)
+  				this.getOnChange()[index](e);
+			end
+		end
+	end
+	
+	private function setSelectedEvent(e Event in)
+		if (selectedOption != e.widget)
+			selectedOption = e.widget;
+			selected = e.widget.getAttribute("value") as string;
+			browser String = RUILib.getUserAgent();
+			if (this.getOnChange().getSize() > 0)
+				e.widget = this;
+				for (index int from 1 to this.onChange.getSize() by 1)
+					this.getOnChange()[index](e);
+				end
+			end
+		end
+		if (this.getOnClick().getSize() > 0)
+			e.widget = this;
+			for (index int from 1 to this.onClick.getSize() by 1)
+				this.getOnClick()[index](e);
+			end
+		end
+	end
+	
+	function getSelected() returns (string)
+		return (selected);
+	end
+
+	function setTextLayout(textLayout String in) 
+		this.textLayoutThis = textLayout;
+		setBiDiStyles();	
+	end
+	
+	function getTextLayout() returns (String) 
+		return (this.textLayoutThis);
+	end
+
+	function setReverseTextDirection(reverseTextDirection String in) 
+		this.reverseTextDirectionThis = reverseTextDirection;
+		setBiDiStyles();
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (this.reverseTextDirectionThis);
+	end
+	function getWidgetOrientation() returns (String) 
+		return (this.widgetOrientationThis);	 	
+	end
+	
+	function setWidgetOrientation(widgetOrientation String in) 
+		this.widgetOrientationThis = widgetOrientation;	
+		if(widgetOrientation == "RTL")
+			optionsBox.setAttribute("dir", "rtl");
+			optionsBox.alignment = 2;
+			this.setReverseTextDirection("Yes");  //in order to provide similar to dojo widget behavior
+		else
+			optionsBox.setAttribute("dir", "ltr");
+			optionsBox.alignment = 0;
+			this.setReverseTextDirection("No");		//in order to provide similar to dojo widget behavior	
+		end
+	end
+	
+	private function setBiDiStyles()
+		children Widget[] = optionsBox.getChildren();
+		if(children.getSize() > 0)
+			for(i int from 1 to children.getSize() by 1)
+				if (children[i].class == "EglRuiRadioGroupOptionName")
+					children[i].textLayout = this.textLayoutThis;
+					children[i].reverseTextDirection = this.reverseTextDirectionThis;
+				end;
+			end;
+		end
+
+	end	
+	
+	private function setValueAsText(value String in)
+		setSelected(value);
+	end
+	
+	private function getValueAsText() returns(String)
+		return (selected);
+	end
+end

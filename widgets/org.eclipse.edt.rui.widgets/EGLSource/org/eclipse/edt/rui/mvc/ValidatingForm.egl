@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import org.eclipse.edt.rui.widgets.Box;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import eglx.ui.rui.Widget;
+
+record FormField
+	displayName String?;
+	controller Controller;
+	nameLabel TextLabel;
+	errorLabel TextLabel;
+	labelClass String?;
+end
+
+handler ValidatingForm type RUIWidget {tagName = "div"}
+
+	entries FormField[] { @EGLProperty { setMethod=setEntries, getMethod=getEntries } };
+	box Box { columns=3 };
+
+	function setEntries(entries FormField[] in)
+		this.entries = entries;
+		for (n int from 1 to entries.getSize() by 1)
+			this.entries[n].nameLabel = new TextLabel { text=entries[n].displayName };
+			this.entries[n].labelClass = entries[n].nameLabel.class;
+			box.appendChild(this.entries[n].nameLabel);
+			box.appendChild(this.entries[n].controller.view);
+			this.entries[n].errorLabel = new TextLabel { marginLeft=9, class="EglRuiTextLabel FormErrorLabel" };
+			box.appendChild(this.entries[n].errorLabel);
+			if (this.entries[n].controller.validStateSetter == null)
+				this.entries[n].controller.validStateSetter = validStateSetter;
+			end
+		end
+		appendChild(box);
+	end
+	
+	function getEntries() returns(FormField[])
+		return (entries);
+	end		
+	
+	function commit()
+		for (n int from entries.getSize() to 1 decrement by 1)
+			entries[n].controller.commit();
+			msg String? = entries[n].controller.getErrorMessage();
+			if (!(msg == null || msg == ""))
+				entries[n].errorLabel.text = msg;
+			end
+		end
+	end
+	
+	function publish()
+		for (n int from entries.getSize() to 1 decrement by 1)
+			entries[n].controller.publish();
+		end		 
+	end
+	
+	function isValid() returns(boolean)
+		result boolean = true;
+		for (n int from entries.getSize() to 1 decrement by 1)
+			if (!entries[n].controller.isValid())
+				result = false;				
+			end
+		end		
+		return(result);
+	end
+	
+	function validStateSetter(view Widget in, valid boolean in)
+		for (n int from entries.getSize() to 1 decrement by 1)
+			entry FormField = entries[n];
+			msg String? = entry.controller.getErrorMessage();
+			if (msg == null)
+				msg = "";
+			end
+			entry.errorLabel.text = msg;
+			setValidState(entry, view, valid);
+		end
+	end
+	
+	function setValidState(entry FormField, view Widget in, valid boolean in)
+		if (entry.controller.view == view)
+			if (valid)
+				entry.nameLabel.class = entry.labelClass;
+			else
+				entry.nameLabel.class = entry.labelClass + " FormErrorLabel";
+			end
+		end
+	end
+end

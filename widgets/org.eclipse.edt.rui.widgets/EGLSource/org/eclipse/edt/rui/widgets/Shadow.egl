@@ -1,0 +1,35 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler Shadow type RUIWidget{tagName = "div", cssFile = "css/org.eclipse.edt.rui.css" }
+
+	div Div { @EGLProperty { setMethod=setDiv, getMethod=getDiv } };
+	
+	function setDiv(div Div in)
+		this.class = "EglRuiShadowDiv1";
+		this.appendChild(
+			new	Div { class = "EglRuiShadowDiv2", children = [ 
+				new Div { class = "EglRuiShadowDiv3", children = [ 
+					div
+				]}
+			]} 
+		);
+		div.class = div.class + " EglRuiShadowDiv4";
+		this.div = div;
+	end
+
+	function getDiv() returns(Div)
+		return (div );
+	end
+	
+end

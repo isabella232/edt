@@ -1,0 +1,123 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Delegate
+	DataGridSelectionListener()
+end
+
+handler DataGridSelector
+
+	selection any[] = [];
+	selectedRows Widget[] = [];
+	color String = "lightgreen";
+	
+	selectionChangedListener DataGridSelectionListener? = null;
+	grid DataGrid?;
+	
+	private selectedGridRows Widget[] = [];
+	
+	function enableSelection(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+		grid.selectionMode=DataGridLib.DISABLE_SELECTION;
+		if(this.grid==null)
+			this.grid=grid;
+		end
+		td.onClick ::= setSelected;
+		td.setAttribute("originalBG", td.backgroundColor);
+		grid.cursor = "pointer";
+	end
+	
+	function setSelected(e Event in)		
+		gridCell Widget = e.widget;
+		gridRow Widget = gridCell.parent;
+		row String = " " + gridCell.getAttribute("row");
+		dataRecord any = grid.data[row as int];
+		if (e.ctrlKey || e.metaKey)
+			index int = selectionIndex(gridRow);
+			if (index == 0)
+				selection.appendElement(dataRecord);  
+				box Box { table { } };  
+				box.columns = gridRow.children.getSize();
+			  	for(n int from 1 to box.columns)
+			  		box.appendChild(new Div {innerHTML = gridRow.children[n].innerHTML, backgroundColor = color, margin = 1});
+			  	end
+			  	tr Widget = box.lastRow;
+			  	tr.setAttribute("row", row);
+				selectedRows.appendElement(tr);	
+				selectedGridRows.appendElement(gridRow);			
+				highlightRow(gridRow);
+			else
+				unHighlightRow(gridRow);
+				selection.removeElement(index);
+				selectedRows.removeElement(index);
+				selectedGridRows.removeElement(index);
+			end
+		else
+			unHighlightRows(selectedGridRows);
+			selection = [ dataRecord ];
+			box Box { table { } };
+			box.columns = gridRow.children.getSize();
+		  	for(n int from 1 to box.columns)
+		  		box.appendChild(new Div {innerHTML = gridRow.children[n].innerHTML, backgroundColor = color, margin = 1});
+		  	end
+		  	tr Widget = box.lastRow;
+		  	tr.setAttribute("row", row);
+			selectedRows = [ tr ];
+			selectedGridRows = [gridRow];
+			highlightRow(gridRow);
+		end
+		if (selectionChangedListener != null)
+			selectionChangedListener();
+		end
+	end
+	
+	function selectionIndex(tr Widget in) returns(int)
+		for (n int from 1 to selectedGridRows.getSize() by 1)
+			if (selectedGridRows[n] == tr)
+				return(n);
+			end
+		end
+		return (0);
+	end	
+	
+	function highlightRow(tr Widget in)
+		tds Widget[] = tr.getElementsByTagName("div");
+		for (n int from 1 to tds.getSize() by 1)
+			if(tds[n].class.isLike("%EglRuiDataGridCell%"))
+				tds[n].backgroundColor = color;
+			end
+		end
+		tr.cursor = "move";
+	end
+	
+	function unHighlightRow(tr Widget in)
+		tds Widget[] = tr.getElementsByTagName("div");
+		for (n int from 1 to tds.getSize() by 1)
+			if (tds[n].class.isLike("%EglRuiDataGridCell%"))
+				tds[n].backgroundColor = tds[n].getAttribute("originalBG");
+			end
+		end
+		tr.cursor = "default";
+	end
+	
+	function unHighlightRows(trs Widget[] in)
+		for (r int from 1 to trs.getSize() by 1)
+			unHighlightRow(trs[r]);
+		end
+	end
+	
+	function clear(Grid DataGrid)
+		unHighlightRows(selectedRows);
+		selection = [ ];
+		selectedRows = [ ];
+	end
+end

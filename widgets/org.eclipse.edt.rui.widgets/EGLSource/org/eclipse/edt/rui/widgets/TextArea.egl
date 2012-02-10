@@ -1,0 +1,138 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler TextArea type RUIWidget{tagName="textarea", onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{ width = \"200\", height = \"200\" }",
+		displayName = "TextArea",
+		smallIcon = "icons/ctool16/textarea.gif",
+		largeIcon = "icons/ctool24/textarea.gif"
+	},
+	@VEDataTemplate{
+		dataTemplates = [
+			@DataTemplate{
+				name = "TextArea (read only)",
+				dataMapping = @DataMapping {
+					forArray = false,
+					mappings = [MappingKind.TYPE_PRIMITIVE_STRING]
+				},
+				genController = true,
+				purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.TextArea} {readOnly = true};"
+			},
+			@DataTemplate{
+				name = "TextArea",
+				dataMapping = @DataMapping {
+					forArray = false,
+					mappings = [MappingKind.TYPE_PRIMITIVE_STRING]
+				},
+				genController = true,
+				purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.TextArea} {};"
+			}
+		]
+	}}
+
+	private savedBackgroundColor string;
+	
+	text String { @EGLProperty { getMethod=getText, setMethod=setText }, @VEProperty{} };
+	readOnly boolean {@EGLProperty {getMethod=getReadOnly, setMethod=setReadOnly}, @VEProperty{}};
+	numRows Int { @EGLProperty { getMethod=getNumRows, setMethod=setNumRows }, @VEProperty{} };
+	numColumns Int { @EGLProperty { getMethod=getNumColumns, setMethod=setNumColumns }, @VEProperty{} };
+	
+	private buffer string[];
+	private redraw boolean = true;
+	private savedEnableSelection boolean;
+	
+	function start()
+		onFocusGained ::= enableSelection;
+		onFocusLost ::= disableSelection;
+	end
+	
+	function enableSelection(e Event in)
+		savedEnableSelection = RUILib.getTextSelectionEnabled();
+		RUILib.setTextSelectionEnabled(true);
+	end
+	
+	function disableSelection(e Event in)
+		RUILib.setTextSelectionEnabled(savedEnableSelection);
+	end
+	
+	function append(text String in)
+		if(redraw)
+			setText(getText() + text);
+		else
+			buffer.appendElement(text);
+		end
+	end
+	
+	function setRedraw(draw boolean in)
+		redraw = draw;
+		bufSize int = buffer.getSize();
+		if(redraw && bufSize > 0)
+			s string;
+			for(i int from 1 to bufSize)
+				s += buffer[i] + "\n";
+			end
+			append(s);
+			buffer = new string[0];
+		end
+	end
+
+	function getNumRows() returns(int)
+		numRows = getAttribute("rows") as int;
+		return( numRows);
+	end
+	
+	function setNumRows(rows int in)
+		numRows = rows;
+		setAttribute("rows", rows);
+	end
+	
+	function getNumColumns() returns(int)
+		numColumns = getAttribute("cols") as int;
+		return(numColumns);
+	end
+	
+	function setNumColumns(cols int in)
+		numColumns = cols;
+		setAttribute("cols", cols);
+	end
+	
+	private function setText(text string in)
+		setAttribute("value", text);		
+	end
+	
+	private function getText() returns (string)
+		return (getAttribute("value") as string);
+	end
+	
+	private function getReadOnly() returns(boolean)
+		return(readOnly);
+	end
+
+	private function setReadOnly(ro boolean in)
+		readOnly = ro;
+		if(ro)
+			setAttribute("readOnly", "true");
+			savedBackgroundColor = backgroundColor;
+			backgroundColor = "";
+			class = "EglRuiTextAreaReadOnly";
+		else
+			removeAttribute("readOnly");
+			backgroundColor = savedBackgroundColor;
+			class = "EglRuiTextAreaRead";
+		end
+	end
+end

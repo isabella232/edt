@@ -1,0 +1,205 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Handler CheckBox type RUIWidget{targetWidget = span, cssFile = "css/org.eclipse.edt.rui.css", 
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{ text=\"CheckBox\", selected=true }",
+		displayName = "CheckBox",
+		smallIcon = "icons/ctool16/checkbox.gif",
+		largeIcon = "icons/ctool24/checkbox.gif"
+	},
+	@MVCView{
+		retrieveViewHelper = getValueAsText,
+		publishHelper = setValueAsText
+	},  
+	@VEDataTemplate{
+		dataTemplates = [
+			@DataTemplate{
+				name = "CheckBox",
+				dataMapping = @DataMapping {
+					forArray = false,
+					mappings = [MappingKind.TYPE_PRIMITIVE_BOOLEAN]
+				},
+				genController = true,
+				purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.CheckBox} { };"
+			},
+			@DataTemplate{
+				name = "CheckBox (read only)",
+				dataMapping = @DataMapping {
+					forArray = false,
+					mappings = [MappingKind.TYPE_PRIMITIVE_BOOLEAN]
+				},
+				genController = true,
+				purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.CheckBox} { disabled = true };"
+			}
+		]
+	}}
+
+	text String{@EGLProperty{setMethod = setText, getMethod = getText}, @VEProperty{}};
+	selected boolean{@EGLProperty{setMethod = setSelected, getMethod = getSelected}, @VEProperty{}};
+	private check Widget{tagName = "input type=checkbox", onKeyUp ::= key, onClick ::= click };
+	private textspan Widget{tagName = "span" };
+	private span Widget{tagName = "span", onClick ::= setFocus, children = [ check, textspan ]};
+			
+	function setText(textIn String in)
+		text = textIn;
+		textspan.innerHTML = textIn;
+/*		if(this.getTextLayout() != null || this.getReverseTextDirection() != null)
+			this.textspan.setBiDiMarkers(this.getTextLayout() == "Visual",this.getReverseTextDirection() == "Yes");
+			if (this.getWidgetOrientation() == "RTL")
+				textspan.innerHTML = 8235 + textspan.innerHTML;
+			end
+		end*/
+	end
+	
+	function getText() returns (String)
+		return (text);
+	end
+	
+    function setFont( font String ) 
+        textspan.font = font;    
+    end
+	
+	function setDisabled(disabled Boolean in)
+		check.disabled = disabled;
+		span.disabled = disabled;
+	end
+	
+	private function doSetSelected()
+		browser String = RUILib.getUserAgent();
+		if (browser.indexOf("MSIE 7.0") != 0)
+			check.setAttribute("checked", "true");
+		else
+			check.setAttribute("checked", 1);
+		end
+	end
+
+	private function doSetUnSelected()
+    	check.setAttribute("checked", "");
+        check.removeAttribute("checked");
+    end
+
+	function setSelected(selected Boolean in)
+        if (!selected)
+        	doSetUnSelected();// Update the DOM immediately.
+            new Job { runFunction = doSetUnSelected }.schedule();//fix for IE problem
+        else
+        	doSetSelected();
+            new Job { runFunction = doSetSelected }.schedule();
+        end
+    end
+	
+	function getSelected() returns (boolean)
+		browser String = RUILib.getUserAgent();
+		if (browser.indexOf("MSIE 7.0") != 0)
+			return (check.getAttribute("checked") as boolean);
+		else
+			return (check.getAttribute("checked") as string == "true");
+		end
+	end
+
+	function getWidgetOrientation() returns (String) 
+		if(this.span.getAttribute("dir") as string == "rtl")
+			return ("RTL");
+		else 
+			if(this.span.getAttribute("dir") as string == "ltr")
+				return ("LTR");
+			else
+				return ("");				
+			end
+		end		
+	end
+	
+	function setWidgetOrientation(widgetOrientation String in) 
+		if(widgetOrientation == "RTL")
+/*			if(this.getTextLayout() != "Visual")
+				this.textspan.setAttribute("dir", "ltr");				
+			end*/
+			
+			this.span.setAttribute("dir", "rtl");			
+			this.span.style = "text-align: right;";
+			this.textspan.setAttribute("dir", "rtl");
+		else
+			this.span.setAttribute("dir", "ltr");
+			this.span.style = "text-align: left;";
+			this.textspan.setAttribute("dir", "ltr");		
+		end
+		this.span.displayStyle = "inline-block";
+		
+	end
+	
+	function setTextLayout(textLayout String in) 	
+		this.textspan.textLayout = textLayout;			
+	end
+
+	function getTextLayout() returns (String) 
+		return (this.textspan.textLayout);
+	end
+	
+	function setReverseTextDirection(reverseTextDirection String in) 
+		this.textspan.reverseTextDirection = reverseTextDirection;	
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (this.textspan.reverseTextDirection);
+	end
+	
+	function setFocus(e Event in)
+		check.focus();
+	end
+	
+	private function click(e Event in)
+		browser String = RUILib.getUserAgent();
+		if (browser.indexOf( "IE") != 0)
+			e.widget = this;
+			for (n int from 1 to onChange.getSize())
+				onChange[n](e);
+			end
+			for (n int from 1 to onClick.getSize())
+				onClick[n](e);
+			end
+		end
+	end	
+	
+	private function key(e Event in)
+		if (e.ch == 32) 
+			browser String = RUILib.getUserAgent();
+			if (browser.indexOf("IE") != 0)
+				setSelected(!getSelected());
+			end
+			e.widget = this;
+			for (n int from 1 to onChange.getSize())
+				onChange[n](e);
+			end
+		end
+	end
+	
+	private function setValueAsText(value String in)
+		if("TRUE" == value.toUpperCase())
+			setSelected (true);
+		else
+			setSelected(false);
+		end 
+	end
+	
+	private function getValueAsText() returns(String)
+		if(getSelected())
+			return("TRUE");
+		else
+			return("FALSE");
+		end
+	end
+end

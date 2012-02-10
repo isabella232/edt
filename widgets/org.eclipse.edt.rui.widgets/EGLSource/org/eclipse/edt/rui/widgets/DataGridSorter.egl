@@ -1,0 +1,46 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
+handler DataGridSorter
+
+	sortByName String;
+	sortingUp boolean = true;
+	caseIgnore boolean = false;
+
+	function columnSorter(grid DataGrid in, td Widget in, ignoreRow any in, ignoreDataIndex int in, column DataGridColumn in)
+		grid.enableSorting=false;
+		td.onClick ::= sortColumn;
+	end
+	
+	function sortColumn(e Event in)
+		td Widget = e.widget;
+		grid DataGrid=td.logicalParent;
+		column int = td.getAttribute("column");
+		sortByName = grid.columns[column].name;
+		sortingUp = !sortingUp;
+		for (n int from 1 to grid.columns.getSize())
+			if (n != column)
+				grid.columns[n].sortDirection = 0;
+			end
+		end
+		if(sortingUp)
+			grid.columns[column].sortDirection = 2;
+		else
+			grid.columns[column].sortDirection = 1;
+		end
+		grid.data=DataGridLib.util.sort(grid.data, sortByName, sortingUp, caseIgnore,null);
+	end
+end

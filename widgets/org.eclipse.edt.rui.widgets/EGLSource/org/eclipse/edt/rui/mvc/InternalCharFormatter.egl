@@ -1,0 +1,147 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import eglx.rbd.strlib;
+
+library InternalCharFormatter
+	use InternalMessageLib;
+
+	util InternalFormattingUtil{};
+
+	function format(input string? in, dateFormat string in, timeFormat string in,
+			isUppercase boolean in, isLowercase boolean in, typeChkMsgKey string in) returns(string)
+		if (input == null)
+			return("");
+		end
+		
+		if (dateFormat != "")
+			return(asDate(input, dateFormat, typeChkMsgKey));
+		end
+// TODO 070
+//		if (timeFormat != "")
+//			return(asTime(input, timeFormat, typeChkMsgKey));
+//		end
+		if (isUpperCase)
+			return(input.toUpperCase());
+		end
+		if (isLowercase)
+			return(input.toLowerCase());
+		end
+		return(input);
+	end
+	
+	private function asDate(input string in, format string in, msg String in) returns(string?)
+		if (input == "")
+			return("");
+		end
+		
+		try
+			d date = input; // The value stored in the input string must conform to the format referenced in EDate.asDate()
+			return(StringLib.format(d, format));
+		onException(exception AnyException)
+			// TODO: do not hard code this format - access it from EDate
+			errorFormat string = "mm/dd/YYYY";
+			throw new AnyException {message = getRuntimeMessage(msg, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+		end
+	end
+
+// TODO !070	
+//	private function asTime(input string in, format string in, msg string in) returns(string?)
+//		if (input == "")
+//			return("");
+//		end
+//		
+//		savedFormat string = strlib.defaultTimeFormat;
+//		try
+//			strlib.defaultTimeFormat = "HH:mm:ss";
+//			
+//			sizeDifference int = strlib.characterLen(strlib.defaultTimeFormat) - strlib.characterLen(input);
+//			if (sizeDifference < 0)
+//				input = input[1:strlib.characterLen(strlib.defaultTimeFormat)];
+//			else
+//				if (sizeDifference != 0)
+//					for (i int from 1 to sizeDifference)
+//						input += "0";
+//					end
+//				end
+//			end
+//			 
+//			t timestamp("HHmmss") = input;
+//			result string? = eglx.lang.stringLib.format(t, format);
+//			strlib.defaultTimeFormat = savedFormat;
+//			return(result);
+//		onException(exception AnyException)
+//			errorFormat string = strlib.defaultTimeFormat;
+//			strlib.defaultTimeFormat = savedFormat;
+//			throw new AnyException {message = getRuntimeMessage(msg, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+//		end
+//	end
+	
+	function unformat(input string in, dateFormat string in, timeFormat string in,
+			isUppercase boolean in, isLowercase boolean in, typeChkMsgKey string in) returns(string)
+		input = strLib.clip(input, 0);
+		if (dateFormat != "")
+			return(fromDate(input, dateFormat, typeChkMsgKey));
+		end
+// TODO !070
+//		if (timeFormat != "")
+//			return(fromTime(input, timeFormat, typeChkMsgKey));
+//		end
+		if ( isUppercase )
+			return(strlib.upperCase(input));
+		end
+		if ( isLowercase )
+			return(strlib.lowerCase(input));
+		end
+		return(input);
+	end
+	
+	private function fromDate(input string in, format string in, msg string in) returns(string?)
+		if (input == "")
+			return("");
+		end
+		
+		util InternalFormattingUtil{};
+		
+		// A date format has been specified, attempt to convert the string to a date 
+		result date? = util.asDate(input, format, true);
+			
+		if(result == null)
+			// The conversion failed
+			errorFormat string = format;
+			throw new AnyException {message = getRuntimeMessage(msg, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+		else
+			return(result);
+		end
+	end
+
+//TODO !070	
+//	private function fromTime(input string in, format string in, msg string in) returns(string?)
+//		if (input == "")
+//			return("");
+//		end
+//		
+//		savedFormat string = strlib.defaultTimeFormat;
+//		try
+//			strlib.defaultTimeFormat = format;
+//			t timestamp("HHmmss") = input;
+//			result string? = eglx.lang.stringLib.format(t, "HH:mm:ss");
+//			strlib.defaultTimeFormat = savedFormat;
+//			return(result);
+//		onException(exception AnyException)
+//			errorFormat string = strlib.defaultTimeFormat;
+//			strlib.defaultTimeFormat = savedFormat;
+//			throw new AnyException {message = getRuntimeMessage(msg, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+//		end
+//	end
+end

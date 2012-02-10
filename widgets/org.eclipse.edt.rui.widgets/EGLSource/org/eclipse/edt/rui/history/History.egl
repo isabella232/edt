@@ -1,0 +1,104 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.history;
+
+import org.eclipse.edt.rui.widgets.UtilLib;
+import eglx.javascript.Job;
+import eglx.ui.rui.Widget;
+
+Delegate 
+	HistoryChanged(newLocation String in)
+end
+
+Delegate
+	OnBeforeUnloadMessageFunction() returns(String)
+end
+
+handler History type RUIWidget { onConstructionFunction = start }
+   
+    private frame Widget;
+    private listeners HistoryChanged[] = [];
+    private checkURLJob Job { runFunction = checkURL };
+    private currentLocation String;
+    private browser HistoryHelper{};
+    private const BASE String = "org/eclipse/edt/rui/history/history.html?history=";
+    
+    private function start()
+    	if (!browser.inVisualEditorDesignMode())
+	    	if (browser.isIE())
+		    	frame = new Widget { tagName="iframe", visibility="hidden", position="absolute", width=0, height=0 };
+		    	document.body.appendChild(frame);
+		    	frame.setAttribute("src", BASE+"empty");
+		    end
+	   		checkURLJob.repeat(100);
+	   	end
+    end
+    
+    function goBack() 
+    	browser.goBack();
+    end
+    
+    function goForward()
+    	browser.goForward();
+    end
+    
+    function addListener(listener HistoryChanged)
+    	if (!browser.inVisualEditorDesignMode())
+	    	listeners ::= listener;
+	    end
+    end
+    
+    function addToHistory(newLocation String in)
+     	if (!browser.inVisualEditorDesignMode())
+	    	if (newLocation == "")
+	    		messageValue String = UtilLib.getMessage("CRRUI2004E", [newLocation]);
+				throw new AnyException {message = messageValue, messageId = "CRRUI2004E"};
+	    	end
+	    	browser.setLocationHash(newLocation);
+	    	checkUrl();
+	    	if (browser.isIE())
+	    		frame.setAttribute("src", BASE+newLocation);
+	    	end
+	    end
+    end
+    
+    private function tellListeners()
+    	for (n int from 1 to listeners.getSize() by 1)
+    		listeners[n](HttpLib.convertFromURLEncoded(currentLocation));
+    	end
+    end
+    
+    private function checkURL()
+		if (browser.isIE()) 
+	    	location String = browser.getFrameSrc(frame);
+    		index int = location.indexOf("=");
+	    	location = location[index+1 : location.length()];
+	    	if (location != null && location != currentLocation)
+	    		currentLocation = location;
+	    		browser.setLocationHash(location);
+	    		tellListeners();
+		    end
+	    else
+			hash String = browser.getLocationHash();
+		    if (hash != currentLocation)
+		    	currentLocation = hash;
+	    		tellListeners();
+		    end
+    	end
+    end
+    
+    function keepUserOnPage(onBeforeUnloadMessageFunction OnBeforeUnloadMessageFunction)
+    	if (!browser.inVisualEditorDesignMode())
+	    	browser.setOnbeforeUnload(onBeforeUnloadMessageFunction);
+	    end
+    end
+end

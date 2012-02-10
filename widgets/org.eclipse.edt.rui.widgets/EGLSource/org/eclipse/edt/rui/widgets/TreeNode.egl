@@ -1,0 +1,130 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler TreeNode type RUIWidget{ targetWidget = outerContainer, onConstructionFunction=start}
+
+	text String  { @EGLProperty{getMethod = getText, setMethod = setText }} = "";
+	behaviors TreeNodeBehavior[] = [];
+	bgColor String = "";
+	imageURL string  { @EGLProperty{setMethod = setImageURL }};
+	image Image { 
+		src="images/TreeNodeEmpty.gif" 
+	};
+	span Span { };
+	childNodes TreeNode[] = [];
+	childrenContainer Div { };
+	nodeContainer Div { 
+		children = [ image, span, childrenContainer ], 
+		paddingLeft = 12, style="text-align: left;",
+		background = "url(images/TreeNodeL.gif) no-repeat" 
+	};
+	outerContainer Div { 
+		children = [ nodeContainer ], 
+		background = "url(images/TreeNodeI.gif) repeat-y"
+	};
+	private ignoreChanges boolean = false;
+	
+	function start()
+		childrenContainer.logicalParent = this;
+		image.logicalParent = this;
+		span.logicalParent = this;
+	end
+	
+	function setImageURL(imageURL String in) 
+		image.src = imageURL;
+		image.width = 16;
+		image.height = 16;
+	end
+	
+	function setChildren(newChildren TreeNode[] in) 
+		ignoreChanges = true;
+		removeChildren();
+		childrenCount int = newChildren.getSize();
+		for (n int from 1 to childrenCount by 1)
+			child TreeNode = newChildren[n];
+			appendChild(newChildren[n]);
+		end
+		ignoreChanges = false;
+		childrenChanged();
+	end
+	
+	function getChildren() returns(TreeNode[]) 
+		return (childNodes);
+	end
+	
+	function removeChildren() 
+		childNodes.removeAll();
+		childrenContainer.removeChildren();
+		childrenChanged();
+	end
+	
+	function appendChild(child TreeNode in) 
+		childrenContainer.appendChild(child);
+		node TreeNode = child;
+		childNodes ::= node;
+		node.logicalParent = this;
+		childrenChanged();
+	end
+	
+	function childrenChanged() 
+		if (!ignoreChanges)
+			applyBehaviorsToChildren();
+		end
+	end
+	
+	function getText() returns(String)
+		if (span == null) return ("span=null"); end
+		return (span.innerHTML);
+	end
+	function setText(text String in)
+		span.innerHTML = text;
+	end
+	
+	function applyBehaviors(behaviors TreeNodeBehavior[], bgColor String in)
+		this.bgColor = bgColor;
+		if (this.behaviors.getSize() == 0)
+			this.behaviors.appendAll(behaviors);
+			behaviorCount int = behaviors.getSize();
+			for (n int from 1 to behaviorCount by 1)
+				behaviors[n](this);
+			end
+		end
+		applyBehaviorsToChildren();
+	end
+	
+	function applyBehaviorsToChildren()
+		childrenCount int = childNodes.getSize();
+		for (n int from 1 to childrenCount by 1)
+			child TreeNode = childNodes[n];
+			child.applyBehaviors(behaviors, bgColor);
+			child.markAsLast(n==childrenCount, bgColor); 
+		end
+	end
+	
+	function markAsLast(lastNode boolean in, bgColor string in)
+		if (lastNode)
+			nodeContainer.background = bgColor + " url(images/TreeNodeL.gif) no-repeat";
+		else
+			nodeContainer.background = " url(images/TreeNodeL.gif) no-repeat" ; 
+		end
+	end
+	
+	function setBiDiStyle(textLayoutThis string in,reverseTextDirectionThis string in)
+		this.span.textLayout = textLayoutThis;
+		this.span.reverseTextDirection = reverseTextDirectionThis;
+		for (i int from 1 to childNodes.getSize() by 1)
+			child TreeNode = childNodes[i];		
+			child.setBiDiStyle(textLayoutThis,reverseTextDirectionThis);
+		end		
+	end		
+end

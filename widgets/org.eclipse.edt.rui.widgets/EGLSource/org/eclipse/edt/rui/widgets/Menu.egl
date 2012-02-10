@@ -1,0 +1,291 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
+handler Menu type RUIWidget{tagName = "div", onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{}",
+		displayName = "Menu",
+		smallIcon = "icons/ctool16/menu.gif",
+		largeIcon = "icons/ctool24/menu.gif"
+	}}
+	
+	titleBar Span{onClick::= showOptionsEvent, text = "Title", class = "EglRuiMenuTitleBar"};
+	optionsBox Box{onclick::= hideOptionsEvent, columns = 1, position = "absolute", visibility = "hidden"};
+	private settingOptions boolean = false;
+	
+	onMenuOpen MenuOpenAction?;
+	
+	isOpen boolean = false;
+	subMenus Menu[];
+	parentMenu Menu? = null;
+	menuBehaviors MenuBehavior[]{@EGLProperty{setMethod = setBehaviors, getMethod = getBehaviors}};
+	options MenuItem[]{@EGLProperty{setMethod = setOptions, getMethod = getOptions}};
+	title string {@EGLProperty{setMethod = setTitle, getMethod = getTitle}};
+	widgetOrientationThis string = "LTR";
+	arrowLeft Image? = null;
+	arrowRight Image? = null;
+	
+	function start()
+		appendChild(titleBar);
+		document.body.appendChild(optionsBox);
+	end
+	
+	function setAsSubMenu(parent Menu)
+		parentMenu = parent;
+		if((parentMenu != null && (parentMenu.widgetOrientationThis == "RTL")) || (widgetOrientationThis == "RTL"))
+			this.setAttribute("dir", "rtl");		
+			arrowLeft = new Image{src = "images/ArrowLeft.gif"};				
+			tb Widget = titleBar;
+			tb.displayStyle = "inline-block";
+			appendChild(arrowLeft);			
+		else
+			this.setAttribute("dir", "");
+			arrowRight = new Image{src = "images/ArrowRight.gif"};
+			appendChild(arrowRight);
+		end
+		this.onMouseOver ::= showOptionsEvent;
+	end
+	
+	function setTitle(titleIn string in)
+		title = titleIn;
+		titleBar.text = title;
+		setBehaviors(menuBehaviors);
+	end
+	
+	function getTitle() returns (string)
+		return (titleBar.text);
+	end
+	
+	function setOptions(op MenuItem[] in)
+		options = op;
+		settingOptions = true;
+		optionsBox.removeChildren();
+		for (index int from 1 to op.getSize() by 1)
+			addOption(op[index]);
+		end
+		if((parentMenu != null && (parentMenu.widgetOrientationThis == "RTL")) || (widgetOrientationThis == "RTL"))
+			for (index int from 1 to optionsBox.children.getSize() by 1)		
+				w Widget = optionsBox.children[index];
+				w.widgetOrientation = "RTL";
+			end			
+		end
+		settingOptions = false;
+		setBehaviorsInternal();
+	end
+	
+	function getOptions() returns (MenuItem[])
+		return (options);
+	end
+	
+	function addOption(newItem MenuItem in)
+		widget Widget = newItem.ItemType(newItem.item, newItem.itemAction, this);
+		if (newItem.id != null)
+			widget.id = newItem.id;
+		end
+		widget.onClick::= hideOptionsEvent;
+		optionsBox.appendChild(widget);
+		widget.parent.onClick::= hideOptionsEvent;
+		if (!settingOptions)
+			options.appendElement(newItem);
+			setBehaviorsInternal();
+		end
+	end
+	
+	function setBehaviors(behaviors MenuBeHavior[] in)
+		menuBehaviors = behaviors;
+		setBehaviorsInternal();
+	end
+	
+	function getBehaviors() returns (MenuBehavior[])
+		return (menuBehaviors);
+	end
+	
+	private function setBehaviorsInternal()
+		for (index int from 1 to menuBehaviors.getSize() by 1)
+			menuBehaviors[index](this, titleBar, optionsBox, options);
+		end
+		for (index int from 1 to subMenus.getSize() by 1)
+			subMenus[index].menuBehaviors = menubehaviors;
+		end
+	end
+	
+	private function showOptionsEvent(e Event in )
+		if (isOpen && e.widget == titleBar)
+			hideOptions(false);
+		else
+			showOptions();
+		end
+		e.stopPropagation();
+	end
+	
+	function showOptions()
+		isOpen = true;
+		if (onMenuOpen != null)
+			onMenuOpen(this);
+		end
+		if (parentMenu != null)
+			parentMenu.closeSubMenus(this);
+		end
+		
+		if (parentMenu == null)
+			if(widgetOrientationThis == "RTL")
+				optionsBox.x = titleBar.x + titleBar.pixelWidth - optionsBox.pixelWidth;
+			else
+				optionsBox.x = titleBar.x;				
+			end
+			optionsBox.y = titleBar.y + titleBar.pixelHeight;
+		else
+			if((parentMenu.widgetOrientationThis == "RTL") || (widgetOrientationThis == "RTL"))
+				optionsBox.x = titleBar.x - optionsBox.pixelWidth;
+				if(arrowLeft != null)
+				 optionsBox.x -= arrowLeft.pixelWidth;
+				end
+				if(arrowRight != null)
+				 optionsBox.x -= arrowRight.pixelWidth;
+				end				
+			else
+				optionsBox.x = titleBar.x + this.parent.pixelWidth;
+				if((titleBar.reverseTextDirection == "Yes") && (arrowRight != null))
+					optionsBox.x = optionsBox.x - arrowRight.pixelWidth;
+				end				
+			end			
+			optionsBox.y = titleBar.y;
+		end
+		optionsBox.visibility = "visible";
+		optionsBox.zIndex = 1;
+	end
+	
+	private function hideOptionsEvent(e Event in)
+		hideOptions(true);
+		e.stopPropagation();
+	end
+	
+	function hideOptions(closeParent boolean in)
+		isOpen = false;
+		closeSubMenus(null);
+		if (parentMenu != null && closeParent)
+			parentMenu.hideOptions(closeParent);
+		end
+		optionsBox.visibility = "hidden";
+		optionsBox.zIndex = 1;
+	end
+	
+	function closeSubMenus(keepOpen Menu in)
+		for (index int from 1 to subMenus.getSize() by 1)
+			//TODO: 355971
+			if (subMenus[index] != keepOpen)
+				subMenus[index].hideOptions(false);
+			end
+		end
+	end
+
+	function encloseInBiDiMarkers(optBox Box)
+		for (index int from 1 to optBox.children.getSize() by 1)			
+			w Widget = optBox.children[index];			
+			if(w.class == "EglRuiSpan")
+				w.textLayout = titleBar.textLayout;
+				w.reverseTextDirection = titleBar.reverseTextDirection;				
+			else
+				if(w.class == "EglRuiMenu")
+					m Menu = w;
+					m.titleBar.textLayout = titleBar.textLayout;
+					m.titleBar.reverseTextDirection = titleBar.reverseTextDirection;
+					b Box = m.optionsBox;
+					encloseInBiDiMarkers(b);				
+				end				
+			end			
+		end		
+	end
+
+	function setTextLayout(textLayout String in) 
+		titleBar.textLayout = textLayout;			
+		encloseInBiDiMarkers(optionsBox);		
+	end
+			
+	function getTextLayout() returns (String) 
+		return (titleBar.textLayout);
+	end
+	
+	function setReverseTextDirection( reverseTextDirection String in) 
+		titleBar.reverseTextDirection = reverseTextDirection;
+		encloseInBiDiMarkers(optionsBox);	
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (titleBar.reverseTextDirection);
+	end	
+	
+	function getWidgetOrientation() returns (String) 
+		return (widgetOrientationThis);
+	end
+	
+	function setWidgetOrientation(widgetOrientation String in) 
+		if(widgetOrientation != widgetOrientationThis)	
+			widgetOrientationThis = widgetOrientation;
+			for (index int from 1 to optionsBox.children.getSize() by 1)		
+				w Widget = optionsBox.children[index];
+				w.widgetOrientation = widgetOrientation;
+			end
+			setMenuArrowOrientation();
+		end	
+	end	
+
+	function setMenuArrowOrientation()
+		for (i int from 1 to subMenus.getSize() by 1)
+			if(widgetOrientationThis == "RTL")
+				subMenus[i].setAttribute("dir", "rtl");
+				if(subMenus[i].arrowLeft != null)
+					subMenus[i].arrowLeft.visibility = "visible";
+				else
+					subMenus[i].arrowLeft = new Image{src = "images/ArrowLeft.gif"};						
+					tb Widget = subMenus[i].titleBar;
+					tb.displayStyle = "inline-block";
+					subMenus[i].appendChild(subMenus[i].arrowLeft);						
+				end
+				if(subMenus[i].arrowRight != null)
+					subMenus[i].arrowRight.visibility = "hidden";
+				end
+			else
+				subMenus[i].setAttribute("dir", "");
+				if(subMenus[i].arrowRight != null)
+					subMenus[i].arrowRight.visibility = "visible";
+				else
+					subMenus[i].arrowRight = new Image{src = "images/ArrowRight.gif"};						
+					tb Widget = subMenus[i].titleBar;
+					tb.displayStyle = "inline-block";
+					subMenus[i].appendChild(subMenus[i].arrowRight);						
+				end
+				if(subMenus[i].arrowLeft != null)
+					subMenus[i].arrowLeft.visibility = "hidden";
+				end
+			end
+		end	
+	end
+
+end
+
+Record MenuItem
+	id string?;
+	item any?;
+	itemType MenuItemType?;
+	itemAction MenuItemSelection?;
+end
+
+Delegate MenuItemType(newItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any) end
+Delegate MenuItemSelection(parentMenu Menu, item any in) end
+Delegate MenuBehavior(menu Menu in, titleBar Span, optionsBox Box, options MenuItem[]) end
+Delegate MenuOpenAction(menu Menu in) end

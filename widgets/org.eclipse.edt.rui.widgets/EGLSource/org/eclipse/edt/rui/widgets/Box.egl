@@ -1,0 +1,175 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+import eglx.lang.eglproperty;
+import eglx.ui.rui.RUIWIdget;
+import eglx.ui.rui.vecontainer;
+import eglx.ui.rui.veproperty;
+import eglx.ui.rui.vepropertychoice;
+import eglx.ui.rui.vewidget;
+import eglx.ui.rui.widget;
+
+handler Box type RUIWidget{targetWidget = div, cssFile = "css/org.eclipse.edt.rui.css", 
+    @VEWidget{
+	    category = "Layout",
+		template = "${typeName}{ padding=8 }",
+		displayName = "Box",
+		smallIcon = "icons/ctool16/box.gif",
+		largeIcon = "icons/ctool24/box.gif",
+		container = @VEContainer{}
+	}}
+
+	use BoxLib;
+	
+	lastRow Widget? = null;  
+	body Widget { tagName = "tbody" };
+	table Widget { tagName = "table", children = [ body ], class = "EglRuiBoxTable" };
+	div Div { children = [ table ]};
+	alignment int {@EGLProperty{setMethod = setAlignment, getMethod = getAlignment}, @VEProperty{
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "LEFT", id = "${typeName:org.eclipse.edt.rui.widgets.BoxLib}.ALIGN_LEFT"},
+			@VEPropertyChoice {displayName = "CENTER", id = "${typeName:org.eclipse.edt.rui.widgets.BoxLib}.ALIGN_CENTER"},
+			@VEPropertyChoice {displayName = "RIGHT", id = "${typeName:org.eclipse.edt.rui.widgets.BoxLib}.ALIGN_RIGHT"}
+		],
+		default = "${typeName:org.eclipse.edt.rui.widgets.BoxLib}.ALIGN_LEFT"
+	}};
+	
+	private widgetOrientationThis String = "";	
+	private cells Widget[] = [];
+	columns int {@EGLProperty{setMethod = setColumns, getMethod = getColumns}, @VEProperty{}} = 32768;
+		
+	function setChildren(children Widget[] in) 
+		if (children == null)
+			throw new AnyException { message="Children cannot be null" };
+		end
+		removeChildren();
+		if(widgetOrientationThis != "")
+			div.widgetOrientation = widgetOrientationThis;
+			if (widgetOrientationThis == "RTL")
+				this.alignment = 2;
+			else
+				this.alignment = 0;				
+			end
+		end
+				
+		for (index int from 1 to children.getSize() by 1)
+			appendChild(children[index]);
+		end
+	end
+	
+	function getChildren() returns(Widget[]) 
+		return (cells);
+	end
+	
+	function appendChild(newChild Widget in)  
+		if (newChild == null)
+			throw new AnyException { message="Child to add cannot be null" };
+		end
+		child Widget = newChild as any;
+		
+		if(widgetOrientationThis != "")
+			if(child.widgetOrientation == "")
+				child.widgetOrientation = widgetOrientationThis;
+			end
+		end
+		 
+		td Widget { tagName="td", children = [child] };
+		td.class = "EglRuiVAlignTop EglRuiBoxTd";
+		case (alignment)
+			when(0)
+				div.setAttribute("align", "left");
+				td.setAttribute("align", "left");
+			when(1)
+				div.setAttribute("align", "center");
+				td.setAttribute("align", "center");
+			when(2)
+				div.setAttribute("align", "right");
+				td.setAttribute("align", "right");
+		end
+		child.logicalParent = this;
+		td.logicalParent = this;
+		if (lastRow == null || columns == 1 || lastRow.children.getSize() >= columns)
+			lastRow = new Widget { tagName="tr" };
+			body.appendChild(lastRow);
+		end
+		lastRow.appendChild(td);
+		cells.appendElement(child);
+	end
+	
+	function removeChild(child Widget in) 
+		for (index int from 1 to cells.getSize() by 1)
+			if (cells[index] == child)
+				cells.removeElement(index);
+				setChildren(cells);
+				return;
+			end
+		end
+	end
+	
+	function removeChildren()  
+		body.removeChildren();
+		cells = [];
+		lastRow = null;
+	end
+	
+	function layout()
+		setChildren(cells);
+	end
+	
+	function setColumns(columns int in)
+		this.columns = columns;
+		layout();
+	end
+	
+	function getColumns() returns(int)
+		return (this.columns);
+	end
+	
+	function setAlignment(align int in)
+		alignment = align;
+		setChildren(children);
+	end
+	
+	function getAlignment() returns (int)
+		return (alignment);
+	end
+
+	function getWidgetOrientation() returns (String) 
+		return (this.widgetOrientationThis);
+	end
+	
+	function setWidgetOrientation(widgetOrientation String in) 
+		this.widgetOrientationThis = widgetOrientation;		
+		if(widgetOrientationThis != "" && cells.getSize() > 0)
+			div.widgetOrientation = widgetOrientationThis;
+			if (widgetOrientationThis == "RTL")
+				div.setAttribute("align", "right");
+			else
+				div.setAttribute("align", "left");				
+			end
+			for (index int from 1 to cells.getSize() by 1)
+				if(cells[index].widgetOrientation == "")
+					cells[index].widgetOrientation = widgetOrientationThis;
+				end
+			end			
+		end		
+	end
+	
+	function setReverseTextDirection(reverseTextDirection String in) 	
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return ("");
+	end	
+end

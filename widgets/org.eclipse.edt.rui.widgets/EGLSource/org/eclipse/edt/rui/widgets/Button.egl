@@ -1,0 +1,44 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Handler Button type RUIWidget{
+			tagName = "input type=button",
+			cssFile = "css/org.eclipse.edt.rui.css", 
+			@VEWidget{
+				category = "Display and Input",
+				template = "${typeName}{ text=\"Button\" }",
+				displayName = "Button",
+				smallIcon = "icons/ctool16/button.gif",
+				largeIcon = "icons/ctool24/button.gif"
+			} }
+
+	text String{@EGLProperty{setMethod = setText, getMethod = getText}, @VEProperty{}};
+
+	private function setText(textIn String in)
+		text = textIn;
+		setAttribute("value", textIn);
+		isVisual boolean = this.textLayout == "Visual";
+		isReverseDirection boolean = this.reverseTextDirection == "Yes";		
+		if(isVisual || isReverseDirection)
+			this.setBiDiMarkers(isVisual, isReverseDirection);
+		end		
+	end
+	
+	private function getText() returns (String)
+		if(this.textLayout == "Visual" || this.reverseTextDirection == "Yes")
+			this.cleanBiDiMarkers();
+		end			
+		return ( getAttribute("value") as string);
+	end  
+
+end

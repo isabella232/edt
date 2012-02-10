@@ -1,0 +1,54 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Handler Grouping type RUIWidget{targetWidget = fieldset, cssFile = "css/org.eclipse.edt.rui.css"}
+	
+	text String { @EGLProperty { getMethod=getText, setMethod=setText } };
+	legend Widget { tagName = "legend", @EGLProperty{getMethod = getLegend, setMethod = setLegend} };
+	contents Div { };
+	private fieldSet Widget { tagName = "fieldset", children=[legend, contents] };
+
+	function setText(text string in)
+		legend.innerHTML = text;
+	end
+	
+	function getText() returns (string)
+		return (legend.innerHTML);
+	end	
+	
+	function removeChildren()  
+		contents.removeChildren();
+	end
+	
+	function setChildren(children Widget[] in)  
+		contents.setChildren(children);
+	end
+	
+	function getChildren() returns(Widget[])  
+		return (contents.getChildren());
+	end
+	
+	function appendChild(newChild Widget in)  
+		contents.appendChild(newChild);
+	end
+	
+	function setLegend(widget Widget in)
+		legend = widget;
+		fieldSet.children = [legend,contents];
+	end
+	
+	function getLegend() returns (widget)
+		return (legend);
+	end
+	
+end

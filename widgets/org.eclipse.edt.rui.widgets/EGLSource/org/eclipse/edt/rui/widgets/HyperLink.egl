@@ -1,0 +1,53 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler HyperLink type RUIWidget{targetWidget = hyperParent, cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{ text=\"HyperLink\" }",
+		displayName = "HyperLink",
+		smallIcon = "icons/ctool16/hyperlink.gif",
+		largeIcon = "icons/ctool24/hyperlink.gif"
+	} }
+
+	text String { @EGLProperty { getMethod=getText, setMethod=setText }, @VEProperty{} };
+	target String { @EGLProperty { getMethod=getTarget, setMethod=setTarget }, @VEProperty{} };
+	href String { @EGLProperty { getMethod=getHref, setMethod=setHref }, @VEProperty{} };
+	private hyperChild Widget {tagName = "a" };
+	private hyperParent Widget{tagName = "div", children = [hyperChild]};
+	
+	function getText() returns (string)
+		return (text);
+	end
+	function setText(textIn string in)
+		text = textIn;
+		hyperChild.innerHTML = text;
+	end
+	
+	function getTarget() returns (string)
+		return (target);
+	end
+	function setTarget(targetIn string in)
+		target = targetIn;
+		hyperChild.setAttribute("target", target);
+	end
+	
+	function getHref() returns (string)
+		return (href);
+	end
+	function setHref(hrefIn string in)
+		href = hrefIn;
+		hyperChild.setAttribute("href", href);
+	end
+
+end

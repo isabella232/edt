@@ -1,0 +1,107 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import eglx.rbd.StrLib;
+
+library InternalValidators
+
+	use InternalMessageLib;
+	
+	util InternalFormattingUtil{};
+    validHexDigits string = "0123456789abcdefABCDEF";
+
+    function isNotEmpty(s string in, message string in) returns(string?)
+        if(s != "")
+            return(null);
+        else
+            return(getRuntimeMessage(message, "CRRUI2700E", null));
+        end
+    end
+
+    function isDecimalDigits(text string in, message string in) returns(string?)
+    	len int = strlib.characterLen(text);
+    	decimalSeparator string = util.getDecimalSeparator();
+    	groupingSeparator string = util.getGroupingSeparator();
+    	
+    	for (i int from 1 to len)
+    		s string = text[i:i];
+    		if ( (s < "0" || s > "9") && s != "-" && s != decimalSeparator && s != groupingSeparator )
+    			return(getRuntimeMessage(message, "CRRUI2702E", null));
+    		end
+    	end
+    	
+    	return(null);
+    end
+
+    function isHexDigits(s string in, message string in) returns(string?)
+        strLen int = StrLib.characterLen(s);
+        for(i int from 1 to strLen)
+            if(strlib.indexOf(validHexDigits, s[i : i]) == 0)
+                return(getRuntimeMessage(message, "CRRUI2712E", null));
+            end
+        end
+        return(null);
+    end
+
+    function checkMinimumInput(s string in, minLength int in, message string in) returns(string?)
+        if(StrLib.characterLen(s) >= minLength)
+            return(null);
+        else
+            return(getRuntimeMessage(message, "CRRUI2705E", null));
+        end
+    end
+
+    function checkValidValues(s string in, validValues any[][] in, message string in) returns(string?)
+        input string = strlib.clip(s, 0);
+        length int = validValues.getSize();
+        if(validValues[1][1] isa string)
+            for(i int from 1 to length)
+                if(validValues[i].getSize() == 1)
+                    if(input == strlib.clip(validValues[i][1], 0))
+                        return(null);
+                    end
+                else
+                    if(input >= strlib.clip(validValues[i][1], 0))
+                        upper string = strlib.clip(validValues[i][2], 0);
+                        if(s <= upper)
+                            return(null);
+                        end
+
+                        len int = strlib.characterLen(upper);
+                        if(strlib.characterLen(input) > len)
+                            if(input[1 : len] <= upper)
+                                return(null);
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            for(i int from 1 to length)
+                if(validValues[i].getSize() == 1)
+                    if((input as decimal) == (validValues[i][1] as decimal))
+                        return(null);
+                    end
+                else
+                	//TODO: Bug - 355976
+                    if(((input) as decimal) >= ((validValues[i][1]) as decimal) &&
+                       ((input) as decimal) <= ((validValues[i][2]) as decimal))
+                        return(null);
+                    end
+                end
+            end
+        end
+
+        return(getRuntimeMessage(message, "CRRUI2716E", null));
+    end
+end

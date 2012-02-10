@@ -1,0 +1,37 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Delegate CellFormatter(class String, value String, rowData any in) end
+Delegate ColumnComparator(data1 any in, data2 any in) returns (int) end
+
+handler DataGridColumn 
+
+	name String;
+	displayName String?;
+	width String;
+	
+	//
+	//  new attributes follow below
+	//
+	
+	headerAlignment int;
+	alignment int;
+	
+	enableSorting boolean = true;
+	
+	formatters CellFormatter[]; 
+	columnComparator ColumnComparator?;	
+	
+	sortDirection int;
+	ignoreCase boolean = true;
+end

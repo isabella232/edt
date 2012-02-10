@@ -1,0 +1,136 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;   
+
+handler ListMulti type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.rui.css", 
+	@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ values = [\"ListMulti\"], size = 1 }",
+			displayName = "ListMulti",
+			smallIcon = "icons/ctool16/listmulti.gif",
+			largeIcon = "icons/ctool24/listmulti.gif"
+		}  }
+
+	values String[] { @EGLProperty { getMethod=getValues, setMethod=setValues }, @VEproperty{} };
+	selection Int[] {	@EGLProperty { getMethod=getSelection, setMethod=setSelection }, @VEproperty{} };
+	
+	/*
+		Size must be set in order for ListMulti to appear properly as a List in IE6.
+	*/
+	size Int {	@EGLProperty { getMethod=getSize, setMethod=setSize }, @VEProperty };
+	
+	private options Widget[];
+	private sizeSet boolean = false;
+	private reverseTextDirectionThis String = "No";
+	private textLayoutThis String = "Logical";
+			
+	function setValues(value string[] in)
+		values = value;
+		removeChildren();
+		options.removeAll();
+		setAttribute("multiple", "true");
+		for(index int from 1 to value.getSize() by 1)
+			option Widget = new Widget{tagName = "option"};
+			option.innerHTML = value[index];
+			options.appendElement(option);
+			appendChild(option);
+		end
+		if (!sizeSet)
+			setSize(values.getSize());
+		end
+		if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")		
+			setBiDiMarkers();
+		end		
+	end
+	
+	function getValues() returns (string[])
+		return (values);
+	end
+	
+	function setSelection(selection int[] in)
+		savedSelection = new int[ 0 ];
+		savedSelection.appendAll( selection );
+		new Job{ RunFunction = selectionSetter }.schedule( 1 );
+	end
+	
+	private savedSelection int[]?;
+	
+	private function selectionSetter()
+		if ( savedSelection != null )
+			setSelectionInternal( savedSelection );
+			savedSelection = null;
+		end
+	end
+	
+	private function setSelectionInternal(selection int[] in)
+		for (index int from 1 to options.getSize() by 1)
+			options[index].setAttribute("selected", "");
+			options[index].removeAttribute("selected");
+		end
+		for (index int from 1 to selection.getSize() by 1)
+			if (selection[index] > 0 && selection[index] <= options.getSize())
+				options[selection[index]].setAttribute("selected", "true");
+			end
+		end
+		if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")		
+			setBiDiMarkers();
+		end		
+	end
+	
+	function getSelection() returns (int[])
+		selected int[];
+		for (index int from 1 to options.getSize() by 1)
+			if ((options[index].getAttribute("selected") as string == "true"))
+				selected.appendelement(index);
+			end
+		end
+		return (selected);
+	end
+	
+	function setSize(sizeIn int in)
+		if (sizeIn > 1)
+			size = sizeIn;
+			sizeSet = true;
+			setAttribute("size", sizeIn);
+		end
+	end
+	
+	function getSize() returns (int)
+		return (size);
+	end
+	
+	function setTextLayout(textLayout String in) 
+		this.textLayoutThis = textLayout;	
+		setBiDiMarkers();
+	end
+	
+	function getTextLayout() returns (String) 
+		return (this.textLayoutThis);
+	end
+
+	function setReverseTextDirection(reverseTextDirection String in) 
+		this.reverseTextDirectionThis = reverseTextDirection;			
+		setBiDiMarkers();
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (this.reverseTextDirectionThis);
+	end
+		
+	private function setBiDiMarkers()
+		isVisual boolean = this.textLayoutThis == "Visual";
+		isReverseDirection boolean = this.reverseTextDirectionThis == "Yes";		
+		for(index int from 1 to options.getSize() by 1)			
+			options[index].setBiDiMarkers(isVisual,isReverseDirection);
+		end		
+	end	
+end

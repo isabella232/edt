@@ -1,0 +1,76 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import eglx.rbd.strlib;
+
+library InternalDateFormatter
+	use InternalMessageLib;
+	
+	util InternalFormattingUtil{};
+	
+	function format(input string in, format string in, typeChkMsgKey string in) returns(string)
+		if (input == "")
+			return("");
+		end
+		
+		// Input must be in the format defined by EDate.asDate()
+		try
+			if (format != "")
+				// A date format has been specified, convert the string to a date so that it can be formatted
+				dateInput date = input;
+				return(StringLib.format(dateInput, format));
+			else
+				// If there is no date format, let the default string conversion happen
+				return(input);
+			end			
+		onException(exception AnyException)
+			errorFormat String = format;
+			if (errorFormat == "")
+				//TODO: do not hard code this format - access it from EDate
+				errorFormat = "mm/dd/YYYY";
+			end
+			throw new AnyException {message = getRuntimeMessage(typeChkMsgKey, "CRRUI2717E", [errorFormat]), messageId="CRRUI2717E"};
+		end
+	end
+	
+	function unformat(input string in, format string in, typeChkMsgKey string in) returns(string)
+		if (input == "")
+			return("");
+		end
+		
+		util InternalFormattingUtil{};
+		
+		if(format != "")
+			// A date format has been specified, attempt to convert the string to a date 
+			result date? = util.asDate(input, format, true);
+			
+			if(result == null)
+				// The conversion failed
+				errorFormat string = format;
+				throw new AnyException {message = getRuntimeMessage(typeChkMsgKey, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+			else
+				return(result);
+			end
+		else
+			try
+				// If there is no date format, let the default string conversion happen
+				result Date = input;
+				return (result);
+			onException (exception AnyException)
+				// TODO: do not hard code this format - access it from EDate
+				errorFormat string = "mm/dd/YYYY";
+				throw new AnyException {message = getRuntimeMessage(typeChkMsgKey, "CRRUI2708E", [errorFormat]), messageId = "CRRUI2708E"};
+			end			
+		end
+	end
+end

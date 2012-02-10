@@ -1,0 +1,88 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+library MenuBehaviors
+	
+	function simpleText(menuItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any)
+		text Span { text = menuItem as string, class = "EglRuiMenuSimpleText" };
+		if (itemAction != null)
+			action MenuItemAction {
+				theItem = menuItem, 
+				theAction = itemAction, 
+				theParentMenu = parentMenu
+			};
+			action.addActionTo(text);
+		end
+		return (text);
+	end
+	
+	function WidgetItem(menuItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any)
+		return (menuItem);
+	end
+	
+	function subMenu(menuItem any in, itemAction MenuItemSelection, parentMenu Menu in) returns (any)
+		titleOptions any[] = menuItem;
+		newMenu Menu {
+			title = titleOptions[1],
+			options = titleOptions[2],
+			menuBehaviors = parentMenu.menuBehaviors
+		};
+		parentMenu.subMenus ::= newMenu;
+		newMenu.setAsSubMenu(parentMenu);
+		newMenu.onMouseOver ::= highlight;
+		newMenu.onMouseOut::=removeHighlight;
+		return (newMenu);
+	end
+	
+	function definedSubMenu(menuItem any in,itemAction MenuItemSelection, parentMenu Menu in) returns (any)
+		newMenu Menu = menuItem;
+		newMenu.parentMenu = parentMenu;
+		return (newMenu);
+	end
+	
+	function BasicMenu(menu Menu in, titleBar Span, optionsBox Box, options MenuItem[])
+		optionsBox.class = "EglRuiMenuBasicMenuOptionsBox";
+		titlebar.class = "EglRuiMenuBasicMenuTitlebar";
+		for (index int from 1 to optionsbox.children.getSize() by 1)
+			widget Widget = optionsBox.children[index].parent;
+			widget.onMouseOver ::= highlight;
+			widget.onMouseOut ::= removehighlight;
+		end
+	end
+	
+	function ContextMenu(menu Menu in, titleBar Span, optionsBox Box, options MenuItem[])
+		optionsBox.class = "EglRuiMenuContextMenuOptionsBox";
+		titleBar.class = "EglRuiMenuContextMenuTitlebar";
+		for (index int from 1 to optionsbox.children.getSize() by 1)
+			widget Widget = optionsBox.children[index];
+			widget.onMouseOver ::= highlight;
+			widget.onMouseOut ::= removemenuhighlight;
+		end
+	end
+	
+	function highlight(e Event in)
+		widget widget = e.widget;
+		widget.class = "EglRuiMenuOptionHighlight";
+	end
+	
+	function removeHighlight(e event in)
+		widget widget = e.widget;
+		widget.class = "EglRuiMenuOptionUnHighlight";
+	end
+	
+	function removeMenuHighlight(e event in)
+		widget widget = e.widget;
+		widget.class = "EglRuiMenuMenuUnHighlight";
+	end
+
+end

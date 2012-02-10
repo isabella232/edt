@@ -1,0 +1,80 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Handler Tree type RUIWidget{targetWidget = nodeContainer, cssFile = "css/org.eclipse.edt.rui.css" }
+
+	behaviors TreeNodeBehavior[];
+	nodeContainer Widget { tagName="div" };
+	private reverseTextDirectionThis String = "No";
+	private textLayoutThis String = "Logical";
+	
+	function setChildren(children Widget[])  
+		if (backgroundColor == "")
+			throw new AnyException { message="A value for backgroundColor is required on a Tree to work correctly. Set it to \"white\" if none is needed." };
+		end
+		childrenCount int = children.getSize();
+		nodeContainer.removeChildren();
+		for (n int from 1 to childrenCount by 1)
+			node TreeNode = children[n];
+			appendChild(node);
+			node.markAsLast(n==childrenCount, backgroundColor);				
+			if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")
+				node.setBiDiStyle(this.textLayoutThis,this.reverseTextDirectionThis);							
+			end
+		end
+	end	
+	
+	function appendChild (child Widget in)  
+		node TreeNode = child;
+		nodeContainer.appendChild(child);
+		node.applyBehaviors(behaviors, backgroundColor);
+	end	
+	
+	function removeChild (child Widget in)  
+		nodeContainer.removeChild(child);
+	end
+	
+	function removeChildren ()  
+		nodeContainer.removeChildren();
+	end
+
+	function setReverseTextDirection( reverseTextDirection String in) 
+		this.reverseTextDirectionThis = reverseTextDirection;
+		setChildrenBiDiStyle();
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (this.reverseTextDirectionThis);
+	end	
+
+	function setTextLayout( textLayout String in) 
+		this.textLayoutThis = textLayout;
+		setChildrenBiDiStyle();
+	end
+	
+	function getTextLayout() returns (String) 
+		return (this.textLayoutThis);
+	end	
+	
+	function setChildrenBiDiStyle()	
+		children Widget [] = nodeContainer.children;
+		if(children != null && children.getSize() > 0)
+			for (i int from 1 to children.getSize() by 1)
+				node TreeNode = children[i];			
+				node.setBiDiStyle(this.textLayoutThis,this.reverseTextDirectionThis);	
+			end
+		end		
+	end	
+end
+	
+Delegate TreeNodeBehavior(node TreeNode in) end

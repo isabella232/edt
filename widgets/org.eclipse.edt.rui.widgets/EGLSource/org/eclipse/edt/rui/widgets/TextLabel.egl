@@ -1,0 +1,77 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler TextLabel type RUIWidget{tagName = "div", cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+		category = "Display and Input",
+		template = "${typeName}{ text=\"TextLabel\" }",
+		displayName = "TextLabel",
+		smallIcon = "icons/ctool16/textlabel.gif",
+		largeIcon = "icons/ctool24/textlabel.gif"
+	},
+	@VEDataTemplate{
+		dataTemplates = [
+			@DataTemplate{
+				name = "TextLabel",
+				dataMapping = @DataMapping {
+					forArray = false,
+					mappings = [MappingKind.TYPE_PRIMITIVE_STRING,
+								MappingKind.TYPE_PRIMITIVE_DATE,
+								MappingKind.TYPE_PRIMITIVE_TIME,
+								MappingKind.TYPE_PRIMITIVE_TIMESTAMP,
+								MappingKind.TYPE_PRIMITIVE_BIGINT,
+								MappingKind.TYPE_PRIMITIVE_BIN,
+								MappingKind.TYPE_PRIMITIVE_DECIMAL,
+								MappingKind.TYPE_PRIMITIVE_FLOAT,
+								MappingKind.TYPE_PRIMITIVE_INT,
+								MappingKind.TYPE_PRIMITIVE_NUM,
+								MappingKind.TYPE_PRIMITIVE_MONEY,
+								MappingKind.TYPE_PRIMITIVE_SMALLFLOAT,
+								MappingKind.TYPE_PRIMITIVE_SMALLINT]
+				},
+				genController = true,
+				purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
+				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.TextLabel}  {};"
+			}
+		]
+	}}
+
+	text String { @EGLProperty { getMethod=getText, setMethod=setText }, @VEProperty{} };
+	
+	private widgetOrientationThis String = "";
+			
+	function setText(textIn string in)
+		text = textIn;
+		innerText = text;
+	end
+	
+	function getText() returns (string)
+		return (text);
+	end
+
+	function getWidgetOrientation() returns (String) 
+		return (this.widgetOrientationThis);		
+	end
+	
+	function setWidgetOrientation(widgetOrientation String in) 
+		this.widgetOrientationThis = widgetOrientation;	
+		if(widgetOrientation == "RTL")
+			this.style = "text-align: right;";
+			if(this.getTextLayout() != "Visual")
+				this.setAttribute("dir", "ltr");
+			end			
+		else
+			this.style = "text-align: left;";		
+		end
+	end
+end

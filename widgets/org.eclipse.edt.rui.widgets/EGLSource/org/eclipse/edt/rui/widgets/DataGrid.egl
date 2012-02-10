@@ -1,0 +1,1302 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+import eglx.javascript.Job;
+import eglx.ui.rui.Event;
+import eglx.ui.rui.Widget;
+
+externalType DataGridUtil type JavaScriptObject{relativePath = "org/eclipse/edt/rui/widgets", externalName = "DataGridUtil"}   
+	function getIntAttribute(widget Widget in, name string in) returns(int);
+    function getOriginalTarget(e Event in) returns(Widget);
+    function setSelected(object any in, selected boolean in);
+    function getSelected(object any in) returns(boolean);
+    function setChecked(object any in, selected boolean in);
+    function getChecked(object any in) returns(boolean);
+    function getUniqueID() returns(string);
+    function getTextWidth(s string in) returns(int);
+    function sort(array any[] in, fieldName string in, up boolean in, ci boolean in, cc ColumnComparator in) returns(any[]);
+    function getFieldNames(object any in) returns(string[]);
+    function setBiDiMarkersStr(text string in, isTextTypeVisual boolean in, isTextOrientationRightToLeft boolean in) returns (string);
+    function destroyHeaderCell(grid Widget in);
+end
+
+delegate DataCellBehavior(grid DataGrid in, cell Widget in, rowData any in, dataIndex int in, column DataGridColumn in) end
+delegate EditorBehavior(grid DataGrid in, cell Widget in, rowData any in, dataIndex int in, column DataGridColumn in, value any in) returns(Widget) end
+delegate DataLoader(startRow int in, endRow int in, sortFieldName string in, sortDirection int in) returns(boolean) end
+delegate PageChangeListener(grid DataGrid in, oldPageIndex int in, newPageIndex int in) end
+delegate SelectionListener(grid DataGrid in) end
+delegate CheckboxListener(grid DataGrid in) end
+delegate SortListener(grid DataGrid in, sortColumn DataGridColumn in) end
+
+record GridColumnSortOrder
+    columnNames string[];
+end
+
+handler DataGrid type RUIWidget{
+	targetWidget = ui, 
+	cssFile = "css/org.eclipse.edt.rui.css", 
+	onConstructionFunction = start, 
+	@VEWidget{
+		category = "Display and Input", 
+		template = "${typeName}{\n" +
+        	"\t\tbehaviors = [ ],\n" +
+			"\t\theaderBehaviors = [ ],\n" +"\t\tcolumns = [\n" +
+            "\t\t\tnew ${typeName:org.eclipse.edt.rui.widgets.DataGridColumn}{name = \"field1\", displayName = \"Column 1 Header\", width=120},\n" +
+            "\t\t\tnew ${typeName:org.eclipse.edt.rui.widgets.DataGridColumn}{name = \"field2\", displayName = \"Column 2 Header\", width=120}\n" +
+            "\t\t],\n\t\tdata = [\n" +
+            "\t\t\tnew Dictionary { field1 = \"Row 1, Column 1\", field2 = \"Row 1, Column 2\"},\n" +
+            "\t\t\tnew Dictionary { field1 = \"Row 2, Column 1\", field2 = \"Row 2, Column 2\"}\n" +
+            "\t\t]\n" +
+            "\t}", 
+        displayName = "DataGrid",    
+        smallIcon = "icons/ctool16/grid.gif", 
+        largeIcon = "icons/ctool24/grid.gif"
+    }, 
+    @VEDataTemplate{
+    	dataTemplates =[
+    		@DataTemplate{name = "DataGrid (read only)", 
+	    		dataMapping = @DataMapping{
+	    			forArray = true, 
+	    			isDefault = true, 
+	    			genChildWidget = false, 
+	    			mappings =[MappingKind.TYPE_RECORD_SIMPLE]
+				}, 
+				purposes =[
+	                PurposeKind.FOR_DISPLAY,
+	                PurposeKind.FOR_CREATE,
+	                PurposeKind.FOR_UPDATE
+	            ], 
+	            genController = false,
+	            template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.DataGrid} {\n" +
+	                "\t\tcolumns = [\n" +
+	                "${startRepeat}\n" +
+	                "\t\t\t\tnew ${typeName:org.eclipse.edt.rui.widgets.DataGridColumn} {name = \"${shortBindingName}\", displayName = \"${labelText}\", width = 120}\n" +
+	                "${endRepeat}\n\t\t],\n" +
+	                "\t\tdata = ${bindingName} as any[]\n" +
+	                "\t};"
+        	}
+    	]
+	}
+}
+
+	private RUIDataGridID string = "RUIDataGridID";
+
+	data any[]{@EGLProperty{setMethod = setData, getMethod = getData}};
+	private internalID string;    
+    util DataGridUtil{};
+    private pagingLabel string = "{page} / {pageCount}";
+
+    private grid Div{class = "EglRuiDataGrid", position = "relative", onClick ::= clickGrid};
+
+    private gotoStartButton Button{text = "<<", width = 45, marginRight = 10, onClick ::= gotoStart};
+    private gotoPageBackButton Button{text = "<", width = 45, marginRight = 10, onClick ::= gotoPageBack};
+    private pageTextLabel HTML{marginRight = 10, fontSize = "80%", marginTop = 4};
+    private gotoPageForwardButton Button{text = ">", width = 45, marginRight = 10, onClick ::= gotoPageForward};
+    private gotoEndButton Button{text = ">>", width = 45, marginRight = 10, onClick ::= gotoEnd};
+    private buttonBar Box{
+    	class = "EglRuiDataGridButtonBar", 
+    	children =[gotoStartButton, gotoPageBackButton, pageTextLabel, gotoPageForwardButton, gotoEndButton]
+	};
+
+    private ui Box{columns = 1};
+
+    columns DataGridColumn[] {@EglProperty};
+
+    behaviors DataCellBehavior[];
+    headerBehaviors DataCellBehavior[];
+    editorBehaviors EditorBehavior[];
+
+    selection any[]{@EglProperty};
+    checked any[]{@EglProperty};
+
+    showCheckBoxes boolean {@EglProperty,@VEProperty};
+    showScrollbar boolean { @EglProperty,@VEProperty};
+    selectionMode int{@EGLProperty, @VEProperty{
+    	propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "MULTIPLE", id = "${typeName:org.eclipse.edt.rui.widgets.DataGridLib}.MULTIPLE_SELECTION"},
+			@VEPropertyChoice {displayName = "SINGLE", id = "${typeName:org.eclipse.edt.rui.widgets.DataGridLib}.SINGLE_SELECTION"},
+			@VEPropertyChoice {displayName = "DISABLE", id = "${typeName:org.eclipse.edt.rui.widgets.DataGridLib}.DISABLE_SELECTION"}
+		],
+		default = "${typeName:org.eclipse.edt.rui.widgets.DataGridLib}.MULTIPLE_SELECTION"
+    }} = DataGridLib.MULTIPLE_SELECTION;
+    enableSorting boolean{@EGLProperty, @VEProperty{default = "true"}} = true;
+    showButtonBar boolean{@EglProperty, @VEProperty{default = "true"}} = true;
+    showHeader boolean{@EglProperty, @VEProperty{default = "true"}} = true;
+    
+    pageChangeListeners PageChangeListener[];
+    selectionListeners SelectionListener[];
+    checkboxListeners CheckboxListener[];
+    sortListeners SortListener[];
+
+    cellPadding int{ @EglProperty, @VEProperty{ default = "4" }} = 4;
+    cellBorder int{ @EglProperty, @VEProperty{ default = "1" }} = 1;
+    rowHeight int{ @EglProperty, @VEProperty{} };
+    checkBoxWidth int{ @EglProperty, @VEProperty{ default = "20" }} = 20;
+
+    startRow int{ @EglProperty, @VEProperty{ default = "1" } } = 1;
+    // The internally used calculated start row
+    private _startRow int = startRow;
+    private lastStartRow int = 0;
+    pageSize int{@EglProperty, @VEProperty{ default = "10" }} = 10;
+
+    private reverseTextDirectionThis string = "No";
+    private textLayoutThis string = "Logical";
+
+    dataLoader DataLoader = fullyCached;
+
+	private loadingDiv Div {		
+		class = "EglRuiGridLoadingDiv",        		
+ 		innerHTML = "<img src='images/spinner.gif' />",
+ 		position =   "absolute",
+ 		opacity = 100,
+ 		zIndex = 100,
+ 		width = 100,
+ 		height = 100,
+ 		paddingTop = 45,
+ 		paddingLeft = 45         	
+	};            
+
+    function setData(data any[] in)
+        if(data == null)
+            return;
+        end
+        if(ui.id == "")
+            ui.id = this.internalID + "_container";
+        end
+        grid.id = this.internalID;
+        this.data = data;
+        updateColumns();        
+	    setAllDeselected();
+        render();
+    end
+
+    private function fullyCached(startRow int in, endRow int in, sortFieldName string in, sortDirection int in) returns(boolean)
+        return(true);
+    end
+
+    function render()
+        if(dataIsAvailable())
+ 			util.destroyHeaderCell(grid);
+            showLoadingDivJob.cancel();
+            setColumnsProperty();
+            UtilLib.utilNative.clearHTMLString();        
+			UtilLib.utilNative.appendHTMLString("<div class=EglRuiDataGridTable>");
+			renderHeaderCells();
+			renderRows();
+			UtilLib.utilNative.appendHTMLString("</div>");
+			grid.innerHTML = UtilLib.utilNative.getHTMLString();
+            applyBehaviors();
+            renderButtonBar();
+            enableDragging();
+            new Job{runFunction = updateDimensions}.schedule();
+            new Job{runFunction = updateHighlights}.schedule();
+        else
+            showLoadingDivJob.schedule(200);
+        end
+    end
+
+    private function dataIsAvailable() returns(boolean)
+        key string = "";
+        direction int = 0;
+        if(columns.getSize() > 0)
+            key = columns[sortedColumn].name;
+            direction = columns[sortedColumn].sortDirection;
+        end
+        return(dataLoader(_startRow, _startRow + pageSize - 1, key, direction));
+    end
+
+    function start()
+		if(this.internalID == "" )
+			this.internalID = util.getUniqueID();
+		end
+    end
+	private columnClass String[]{}; 
+    private function updateColumns()
+        if(columns.getSize() == 0 && data.getSize() > 0)
+            fieldNames string[] = util.getFieldNames(data[1]);
+            for(n int from 1 to fieldNames.getSize())
+                columns ::= new DataGridColumn{
+                	name = fieldNames[n], 
+                	displayName = fieldNames[n], 
+                	width = 44 + util.getTextWidth(fieldNames[n])
+            	};              
+            end
+		end
+        if(columns.getSize() > 0 && data.getSize() > 0)
+            for(n int from 1 to columns.getSize())
+                if(columns[n].enableSorting && columns[n].sortDirection != DataGridLib.SORT_NONE)
+                    if(columns[n].columnComparator != null)
+                        data = util.sort(data, columns[n].name, columns[n].sortDirection == DataGridLib.SORT_UP,columns[n].ignoreCase,columns[n].columnComparator);
+                    else
+                        data = util.sort(data, columns[n].name, columns[n].sortDirection == DataGridLib.SORT_UP,columns[n].ignoreCase, null);
+                    end
+                    exit;
+                end
+            end
+        end
+    end
+    
+    private function setColumnsProperty()
+    	 if(data.getSize() > 0 && columns.getSize() > 0 )
+    		for(column int from 1 to columns.getSize())
+    			try
+    				if(data[1][columns[column].name]!=null) end
+    			onException(ex AnyException)
+					if( ex.messageID == "CRRUI2025E")
+		        		columns[column].enableSorting = false;
+		        	else
+		        		throw(ex);
+		        	end       				
+    			end
+    		end
+    	end
+
+        if(columns.getSize()>0)
+        	columnClass.resize(columns.getSize());
+	        for(column int from 1 to columns.getSize())
+	        	columnClass[column] = "EglRuiDataGridCell" + getAlignmentClass(columns[column].alignment);	        	
+	        end
+	    end 
+    end
+
+    private showLoadingDivJob Job{runFunction = showLoadingDiv};
+
+    private function showLoadingDiv()
+        try    
+        	uiCount int = ui.children.getSize();    	     	
+            if(uiCount >= 1 )
+            	loadingDiv.position = "absolute";
+            	rows Widget = grid.getElementById(grid.id+"-rows");
+            	if(rows != null)
+            		rows.children = [new Div{height = rows.pixeLHeight, width = rows.pixelWidth}];
+            	end
+            	loadingDiv.paddingTop = Mathlib.max(ui.pixelHeight / 2 - 12, 0);            	
+            	loadingDiv.width = ui.children[1].pixelWidth + 2; 
+            	loadingDiv.paddingLeft = Mathlib.max(ui.children[1].pixelWidth / 2 - 20, 0);         
+            	loadingDiv.height = ui.pixelHeight / 2 + 12;
+            else
+            	loadingDiv.position = "static";          
+          	end
+          	loadingDiv.id = grid.id + "_GridLoadingDiv";
+            loadingDiv.x = ui.x - 1;
+            loadingDiv.y = ui.y;        
+            ui.appendChild(loadingDiv);
+        onException(e AnyException)
+        end
+    end
+    
+    function cancelDataLoader()
+    	loadingDiv Widget = ui.getElementById(grid.id + "_GridLoadingDiv");
+    	if( loadingDiv != null)
+	    	showLoadingDivJob.cancel();
+	    	_startRow = lastStartRow;
+	    	if(showScrollBar || _startRow < 1 ) 
+	    		_startRow = 1;
+	    		setData([]);
+	    		return;
+	    	end	    	
+	    	render();
+	    end
+    end
+
+    private Directions string[] =["None", "Down", "Up"];
+
+    private function renderHeaderCells()
+        if(!showHeader)
+            return;
+        end
+        html string = "";
+        columnCount int = columns.getSize();
+        totalWidth int = 0;
+        if(showCheckBoxes)
+            totalWidth += checkBoxWidth + 2 * cellPadding + cellBorder;
+            html += "<span class='EglRuiDataGridHeaderCell EglRuiDataGridCheckBox' id=" +
+                    grid.id + "-header-checkbox style='";
+            if (ui.getWidgetOrientation() == "RTL")
+            	html += "float: right; ";
+            end        
+            html += "padding:" + cellPadding + 
+            		"px; width:" + checkBoxWidth +
+                    "px; border-width: 1px " + cellBorder
+                    + "px 0 0'>&nbsp;</span>";
+        end
+        for(column int from 1 to columnCount)
+            c DataGridColumn = columns[column];
+            value string;
+            if(c.displayName == null)
+           		value = c.name;
+           	else value = c.displayName;
+           	end
+            if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")
+            	isVisual boolean = this.textLayoutThis == "Visual";
+				isReverseDirection boolean = this.reverseTextDirectionThis == "Yes";		
+				value = util.setBiDiMarkersStr(value, isVisual, isReverseDirection);
+			end
+            if(c.width == "" || c.width == 0)
+                c.width = 44 + util.getTextWidth(value);
+            end
+            totalWidth += cellBorder + c.width + 2 * cellPadding;
+            class string = getAlignmentClass(c.headerAlignment);
+          	           
+            w int = c.width;
+            html += "<span id=" + grid.id + "-header-" +
+                    column + " class=EglRuiDataGridHeaderCell column=" + column + " style='";
+            if (ui.getWidgetOrientation() == "RTL")
+            	html += "float: right; ";
+            end
+            
+            html += "width:" +(w + 2 * cellPadding) + "px; border-width: 1px " + cellBorder
+                    + "px 0 0'><span class=" +
+                    getAlignmentClass(c.headerAlignment) + " style='padding:" +
+                    cellPadding + "px'>" +
+                    "<span class=EglRuiDataGridHeaderLabel>" + value + "</span></span><span class=EglRuiDataGridSort" + Directions[c.sortDirection + 1] + 
+                    ">&nbsp;&nbsp;&nbsp;&nbsp;</span></span>";
+        end
+        html += "</div>";
+        html = "<div id=" + grid.id +
+                "-header class=EglRuiDataGridHeaderRow style='width:" +(
+                totalWidth) + "px'><div id=" + grid.id +
+                "-header-inner class=EglRuiDataGridHeaderRowInner style='width:" +(
+                totalWidth + columnCount * 8) + "px'>" + html + "</div>";
+		UtilLib.utilNative.appendHTMLString(html);
+    end
+
+    private function getAlignmentClass(alignment int in) returns(string)
+        case(alignment)
+            when(DataGridLib.ALIGN_LEFT)
+                return(" EglRuiDataGridAlignLeft");
+            when(DataGridLib.ALIGN_CENTER)
+                return(" EglRuiDataGridAlignCenter");
+            when(DataGridLib.ALIGN_RIGHT)
+                return(" EglRuiDataGridAlignRight");
+        end
+    end
+
+    private function renderRows()
+        columnCount int = columns.getSize();
+        page int = (_startRow - 1)/pageSize;
+        _startRow = page*pageSize+1;
+        endRow int = data.getSize();
+        if(showScrollbar)
+        	lastStartRow = _startRow;
+        	_startRow = 1;
+            UtilLib.utilNative.appendHTMLString("<div class=EglRuiDataGridScroller id=" + grid.id + "-scroller>");
+        else
+            if(pageSize != 0)
+                endRow = MathLib.min(endRow, _startRow + pageSize - 1);
+            end
+        end
+        UtilLib.utilNative.appendHTMLString("<div class=EglRuiDataGridRows id=" + grid.id + "-rows>");
+        h string = " ";
+        if(rowHeight > 0)
+            h = "overflow-y: hidden; height:" +(rowHeight + 2 * cellPadding) + "px;";
+        end
+        for(row int from _startRow to endRow)
+            UtilLib.utilNative.appendHTMLString("<div class=" + getRowClass(row) + " row=" + row +
+                    " id=" + grid.id + "-row-" + row + " style='" + h + "'>");
+            if(showCheckBoxes)
+                UtilLib.utilNative.appendHTMLString("<span class='EglRuiDataGridCell EglRuiDataGridCheckBox' style='");
+                if (ui.getWidgetOrientation() == "RTL")
+            			UtilLib.utilNative.appendHTMLString("float: right; ");
+            	end
+                UtilLib.utilNative.appendHTMLString(h + "padding:" +(cellPadding - 1) + "px " +
+                        cellPadding + "px " +(cellPadding + 5000) + "px " +
+                        cellPadding + "px; margin-bottom:" +
+                        (0 - cellPadding - 5000) + "px; width:" + 
+                        checkBoxWidth + "px; border-width: 0 " + 
+                        cellBorder + "px 0 0''><input id=" +
+                        grid.id + "-checkbox-" + row + " type=checkbox row=" +
+                        row + " onclick='egl.org.eclipse.edt.rui.widgets.DataGridUtil.dataGridCheckboxClick(\"" + this.internalID + "\", this)'></input></span>");
+            end
+            for(column int from 1 to columnCount)
+                c DataGridColumn = columns[column];
+                renderCell(row, column, getCellValue(row, c.name), c, column == columnCount);
+            end
+            UtilLib.utilNative.appendHTMLString("</div>");
+        end
+        if((!showScrollbar && data.getSize() > pageSize) || endRow == 0 )
+            for(row int from endRow + 1 to _startRow + pageSize - 1)
+                UtilLib.utilNative.appendHTMLString("<div class=" + getRowClass(row) + ">");
+                if(showCheckBoxes)
+                    UtilLib.utilNative.appendHTMLString("<span class='EglRuiDataGridCell EglRuiDataGridCheckBox' style='");
+                    if (ui.getWidgetOrientation() == "RTL")
+            			UtilLib.utilNative.appendHTMLString("float: right; ");
+            		end;
+            		UtilLib.utilNative.appendHTMLString("padding:" + cellPadding + 
+            					"px; padding-bottom:" +(cellPadding + 5000) + 
+            					"px; margin-bottom:" +(0 - cellPadding - 5000) + 
+            					"px; width:" + checkBoxWidth + 
+            					"px; border-width: 0 " + cellBorder + 
+            					"px 0 0'></span>");
+                end
+                for(column int from 1 to columnCount)
+                    c DataGridColumn = columns[column];
+                    renderCell(-1, column, "", c, column == columnCount);
+                end
+                UtilLib.utilNative.appendHTMLString("</div>");
+            end
+        end
+        UtilLib.utilNative.appendHTMLString("</div>");
+        if(showScrollbar)
+            UtilLib.utilNative.appendHTMLString("</div>");
+        end
+    end
+
+    function getRowClass(row int in) returns(string)
+        if(row % 2 == 0)
+            return("EglRuiDataGridEvenRow");
+        else
+            return("EglRuiDataGridOddRow");
+        end
+    end
+
+    private function getCellValue(row int in, fieldName string in) returns(string)
+        object any = data[row];
+        if(object == null)
+            return("");
+        end
+        cell any?;
+        try
+        	cell = object[fieldName];
+        onException(ex AnyException)
+        	if( ex.messageID == "CRRUI2025E")
+        		cell = null;
+        	else
+        		throw(ex);
+        	end
+        end
+        if(cell == null)
+            return("");
+        else
+            return("" + cell);
+        end
+    end
+
+    private function renderCell(row int in, column int in, value string in, c DataGridColumn, lastColumn boolean in)        
+        class string = columnClass[column];
+        if(row > 0)	        
+	        formatters CellFormatter[] = c.formatters;	        
+	        if(formatters != null)
+	            formatterCount int = formatters.getSize();	           
+	            for(k int from 1 to formatterCount)
+	          		formatters[k](class, value, data[row]);
+	            end
+	        end
+	    end
+        w int = c.width;
+        h string = " ";
+        if(rowHeight > 0)
+            h = "height:" +(rowHeight + 2 * cellPadding) + "px;";
+        end
+        UtilLib.utilNative.appendHTMLString("<div id=" + grid.id + "-cell-" + row + "-" + column +
+                " class='" + class + "' row='" + row + "' column='" + column +
+                "' style='");
+        if (ui.getWidgetOrientation() == "RTL")
+            	UtilLib.utilNative.appendHTMLString("float: right; ");
+        end
+        cb int = cellBorder;
+        if (lastColumn)
+			cb = 0;
+		end
+		if (showScrollbar && lastColumn)
+			w -= 17;
+		end
+		if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")
+            	isVisual boolean = this.textLayoutThis == "Visual";
+				isReverseDirection boolean = this.reverseTextDirectionThis == "Yes";		
+				value = util.setBiDiMarkersStr(value, isVisual, isReverseDirection);
+		end
+        UtilLib.utilNative.appendHTMLString("width:" + w + "px; " + h + "padding:" + cellPadding +
+                "px; padding-bottom:" +(cellPadding + 5000) +
+                "px; margin-bottom:" +(0 - cellPadding - 5000) + 
+                "px; border-width: 0 " + cb + "px 0 0'>" + value + "</div>");
+    end
+
+    private function applyBehaviors()
+        tds Widget[];
+        count int;
+        row int;
+        column int;
+        n int;
+        
+        if(headerBehaviors.getSize() > 0)
+            tds = grid.getElementsByTagName("span");
+            count = tds.getSize();
+            for(n from 1 to count)
+                row = util.getIntAttribute(tds[n], "row");
+                column = util.getIntAttribute(tds[n], "column");
+                tds[n].logicalParent = this;
+                if(row < 1 && column >= 1)
+                    len int = headerBehaviors.getSize();
+                    for(k int from 1 to len)
+                        headerBehaviors[k](this, tds[n], null, 0, columns[column]);
+                    end
+                end
+            end
+        end
+        if(behaviors.getSize() > 0 || editorBehaviors.getSize() > 0)
+            tds = grid.getElementsByTagName("div");
+            count = tds.getSize();
+            for(n from 1 to count)
+                row = util.getIntAttribute(tds[n], "row");
+                column = util.getIntAttribute(tds[n], "column");
+                tds[n].logicalParent = this;
+                if(row > 0 && column > 0)
+                    object any = data[row];
+                    len int = behaviors.getSize();
+                    for(k int from 1 to len)
+                        behaviors[k](this, tds[n], object, row, columns[column]);
+                    end
+                    len = editorBehaviors.getSize();
+                    for(k int from 1 to len)
+                        editor Widget = editorBehaviors[k](this, tds[n],data[row], row,
+                                        columns[column],
+                                        tds[n].innerText);
+                        if(editor != null)
+                            tds[n].children =[editor];
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    private function updateDimensions()
+    	scroller Widget = grid.getElementById(grid.id + "-scroller");
+        if(scroller != null)
+            lastRow int = _startRow + pageSize - 1;
+            row Widget = grid.getElementbyId(grid.id + "-row-" + lastRow);
+            while(row == null && lastRow > 0)
+                lastRow -= 1;
+                row = grid.getElementbyid(grid.id + "-row-" + lastRow);
+            end            
+            rowsHeight int = 0;            
+            if(row != null)
+                rowsHeight = row.y + row.pixelHeight - scroller.y;
+            end
+            height int;
+            header Widget = grid.getElementById(grid.id + "-header");
+            if(header != null)
+                height = this.pixelHeight - header.pixeLHeight;
+                if(height < 0)
+                	height = 0;
+                end
+            else
+            	height = this.pixelHeight;
+            end
+            if(height < rowsHeight || rowsHeight < 0 )
+            	scroller.height = height;
+            else
+            	scroller.height = rowsHeight;
+            end
+        end
+    end
+
+    //////////////////////////////////////////////////////
+    //
+    // Column drag support
+    //
+    //////////////////////////////////////////////////////
+    
+    private function enableDragging()
+        columnCount int = columns.getSize();
+        tds Widget[] = grid.getElementsByTagName("span");
+        count int = tds.getSize();
+        for(n int from 1 to count)
+        	if(tds[n].id.isLike(grid.id + "-header-%"))
+        		header Widget = tds[n];
+        		header.onStartDrag = startDrag;
+                header.onDrag = dragColumn;
+                header.onDropOnTarget = endDrag;
+        	end  
+        end
+    end
+
+    private function startDrag(w Widget in, startX int in, startY int in) returns(boolean)
+        return(true);
+    end
+
+    columnDragger Span{class = "EglRuiDataGridResizeHandle", background = "#CCCCCC", innerHTML = "&nbsp;"};
+
+    private function dragColumn(w Widget in, dropw Widget in, dragX int in, dragY int in)
+        column int = w.getAttribute("column");
+        target int = getTargetColumn(dragX);
+        ui.appendChild(columnDragger);
+        columnDragger.position = "absolute";
+        columnDragger.y = grid.y;
+        columnDragger.width = 4;
+        columnDragger.height = grid.pixelHeight;
+        columnDragger.visible = true;
+        try
+            header Widget = grid.getElementById(grid.id + "-header-" + target);
+            columnDragger.x = header.x - 5;
+        onException(e AnyException)
+            columnDragger.x = grid.x + grid.pixelWidth - 5;
+        end
+    end
+
+    private function getTargetColumn(x int in) returns(int)
+        columnCount int = columns.getSize();
+        dx int = ui.x;
+        for(column int from 1 to columnCount)
+            w int = 2 * cellPadding + columns[column].width;
+            if(x > dx && x < dx + w)
+                return(column);
+            end          
+            dx += w;
+        end
+    end
+
+    private function endDrag(w Widget in, dropw Widget in, dragX int in, dragY int in)
+        column int = w.getAttribute("column");
+        target int = getTargetColumn(dragX);
+        columnCount int = columns.getSize();
+        if(target != column && columnDragger.visible)
+            draggedColumn DataGridColumn = columns[column];
+            columns.removeElement(column);
+            try
+                if(target > columnCount)
+                    columns.appendElement(draggedColumn);
+                else
+                    if(target > column)
+                        columns.insertElement(draggedColumn, target - 1);
+                    else
+                        columns.insertElement(draggedColumn, target);
+                    end
+                end
+            onException(e AnyException)
+                columns.appendElement(draggedColumn);
+            end
+            render();
+        else
+        	columnDragger.x = grid.x + grid.pixelWidth + 5;
+        	columnDragger.visible = false;
+        end
+    end
+
+    //////////////////////////////////////////////////////
+    //
+    // Pagination support
+    //
+    //////////////////////////////////////////////////////
+    
+    private function renderButtonBar()
+        if(showButtonBar && !showScrollbar && pageSize > 0 && data.getSize() >
+                        pageSize)
+            pageCount int = data.getSize() / pageSize;
+            page int = 1 +(_startRow - 1) / pageSize;
+            if(data.getSize() % pageSize > 0)
+                pageCount += 1;
+            end
+            pageText string = pagingLabel;
+            replaceMarker(pageText, "{page}", page);
+            replaceMarker(pageText, "{pageCount}", pageCount);
+            gotoStartButton.disabled = page == 1;
+            gotoPageBackButton.disabled = page == 1;
+            pageTextLabel.text = pageText;
+            gotoPageForwardButton.disabled = page == pageCount;
+            gotoEndButton.disabled = page == pageCount;
+            ui.children =[new Box{children =[grid, new Div{}]}, buttonBar];
+        else
+            ui.children =[grid];
+        end
+    end
+
+    function replaceMarker(s string, marker string in, value string in)
+        index int = s.indexOf( marker);
+        ml int = marker.length();
+        sl int = s.length();
+        prefix string = "";
+        postfix string = "";
+        if(index > 0)        	
+        	if( index > 1 )
+        		prefix = s[1 : index - 1];
+        	end
+        	if( index + ml < sl )
+        		postfix = s[index + ml : sl ];
+        	end
+        	s= prefix + value + postfix;
+        end
+    end
+
+	function gotoPage(pageIndex int in)
+		if(pageIndex < 1) pageIndex = 1; end
+		if(pageIndex > getPageCount()) pageIndex = getPageCount(); end
+        oldPageIndex int = (_startRow - 1)/pageSize + 1;            
+        _startRow = (pageIndex - 1) * pageSize + 1;
+        render();
+        for(n int from 1 to pageChangeListeners.getSize())
+            pageChangeListeners[n](this, oldPageIndex, pageIndex);
+        end
+
+    end
+   
+    function getPageCount() returns (int)
+        return ((data.getSize()-1)/pageSize+1);        
+    end
+   
+    function getCurrentPageIndex() returns (int)
+        return ((_startRow - 1)/pageSize + 1);
+    end
+    
+    private function gotoStart(e Event in)
+    	oldPageIndex int = (_startRow - 1)/pageSize + 1;
+    	lastStartRow = _startRow;
+        _startRow = 1;        
+        render();
+        for(n int from 1 to pageChangeListeners.getSize())
+        	pageChangeListeners[n](this, oldPageIndex, 1);
+        end
+    end
+
+    private function gotoPageBack(e Event in)
+    	oldPageIndex int = (_startRow - 1)/pageSize + 1;
+    	lastStartRow = _startRow;
+        _startRow = _startRow - pageSize;        
+        render();
+        for(n int from 1 to pageChangeListeners.getSize())
+        	pageChangeListeners[n](this, oldPageIndex, oldPageIndex - 1);
+        end
+    end
+
+    private function gotoPageForward(e Event in)
+    	oldPageIndex int = (_startRow - 1)/pageSize + 1;
+    	lastStartRow = _startRow;
+        _startRow = _startRow + pageSize;        
+        render();
+        for(n int from 1 to pageChangeListeners.getSize())
+        	pageChangeListeners[n](this, oldPageIndex, oldPageIndex + 1);
+        end
+    end
+
+    private function gotoEnd(e Event in)
+    	oldPageIndex int = (_startRow - 1)/pageSize + 1;
+    	pageCount int = (data.getSize()-1)/pageSize + 1;
+        leftOver int =(data.getSize() % pageSize);
+        if(leftOver == 0)
+            leftOver = pageSize;
+        end
+        lastStartRow = _startRow;
+        _startRow = MathLib.max(1, data.getSize() - leftOver + 1);        
+        render();
+        for(n int from 1 to pageChangeListeners.getSize())
+        	pageChangeListeners[n](this, oldPageIndex, pageCount);
+        end
+    end
+    
+    //////////////////////////////////////////////////////
+    //
+    //  Common Functions for Selection && Checkbox support
+    //
+    //////////////////////////////////////////////////////
+    
+    function updateHighlights()
+        divs Widget[] = grid.getElementsByTagName("div");
+        divCount int = divs.getSize();
+        for(n int from 1 to divCount)
+            row int = divs[n].getAttribute("row");
+            if(row > 0)
+                selected boolean = util.getSelected(data[row]);
+                selectRow(divs[n].parent, selected);                
+            end
+        end        
+        
+        if(showCheckBoxes)          
+           checkBoxes Widget[] = grid.getElementsByTagName("input");
+           checkBoxCount int = checkBoxes.getSize();
+           for(c int from 1 to checkBoxCount)
+               row int = checkBoxes[c].getAttribute("row");
+               if(row>0 && checkBoxes[c].id == grid.id+"-checkbox-"+row)            
+                   if(util.getChecked(data[row]))
+                       checkBoxes[c].setAttribute("checked", true);
+                   else
+                   	   checkBoxes[c].setAttribute("checked", false);
+                       checkBoxes[c].removeAttribute("checked");
+                   end
+               end
+           end
+       end
+    end
+    
+    //////////////////////////////////////////////////////
+    //
+    // Checkbox support
+    //
+    //////////////////////////////////////////////////////
+
+
+	//
+    // This function is called from GridUtil.js and is triggered when the user
+    // selects the selection checkbox shown in each row
+    // 
+    
+    private function checkSelection( checkBox Widget in)
+        inputs Widget[] = grid.getElementsByTagName("input");
+        inputCount int = inputs.getSize();
+        for(n int from 1 to inputCount)
+            if(inputs[n].id == checkBox.id)
+                isChecked boolean = "" + checkBox.getAttribute("checked") == "true";
+                row int = checkbox.parent.parent.getAttribute("row");                
+                util.setChecked(data[row], isChecked);
+                notifyCheckboxChangeListeners();     
+            end
+        end
+    end
+    
+    function notifyCheckboxChangeListeners()       
+        for(k int from 1 to checkboxListeners.getSize())
+        	checkboxListeners[k](this);
+        end      
+    end
+    
+    function setChecked(checked any[] in)        
+        setAllUnchecked();
+        len int = checked.getSize();     
+        for(n int from 1 to len)
+            util.setChecked(checked[n], true);
+        end
+        updateHighlights();
+        notifyCheckboxChangeListeners();
+    end
+
+    function getChecked() returns(any[])
+        result any[];
+        count int = data.getSize();
+        for(n int from 1 to count)
+            if(util.getChecked(data[n]))
+                result.appendElement(data[n]);
+            end
+        end
+        return(result);
+    end
+    
+    private function setAllUnchecked()
+    	count int = data.getSize();
+        for(n int from 1 to count)
+            object any = data[n];
+            if(object != null)
+                util.setChecked(object, false);
+            end
+        end
+    end
+    
+    function uncheckAll()
+    	setAllUnchecked();
+    	updateHighlights();
+    	notifyCheckboxChangeListeners();
+    end    
+
+	private function setAllChecked()
+		count int = data.getSize();
+        for(n int from 1 to count)
+            object any = data[n];
+            if(object != null)
+                util.setChecked(object, true);
+            end
+        end
+	end
+	
+    function checkAll()
+      	setAllChecked();
+      	updateHighlights();
+      	notifyCheckboxChangeListeners();
+    end
+
+    //////////////////////////////////////////////////////
+    //
+    // Selection support
+    //
+    //////////////////////////////////////////////////////
+    
+    function setSelectionMode(value int in)
+        selectionMode = value;
+        setAllDeselected();
+        updateHighlights();
+    end
+
+    function getSelectionMode() returns(int)
+        return(selectionMode);
+    end
+
+    function selectRow(div Widget in, selected boolean in)
+        row int = div.getAttribute("row");
+        if(row > 0)
+            if(selected)
+                util.setSelected(data[row], true);
+                addClass(div, "EglRuiDataGridRowSelected");
+            else
+                util.setSelected(data[row], false);
+                removeClass(div, "EglRuiDataGridRowSelected");
+            end
+        end
+    end
+    
+
+    private lastSelectedRow int;
+    private lastEvent Event;
+
+    private function clickGrid(e Event in)
+        lastEvent = e;        
+        widget Widget = getCellWidget(e);
+        while(widget.class != "EglRuiDataGrid" &&(widget.getAttribute("column") as int) == 0)
+            widget = widget.parent;
+        end
+        if(widget.class != "EglRuiDataGrid")
+            row int = widget.getAttribute("row");
+            if(row > 0 && selectionMode != DataGridLib.DISABLE_SELECTION )
+                if(selectionMode == DataGridLib.SINGLE_SELECTION)
+                    setAllDeselected();
+                    util.setSelected(data[row], true);
+                else
+                    if(e.ctrlKey || e.metaKey)
+                        if(util.getSelected(data[row]))
+                            util.setSelected(data[row], false);
+                        else
+                            util.setSelected(data[row], true);
+                        end
+                    else
+                        if(e.shiftKey && lastSelectedRow > 0)
+                            setAllDeselected();
+                            start int = Mathlib.min(row, lastSelectedRow);
+                            finish int = Mathlib.max(row, lastSelectedRow);
+                            for(n int from start to finish)
+                                util.setSelected(data[n], true);
+                            end
+                        else
+                            setAllDeselected();
+                            util.setSelected(data[row], true);
+                        end
+                    end
+                    lastSelectedRow = row;
+                end
+                updateHighlights();
+                notifySelectionChangeListeners();
+            else
+                if(row == 0 && this.enableSorting)
+                    sortColumn(widget);
+                end
+            end
+        end
+    end
+
+    function notifySelectionChangeListeners()       
+        for(k int from 1 to selectionListeners.getSize())
+        	selectionListeners[k](this);
+        end      
+    end
+
+	private function setAllDeselected()
+		count int = data.getSize();
+        for(n int from 1 to count)
+            object any = data[n];
+            if(object != null)
+                util.setSelected(object, false);
+            end
+        end
+	end
+	
+    function deselectAll()
+    	setAllDeselected();
+    	updateHighlights();    
+    	notifySelectionChangeListeners();
+    end
+    
+    private function setAllSelected()
+    	count int = data.getSize();
+        for(n int from 1 to count)
+            object any = data[n];
+            if(object != null)
+                util.setSelected(object, true);
+            end
+        end
+    end
+
+    function selectAll()
+        setAllSelected();
+        updateHighlights();
+        notifySelectionChangeListeners();
+    end
+
+    private function addClass(widget Widget in, class string in)
+        removeClass(widget, class);
+        widget.class += " " + class;
+    end
+
+    private function removeClass(widget Widget in, class string in)
+        s string = widget.class;
+        index int = s.indexOf(class);
+        ml int = class.length();
+        sl int = s.length();
+        prefix string = "";
+        postfix string = "";
+        if(index > 0)        	
+        	if( index > 1 )
+        		prefix = s[1 : index - 1];
+        	end
+        	if( index + ml < sl )
+        		postfix = s[index + ml : sl ];
+        	end
+        	widget.class= prefix + postfix;
+        end
+    end
+
+    function setSelection(selection any[] in)
+        if(selectionMode == DataGridLib.DISABLE_SELECTION)
+            return;
+        end
+        setAllDeselected();
+        len int = selection.getSize();
+        if(selectionMode == DataGridLib.SINGLE_SELECTION)
+            len = 1;
+        end
+        for(n int from 1 to len)
+            util.setSelected(selection[n], true);
+        end
+        updateHighlights();
+        notifySelectionChangeListeners();
+    end
+
+    function getSelection() returns(any[])
+        result any[];
+        count int = data.getSize();
+        for(n int from 1 to count)
+            if(util.getSelected(data[n]))
+                result.appendElement(data[n]);
+            end
+        end
+        return(result);
+    end
+
+    /////////////////////////////////////////////////////////////////
+    //
+    // Sorting support
+    //
+    /////////////////////////////////////////////////////////////////
+    
+    private sortedColumn int = 1;
+
+    function setEnableSorting(value boolean in)
+        enableSorting = value;
+        columnCount int = columns.getSize();
+        for(column int from 1 to columnCount)
+            columns[column].enableSorting = value;
+            columns[column].sortDirection = DataGridLib.SORT_NONE;
+        end
+    end
+
+    function getEnableSorting() returns(boolean)
+        return(enableSorting);
+    end
+
+    private function sortColumn(widget Widget in)
+        column int = widget.getAttribute("column");
+        while(column == 0 && widget.class != "EglRuiDataGrid")
+            widget = widget.parent;
+            column = widget.getAttribute("column");
+        end
+        if(column != 0 && columns[column].enableSorting)            
+            sortedColumn = column;
+            for(n int from 1 to columns.getSize())
+                if(n != column)
+                    columns[n].sortDirection = 0;
+                end
+            end
+            c DataGridColumn = columns[column];            
+            if(c.sortDirection == DataGridLib.SORT_NONE)
+                c.sortDirection = DataGridLib.SORT_UP;
+            else
+                c.sortDirection = 3 - c.sortDirection;
+            end
+            try
+            	if(c.columnComparator != null)
+                	data = util.sort(data, c.name, c.sortDirection == DataGridLib.SORT_UP, c.ignoreCase, c.columnComparator);
+                else
+                	data = util.sort(data, c.name, c.sortDirection == DataGridLib.SORT_UP, c.ignoreCase, null);
+                end
+                render();
+                for(k int from 1 to sortListeners.getSize())
+                	sortListeners[k](this, c);
+                end
+            onException(e AnyException)
+                throw new AnyException {message="Sort fail "+ e.messageID + " : " + e.message};
+            end   
+        end
+    end
+
+    //////////////////////////////////////////////////////
+    //
+    // Various other functions
+    //
+    //////////////////////////////////////////////////////
+    
+    function layout()
+        setData(this.data);
+    end
+
+    function getData() returns(any[])
+        return(this.data);
+    end
+
+    function getCellWidget(e Event in) returns(Widget)
+        return(util.getOriginalTarget(e));
+    end
+
+    function getColumn(td Widget in) returns(DataGridColumn)
+    	column int = td.getAttribute("column");    	
+        return (columns[column]);       
+    end
+
+    function getCell(row int in, fieldName string in) returns(Widget)
+        tds Widget[] = grid.getElementsByTagName("div");
+        count int = tds.getSize();
+        for(n int from 1 to count)
+            rowNum int = util.getIntAttribute(tds[n], "row");
+            columnNum int = util.getIntAttribute(tds[n], "column");
+            if(rowNum == row && columnNum > 0 && columnNum <=
+                            columns.getSize() && columns[columnNum].name ==
+                            fieldName)
+                return(tds[n]);
+            end
+        end
+        return(null);
+    end
+
+	function getColumns() returns (DataGridColumn[])
+		return (columns);
+	end
+	
+	function setColumns(columns DataGridColumn[] in)		
+		this.columns = columns;		
+		render();
+	end	
+	
+	function getShowCheckBoxes() returns (boolean)
+    	return (showCheckBoxes);
+    end
+    
+    function setShowCheckBoxes(showCheckBoxes boolean in)
+    	this.showCheckBoxes = showCheckBoxes;
+    	render();
+    end
+    
+    function getShowScrollbar() returns (boolean)
+    	return (showScrollbar);
+    end
+    
+    function setShowScrollbar(showScrollbar boolean in)
+    	this.showScrollbar = showScrollbar;
+    	render();
+    end
+    
+    function getShowButtonBar() returns (boolean)
+    	return (showButtonBar);
+    end
+    
+    function setShowButtonBar(showButtonBar boolean in)
+    	this.showButtonBar = showButtonBar;
+    	render();
+    end
+    
+    function getShowHeader() returns (boolean)
+    	return (showHeader);
+    end
+    
+    function setShowHeader(showHeader boolean in)
+    	this.showHeader = showHeader;
+    	render();
+    end
+    
+    function getCellPadding() returns (int)
+    	return (cellPadding);
+    end
+    
+    function setCellPadding(cellPadding int in)
+    	this.cellPadding = cellPadding;
+    	render();
+    end
+    
+    function getCellBorder() returns (int)
+    	return (cellBorder);
+    end
+    
+    function setCellBorder(cellBorder int in)
+    	this.cellBorder = cellBorder;
+    	render();
+    end
+    
+    function getRowHeight() returns (int)
+    	return (rowHeight);
+    end
+    
+    function setrowHeight(rowHeight int in)
+    	this.rowHeight = rowHeight;
+    	render();
+    end
+    
+    function getCheckBoxWidth() returns (int)
+    	return (checkBoxWidth);
+    end
+    
+    function setCheckBoxWidth(checkBoxWidth int in)
+    	this.checkBoxWidth = checkBoxWidth;
+    	render();
+    end
+    
+    function getStartRow() returns (int)
+    	return (startRow);
+    end
+    
+    function setStartRow(startRow int in)
+    	this.startRow = startRow;
+    	page int = (startRow - 1)/pageSize;
+    	_startRow = page*pageSize+1;
+    	render();
+    end
+    
+    function getPageSize() returns (int)
+    	return (pageSize);
+    end
+    
+    function setPageSize(pageSize int in)
+    	this.pageSize = pageSize;
+    	this.setStartRow(startRow);
+    end
+
+    function setReverseTextDirection(reverseTextDirection string in)
+        this.reverseTextDirectionThis = reverseTextDirection;
+        render();
+    end
+
+    function getReverseTextDirection() returns(string)
+        return(this.reverseTextDirectionThis);
+    end
+
+    function setTextLayout(textLayout string in)
+        this.textLayoutThis = textLayout;
+  		render();
+    end
+
+    function getTextLayout() returns(string)
+        return(this.textLayoutThis);
+    end
+    
+    function setWidgetOrientation(widgetOrientation String in) 
+		ui.setWidgetOrientation(widgetOrientation);
+		if (grid.innerHTML != null)
+			render();
+		end;
+	end
+	
+
+end

@@ -1,0 +1,311 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+import eglx.rbd.StrLib;
+
+library InternalNumericFormatter
+	use InternalMessageLib;
+	util InternalFormattingUtil{};
+	
+	private const PARSE_ERROR String = "CRRUI2719E";
+	private const EDIT_INVALID_DATE_TIME_ERR String = "CRRUI2708E";
+	private const BOOLEAN_ERROR String = "CRRUI2710E";
+
+	function format(input string in, isBoolean boolean in,
+			zeroFormat boolean in, fillChar string in, sign SignKind in, currency boolean in,
+			currencySymbol string in, numericSeparator boolean in, itemLength int in,
+			itemDecimals int in, itemType string in, msgKey string in) returns(string)
+		if (input == "")
+			return("");
+		end
+		
+		if (!zeroFormat && (input as decimal) == 0)
+			if (fillChar != " " && fillChar != "" && itemType != "eglx.lang.EFloat" && itemType != "eglx.lang.ESmallfloat")
+				result string;
+				integerLength int = itemLength - itemDecimals;
+				for (i int from 1 to integerLength by 1)
+					result += fillChar;
+				end
+				return(result);
+			end
+			return("");
+		end
+		
+		result string = input;
+		isNegative boolean = result[1:1] == "-";
+		if (isNegative)
+			result = result[2:strlib.characterLen(result)];
+		end
+		
+		preDecimal string;
+		postDecimal string;
+		decimalIndex int = strlib.indexOf(result, ".");
+		if (decimalIndex > 1)
+			preDecimal = result[1:decimalIndex - 1];
+			if (strlib.characterLen(result) > decimalIndex)
+				postDecimal = result[decimalIndex + 1:strlib.characterLen(result)];
+			end 
+		else
+			if (decimalIndex == 1)
+				if (strlib.characterLen(result) > 1)
+					postDecimal = result[2:strlib.characterLen(result)];
+				end 
+			else
+				preDecimal = result;
+			end
+		end
+		
+		if (numericSeparator)
+			separatorChar string = util.getGroupingSeparator();
+			for (i int from strlib.characterLen(preDecimal) - 3 to 1 decrement by 3)
+				preDecimal = preDecimal[1:i] + separatorChar + preDecimal[i+1:strlib.characterLen(preDecimal)];
+			end
+		end
+		
+		if (itemDecimals > 0)
+			if (itemType != "eglx.lang.ESmallfloat" && itemType != "eglx.lang.EFloat")
+				if (strlib.characterLen(postDecimal) > itemDecimals)
+					postDecimal = postDecimal[1:itemDecimals];
+				else
+					while (strlib.characterLen(postDecimal) < itemDecimals)
+						postDecimal += "0";
+					end
+				end
+			end
+			decimalIndex = strlib.characterLen(preDecimal) + 1;
+			result = preDecimal + util.getDecimalSeparator() + postDecimal;
+		else
+			decimalIndex = 0;
+			result = preDecimal;
+		end
+		
+		if (fillChar != " " && fillChar != "" && itemType != "eglx.lang.EFloat" && itemType != "eglx.lang.ESmallfloat")
+			start int;
+			if (decimalIndex != 0)
+				start = decimalIndex;
+			else
+				start = strlib.characterLen(result) + 1;
+			end
+			
+			integerLength int = itemLength - itemDecimals;
+			for (i int from start to integerLength by 1)
+				result = fillChar + result;
+			end
+		end
+		
+		if (currency)
+			if (currencySymbol == "")
+				currencySymbol = util.getCurrencySymbol();
+			end
+			result = currencySymbol + result; 
+		end
+		
+		case (sign)
+			when(SignKind.leading)
+				if (isNegative)
+					result = "-" + result;
+				end
+			when(SignKind.trailing)
+				if (isNegative)
+					result += "-";
+				else
+					result += "+";
+				end
+			when(SignKind.parens)
+				if (isNegative)
+					result = "(" + result + ")";
+				end
+		end
+		
+		return(result);
+	end
+	
+	function unformat(input string in, isBoolean boolean in,
+			zeroFormat boolean in, fillChar string in, sign SignKind in, currency boolean in,
+			currencySymbol string in, numericSeparator boolean in, itemLength int in,
+			itemDecimals int in, itemType string in, msgKey string in) returns(string)
+		
+		input = strlib.clip(input, 0);
+		return(unformatAndConvertToNumber(input, isBoolean, fillChar, sign, currency, currencySymbol,
+				numericSeparator, itemLength, itemDecimals, itemType, msgKey));
+	end
+	
+	private function unformatAndConvertToNumber(input string in, isBoolean boolean in, fillChar string? in,
+			sign SignKind in, currency boolean in, currencySymbol string in, numericSeparator boolean in,
+			itemLength int in, itemDecimals int in, itemType string in, msgKey string in) returns(string)
+		
+		if (fillChar != " " && fillChar != "")
+			while (strlib.indexOf(input, fillChar) == 1)
+				input = input[2:strlib.characterLen(input)];
+			end
+		end
+		
+		if (input == "")
+			return(convertToNumber("0", isBoolean, itemLength, itemDecimals, itemType, msgKey));
+		end
+		
+		if (currency)
+			if (currencySymbol == "")
+				currencySymbol = util.getCurrencySymbol();
+			end
+			removeSubstring(input, currencySymbol);
+		end
+		
+		if (numericSeparator)
+			separatorChar string = util.getGroupingSeparator();
+			while (removeSubstring(input, separatorChar))
+			end
+		end
+		
+		length int = strlib.characterLen(input);
+		if (length != 0)
+			case (sign)
+				when(SignKind.parens)
+					if (input[1:1] == "(")
+						input = "-" + input[2:length];
+					end
+					if (input[length:length] == ")")
+						if (length == 1)
+							input = "";
+						else
+							input = input[1:length - 1];
+						end
+					end
+				when(SignKind.trailing)
+					if (input[length:length] == "+")
+						if (length == 1)
+							input = "";
+						else
+							input = input[1:length - 1];
+						end
+					else
+						if (input[length:length] == "-")
+							if (length == 1)
+								input = "";
+							else
+								input = "-" + input[1:length - 1];
+							end
+						end
+					end
+				when(SignKind.leading)
+					if (input[1:1] == "+")
+						if (length == 1)
+							input = "";
+						else
+							input = input[2:length];
+						end
+					end
+			end
+		end
+		
+		decimalSeparator string = util.getDecimalSeparator();
+		if (decimalSeparator != ".")
+			index int = strlib.indexOf(input, decimalSeparator);
+			if (index != 0)
+				input = input[1:index - 1] + "." + input[index + 1:length];
+			end
+		end
+		
+		if (input == "")
+			input = "0";
+		end
+		return(convertToNumber(input, isBoolean, itemLength, itemDecimals, itemType, msgKey));
+	end
+	
+	private function removeSubstring(input string inOut, substring string in) returns(boolean)
+		if (substring == "")
+			return(false);
+		end
+		
+		index int = strlib.indexOf(input, substring);
+		if (index != 0)
+			inputLength int = strlib.characterLen(input);
+			substringLength int = strlib.characterLen(substring);
+			if (index == 1)
+				input = input[1 + substringLength:inputLength];
+			else
+				if (index + substringLength - 1 == inputLength)
+					input = input[1:index - 1];
+				else
+					input = input[1:index - 1] + input[index + substringLength:inputLength];
+				end
+			end
+			return(true);
+		end
+		return(false);
+	end
+	
+	private function convertToNumber(input string in, isBoolean boolean in, itemLength int in,
+			itemDecimals int in, itemType string in, msgKey string in) returns(string)
+		msg String;
+		
+		if (itemDecimals == 0 && itemType != "eglx.lang.EFloat" && itemType != "eglx.lang.ESmallfloat")
+			if (input[1:1] == "-")
+				if (!(input[2:strlib.characterLen(input)] isa Number))
+					throw new AnyException {message = getRuntimeMessage(msgKey, PARSE_ERROR, []), messageId = PARSE_ERROR};				
+				end
+			else
+				if (!(input isa Number))
+					throw new AnyException {message = getRuntimeMessage(msgKey, PARSE_ERROR, []), messageId = PARSE_ERROR};			
+				end
+			end
+		end
+		
+		isOneOrZero boolean;
+		try
+			case (itemType)
+				when("eglx.lang.ESmallfloat")
+					temp smallfloat = input;
+					isOneOrZero = temp == 0 || temp == 1;
+				when("eglx.lang.EFloat")
+					temp float = input;
+					isOneOrZero = temp == 0 || temp == 1;
+				when("eglx.lang.EInt")
+					temp int = input;
+					isOneOrZero = temp == 0 || temp == 1;
+				when("eglx.lang.ESmallint")
+					temp smallint = input;
+					isOneOrZero = temp == 0 || temp == 1;
+				when("eglx.lang.EBigint")
+					temp bigint = input;
+					isOneOrZero = temp == 0 || temp == 1;
+				otherwise
+					result any = (input as decimal);
+					if (result == null || !util.decimalValueIsValid(result, itemLength, itemDecimals))
+						throw new AnyException {message = getRuntimeMessage(msgKey, PARSE_ERROR, []), messageId = PARSE_ERROR};
+					end
+					isOneOrZero = ((input as decimal) == 0) || ((input as decimal) == 1);
+			end
+		onException(exception AnyException)
+			throw new AnyException {message = getRuntimeMessage(msgKey, PARSE_ERROR, []), messageId = PARSE_ERROR};
+		end
+		
+		if (isBoolean && !isOneOrZero)
+			throw new AnyException {message = getRuntimeMessage(msgKey, BOOLEAN_ERROR, []), messageId = BOOLEAN_ERROR};
+		end
+		
+		return(input);
+	end
+	
+	private function getInternalDateFormat(itemLength int in) returns(string)
+		case (itemLength)
+			when(5,7)
+				//This should be caught by calling functions and made more "user friendly"
+				throw new AnyException {message = "Unsupported dateformat length"};
+			when(6)
+				return("yyMMdd");
+			otherwise
+				return("yyyyMMdd");
+		end
+	end
+end

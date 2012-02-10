@@ -1,0 +1,127 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+handler List type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.rui.css",
+	@VEWidget{
+			category = "Display and Input",
+			template = "${typeName}{ values = [\"List\"], size = 1 }",
+			displayName = "List",
+			smallIcon = "icons/ctool16/list.gif",
+			largeIcon = "icons/ctool24/list.gif"
+	},
+	@MVCView{
+		retrieveViewHelper = getValueAsText,
+		publishHelper = setValueAsText
+	}
+}
+
+	values String[] { @EGLProperty { getMethod=getValues, setMethod=setValues }, @VEproperty{} };
+	selection Int {	@EGLProperty { getMethod=getSelection, setMethod=setSelection }, @VEProperty{} };
+	
+	/*
+		Size must be set for List to properly appear as a list in IE6
+	*/
+	size Int {	@EGLProperty { getMethod=getSize, setMethod=setSize }, @VEProperty{} };
+	
+	private options Widget[];
+	private sizeSet boolean = false;
+	private reverseTextDirectionThis String = "No";
+	private textLayoutThis String = "Logical";
+			
+	function setValues(value string[] in)
+		values = value;
+		removeChildren();
+		options.removeAll();
+		for(index int from 1 to value.getSize() by 1)
+			option Widget = new Widget{tagName = "option"};
+			option.innerHTML = value[index];
+			options.appendElement(option);
+			appendChild(option);
+		end
+		setSelection(1);		
+		if (!sizeSet)
+			setSize(values.getSize());
+		end
+		if(this.textLayoutThis == "Visual" || this.reverseTextDirectionThis == "Yes")		
+			setBiDiMarkers();
+		end		
+	end
+	
+	function getValues() returns (string[])
+		return (values);
+	end
+	
+	function setSelection(selection int in)
+		if (selection > 0 && selection <= options.getSize())
+			setAttribute("selectedIndex", selection - 1);
+		end
+	end
+	
+	function getSelection() returns (int)
+		return ( (getAttribute("selectedIndex") as int) + 1);
+	end
+	
+	function setSize(sizeIn int in)
+		if (sizeIn > 1)
+			size = sizeIn;
+			sizeSet = true;
+			setAttribute("size", sizeIn);
+		end
+	end
+	
+	function getSize() returns (int)
+		return (size);
+	end
+	
+	function setTextLayout(textLayout String in) 
+		this.textLayoutThis = textLayout;	
+		setBiDiMarkers();
+	end
+	
+	function getTextLayout() returns (String) 
+		return (this.textLayoutThis);
+	end
+
+	function setReverseTextDirection(reverseTextDirection String in) 
+		this.reverseTextDirectionThis = reverseTextDirection;			
+		setBiDiMarkers();
+	end
+	
+	function getReverseTextDirection() returns (String) 
+		return (this.reverseTextDirectionThis);
+	end
+		
+	private function setBiDiMarkers()
+		isVisual boolean = this.textLayoutThis == "Visual";
+		isReverseDirection boolean = this.reverseTextDirectionThis == "Yes";		
+		for(index int from 1 to options.getSize() by 1)			
+			options[index].setBiDiMarkers(isVisual,isReverseDirection);
+		end
+	end	
+	
+	private function setValueAsText(selectionText String in)
+		for(index int from 1 to values.getSize() by 1)
+			if(selectionText == values[index])
+				setSelection(index);
+				return;
+			end
+		end
+		if(values.getSize() > 0)
+			setSelection(1);
+		end
+	end
+	
+	private function getValueAsText() returns (String)
+		return (values[getSelection()]);
+	end
+end

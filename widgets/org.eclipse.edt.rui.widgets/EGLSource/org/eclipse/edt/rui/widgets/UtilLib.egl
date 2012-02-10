@@ -1,0 +1,66 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+import eglx.ui.rui.Widget;
+
+externalType UtilLibNative type JavaScriptObject{relativePath = "org/eclipse/edt/rui/widgets", externalName = "UtilLibNative"}
+
+	function getWidgetVariableName( widget Widget in ) returns (String);
+	function destroyWidget( widget Widget in );
+	function destroyWidgetChildren( widget Widget in );
+	function clearHTMLString();
+	function appendHTMLString(str String in);
+	function getHTMLString() returns(string);
+	function getMessage(id string in, inserts string[] in) returns(string);
+end
+
+// basic library
+library UtilLib  { }
+
+	utilNative UtilLibNative{};
+	private serialNum int = 0;
+	
+	function getSerial() returns(int)
+		serialNum = serialNum+1;
+		return(serialNum);
+	end
+	
+   	function getWidgetVariableName( widget Widget in ) returns (String)
+   		return (utilNative.getWidgetVariableName(widget));
+   	end
+   	
+   	function destroyWidget( widget Widget in )
+   		utilNative.destroyWidget(widget);
+   	end 
+   	
+   	function destroyWidgetChildren( widget Widget in )
+		if(widget isa Box)
+			box Box = widget as Box;
+			utilNative.destroyWidgetChildren(box.body);
+			box.removeChildren();
+			return;
+		end
+		if(widget isa GridLayout)
+			gridLayout GridLayout = widget as GridLayout;
+			utilNative.destroyWidgetChildren(gridLayout.table);
+			gridLayout.removeChildren();
+			return;
+		end
+   		utilNative.destroyWidgetChildren(widget);
+   	end
+   	
+   	function getMessage(id string in, inserts string[] in) returns(string)
+   		return(utilNative.getMessage(id, inserts));
+   	end 
+   	
+end

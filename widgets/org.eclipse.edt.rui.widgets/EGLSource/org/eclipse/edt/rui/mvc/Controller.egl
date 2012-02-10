@@ -1,0 +1,280 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+handler Controller
+	
+	use InternalCharFormatter;
+	use InternalDateFormatter;
+	use InternalFormatters;
+	use InternalNumericFormatter;
+	use InternalTimestampFormatter;
+	use InternalValidators;
+	
+	model any? { @EGLProperty { setMethod=setModel,getMethod=getModel } };
+	view Widget { @EGLProperty { getMethod=getView, setMethod=setView } };
+	
+	formatters MVCFormatterFunction[] = [];
+	unformatters MVCFormatterFunction[] = [];
+	validators MVCValidatorFunction[] = [];
+	
+	private internalFormatters MVCFormatterFunction[] = [];
+	private internalUnformatters MVCFormatterFunction[] = [];
+	private internalValidators MVCValidatorFunction[] = [];
+	
+	commitHelper MVCCommitter? { @EGLProperty { setMethod=setCommitHelper,getMethod=getCommitHelper } };
+	retrieveModelHelper MVCRetriever? { @EGLProperty { setMethod=setRetrieveModelHelper,getMethod=getRetrieveModelHelper } };
+	
+	// MVC View Functions
+	publishHelper MVCPublisher? { @EGLProperty { setMethod=setPublishHelper,getMethod=getPublishHelper } };
+	retrieveViewHelper MVCRetriever? { @EGLProperty { setMethod=setRetrieveViewHelper,getMethod=getRetrieveViewHelper } };	
+	publishMessageHelper MVCMessagePublisher? { @EGLProperty { setMethod=setPublishMessageHelper,getMethod=getPublishMessageHelper } };
+	retrieveValidStateHelper MVCValidStateRetriever? { @EGLProperty { setMethod=setRetrieveValidStateHelper,getMethod=getRetrieveValidStateHelper } };
+	showErrorState MVCShowErrorState?{@EGLProperty { setMethod=setShowErrorState, getMethod=getShowErrorState }};
+	
+	validStateSetter MVCValidStateSetter?;
+	
+	private errorMessage String? = null;
+	private initialClass String = "";
+	private isStateInitialized boolean = false;
+	private publishJob Job{runFunction = publish};
+	
+	private function setModel(model any? in)
+		this.model = model;
+		publishJob.schedule();
+	end
+
+	private function setView(view Widget in)
+		this.view = view;
+		// set up the validator handlers
+		view.onFocusGained ::= focusGained;		
+		view.onFocusLost ::= focusLost;
+		publishJob.schedule();
+	end
+
+	function commit()
+		try
+			MVCLib.setCurrentContext(this);
+			s String = unformat(retrieveViewHelper());
+			MVCLib.setCurrentContext(this);//unformat will set the context to null
+			commitHelper(s);
+			MVCLib.setCurrentContext(null);
+		onException (e AnyException)
+			MVCLib.setCurrentContext(null);
+			errorMessage = e.message;
+		end
+	end
+	
+	function publish()
+		try
+			MVCLib.setCurrentContext(this);
+			s String = format(retrieveModelHelper());
+			MVCLib.setCurrentContext(this);//format will set the context to null
+			publishHelper(s);
+			MVCLib.setCurrentContext(null);
+		onException (exception AnyException)
+			MVCLib.setCurrentContext(null);
+			throw(exception);
+		end
+	end	
+	
+	function isValid() returns(boolean)
+		valid boolean = validate();
+		notifyStateChange(valid);
+		return (valid);
+	end	
+	
+	function validate() returns(boolean)
+		isStateInitialized = true;		
+		try
+			MVCLib.setCurrentContext(this);
+			if(this.retrieveValidStateHelper != null)
+				errorMessage = this.retrieveValidStateHelper();
+				if (!(errorMessage == null || errorMessage == ""))
+					return (false);
+				end
+	 		end
+			s String = unformat(retrieveViewHelper());
+			MVCLib.setCurrentContext(this);//the unformat will set context to null, so just set current context again
+			if (errorMessage != null) 
+				return (false);
+			end
+			for (n int from 1 to internalValidators.getSize() by 1)
+				errorMessage = internalValidators[n](s);
+				if (!(errorMessage == null || errorMessage == ""))
+					return (false);
+				end
+			end
+			for (n int from 1 to validators.getSize() by 1)
+				errorMessage = validators[n](s);
+				if (!(errorMessage == null || errorMessage == ""))
+					return (false);
+				end
+			end
+			MVCLib.setCurrentContext(null);
+			return(true);
+		onException (exception AnyException)
+			MVCLib.setCurrentContext(null);
+			throw(exception);
+		end
+	end
+	
+	function format(s String in) returns(String)
+		try
+			MVCLib.setCurrentContext(this);
+			for (n int from internalFormatters.getSize() to 1 decrement by 1)
+				s = internalFormatters[n](s);
+			end
+			for (n int from formatters.getSize() to 1 decrement by 1)
+				s = formatters[n](s);
+			end
+			MVCLib.setCurrentContext(null);
+		onException (e AnyException)
+			MVCLib.setCurrentContext(null);
+			errorMessage = e.message;
+		end
+		return(s);
+	end
+	
+	function unformat(s String in) returns(String)
+		errorMessage = null;
+		try
+			MVCLib.setCurrentContext(this);
+			for (n int from unformatters.getSize() to 1 decrement by 1)
+				s = unformatters[n](s);
+			end
+			for (n int from internalUnformatters.getSize() to 1 decrement by 1)
+				s = internalUnformatters[n](s);
+			end
+			MVCLib.setCurrentContext(null);
+		onException (e AnyException)
+			MVCLib.setCurrentContext(null);
+			errorMessage = e.message;
+		end
+		return(s);
+	end
+	
+	function getValidators() returns(MVCValidatorFunction[])
+		return (validators);
+	end
+	
+	function getErrorMessage() returns(String?)
+		return (errorMessage);
+	end
+	
+	function setErrorMessage(msg String)
+		errorMessage = msg;
+	end
+	
+	private function getView() returns(Widget)
+		return(view);
+	end
+	
+	private function getModel() returns(any?)
+		return(model);
+	end
+	
+	private function focusLost(e Event in)
+		isValid();
+	end
+	
+	private function focusGained(e Event in)
+		try
+			MVCLib.setCurrentContext(this);
+			if(!(null == errorMessage || "" ==errorMessage) && null != this.publishMessageHelper)
+				if(null != showErrorState)
+					this.showErrorState(true);
+				end
+				this.publishMessageHelper(errorMessage);
+			end
+			MVCLib.setCurrentContext(null);
+		onException (exception AnyException)
+			MVCLib.setCurrentContext(null);
+			throw(exception);
+		end
+	end
+	
+	private function notifyStateChange(valid boolean in)
+		try
+			MVCLib.setCurrentContext(this);
+			initialClass = view.class;
+			if (valid)
+				view.class = initialClass;
+			else
+				view.class = initialClass + " FormErrorEditor";
+			end
+			if(!valid && null != showErrorState)
+				this.showErrorState(true);
+			end
+			if (validStateSetter != null)
+				validStateSetter(view, valid);
+			end
+			MVCLib.setCurrentContext(null);
+		onException (exception AnyException)
+			MVCLib.setCurrentContext(null);
+		end
+	end
+		
+	private function getCommitHelper() returns(MVCCommitter?)
+		return (commitHelper);
+	end
+	private function getPublishHelper() returns(MVCPublisher?)
+		return (publishHelper);
+	end
+	private function getRetrieveViewHelper() returns(MVCRetriever?)
+		return (retrieveViewHelper);
+	end
+	private function getRetrieveModelHelper() returns(MVCRetriever?)
+		return (retrieveModelHelper);
+	end
+	private function getPublishMessageHelper() returns(MVCMessagePublisher?)
+		return (publishMessageHelper);
+	end
+	private function getRetrieveValidStateHelper() returns(MVCValidStateRetriever?)
+		return (retrieveValidStateHelper);
+	end
+	private function getShowErrorState() returns(MVCShowErrorState?)
+		return (showErrorState);
+	end
+	
+	private function setCommitHelper(helper MVCCommitter? in)
+		commitHelper = helper;
+	end
+	private function setPublishHelper(helper MVCPublisher? in)
+		publishHelper = helper;
+		new Job { runFunction=publish }.schedule();
+	end
+	private function setRetrieveViewHelper(helper MVCRetriever? in)
+		retrieveViewHelper = helper;
+	end
+	private function setRetrieveModelHelper(helper MVCRetriever? in)
+		retrieveModelHelper = helper;
+		new Job { runFunction=publish }.schedule();
+	end
+	private function setPublishMessageHelper(helper MVCMessagePublisher? in)
+		publishMessageHelper = helper;
+	end
+	private function setRetrieveValidStateHelper(helper MVCValidStateRetriever? in)
+		retrieveValidStateHelper = helper;
+	end
+	private function setShowErrorState(helper MVCShowErrorState? in)
+		showErrorState = helper;
+	end
+	
+	/**
+	 * this returns if the validation has ever been run for this controller
+	*/
+	function isValidStateInitialized() returns (boolean)
+		return (isStateInitialized);
+	end 
+	
+end

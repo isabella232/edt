@@ -1,0 +1,115 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.widgets;
+
+Delegate
+	TooltipTextProvider(widget any in) returns(Box)
+end
+
+handler Tooltip type RUIWidget {onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.css"}
+
+	provider TooltipTextProvider?;
+	delay int = 400;
+	text String? = null;
+	
+	private container Div { 
+		class = "EglRuiTooltip",
+		onMouseOver ::= enterTooltip,
+		onMouseOut ::= leaveTooltip 
+	};
+	private shadow Shadow { div = container };
+	private tooltip Box { children = [shadow], visibility="hidden", zindex="99" , position="absolute" };
+	private defaultTip Box { children = [ new HTML {}] };
+	
+	private showJob Job { runFunction = showTooltip };
+	private hideJob Job { runFunction = hideTooltip };
+	private insideTarget boolean;
+	
+	function start()
+		document.body.appendChild(tooltip);
+	end 	
+	
+	function enable(widget any in)
+		target Widget = widget;
+		target.onMouseOver ::= activateTooltip;
+		target.onMouseOut ::= deactivateTooltip;
+		target.onClick ::= leaveTooltip;
+	end
+	
+	function deactivateTooltip(e Event in)
+		hideJob.schedule(delay);
+		insideTarget = false;
+	end
+	
+	function activateTooltip(e Event in)
+		insideTarget = true;
+		widget Widget = e.widget;
+		tip Box? = null;
+		if (provider == null && text != null)
+			tip = defaultTip;
+			(tip.children[1] as HTML).text = text;
+		else
+			tip = provider(e.widget);
+		end
+		if (tip != null)
+			h int = 10;
+			if (widget.height != "auto")
+                hs string = widget.height;
+                if ( hs isa Number )
+                    h = hs;
+                else
+                    // Handle the cases of values with unit, such as 10px, 10mm etc.
+                    // The unit is always 2 characters.
+                    len int = hs.length();
+                    if ( len > 2 && hs[1:len - 2] isa Number )
+                        h = hs[1:len - 2];
+                    end
+                end
+			end
+			y int = Mathlib.min(widget.y + h - 3, e.pageY + 10);		
+			container.removeChildren();
+			container.children = [tip];
+			container.opacity=1.0;
+			tooltip.x = e.pageX ;
+			tooltip.y = y;
+			hideJob.cancel();
+			showJob.schedule(delay);
+		else
+			hideTooltip();
+		end
+		e.stopPropagation();
+	end
+	
+	function showTooltip()
+		if (insideTarget)
+			tooltip.visibility = "visible";
+		end
+	end
+	
+	function hideTooltip()  
+		container.fadeOut(300, setInvisible);
+		insideTarget = false;
+	end
+	
+	function setInvisible()
+		container.opacity = 1.0;
+		tooltip.visibility = "hidden";
+	end
+	
+	function enterTooltip(e Event in)
+		hideJob.cancel();
+	end
+	function leaveTooltip(e Event in)
+		hideJob.schedule(200);
+	end
+	
+end

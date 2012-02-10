@@ -1,0 +1,24 @@
+/*******************************************************************************
+ * Copyright © 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package org.eclipse.edt.rui.mvc;
+
+externalType InternalFormattingUtil type JavaScriptObject
+	{relativePath = "org/eclipse/edt/rui/mvc",
+	 externalName = "InternalFormattingUtil"}
+	 
+	function decimalValueIsValid(a any in, length int in, decimals int in) returns(boolean);
+	function getCurrencySymbol() returns(string);
+	function getDecimalSeparator() returns(string);
+	function getGroupingSeparator() returns(string);
+	function asDate(s String in, mask String in, strict boolean in) returns(date);
+	function asTimestamp(s String in, mask String in, strict boolean in)returns(timestamp);
+end
