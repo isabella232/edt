@@ -84,7 +84,7 @@ ExternalType DojoTabContainer Extends DojoContainer type JavaScriptObject{
 	 * Event handler notifying users when a given tab is removed by the user. 
 	 * Use the options field to find out which one.
 	 */
-	onTabRemoved EventHandler[] {@Property, @VEEvent };
+	onTabRemoved EventHandler[] {@Property { getMethod="getOnTabRemoved" }, @VEEvent };
 	
 	/*
 	 *tabindex : The index of the tab that you want to remove.
