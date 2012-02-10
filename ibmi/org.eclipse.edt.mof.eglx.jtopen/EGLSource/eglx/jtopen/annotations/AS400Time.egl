@@ -1,7 +1,9 @@
 package eglx.jtopen.annotations;
 
 Record AS400Time type Annotation
-{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+{	
+	targets=[ElementKind.FieldMbr],
+	ValidationProxy="org.eclipse.edt.compiler.binding.AS400TimeAnnotationTypeBinding"
 }
 	ibmiFormat any = com.ibm.as400.access.AS400Time.FORMAT_ISO;
 	ibmiSeparatorChar string?;

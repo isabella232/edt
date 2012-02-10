@@ -1,7 +1,9 @@
 package eglx.jtopen.annotations;
 
 Record AS400DecimalZoned type Annotation
-{	targets=[ElementKind.FieldMbr, ElementKind.FunctionMbr]
+{	
+	targets=[ElementKind.FieldMbr],
+	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DecimalZonedAnnotationTypeBinding"
 }
 	decimals int?;
 	length int?;

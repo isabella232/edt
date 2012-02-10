@@ -1,0 +1,8 @@
+package eglx.jtopen.annotations;
+
+Record AS400Bin1 type Annotation
+{	
+	targets=[ElementKind.FieldMbr],
+	ValidationProxy="org.eclipse.edt.compiler.binding.AS400Bin1AnnotationTypeBinding"
+}
+end

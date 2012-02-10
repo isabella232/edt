@@ -5,7 +5,8 @@ import eglx.lang.resource;
 
 Record IBMiProgram type Annotation
 {
-	targets = [ElementKind.FunctionMbr]
+	targets = [ElementKind.FunctionMbr],
+	ValidationProxy="org.eclipse.edt.compiler.binding.IBMiProgramAnnotationTypeBinding"
 } 
 	programName string;
 	libraryName string;
