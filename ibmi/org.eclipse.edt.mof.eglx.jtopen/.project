@@ -3,7 +3,6 @@
 	<name>org.eclipse.edt.mof.eglx.jtopen</name>
 	<comment></comment>
 	<projects>
-		<project>org.eclipse.edt.externaltypes.jtopen</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

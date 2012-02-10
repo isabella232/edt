@@ -1,5 +1,4 @@
 package org.eclipse.edt.mof.eglx.jtopen;
 
-
-externalType IBMiFunction extends org.eclipse.edt.mof.egl.FunctionPart type MofClass
+externalType IBMiFunction extends org.eclipse.edt.mof.egl.EGLFunction type MofClass
 end
