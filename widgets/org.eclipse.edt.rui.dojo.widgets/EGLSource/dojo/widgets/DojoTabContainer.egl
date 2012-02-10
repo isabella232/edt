@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -78,7 +78,7 @@ ExternalType DojoTabContainer Extends DojoContainer type JavaScriptObject{
 	 * Event handler notifying users when a given tab is selected. 
 	 * Use the selection field to find out which one.
 	 */
-	onTabSelected EventHandler[] {@Property, @VEEvent };
+	onTabSelected EventHandler[] {@Property { getMethod="getOnTabSelected" }, @VEEvent };
 	
 	/*
 	 * Event handler notifying users when a given tab is removed by the user. 

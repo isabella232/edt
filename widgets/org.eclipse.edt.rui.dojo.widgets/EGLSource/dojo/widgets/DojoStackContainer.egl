@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -71,7 +71,7 @@ ExternalType DojoStackContainer Extends DojoContainer type JavaScriptObject{
 	 * Event handler notifying users when a given stack is selected. 
 	 * Use the selection field to find out which one.
 	 */
-	onStackSelected EventHandler[] {@Property, @VEEvent };
+	onStackSelected EventHandler[] {@Property{ getMethod="getOnStackSelected" }, @VEEvent };
 	
 	/*
 	 * Move to the previous stack
