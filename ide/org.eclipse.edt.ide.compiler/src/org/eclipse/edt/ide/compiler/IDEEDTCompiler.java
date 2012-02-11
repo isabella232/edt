@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.compiler;
 import java.io.File;
 
 import org.eclipse.edt.ide.core.IDEBaseCompiler;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 
 public class IDEEDTCompiler extends IDEBaseCompiler {
 	
@@ -31,7 +32,7 @@ public class IDEEDTCompiler extends IDEBaseCompiler {
 		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.services", "egllib");
 //FIXME JV this need to be extensible 
 		path += File.pathSeparator;
-		path += getPathToPluginDirectory("org.eclipse.edt.mof.eglx.jtopen", "egllib");
+		path += getPathToPluginDirectory(IBMiFactory.packageName, "egllib");
 		return path;
 	}
 
