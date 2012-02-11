@@ -19,7 +19,6 @@ public interface IBMiFactory extends EFactory  {
 	public static final IBMiFactory INSTANCE = new IBMiFactoryImpl();
 	public String packageName = "org.eclipse.edt.mof.eglx.jtopen";
 	
-
 	String IBMiFunction = packageName+".IBMiFunction";
 	String IBMiCallStatement = packageName+".IBMiCallStatement";
 	
