@@ -159,11 +159,11 @@ public class AS400GenType {
 	}
 	private void genAS400Time(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("com.ibm.as400.access.AS400Time(");
-		genAS400DateTimeConstructorOptions(member, type, annot, ctx, out);
+		genAS400TimeConstructorOptions(member, type, annot, ctx, out);
 		out.print(")");
 	}
 	private void genAS400Timestamp(Type type, Context ctx, TabbedWriter out, Annotation annot) {
-		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(");
+		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT,");
 		genTimestampPattern(type, ctx, out, annot);
 		out.print(")");
 	}
@@ -192,8 +192,8 @@ public class AS400GenType {
 		out.print(")");
 	}
 	private void genAS400Date(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
-		out.print("com.ibm.as400.access.AS400Date(");
-		genAS400DateTimeConstructorOptions(member, type, annot, ctx, out);
+		out.print("org.eclipse.edt.java.jtopen.access.AS400Date(");
+		genAS400DateConstructorOptions(member, type, annot, ctx, out);
 		out.print(")");
 	}
 	private void genAS400Float8(TabbedWriter out) {
@@ -226,10 +226,22 @@ public class AS400GenType {
 		out.print(Constants.as400ConnectionName);
 		out.print(")");
 	}
-	private void genAS400DateTimeConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
+	private void genAS400DateConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
+		if(!genAS400DateTimeAnnotationConstructorOptions(member, type, annot, ctx, out)){
+			out.print("com.ibm.as400.access.AS400Date.FORMAT_ISO");
+		}
+	}
+	private void genAS400TimeConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
+		if(!genAS400DateTimeAnnotationConstructorOptions(member, type, annot, ctx, out)){
+			out.print("com.ibm.as400.access.AS400Time.FORMAT_ISO");
+		}
+	}
+	private boolean genAS400DateTimeAnnotationConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
+		boolean addFormatAdded = false;
 		if(annot != null){
 			Expression ibmiFormat = (Expression)annot.getValue(Constants.subKey_ibmiFormat);
 			if(ibmiFormat != null){
+				addFormatAdded = true;
 				ctx.invoke(org.eclipse.edt.gen.java.templates.JavaTemplate.genExpression, ibmiFormat, ctx, out);
 				String ibmiSeperator = (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
 				if(ibmiSeperator != null && !ibmiSeperator.isEmpty()){
@@ -239,6 +251,7 @@ public class AS400GenType {
 				}
 			}
 		}
+		return addFormatAdded;
 	}
 	private void genDecimals(Type type, TabbedWriter out, Annotation typeAnnot) {
 		if(typeAnnot != null && typeAnnot.getValue(Constants.subKey_decimals) != null){
