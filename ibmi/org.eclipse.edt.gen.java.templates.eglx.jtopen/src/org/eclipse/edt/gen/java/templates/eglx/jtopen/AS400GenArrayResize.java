@@ -41,8 +41,7 @@ public class AS400GenArrayResize {
 	static AS400GenArrayResize INSTANCE = new AS400GenArrayResize();
 	public void genArrayResizeParameter(FunctionParameter parameter, Context ctx, TabbedWriter out, Function functionContainer){
 		if(parameter.getType() instanceof ArrayType){
-			Member cntMember = getCountMember(org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(parameter, Constants.signature_AS400Array, ctx), functionContainer);
-			genResizeMember(cntMember == null ? null : createMemberName(cntMember),
+			genResizeMember(getCountMember(parameter, ctx),
 					createMemberName(parameter), (ArrayType)parameter.getType(),
 					ctx, out, functionContainer, functionContainer);
 		}
@@ -73,19 +72,11 @@ public class AS400GenArrayResize {
 		return mn;
 	}
 	
-	private Member getCountMember(Annotation as400Array, Container container) {
-		Member cntMember = null;
-		if(as400Array != null && as400Array.getValue(Constants.subKey_validElementCountVariable) != null){
-			String validElementCountVariable = (String)as400Array.getValue(Constants.subKey_validElementCountVariable);
-			for(Member member : container.getMembers()){
-				if(member.getId().equalsIgnoreCase(validElementCountVariable)){
-					cntMember = member;
-					break;
-				}
-			}
-		}
-		return cntMember;
+	private MemberName getCountMember(Member member, Context ctx) {
+		Annotation as400Array = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Array, ctx);
+		return as400Array == null ? null : (MemberName)as400Array.getValue(Constants.subKey_validElementCountVariable);
 	}
+	
 	private void genArrayResizeElements(ArrayType type, Context ctx, TabbedWriter out, LHSExpr array, Function functionContainer) {
 		//FIXME what about multi dim arrays there is no elementCount for this case
 		String tempName = ctx.nextTempName();
@@ -156,8 +147,7 @@ public class AS400GenArrayResize {
 		for(Field field : part.getFields()){
 			//build new container expression
 			if(field.getType() instanceof ArrayType){
-				Member cntMember = getCountMember(org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(field, Constants.signature_AS400Array, ctx), part);
-				genResizeMember(cntMember == null ? null : createMemberAccess(cntMember, qual),
+				genResizeMember(getCountMember(field, ctx),
 						createMemberAccess(field, qual), 
 						(ArrayType)field.getType(),
 						ctx, out, part, functionContainer);
