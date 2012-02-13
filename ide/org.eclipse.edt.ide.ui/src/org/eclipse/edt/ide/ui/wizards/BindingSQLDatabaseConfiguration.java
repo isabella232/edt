@@ -142,7 +142,7 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		sqlBinding.setName(bindingName);
 		
 		Parameters params = null;
-		if (!getUri().startsWith("jndi://")) {
+		if (getUri() == null || !getUri().startsWith("jndi://")) {
 			params = DeploymentFactory.eINSTANCE.createParameters();
 			sqlBinding.setParameters(params);
 			EGLDDRootHelper.addOrUpdateParameter(params, SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_deployAsJndi, true);
