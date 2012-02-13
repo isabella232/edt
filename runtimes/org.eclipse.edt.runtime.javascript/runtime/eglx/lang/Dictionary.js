@@ -71,6 +71,7 @@ egl.eglx.lang.EDictionary.lookup = function (dict, key) {
  * won't work. 
  */ 
 egl.eglx.lang.EDictionary.set = function(dict, key, boxedValue){
+	 boxedValue = egl.boxAny(boxedValue);
 	 return egl.valueByKey(egl.checkNull(dict), key, boxedValue.eze$$value, boxedValue.eze$$signature);
 };
 
