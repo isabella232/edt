@@ -169,11 +169,12 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	}
 
 	private boolean isIBMiCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement callStatement){
-	
-
 		org.eclipse.edt.compiler.core.ast.Expression expr = callStatement.getInvocationTarget();
-		FunctionBinding function = (FunctionBinding)expr.resolveTypeBinding();
-		return function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null;
+		if(expr != null){
+			FunctionBinding function = (FunctionBinding)expr.resolveTypeBinding();
+			return function != null && function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null;
+		}
+		return false;
 	}
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
