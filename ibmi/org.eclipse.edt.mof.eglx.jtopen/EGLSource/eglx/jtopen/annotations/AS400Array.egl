@@ -6,6 +6,6 @@ Record AS400Array type Annotation
 	ValidationProxy="org.eclipse.edt.compiler.binding.AS400ArrayAnnotationTypeBinding"
 }
 	elementCount int;
-	returnCountVariable any?;
+	returnCountVariable FieldRef;
 	elementTypeAS400Annotation any?;
 end
