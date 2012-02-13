@@ -60,7 +60,6 @@ import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.NullableType;
 import org.eclipse.edt.compiler.core.ast.OnEventBlock;
 import org.eclipse.edt.compiler.core.ast.OpenStatement;
 import org.eclipse.edt.compiler.core.ast.OpenUIStatement;
@@ -95,7 +94,6 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.ForStatementV
 import org.eclipse.edt.compiler.internal.core.validation.statement.ForwardStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FreeSQLStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.FunctionDataDeclarationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.GetByPositionStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.GotoStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.IfStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LabelStatementValidator;

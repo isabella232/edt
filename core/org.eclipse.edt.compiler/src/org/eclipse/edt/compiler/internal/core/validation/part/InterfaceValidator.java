@@ -63,8 +63,6 @@ public class InterfaceValidator extends AbstractASTVisitor {
 					IProblemRequestor.INTERFACE_FUNCTION_CANNOT_BE_PRIVATE);
 		}
 
-		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
-
 		ServiceInterfaceValidatorUtil.validateParametersAndReturn(nestedFunction,false,problemRequestor);
 		
 		if (InternUtil.intern(nestedFunction.getName().getCanonicalName()) == InternUtil.intern(IEGLConstants.MNEMONIC_MAIN)){
