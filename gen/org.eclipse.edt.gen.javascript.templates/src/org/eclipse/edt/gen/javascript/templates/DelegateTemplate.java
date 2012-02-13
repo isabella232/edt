@@ -13,7 +13,11 @@ package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.MemberName;
 
 public class DelegateTemplate extends JavaScriptTemplate {
 
@@ -35,6 +39,16 @@ public class DelegateTemplate extends JavaScriptTemplate {
 	
 	public Boolean supportsConversion(Delegate part, Context ctx) {
 		return Boolean.FALSE;
+	}
+	
+	public void genConversionOperation(Delegate part, Context ctx, TabbedWriter out, AsExpression arg) {
+		Expression expr = arg.getObjectExpr();
+		if(expr instanceof MemberName && ((MemberName)expr).getMember() != null &&
+				((MemberName)expr).getMember() instanceof Function){
+			ctx.invoke(genCallbackAccesor, expr, ctx, out, null);
+		}else{
+			ctx.invokeSuper(this, genConversionOperation, part, ctx, out, arg);
+		}		
 	}
 
 }

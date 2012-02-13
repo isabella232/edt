@@ -237,8 +237,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print(arg.getObjectExpr().isNullable());
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
 			out.print(")");
-		} else {
-			out.print(eglnamespace + "eglx.lang.EAny.ezeCast("); // TODO sbg need to dynamically get class name
+		}else {
+			if( arg.getType() != TypeUtils.Type_ANY )
+				out.print(eglnamespace + "eglx.lang.EAny.ezeCast("); // TODO sbg need to dynamically get class name
 			if (arg.getObjectExpr().getType() != TypeUtils.Type_ANY) {
 				BoxingExpression boxingExpr = IrFactory.INSTANCE.createBoxingExpression();
 				boxingExpr.setExpr(arg.getObjectExpr());
@@ -247,9 +248,11 @@ public class TypeTemplate extends JavaScriptTemplate {
 			else {
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			}
-			out.print(", ");
-			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
-			out.print(")");
+			if( arg.getType() != TypeUtils.Type_ANY ){
+				out.print(", ");
+				ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.JavascriptImplementation);
+				out.print(")");
+			}			
 		}
 	}
 
