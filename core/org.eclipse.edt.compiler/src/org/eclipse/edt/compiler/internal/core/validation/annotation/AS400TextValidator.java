@@ -35,7 +35,7 @@ public class AS400TextValidator extends
 	private void validateLength(IAnnotationBinding ann, Node errorNode, IProblemRequestor problemRequestor) {
 		Integer length = getLength(ann);
 		if (length != null) {
-			if (length.intValue() < 1 || length.intValue() > 32) {
+			if (length.intValue() < 1 || length.intValue() > Integer.MAX_VALUE) {
 				problemRequestor.acceptProblem(errorNode, IProblemRequestor.AS400_BAD_LENGTH, new String[] {length.toString(), getName(), Integer.toString(Integer.MAX_VALUE)});
 			}
 		}
