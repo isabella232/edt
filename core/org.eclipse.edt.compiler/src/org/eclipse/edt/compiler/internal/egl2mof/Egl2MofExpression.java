@@ -32,11 +32,13 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.LibraryBinding;
 import org.eclipse.edt.compiler.binding.LibraryDataBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
+import org.eclipse.edt.compiler.binding.ServiceBinding;
 import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.binding.annotationType.EGLSystemConstantAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -568,7 +570,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				|| binding instanceof ExternalTypeBinding
 				|| binding instanceof EnumerationTypeBinding
 				|| binding instanceof FormBinding
-				|| binding instanceof ProgramBinding) {
+				|| binding instanceof ProgramBinding
+				|| binding instanceof InterfaceBinding
+				|| binding instanceof ServiceBinding) {
 			// Is only a proper reference to a part if given part type is allowed to have
 			// field references to the part itself (static reference) as opposed to field
 			// of an instance.  SimpleName AST values may be referencing a Part in the case
