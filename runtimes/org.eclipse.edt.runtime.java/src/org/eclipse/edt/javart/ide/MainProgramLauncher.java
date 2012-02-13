@@ -14,6 +14,7 @@ package org.eclipse.edt.javart.ide;
 import java.lang.reflect.Method;
 
 
+import eglx.lang.AnyException;
 import eglx.lang.SysLib;
 
 public class MainProgramLauncher {
@@ -61,7 +62,15 @@ public class MainProgramLauncher {
 		}
 		
 		String defaultDD = System.getProperty(DEFAULT_DD_ARG, null);
-		bindingProcessor.setDefaultDD(defaultDD);
+		if (defaultDD != null && (defaultDD = defaultDD.trim()).length() > 0) {
+			try {
+				bindingProcessor.setDefaultDD(defaultDD);
+			}
+			catch (AnyException ex) {
+				// Not fatal, print error and continue.
+				ex.printStackTrace();
+			}
+		}
 		
 		SysLib.setBindingResourceProcessor( bindingProcessor );
 		
