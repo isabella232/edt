@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Validation
+Bundle-SymbolicName: org.eclipse.edt.tests.validation
+Bundle-Version: 1.0.0.qualifier
+Export-Package: org.eclipse.edt.tests.validation.junit,
+ org.eclipse.edt.tests.validation.junit.ibmi
+Require-Bundle: org.junit;bundle-version="3.8.2",
+ org.eclipse.edt.compiler;bundle-version="0.7.0"
