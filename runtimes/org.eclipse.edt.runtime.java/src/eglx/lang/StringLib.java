@@ -130,8 +130,11 @@ public class StringLib extends ExecutableBase {
 			tokenStart++;
 		}
 		// If we're at the end of the substring, the search failed.
-		if (tokenStart >= searchEnd)
+		if (tokenStart >= searchEnd) {
+			// Store the end of the token in index.
+			index.ezeCopy(searchEnd + 1);
 			return null;
+		}
 		// Now we know we've found the beginning of a token. Find its end.
 		int tokenEnd = tokenStart + 1;
 		// Check each char to see if it's the start of a delimiter.
