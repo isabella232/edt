@@ -1257,6 +1257,35 @@ public interface IProblemRequestor {
     public static final int LIBRARY_HAS_INVALID_SUBTYPE = 5617;
     public static final int SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = 5618;
     
+    public static final int AS400_ANNOTATION_TYPE_MISMATCH = 5700;
+    public static final int WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS = 5701;
+    public static final int PARAMETER_ANNOTATION_INVALID = 5702;
+    public static final int IBMIPROGRAM_CONTAINER_INVALID = 5703;
+    public static final int IBMIPROGRAM_CANNOT_HAVE_STMTS = 5704;
+    public static final int IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN = 5705;
+    public static final int IBMIPROGRAM_CAN_ONLY_RETURN_INT = 5706;
+    public static final int AS400_BAD_LENGTH = 5707;
+    public static final int AS400_NEGATIVE_DECIMAL = 5708;
+    public static final int AS400_BAD_DECIMAL = 5709;
+    public static final int AS400_PROPERTY_REQUIRED = 5710;
+    public static final int AS400_PROPERTY_NOT_ALLOWED = 5711;
+    public static final int ELEMENTTYPE_ANNOTATION_INVALID = 5712;
+    public static final int RETURN_COUNT_VAR_MUST_BE_INT_COMPAT = 5713;
+    public static final int RETURN_COUNT_VAR_DEFINED_IN_WRONG_PLACE = 5714;
+    public static final int PROGRAM_PARAMETER_ANNOTATION_REQUIRED = 5715;
+    public static final int AS400_ANNOTATION_NULLABLE_TYPE_INVALID = 5716;
+    public static final int IBMIPROGRAM_PARM_TYPE_INVALID = 5717;
+    public static final int IBMIPROGRAM_NULLABLE_PARM_INVALID = 5718;
+    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID = 5719;
+    public static final int IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID = 5720;
+    public static final int IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID = 5721;
+    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID = 5722;
+    public static final int IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400 = 5723;
+    
+    
+    
+    
+    
 //6000-6050 ARE IN EGLMESSAGES
 
 	public static final int EMPTY_SQL_STRING = 6500;

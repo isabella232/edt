@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionSta
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
@@ -48,6 +49,8 @@ public class EDTCompiler extends BaseCompiler {
 			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib");
+			path += File.pathSeparator;
+			path += SystemEnvironmentUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib");
 			path += File.pathSeparator;
 			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
 		}

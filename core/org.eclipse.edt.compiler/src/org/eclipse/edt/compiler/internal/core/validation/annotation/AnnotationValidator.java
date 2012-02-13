@@ -449,7 +449,7 @@ public class AnnotationValidator {
 					SettingsBlock settingsBlock = setValuesExpression.getSettingsBlock();
 					
 					ITypeBinding annotationExpressionTBinding =  annotationExpressionDBinding.getType();
-					if(annotationExpressionTBinding != null && !((IAnnotationTypeBinding) annotationExpressionTBinding).hasSingleValue()) {					   
+					if(annotationExpressionTBinding != null) {					   
 						processSubAnnotations(annotationExpression, target, targetTypeBinding, null, (IAnnotationBinding)annotationExpressionDBinding, ((IAnnotationTypeBinding) annotationExpressionTBinding).getValidationProxy().getAnnotations());
 						processComplexAnnotationFields(target, settingsBlock, (IAnnotationTypeBinding) annotationExpressionTBinding);
 						

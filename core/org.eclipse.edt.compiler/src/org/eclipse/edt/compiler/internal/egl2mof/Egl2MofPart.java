@@ -128,9 +128,11 @@ abstract class Egl2MofPart extends Egl2MofBase {
 			List<EClass> superTypes = new ArrayList<EClass>();
 			for (Object name : node.getExtendedTypes()) {
 				IPartBinding superType = (IPartBinding)((Name)name).resolveBinding();
-				EClass superTypeClass = (EClass)mofTypeFor(superType);
-				fixSuperTypes(superTypeClass);
-				superTypes.add((EClass)mofTypeFor(superType));
+				if (Binding.isValidBinding(superType)) {
+					EClass superTypeClass = (EClass)mofTypeFor(superType);
+					fixSuperTypes(superTypeClass);
+					superTypes.add((EClass)mofTypeFor(superType));
+				}
 			}
 			((EClass)part).addSuperTypes(superTypes);
 		}

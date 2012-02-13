@@ -47,7 +47,12 @@ public abstract class AnnotationTypeBinding extends TypeBinding implements IAnno
 	/**
      * @param simpleName
      */
-    public AnnotationTypeBinding(String caseSensitiveInternedName, ITypeBinding singleValueType) {
+
+    public AnnotationTypeBinding(String caseSensitiveInternedName) {
+        this(caseSensitiveInternedName, new Object[] {});
+    }
+	
+	public AnnotationTypeBinding(String caseSensitiveInternedName, ITypeBinding singleValueType) {
         this(caseSensitiveInternedName, new Object[] {
         	"value",	singleValueType
         });

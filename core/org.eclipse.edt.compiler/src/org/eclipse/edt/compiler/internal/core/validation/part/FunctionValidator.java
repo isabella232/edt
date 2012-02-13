@@ -83,6 +83,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.AnnotationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
@@ -163,6 +164,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkFunctionName(nestedFunction.getName(), true);
 		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
 		checkForConstructorCalls(nestedFunction);
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction);
+
 		
 		return true;
 	}
