@@ -751,8 +751,10 @@ class Egl2MofMember extends Egl2MofPart {
 					// as in "displayName = "abc" being the same thing as "@DisplayName{"abc")"
 					EField field = (EField)target.getEClass().getEField((nameExpr.getNameComponents()[0]));
 					if (field == null) {
-						source = mofValueFrom(nameExpr.resolveBinding());
-						((Element)target).getAnnotations().add((Annotation)source);
+						if (Binding.isValidBinding(nameExpr.resolveBinding())) {
+							source = mofValueFrom(nameExpr.resolveBinding());
+							((Element)target).getAnnotations().add((Annotation)source);
+						}
 					}
 					else {
 						source = evaluateExpression(assignment.getRightHandSide());
