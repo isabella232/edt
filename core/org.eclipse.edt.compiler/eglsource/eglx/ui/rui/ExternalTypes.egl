@@ -46,20 +46,20 @@ ExternalType Document type JavaScriptObject {
 		relativePath = "eglx/ui/rui"
 	}
 	
-	onKeyDown EventHandler?  { @Property { getMethod="getOnKeyDown" } };
-	onKeyPress EventHandler? { @Property { getMethod="getOnKeyPress" } };
-	onKeyUp EventHandler? { @Property { getMethod="getOnKeyUp" } };
-	onMouseDown EventHandler? { @Property { getMethod="getOnMouseDown" } };
-	onMouseMove EventHandler? { @Property { getMethod="getOnMouseMove" } };
-	onMouseOver EventHandler? { @Property { getMethod="getOnMouseOver" } };
-	onMouseOut EventHandler? { @Property { getMethod="getOnMouseOut" } };
-	onMouseUp EventHandler? { @Property { getMethod="getOnMouseUp" } };
-	onScroll EventHandler? { @Property { getMethod="getOnScroll" } };
-	onChange EventHandler? { @Property { getMethod="getOnChange" } };						
-	onClick EventHandler? { @Property { getMethod="getOnClick" } };
+	onKeyDown EventHandler?  { @Property { setMethod="setOnKeyDown" } };
+	onKeyPress EventHandler? { @Property { setMethod="setOnKeyPress" } };
+	onKeyUp EventHandler? { @Property { setMethod="setOnKeyUp" } };
+	onMouseDown EventHandler? { @Property { setMethod="setOnMouseDown" } };
+	onMouseMove EventHandler? { @Property { setMethod="setOnMouseMove" } };
+	onMouseOver EventHandler? { @Property { setMethod="setOnMouseOver" } };
+	onMouseOut EventHandler? { @Property { setMethod="setOnMouseOut" } };
+	onMouseUp EventHandler? { @Property { setMethod="setOnMouseUp" } };
+	onScroll EventHandler? { @Property { setMethod="setOnScroll" } };
+	onChange EventHandler? { @Property { setMethod="setOnChange" } };						
+	onClick EventHandler? { @Property { setMethod="setOnClick" } };
 
-	onSelectStart EventHandler? { @Property { getMethod="getOnSelecStart" } };
-	onDragStart EventHandler? { @Property { getMethod="getOnDragStart" } };
+	onSelectStart EventHandler? { @Property { setMethod="setOnSelecStart" } };
+	onDragStart EventHandler? { @Property { setMethod="setOnDragStart" } };
 	
 	body Widget;
 	
