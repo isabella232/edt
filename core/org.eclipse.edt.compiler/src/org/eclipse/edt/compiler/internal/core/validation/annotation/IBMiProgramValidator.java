@@ -242,7 +242,7 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 			return;
 		}
 		
-		IDataBinding srvPgmAnn = (AnnotationFieldBinding)ibmiAnn.findData("isServiceProgram");
+		IDataBinding srvPgmAnn = ibmiAnn.findData("isServiceProgram");
 		if (!Binding.isValidBinding(srvPgmAnn) || ((AnnotationFieldBinding)srvPgmAnn).getValue() != Boolean.YES) {
 			problemRequestor.acceptProblem(function.getReturnDeclaration(), IProblemRequestor.IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN, new String[] {function.getName().getCaseSensitiveIdentifier()});			
 		}
