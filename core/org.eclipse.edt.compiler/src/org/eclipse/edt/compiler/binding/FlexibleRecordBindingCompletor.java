@@ -58,8 +58,6 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
         flexibleRecordBindingFieldsCompletor = new FlexibleRecordBindingFieldsCompletor(currentScope, recordBinding, record.getName().getCanonicalName(), dependencyRequestor, problemRequestor, compilerOptions);
 		//Next, we need to complete the fields in the record
         record.accept(flexibleRecordBindingFieldsCompletor);
-        
-        addImplicitFieldsFromAnnotations();
 
         //now we will need to process the SettingsBlock for the
         // record...the collector has already gathered those for us.
@@ -210,52 +208,6 @@ public class FlexibleRecordBindingCompletor extends DefaultBinder {
                 || annotationIs(annotationType, new String[] {"egl", "core"}, "Redefines")
 				|| annotationIs(annotationType, new String[] {"egl", "ui", "console"}, "Binding");
     }
-    
-    private void addImplicitFieldsFromAnnotations() {
-    	int index = 0;
-		for(Iterator iter = recordBinding.getAnnotations().iterator(); iter.hasNext();) {
-			IAnnotationBinding aBinding = (IAnnotationBinding) iter.next();
-			String annotationContributingFieldsName = aBinding.getCaseSensitiveName();
-			aBinding = aBinding.getAnnotation(AnnotationAnnotationTypeBinding.getInstance());
-			if(aBinding != null) {				
-				aBinding = (IAnnotationBinding) aBinding.findData("implicitFields");
-				if(IBinding.NOT_FOUND_BINDING != aBinding) {					
-					IAnnotationBinding[] implicitFields = (IAnnotationBinding[]) aBinding.getValue();
-					for(int i = 0; i < implicitFields.length; i++) {
-						IAnnotationBinding implicitField = implicitFields[i];
-						IAnnotationBinding fieldNameBinding = (IAnnotationBinding) implicitField.findData("FieldName");
-						IAnnotationBinding fieldTypeBinding = (IAnnotationBinding) implicitField.findData("FieldType");
-						if(IBinding.NOT_FOUND_BINDING != fieldNameBinding && IBinding.NOT_FOUND_BINDING != fieldTypeBinding) {
-							FlexibleRecordFieldBinding newField = new FlexibleRecordFieldBinding(
-								InternUtil.internCaseSensitive((String) fieldNameBinding.getValue()),
-								recordBinding,
-								(ITypeBinding) fieldTypeBinding.getValue()
-							);
-							
-							newField.setImplicit(true);
-							newField.addAnnotations(implicitField.getAnnotations());
-
-							Node existingField = flexibleRecordBindingFieldsCompletor.getNode(newField.getName());
-							if(existingField == null) {
-								recordBinding.addField(newField, index);
-								index = index + 1;
-							}
-							else {
-								problemRequestor.acceptProblem(
-									existingField,
-									IProblemRequestor.USER_FIELD_NAME_CONFLICTS_WITH_IMPLICIT_FIELD_NAME,
-									new String[] {
-										annotationContributingFieldsName,
-										recordBinding.getCaseSensitiveName(),										
-										newField.getCaseSensitiveName()
-									});
-							}
-						}
-					}
-				}
-			}
-		}		
-	}
     
     private void convertItemsToNullableIfNeccesary() {
 		IAnnotationBinding aBinding = recordBinding.getAnnotation(new String[] {"egl", "core"}, "I4GLItemsNullable");
