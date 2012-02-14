@@ -150,7 +150,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			args.append("\""); //$NON-NLS-1$
 			
 			if (TestServerPlugin.getDefault().getPreferenceStore().getBoolean(ITestServerPreferenceConstants.PREFERENCE_TESTSERVER_ENABLE_DEBUG)) {
-				args.append(" -d");
+				args.append(" -d"); //$NON-NLS-1$
 			}
 			
 			// Append the configurators argument.
@@ -356,7 +356,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		
 		if (ITestServerPreferenceConstants.PREFERENCE_TESTSERVER_ENABLE_DEBUG.equals(event.getProperty())) {
 			try {
-				int status = invokeServlet(DefaultServlet.SERVLET_PATH, DefaultServlet.ARG_DEBUG + "=" + event.getNewValue());
+				int status = invokeServlet(DefaultServlet.SERVLET_PATH, DefaultServlet.ARG_DEBUG + "=" + event.getNewValue()); //$NON-NLS-1$
 				if (status != 200) {
 					TestServerPlugin.getDefault().log(NLS.bind(TestServerMessages.DefaultServletBadStatus, new Object[]{status, project.getName()}));
 				}
