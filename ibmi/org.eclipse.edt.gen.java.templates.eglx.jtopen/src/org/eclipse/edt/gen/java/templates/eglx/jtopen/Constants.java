@@ -56,7 +56,7 @@ public interface Constants {
 	static final String subKey_libraryName = "libraryName";
 	static final String subKey_programName = "programName";
 	public static final String subKey_encoding = "encoding";
-	public static final String subKey_timeZoneID = "timeZoneID";
+	public static final String subKey_timeZoneID = "ibmiTimezoneID";
 	public static final String subKey_length = "length";
 	public static final String subKey_preserveTrailingSpaces = "preserveTrailingSpaces";
 	public static final String subKey_decimals = "decimals";
