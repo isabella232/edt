@@ -62,8 +62,20 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 					if (sqlBinding.isDeployAsJndi()) {
 						String jndiName = sqlBinding.getJndiName();
 						if (jndiName != null && (jndiName = jndiName.trim()).length() > 0) {
-							// We configured the data source to have the username / password already.
-							return new SQLJNDIDataSource(jndiName);
+							EDictionary props = null;
+							if (sqlBinding.isApplicationAuthentication()) {
+								SQLConnectionInfo info = getParsedConnectionProfileSettings(uri.substring(12)); // "workspace://".length()
+								if (info != null) {
+									props = new EDictionary();
+									if (info.username != null && info.username.length() > 0) {
+										props.put("user", info.username); //$NON-NLS-1$
+									}
+									if (info.password != null && info.password.length() > 0) {
+										props.put("password", info.password); //$NON-NLS-1$
+									}
+								}
+							}
+							return new SQLJNDIDataSource(jndiName, props);
 						}
 						else {
 							System.err.println("WARN: jndiName parameter missing for resource binding " + sqlBinding.getName() + ". JNDI connection will NOT be used"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -102,8 +114,19 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 			else if (sqlBinding.isDeployAsJndi()) {
 				String jndiName = sqlBinding.getJndiName();
 				if (jndiName != null && (jndiName = jndiName.trim()).length() > 0) {
-					// We configured the data source to have the username / password already.
-					return new SQLJNDIDataSource(jndiName);
+					EDictionary props = null;
+					if (sqlBinding.isApplicationAuthentication()) {
+						props = new EDictionary();
+						String user = sqlBinding.getSqlID();
+						String pass = sqlBinding.getSqlPassword();
+						if (user.length() > 0) {
+							props.put("user", user); //$NON-NLS-1$
+						}
+						if (pass.length() > 0) {
+							props.put("password", pass); //$NON-NLS-1$
+						}
+					}
+					return new SQLJNDIDataSource(jndiName, props);
 				}
 				else {
 					System.err.println("WARN: jndiName parameter missing for resource binding " + sqlBinding.getName() + ". JNDI connection will NOT be used"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -139,7 +162,7 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 	public SQLConnectionInfo getParsedConnectionProfileSettings(String profileName) {
 		String profileInfo = getConnectionProfileSettings(profileName);
 		if (profileInfo != null && profileInfo.length() > 0) {
-			String[] tokens = profileInfo.split(";");
+			String[] tokens = profileInfo.split(";"); //$NON-NLS-1$
 			if (tokens.length > 0) {
 				String url = tokens[0].trim();
 				String user = null;
