@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.javascript.internal.model;
 
-import org.eclipse.edt.debug.javascript.internal.model.RUIVariable;
-
 public interface IVariableQueryCompletion
 {
 	void completed( Object value );
