@@ -10,10 +10,15 @@
  *******************************************************************************/
 package org.eclipse.edt.java.jtopen.access;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+
+import com.ibm.as400.access.AS400;
+
+import eglx.lang.StringLib;
 
 
 public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
@@ -21,9 +26,16 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 
 	private int startCode;
 	private int endCode;
+	private SimpleDateFormat sdf;
 	
-	public AS400Timestamp(int ibmiFormat, int startCode, int endCode) {
-		super();
+	public AS400Timestamp(int ibmiFormat, int startCode, int endCode, AS400 system) {
+		super(AS400DateTimeUtil.getIBMiTimezoneID(system));
+		this.startCode = startCode;
+		this.endCode = endCode;
+	}
+
+	public AS400Timestamp(int ibmiFormat, int startCode, int endCode, String timeZoneID) {
+		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID));
 		this.startCode = startCode;
 		this.endCode = endCode;
 	}
@@ -37,24 +49,34 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 	@Override
 	public byte[] toBytes(Object object) {
 		if(object instanceof Calendar){
-			object = new java.sql.Timestamp(((Calendar)object).getTimeInMillis());
+			object = toSqlTimestamp((Calendar)object);
 		}
 		return super.toBytes(object);
 	}
 	@Override
 	public int toBytes(Object object, byte[] bytes) {
 		if(object instanceof Calendar){
-			object = new java.sql.Timestamp(((Calendar)object).getTimeInMillis());
+			object = toSqlTimestamp((Calendar)object);
 		}
 		return super.toBytes(object, bytes);
 	}
 	@Override
 	public int toBytes(Object object, byte[] bytes, int offset) {
 		if(object instanceof Calendar){
-			object = new java.sql.Timestamp(((Calendar)object).getTimeInMillis());
+			object = toSqlTimestamp((Calendar)object);
 		}
 		return super.toBytes(object, bytes, offset);
 	}
+	private Object toSqlTimestamp(Calendar cal) {
+		Object returnVal = null;
+		try {
+			returnVal = new java.sql.Timestamp(ibmiSimpleDateFormat().parse(StringLib.format(cal, ETimestamp.DefaultFormatPattern)).getTime());
+		} catch (ParseException e) { 
+			e.printStackTrace();
+		}
+		return returnVal;
+	}
+	
 	@Override
 	public Object toObject(byte[] arg0) {
 		Object obj = super.toObject(arg0);
@@ -71,11 +93,19 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 			return ETimestamp.asTimestamp((Calendar)obj, startCode, endCode);
 		}
 		else if(obj instanceof java.sql.Timestamp){
-			return ETimestamp.asTimestamp(DateTimeUtil.getNewCalendar((java.sql.Timestamp)obj), startCode, endCode);
+			return ETimestamp.asTimestamp(ibmiSimpleDateFormat().format((java.sql.Timestamp)obj), startCode, endCode);
 		}
 		else if(obj instanceof java.util.Date){
-			return ETimestamp.asTimestamp(DateTimeUtil.getNewCalendar((java.util.Date)obj), startCode, endCode);
+			return ETimestamp.asTimestamp(ibmiSimpleDateFormat().format((java.util.Date)obj), startCode, endCode);
 		}
 		return obj;
 	}
+	private SimpleDateFormat ibmiSimpleDateFormat(){
+		if(sdf == null){
+			sdf = new SimpleDateFormat(ETimestamp.DefaultFormatPattern);
+			sdf.setTimeZone(getTimeZone());
+		}
+		return sdf;
+	}
+
 }
