@@ -10,15 +10,10 @@
  *******************************************************************************/
 package org.eclipse.edt.java.jtopen.access;
 
-import java.io.IOException;
-
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
 import com.ibm.as400.access.AS400;
-import com.ibm.as400.access.AS400SecurityException;
 import com.ibm.as400.access.BidiConversionProperties;
-import com.ibm.as400.access.ErrorCompletingRequestException;
-import com.ibm.as400.access.ObjectDoesNotExistException;
 
 
 public class AS400Text extends com.ibm.as400.access.AS400Text {
@@ -27,24 +22,6 @@ public class AS400Text extends com.ibm.as400.access.AS400Text {
 	private boolean retainTrailingSpaces;
 	public AS400Text(int length, AS400 system, boolean retainTrailingSpaces) {
 		super(length, system);
-		try {
-			System.out.println(system.getTimeZone().getDisplayName());
-		} catch (AS400SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ErrorCompletingRequestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ObjectDoesNotExistException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		this.retainTrailingSpaces = retainTrailingSpaces;
 	}
 
