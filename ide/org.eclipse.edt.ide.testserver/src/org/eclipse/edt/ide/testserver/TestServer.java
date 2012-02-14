@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.ide.internal.testserver.ContributionConfiguration;
-import org.eclipse.edt.ide.internal.testserver.Logger;
 import org.eclipse.edt.ide.internal.testserver.DefaultServlet;
+import org.eclipse.edt.ide.internal.testserver.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.Loader;

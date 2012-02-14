@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.internal.testserver;
 
-import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.ide.testserver.ITestServerPreferenceConstants;
 import org.eclipse.edt.ide.testserver.TestServerMessages;
+import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.ide.ui.internal.preferences.AbstractPreferencePage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;

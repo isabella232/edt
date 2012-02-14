@@ -12,8 +12,8 @@
 package org.eclipse.edt.ide.internal.testserver;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.ide.testserver.ITestServerPreferenceConstants;
+import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 /**
