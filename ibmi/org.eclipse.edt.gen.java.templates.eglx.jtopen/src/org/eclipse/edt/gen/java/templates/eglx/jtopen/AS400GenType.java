@@ -165,7 +165,21 @@ public class AS400GenType {
 	private void genAS400Timestamp(Type type, Context ctx, TabbedWriter out, Annotation annot) {
 		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT,");
 		genTimestampPattern(type, ctx, out, annot);
+		out.print(", ");
+		addTimezoneID(out, annot);
 		out.print(")");
+	}
+	private void addTimezoneID(TabbedWriter out, Annotation annot) {
+		String timeZone = annot == null ? null : (String)annot.getValue(Constants.subKey_timeZoneID);
+		if(timeZone != null && !timeZone.isEmpty()){
+			out.print("\"");
+			out.print(timeZone);
+			out.print("\"");
+		}
+		else{
+			out.print(Constants.as400ConnectionName);
+			out.print(".getAS400()");
+		}
 	}
 	private void genAS400Text(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("org.eclipse.edt.java.jtopen.access.AS400Text(");
@@ -194,6 +208,8 @@ public class AS400GenType {
 	private void genAS400Date(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("org.eclipse.edt.java.jtopen.access.AS400Date(");
 		genAS400DateConstructorOptions(member, type, annot, ctx, out);
+		out.print(", ");
+		addTimezoneID(out, annot);
 		out.print(")");
 	}
 	private void genAS400Float8(TabbedWriter out) {

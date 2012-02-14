@@ -40,7 +40,7 @@ public class AS400GenHelper {
 		}
 	}
 	public void genHelperClass(LogicAndDataPart part, Context ctx, TabbedWriter out){
-		if(CommonUtilities.getGeneratedHelpers(ctx).add(part.getTypeSignature())){
+		if(!part.hasCompileErrors() && CommonUtilities.getGeneratedHelpers(ctx).add(part.getTypeSignature())){
 			out.println();
 			out.print("protected class ");
 			genHelperClassName(part, out);
