@@ -98,7 +98,7 @@ public class AS400Date extends com.ibm.as400.access.AS400Date {
 	private SimpleDateFormat ibmiSimpleDateFormat(){
 		if(sdf == null){
 			sdf = new SimpleDateFormat("MM/dd/yyyy");
-			sdf.setTimeZone(this.getTimeZone());
+			sdf.setTimeZone(getTimeZone());
 		}
 		return sdf;
 	}

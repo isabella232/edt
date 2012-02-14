@@ -31,7 +31,6 @@ import eglx.lang.InvocationException;
 
 public class IBMiProgramCall {
 
-	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	public enum ParameterTypeKind{IN, INOUT, OUT};
 	public static Integer ezeRunProgram(final String library,
