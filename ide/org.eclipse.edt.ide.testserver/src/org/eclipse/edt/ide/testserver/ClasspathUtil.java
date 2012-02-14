@@ -59,6 +59,11 @@ public class ClasspathUtil {
 	public final static char[] SUFFIX_EGLDD = ".EGLDD".toCharArray(); //$NON-NLS-1$
 	
 	/**
+	 * The classpath entries that are applied to all test servers.
+	 */
+	private static List<String> testServerBaseEntries;
+	
+	/**
 	 * Creates a classpath to be added to a a launch configuration for running the Jetty server. The appropriate Jetty,
 	 * servlet, and EDT plug-ins will be added to the classpath, as well as ensuring any Java projects on the EGL build path
 	 * are included in the classpath if they aren't already. Finally, classpath contributions from
@@ -73,26 +78,32 @@ public class ClasspathUtil {
 		IProject project = config.getProject();
 		String entry;
 		
-		// Add all org.eclipse.jetty.* plug-ins.
-		Bundle[] bundles = TestServerPlugin.getDefault().getBundle().getBundleContext().getBundles();
-		for (Bundle bundle : bundles) {
-			if (bundle.getSymbolicName().startsWith("org.eclipse.jetty.")) { //$NON-NLS-1$
-				entry = getClasspathEntry(bundle);
-				if (entry != null) {
-					classpath.add(entry);
+		if (testServerBaseEntries == null) {
+			testServerBaseEntries = new ArrayList<String>(20);
+
+			// Add all org.eclipse.jetty.* plug-ins.
+			Bundle[] bundles = TestServerPlugin.getDefault().getBundle().getBundleContext().getBundles();
+			for (Bundle bundle : bundles) {
+				if (bundle.getSymbolicName().startsWith("org.eclipse.jetty.")) { //$NON-NLS-1$
+					entry = getClasspathEntry(bundle);
+					if (entry != null) {
+						testServerBaseEntries.add(entry);
+					}
 				}
+			}
+			
+			entry = getClasspathEntry("javax.servlet"); //$NON-NLS-1$
+			if (entry != null) {
+				testServerBaseEntries.add(entry);
+			}
+			
+			entry = getClasspathEntry("org.eclipse.edt.ide.testserver"); //$NON-NLS-1$
+			if (entry != null) {
+				testServerBaseEntries.add(entry);
 			}
 		}
 		
-		entry = getClasspathEntry("javax.servlet"); //$NON-NLS-1$
-		if (entry != null) {
-			classpath.add(entry);
-		}
-		
-		entry = getClasspathEntry("org.eclipse.edt.ide.testserver"); //$NON-NLS-1$
-		if (entry != null) {
-			classpath.add(entry);
-		}
+		classpath.addAll(testServerBaseEntries);
 		
 		// The main project.
 		classpath.add(getWorkspaceProjectClasspathEntry(project.getName()));
