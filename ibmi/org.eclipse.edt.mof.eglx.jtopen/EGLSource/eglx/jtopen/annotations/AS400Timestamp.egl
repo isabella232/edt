@@ -7,5 +7,5 @@ Record AS400Timestamp type Annotation
 }
 	ibmiFormat any = com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT;
 	eglPattern string?;
-	timeZoneID string?;
+	ibmiTimezoneID string?;
 end

@@ -7,5 +7,5 @@ Record AS400Time type Annotation
 }
 	ibmiFormat any = com.ibm.as400.access.AS400Time.FORMAT_ISO;
 	ibmiSeparatorChar string? = "";
-	timeZoneID string?;
+	ibmiTimezoneID string?;
 end
