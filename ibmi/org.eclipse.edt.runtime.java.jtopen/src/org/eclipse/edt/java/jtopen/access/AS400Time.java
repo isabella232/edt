@@ -12,16 +12,25 @@ package org.eclipse.edt.java.jtopen.access;
 
 import java.util.Calendar;
 
+import com.ibm.as400.access.AS400;
+
 
 public class AS400Time extends com.ibm.as400.access.AS400Time {
 	private static final long serialVersionUID = 1L;
 
-	public AS400Time(int ibmiFormat) {
-		super(ibmiFormat);
+	public AS400Time(int ibmiFormat, String timeZoneID) {
+		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID), ibmiFormat);
+	}
+	public AS400Time(int ibmiFormat, AS400 system) {
+		super(AS400DateTimeUtil.getIBMiTimezoneID(system), ibmiFormat);
 	}
 
-	public AS400Time(int ibmiFormat, Character seperator) {
-		super(ibmiFormat, seperator);
+	public AS400Time(int ibmiFormat, Character seperator, AS400 system ){
+		super(AS400DateTimeUtil.getIBMiTimezoneID(system), ibmiFormat, seperator);
+	}
+
+	public AS400Time(int ibmiFormat, Character seperator, String timeZoneID ) {
+		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID), ibmiFormat, seperator);
 	}
 
 	@Override
