@@ -342,10 +342,10 @@ egl.defineClass(
 	},
 	
 	"getUserData" :function(){
-		return(data);
+		return(this.data);
 	},
 	"setUserData":function(value){
-		data = value;
+		this.data = value;
 	},
 	"getID" : function(){
 		return this.eze$$getDOMElement().id;
