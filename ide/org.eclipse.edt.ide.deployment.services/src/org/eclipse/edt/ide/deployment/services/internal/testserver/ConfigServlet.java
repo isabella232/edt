@@ -127,7 +127,7 @@ public class ConfigServlet extends HttpServlet {
 	/**
 	 * Class to use for connection pooling, possibly null.
 	 */
-	private final Class basicDataSourceClass;
+	private final String basicDataSourceClassName;
 	
 	/**
 	 * Constructor.
@@ -141,22 +141,24 @@ public class ConfigServlet extends HttpServlet {
 		this.addedDataSources = new ArrayList<NamingEntry>();
 		
 		// See if a connection pooling data source is available.
-		Class clazz = null;
+		String className = null;
 		try {
-			clazz = Class.forName("org.apache.tomcat.dbcp.dbcp.BasicDataSource"); //$NON-NLS-1$
+			Class.forName("org.apache.tomcat.dbcp.dbcp.BasicDataSource"); //$NON-NLS-1$
+			className = EGLBasicDataSource1.class.getCanonicalName();
 		}
 		catch (Throwable t) {
 		}
-		if (clazz == null) {
+		if (className == null) {
 			try {
-				clazz = Class.forName("org.apache.commons.dbcp.BasicDataSource"); //$NON-NLS-1$
+				Class.forName("org.apache.commons.dbcp.BasicDataSource"); //$NON-NLS-1$
+				className = EGLBasicDataSource2.class.getCanonicalName();
 			}
 			catch (Throwable t) {
 			}
 		}
-		basicDataSourceClass = clazz;
+		basicDataSourceClassName = className;
 		
-		if (basicDataSourceClass == null) {
+		if (basicDataSourceClassName == null) {
 			TestServer.logWarning("Apache's BasicDataSource class is not on the classpath so connection pooling for JNDI data sources will not be used. " +
 					"To enable connection pooling you can add an Apache Tomcat runtime to your workspace via Preferences > Server > Runtime Environments.");
 		}
@@ -312,11 +314,11 @@ public class ConfigServlet extends HttpServlet {
 				settings.put("username", info.username); //$NON-NLS-1$
 				settings.put("password", info.password); //$NON-NLS-1$
 				settings.put("url", info.url); //$NON-NLS-1$
-				if (basicDataSourceClass != null) {
+				if (basicDataSourceClassName != null) {
 					settings.put("maxActive", "5"); //$NON-NLS-1$ //$NON-NLS-2$
 					settings.put("maxIdle", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 					settings.put("maxWait", "5000"); //$NON-NLS-1$ //$NON-NLS-2$
-					dataSourceClass = basicDataSourceClass.getCanonicalName();
+					dataSourceClass = basicDataSourceClassName;
 				}
 				else {
 					dataSourceClass = SimpleDataSource.class.getCanonicalName();
