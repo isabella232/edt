@@ -219,8 +219,7 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 		IBinding binding = getBinding(parm);
 		if (binding == null) {
 			String name = InternUtil.intern(parm.getName());
-			parm.getType().accept(this);
-			ITypeBinding type = (ITypeBinding)stack.pop();
+			ITypeBinding type = bindingForType(parm);
 			
 			IPartBinding declarer;
 			FunctionBinding func;

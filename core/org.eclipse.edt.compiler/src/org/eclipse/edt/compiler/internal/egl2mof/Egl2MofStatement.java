@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
+import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
@@ -168,25 +169,21 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		return false;
 	}
 
-	private boolean isIBMiCallStatement(org.eclipse.edt.compiler.core.ast.CallStatement callStatement){
-	
-
-		org.eclipse.edt.compiler.core.ast.Expression expr = callStatement.getInvocationTarget();
-		ITypeBinding type = (FunctionBinding)expr.resolveTypeBinding();
-		if (Binding.isValidBinding(type) && type instanceof FunctionBinding) {
-			FunctionBinding function = (FunctionBinding) type;
-			return function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null;
-		}
-		return false;
-	}
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
 		//FIXME JV this need to be extensible 
 		CallStatement stmt;
-		if(isIBMiCallStatement(callStatement)){
-			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
+		if (CallStatementValidator.isFunctionCallStatement(callStatement)) {
+			if (CallStatementValidator.isLocalFunctionCallStatement(callStatement)) {
+				stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
+			}
+			else {
+				IOStatementGenerator generator = getGeneratorFor(callStatement);
+				stmt = generator.genCallStatement(callStatement, eObjects);
+			}
 		}
-		else{
+		else {
+			//TODO this should create a "plain" CallStatement
 			IOStatementGenerator generator = getGeneratorFor(callStatement);
 			stmt = generator.genCallStatement(callStatement, eObjects);
 		}

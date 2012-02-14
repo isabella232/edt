@@ -439,7 +439,9 @@ public interface IProblemRequestor {
 	public static final int TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE = 3410;
 
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
-	
+
+	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
+
 	public static final int SYSTEM_FUNCTION_CANNOT_BE_DELEGATED = 3416;
 	public static final int FUNCTION_WITH_CONVERSE_CANNOT_BE_DELEGATED = 3417;
 	public static final int MAIN_FUNCTION_CANNOT_BE_ASSIGNED_TO_DELEGATE = 3418;
@@ -1281,6 +1283,11 @@ public interface IProblemRequestor {
     public static final int IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID = 5721;
     public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID = 5722;
     public static final int IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400 = 5723;
+    public static final int IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED = 5724;
+    public static final int IBMIPROGRAM_RETURNS_NOT_ALLOWED = 5725;
+    public static final int IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION = 5726;
+    public static final int IBMIPROGRAM_USING_HAS_WRONG_TYPE = 5727;
+    public static final int IBMIPROGRAM_MUST_BE_SPECIFIED = 5728;
     
     
     

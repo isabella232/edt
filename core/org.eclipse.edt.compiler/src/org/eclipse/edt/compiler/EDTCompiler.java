@@ -15,11 +15,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
+import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
+import org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen.IBMiProgramCallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementValidator;
 import org.eclipse.edt.mof.egl.MofConversion;
@@ -37,6 +41,7 @@ public class EDTCompiler extends BaseCompiler {
 		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
 		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
 		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
+		StatementValidator.Registry.put("eglx.jtopen", new IBMiProgramCallStatementValidator());
 	}
 
 	@Override
@@ -115,7 +120,18 @@ public class EDTCompiler extends BaseCompiler {
 			return StatementValidator.Registry.get("eglx.persistence.sql");
 		}
 		else if (validator[0] == null && stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
-			return StatementValidator.Registry.get("eglx.services");
+			CallStatement call = (CallStatement) stmt;
+			if (CallStatementValidator.isFunctionCallStatement(call)) {
+				if (CallStatementValidator.isLocalFunctionCallStatement(call)) {
+					return StatementValidator.Registry.get("eglx.jtopen");
+				}
+				else {
+					return StatementValidator.Registry.get("eglx.services");
+				}
+			}
+			else {
+				return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
+			}
 		}
 		else {
 			return validator[0];

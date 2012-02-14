@@ -17,7 +17,9 @@ import java.util.Iterator;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
@@ -27,13 +29,16 @@ import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FloatLiteral;
+import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -273,6 +278,77 @@ import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidat
 			return (ITypeBinding[]) list.toArray(new ITypeBinding[list.size()]);
 								
 		}
+		
+		public static boolean isFunctionCallStatement(CallStatement stmt) {			
+			return Binding.isValidBinding(stmt.getInvocationTarget().resolveDataBinding()) &&
+					IDataBinding.NESTED_FUNCTION_BINDING == stmt.getInvocationTarget().resolveDataBinding().getKind();
+		}
+		
+		public static boolean isLocalFunctionCallStatement(CallStatement stmt) {
+			if (!isFunctionCallStatement(stmt)) {
+				return false;
+			}
+			NestedFunctionBinding nestedBinding = (NestedFunctionBinding) stmt.getInvocationTarget().resolveDataBinding();
+			
+			if (Binding.isValidBinding(nestedBinding.getDeclaringPart())) {
+				
+				//if the function is in an interface, it is definatly not local
+				if (ITypeBinding.INTERFACE_BINDING == nestedBinding.getDeclaringPart().getKind()) {
+					return false;
+				}
+				
+				//Otherwise, if this is not a service function, we are local
+				if (ITypeBinding.SERVICE_BINDING != nestedBinding.getDeclaringPart().getKind()) {
+					return true;
+				}
+				
+				//At this point, we know the function is in a service. Check to see if the
+				//call statement is in the same service, if not, we know the call is not local
+				if (getContainingPart(stmt) != nestedBinding.getDeclaringPart()) {
+					return false;
+				}
+				
+				//So we are invoking a function in the same service as the service that contains the call statement
+				//The call is only local if the target is unqualified, or is qualified with "this"
+				final boolean[] isLocal = new boolean[1];
+				IASTVisitor visitor = new DefaultASTVisitor() {
+					public boolean visit(ParenthesizedExpression parenthesizedExpression) {
+						return true;
+					}
+					public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName simpleName) {
+						isLocal[0] = true;
+						return false;
+					}
+					public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
+						isLocal[0] = fieldAccess.getPrimary() instanceof ThisExpression;
+						return false;
+					}
+				};
+				stmt.getInvocationTarget().accept(visitor);
+				return isLocal[0];
+				
+			}
+			return false;
+		}
+		
+		public static boolean isRemoteFunctionCallStatement(CallStatement stmt) {
+			return isFunctionCallStatement(stmt) && !isLocalFunctionCallStatement(stmt);
+		}
+
+		private static IPartBinding getContainingPart(Node node) {
+			if (node == null) {
+				return null;
+			}
+			if (node instanceof Part) {
+				if (Binding.isValidBinding(((Part) node).getName().resolveBinding())) {
+					return (IPartBinding) ((Part) node).getName().resolveBinding();
+				}
+			}
+			
+			return getContainingPart(node.getParent());
+			
+		}
+		
 	}
 	
 	

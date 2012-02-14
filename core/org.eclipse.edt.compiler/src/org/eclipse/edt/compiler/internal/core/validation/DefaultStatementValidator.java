@@ -1,6 +1,7 @@
 package org.eclipse.edt.compiler.internal.core.validation;
 
 import org.eclipse.edt.compiler.internal.core.validation.statement.AddStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CloseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.DeleteStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ExecuteStatementValidator;
@@ -55,6 +56,11 @@ public class DefaultStatementValidator extends AbstractStatementValidator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ReplaceStatement replaceStatement) {
 		replaceStatement.accept(new ReplaceStatementValidator(problemRequestor, compilerOptions));
 		return false;
+	}
+	
+	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
+		callStatement.accept(new CallStatementValidator(problemRequestor, compilerOptions));
+		return false;		
 	}
 
 }

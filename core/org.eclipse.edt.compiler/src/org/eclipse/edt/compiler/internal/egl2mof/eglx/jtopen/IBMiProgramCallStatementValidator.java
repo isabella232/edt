@@ -1,10 +1,11 @@
-package org.eclipse.edt.compiler.internal.egl2mof.eglx.services;
+package org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
@@ -29,77 +30,82 @@ import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidat
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
-public class ServicesActionStatementValidator extends DefaultStatementValidator {
+public class IBMiProgramCallStatementValidator extends DefaultStatementValidator {
 
     
-    public ServicesActionStatementValidator() {
+    public IBMiProgramCallStatementValidator() {
     }
     
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
-		validateServiceFunctionCall(callStatement);
+		validateIBMiProgramCall(callStatement);
 		return false;
 	}
 	
 	
-	private void validateServiceFunctionCall(CallStatement callStatement) {
-		
-		//if a callback or error callback is specified, the target must point to a function
-		if (callStatement.getCallSynchronizationValues() != null && 
-				(callStatement.getCallSynchronizationValues().getOnException() != null || 
-				 callStatement.getCallSynchronizationValues().getReturnTo() != null)) {
-			ITypeBinding type = callStatement.getInvocationTarget().resolveTypeBinding();
-			if (!Binding.isValidBinding(type) || type.getKind() != ITypeBinding.FUNCTION_BINDING) {
-				//error...target must be a function if callback or error routine specified
-	            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALL_TARGET_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
-				return;
-			}
-		}
-		
-		IDataBinding dataBinding = callStatement.getInvocationTarget().resolveDataBinding();
-		if (!Binding.isValidBinding(dataBinding)) {
+	private void validateIBMiProgramCall(CallStatement callStatement) {
+				
+		ITypeBinding targType = callStatement.getInvocationTarget().resolveTypeBinding();
+		if (!Binding.isValidBinding(targType) || ITypeBinding.FUNCTION_BINDING != targType.getKind()) {
 			return;
 		}
+				
+		IFunctionBinding functionBinding = (IFunctionBinding)targType;
 		
-		if (dataBinding.getKind() == IDataBinding.TOP_LEVEL_FUNCTION_BINDING) {
-            problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_MUST_BE_SERVICE_OR_INTERFACE, IMarker.SEVERITY_ERROR, new String[] {dataBinding.getCaseSensitiveName()});
+		//TODO for now, do not allow a local function call to a function that is not an IBMiProgram function.		
+		if (functionBinding.getAnnotation(InternUtil.intern(new String[]{"eglx", "jtopen", "annotations"}), InternUtil.intern("IBMiProgram")) == null) {
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {});
 			return;
+		}
+
+		
+		//validate the arguments against the parms
+		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
+		
+		//if the function returns a value, either a callback or a returns is required
+		if (functionBinding.getReturnType() != null && 
+				(callStatement.getCallSynchronizationValues() == null || 
+						(callStatement.getCallSynchronizationValues().getReturnTo() == null) &&
+						(callStatement.getCallSynchronizationValues().getReturns() == null)
+			)) {
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {});
 		}
 		
 		if (callStatement.getUsing() != null) {
 			ITypeBinding usingType = callStatement.getUsing().resolveTypeBinding();
 			if (Binding.isValidBinding(usingType)) {
-				if (!isIHTTP(usingType)) {
-					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
+				if (!isIBMiConnection(usingType)) {
+					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.IBMIPROGRAM_USING_HAS_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 				}
 			}
 		}
-
-		if (dataBinding.getKind() == IDataBinding.NESTED_FUNCTION_BINDING) {
-			//check to make sure it is in service or interface
-			if (dataBinding.getDeclaringPart() == null || (dataBinding.getDeclaringPart().getKind() != ITypeBinding.SERVICE_BINDING && dataBinding.getDeclaringPart().getKind() != ITypeBinding.INTERFACE_BINDING )) {
-				problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_MUST_BE_SERVICE_OR_INTERFACE, IMarker.SEVERITY_ERROR, new String[] {dataBinding.getCaseSensitiveName()});
-			}
-			else {
-				//validate the arguments against the parms
-				callStatement.accept(new FunctionArgumentValidator((IFunctionBinding)dataBinding.getType(), dataBinding.getDeclaringPart(), problemRequestor, compilerOptions));
-			}
-			
-			//check to make sure a callback is specified
-			if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {
-				problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_CALLBACK_FUNCTION_REQUIRED, IMarker.SEVERITY_ERROR, new String[] {});
-			}
-
-			if (callStatement.getCallSynchronizationValues() != null) {
-				//validate callback/error routine
-				if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
-					validateCallback(callStatement, callStatement.getCallSynchronizationValues().getReturnTo().getExpression(), false, callStatement.getInvocationTarget());
+		
+		
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+				//If a returns is specified, the function must return a value
+				if (functionBinding.getReturnType() == null) {
+					problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()});
 				}
-				if (callStatement.getCallSynchronizationValues().getOnException() != null) {
-					validateCallback(callStatement, callStatement.getCallSynchronizationValues().getOnException().getExpression(), true, callStatement.getInvocationTarget());
-				}		
+				else {
+				//Ensure that the returns type of the call is compatible with the function's return type
+					if (Binding.isValidBinding(functionBinding.getReturnType())) {
+						Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
+						ITypeBinding callReturnsType = callReturnsExpr.resolveTypeBinding();
+						if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, functionBinding.getReturnType(), null, compilerOptions)) {
+							problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(functionBinding.getReturnType()), functionBinding.getCaseSensitiveName(), StatementValidator.getShortTypeString(callReturnsType), callReturnsExpr.getCanonicalString()});
+						}
+					}
+				}
 			}
-			
+			//validate callback/error routine
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getReturnTo().getExpression(), false, callStatement.getInvocationTarget());
+			}
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getOnException().getExpression(), true, callStatement.getInvocationTarget());
+			}		
 		}
+			
 	}
 	private void validateCallback(CallStatement stmt, Expression expr, boolean isErrorCallback, Expression invocTarget ) {
 		// 1) must be a function or delegeate
@@ -288,12 +294,11 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 	
-	private boolean isIHTTP(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
-			return (type.getName() == InternUtil.intern("IHTTP") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "http"}));
+	private boolean isIBMiConnection(ITypeBinding type) {
+		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
+			return (type.getName() == InternUtil.intern("IBMiConnection") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "jtopen"}));
 		}
 		return false;
 	}
-	
 	
 }
