@@ -6,5 +6,6 @@ Record AS400Time type Annotation
 	ValidationProxy="org.eclipse.edt.compiler.binding.AS400TimeAnnotationTypeBinding"
 }
 	ibmiFormat any = com.ibm.as400.access.AS400Time.FORMAT_ISO;
-	ibmiSeparatorChar string?;
+	ibmiSeparatorChar string? = "";
+	timeZoneID string?;
 end

@@ -5,7 +5,7 @@
 <target name="init">    
     <echo message="processing ${basedir}." />
     <echo message="processing ${pluginName}." />
-	<property name="eglBin" value="EGLBin"/>
+	<property name="eglBin" value="eglbin"/>
 </target>
 	
 <target name="JarMofar" depends="init">	
