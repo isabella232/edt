@@ -1,8 +1,0 @@
-package statements.sql;
-
-// basic handler
-
-handler Orphan type entity
-	id int;
-	
-end

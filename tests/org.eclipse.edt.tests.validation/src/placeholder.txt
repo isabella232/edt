@@ -1,1 +1,0 @@
-This file makes sure the src folder gets checked out from CVS, preventing build path errors.

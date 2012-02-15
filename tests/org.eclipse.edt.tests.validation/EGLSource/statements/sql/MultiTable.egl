@@ -1,7 +1,0 @@
-package statements.sql;
-
-record MultiTable type Entity{@Table {Name = "Tbl1"},
-	@SecondaryTables {value = [@SecondaryTable {Name = "A"}]}
-	}
-	i int{@Id};
-end

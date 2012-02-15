@@ -1,9 +1,0 @@
-package statements.sql;
-
-// basic handler
-
-handler Parent type Entity
-	id int {@ID};           
-	child child ;    
-	orphan orphan{@ManyToOne};
-end

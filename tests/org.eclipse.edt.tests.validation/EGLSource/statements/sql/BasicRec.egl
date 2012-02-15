@@ -1,5 +1,0 @@
-package statements.sql;
-
-record BasicRec
-	name string;
-end

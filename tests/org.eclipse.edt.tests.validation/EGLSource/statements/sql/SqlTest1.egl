@@ -1,4 +1,34 @@
-package statements.sql;
+record BasicRec
+	name string;
+end
+
+
+handler Child type Entity
+	
+	name string;
+	parent parent;
+
+
+end
+
+record MultiTable type Entity{@Table {Name = "Tbl1"},
+	@SecondaryTables {value = [@SecondaryTable {Name = "A"}]}
+	}
+	i int{@Id};
+end
+
+handler Orphan type entity
+	id int;
+	
+end
+
+
+handler Parent type Entity
+	id int {@ID};           
+	child child ;    
+	orphan orphan{@ManyToOne};
+end
+
 
 externalType myEntity type Entity
 	field1 string {@ID};

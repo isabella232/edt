@@ -1,0 +1,129 @@
+service myserv
+	
+	i int;
+	d date;
+	
+	function srvFunc() returns (int)
+	end
+	
+	function srvIBMiNoReturn() {@IBMiProgram}
+	end
+
+	function srvIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	function testLocalCallsToService()
+		//test local call to the same service
+		call srvIBMiNoReturn(); //0
+		call this.srvIBMiNoReturn(); //0
+
+		call srvIBMiReturn(); //1 must specify a returns
+		call this.srvIBMiReturn(); //1 must specify a returns
+		
+		call srvIBMiNoReturn() returns (i); //1 cannot specify a returns value 
+		call this.srvIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call srvIBMiReturn() returns (i); //0 
+		call this.srvIBMiReturn() returns (i); //0
+
+		call srvIBMiReturn() returns (d); //1 return type int of the function srvIBMiReturn is not compatible with the type date
+		call this.srvIBMiReturn() returns (d); //1 return type int of the function srvIBMiReturn is not compatible with the type date
+
+		call srvIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.srvIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+					
+		call srvIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.srvIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call srvIBMiReturn() 
+				using syslib.getResource("binding:fred")as IBMiConnection   //0
+					returns (i); //0 
+		call this.srvIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call srvFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		call this.srvFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call srvIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+		call this.srvIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	
+	
+	function callback(p1 int in)
+	end
+end
+
+
+library lib1
+	function libFunc() returns (int)
+	end
+	
+	function libIBMiNoReturn() {@IBMiProgram}
+	end
+
+	function libIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	end
+end
+
+
+library LocalFunctionCallTests
+	
+	i int;
+	d date;
+	
+	
+	function testLocalCallsToLib()
+		//test local call to a library
+		call lib1.libIBMiNoReturn(); //0
+
+		call lib1.libIBMiReturn(); //1 must specify a returns
+		
+		call lib1.libIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call lib1.libIBMiReturn() returns (i); //0
+
+		call lib1.libIBMiReturn() returns (d); //1 return type int of the function libIBMiReturn is not compatible with the type date
+
+		call lib1.libIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+					
+		call lib1.libIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call lib1.libIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call lib1.libFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call lib1.libIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function callback(p1 int in)
+	end
+end
