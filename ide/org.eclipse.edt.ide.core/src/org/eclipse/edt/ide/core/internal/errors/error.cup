@@ -740,8 +740,8 @@ callSynchronizationOpt
 		
 callReturns
 	::=
-	RETURNS LPAREN:lparen1 lvalue:lvalue1 RPAREN:rparen1
-	{: RESULT =  new CallReturns(lvalue1, lparen1left, rparen1right); :}
+	RETURNS:returns1 LPAREN:lparen1 lvalue:lvalue1 RPAREN:rparen1
+	{: RESULT =  new CallReturns(lvalue1, returns1left, rparen1right); :}
 	;
 	
 callReturnTo
