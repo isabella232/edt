@@ -74,7 +74,27 @@ library DojoDialogLib {}
 		return(createDialog(title, message, content, buttons));	
 	end
 	
-	private callbacks dialogButtonClicked[];
+	function promptForValue(title String in, message String in, callback promptSupplied) returns (DojoDialog)
+		promptField DojoTextField { width = "300px", style = "max-width: 500px"  };
+		
+		if(callback != null)
+			promptField.setUserData(callback);
+		end
+		
+		buttons DojoButton[] = [ createButtonForPrompt("OK", ID_OK, promptField), createButtonForPrompt("Cancel", ID_CANCEL, promptField) ];
+		
+		row1 Widget { tagName = "tr", children = [new Widget { tagName = "td", innerHTML = message, style = "padding: 4px; vertical-align: middle; max-width: 500px" }] };
+		row2 Widget { tagName = "tr", children = [new Widget { tagName = "td", children = [ promptField] } ] };
+		
+		body Widget { tagName = "tbody", children = [ row1, row2 ] };
+		table Widget { tagName = "table", children = [ body ], style = "max-width: 500px" };
+		table.setAttribute("border", "0");
+						
+		dialog DojoDialog { title = title, children = [ table ], buttons = buttons };
+		dialog.showDialog();	
+		
+		return (dialog);
+	end		
 	
 	private function createDialog(title string in,message String in, content widget in, buttons DojoButton[] in) returns(DojoDialog)
 		dialog DojoDialog { title = title, children = [ content ], buttons = buttons};
@@ -88,15 +108,26 @@ library DojoDialogLib {}
 		
 	function createButton(text String in, id String in, callback dialogButtonClicked) returns (DojoButton)
 		button DojoButton {value = id, text = text, onClick ::= buttonClicked };
-		button.setAttribute("functionId", id);
-		button.setAttribute("callbackIndex", callbacks.getSize() + 1);
-		if (callback != null)
-			callbacks.appendElement(callback);
-		end
+		
+		bDict Dictionary; 
+		bDict.functionId = id;
+		bDict.callback = callback;
+		button.setUserData(bDict);
 		
 		return (button);
 	end	
 	
+	function createButtonForPrompt(text String in, id String in, promptField DojoTextField) returns (DojoButton)
+		button DojoButton {value = id, text = text, onClick ::= promptButtonClicked};
+		
+		buttonDict Dictionary;
+		buttonDict.functionId = id;
+		buttonDict.promptField = promptField;
+		button.setUserData(buttonDict);
+		
+		return (button);
+	end
+
 	function createContents(message String in, imagePath String? in) returns (Widget)
 		cells Widget { tagName = "tr", children = [] };
 		body Widget { tagName = "tbody", children = [ cells ] };
@@ -114,23 +145,42 @@ library DojoDialogLib {}
 	end
 	
 	private function buttonClicked(e Event in)
-		button DojoButton = (e.widget as DojoButton);		
-		functionId String = button.getAttribute("functionId");
-		callbackIndex int = button.getAttribute("callbackIndex");
-			
+		button DojoButton = (e.widget as DojoButton);	
+		
 		dialog DojoDialog = findParentDialog(e.widget);
 		
-		hide boolean = true;
+		buttonDict Dictionary = button.getUserData();
 		
-		if (callbackIndex > 0 && callbackIndex <= callbacks.getSize())
-			if (callbacks[callbackIndex] != null)
-				hide = callbacks[callbackIndex](functionId, e);
-			end						
-		end
+		hide boolean = true;
+		if(buttonDict.callback != null)
+			callback dialogButtonClicked = buttonDict.callback;
+			functionId String= buttonDict.functionId;
+			hide = callback(functionId, e);
+		end					
 		
 		if (hide)
 			dialog.hideDialog();
 		end				
+	end
+	
+	private function promptButtonClicked(e Event in) 
+		button DojoButton = (e.widget as DojoButton);		
+		
+		buttonDict Dictionary = button.getUserData();
+		promptField DojoTextField = buttonDict.promptField;
+		
+		dialog DojoDialog = findParentDialog(e.widget);
+		
+		hide boolean = true;
+		
+		if(promptField.getUserData() != null)
+			callback promptSupplied = promptField.getUserData();
+			hide = callback(promptField.text, e);
+		end
+		
+		if (hide)
+			dialog.hideDialog();
+		end						
 	end
 	
 	function findParentDialog(widget Widget in) returns (DojoDialog)
@@ -145,4 +195,8 @@ end
 
 delegate dialogButtonClicked(buttonId String in, e Event in) returns (boolean)
 	
+end
+
+delegate promptSupplied(value String in, e Event in) returns (boolean)
+
 end
