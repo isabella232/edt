@@ -84,7 +84,7 @@ library lib1
 end
 
 
-library LocalFunctionCallTests
+library LocalFunctionCallTestsLib
 	
 	i int;
 	d date;
@@ -123,6 +123,222 @@ library LocalFunctionCallTests
 
 	end
 
+
+	function callback(p1 int in)
+	end
+end
+
+Handler LocalFunctionCallTestsHand
+	
+	i int;
+	d date;
+	
+	function handFunc() returns (int)
+	end
+	
+	function handIBMiNoReturn() {@IBMiProgram}
+	end
+
+	function handIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	
+	function testLocalCallsToHand()
+		//test local call to a handler
+		call handIBMiNoReturn(); //0
+		call this.handIBMiNoReturn(); //0
+
+		call handIBMiReturn(); //1 must specify a returns
+		call this.handIBMiReturn(); //1 must specify a returns
+		
+		call handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+		call this.handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call handIBMiReturn() returns (i); //0
+		call this.handIBMiReturn() returns (i); //0
+
+		call handIBMiReturn() returns (d); //1 return type int of the function handIBMiReturn is not compatible with the type date
+		call this.handIBMiReturn() returns (d); //1 return type int of the function handIBMiReturn is not compatible with the type date
+
+		call handIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.handIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+					
+		call handIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.handIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call handIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+		call this.handIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call handFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		call this.handFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+		call this.handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function callback(p1 int in)
+	end
+end
+
+program LocalFunctionCallTestsPgm
+	
+	i int;
+	d date;
+	
+	function main()
+	end
+	
+	function pgmFunc() returns (int)
+	end
+	
+	function pgmIBMiNoReturn() {@IBMiProgram}
+	end
+
+	function pgmIBMiReturn() returns (int) {@IBMiProgram{isServiceProgram = yes}}
+	end
+	
+	
+	function testLocalCallsToPgm()
+		//test local call to a program
+		call pgmIBMiNoReturn(); //0
+		call this.pgmIBMiNoReturn(); //0
+
+		call pgmIBMiReturn(); //1 must specify a returns
+		call this.pgmIBMiReturn(); //1 must specify a returns
+		
+		call pgmIBMiNoReturn() returns (i); //1 cannot specify a returns value
+		call this.pgmIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call pgmIBMiReturn() returns (i); //0
+		call this.pgmIBMiReturn() returns (i); //0
+
+		call pgmIBMiReturn() returns (d); //1 return type int of the function pgmIBMiReturn is not compatible with the type date
+		call this.pgmIBMiReturn() returns (d); //1 return type int of the function pgmIBMiReturn is not compatible with the type date
+
+		call pgmIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.pgmIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+					
+		call pgmIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+		call this.pgmIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call pgmIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+		call this.pgmIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call pgmFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		call this.pgmFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call pgmIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+		call this.pgmIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+
+
+	function testLocalCallsToLib()
+		//test local call to a library
+		call lib1.libIBMiNoReturn(); //0
+
+		call lib1.libIBMiReturn(); //1 must specify a returns
+		
+		call lib1.libIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call lib1.libIBMiReturn() returns (i); //0
+
+		call lib1.libIBMiReturn() returns (d); //1 return type int of the function libIBMiReturn is not compatible with the type date
+
+		call lib1.libIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+					
+		call lib1.libIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call lib1.libIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call lib1.libFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call lib1.libIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+	
+	function testLocalCallsToHand()
+		hand1 LocalFunctionCallTestsHand;
+		
+		//test local call to a library
+		call hand1.handIBMiNoReturn(); //0
+
+		call hand1.handIBMiReturn(); //1 must specify a returns
+		
+		call hand1.handIBMiNoReturn() returns (i); //1 cannot specify a returns value
+
+		call hand1.handIBMiReturn() returns (i); //0
+
+		call hand1.handIBMiReturn() returns (d); //1 return type int of the function handIBMiReturn is not compatible with the type date
+
+		call hand1.handIBMiReturn() 
+				using "binding:fred"   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+					
+		call hand1.handIBMiReturn() 
+				using syslib.getResource("binding:fred")   //1 type of the using expression must be eglx.jtopen.IBMiConnection
+					returns (i); //0 
+
+		call hand1.handIBMiReturn() 
+				using syslib.getResource("binding:fred") as IBMiConnection  //0
+					returns (i); //0 
+					
+					
+		call hand1.handFunc returns (i); //1 must be defined with the IBMiProgram annotation
+		
+		call hand1.handIBMiNoReturn
+			returning to callback  //1 "returning to" or "onexception" expression is not allowed
+			onexception	callback;  //1 "returning to" or "onexception" expression is not allowed
+
+	end
+	
 
 	function callback(p1 int in)
 	end
