@@ -98,7 +98,6 @@ public class SimpleDataSource implements DataSource {
 	
 	@Override
 	public Connection getConnection(String theUsername, String thePassword) throws SQLException {
-		System.out.println("simple ds");
 		initDriver();
 		return DriverManager.getConnection(url, theUsername, thePassword);
 	}
