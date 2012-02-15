@@ -53,7 +53,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		
 		//TODO for now, do not allow a local function call to a function that is not an IBMiProgram function.		
 		if (functionBinding.getAnnotation(InternUtil.intern(new String[]{"eglx", "jtopen", "annotations"}), InternUtil.intern("IBMiProgram")) == null) {
-			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {});
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()});
 			return;
 		}
 
@@ -61,7 +61,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		//validate the arguments against the parms
 		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
 		
-		//if the function returns a value, either a callback or a returns is required
+		//if the function returns a value, a returns is required
 		if (functionBinding.getReturnType() != null && 
 				(callStatement.getCallSynchronizationValues() == null || 
 						(callStatement.getCallSynchronizationValues().getReturnTo() == null) &&
@@ -97,94 +97,16 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 					}
 				}
 			}
-			//validate callback/error routine
+			//validate callback/error routine 
+			//TODO for now, callback/exception functions are not supported
 			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
-				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getReturnTo().getExpression(), false, callStatement.getInvocationTarget());
+				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturnTo(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}
 			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
-				validateCallback(callStatement, callStatement.getCallSynchronizationValues().getOnException().getExpression(), true, callStatement.getInvocationTarget());
+				problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getOnException(), IProblemRequestor.IBMIPROGRAM_CALLBACK_NOT_SUPPORTED, IMarker.SEVERITY_ERROR, new String[] {});
 			}		
 		}
 			
-	}
-	private void validateCallback(CallStatement stmt, Expression expr, boolean isErrorCallback, Expression invocTarget ) {
-		// 1) must be a function or delegeate
-		
-		ITypeBinding cbType = expr.resolveTypeBinding();
-		if (!Binding.isValidBinding(cbType)) {
-			return;
-		}
-		if (cbType.getKind() != ITypeBinding.FUNCTION_BINDING && cbType.getKind() != ITypeBinding.DELEGATE_BINDING) {
-			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_CALLBACK_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
-			return;
-		}
-		
-		//2) if is it is a nested function it must be defined inside this part 
-		if (expr.resolveDataBinding() != null && expr.resolveDataBinding().getKind() == IDataBinding.NESTED_FUNCTION_BINDING) {
-//FIXME how do I get the scope			FunctionContainerScope fcScope = getFunctionContainerScope(currentScope);
-			IBinding callStmtPart = null;
-			Node node = stmt;
-			while(!(node.getParent() instanceof File)){
-				node = node.getParent();
-			}
-			if(node instanceof Part){
-				callStmtPart = ((Part)node).getName().resolveBinding();
-			}
-			if (callStmtPart == null || callStmtPart != expr.resolveDataBinding().getDeclaringPart()) {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_MUST_BE_DEFINED_IN_PART, IMarker.SEVERITY_ERROR, new String[] {expr.resolveDataBinding().getCaseSensitiveName(), stmt.getStatementBinding().getName()});
-			}
-		}
-		
-				
-		// 3) must not have a return type
-		if (getReturnType(expr) != null) {
-			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_CANNOT_HAVE_RETURN_TYPE, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()});
-		}
-		
-		
-		// 3) all parms must be IN
-		FunctionParameterBinding[] parms = getParameters(expr);
-		for (int i = 0; i < parms.length; i++) {
-			if (!parms[i].isInput()) {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_MUST_HAVE_ALL_IN_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString()});
-				break;
-			}
-		}
-		
-		// 4) ErrorRoutine must have 1 parm, with a type of AnyException
-		if (isErrorCallback) {
-			if( parms.length == 1 ||
-					(parms.length == 2 && lastParmIsIHttp(parms))) {
-				//make sure the parm is AnyException
-				if (Binding.isValidBinding(parms[0]) && Binding.isValidBinding(parms[0].getType()) && !isAnyException(parms[0].getType())) {
-					problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_PARM_MUST_HAVE_TYPE, IMarker.SEVERITY_ERROR, new String[] {"1", expr.getCanonicalString(), getQualAnyExceptionString()});
-				}
-			}
-			else {
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(), lastParmIsIHttp(parms)? "2" : "1"});
-			}
-		}
-		else {
-			//5) Number of parms in the callback must be correct
-			ITypeBinding[] argTypes = getArgTypesForCallback(invocTarget);
-			
-			if(argTypes.length == parms.length ||
-					(argTypes.length == parms.length - 1 && lastParmIsIHttp(parms))) {
-				// 6) parms in the callback function should be move compatible with the out/inout args/return type of the service function
-
-				for (int i = 0; i < argTypes.length; i++) {
-					if (!argTypeCompatibleWithParm(argTypes[i], parms[i])) {
-						problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_TYPE_NOT_COMPAT_WITH_PARM, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(argTypes[i]), parms[i].getCaseSensitiveName(), expr.getCanonicalString(), StatementValidator.getShortTypeString(parms[i].getType())});
-					}
-				}
-			
-			}
-			else{
-				problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_REQUIRES_N_PARMS, IMarker.SEVERITY_ERROR, new String[] {expr.getCanonicalString(),  Integer.toString(lastParmIsIHttp(parms) ? argTypes.length + 1 :argTypes.length)});
-			}
-			
-		}
-		
 	}
 	
 	private boolean lastParmIsIHttp(FunctionParameterBinding[] parms){

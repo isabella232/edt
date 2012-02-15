@@ -525,6 +525,7 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION),
 		new Integer(IBMIPROGRAM_USING_HAS_WRONG_TYPE), 
 		new Integer(IBMIPROGRAM_MUST_BE_SPECIFIED),
+		new Integer(IBMIPROGRAM_CALLBACK_NOT_SUPPORTED),
 	
 	}));
 	
