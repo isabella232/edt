@@ -159,8 +159,44 @@ public class AS400GenType {
 	}
 	private void genAS400Time(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("com.ibm.as400.access.AS400Time(");
-		genAS400TimeConstructorOptions(member, type, annot, ctx, out);
+		if(!genAS400AnnotationIBMiFormat(annot, ctx, out)){
+			out.print("com.ibm.as400.access.AS400Time.FORMAT_ISO");
+		}
+		genAS400AnnotationIBMiSeparatorChar(annot, ctx, out);
 		out.print(")");
+	}
+	private void genAS400Date(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
+		out.print("org.eclipse.edt.java.jtopen.access.AS400Date(");
+		if(!genAS400AnnotationIBMiFormat(annot, ctx, out)){
+			out.print("com.ibm.as400.access.AS400Date.FORMAT_ISO");
+		}
+		genAS400AnnotationIBMiSeparatorChar(annot, ctx, out);
+		out.print(", ");
+		addTimezoneID(out, annot);
+		out.print(")");
+	}
+	private void genAS400AnnotationIBMiSeparatorChar(Annotation annot, Context ctx, TabbedWriter out){
+		if(annot != null){
+			String ibmiSeperator = (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
+			if(ibmiSeperator != null && !ibmiSeperator.isEmpty()){
+				out.print(", '");
+				out.print(ibmiSeperator);
+				out.print("'");
+			}
+			else if(ibmiSeperator == null){
+				out.print(", null");
+			}
+		}
+	}
+	private boolean genAS400AnnotationIBMiFormat(Annotation annot, Context ctx, TabbedWriter out){
+		if(annot != null){
+			Expression ibmiFormat = (Expression)annot.getValue(Constants.subKey_ibmiFormat);
+			if(ibmiFormat != null){
+				ctx.invoke(org.eclipse.edt.gen.java.templates.JavaTemplate.genExpression, ibmiFormat, ctx, out);
+				return true;
+			}
+		}
+		return false;
 	}
 	private void genAS400Timestamp(Type type, Context ctx, TabbedWriter out, Annotation annot) {
 		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT,");
@@ -205,13 +241,6 @@ public class AS400GenType {
 		}
 		out.print(")");
 	}
-	private void genAS400Date(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
-		out.print("org.eclipse.edt.java.jtopen.access.AS400Date(");
-		genAS400DateConstructorOptions(member, type, annot, ctx, out);
-		out.print(", ");
-		addTimezoneID(out, annot);
-		out.print(")");
-	}
 	private void genAS400Float8(TabbedWriter out) {
 		out.print("com.ibm.as400.access.AS400Float8()");
 	}
@@ -242,68 +271,41 @@ public class AS400GenType {
 		out.print(Constants.as400ConnectionName);
 		out.print(")");
 	}
-	private void genAS400DateConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
-		if(!genAS400DateTimeAnnotationConstructorOptions(member, type, annot, ctx, out)){
-			out.print("com.ibm.as400.access.AS400Date.FORMAT_ISO");
-		}
-	}
-	private void genAS400TimeConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
-		if(!genAS400DateTimeAnnotationConstructorOptions(member, type, annot, ctx, out)){
-			out.print("com.ibm.as400.access.AS400Time.FORMAT_ISO");
-		}
-	}
-	private boolean genAS400DateTimeAnnotationConstructorOptions(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out){
-		boolean addFormatAdded = false;
-		if(annot != null){
-			Expression ibmiFormat = (Expression)annot.getValue(Constants.subKey_ibmiFormat);
-			if(ibmiFormat != null){
-				addFormatAdded = true;
-				ctx.invoke(org.eclipse.edt.gen.java.templates.JavaTemplate.genExpression, ibmiFormat, ctx, out);
-				String ibmiSeperator = (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
-				if(ibmiSeperator != null && !ibmiSeperator.isEmpty()){
-					out.print(", '");
-					out.print(ibmiSeperator);
-					out.print("'");
-				}
-			}
-		}
-		return addFormatAdded;
-	}
 	private void genDecimals(Type type, TabbedWriter out, Annotation typeAnnot) {
-		if(typeAnnot != null && typeAnnot.getValue(Constants.subKey_decimals) != null){
-			out.print(((Integer)typeAnnot.getValue(Constants.subKey_decimals)).toString());
-		}
-		else if(type instanceof FixedPrecisionType){
+		if(type instanceof FixedPrecisionType){
 			out.print(((FixedPrecisionType)type).getDecimals());
 		}
-		else{
+		else if(typeAnnot != null && typeAnnot.getValue(Constants.subKey_decimals) != null){
+			out.print(((Integer)typeAnnot.getValue(Constants.subKey_decimals)).toString());
+		}
+		else {
 			out.print("unknown");
 		}
 	}
 	
 	private void genLength(Type type, TabbedWriter out, Annotation typeAnnot) {
-		if(typeAnnot != null && typeAnnot.getValue(Constants.subKey_length) != null){
-			out.print(((Integer)typeAnnot.getValue(Constants.subKey_length)).toString());
-		}
-		else if(type instanceof FixedPrecisionType){
+		if(type instanceof FixedPrecisionType){
 			out.print(((FixedPrecisionType)type).getLength());
 		}
 		else if(type instanceof SequenceType){
 			out.print(((SequenceType)type).getLength());
 		}
-		else{
+		else if(typeAnnot != null && typeAnnot.getValue(Constants.subKey_length) != null){
+			out.print(((Integer)typeAnnot.getValue(Constants.subKey_length)).toString());
+		}
+		else {
 			out.print("unknown");
 		}
 	}
 	private void genTimestampPattern(Type type, Context ctx, TabbedWriter out, Annotation typeAnnot){
 		String eglPattern = typeAnnot == null ? null : (String)typeAnnot.getValue(Constants.subKey_eglPattern);
-		if(eglPattern != null && !eglPattern.isEmpty()){
-			new TimestampTypeTemplate().generateOptions(type, ctx, out, eglPattern);
-		}
-		else if(type instanceof TimestampType){
+		if(type instanceof TimestampType){
 			new TimestampTypeTemplate().generateOptions((TimestampType)type, ctx, out);
 		}
-		else{
+		else if(eglPattern != null && !eglPattern.isEmpty()){
+			new TimestampTypeTemplate().generateOptions(type, ctx, out, eglPattern);
+		}
+		else {
 			out.print("unknown");
 		}
 	}	

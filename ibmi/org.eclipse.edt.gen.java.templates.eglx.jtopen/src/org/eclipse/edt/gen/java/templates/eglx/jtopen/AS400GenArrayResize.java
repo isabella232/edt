@@ -147,7 +147,8 @@ public class AS400GenArrayResize {
 		for(Field field : part.getFields()){
 			//build new container expression
 			if(field.getType() instanceof ArrayType){
-				genResizeMember(getCountMember(field, ctx),
+				MemberName mn = getCountMember(field, ctx);
+				genResizeMember(mn == null ? null : createMemberAccess(mn.getMember(), qual),
 						createMemberAccess(field, qual), 
 						(ArrayType)field.getType(),
 						ctx, out, part, functionContainer);

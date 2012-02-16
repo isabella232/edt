@@ -10,10 +10,10 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
@@ -70,11 +70,11 @@ public class CommonUtilities {
 		return Constants.FUNCTION_HELPER_PREFIX + function.getName() + Constants.FUNCTION_HELPER_SUFFIX;
 	}
 	
-	public static List<String> getGeneratedHelpers(Context ctx) {
+	public static Set<String> getGeneratedHelpers(Context ctx) {
 		@SuppressWarnings("unchecked")
-		List<String> generatedHelpers = (List<String>)ctx.getAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers);
+		Set<String> generatedHelpers = (Set<String>)ctx.getAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers);
 		if(generatedHelpers == null){
-			generatedHelpers = new ArrayList<String>();
+			generatedHelpers = new HashSet<String>();
 			ctx.putAttribute(ctx.getClass(), Constants.subKey_ibmiGeneratedHelpers, generatedHelpers);
 		}
 		return generatedHelpers;
