@@ -246,7 +246,9 @@ public class TypeTemplate extends JavaTemplate {
 				} else if (TypeUtils.isReferenceType(arg2.getType())) {
 					ctx.invoke(genExpression, arg1, ctx, out);
 					out.print(arg3);
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 					ctx.invoke(genExpression, arg2, ctx, out);
+					out.print(")");
 				} else {
 					ctx.invoke(genExpression, arg1, ctx, out);
 					out.print(arg3 + " ");
