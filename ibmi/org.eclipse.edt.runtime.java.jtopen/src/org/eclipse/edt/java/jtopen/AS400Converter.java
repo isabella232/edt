@@ -176,7 +176,7 @@ public class AS400Converter {
 					convertedFields.add(convertToObjects(method.invoke(object, (Object[])null), as400Fields[as400Idx++]));
 				}
 				else if(Modifier.isPublic(field.getModifiers())){
-					convertedFields.add(convertToObjects(field, as400Fields[as400Idx++]));
+					convertedFields.add(convertToObjects(field.get(object), as400Fields[as400Idx++]));
 				}
 			} catch (Throwable t) {
 			    InvalidArgumentException ex = new InvalidArgumentException();

@@ -10,6 +10,8 @@
  *******************************************************************************/
 package org.eclipse.edt.java.jtopen.access;
 
+import java.io.UnsupportedEncodingException;
+
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
 import com.ibm.as400.access.AS400;
@@ -20,14 +22,70 @@ public class AS400Text extends com.ibm.as400.access.AS400Text {
 	private static final long serialVersionUID = 1L;
 
 	private boolean retainTrailingSpaces;
+	private int characterLength;
 	public AS400Text(int length, AS400 system, boolean retainTrailingSpaces) {
-		super(length, system);
-		this.retainTrailingSpaces = retainTrailingSpaces;
+		this(length, getSystemEncoding(system), retainTrailingSpaces);
 	}
 
 	public AS400Text(int length, String encoding, boolean retainTrailingSpaces) {
-		super(length, encoding);
+		super(calculateByteLength(length, encoding), encoding);
 		this.retainTrailingSpaces = retainTrailingSpaces;
+		characterLength = length;
+	}
+
+	private static String getSystemEncoding(AS400 system){
+		try {
+			return system.getJobCCSIDEncoding();
+		} catch (Exception e) {}
+		return null;
+	}
+
+	private static int calculateByteLength(int length, String encoding){
+		if(encoding != null && !encoding.isEmpty()){
+			try {
+				byte[] bytes = new String("A").getBytes(encoding);
+				if(bytes != null && bytes.length > 1){
+					return length + length;
+				}
+			} catch (UnsupportedEncodingException e) { }
+		}
+		return length;
+	}
+	
+	@Override
+	public byte[] toBytes(Object arg0) {
+		return super.toBytes(pad(arg0));
+	}
+	@Override
+	public int toBytes(Object arg0, byte[] arg1) {
+		return super.toBytes(pad(arg0), arg1);
+	}
+	@Override
+	public int toBytes(Object arg0, byte[] arg1, int arg2) {
+		return super.toBytes(pad(arg0), arg1, arg2);
+	}
+	@Override
+	public int toBytes(Object arg0, byte[] arg1, int arg2, BidiConversionProperties arg3) {
+		return super.toBytes(pad(arg0), arg1, arg2, arg3);
+	}
+	@Override
+	public int toBytes(Object arg0, byte[] arg1, int arg2, int arg3) {
+		return super.toBytes(pad(arg0), arg1, arg2, arg3);
+	}
+	private Object pad(Object str){
+		if(str instanceof String &&
+				((String)str).length() < characterLength &&
+				characterLength != getByteLength()){
+			try{
+				StringBuilder sb = new StringBuilder((String)str);
+				while(sb.toString().getBytes(getEncoding()).length < getByteLength()){
+					sb.append(' ');
+				}
+				return sb.toString();
+			}
+			catch(Exception e){}
+		}
+		return str;
 	}
 
 	@Override
