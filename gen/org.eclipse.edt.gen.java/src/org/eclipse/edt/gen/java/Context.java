@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
+import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -30,6 +32,8 @@ import org.eclipse.edt.mof.egl.Type;
 public class Context extends EglContext {
 
 	private static final long serialVersionUID = 6429116299734843162L;
+
+	private TabbedWriter tabbedWriter;
 
 	private boolean smapIsProcessing;
 	private boolean smapHasOutstandingLine;
@@ -49,6 +53,18 @@ public class Context extends EglContext {
 		super(processor);
 		smapData.append(Constants.smap_header);
 		smapExtension.append("");
+	}
+
+	public TabbedWriter getTabbedWriter() {
+		if (tabbedWriter == null) {
+			tabbedWriter = Boolean.TRUE.equals(getParameter(org.eclipse.edt.gen.Constants.parameter_report)) ? new TabbedReportWriter("org.eclipse.edt.gen.java.templates.",
+				new StringWriter()) : new TabbedWriter(new StringWriter());
+			return tabbedWriter;
+		} else {
+			TabbedWriter newTabbedWriter = new TabbedWriter(new StringWriter());
+			newTabbedWriter.setLineNumber(tabbedWriter.getLineNumber());
+			return newTabbedWriter;
+		}
 	}
 
 	public Function getCurrentFunction() {

@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.java;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -129,10 +128,8 @@ public class JavaGenerator extends Generator {
 	}
 
 	private void makeWriter() {
-		if (out == null) {
-			out = Boolean.TRUE.equals(context.getParameter(org.eclipse.edt.gen.Constants.parameter_report)) ? new TabbedReportWriter("org.eclipse.edt.gen.java.templates.",
-				new StringWriter()) : new TabbedWriter(new StringWriter());
-		}
+		if (out == null)
+			out = context.getTabbedWriter();
 	}
 
 	private String unqualifyFileName(String fileName) {
