@@ -214,6 +214,10 @@ public class TabbedWriter
 		return lineNumber;
 	}
 	
+	public void setLineNumber(int lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
 	/**
 	 * Returns the underlying Writer.
 	 *
