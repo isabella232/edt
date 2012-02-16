@@ -1,37 +1,27 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
-import java.lang.Short;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import java.lang.Long;
-import eglx.lang.StringLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
-import java.lang.Float;
 import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 import java.math.BigDecimal;
+import eglx.lang.StringLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import java.lang.Short;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import java.lang.Float;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
@@ -71,7 +61,7 @@ public class StrLib extends ExecutableBase {
 		}
 		else {
 			{
-				EzeLabel_eze_CaseLabel_0: if ((EInt.equals(clipType, (int)(short)((short) 0)))) {
+				EzeLabel_eze_caselabel_0: if ((EInt.equals(clipType, (int)(short)((short) 0)))) {
 					String eze$Temp7;
 					eze$Temp7 = EString.trim(source);
 					return eze$Temp7;
@@ -212,34 +202,32 @@ public class StrLib extends ExecutableBase {
 		String token;
 		token = StringLib.getNextToken(source, eze$Temp42, delimiters);
 		charIndex = org.eclipse.edt.javart.util.JavartUtil.checkNullable(eze$Temp42.ezeUnbox());
-		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(token, null))) {
-			index.ezeCopy((((charIndex - (int)(short)((short) 1)) * (int)(short)((short) 2)) + (int)(short)((short) 1)));
-		}
+		index.ezeCopy((((charIndex - (int)(short)((short) 1)) * (int)(short)((short) 2)) + (int)(short)((short) 1)));
 		return token;
 	}
 	public int getTokenCount(String source, String delimiters) {
-		int eze$Temp44;
-		eze$Temp44 = StringLib.getTokenCount(source, delimiters);
-		return eze$Temp44;
+		int eze$Temp43;
+		eze$Temp43 = StringLib.getTokenCount(source, delimiters);
+		return eze$Temp43;
 	}
 	public int indexOf(String source, String pattern) {
-		int eze$Temp45;
-		eze$Temp45 = EString.indexOf(source, pattern);
-		return eze$Temp45;
+		int eze$Temp44;
+		eze$Temp44 = EString.indexOf(source, pattern);
+		return eze$Temp44;
 	}
 	public int indexOf(String source, String pattern, Integer startIndex) {
-		int eze$Temp46;
-		eze$Temp46 = EString.indexOf(source, pattern, startIndex);
-		return eze$Temp46;
+		int eze$Temp45;
+		eze$Temp45 = EString.indexOf(source, pattern, startIndex);
+		return eze$Temp45;
 	}
 	public String lowerCase(String characterItem) {
 		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(characterItem, null))) {
 			return null;
 		}
 		else {
-			String eze$Temp48;
-			eze$Temp48 = EString.toLowerCase(characterItem);
-			return eze$Temp48;
+			String eze$Temp47;
+			eze$Temp47 = EString.toLowerCase(characterItem);
+			return eze$Temp47;
 		}
 	}
 	public String spaces(Integer characterCount) {
@@ -265,9 +253,9 @@ public class StrLib extends ExecutableBase {
 			return null;
 		}
 		else {
-			String eze$Temp53;
-			eze$Temp53 = EString.toUpperCase(characterItem);
-			return eze$Temp53;
+			String eze$Temp52;
+			eze$Temp52 = EString.toUpperCase(characterItem);
+			return eze$Temp52;
 		}
 	}
 }
