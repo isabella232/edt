@@ -1,6 +1,5 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import org.eclipse.edt.gen.java.Context;
@@ -130,13 +129,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 
 	
 	private void genSetTargetFromResultSet(Expression target, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
-		TabbedWriter newOut = new TabbedWriter(new StringWriter());
+		TabbedWriter newOut = ctx.getTabbedWriter();
 		genGetColumnValueByIndex(target.getType(), var_resultSet, columnIndex, ctx, newOut);
 		genSetTargetFromResultSet(target, newOut.getCurrentLine(), var_resultSet, ctx, out);
 	}
 	
 	private void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
-		TabbedWriter newOut = new TabbedWriter(new StringWriter());
+		TabbedWriter newOut = ctx.getTabbedWriter();
 		ctx.invoke(genName, field, ctx, newOut);
 		MemberAccess expr = ctx.getFactory().createMemberAccess();
 		expr.setQualifier(target);
@@ -475,7 +474,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public String getExprString(Expression expr, Context ctx) {
 		if (expr == null) return "<invalid expression>";
 		
-		TabbedWriter out = new TabbedWriter(new StringWriter());
+		TabbedWriter out = ctx.getTabbedWriter();
 		ctx.invoke(genExpression, expr, ctx, out);
 		return out.getCurrentLine();
 	}

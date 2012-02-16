@@ -1,7 +1,5 @@
 package org.eclipse.edt.gen.java.templates.eglx.persistence.sql;
 
-import java.io.StringWriter;
-
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayType;
@@ -43,7 +41,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 					genSetColumnValue(addStmt, addStmt.getTarget(), var_statement, 1, ctx, out);
 				}
 				else{
-					TabbedWriter temp = new TabbedWriter(new StringWriter());
+					TabbedWriter temp = ctx.getTabbedWriter();
 					ctx.invoke(genExpression, addStmt.getTarget(), ctx, temp);
 					genAddSingleValue(targetType, temp.getCurrentLine(), ctx, out);
 				}
