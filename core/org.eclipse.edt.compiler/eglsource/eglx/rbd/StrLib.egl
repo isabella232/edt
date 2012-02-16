@@ -105,9 +105,7 @@ library StrLib
 	function getNextToken(source string in, index int inout, delimiters string in) returns (string?)
 		charIndex int = index / 2 + 1;
 		token string? = StringLib.getNextToken( source, charIndex, delimiters );
-		if ( token != null )
-			index = (charIndex - 1) * 2 + 1;
-		end
+		index = (charIndex - 1) * 2 + 1;
 		return( token );
 	end
 	
