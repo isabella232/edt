@@ -43,9 +43,6 @@ public abstract class EglContext extends TemplateContext {
 
 	private IrFactory factory;
 
-	// The output stream for generators using this Context.
-	private TabbedWriter out;
-
 	// this is the nesting of exit/continue labels for various statements
 	private Stack<Label> labelStack;
 
@@ -83,22 +80,6 @@ public abstract class EglContext extends TemplateContext {
 	 */
 	public IrFactory getFactory() {
 		return factory;
-	}
-
-	/**
-	 * Returns the TabbedWriter of this Context.
-	 * @return the TabbedWriter of this Context.
-	 */
-	public TabbedWriter getWriter() {
-		return out;
-	}
-
-	/**
-	 * Sets the TabbedWriter of this Context.
-	 * @param out the new TabbedWriter of this Context.
-	 */
-	public void setWriter(TabbedWriter out, Object... args) {
-		this.out = out;
 	}
 
 	/**
