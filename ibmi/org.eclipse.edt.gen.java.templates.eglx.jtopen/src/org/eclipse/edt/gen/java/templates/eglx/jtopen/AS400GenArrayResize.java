@@ -80,8 +80,7 @@ public class AS400GenArrayResize {
 	private void genArrayResizeElements(ArrayType type, Context ctx, TabbedWriter out, LHSExpr array, Function functionContainer) {
 		//FIXME what about multi dim arrays there is no elementCount for this case
 		String tempName = ctx.nextTempName();
-		StringWriter sw = new StringWriter();
-		TabbedWriter writer = new TabbedWriter(sw);
+		TabbedWriter writer = ctx.getTabbedWriter();
 		ArrayAccess arrayAccess = JavaTemplate.factory.createArrayAccess();
 		arrayAccess.setArray(array);
 		Field f = JavaTemplate.factory.createField();
@@ -96,7 +95,7 @@ public class AS400GenArrayResize {
 		idx.setMember(f);
 		arrayAccess.setIndex(idx);
 		processElements(type.getElementType(), ctx, writer, arrayAccess, functionContainer);
-		if(sw.getBuffer().length() > 0){
+		if(((StringWriter)writer.getWriter()).getBuffer().length() > 0){
 			out.print("for(int ");
 			out.print(tempName);
 			out.print("= 1; ");
@@ -107,7 +106,7 @@ public class AS400GenArrayResize {
 			out.print(tempName);
 			out.println("++)");
 			out.println("{");
-			out.println(sw.getBuffer().toString());
+			out.println(((StringWriter)writer.getWriter()).getBuffer().toString());
 			out.println("}");
 		}
 	}
