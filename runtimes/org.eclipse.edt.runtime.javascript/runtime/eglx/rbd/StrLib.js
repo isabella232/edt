@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
 egl.defineRUILibrary('eglx.rbd', 'StrLib',
 {
 	'eze$$fileName': 'eglx/rbd/StrLib.egl',
@@ -223,28 +213,26 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 			var token;
 			token = egl.eglx.lang.StringLib.getNextToken(source, eze$Temp42, delimiters);
 			charIndex = eze$Temp42.ezeUnbox();
-			if ((egl.eglx.lang.NullType.notEquals(token, null))) {
-				index.ezeCopy(((((((charIndex - 1)) * 2)) + 1)));
-			}
+			index.ezeCopy(((((((charIndex - 1)) * 2)) + 1)));
 			return token;
 		}
 		,
 		"getTokenCount": function(source, delimiters) {
-			var eze$Temp44;
-			eze$Temp44 = egl.eglx.lang.StringLib.getTokenCount(source, delimiters);
-			return eze$Temp44;
+			var eze$Temp43;
+			eze$Temp43 = egl.eglx.lang.StringLib.getTokenCount(source, delimiters);
+			return eze$Temp43;
 		}
 		,
 		"indexOf_2_S_S": function(source, pattern) {
-			var eze$Temp45;
-			eze$Temp45 = egl.eglx.lang.EString.indexOf(source, pattern);
-			return eze$Temp45;
+			var eze$Temp44;
+			eze$Temp44 = egl.eglx.lang.EString.indexOf(source, pattern);
+			return eze$Temp44;
 		}
 		,
 		"indexOf_3_S_S_I": function(source, pattern, startIndex) {
-			var eze$Temp46;
-			eze$Temp46 = egl.eglx.lang.EString.indexOf(source, pattern, startIndex);
-			return eze$Temp46;
+			var eze$Temp45;
+			eze$Temp45 = egl.eglx.lang.EString.indexOf(source, pattern, startIndex);
+			return eze$Temp45;
 		}
 		,
 		"lowerCase": function(characterItem) {
@@ -252,9 +240,9 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 				return null;
 			}
 			else {
-				var eze$Temp48;
-				eze$Temp48 = egl.eglx.lang.EString.toLowerCase(characterItem);
-				return eze$Temp48;
+				var eze$Temp47;
+				eze$Temp47 = egl.eglx.lang.EString.toLowerCase(characterItem);
+				return eze$Temp47;
 			}
 		}
 		,
@@ -282,24 +270,14 @@ egl.defineRUILibrary('eglx.rbd', 'StrLib',
 				return null;
 			}
 			else {
-				var eze$Temp53;
-				eze$Temp53 = egl.eglx.lang.EString.toUpperCase(characterItem);
-				return eze$Temp53;
+				var eze$Temp52;
+				eze$Temp52 = egl.eglx.lang.EString.toUpperCase(characterItem);
+				return eze$Temp52;
 			}
 		}
 		,
 		"toString": function() {
 			return "[StrLib]";
-		}
-		,
-		"eze$$getName": function() {
-			return "StrLib";
-		}
-		,
-		"eze$$getChildVariables": function() {
-			var eze$$parent = this;
-			return [
-			];
 		}
 	}
 );
