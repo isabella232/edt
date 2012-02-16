@@ -40,6 +40,7 @@ import org.eclipse.edt.ide.ui.internal.record.conversion.IMessageHandler;
 import org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.DataToolsObjectsToEglSource;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
+import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizard;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizard;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
@@ -193,9 +194,8 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 				}
 			}
 			
-			if(isFinished) {
-				BindingSQLDatabaseConfiguration sqlConfig = new BindingSQLDatabaseConfiguration();
-				IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(sqlConfig);//getEGLDDFileHandle(sqlConfig);
+			if(isFinished && config.isSaveConnectionToDeploymentDescriptor()) {
+				IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(((EGLFileWizard)this.getParentWizard()).getConfiguration());
 				
 				if(eglddFile != null) {
 					EGLDeploymentRoot deploymentRoot = null;
@@ -204,6 +204,7 @@ public class RecordFromSqlDatabaseWizard extends TemplateWizard implements IWork
 						
 						IConnectionProfile profile = connection.getConnectionProfile();
 						ConnectionDisplayProperty[] properties = EGLSQLUtility.getConnectionDisplayProperties(profile);
+						BindingSQLDatabaseConfiguration sqlConfig = new BindingSQLDatabaseConfiguration();
 						UISQLUtility.setBindingSQLDatabaseConfiguration(sqlConfig, properties);
 						
 						Deployment deployment = deploymentRoot.getDeployment();
