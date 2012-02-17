@@ -31,6 +31,12 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 public class IBMiCallStatementTemplate extends JavaTemplate implements Constants{
+	
+	public boolean isStatementRequiringWrappedParameters(CallStatement callStatement, Context ctx){
+		return false;
+	}
+	
+	
 	public void genStatementBody(CallStatement callStatement, Context ctx, TabbedWriter out) {
 		//using can be a string or an IBMiConnection
 		QualifiedFunctionInvocation invoc = createFunctionInvocationBody(callStatement, ctx);

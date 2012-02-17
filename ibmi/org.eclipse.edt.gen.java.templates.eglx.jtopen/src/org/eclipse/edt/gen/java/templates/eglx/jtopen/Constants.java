@@ -65,6 +65,7 @@ public interface Constants {
 	public static final String subKey_elementTypeAS400Annotation = "elementTypeAS400Annotation";
 	static final String subKey_ibmiGeneratedHelpers = "ibmiGeneratedHelpers";
 	static final String subKey_ibmiAnnotations = "ibmiAnnotations";
+	static final String subKey_realFunctionName = "realFunctionName";
 	
 	//Misc constants
 	public static final String as400ConnectionName = "ezeIBMiConn";

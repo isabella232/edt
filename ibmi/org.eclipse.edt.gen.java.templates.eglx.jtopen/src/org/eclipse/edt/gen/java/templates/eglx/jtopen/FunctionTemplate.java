@@ -86,7 +86,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		if(isServiceProgram){
 			out.print("\", \"");
 			Annotation externalName = function.getAnnotation(signature_ExternalName);
-			String functionName = function.getName();
+			String functionName = (String)ctx.getAttribute(function, subKey_realFunctionName);
 			if(externalName != null){
 				functionName = 	(String)externalName.getValue();
 			}
@@ -166,7 +166,10 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 	}
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		ctx.invokeSuper(this, genDeclaration, createFunction(function, ctx), ctx, out);
-		ctx.invokeSuper(this, genDeclaration, CommonUtilities.createProxyFunction(function), ctx, out);
+		Function proxyFunction = CommonUtilities.createProxyFunction(function);
+		ctx.putAttribute(proxyFunction, subKey_realFunctionName, function.getName());
+		ctx.invokeSuper(this, genDeclaration, proxyFunction, ctx, out);
+		ctx.remove(proxyFunction);
 		for(FunctionParameter parameter : function.getParameters()){
 			AS400GenHelper.INSTANCE.genHelperClass(parameter.getType(), ctx, out);
 		}
