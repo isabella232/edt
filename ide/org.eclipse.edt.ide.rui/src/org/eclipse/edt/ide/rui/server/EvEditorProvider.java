@@ -22,9 +22,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
+import org.eclipse.edt.compiler.internal.core.builder.AccumulatingProblemrRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
@@ -513,16 +513,17 @@ public class EvEditorProvider {
 		}
 		ICompilerOptions compilerOptions = new ICompilerOptions() {
 			public boolean isVAGCompatible() {
-				return EGLVAGCompatibilitySetting.isVAGCompatibility();
+				return false;
 			}
 			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
+				return false;
 			}            
 		};
-//TODO EDT validate name		
-//		if (EGLNameValidator.validateEGLName(strName, EGLNameValidator.PART, compilerOptions).size() != 0){  
-//			return false;
-//		}
+		AccumulatingProblemrRequestor pRequestor = new AccumulatingProblemrRequestor();
+		EGLNameValidator.validate(strName, EGLNameValidator.PART, pRequestor, compilerOptions);
+		if(pRequestor.getProblems().size() != 0){
+			return false;
+		};
 		return true;
 	}
 	
