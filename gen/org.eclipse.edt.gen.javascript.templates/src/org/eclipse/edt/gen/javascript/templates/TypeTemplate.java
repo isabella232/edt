@@ -34,6 +34,8 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NamedElement;
+import org.eclipse.edt.mof.egl.Operation;
+import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -202,9 +204,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 	
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (arg.getConversionOperation() != null) {
+			Operation op = arg.getConversionOperation();
 			out.print("(function(x){ return x == null ? x : ");
 			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
-			out.print(CommonUtilities.getOpName(ctx, arg.getConversionOperation()));
+			out.print(CommonUtilities.getOpName(ctx, op));
 			out.print(".apply( this, arguments );})(");
 			Expression objectExpr = arg.getObjectExpr();
 			if (objectExpr instanceof BoxingExpression){
@@ -215,7 +218,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			
 			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
 			//TODO shouldn't have to special case ENumber and Decimal
-			if (((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
+			if ( "asAny".equalsIgnoreCase(op.getName()) || ((ctx.getPrimitiveMapping(typeSignature) == null) && (!"eglx.lang.ENumber".equalsIgnoreCase(typeSignature))) || ("eglx.lang.EDecimal".equalsIgnoreCase(typeSignature))) {
 				out.print(",\"");
 				ctx.invoke(genSignature, arg.getObjectExpr().getType(), ctx, out, arg);
 				out.print("\"");
