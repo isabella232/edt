@@ -214,6 +214,9 @@ public class TypeTemplate extends JavaScriptTemplate {
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
 			}
 			ctx.invoke(genExpression, objectExpr, ctx, out);
+			if(objectExpr.getType() instanceof Record){
+				out.print(".eze$$clone()");
+			}
 			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
 			
 			String typeSignature = arg.getObjectExpr().getType().getClassifier().getTypeSignature();			
