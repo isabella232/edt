@@ -511,6 +511,7 @@ public class EvEditorProvider {
 		if (strName.length() > 128){
 			return false;
 		}
+		
 		ICompilerOptions compilerOptions = new ICompilerOptions() {
 			public boolean isVAGCompatible() {
 				return false;
