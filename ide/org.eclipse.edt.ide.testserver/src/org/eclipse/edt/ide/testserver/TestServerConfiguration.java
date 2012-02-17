@@ -499,6 +499,11 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		return result;
 	}
 	
+	@Override
+	public String toString() {
+		return "Test server: project=" + (project == null ? "null" : project.getName())+ ", port=" + port + ", started=" + started; 
+	}
+	
 	/**
 	 * Allows clients to be notified when this server configuration terminates.
 	 */
