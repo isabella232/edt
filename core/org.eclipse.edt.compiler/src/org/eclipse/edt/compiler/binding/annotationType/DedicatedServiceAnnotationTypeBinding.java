@@ -23,7 +23,7 @@ import org.eclipse.edt.compiler.internal.core.validation.annotation.DedicatedSer
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-class DedicatedServiceAnnotationTypeBinding extends IntegerValueAnnotationTypeBinding {
+public class DedicatedServiceAnnotationTypeBinding extends IntegerValueAnnotationTypeBinding {
 	public static final String caseSensitiveName = InternUtil.internCaseSensitive("dedicatedService");
 	public static final String name = InternUtil.intern(caseSensitiveName);
 	
