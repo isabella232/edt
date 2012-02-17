@@ -33,6 +33,7 @@ public class Messages extends NLS {
 	public static String LabelSystem;
 	public static String LabelUserId;
 	public static String IBMiBindingBlankError;
+	public static String IBMiBindingSystemBlankError;
 	public static String LabelPassword;
 	public static String LabelLibrary;
 	

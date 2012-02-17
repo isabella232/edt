@@ -218,10 +218,13 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 	protected boolean determinePageCompletion() {
 		setErrorMessage(null);
 		boolean result = true;
-		
 		String name = fNameField.getText();
+		String systemName = fSystemField.getText();
 		if (name == null || name.trim().length() == 0) {
 			setErrorMessage(Messages.IBMiBindingBlankError);
+			result = false;
+		}else if(null == systemName || 0 == systemName.trim().length()){
+			setErrorMessage(Messages.IBMiBindingSystemBlankError);
 			result = false;
 		}
 		
