@@ -63,7 +63,7 @@ import com.ibm.icu.text.MessageFormat;
 
 public class CompilerPropertyAndPreferencePage extends PropertyAndPreferencePage {
 
-	public static final String PROP_ID = "org.eclipse.edt.ide.ui.projectCompilerPropertyPage"; //$NON-NLS-1$
+	public static final String PROP_ID = "org.eclipse.edt.ide.ui.folderCompilerPropertyPage";//$NON-NLS-1$
 
 	public static final String EXTENSIONPOINT_GENERATOR_TABS = org.eclipse.edt.ide.ui.EDTUIPlugin.PLUGIN_ID + ".edtGeneratorTabs"; //$NON-NLS-1$
 	public static final String GENERATOR_TAB = "generatorTab"; //$NON-NLS-1$
