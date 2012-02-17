@@ -286,7 +286,7 @@ public class GenerationSettingsComposite extends Composite {
 			genArguments.setLayoutData(data);
 		}
 		
-		createGeneratorContributorTable();
+//		createGeneratorContributorTable();
 	}
 	
 	private void createGeneratorContributorTable(){
