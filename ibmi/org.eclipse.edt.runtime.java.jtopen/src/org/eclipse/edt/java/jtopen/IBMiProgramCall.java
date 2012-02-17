@@ -43,6 +43,12 @@ public class IBMiProgramCall {
 									final IBMiConnection connection, 
 									final String methodName, final 
 									ExecutableBase caller){
+		if(connection == null || connection.getAS400() == null){
+			InvocationException ex = new InvocationException();
+			ex.setName(programName);
+			ex.setMessage("Host connection is null.");
+			throw ex;
+		}
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for(int idx = 0; idx < parameters.length; idx++){
 			parameterTypes[idx] = parameters[idx].getClass();
@@ -106,7 +112,11 @@ public class IBMiProgramCall {
 					if(idx>0){
 						buf.append("\n");
 					}
-					buf.append(messagelist[idx]);
+					buf.append(messagelist[idx].getID());
+					buf.append(":");
+					buf.append(messagelist[idx].getText());
+					buf.append("\n");
+					buf.append(messagelist[idx].getHelp());
 				}
 				InvocationException ex = new InvocationException();
 				ex.setName(programName);
