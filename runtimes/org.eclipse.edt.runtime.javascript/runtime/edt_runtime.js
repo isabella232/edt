@@ -70,7 +70,8 @@ egl.eglx.lang.EAny.ezeCast = function(obj, cons){
 egl.eglx.lang.EAny.unbox = function(obj){
 	return egl.unboxAny(obj);
 };
-egl.eglx.lang.EAny.fromEAny = function(obj, sig){
+egl.eglx.lang.EAny.fromEAny = function(obj){
+	var sig = arguments[arguments.length - 1];
 	return egl.boxAny(obj instanceof egl.eglx.lang.AnyBoxedObject?obj.eze$$value:obj,sig);
 };
 egl.eglx.lang.EAny.equals = function(obj1, obj2){
