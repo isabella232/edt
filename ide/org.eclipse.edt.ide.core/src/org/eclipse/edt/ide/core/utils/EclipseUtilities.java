@@ -25,6 +25,7 @@ import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -41,8 +42,10 @@ import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.core.JavaModelManager;
 import org.eclipse.jst.j2ee.project.JavaEEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
 
@@ -260,6 +263,20 @@ public class EclipseUtilities {
 					System.arraycopy(entries, 0, newEntries, 0, entries.length);
 					newEntries[newEntries.length - 1] = JavaCore.newSourceEntry(fullPath);
 					javaProject.setRawClasspath(newEntries, null);
+				}
+			}
+			
+			try {
+				if (project.isAccessible()) {
+					IMarker[] markers = project.findMarkers(IJavaModelMarker.BUILDPATH_PROBLEM_MARKER, false, IResource.DEPTH_ZERO);
+					for (int i = 0, length = markers.length; i < length; i++) {
+						IMarker marker = markers[i];
+						marker.delete();
+					}
+				}
+			} catch (CoreException e) {
+				if (JavaModelManager.VERBOSE) {
+					e.printStackTrace();
 				}
 			}
 		}
