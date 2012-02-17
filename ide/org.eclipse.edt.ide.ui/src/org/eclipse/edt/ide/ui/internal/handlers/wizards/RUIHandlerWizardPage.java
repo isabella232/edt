@@ -267,4 +267,8 @@ public class RUIHandlerWizardPage extends WizardPage {
 		fHandlerDialogField.setText(getConfiguration().getHandlerName());
 	}
 
+
+	public boolean isPageComplete(){
+		return true;
+	}
 }

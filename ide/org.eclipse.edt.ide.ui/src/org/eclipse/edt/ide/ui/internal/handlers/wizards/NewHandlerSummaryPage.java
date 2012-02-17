@@ -177,4 +177,8 @@ public class NewHandlerSummaryPage extends WizardPage {
 			getParent().layout(true);
 		}		
 	}
+	public boolean isPageComplete(){
+		return true;
+	}
+	
 }

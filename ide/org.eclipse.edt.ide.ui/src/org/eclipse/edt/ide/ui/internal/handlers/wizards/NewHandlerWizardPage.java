@@ -67,4 +67,9 @@ public class NewHandlerWizardPage extends EGLTemplateWizardPage {
 	protected String getTemplateID() {
 		return "org.eclipse.edt.ide.ui.handlers";
 	}
+	
+	protected void handleSelectedTemplate() {
+		getNextPage();
+		super.handleSelectedTemplate();
+	}
 }
