@@ -26,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
@@ -215,6 +214,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		determinePageCompletion();
 	}
 	
+	@Override
 	protected boolean determinePageCompletion() {
 		setErrorMessage(null);
 		boolean result = true;
@@ -230,13 +230,5 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		setPageComplete(result);
 		return result;
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		if (visible) {
-			determinePageCompletion();
-		}
 	}
 }
