@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.property.pages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
@@ -129,9 +130,11 @@ public class DefaultDeploymentDescriptorComposite extends Composite {
 			if(dialog.open() == IDialogConstants.OK_ID) {
 				Object obj = dialog.getFirstResult();
 				if ( obj instanceof IFile ) {
+					IPath path = ((IFile)obj).getFullPath();
+					
 					PartWrapper wrapper = new PartWrapper();
-					wrapper.setPartName("");
-					wrapper.setPartPath(((IFile)obj).getFullPath().toString());
+					wrapper.setPartName(path.removeFileExtension().lastSegment());
+					wrapper.setPartPath(path.toString());
 					setCurrentBD(wrapper);
 				}
 			}
