@@ -138,17 +138,26 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 	
 	@Override
 	protected URI getDefaultDDURI() {
+		if (defaultDD == null) {
+			AnyException ae = new AnyException();
+			throw ae.fillInMessage( Message.MISSING_DEFAULT_DD );
+		}
 		return defaultDD;
 	}
 	
 	public void setDefaultDD(String dd) throws AnyException {
-		try {
-			this.defaultDD = createFileURI(dd);
-		} catch (URISyntaxException e) {
-			JavaObjectException jox = new JavaObjectException();
-			jox.exceptionType = URI.class.getName();
-			jox.initCause( e );
-			throw jox.fillInMessage( Message.RESOURCE_URI_EXCEPTION, defaultDD );
+		if (dd == null || (dd = dd.trim()).length() == 0) {
+			this.defaultDD = null;
+		}
+		else {
+			try {
+				this.defaultDD = createFileURI(dd);
+			} catch (URISyntaxException e) {
+				JavaObjectException jox = new JavaObjectException();
+				jox.exceptionType = URI.class.getName();
+				jox.initCause( e );
+				throw jox.fillInMessage( Message.RESOURCE_URI_EXCEPTION, defaultDD );
+			}
 		}
 	}
 	
