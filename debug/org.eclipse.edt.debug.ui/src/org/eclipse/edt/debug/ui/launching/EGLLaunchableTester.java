@@ -45,6 +45,8 @@ public class EGLLaunchableTester extends PropertyTester
 	private static final String PROPERTY_HAS_PROJECT_NATURES = "hasProjectNatures"; //$NON-NLS-1$
 	private static final String HAS_JAVA_MAIN_PROGRAM = "hasJavaMainProgram"; //$NON-NLS-1$
 	
+	private static final JavaLaunchableTester tester = new JavaLaunchableTester();
+	
 	protected Object resolveElement( Object receiver )
 	{
 		Object element = null;
@@ -164,7 +166,6 @@ public class EGLLaunchableTester extends PropertyTester
 		if ( files != null && files.size() > 0 )
 		{
 			List<IFile> mainFiles = new ArrayList<IFile>( files.size() );
-			JavaLaunchableTester tester = new JavaLaunchableTester();
 			for ( IFile file : files )
 			{
 				if ( tester.test( file, "hasMain", new Object[ 0 ], null ) ) //$NON-NLS-1$
@@ -193,9 +194,10 @@ public class EGLLaunchableTester extends PropertyTester
 			
 			if ( javaGens.size() > 0 )
 			{
-				IEGLFile element = (IEGLFile)EGLCore.create( eglFile );
-				if ( element != null )
+				Object o = EGLCore.create( eglFile );
+				if ( o instanceof IEGLFile )
 				{
+					IEGLFile element = (IEGLFile)o;
 					ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment( eglFile.getProject() );
 					try
 					{
