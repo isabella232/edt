@@ -164,6 +164,7 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		determinePageCompletion();
 	}
 	
+	@Override
 	protected boolean determinePageCompletion() {
 		setErrorMessage(null);
 		boolean result = true;
@@ -176,11 +177,5 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		setPageComplete(result);
 		return result;
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		determinePageCompletion();
 	}
 }

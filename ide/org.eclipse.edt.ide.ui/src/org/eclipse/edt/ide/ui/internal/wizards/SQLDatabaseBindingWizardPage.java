@@ -424,6 +424,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 		tc2.setWidth(350);
 	}
 	
+	@Override
 	protected boolean determinePageCompletion() {
 		setErrorMessage(null);
 		boolean result = true;
@@ -440,12 +441,6 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 		return result;
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		super.setVisible(visible);
-		determinePageCompletion();
-	}
-
 	private BindingSQLDatabaseConfiguration getConfiguration(){
 		return (BindingSQLDatabaseConfiguration)((EGLPartWizard)getWizard()).getConfiguration(getName());
 	}

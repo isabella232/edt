@@ -76,7 +76,7 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 	}
 	
     public boolean canFinish() {
-    	return canPagePathFinish( PAGES );
+    	return PAGES != null && canPagePathFinish( PAGES );
     }
 	
     public void addPages() {

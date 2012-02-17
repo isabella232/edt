@@ -105,6 +105,11 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 		for ( int i = 0; i < providers.length; i ++ ) {
 			Button button = createBindingRadioButton(grp, providers[i].description, providers[i].bindingId);
 			bindingButtons.add( button );
+			
+			// For GTK we need to manually select the first radio button
+			if (i == 0) {
+				button.setSelection(true);
+			}
 		}
 		
 	}
@@ -266,5 +271,19 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	
 	public IWizardPage getNextPage() {
 		return getWizard().getNextPage(this);
+	}
+	
+	/**
+	 * Subclasses should override to set any error messages and the page complete flag.
+	 */
+	protected boolean determinePageCompletion() {
+		setPageComplete(true);
+		return true;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		determinePageCompletion();
 	}
 }
