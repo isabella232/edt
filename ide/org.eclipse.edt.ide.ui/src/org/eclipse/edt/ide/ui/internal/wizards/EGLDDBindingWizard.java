@@ -39,7 +39,15 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 	
 	public void init(IWorkbench workbench, IProject proj, EGLDeploymentRoot root) {
 		getEGLDDBindingConfiguration().init(workbench, proj, root);
+		initBindingConfiguration(proj,root);
 		setWindowTitle(NewWizardMessages.EGLDDBindingWizTitle);
+	}
+	
+	private void initBindingConfiguration(IProject proj, EGLDeploymentRoot root){
+		EGLDDBindingWizardProvider[] providers = EGLDDBindingProviderRegistry.singleton.getEGLDDBindingWizardProviders();
+		for ( int i = 0; i < providers.length; i ++ ) {
+			providers[i].bindingconfigurationClass.init(root, proj);
+		}
 	}
 	
 	public EGLPackageConfiguration getConfiguration() {
