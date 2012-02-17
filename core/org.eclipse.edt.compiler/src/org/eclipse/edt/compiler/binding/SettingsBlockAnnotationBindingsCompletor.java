@@ -208,6 +208,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							if(parentScope instanceof AnnotationLeftHandScope &&
 							   annotationTypeBindingImpl.isApplicableFor(((AnnotationLeftHandScope) parentScope).getBindingBeingAnnotated())) {
 								qualifiedName.setBinding(annotationBinding);
+								qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 							}
 							else {
 								getAnnotationLeftHandScope().setNotApplicableBinding(annotationBinding);
@@ -217,6 +218,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							}
 						} else {
 							qualifiedName.setBinding(annotationBinding);
+							qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 						}
 					}
 				} catch (ResolutionException e) {
