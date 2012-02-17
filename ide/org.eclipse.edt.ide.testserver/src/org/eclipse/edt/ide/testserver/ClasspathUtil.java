@@ -14,7 +14,6 @@ package org.eclipse.edt.ide.testserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -107,9 +106,6 @@ public class ClasspathUtil {
 		
 		// The main project.
 		classpath.add(getWorkspaceProjectClasspathEntry(project.getName()));
-		
-		// For each project on the EGL path, add it to the classpath if it's a Java project and not already on the Java path of the launching project.
-		addEGLPathToJavaPathIfNecessary(JavaCore.create(project), project, new HashSet<IProject>(), classpath);
 		
 		// Add any contributed classpath entries.
 		for (AbstractTestServerContribution contrib : TestServerPlugin.getContributions()) {
