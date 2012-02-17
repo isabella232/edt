@@ -443,9 +443,7 @@ public class SQLDatabaseBindingWizardPage extends EGLDDBindingWizardPage impleme
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (visible) {
-			determinePageCompletion();
-		}
+		determinePageCompletion();
 	}
 
 	private BindingSQLDatabaseConfiguration getConfiguration(){

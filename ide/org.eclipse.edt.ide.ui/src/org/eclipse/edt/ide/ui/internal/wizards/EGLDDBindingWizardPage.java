@@ -128,7 +128,10 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 
 	protected void updateWizardDialogButtons(IWizardPage currWizPage) {
 		IWizard wiz = getWizard();
-		IWizardContainer wizDlg = getWizard().getContainer();		
+		IWizardContainer wizDlg = getWizard().getContainer();
+		if(wiz instanceof EGLDDBindingWizard){
+			((EGLDDBindingWizard)wiz).updatePagePathAndNextPage(currWizPage);
+		}
 		wizDlg.updateButtons();
 	}
 
