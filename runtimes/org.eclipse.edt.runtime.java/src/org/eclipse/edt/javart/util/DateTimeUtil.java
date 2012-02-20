@@ -19,15 +19,7 @@ import java.util.Locale;
 
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
-import com.ibm.icu.util.BuddhistCalendar;
-import com.ibm.icu.util.ChineseCalendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.HebrewCalendar;
-import com.ibm.icu.util.IslamicCalendar;
-import com.ibm.icu.util.JapaneseCalendar;
-import com.ibm.icu.util.ULocale;
-
-
+import com.ibm.icu.util.*;
 
 /**
  * This class has constants and utility methods related to date/time values.
@@ -36,6 +28,16 @@ import com.ibm.icu.util.ULocale;
  */
 public class DateTimeUtil
 {
+	/**
+	 * The value of TimeZone.getDefault().
+	 */
+	public static final java.util.TimeZone DEFAULT_TIME_ZONE = java.util.TimeZone.getDefault();
+	
+	/**
+	 * The ICU4J version of DEFAULT_TIME_ZONE.
+	 */
+	private static final TimeZone DEFAULT_ICU_TIME_ZONE = TimeZone.getTimeZone( DEFAULT_TIME_ZONE.getID(), TimeZone.TIMEZONE_JDK );
+	
 	/**
 	 * The number of microseconds in a second (one million).
 	 */
@@ -53,7 +55,7 @@ public class DateTimeUtil
 	static
 	{
 		// Initialize baseCalendar.
-		baseCalendar = Calendar.getInstance();
+		baseCalendar = Calendar.getInstance( DEFAULT_TIME_ZONE );
 		baseCalendar.clear();
 		baseCalendar.setLenient( false );
 	}
@@ -406,6 +408,7 @@ public class DateTimeUtil
 		            break;
 			}
 
+			cal.setTimeZone( DEFAULT_ICU_TIME_ZONE );
 			formatter = 
             	(JavartDateFormat)cal.getDateTimeFormat(
                         DateFormat.DEFAULT, DateFormat.DEFAULT, ULocale.forLocale( locale ) );
