@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,10 +25,12 @@ egl.defineWidget(
 	},
 	"createDojoWidget" : function(parent) {
 		this.dojoID = "egl.DojoTabContainer" + (++egl._dojoSerial);
+		if(this._id == null)
+			this._id = this.dojoID;
 		this._mergeArgs({
 			tabPosition: this.getDojoTabPosition(), 
 			doLayout: true, 
-			id: this.id || this.dojoID,
+			id: this.id || (this._id || this.dojoID),
 			style: "width:"+egl.toPX(this.width)+";height:"+egl.toPX(this.height)
 		});
 		var visibility = parent.style.visibility;
