@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.NullLiteral;
 
 
 public class AnnotationImpl extends ElementImpl implements Annotation {
@@ -23,7 +24,12 @@ public class AnnotationImpl extends ElementImpl implements Annotation {
 	@Override
 	public Object getValue() {
 		if (getEClass().getEFields().isEmpty()) return null;
-		return eGet(getEClass().getEFields().get(0));
+		
+		Object value = eGet(getEClass().getEFields().get(0));
+		if (value instanceof NullLiteral) {
+			value = null;
+		}
+		return value;
 	}
 	
 	@Override
@@ -34,7 +40,11 @@ public class AnnotationImpl extends ElementImpl implements Annotation {
 	
 	@Override
 	public Object getValue(String key) {
-		return eGet(key);
+		Object value = eGet(key);
+		if (value instanceof NullLiteral) {
+			value = null;
+		}
+		return value;
 	}
 	
 	@Override
