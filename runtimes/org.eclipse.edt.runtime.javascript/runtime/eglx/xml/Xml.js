@@ -118,11 +118,11 @@ egl.eglx.xml.XmlLib["dictionaryToXML"] = function( /*value*/value, /*map*/namesp
 	for (f in value) {
 		if (!f.match(/^eze\$\$/) && (typeof this[f] != "function")) {
 			//create an fieldInfo for each field
-			var xmlElem = new egl.eglx.xml.binding.annotation.XMLElement(f, null, true);
-			annotations = {};
+			var annotations = {};
+			annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement(f, null, true, true);
 			var fieldInfo = new egl.eglx.xml.binding.annotation.FieldInfo(
 					null, null, fieldInfo.eglSignature,
-					fieldInfo.eglType, null);
+					fieldInfo.eglType, annotations);
 			this.toXML(f, namespaces, fieldInfo);
 		}
 	}
