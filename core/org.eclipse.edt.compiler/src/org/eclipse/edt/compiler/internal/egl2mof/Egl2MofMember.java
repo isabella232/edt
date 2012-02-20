@@ -39,6 +39,7 @@ import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
@@ -530,6 +531,9 @@ class Egl2MofMember extends Egl2MofPart {
 				if (Binding.isValidBinding(lhsExpr.resolveDataBinding())) {
 					if (lhsExpr.resolveDataBinding() instanceof IAnnotationBinding) {
 						Annotation value = (Annotation)mofValueFrom(lhsExpr.resolveDataBinding());
+						if (assignment.getRightHandSide() instanceof NullLiteral && value != null) {
+							value.setValue(factory.createNullLiteral());
+						}
 						context.getAnnotations().add(value);
 					}
 					// Check if this is setting a value into the context element, i.e. setting contents into a DataTable
@@ -757,7 +761,12 @@ class Egl2MofMember extends Egl2MofPart {
 						}
 					}
 					else {
-						source = evaluateExpression(assignment.getRightHandSide());
+						if (assignment.getRightHandSide() instanceof NullLiteral) {
+							source = factory.createNullLiteral();
+						}
+						else {
+							source = evaluateExpression(assignment.getRightHandSide());
+						}
 						String[] names = nameExpr.getNameComponents();
 						if (nameExpr.getNameComponents().length > 1) {
 							for (int i=1; i<names.length; i++) {
