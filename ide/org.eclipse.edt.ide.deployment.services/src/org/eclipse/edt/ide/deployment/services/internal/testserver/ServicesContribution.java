@@ -267,9 +267,12 @@ public class ServicesContribution extends AbstractTestServerContribution {
 									// Fall through.
 								case IResourceDelta.ADDED:
 								case IResourceDelta.REMOVED:
-									if ("egldd".equalsIgnoreCase(delta.getFullPath().getFileExtension()) //$NON-NLS-1$
-											&& config.isOnEGLPath(config.getProject(), delta.getResource().getProject(), new HashSet<IProject>())) {
-										throw new RecomputeSettings();
+									if ("egldd".equalsIgnoreCase(delta.getFullPath().getFileExtension())) { //$NON-NLS-1$
+										for (DDFile dd : currentDDFiles.get(config)) {
+											if (dd.path.equals(delta.getResource().getLocation().toOSString())) {
+												throw new RecomputeSettings();
+											}
+										}
 									}
 									break;
 							}
