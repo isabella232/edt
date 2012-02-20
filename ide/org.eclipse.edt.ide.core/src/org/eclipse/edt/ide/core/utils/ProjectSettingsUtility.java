@@ -204,7 +204,7 @@ public class ProjectSettingsUtility {
 		} catch ( Exception e ) {
 			
 		}
-		if (ids == null) {
+		if (ids == null || ids.length == 0) {
 			// When the project doesn't have its own settings, use the workspace defaults
 			ids = getWorkspaceGeneratorIds();
 		}
