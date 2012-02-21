@@ -350,6 +350,13 @@
 <entry keyword="History Rich UI handler part">
 <topic href="topics/cedt01023.html#cedt01023" title="Browser history"/>
 </entry>
+<entry keyword="IBM i">
+<entry keyword="access of called or service programs">
+<entry keyword="overview">
+<topic href="topics/tedt01042.html#tedt01042" title="Accessing an IBM i called or service program"/>
+</entry>
+</entry>
+</entry>
 <entry keyword="Infobus Rich UI widget">
 <topic href="topics/cedt01022.html#cedt01022" title="Rich UI Infobus"/>
 </entry>

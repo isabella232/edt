@@ -32,9 +32,15 @@ cases are possible:</div>
 <ul>
 <li>If you are working in Rich UI, the only accessible EGL service
 is a dedicated service, as explained in “Service access in Rich UI.”
-You can use an Interface part to declare the variable, but can easily
-use the Service part instead. Here is an example: <pre class="codeblock">  myService MyServiceType?{@dedicatedService};
+You can use an Interface type to declare the variable, but can easily
+use the Service type instead. Here is an example, which also references
+the package name in which the Service type resides: <pre class="codeblock">myService server.MyServiceType?{@dedicatedService};
 </pre>
+<div class="p">If you use an Interface part, set the <strong>serviceName</strong> annotation
+field to the name of the Service type:<pre class="codeblock">myService MyInterfaceType?
+   {@dedicatedService{serviceName = "server.MyServiceType"}};
+</pre>
+</div>
 <p>After declaring the variable, use it in a <span class="synph"><span class="kwd">call</span></span> statement.
 For details, see “Invoking a service asynchronously from a Rich UI
 application.”</p>

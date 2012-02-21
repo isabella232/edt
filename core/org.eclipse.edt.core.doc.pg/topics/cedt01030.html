@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Resource bindings"></meta>
-<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database."></meta>
-<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database."></meta>
+<meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application."></meta>
+<meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application."></meta>
 <meta name="DC.subject" content="Resource bindings"></meta>
 <meta name="keywords" content="Resource bindings"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
@@ -30,14 +30,14 @@
 
 <div id="body"><a name="body"><!-- --></a><p>One of the more elegant aspects of EGL is its
 use of <em>resource bindings</em>, each of which is a value that describes
-how to access a service or database.</p>
+how to access a service or database. In most cases, you maintain bindings
+in an EGL deployment descriptor, which is external to your logic.
+The deployment descriptor provides the access details when you are
+developing or deploying your application.</p>
 
-<p>In most cases, you maintain bindings in an EGL deployment descriptor,
-which is external to your logic and provides the access details when
-you are developing or deploying your application.  This use of the
-deployment descriptor is safe and flexible. You can change the details
-stored there and redeploy the code without changing the logic and
-without spending the time to regenerate output. </p>
+<p>This use of the deployment descriptor is safe and flexible. You
+can change the details stored there and redeploy the code without
+changing the logic and without spending the time to regenerate output. </p>
 
 <div class="section"><h2 class="sectiontitle">The typical process</h2><div class="p">The binding mechanism
 is the same for service and database access. The typical process is
@@ -70,17 +70,17 @@ preceding annotation, the missing value for the uri field is <samp class="codeph
 output invokes code that is equivalent to the SysLib.getResource function.</li>
 
 <li>You can explicitly identify an EGL deployment descriptor: <pre class="codeblock">myService MyInterfaceType?;
-myService = SysLib.getResource("binding:myDDFile#myBinding"); 
+myService = SysLib.getResource("binding:file:myDDFile#myBinding"); 
 
 // equivalent annotation
-myService MyInterfaceType?(@Resource{uri = "binding:myDDFile#myBinding"}};</pre>
+myService MyInterfaceType?(@Resource{uri = "binding:file:myDDFile#myBinding"}};</pre>
 </li>
 
 <li>If you do not identify an EGL deployment descriptor, the referenced
 file is the one that is currently in use. At development time, the
-one currently in use is identified in the following project property: <strong>Development
-Deployment Descriptor</strong>. At deployment time, the referenced deployment
-descriptor is the one that you deploy.</li>
+one that is currently in use is identified in the following project
+property: <strong>Development Deployment Descriptor</strong>. At deployment
+time, the referenced deployment descriptor is the one that you deploy.</li>
 
 </ul>
 </div>

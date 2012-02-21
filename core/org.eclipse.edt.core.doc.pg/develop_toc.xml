@@ -35,8 +35,6 @@
                 href="topics/tedt01024.html"/>
          <topic label="Using a provided Interface part for a 3rd-party REST service"
                 href="topics/tedt01025.html"/>
-         <topic label="Accessing an IBM i program as a web service"
-                href="topics/tedt01042.html"/>
       </topic>
    </topic>
    <topic label="EGL support for Rich Internet Applications" href="topics/cedt01002.html">
@@ -83,6 +81,8 @@
    <topic label="Transferring control">
       <topic label="Accessing a BIRT report" href="topics/tedt01014.html"/>
       <topic label="Accessing a program or transaction from generated code">
+         <topic label="Accessing an IBM i called or service program"
+                href="topics/tedt01042.html"/>
          <topic label="Calling from generated Java code to Java code"
                 href="topics/tedt01026.html"/>
          <topic label="Calling from generated Java code to an EXEC or BAT file"
