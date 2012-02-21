@@ -51,7 +51,7 @@ handler HTML type RUIWidget{ tagName = "div", onConstructionFunction = start,
 	end
 
 	function setSrc(src string in)
-		restService IRest?{@Resource {uri = "binding:file:org_eclipse_edt_rui_widgets_0_7_0#restServiceHTMLWidget"}};
+		restService IRest?{@Resource {uri = "binding:file:org_eclipse_edt_rui_widgets#restServiceHTMLWidget"}};
 		if (src.length() < 4 || src[1:4].toLowerCase() != "http")
             call restService.invokeGet(contextURL + src) returning to setText;
         else
