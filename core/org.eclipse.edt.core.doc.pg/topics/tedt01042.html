@@ -151,7 +151,7 @@ example of an EGL proxy function, including the annotations named <strong>Extern
             @AS400Text{length = 1},
            	null 
          ],
-         connectionResource = @Resource{uri = "binding:file:EGLDDFile#MyConnection"}
+         resourceBindingURI = @Resource{uri = "binding:file:EGLDDFile#MyConnection"}
       }
    }
 end   </pre>
@@ -218,7 +218,7 @@ are in effect for the fields that are in a container; that is, in
 a variable that is based on a Record or Handler type. For example,
 here is a Record type with annotations:<pre class="codeblock">Record Example
 
-   //Convert using the default AS400Bin4 
+   //Convert using the default AS400Bin4
    f1 int;
 
    //After the host program call, f2 is resized using the data returned in f3
@@ -234,7 +234,7 @@ here is a Record type with annotations:<pre class="codeblock">Record Example
    f5 decimal(10,2);
 
    //Convert using the AS400ZonedDecimal
-   f6 decimal(10,4){@AS400DecimalZoned{}};
+   f6 decimal(10,4){@AS400ZonedDecimal{}};
 end</pre>
 </div>
 <p>If that Record type included a record, you would
@@ -256,7 +256,7 @@ the following proxy function, which resides in an EGL Program type: <pre class="
    {
       @IBMiProgram{
          programName = "/QSYS.LIB/VARLABXX.LIB/GETREC",
-         connectionResource = @Resource{uri = "binding:file:someConnection"},
+         resourceBindingURI = @Resource{uri = "binding:file:someConnection"},
          isServiceProgram= true,
          parameterAnnotations = [@AS400Text{length = 10}, @AS400Text{length = 10}]
       }
@@ -266,7 +266,7 @@ end</pre>
 </div>
 <div class="p">Here is a call from another function in the
 same program, including reference to a Customer Record type. The call
-relies on the binding detail that was just shown in the <strong>connectionResource</strong> field:<pre class="codeblock">cust Customer;
+relies on the binding detail that was just shown in the <strong>resourceBindingURI</strong> field:<pre class="codeblock">cust Customer;
 result Int;
 myString String = "abc";
 try
@@ -306,10 +306,11 @@ end</pre>
 might provide a value of type IBMiConnection instead of referencing
 the EGL deployment descriptor:<pre class="codeblock">cust Customer;
 result int;
+myString String = "abc";
 
 conn IBMiConnection? = getMyDefinedConnection();
 try
-   call MyHostProcedure("abd", cust) 
+   call MyHostProcedure(myString, cust) 
       using conn
       returns (result);
    onexception(exception AnyException)
@@ -445,11 +446,11 @@ same as the name of the corresponding Java class in the JTOpen <samp class="code
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="13.559322033898304%" id="d25177e546">EGL type </th>
+<th class="cellrowborder" valign="bottom" width="13.559322033898304%" id="d25177e545">EGL type </th>
 
-<th class="cellrowborder" valign="bottom" width="35.59322033898305%" id="d25177e549">EGL annotation</th>
+<th class="cellrowborder" valign="bottom" width="35.59322033898305%" id="d25177e548">EGL annotation</th>
 
-<th class="cellrowborder" valign="bottom" width="50.847457627118644%" id="d25177e552">Annotation fields</th>
+<th class="cellrowborder" valign="bottom" width="50.847457627118644%" id="d25177e551">Annotation fields</th>
 
 </tr>
 
@@ -457,20 +458,20 @@ same as the name of the corresponding Java class in the JTOpen <samp class="code
 
 <tbody>
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">bigint</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">bigint</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 "></td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 "></td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">bytes<strong> (not yet supported)</strong></td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">bytes<strong> (not yet supported)</strong></td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Array</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Array</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">For a non-parameterized bytes type:<dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">For a non-parameterized bytes type:<dl>
 
 <dt class="dlterm">length</dt>
 
@@ -482,11 +483,11 @@ same as the name of the corresponding Java class in the JTOpen <samp class="code
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">date</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">date</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Date</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Date</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 "><dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 "><dl>
 <dt class="dlterm">ibmiFormat</dt>
 
 <dd>Controls the conversion to an  IBM i
@@ -519,11 +520,11 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">decimal</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">decimal</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">For a non-parameterized decimal type: <dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">For a non-parameterized decimal type: <dl>
 
 <dt class="dlterm">length</dt>
 
@@ -543,44 +544,44 @@ field is not available.</dd>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">float</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">float</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Float8 (the default).</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Float8 (the default).</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">Handler types</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">Handler types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">No annotation. Conversion is controlled by the
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">int</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">int</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">List types</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">List types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Array (the default).<p>You must specify
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Array (the default).<p>You must specify
 the annotation if you need to use any of the annotation fields. None
 of those fields has a default value.</p>
 <p>For examples, see a later
 section.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 "><dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 "><dl>
 <dt class="dlterm">elementCount</dt>
 
 <dd><p>The number of elements in the list that is sent to the host. </p>
@@ -620,21 +621,21 @@ lists. </p>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">Record types</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">Record types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">No annotation. Conversion is controlled by the
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">string</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">string</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Text (the default). </td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Text (the default). </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">For a non-parameterized string type: <dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">For a non-parameterized string type: <dl>
 
 <dt class="dlterm">length</dt>
 
@@ -660,29 +661,29 @@ the right side of the string. The default is false.</dd>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">smallfloat</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">smallfloat</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Float4 (the default).</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Float4 (the default).</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
-
-</tr>
-
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">smallint</td>
-
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
-
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 ">&#xA0;</td>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">time</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">smallint</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Time (the default).</td>
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 "><dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 ">&#xA0;</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">time</td>
+
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Time (the default).</td>
+
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 "><dl>
 <dt class="dlterm">ibmiFormat</dt>
 
 <dd>Controls the conversion to an  IBM i
@@ -715,18 +716,18 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e546 ">timestamp</td>
+<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d25177e545 ">timestamp</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e549 ">AS400Timestamp (the default). The conversion
+<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d25177e548 ">AS400Timestamp (the default). The conversion
 to an IBM i timestamp format
 is in accordance with the Java FORMAT_DEFAULT field in the following
 class: com.ibm.as400.access.AS400Timestamp. </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e552 "><dl>
+<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d25177e551 "><dl>
 <dt class="dlterm">eglPattern</dt>
 
 <dd>Controls the conversion back to an EGL format. For details on
-the patterns, see the following help topic:  <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00238.dita">../../org.eclipse.edt.core.doc.lr/topics/redt00238.dita</a>.</dd>
+the patterns, see the following help topic:  <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00238.html" title="A variety of characters are available for the patterns that you specify in the StringLib.format system function and in several StrLib system functions.">Pattern characters used to format non-string values to strings</a>.</dd>
 
 
 <dt class="dlterm">ibmiTimezoneID</dt>
