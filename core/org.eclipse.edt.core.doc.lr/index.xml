@@ -199,9 +199,6 @@
 <entry keyword="commit EGL function">
 <topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
 </entry>
-<entry keyword="completeBind EGL function">
-<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
-</entry>
 <entry keyword="Constants EGL system library">
 <entry keyword="overview">
 <topic href="topics/redt00240.html#redt00240" title="Constants library"/>
@@ -477,9 +474,6 @@
 </entry>
 <entry keyword="commit">
 <topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
-</entry>
-<entry keyword="completeBind">
-<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
 </entry>
 <entry keyword="convertFromJSON">
 <topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
@@ -1457,9 +1451,6 @@
 <topic href="topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
 </entry>
 <entry keyword="ServiceLib EGL external type">
-<entry keyword="completeBind">
-<topic href="topics/redt00144.html#redt00144" title="ServiceLib.completeBind function"/>
-</entry>
 <entry keyword="overview">
 <topic href="topics/redt00071.html#redt00071" title="ServiceLib external type"/>
 </entry>

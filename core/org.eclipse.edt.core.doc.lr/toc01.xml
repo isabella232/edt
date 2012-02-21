@@ -220,9 +220,7 @@
       </topic>
       <topic label="eglx.rbd package and its StrLib library" href="topics/redt00239.html"/>
       <topic label="eglx.services package" href="topics/redt00065.html">
-         <topic label="ServiceLib external type" href="topics/redt00071.html">
-            <topic label="ServiceLib.completeBind function" href="topics/redt00144.html"/>
-         </topic>
+         <topic label="ServiceLib external type" href="topics/redt00071.html"/>
       </topic>
       <topic label="eglx.xml package" href="topics/redt00034.html">
          <topic label="XMLLib external type" href="topics/redt00257.html">

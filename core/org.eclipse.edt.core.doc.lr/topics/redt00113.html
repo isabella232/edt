@@ -1128,10 +1128,10 @@ handler MyHandler type RUIhandler { initialUI = [ grid ],
       tooltipBox.children = [ tooltipArea ];	
       tooltipArea.text = 
       "In function tooltipText (a tooltip provider):" + 
-      "\n   fieldName is the column name ('"+fieldName+"')." +
+      "\n   o  fieldName is the column name ('"+fieldName+"')." +
       "\nYou can access cell content:" +
-      "\n   td.innerText is '"+td.innerText+"'. \nThanks to EGL dynamic access" +
-      "\n   rowData[fieldName] is also '"+rowData[fieldName] + "'."; 
+      "\n   o  td.innerText is '"+td.innerText+"'." +
+      "\n   o  rowData["+fieldName+"] is '"+rowData[fieldName] + "'."; 
       return (tooltipBox); 
    end
 end</pre>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.6"?>
+<plugin>
+   <extension 
+      point="org.eclipse.help.toc"> 
+      <toc file="toc01.xml" primary="true"/>
+      <!-- index path="index/" -->
+   </extension>
+   
+   <extension point="org.eclipse.help.contentProducer">
+      <binding producerId="org.eclipse.help.dynamic" />
+   </extension>
+      
+   <!--extension
+      point="org.eclipse.help.contentExtension">
+      <contentExtension file="wiring.xml"/>
+   </extension-->  
+   
+   <!-- extension point="org.eclipse.help.index">
+      <index file="index.xml" /-->   
+   
+   <!-- extension
+         point="org.eclipse.help.base.luceneSearchParticipants">
+      <binding participantId="org.eclipse.help.base.xhtml"/>
+   </extension -->
+   
+</plugin>   
+   
+   
+
+   
+     
+   
+   
+
