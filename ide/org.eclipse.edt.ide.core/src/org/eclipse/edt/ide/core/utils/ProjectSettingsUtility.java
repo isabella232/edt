@@ -198,17 +198,8 @@ public class ProjectSettingsUtility {
 	 * @return a non-null array of the IGenerators for the resource
 	 */
 	public static IGenerator[] getProjectGenerators(IProject resource) {
-		String[] ids = null;
-		try {
-			ids = getChildrenGeneratorIds(resource);
-		} catch ( Exception e ) {
-			
-		}
-		if (ids == null || ids.length == 0) {
-			// When the project doesn't have its own settings, use the workspace defaults
-			ids = getWorkspaceGeneratorIds();
-		}
-		if (ids != null && ids.length != 0) {
+		String[] ids = getChildrenGeneratorIds(resource);
+		if (ids.length != 0) {
 			IIDECompiler compiler = getCompiler(resource.getProject());
 			IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
 			if (gens.length > 0) {
@@ -237,7 +228,7 @@ public class ProjectSettingsUtility {
 	public static String[] getWorkspaceGeneratorIds() {
 		String genIDs = EDTCoreIDEPlugin.getPlugin().getPreferenceStore().getString(EDTCorePreferenceConstants.GENERATOR_IDS);
 		if (genIDs != null && (genIDs = genIDs.trim()).length() != 0) {
-			return genIDs.split(",");
+			return genIDs.split(","); //$NON-NLS-1$
 		}
 		else {
 			return EMPTY_GENERATOR_IDS;
@@ -261,7 +252,7 @@ public class ProjectSettingsUtility {
 		if (setting != null) {
 			setting = setting.trim();
 			if (setting.length() != 0) {
-				String[] ids = setting.split(",");
+				String[] ids = setting.split(","); //$NON-NLS-1$
 				
 				// trim each value
 				for (int i = 0; i < ids.length; i++) {
@@ -278,34 +269,46 @@ public class ProjectSettingsUtility {
 	
 	/**
 	 * Returns the IDs of the generators associated with the resource and its children resources. 
-	 * If there are no generators for the resource, this returns null.
 	 * 
 	 * @param resource  The resource (a file, folder, or project)
-	 * @return an array of the generator IDs, possibly null
+	 * @return an array of the generator IDs, never null.
 	 */
-	public static String[] getChildrenGeneratorIds(IResource resource) throws BackingStoreException {
+	public static String[] getChildrenGeneratorIds(IResource resource) {
 		List<String> generators = new ArrayList<String>(0);
 		IProject project = resource.getProject();
 		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
 		
-		String resourcePath = keyFor( resource.getFullPath() );
-		
-	    String[] keys = prefs.keys();
-	    for (String key : keys) {
-	    	String setting = prefs.get(key, null);
-	    	String path = EclipseUtilities.convertToInternalPath(key);
-	        if ( pathStartWith( path, resourcePath ) || "<project>".equals( resourcePath ) ) {
-				setting = setting.trim();
-				if (setting.length() != 0) {
-					String[] ids = setting.split(",");
-					// trim each value
-					for (int i = 0; i < ids.length; i++) {
-						generators.add( ids[i].trim() );
+		try {
+		    String[] keys = prefs.keys();
+		    String resourcePath = keyFor(resource.getFullPath());
+		    for (String key : keys) {
+		    	String setting = prefs.get(key, null);
+		    	String path = EclipseUtilities.convertToInternalPath(key);
+		        if (PROJECT_KEY.equals(resourcePath) || pathStartWith(path, resourcePath)) {
+					setting = setting.trim();
+					if (setting.length() != 0) {
+						String[] ids = setting.split(","); //$NON-NLS-1$
+						// trim each value
+						for (int i = 0; i < ids.length; i++) {
+							generators.add(ids[i].trim());
+						}
+	
 					}
-
-				}
-	        }
-	    }
+		        }
+		    }
+		}
+		catch (BackingStoreException bse) {
+			// Nothing we can do except still check if any resources are using workspace generators below.
+			EDTCoreIDEPlugin.log(bse);
+		}
+		
+		// If this resource specifies its own generation settings, do not add the workspace generator IDs. If this has its own
+		// settings that means none of its children resources could be inheriting from workspace settings either.
+		if (findSetting(resource.getFullPath(), prefs, false) == null) {
+			for (String id : getWorkspaceGeneratorIds()) {
+				generators.add(id);
+			}
+		}
 		
 		return (String[])generators.toArray(new String[generators.size()]);
 	}
@@ -327,7 +330,7 @@ public class ProjectSettingsUtility {
 			prefs.remove(keyFor(resource.getFullPath()));
 		}
 		else if (ids.length == 0) {
-			prefs.put(keyFor(resource.getFullPath()), "");
+			prefs.put(keyFor(resource.getFullPath()), ""); //$NON-NLS-1$
 		}
 		else {
 			StringBuilder buf = new StringBuilder(100);
@@ -446,8 +449,9 @@ public class ProjectSettingsUtility {
 		String setting = ProjectSettingsUtility.findSetting(resource.getFullPath(), propertyPrefs, true);
 		if (setting != null && setting.length() > 0) {
 			return setting;
-		}else{
-			return "";
+		}
+		else {
+			return ""; //$NON-NLS-1$
 		}
 	}
 	/**
@@ -585,8 +589,9 @@ public class ProjectSettingsUtility {
 	
 	protected static String[] getGenerationDirectoryForLanguage(IProject project, String language) {
 		
-		if(language==null) 
+		if(language==null) {
 			return new String[0];
+		}
 
 		HashSet<String> retValue = new HashSet<String>();
 		IGenerator[] generators = getProjectGenerators(project);
@@ -687,7 +692,7 @@ public class ProjectSettingsUtility {
     }
     
     private static boolean pathStartWith( String path1, String path2 ) {
-    	return path1.equals( path2 ) || (path1.startsWith( path2 + "/" ) );
+    	return path1.equals( path2 ) || (path1.startsWith( path2 + "/" ) ); //$NON-NLS-1$
     }
 	
     private static String[] getPreferenceNodes(IProject project) {
