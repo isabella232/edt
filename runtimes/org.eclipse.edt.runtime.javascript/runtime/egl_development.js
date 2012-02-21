@@ -143,7 +143,7 @@ egl.loadCSS = function(cssFile) {
 	if ( egl.ptCrash )
 		return;
 	if ( egl.cssFiles && egl.cssFiles.length == 0 ) {
-		var links = document.body.getElementsByTagName( "link" );
+		var links = document.getElementsByTagName( "link" );
 		for ( var i = 0; i < links.length; i ++ ) {
 			var href = links[i].getAttribute( "href" );
 			if ( href ) {
