@@ -173,4 +173,55 @@
              visibleInUI="true">
        </commonFilter>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.edt.ide.ui.preferences"
+            class="org.eclipse.edt.debug.internal.ui.BaseDebugPreferencePage"
+            id="org.eclipse.edt.debug.ui.basePreferencePage"
+            name="%BasePreferencePageName">
+      </page>
+      <page
+            category="org.eclipse.edt.debug.ui.basePreferencePage"
+            class="org.eclipse.edt.debug.internal.ui.java.EGLJavaDebugPreferencePage"
+            id="org.eclipse.edt.debug.ui.eglJavaPreferencePage"
+            name="%EGLJavaPreferencePageName">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.debug.ui.DebugView">
+         <menu
+               id="org.eclipse.edt.debug.ui.DebugView.eglMenu"
+               label="%EGLSubMenuLabel">
+            <command
+                  commandId="org.eclipse.edt.debug.ui.commands.enableFilters"
+                  label="%EGLSubMenuEnableFiltersLabel"
+                  style="toggle">
+            </command>
+            <command
+                  commandId="org.eclipse.edt.debug.ui.commands.configureFilters"
+                  label="%EGLSubMenuConfigureFiltersLabel"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.eclipse.edt.debug.internal.ui.actions.EnableFiltersAction"
+            description="%EGLSubMenuEnableFiltersDescription"
+            id="org.eclipse.edt.debug.ui.commands.enableFilters"
+            name="%EGLSubMenuEnableFiltersLabel">
+      </command>
+      <command
+            defaultHandler="org.eclipse.edt.debug.internal.ui.actions.ConfigureFiltersAction"
+            description="%EGLSubMenuConfigureFiltersDescription"
+            id="org.eclipse.edt.debug.ui.commands.configureFilters"
+            name="%EGLSubMenuConfigureFiltersLabel">
+      </command>
+   </extension>
 </plugin>

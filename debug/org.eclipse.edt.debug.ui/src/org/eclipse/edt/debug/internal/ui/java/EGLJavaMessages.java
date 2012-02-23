@@ -25,4 +25,15 @@ public class EGLJavaMessages extends NLS
 	
 	public static String LineBreakpointUnkown;
 	public static String LineBreakpointLabel;
+	public static String PreferencePageMessage;
+	public static String JavaPreferencePageLink;
+	public static String JavaFilterPreferencePageLink;
+	public static String FilterStepIntoLabel;
+	public static String FilterStepReturnLabel;
+	public static String TypeFiltersGroupLabel;
+	public static String TypeFiltersDescription;
+	public static String TypeFiltersEnableButtonLabel;
+	public static String TypeFiltersCategoryColumn;
+	public static String TypeFiltersBehaviorColumn;
+	public static String TypeFilterDescriptionLabel;
 }
