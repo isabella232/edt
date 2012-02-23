@@ -23,6 +23,9 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 
+/**
+ * Utility methods used by the debugger.
+ */
 public class DebugUtil
 {
 	private DebugUtil()
@@ -43,13 +46,17 @@ public class DebugUtil
 				: name.length();
 		int suffixLength = SUFFIX_EGL.length;
 		if ( nameLength < suffixLength )
+		{
 			return false;
+		}
 		
 		for ( int i = 0, offset = nameLength - suffixLength; i < suffixLength; i++ )
 		{
 			char c = name.charAt( offset + i );
 			if ( c != SUFFIX_egl[ i ] && c != SUFFIX_EGL[ i ] )
+			{
 				return false;
+			}
 		}
 		return true;
 	}
