@@ -498,6 +498,10 @@ public class ConfigServlet extends HttpServlet {
 		for (int i = size - 1; i >= 0; i--) {
 			try {
 				RuntimeDeploymentDesc dd = bindingProcessor.getResourceLocator().getDeploymentDesc(names.get(i));
+				if (dd == null) {
+					continue;
+				}
+				
 				List<SQLDatabaseBinding> bindings = dd.getSqlDatabaseBindings();
 				
 				for (SQLDatabaseBinding binding : bindings) {
@@ -553,6 +557,10 @@ public class ConfigServlet extends HttpServlet {
 		for (int i = size - 1; i >= 0; i--) {
 			try {
 				RuntimeDeploymentDesc dd = bindingProcessor.getResourceLocator().getDeploymentDesc(names.get(i));
+				if (dd == null) {
+					continue;
+				}
+				
 				List<SQLDatabaseBinding> bindings = dd.getSqlDatabaseBindings();
 				
 				for (SQLDatabaseBinding binding : bindings) {
