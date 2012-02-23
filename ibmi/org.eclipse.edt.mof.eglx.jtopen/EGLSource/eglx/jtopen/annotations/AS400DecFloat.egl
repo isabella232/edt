@@ -1,6 +1,6 @@
 package eglx.jtopen.annotations;
 
-Record AS400DecimalFloat type Annotation
+Record AS400DecFloat type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
 	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DecimalFloatAnnotationTypeBinding"
