@@ -670,6 +670,9 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	public Object getAdapter(Class required) {
+		if (required == IEGLEditor.class || required == EGLEditor.class) {
+			return this;
+		}
 		if (IContentOutlinePage.class.equals(required)) {
 			return getOutlinePage();
 		}
