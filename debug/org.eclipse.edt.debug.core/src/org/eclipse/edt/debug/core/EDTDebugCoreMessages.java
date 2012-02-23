@@ -26,4 +26,8 @@ public class EDTDebugCoreMessages extends NLS
 	public static String TransformerUnsupportedEncoding;
 	public static String ErrorRetrievingValue;
 	public static String WatchExprsUnsupported;
+	public static String TypeFilterExtensionRequiredAttributeMissing;
+	public static String TypeFilterProviderMissingCategory;
+	public static String NoDescription;
+	public static String TypeFilterClasspathEntryNotSupported;
 }

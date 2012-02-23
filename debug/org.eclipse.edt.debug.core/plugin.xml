@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="javaVariableAdapters" name="Debug Variable Adapters" schema="schema/javaVariableAdapters.exsd"/>
+   <extension-point id="javaTypeFilters" name="Debug Type Filters" schema="schema/javaTypeFilters.exsd"/>
    
 	<extension
 		id="smapBuilder"
@@ -63,5 +64,90 @@
 		description="%PackageFragmentRootSourceContainerType.description"
 		class="org.eclipse.edt.debug.core.EGLPackageFragmentRootSourceContainer">
 	</sourceContainerType>
+ </extension>
+ <extension
+       point="org.eclipse.edt.debug.core.javaTypeFilters">
+    <category
+          defaultEnablement="true"
+          defaultStepType="into"
+          description="%JavaRuntimeFilterDescription"
+          id="org.eclipse.edt.debug.core.filters.javaRuntimeCategory"
+          name="%JavaRuntimeFilterName"
+          visible="true">
+    </category>
+    <category
+          defaultEnablement="true"
+          defaultStepType="return"
+          description="%JREFilterDescription"
+          id="org.eclipse.edt.debug.core.filters.jreCategory"
+          name="%JREFilterName"
+          visible="true">
+    </category>
+    <category
+          defaultEnablement="true"
+          defaultStepType="return"
+          description="%TestServerFilterDescription"
+          id="org.eclipse.edt.debug.core.filters.testServerCategory"
+          name="%TestServerFilterName"
+          visible="true">
+    </category>
+    <category
+          defaultEnablement="true"
+          defaultStepType="return"
+          description="%ApacheFilterDescription"
+          id="org.eclipse.edt.debug.core.filters.apacheCategory"
+          name="%ApacheFilterName"
+          visible="true">
+    </category>
+    <category
+          class="org.eclipse.edt.debug.internal.core.java.filters.JDTStepFilterCategory"
+          defaultEnablement="true"
+          defaultStepType="return"
+          description="%JDTStepFilterDescription"
+          id="org.eclipse.edt.debug.core.filters.jdtStepFilterCategory"
+          name="%JDTStepFilterName"
+          visible="false">
+    </category>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.javaRuntimeCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.JavaRuntimeContainerFilter"
+          id="org.eclipse.edt.debug.core.filters.javaRuntimeFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.jreCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.JREFilter"
+          id="org.eclipse.edt.debug.core.filters.jreFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.testServerCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.JettyFilter"
+          id="org.eclipse.edt.debug.core.filters.jettyFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.testServerCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.TestServerFilter"
+          id="org.eclipse.edt.debug.core.filters.testServerFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.testServerCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.ServletFilter"
+          id="org.eclipse.edt.debug.core.filters.servletFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.apacheCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.ApacheFilter"
+          id="org.eclipse.edt.debug.core.filters.apacheFilter">
+    </filter>
+    <filter
+          categoryId="org.eclipse.edt.debug.core.filters.jdtStepFilterCategory"
+          class="org.eclipse.edt.debug.internal.core.java.filters.JDTStepFilter"
+          id="org.eclipse.edt.debug.core.filters.jdtStepFilter">
+    </filter>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+    <initializer
+          class="org.eclipse.edt.debug.core.DebugPreferenceInitializer">
+    </initializer>
  </extension>
 </plugin>

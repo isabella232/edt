@@ -42,4 +42,19 @@ public interface IEGLDebugCoreConstants
 	 * The path to the file which the run to line operation was performed.
 	 */
 	public static final String RUN_TO_LINE_PATH = EDTDebugCorePlugin.PLUGIN_ID + ".runToLinePath"; //$NON-NLS-1$
+	
+	/**
+	 * Preference key for the boolean value indicating if filtering is enabled.
+	 */
+	public static final String PREFERENCE_TYPE_FILTERS_ENABLED = EDTDebugCorePlugin.PLUGIN_ID + ".typeFiltersEnabled"; //$NON-NLS-1$
+	
+	/**
+	 * Preference key for the string value listing the enablement for each filter.
+	 */
+	public static final String PREFERENCE_TYPE_FILTER_ENABLEMENT = EDTDebugCorePlugin.PLUGIN_ID + ".typeFilterEnablement"; //$NON-NLS-1$
+	
+	/**
+	 * Preference key for the string value listing the step type for each filter.
+	 */
+	public static final String PREFERENCE_TYPE_FILTER_STEP_TYPES = EDTDebugCorePlugin.PLUGIN_ID + ".typeFilterStepTypes"; //$NON-NLS-1$
 }

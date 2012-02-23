@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.edt.debug.core.java.filters.TypeFilterUtil;
 import org.eclipse.edt.debug.core.java.variables.IVariableAdapter;
 import org.eclipse.edt.debug.internal.core.java.variables.DefaultVariableAdapter;
 import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
@@ -84,6 +85,8 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	{
 		super.stop( bundleContext );
 		
+		TypeFilterUtil.INSTANCE.dispose();
+		
 		if ( variableAdapters != null )
 		{
 			for ( IVariableAdapter adapter : variableAdapters )
@@ -92,7 +95,9 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 			}
 			variableAdapters = null;
 		}
-			
+		
+		PreferenceUtil.savePreferences();
+		
 		plugin = null;
 	}
 	

@@ -19,14 +19,17 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.launching,
  org.eclipse.debug.ui,
  org.eclipse.edt.compiler,
- org.eclipse.edt.runtime.java
+ org.eclipse.edt.runtime.java,
+ org.eclipse.pde.core;bundle-version="3.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.debug.core,
  org.eclipse.edt.debug.core.breakpoints,
  org.eclipse.edt.debug.core.java,
+ org.eclipse.edt.debug.core.java.filters,
  org.eclipse.edt.debug.core.java.variables,
  org.eclipse.edt.debug.internal.core.java;x-friends:="org.eclipse.edt.debug.ui",
+ org.eclipse.edt.debug.internal.core.java.filters;x-internal:=true,
  org.eclipse.edt.debug.internal.core.java.variables;x-internal:=true
 Agent-Class: org.eclipse.edt.debug.core.Transformer
 Premain-Class: org.eclipse.edt.debug.core.Transformer

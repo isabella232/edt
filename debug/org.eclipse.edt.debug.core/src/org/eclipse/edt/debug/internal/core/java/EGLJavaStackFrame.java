@@ -146,21 +146,18 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	@Override
 	public void stepInto() throws DebugException
 	{
-		eglThread.updateSteppingFromEGL( javaFrame );
 		javaFrame.stepInto();
 	}
 	
 	@Override
 	public void stepOver() throws DebugException
 	{
-		eglThread.updateSteppingFromEGL( javaFrame );
 		javaFrame.stepOver();
 	}
 	
 	@Override
 	public void stepReturn() throws DebugException
 	{
-		eglThread.updateSteppingFromEGL( javaFrame );
 		javaFrame.stepReturn();
 	}
 	
@@ -337,7 +334,6 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	@Override
 	public void dropToFrame() throws DebugException
 	{
-		eglThread.updateSteppingFromEGL( javaFrame );
 		javaFrame.dropToFrame();
 	}
 	

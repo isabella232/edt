@@ -17,14 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -32,7 +32,6 @@ import org.eclipse.debug.core.IBreakpointManager;
 import org.eclipse.debug.core.IBreakpointManagerListener;
 import org.eclipse.debug.core.IDebugEventFilter;
 import org.eclipse.debug.core.ILaunch;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
@@ -43,9 +42,12 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
+import org.eclipse.edt.debug.core.PreferenceUtil;
 import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.debug.core.java.filters.ITypeFilter;
+import org.eclipse.edt.debug.core.java.filters.TypeFilterUtil;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -57,18 +59,14 @@ import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
 import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 /**
  * Wraps an IJavaDebugTarget.
  */
 @SuppressWarnings("restriction")
-public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter, IBreakpointManagerListener
+public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter, IBreakpointManagerListener,
+		IPreferenceChangeListener
 {
-	private static final String FILTER_ATTR = "edt.debug.filter.runtimes"; //$NON-NLS-1$
-	
-	public static final boolean FILTER_RUNTIMES = !System.getProperty( FILTER_ATTR, "yes" ).equalsIgnoreCase( "false" ); //$NON-NLS-1$ //$NON-NLS-2$
-	
 	/**
 	 * The underlying Java debug target.
 	 */
@@ -106,7 +104,8 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		threads = new HashMap<IJavaThread, EGLJavaThread>();
 		eglThreads = new ArrayList<IEGLJavaThread>();
 		breakpoints = new HashMap<EGLLineBreakpoint, IJavaBreakpoint>();
-		initFilterSetting();
+		smapFileCache = new HashMap<String, String>(); // enable reading *.eglsmap off the disk for the Java runtime.
+		initFilters();
 		
 		// Add the initial threads, which are created before the target.
 		try
@@ -125,60 +124,24 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 			EDTDebugCorePlugin.log( e );
 		}
 		
+		PreferenceUtil.addPreferenceChangeListener( this );
 		DebugPlugin.getDefault().addDebugEventFilter( this );
 		initializeBreakpoints();
 	}
 	
 	/**
-	 * Initialize the filtering setting. If the launch configuration specifies the VM arg then we'll honor it, otherwise we fall back on the system
-	 * property setting within the Eclipse JVM.
+	 * Initialize the filtering settings.
 	 */
-	private void initFilterSetting()
+	protected void initFilters()
 	{
-		boolean set = false;
-		ILaunch launch = getDebugTarget().getLaunch();
-		if ( launch != null )
-		{
-			ILaunchConfiguration config = launch.getLaunchConfiguration();
-			if ( config != null )
-			{
-				try
-				{
-					String vmArgs = config.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String)null );
-					if ( vmArgs != null && vmArgs.length() > 0 )
-					{
-						Pattern p = Pattern.compile( ".*-D" + FILTER_ATTR + "=([\\S]*)" ); //$NON-NLS-1$ //$NON-NLS-2$
-						Matcher m = p.matcher( vmArgs );
-						if ( m.matches() && m.groupCount() > 0 )
-						{
-							if ( "false".equalsIgnoreCase( m.group( 1 ) ) ) //$NON-NLS-1$
-							{
-								filterRuntimes = false;
-							}
-							else
-							{
-								filterRuntimes = true;
-							}
-							set = true;
-						}
-					}
-				}
-				catch ( CoreException e )
-				{
-				}
-			}
-		}
+		filterRuntimes = PreferenceUtil.getBoolean( IEGLDebugCoreConstants.PREFERENCE_TYPE_FILTERS_ENABLED, true );
 		
-		if ( !set )
-		{
-			filterRuntimes = FILTER_RUNTIMES;
-		}
-		
-		// When filtering is enabled, also enable reading *.eglsmap files off disk for the Java runtime. If
-		// the build process is updated to add SMAP data to the runtime's .class files then we can remove this.
 		if ( filterRuntimes )
 		{
-			smapFileCache = new HashMap<String, String>();
+			for ( ITypeFilter filter : TypeFilterUtil.INSTANCE.getActiveFilters() )
+			{
+				filter.initialize( this );
+			}
 		}
 	}
 	
@@ -186,6 +149,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	 * (non-Javadoc)
 	 * @see org.eclipse.debug.core.model.IDebugElement#getDebugTarget()
 	 */
+	@Override
 	public IDebugTarget getDebugTarget()
 	{
 		return this;
@@ -748,6 +712,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		plugin.getBreakpointManager().removeBreakpointListener( this );
 		plugin.getBreakpointManager().removeBreakpointManagerListener( this );
 		plugin.removeDebugEventFilter( this );
+		PreferenceUtil.removePreferenceChangeListener( this );
 		
 		// Delete all the stratum breakpoints we created.
 		for ( IJavaBreakpoint bp : breakpoints.values() )
@@ -776,6 +741,13 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 			}
 		}
 		breakpoints.clear();
+		
+		// Let the type filters clean up anything cached for this target. Do this for all filters in case some were disabled during debugging
+		// and therefore no longer part of the active filter list.
+		for ( ITypeFilter filter : TypeFilterUtil.INSTANCE.getAllFilters() )
+		{
+			filter.dispose( this );
+		}
 		
 		if ( smapFileCache != null )
 		{
@@ -807,5 +779,68 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	public Object getJavaDebugElement()
 	{
 		return getJavaDebugTarget();
+	}
+	
+	@Override
+	public void preferenceChange( PreferenceChangeEvent event )
+	{
+		boolean refreshFrames = false;
+		String key = event.getKey();
+		if ( IEGLDebugCoreConstants.PREFERENCE_TYPE_FILTERS_ENABLED.equals( key ) )
+		{
+			initFilters();
+			refreshFrames = true;
+		}
+		else if ( IEGLDebugCoreConstants.PREFERENCE_TYPE_FILTER_ENABLEMENT.equals( key ) )
+		{
+			refreshFrames = true;
+		}
+		
+		if ( refreshFrames )
+		{
+			refreshAllFrames();
+		}
+	}
+	
+	/**
+	 * Tells debug platform that the content of each EGLJavaThread has changed.
+	 */
+	public void refreshAllFrames()
+	{
+		synchronized ( eglThreads )
+		{
+			for ( IEGLJavaThread thread : eglThreads )
+			{
+				try
+				{
+					if ( thread.hasStackFrames() && thread instanceof EGLJavaThread )
+					{
+						((EGLJavaThread)thread).disposeStackFrames();
+						fireEvent( new DebugEvent( thread, DebugEvent.CHANGE, DebugEvent.CONTENT ) );
+					}
+				}
+				catch ( DebugException de )
+				{
+				}
+			}
+		}
+	}
+	
+	@Override
+	public boolean supportsStepFilters()
+	{
+		return javaTarget.supportsStepFilters();
+	}
+	
+	@Override
+	public boolean isStepFiltersEnabled()
+	{
+		return javaTarget.isStepFiltersEnabled();
+	}
+	
+	@Override
+	public void setStepFiltersEnabled( boolean enabled )
+	{
+		javaTarget.setStepFiltersEnabled( enabled );
 	}
 }

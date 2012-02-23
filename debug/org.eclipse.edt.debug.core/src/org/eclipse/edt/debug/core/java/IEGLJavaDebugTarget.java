@@ -11,10 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.java;
 
+import org.eclipse.debug.core.model.IStepFilters;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 
-public interface IEGLJavaDebugTarget extends IEGLDebugTarget, IEGLJavaDebugElement
+/**
+ * Represents an EGL debug target in the Java-based debugger. EGL debug targets wrap the original Java debug target.
+ */
+public interface IEGLJavaDebugTarget extends IEGLDebugTarget, IEGLJavaDebugElement, IStepFilters
 {
 	/**
 	 * @return the underlying debug target.
