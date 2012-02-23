@@ -20,6 +20,7 @@ import org.eclipse.edt.debug.core.IEGLValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
 /**
