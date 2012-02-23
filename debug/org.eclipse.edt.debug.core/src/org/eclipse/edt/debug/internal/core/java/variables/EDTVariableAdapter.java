@@ -53,6 +53,10 @@ public class EDTVariableAdapter implements IVariableAdapter
 					}
 				}
 			}
+			else if ( VariableUtil.isInstanceOf( variable, "org.eclipse.edt.javart.Delegate" ) ) //$NON-NLS-1$
+			{
+				return new ToStringVariable( frame.getDebugTarget(), variable, info, frame, parent );
+			}
 		}
 		catch ( DebugException e )
 		{
