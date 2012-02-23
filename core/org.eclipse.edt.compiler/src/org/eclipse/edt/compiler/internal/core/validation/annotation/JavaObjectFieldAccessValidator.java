@@ -48,7 +48,7 @@ public class JavaObjectFieldAccessValidator implements IFieldAccessAnnotationVal
 	}
 	
 	private boolean hasGetterButNotSetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"egl", "idl", "java"}, "JavaProperty");
+		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
 		if(aBinding != null) {
 			return aBinding.findData("getMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("setMethod") == IBinding.NOT_FOUND_BINDING;
@@ -57,7 +57,7 @@ public class JavaObjectFieldAccessValidator implements IFieldAccessAnnotationVal
 	}
 	
 	private boolean hasSetterButNotGetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"egl", "idl", "java"}, "JavaProperty");
+		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang", }, "Property");
 		if(aBinding != null) {
 			return aBinding.findData("setMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("getMethod") == IBinding.NOT_FOUND_BINDING;

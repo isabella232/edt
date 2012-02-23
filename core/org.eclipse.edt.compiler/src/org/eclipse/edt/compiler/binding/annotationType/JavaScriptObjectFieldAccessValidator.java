@@ -49,7 +49,7 @@ public class JavaScriptObjectFieldAccessValidator implements IFieldAccessAnnotat
 	}
 	
 	private boolean hasGetterButNotSetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"egl", "rui"}, "JavaScriptProperty");
+		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
 		if(aBinding != null) {
 			return aBinding.findData("getMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("setMethod") == IBinding.NOT_FOUND_BINDING;
@@ -58,7 +58,7 @@ public class JavaScriptObjectFieldAccessValidator implements IFieldAccessAnnotat
 	}
 	
 	private boolean hasSetterButNotGetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"egl", "rui"}, "JavaScriptProperty");
+		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
 		if(aBinding != null) {
 			return aBinding.findData("setMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("getMethod") == IBinding.NOT_FOUND_BINDING;
