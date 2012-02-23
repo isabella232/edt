@@ -465,7 +465,6 @@ public class OrganizeImportsOperation implements IWorkspaceRunnable {
 					monitor);
 				
 				removeTypesInDefaultPackage(typeList);
-				addSystemTypes(typeList, unresolvedTypeName, eglProj.getProject());
 				
 				int foundCnts = typeList.size();
 				if(foundCnts == 1)

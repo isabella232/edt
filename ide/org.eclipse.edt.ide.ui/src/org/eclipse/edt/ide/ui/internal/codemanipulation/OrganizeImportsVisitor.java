@@ -56,6 +56,8 @@ import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.ui.internal.codemanipulation.OrganizeImportsOperation.OrganizedImportSection;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	private Name currentPartName = null;
@@ -64,6 +66,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 	Set /*<ImportDeclaration>*/ originalImports;
 	private Boolean fIsIncludeRefFunc;
 	private IProject project;
+	private IEnvironment env;
 
 	public OrganizeImportsVisitor(OrganizedImportSection resolvedTypes, Map unresolvedTypes, Set /*<ImportDeclaration>*/ oldImports, Boolean isIncludeRefFunc, IProject project) {
 		super(); 
@@ -72,6 +75,7 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 		this.originalImports = oldImports;
 		this.fIsIncludeRefFunc = isIncludeRefFunc;
 		this.project = project;
+		this.env = SystemEnvironmentManager.findSystemEnvironment(project, null).getIREnvironment();
 	}
 
 	public void setCurrentPartName(Name partName)
@@ -391,7 +395,12 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 			String[] pkgName = typeBinding.getPackageName();
 			IPath pkgPath = Util.stringArrayToPath(pkgName);
 			String packageName = pkgPath.toString().replace(IPath.SEPARATOR, '.');
-			boolean isSysPart = partBinding.isSystemPart();
+			boolean isSysPart;
+			if(null !=packageName && "" != packageName){
+				isSysPart = IRUtils.isSystemPart(packageName + "." + partName, this.env);
+			}else{
+				isSysPart = IRUtils.isSystemPart(partName, this.env);
+			}		
 			if(!isSysPart || (isSysPart && isInOriginalImports(packageName, partName))) {	
 				resolvedTypes.addImport(packageName, partName);
 			}
@@ -404,7 +413,12 @@ public class OrganizeImportsVisitor extends AbstractASTExpressionVisitor{
 				IPath pkgPath = Util.stringArrayToPath(pkgName);
 				String packageName = pkgPath.toString().replace(IPath.SEPARATOR, '.');
 				
-				boolean isSysAnnotation = annotationTypeBinding.isSystemAnnotation();
+				boolean isSysAnnotation;
+				if(null !=packageName && "" != packageName){
+					isSysAnnotation = IRUtils.isSystemPart(packageName + "." + partName, this.env);
+				}else{
+					isSysAnnotation = IRUtils.isSystemPart(partName, this.env);
+				}				
 				//if it is the system annotation, but it was already in the original imports
 				//we want to keep it
 				if(!isSysAnnotation || (isSysAnnotation && isInOriginalImports(packageName, partName))){
