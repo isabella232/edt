@@ -5,7 +5,7 @@ Record AS400Date type Annotation
 	targets=[ElementKind.FieldMbr],
 	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DateAnnotationTypeBinding"
 }
-	ibmiFormat any = com.ibm.as400.access.AS400Date.FORMAT_ISO;
+	ibmiFormat any?;
 	ibmiSeparatorChar string? = "";
 	ibmiTimezoneID string?;
 end

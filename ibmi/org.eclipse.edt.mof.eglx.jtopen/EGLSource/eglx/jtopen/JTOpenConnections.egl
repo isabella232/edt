@@ -6,4 +6,5 @@ import com.ibm.as400.access.as400;
 externalType JTOpenConnections type JavaObject 
  	private constructor();
  	static function getAS400ConnectionPool()returns(AS400ConnectionPool);
+ 	static function returnConnectionToPool(conn IBMiConnection in); 
 end

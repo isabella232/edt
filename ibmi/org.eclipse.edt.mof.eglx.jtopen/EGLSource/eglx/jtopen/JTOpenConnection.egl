@@ -3,6 +3,6 @@ package eglx.jtopen;
 import com.ibm.as400.access.AS400;
 
 externalType JTOpenConnection extends IBMiConnection type JavaObject 
+ 	constructor();
  	constructor(as400 AS400 in);
- 	constructor(as400 AS400 in, libry String in);
 end

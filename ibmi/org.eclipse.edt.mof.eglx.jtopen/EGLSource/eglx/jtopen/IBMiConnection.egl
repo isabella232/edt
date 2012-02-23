@@ -2,6 +2,17 @@ package eglx.jtopen;
 
 import com.ibm.as400.access.AS400;
 
-externalType IBMiConnection type NativeType
+externalType IBMiConnection type NativeType 
+	private constructor();
+	_library String?{@Property {getMethod = "getLibrary", setMethod = "setLibrary"}, @ExternalName {value = "library"}};
+	encoding String?{@Property {}};
+	userid String?{@Property {}};
+	password String?{@Property {}};
+	system String?{@Property {}};
+	dateFormat int?{@Property {}};
+	dateSeparatorChar string?{@Property {}};
+	timeFormat int?{@Property {}};
+	timeSeparatorChar string?{@Property {}};
+	timezone String?{@Property {}};
 	function getAS400()returns(AS400);
 end

@@ -5,7 +5,7 @@ Record AS400Timestamp type Annotation
 	targets=[ElementKind.FieldMbr],
 	ValidationProxy="org.eclipse.edt.compiler.binding.AS400TimestampAnnotationTypeBinding"
 }
-	ibmiFormat any = com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT;
+	ibmiFormat any?;
 	eglPattern string?;
 	ibmiTimezoneID string?;
 end
