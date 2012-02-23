@@ -41,7 +41,9 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 		if ( bp == null )
 		{
 			ITextEditor editor = getEditor();
-			IEGLEditor eglEditor = editor == null ? null : (IEGLEditor)editor.getAdapter( IEGLEditor.class );
+			IEGLEditor eglEditor = editor == null
+					? null
+					: (IEGLEditor)editor.getAdapter( IEGLEditor.class );
 			IEditorInput input = editor.getEditorInput();
 			if ( eglEditor != null && input instanceof IFileEditorInput )
 			{

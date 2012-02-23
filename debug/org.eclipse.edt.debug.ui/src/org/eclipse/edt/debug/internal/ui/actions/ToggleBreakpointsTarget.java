@@ -145,7 +145,9 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 				}
 			}
 			
-			IEGLEditor eglEditor = textEditor == null ? null : (IEGLEditor)textEditor.getAdapter( IEGLEditor.class );
+			IEGLEditor eglEditor = textEditor == null
+					? null
+					: (IEGLEditor)textEditor.getAdapter( IEGLEditor.class );
 			if ( eglEditor != null )
 			{
 				// Otherwise validate it's an okay location to add a breakpoint.
