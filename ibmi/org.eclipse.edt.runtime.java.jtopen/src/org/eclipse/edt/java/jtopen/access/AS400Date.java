@@ -13,11 +13,11 @@ package org.eclipse.edt.java.jtopen.access;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.eclipse.edt.runtime.java.eglx.lang.EDate;
 
-import com.ibm.as400.access.AS400;
-
+import eglx.jtopen.IBMiConnection;
 import eglx.lang.StringLib;
 
 
@@ -26,19 +26,23 @@ public class AS400Date extends com.ibm.as400.access.AS400Date {
 
 	private SimpleDateFormat sdf;
 
-	public AS400Date(int ibmiFormat, String timeZoneID) {
-		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID), ibmiFormat);
-	}
-	public AS400Date(int ibmiFormat, AS400 system) {
-		super(AS400DateTimeUtil.getIBMiTimezoneID(system), ibmiFormat);
+	public AS400Date(TimeZone tz) {
+		super(tz);
 	}
 
-	public AS400Date(int ibmiFormat, Character seperator, AS400 system ){
-		super(AS400DateTimeUtil.getIBMiTimezoneID(system), ibmiFormat, seperator);
-	}
-
-	public AS400Date(int ibmiFormat, Character seperator, String timeZoneID ) {
-		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID), ibmiFormat, seperator);
+	public AS400Date(Integer ibmiFormat, String seperator, String timeZoneID, IBMiConnection conn) {
+		this(AS400DateTimeUtil.getIBMiTimezone(timeZoneID, conn));
+		if(ibmiFormat == null){
+			ibmiFormat = conn.getDateFormat();
+		}
+		seperator = AS400DateTimeUtil.getConnSeparator(seperator, conn);
+		if(ibmiFormat != null && seperator != null && seperator.isEmpty()){
+			setFormat(ibmiFormat.intValue());
+		}
+		else if(ibmiFormat != null){
+			Character seperatorChar = seperator == null ? null : Character.valueOf(seperator.charAt(0));
+			setFormat(ibmiFormat.intValue(), seperatorChar);
+		}
 	}
 
 	@Override

@@ -16,8 +16,7 @@ import java.util.Calendar;
 
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
-import com.ibm.as400.access.AS400;
-
+import eglx.jtopen.IBMiConnection;
 import eglx.lang.StringLib;
 
 
@@ -28,14 +27,8 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 	private int endCode;
 	private SimpleDateFormat sdf;
 	
-	public AS400Timestamp(int ibmiFormat, int startCode, int endCode, AS400 system) {
-		super(AS400DateTimeUtil.getIBMiTimezoneID(system));
-		this.startCode = startCode;
-		this.endCode = endCode;
-	}
-
-	public AS400Timestamp(int ibmiFormat, int startCode, int endCode, String timeZoneID) {
-		super(AS400DateTimeUtil.getIBMiTimezoneID(timeZoneID));
+	public AS400Timestamp(Integer ibmiFormat, int startCode, int endCode, String timeZoneID, IBMiConnection conn) {
+		super(AS400DateTimeUtil.getIBMiTimezone(timeZoneID, conn));
 		this.startCode = startCode;
 		this.endCode = endCode;
 	}

@@ -14,8 +14,9 @@ import java.io.UnsupportedEncodingException;
 
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
-import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.BidiConversionProperties;
+
+import eglx.jtopen.IBMiConnection;
 
 
 public class AS400Text extends com.ibm.as400.access.AS400Text {
@@ -23,8 +24,8 @@ public class AS400Text extends com.ibm.as400.access.AS400Text {
 
 	private boolean retainTrailingSpaces;
 	private int characterLength;
-	public AS400Text(int length, AS400 system, boolean retainTrailingSpaces) {
-		this(length, getSystemEncoding(system), retainTrailingSpaces);
+	public AS400Text(int length, IBMiConnection conn, boolean retainTrailingSpaces) {
+		this(length, getSystemEncoding(conn), retainTrailingSpaces);
 	}
 
 	public AS400Text(int length, String encoding, boolean retainTrailingSpaces) {
@@ -33,10 +34,19 @@ public class AS400Text extends com.ibm.as400.access.AS400Text {
 		characterLength = length;
 	}
 
-	private static String getSystemEncoding(AS400 system){
-		try {
-			return system.getJobCCSIDEncoding();
-		} catch (Exception e) {}
+	private static String getSystemEncoding(IBMiConnection conn){
+		String encoding = null;
+		if(conn != null && (encoding = conn.getTimezone()) != null && !encoding.isEmpty()){
+			return encoding;
+		}
+		else if(conn != null){
+			try {
+				if(conn.getAS400() != null){
+					return conn.getAS400().getJobCCSIDEncoding();
+				}
+			} catch (Exception e) {}
+		}
+		
 		return null;
 	}
 
