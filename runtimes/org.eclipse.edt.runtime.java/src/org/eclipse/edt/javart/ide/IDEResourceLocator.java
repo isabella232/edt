@@ -71,7 +71,12 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 	
 	@Override
 	public RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileUri) {
-		return getDeploymentDesc(propertyFileUri.toString());
+		RuntimeDeploymentDesc dd = getDeploymentDesc(propertyFileUri.toString());
+		if (dd == null) {
+			// Not a file we know about - see if there's a -bnd.xml on the classpath.
+			return super.getDeploymentDesc(propertyFileUri);
+		}
+		return dd;
 	}
 	
 	public RuntimeDeploymentDesc getDeploymentDesc(String propertyFileName) {
@@ -94,10 +99,6 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 					AnyException ex = new AnyException();
 					throw ex.fillInMessage(Message.ERROR_PARSING_RESOURCE_FILE, propertyFileName, e);
 				}
-			}
-			else {
-				AnyException ex = new AnyException();
-				throw ex.fillInMessage(Message.RESOURCE_FILE_NOT_FOUND, propertyFileName);
 			}
 		}
 		return dd;
