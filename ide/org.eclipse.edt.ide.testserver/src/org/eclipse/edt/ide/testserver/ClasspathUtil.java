@@ -36,7 +36,9 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaLaunchDelegate;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Bundle;
 
@@ -76,6 +78,17 @@ public class ClasspathUtil {
 	public static void buildClasspath(TestServerConfiguration config, List<String> classpath) throws CoreException {
 		IProject project = config.getProject();
 		String entry;
+		
+		// The project's JRE (not required for execution, but required for source lookup).
+		try {
+			IRuntimeClasspathEntry jreEntry = JavaRuntime.computeJREEntry(JavaCore.create(config.getProject()));
+			if (jreEntry != null) {
+				classpath.add(jreEntry.getMemento());
+			}
+		}
+		catch (CoreException ce) {
+			TestServerPlugin.getDefault().log(ce);
+		}
 		
 		if (testServerBaseEntries == null) {
 			testServerBaseEntries = new ArrayList<String>(20);
