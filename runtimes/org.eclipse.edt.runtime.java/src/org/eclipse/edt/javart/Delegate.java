@@ -74,4 +74,16 @@ public class Delegate {
 	public Method getMethod() {
 		return method;
 	}
+	
+	/**
+	 * Added for an easy way to nicely display this in the debugger.
+	 */
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(100);
+		buf.append(target.getClass().getCanonicalName());
+		buf.append('.');
+		buf.append(method.getName());
+		return buf.toString();
+	}
 }
