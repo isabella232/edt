@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
@@ -28,6 +30,7 @@ import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaFunctionContainerVariable;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
+import org.eclipse.edt.debug.internal.core.java.variables.DefaultVariableAdapter;
 import org.eclipse.jdt.debug.core.IEvaluationRunnable;
 import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaClassType;
@@ -47,7 +50,20 @@ import org.eclipse.jdt.debug.core.IJavaVariable;
  */
 public class VariableUtil
 {
+	/**
+	 * Use this when an empty variable array would otherwise be created.
+	 */
 	public static final IVariable[] EMPTY_VARIABLES = {};
+	
+	/**
+	 * The ID for the variable adapters extension point.
+	 */
+	public static final String EXTENSION_POINT_VARIABLE_ADAPTERS = "javaVariableAdapters"; //$NON-NLS-1$
+	
+	/**
+	 * The variable adapters.
+	 */
+	private static IVariableAdapter[] variableAdapters;
 	
 	private VariableUtil()
 	{
@@ -170,7 +186,7 @@ public class VariableUtil
 			IEGLJavaValue parent )
 	{
 		// Consult the adapters.
-		for ( IVariableAdapter adapter : EDTDebugCorePlugin.getDefault().getVariableAdapters() )
+		for ( IVariableAdapter adapter : variableAdapters )
 		{
 			IEGLJavaVariable variable = adapter.adapt( javaVariable, frame, info, parent );
 			if ( variable != null )
@@ -520,6 +536,51 @@ public class VariableUtil
 			{
 				return;
 			}
+		}
+	}
+	
+	/**
+	 * @return the variable adapter extensions.
+	 */
+	public static synchronized IVariableAdapter[] getVariableAdapters()
+	{
+		if ( variableAdapters == null )
+		{
+			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor( EDTDebugCorePlugin.PLUGIN_ID,
+					EXTENSION_POINT_VARIABLE_ADAPTERS );
+			List<IVariableAdapter> adapters = new ArrayList<IVariableAdapter>( elements.length );
+			for ( IConfigurationElement element : elements )
+			{
+				try
+				{
+					Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
+					if ( o instanceof IVariableAdapter )
+					{
+						adapters.add( (IVariableAdapter)o );
+					}
+				}
+				catch ( CoreException e )
+				{
+					EDTDebugCorePlugin.log( e );
+				}
+			}
+			
+			variableAdapters = new IVariableAdapter[ adapters.size() + 1 ];
+			adapters.toArray( variableAdapters );
+			variableAdapters[ variableAdapters.length - 1 ] = new DefaultVariableAdapter();
+		}
+		return variableAdapters;
+	}
+	
+	public static void dispose()
+	{
+		if ( variableAdapters != null )
+		{
+			for ( IVariableAdapter adapter : variableAdapters )
+			{
+				adapter.dispose();
+			}
+			variableAdapters = null;
 		}
 	}
 }
