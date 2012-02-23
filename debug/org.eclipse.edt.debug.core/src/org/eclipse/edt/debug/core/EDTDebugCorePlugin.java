@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.URIUtil;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.edt.debug.core.java.IVariableAdapter;
+import org.eclipse.edt.debug.core.java.variables.IVariableAdapter;
 import org.eclipse.edt.debug.internal.core.java.variables.DefaultVariableAdapter;
 import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.equinox.frameworkadmin.BundleInfo;
@@ -49,7 +49,7 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	/**
 	 * The ID for the variable adapters extension point.
 	 */
-	public static final String EXTENSION_POINT_VARIABLE_ADAPTERS = "variableAdapters"; //$NON-NLS-1$
+	public static final String EXTENSION_POINT_VARIABLE_ADAPTERS = "javaVariableAdapters"; //$NON-NLS-1$
 	
 	/**
 	 * The shared instance.
@@ -83,6 +83,16 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 	public void stop( BundleContext bundleContext ) throws Exception
 	{
 		super.stop( bundleContext );
+		
+		if ( variableAdapters != null )
+		{
+			for ( IVariableAdapter adapter : variableAdapters )
+			{
+				adapter.dispose();
+			}
+			variableAdapters = null;
+		}
+			
 		plugin = null;
 	}
 	
