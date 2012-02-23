@@ -62,14 +62,13 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.GenModel;
 import org.eclipse.edt.ide.rui.visualeditor.internal.widget.gen.GenModelBuilder;
 import org.eclipse.edt.ide.rui.visualeditor.internal.widget.layout.WidgetLayout;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
+import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.gef.ui.views.palette.PaletteView;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -84,21 +83,13 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.CloseWindowListener;
-import org.eclipse.swt.browser.OpenWindowListener;
-import org.eclipse.swt.browser.VisibilityWindowListener;
-import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.text.undo.DocumentUndoManagerRegistry;
 import org.eclipse.text.undo.IDocumentUndoManager;
 import org.eclipse.ui.IEditorInput;
@@ -916,6 +907,10 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 	 * 
 	 */
 	public Object getAdapter( Class classRequested ) {
+		if (classRequested == IEGLEditor.class || classRequested == EGLEditor.class) {
+			return _pageSource;
+		}
+		
 		// Page Data View
 		//----------------
 		if(classRequested.equals( IPageDataViewPage.class )){
