@@ -157,6 +157,4 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 			log( new Status( IStatus.ERROR, PLUGIN_ID, DebugPlugin.ERROR, "Internal Error", t ) ); //$NON-NLS-1$
 		}
 	}
-	
-	
 }
