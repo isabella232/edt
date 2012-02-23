@@ -13,5 +13,27 @@
 	      </wizardPage>
       </provider>
    </extension>
+   <extension
+         point="org.eclipse.edt.debug.core.javaTypeFilters">
+      <category
+            defaultEnablement="true"
+            defaultStepType="return"
+            description="%jtopenFilterCategoryDescription"
+            id="org.eclipse.edt.ide.jtopen.debug.jtopenCategory"
+            name="%jtopenFilterCategoryName"
+            visible="true">
+      </category>
+      <filter
+            categoryId="org.eclipse.edt.ide.jtopen.debug.jtopenCategory"
+            class="org.eclipse.edt.ide.jtopen.debug.JTOpenFilter"
+            id="org.eclipse.edt.ide.jtopen.debug.jtopenFilter">
+      </filter>
+   </extension>
+   <extension
+         point="org.eclipse.edt.ide.testserver.testServerExtension">
+      <provider
+            class="org.eclipse.edt.ide.jtopen.IBMiTestServerContribution">
+      </provider>
+   </extension>
 
 </plugin>
