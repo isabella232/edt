@@ -1,30 +1,13 @@
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
-import org.eclipse.edt.compiler.core.ast.File;
-import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -107,113 +90,6 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 			}		
 		}
 			
-	}
-	
-	private boolean lastParmIsIHttp(FunctionParameterBinding[] parms){
-		if(parms.length > 0){
-			//function has 1 extra parameter 
-			//see if it's an IHttp 
-			ITypeBinding lastParm = parms[parms.length - 1].getType();
-			return (InternUtil.intern(new String[]{"eglx", "http"}).equals(lastParm.getPackageName()) && InternUtil.intern("IHttp").equals(lastParm.getName()));
-		}
-		return false;
-	}
-	
-	private ITypeBinding[] getArgTypesForCallback(Expression invocTarget) {
-		FunctionParameterBinding[] parms = getParameters(invocTarget);
-		List<ITypeBinding> list = new ArrayList<ITypeBinding>();
-		for (int i = 0; i < parms.length; i++) {
-			if (parms[i].isOutput() || parms[i].isInputOutput()) {
-				list.add(parms[i].getType());
-			}
-		}
-		
-		ITypeBinding retType = getReturnType(invocTarget);
-		if (retType != null) {
-			list.add(retType);
-		}
-		
-		return (ITypeBinding[])list.toArray(new ITypeBinding[list.size()]);
-	}
-	private FunctionParameterBinding[] getParameters(Expression expr) {
-		if (Binding.isValidBinding(expr.resolveTypeBinding())) {
-			if (expr.resolveTypeBinding().getKind() == ITypeBinding.DELEGATE_BINDING) {
-				List list = ((DelegateBinding)expr.resolveTypeBinding()).getParemeters();
-				return (FunctionParameterBinding[])list.toArray(new FunctionParameterBinding[list.size()]);
-			}
-			if (expr.resolveTypeBinding().getKind() == ITypeBinding.FUNCTION_BINDING) {
-				List list = ((IFunctionBinding)expr.resolveTypeBinding()).getParameters();
-				return (FunctionParameterBinding[])list.toArray(new FunctionParameterBinding[list.size()]);
-			}
-		}
-		return new FunctionParameterBinding[0];
-	}
-	private ITypeBinding getReturnType(Expression expr) {
-		if (Binding.isValidBinding(expr.resolveTypeBinding())) {
-			if (expr.resolveTypeBinding().getKind() == ITypeBinding.DELEGATE_BINDING) {
-				return ((DelegateBinding)expr.resolveTypeBinding()).getReturnType();
-			}
-			if (expr.resolveTypeBinding().getKind() == ITypeBinding.FUNCTION_BINDING) {
-				return ((IFunctionBinding)expr.resolveTypeBinding()).getReturnType();
-			}
-		}
-		return null;
-	}
-	
-	private FunctionContainerScope getFunctionContainerScope(Scope scope) {
-		if (scope == null) {
-			return null;
-		}
-		if (scope instanceof FunctionContainerScope) {
-			return (FunctionContainerScope)scope;
-		}
-		return getFunctionContainerScope(scope.getParentScope());
-	}
-	
-	
-	private boolean argTypeCompatibleWithParm(ITypeBinding argType, FunctionParameterBinding parm) {
-		if (!Binding.isValidBinding(argType)) {
-			return true;
-		}
-		
-		if (!Binding.isValidBinding(parm) || !Binding.isValidBinding(parm.getType())) {
-			return true;
-		}
-
-    	if (TypeCompatibilityUtil.isMoveCompatible(parm.getType(), argType, null, compilerOptions)) {
-    		return true;
-    	}
-		
-		
- 	   if (argType.isDynamic()) {
- 		   return true;
- 	   }
-    	
- 	   if (TypeCompatibilityUtil.areCompatibleExceptions(argType, parm.getType(), compilerOptions)) {
- 		   return true;
- 	   }
- 	   return false;
-
-	}
-	
-	
-	private boolean isAnyException(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) {
-			return false;
-		}
-		
-		if (type.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-			IPartBinding part =  (IPartBinding) type;
-			if (InternUtil.intern(part.getPackageQualifiedName()) == getQualAnyExceptionString()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	private String getQualAnyExceptionString() {
-		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 	
 	private boolean isIBMiConnection(ITypeBinding type) {

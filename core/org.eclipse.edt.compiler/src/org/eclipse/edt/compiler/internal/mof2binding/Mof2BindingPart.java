@@ -211,8 +211,15 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			for (Interface iface : ir.getInterfaces()) {
 				iface.accept(this);
-				binding.getImplementedInterfaces().add((InterfaceBinding)stack.pop());
+				binding.addExtenedInterface((InterfaceBinding)stack.pop());
 			}
+
+			for (StructPart supertype: ir.getSuperTypes()) {
+				if (supertype instanceof Interface) {
+					supertype.accept(this);
+					binding.addExtenedInterface((InterfaceBinding)stack.pop());
+				}
+			}			
 			
 			for (Constructor constructor : ir.getConstructors()) {
 				constructor.accept(this);
@@ -251,8 +258,15 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			handleVisitLogicAndDataPart((LogicAndDataPart)ir, (FunctionContainerBinding)binding);
 			for (Interface iface : ir.getInterfaces()) {
 				iface.accept(this);
-				binding.getImplementedInterfaces().add((InterfaceBinding)stack.pop());
+				binding.addExtenedInterface((InterfaceBinding)stack.pop());
 			}
+			for (StructPart supertype: ir.getSuperTypes()) {
+				if (supertype instanceof Interface) {
+					supertype.accept(this);
+					binding.addExtenedInterface((InterfaceBinding)stack.pop());
+				}
+			}
+
 			partStack.pop();
 		}
 		stack.push(binding);
@@ -273,6 +287,13 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			for (Interface iface : ir.getInterfaces()) {
 				iface.accept(this);
 				binding.addExtendedType((InterfaceBinding)stack.pop());
+			}
+			
+			for (StructPart supertype: ir.getSuperTypes()) {
+				if (supertype instanceof Interface) {
+					supertype.accept(this);
+					binding.addExtendedType((InterfaceBinding)stack.pop());
+				}
 			}
 
 			partStack.pop();

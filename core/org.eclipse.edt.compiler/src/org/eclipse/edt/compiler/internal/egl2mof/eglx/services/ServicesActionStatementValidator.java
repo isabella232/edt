@@ -1,24 +1,25 @@
 package org.eclipse.edt.compiler.internal.egl2mof.eglx.services;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
+import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
+import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
@@ -68,7 +69,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		if (callStatement.getUsing() != null) {
 			ITypeBinding usingType = callStatement.getUsing().resolveTypeBinding();
 			if (Binding.isValidBinding(usingType)) {
-				if (!isIHTTP(usingType)) {
+				if (!isIHTTP(usingType, new ArrayList())) {
 					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.SERVICE_CALL_USING_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 				}
 			}
@@ -288,10 +289,46 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		return InternUtil.intern("eglx.lang" + "." + IEGLConstants.EGL_ANYEXCEPTION);
 	}
 	
-	private boolean isIHTTP(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
-			return (type.getName() == InternUtil.intern("IHTTP") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "http"}));
+	private List getImplementedInterfaces(ITypeBinding type) {
+		
+		if (Binding.isValidBinding(type) && ITypeBinding.HANDLER_BINDING == type.getKind()) {
+			HandlerBinding hand = (HandlerBinding)type;
+			return hand.getImplementedInterfaces();
 		}
+
+		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
+			InterfaceBinding inter = (InterfaceBinding)type;
+			return inter.getExtendedTypes();
+		}
+
+		return null;
+	}
+	
+	private boolean isIHTTP(ITypeBinding type, List seenTypes) {
+		
+		if (seenTypes.contains(type)) {
+			return false;
+		}
+		seenTypes.add(type);
+		
+		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
+			if (type.getName() == InternUtil.intern("IHTTP") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "http"})) {
+				return true;
+			}
+		}
+
+		List interfaces = getImplementedInterfaces(type);
+		if (interfaces != null) {
+			Iterator i = interfaces.iterator();
+			while (i.hasNext()) {
+				ITypeBinding imp = (ITypeBinding)i.next();
+				if (isIHTTP(imp, seenTypes)) {
+					return true;
+				}
+			}
+		}
+		
+
 		return false;
 	}
 	
