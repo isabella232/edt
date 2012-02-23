@@ -33,4 +33,8 @@ public class Compiler extends org.eclipse.edt.compiler.internal.core.builder.Com
 	protected void logValidationException(RuntimeException e) {
 		EDTCoreIDEPlugin.getPlugin().log("Part Validation Failure", e);  //$NON-NLS-1
 	}
+	
+	public void logIRCreationException(RuntimeException e) {
+		EDTCoreIDEPlugin.getPlugin().log("IR Creation Failure", e);  //$NON-NLS-1
+	}
 }

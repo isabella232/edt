@@ -67,6 +67,7 @@ import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.SerializationException;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -218,24 +219,29 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
 			previousPart = null;
 		}
 		
-		MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
-        if(previousPart == null || !TypeUtils.areStructurallyEquivalent(previousPart, part)){
-        	notifier.subTask(NLS.bind(BuilderResources.buildAddingDependentsOf, qualifiedName));
-			
-			// If a part binding does not previously exist, do not add dependents of this part, because we have added dependents already before we processed the part.
-        	if(previousPart != null){
-				addDependents(packageName, caseInsensitiveInternedString);
+		try {
+			MofSerializable part = createIRFromBoundAST(partAST, declaringFile, functionInfos, fileAST.getImportDeclarations(), cappedProblemRequestor);
+			if(previousPart == null || !TypeUtils.areStructurallyEquivalent(previousPart, part)){
+				notifier.subTask(NLS.bind(BuilderResources.buildAddingDependentsOf, qualifiedName));
+				
+				// If a part binding does not previously exist, do not add dependents of this part, because we have added dependents already before we processed the part.
+				if(previousPart != null){
+					addDependents(packageName, caseInsensitiveInternedString);
+				}
+				
+				if(requestor != null){
+					requestor.recordStructuralChange(packageName, caseInsensitiveInternedString, binding.getKind());
+				}
 			}
 			
-			if(requestor != null){
-				requestor.recordStructuralChange(packageName, caseInsensitiveInternedString, binding.getKind());
+			notifier.subTask(NLS.bind(BuilderResources.buildSavingIR, qualifiedName));
+			
+			if (canSave(caseInsensitiveInternedString)) {
+				ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().save(part, true);
 			}
-        }
-        
-        notifier.subTask(NLS.bind(BuilderResources.buildSavingIR, qualifiedName));
-        
-		if (canSave(caseInsensitiveInternedString)) {
-			ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment().save(part, true);
+		} catch (RuntimeException e) {
+			cappedProblemRequestor.acceptProblem(partAST.getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{partAST.getName().getCanonicalName()});
+			Compiler.getInstance().logIRCreationException(e);
 		}
 	}
 	
