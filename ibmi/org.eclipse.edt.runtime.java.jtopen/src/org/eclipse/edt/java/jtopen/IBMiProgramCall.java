@@ -43,11 +43,16 @@ public class IBMiProgramCall {
 									final IBMiConnection connection, 
 									final String methodName, final 
 									ExecutableBase caller){
-		if(connection == null || connection.getAS400() == null){
-			InvocationException ex = new InvocationException();
-			ex.setName(programName);
-			ex.setMessage("Host connection is null.");
-			throw ex;
+		try{
+			if(connection == null || connection.getAS400() == null){
+				InvocationException ex = new InvocationException();
+				ex.setName(programName);
+				ex.setMessage("Host connection is null.");
+				throw ex;
+			}
+		}
+		catch(Exception e){
+			throwInvocationException(programName, e);
 		}
 		Class<?>[] parameterTypes = new Class<?>[parameters.length];
 		for(int idx = 0; idx < parameters.length; idx++){
@@ -55,9 +60,9 @@ public class IBMiProgramCall {
 		}
 		String hostLibrary = library;
 		if(connection instanceof JTOpenConnection){
-			if(((JTOpenConnection)connection).getLibrary() != null && 
-					!((JTOpenConnection)connection).getLibrary().isEmpty()){
-				hostLibrary = ((JTOpenConnection)connection).getLibrary();
+			if(((IBMiConnection)connection).getLibrary() != null && 
+					!((IBMiConnection)connection).getLibrary().isEmpty()){
+				hostLibrary = ((IBMiConnection)connection).getLibrary();
 			}
 		}
 		String slash = hostLibrary != null && !hostLibrary.isEmpty() ? "/" : "";

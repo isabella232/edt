@@ -10,6 +10,7 @@
  *******************************************************************************/
 package eglx.jtopen;
 
+import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400ConnectionPool;
 
 public class JTOpenConnections {
@@ -48,4 +49,11 @@ public class JTOpenConnections {
 		return connectionPool;
 	}
 
+	public static void returnConnectionToPool(IBMiConnection conn){
+		if(conn instanceof JTOpenConnection){
+			AS400 as400 = conn.getAS400();
+			((JTOpenConnection)conn).as400 = null;
+			getAS400ConnectionPool().returnConnectionToPool(as400);
+		}
+	}
 }

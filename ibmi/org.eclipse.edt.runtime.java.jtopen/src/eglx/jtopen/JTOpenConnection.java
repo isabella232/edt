@@ -10,24 +10,38 @@
  *******************************************************************************/
 package eglx.jtopen;
 
+import org.eclipse.edt.javart.resources.egldd.Binding;
+
 import com.ibm.as400.access.AS400;
+import com.ibm.as400.access.ConnectionPoolException;
+
+import eglx.lang.AnyException;
+import eglx.lang.InvocationException;
 
 public class JTOpenConnection extends IBMiConnection {
 
-	private AS400 as400;
-	private String library;
+	AS400 as400;
+	public JTOpenConnection() {
+	}
+	public JTOpenConnection(Binding binding) {
+		this.binding = binding;
+	}
 	public JTOpenConnection(AS400 as400) {
 		this.as400 = as400;
 	}
-	public JTOpenConnection(AS400 as400, String library) {
-		this(as400);
-		this.library = library;
-	}
 	@Override
-	public AS400 getAS400() {
+	public AS400 getAS400() throws AnyException{
+		if(as400 == null){
+			try {
+				as400 = JTOpenConnections.getAS400ConnectionPool().getConnection(getSystem(), getUserid(), getPassword());
+			} catch (ConnectionPoolException e) {
+				InvocationException ex = new InvocationException();
+				ex.setMessage(e.getClass().getName() + ":" + e.getLocalizedMessage());
+				throw ex;
+			}
+		}
 		return as400;
 	}
-	public String getLibrary() {
-		return library;
-	}
+	
+	
 }
