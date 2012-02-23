@@ -3,7 +3,7 @@
 <schema targetNamespace="org.eclipse.edt.debug.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.edt.debug.core" id="variableAdapters" name="%variableAdaptersName"/>
+         <meta.schema plugin="org.eclipse.edt.debug.core" id="javaVariableAdapters" name="%variableAdaptersName"/>
       </appinfo>
       <documentation>
          This extension point provides a mechanism for adapting Java variables to be displayed in an EGL-specific way.
@@ -52,10 +52,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  Specifies the fully qualified class name that implements &lt;b&gt;org.eclipse.edt.debug.core.java.IVariableAdapter&lt;/b&gt;
+                  Specifies the fully qualified class name that implements &lt;b&gt;org.eclipse.edt.debug.core.java.variables.IVariableAdapter&lt;/b&gt;
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.debug.core.java.IVariableAdapter"/>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.edt.debug.core.java.variables.IVariableAdapter"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -69,7 +69,7 @@
          <meta.section type="apiinfo"/>
       </appinfo>
       <documentation>
-         The attribute &lt;b&gt;class&lt;/b&gt; must be a fully qualified name of a Java class that is an instance of &lt;b&gt;org.eclipse.edt.debug.core.java.IVariableAdapter&lt;/b&gt;.
+         The attribute &lt;b&gt;class&lt;/b&gt; must be a fully qualified name of a Java class that is an instance of &lt;b&gt;org.eclipse.edt.debug.core.java.variables.IVariableAdapter&lt;/b&gt;.
       </documentation>
    </annotation>
 
