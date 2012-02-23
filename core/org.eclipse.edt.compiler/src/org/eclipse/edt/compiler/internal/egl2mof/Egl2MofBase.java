@@ -915,7 +915,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	
 	protected EObject mofTypeFor(ITypeBinding type) {
-		if (type == null) return null;
+		if (!Binding.isValidBinding(type)) return null;
 		EObject eType;
 		switch (type.getKind()) {
 		case ITypeBinding.MULTIPLY_OCCURING_ITEM:

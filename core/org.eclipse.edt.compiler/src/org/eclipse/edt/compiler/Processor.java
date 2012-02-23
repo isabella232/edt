@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -45,6 +46,7 @@ import org.eclipse.edt.compiler.internal.sdk.compile.TopLevelFunctionProcessor;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.SerializationException;
 
 
 /**
@@ -117,14 +119,18 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
             org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
             
 //	        Part part = createIRFromBoundAST(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
-	        MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
-	        
-	        if(part == null) {
-	        	System.out.println("Part is null!");
-	        	return binding;
-	        }
-	        	        
-            environment.save(part, true);
+	        try {
+				MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
+				
+				if(part == null) {
+					System.out.println("Part is null!");
+					return binding;
+				}
+					        
+				environment.save(part, true);
+			} catch (RuntimeException e) {
+				problemRequestor.acceptProblem(((Part)partAST).getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{((Part)partAST).getName().getCanonicalName()});
+			}
         }
         
          return binding;
