@@ -36,7 +36,7 @@ public class AS400GenType {
 		out.print("new ");
 		Annotation annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Bin1, ctx);
 		if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Bin1, ctx)) != null){
-			out.print("com.ibm.as400.access.AS400Bin1()");
+			out.print("org.eclipse.edt.java.jtopen.access.AS400Bin1()");
 		}
 		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Bin2, ctx)) != null){
 			genAS400Bin2(out);
@@ -56,14 +56,17 @@ public class AS400GenType {
 		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400UnsignedBin4, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400UnsignedBin4()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400DecimalZoned, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400UnsignedBin8, ctx)) != null){
+			out.print("org.eclipse.edt.java.jtopen.access.AS400UnsignedBin8()");
+		}
+		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400ZonedDecimal, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400ZonedDecimal(");
 			genLength(type, out, annot);
 			out.print(", ");
 			genDecimals(type, out, annot);
 			out.print(")");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400DecimalFloat, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400DecFloat, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400DecFloat(");
 			if(annot.getValue(Constants.subKey_length) != null){
 				out.print(((Integer)annot.getValue(Constants.subKey_length)).toString());
@@ -73,7 +76,7 @@ public class AS400GenType {
 			}
 			out.print(")");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400DecimalPacked, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400PackedDecimal, ctx)) != null){
 			genAS400PackedDecimal(type, ctx, out, annot);
 		}
 		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_AS400Float4, ctx)) != null){
@@ -159,62 +162,59 @@ public class AS400GenType {
 	}
 	private void genAS400Time(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("com.ibm.as400.access.AS400Time(");
-		if(!genAS400AnnotationIBMiFormat(annot, ctx, out)){
-			out.print("com.ibm.as400.access.AS400Time.FORMAT_ISO");
-		}
+		genAS400AnnotationIBMiFormat(annot, ctx, out);
 		genAS400AnnotationIBMiSeparatorChar(annot, ctx, out);
+		genTimezone(out, annot);
+		out.print(", ");
+		out.print(Constants.as400ConnectionName);
 		out.print(")");
 	}
 	private void genAS400Date(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
 		out.print("org.eclipse.edt.java.jtopen.access.AS400Date(");
-		if(!genAS400AnnotationIBMiFormat(annot, ctx, out)){
-			out.print("com.ibm.as400.access.AS400Date.FORMAT_ISO");
-		}
+		genAS400AnnotationIBMiFormat(annot, ctx, out);
 		genAS400AnnotationIBMiSeparatorChar(annot, ctx, out);
+		genTimezone(out, annot);
 		out.print(", ");
-		addTimezoneID(out, annot);
+		out.print(Constants.as400ConnectionName);
 		out.print(")");
 	}
 	private void genAS400AnnotationIBMiSeparatorChar(Annotation annot, Context ctx, TabbedWriter out){
-		if(annot != null){
-			String ibmiSeperator = (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
-			if(ibmiSeperator != null && !ibmiSeperator.isEmpty()){
-				out.print(", '");
-				out.print(ibmiSeperator);
-				out.print("'");
-			}
-			else if(ibmiSeperator == null){
-				out.print(", null");
-			}
+		String ibmiSeperator = annot == null ? null : (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
+		if(ibmiSeperator != null){
+			out.print(", \"");
+			out.print(ibmiSeperator);
+			out.print("\"");
+		}
+		else{
+			out.print(", null");
 		}
 	}
-	private boolean genAS400AnnotationIBMiFormat(Annotation annot, Context ctx, TabbedWriter out){
-		if(annot != null){
-			Expression ibmiFormat = (Expression)annot.getValue(Constants.subKey_ibmiFormat);
-			if(ibmiFormat != null){
-				ctx.invoke(org.eclipse.edt.gen.java.templates.JavaTemplate.genExpression, ibmiFormat, ctx, out);
-				return true;
-			}
+	private void genAS400AnnotationIBMiFormat(Annotation annot, Context ctx, TabbedWriter out){
+		Expression ibmiFormat = annot == null ? null : (Expression)annot.getValue(Constants.subKey_ibmiFormat);
+		if(ibmiFormat != null){
+			ctx.invoke(org.eclipse.edt.gen.java.templates.JavaTemplate.genExpression, ibmiFormat, ctx, out);
 		}
-		return false;
+		else{
+			out.print("null");
+		}
 	}
 	private void genAS400Timestamp(Type type, Context ctx, TabbedWriter out, Annotation annot) {
-		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(com.ibm.as400.access.AS400Timestamp.FORMAT_DEFAULT,");
+		out.print("org.eclipse.edt.java.jtopen.access.AS400Timestamp(null,");
 		genTimestampPattern(type, ctx, out, annot);
+		genTimezone(out, annot);
 		out.print(", ");
-		addTimezoneID(out, annot);
+		out.print(Constants.as400ConnectionName);
 		out.print(")");
 	}
-	private void addTimezoneID(TabbedWriter out, Annotation annot) {
+	private void genTimezone(TabbedWriter out, Annotation annot) {
 		String timeZone = annot == null ? null : (String)annot.getValue(Constants.subKey_timeZoneID);
 		if(timeZone != null && !timeZone.isEmpty()){
-			out.print("\"");
+			out.print(", \"");
 			out.print(timeZone);
 			out.print("\"");
 		}
 		else{
-			out.print(Constants.as400ConnectionName);
-			out.print(".getAS400()");
+			out.print(", null");
 		}
 	}
 	private void genAS400Text(Member member, Type type, Annotation annot, Context ctx, TabbedWriter out) {
@@ -229,7 +229,6 @@ public class AS400GenType {
 		}
 		else{
 			out.print(Constants.as400ConnectionName);
-			out.print(".getAS400()");
 		}
 		out.print(", ");
 		Boolean preserveTrailingSpaces = annot == null ? null :(Boolean)annot.getValue(Constants.subKey_preserveTrailingSpaces);
@@ -306,7 +305,7 @@ public class AS400GenType {
 			new TimestampTypeTemplate().generateOptions(type, ctx, out, eglPattern);
 		}
 		else {
-			out.print("unknown");
+			out.print("unknown, unknown");
 		}
 	}	
 }

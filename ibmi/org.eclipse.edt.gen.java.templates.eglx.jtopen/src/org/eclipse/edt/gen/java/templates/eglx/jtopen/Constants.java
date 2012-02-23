@@ -34,9 +34,9 @@ public interface Constants {
 	static final String signature_AS400Bin4 = "eglx.jtopen.annotations.AS400Bin4";
 	static final String signature_AS400Bin8 = "eglx.jtopen.annotations.AS400Bin8";
 	static final String signature_AS400Date = "eglx.jtopen.annotations.AS400Date";
-	static final String signature_AS400DecimalFloat = "eglx.jtopen.annotations.AS400DecimalFloat";
-	static final String signature_AS400DecimalPacked = "eglx.jtopen.annotations.AS400DecimalPacked";
-	static final String signature_AS400DecimalZoned = "eglx.jtopen.annotations.AS400DecimalZoned";
+	static final String signature_AS400DecFloat = "eglx.jtopen.annotations.AS400DecFloat";
+	static final String signature_AS400PackedDecimal = "eglx.jtopen.annotations.AS400PackedDecimal";
+	static final String signature_AS400ZonedDecimal = "eglx.jtopen.annotations.AS400ZonedDecimal";
 	static final String signature_AS400Float4 = "eglx.jtopen.annotations.AS400Float4";
 	static final String signature_AS400Float8 = "eglx.jtopen.annotations.AS400Float8";
 	static final String signature_AS400Text = "eglx.jtopen.annotations.AS400Text";
@@ -45,6 +45,7 @@ public interface Constants {
 	static final String signature_AS400UnsignedBin1 = "eglx.jtopen.annotations.AS400UnsignedBin1";
 	static final String signature_AS400UnsignedBin2 = "eglx.jtopen.annotations.AS400UnsignedBin2";
 	static final String signature_AS400UnsignedBin4 = "eglx.jtopen.annotations.AS400UnsignedBin4";
+	static final String signature_AS400UnsignedBin8 = "eglx.jtopen.annotations.AS400UnsignedBin8";
 	
 	//Annotation fields
 	static final String subKey_parameterAnnotations = "parameterAnnotations";
