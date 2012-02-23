@@ -78,9 +78,9 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 							else
 							{
 								int line;
-								if ( editor instanceof IEGLEditor )
+								IEGLEditor eglEditor = (IEGLEditor)editor.getAdapter( IEGLEditor.class );
+								if ( eglEditor != null )
 								{
-									IEGLEditor eglEditor = (IEGLEditor)editor;
 									line = eglEditor.getLineAtOffset( BreakpointUtils.getStatementNode( eglEditor, textSelection.getStartLine() )
 											.getOffset() ) + 1;
 								}
@@ -145,10 +145,11 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 				}
 			}
 			
-			if ( textEditor instanceof IEGLEditor )
+			IEGLEditor eglEditor = textEditor == null ? null : (IEGLEditor)textEditor.getAdapter( IEGLEditor.class );
+			if ( eglEditor != null )
 			{
 				// Otherwise validate it's an okay location to add a breakpoint.
-				return BreakpointUtils.isBreakpointValid( (IEGLEditor)textEditor, textSelection.getStartLine() );
+				return BreakpointUtils.isBreakpointValid( eglEditor, textSelection.getStartLine() );
 			}
 		}
 		return false;

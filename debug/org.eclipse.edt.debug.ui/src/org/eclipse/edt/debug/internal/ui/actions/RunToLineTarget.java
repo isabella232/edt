@@ -48,9 +48,10 @@ public class RunToLineTarget implements IRunToLineTarget
 	{
 		String errorMessage = null;
 		ITextEditor editor = BreakpointUtils.getEditor( part );
-		if ( editor instanceof IEGLEditor )
+		IEGLEditor eglEditor = editor == null ? null : (IEGLEditor)editor.getAdapter( IEGLEditor.class );
+		
+		if ( editor != null )
 		{
-			IEGLEditor eglEditor = (IEGLEditor)editor;
 			ITextSelection textSelection = (ITextSelection)selection;
 			if ( BreakpointUtils.isBreakpointValid( eglEditor, textSelection.getStartLine() ) )
 			{

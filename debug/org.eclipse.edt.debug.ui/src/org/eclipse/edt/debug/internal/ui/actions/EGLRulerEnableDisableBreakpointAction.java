@@ -41,11 +41,10 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 		if ( bp == null )
 		{
 			ITextEditor editor = getEditor();
+			IEGLEditor eglEditor = editor == null ? null : (IEGLEditor)editor.getAdapter( IEGLEditor.class );
 			IEditorInput input = editor.getEditorInput();
-			if ( editor instanceof IEGLEditor && input instanceof IFileEditorInput )
+			if ( eglEditor != null && input instanceof IFileEditorInput )
 			{
-				IEGLEditor eglEditor = ((IEGLEditor)editor);
-				
 				int line = getVerticalRulerInfo().getLineOfLastMouseButtonActivity();
 				if ( line != -1 )
 				{
