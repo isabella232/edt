@@ -14,6 +14,9 @@ package org.eclipse.edt.debug.core.java;
 import org.eclipse.edt.debug.core.IEGLVariable;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
+/**
+ * Represents an EGL variable in the Java-based debugger. EGL variables wrap the original Java variable.
+ */
 public interface IEGLJavaVariable extends IEGLVariable, IEGLJavaDebugElement
 {
 	/**

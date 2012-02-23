@@ -15,6 +15,9 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.edt.debug.core.IEGLValue;
 import org.eclipse.jdt.debug.core.IJavaValue;
 
+/**
+ * Represents an EGL value in the Java-based debugger. EGL values wrap the original Java value.
+ */
 public interface IEGLJavaValue extends IEGLValue, IEGLJavaDebugElement
 {
 	/**

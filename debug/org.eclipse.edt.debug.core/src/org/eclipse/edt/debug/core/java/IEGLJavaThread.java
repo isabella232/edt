@@ -14,6 +14,9 @@ package org.eclipse.edt.debug.core.java;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.jdt.debug.core.IJavaThread;
 
+/**
+ * Represents an EGL thread in the Java-based debugger. EGL threads wrap the original Java thread.
+ */
 public interface IEGLJavaThread extends IEGLThread, IEGLJavaDebugElement
 {
 	/**

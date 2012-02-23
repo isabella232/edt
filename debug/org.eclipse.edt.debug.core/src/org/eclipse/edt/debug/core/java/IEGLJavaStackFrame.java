@@ -15,6 +15,9 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
+/**
+ * Represents an EGL stack frame in the Java-based debugger. EGL stack frames wrap the original Java stack frame.
+ */
 public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 {
 	/**
