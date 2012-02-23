@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="variableAdapters" name="Debug Variable Adapters" schema="schema/variableAdapters.exsd"/>
+   <extension-point id="javaVariableAdapters" name="Debug Variable Adapters" schema="schema/javaVariableAdapters.exsd"/>
    
 	<extension
 		id="smapBuilder"
@@ -15,7 +15,7 @@
     	<startup class="org.eclipse.edt.debug.internal.core.java.DebugTargetWrapper"/>
 	</extension>
 	<extension
-		point="org.eclipse.edt.debug.core.variableAdapters">
+		point="org.eclipse.edt.debug.core.javaVariableAdapters">
 		<adapter class="org.eclipse.edt.debug.internal.core.java.variables.EDTVariableAdapter"/>
 	</extension>
  <extension
