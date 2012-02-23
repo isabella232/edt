@@ -32,14 +32,13 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Service;
-import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.ide.testserver.ClasspathUtil;
+import org.eclipse.edt.ide.testserver.TestServerPlugin;
 import org.eclipse.edt.javart.resources.egldd.Binding;
 
 /**
@@ -167,17 +166,6 @@ public class DeploymentDescriptorFinder {
 						return true;
 					}
 				}, IResource.NONE);
-			}
-			
-			// Finally do the same for any projects in its EGL path.
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			for (IEGLPathEntry entry : eglProject.getResolvedEGLPath(true)) {
-				if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
-					IResource resource = root.findMember(entry.getPath());
-					if (resource != null && resource.getType() == IResource.PROJECT && resource.isAccessible()) {
-						addDDFiles((IProject)resource, seenProjects, seenDDs, ddFiles);
-					}
-				}
 			}
 		}
 		catch (CoreException e) {
