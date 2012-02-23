@@ -29,6 +29,7 @@ import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPFunctionInfo;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 /**
