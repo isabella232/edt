@@ -1,0 +1,6 @@
+package eglx.jtopen.annotations;
+
+Record AS400UnsignedBin8 type Annotation
+{	
+	targets=[ElementKind.FieldMbr]}
+end
