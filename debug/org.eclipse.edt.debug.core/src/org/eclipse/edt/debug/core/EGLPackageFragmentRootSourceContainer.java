@@ -29,6 +29,9 @@ import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
+/**
+ * Provides source lookup for an EGL package fragment root.
+ */
 public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContainer implements IWorkbenchAdapter
 {
 	public static final String TYPE_ID = EDTDebugCorePlugin.PLUGIN_ID + ".sourceContainer.packageFragmentRoot"; //$NON-NLS-1$
