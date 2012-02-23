@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.edt.compiler.tools.IRUtils;
@@ -37,7 +38,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
-import org.eclipse.jdt.launching.JavaLaunchDelegate;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
 import org.osgi.framework.Bundle;
@@ -50,11 +50,6 @@ public class ClasspathUtil {
 	private ClasspathUtil() {
 		// No instances.
 	}
-	
-	/**
-	 * Clients are free to use this delegate to calculate a resolved classpath.
-	 */
-	public static final JavaLaunchDelegate delegate = new JavaLaunchDelegate();
 	
 	public final static char[] SUFFIX_egldd = ".egldd".toCharArray(); //$NON-NLS-1$
 	public final static char[] SUFFIX_EGLDD = ".EGLDD".toCharArray(); //$NON-NLS-1$
@@ -236,11 +231,25 @@ public class ClasspathUtil {
 			classpath.add(entry);
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpath);
 			
-			delegate.getClasspath(copy);
+			JavaRuntime.resolveRuntimeClasspath(JavaRuntime.computeUnresolvedRuntimeClasspath(copy), copy);
 			return true;
 		}
 		catch (CoreException ce) {
 			return false;
 		}
+	}
+	
+	/**
+	 * @return the resolved classpath for the launch configuration. All entries, not just user entries, are returned.
+	 * @throws CoreException
+	 */
+	public static String[] resolveClasspath(ILaunchConfiguration config) throws CoreException {
+		IRuntimeClasspathEntry[] entries = JavaRuntime.resolveRuntimeClasspath(JavaRuntime.computeUnresolvedRuntimeClasspath(config), config);
+		
+		String[] paths = new String[entries.length];
+		for (int i = 0; i < entries.length; i++) {
+			paths[i] = entries[i].getLocation();
+		}
+		return paths;
 	}
 }

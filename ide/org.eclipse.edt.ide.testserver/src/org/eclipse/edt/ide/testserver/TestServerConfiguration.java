@@ -191,7 +191,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			ResourcesPlugin.getWorkspace().addResourceChangeListener(this, IResourceChangeEvent.POST_CHANGE);
 			
 			launch = copy.launch(debugMode ? ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE, monitor);
-			latestCheckedClasspath = ClasspathUtil.delegate.getClasspath(launch.getLaunchConfiguration());
+			latestCheckedClasspath = ClasspathUtil.resolveClasspath(launch.getLaunchConfiguration());
 			
 			if (waitForServerToStart) {
 				// Wait up to 60 seconds for the server to start.
@@ -487,7 +487,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			ClasspathUtil.buildClasspath(this, newClasspath);
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, newClasspath);
 			
-			String[] newResolvedClasspath = ClasspathUtil.delegate.getClasspath(copy);
+			String[] newResolvedClasspath = ClasspathUtil.resolveClasspath(copy);
 			
 			// Order DOES matter in a classpath, in the case of duplicate qualified class names. The arrays must be exactly equal to be considered unchanged.
 			result = !Arrays.equals(latestCheckedClasspath, newResolvedClasspath);
