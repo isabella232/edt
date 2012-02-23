@@ -9,8 +9,13 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.core.java;
+package org.eclipse.edt.debug.core.java.variables;
 
+import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
+import org.eclipse.edt.debug.core.java.IEGLJavaValue;
+import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
+import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
@@ -41,4 +46,9 @@ public interface IVariableAdapter
 	 * @return the adapted variable, or null if it can't adapt the Java variable.
 	 */
 	public IEGLJavaVariable adapt( IJavaVariable variable, IEGLJavaStackFrame frame, SMAPVariableInfo info, IEGLJavaValue parent );
+	
+	/**
+	 * Performs any required cleanup.
+	 */
+	public void dispose();
 }

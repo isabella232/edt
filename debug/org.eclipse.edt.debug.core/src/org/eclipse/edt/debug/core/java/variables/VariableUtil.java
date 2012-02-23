@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.debug.internal.core.java;
+package org.eclipse.edt.debug.core.java.variables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,9 @@ import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
-import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaFunctionContainerVariable;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
 import org.eclipse.jdt.debug.core.IEvaluationRunnable;
 import org.eclipse.jdt.debug.core.IJavaClassObject;
 import org.eclipse.jdt.debug.core.IJavaClassType;
@@ -194,7 +195,7 @@ public class VariableUtil
 		
 		if ( var instanceof EGLJavaFunctionContainerVariable )
 		{
-			return "this";
+			return "this"; //$NON-NLS-1$
 		}
 		
 		IEGLJavaValue parent = var.getParentValue();

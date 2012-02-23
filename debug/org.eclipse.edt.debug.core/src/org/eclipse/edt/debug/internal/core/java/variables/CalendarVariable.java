@@ -18,9 +18,9 @@ import org.eclipse.edt.debug.core.EDTDebugCoreMessages;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaValue;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
-import org.eclipse.edt.debug.internal.core.java.VariableUtil;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaObject;
@@ -28,7 +28,7 @@ import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
- * Variable that shows the calendar formatted nicely.
+ * Variable that shows the calendar formatted nicely, using the EDT Java runtime's EString class.
  */
 public class CalendarVariable extends EGLJavaVariable
 {

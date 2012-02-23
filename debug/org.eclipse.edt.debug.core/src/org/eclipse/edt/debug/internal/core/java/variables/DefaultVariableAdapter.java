@@ -19,10 +19,12 @@ import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
-import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
+import org.eclipse.edt.debug.core.java.variables.ChildlessVariable;
+import org.eclipse.edt.debug.core.java.variables.IVariableAdapter;
+import org.eclipse.edt.debug.core.java.variables.ToStringVariable;
+import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaVariable;
-import org.eclipse.edt.debug.internal.core.java.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaFieldVariable;
 import org.eclipse.jdt.debug.core.IJavaObject;
 import org.eclipse.jdt.debug.core.IJavaPrimitiveValue;
@@ -151,5 +153,11 @@ public class DefaultVariableAdapter implements IVariableAdapter
 			simpleTypes.put( "java.math.BigInteger", null ); //$NON-NLS-1$
 		}
 		return simpleTypes;
+	}
+	
+	@Override
+	public void dispose()
+	{
+		simpleTypes = null;
 	}
 }

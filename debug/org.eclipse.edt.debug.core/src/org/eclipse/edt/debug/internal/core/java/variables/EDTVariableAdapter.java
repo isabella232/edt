@@ -17,12 +17,16 @@ import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
-import org.eclipse.edt.debug.core.java.IVariableAdapter;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
-import org.eclipse.edt.debug.internal.core.java.VariableUtil;
+import org.eclipse.edt.debug.core.java.variables.IVariableAdapter;
+import org.eclipse.edt.debug.core.java.variables.ToStringVariable;
+import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaValue;
 import org.eclipse.jdt.debug.core.IJavaVariable;
 
+/**
+ * Adapts some types provided by the core EDT Java Runtime.
+ */
 public class EDTVariableAdapter implements IVariableAdapter
 {
 	@Override
@@ -63,5 +67,11 @@ public class EDTVariableAdapter implements IVariableAdapter
 			EDTDebugCorePlugin.log( e );
 		}
 		return null;
+	}
+	
+	@Override
+	public void dispose()
+	{
+		// Nothing to do.
 	}
 }
