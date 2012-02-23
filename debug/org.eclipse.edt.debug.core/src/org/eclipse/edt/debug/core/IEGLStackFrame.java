@@ -13,6 +13,9 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IStackFrame;
 
+/**
+ * Interface for all stack frames in any EGL debugger.
+ */
 public interface IEGLStackFrame extends IStackFrame, IEGLDebugElement
 {
 }

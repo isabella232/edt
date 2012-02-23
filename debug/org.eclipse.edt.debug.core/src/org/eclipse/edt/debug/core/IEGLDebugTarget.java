@@ -13,6 +13,9 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IDebugTarget;
 
+/**
+ * Interface for all debug targets in any EGL debugger.
+ */
 public interface IEGLDebugTarget extends IDebugTarget, IEGLDebugElement
 {
 }

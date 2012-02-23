@@ -13,6 +13,9 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IVariable;
 
+/**
+ * Interface for all variables in any EGL debugger.
+ */
 public interface IEGLVariable extends IVariable, IEGLDebugElement
 {
 }

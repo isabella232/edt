@@ -13,6 +13,9 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IValue;
 
+/**
+ * Interface for all values in any EGL debugger.
+ */
 public interface IEGLValue extends IValue, IEGLDebugElement
 {
 }

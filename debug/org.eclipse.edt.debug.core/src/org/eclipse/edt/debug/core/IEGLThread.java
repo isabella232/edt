@@ -13,6 +13,9 @@ package org.eclipse.edt.debug.core;
 
 import org.eclipse.debug.core.model.IThread;
 
+/**
+ * Interface for all threads in any EGL debugger.
+ */
 public interface IEGLThread extends IThread, IEGLDebugElement
 {
 }
