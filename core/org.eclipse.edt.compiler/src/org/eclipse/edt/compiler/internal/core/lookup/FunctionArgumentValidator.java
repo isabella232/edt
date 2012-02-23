@@ -31,6 +31,7 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
@@ -350,8 +351,23 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		if(!checkNoDynamicTypesPassedToMathLibFunctions(argExpr, argType, parameterBinding, parameterType)) {
 			return false;
 		}
+		
+		checkNullPassedToNonNullable(argExpr, parameterType, parameterBinding);
 				
 		return false;
+	}
+	
+	private void checkNullPassedToNonNullable(Expression argExpr, ITypeBinding parameterType, FunctionParameterBinding parameterBinding) {
+		
+		if (argExpr.resolveTypeBinding() == NilBinding.INSTANCE && Binding.isValidBinding(parameterType) && !parameterType.isNullable()) {
+			problemRequestor.acceptProblem(
+					argExpr,
+					IProblemRequestor.CANNOT_PASS_NULL,
+					new String[] {
+						parameterBinding.getCaseSensitiveName(),
+						functionBinding.getCaseSensitiveName()
+					});
+		}
 	}
 	
 	public void endVisit(FunctionInvocation functionInvocation) {

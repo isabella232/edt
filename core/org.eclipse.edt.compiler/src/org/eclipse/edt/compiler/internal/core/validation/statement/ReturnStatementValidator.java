@@ -11,9 +11,11 @@
  *******************************************************************************/
 	package org.eclipse.edt.compiler.internal.core.validation.statement;
 	
-	import org.eclipse.edt.compiler.binding.IFunctionBinding;
+	import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
+import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -44,11 +46,12 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 		
 		public boolean visit(final ReturnStatement returnStatement) {
 			Node current = returnStatement.getParent();
+			final IFunctionBinding[] fBinding = new IFunctionBinding[1];
 			ParentASTVisitor visitor = new ParentASTVisitor(){
 				public boolean visit(NestedFunction nFunction) {
-					IFunctionBinding fBinding = (IFunctionBinding) ((NestedFunctionBinding) nFunction.getName().resolveBinding()).getType();
-					if(fBinding != null) {
-						binding = fBinding.getReturnType();
+					fBinding[0] = (IFunctionBinding) ((NestedFunctionBinding) nFunction.getName().resolveBinding()).getType();
+					if(fBinding[0] != null) {
+						binding = fBinding[0].getReturnType();
 					}
 					bcontinue = false;
 										
@@ -57,9 +60,9 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 				
 				public boolean visit(TopLevelFunction tlFunction) {
 					bcontinue = false;
-					IFunctionBinding fBinding = (IFunctionBinding) tlFunction.getName().resolveBinding();
-					if(fBinding != null) {
-						binding = fBinding.getReturnType();
+					fBinding[0] = (IFunctionBinding) tlFunction.getName().resolveBinding();
+					if(fBinding[0] != null) {
+						binding = fBinding[0].getReturnType();
 					}
 					return false;
 				}
@@ -84,6 +87,12 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 					problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
 							IProblemRequestor.RETURN_STATEMENT_TYPE_INCOMPATIBLE,
 							new String[] {getTypeName(returnStatement.getParenthesizedExprOpt().resolveTypeBinding()), getTypeName(visitor.getBinding())});
+				}
+				
+				if (returnStatement.getParenthesizedExprOpt().resolveTypeBinding() == NilBinding.INSTANCE && Binding.isValidBinding(visitor.getBinding()) && !visitor.getBinding().isNullable()) {
+					problemRequestor.acceptProblem(returnStatement.getParenthesizedExprOpt(),
+							IProblemRequestor.CANNOT_RETURN_NULL,
+							new String[] {fBinding[0].getCaseSensitiveName()});
 				}
 			}
 			

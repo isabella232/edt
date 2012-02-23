@@ -1258,6 +1258,8 @@ public interface IProblemRequestor {
     public static final int NATIVE_LIBRARYS_DO_NOT_SUPPORT_USE_STATEMENTS = 5616;
     public static final int LIBRARY_HAS_INVALID_SUBTYPE = 5617;
     public static final int SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = 5618;
+    public static final int CANNOT_PASS_NULL = 5619;
+    public static final int CANNOT_RETURN_NULL = 5620;
     
     public static final int AS400_ANNOTATION_TYPE_MISMATCH = 5700;
     public static final int WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS = 5701;
