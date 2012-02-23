@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java.filters;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,12 +20,13 @@ import java.util.Map;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IDebugTarget;
+import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.filters.AbstractTypeFilter;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
-import org.eclipse.jdt.internal.debug.core.model.JDIMethod;
+import org.eclipse.jdt.debug.ui.IJavaDebugUIConstants;
 import org.eclipse.jdt.internal.debug.core.model.JDIStackFrame;
 import org.eclipse.jdt.internal.debug.ui.IJDIPreferencesConstants;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
@@ -41,6 +43,57 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 {
 	private String[] packageFilters;
 	private Map<String, Object> classFilters;
+	
+	private static final Method isFilterGetters;
+	private static final Method isFilterSetters;
+	private static final Method isGetterMethod;
+	private static final Method isSetterMethod;
+	private static final Method setFilterGetters;
+	private static final Method setFilterSetters;
+	
+	/**
+	 * This key is new to 3.7 so we cannot reference it from JDT or we won't compile with 3.6.
+	 */
+	private static final String PREF_FILTER_GETTERS = IJavaDebugUIConstants.PLUGIN_ID + ".filter_get"; //$NON-NLS-1$
+	
+	/**
+	 * This key is new to 3.7 so we cannot reference it from JDT or we won't compile with 3.6.
+	 */
+	private static final String PREF_FILTER_SETTERS = IJavaDebugUIConstants.PLUGIN_ID + ".filter_setters"; //$NON-NLS-1$
+	
+	static
+	{
+		// Filter getters and setters are new to 3.7. Need to use reflection so that this compiles in 3.6.
+		Method filterGetters = null;
+		Method filterSetters = null;
+		Method getterMethod = null;
+		Method setterMethod = null;
+		Method setGetters = null;
+		Method setSetters = null;
+		
+		try
+		{
+			// No need to wrap each in their own try/catch - they'll either all exist, or none.
+			filterGetters = IJavaDebugTarget.class.getMethod( "isFilterGetters", (Class[])null );
+			filterSetters = IJavaDebugTarget.class.getMethod( "isFilterSetters", (Class[])null );
+			setGetters = IJavaDebugTarget.class.getMethod( "setFilterGetters", Boolean.TYPE );
+			setSetters = IJavaDebugTarget.class.getMethod( "setFilterSetters", Boolean.TYPE );
+			
+			Class<?> JDIMethodClass = Class.forName( "org.eclipse.jdt.internal.debug.core.model.JDIMethod" );
+			getterMethod = JDIMethodClass.getMethod( "isGetterMethod", com.sun.jdi.Method.class );
+			setterMethod = JDIMethodClass.getMethod( "isSetterMethod", com.sun.jdi.Method.class );
+		}
+		catch ( Throwable t )
+		{
+		}
+		
+		isFilterGetters = filterGetters;
+		isFilterSetters = filterSetters;
+		isGetterMethod = getterMethod;
+		isSetterMethod = setterMethod;
+		setFilterGetters = setGetters;
+		setFilterSetters = setSetters;
+	}
 	
 	@Override
 	public boolean filter( IJavaStackFrame frame, IEGLJavaDebugTarget target )
@@ -61,7 +114,10 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 		// Finally, check the type and package filters.
 		try
 		{
-			String typeName = frame.getReferenceType().getName(); // This way avoids '<>' from generics.
+			String typeName = frame.getReferenceType().getName(); // This way
+																	// avoids
+																	// '<>' from
+																	// generics.
 			
 			if ( classFilters.containsKey( typeName ) )
 			{
@@ -109,10 +165,14 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 			classFilters.clear();
 		}
 		
-		// JDT is forcing us to keep track of this ourselves... If the debug target isn't exactly IJavaDebugTarget it isn't told about filter updates
+		// JDT is forcing us to keep track of this ourselves... If the debug
+		// target isn't exactly IJavaDebugTarget it isn't told about filter
+		// updates
 		// (IAdaptable would solve this).
-		// Also their code that parses the filters from the preference isn't visible so we have to duplicate that too.
-		// Since we're going through all this work, might as well split it into package-based and class-based for faster processing in filter().
+		// Also their code that parses the filters from the preference isn't
+		// visible so we have to duplicate that too.
+		// Since we're going through all this work, might as well split it into
+		// package-based and class-based for faster processing in filter().
 		String[] allFilters = JavaDebugOptionsManager.parseList( store.getString( IJDIPreferencesConstants.PREF_ACTIVE_FILTERS_LIST ) );
 		
 		List<String> pkgFilters = new ArrayList<String>();
@@ -180,20 +240,24 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 	
 	private boolean filterGetter( IJavaStackFrame frame, IJavaDebugTarget target )
 	{
-		if ( target.isFilterGetters() )
+		if ( isFilterGetters != null )
 		{
 			try
 			{
-				if ( frame instanceof JDIStackFrame )
+				if ( (Boolean)isFilterGetters.invoke( target, (Object[])null ) )
 				{
-					return JDIMethod.isGetterMethod( ((JDIStackFrame)frame).getUnderlyingMethod() );
+					if ( isGetterMethod != null && frame instanceof JDIStackFrame )
+					{
+						return (Boolean)isGetterMethod.invoke( null, ((JDIStackFrame)frame).getUnderlyingMethod() );
+					}
+					
+					// No API in the interface to get the bytes to determine if this
+					// is a simple getter...
+					String method = frame.getMethodName();
+					return method.startsWith( "get" ) || method.startsWith( "is" ); //$NON-NLS-1$ //$NON-NLS-2$
 				}
-				
-				// No API in the interface to get the bytes to determine if this is a simple getter...
-				String method = frame.getMethodName();
-				return method.startsWith( "get" ) || method.startsWith( "is" ); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-			catch ( DebugException de )
+			catch ( Exception e )
 			{
 			}
 		}
@@ -202,20 +266,24 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 	
 	private boolean filterSetter( IJavaStackFrame frame, IJavaDebugTarget target )
 	{
-		if ( target.isFilterSetters() )
+		if ( isFilterSetters != null )
 		{
 			try
 			{
-				if ( frame instanceof JDIStackFrame )
+				if ( (Boolean)isFilterSetters.invoke( target, (Object[])null ) )
 				{
-					return JDIMethod.isSetterMethod( ((JDIStackFrame)frame).getUnderlyingMethod() );
+					if ( isSetterMethod != null && frame instanceof JDIStackFrame )
+					{
+						return (Boolean)isSetterMethod.invoke( null, ((JDIStackFrame)frame).getUnderlyingMethod() );
+					}
+					
+					// No API in the interface to get the bytes to determine if this
+					// is a simple setter...
+					String method = frame.getMethodName();
+					return method.startsWith( "set" ); //$NON-NLS-1$
 				}
-				
-				// No API in the interface to get the bytes to determine if this is a simple setter...
-				String method = frame.getMethodName();
-				return method.startsWith( "set" ); //$NON-NLS-1$
 			}
-			catch ( DebugException de )
+			catch ( Exception e )
 			{
 			}
 		}
@@ -240,7 +308,8 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 					.getBoolean( IJDIPreferencesConstants.PREF_FILTER_CONSTRUCTORS );
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
@@ -256,7 +325,8 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 					.getBoolean( IJDIPreferencesConstants.PREF_FILTER_STATIC_INITIALIZERS );
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
@@ -266,33 +336,49 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 				}
 			}
 		}
-		else if ( IJDIPreferencesConstants.PREF_FILTER_GETTERS.equals( property ) )
+		else if ( PREF_FILTER_GETTERS.equals( property ) )
 		{
-			boolean filterGetters = JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( IJDIPreferencesConstants.PREF_FILTER_GETTERS );
+			boolean filterGetters = JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( PREF_FILTER_GETTERS );
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
-				if ( eglTarget != null )
+				if ( eglTarget != null && setFilterGetters != null )
 				{
-					eglTarget.getJavaDebugTarget().setFilterGetters( filterGetters );
+					try
+					{
+						setFilterGetters.invoke( eglTarget.getJavaDebugTarget(), filterGetters );
+					}
+					catch ( Exception e )
+					{
+						EDTDebugCorePlugin.log( e );
+					}
 				}
 			}
 		}
-		else if ( IJDIPreferencesConstants.PREF_FILTER_SETTERS.equals( property ) )
+		else if ( PREF_FILTER_SETTERS.equals( property ) )
 		{
-			boolean filterSetters = JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( IJDIPreferencesConstants.PREF_FILTER_SETTERS );
+			boolean filterSetters = JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( PREF_FILTER_SETTERS );
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
-				if ( eglTarget != null )
+				if ( eglTarget != null && setFilterSetters != null )
 				{
-					eglTarget.getJavaDebugTarget().setFilterSetters( filterSetters );
+					try
+					{
+						setFilterSetters.invoke( eglTarget.getJavaDebugTarget(), filterSetters );
+					}
+					catch ( Exception e )
+					{
+						EDTDebugCorePlugin.log( e );
+					}
 				}
 			}
 		}
@@ -302,7 +388,8 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 					.getBoolean( IJDIPreferencesConstants.PREF_FILTER_SYNTHETICS );
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
@@ -317,7 +404,8 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 			String[] allFilters = initActiveFilters();
 			refreshFrames = true;
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );
@@ -331,7 +419,8 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 		{
 			boolean stepThru = JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( IJDIPreferencesConstants.PREF_STEP_THRU_FILTERS );
 			
-			// EGL-wrapped Java targets don't get notified by JDT of filter preference changes.
+			// EGL-wrapped Java targets don't get notified by JDT of filter
+			// preference changes.
 			for ( IDebugTarget target : DebugPlugin.getDefault().getLaunchManager().getDebugTargets() )
 			{
 				IEGLJavaDebugTarget eglTarget = (IEGLJavaDebugTarget)target.getAdapter( IEGLJavaDebugTarget.class );

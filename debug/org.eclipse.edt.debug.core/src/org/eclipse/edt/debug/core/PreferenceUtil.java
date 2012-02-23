@@ -12,6 +12,7 @@
 package org.eclipse.edt.debug.core;
 
 import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
@@ -21,6 +22,16 @@ import org.osgi.service.prefs.BackingStoreException;
  */
 public class PreferenceUtil
 {
+	/**
+	 * Holds instance preference values.
+	 */
+	private static IEclipsePreferences instanceNode;
+	
+	/**
+	 * Holds default preference values.
+	 */
+	private static IEclipsePreferences defaultNode;
+	
 	private PreferenceUtil()
 	{
 		// No instances.
@@ -28,68 +39,68 @@ public class PreferenceUtil
 	
 	public static void setToDefault( String key )
 	{
-		InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).remove( key );
+		getInstanceNode().remove( key );
 	}
 	
 	public static void setDefaultString( String key, String value )
 	{
 		if ( value == null )
 		{
-			DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).remove( key );
+			getDefaultNode().remove( key );
 		}
 		else
 		{
-			DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).put( key, value );
+			getDefaultNode().put( key, value );
 		}
 	}
 	
 	public static void setDefaultBoolean( String key, boolean value )
 	{
-		DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).putBoolean( key, value );
+		getDefaultNode().putBoolean( key, value );
 	}
 	
 	public static String getDefaultString( String key, String defaultValue )
 	{
-		return DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).get( key, defaultValue );
+		return getDefaultNode().get( key, defaultValue );
 	}
 	
 	public static boolean getDefaultBoolean( String key, boolean defaultValue )
 	{
-		return DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).getBoolean( key, defaultValue );
+		return getDefaultNode().getBoolean( key, defaultValue );
 	}
 	
 	public static void setString( String key, String value )
 	{
 		if ( value == null )
 		{
-			InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).remove( key );
+			getInstanceNode().remove( key );
 		}
 		else
 		{
-			InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).put( key, value );
+			getInstanceNode().put( key, value );
 		}
 	}
 	
 	public static void setBoolean( String key, boolean value )
 	{
-		InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).putBoolean( key, value );
+		getInstanceNode().putBoolean( key, value );
 	}
 	
 	public static String getString( String key, String defaultValue )
 	{
-		return InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).get( key, defaultValue );
+		return getInstanceNode().get( key, defaultValue );
 	}
 	
 	public static boolean getBoolean( String key, boolean defaultValue )
 	{
-		return InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).getBoolean( key, defaultValue );
+		return getInstanceNode().getBoolean( key, defaultValue );
 	}
 	
 	public static synchronized void savePreferences()
 	{
 		try
 		{
-			DefaultScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).flush();
+			getDefaultNode().flush();
 		}
 		catch ( BackingStoreException bse )
 		{
@@ -98,7 +109,7 @@ public class PreferenceUtil
 		
 		try
 		{
-			InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).flush();
+			getInstanceNode().flush();
 		}
 		catch ( BackingStoreException bse )
 		{
@@ -108,11 +119,33 @@ public class PreferenceUtil
 	
 	public static void addPreferenceChangeListener( IPreferenceChangeListener listener )
 	{
-		InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).addPreferenceChangeListener( listener );
+		getInstanceNode().addPreferenceChangeListener( listener );
 	}
 	
 	public static void removePreferenceChangeListener( IPreferenceChangeListener listener )
 	{
-		InstanceScope.INSTANCE.getNode( EDTDebugCorePlugin.PLUGIN_ID ).removePreferenceChangeListener( listener );
+		getInstanceNode().removePreferenceChangeListener( listener );
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static IEclipsePreferences getDefaultNode()
+	{
+		if ( defaultNode == null )
+		{
+			// Cannot use InstanceScope.INSTANCE because it doesn't exist in Eclipse 3.6.
+			defaultNode = new DefaultScope().getNode( EDTDebugCorePlugin.PLUGIN_ID );
+		}
+		return defaultNode;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static IEclipsePreferences getInstanceNode()
+	{
+		if ( instanceNode == null )
+		{
+			// Cannot use InstanceScope.INSTANCE because it doesn't exist in Eclipse 3.6.
+			instanceNode = new InstanceScope().getNode( EDTDebugCorePlugin.PLUGIN_ID );
+		}
+		return instanceNode;
 	}
 }
