@@ -35,7 +35,7 @@ public class EGLDefinedReferenceCompletions {
 			completionList.add(new EGLSQLGetStatementReferenceCompletion());
 			completionList.add(new EGLSQLOpenStatementReferenceCompletion());
 			completionList.add(new EGLSQLPrepareStatementReferenceCompletion());
-			completionList.add(new EGLSQLUsingStatementReferenceCompletion());
+			completionList.add(new EGLUsingStatementReferenceCompletion());
 			completionList.add(new EGLAnnotationNameReferenceCompletion());
 			completionList.add(new EGLAsIsaOperatorReferenceCompletion());
 			completionList.add(new EGLArrayIndexReferenceCompletion());

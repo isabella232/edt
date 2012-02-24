@@ -48,7 +48,6 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 	 */
 	protected void precompileContexts() {
 		addContext("package a; function a() a="); //$NON-NLS-1$
-		addContext("package a; function a() a=("); //$NON-NLS-1$
 		addContext("package a; function a() a int="); //$NON-NLS-1$
 		addContext("package a; function a() a int=["); //$NON-NLS-1$
 		addContext("package a; program a type b{c=["); //$NON-NLS-1$
@@ -161,7 +160,7 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 				
 				//Get all enumeration name proposals
 				proposals.addAll(
-					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix).getProposals());
+					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 			}
 		}
 

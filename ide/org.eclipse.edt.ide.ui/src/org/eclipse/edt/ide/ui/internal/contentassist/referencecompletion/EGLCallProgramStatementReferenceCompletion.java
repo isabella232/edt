@@ -35,10 +35,7 @@ public class EGLCallProgramStatementReferenceCompletion extends EGLAbstractRefer
 	 */
 	protected List returnCompletionProposals(ParseStack parseStack, final String prefix, final ITextViewer viewer, final int documentOffset) {
 		final List proposals = new ArrayList();
-		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.PROGRAM));
-		getBoundASTNodeForOffsetInStatement(viewer, documentOffset, new IBoundNodeProcessor() {public void processBoundNode(Node boundNode) {
-			proposals.addAll(new EGLDeclarationProposalHandler(viewer, documentOffset, prefix, boundNode).getServiceProposals());
-		}});
+		proposals.addAll(new EGLPartSearchProposalHandler(viewer, documentOffset, prefix, editor).getProposals(IEGLSearchConstants.PROGRAM | IEGLSearchConstants.SERVICE));
 		return proposals;
 	}
 
