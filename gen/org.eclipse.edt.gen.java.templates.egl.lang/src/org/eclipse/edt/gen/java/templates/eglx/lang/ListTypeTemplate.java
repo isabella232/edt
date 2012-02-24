@@ -137,10 +137,8 @@ public class ListTypeTemplate extends JavaTemplate
 		else
 		{
 			if ( expr.getArguments() != null && expr.getArguments().size() > 0 )
-			{
 				out.print( ", " );
-				ctx.foreach( expr.getArguments(), ',', genExpression, ctx, out );
-			}
+			ctx.invoke(genInvocationArguments, expr, ctx, out);
 			out.print( ')' );
 		}
 	}
@@ -177,6 +175,9 @@ public class ListTypeTemplate extends JavaTemplate
 			{
 				switch ( TypeUtils.getTypeKind( elementType ) )
 				{
+					case TypeUtils.TypeKind_ANY:
+						out.print( "null" );
+						break;
 					case TypeUtils.TypeKind_INT:
 						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.IntFactory" );
 						break;
