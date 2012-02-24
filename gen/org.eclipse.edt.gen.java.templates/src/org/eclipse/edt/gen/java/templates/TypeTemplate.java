@@ -78,7 +78,8 @@ public class TypeTemplate extends JavaTemplate {
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
 		// types can override this to cause/prevent an compound assignment expression to be broken up
 		// the arg contains the operation being asked about. we always want certain ones broken up
-		if (expr.getOperator() .equals("**=") || expr.getOperator() .equals("?:=") || expr.getOperator() .equals("::="))
+		if (expr.getOperator().equals("**=") || expr.getOperator().equals("?:=") || expr.getOperator().equals("::=")
+			|| (expr.getLHS() instanceof MemberName && CommonUtilities.getPropertyFunction(((MemberName) expr.getLHS()).getNamedElement(), true, ctx) != null))
 			return true;
 		else
 			return false;
@@ -93,7 +94,7 @@ public class TypeTemplate extends JavaTemplate {
 		// types can override this to cause/prevent mathlib decimals/precision boxing to be done
 		return false;
 	}
-	
+
 	public Boolean isStringLibFormatBoxingWanted(Type type, Context ctx) {
 		return false;
 	}
@@ -280,8 +281,8 @@ public class TypeTemplate extends JavaTemplate {
 				out.print(" == null ? false : true)");
 			} else
 				out.print("true");
-		} else if (arg.getObjectExpr().getType().getClassifier() != null && 
-			arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+		} else if (arg.getObjectExpr().getType().getClassifier() != null
+			&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
 			if (arg.getObjectExpr().isNullable()) {
 				out.print("(");
 				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
@@ -360,7 +361,7 @@ public class TypeTemplate extends JavaTemplate {
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
-		// if either side of this expression is nullable, or if either side is an array access, 
+		// if either side of this expression is nullable, or if either side is an array access,
 		// or if there is no direct java operation, we need to use the runtime
 		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || (arg.getLHS() instanceof ArrayAccess || arg.getRHS() instanceof ArrayAccess)
 			|| CommonUtilities.getNativeJavaOperation(arg, ctx).length() == 0) {
