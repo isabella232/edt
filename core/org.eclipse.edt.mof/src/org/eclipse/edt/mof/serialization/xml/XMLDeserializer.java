@@ -258,6 +258,9 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 				EObject etarget = (EObject)target;
 				EField field = ((EClass)etarget.getEClass()).getEField(localName);
 				if (field.getEType().getEClassifier() == mof.getEListEDataType()) {
+					if ((List)etarget.eGet(field) == null && isNullableListType(field)) {
+						etarget.eSet(field, new EList());
+					}
 					((List)etarget.eGet(field)).add(source);
 					if (source instanceof List)
 						newList = true;  // only occurs if dealing with List of List values
@@ -269,6 +272,15 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 		}
 	}
 	
+	private boolean isNullableListType(EField field) {
+		if (!field.isNullable()) {
+			return false;
+		}
+		if (field.getEType() != null && field.getEType().getEClassifier() != null) {
+			return field.getEType().getEClassifier().equals(MofFactory.INSTANCE.getEListEDataType());
+		}
+		return false;
+	}
 	
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
