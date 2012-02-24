@@ -2052,8 +2052,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 					
 					if(!shouldContinue[0]) return;
 					
-					if((type1.isReference() && !type1.isDynamic() || NilBinding.INSTANCE == type1) ||
-					   type2 != null && (type2.isReference() && !type2.isDynamic() || NilBinding.INSTANCE == type2)) {
+					if((type1.isReference() && !type1.isDynamic() && !isUnparameterizedPrimitive(type1)|| NilBinding.INSTANCE == type1) ||
+					   type2 != null && (type2.isReference() && !type2.isDynamic() && !isUnparameterizedPrimitive(type2) || NilBinding.INSTANCE == type2)) {
 						if(operator != BinaryExpression.Operator.EQUALS &&
 						   operator != BinaryExpression.Operator.NOT_EQUALS) {
 							//do not show error for number or decimal
@@ -2142,6 +2142,14 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 		}
 	}
+	
+	private boolean isUnparameterizedPrimitive(ITypeBinding type) {
+		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING)  {
+			return ((PrimitiveTypeBinding)type).isUnparemeterizedReference();
+		}
+		return false;
+	}
+	
 	
 	private boolean isNumberOrDecimal(ITypeBinding type) {
 		if (Binding.isValidBinding(type)) {

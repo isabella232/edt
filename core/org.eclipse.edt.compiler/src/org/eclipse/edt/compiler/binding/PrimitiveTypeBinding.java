@@ -428,6 +428,10 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 				|| (getPrimitive() == Primitive.TIMESTAMP && getPattern() == null);
 	}
 	
+	public boolean isUnparemeterizedReference() {
+		return isReference() && (getPrimitive() == Primitive.DECIMAL ||getPrimitive() == Primitive.NUMBER || getPrimitive() == Primitive.TIMESTAMP || getPrimitive() == Primitive.STRING);
+	}
+	
 	@Override
 	public boolean isInstantiable() {
 		return false;
