@@ -1,0 +1,35 @@
+handler hand1
+	field1 int {@eglproperty{}};  //2
+	field2 int {@eglproperty{getmethod = getit}};  //0
+	field3 int {@eglproperty{setmethod = setit}};  //0
+	field4 int {@eglproperty{getmethod = getit, setmethod = setit}};  //0
+	field5 int {@eglproperty{getmethod = setit, setmethod = getit}};  //4
+	
+	function getit() returns (int) end
+	function setit(p1 int in) end
+	
+	function test()
+		temp int;
+		
+		field2 = 3;  //1
+		temp = field3; //1
+		
+		field4 = 3; //0
+		temp = field4; //0
+	end
+end
+
+library lib1
+	hand1 hand1;
+	temp int;
+	
+	function f1()
+		hand1.field2 = 3;  //1
+		temp = hand1.field3; //1
+		
+		hand1.field4 = 3; //0
+		temp = hand1.field4; //0
+		
+	end
+	
+end
