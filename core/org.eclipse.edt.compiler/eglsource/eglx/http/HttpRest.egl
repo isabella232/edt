@@ -5,15 +5,9 @@ package eglx.http;
 
 //
 //
-handler HttpRest implements IHttp
-	request Request;
-	response Response;
+externalType HttpRest type NativeType
+	constructor();
+	request Request{@Property {}};
+	response Response{@Property {}};
 	restType eglx.rest.ServiceType?;
-	
-	function getRequest()returns(Request)
-		return(request);
-	end	
-	function getResponse()returns(Response)
-		return(response);
-	end	
 end

@@ -1,0 +1,8 @@
+package eglx.http;
+
+// basic handler
+
+externalType HttpProxy extends HttpRest type NativeType
+	constructor();
+	constructor(serviceName string in);
+end
