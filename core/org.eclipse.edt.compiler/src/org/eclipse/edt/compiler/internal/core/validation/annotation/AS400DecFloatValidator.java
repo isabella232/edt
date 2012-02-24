@@ -1,20 +1,20 @@
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.binding.AS400DecimalFloatAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.AS400DecFloatAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 
-public class AS400DecimalFloatValidator extends AS400DecimalValidator {
+public class AS400DecFloatValidator extends AS400DecimalValidator {
 	
 	@Override
 	protected String getName() {
-		return AS400DecimalFloatAnnotationTypeBinding.caseSensitiveName;
+		return AS400DecFloatAnnotationTypeBinding.caseSensitiveName;
 	}
 	
 	@Override
 	protected String getInternedName() {
-		return AS400DecimalFloatAnnotationTypeBinding.name;
+		return AS400DecFloatAnnotationTypeBinding.name;
 	}
 	
 	protected void validateLengthAndDecimalsSpecified(IAnnotationBinding ann, Node errorNode, IProblemRequestor problemRequestor) {
