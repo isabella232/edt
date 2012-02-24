@@ -175,9 +175,6 @@ public class ListTypeTemplate extends JavaTemplate
 			{
 				switch ( TypeUtils.getTypeKind( elementType ) )
 				{
-					case TypeUtils.TypeKind_ANY:
-						out.print( "null" );
-						break;
 					case TypeUtils.TypeKind_INT:
 						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.IntFactory" );
 						break;
