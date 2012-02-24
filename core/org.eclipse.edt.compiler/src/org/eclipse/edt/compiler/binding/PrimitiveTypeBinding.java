@@ -87,6 +87,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		REFERENCE_PRIMITIVES.add(Primitive.NUMBER);
 		REFERENCE_PRIMITIVES.add(Primitive.BLOB);
 		REFERENCE_PRIMITIVES.add(Primitive.CLOB);
+		REFERENCE_PRIMITIVES.add(Primitive.STRING);
 	}
 	
 	public abstract Primitive getPrimitive();
@@ -434,6 +435,9 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	
 	@Override
 	public boolean isInstantiable() {
+		if (getPrimitive() == Primitive.STRING /*|| getPrimitive() == Primitive.DECIMAL || getPrimitive() == Primitive.NUMBER*/) {
+			return true;
+		}
 		return false;
 	}
 	
