@@ -3,7 +3,7 @@ package eglx.jtopen.annotations;
 Record AS400PackedDecimal type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DecimalPackedAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.AS400PackedDecimalAnnotationTypeBinding"
 }
 	decimals int?;
 	length int?;
