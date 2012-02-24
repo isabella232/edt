@@ -852,6 +852,14 @@ public class TypeCompatibilityUtil {
 			if (srcPrim == Primitive.NUMBER && Primitive.isNumericType(tgtPrim)) {
 				return true;
 			}
+			
+			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim))) {
+				return true;
+			}
+			
+			if (tgtPrim == Primitive.STRING && (Primitive.isStringType(srcPrim) || Primitive.isNumericType(srcPrim) || Primitive.isDateTimeType(srcPrim))) {
+				return true;
+			}
 		}
 		
 		if (ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind() ) {
