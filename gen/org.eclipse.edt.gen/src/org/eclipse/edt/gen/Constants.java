@@ -56,6 +56,7 @@ public class Constants {
 	public static final String AnnotationDedicatedService = "eglx.services.DedicatedService";
 	public static final String AnnotationResource = "eglx.lang.Resource";
 	public static final String PartHttpRest = "eglx.http.HttpRest";
+	public static final String PartHttpProxy = "eglx.http.HttpProxy";
 	public static final String LibrarySys = "eglx.lang.SysLib";
 	public static final String AnnotationXMLStructureKind = "eglx.xml.binding.annotation.XMLStructureKind";
 	public static final String AnnotationXMLValue = "eglx.xml.binding.annotation.XMLValue";
