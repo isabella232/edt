@@ -28,6 +28,11 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		}
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
+		ctx.invoke(genInvocationArguments, expr, ctx, out);
+		out.print(")");
+	}
+
+	public void genInvocationArguments(InvocationExpression expr, Context ctx, TabbedWriter out) {
 		// check to see if we are trying to pass a nullable to a non-nullable
 		if (expr.getArguments() != null) {
 			for (int i = 0; i < expr.getArguments().size(); i++) {
@@ -49,6 +54,5 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 					out.print(", ");
 			}
 		}
-		out.print(")");
 	}
 }
