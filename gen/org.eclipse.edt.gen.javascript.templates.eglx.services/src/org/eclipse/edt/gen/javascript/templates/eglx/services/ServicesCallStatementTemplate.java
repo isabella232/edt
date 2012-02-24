@@ -27,8 +27,10 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -105,6 +107,8 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		genRequestConfig(out);
 		genResponseConfig(out);
 		out.println("),");
+		ctx.invoke("genServiceName", stmt, ctx, out, stmt.getInvocationTarget().getQualifier());
+		out.println(", ");
 		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 		Function callbackFunction = null;
 		if(stmt.getCallback() != null){
@@ -123,6 +127,21 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		out.popIndent();
 		out.popIndent();
 	}
+	
+	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Service service) {
+		out.print("\"");
+		out.print(stmt.getInvocationTarget().getQualifier().getType().getTypeSignature());
+		out.print("\"");
+	}
+	
+	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Type type) {
+		out.print("null");
+	}
+	
+	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, LHSExpr access) {
+		ctx.invoke("genServiceName", stmt, ctx, out, access.getType());
+	}
+	
 	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
 			Annotation getRest, Annotation putRest, Annotation postRest,
 			Annotation deleteRest, Context ctx, TabbedWriter out) {
