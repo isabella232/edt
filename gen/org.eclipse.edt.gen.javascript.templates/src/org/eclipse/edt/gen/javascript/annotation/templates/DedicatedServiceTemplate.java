@@ -18,113 +18,31 @@ import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.Assignment;
-import org.eclipse.edt.mof.egl.AssignmentStatement;
-import org.eclipse.edt.mof.egl.Container;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.LHSExpr;
-import org.eclipse.edt.mof.egl.LogicAndDataPart;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.NewExpression;
-import org.eclipse.edt.mof.egl.PartName;
-import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
-import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class DedicatedServiceTemplate extends JavaScriptTemplate {
 
-	public void genDefaultValue(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) throws MofObjectNotFoundException, DeserializationException {
-		String serviceName = (String)annot.getValue("serviceName");
-		if(serviceName == null){
-			serviceName = field.getType().getTypeSignature();
-		}
-		Annotation eglLocation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
-		Container container = field.getContainer();
 
-		LogicAndDataPart httpRecordType = (LogicAndDataPart)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.PartHttpRest);
-		
+	public void genDefaultValue(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) throws MofObjectNotFoundException, DeserializationException {
+		Annotation eglLocation = field.getAnnotation(IEGLConstants.EGL_LOCATION);
 		NewExpression newExpr = factory.createNewExpression();
+		newExpr.setId(Constants.PartHttpProxy);
 		if (eglLocation != null)
 			newExpr.addAnnotation(eglLocation);
-		newExpr.setId(Constants.PartHttpRest);
+		String serviceName = (String)annot.getValue("serviceName");
+		if(serviceName != null){
+			StringLiteral stringLiteral = factory.createStringLiteral();
+			if (eglLocation != null)
+				stringLiteral.addAnnotation(eglLocation);
+			stringLiteral.setValue(serviceName);
+			newExpr.getArguments().add(stringLiteral);
+		}
 		ctx.invoke(genNewExpression, newExpr, ctx, out);
 		out.println(";");
-		
-		StatementBlock stmtBlock = factory.createStatementBlock();
-		if (eglLocation != null)
-			stmtBlock.addAnnotation(eglLocation);
-		stmtBlock.setContainer(field.getContainer());
-
-		// we need to create the member access
-		MemberName httpRecordMemberName = factory.createMemberName();
-		if (eglLocation != null)
-			httpRecordMemberName.addAnnotation(eglLocation);
-		httpRecordMemberName.setMember(field);
-		httpRecordMemberName.setId(field.getId());
-
-		//<field>.restType = ServiceType.EglDedicated;
-		Field httpRecordField = httpRecordType.getField("restType");
-		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess( httpRecordMemberName, httpRecordField, eglLocation),
-				createEnumerationEntry(httpRecordField.getType(), "egldedicated", eglLocation), 
-				eglLocation));		
-
-		//<field>.request.uri = "services.HelloWorld";
-		Field httpRecordRequestField = httpRecordType.getField("request");
-		MemberAccess httpRecordRequestFieldMemberAccess = createFieldMemberAccess(httpRecordMemberName, httpRecordRequestField, eglLocation);
-		
-		Field httpRecordRequestUriField = ((LogicAndDataPart)httpRecordRequestField.getType()).getField("uri");
-		StringLiteral stringLiteral = factory.createStringLiteral();
-		if (eglLocation != null)
-			stringLiteral.addAnnotation(eglLocation);
-		stringLiteral.setValue(serviceName);
-		stmtBlock.getStatements().add(createAssignment(container, 
-				createFieldMemberAccess(httpRecordRequestFieldMemberAccess, httpRecordRequestUriField, eglLocation),
-				stringLiteral, 
-				eglLocation));		
-
-		ctx.invoke(genStatementBodyNoBraces, stmtBlock, ctx, out);
 	}
 
-	private MemberAccess createEnumerationEntry(Type enumerationType, String id, Annotation eglLocation) {
-		PartName partName  = factory.createPartName();
-		partName.setType(enumerationType);
-		MemberAccess enumEntry = factory.createMemberAccess();
-		if (eglLocation != null){
-			partName.addAnnotation(eglLocation);
-			enumEntry.addAnnotation(eglLocation);
-		}
-		enumEntry.setId(id);
-		enumEntry.setQualifier(partName);
-		return enumEntry;
-	}
-
-	private MemberAccess createFieldMemberAccess( Expression qualifier, Field targetField, Annotation eglLocation) {
-		MemberAccess memberAccess = factory.createMemberAccess();
-		if (eglLocation != null)
-			memberAccess.addAnnotation(eglLocation);
-		memberAccess.setQualifier(qualifier);
-		memberAccess.setId(targetField.getName());
-		memberAccess.setMember(targetField);
-		return memberAccess;
-	}
-
-	private AssignmentStatement createAssignment(Container container, LHSExpr lhsExpr, Expression rhsExpr, Annotation eglLocation) {
-		AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
-		assignmentStatement.setContainer(container);
-		Assignment assignment = factory.createAssignment();
-		if (eglLocation != null){
-			assignmentStatement.addAnnotation(eglLocation);
-			assignment.addAnnotation(eglLocation);
-		}
-		assignmentStatement.setAssignment(assignment);
-		assignment.setLHS(lhsExpr);
-		assignment.setRHS(rhsExpr);
-		return assignmentStatement;
-	}
 }
