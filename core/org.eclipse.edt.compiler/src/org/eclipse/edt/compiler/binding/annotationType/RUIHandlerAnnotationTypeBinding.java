@@ -31,12 +31,7 @@ public class RUIHandlerAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     private static RUIHandlerAnnotationTypeBinding INSTANCE = new RUIHandlerAnnotationTypeBinding();
     
     private static final List annotations = new ArrayList();
-   	   	
-    private static final List fieldAccessAnnotations = new ArrayList();
-    static {
-    	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(RuiWidgetFieldAccessValidator.class));
-    }    
-    
+   	   	    
     public RUIHandlerAnnotationTypeBinding() {
         super(caseSensitiveName);
     }
@@ -56,7 +51,4 @@ public class RUIHandlerAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
 	public List getAnnotations(){
 		return annotations;
 	}
-    public List getFieldAccessAnnotations() {
-    	return fieldAccessAnnotations;
-    }
 }

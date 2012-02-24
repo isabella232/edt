@@ -17,9 +17,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectFieldAccessValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectFieldTypeValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -36,12 +34,7 @@ public class JavaObjectAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     static {
     	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaObjectFieldTypeValidator.class));
     }
-    
-    private static final List fieldAccessAnnotations = new ArrayList();
-    static {
-    	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(JavaObjectFieldAccessValidator.class));
-    }
-    
+        
     public JavaObjectAnnotationTypeBinding() {
         super(name);
     }
@@ -60,9 +53,5 @@ public class JavaObjectAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     
     public List getPartSubTypeAnnotations() {
     	return subPartTypeAnnotations;
-    }
-    
-    public List getFieldAccessAnnotations() {
-    	return fieldAccessAnnotations;
     }
 }

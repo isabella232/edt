@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -34,12 +33,7 @@ public class JavaScriptObjectAnnotationTypeBinding extends PartSubTypeAnnotation
     static {
     	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaScriptObjectFieldContentValidator.class));
     }
-    
-    private static final List fieldAccessAnnotations = new ArrayList();
-    static {
-    	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(JavaScriptObjectFieldAccessValidator.class));
-    }
-    
+        
     public JavaScriptObjectAnnotationTypeBinding() {
         super(name);
     }
@@ -58,9 +52,5 @@ public class JavaScriptObjectAnnotationTypeBinding extends PartSubTypeAnnotation
     
     public List getPartSubTypeAnnotations() {
     	return subPartTypeAnnotations;
-    }
-    
-    public List getFieldAccessAnnotations() {
-    	return fieldAccessAnnotations;
     }
 }

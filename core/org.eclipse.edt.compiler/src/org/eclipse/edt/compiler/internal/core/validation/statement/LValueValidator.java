@@ -83,23 +83,34 @@ public class LValueValidator {
 		this.compilerOptions = compilerOptions;
 	}
 	
+	private boolean invokeFieldAccessValidators() {
+		boolean result = true;
+
+		if (!Binding.isValidBinding(dBinding)) {
+			return result;
+		}
+		Iterator i = dBinding.getAnnotations().iterator();
+		while (i.hasNext()) {
+			IAnnotationBinding ann = (IAnnotationBinding)i.next();
+			if (Binding.isValidBinding(ann) && Binding.isValidBinding(ann.getType()) && ann.getType() instanceof IAnnotationTypeBinding) {
+				IAnnotationTypeBinding annType = (IAnnotationTypeBinding)ann.getType();
+				IAnnotationTypeBinding validationProxy = annType.getValidationProxy();
+				if(validationProxy != null) {
+					for(Iterator iter = validationProxy.getFieldAccessAnnotations().iterator(); iter.hasNext();) {
+						result = ((FieldAccessValidationAnnotationTypeBinding) iter.next()).validateLValue(lValue, dBinding, problemRequestor, compilerOptions) && result;
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	public boolean validate() {
 		boolean result = true;
 		
 		if (validationRules.shouldRunAccessRules()) {
-			//Run field access rules defined by subtype of part that field belongs to
-			IPartBinding declaringPart = dBinding.getDeclaringPart();
-			if(Binding.isValidBinding(declaringPart)) {
-				IPartSubTypeAnnotationTypeBinding declaringSubtype = declaringPart.getSubType();
-				if(Binding.isValidBinding(declaringSubtype)) {
-					IAnnotationTypeBinding validationProxy = declaringSubtype.getValidationProxy();
-					if(validationProxy != null) {
-						for(Iterator iter = validationProxy.getFieldAccessAnnotations().iterator(); iter.hasNext();) {
-							((FieldAccessValidationAnnotationTypeBinding) iter.next()).validateLValue(lValue, dBinding, problemRequestor, compilerOptions);
-						}
-					}
-				}
-			}
+			//Run field access rules defined by annotations on the field
+			result = invokeFieldAccessValidators();
 		}
 		
 		if (!validationRules.canAssignToPCB()) {

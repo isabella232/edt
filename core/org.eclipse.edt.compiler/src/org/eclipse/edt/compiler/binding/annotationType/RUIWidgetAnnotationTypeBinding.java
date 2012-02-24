@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -32,11 +31,6 @@ public class RUIWidgetAnnotationTypeBinding extends PartSubTypeAnnotationTypeBin
     
     private static final List annotations = new ArrayList();
    	   	
-    private static final List fieldAccessAnnotations = new ArrayList();
-    static {
-    	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(RuiWidgetFieldAccessValidator.class));
-    }
-
     public RUIWidgetAnnotationTypeBinding() {
         super(caseSensitiveName);
     }
@@ -56,8 +50,5 @@ public class RUIWidgetAnnotationTypeBinding extends PartSubTypeAnnotationTypeBin
 	public List getAnnotations(){
 		return annotations;
 	}
-    public List getFieldAccessAnnotations() {
-    	return fieldAccessAnnotations;
-    }
 
 }

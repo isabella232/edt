@@ -31,56 +31,14 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
-
-/**
- * @author demurray
- */
 public class EGLPropertyValidator implements IAnnotationValidationRule {
 	
-	
-	private boolean supportsEglProperty(IPartBinding part) {
-		if (part == null || part.getSubType() == null) {
-			return false;
-		}
-				
-		String[] ruiPkg = InternUtil.intern(new String[] {"eglx", "ui", "rui"});
-				
-		if (InternUtil.intern(IEGLConstants.PROPERTY_RUIWIDGET) == part.getName() && part.getPackageName() == ruiPkg) {
-			return true;
-		}
-
-		String subName = part.getSubType().getName();
-		String[] subPkg = part.getSubType().getPackageName();
-
-		if (ruiPkg != subPkg) {
-			return false;
-		}
-
-		if (InternUtil.intern(IEGLConstants.PROPERTY_RUIWIDGET) == subName) {
-			return true;
-		}
-
-		if (InternUtil.intern(IEGLConstants.PROPERTY_RUIHANDLER) == subName) {
-			return true;
-		}
-			
-		return false;
-
-	}
 	
 	
 	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 
 		//validate that this is only specified in a RUIWidget or RUIHandler!
 		IAnnotationBinding ann = (IAnnotationBinding)allAnnotations.get(InternUtil.intern(IEGLConstants.PROPERTY_EGLPROPERTY));
-		if (ann != null && ann.getDeclaringPart() != null) {
-			
-//			if (!supportsEglProperty(ann.getDeclaringPart())) {
-//				problemRequestor.acceptProblem(errorNode, IProblemRequestor.ANNOTATION_NOT_APPLICABLE, IMarker.SEVERITY_ERROR, new String[] {IEGLConstants.PROPERTY_EGLPROPERTY});				
-//				return;
-//			}
-			
-		}
 		
 		//validate the getter and setter methods if they were not explicitly named
 		if ((allAnnotations.get(InternUtil.intern(IEGLConstants.PROPERTY_GETMETHOD)) == null) && (allAnnotations.get(InternUtil.intern(IEGLConstants.PROPERTY_SETMETHOD)) == null)) {

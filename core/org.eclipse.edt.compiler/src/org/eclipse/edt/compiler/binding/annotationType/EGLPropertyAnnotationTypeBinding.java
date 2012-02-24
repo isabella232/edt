@@ -17,8 +17,10 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
+import org.eclipse.edt.compiler.binding.UserDefinedFieldAccessAnnotationValidationRule;
 import org.eclipse.edt.compiler.binding.UserDefinedValueValidationRule;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.EGLPropertyFieldAccessValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.EGLPropertyValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.GetMethodAnnotationValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.SetMethodAnnotationValueValidator;
@@ -30,6 +32,12 @@ public class EGLPropertyAnnotationTypeBinding extends ComplexAnnotationTypeBindi
 	
 	private static EGLPropertyAnnotationTypeBinding INSTANCE = new EGLPropertyAnnotationTypeBinding();
 	
+	
+   private static final List fieldAccessAnnotations = new ArrayList();
+   static {
+    	fieldAccessAnnotations.add(new UserDefinedFieldAccessAnnotationValidationRule(EGLPropertyFieldAccessValidator.class));
+    }    
+
 	private static final ArrayList getMethodAnnotations = new ArrayList();
    	static{
    		getMethodAnnotations.add(new UserDefinedValueValidationRule(GetMethodAnnotationValueValidator.class));
@@ -74,5 +82,10 @@ public class EGLPropertyAnnotationTypeBinding extends ComplexAnnotationTypeBindi
 	public List getAnnotations() {
 		return myAnnotations;
 	}
+	
+    public List getFieldAccessAnnotations() {
+    	return fieldAccessAnnotations;
+    }
+
 
 }

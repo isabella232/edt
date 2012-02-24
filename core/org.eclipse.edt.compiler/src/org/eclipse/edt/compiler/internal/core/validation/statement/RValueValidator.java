@@ -15,11 +15,10 @@ import java.util.Iterator;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FieldAccessValidationAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -47,22 +46,26 @@ public class RValueValidator {
 			result = false;
 		}
 		
-		if(!checkFieldAccessRulesFromSubtype()) {
+		if(!invokeFieldAccessValidators()) {
 			result = false;
 		}
 		
 		return result;
 	}
 
-	private boolean checkFieldAccessRulesFromSubtype() {
+	private boolean invokeFieldAccessValidators() {
+		//Run field access rules defined by annotations on the field
 		boolean result = true;
-		
-		//Run field access rules defined by subtype of part that field belongs to
-		IPartBinding declaringPart = dBinding.getDeclaringPart();
-		if(Binding.isValidBinding(declaringPart)) {
-			IPartSubTypeAnnotationTypeBinding declaringSubtype = declaringPart.getSubType();
-			if(Binding.isValidBinding(declaringSubtype)) {
-				IAnnotationTypeBinding validationProxy = declaringSubtype.getValidationProxy();
+
+		if (!Binding.isValidBinding(dBinding)) {
+			return result;
+		}
+		Iterator i = dBinding.getAnnotations().iterator();
+		while (i.hasNext()) {
+			IAnnotationBinding ann = (IAnnotationBinding)i.next();
+			if (Binding.isValidBinding(ann) && Binding.isValidBinding(ann.getType()) && ann.getType() instanceof IAnnotationTypeBinding) {
+				IAnnotationTypeBinding annType = (IAnnotationTypeBinding)ann.getType();
+				IAnnotationTypeBinding validationProxy = annType.getValidationProxy();
 				if(validationProxy != null) {
 					for(Iterator iter = validationProxy.getFieldAccessAnnotations().iterator(); iter.hasNext();) {
 						result = ((FieldAccessValidationAnnotationTypeBinding) iter.next()).validateRValue(nodeForErrors, dBinding, problemRequestor, compilerOptions) && result;
@@ -70,7 +73,6 @@ public class RValueValidator {
 				}
 			}
 		}
-		
 		return result;
 	}
 

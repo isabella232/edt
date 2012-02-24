@@ -19,7 +19,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
-public class JavaObjectFieldAccessValidator implements IFieldAccessAnnotationValidationRule {
+public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValidationRule {
 	
 	public boolean validateLValue(Expression lValue, IDataBinding fieldBinding, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		if(hasGetterButNotSetter(fieldBinding)) {
@@ -47,8 +47,12 @@ public class JavaObjectFieldAccessValidator implements IFieldAccessAnnotationVal
 		return true;
 	}
 	
+	protected IAnnotationBinding getAnnotation(IDataBinding binding) {
+		return binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
+	}
+	
 	private boolean hasGetterButNotSetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang"}, "Property");
+		IAnnotationBinding aBinding = getAnnotation(binding);
 		if(aBinding != null) {
 			return aBinding.findData("getMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("setMethod") == IBinding.NOT_FOUND_BINDING;
@@ -57,7 +61,7 @@ public class JavaObjectFieldAccessValidator implements IFieldAccessAnnotationVal
 	}
 	
 	private boolean hasSetterButNotGetter(IDataBinding binding) {
-		IAnnotationBinding aBinding = binding.getAnnotation(new String[] {"eglx", "lang", }, "Property");
+		IAnnotationBinding aBinding = getAnnotation(binding);
 		if(aBinding != null) {
 			return aBinding.findData("setMethod") != IBinding.NOT_FOUND_BINDING &&
 			       aBinding.findData("getMethod") == IBinding.NOT_FOUND_BINDING;
