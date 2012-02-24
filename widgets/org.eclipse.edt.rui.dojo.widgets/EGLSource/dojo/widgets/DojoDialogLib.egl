@@ -106,7 +106,7 @@ library DojoDialogLib {}
 		return(dialog);
 	end
 		
-	function createButton(text String in, id String in, callback dialogButtonClicked) returns (DojoButton)
+	function createButton(text String in, id String in, callback dialogButtonClicked?) returns (DojoButton)
 		button DojoButton {value = id, text = text, onClick ::= buttonClicked };
 		
 		bDict Dictionary; 
