@@ -74,11 +74,10 @@ public class ArrayAccessImpl extends ExpressionImpl implements ArrayAccess {
 	@Override
 	public boolean isNullable() {
 		if (getArray().getType() instanceof ArrayType) {
-			return ((ArrayType)getArray().getType()).elementsNullable() 
-				|| TypeUtils.isReferenceType(getType()) ;
+			return ((ArrayType)getArray().getType()).elementsNullable();
 		}
 		else {
-			return TypeUtils.isReferenceType(getType());
+			return false;
 		}
 	}
 
