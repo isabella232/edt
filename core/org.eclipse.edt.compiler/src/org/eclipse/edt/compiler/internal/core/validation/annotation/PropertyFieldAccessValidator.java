@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
+import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -54,17 +55,39 @@ public class PropertyFieldAccessValidator implements IFieldAccessAnnotationValid
 	private boolean hasGetterButNotSetter(IDataBinding binding) {
 		IAnnotationBinding aBinding = getAnnotation(binding);
 		if(aBinding != null) {
-			return aBinding.findData("getMethod") != IBinding.NOT_FOUND_BINDING &&
-			       aBinding.findData("setMethod") == IBinding.NOT_FOUND_BINDING;
+			return hasGet(aBinding) &&
+			       !hasSet(aBinding);
 		}
 		return false;
+	}
+	
+	private boolean hasGet(IAnnotationBinding aBinding) {
+		return hasValue(aBinding, "getMethod");
+	}
+	private boolean hasSet(IAnnotationBinding aBinding) {
+		return hasValue(aBinding, "setMethod");
+	}
+
+	
+	private boolean hasValue(IAnnotationBinding aBinding, String fieldName) {
+		IDataBinding annField = aBinding.findData(fieldName);
+		if (!Binding.isValidBinding(annField)) {
+			return false;
+		}
+		return hasValue(((AnnotationFieldBinding)annField).getValue());
+		
+	}
+	
+	protected boolean hasValue(Object obj) {
+		
+		return (obj != null) && obj.toString().length() > 0;
 	}
 	
 	private boolean hasSetterButNotGetter(IDataBinding binding) {
 		IAnnotationBinding aBinding = getAnnotation(binding);
 		if(aBinding != null) {
-			return aBinding.findData("setMethod") != IBinding.NOT_FOUND_BINDING &&
-			       aBinding.findData("getMethod") == IBinding.NOT_FOUND_BINDING;
+			return hasSet(aBinding) &&
+			       !hasGet(aBinding);
 		}
 		return false;
 	}

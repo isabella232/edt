@@ -10,5 +10,9 @@ public class EGLPropertyFieldAccessValidator extends
 		return binding.getAnnotation(new String[] {"eglx", "lang"}, "EGLProperty");
 	}
 
+	protected boolean hasValue(Object obj) {
+		
+		return (obj != null);
+	}
 
 }

@@ -87,7 +87,11 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 			
 			if(StatementValidator.isValidBinding(lhsDataBinding)) {
 				new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
+
+				//Must validate the LHS as being on the rhs, because x += 2 is the same as x = x + 2;
+				new RValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs).validate();
 			}
+
 			
 			if(StatementValidator.isValidBinding(rhsDataBinding)) {
 				new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
@@ -256,8 +260,20 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		}
 		
 		if(StatementValidator.isValidBinding(lhsDataBinding)) {
-			new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
+			//concatenation assignmet is special case. myarr ::= element is really just an append, so we do not have to validate
+			//the LHS of the assignment statement
+			if (Assignment.Operator.CONCAT != assignmentOperator) {
+				new LValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs, lvalueValidationRules).validate();
+			}
+			
+			//validate the LHS of all other types of assignments as if the LHS was on ther RHS. This is because expressions
+			//like  x &= y is the same as x = x & y
+			if (Assignment.Operator.ASSIGN != assignmentOperator) {
+				new RValueValidator(problemRequestor, compilerOptions, lhsDataBinding, lhs).validate();
+			}
 		}
+		
+		
 		
 		if(StatementValidator.isValidBinding(rhsDataBinding)) {
 			new RValueValidator(problemRequestor, compilerOptions, rhsDataBinding, rhs).validate();
