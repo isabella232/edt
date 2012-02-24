@@ -23,7 +23,8 @@ end
  */
 Record Property type Annotation
 {
-	targets = [ElementKind.FieldMbr]
+	targets = [ElementKind.FieldMbr],
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.PropertyAnnotationTypeBinding"
 }
 	getMethod String;
 	setMethod String;
