@@ -214,6 +214,10 @@ public class TypeUtils implements MofConversion {
 				return false;
 			}
 			
+			if (key.equalsIgnoreCase(Type_EGLString) && type instanceof ParameterizableType) {
+				return false;
+			}
+			
 			return ((EGLClass)type.getClassifier()).isSubtypeOf((EGLClass)getType(Type_AnyValue));
 		}
 		else {
