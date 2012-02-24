@@ -184,5 +184,8 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI3660E' : 'Exception occurred, could not handle response for \'{0}\', reason: \'{1}\'',
 		'CRRUI3661E' : 'Service binding information is missing for \'{0}\' while trying to invoke service function \'{1}\'.',
 		'CRRUI3662E' : 'The service invocation specified to use the response.Content-Type to decode the response. Unable to determine the response encoding from Content-Type:\'{0}\'.',
-		'CRRUI3663E' : 'getResource requires a URI parameter string. \'{0}\' is not a supported URI.'
+		'CRRUI3663E' : 'getResource requires a URI parameter string. \'{0}\' is not a supported URI.',
+		'CRRUI3664E' : 'An EGL service is being invoked in a dedicated fashion but no service name has been supplied.',
+		'CRRUI3665E' : 'The IHTTP connection supplied is not for a REST service invocation.',
+		'CRRUI3666E' : 'An interface or service contains true REST annotations and is being incorrectly invoked in a dedicated fashion.'
 };

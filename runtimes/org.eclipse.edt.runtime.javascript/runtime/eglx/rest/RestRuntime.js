@@ -8,8 +8,11 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-egl.eglx.rest = {};
+if(egl.eglx.rest === undefined){
+	egl.eglx.rest = {};
+}
 egl.eglx.rest.invokeEglService = function(http,
+										serviceName,
 										methodName,
 										inData, 
 										inDatatypes,
@@ -21,6 +24,19 @@ egl.eglx.rest.invokeEglService = function(http,
 	eglRpcRestRequest.method = methodName;
 	eglRpcRestRequest.params = inData;
 	http = egl.eglx.lang.EAny.unbox(http);
+	if(!(http instanceof egl.eglx.http.HttpRest)){
+		throw egl.createRuntimeException("CRRUI3665E", []);
+	}
+	if(http instanceof egl.eglx.http.HttpProxy &&
+			(http.request.uri === null || http.request.uri.length === 0) &&
+			serviceName === null){
+		throw egl.createRuntimeException("CRRUI3664E", []);
+	}
+	else if(http instanceof egl.eglx.http.HttpProxy &&
+			(http.request.uri === null || http.request.uri.length === 0) &&
+			serviceName !== null){
+		http.request.uri = serviceName;	
+	}
 	egl.eglx.services.$ServiceRT.encodeResquestBody(http.request, eglRpcRestRequest);
 	egl.eglx.services.$ServiceRT.internalInvokeService(http, returnTypes, callbackFunction, errorCallbackFunction, null);
 };
@@ -45,6 +61,12 @@ egl.eglx.rest.invokeService = function(http,
 
 	 */
 	http = egl.eglx.lang.EAny.unbox(http);
+	if(!(http instanceof egl.eglx.http.HttpRest)){
+		throw egl.createRuntimeException("CRRUI3665E", []);
+	}
+	else if(http instanceof egl.eglx.http.HttpProxy){
+		throw egl.createRuntimeException("CRRUI3666E", []);
+	}
 	http.restType = egl.eglx.rest.ServiceType.TrueRest;
 	if(firstInDataNotInURL == null && http.request.userUri != undefined && http.request.userUri){
 		if(http.request.uri != undefined && http.request.uri != null){
