@@ -19,7 +19,7 @@ library MVCLib  {}
 		return(currentController);
 	end
 	
-	function setCurrentContext(acontroller Controller in)
+	function setCurrentContext(acontroller Controller? in)
 		this.currentController = acontroller;
 	end
 	

@@ -24,13 +24,13 @@ externalType DataGridUtil type JavaScriptObject{relativePath = "org/eclipse/edt/
     function getChecked(object any in) returns(boolean);
     function getUniqueID() returns(string);
     function getTextWidth(s string in) returns(int);
-    function sort(array any[] in, fieldName string in, up boolean in, ci boolean in, cc ColumnComparator in) returns(any[]);
+    function sort(array any[] in, fieldName string in, up boolean in, ci boolean in, cc ColumnComparator? in) returns(any[]);
     function getFieldNames(object any in) returns(string[]);
     function setBiDiMarkersStr(text string in, isTextTypeVisual boolean in, isTextOrientationRightToLeft boolean in) returns (string);
     function destroyHeaderCell(grid Widget in);
 end
 
-delegate DataCellBehavior(grid DataGrid in, cell Widget in, rowData any in, dataIndex int in, column DataGridColumn in) end
+delegate DataCellBehavior(grid DataGrid in, cell Widget in, rowData any? in, dataIndex int in, column DataGridColumn in) end
 delegate EditorBehavior(grid DataGrid in, cell Widget in, rowData any in, dataIndex int in, column DataGridColumn in, value any in) returns(Widget) end
 delegate DataLoader(startRow int in, endRow int in, sortFieldName string in, sortDirection int in) returns(boolean) end
 delegate PageChangeListener(grid DataGrid in, oldPageIndex int in, newPageIndex int in) end
@@ -1157,7 +1157,7 @@ handler DataGrid type RUIWidget{
         return (columns[column]);       
     end
 
-    function getCell(row int in, fieldName string in) returns(Widget)
+    function getCell(row int in, fieldName string in) returns(Widget?)
         tds Widget[] = grid.getElementsByTagName("div");
         count int = tds.getSize();
         for(n int from 1 to count)

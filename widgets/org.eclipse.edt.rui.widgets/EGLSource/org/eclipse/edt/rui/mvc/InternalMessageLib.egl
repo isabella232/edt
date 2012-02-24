@@ -16,7 +16,7 @@ import org.eclipse.edt.rui.widgets.UtilLib;
 // basic library
 library InternalMessageLib  {}
 
-    function getRuntimeMessage(msgKey string in, defaultMsgId string in, inserts string[] in) returns(string)
+    function getRuntimeMessage(msgKey string in, defaultMsgId string in, inserts string[]? in) returns(string)
         messageValue string;
         if(msgKey == "")
             messageValue = UtilLib.getMessage(defaultMsgId, inserts);

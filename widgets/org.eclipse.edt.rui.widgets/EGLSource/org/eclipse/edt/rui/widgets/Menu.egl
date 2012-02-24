@@ -184,7 +184,7 @@ handler Menu type RUIWidget{tagName = "div", onConstructionFunction = start, css
 		optionsBox.zIndex = 1;
 	end
 	
-	function closeSubMenus(keepOpen Menu in)
+	function closeSubMenus(keepOpen Menu? in)
 		for (index int from 1 to subMenus.getSize() by 1)
 			//TODO: 355971
 			if (subMenus[index] != keepOpen)

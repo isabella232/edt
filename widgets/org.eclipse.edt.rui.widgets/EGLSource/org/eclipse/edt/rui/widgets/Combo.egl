@@ -39,7 +39,7 @@ handler Combo type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.
 		]
 	}} 
 
-	values String[] { @EGLProperty { getMethod=getValues, setMethod=setValues }, @VEProperty{} };
+	values String[] { @EGLProperty { getMethod=getValues, setMethod=setValues }, @VEProperty{} }; 
 	selection Int {	@EGLProperty { getMethod=getSelection, setMethod=setSelection }, @VEProperty{} };
 	private reverseTextDirectionThis String = "No";
 	private textLayoutThis String = "Logical";
@@ -125,7 +125,7 @@ handler Combo type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.
 	
 	private function getValueAsText() returns(String)
 		if(values.getSize() < 1)
-			return (null);
+			return ("");
 		end
 		return (values[getSelection()]);
 	end

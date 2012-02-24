@@ -31,7 +31,7 @@ library DataGridBehaviors
 		td.class = td.class + " EglRuiDataGridCellTight";
 	end
 		
-	function getColumn(td Widget in) returns(DataGridColumn)
+	function getColumn(td Widget in) returns(DataGridColumn?)
 		tr Widget = td.parent;
 		grid DataGrid = td.logicalParent;
 		cells Widget[] = tr.children;
