@@ -5,7 +5,7 @@ package eglx.http;
 
 //
 //
-externalType HttpRest type NativeType
+externalType HttpRest extends IHttp type NativeType
 	constructor();
 	request Request{@Property {}};
 	response Response{@Property {}};

@@ -5,20 +5,12 @@ package eglx.http;
 
 //
 //
-handler HttpSoap implements IHttp
-	request Request;
-	response Response;
+externalType HttpSoap extends IHttp type NativeType
+	constructor();
+	request Request{@Property {}};
+	response Response{@Property {}};
 	responseHeader any?;
 	
-	function getRequest()returns(Request)
-		return(request);
-	end	
-	function getResponse()returns(Response)
-		return(response);
-	end	
-	function setSoapRequestHeader(rec any const in)
-	end	
-	function getSoapResponseHeader()returns(any)
-		return(responseHeader);
-	end	
+	function setSoapRequestHeader(rec any const in);
+	function getSoapResponseHeader()returns(any);
 end

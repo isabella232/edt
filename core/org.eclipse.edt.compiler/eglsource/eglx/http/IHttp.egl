@@ -1,7 +1,8 @@
 package eglx.http;
 
 // interface
-interface IHttp
+externalType IHttp type NativeType 
+	private constructor();
 	function getRequest() returns (eglx.http.Request);
 	function getResponse() returns (eglx.http.Response);
 end
