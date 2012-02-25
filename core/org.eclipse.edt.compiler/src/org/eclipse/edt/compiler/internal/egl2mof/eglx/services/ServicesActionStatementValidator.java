@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -301,6 +302,11 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 			return inter.getExtendedTypes();
 		}
 
+		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
+			ExternalTypeBinding et = (ExternalTypeBinding)type;
+			return et.getExtendedTypes();
+		}
+
 		return null;
 	}
 	
@@ -311,7 +317,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		}
 		seenTypes.add(type);
 		
-		if (Binding.isValidBinding(type) && ITypeBinding.INTERFACE_BINDING == type.getKind()) {
+		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
 			if (type.getName() == InternUtil.intern("IHTTP") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "http"})) {
 				return true;
 			}
