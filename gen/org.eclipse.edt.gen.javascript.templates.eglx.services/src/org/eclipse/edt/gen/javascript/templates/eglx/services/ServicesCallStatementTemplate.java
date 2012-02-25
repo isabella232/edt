@@ -27,7 +27,6 @@ import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
-import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Service;
@@ -107,7 +106,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		genRequestConfig(out);
 		genResponseConfig(out);
 		out.println("),");
-		ctx.invoke("genServiceName", stmt, ctx, out, stmt.getInvocationTarget().getQualifier());
+		ctx.invoke("genServiceName", stmt, ctx, out, stmt.getInvocationTarget().getQualifier().getType());
 		out.println(", ");
 		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
 		Function callbackFunction = null;
@@ -138,17 +137,9 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		out.print("null");
 	}
 	
-	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, LHSExpr access) {
-		ctx.invoke("genServiceName", stmt, ctx, out, access.getType());
-	}
-	
 	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
 			Annotation getRest, Annotation putRest, Annotation postRest,
 			Annotation deleteRest, Context ctx, TabbedWriter out) {
-//		genTimeoutParams(serviceTimeout);
-//		out.println("\"" + operationName(serviceInterfaceFunction) + "\", ");
-//		@SuppressWarnings("unchecked")
-//		List<Expression> tempArgs = (List<Expression>)ctx.getAttribute(stmt, Constants.SubKey_callStatementTempVariables);
 		Function callbackFunction = null;
 		if(stmt.getCallback() != null){
 			callbackFunction = (Function)ctx.invoke(getCallbackFunction, stmt.getCallback(), ctx);
