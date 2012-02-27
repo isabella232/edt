@@ -496,6 +496,15 @@ public class IRUtils {
 			}
 			
 		}
+		
+		//When assigning a reference type to ANY, we do not need a boxing expression, unless we are assigning a list (array) to
+		//the ANY. In this case, we need a boxing expression so that the List can be boxed as an EList and we can maintain the
+		//signature of the list elements
+		if (isAny(type.getClassifier()) && isList(exprType.getClassifier())) {
+			BoxingExpression box = factory.createBoxingExpression();
+			box.setExpr(expr);
+			return box;
+		}
 		return createAsExpression(expr, type);
 	}
 	
