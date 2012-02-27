@@ -160,7 +160,7 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 				
 				//Get all enumeration name proposals
 				proposals.addAll(
-					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix).getProposals());
+					new EGLEnumerationNameProposalHandler(viewer, documentOffset, prefix, editor).getProposals());
 			}
 		}
 

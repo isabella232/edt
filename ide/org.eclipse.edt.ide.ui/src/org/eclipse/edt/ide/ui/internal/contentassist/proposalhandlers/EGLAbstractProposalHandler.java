@@ -84,6 +84,7 @@ public abstract class EGLAbstractProposalHandler {
 	protected ITextViewer viewer;
 	protected AnnotationTypeManager annoTypeMgr = null;
 	protected ContentAssistPartManager caPartMgr = null;
+	protected ISystemEnvironment sysEnv = null;
 
 	public EGLAbstractProposalHandler(ITextViewer viewer, int documentOffset, String prefix) {
 		this(viewer, documentOffset, prefix, null);
@@ -98,9 +99,9 @@ public abstract class EGLAbstractProposalHandler {
 		
 		if(null != editor){
 			IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
-			ISystemEnvironment env = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
-			annoTypeMgr = env.getAnnotationTypeManager();
-			caPartMgr = env.getContentAssistPartsManager();
+			sysEnv = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
+			annoTypeMgr = sysEnv.getAnnotationTypeManager();
+			caPartMgr = sysEnv.getContentAssistPartsManager();
 		}
 	}
 

@@ -12,27 +12,30 @@
 package org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.edt.compiler.internal.enumerations.EGLEnumeration;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.ui.IEditorPart;
 
 public class EGLEnumerationNameProposalHandler extends EGLAbstractProposalHandler {
 
-	public EGLEnumerationNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix) {
-		super(viewer, documentOffset, prefix);
+	public EGLEnumerationNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix, IEditorPart editor) {
+		super(viewer, documentOffset, prefix, editor);
 	}
 
 	public List getProposals() {
 		List proposals = new ArrayList();
-		EGLEnumeration[] enumerations = EGLEnumeration.getEnumerations();
-		for (int i = 0; i < enumerations.length; i++) {
-			String enumerationName = enumerations[i].getName();
-			if (enumerationName.toUpperCase().startsWith(getPrefix().toUpperCase()))
+		Map enums = sysEnv.getEnumerationManager().getAllSystemEnumType();
+		for (Iterator iterator = enums.keySet().iterator(); iterator.hasNext();) {
+			String enumerationName = (String) iterator.next();
+			if (enumerationName.toUpperCase().startsWith(getPrefix().toUpperCase())){
 				proposals.add(createProposal(enumerationName));
+			}
 		}
 		return proposals;
 	}
