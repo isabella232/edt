@@ -58,8 +58,9 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private EGL2IREnvironment environment;
     private ISDKProblemRequestorFactory problemRequestorFactory;
     private ISystemEnvironment sysEnv;
+    private ICompiler compiler;
 
-    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv) {
+    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv, ICompiler compiler) {
         super(notifier, compilerOptions);
         this.problemRequestorFactory = problemRequestorFactory;
         if (problemRequestorFactory == null){
@@ -67,6 +68,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
         }
         this.sysEnv = sysEnv;
+        this.compiler = compiler;
     }
     
     public void setEnvironment(EGL2IREnvironment environment){
@@ -167,7 +169,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
     	
         Egl2Mof generator = new Egl2Mof(environment);
-        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile), problemRequestor);
+        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
     }
     
     private IProblemRequestor createProblemRequestor(File file,Node partAST, IPartBinding binding) {

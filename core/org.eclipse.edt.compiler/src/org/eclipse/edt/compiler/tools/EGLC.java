@@ -103,7 +103,7 @@ public class EGLC {
 						// TODO Auto-generated method stub
 						return false;
 					}	        
-			    },problemRequestorFactory, sysEnv);
+			    },problemRequestorFactory, sysEnv, compiler);
 			    
 			    processor.setEnvironment(eglcEnv);
 			    

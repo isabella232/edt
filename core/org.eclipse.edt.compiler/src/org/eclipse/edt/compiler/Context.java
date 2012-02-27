@@ -17,20 +17,21 @@ public abstract class Context {
 
 	String absolutePath;
 	String fileName;
+	ICompiler compiler;
 	
 	public Context() {
 		super();
 	}
 	
-	public Context(String absolutePath) {
-		super();
-		this.absolutePath = absolutePath;
+	public Context(String absolutePath, ICompiler compiler) {
+		this(absolutePath, null, compiler);
 	}
 	
-	public Context(String absolutePath, String simpleFileName) {
+	public Context(String absolutePath, String simpleFileName, ICompiler compiler) {
 		super();
 		this.absolutePath = absolutePath;
 		this.fileName = simpleFileName;
+		this.compiler = compiler;
 	}
 
 	/**
@@ -39,6 +40,10 @@ public abstract class Context {
 	 */
 	public String getFileName() {
 		return absolutePath;
+	}
+	
+	public ICompiler getCompiler() {
+		return compiler;
 	}
 	
 	public String getAbsolutePath() {

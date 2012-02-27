@@ -27,8 +27,8 @@ public class SDKContext extends Context{
 	private SimpleLineTracker lineTracker;
 
 	
-	public SDKContext(File file) {
-		super(file.getAbsolutePath(), file.getName());
+	public SDKContext(File file, ICompiler compiler) {
+		super(file.getAbsolutePath(), file.getName(), compiler);
 		this.file = file;
 	}
 
