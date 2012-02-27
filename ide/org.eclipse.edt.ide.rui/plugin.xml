@@ -80,7 +80,7 @@ Register the Preference Pages
             provider="Eclipse.org"
              resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="true"
+            selected="false"
             version="0.7.0"
             version_desc="Dojo 1.6.1">
       </provider>
@@ -95,7 +95,7 @@ Register the Preference Pages
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="false"
+            selected="true"
             version="0.7.0"
             version_desc="Dojo 1.6.1 Remote">
       </provider>
