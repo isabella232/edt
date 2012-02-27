@@ -1640,10 +1640,11 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		
 		final CodeFormatterVisitor thisVisitor = this;		
 		final Expression expr = callStatement.getInvocationTarget();
-//		final CallbackTarget callbackTgt = callStatement.getCallbackTarget();
-//		final Expression callbackExpr = (callbackTgt != null) ? callbackTgt.getExpression() : null;
-//		final CallbackTarget errCallbackTgt = callStatement.getErrorCallbackTarget();
-//		final Expression errCallbackExpr = (errCallbackTgt != null ) ? errCallbackTgt.getExpression() : null;
+		final Expression usingExpr = callStatement.getUsing();
+		final CallbackTarget callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+		final Expression callbackExpr = (callbackTgt != null) ? callbackTgt.getExpression() : null;
+		final CallbackTarget errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+		final Expression errCallbackExpr = (errCallbackTgt != null ) ? errCallbackTgt.getExpression() : null;
 		final SettingsBlock settingsBlock = callStatement.getSettingsBlock();
 		final List callParams = callStatement.getArguments();
 		final Expression firstCallParm = (callParams != null && !callParams.isEmpty()) ? (Expression)callParams.get(0) : null;
@@ -1663,14 +1664,18 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_COMMA_CALLSTMT),
 							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_COMMA_CALLSTMT));
 				}
-//				else if(callbackExpr != null && currToken.left == callbackExpr.getOffset()){
-//					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-//					callbackExpr.accept(thisVisitor);
-//				}
-//				else if(errCallbackExpr != null && currToken.left == errCallbackExpr.getOffset()){
-//					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
-//					errCallbackExpr.accept(thisVisitor);
-//				}
+				else if(usingExpr != null && currToken.left == usingExpr.getOffset()){
+					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+					usingExpr.accept(thisVisitor);
+				}
+				else if(callbackExpr != null && currToken.left == callbackExpr.getOffset()){
+					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+					callbackExpr.accept(thisVisitor);
+				}
+				else if(errCallbackExpr != null && currToken.left == errCallbackExpr.getOffset()){
+					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+					errCallbackExpr.accept(thisVisitor);
+				}
 				else if(settingsBlock != null && currToken.left == settingsBlock.getOffset()){
 					setGlobalFormattingSettings(getNumOfBlankLinesBeforeCurlyBrace(), 
 							getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LCURLY_SETTINGS), 
@@ -1694,6 +1699,12 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_LPAREN_CALLSTMT);
 					else if(currToken.sym == NodeTypes.RPAREN)
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_RPAREN_CALLSTMT);
+					else if(currToken.sym == NodeTypes.USING){
+						addSpace = true;
+						wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_CALLSTMT);
+						if(usingExpr == null)
+							indent(numOfIndents4Wrapping); //indentA
+					}
 					else if(currToken.sym == NodeTypes.RETURNING){	//this implies that callbackTgt != null
 						addSpace = true;
 						wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_CALLSTMT);
@@ -1702,13 +1713,13 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 					else if(currToken.sym == NodeTypes.ONEXCEPTION){	//implies that errCallbackTgt != null
 						addSpace = true;
 						wrappingPolicy = getEnumPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WRAP_CALLSTMT);
-//						if(callbackTgt == null)
-//							indent(numOfIndents4Wrapping); //indentA
+						if(callbackTgt == null)
+							indent(numOfIndents4Wrapping); //indentA
 					}
 					else if(currToken.sym == NodeTypes.SEMI){
 						addSpace = getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_BEFORE_SEMI_STMT);
-//						if(callbackTgt != null || errCallbackTgt != null)
-//							unindent(numOfIndents4Wrapping);	//match indentA
+						if(callbackTgt != null || errCallbackTgt != null)
+							unindent(numOfIndents4Wrapping);	//match indentA
 					}
 					
 					printToken(prevToken, currToken, numOfBlankLines, addSpace, wrappingPolicy);
