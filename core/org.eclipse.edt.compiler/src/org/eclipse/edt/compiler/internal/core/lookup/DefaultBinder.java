@@ -370,7 +370,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 							new String[]{arrayAccess.getArray().getCanonicalString()});
 	    				
 	    			}
-	    			arrayAccess.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.ANY));
+	    			arrayAccess.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.ANY).getNullableInstance());
 	    			return;
 	    		}
     		}

@@ -25,7 +25,7 @@ import org.eclipse.edt.compiler.core.ast.Primitive;
 public class DynamicDataBinding extends DataBinding {
 
     public DynamicDataBinding(String caseSensitiveInternedName, IPartBinding declarer) {
-        super(caseSensitiveInternedName, declarer, PrimitiveTypeBinding.getInstance(Primitive.ANY));
+        super(caseSensitiveInternedName, declarer, PrimitiveTypeBinding.getInstance(Primitive.ANY).getNullableInstance());
     }
 
 	public int getKind() {
