@@ -75,8 +75,10 @@ import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
+import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -611,63 +613,17 @@ public class AnnotationValidator {
 					   StatementValidator.isValidBinding(rhType) &&
 					   ITypeBinding.ANNOTATION_BINDING != lhType.getKind()) {
 						
-						if((Assignment.Operator.CONCAT == assignment.getOperator() || Assignment.Operator.NULLCONCAT == assignment.getOperator()) && ITypeBinding.ARRAY_TYPE_BINDING == lhType.getKind()) {
-							lhType = ((ArrayTypeBinding) lhType).getElementType();
-						}
+						new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
+											assignment.getOperator(), 
+											assignment.getLeftHandSide(), 
+											assignment.getRightHandSide(), 
+											assignment.getLeftHandSide().resolveTypeBinding(), 
+											assignment.getRightHandSide().resolveTypeBinding(), 
+											assignment.getLeftHandSide().resolveDataBinding(), 
+											assignment.getRightHandSide().resolveDataBinding(), 
+											false, 
+											DefaultBinder.isArithmeticAssignment(assignment));
 						
-						if(!TypeCompatibilityUtil.isMoveCompatible(lhType, rhType, assignment.getRightHandSide(), compilerOptions) &&
-						   !rhType.isDynamic() &&
-						   !TypeCompatibilityUtil.areCompatibleExceptions(rhType, lhType, compilerOptions)) {
-							problemRequestor.acceptProblem(
-								assignment.getRightHandSide(),
-								IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-								new String[] {
-									StatementValidator.getShortTypeString(lhType),
-									StatementValidator.getShortTypeString(rhType),
-									assignment.getLeftHandSide().getCanonicalString() + "=" + assignment.getRightHandSide().getCanonicalString()
-								});
-						}
-						
-						target.accept(new DefaultASTVisitor() {
-							public boolean visit(Record record) {
-								IDataBinding lhDBinding = assignment.getLeftHandSide().resolveDataBinding();
-								if(StatementValidator.isValidBinding(lhDBinding) &&
-								   IDataBinding.STRUCTURE_ITEM_BINDING == lhDBinding.getKind() &&					   
-								   !((StructureItemBinding) lhDBinding).getChildren().isEmpty()) {
-									problemRequestor.acceptProblem(
-										assignment.getLeftHandSide(),
-										IProblemRequestor.INITIALIZERS_ONLY_ALLOWED_ON_LEAF_ITEMS);
-								}
-								return false;
-							}
-						});
-						
-						IDataBinding lhDBinding = assignment.getLeftHandSide().resolveDataBinding();
-						if(StatementValidator.isValidBinding(lhDBinding)) {
-							new LValueValidator(problemRequestor, compilerOptions, lhDBinding, assignment.getLeftHandSide(), new LValueValidator.DefaultLValueValidationRules() {
-								public boolean canAssignToReadOnlyVariables() {
-									return true;
-								}
-							}).validate();
-						}
-						
-						IDataBinding rhDBinding = assignment.getRightHandSide().resolveDataBinding();
-						if(StatementValidator.isValidBinding(rhDBinding)) {
-							new RValueValidator(problemRequestor, compilerOptions, rhDBinding, assignment.getRightHandSide()).validate();
-						}
-					}
-				}
-				else {
-					IDataBinding lhDBinding = assignment.getLeftHandSide().resolveDataBinding();
-					if(StatementValidator.isValidBinding(lhDBinding)) {
-						if(lhDBinding.getAnnotation(EGLNotInCurrentReleaseAnnotationTypeBinding.getInstance()) != null) {
-							problemRequestor.acceptProblem(
-								assignment.getLeftHandSide(),
-								IProblemRequestor.SYSTEM_PART_NOT_SUPPORTED,
-								new String[] {
-									lhDBinding.getCaseSensitiveName()
-								});
-						}
 					}
 				}
 				return false;

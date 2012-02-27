@@ -152,6 +152,7 @@ import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.LengthItemForSerialMessageOrIndexedRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.RecordNumItemValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
@@ -3773,35 +3774,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 			if(StatementValidator.isValidBinding(lhType) &&
 			   StatementValidator.isValidBinding(rhType) &&
 			   ITypeBinding.ANNOTATION_BINDING != lhType.getKind()) {
-				
-				if((Assignment.Operator.CONCAT == assignment.getOperator() || Assignment.Operator.NULLCONCAT == assignment.getOperator()) && ITypeBinding.ARRAY_TYPE_BINDING == lhType.getKind()) {
-					lhType = ((ArrayTypeBinding) lhType).getElementType();
-				}
-				
-				if(!TypeCompatibilityUtil.isMoveCompatible(lhType, rhType, rightHandSide, compilerOptions) &&
-				   !rhType.isDynamic() &&
-				   !TypeCompatibilityUtil.areCompatibleExceptions(rhType, lhType, compilerOptions)) {
-					problemRequestor.acceptProblem(
-						rightHandSide,
-						IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
-						new String[] {
-							StatementValidator.getShortTypeString(lhType),
-							StatementValidator.getShortTypeString(rhType),
-							leftHandSide.getCanonicalString() + "=" + rightHandSide.getCanonicalString()
-						});
-				}
-				
-				if(StatementValidator.isValidBinding(lhDBinding)) {
-					new LValueValidator(problemRequestor, compilerOptions, lhDBinding, leftHandSide, new LValueValidator.DefaultLValueValidationRules() {
-						public boolean canAssignToReadOnlyVariables() {
-							return canAssignToReadOnlyFields;
-						}
-					}).validate();
-				}
-				
-				if(StatementValidator.isValidBinding(rhDBinding)) {
-					new RValueValidator(problemRequestor, compilerOptions, lhDBinding, leftHandSide).validate();
-				}
+				new AssignmentStatementValidator(problemRequestor, 	compilerOptions, null).validateAssignment(
+						assignment.getOperator(), 
+						assignment.getLeftHandSide(), 
+						assignment.getRightHandSide(), 
+						assignment.getLeftHandSide().resolveTypeBinding(), 
+						assignment.getRightHandSide().resolveTypeBinding(), 
+						assignment.getLeftHandSide().resolveDataBinding(), 
+						assignment.getRightHandSide().resolveDataBinding(), 
+						false, 
+						DefaultBinder.isArithmeticAssignment(assignment));
 			}
 		}
 	}

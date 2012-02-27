@@ -104,9 +104,7 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		if((Assignment.Operator.CONCAT == assignmentOperator) &&
 		   StatementValidator.isValidBinding(lhsBinding) &&
 		   ITypeBinding.ARRAY_TYPE_BINDING == lhsBinding.getKind()) {
-			if(!StatementValidator.isValidBinding(rhsBinding) || ITypeBinding.ARRAY_TYPE_BINDING != rhsBinding.getKind()) {
 				lhsBinding = ((ArrayTypeBinding) lhsBinding).getElementType();
-			}
 		}
 
 		if(Assignment.Operator.XOR == assignmentOperator ||
