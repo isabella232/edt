@@ -16,17 +16,18 @@ record noerr
 	f5 int {@as400unsignedbin2}; //0
 	f6 bigint {@as400bin8}; //0
 	f7 bigint {@as400unsignedbin4}; //0
+	f8 decimal(20) {@as400unsignedbin8}; //0
 	f9 date {@as400date}; //0
 	fa timestamp("yyyy") {@as400timestamp}; //0
 	fb timestamp {@as400timestamp{eglPattern = "yyyy"}}  = ""; //0
 	fc smallfloat {@as400float4}; //0
 	fd float {@as400float8{}}; //0
-	fe decimal(10) {@as400decimalFloat{}}; //0
-	ff decimal(10) {@as400decimalpacked{}}; //0
-	fg decimal(10) {@as400decimalzoned{}};  //0
-	fh decimal {@as400decimalFloat{length = 3}} = 0;  //0
-	fi decimal {@as400decimalpacked{length = 3, decimals = 2}} = 0; //0
-	fj decimal {@as400decimalzoned{length = 3, decimals = 2}} = 0;  //0
+	fe decimal(10) {@as400decFloat{}}; //0
+	ff decimal(10) {@as400packeddecimal{}}; //0
+	fg decimal(10) {@as400zoneddecimal{}};  //0
+	fh decimal {@as400decFloat{length = 3}} = 0;  //0
+	fi decimal {@as400packeddecimal{length = 3, decimals = 2}} = 0; //0
+	fj decimal {@as400zoneddecimal{length = 3, decimals = 2}} = 0;  //0
 	fk string {@as400text{length = 3}};
 	fl int[] {@as400array};  //0
 	fm int[] {@as400array{returnCountVariable = f1}}; //0
@@ -41,21 +42,22 @@ record err
 	f5 int {@as400bin8}; //1 not compatible with the type
 	f6 bigint {@as400bin2}; //1 not compatible with the type
 	f7 bigint {@as400date}; //1 not compatible with the type
+	f8 decimal(19) {@as400unsignedbin8}; //1 not compatible with the type
 	f9 date {@as400timestamp}; //not compatible with the type
 	fa timestamp("yyyy") {@as400date}; //1 not compatible with the type
 	fb timestamp {@as400timestamp{eglPattern = "yyddd"}}  = ""; //1 Invalid pattern
 	fba timestamp {@as400timestamp{}}  = ""; //1 eglPattern must be specified
 	fc smallfloat {@as400float8}; //1 not compatible with the type
 	fd float {@as400float4{}}; //1 not compatible with the type
-	fe decimal(10) {@as400decimalFloat{length = 3}}; //1 length is not allowed
-	ff decimal(10) {@as400decimalpacked{decimals = 2}}; //1 decimals is not allowed
-	fg decimal(10) {@as400decimalzoned{length = 3, decimals = 2}};  //2
-	fh decimal {@as400decimalFloat{length = -3}} = 0;  //1 must be an integer
-	fi decimal {@as400decimalpacked{length = 3, decimals = 4}} = 0; //1 must be an integer
-	fj decimal {@as400decimalzoned{length = 33, decimals = 2}} = 0;  //1 must be an integer
-	fha decimal {@as400decimalFloat{}} = 0;  //1 length must be specified
-	fib decimal {@as400decimalpacked{}} = 0; //2
-	fjc decimal {@as400decimalzoned{}} = 0;  //2
+	fe decimal(10) {@as400decFloat{length = 3}}; //1 length is not allowed
+	ff decimal(10) {@as400packeddecimal{decimals = 2}}; //1 decimals is not allowed
+	fg decimal(10) {@as400zoneddecimal{length = 3, decimals = 2}};  //2
+	fh decimal {@as400decFloat{length = -3}} = 0;  //1 must be an integer
+	fi decimal {@as400packeddecimal{length = 3, decimals = 4}} = 0; //1 must be an integer
+	fj decimal {@as400zoneddecimal{length = 33, decimals = 2}} = 0;  //1 must be an integer
+	fha decimal {@as400decFloat{}} = 0;  //1 length must be specified
+	fib decimal {@as400packeddecimal{}} = 0; //2
+	fjc decimal {@as400zoneddecimal{}} = 0;  //2
 	fk string {@as400text{length = -3}}; //1 must be an integer
 	fka string {@as400text{}}; //1 length must be specified
 	fl boolean[] {@as400array};  //1 is not compatible

@@ -1,0 +1,24 @@
+//I ran across this validation problem recently. Validation was not allowing you to set
+//a dictionary entry to null. This is because it was returning a type of ANY instead of ANY?
+library lib1
+
+	a any = 3;
+	d dictionary {
+		key1 = null    //0
+	};
+	
+	function f0()
+		a.x = null;  //0
+		this.a.x = null; //0
+		this.a.x.y = null; //0
+		a["x"] = null;  //0
+		a["x"]["y"] = null;  //0
+		
+		d.x = null;  //0
+		this.d.x = null; //0
+		this.d.x.y = null;  //0
+		d["x"] = null;  //0
+		d["x"]["y"] = null;  //0
+		
+	end
+end

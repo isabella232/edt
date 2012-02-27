@@ -103,7 +103,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f9 date {@as400date};
+	 * f8 decimal(20) {@as400unsignedbin8};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine19() {
@@ -112,7 +112,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fa timestamp("yyyy") {@as400timestamp};
+	 * f9 date {@as400date};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine20() {
@@ -121,7 +121,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fb timestamp {@as400timestamp{eglPattern = "yyyy"}}  = "";
+	 * fa timestamp("yyyy") {@as400timestamp};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine21() {
@@ -130,7 +130,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fc smallfloat {@as400float4};
+	 * fb timestamp {@as400timestamp{eglPattern = "yyyy"}}  = "";
 	 * 0 validation messages are expected.
 	 */
 	public void testLine22() {
@@ -139,7 +139,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fd float {@as400float8{}};
+	 * fc smallfloat {@as400float4};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine23() {
@@ -148,7 +148,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fe decimal(10) {@as400decimalFloat{}};
+	 * fd float {@as400float8{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine24() {
@@ -157,7 +157,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ff decimal(10) {@as400decimalpacked{}};
+	 * fe decimal(10) {@as400decFloat{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine25() {
@@ -166,7 +166,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fg decimal(10) {@as400decimalzoned{}};
+	 * ff decimal(10) {@as400packeddecimal{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine26() {
@@ -175,7 +175,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fh decimal {@as400decimalFloat{length = 3}} = 0;
+	 * fg decimal(10) {@as400zoneddecimal{}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine27() {
@@ -184,7 +184,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fi decimal {@as400decimalpacked{length = 3, decimals = 2}} = 0;
+	 * fh decimal {@as400decFloat{length = 3}} = 0;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine28() {
@@ -193,7 +193,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fj decimal {@as400decimalzoned{length = 3, decimals = 2}} = 0;
+	 * fi decimal {@as400packeddecimal{length = 3, decimals = 2}} = 0;
 	 * 0 validation messages are expected.
 	 */
 	public void testLine29() {
@@ -202,16 +202,16 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fl int[] {@as400array};
+	 * fj decimal {@as400zoneddecimal{length = 3, decimals = 2}} = 0;
 	 * 0 validation messages are expected.
 	 */
-	public void testLine31() {
-		List messages = getMessagesAtLine( 31 );
+	public void testLine30() {
+		List messages = getMessagesAtLine( 30 );
 		assertEquals( 0, messages.size() );
 	}
 
 	/*
-	 * fm int[] {@as400array{returnCountVariable = f1}};
+	 * fl int[] {@as400array};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine32() {
@@ -220,7 +220,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fn string[] {@as400array{elementTypeAS400Annotation = @as400text{length = 3}}};
+	 * fm int[] {@as400array{returnCountVariable = f1}};
 	 * 0 validation messages are expected.
 	 */
 	public void testLine33() {
@@ -229,12 +229,21 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
+	 * fn string[] {@as400array{elementTypeAS400Annotation = @as400text{length = 3}}};
+	 * 0 validation messages are expected.
+	 */
+	public void testLine34() {
+		List messages = getMessagesAtLine( 34 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
 	 * f1 smallint {@as400bin4};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
-	public void testLine37() {
-		List messages = getMessagesAtLine( 37 );
+	public void testLine38() {
+		List messages = getMessagesAtLine( 38 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
@@ -246,8 +255,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "not valid for use with the nullable type".
 	 */
-	public void testLine38() {
-		List messages = getMessagesAtLine( 38 );
+	public void testLine39() {
+		List messages = getMessagesAtLine( 39 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not valid for use with the nullable type" );
@@ -256,19 +265,6 @@ public class IBMiTest1Test extends ValidationTestCase {
 
 	/*
 	 * f3 smallint {@as400text};
-	 * 1 validation message is expected.
-	 * It is expected to contain "not compatible with the type".
-	 */
-	public void testLine39() {
-		List messages = getMessagesAtLine( 39 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
-	}
-
-	/*
-	 * f4 int {@as400bin2};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -281,7 +277,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f5 int {@as400bin8};
+	 * f4 int {@as400bin2};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -294,7 +290,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f6 bigint {@as400bin2};
+	 * f5 int {@as400bin8};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -307,7 +303,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f7 bigint {@as400date};
+	 * f6 bigint {@as400bin2};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -320,7 +316,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * f9 date {@as400timestamp};
+	 * f7 bigint {@as400date};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -333,7 +329,7 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fa timestamp("yyyy") {@as400date};
+	 * f8 decimal(19) {@as400unsignedbin8};
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
@@ -346,12 +342,38 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
+	 * f9 date {@as400timestamp};
+	 * 1 validation message is expected.
+	 * It is expected to contain "not compatible with the type".
+	 */
+	public void testLine46() {
+		List messages = getMessagesAtLine( 46 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
+	 * fa timestamp("yyyy") {@as400date};
+	 * 1 validation message is expected.
+	 * It is expected to contain "not compatible with the type".
+	 */
+	public void testLine47() {
+		List messages = getMessagesAtLine( 47 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not compatible with the type\" was issued." );
+	}
+
+	/*
 	 * fb timestamp {@as400timestamp{eglPattern = "yyddd"}}  = "";
 	 * 1 validation message is expected.
 	 * It is expected to contain "Invalid pattern".
 	 */
-	public void testLine46() {
-		List messages = getMessagesAtLine( 46 );
+	public void testLine48() {
+		List messages = getMessagesAtLine( 48 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "Invalid pattern" );
@@ -363,8 +385,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "eglPattern must be specified".
 	 */
-	public void testLine47() {
-		List messages = getMessagesAtLine( 47 );
+	public void testLine49() {
+		List messages = getMessagesAtLine( 49 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "eglPattern must be specified" );
@@ -376,8 +398,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
-	public void testLine48() {
-		List messages = getMessagesAtLine( 48 );
+	public void testLine50() {
+		List messages = getMessagesAtLine( 50 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
@@ -389,8 +411,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "not compatible with the type".
 	 */
-	public void testLine49() {
-		List messages = getMessagesAtLine( 49 );
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not compatible with the type" );
@@ -398,12 +420,12 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fe decimal(10) {@as400decimalFloat{length = 3}};
+	 * fe decimal(10) {@as400decFloat{length = 3}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "length is not allowed".
 	 */
-	public void testLine50() {
-		List messages = getMessagesAtLine( 50 );
+	public void testLine52() {
+		List messages = getMessagesAtLine( 52 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length is not allowed" );
@@ -411,12 +433,12 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * ff decimal(10) {@as400decimalpacked{decimals = 2}};
+	 * ff decimal(10) {@as400packeddecimal{decimals = 2}};
 	 * 1 validation message is expected.
 	 * It is expected to contain "decimals is not allowed".
 	 */
-	public void testLine51() {
-		List messages = getMessagesAtLine( 51 );
+	public void testLine53() {
+		List messages = getMessagesAtLine( 53 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "decimals is not allowed" );
@@ -424,42 +446,16 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fg decimal(10) {@as400decimalzoned{length = 3, decimals = 2}};
+	 * fg decimal(10) {@as400zoneddecimal{length = 3, decimals = 2}};
 	 * 2 validation messages are expected.
 	 */
-	public void testLine52() {
-		List messages = getMessagesAtLine( 52 );
+	public void testLine54() {
+		List messages = getMessagesAtLine( 54 );
 		assertEquals( 2, messages.size() );
 	}
 
 	/*
-	 * fh decimal {@as400decimalFloat{length = -3}} = 0;
-	 * 1 validation message is expected.
-	 * It is expected to contain "must be an integer".
-	 */
-	public void testLine53() {
-		List messages = getMessagesAtLine( 53 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
-	}
-
-	/*
-	 * fi decimal {@as400decimalpacked{length = 3, decimals = 4}} = 0;
-	 * 1 validation message is expected.
-	 * It is expected to contain "must be an integer".
-	 */
-	public void testLine54() {
-		List messages = getMessagesAtLine( 54 );
-		assertEquals( 1, messages.size() );
-		
-		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
-		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
-	}
-
-	/*
-	 * fj decimal {@as400decimalzoned{length = 33, decimals = 2}} = 0;
+	 * fh decimal {@as400decFloat{length = -3}} = 0;
 	 * 1 validation message is expected.
 	 * It is expected to contain "must be an integer".
 	 */
@@ -472,12 +468,38 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fha decimal {@as400decimalFloat{}} = 0;
+	 * fi decimal {@as400packeddecimal{length = 3, decimals = 4}} = 0;
 	 * 1 validation message is expected.
-	 * It is expected to contain "length must be specified".
+	 * It is expected to contain "must be an integer".
 	 */
 	public void testLine56() {
 		List messages = getMessagesAtLine( 56 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
+	}
+
+	/*
+	 * fj decimal {@as400zoneddecimal{length = 33, decimals = 2}} = 0;
+	 * 1 validation message is expected.
+	 * It is expected to contain "must be an integer".
+	 */
+	public void testLine57() {
+		List messages = getMessagesAtLine( 57 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"must be an integer\" was issued." );
+	}
+
+	/*
+	 * fha decimal {@as400decFloat{}} = 0;
+	 * 1 validation message is expected.
+	 * It is expected to contain "length must be specified".
+	 */
+	public void testLine58() {
+		List messages = getMessagesAtLine( 58 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
@@ -485,20 +507,20 @@ public class IBMiTest1Test extends ValidationTestCase {
 	}
 
 	/*
-	 * fib decimal {@as400decimalpacked{}} = 0;
+	 * fib decimal {@as400packeddecimal{}} = 0;
 	 * 2 validation messages are expected.
 	 */
-	public void testLine57() {
-		List messages = getMessagesAtLine( 57 );
+	public void testLine59() {
+		List messages = getMessagesAtLine( 59 );
 		assertEquals( 2, messages.size() );
 	}
 
 	/*
-	 * fjc decimal {@as400decimalzoned{}} = 0;
+	 * fjc decimal {@as400zoneddecimal{}} = 0;
 	 * 2 validation messages are expected.
 	 */
-	public void testLine58() {
-		List messages = getMessagesAtLine( 58 );
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
 		assertEquals( 2, messages.size() );
 	}
 
@@ -507,8 +529,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "must be an integer".
 	 */
-	public void testLine59() {
-		List messages = getMessagesAtLine( 59 );
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "must be an integer" );
@@ -520,8 +542,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "length must be specified".
 	 */
-	public void testLine60() {
-		List messages = getMessagesAtLine( 60 );
+	public void testLine62() {
+		List messages = getMessagesAtLine( 62 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
@@ -533,8 +555,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "is not compatible".
 	 */
-	public void testLine61() {
-		List messages = getMessagesAtLine( 61 );
+	public void testLine63() {
+		List messages = getMessagesAtLine( 63 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "is not compatible" );
@@ -546,8 +568,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "not valid for use with the nullable type".
 	 */
-	public void testLine62() {
-		List messages = getMessagesAtLine( 62 );
+	public void testLine64() {
+		List messages = getMessagesAtLine( 64 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "not valid for use with the nullable type" );
@@ -559,8 +581,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "must have a type that is assignment compatible".
 	 */
-	public void testLine63() {
-		List messages = getMessagesAtLine( 63 );
+	public void testLine65() {
+		List messages = getMessagesAtLine( 65 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "must have a type that is assignment compatible" );
@@ -572,8 +594,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "length must be specified".
 	 */
-	public void testLine64() {
-		List messages = getMessagesAtLine( 64 );
+	public void testLine66() {
+		List messages = getMessagesAtLine( 66 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "length must be specified" );
@@ -585,8 +607,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "must exactly match the number of parameters".
 	 */
-	public void testLine81() {
-		List messages = getMessagesAtLine( 81 );
+	public void testLine83() {
+		List messages = getMessagesAtLine( 83 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "must exactly match the number of parameters" );
@@ -598,8 +620,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "value specified for the parameterAnnotations".
 	 */
-	public void testLine87() {
-		List messages = getMessagesAtLine( 87 );
+	public void testLine89() {
+		List messages = getMessagesAtLine( 89 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "value specified for the parameterAnnotations" );
@@ -611,8 +633,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "cannot contain statements.".
 	 */
-	public void testLine93() {
-		List messages = getMessagesAtLine( 93 );
+	public void testLine95() {
+		List messages = getMessagesAtLine( 95 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot contain statements." );
@@ -624,8 +646,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "cannot return a value".
 	 */
-	public void testLine96() {
-		List messages = getMessagesAtLine( 96 );
+	public void testLine98() {
+		List messages = getMessagesAtLine( 98 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "cannot return a value" );
@@ -637,8 +659,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "only valid return type is INT".
 	 */
-	public void testLine100() {
-		List messages = getMessagesAtLine( 100 );
+	public void testLine102() {
+		List messages = getMessagesAtLine( 102 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "only valid return type is INT" );
@@ -650,8 +672,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "nullable type int? is not supported".
 	 */
-	public void testLine106() {
-		List messages = getMessagesAtLine( 106 );
+	public void testLine108() {
+		List messages = getMessagesAtLine( 108 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "nullable type int? is not supported" );
@@ -663,8 +685,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "array of nullable types int?[] is not supported".
 	 */
-	public void testLine111() {
-		List messages = getMessagesAtLine( 111 );
+	public void testLine113() {
+		List messages = getMessagesAtLine( 113 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "array of nullable types int?[] is not supported" );
@@ -676,8 +698,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "entry in the array of IBMiProgramParameterAnnotations is required".
 	 */
-	public void testLine116() {
-		List messages = getMessagesAtLine( 116 );
+	public void testLine118() {
+		List messages = getMessagesAtLine( 118 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "entry in the array of IBMiProgramParameterAnnotations is required" );
@@ -689,8 +711,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * 1 validation message is expected.
 	 * It is expected to contain "type of parameter p1 is not supported".
 	 */
-	public void testLine120() {
-		List messages = getMessagesAtLine( 120 );
+	public void testLine122() {
+		List messages = getMessagesAtLine( 122 );
 		assertEquals( 1, messages.size() );
 		
 		Object messageWithSubstring = messageWithSubstring( messages, "type of parameter p1 is not supported" );
@@ -701,8 +723,8 @@ public class IBMiTest1Test extends ValidationTestCase {
 	 * {@IBMiProgram{}}
 	 * 4 validation messages are expected.
 	 */
-	public void testLine124() {
-		List messages = getMessagesAtLine( 124 );
+	public void testLine126() {
+		List messages = getMessagesAtLine( 126 );
 		assertEquals( 4, messages.size() );
 	}
 }

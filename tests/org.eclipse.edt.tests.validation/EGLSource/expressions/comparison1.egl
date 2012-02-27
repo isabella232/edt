@@ -1,0 +1,57 @@
+library lib1
+	n number = 3;
+	s string = "";
+	d decimal = 2;
+	t timestamp = "4";
+	
+	function f1()
+
+		if (s < n)   //0
+		end
+
+		if (n < d)    //0
+		end
+				
+		if (n < 3) //0
+		end
+		
+		if (d < 4) //0
+		end
+		
+		if (s < t) //0
+		end
+		
+		if (s < "aa") //0
+		end
+		
+		if (t < "322")  //0
+		end
+		
+		if (t < null)  //1
+		end
+		
+	end
+	
+	  function oops()
+       d1 decimal?;
+       d2 decimal(14,2);
+       ts1 timestamp?;
+       ts2 timestamp("yyyyMM");
+
+       if (d1 < 0) // 0
+       end
+
+       if (d2 < 0) // 0
+       end
+
+       if (d1 < d2) // 0
+       end
+
+       if (ts1 < ts2) // 0
+       end
+
+       if (ts2 < ts2) // 0
+       end
+   end
+	
+end

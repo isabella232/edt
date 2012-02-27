@@ -33,3 +33,61 @@ library lib1
 	end
 	
 end
+
+
+
+handler hand2
+
+	intFieldSet int {@eglproperty{setMethod = setInt}};
+	intFieldGet int {@eglproperty{getMethod = getInt}};
+
+	arrFieldSet int[] {@eglproperty{setMethod = setArr}};
+	arrFieldGet int[] {@eglproperty{getMethod = getArr}};
+
+	local int;
+	localarr int[];
+	
+    function start()    
+		intFieldSet = 3;  //0
+		local = intFieldSet;  //1 not a get method
+
+		intFieldGet = 3;  //1 not a set method
+		local = intFieldGet;  //0
+		
+		intFieldSet += 3;  //1 not a get method
+		intFieldGet += 3;  //1 not a set method
+		
+		arrFieldSet = [3];  //0
+		localarr = arrFieldSet;  //1 not a get method
+
+		arrFieldGet = [3];  //1 not a set method
+		localarr = arrFieldGet;  //0
+		
+		arrFieldSet ::= 3;  //1 not a get method
+		arrFieldGet ::= 3;  //0
+		
+		myhandA hand2 {
+			arrFieldSet ::= 3,   //1 not a get method
+			arrFieldGet ::= 3		 //0
+		};
+		
+		myHandB hand2 = new hand2 {
+			arrFieldSet ::= 3,   //1 not a get method
+			arrFieldGet ::= 3		 //0
+		};
+		
+    end
+    
+    function setInt(p1 int in)
+    end
+    
+    function getInt() returns (int)
+    end
+
+    function setArr(p1 int[] in)
+    end
+    
+    function getArr() returns (int[])
+    end
+    
+end

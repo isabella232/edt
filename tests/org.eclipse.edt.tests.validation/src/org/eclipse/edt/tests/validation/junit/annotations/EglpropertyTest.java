@@ -129,4 +129,184 @@ public class EglpropertyTest extends ValidationTestCase {
 		List messages = getMessagesAtLine( 31 );
 		assertEquals( 0, messages.size() );
 	}
+
+	/*
+	 * intFieldSet = 3;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine51() {
+		List messages = getMessagesAtLine( 51 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * local = intFieldSet;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine52() {
+		List messages = getMessagesAtLine( 52 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * intFieldGet = 3;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a set method".
+	 */
+	public void testLine54() {
+		List messages = getMessagesAtLine( 54 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a set method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a set method\" was issued." );
+	}
+
+	/*
+	 * local = intFieldGet;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine55() {
+		List messages = getMessagesAtLine( 55 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * intFieldSet += 3;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine57() {
+		List messages = getMessagesAtLine( 57 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * intFieldGet += 3;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a set method".
+	 */
+	public void testLine58() {
+		List messages = getMessagesAtLine( 58 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a set method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a set method\" was issued." );
+	}
+
+	/*
+	 * arrFieldSet = [3];
+	 * 0 validation messages are expected.
+	 */
+	public void testLine60() {
+		List messages = getMessagesAtLine( 60 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * localarr = arrFieldSet;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine61() {
+		List messages = getMessagesAtLine( 61 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * arrFieldGet = [3];
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a set method".
+	 */
+	public void testLine63() {
+		List messages = getMessagesAtLine( 63 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a set method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a set method\" was issued." );
+	}
+
+	/*
+	 * localarr = arrFieldGet;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine64() {
+		List messages = getMessagesAtLine( 64 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * arrFieldSet ::= 3;
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine66() {
+		List messages = getMessagesAtLine( 66 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * arrFieldGet ::= 3;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine67() {
+		List messages = getMessagesAtLine( 67 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * arrFieldSet ::= 3,
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine70() {
+		List messages = getMessagesAtLine( 70 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * arrFieldGet ::3
+	 * 0 validation messages are expected.
+	 */
+	public void testLine71() {
+		List messages = getMessagesAtLine( 71 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * arrFieldSet ::= 3,
+	 * 1 validation message is expected.
+	 * It is expected to contain "not a get method".
+	 */
+	public void testLine75() {
+		List messages = getMessagesAtLine( 75 );
+		assertEquals( 1, messages.size() );
+		
+		Object messageWithSubstring = messageWithSubstring( messages, "not a get method" );
+		if( messageWithSubstring == null ) fail( "No message with substring \"not a get method\" was issued." );
+	}
+
+	/*
+	 * arrFieldGet ::3
+	 * 0 validation messages are expected.
+	 */
+	public void testLine76() {
+		List messages = getMessagesAtLine( 76 );
+		assertEquals( 0, messages.size() );
+	}
 }

@@ -15,9 +15,14 @@ package org.eclipse.edt.tests.validation.junit;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.eclipse.edt.tests.validation.junit.annotations.EglpropertyTest;
+import org.eclipse.edt.tests.validation.junit.annotations.PropertyTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.LocalFunctionCallTestsTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.RemoteFunctionCallTestsTest;
+import org.eclipse.edt.tests.validation.junit.expressions.Comparison1Test;
+import org.eclipse.edt.tests.validation.junit.expressions.DynamicAccess1Test;
 import org.eclipse.edt.tests.validation.junit.ibmi.IBMiTest1Test;
+import org.eclipse.edt.tests.validation.junit.statements.sql.SqlTest1Test;
 
 
 public class AllValidationTests {
@@ -28,10 +33,14 @@ public class AllValidationTests {
 		TestSuite suite = new TestSuite("Validation Tests");
 		//$JUnit-BEGIN$
 	 
-//No error for reference to ambiguous part		suite.addTestSuite(AbstractFunctionTest.class);
 		suite.addTestSuite(LocalFunctionCallTestsTest.class);
 		suite.addTestSuite(RemoteFunctionCallTestsTest.class);
 		suite.addTestSuite(IBMiTest1Test.class);
+		suite.addTestSuite(EglpropertyTest.class);
+		suite.addTestSuite(PropertyTest.class);
+		suite.addTestSuite(Comparison1Test.class);
+		suite.addTestSuite(DynamicAccess1Test.class);
+//		suite.addTestSuite(SqlTest1Test.class);
 
 		//$JUnit-END$
 		return suite;
