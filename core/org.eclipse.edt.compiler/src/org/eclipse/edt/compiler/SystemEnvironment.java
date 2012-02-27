@@ -205,6 +205,8 @@ public class SystemEnvironment implements ISystemEnvironment {
         	}
         }
         else if (part.getKind() == ITypeBinding.ENUMERATION_BINDING) {
+        	getEnumerationManager().addSystemEnumType((EnumerationTypeBinding)part);  
+        	
         	if(enumerationIsImplicitlyUsed(part)) {
         		getEnumerationManager().addResolvableDataBindings((EnumerationTypeBinding) part);
         	}
