@@ -124,6 +124,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			
 			if (port < 0) {
 				port = SocketUtil.findOpenPort(DEFAULT_PORT, 5, 100);
+				SocketUtil.reservePort(port);
 			}
 			
 			AbstractTestServerContribution[] contributions = TestServerPlugin.getContributions();
@@ -304,6 +305,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
 		DebugPlugin.getDefault().removeDebugEventListener(this);
 		TestServerPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(this);
+		SocketUtil.freePort(port);
 		
 		// Notify the listeners before we null anything out.
 		if (terminationListeners != null) {
