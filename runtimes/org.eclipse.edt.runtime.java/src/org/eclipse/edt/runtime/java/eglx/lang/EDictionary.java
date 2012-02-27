@@ -266,10 +266,10 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 	/**
 	 * Return a list of the values that exist in this dictionary in the preferred order.
 	 */
-	public List<eglx.lang.EAny> getValues() throws AnyException {
-		List<eglx.lang.EAny> vals = new ArrayList<eglx.lang.EAny>();
+	public List<Object> getValues() throws AnyException {
+		List<Object> vals = new ArrayList<Object>();
 		for (Object value : this.map.values()) {
-			vals.add( value instanceof eglx.lang.EAny ? (eglx.lang.EAny)value : EAny.ezeBox( value ) );
+			vals.add(value);
 		}
 
 		return vals;
@@ -360,7 +360,7 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 		return value;
 	}
 
-	public eglx.lang.EAny ezeGet(String name) throws AnyException {
+	public Object ezeGet(String name) throws AnyException {
 		if (!this.caseSensitive) {
 			name = name.toLowerCase();
 		}
@@ -372,7 +372,7 @@ public class EDictionary extends EAny implements eglx.lang.EDictionary {
 			dax.key = name;
 			throw dax.fillInMessage( Message.DYNAMIC_ACCESS_FAILED, name, "dictionary" );
 		}
-		return value instanceof eglx.lang.EAny ? (eglx.lang.EAny) value : EAny.ezeBox(value);
+		return value;
 	}
 
 	@Override

@@ -135,7 +135,7 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 	}
 	
 	@Override
-	public eglx.lang.EAny ezeGet( int index ) throws AnyException 
+	public Object ezeGet( int index ) throws AnyException 
 	{
 		return EAny.asAny( ezeUnbox().get( index ) );
 	}
@@ -269,10 +269,7 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 				{
 					public int compare( T obj1, T obj2 )
 					{
-						eglx.lang.EAny arg1 = obj1 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj1 : EAny.ezeBox( obj1 );
-						eglx.lang.EAny arg2 = obj2 instanceof eglx.lang.EAny ? (eglx.lang.EAny)obj2 : EAny.ezeBox( obj2 );
-						
-						Object result = sortFunction.invoke( arg1, arg2 );
+						Object result = sortFunction.invoke( obj1, obj2 );
 						if ( result instanceof Integer )
 						{
 							return (Integer)result;

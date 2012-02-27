@@ -16,7 +16,10 @@ import java.util.List;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
-import eglx.lang.*;
+import eglx.lang.AnyException;
+import eglx.lang.AnyValue;
+import eglx.lang.DynamicAccessException;
+import eglx.lang.TypeCastException;
 
 public class AnyBoxedObject<R> implements eglx.lang.EAny, BoxedValue {
 
@@ -41,7 +44,7 @@ public class AnyBoxedObject<R> implements eglx.lang.EAny, BoxedValue {
 	}
 
 	@Override
-	public eglx.lang.EAny ezeGet(String name) throws AnyException {
+	public Object ezeGet(String name) throws AnyException {
 		if (object instanceof EAny) {
 			return ((EAny)object).ezeGet(name);
 		}
@@ -53,7 +56,7 @@ public class AnyBoxedObject<R> implements eglx.lang.EAny, BoxedValue {
 	}
 
 	@Override
-	public eglx.lang.EAny ezeGet(int index) throws AnyException {
+	public Object ezeGet(int index) throws AnyException {
 		Object unboxed = ezeUnbox();
 		if (unboxed instanceof List)
 			return EAny.asAny(((List<?>) unboxed).get(index));

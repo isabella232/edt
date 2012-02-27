@@ -17,7 +17,6 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.TypeConstraints;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 
 public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -51,11 +50,11 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	public void ezeInitialize() {}
 
 	@Override
-	public eglx.lang.EAny ezeGet(String name) throws AnyException {
+	public Object ezeGet(String name) throws AnyException {
 		try {
 			Field field = this.getClass().getField(name);
 			Object value = field.get(this);
-			return value instanceof eglx.lang.EAny ? (eglx.lang.EAny) value : EAny.ezeBox(value);
+			return value;
 		}
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
@@ -66,7 +65,7 @@ public class AnyException extends RuntimeException implements eglx.lang.EAny {
 	}
 
 	@Override
-	public EAny ezeGet(int index) throws AnyException {
+	public Object ezeGet(int index) throws AnyException {
 		TypeCastException tcx = new TypeCastException();
 		tcx.castToName = "list";
 		Object unboxed = ezeUnbox();

@@ -24,6 +24,7 @@ import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.lang.AnyException;
 import eglx.lang.DynamicAccessException;
+import eglx.lang.NullValueException;
 import eglx.lang.TypeCastException;
 
 public abstract class EAny implements eglx.lang.EAny {
@@ -181,7 +182,45 @@ public abstract class EAny implements eglx.lang.EAny {
 		return super.clone();
 	}
 
-	public eglx.lang.EAny ezeGet(String name) throws AnyException {
+	public static Object ezeGet(Object obj, String name) throws AnyException {
+		if (obj == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if (obj instanceof eglx.lang.EAny) 
+			return ((eglx.lang.EAny)obj).ezeGet(name);
+		DynamicAccessException dax = new DynamicAccessException();
+		dax.key = name;
+		throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, obj);
+	}
+	
+	public static Object ezeGet(Object obj, int index) throws AnyException {
+		if (obj == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if (obj instanceof eglx.lang.EAny) 
+			return ((eglx.lang.EAny)obj).ezeGet(index);
+		DynamicAccessException dax = new DynamicAccessException();
+		dax.key = "" + index;
+		throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, "" + index, obj);
+	}
+
+	public static void ezeSet(Object obj, String name, Object value) throws AnyException {
+		if (obj == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		if (obj instanceof eglx.lang.EAny) { 
+			((eglx.lang.EAny)obj).ezeSet(name, value);
+			return;
+		}
+		DynamicAccessException dax = new DynamicAccessException();
+		dax.key = name;
+		throw dax.fillInMessage(Message.DYNAMIC_ACCESS_FAILED, name, obj);
+	}
+	
+	public Object ezeGet(String name) throws AnyException {
 		try {
 			Field field = this.getClass().getField(name);
 			if (ezeTypeConstraints(name) != null) {
@@ -190,7 +229,7 @@ public abstract class EAny implements eglx.lang.EAny {
 				return constraints.box(value);
 			}
 			Object value = field.get(this);
-			return value instanceof eglx.lang.EAny ? (eglx.lang.EAny) value : ezeBox(value);
+			return value;
 		}
 		catch (Exception e) {
 			DynamicAccessException dax = new DynamicAccessException();
@@ -200,8 +239,7 @@ public abstract class EAny implements eglx.lang.EAny {
 		}
 	}
 	
-	@Override
-	public eglx.lang.EAny ezeGet(int index) throws AnyException {
+	public Object ezeGet(int index) throws AnyException {
 		Object unboxed = ezeUnbox();
 		if (unboxed instanceof List)
 			return EAny.asAny(((List<?>) unboxed).get(index));
@@ -240,12 +278,8 @@ public abstract class EAny implements eglx.lang.EAny {
 		return this;
 	}
 
-	public static eglx.lang.EAny asAny(Object value) {
-		if (value == null)
-			return null;
-		if (value instanceof eglx.lang.EAny)
-			return (eglx.lang.EAny) value;
-		return ezeBox(value);
+	public static Object asAny(Object value) {
+		return value;
 	}
 
 	public static boolean equals(Object object1, Object object2) {
