@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -248,7 +249,7 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
     private MofSerializable createIRFromBoundAST(Part partAST, IFile declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
     	IEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getIREnvironment();
         Egl2Mof generator = new Egl2Mof(env);
-        return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile), problemRequestor);
+        return (MofSerializable)generator.convert(partAST, new IDEContext(declaringFile, projectEnvironment.getCompiler()), problemRequestor);
     }
 
 	protected void addPartFromCompiledFile(String[] packageName, String partName){}

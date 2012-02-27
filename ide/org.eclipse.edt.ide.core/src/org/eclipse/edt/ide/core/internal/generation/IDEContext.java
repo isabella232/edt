@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.Context;
+import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.util.SimpleLineTracker;
 import org.eclipse.edt.ide.core.internal.lookup.FileInfoManager;
@@ -23,8 +24,8 @@ import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
 
 public class IDEContext extends Context {
 
-	public IDEContext(IFile file) {
-		super(file.getFullPath().toString(), file.getName());
+	public IDEContext(IFile file, ICompiler compiler) {
+		super(file.getFullPath().toString(), file.getName(), compiler);
 		this.file = file;
 		this.project = file.getProject();
 	}
