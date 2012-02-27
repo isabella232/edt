@@ -109,13 +109,15 @@ public class ArrayAccessTemplate extends JavaTemplate {
 	}
 
 	public void genArrayAccess(ArrayAccess expr, Context ctx, TabbedWriter out) {
-		ctx.invoke(genExpression, expr.getArray(), ctx, out);
 		if (expr.getArray().getType().equals(TypeUtils.Type_ANY)) {
-			out.print(".ezeGet(");
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeGet(");
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+			out.print(", ");
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1");
 			out.print(")");
 		} else {
+			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".get(");
 			out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
