@@ -18,6 +18,7 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.Type;
 
 public class AnyTypeTemplate extends JavaTemplate {
@@ -25,8 +26,8 @@ public class AnyTypeTemplate extends JavaTemplate {
 	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny"))
 			out.print("null");
-	else
-		ctx.invokeSuper(this, genInstantiation, type, ctx, out);
+		else
+			ctx.invokeSuper(this, genInstantiation, type, ctx, out);
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
@@ -42,4 +43,34 @@ public class AnyTypeTemplate extends JavaTemplate {
 			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
 	}
 
+	public void genIsaExpression(EGLClass type, Context ctx, TabbedWriter out, IsAExpression arg) {
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.EAny")) {
+			if (arg.getObjectExpr().getType().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+				if (arg.getObjectExpr().isNullable()) {
+					out.print("(");
+					ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+					out.print(" == null ? false : true)");
+				} else
+					out.print("true");
+			} else if (arg.getObjectExpr().getType().getClassifier() != null
+				&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getTypeSignature())) {
+				if (arg.getObjectExpr().isNullable()) {
+					out.print("(");
+					ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+					out.print(" == null ? false : true)");
+				} else
+					out.print("true");
+			} else if (arg.getObjectExpr().getType().getClassifier() != null && arg.getEType().getClassifier() != null
+				&& arg.getObjectExpr().getType().getClassifier().getTypeSignature().equalsIgnoreCase(arg.getEType().getClassifier().getTypeSignature())) {
+				out.print("false");
+			} else {
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeIsa(");
+				ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+				out.print(", ");
+				ctx.invoke(genRuntimeClassTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
+				out.print(")");
+			}
+		} else
+			ctx.invokeSuper(this, genIsaExpression, type, ctx, out, arg);
+	}
 }
