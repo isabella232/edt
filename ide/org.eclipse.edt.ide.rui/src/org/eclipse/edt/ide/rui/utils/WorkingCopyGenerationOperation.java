@@ -37,6 +37,7 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLModelStatusConstants;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.mof.EObject;
@@ -107,7 +108,7 @@ public class WorkingCopyGenerationOperation {
 							
 								if(!problemRequestorFactory.getProblemRequestor(file, partName).hasError()){
 									Egl2Mof generator = new Egl2Mof(previewEnvironment);
-							        EObject mof = generator.convert(partAST, new IDEContext(file), problemRequestorFactory.getProblemRequestor(file, partName));
+							        EObject mof = generator.convert(partAST, new IDEContext(file, ProjectSettingsUtility.getCompiler(file.getProject())), problemRequestorFactory.getProblemRequestor(file, partName));
 
 							        if(notifier.isCancelled()){ 
 							        	return;	
