@@ -136,6 +136,13 @@ public class EGLDDBindingWizard extends EGLPartWizard {
 		//create a new external service node, add it to the EGLModuleRoot
 		try {
 			executeFinishOperations();
+			IWizardPage[] pages = getPages();
+			for(IWizardPage page : pages) {
+				if(page instanceof EGLDDBindingWizardPage) {
+					EGLDDBindingWizardPage thePage = (EGLDDBindingWizardPage)page;
+					thePage.finish();
+				}
+			}
 		} catch (InvocationTargetException e) {
 			if(e.getTargetException() instanceof CoreException) {
 				ErrorDialog.openError(

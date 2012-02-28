@@ -12,7 +12,10 @@
 package org.eclipse.edt.ide.ui.internal.wizards;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -35,6 +38,7 @@ import org.eclipse.edt.ide.ui.wizards.EGLDDBindingConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -285,5 +289,29 @@ public class EGLDDBindingWizardPage extends EGLFileWizardPage {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		determinePageCompletion();
+	}
+	
+	/**
+	 * The method is called by the wizard and want the page to run some of operation when finishing running of the wizard.
+	 * Such as save the user inputs etc.
+	 */
+	public void finish() {
+		IDialogSettings settings= getDialogSettings();
+		if (settings != null) {
+			HashMap<String, String> toStored = getStoredKeyValues();
+			Set<String> keys = toStored.keySet();
+			Iterator<String> it = keys.iterator();
+			while(it.hasNext()) {
+				String key = it.next();
+				settings.put(key, toStored.get(key));
+			}
+		}
+	}
+	/**
+	 * 
+	 * @return
+	 */
+	public HashMap<String, String> getStoredKeyValues() {
+		return new HashMap<String, String>();
 	}
 }

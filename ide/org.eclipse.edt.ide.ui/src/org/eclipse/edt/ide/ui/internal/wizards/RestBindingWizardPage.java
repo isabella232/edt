@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.wizards;
 
+import java.util.HashMap;
+
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
@@ -19,6 +21,7 @@ import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringDialogField;
 import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.BindingRestConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,8 +35,13 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	private StringDialogField fBaseUriField;
 	private StringDialogField fSessionCookieId;
 	
+	private static String storeBaseURINameId = ".STORE_BASE_URI_NAME_ID";
+	private static String storeSessionCookieNameId = ".STORE_SESSION_COOKIE_NAME_ID";
+	
 	public RestBindingWizardPage(String pageName){
 		super(pageName);
+		storeBaseURINameId = pageName + storeBaseURINameId;
+		storeSessionCookieNameId = pageName = storeSessionCookieNameId;
 		setTitle(NewWizardMessages.TitleAddRestBinding);
 		setDescription(NewWizardMessages.DescAddRestBinding);
 		nColumns = 4;
@@ -91,7 +99,10 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fBaseUriField = new StringDialogField();
 		fBaseUriField.setLabelText(NewWizardMessages.LabelRestBaseURI);
-		fBaseUriField.setText(getConfiguration().getBaseUri());
+		IDialogSettings dialogSettings = getDialogSettings();
+		if(dialogSettings != null && (dialogSettings.get(storeBaseURINameId)) != null) {
+			fBaseUriField.setText(dialogSettings.get(storeBaseURINameId));	
+		}
 		createStringDialogField(composite, fBaseUriField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -130,7 +141,10 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fSessionCookieId = new StringDialogField();
 		fSessionCookieId.setLabelText(NewWizardMessages.LabelSessionCookieId);
-		fSessionCookieId.setText(getConfiguration().getSessionCookieId());
+		IDialogSettings dialogSettings = getDialogSettings();
+		if(dialogSettings != null && (dialogSettings.get(storeSessionCookieNameId) != null)) {
+			fSessionCookieId.setText(dialogSettings.get(storeSessionCookieNameId));	
+		}
 		createStringDialogField(composite, fSessionCookieId, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -148,7 +162,6 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	protected void createComponentNameControl(Composite parent, String labelName, final BindingBaseConfiguration esConfig) {
 		fNameField = new StringDialogField();
 		fNameField.setLabelText( labelName );
-		fNameField.setText( esConfig.getBindingName() );
 		createStringDialogField( parent, fNameField, new IDialogFieldListener() {
 			@Override
 			public void dialogFieldChanged(DialogField field) {
@@ -177,5 +190,13 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		setPageComplete(result);
 		return result;
+	}
+	
+	@Override
+	public HashMap<String, String> getStoredKeyValues() {
+		HashMap<String, String> ret = super.getStoredKeyValues();
+		ret.put(storeBaseURINameId, fBaseUriField.getText());
+		ret.put(storeSessionCookieNameId, fSessionCookieId.getText());
+		return ret;
 	}
 }
