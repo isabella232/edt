@@ -35,8 +35,8 @@ import org.eclipse.edt.compiler.binding.PackageBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypePartManager;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
-import org.eclipse.edt.compiler.internal.core.lookup.System.ContentAssistPartManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
@@ -55,7 +55,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     private Map unqualifiedSystemParts = Collections.EMPTY_MAP;
     private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
-    private ContentAssistPartManager contentAssistPartsManager;//Should Only used by Content Assist
+    private ExternalTypePartManager externalTypePartsManager;
     private AnnotationTypeManager annTypeManger;
     private ICompiler compiler;
 
@@ -198,10 +198,10 @@ public class SystemEnvironment implements ISystemEnvironment {
         	getSystemLibraryManager().addSystemLibrary((LibraryBinding)part);
 		} 
         else if (part.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-        	if(ContentAssistPartManager.isLibraryType((ExternalTypeBinding)part)){
-        		getContentAssistPartsManager().addExternalTypeLibrary((ExternalTypeBinding)part);
-        	}else if(ContentAssistPartManager.isExceptionType((ExternalTypeBinding)part)){
-        		getContentAssistPartsManager().addExternalTypeException((ExternalTypeBinding)part);
+        	if(ExternalTypePartManager.isLibraryType((ExternalTypeBinding)part)){
+        		getExternalTypePartsManager().addExternalTypeLibrary((ExternalTypeBinding)part);
+        	}else if(ExternalTypePartManager.isExceptionType((ExternalTypeBinding)part)){
+        		getExternalTypePartsManager().addExternalTypeException((ExternalTypeBinding)part);
         	}
         }
         else if (part.getKind() == ITypeBinding.ENUMERATION_BINDING) {
@@ -242,13 +242,13 @@ public class SystemEnvironment implements ISystemEnvironment {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
         	annTypeManger = new AnnotationTypeManager(parentEnv.getAnnotationTypeManager());
-        	contentAssistPartsManager = new ContentAssistPartManager(parentEnv.getContentAssistPartsManager());
+        	externalTypePartsManager = new ExternalTypePartManager(parentEnv.getExternalTypePartsManager());
         }
         else {
         	enumerationManager = new EnumerationManager(null);
         	sysLibManager = new SystemLibraryManager(null);
         	annTypeManger = new AnnotationTypeManager(null);
-        	contentAssistPartsManager = new ContentAssistPartManager(null);
+        	externalTypePartsManager = new ExternalTypePartManager(null);
         }
     }
 
@@ -409,9 +409,9 @@ public class SystemEnvironment implements ISystemEnvironment {
 		return annTypeManger;
 	}
 
-	@Override////Should Only used by Content Assist
-	public ContentAssistPartManager getContentAssistPartsManager() {
-		return contentAssistPartsManager;
+	@Override
+	public ExternalTypePartManager getExternalTypePartsManager() {
+		return externalTypePartsManager;
 	}
 
 }

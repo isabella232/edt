@@ -353,4 +353,17 @@ public class ExternalTypeBinding extends PartBinding {
 		}
 		return super.isInstantiable();
 	}
+	
+	public boolean containsStaticFunctions(){
+		List allFunctions = getDeclaredAndInheritedFunctions();
+		
+		for (Iterator iterator = allFunctions.iterator(); iterator.hasNext();) {
+			ITypeBinding funcBinding = ((NestedFunctionBinding) iterator.next()).typeBinding;
+			if(funcBinding instanceof FunctionBinding && ((FunctionBinding)funcBinding).isStatic()){
+				return true;
+			}
+		}
+		
+		return(false);
+	}
 }

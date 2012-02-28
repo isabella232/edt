@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-package org.eclipse.edt.compiler.internal.core.lookup.System;
+package org.eclipse.edt.compiler.internal.core.lookup;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,11 +21,11 @@ import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
 
-public class ContentAssistPartManager {
+public class ExternalTypePartManager {
 	private Map externalTypeLibraries = new HashMap();
 	private Map externalTypeException = new HashMap();
 
-	public ContentAssistPartManager(ContentAssistPartManager parent) {
+	public ExternalTypePartManager(ExternalTypePartManager parent) {
 		if (null != parent) {
 			externalTypeLibraries.putAll(parent.externalTypeLibraries);
 			externalTypeException.putAll(parent.externalTypeException);
@@ -69,8 +69,7 @@ public class ContentAssistPartManager {
 	}
 	
 	public static boolean isLibraryType(ExternalTypeBinding externalPart){
-		return (null != externalPart.getAnnotation(
-				IEGLConstants.EGLX_LANG_PACKAGE, IEGLConstants.ContentAssist));
+		return (!externalPart.isInstantiable() || externalPart.containsStaticFunctions());
 	}
 	
 }
