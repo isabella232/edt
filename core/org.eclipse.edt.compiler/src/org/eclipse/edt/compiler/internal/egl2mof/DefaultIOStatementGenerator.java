@@ -104,7 +104,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		}
 		node.accept(new AbstractASTExpressionVisitor() {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.UsingKeysClause clause) {
-				Iterator i = clause.getExpressions().iterator();
 				for (org.eclipse.edt.compiler.core.ast.Expression expr : (List<org.eclipse.edt.compiler.core.ast.Expression>)clause.getExpressions()) {
 					expr.accept(generator);
 					stmt.getUsingKeyExpressions().add((Expression)stack.pop());

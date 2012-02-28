@@ -28,8 +28,6 @@ public class EGLCArgumentProcessor {
         private File[] sourcePath = null;
         private File[] partPath = null;
         private File irOutputPath = null;
-        private boolean isVAGCompatible = false;
-        private boolean isAliasJSFNames = true;
         private File[] partFiles = null;
         private boolean bClean = false;
         private ArrayList list = new ArrayList();
@@ -78,27 +76,11 @@ public class EGLCArgumentProcessor {
         	return    irOutputPath;     	
         }
         
-        public boolean isVAGCompatible(){
-            return isVAGCompatible;
-        }
-        
-        public boolean isAliasJSFNames(){
-            return isAliasJSFNames;
-        }
-        
         public File[] getPartFiles(){
         	if (partFiles == null){
         		partFiles = (File[])list.toArray(new File[list.size()]);
         	}
             return partFiles;
-        }
-        
-        protected void setVAGCompatible(boolean isVAGCompatible) {
-            this.isVAGCompatible = isVAGCompatible;
-        }
-        
-        protected void setAliasJSFNames(boolean alias) {
-            this.isAliasJSFNames = alias;
         }
         
         protected void initPartFiles(String pattern) {
@@ -120,8 +102,6 @@ public class EGLCArgumentProcessor {
     
 	private static final String SOURCE_PATH = "-eglPath";
 	private static final String IR_OUTPUT_PATH = "-irDestination";
-    private static final String IS_VAG_COMPATIBLE = "-isVAGCompatible";
-    private static final String NO_ALIAS_JSF_NAMES = "-noAliasJSFNames";
     private static final String CLEAN = "-clean";
     private static final String NLSCODE = "-nlsCode";
     private static final String MSGTABLEPREFIX = "-msgTablePrefix";
@@ -160,12 +140,6 @@ public class EGLCArgumentProcessor {
 	            arguments.setSourcePath(processPath(args[newindex + 1]));
 	            arguments.setPartPath(processPath(args[newindex + 1]));
 	             newindex += 2;
-	        }else if(args[newindex].equalsIgnoreCase(IS_VAG_COMPATIBLE)){
-	            arguments.setVAGCompatible(true);
-	            newindex += 1;
-	        }else if(args[newindex].equalsIgnoreCase(NO_ALIAS_JSF_NAMES)){
-	            arguments.setAliasJSFNames(false);
-	            newindex += 1;
 	        }else if(args[newindex].equalsIgnoreCase(CLEAN)){
 	            arguments.setClean(true);
 	            newindex += 1;
@@ -191,7 +165,7 @@ public class EGLCArgumentProcessor {
  	}
       
     private void processError() {
-        System.out.println("Usage: eglc -isVAGCompatible -eglPath <path> -clean -irDestination <path> <partFiles>");
+        System.out.println("Usage: eglc -eglPath <path> -clean -irDestination <path> <partFiles>");
     }
 
     private static File[] processPath(String partPath) {

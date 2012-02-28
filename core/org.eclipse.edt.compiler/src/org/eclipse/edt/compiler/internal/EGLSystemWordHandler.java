@@ -51,7 +51,6 @@ public class EGLSystemWordHandler {
 
 	//Types common to both variables and functions
 	public static final int SYSTEM_WORD_NONE = 0;
-	public static final int SYSTEM_WORD_VAGEN_COMPATIBILITY = 1 << 1;
 
 	//Types of variables
 	public static final int SYSTEM_WORD_CHARACTER = 1 << 2;
@@ -346,7 +345,7 @@ public class EGLSystemWordHandler {
 		recordWords.put(IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION, new EGLSystemVariable("resourceAssociation", SYSTEM_WORD_CHARACTER, IEGLConstants.Special_Function_SystemName, IEGLConstants.CHAR_STRING, 65, recordSystemFunction)); //$NON-NLS-1$
 		
 		// EGLTODO Does this have a primitive type and length?
-//		sysVarWords.put(IEGLConstants.SYSTEM_WORD_HANDLEHARDDLIERRORS, new EGLSystemVariable("handleHardDliErrors", SYSTEM_WORD_NUMERIC | SYSTEM_WORD_VAGEN_COMPATIBILITY, IEGLConstants.Special_Function_HandleHardDliErrors, IEGLConstants.BIN_STRING, 9)); //$NON-NLS-1$
+//		sysVarWords.put(IEGLConstants.SYSTEM_WORD_HANDLEHARDDLIERRORS, new EGLSystemVariable("handleHardDliErrors", SYSTEM_WORD_NUMERIC, IEGLConstants.Special_Function_HandleHardDliErrors, IEGLConstants.BIN_STRING, 9)); //$NON-NLS-1$
 	
 		sysVarWords.put(IEGLConstants.SYSTEM_WORD_OVERFLOWINDICATOR, new EGLSystemVariable("overflowIndicator", SYSTEM_WORD_NUMERIC, IEGLConstants.Special_Function_OverflowIndicator, IEGLConstants.NUM_STRING, 1)); //$NON-NLS-1$
 		
@@ -372,11 +371,11 @@ public class EGLSystemWordHandler {
 		// EGLTODO This is the old EZEDESTP, need to figure out what that is (prim type).
 		converseVarWords.put(IEGLConstants.SYSTEM_WORD_PRINTERASSOCIATION, new EGLSystemVariable("printerAssociation", SYSTEM_WORD_CHARACTER, IEGLConstants.Special_Function_PrinterAssociation, IEGLConstants.CHAR_STRING, 50, converseVariablesLibrary)); //$NON-NLS-1$
 		// EGLTODO Does this have a primitive type and length?
-		converseVarWords.put(IEGLConstants.SYSTEM_WORD_SEGMENTEDMODE, new EGLSystemVariable("segmentedMode", SYSTEM_WORD_NUMERIC | SYSTEM_WORD_VAGEN_COMPATIBILITY, IEGLConstants.Special_Function_SegmentedMode, IEGLConstants.BIN_STRING, 9, converseVariablesLibrary)); //$NON-NLS-1$
+		converseVarWords.put(IEGLConstants.SYSTEM_WORD_SEGMENTEDMODE, new EGLSystemVariable("segmentedMode", SYSTEM_WORD_NUMERIC, IEGLConstants.Special_Function_SegmentedMode, IEGLConstants.BIN_STRING, 9, converseVariablesLibrary)); //$NON-NLS-1$
 		// EGLTODO Does the next two have a primitive type and lengths?
 		converseVarWords.put(IEGLConstants.SYSTEM_WORD_VALIDATIONMSGNUM, new EGLSystemVariable("validationMsgNum", SYSTEM_WORD_NUMERIC, IEGLConstants.Special_Function_ValidationMsgNum, IEGLConstants.BIN_STRING, 9, converseVariablesLibrary)); //$NON-NLS-1$
 		// EGLTODO Does this have a prim type and length?
-		converseVarWords.put(IEGLConstants.SYSTEM_WORD_COMMITONCONVERSE, new EGLSystemVariable("commitOnConverse", SYSTEM_WORD_NUMERIC | SYSTEM_WORD_VAGEN_COMPATIBILITY, IEGLConstants.Special_Function_CommitOnConverse, IEGLConstants.NUM_STRING, 1, converseVariablesLibrary)); //$NON-NLS-1$
+		converseVarWords.put(IEGLConstants.SYSTEM_WORD_COMMITONCONVERSE, new EGLSystemVariable("commitOnConverse", SYSTEM_WORD_NUMERIC, IEGLConstants.Special_Function_CommitOnConverse, IEGLConstants.NUM_STRING, 1, converseVariablesLibrary)); //$NON-NLS-1$
 					
 		//Date/Time Functions
 		dateTimeLibWords.put(IEGLConstants.SYSTEM_WORD_CURRENTDATE, new EGLSystemFunctionWord("currentDate", SYSTEM_WORD_RETURNS, IEGLConstants.Special_Function_CurrentDate, dateTimeLibrary, IEGLConstants.DATE_STRING, 8, new String[0], new String[0], new int[0], new int[] { 0 } ));
@@ -578,21 +577,6 @@ public class EGLSystemWordHandler {
 			EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 			if (systemWord.getLibrary().equals(library))
 				systemWordNames.add(systemWord);
-		}
-		return systemWordNames;
-	}
-
-	/**
-	 * return the List of mathLib function EGLSystemWord names with no return value
-	 */
-	public static List getVAGCompatibilityMathLibWordNames() {
-		ArrayList systemWordNames = new ArrayList();
-		Collection systemWordsValues = mathLibWords.values();
-		Iterator iter = systemWordsValues.iterator();
-		for (int i = 0; i < mathLibWords.size(); i++) {
-			EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-			if (systemWord.isVAGCompatible())
-			systemWordNames.add(systemWord.getName());
 		}
 		return systemWordNames;
 	}
@@ -830,21 +814,6 @@ public class EGLSystemWordHandler {
 			EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 			if (systemWord.getLibrary().equals(library))
 				systemWordNames.add(systemWord);
-		}
-		return systemWordNames;
-	}
-
-	/**
-	 * return the List of strLib function EGLSystemWord names with no return value
-	 */
-	public static List getVAGCompatibilityStrLibWordNames() {
-		ArrayList systemWordNames = new ArrayList();
-		Collection systemWordsValues = strLibWords.values();
-		Iterator iter = systemWordsValues.iterator();
-		for (int i = 0; i < strLibWords.size(); i++) {
-			EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-			if (systemWord.isVAGCompatible())
-			systemWordNames.add(systemWord.getName());
 		}
 		return systemWordNames;
 	}
@@ -1088,21 +1057,6 @@ public class EGLSystemWordHandler {
 		}
 
 		/**
-		 * return the List of sysLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilitySysLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = sysLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < sysLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-				systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of sysLib system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerSysLibFunctionWordNames() {
@@ -1340,21 +1294,6 @@ public class EGLSystemWordHandler {
 			return systemWordNames;
 		}
 
-		/**
-		 * return the List of sysVar function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilitySysVarWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = sysVarWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < sysVarWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-				systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
 		/**
 		 * Return the list of sysVar system function names that are only valid for use within a page handler.
 		 */
@@ -1594,21 +1533,6 @@ public class EGLSystemWordHandler {
 		}
 
 		/**
-		 * return the List of Dictionary function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityDictionaryWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = dictionaryWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < dictionaryWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-				systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of Dictionary system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerDictionaryFunctionWordNames() {
@@ -1843,21 +1767,6 @@ public class EGLSystemWordHandler {
 				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 				if (systemWord.getLibrary().equals(library))
 					systemWordNames.add(systemWord);
-			}
-			return systemWordNames;
-		}
-		
-		/**
-		 * return the List of ConsoleLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityConsoleLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = consoleLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < consoleLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
 			}
 			return systemWordNames;
 		}
@@ -2104,21 +2013,6 @@ public class EGLSystemWordHandler {
 			}
 
 			/**
-			 * return the List of dynArray function EGLSystemWord names with no return value
-			 */
-			public static List getVAGCompatibilityDynArrayWordNames() {
-				ArrayList systemWordNames = new ArrayList();
-				Collection systemWordsValues = dynArrayWords.values();
-				Iterator iter = systemWordsValues.iterator();
-				for (int i = 0; i < dynArrayWords.size(); i++) {
-					EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-					if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-				}
-				return systemWordNames;
-			}
-			
-			/**
 			 * Return the list of dynArray system function names that are only valid for use within a page handler.
 			 */
 			public static List getPageHandlerDynArrayFunctionWordNames() {
@@ -2358,21 +2252,6 @@ public class EGLSystemWordHandler {
 			return systemWordNames;
 		}
 
-		/**
-		 * return the List of record function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityRecordWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = recordWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < recordWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-				systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
 		/**
 		 * Return the list of record system function names that are only valid for use within a page handler.
 		 */
@@ -2626,21 +2505,6 @@ public class EGLSystemWordHandler {
 			}
 
 			/**
-			 * return the List of ReportLib function EGLSystemWord names with no return value
-			 */
-			public static List getVAGCompatibilityReportLibWordNames() {
-				ArrayList systemWordNames = new ArrayList();
-				Collection systemWordsValues = reportLibWords.values();
-				Iterator iter = systemWordsValues.iterator();
-				for (int i = 0; i < reportLibWords.size(); i++) {
-					EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-					if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-				}
-				return systemWordNames;
-			}
-			
-			/**
 			 * Return the list of ReportLib system function names that are only valid for use within a page handler.
 			 */
 			public static List getPageHandlerReportLibFunctionWordNames() {
@@ -2873,21 +2737,6 @@ public class EGLSystemWordHandler {
 				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 				if (systemWord.getLibrary().equals(library))
 					systemWordNames.add(systemWord);
-			}
-			return systemWordNames;
-		}
-		
-		/**
-		 * return the List of ConverseLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityConverseLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = converseLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < converseLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
 			}
 			return systemWordNames;
 		}
@@ -3130,21 +2979,6 @@ public class EGLSystemWordHandler {
 		}
 		
 		/**
-		 * return the List of LobLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityLobLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = lobLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < lobLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of LobLib system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerLobLibFunctionWordNames() {
@@ -3377,21 +3211,6 @@ public class EGLSystemWordHandler {
 				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 				if (systemWord.getLibrary().equals(library))
 					systemWordNames.add(systemWord);
-			}
-			return systemWordNames;
-		}
-		
-		/**
-		 * return the List of VGLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityVGLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = vgLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < vgLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
 			}
 			return systemWordNames;
 		}
@@ -3634,21 +3453,6 @@ public class EGLSystemWordHandler {
 		}
 		
 		/**
-		 * return the List of JavaLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityJavaLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = javaLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < javaLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of JavaLib system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerJavaLibFunctionWordNames() {
@@ -3882,21 +3686,6 @@ public class EGLSystemWordHandler {
 				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 				if (systemWord.getLibrary().equals(library))
 					systemWordNames.add(systemWord);
-			}
-			return systemWordNames;
-		}
-		
-		/**
-		 * return the List of DateTimeLib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityDateTimeLibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = dateTimeLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < dateTimeLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
 			}
 			return systemWordNames;
 		}
@@ -4157,21 +3946,6 @@ public class EGLSystemWordHandler {
 		}
 		
 		/**
-		 * return the List of J2EELib function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityJ2EELibWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = j2eeLibWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < j2eeLibWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of J2EELib system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerJ2EELibFunctionWordNames() {
@@ -4410,21 +4184,6 @@ public class EGLSystemWordHandler {
 		}
 		
 		/**
-		 * return the List of ConverseVar function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityConverseVarWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = converseVarWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < converseVarWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-			}
-			return systemWordNames;
-		}
-		
-		/**
 		 * Return the list of ConverseVar system function names that are only valid for use within a page handler.
 		 */
 		public static List getPageHandlerConsoleConverseVarFunctionWordNames() {
@@ -4658,21 +4417,6 @@ public class EGLSystemWordHandler {
 				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
 				if (systemWord.getLibrary().equals(library))
 					systemWordNames.add(systemWord);
-			}
-			return systemWordNames;
-		}
-		
-		/**
-		 * return the List of VGVar function EGLSystemWord names with no return value
-		 */
-		public static List getVAGCompatibilityVGVarWordNames() {
-			ArrayList systemWordNames = new ArrayList();
-			Collection systemWordsValues = vgVarWords.values();
-			Iterator iter = systemWordsValues.iterator();
-			for (int i = 0; i < vgVarWords.size(); i++) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
 			}
 			return systemWordNames;
 		}
@@ -5016,26 +4760,6 @@ public class EGLSystemWordHandler {
 		}	
 	}
 	
-	/**
-	 * return the List of function EGLSystemWord names with no return value
-	 */
-	public static List getVAGCompatibilitySystemWordNames() {
-		ArrayList systemWordNames = new ArrayList();
-		Collection wordTreeMaps = systemWords.values();
-		Iterator mapsIter = wordTreeMaps.iterator();
-		for (int jj = 0; jj < wordTreeMaps.size(); jj++) {
-			Collection systemWordsValues = ((TreeMap)mapsIter.next()).values();
-			Iterator iter = systemWordsValues.iterator();
-			while (iter.hasNext()) {
-				EGLSystemWord systemWord = (EGLSystemWord) iter.next();
-				if (systemWord.isVAGCompatible())
-					systemWordNames.add(systemWord.getName());
-			}
-		}
-
-		return systemWordNames;
-	}
-
 	/**
 	 * Return the list of system function names that are only valid for use within a page handler.
 	 */

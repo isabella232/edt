@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.internal.core.utils;
 
 import java.io.StringReader;
 
-import java_cup.runtime.Scanner;
-
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
@@ -26,7 +24,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
@@ -174,8 +171,7 @@ public class ExpressionParser {
     private File getFileAst(String string) {
         try {
             StringReader reader = new StringReader(string);
-            ErrorCorrectingParser parser = new ErrorCorrectingParser(compilerOptions.isVAGCompatible() ? (Scanner) new VAGLexer(reader)
-                    : (Scanner) new Lexer(reader));
+            ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(reader));
 
             File fileAST = (File) parser.parse().value;
             return fileAST;

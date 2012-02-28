@@ -24,12 +24,4 @@ public class DefaultCompilerOptions implements ICompilerOptions{
     public static ICompilerOptions getInstance() {
         return INSTANCE;
     }
-
-    public boolean isVAGCompatible() {
-        return false;
-    }
-
-	public boolean isAliasJSFNames() {
-		return true;
-	}
 }

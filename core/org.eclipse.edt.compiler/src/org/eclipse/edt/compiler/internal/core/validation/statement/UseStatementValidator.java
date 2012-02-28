@@ -106,8 +106,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 						}
 					}
 					
-					if (useStatement.getUsedTypeBinding().getAnnotation(EGLCORE, "DeleteAfterUse") != null &&
-							!compilerOptions.isVAGCompatible()){
+					if (useStatement.getUsedTypeBinding().getAnnotation(EGLCORE, "DeleteAfterUse") != null){
 						problemRequestor.acceptProblem((Node)useStatement.getNames().get(0),
 								IProblemRequestor.USE_STATEMENT_VAGCOMPATIBILITY,
 								new String[] {IEGLConstants.PROPERTY_DELETEAFTERUSE});

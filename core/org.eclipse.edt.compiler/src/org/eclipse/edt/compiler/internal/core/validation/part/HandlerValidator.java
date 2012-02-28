@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import java.util.Map;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FunctionBinding;
 import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
@@ -36,7 +33,6 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.SystemFunctionBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
@@ -46,7 +42,6 @@ import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.AttrType;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.Handler;
-import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -274,130 +269,10 @@ public class HandlerValidator extends FunctionContainerValidator {
 		return false;
 	}
 	
-	private void validateJSFNames() {
-		
-		handler.accept(new AbstractASTVisitor() {
-			public boolean visit(Handler handler) {
-//				if (!Aliaser.isValidJavaIdentifier(handler.getName().getCanonicalString(), true)) {
-//					problemRequestor.acceptProblem(handler.getName(), IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-//						handler.getName().getCanonicalString() });
-//				}
-				return true;
-			}
-			public boolean visit(NestedFunction nestedFunction) {
-				
-				if (!nestedFunction.isPrivate()) {
-					if (!isValidFunctionName(nestedFunction.getName().getCanonicalString())) {
-						problemRequestor.acceptProblem(nestedFunction.getName(), IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-							nestedFunction.getName().getCanonicalString() });
-						}
-				}
-				
-				return false;
-			}
-			
-			private boolean isValidFunctionName(String name) {
-//				if (!Aliaser.isValidJavaIdentifier(name, true)) {
-//					return false;
-//				}
-				
-				if (name.length() > 0) {
-					if (name.startsWith("_"))  {
-						return false;
-					}
-					if (name.startsWith("$"))  {
-						return false;
-					}
-				}
-					
-				return true;
-			}
-
-			
-			public boolean visit(ClassDataDeclaration classDataDeclaration) {
-				if (!classDataDeclaration.isPrivate()) {
-					Iterator i = classDataDeclaration.getNames().iterator();
-					while (i.hasNext()) {
-						Name name = (Name) i.next();
-//						if (!Aliaser.isValidJavaIdentifier(name.getCanonicalString(), true)) {
-//							problemRequestor.acceptProblem(name, IProblemRequestor.NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-//								name.getCanonicalString() });
-//						}
-						deepValidate(name.resolveDataBinding(), classDataDeclaration.getType(), new HashSet());
-					}
-				}
-				return false;
-			}
-			
-			private void deepValidate(IDataBinding binding, Node node, HashSet alreadySeen) {
-				try {
-					if (Binding.isValidBinding(binding)) {
-						ITypeBinding type = binding.getType();
-						if (Binding.isValidBinding(type) && !alreadySeen.contains(type)) {
-							int kind = type.getKind();
-							switch (kind) {
-								case ITypeBinding.FIXED_RECORD_BINDING:
-									deepValidateRecord((FixedRecordBinding) type, node);
-									break;
-								case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-									deepValidateRecord((FlexibleRecordBinding)type, node, alreadySeen);
-									break;
-								default:
-									break;
-								}
-						}
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			private void deepValidateRecord(FixedRecordBinding rec, Node node) {
-				Iterator i = rec.getStructureItems().iterator();
-				while (i.hasNext()) {
-					StructureItemBinding siBinding = (StructureItemBinding)i.next();
-					deepValidateStructItem(siBinding, node, rec);
-				}
-			}
-			private void deepValidateStructItem(StructureItemBinding siBinding, Node node, FixedRecordBinding rec) {
-				String name = siBinding.getCaseSensitiveName();
-				if (!name.equals("*")) {
-//					if (!Aliaser.isValidJavaIdentifier(name, true)) {
-//						problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-//							name, rec.getCaseSensitiveName()});
-//					}
-				}
-				
-				Iterator i = siBinding.getChildren().iterator();
-				while (i.hasNext()) {
-					deepValidateStructItem((StructureItemBinding)i.next(), node, rec);
-				}
-			}
-			private void deepValidateRecord(FlexibleRecordBinding rec, Node node, HashSet alreadySeen) {				
-				IDataBinding[] fields = rec.getFields();
-				for (int i = 0; i < fields.length; i++) {
-					String name = fields[i].getCaseSensitiveName();
-					if (!name.equals("*")) {
-//						if (!Aliaser.isValidJavaIdentifier(name, true)) {
-//							problemRequestor.acceptProblem(node, IProblemRequestor.FIELD_NAME_MUST_BE_VALID_JAVA_IDENTIFIER, new String[] {
-//								name, rec.getCaseSensitiveName()});
-//						}
-						deepValidate(fields[i], node, alreadySeen);
-					}
-				}
-			}
-		});		
-	}
-	
 	private void validateJSFHandler() {
 		IPartBinding part = (IPartBinding) handler.getName().resolveBinding();
 		if (part == null) {
 			return;
-		}
-		
-		//If not aliasing JSF names, must validate the handler name and the public variable/function names
-		//to make sure they are valid java names
-		if (!compilerOptions.isAliasJSFNames()) {
-			validateJSFNames();
 		}
 		
 		IAnnotationBinding typeAnn = part.getSubTypeAnnotationBinding();

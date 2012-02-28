@@ -32,7 +32,6 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.VAGenResolutionWarningsValidator;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 
 
@@ -59,8 +58,6 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 		ITypeBinding rhsBinding = rhs.resolveTypeBinding();
 		IDataBinding lhsDataBinding = lhs.resolveDataBinding();
 		IDataBinding rhsDataBinding = rhs.resolveDataBinding();
-		
-		new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions).checkOperands(enclosingPart, lhs, rhs, assignment);
 		
 		return validateAssignment(assignmentStatement.getAssignment().getOperator(), lhs,rhs,lhsBinding,rhsBinding,lhsDataBinding,rhsDataBinding,false, DefaultBinder.isArithmeticAssignment(assignment));
 	}

@@ -64,6 +64,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
@@ -548,17 +549,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	private ICompilerOptions getCompilerOptions() {
-		ICompilerOptions compilerOptions = new ICompilerOptions() {
-			public boolean isVAGCompatible() {
-				return true;
-			}
-
-			@Override
-			public boolean isAliasJSFNames() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
+		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
 		return compilerOptions;
 	}
 

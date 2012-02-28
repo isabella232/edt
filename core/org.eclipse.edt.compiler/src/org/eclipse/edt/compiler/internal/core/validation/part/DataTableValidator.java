@@ -260,10 +260,6 @@ public class DataTableValidator extends FixedStructureValidator {
 				return false;
 			} else {
 				int typeBindingLength = primTypeBinding.getLength();
-				if(compilerOptions.isVAGCompatible() && Primitive.DECIMAL == primTypeBinding.getPrimitive()) {
-					//Add 1 to length of even-length decimal fields in VAG compatible
-					typeBindingLength += (typeBindingLength+1) % 2;
-				}
 				if(totalContentLength > typeBindingLength) {
 					problemRequestor.acceptProblem(
 						nodeForErrors,

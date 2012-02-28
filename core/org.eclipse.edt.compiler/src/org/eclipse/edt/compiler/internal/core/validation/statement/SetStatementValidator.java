@@ -496,7 +496,6 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 										}
 										else {
 											validateStates( setStmt,expression,
-												compilerOptions.isVAGCompatible() ? new String[]{INVISIBLE_INTERN}:
 												new String[0],
 												IProblemRequestor.INVALID_SET_STATE_FOR_ITEM);
 										}

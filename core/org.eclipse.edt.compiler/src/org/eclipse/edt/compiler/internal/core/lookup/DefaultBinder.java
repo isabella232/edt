@@ -82,7 +82,6 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Assignment.Operator;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
-import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
@@ -153,8 +152,6 @@ import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.LengthItemForSerialMessageOrIndexedRecordValidator;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.RecordNumItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.LValueValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.type.PrimitiveTypeValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -458,11 +455,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	    				
 	    				if(((StructureItemBinding) dBinding).isMultiplyOccuring()) {
 		    				if(numSubscripts(arrayAccess) < dimensions.length) {
-		    					if(
-//		    						dimensions.length != 1 || 
-		    						!compilerOptions.isVAGCompatible()) {
-		    						arrayAccess.setTypeBinding(new MultiplyOccuringItemTypeBinding(dBinding.getType()));
-		    					}
+	    						arrayAccess.setTypeBinding(new MultiplyOccuringItemTypeBinding(dBinding.getType()));
 		    				}
 	    				}
 	    			}
@@ -952,11 +945,7 @@ public abstract class DefaultBinder extends AbstractBinder {
         	if(isMultiplyOccuringItem(fieldAccessDB)) {
         		int[] dimensions = getDimensions(fieldAccess);
 				if(dimensions.length != 0) {
-        			if(
-//        				dimensions.length != 1 || 
-        				!compilerOptions.isVAGCompatible()) {
-        				fieldAccess.setTypeBinding(new MultiplyOccuringItemTypeBinding(fieldAccessDB.getType()));
-        			}
+       				fieldAccess.setTypeBinding(new MultiplyOccuringItemTypeBinding(fieldAccessDB.getType()));
         		}
         	}
         }
@@ -993,9 +982,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 			
 			if(ITypeBinding.ARRAY_TYPE_BINDING == qualifierTypeBinding.getKind()) {
 				if(ITypeBinding.FIXED_RECORD_BINDING == qualifierTypeBinding.getBaseType().getKind()) {
-					if(!compilerOptions.isVAGCompatible() &&
-					    (simpleName.resolveTypeBinding() == null ||
-						!simpleName.resolveTypeBinding().isFunctionBinding())) {
+					if(simpleName.resolveTypeBinding() == null ||
+						!simpleName.resolveTypeBinding().isFunctionBinding()) {
 						simpleName.setTypeBinding(new MultiplyOccuringItemTypeBinding(simpleName.resolveTypeBinding()));
 					}
 				}
@@ -1014,9 +1002,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 			if(qualifierTypeBinding != null) {
 				if(ITypeBinding.ARRAY_TYPE_BINDING == qualifierTypeBinding.getKind()) {
 					if(ITypeBinding.FIXED_RECORD_BINDING == qualifierTypeBinding.getBaseType().getKind()) {
-						if(!compilerOptions.isVAGCompatible() &&
-						    (qualifiedName.resolveTypeBinding() == null ||
-							!qualifiedName.resolveTypeBinding().isFunctionBinding())) {
+						if(qualifiedName.resolveTypeBinding() == null ||
+							!qualifiedName.resolveTypeBinding().isFunctionBinding()) {
 							qualifiedName.setTypeBinding(new MultiplyOccuringItemTypeBinding(qualifiedName.resolveTypeBinding()));
 						}
 					}
@@ -1059,11 +1046,7 @@ public abstract class DefaultBinder extends AbstractBinder {
     		if(isMultiplyOccuringItem(dBinding)) {
     			int[] dimensions = getDimensions(name);
 				if(dimensions.length != 0) {
-        			if(
-//        				dimensions.length != 1 || 
-        				!compilerOptions.isVAGCompatible()) {
-        				name.setTypeBinding(new MultiplyOccuringItemTypeBinding(dBinding.getType()));
-        			}
+       				name.setTypeBinding(new MultiplyOccuringItemTypeBinding(dBinding.getType()));
         		}
     		}
     	}
@@ -1914,8 +1897,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 		ITypeBinding type2 = operand2.resolveTypeBinding();
 		BinaryExpression.Operator operator = binaryExpression.getOperator();
 		
-		new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions).checkOperands(currentScope.getPartBinding(), operand1, operand2, binaryExpression);
-		
 		if(type1 != null) {
 			if((operator == BinaryExpression.Operator.CONCAT) &&
 				(ITypeBinding.ARRAY_TYPE_BINDING == type1.getKind() ||
@@ -2427,15 +2408,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 				if(Binding.isValidBinding(rightSideDBinding)) {
 					if(IDataBinding.STRUCTURE_ITEM_BINDING == rightSideDBinding.getKind()) {
 						if(ITypeBinding.DATATABLE_BINDING != rightSideDBinding.getDeclaringPart().getKind()) {
-							if(!((StructureItemBinding) rightSideDBinding).isMultiplyOccuring() || !compilerOptions.isVAGCompatible()) {
-								QualifierBindingGatherer qb = new QualifierBindingGatherer(true);
-								operand2.accept(qb);
-								ITypeBinding qualifierType2 = qb.qualifierTBinding;
-								
-								if(Binding.isValidBinding(qualifierType2)) {
-									rightSideValidForInFrom = ITypeBinding.ARRAY_TYPE_BINDING == qualifierType2.getKind() &&
-									                 ITypeBinding.FIXED_RECORD_BINDING == ((ArrayTypeBinding) qualifierType2).getElementType().getKind();
-								}
+							QualifierBindingGatherer qb = new QualifierBindingGatherer(true);
+							operand2.accept(qb);
+							ITypeBinding qualifierType2 = qb.qualifierTBinding;
+							
+							if(Binding.isValidBinding(qualifierType2)) {
+								rightSideValidForInFrom = ITypeBinding.ARRAY_TYPE_BINDING == qualifierType2.getKind() &&
+								                 ITypeBinding.FIXED_RECORD_BINDING == ((ArrayTypeBinding) qualifierType2).getElementType().getKind();
 							}
 						}
 					}
@@ -3692,10 +3671,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 								if(Primitive.isNumericType(((PrimitiveTypeBinding) indexType).getPrimitive())) {
 									ITypeBinding arrayType = arrayAccess.getArray().resolveTypeBinding();
 									if(arrayType != null) {
-										arrayAccess.setTypeBinding(										
-											compilerOptions.isVAGCompatible() && ITypeBinding.ARRAY_TYPE_BINDING != arrayType.getKind() ?
-												new MultiplyOccuringItemTypeBinding(arrayType) :
-												arrayType);
+										arrayAccess.setTypeBinding(arrayType);
 									}
 								}
 							}
@@ -4361,15 +4337,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 		}
 	}	
-	
-	public void endVisit(CallStatement callStatement) {
-		if(callStatement.hasArguments()) {
-			VAGenResolutionWarningsValidator val = new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions);
-			for(Iterator iter = callStatement.getArguments().iterator(); iter.hasNext();) {
-				val.checkItemRecordNameOverlap(currentScope, (Expression) iter.next());
-			}
-		}
-	}
 	
 	
 	protected void validateIOStatementInDLIProgram(final Node node) {

@@ -21,13 +21,7 @@ import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
+import org.eclipse.edt.compiler.internal.core.lookup.*;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -119,17 +113,7 @@ public class SourcePathEntry {
 			IPartBinding fileBinding = getOrCompilePartBinding(packageName, fileName, true);
 			scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()), declaringEnvironment.getSystemEnvironment());
         }
-        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
-            public boolean isVAGCompatible() {
-                // TODO pass this in
-                return false;
-            }
-
-			public boolean isAliasJSFNames() {
-				// TODO pass this in
-				return true;
-			}            
-        });
+        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
         partBinding.setEnvironment(declaringEnvironment);
        
         bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);

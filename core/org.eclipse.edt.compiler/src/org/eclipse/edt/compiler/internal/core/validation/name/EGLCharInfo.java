@@ -70,16 +70,7 @@ public class EGLCharInfo {
 	 */
 	public static final boolean isIdentifier( int c, ICompilerOptions compilerOptions )
 	{
-	
- 		if (compilerOptions.isVAGCompatible()) {
-			return ( (Character.isJavaIdentifierPart( (char)c ) ) 
-			// '$' and '_' are already allowed by isJavaIdentifierPart 
-					|| (c == '-' ) // dash
-					|| (c == '@' ) // at sign 
-					|| (c == '#' ) // pound sign 					
-					 );
- 		}
- 		else return ( (Character.isJavaIdentifierPart( (char)c ) ) );		
+ 		return Character.isJavaIdentifierPart( (char)c );		
 	}
 	/**
 	 * Returns true if c can be the first character of an identifier.
@@ -91,13 +82,7 @@ public class EGLCharInfo {
 	 */
 	public static final boolean isIdentifier1( int c, ICompilerOptions compilerOptions )
 	{
-		if (compilerOptions.isVAGCompatible()) {
-			return ( (Character.isJavaIdentifierStart( (char)c ) )
-			// '$' and '_' are already allowed by isJavaIdentifierStart 		 
-					|| (c == '@' ) // at sign
-					 );
-		}
-		else return ( (Character.isJavaIdentifierStart( (char)c ) )  );			
+		return Character.isJavaIdentifierStart( (char)c );			
 	}
 	/**
 	 * Returns true if c can be the first character of an identifier.
@@ -109,17 +94,9 @@ public class EGLCharInfo {
 	 */
 	public static final boolean isFileIdentifier1( int c, ICompilerOptions compilerOptions )
 	{
-		if (compilerOptions.isVAGCompatible()) {
-			return ( (Character.isJavaIdentifierStart( (char)c ) )
-			// '$' and '_' are already allowed by isJavaIdentifierStart 		 
-					|| (c == '@' ) // at sign
-					|| (c == '#' ) // pound sign
-					|| (c == '$' ) // dollar sign
-					 );
-		}
-		else return ( (Character.isJavaIdentifierStart( (char)c ) )
-					|| (c == '#')  // pound sign
-					|| (c == '$') );  // dollar sign
+		return ( (Character.isJavaIdentifierStart( (char)c ) )
+					|| (c == '#')
+					|| (c == '$') );
 	}	
 	/**
 	 * Returns true if c can be the first character of a symbol.

@@ -50,7 +50,6 @@ import org.eclipse.edt.compiler.core.ast.SubstringAccess;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.VAGenResolutionWarningsValidator;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
@@ -102,8 +101,6 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		if(modifier != null && modifier.isFor()) {
 			checkForCount(((ForMoveModifier) modifier).getExpression());
 		}
-		
-		new VAGenResolutionWarningsValidator(problemRequestor, compilerOptions).checkOperands(enclosingPart, sourceExpr, targetExpr, moveStatement);
 		
 		boolean expressionsValid =
 			checkTargetOrSourceExpression(sourceExpr, sourceType, IProblemRequestor.MOVE_STATEMENT_INVALID_SOURCE_TYPE) &&
@@ -510,13 +507,7 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 		                	compilerOptions);
 					break;
 				case IDataBinding.STRUCTURE_ITEM_BINDING:
-					targetIsValid = compilerOptions.isVAGCompatible() &&
-						((StructureItemBinding) targetDBinding).isMultiplyOccuring() &&
-						TypeCompatibilityUtil.isMoveCompatible(
-							targetType,
-							((ArrayTypeBinding) sourceType).getElementType(),
-							null,
-		                	compilerOptions);
+					targetIsValid = false;
 					break;
 				default:
 					targetIsValid = false;
@@ -548,9 +539,6 @@ public class MoveStatementValidator extends DefaultASTVisitor {
 			else {
 				targetIsValid = TypeCompatibilityUtil.isMoveCompatible(targetType.getBaseType(), sourceType, null, compilerOptions);
 			}
-		}
-		else if(compilerOptions.isVAGCompatible()) {
-			targetIsValid = TypeCompatibilityUtil.isMoveCompatible(targetType, sourceType, sourceExpr, compilerOptions);
 		}
 		if(!targetIsValid) {
 			problemRequestor.acceptProblem(

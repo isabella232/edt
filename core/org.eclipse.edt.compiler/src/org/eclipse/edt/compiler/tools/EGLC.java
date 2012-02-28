@@ -34,7 +34,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.NullBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.sdk.IPartRequestor;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
 import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory;
@@ -84,26 +84,14 @@ public class EGLC {
     			initializeOutputPath(processedArgs);
     			initializeSystemRoot(processedArgs, compiler);
     			initializeEGLPath(processedArgs);
-    			
-	        	ASTManager.getInstance().setVAGComaptiblity(processedArgs.isVAGCompatible());
 	        	
 	            
 	            ISystemEnvironment sysEnv = compiler.getSystemEnvironment(null);
             	eglcEnv.setCompiler(compiler);
 
 			    
-			    Processor processor = new Processor(NullBuildNotifier.getInstance(), new ICompilerOptions(){
-			        private boolean isVAGCompatible = processedArgs.isVAGCompatible();
-		            
-			        public boolean isVAGCompatible() {
-		                return isVAGCompatible;
-		            }
-
-					public boolean isAliasJSFNames() {
-						// TODO Auto-generated method stub
-						return false;
-					}	        
-			    },problemRequestorFactory, sysEnv, compiler);
+			    Processor processor = new Processor(NullBuildNotifier.getInstance(), DefaultCompilerOptions.getInstance(),
+			    		problemRequestorFactory, sysEnv, compiler);
 			    
 			    processor.setEnvironment(eglcEnv);
 			    

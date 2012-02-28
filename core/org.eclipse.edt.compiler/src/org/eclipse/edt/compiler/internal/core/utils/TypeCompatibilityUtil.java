@@ -879,22 +879,6 @@ public class TypeCompatibilityUtil {
 		}
 
 		
-		if(compilerOptions.isVAGCompatible()) {
-			//even-length decimal source items can match decimal target items
-			//whose length is one greater
-			if(ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind()) {
-				PrimitiveTypeBinding primSourceType = (PrimitiveTypeBinding) sourceType;
-				int sourceLength = primSourceType.getLength();
-				int sourceDecimals = primSourceType.getDecimals();
-				if(primSourceType.getPrimitive() == Primitive.DECIMAL &&
-				   sourceLength % 2 == 0) {
-					if(PrimitiveTypeBinding.getInstance(Primitive.DECIMAL, sourceLength+1, sourceDecimals) == targetType) {
-						return true;
-					}
-				}
-			}
-		}
-		
 		if(ITypeBinding.INTERFACE_BINDING == targetType.getKind()) {
 			if(ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) {
 				if(((InterfaceBinding) sourceType).getExtendedTypes().contains(targetType) ||
@@ -1046,16 +1030,6 @@ public class TypeCompatibilityUtil {
 
 			if(Primitive.SECONDSPAN_INTERVAL == primTypeBinding.getPrimitive()) {
 				return PrimitiveTypeBinding.getInstance(Primitive.SECONDSPAN_INTERVAL, primTypeBinding.getTimeStampOrIntervalPattern().toUpperCase().toLowerCase());
-			}
-
-			if(compilerOptions.isVAGCompatible()) {
-				//even-length decimal source items can match decimal target items
-				//whose length is one greater
-				int sourceLength = primTypeBinding.getLength(); 
-				if(primTypeBinding.getPrimitive() == Primitive.DECIMAL &&
-				   sourceLength % 2 == 1) {
-					return PrimitiveTypeBinding.getInstance(Primitive.DECIMAL, sourceLength-1, primTypeBinding.getDecimals());
-				}
 			}
 		}		
 		

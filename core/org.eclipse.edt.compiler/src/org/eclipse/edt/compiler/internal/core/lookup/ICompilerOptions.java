@@ -16,7 +16,4 @@ package org.eclipse.edt.compiler.internal.core.lookup;
  *
  */
 public interface ICompilerOptions {
-
-    public boolean isVAGCompatible();
-    public boolean isAliasJSFNames();
 }

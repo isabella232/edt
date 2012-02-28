@@ -27,8 +27,6 @@ import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -1304,32 +1302,16 @@ public class EGLNameValidator {
 		if (name == "") //$NON-NLS-1$
 			return true;
 
-		//more special characters are allowed if VAGCompatibility is enabled
-		if (!compilerOptions.isVAGCompatible()) {
-			if (!Character.isJavaIdentifierStart(name.charAt(0)))
-			// '$' and '_' are already allowed by isJavaIdentifierStart 			
-				return false;
+		if (!Character.isJavaIdentifierStart(name.charAt(0)))
+		// '$' and '_' are already allowed by isJavaIdentifierStart 			
+			return false;
 
-			for (int i = 1; i < name.length(); i++) {
-				if (!Character.isJavaIdentifierPart(name.charAt(i)))
-				// '$' and '_' are already allowed by isJavaIdentifierPart 				
-					return false;
-			}
-		} else { // in VAGCompatibility mode
-			if (!Character.isJavaIdentifierStart(name.charAt(0)))
-			// '$' and '_' are already allowed by isJavaIdentifierStart 
+		for (int i = 1; i < name.length(); i++) {
+			if (!Character.isJavaIdentifierPart(name.charAt(i)))
+			// '$' and '_' are already allowed by isJavaIdentifierPart 				
 				return false;
-
-			for (int i = 1; i < name.length(); i++) {
-				if (!Character.isJavaIdentifierPart(name.charAt(i)))
-				// '$' and '_' are already allowed by isJavaIdentifierPart 				
-					if (name.charAt(i) != '-'
-						&& name.charAt(i) != '@'
-						&& name.charAt(i) != '#'
-						&& name.charAt(i) != ' ') //FRIEDA - ask Jon why
-						return false;
-			}
 		}
+
 		return true;
 	}
 
@@ -1365,17 +1347,16 @@ public class EGLNameValidator {
 		if (name == "") //$NON-NLS-1$
 			return true;
 
-		if (!compilerOptions.isVAGCompatible()) {
-			if (!Character.isJavaIdentifierStart(name.charAt(0)))
+		if (!Character.isJavaIdentifierStart(name.charAt(0)))
 			// '$' and '_' are already allowed by isJavaIdentifierStart 			
-				return false;
+			return false;
 
-			for (int i = 1; i < name.length(); i++) {
-				if (!Character.isJavaIdentifierPart(name.charAt(i)))
+		for (int i = 1; i < name.length(); i++) {
+			if (!Character.isJavaIdentifierPart(name.charAt(i)))
 				// '$' and '_' are already allowed by isJavaIdentifierPart 				
-					return false;
-			}
-		} 
+				return false;
+		}
+
 		return true;
 	}
 	/**

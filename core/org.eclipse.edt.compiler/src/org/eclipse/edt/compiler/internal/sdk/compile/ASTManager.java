@@ -22,7 +22,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 
@@ -37,16 +36,10 @@ public class ASTManager {
     
 	private static final ASTManager INSTANCE = new ASTManager();
 	
-	private boolean isVAGCompatible = false;
-	
 	private ASTManager(){}
 	
 	public static ASTManager getInstance(){
 		return INSTANCE;
-	}
-	
-	public void setVAGComaptiblity(boolean vagCompatible){
-	    this.isVAGCompatible = vagCompatible;
 	}
 	
     public File getFileAST(java.io.File file) {
@@ -55,12 +48,7 @@ public class ASTManager {
     	
     	if(cachedFile == null){
 	        try {
-	        	ErrorCorrectingParser parser;
-	           	if(isVAGCompatible){
-	           		parser = new ErrorCorrectingParser(new VAGLexer(new BufferedInputStream(new FileInputStream(file))));
-	           	}else{
-	           		parser = new ErrorCorrectingParser(new Lexer(new BufferedInputStream(new FileInputStream(file))));
-	           	}
+	        	ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(new BufferedInputStream(new FileInputStream(file))));
 	           	
 	        	cachedFile = (File)parser.parse().value;
 	           	fileLRUCache.put(file, cachedFile);
@@ -99,6 +87,5 @@ public class ASTManager {
 	
 	public void reset() {
 		fileLRUCache = new SoftLRUCache(MAX_NUM_FILES);
-		isVAGCompatible = false;
 	}
  }

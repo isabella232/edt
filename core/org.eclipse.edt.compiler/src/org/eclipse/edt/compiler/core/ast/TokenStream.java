@@ -62,10 +62,6 @@ public class TokenStream implements ITokenStream {
         public Terminal peekLookAhead(int pos) {
             return TokenStream.this.peekLookAhead(pos + offset);
         }
-
-        public void setSource(String source) {
-            throw new UnsupportedOperationException();
-        }
         
         public String toString() {
             return cachedLookAheads.subList(offset, cachedLookAheads.size()).toString();
@@ -92,9 +88,6 @@ public class TokenStream implements ITokenStream {
     public List getLexerErrors() {
     	if(lexer instanceof Lexer) {
     		return ((Lexer) lexer).getLexerErrors();
-    	}
-    	else if(lexer instanceof VAGLexer) {
-    		return ((VAGLexer) lexer).getLexerErrors();
     	}
     	else {
     		return null;

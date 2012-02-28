@@ -53,12 +53,7 @@ public class ErrorCorrectingParser extends Parser { // TODO we are only extendin
     
     public Node parse(String source) {
         // Set up the stream that is shared by both parsers
-    	Scanner scanner = null;
-//    	if(EGLVAGCompatibilitySetting.isVAGCompatibility()){
-       		scanner = new VAGLexer(new StringReader(source));
-//       	}else{
-//       		scanner = new Lexer(new StringReader(source));
-//       	}
+    	Scanner scanner = new Lexer(new StringReader(source));
         stream = new TokenStream(RECOVERY_SUCCESS + AdvancedPhraseRecovery.INPUT_DELETION_LIMIT, scanner);
         return (Node) parse().value;
     }
@@ -76,12 +71,6 @@ public class ErrorCorrectingParser extends Parser { // TODO we are only extendin
     		eglLexer.returnBlockComments = (whitespaceMask & RETURN_BLOCK_COMMENT) != 0;
     		eglLexer.returnLineBreaks = (whitespaceMask & RETURN_LINEBREAKS) != 0;
     		eglLexer.returnLineComments = (whitespaceMask & RETURN_LINE_COMMENT) != 0;
-    	}
-    	else if(lexer instanceof VAGLexer) {
-    		VAGLexer vagLexer = (VAGLexer) lexer;
-    		vagLexer.returnBlockComments = (whitespaceMask & RETURN_BLOCK_COMMENT) != 0;
-    		vagLexer.returnLineBreaks = (whitespaceMask & RETURN_LINEBREAKS) != 0;
-    		vagLexer.returnLineComments = (whitespaceMask & RETURN_LINE_COMMENT) != 0;
     	}
         stream = new TokenStream(RECOVERY_SUCCESS + AdvancedPhraseRecovery.INPUT_DELETION_LIMIT, lexer);
     }
@@ -288,12 +277,6 @@ public class ErrorCorrectingParser extends Parser { // TODO we are only extendin
     		file.blockComments = eglLexer.blockComments;
     		file.lineBreaks = eglLexer.lineBreaks;
     		file.lineComments = eglLexer.lineComments;
-    	}
-    	else if(lexer instanceof VAGLexer) {
-    		VAGLexer vagLexer = (VAGLexer) lexer;
-    		file.blockComments = vagLexer.blockComments;
-    		file.lineBreaks = vagLexer.lineBreaks;
-    		file.lineComments = vagLexer.lineComments;
     	}
 
         // Return the value

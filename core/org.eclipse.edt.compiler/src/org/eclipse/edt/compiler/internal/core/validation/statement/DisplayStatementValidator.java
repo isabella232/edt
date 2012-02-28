@@ -42,38 +42,18 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 			if(enclosingPart != null) {
 				if(ITypeBinding.PROGRAM_BINDING == enclosingPart.getKind()) {			
 					if (enclosingPart.getAnnotation(EGLUIWEBTRANSACTION, "VGWebTransaction") != null ||
-						(enclosingPart.getAnnotation(EGLCORE, "BasicProgram") != null && !compilerOptions.isVAGCompatible())){
+						enclosingPart.getAnnotation(EGLCORE, "BasicProgram") != null){
 						problemRequestor.acceptProblem(displayStatement,
 								IProblemRequestor.STATEMENT_CANNOT_BE_IN_ACTION_OR_BASIC_PROGRAM,
 								new String[] { IEGLConstants.KEYWORD_DISPLAY });
-					}else if (compilerOptions.isVAGCompatible() && enclosingPart.getAnnotation(EGLCORE, "BasicProgram") != null ){
-						Expression expr = displayStatement.getExpr();
-						ITypeBinding targetBinding = expr.resolveTypeBinding();
-						if (StatementValidator.isValidBinding(targetBinding)){
-							if (targetBinding.getAnnotation(EGLUITEXT, "PrintForm") == null){
-								problemRequestor.acceptProblem(expr,
-										IProblemRequestor.STATEMENT_TARGET_MUST_BE_PRINT_FORM,
-										new String[] { expr.getCanonicalString(),IEGLConstants.KEYWORD_DISPLAY });
-							}
-						}
 					}else if (enclosingPart.getAnnotation(EGLUITEXT, "TextUIProgram") != null){
 						Expression expr = displayStatement.getExpr();
 						ITypeBinding targetBinding = expr.resolveTypeBinding();
 						if (StatementValidator.isValidBinding(targetBinding)){
-							if (!compilerOptions.isVAGCompatible()){
-								if (targetBinding.getAnnotation(EGLUITEXT, "TextForm") == null){
-									problemRequestor.acceptProblem(expr,
-											IProblemRequestor.STATEMENT_TARGET_MUST_BE_TEXT_FORM,
-											new String[] { expr.getCanonicalString(),IEGLConstants.KEYWORD_DISPLAY });
-								}
-							}else {
-								if (targetBinding.getAnnotation(EGLUITEXT, "PrintForm") == null &&
-									targetBinding.getAnnotation(EGLUITEXT, "TextForm") == null &&
-									!StatementValidator.isStringCompatible(targetBinding)){
-									problemRequestor.acceptProblem(expr,
-											IProblemRequestor.STATEMENT_TARGET_MUST_BE_FORM,
-											new String[] { expr.getCanonicalString(),IEGLConstants.KEYWORD_DISPLAY });
-								}
+							if (targetBinding.getAnnotation(EGLUITEXT, "TextForm") == null){
+								problemRequestor.acceptProblem(expr,
+										IProblemRequestor.STATEMENT_TARGET_MUST_BE_TEXT_FORM,
+										new String[] { expr.getCanonicalString(),IEGLConstants.KEYWORD_DISPLAY });
 							}
 						}
 					}

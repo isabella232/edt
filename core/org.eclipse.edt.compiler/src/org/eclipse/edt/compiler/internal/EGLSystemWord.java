@@ -49,10 +49,6 @@ public abstract class EGLSystemWord {
 		return false;
 	}
 
-	public boolean isVAGCompatible() {
-		return (type & EGLSystemWordHandler.SYSTEM_WORD_VAGEN_COMPATIBILITY) != 0;
-	}
-	
 	public boolean isDictionary() {
 	    return (type & EGLSystemWordHandler.SYSTEM_WORD_DICTIONARY) != 0;
 	}

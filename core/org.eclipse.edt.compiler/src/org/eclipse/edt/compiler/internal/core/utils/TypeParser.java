@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.internal.core.utils;
 
 import java.io.StringReader;
 
-import java_cup.runtime.Scanner;
-
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AccumulatingSyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
@@ -22,7 +20,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Type;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
@@ -62,8 +59,7 @@ public class TypeParser {
     private File getFileAst(String string) {
         try {
             StringReader reader = new StringReader(string);
-            ErrorCorrectingParser parser = new ErrorCorrectingParser(compilerOptions.isVAGCompatible() ? (Scanner) new VAGLexer(reader)
-                    : (Scanner) new Lexer(reader));
+            ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(reader));
             AccumulatingSyntaxErrorRequestor pRequestor = new AccumulatingSyntaxErrorRequestor();
             parser.setProblemRequestor(pRequestor);
             File fileAST = (File) parser.parse().value;

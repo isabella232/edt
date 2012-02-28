@@ -18,7 +18,6 @@ import java_cup.runtime.Symbol;
 
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
@@ -35,8 +34,7 @@ public class DLIEGLLexer implements Scanner {
     private int lastNonWSEnd;
     
     public DLIEGLLexer(String string, ICompilerOptions compilerOptions) {
-        eglLexer = compilerOptions.isVAGCompatible() ?
-        	(Scanner) new Lexer(new StringReader(string)) : new VAGLexer(new StringReader(string));
+        eglLexer = new Lexer(new StringReader(string));
         startPosition = 0;
     }
     

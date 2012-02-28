@@ -14,7 +14,6 @@ package org.eclipse.edt.compiler.internal.dli;
 import java.io.StringReader;
 import java.util.Stack;
 
-import java_cup.runtime.Scanner;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.lr_parser;
 
@@ -24,7 +23,6 @@ import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Parser;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
@@ -139,8 +137,7 @@ public class DLIEGLParser extends lr_parser {
     private File getFileAst(String string) {
         try {
             StringReader reader = new StringReader(string);
-            ErrorCorrectingParser parser = new ErrorCorrectingParser(compilerOptions.isVAGCompatible() ? (Scanner) new VAGLexer(reader)
-                    : (Scanner) new Lexer(reader));
+            ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(reader));
 
             File fileAST = (File) parser.parse().value;
             return fileAST;
