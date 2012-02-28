@@ -30,7 +30,7 @@ ExternalType DojoBase extends Widget type JavaScriptObject {
 	relativePath = "dojo/widgets",
 	externalName = "DojoBase",
 	
-	includeFile = "config/includeDojo.html"
+	includeFile = "includeDojo.html"
 	
 }
 	
