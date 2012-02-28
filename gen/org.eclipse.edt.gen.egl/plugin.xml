@@ -2,12 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.edt.gen.GenerationContributors">
-      <provider
+         point="org.eclipse.edt.ide.core.GenerationContributors">
+      <GenerationContributor
             class="org.eclipse.edt.gen.egl.EglGenerationContributor"
             provider="org.eclipse.edt.gen.egl.provider6"
             id="EglGenerationContributor">
-      </provider>
+      </GenerationContributor>
    </extension>
 
 </plugin>
