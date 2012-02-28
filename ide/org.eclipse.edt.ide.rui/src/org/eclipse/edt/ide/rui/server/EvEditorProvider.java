@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.AccumulatingProblemrRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
@@ -512,16 +512,8 @@ public class EvEditorProvider {
 			return false;
 		}
 		
-		ICompilerOptions compilerOptions = new ICompilerOptions() {
-			public boolean isVAGCompatible() {
-				return false;
-			}
-			public boolean isAliasJSFNames() {
-				return false;
-			}            
-		};
 		AccumulatingProblemrRequestor pRequestor = new AccumulatingProblemrRequestor();
-		EGLNameValidator.validate(strName, EGLNameValidator.PART, pRequestor, compilerOptions);
+		EGLNameValidator.validate(strName, EGLNameValidator.PART, pRequestor, DefaultCompilerOptions.getInstance());
 		if(pRequestor.getProblems().size() != 0){
 			return false;
 		};
