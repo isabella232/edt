@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.jtopen.wizards;
 
+import java.util.HashMap;
+
 import org.eclipse.edt.ide.jtopen.Messages;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
@@ -21,6 +23,7 @@ import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IDialogFieldListener
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringDialogField;
 import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -34,8 +37,17 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 	private StringDialogField fPasswordField;
 	private StringDialogField fLibraryField;
 	
+	private static String storeSystemNameId = ".STORE_SYSTEM_NAME_ID";
+	private static String storeUserIDNameId = ".STORE_USERID_NAME_ID";
+	private static String storePasswordNameId = ".STORE_PASSWORD_NAME_ID";
+	private static String storeLibraryNameId = ".STORE_LIBRARY_NAME_ID";
+	
 	public IBMiBindingWizardPage(String pageName){
 		super(pageName);
+		storeSystemNameId = pageName + storeSystemNameId;
+		storeUserIDNameId = pageName + storeUserIDNameId;
+		storePasswordNameId = pageName + storePasswordNameId;
+		storeLibraryNameId = pageName + storeLibraryNameId;
 		setTitle(Messages.TitleAddIBMiBinding);
 		setDescription(Messages.DescAddIBMiBinding);
 		nColumns = 4;
@@ -95,7 +107,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fSystemField = new StringDialogField();
 		fSystemField.setLabelText(Messages.LabelSystem);
-		fSystemField.setText(getConfiguration().getSystem());
+		fSystemField.setText(getStoredValue(storeSystemNameId));
 		createStringDialogField(composite, fSystemField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -134,7 +146,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fUserIdField = new StringDialogField();
 		fUserIdField.setLabelText(Messages.LabelUserId);
-		fUserIdField.setText(getConfiguration().getUserId());
+		fUserIdField.setText(getStoredValue(storeUserIDNameId));
 		createStringDialogField(composite, fUserIdField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -157,7 +169,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fPasswordField = new StringDialogField();
 		fPasswordField.setLabelText(Messages.LabelPassword);
-		fPasswordField.setText(getConfiguration().getPassword());
+		fPasswordField.setText(getStoredValue(storePasswordNameId));
 		createStringDialogField(composite, fPasswordField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -180,7 +192,7 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		fLibraryField = new StringDialogField();
 		fLibraryField.setLabelText(Messages.LabelLibrary);
-		fLibraryField.setText(getConfiguration().getUserId());
+		fLibraryField.setText(getStoredValue(storeLibraryNameId));
 		createStringDialogField(composite, fLibraryField, 
 				new IDialogFieldListener(){
 					public void dialogFieldChanged(DialogField field) {
@@ -198,7 +210,6 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 	protected void createComponentNameControl(Composite parent, String labelName, final BindingBaseConfiguration esConfig) {
 		fNameField = new StringDialogField();
 		fNameField.setLabelText( labelName );
-		fNameField.setText( esConfig.getBindingName() );
 		createStringDialogField( parent, fNameField, new IDialogFieldListener() {
 			@Override
 			public void dialogFieldChanged(DialogField field) {
@@ -230,5 +241,25 @@ public class IBMiBindingWizardPage extends EGLDDBindingWizardPage {
 		
 		setPageComplete(result);
 		return result;
+	}
+	
+	@Override
+	public HashMap<String, String> getStoredKeyValues() {
+		HashMap<String, String> ret = super.getStoredKeyValues();
+		ret.put(storePasswordNameId, fPasswordField.getText());
+		ret.put(storeSystemNameId, fSystemField.getText());
+		ret.put(storeUserIDNameId, fUserIdField.getText());
+		ret.put(storeLibraryNameId, fLibraryField.getText());
+		return ret;
+	}
+	
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private String getStoredValue(String key) {
+		IDialogSettings dialogSettings = getDialogSettings();
+		return dialogSettings.get(key) == null ? "" : dialogSettings.get(key);
 	}
 }
