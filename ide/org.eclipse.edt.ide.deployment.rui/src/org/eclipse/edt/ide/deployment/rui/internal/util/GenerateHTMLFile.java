@@ -121,7 +121,7 @@ public class GenerateHTMLFile{
 		try {
 			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
 			Environment.pushEnv(environment.getIREnvironment());			
-			environment.getIREnvironment().initSystemEnvironment(environment.getSystemEnvironment()); 
+			environment.initIREnvironments();
 			
 			String[] splits = resourceName.split("/");
 			String[] packageName = new String[splits.length-1];

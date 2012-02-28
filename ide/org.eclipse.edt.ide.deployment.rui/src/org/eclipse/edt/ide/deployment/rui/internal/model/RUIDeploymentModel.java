@@ -535,7 +535,7 @@ public class RUIDeploymentModel {
 		try {
 			environment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(file.getProject());
 			Environment.pushEnv(environment.getIREnvironment());			
-			environment.getIREnvironment().initSystemEnvironment(environment.getSystemEnvironment()); 
+			environment.initIREnvironments();
 			
 			IEGLElement element = EGLCore.create(file);
 			if (element instanceof IEGLFile) {
