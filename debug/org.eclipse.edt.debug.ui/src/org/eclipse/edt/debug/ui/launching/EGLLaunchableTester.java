@@ -202,7 +202,7 @@ public class EGLLaunchableTester extends PropertyTester
 					try
 					{
 						Environment.pushEnv( env.getIREnvironment() );
-						env.getIREnvironment().initSystemEnvironment( env.getSystemEnvironment() );
+						env.initIREnvironments();
 						
 						List<IFile> files = new ArrayList<IFile>( javaGens.size() );
 						
