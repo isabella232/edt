@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
@@ -35,7 +37,9 @@ import org.osgi.service.prefs.Preferences;
  * Base implementation of IGenerator intended to be subclassed by clients.
  */
 public abstract class AbstractGenerator extends org.eclipse.edt.compiler.AbstractGenerator implements IGenerator {
-
+	
+	private static final EDTRuntimeContainer[] EMPTY_CONTAINERS = {};
+	
 	/**
 	 * The runtime contributions.
 	 */
@@ -63,7 +67,61 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 
 	@Override
 	public EDTRuntimeContainer[] getRuntimeContainers() {
+		if (runtimeContainers == null) {
+			EDTRuntimeContainer[] baseContainers = resolveBaseRuntimeContainers();
+			EDTRuntimeContainer[] contributedContainers = resolveContributedRuntimeContainers();
+			
+			int baseSize = baseContainers == null ? 0 : baseContainers.length;
+			int contributedSize = contributedContainers == null ? 0 : contributedContainers.length;
+			
+			if (baseSize + contributedSize == 0) {
+				runtimeContainers = EMPTY_CONTAINERS;
+			}
+			else {
+				runtimeContainers = new EDTRuntimeContainer[baseSize + contributedSize];
+				int start = 0;
+				if (baseSize > 0) {
+					System.arraycopy(baseContainers, 0, runtimeContainers, start, baseSize);
+					start += baseSize;
+				}
+				if (contributedSize > 0) {
+					System.arraycopy(contributedContainers, 0, runtimeContainers, start, contributedSize);
+					start += contributedSize;
+				}
+			}
+		}
 		return runtimeContainers;
+	}
+	
+	/**
+	 * Subclasses should use this to return the runtime containers provided specifically by this generator.
+	 * This may return null.
+	 * @see AbstractGenerator#getRuntimeContainers()
+	 */
+	protected EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
+		return null;
+	}
+	
+	/**
+	 * By default this will return the runtime containers from the contributions being used by this generator.
+	 * This may return null, and subclasses may override this behavior.
+	 * @see AbstractGenerator#getRuntimeContainers()
+	 */
+	protected EDTRuntimeContainer[] resolveContributedRuntimeContainers() {
+		initContributionsIfNecessary();
+		
+		if (contributionsUsed == null || contributionsUsed.size() == 0) {
+			return null;
+		}
+		
+		List<EDTRuntimeContainer> allContainers = new ArrayList<EDTRuntimeContainer>(10);
+		for (GenerationContributorEntry entry : contributionsUsed) {
+			EDTRuntimeContainer[] entryContainers = entry.getRuntimeContainers();
+			if (entryContainers != null && entryContainers.length > 0) {
+				allContainers.addAll(Arrays.asList(entryContainers));
+			}
+		}
+		return allContainers.toArray(new EDTRuntimeContainer[allContainers.size()]);
 	}
 
 	@Override
@@ -114,21 +172,58 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		if (AbstractGenerator.contributions == null) {
 			// for each of the contributions, we need to add it to a list of class names
 			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				"org.eclipse.edt.gen" + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTORS);
+				EDTCoreIDEPlugin.PLUGIN_ID + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTORS);
 			if (elements != null) {
 				List<GenerationContributorEntry> contributions = new ArrayList<GenerationContributorEntry>();
 				for (int i = 0; i < elements.length; i++) {
 					try {
-						elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS);
+						elements[i].createExecutableExtension(EDTCoreIDEPlugin.CLASS); // makes sure the class exists.
 						GenerationContributorEntry contribution = new GenerationContributorEntry();
 						contribution.setClassName(elements[i].getAttribute(EDTCoreIDEPlugin.CLASS));
 						contribution.setProvider(elements[i].getAttribute(EDTCoreIDEPlugin.PROVIDER));
 						contribution.setIdentifier(elements[i].getAttribute(EDTCoreIDEPlugin.ID));
 						contribution.setRequires(elements[i].getAttribute(EDTCoreIDEPlugin.REQUIRES));
+						
+						IConfigurationElement[] containers = elements[i].getChildren(EDTCoreIDEPlugin.RUNTIMECONTAINER);
+						if (containers != null && containers.length > 0) {
+							List<EDTRuntimeContainer> runtimeContainers = new ArrayList<EDTRuntimeContainer>(containers.length);
+							
+							for (int j = 0; j < containers.length; j++) {
+								IConfigurationElement container = containers[j];
+								String id = container.getAttribute(EDTCoreIDEPlugin.ID);
+								String name = container.getAttribute(EDTCoreIDEPlugin.NAME);
+								String desc = container.getAttribute(EDTCoreIDEPlugin.DESCRIPTION);
+								
+								IConfigurationElement[] entries = container.getChildren(EDTCoreIDEPlugin.RUNTIMECONTAINERENTRY);
+								if (entries != null && entries.length > 0) {
+									EDTRuntimeContainerEntry[] runtimeEntries = new EDTRuntimeContainerEntry[entries.length];
+									for (int k = 0; k < entries.length; k++) {
+										IConfigurationElement element = entries[k];
+										String bundleId = element.getAttribute(EDTCoreIDEPlugin.BUNDLEID);
+										String bundleRoot = element.getAttribute(EDTCoreIDEPlugin.BUNDLEROOT);
+										String versionRange = element.getAttribute(EDTCoreIDEPlugin.VERSIONRANGE);
+										String sourceBundleId = element.getAttribute(EDTCoreIDEPlugin.SOURCEBUNDLEID);
+										String sourceBundleRoot = element.getAttribute(EDTCoreIDEPlugin.SOURCEBUNDLEROOT);
+										String javadocLocation = element.getAttribute(EDTCoreIDEPlugin.JAVADOCLOCATION);
+										EDTRuntimeContainerEntry entry = new EDTRuntimeContainerEntry(bundleId, bundleRoot, new VersionRange(versionRange),
+												sourceBundleId, sourceBundleRoot, javadocLocation);
+										
+										runtimeEntries[k] = entry;
+									}
+									
+									runtimeContainers.add(new EDTRuntimeContainer(id, name, desc, runtimeEntries));
+								}
+							}
+							
+							if (runtimeContainers.size() > 0) {
+								contribution.setRuntimeContainers(runtimeContainers.toArray(new EDTRuntimeContainer[runtimeContainers.size()]));
+							}
+						}
+						
 						contributions.add(contribution);
 					}
 					catch (CoreException e) {
-						e.printStackTrace();
+						EDTCoreIDEPlugin.log(e);
 					}
 				}
 				AbstractGenerator.contributions = contributions.toArray(new GenerationContributorEntry[contributions.size()]);
@@ -161,12 +256,10 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 			numArgs += additionalArgs.length;
 		}
 		// add in the contribution parms
-		if (contributionsUsed == null && getId() != null) {
-			contributionsUsed = new ArrayList<GenerationContributorEntry>();
-			AbstractGenerator.determineContributions(getId(), contributionsUsed);
-		}
-		if (contributionsUsed != null)
+		initContributionsIfNecessary();
+		if (contributionsUsed != null) {
 			numArgs += contributionsUsed.size() + 1;
+		}
 
 		// get the array
 		String[] args = new String[numArgs];
@@ -200,13 +293,21 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 
 		return args;
 	}
+	
+	private void initContributionsIfNecessary() {
+		if (contributionsUsed == null && getId() != null) {
+			contributionsUsed = new ArrayList<GenerationContributorEntry>();
+			AbstractGenerator.determineContributions(getId(), contributionsUsed);
+		}
+	}
 
 	public static void determineContributions(String provider, List<GenerationContributorEntry> contributionsUsed) {
 		// take the passed generator id and determine the contribution id
 		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
 			GenerationContributorEntry contribution = AbstractGenerator.contributions[i];
-			if (provider.equals(contribution.getProvider()))
+			if (provider.equals(contribution.getProvider())) {
 				AbstractGenerator.locateContributions(contribution.getIdentifier(), contributionsUsed);
+			}
 		}
 	}
 
@@ -221,8 +322,9 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 			if (contributionId.equals(contribution.getIdentifier())) {
 				contributionsUsed.add(contribution);
 				if (contribution.getRequires() != null) {
-					if (!requires.contains(contribution.getRequires()))
+					if (!requires.contains(contribution.getRequires())) {
 						requires.add(contribution.getRequires());
+					}
 				}
 			}
 		}

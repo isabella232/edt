@@ -16,6 +16,15 @@ public class GenerationContributorEntry {
 	private String provider;
 	private String identifier;
 	private String requires;
+	private EDTRuntimeContainer[] runtimeContainers;
+
+	public EDTRuntimeContainer[] getRuntimeContainers() {
+		return runtimeContainers;
+	}
+
+	public void setRuntimeContainers(EDTRuntimeContainer[] runtimeContainers) {
+		this.runtimeContainers = runtimeContainers;
+	}
 
 	public GenerationContributorEntry() {
 		super();

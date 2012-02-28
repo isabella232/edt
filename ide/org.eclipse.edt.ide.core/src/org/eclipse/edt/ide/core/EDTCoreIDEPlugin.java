@@ -128,6 +128,15 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	public static final String LANGUAGE = "language"; //$NON-NLS-1$
 	public static final String ENABLED_WITH = "enabledWith"; //$NON-NLS-1$
 
+	public static final String BUNDLEID = "bundleId";
+	public static final String BUNDLEROOT = "bundleRoot";
+	public static final String VERSIONRANGE = "versionRange";
+	public static final String SOURCEBUNDLEID = "sourceBundleId";
+	public static final String SOURCEBUNDLEROOT = "sourceBundleRoot";
+	public static final String JAVADOCLOCATION = "javadocLocation";
+	public static final String RUNTIMECONTAINERENTRY = "runtimeContainerEntry";
+	public static final String RUNTIMECONTAINER = "runtimeContainer";
+
 
 	/**
 	 * Control flag for features 
@@ -659,7 +668,9 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	 * 
 	 * @return Core plug-in preferences
 	 */
+	@SuppressWarnings("deprecation")
 	public IEclipsePreferences getCorePluginPreferences() {
+		// Must use deprecated API to support Eclipse 3.6
 		return new InstanceScope().getNode( PLUGIN_ID );
 	}
 	
