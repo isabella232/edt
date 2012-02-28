@@ -36,9 +36,8 @@ import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.ReplaceStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLAddStatementFactory;
 import org.eclipse.edt.compiler.internal.sql.statements.EGLSQLDeclareStatementFactory;
@@ -616,20 +615,12 @@ public class SQLStatementAction extends ResourceAction {
 	}
 
 	private String getDefaultSelectStatement(IDataBinding recordBinding, boolean buildIntoClause) {
-		final ICompilerOptions compileOptions = new ICompilerOptions() {
-			public boolean isVAGCompatible() {
-				return EGLVAGCompatibilitySetting.isVAGCompatibility();
-			}
-			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-		};
 		String selectStatement = null;
 		if (recordBinding != null && recordBinding != IBinding.NOT_FOUND_BINDING) {
 			EGLSQLRecordStatementFactory statementFactory = new EGLSQLRecordStatementFactory(
 					recordBinding, 
 					recordBinding.getName(),
-					compileOptions);
+					DefaultCompilerOptions.getInstance());
 			statementFactory.setBuildIntoClause(buildIntoClause);
 			selectStatement = statementFactory.buildDefaultSQLStatement();
 			updateSQLErrorView(statementFactory.getErrorMessages());

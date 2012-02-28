@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.internal.core.builder.AccumulatingProblemrReques
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
@@ -205,17 +206,7 @@ public class RUIHandlerWizardPage extends WizardPage {
 	
 	protected void validateEGLName(String name, int nameValidatorConstant, StatusInfo status) {
 		AccumulatingProblemrRequestor pRequestor = new AccumulatingProblemrRequestor();
-		ICompilerOptions compilerOptions = new ICompilerOptions() {
-// TODO EDT Remove isVAGCompatible and isAliasJSFNames			
-			public boolean isVAGCompatible() {
-				return false;
-//				return EGLVAGCompatibilitySetting.isVAGCompatibility();
-			}
-			public boolean isAliasJSFNames() {
-				return false;
-//				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-		};
+		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
 		EGLNameValidator.validate(name, nameValidatorConstant, pRequestor, compilerOptions);
 		List validationList = pRequestor.getProblems();
 		if (!validationList.isEmpty()) {

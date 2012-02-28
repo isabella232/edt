@@ -18,7 +18,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
@@ -359,15 +359,7 @@ public class ProjectWizardMainPage extends WizardSelectionPage implements ISelec
 				return ProjectWizardUtils.createErrorStatus(NewWizardMessages.error_basepackage_spaces);
 			}
 			StatusInfo pkgStatus= new StatusInfo();
-			ICompilerOptions compilerOption = new ICompilerOptions(){
-	            public boolean isVAGCompatible() {
-	            	//TODO EDT Remove isVAGCompatibility	            	
-	            	return false;
-	            }
-				public boolean isAliasJSFNames() {
-					return EGLAliasJsfNamesSetting.isAliasJsfNames();
-				}            
-	        };
+			ICompilerOptions compilerOption = DefaultCompilerOptions.getInstance();
 	        NameValidatorProblemRequestor nameValidaRequestor = new NameValidatorProblemRequestor(pkgStatus);
 			EGLNameValidator.validate(packageName, EGLNameValidator.PACKAGE, nameValidaRequestor, compilerOption);
 			if(!pkgStatus.isOK())

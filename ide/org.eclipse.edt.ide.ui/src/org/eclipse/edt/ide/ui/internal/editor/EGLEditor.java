@@ -28,8 +28,6 @@ import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
 import org.eclipse.edt.compiler.core.ast.PackageDeclaration;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -1135,11 +1133,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 				Symbol nextToken = new Symbol(NodeTypes.EOF);
 				java_cup.runtime.Scanner leftScanner = null, rightScanner = null;
 				
-				boolean isVAGCompatibilityMode = EGLVAGCompatibilitySetting.isVAGCompatibility();				
-				if(isVAGCompatibilityMode)
-					leftScanner = new VAGLexer(new StringReader(leftOfSelection));
-				else					
-					leftScanner = new Lexer(new StringReader(leftOfSelection));
+				leftScanner = new Lexer(new StringReader(leftOfSelection));
 				//find the last token in the leftScanner, which is the previous token of the cursor offset
 				Symbol tmp = leftScanner.next_token();
 				while(tmp.sym != NodeTypes.EOF)
@@ -1149,10 +1143,7 @@ public class EGLEditor extends TextEditor implements IEGLEditor {
 				}
 				String previous= prevToken.sym == NodeTypes.EOF ? null : document.get(prevToken.left+scanOffset, offset-scanOffset-prevToken.left).trim();				
 
-				if(isVAGCompatibilityMode)
-					rightScanner = new VAGLexer(new StringReader(rightOfSelection));
-				else
-					rightScanner = new Lexer(new StringReader(rightOfSelection));
+				rightScanner = new Lexer(new StringReader(rightOfSelection));
 				//find the 1st token in the rightScanner, which is the next token of the cursor offset				
 				nextToken = rightScanner.next_token();								
 				//String next= nextToken.sym == NodeTypes.EOF ? null : document.get(offset+length+nextToken.left, nextToken.right-nextToken.left).trim();

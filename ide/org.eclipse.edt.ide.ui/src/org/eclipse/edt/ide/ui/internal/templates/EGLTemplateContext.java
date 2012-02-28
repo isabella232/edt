@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.eclipse.edt.compiler.core.ast.NodeTypes;
-import org.eclipse.edt.ide.core.internal.errors.ErrorLexerFactory;
+import org.eclipse.edt.ide.core.internal.errors.ErrorLexer;
 import org.eclipse.edt.ide.core.internal.errors.IErrorLexer;
 import org.eclipse.edt.ide.core.internal.errors.ParseStack;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
@@ -37,7 +37,7 @@ public class EGLTemplateContext extends DocumentTemplateContext {
 	private static final String PLATFORM_LINE_DELIMITER = System.getProperty("line.separator"); //$NON-NLS-1$
 
 	//This is relatively expensive, so reuse it 
-	private static IErrorLexer lexer = ErrorLexerFactory.createLexer(""); //$NON-NLS-1$
+	private static IErrorLexer lexer = new ErrorLexer(new StringReader("")); //$NON-NLS-1$
 	private ParseStack parseStack;
 	private String prefix;
 	/**

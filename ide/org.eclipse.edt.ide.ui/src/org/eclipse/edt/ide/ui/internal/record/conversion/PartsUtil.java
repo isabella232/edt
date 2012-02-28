@@ -11,12 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.record.conversion;
 
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizardMessages;
 import org.eclipse.edt.ide.ui.templates.parts.Field;
@@ -76,17 +74,7 @@ public abstract class PartsUtil {
 
 	private String getName(String str, DefaultProblemRequestor problemRequestor) {
 	
-		EGLNameValidator.validate(str, EGLNameValidator.PART, problemRequestor, new ICompilerOptions() {
-			public boolean isVAGCompatible() {
-				// return false; // used for Cafe conversion tool
-				return EGLVAGCompatibilitySetting.isVAGCompatibility();
-			}
-	
-			public boolean isAliasJSFNames() {
-				// return false; // used for Cafe conversion tool
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}
-		});
+		EGLNameValidator.validate(str, EGLNameValidator.PART, problemRequestor, DefaultCompilerOptions.getInstance());
 	
 		return str;
 	

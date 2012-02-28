@@ -30,8 +30,7 @@ import org.eclipse.edt.compiler.core.ast.UsingClause;
 import org.eclipse.edt.compiler.core.ast.UsingKeysClause;
 import org.eclipse.edt.compiler.core.ast.WithIDClause;
 import org.eclipse.edt.compiler.core.ast.WithInlineSQLClause;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.sqltokenizer.EGLSQLParser;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -57,14 +56,7 @@ public class SQLIOStatementUtility {
 	
 	private static SQLIOStatementActionInfo setupActionInfo(Node node, final SQLIOStatementActionInfo info) {
 		
-		final ICompilerOptions compileOptions = new ICompilerOptions(){
-            public boolean isVAGCompatible() {
-                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-            }            
-			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-        };	
+		final ICompilerOptions compileOptions = DefaultCompilerOptions.getInstance();	
         info.setCompilerOption(compileOptions);
 		if (node instanceof AddStatement) {
 			AddStatement addStatement = (AddStatement) node;

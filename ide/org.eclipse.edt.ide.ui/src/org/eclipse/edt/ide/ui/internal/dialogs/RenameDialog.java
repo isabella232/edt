@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.internal.core.builder.AccumulatingProblemrReques
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.Problem;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
@@ -75,18 +76,7 @@ public class RenameDialog extends InputDialog {
 		if (elementName.length() > 0) {
 			AccumulatingProblemrRequestor pRequstor = new AccumulatingProblemrRequestor();
 			List validationList = pRequstor.getProblems();
-			ICompilerOptions compilerOptions = new ICompilerOptions() {
-				public boolean isVAGCompatible() {
-// TODO EDT 				
-//					return EGLVAGCompatibilitySetting.isVAGCompatibility();
-					return false;
-				}
-				public boolean isAliasJSFNames() {
-// TODO EDT 
-//					return EGLAliasJsfNamesSetting.isAliasJsfNames();
-					return false;
-				}            
-			};
+			ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
 			
 			if((initialElement.getElementType()==IEGLElement.EGL_FILE && 
 			   initialElement.getElementName().equals(elementName + ".egl")) ||	//$NON-NLS-1$

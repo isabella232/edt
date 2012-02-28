@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.model.EGLModelException;
@@ -217,16 +217,7 @@ public class RenameEGLFileProcessor extends RenameProcessor implements IReferenc
 					}
 				}
 			}, 
-			new ICompilerOptions() {
-				public boolean isVAGCompatible() {
-// TODO EDT			return EGLVAGCompatibilitySetting.isVAGCompatibility();
-					return false;
-				}
-				public boolean isAliasJSFNames() {
-// TODO EDT			return EGLAliasJsfNamesSetting.isAliasJsfNames();
-					return false;
-				}            
-			});
+			DefaultCompilerOptions.getInstance());
 			return result[0];
 		}
 	}

@@ -45,9 +45,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -66,7 +66,6 @@ import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLFileWizardPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.edt.ide.ui.project.templates.BasicProjectTemplate;
-import org.eclipse.edt.ide.ui.project.templates.IProjectTemplate;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 public class EGLWizardUtilities {
@@ -786,16 +785,7 @@ public class EGLWizardUtilities {
 		//Validate Package Field
 		if (packageName.length() > 0) {
 //			IStatus val= EGLConventions.validatePackageName(packageName);
-			ICompilerOptions compilerOption = new ICompilerOptions(){
-	            public boolean isVAGCompatible() {
-// TODO EDT Remove isVAGCompatibility	            	
-//	                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-	            	return false;
-	            }
-				public boolean isAliasJSFNames() {
-					return EGLAliasJsfNamesSetting.isAliasJsfNames();
-				}            
-	        };
+			ICompilerOptions compilerOption = DefaultCompilerOptions.getInstance();
 
 	        NameValidatorProblemRequestor nameValidaRequestor = new NameValidatorProblemRequestor(pkgStatus);
 			EGLNameValidator.validate(packageName, EGLNameValidator.PACKAGE, nameValidaRequestor, compilerOption);
@@ -860,16 +850,7 @@ public class EGLWizardUtilities {
 				fileStatus.setError(NewWizardMessages.NewTypeWizardPageErrorQualifiedName);
 			}
 			else {
-				ICompilerOptions compilerOption = new ICompilerOptions(){
-		            public boolean isVAGCompatible() {
-		            	// TODO EDT Remove VAGCompability
-//		                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-		            	return false;
-		            }
-					public boolean isAliasJSFNames() {
-						return EGLAliasJsfNamesSetting.isAliasJsfNames();
-					}            
-		        };
+				ICompilerOptions compilerOption = DefaultCompilerOptions.getInstance();
 		        NameValidatorProblemRequestor nameValidaRequestor = new NameValidatorProblemRequestor(fileStatus);
 				EGLNameValidator.validate(fileName + "." + fileExtension, EGLNameValidator.FILENAME, nameValidaRequestor, compilerOption); //$NON-NLS-1$
 				
