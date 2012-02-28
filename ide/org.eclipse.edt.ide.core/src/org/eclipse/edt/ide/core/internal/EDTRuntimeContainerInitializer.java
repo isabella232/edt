@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
+import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
 import org.eclipse.jdt.core.IClasspathContainer;
@@ -57,16 +58,20 @@ public class EDTRuntimeContainerInitializer extends ClasspathContainerInitialize
 	
 	private static class EDTContainer implements IClasspathContainer {
 		private final IPath path;
-		private final IClasspathEntry[] entries;
+		private final IClasspathEntry[] classpathEntries;
 		private final String description;
 		
-		public EDTContainer(IPath path, IClasspathEntry[] entries, String description) {
+		public EDTContainer(IPath path, EDTRuntimeContainerEntry[] entries, String description) {
 			this.path = path;
-			this.entries = entries;
 			this.description = description;
+			
+			this.classpathEntries = new IClasspathEntry[entries.length];
+			for (int i = 0; i < entries.length; i++) {
+				this.classpathEntries[i] = entries[i].getClasspathEntry();
+			}
 		}
 		public IClasspathEntry[] getClasspathEntries() {
-			return entries;
+			return classpathEntries;
 		}
 
 		public String getDescription() {
