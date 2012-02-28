@@ -2,13 +2,13 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.edt.gen.GenerationContributors">
-      <provider
+         point="org.eclipse.edt.ide.core.GenerationContributors">
+      <GenerationContributor
             class="org.eclipse.edt.gen.generator.example.ExampleGenerationContributor"
             provider="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
             id="ExampleGenerationContributor"
             requires="JavaGenerationContributor">
-      </provider>
+      </GenerationContributor>
    </extension>
 <!--
     <extension point="org.eclipse.edt.ide.core.generators">
