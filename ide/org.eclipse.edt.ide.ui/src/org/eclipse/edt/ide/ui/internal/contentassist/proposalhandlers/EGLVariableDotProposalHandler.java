@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
+import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
@@ -259,10 +260,22 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 						String displayString = proposalString + " : " + dataBinding.getType().getCaseSensitiveName() +  " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
 						if (!containsProperty(proposalString, propertyBlockList)) {
 							if (addEquals) {
-								if (dataBinding.getAnnotation(InternUtil.intern(new String[] {"egl", "ui", "rui"}), InternUtil.intern("VEEvent")) != null) {
-									proposalString = proposalString + " ::= "; //$NON-NLS-1$
+								List<IAnnotationBinding> annArr = dataBinding.getAnnotations();
+								boolean containsSetterMethod = false;
+								for (Iterator iterator = annArr.iterator(); iterator.hasNext();) {
+									IAnnotationBinding iAnnotationBinding = (IAnnotationBinding) iterator.next();
+									if ((iAnnotationBinding.getName().equalsIgnoreCase("Property") || 
+											iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))&&
+											iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD) != null) {
+										
+										containsSetterMethod = true;
+										break;
+									}
 								}
-								else {
+
+								if (!containsSetterMethod) {
+									proposalString = proposalString + " ::= "; //$NON-NLS-1$
+								} else {
 									proposalString = proposalString + " = "; //$NON-NLS-1$
 								}
 							}
