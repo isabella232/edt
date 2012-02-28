@@ -11,12 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClasspathEntry;
 
 /**
  * A runtime container contains zero or more classpath entries (though an empty container is useless).
@@ -39,9 +35,9 @@ public class EDTRuntimeContainer {
 	private final String description;
 	
 	/**
-	 * The classpath entries.
+	 * The container's entries.
 	 */
-	private final IClasspathEntry[] entries;
+	private final EDTRuntimeContainerEntry[] entries;
 	
 	/**
 	 * The path stored in the .classpath file, based on the id.
@@ -53,20 +49,7 @@ public class EDTRuntimeContainer {
 		this.name = name;
 		this.description = description;
 		this.path = new Path(EDTCoreIDEPlugin.EDT_CONTAINER_ID).append(this.id);
-		
-		if (entries == null || entries.length == 0) {
-			this.entries = new IClasspathEntry[0];
-		}
-		else {
-			List<IClasspathEntry> resolvedEntries = new ArrayList<IClasspathEntry>(entries.length);
-			for (int i = 0; i < entries.length; i++) {
-				IClasspathEntry entry = entries[i].getClasspathEntry();
-				if (entry != null) {
-					resolvedEntries.add(entry);
-				}
-			}
-			this.entries = resolvedEntries.toArray(new IClasspathEntry[resolvedEntries.size()]);
-		}
+		this.entries = entries;
 	}
 	
 	public String getId() {
@@ -81,7 +64,7 @@ public class EDTRuntimeContainer {
 		return this.description;
 	}
 	
-	public IClasspathEntry[] getEntries() {
+	public EDTRuntimeContainerEntry[] getEntries() {
 		return this.entries;
 	}
 	

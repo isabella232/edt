@@ -248,4 +248,28 @@ public class EDTRuntimeContainerEntry {
 	public IClasspathEntry getClasspathEntry() {
 		return entry;
 	}
+	
+	public String getBundleId() {
+		return bundleId;
+	}
+	
+	public String getBundleRoot() {
+		return bundleRoot;
+	}
+	
+	public VersionRange getVersionRange() {
+		return bundleVersionRange;
+	}
+	
+	public String getSourceBundleId() {
+		return sourceBundleId;
+	}
+	
+	public String getSourceBundleRoot() {
+		return sourceBundleRoot;
+	}
+	
+	public String getJavadocLocation() {
+		return javadocLocation;
+	}
 }
