@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
+import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.ui.internal.dialogs.StatusInfo;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -39,6 +40,7 @@ import org.eclipse.swt.widgets.Label;
 /**
  * Wizard page that lets you pick an EDT runtime to be added to the Java build path. The available runtimes come from the generators.
  */
+@SuppressWarnings("restriction")
 public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implements IClasspathContainerPage, IClasspathContainerPageExtension {
 	
 	private IClasspathEntry currentEntry;
@@ -107,10 +109,11 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 			label = new Label(composite, SWT.NONE);
 			label.setText(NewWizardMessages.EDTRuntimeContainerPage_PathsLabel);
 			label.setFont(composite.getFont());
+			label.setLayoutData(new GridData(SWT.BEGINNING, SWT.TOP, false, false));
 			
 			path = new Label(composite, SWT.WRAP);
 			path.setFont(composite.getFont());
-			path.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+			path.setLayoutData(new GridData(GridData.FILL_BOTH));
 			
 			String[] items = new String[availableLibraries.length];
 			for (int i = 0; i < items.length; i++) {
@@ -144,13 +147,13 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 		description.setText(container.getDescription());
 		
 		StringBuilder buf = new StringBuilder();
-		IClasspathEntry[] entries = container.getEntries();
+		EDTRuntimeContainerEntry[] entries = container.getEntries();
 		if (entries != null && entries.length > 0) {
 			for (int i = 0; i < entries.length; i++) {
 				if (i > 0) {
 					buf.append("\n"); //$NON-NLS-1$
 				}
-				buf.append(entries[i].getPath());
+				buf.append(entries[i].getClasspathEntry().getPath());
 			}
 		}
 		path.setText(buf.toString());
