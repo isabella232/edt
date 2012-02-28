@@ -46,7 +46,7 @@ public class EGLSystemLibraryProposalHandler extends EGLAbstractProposalHandler 
 		ISystemEnvironment env = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
 		List contentAssistPartList = new LinkedList();
 		contentAssistPartList.addAll(env.getSystemLibraryManager().getLibraries().values());
-		contentAssistPartList.addAll(env.getContentAssistPartsManager().getExternalTypeLibraries().values());
+		contentAssistPartList.addAll(env.getExternalTypePartsManager().getExternalTypeLibraries().values());
 		
 		for(Iterator iter = CapabilityFilterUtility.filterParts(contentAssistPartList).iterator(); iter.hasNext();) {
 			IPartBinding nextLibrary = (IPartBinding) iter.next();

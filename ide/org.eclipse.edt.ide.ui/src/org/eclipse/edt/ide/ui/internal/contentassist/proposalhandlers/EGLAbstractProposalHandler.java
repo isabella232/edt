@@ -50,7 +50,7 @@ import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.EGLSystemFunctionWord;
 import org.eclipse.edt.compiler.internal.EGLSystemWordHandler;
 import org.eclipse.edt.compiler.internal.IEGLConstants;
-import org.eclipse.edt.compiler.internal.core.lookup.System.ContentAssistPartManager;
+import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypePartManager;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
@@ -83,7 +83,7 @@ public abstract class EGLAbstractProposalHandler {
 	protected IEditorPart editor;
 	protected ITextViewer viewer;
 	protected AnnotationTypeManager annoTypeMgr = null;
-	protected ContentAssistPartManager caPartMgr = null;
+	protected ExternalTypePartManager externalPartMgr = null;
 	protected ISystemEnvironment sysEnv = null;
 
 	public EGLAbstractProposalHandler(ITextViewer viewer, int documentOffset, String prefix) {
@@ -101,7 +101,7 @@ public abstract class EGLAbstractProposalHandler {
 			IFileEditorInput editorInput = (IFileEditorInput) editor.getEditorInput();
 			sysEnv = SystemEnvironmentManager.findSystemEnvironment(editorInput.getFile().getProject(), null); 
 			annoTypeMgr = sysEnv.getAnnotationTypeManager();
-			caPartMgr = sysEnv.getContentAssistPartsManager();
+			externalPartMgr = sysEnv.getExternalTypePartsManager();
 		}
 	}
 

@@ -42,7 +42,7 @@ public class EGLExceptionProposalHandler extends EGLAbstractProposalHandler {
 		EDTCoreIDEPlugin.getPlugin();		//This will make sure the system packages are initialized
 		
 		Collection exceptions = ExceptionHandler.getFilteredSystemExceptions(annoTypeMgr);
-		exceptions.addAll(caPartMgr.getExternalTypeException().values());//add those exception are not record type
+		exceptions.addAll(externalPartMgr.getExternalTypeException().values());//add those exception are not record type
 		
 		for (Iterator iter = exceptions.iterator(); iter.hasNext();) {
 			Binding binding = (Binding) iter.next();

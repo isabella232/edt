@@ -99,6 +99,12 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 									isPropertySetting[0] = true;
 									isDone[0] = true;
 //									return;
+								}else if(lhBinding instanceof ClassFieldBinding && 
+										assignmentNode.getParent() != null &&								
+										assignmentNode.getParent() instanceof SettingsBlock && 
+										parseStack.getCurrentState() == invokeInArray){
+									isPropertySetting[0] = true;
+									isDone[0] = true;
 								}
 							}
 						}
