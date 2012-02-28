@@ -3,7 +3,7 @@
 <plugin>
    <extension
          point="org.eclipse.edt.ide.ui.eglDDEditorBindingProvider">
-      <provider id="edt.binding.ibmiconnection" description="IBM i Binding"
+      <provider id="edt.binding.ibmiconnection" description="IBMi Binding"
          bindingconfigurationClass="org.eclipse.edt.ide.jtopen.wizards.IBMiBindingConnectionConfiguration"
          bindingdetailsPageClass="org.eclipse.edt.ide.jtopen.pages.IBMiConnectionBindingDetailPage">
 	      <wizardPage
@@ -35,5 +35,23 @@
             class="org.eclipse.edt.ide.jtopen.IBMiTestServerContribution">
       </provider>
    </extension>
-
+   <extension
+         point="org.eclipse.edt.ide.core.GenerationContributors">
+      <GenerationContributor
+            class="org.eclipse.edt.gen.java.eglx.jtopen.IBMiGenerationContributor"
+            id="org.eclipse.edt.gen.java.eglx.jtopen.IBMiGenerationContributor"
+            provider="org.eclipse.edt.ide.gen.JavaGenProvider">
+         <runtimeContainer
+               description="%runtimeContainerDescription"
+               id="org.eclipse.edt.ide.jtopen.ibmiContainer"
+               name="%runtimeContainerName">
+            <runtimeContainerEntry
+                  bundleId="org.eclipse.edt.runtime.java.jtopen"
+                  bundleRoot="bin"
+                  sourceBundleId="org.eclipse.edt.runtime.java.jtopen.source"
+                  sourceBundleRoot="src">
+            </runtimeContainerEntry>
+         </runtimeContainer>
+      </GenerationContributor>
+   </extension>
 </plugin>
