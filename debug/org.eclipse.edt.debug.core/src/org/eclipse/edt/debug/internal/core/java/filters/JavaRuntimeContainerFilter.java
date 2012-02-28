@@ -12,13 +12,13 @@
 package org.eclipse.edt.debug.internal.core.java.filters;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.filters.ClasspathEntryFilter;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
+import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.jdt.core.IClasspathEntry;
 
@@ -38,10 +38,13 @@ public class JavaRuntimeContainerFilter extends ClasspathEntryFilter
 			{
 				for ( EDTRuntimeContainer container : containers )
 				{
-					IClasspathEntry[] containerEntries = container.getEntries();
+					EDTRuntimeContainerEntry[] containerEntries = container.getEntries();
 					if ( containerEntries != null )
 					{
-						entries.addAll( Arrays.asList( containerEntries ) );
+						for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
+						{
+							entries.add( nextEntry.getClasspathEntry() );
+						}
 					}
 				}
 			}
