@@ -9,7 +9,8 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.edt.gen.javascriptdev,
  org.eclipse.edt.gen.javascriptdev.ide,
- org.eclipse.edt.gen.javascriptdev.templates
+ org.eclipse.edt.gen.javascriptdev.templates,
+ org.eclipse.edt.gen.javascriptdev.templates.eglx.services
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.edt.gen;bundle-version="0.7.0",
