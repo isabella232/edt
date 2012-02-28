@@ -186,7 +186,7 @@ public class VariableUtil
 			IEGLJavaValue parent )
 	{
 		// Consult the adapters.
-		for ( IVariableAdapter adapter : variableAdapters )
+		for ( IVariableAdapter adapter : getVariableAdapters() )
 		{
 			IEGLJavaVariable variable = adapter.adapt( javaVariable, frame, info, parent );
 			if ( variable != null )
