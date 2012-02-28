@@ -56,7 +56,7 @@ egl.defineWidget(
 		}
 	},
 	"convertEGLTimeToDojoTime" : function(eglTime) {
-		return egl.timeStampToString(eglTime, this.timePattern);
+		return eglTime == null? "" : egl.timeStampToString(eglTime, this.timePattern);
 	},
 	"getValue" : function(){
         if (this.dojoWidget) {            
