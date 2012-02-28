@@ -40,8 +40,6 @@ import org.eclipse.edt.compiler.core.ast.Record;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.ide.core.ast.GetNodeAtOffsetVisitor;
 import org.eclipse.edt.ide.core.ast.GetNodeAtOrBeforeOffsetVisitor;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -253,12 +251,8 @@ public class EGLDocument extends Document implements IEGLDocument {
 		if (needReconcile) {
 			needReconcile = false;
 			
-			ErrorCorrectingParser newParser;			
 			int whitespacemask = ErrorCorrectingParser.RETURN_BLOCK_COMMENT | ErrorCorrectingParser.RETURN_LINE_COMMENT | ErrorCorrectingParser.RETURN_LINEBREAKS;
-	       	if(EGLVAGCompatibilitySetting.isVAGCompatibility())
-	       		newParser = new ErrorCorrectingParser(new VAGLexer(new BufferedReader(new StringReader(this.get()))), whitespacemask);
-	       	else
-	       		newParser = new ErrorCorrectingParser(new Lexer(new BufferedReader(new StringReader(this.get()))), whitespacemask);		
+			ErrorCorrectingParser newParser = new ErrorCorrectingParser(new Lexer(new BufferedReader(new StringReader(this.get()))), whitespacemask);		
 			fileRootNode = (File)(newParser.parse().value);
 			
 			fireModelReconciled(report);

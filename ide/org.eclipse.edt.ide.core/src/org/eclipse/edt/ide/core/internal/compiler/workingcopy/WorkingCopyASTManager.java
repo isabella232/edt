@@ -24,8 +24,6 @@ import org.eclipse.edt.compiler.core.ast.NestedForm;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.ide.core.internal.lookup.AbstractASTManager;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -85,12 +83,7 @@ public class WorkingCopyASTManager extends AbstractASTManager {
 		try {
 			String contents = ((IEGLFile)workingCopy).getBuffer().getContents();
  
-        	ErrorCorrectingParser parser;
-           	if(EGLVAGCompatibilitySetting.isVAGCompatibility()){
-           		parser = new ErrorCorrectingParser(new VAGLexer(new BufferedReader(new StringReader(contents))));
-           	}else{
-           		parser = new ErrorCorrectingParser(new Lexer(new BufferedReader(new StringReader(contents))));
-           	}
+        	ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(new BufferedReader(new StringReader(contents))));
            	File cachedFile = (File)parser.parse().value;
            	fileCache.put(((IEGLFile)workingCopy.getOriginalElement()).getResource(), cachedFile);
            	

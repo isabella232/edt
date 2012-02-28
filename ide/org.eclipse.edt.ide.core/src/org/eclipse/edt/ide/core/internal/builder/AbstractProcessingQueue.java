@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
@@ -31,20 +30,12 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.CappedProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.GenericTopLevelFunctionProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
+import org.eclipse.edt.compiler.internal.core.lookup.*;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -68,7 +59,6 @@ import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.IEnvironment;
-import org.eclipse.edt.mof.serialization.SerializationException;
 import org.eclipse.osgi.util.NLS;
 
 /**
@@ -111,21 +101,8 @@ public abstract class AbstractProcessingQueue extends org.eclipse.edt.compiler.i
         }
 	}
     
-    private static class CompilerOptions implements ICompilerOptions {
-    	private boolean isVAGCompatible = EGLVAGCompatibilitySetting.isVAGCompatibility();
-    	private boolean isAliasJSFNames = EGLAliasJsfNamesSetting.isAliasJsfNames();
-
-		public boolean isVAGCompatible() {
-			return isVAGCompatible;
-		}
-
-		public boolean isAliasJSFNames() {
-			return isAliasJSFNames;
-		}        
-    }
-    
     public AbstractProcessingQueue(IProject project, IBuildNotifier notifier) {
-    	super(notifier, new CompilerOptions());
+    	super(notifier, DefaultCompilerOptions.getInstance());
         this.project = project;
         this.projectInfo = ProjectInfoManager.getInstance().getProjectInfo(project);
         this.projectEnvironment = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);

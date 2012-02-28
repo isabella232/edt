@@ -10,7 +10,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
@@ -186,10 +185,6 @@ public class GenerationBuilder extends IncrementalProjectBuilder {
 				// We won't get to this point if the project has an unhandled EDT build exception due to the marker check above
 				if (p.exists() && p.isOpen()){
 					if(!BuildManager.getInstance().getProjectState(p))  {
-						boolean cycleReferences = ProjectBuildPathManager.getInstance().getProjectBuildPath(p).hasCycle();
-						if (cycleReferences && EGLVAGCompatibilitySetting.isVAGCompatibility()){
-							continue;
-						}
 						currentProject.deleteMarkers(EDTCoreIDEPlugin.GENERATION_PROBLEM, true, IResource.DEPTH_INFINITE);
 						IMarker marker = currentProject.createMarker(EDTCoreIDEPlugin.GENERATION_PROBLEM);
 						marker.setAttribute(IMarker.MESSAGE, projectHasUnhandledBuildException(p)

@@ -23,8 +23,6 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 import org.eclipse.edt.ide.core.internal.utils.Util;
@@ -98,12 +96,7 @@ public abstract class AbstractASTManager {
 
 		
 	private File getFileAST(Reader reader) {
-    	ErrorCorrectingParser parser;
-    	if(EGLVAGCompatibilitySetting.isVAGCompatibility()){
-       		parser = new ErrorCorrectingParser(new VAGLexer(reader));
-       	}else{
-       		parser = new ErrorCorrectingParser(new Lexer(reader));
-       	}
+    	ErrorCorrectingParser parser = new ErrorCorrectingParser(new Lexer(reader));
        	return (File)parser.parse().value;
     }
     

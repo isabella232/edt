@@ -21,19 +21,10 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
+import org.eclipse.edt.compiler.internal.core.lookup.*;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
@@ -275,15 +266,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
 			}
         }
-        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, new ICompilerOptions(){
-            public boolean isVAGCompatible() {
-                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-            }
-
-			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-        });
+        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
         partBinding.setEnvironment(declaringEnvironment);
        
         bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
@@ -389,14 +372,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
         
         Scope scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
         
-        BindingCompletor.getInstance().completeBinding(fileAST, fileBinding, scope, new ICompilerOptions(){
-            public boolean isVAGCompatible() {
-                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-            }            
-			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-        });
+        BindingCompletor.getInstance().completeBinding(fileAST, fileBinding, scope, DefaultCompilerOptions.getInstance());
                
         bindingCache.put(packageName, caseInsensitiveInternedFileName, fileBinding);
         

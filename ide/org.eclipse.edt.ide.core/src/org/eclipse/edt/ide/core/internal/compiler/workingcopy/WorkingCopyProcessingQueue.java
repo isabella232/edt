@@ -28,19 +28,11 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
-import org.eclipse.edt.compiler.internal.EGLAliasJsfNamesSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.AbstractProcessingQueue;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
+import org.eclipse.edt.compiler.internal.core.lookup.*;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.compiler.Binder;
@@ -108,14 +100,7 @@ public class WorkingCopyProcessingQueue extends AbstractProcessingQueue {
 	}
 	
 	public WorkingCopyProcessingQueue(IProject project, IProblemRequestorFactory problemRequestorFactory){
-		super(WorkingCopyBuildNotifier.getInstance(), new ICompilerOptions(){	
-            public boolean isVAGCompatible() {
-                return EGLVAGCompatibilitySetting.isVAGCompatibility();
-             }           
-			public boolean isAliasJSFNames() {
-				return EGLAliasJsfNamesSetting.isAliasJsfNames();
-			}            
-         });
+		super(WorkingCopyBuildNotifier.getInstance(), DefaultCompilerOptions.getInstance());
 		
 		this.project = project;
 		this.problemRequestorFactory = problemRequestorFactory;

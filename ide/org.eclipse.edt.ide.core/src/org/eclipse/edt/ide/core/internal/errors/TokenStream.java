@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.errors;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +19,6 @@ import java.util.List;
  * @author winghong
  */
 public class TokenStream {
-	// TODO remove SKIPWHITESPACE later
-	private static boolean SKIPWHITESPACE = false;
 	
 	private ArrayList tokenList = new ArrayList();
 	private int lookaheadPos = 0;
@@ -31,7 +30,7 @@ public class TokenStream {
 	
 	
 	public TokenStream(String input) {
-		IErrorLexer errorLexer = ErrorLexerFactory.createLexer(input);
+		IErrorLexer errorLexer = new ErrorLexer(new StringReader(input));
 
 		lineTracker = new ErrorLineTracker(input);
 		

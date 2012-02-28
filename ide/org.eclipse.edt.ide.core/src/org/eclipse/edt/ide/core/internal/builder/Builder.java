@@ -29,7 +29,6 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.EGLIncompleteBuildPathSetting;
-import org.eclipse.edt.compiler.internal.EGLVAGCompatibilitySetting;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.builder.CancelledException;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
@@ -338,12 +337,6 @@ public class Builder extends IncrementalProjectBuilder {
 				// We won't get to this point if the EGL path is marked as broken due to the marker check above
 				if (p.exists() && p.isOpen()){
 					if(!BuildManager.getInstance().getProjectState(p))  {
-						boolean cycleReferences = ProjectBuildPathManager.getInstance().getProjectBuildPath(p).hasCycle();
-						if (cycleReferences && EGLVAGCompatibilitySetting.isVAGCompatibility()){
-							continue;
-						}
-						// TODO May want to add "check VAG mode"
-						
 						// The prereq project has no build state: if this prereq project has a 'warning' cycle marker then allow build (see bug id 23357)
 						if (DEBUG)
 							System.out.println("Aborted build because prereq project " + p.getName() //$NON-NLS-1$
