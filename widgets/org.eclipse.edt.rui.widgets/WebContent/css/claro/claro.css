@@ -165,7 +165,7 @@ input::-moz-focus-inner, button::-moz-focus-inner {
 	vertical-align:top;
 }
 .claro .EglRuiCheckBox span{
-	vertical-align: top;
+	/*vertical-align: top;*/
 }
 .claro *[disabled].EglRuiCheckBox{
 	background-color:transparent;	
