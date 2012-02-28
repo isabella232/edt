@@ -51,11 +51,19 @@
 			generatorId="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.ui.JavaScriptGeneratorTabProvider">
 		</generatorTab>
-		<!--generalTab 
-			compilerId="org.eclipse.edt.ide.compiler.edtCompiler"
-			tabName="Sample EDT Tab"
-			class="org.eclipse.edt.ide.compiler.gen.ui.SampleEDTTabProvider">
-		</generalTab-->
-		
    	</extension>
+   	
+   	<extension
+         point="org.eclipse.edt.ide.core.GenerationContributors">
+      <GenerationContributor
+            class="org.eclipse.edt.gen.java.JavaGenerationContributor"
+            provider="org.eclipse.edt.ide.gen.JavaGenProvider"
+            id="JavaGenerationContributor">
+      </GenerationContributor>
+      <GenerationContributor
+            class="org.eclipse.edt.gen.javascript.JavaScriptGenerationContributor"
+            provider="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
+            id="JavaScriptGenerationContributor">
+      </GenerationContributor>
+   </extension>
 </plugin>
