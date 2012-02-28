@@ -29,35 +29,35 @@ library DojoDialogLib {}
 		return(createDialog(RuiLib.getTitle(), message, content, buttons));
 	end	
 
-	function showMessage(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+	function showMessage(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
 		content Widget = createContents( message, null );
 		
 		return(createDialog(title, message, content, buttons));
 	end	
 	
-	function showQuestion(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+	function showQuestion(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("Yes", ID_YES, callback), createButton("No", ID_NO, callback) ];
 		content Widget = createContents( message, "utils/dialog/question_32.png" );
 		
 		return(createDialog(title, message, content, buttons));
 	end	
 		
-	function showWarning(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+	function showWarning(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
 		content Widget = createContents( message, "utils/dialog/warning_32.png" );
 		
 		return(createDialog(title, message, content, buttons));
 	end
 
-	function showError(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+	function showError(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
 		content Widget = createContents( message, "utils/dialog/error_32.png" );
 		
 		return(createDialog(title, message, content, buttons));	
 	end
 	
-	function showProgress(title String in, message String in, allowCancel boolean in, callback dialogButtonClicked) returns (DojoDialog)
+	function showProgress(title String in, message String in, allowCancel boolean in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[];
 		if (allowCancel)
 			buttons = [ createButton("Cancel", ID_CANCEL, callback) ];
@@ -67,7 +67,7 @@ library DojoDialogLib {}
 		return(createDialog(title, message, content, buttons));			
 	end
 	
-	function showRetryCancel(title String in, message String in, callback dialogButtonClicked) returns (DojoDialog)
+	function showRetryCancel(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("Retry", ID_RETRY, callback), createButton("Cancel", ID_CANCEL, callback) ];
 		content Widget = createContents( message, "utils/dialog/error_32.png" );
 		
