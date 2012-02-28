@@ -14,7 +14,7 @@ package eglx.ui.rui;
 import eglx.lang.NativeType;
 import eglx.lang.*;
 
-externaltype RuiLib type NativeType{@ContentAssist}
+externaltype RuiLib type NativeType
 
 	private constructor();
 

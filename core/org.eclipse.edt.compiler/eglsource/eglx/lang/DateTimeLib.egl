@@ -5,7 +5,7 @@ import eglx.lang.NativeType;
 /**
  * Utility functions related to date/time processing.
  */
-externaltype DateTimeLib type NativeType{@ContentAssist}
+externaltype DateTimeLib type NativeType
 
 	private constructor();
 	

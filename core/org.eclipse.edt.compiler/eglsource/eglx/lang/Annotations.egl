@@ -64,16 +64,3 @@ Record EventListener type Annotation
 	listenerType String;
 	method String;
 end
-
-/**
- * Use ContentAssist to mark Part when their need
- * To Be listed in Content Assist as a system part.
- */
-Record ContentAssist type Annotation
-{
-	targets = [
-		ElementKind.ExternalTypePart
-	]
-}
-end
-

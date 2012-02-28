@@ -14,7 +14,7 @@ package eglx.json;
 import egl.lang.reflect.InterfacePart;
 import eglx.lang.NativeType;
 
-externaltype JsonLib type NativeType{@ContentAssist}
+externaltype JsonLib type NativeType
 
 	private constructor();
    

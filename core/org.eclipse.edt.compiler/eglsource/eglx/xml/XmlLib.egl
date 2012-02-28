@@ -13,7 +13,7 @@ package eglx.xml;
 
 import eglx.lang.NativeType;
 
-externaltype XmlLib type NativeType{@ContentAssist}
+externaltype XmlLib type NativeType
 
 	private constructor();
 
