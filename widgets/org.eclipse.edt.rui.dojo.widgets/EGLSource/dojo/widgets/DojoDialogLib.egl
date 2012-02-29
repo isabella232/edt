@@ -26,50 +26,50 @@ library DojoDialogLib {}
 		buttons DojoButton[] = [ createButton("OK", ID_OK, null) ];
 		content Widget = createContents( message, null );
 		
-		return(createDialog(RuiLib.getTitle(), message, content, buttons));
+		return(createDialog(null, message, content, buttons));
 	end	
 
-	function showMessage(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showMessage(title String? in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
 		content Widget = createContents( message, null );
 		
 		return(createDialog(title, message, content, buttons));
 	end	
 	
-	function showQuestion(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showQuestion(title String? in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("Yes", ID_YES, callback), createButton("No", ID_NO, callback) ];
-		content Widget = createContents( message, "utils/dialog/question_32.png" );
+		content Widget = createContents( message, "images/question_32.png" );
 		
 		return(createDialog(title, message, content, buttons));
 	end	
 		
-	function showWarning(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showWarning(title String? in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
-		content Widget = createContents( message, "utils/dialog/warning_32.png" );
+		content Widget = createContents( message, "images/warning_32.png" );
 		
 		return(createDialog(title, message, content, buttons));
 	end
 
-	function showError(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showError(title String? in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("OK", ID_OK, callback) ];
-		content Widget = createContents( message, "utils/dialog/error_32.png" );
+		content Widget = createContents( message, "images/error_32.png" );
 		
 		return(createDialog(title, message, content, buttons));	
 	end
 	
-	function showProgress(title String in, message String in, allowCancel boolean in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showProgress(title String? in, message String in, allowCancel boolean in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[];
 		if (allowCancel)
 			buttons = [ createButton("Cancel", ID_CANCEL, callback) ];
 		end
-		content Widget = createContents( message, "utils/dialog/progress_32.gif" );
+		content Widget = createContents( message, "images/progress_32.gif" );
 		
 		return(createDialog(title, message, content, buttons));			
 	end
 	
-	function showRetryCancel(title String in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
+	function showRetryCancel(title String? in, message String in, callback dialogButtonClicked?) returns (DojoDialog)
 		buttons DojoButton[] = [ createButton("Retry", ID_RETRY, callback), createButton("Cancel", ID_CANCEL, callback) ];
-		content Widget = createContents( message, "utils/dialog/error_32.png" );
+		content Widget = createContents( message, "images/error_32.png" );
 		
 		return(createDialog(title, message, content, buttons));	
 	end
@@ -77,18 +77,27 @@ library DojoDialogLib {}
 	function promptForValue(title String in, message String in, callback promptSupplied) returns (DojoDialog)
 		promptField DojoTextField { width = "300px", style = "max-width: 500px"  };
 		
-		if(callback != null)
-			promptField.setUserData(callback);
-		end
+		okButton DojoButton =  createButtonForPrompt("OK", ID_OK, promptField);
+		cancelButton DojoButton =  createButtonForPrompt("Cancel", ID_CANCEL, promptField);		
+		buttons DojoButton[] = [ okButton, cancelButton  ];
 		
-		buttons DojoButton[] = [ createButtonForPrompt("OK", ID_OK, promptField), createButtonForPrompt("Cancel", ID_CANCEL, promptField) ];
+		fDict Dictionary; 
+		fDict.okButton = okButton;
+		fDict.cancelButton = cancelButton;
+		fDict.callback = callback;
+		promptField.setUserData(fDict);
 		
 		row1 Widget { tagName = "tr", children = [new Widget { tagName = "td", innerHTML = message, style = "padding: 4px; vertical-align: middle; max-width: 500px" }] };
 		row2 Widget { tagName = "tr", children = [new Widget { tagName = "td", children = [ promptField] } ] };
 		
 		body Widget { tagName = "tbody", children = [ row1, row2 ] };
-		table Widget { tagName = "table", children = [ body ], style = "max-width: 500px" };
+		table Widget { tagName = "table", children = [ body ], style = "max-width: 500px", onKeyDown ::= tableKeyDown };
 		table.setAttribute("border", "0");
+		table.setUserData(fDict);
+		
+		if (title == null)
+			title = RuiLib.getTitle();
+		end
 						
 		dialog DojoDialog { title = title, children = [ table ], buttons = buttons };
 		dialog.showDialog();	
@@ -96,7 +105,25 @@ library DojoDialogLib {}
 		return (dialog);
 	end		
 	
-	private function createDialog(title string in,message String in, content widget in, buttons DojoButton[] in) returns(DojoDialog)
+	function tableKeyDown(e Event in) 
+		fDict Dictionary = e.widget.getUserData();
+		if (e.ch == 13 && fDict.okButton != null)
+			button DojoButton = fDict.okButton;
+			e.widget = button;
+			promptButtonClicked(e);
+		end
+		if (e.ch == 27 && fDict.cancelButton != null)
+			button DojoButton = fDict.cancelButton;
+			e.widget = button;
+			promptButtonClicked(e);
+		end
+	end	
+	
+	private function createDialog(title string? in,message String in, content widget in, buttons DojoButton[] in) returns(DojoDialog)
+		if (title == null)
+			title = RuiLib.getTitle();
+		end
+		
 		dialog DojoDialog { title = title, children = [ content ], buttons = buttons};
 		
 		//To avoid overlap the 'x' of dialog
@@ -174,8 +201,15 @@ library DojoDialogLib {}
 		hide boolean = true;
 		
 		if(promptField.getUserData() != null)
-			callback promptSupplied = promptField.getUserData();
-			hide = callback(promptField.text, e);
+			fDict Dictionary = promptField.getUserData();
+			if (fDict.callback != null)			
+				callback promptSupplied = fDict.callback;
+				if (buttonDict.functionId == ID_CANCEL)
+					hide = callback(null, e);
+				else
+					hide = callback(promptField.text, e);			
+				end
+			end	
 		end
 		
 		if (hide)
@@ -197,6 +231,6 @@ delegate dialogButtonClicked(buttonId String in, e Event in) returns (boolean)
 	
 end
 
-delegate promptSupplied(value String in, e Event in) returns (boolean)
+delegate promptSupplied(value String? in, e Event in) returns (boolean)
 
 end
