@@ -26,7 +26,7 @@ handler DataGridSelector
 	
 	private selectedGridRows Widget[] = [];
 	
-	function enableSelection(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+	function enableSelection(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 
 		grid.selectionMode=DataGridLib.DISABLE_SELECTION;
 		if(this.grid==null)
 			this.grid=grid;

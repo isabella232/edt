@@ -22,7 +22,7 @@ handler DataGridTooltip  { }
 	
 	private tooltip ToolTip { provider = getTooltipContents };
 	
-	function setTooltips(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in)
+	function setTooltips(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in)
 		tooltip.enable(td);
 		this.grid = grid;
 	end

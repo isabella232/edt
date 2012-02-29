@@ -20,7 +20,7 @@ handler DataGridSorter
 	sortingUp boolean = true;
 	caseIgnore boolean = false;
 
-	function columnSorter(grid DataGrid in, td Widget in, ignoreRow any in, ignoreDataIndex int in, column DataGridColumn in)
+	function columnSorter(grid DataGrid in, td Widget in, ignoreRow any? in, ignoreDataIndex int in, column DataGridColumn in)
 		grid.enableSorting=false;
 		td.onClick ::= sortColumn;
 	end
