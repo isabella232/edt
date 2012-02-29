@@ -4,11 +4,10 @@ package org.eclipse.edt.eunit.runtime;
 //this is rui/javascript implementation, need to call dedicated service to do the file persistent 
 handler CreateResultFile
 	
-	private trService TestResultService?{@dedicatedService{}};
 	//private fileRecords fileRecord[];
 	
 	function createFile(fileDirectory String in, fullFileName String in, fileContent String in)	
-		call trService.createFile(fileDirectory, fullFileName, fileContent) returning to fileCreated onException handleException;	
+		call TestResultService.createFile(fileDirectory, fullFileName, fileContent) using new HttpProxy returning to fileCreated onException handleException;	
 	end	
 	
 	private function fileCreated(absoluteFilePath string in)
