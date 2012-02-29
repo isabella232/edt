@@ -69,7 +69,7 @@ public class ExternalTypePartManager {
 	}
 	
 	public static boolean isLibraryType(ExternalTypeBinding externalPart){
-		return (!externalPart.isInstantiable() || externalPart.containsStaticFunctions());
+		return (externalPart.containsStaticFunctions());
 	}
 	
 }
