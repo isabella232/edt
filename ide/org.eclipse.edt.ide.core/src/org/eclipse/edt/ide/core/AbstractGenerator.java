@@ -179,7 +179,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		if (contributions == null) {
 			// for each of the contributions, we need to add it to a list of class names
 			IConfigurationElement[] elements = Platform.getExtensionRegistry().getConfigurationElementsFor(
-				EDTCoreIDEPlugin.PLUGIN_ID + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTORS);
+					EDTCoreIDEPlugin.PLUGIN_ID + "." + EDTCoreIDEPlugin.PT_GENERATIONCONTRIBUTORS);
 			if (elements != null) {
 				List<GenerationContributorEntry> contributionsList = new ArrayList<GenerationContributorEntry>();
 				for (int i = 0; i < elements.length; i++) {
@@ -308,24 +308,24 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		}
 	}
 
-	private void determineContributions(String provider, List<GenerationContributorEntry> contributionsUsed) {
+	public static void determineContributions(String provider, List<GenerationContributorEntry> contributionsUsed) {
 		// take the passed generator id and determine the contribution id
-		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
-			GenerationContributorEntry contribution = AbstractGenerator.contributions[i];
+		for (int i = 0; i < contributions.length; i++) {
+			GenerationContributorEntry contribution = contributions[i];
 			if (provider.equals(contribution.getProvider())) {
 				locateContributions(contribution.getIdentifier(), contributionsUsed);
 			}
 		}
 	}
 
-	private void locateContributions(String contributionId, List<GenerationContributorEntry> contributionsUsed) {
+	private static void locateContributions(String contributionId, List<GenerationContributorEntry> contributionsUsed) {
 		// we create a list of contributions here. we first look for all of the contributions
 		// that match a specific id. those get added. then, for each of the ones added, we check
 		// to for all required contributions and add those to the list, then we check each of those.
 		// this ends up giving us a list where each level of contributions is a complete group.
 		List<String> requires = new ArrayList<String>();
-		for (int i = 0; i < AbstractGenerator.contributions.length; i++) {
-			GenerationContributorEntry contribution = AbstractGenerator.contributions[i];
+		for (int i = 0; i < contributions.length; i++) {
+			GenerationContributorEntry contribution = contributions[i];
 			if (contributionId.equals(contribution.getIdentifier())) {
 				contributionsUsed.add(contribution);
 				if (contribution.getRequires() != null) {
