@@ -16,13 +16,29 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class NumberTypeTemplate extends JavaTemplate {
+
+	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
+			IntegerLiteral element = factory.createIntegerLiteral();
+			element.setValue("0");
+			AsExpression asExpression = factory.createAsExpression();
+			asExpression.setEType(type);
+			asExpression.setObjectExpr(element);
+			ctx.invoke(genExpression, asExpression, ctx, out);
+		} else
+			ctx.invokeSuper(this, genDefaultValue, type, ctx, out);
+	}
 
 	public void genConstructorOptions(EGLClass type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
