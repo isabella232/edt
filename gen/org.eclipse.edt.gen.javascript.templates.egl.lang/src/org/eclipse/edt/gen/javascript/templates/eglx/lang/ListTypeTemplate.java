@@ -108,7 +108,7 @@ public class ListTypeTemplate extends JavaScriptTemplate {
 		}
 		else
 		{
-			ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+			ctx.invoke(genInvocationArguments, expr, ctx, out);
 		}
 		out.print( ')' );
 	}

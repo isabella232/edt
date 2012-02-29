@@ -54,7 +54,7 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
-		ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		ctx.invoke(genInvocationArguments, expr, ctx, out);
 		out.print(")");
 	}
 
