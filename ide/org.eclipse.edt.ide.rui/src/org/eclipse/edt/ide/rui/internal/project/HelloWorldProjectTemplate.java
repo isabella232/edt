@@ -1,15 +1,4 @@
 /*******************************************************************************
- * Copyright © 2000, 2011 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
-/*******************************************************************************
  * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,7 +55,7 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 		
 		listOps.addAll(dependencyOps);
 				
-		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.7.0", eglProjConfiguration.getProjectName() );
+		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.8.0", eglProjConfiguration.getProjectName() );
 		listOps.add(loadSampleCode);
 
 		return listOps;
