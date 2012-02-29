@@ -13,21 +13,21 @@ package org.eclipse.edt.rui.widgets;
 
 library DataGridBehaviors
 
-	function whiteCells(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+	function whiteCells(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 
 		td.class = td.class + " EglRuiDataGridCellColor2";
 	end
 	
-	function grayCells(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+	function grayCells(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 
 		td.class = td.class + " EglRuiDataGridCellColor1";
 	end
 	
-	function alternatingColor(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+	function alternatingColor(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 
 		if (dataIndex % 2 == 1)
 			td.class = td.class + " EglRuiDataGridCellColor3";
 		end
 	end
 	
-	function tightCells(grid DataGrid in, td Widget in, row any in, dataIndex int in, column DataGridColumn in) 
+	function tightCells(grid DataGrid in, td Widget in, row any? in, dataIndex int in, column DataGridColumn in) 
 		td.class = td.class + " EglRuiDataGridCellTight";
 	end
 		
