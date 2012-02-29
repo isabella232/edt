@@ -28,6 +28,10 @@ import eglx.lang.TypeCastException;
 public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	public ENumber() {
+		super((short) 0);
+	}
+
 	public ENumber(Number value) {
 		super(value);
 	}
