@@ -587,10 +587,10 @@ ExternalType Widget type JavaScriptObject {
 	function getOnContextMenu() returns (EventHandler[]);
 	function setOnContextMenu(handlers EventHandler[] in);
 		
-	function morph(duration int in, callback EffectCallback in, morphFunction MorphFunction in);
-	function fadeIn(duration int in, callback EffectCallback in);
-	function fadeOut(duration int in, callback EffectCallback in);
-	function resize(width int in, height int in, duration int in, callback EffectCallback in);
+	function morph(duration int in, callback EffectCallback? in, morphFunction MorphFunction? in);
+	function fadeIn(duration int in, callback EffectCallback? in);
+	function fadeOut(duration int in, callback EffectCallback? in);
+	function resize(width int in, height int in, duration int in, callback EffectCallback? in);
 	
 	numericSwap String {
 			@VEProperty{
