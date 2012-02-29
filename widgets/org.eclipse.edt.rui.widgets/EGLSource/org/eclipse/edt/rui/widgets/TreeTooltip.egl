@@ -25,7 +25,7 @@ handler TreeTooltip  { }
 		tooltip.enable(node); 
 	end
 	
-	function getTooltipContents(widget any in) returns(Box)
+	function getTooltipContents(widget any in) returns(Box?)
 		node TreeNode = widget;
 		tip Box = provider(node);
 		return(tip);
