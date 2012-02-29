@@ -20,11 +20,9 @@ import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class NumberTypeTemplate extends JavaTemplate {
 
