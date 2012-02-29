@@ -27,24 +27,36 @@ import org.eclipse.pde.internal.core.PDEClasspathContainer;
 @SuppressWarnings("restriction")
 public abstract class ExternalPluginClassFilter extends ClasspathEntryFilter
 {
+	/**
+	 * The cached classpath entries.
+	 */
+	private IClasspathEntry[] entries;
+	
 	@Override
 	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target )
 	{
-		String[] pluginIds = getPluginIds();
-		if ( pluginIds != null && pluginIds.length > 0 )
+		if ( entries == null )
 		{
-			List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-			for ( String pluginId : pluginIds )
+			String[] pluginIds = getPluginIds();
+			if ( pluginIds != null && pluginIds.length > 0 )
 			{
-				IPluginModelBase model = PluginRegistry.findModel( pluginId );
-				if ( model != null )
+				List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+				for ( String pluginId : pluginIds )
 				{
-					entries.addAll( Arrays.asList( PDEClasspathContainer.getExternalEntries( model ) ) );
+					IPluginModelBase model = PluginRegistry.findModel( pluginId );
+					if ( model != null )
+					{
+						list.addAll( Arrays.asList( PDEClasspathContainer.getExternalEntries( model ) ) );
+					}
 				}
+				entries = list.toArray( new IClasspathEntry[ list.size() ] );
 			}
-			return entries.toArray( new IClasspathEntry[ entries.size() ] );
+			else
+			{
+				entries = new IClasspathEntry[ 0 ];
+			}
 		}
-		return null;
+		return entries;
 	}
 	
 	public abstract String[] getPluginIds();

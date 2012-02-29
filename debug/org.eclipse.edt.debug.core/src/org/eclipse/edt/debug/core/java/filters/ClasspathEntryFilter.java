@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.edt.debug.core.EDTDebugCoreMessages;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
@@ -49,11 +48,6 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 	 * Placeholder for when processing a container entry failed.
 	 */
 	protected static final Object COULD_NOT_PARSE_CONTAINER = new Object();
-	
-	/**
-	 * The cached classpath entries.
-	 */
-	private IClasspathEntry[] entries;
 	
 	/**
 	 * Class map for libraries which are the same among all debug targets.
@@ -145,14 +139,10 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 		
 		try
 		{
+			IClasspathEntry[] entries = getClasspathEntries( target );
 			if ( entries == null )
 			{
-				entries = getClasspathEntries( target );
-				
-				if ( entries == null )
-				{
-					entries = new IClasspathEntry[ 0 ];
-				}
+				entries = new IClasspathEntry[ 0 ];
 			}
 			
 			if ( entries.length == 0 )
@@ -216,13 +206,16 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 			}
 			else if ( file.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
 			{
-				processLibraryJar( file );
+				processJar( file, null, libraryClassesToFilter );
 			}
 		}
 	}
 	
-	protected void processLibraryJar( File file )
+	protected void processJar( File file, String rootPath, Map<String, Object> classMap )
 	{
+		int rootPathLen = rootPath == null
+				? 0
+				: rootPath.length();
 		try
 		{
 			JarFile jar = new JarFile( file );
@@ -236,8 +229,8 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 					if ( path.endsWith( ".class" ) ) //$NON-NLS-1$
 					{
 						// Jar always uses '/' as the separator
-						String className = path.substring( 0, path.length() - 6 ).replace( '/', '.' );
-						libraryClassesToFilter.put( className, null );
+						String className = path.substring( rootPathLen, path.length() - 6 ).replace( '/', '.' );
+						classMap.put( className, null );
 					}
 				}
 			}
@@ -303,12 +296,7 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 				
 				try
 				{
-					ILaunchConfiguration config = target.getJavaDebugTarget().getLaunch().getLaunchConfiguration();
-					IJavaProject javaProject = JavaRuntime.getJavaProject( config );
-					if ( javaProject != null )
-					{
-						processClasspath( entry, javaProject, classMap );
-					}
+					processClasspath( entry, target, classMap );
 				}
 				catch ( CoreException ce )
 				{
@@ -318,8 +306,14 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 		}
 	}
 	
-	protected void processClasspath( IClasspathEntry entry, IJavaProject project, Map<String, Object> classMap )
+	protected void processClasspath( IClasspathEntry entry, IEGLJavaDebugTarget target, Map<String, Object> classMap ) throws CoreException
 	{
+		IJavaProject project = JavaRuntime.getJavaProject( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+		if ( project == null )
+		{
+			return;
+		}
+		
 		IPackageFragmentRoot[] roots = project.findPackageFragmentRoots( entry );
 		for ( IPackageFragmentRoot root : roots )
 		{

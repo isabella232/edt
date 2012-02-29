@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java.filters;
 
+import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.filters.ClasspathEntryFilter;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.LibraryLocation;
 
 /**
  * Filters out JRE classes, based on the JRE of the debug target's active VM.
@@ -26,13 +28,26 @@ import org.eclipse.jdt.launching.JavaRuntime;
 public class JREFilter extends ClasspathEntryFilter
 {
 	@Override
+	protected void processClasspath( IClasspathEntry entry, IEGLJavaDebugTarget target, Map<String, Object> classMap ) throws CoreException
+	{
+		IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+		if ( vm != null )
+		{
+			LibraryLocation[] libraries = JavaRuntime.getLibraryLocations( vm );
+			for ( LibraryLocation library : libraries )
+			{
+				processJar( library.getSystemLibraryPath().toFile(), library.getPackageRootPath().toString(), classMap );
+			}
+		}
+	}
+	
+	@Override
 	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target ) throws CoreException
 	{
-		ILaunchConfiguration config = target.getJavaDebugTarget().getLaunch().getLaunchConfiguration();
-		IJavaProject javaProject = JavaRuntime.getJavaProject( config );
-		if ( javaProject != null )
+		IRuntimeClasspathEntry entry = JavaRuntime.computeJREEntry( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+		if ( entry != null )
 		{
-			return new IClasspathEntry[] { JavaRuntime.computeJREEntry( config ).getClasspathEntry() };
+			return new IClasspathEntry[] { entry.getClasspathEntry() };
 		}
 		return null;
 	}
@@ -40,10 +55,9 @@ public class JREFilter extends ClasspathEntryFilter
 	@Override
 	protected Object getContainerClassMapKey( IEGLJavaDebugTarget target ) throws CoreException
 	{
-		IJavaProject javaProject = JavaRuntime.getJavaProject( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
-		if ( javaProject != null )
+		IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+		if ( vm != null )
 		{
-			IVMInstall vm = JavaRuntime.getVMInstall( javaProject );
 			return vm.getId();
 		}
 		return null;

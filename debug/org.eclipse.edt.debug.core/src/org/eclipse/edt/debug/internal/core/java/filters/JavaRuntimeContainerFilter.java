@@ -27,28 +27,37 @@ import org.eclipse.jdt.core.IClasspathEntry;
  */
 public class JavaRuntimeContainerFilter extends ClasspathEntryFilter
 {
+	/**
+	 * The cached classpath entries.
+	 */
+	private IClasspathEntry[] entries;
+	
 	@Override
 	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target )
 	{
-		List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
-		for ( IGenerator gen : EDTCoreIDEPlugin.getPlugin().getGenerators() )
+		if ( entries == null )
 		{
-			EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
-			if ( containers != null )
+			List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+			for ( IGenerator gen : EDTCoreIDEPlugin.getPlugin().getGenerators() )
 			{
-				for ( EDTRuntimeContainer container : containers )
+				EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
+				if ( containers != null )
 				{
-					EDTRuntimeContainerEntry[] containerEntries = container.getEntries();
-					if ( containerEntries != null )
+					for ( EDTRuntimeContainer container : containers )
 					{
-						for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
+						EDTRuntimeContainerEntry[] containerEntries = container.getEntries();
+						if ( containerEntries != null )
 						{
-							entries.add( nextEntry.getClasspathEntry() );
+							for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
+							{
+								list.add( nextEntry.getClasspathEntry() );
+							}
 						}
 					}
 				}
 			}
+			entries = list.toArray( new IClasspathEntry[ list.size() ] );
 		}
-		return entries.toArray( new IClasspathEntry[ entries.size() ] );
+		return entries;
 	}
 }
