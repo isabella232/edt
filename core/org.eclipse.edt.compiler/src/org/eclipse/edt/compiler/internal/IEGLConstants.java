@@ -1940,6 +1940,7 @@ public interface IEGLConstants {
 	public static String MIXED_DICTIONARY_STRING = "dictionary"; //$NON-NLS-1$
 	
 	//System Service data type
+	public static String MIXED_HTTPPROXY_STRING = "HttpProxy";
 	public static String MIXED_HTTPREST_STRING = "HttpRest";
 	public static String MIXED_HTTPSOAP_STRING = "HttpSoap";
 	public static String MIXED_IHTTP_STRING = "IHttp";
