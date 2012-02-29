@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
+import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
@@ -53,7 +54,6 @@ import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.contentassist.EGLCompletionProposal;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.ui.IEditorPart;
 
@@ -264,12 +264,14 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 								boolean containsSetterMethod = false;
 								for (Iterator iterator = annArr.iterator(); iterator.hasNext();) {
 									IAnnotationBinding iAnnotationBinding = (IAnnotationBinding) iterator.next();
+
 									if ((iAnnotationBinding.getName().equalsIgnoreCase("Property") || 
-											iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))&&
-											iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD) != null) {
-										
-										containsSetterMethod = true;
-										break;
+											iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))) {
+										AnnotationFieldBinding field = (AnnotationFieldBinding) iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD);
+										if(null != field.getValue() && !field.getValue().equals("")){
+											containsSetterMethod = true;
+											break;
+										}
 									}
 								}
 
