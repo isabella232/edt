@@ -74,14 +74,14 @@ public class JDTStepFilter extends AbstractTypeFilter implements IPropertyChange
 		try
 		{
 			// No need to wrap each in their own try/catch - they'll either all exist, or none.
-			filterGetters = IJavaDebugTarget.class.getMethod( "isFilterGetters", (Class[])null );
-			filterSetters = IJavaDebugTarget.class.getMethod( "isFilterSetters", (Class[])null );
-			setGetters = IJavaDebugTarget.class.getMethod( "setFilterGetters", Boolean.TYPE );
-			setSetters = IJavaDebugTarget.class.getMethod( "setFilterSetters", Boolean.TYPE );
+			filterGetters = IJavaDebugTarget.class.getMethod( "isFilterGetters", (Class[])null ); //$NON-NLS-1$
+			filterSetters = IJavaDebugTarget.class.getMethod( "isFilterSetters", (Class[])null ); //$NON-NLS-1$
+			setGetters = IJavaDebugTarget.class.getMethod( "setFilterGetters", Boolean.TYPE ); //$NON-NLS-1$
+			setSetters = IJavaDebugTarget.class.getMethod( "setFilterSetters", Boolean.TYPE ); //$NON-NLS-1$
 			
-			Class<?> JDIMethodClass = Class.forName( "org.eclipse.jdt.internal.debug.core.model.JDIMethod" );
-			getterMethod = JDIMethodClass.getMethod( "isGetterMethod", com.sun.jdi.Method.class );
-			setterMethod = JDIMethodClass.getMethod( "isSetterMethod", com.sun.jdi.Method.class );
+			Class<?> JDIMethodClass = Class.forName( "org.eclipse.jdt.internal.debug.core.model.JDIMethod" ); //$NON-NLS-1$
+			getterMethod = JDIMethodClass.getMethod( "isGetterMethod", com.sun.jdi.Method.class ); //$NON-NLS-1$
+			setterMethod = JDIMethodClass.getMethod( "isSetterMethod", com.sun.jdi.Method.class ); //$NON-NLS-1$
 		}
 		catch ( Throwable t )
 		{
