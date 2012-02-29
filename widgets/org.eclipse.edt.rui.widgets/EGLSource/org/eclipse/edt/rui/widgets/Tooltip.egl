@@ -12,7 +12,7 @@
 package org.eclipse.edt.rui.widgets;
 
 Delegate
-	TooltipTextProvider(widget any in) returns(Box)
+	TooltipTextProvider(widget any in) returns(Box?)
 end
 
 handler Tooltip type RUIWidget {onConstructionFunction = start, cssFile = "css/org.eclipse.edt.rui.css"}

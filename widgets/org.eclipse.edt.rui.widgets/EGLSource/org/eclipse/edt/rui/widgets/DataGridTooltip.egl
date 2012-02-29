@@ -12,7 +12,7 @@
 package org.eclipse.edt.rui.widgets;
 
 Delegate
-	DataGridTooltipTextProvider(row any in, fieldName String in, td Widget in) returns(Box)
+	DataGridTooltipTextProvider(row any in, fieldName String in, td Widget in) returns(Box?)
 end
 
 handler DataGridTooltip  { }
@@ -27,7 +27,7 @@ handler DataGridTooltip  { }
 		this.grid = grid;
 	end
 	
-	function getTooltipContents(widget any in) returns(Box)
+	function getTooltipContents(widget any in) returns(Box?)
 		td Widget = widget;
 		row any = grid.data[td.getAttribute("row")];
 		column DataGridColumn = grid.getColumn(td);
