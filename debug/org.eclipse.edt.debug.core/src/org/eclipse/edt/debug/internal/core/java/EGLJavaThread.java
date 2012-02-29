@@ -71,6 +71,11 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	private final Object evaluationLock;
 	
 	/**
+	 * The most recent location from where the user issued a step request (i.e. an unfiltered frame)
+	 */
+	private IJavaStackFrame stepStartFrame;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param target The debug target.
@@ -177,22 +182,34 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	@Override
 	public void stepInto() throws DebugException
 	{
-		// updateSteppingFromEGL( null );
+		setStepStart( null );
 		javaThread.stepInto();
 	}
 	
 	@Override
 	public void stepOver() throws DebugException
 	{
-		// updateSteppingFromEGL( null );
+		setStepStart( null );
 		javaThread.stepOver();
 	}
 	
 	@Override
 	public void stepReturn() throws DebugException
 	{
-		// updateSteppingFromEGL( null );
+		setStepStart( null );
 		javaThread.stepReturn();
+	}
+	
+	public void setStepStart( IJavaStackFrame frame )
+	{
+		if ( frame == null )
+		{
+			frame = eglFrames == null || eglFrames.length == 0
+					? null
+					: eglFrames[ 0 ].getJavaStackFrame();
+		}
+		
+		stepStartFrame = frame;
 	}
 	
 	@Override
@@ -241,19 +258,19 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 					}
 				}
 				
+				boolean doNotFilterRuntimes = !getEGLJavaDebugTarget().filterRuntimes() || indexOfTopEGLFrame == -1;
 				for ( int i = 0; i < javaFrames.length; i++ )
 				{
 					// Filtering rules:
-					// 1. don't filter anything if the preference is disabled
-					// 2. don't filter if there are no frames with the EGL stratum
+					// 1. don't filter anything if the preference is disabled (see doNotFilterRuntimes flag)
+					// 2. don't filter if there are no frames with the EGL stratum (see doNotFilterRuntimes flag)
 					// 3. don't filter the top frame
 					// 4. filter the initial main method (if there is one - there won't be if running on a server)
 					// 5. if we're disabling filtering due to a breakpoint in the runtime, don't filter frames above the topmost frame w/EGL stratum
-					if ( !getEGLJavaDebugTarget().filterRuntimes()
-							|| indexOfTopEGLFrame == -1
-							|| indexOfTopEGLFrame > i
+					if ( doNotFilterRuntimes
 							|| i == 0
-							|| (filter( (IJavaStackFrame)javaFrames[ i ] ) == FilterStepType.NO_STEP && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] ))) )
+							|| indexOfTopEGLFrame >= i
+							|| (!filterFromStack( (IJavaStackFrame)javaFrames[ i ] ) && (i + 1 < javaFrames.length || !isMainMethod( (IJavaStackFrame)javaFrames[ i ] ))) )
 					{
 						EGLJavaStackFrame frame = previousStackFrames == null
 								? null
@@ -403,50 +420,63 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 									}
 									else
 									{
-										FilterStepType filterType = filter( topJavaFrame );
+										// Filter strategy: If the type is EGL and its line number is -1, force a step into. If it's not EGL then
+										// check if it should be filtered. If it should be filtered and the original location where the user issued
+										// the (unfiltered) step request is still in the stack, filter back to that point and then stop. If the
+										// original location is no longer in the stack (user explicitly stepped out of that frame) then: if the
+										// location is not filtered, we stop at it; if it is filtered then we will perform a resume instead of a step.
+										// This is not ideal but this avoids cases where we infinitely run steps due to some loop like an event loop
+										// that sits around forever; the infinite stepping causes flickering and poor performance.
 										
-										if ( filterType == FilterStepType.STEP_INTO )
+										FilterStepType filterType = FilterStepType.NO_STEP;
+										if ( SMAPUtil.isEGLStratum( topJavaFrame ) )
 										{
-											topJavaFrame.stepInto();
-											break;
-										}
-										else if ( filterType == FilterStepType.STEP_RETURN )
-										{
-											if ( frameCount == 1 )
+											// Can be some internal method like ezeSetEmpty.
+											if ( topJavaFrame.getLineNumber() == -1 )
 											{
-												// Can't stepReturn on bottom frame - do a resume.
-												topJavaFrame.resume();
+												filterType = FilterStepType.STEP_INTO;
 											}
-											
-											// Resume if the user stepped out of the last EGL frame. If we don't do this, then when there's a thread
-											// with
-											// a loop that waits for requests (like a servlet thread) it will continually run stepReturns, making the
-											// debug view flicker. An example of this is the service test server - change it below to do a stepReturn
-											// instead of resume and you'll see the flicker after stepping out of an egl service.
-											int indexOfTopEGLFrame = -1;
-											IStackFrame[] javaFrames = javaThread.getStackFrames();
-											for ( int j = 0; j < javaFrames.length; j++ )
+										}
+										else if ( stepStartFrame != topJavaFrame )
+										{
+											filterType = filter( topJavaFrame );
+										}
+										
+										if ( filterType == FilterStepType.STEP_INTO || filterType == FilterStepType.STEP_RETURN )
+										{
+											boolean stepStartFound = false;
+											IStackFrame[] frames = javaThread.getStackFrames();
+											for ( int j = 0; j < frames.length; j++ )
 											{
-												if ( SMAPUtil.isEGLStratum( (IJavaStackFrame)javaFrames[ j ] ) )
+												if ( frames[ j ] == stepStartFrame )
 												{
-													indexOfTopEGLFrame = j;
+													stepStartFound = true;
 													break;
 												}
 											}
 											
-											// TODO what if the user originally stepped into the first EGL frame, and now they want to step out of it
-											// back
-											// into the code that invoked it? Would need to keep track of the EGL entrypoint, and if the user had
-											// stepped
-											// into the EGL then keep track of the frame right below it so we know not to force a stepReturn or
-											// resume.
-											if ( indexOfTopEGLFrame == -1 )
+											if ( stepStartFound )
 											{
-												topJavaFrame.resume();
+												if ( filterType == FilterStepType.STEP_INTO )
+												{
+													topJavaFrame.stepInto();
+												}
+												else
+												{
+													if ( topJavaFrame.canStepReturn() )
+													{
+														topJavaFrame.stepReturn();
+													}
+													else
+													{
+														// Resume when we can't step return (e.g. bottom frame, or above obsolete frame)
+														topJavaFrame.resume();
+													}
+												}
 											}
 											else
 											{
-												topJavaFrame.stepReturn();
+												topJavaFrame.resume();
 											}
 											break;
 										}
@@ -487,19 +517,18 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		}
 	}
 	
-	private FilterStepType filter( IJavaStackFrame frame ) throws DebugException
+	private boolean filterFromStack( IJavaStackFrame frame ) throws DebugException
 	{
 		if ( SMAPUtil.isEGLStratum( frame ) )
 		{
-			// If we're in an EGL stratum frame that has no corresponding line number, run a step into - it must be some internal method like
-			// ezeSetEmpty. Otherwise do not force a step into.
-			if ( frame.getLineNumber() == -1 )
-			{
-				return FilterStepType.STEP_INTO;
-			}
-			return FilterStepType.NO_STEP;
+			return frame.getLineNumber() == -1;
 		}
 		
+		return filter( frame ) != FilterStepType.NO_STEP;
+	}
+	
+	private FilterStepType filter( IJavaStackFrame frame ) throws DebugException
+	{
 		EGLJavaDebugTarget target = getEGLJavaDebugTarget();
 		for ( ITypeFilter filter : TypeFilterUtil.INSTANCE.getActiveFilters() )
 		{
