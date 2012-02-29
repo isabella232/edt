@@ -297,10 +297,7 @@ public class SMAPUtil
 		try
 		{
 			IJavaType type = value.getJavaType();
-			if ( type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() ) )
-			{
-				return true;
-			}
+			return type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() );
 		}
 		catch ( DebugException e )
 		{
@@ -317,10 +314,7 @@ public class SMAPUtil
 		try
 		{
 			IJavaType type = variable.getJavaType();
-			if ( type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() ) )
-			{
-				return true;
-			}
+			return type instanceof IJavaReferenceType && IEGLDebugCoreConstants.EGL_STRATUM.equals( ((IJavaReferenceType)type).getDefaultStratum() );
 		}
 		catch ( DebugException e )
 		{
@@ -337,10 +331,7 @@ public class SMAPUtil
 		try
 		{
 			IJavaReferenceType refType = frame.getReferenceType();
-			if ( refType != null && IEGLDebugCoreConstants.EGL_STRATUM.equals( refType.getDefaultStratum() ) )
-			{
-				return true;
-			}
+			return refType != null && IEGLDebugCoreConstants.EGL_STRATUM.equals( refType.getDefaultStratum() );
 		}
 		catch ( DebugException e )
 		{
