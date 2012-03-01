@@ -16,6 +16,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
+import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
@@ -40,6 +42,7 @@ import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
+import org.eclipse.edt.ide.rui.internal.nls.EWTPreviewMessages;
 import org.eclipse.edt.ide.rui.internal.nls.LocaleUtility;
 import org.eclipse.edt.ide.rui.preferences.IRUIPreferenceConstants;
 import org.eclipse.edt.ide.rui.utils.EGLResource;
@@ -235,12 +238,11 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				String result = cmd.generate(part, generator, environment);
 				return result.getBytes();
 			}
-		} catch (RuntimeException e) {
-			e.printStackTrace();
-//			handleRuntimeException(e, messageRequestor, partName, new HashSet());
-		} catch (final Exception e) {
-			e.printStackTrace();
-//			handleUnknownException(e, messageRequestor);
+		} catch (Exception e) {
+			EGL2HTML4VE cmd = new EGL2HTML4VE();
+			String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
+			CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, null, message);
+			return generator.generate().getBytes();
 		}
 		finally{
 			if(environment != null){

@@ -81,19 +81,21 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 			
 			Part part = null;
 			EObject eObject = null;
+			ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
+			
 			try {
 				eObject = environment.find(PreviewIREnvironmentManager.makeEGLKey(resourceName.replace("/", ".")));
 			} catch (MofObjectNotFoundException e) {
-				e.printStackTrace();
+				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
+				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
 			} catch (DeserializationException e) {
-				e.printStackTrace();
+				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
+				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
 			}
 			
 			if(eObject!=null && eObject instanceof Part){
 				part = (Part)eObject;
 			}			
-			
-			ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
 			
 			if(result.hasGenerationError()){
 				String message = MessageFormat.format(EWTPreviewMessages.GENFAILEDPAGE_HEADERMSG, new Object[] {
@@ -103,8 +105,9 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 					});
 				generator = new GenerationErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
 			}else{
-				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {part.getFullyQualifiedName()});
-				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
+				CompileErrorHTMLGenerator compileErrorHTMLGenerator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				return compileErrorHTMLGenerator.generate().getBytes();
 			}
 			
 			String strResult = cmd.generate(part, generator, environment);

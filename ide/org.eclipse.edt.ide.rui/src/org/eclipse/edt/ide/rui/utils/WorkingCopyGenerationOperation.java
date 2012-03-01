@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.rui.utils;
 
+import java.text.MessageFormat;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.core.ast.AbstractASTPartVisitor;
@@ -24,7 +24,8 @@ import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.egl2mof.Egl2Mof;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
-import org.eclipse.edt.gen.javascriptdev.ide.JavaScriptDevGenerator;
+import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
+import org.eclipse.edt.gen.javascriptdev.ide.VEJavaScriptDevGenerator;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IProblemRequestorFactory;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
@@ -38,11 +39,12 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLModelStatusConstants;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
+import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
+import org.eclipse.edt.ide.rui.internal.nls.EWTPreviewMessages;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofSerializable;
-import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -149,31 +151,16 @@ public class WorkingCopyGenerationOperation {
 					EObject eObject = environment.find(PreviewIREnvironmentManager.makeEGLKey(partName));
 					if(eObject instanceof org.eclipse.edt.mof.egl.Part){
 						part = (org.eclipse.edt.mof.egl.Part)eObject;
-						JavaScriptDevGenerator jsDevGenerator = new JavaScriptDevGenerator() {
-							@Override
-							public String getOutputDirectory(IResource eglFile) {
-								return outputLocation.toOSString();
-							}
-							@Override
-							public String getId() {
-								return "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
-							}
-							@Override
-							public boolean getEditMode() {
-								return true;
-							}
-						};
-						jsDevGenerator.generate(file.getFullPath().toOSString(), (org.eclipse.edt.mof.egl.Part)part.clone(), environment, generationMessageRequestor);
+						VEJavaScriptDevGenerator veJavaScriptDevGenerator = new VEJavaScriptDevGenerator();
+						veJavaScriptDevGenerator.setOutputDirectory(outputLocation);
+						veJavaScriptDevGenerator.generate(file.getFullPath().toOSString(), (org.eclipse.edt.mof.egl.Part)part.clone(), environment, generationMessageRequestor);
 					}
-				} catch (PartNotFoundException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
-	//														buildPartNotFoundMessage(e, messageRequestor, partName);
-				} catch (RuntimeException e) {
-					e.printStackTrace();
-	//														handleRuntimeException(e, messageRequestor, partName, new HashSet());
-				} catch (final Exception e) {
-					e.printStackTrace();
-	//					handleUnknownException(e, messageRequestor);
+					EGL2HTML4VE cmd = new EGL2HTML4VE();
+					String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {partName});
+					CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, null, message);
+					generator.generate();
 				}
 			}
 		}finally{
