@@ -31,7 +31,13 @@ public class IBMiBindingConnectionConfiguration extends BindingEGLConfiguration 
 	private String userId="";
 	private String password="";
 	private String library="";
-
+	private String textEncoding="";
+	private String timezone="";
+	private String dateFormat="";
+	private String dateSeparator="";
+	private String timeFormat="";
+	private String timeSeparator="";
+	
 	public IBMiBindingConnectionConfiguration() {
 		super();
 	}
@@ -91,6 +97,58 @@ public class IBMiBindingConnectionConfiguration extends BindingEGLConfiguration 
 		this.uri = uri;
 	}
 	
+	public String getTextEncoding() {
+		return textEncoding;
+	}
+
+	public void setTextEncoding( String textEncoding ) {
+		this.textEncoding = textEncoding;
+	}
+
+	public String getTimezone() {
+		return timezone;
+	}
+
+	public void setTimezone( String timezone ) {
+		this.timezone = timezone;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat( String dateFormat ) {
+		this.dateFormat = dateFormat;
+	}
+
+	public String getDateSeparator() {
+		return dateSeparator;
+	}
+
+	public void setDateSeparator( String dateSeparator ) {
+		this.dateSeparator = dateSeparator;
+	}
+
+	public String getTimeFormat() {
+		return timeFormat;
+	}
+
+	public void setTimeFormat( String timeFormat ) {
+		this.timeFormat = timeFormat;
+	}
+
+	public String getTimeSeparator() {
+		return timeSeparator;
+	}
+
+	public void setTimeSeparator( String timeSeparator ) {
+		this.timeSeparator = timeSeparator;
+	}
+
+	public boolean isUseUri() {
+		return useUri;
+	}
+	
 	public Object executeAddBinding(Bindings bindings){
 		Binding ibmiBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(ibmiBinding);
@@ -108,9 +166,15 @@ public class IBMiBindingConnectionConfiguration extends BindingEGLConfiguration 
 			ibmiBinding.setParameters(params);
 		
 			EGLDDRootHelper.addOrUpdateParameter(params, "system", getSystem());
-			EGLDDRootHelper.addOrUpdateParameter(params, "userid", getUserId());
+			EGLDDRootHelper.addOrUpdateParameter(params, "userId", getUserId());
 			EGLDDRootHelper.addOrUpdateParameter(params, "password", getPassword());
 			EGLDDRootHelper.addOrUpdateParameter(params, "library", getLibrary());
+			EGLDDRootHelper.addOrUpdateParameter(params, "encoding", getTextEncoding());
+			EGLDDRootHelper.addOrUpdateParameter(params, "timezone", getTimezone());
+			EGLDDRootHelper.addOrUpdateParameter(params, "dateFormat", getDateFormat());
+			EGLDDRootHelper.addOrUpdateParameter(params, "dateSeparatorChar", getDateSeparator());
+			EGLDDRootHelper.addOrUpdateParameter(params, "timeFormat", getTimeFormat());
+			EGLDDRootHelper.addOrUpdateParameter(params, "timeSeparatorChar", getTimeSeparator());
 		}
 		
 		return ibmiBinding;

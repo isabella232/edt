@@ -34,8 +34,16 @@ public class Messages extends NLS {
 	public static String LabelUserId;
 	public static String IBMiBindingBlankError;
 	public static String IBMiBindingSystemBlankError;
+	public static String IBMiBindingDateFormatError;
+	public static String IBMiBindingTimeFormatError;
 	public static String LabelPassword;
 	public static String LabelLibrary;
+	public static String LabelTextEncoding;
+	public static String LabelTimezone;
+	public static String LabelDateFormat;
+	public static String LabelDateSeparator;
+	public static String LabelTimeFormat;
+	public static String LabelTimeSeparator;
 	
 	public static String IBMiBindingDetailSecTitle;
 	public static String IBMiBindingDetailSecDescp;
