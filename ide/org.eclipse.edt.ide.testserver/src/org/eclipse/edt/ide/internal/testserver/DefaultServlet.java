@@ -49,7 +49,7 @@ public class DefaultServlet extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String debug = req.getParameter(ARG_DEBUG);
 		if (debug != null && debug.length() > 0) {
-			server.setDebug(Boolean.valueOf(debug));
+			server.setDebug(Boolean.valueOf(debug), false);
 		}
 		else {
 			server.logInfo("Ping!"); //$NON-NLS-1$

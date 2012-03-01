@@ -11,95 +11,117 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.internal.testserver;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.jetty.util.log.StdErrLog;
 
 /**
- * Logger that simply wraps the given logger and keeps track of all the named loggers that are requested.
- * This way when the debug setting changes, we can apply it to all loggers.
+ * Logger that keeps track of all the named loggers that are requested, so that when the debug setting changes,
+ * we can apply it to all loggers. It's also extra quiet when debug messages are disabled.
  */
-public class Logger implements org.eclipse.jetty.util.log.Logger {
+public class Logger extends StdErrLog {
 	
-	private final org.eclipse.jetty.util.log.Logger logger;
-	private final Set<String> names;
+	private final Map<String, Logger> loggers;
 	
-	public Logger(org.eclipse.jetty.util.log.Logger realLogger) {
-		this.logger = realLogger;
-		this.names = new HashSet<String>();
+	public Logger() {
+		super();
+		this.loggers = new HashMap<String, Logger>();
+	}
+	
+	public Logger(String name) {
+		super(name);
+		this.loggers = new HashMap<String, Logger>();
 	}
 	
 	@Override
 	public void debug(Throwable t) {
-		logger.debug(t);
+		if (isDebugEnabled()) {
+			super.debug(t);
+		}
 	}
 
 	@Override
 	public void debug(String s, Object... o) {
-		logger.debug(s, o);
+		if (isDebugEnabled()) {
+			super.debug(s, o);
+		}
 	}
 
 	@Override
 	public void debug(String s, Throwable t) {
-		logger.debug(s, t);
+		if (isDebugEnabled()) {
+			super.debug(s, t);
+		}
 	}
 
 	@Override
 	public org.eclipse.jetty.util.log.Logger getLogger(String s) {
-		names.add(s);
-		return logger.getLogger(s);
-	}
-
-	@Override
-	public String getName() {
-		return logger.getName();
-	}
-
-	@Override
-	public void ignore(Throwable t) {
-		logger.ignore(t);
+		// If our name matches, return this.
+		if ((s == null && getName() == null) || (s != null && s.equals(getName()))) {
+			return this;
+		}
+		
+		Logger log = loggers.get(s);
+		if (log != null) {
+			return log;
+		}
+		
+		// Need a new one.
+		log = new Logger(s);
+		log.setDebugEnabled(isDebugEnabled());
+		loggers.put(s, log);
+		return log;
 	}
 
 	@Override
 	public void info(Throwable t) {
-		logger.info(t);
+		if (isDebugEnabled()) {
+			super.info(t);
+		}
 	}
 
 	@Override
 	public void info(String s, Object... o) {
-		logger.info(s, o);
+		if (isDebugEnabled()) {
+			super.info(s, o);
+		}
 	}
 
 	@Override
 	public void info(String s, Throwable t) {
-		logger.info(s, t);
-	}
-
-	@Override
-	public boolean isDebugEnabled() {
-		return logger.isDebugEnabled();
+		if (isDebugEnabled()) {
+			super.info(s, t);
+		}
 	}
 
 	@Override
 	public void setDebugEnabled(boolean b) {
-		logger.setDebugEnabled(b);
+		super.setDebugEnabled(b);
 		
-		for (String name : names) {
-			logger.getLogger(name).setDebugEnabled(b);
+		for (Logger log : loggers.values()) {
+			log.setDebugEnabled(b);
 		}
 	}
 
 	@Override
 	public void warn(Throwable t) {
-		logger.warn(t);
+		if (isDebugEnabled()) {
+			super.warn(t);
+		}
 	}
 
 	@Override
 	public void warn(String s, Object... o) {
-		logger.warn(s, o);
+		if (isDebugEnabled()) {
+			super.warn(s, o);
+		}
 	}
 
 	@Override
 	public void warn(String s, Throwable t) {
-		logger.warn(s, t);
+		if (isDebugEnabled()) {
+			super.warn(s, t);
+		}
 	}
 }

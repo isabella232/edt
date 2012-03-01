@@ -191,8 +191,8 @@ public class TestServer {
 		this.configurators = configurators;
 		
 		// Set up logging.
-		Log.setLog(new Logger(Log.getRootLogger()));
-		setDebug(debug);
+		Log.setLog(new Logger());
+		setDebug(debug, true);
 		
 		if (contextRoot != null) {
 			try {
@@ -364,13 +364,18 @@ public class TestServer {
 	
 	/**
 	 * Sets the debug mode for logging messages.
+	 * 
+	 * @param debug  The new debug setting.
+	 * @param quiet  True if we should print a message to stdout about the setting change.
 	 */
-	public void setDebug(boolean debug) {
+	public void setDebug(boolean debug, boolean quiet) {
 		this.debug = debug;
 		Log.getRootLogger().setDebugEnabled(debug);
 		
-		// Don't use logInfo(), otherwise the user only sees when messages are enabled and not when disabled.
-		System.out.println("Debug messages " + (debug ? "enabled" : "disabled")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if (!quiet) {
+			// Don't use logInfo(), otherwise the user only sees when messages are enabled and not when disabled.
+			System.out.println("Debug messages " + (debug ? "enabled" : "disabled")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
 	}
 	
 	/**
