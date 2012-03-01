@@ -58,45 +58,45 @@ Register the Preference Pages
          point="org.eclipse.edt.ide.rui.widgetLibraryProvider">
       <provider
             detail="%StandardWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.widgets_0.7.0"
+            id="org.eclipse.edt.rui.widgets_0.8.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%StandardWidgetLibraryName"
             logo=""
-            projectName="org.eclipse.edt.rui.widgets_0.7.0"
+            projectName="org.eclipse.edt.rui.widgets_0.8.0"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="true"
-            version="0.7.0">
+            version="0.8.0">
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="%DojoWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.dojo_0.7.0"
+            id="org.eclipse.edt.rui.dojo_0.8.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%DojoWidgetLibraryName"
             logo="icons/dojo16_logo.png"
-            projectName="org.eclipse.edt.rui.dojo_0.7.0"
+            projectName="org.eclipse.edt.rui.dojo_0.8.0"
             provider="Eclipse.org"
              resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="false"
-            version="0.7.0"
+            version="0.8.0"
             version_desc="Dojo 1.6.1">
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
             detail="%DojoWidgetLibraryDescription"
-            id="org.eclipse.edt.rui.dojo.remote_0.7.0"
+            id="org.eclipse.edt.rui.dojo.remote_0.8.0"
             importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
             libname="%DojoWidgetLibraryName"
             logo="icons/dojo16_logo.png"
-            projectName="org.eclipse.edt.rui.dojo.remote_0.7.0"
+            projectName="org.eclipse.edt.rui.dojo.remote_0.8.0"
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="true"
-            version="0.7.0"
+            version="0.8.0"
             version_desc="Dojo 1.6.1 Remote">
       </provider>
    </extension>

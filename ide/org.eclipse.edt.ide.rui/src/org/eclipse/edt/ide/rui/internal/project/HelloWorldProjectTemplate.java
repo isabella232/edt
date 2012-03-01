@@ -31,7 +31,7 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 			ProjectConfiguration eglProjConfiguration, int eglFeatureMask,
 			ISchedulingRule rule) {
 		List listOps = new ArrayList();
-		String[] ids = { "org.eclipse.edt.rui.widgets_0.7.0", "org.eclipse.edt.rui.dojo_0.7.0" };
+		String[] ids = { "org.eclipse.edt.rui.widgets_0.8.0", "org.eclipse.edt.rui.dojo_0.8.0" };
 
 		List dependencyOps = new ArrayList();
 		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();

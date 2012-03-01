@@ -24,6 +24,8 @@ package org.eclipse.edt.ide.rui.utils;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.IEGLProject;
 
 
 
@@ -36,10 +38,16 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class EGLbinFileLocator extends IFileLocator{
 
-	private static final String[] RESOURCE_LOCATIONS = new String[]{"EGLbin"};  //$NON-NLS-1$//$NON-NLS-2$
+	private static String[] RESOURCE_LOCATIONS;
 	
 	public EGLbinFileLocator(IProject project) throws CoreException{
 		super(project);
+		IEGLProject eglProject = EGLCore.create(project);
+		if(eglProject.exists()){
+			RESOURCE_LOCATIONS = new String[]{eglProject.getOutputLocation().toString()};  //$NON-NLS-1$//$NON-NLS-2$
+		}else{
+			RESOURCE_LOCATIONS = new String[]{};
+		}
 	}
 	
 	protected String[] initResourceLocations(IProject project) {

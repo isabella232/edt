@@ -13,7 +13,7 @@ package org.eclipse.edt.ide.rui.internal.project;
 
 public class DojoConflictClass extends AbstractWidgetLibraryConflict implements IWidgetLibraryConflict {
 
-	public static final String[] conflictLibs = {"org.eclipse.edt.rui.dojo_0.7.0", "org.eclipse.edt.rui.dojo.remote_0.7.0", "org.eclipse.edt.rui.dojo.mobile_0.7.0"}; 
+	public static final String[] conflictLibs = {"org.eclipse.edt.rui.dojo_0.8.0", "org.eclipse.edt.rui.dojo.remote_0.8.0", "org.eclipse.edt.rui.dojo.mobile_0.7.0"}; 
 	public DojoConflictClass() {
 		super();
 	}
