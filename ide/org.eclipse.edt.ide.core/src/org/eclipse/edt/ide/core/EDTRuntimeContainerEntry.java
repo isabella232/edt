@@ -79,6 +79,11 @@ public class EDTRuntimeContainerEntry {
 	 */
 	private IClasspathEntry entry;
 	
+	/**
+	 * The version of the resolved bundle.
+	 */
+	private String bundleVersion;
+	
 	public EDTRuntimeContainerEntry(String bundleId, String bundleRoot, VersionRange versionRange, String sourceBundleId,
 			String sourceBundleRoot, String javadocLocation) {
 		this.bundleId = bundleId;
@@ -114,6 +119,9 @@ public class EDTRuntimeContainerEntry {
 			if (mainBundle == null) {
 				return;
 			}
+			
+			// Store the version in case any clients need to know which version was chosen.
+			bundleVersion = mainBundle.getVersion();
 			
 			URL bundleURL = FileLocator.toFileURL(URIUtil.toURL(mainBundle.getLocation()));
 			String path = bundleURL.getPath();
@@ -245,6 +253,9 @@ public class EDTRuntimeContainerEntry {
 		return bestMatch;
 	}
 	
+	/**
+	 * @return the classpath entry, or null if the bundle could not be resolved.
+	 */
 	public IClasspathEntry getClasspathEntry() {
 		return entry;
 	}
@@ -271,5 +282,9 @@ public class EDTRuntimeContainerEntry {
 	
 	public String getJavadocLocation() {
 		return javadocLocation;
+	}
+	
+	public String getBundleVersion() {
+		return bundleVersion;
 	}
 }
