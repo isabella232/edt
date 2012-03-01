@@ -73,6 +73,7 @@ public interface SQLConstants {
 	public final static String LEFT_BRACKET = "["; //$NON-NLS-1$
 	public final static String RIGHT_BRACKET = "]"; //$NON-NLS-1$
 	public final static String COMMA = ","; //$NON-NLS-1$
+	public final static String SEMICOLON = ";"; //$NON-NLS-1$
 	public final static String COMMA_AND_SPACE = ", "; //$NON-NLS-1$
 	public final static String EQUALS = " = "; //$NON-NLS-1$
 	public final static String GREATER_THAN_OR_EQUAL = " >= "; //$NON-NLS-1$
