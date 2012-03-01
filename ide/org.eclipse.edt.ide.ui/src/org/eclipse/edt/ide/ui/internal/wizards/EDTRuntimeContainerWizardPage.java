@@ -150,10 +150,12 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 		EDTRuntimeContainerEntry[] entries = container.getEntries();
 		if (entries != null && entries.length > 0) {
 			for (int i = 0; i < entries.length; i++) {
-				if (i > 0) {
-					buf.append("\n"); //$NON-NLS-1$
+				if (entries[i].getClasspathEntry() != null) {
+					if (buf.length() > 0) {
+						buf.append("\n"); //$NON-NLS-1$
+					}
+					buf.append(entries[i].getClasspathEntry().getPath());
 				}
-				buf.append(entries[i].getClasspathEntry().getPath());
 			}
 		}
 		path.setText(buf.toString());
