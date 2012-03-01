@@ -33,6 +33,7 @@ import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLPropert
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemLibraryProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLSystemWordProposalHandler;
 import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLTableUseStatementProposalHandler;
+import org.eclipse.edt.ide.ui.internal.contentassist.proposalhandlers.EGLVariableDotProposalHandler;
 import org.eclipse.jface.text.ITextViewer;
 
 public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractReferenceCompletion {
@@ -90,6 +91,11 @@ public class EGLAssignmentStatementReferenceCompletion extends EGLAbstractRefere
 									isPropertySetting[0] = true;
 									isDone[0] = true;
 //									return;
+								}else if(lhBinding instanceof ClassFieldBinding &&
+										EGLVariableDotProposalHandler.needSetFunctionForTheField((ClassFieldBinding)lhBinding)){
+									isPropertySetting[0] = true;
+									isDone[0] = true;
+									return;
 								}
 								else if(lhBinding instanceof ClassFieldBinding && 
 										assignmentNode.getParent() != null &&								

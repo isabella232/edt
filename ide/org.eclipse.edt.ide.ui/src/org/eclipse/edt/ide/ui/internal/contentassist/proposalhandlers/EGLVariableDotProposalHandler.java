@@ -260,22 +260,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 						String displayString = proposalString + " : " + dataBinding.getType().getCaseSensitiveName() +  " - " + dataBinding.getDeclaringPart().getName();	//$NON-NLS-1$;
 						if (!containsProperty(proposalString, propertyBlockList)) {
 							if (addEquals) {
-								List<IAnnotationBinding> annArr = dataBinding.getAnnotations();
-								boolean containsSetterMethod = false;
-								for (Iterator iterator = annArr.iterator(); iterator.hasNext();) {
-									IAnnotationBinding iAnnotationBinding = (IAnnotationBinding) iterator.next();
-
-									if ((iAnnotationBinding.getName().equalsIgnoreCase("Property") || 
-											iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))) {
-										AnnotationFieldBinding field = (AnnotationFieldBinding) iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD);
-										if(null != field.getValue() && !field.getValue().equals("")){
-											containsSetterMethod = true;
-											break;
-										}
-									}
-								}
-
-								if (!containsSetterMethod) {
+								if (needSetFunctionForTheField(dataBinding)) {
 									proposalString = proposalString + " ::= "; //$NON-NLS-1$
 								} else {
 									proposalString = proposalString + " = "; //$NON-NLS-1$
@@ -373,22 +358,20 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 		}
 	}
 
-//	private List getResourceAssociationSystemWordProposal() {
-//		List proposals = new ArrayList();
-//		if (IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION.toUpperCase().startsWith(getPrefix().toUpperCase())) {
-//			String displayString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION;
-//			String proposalString = IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION + " = "; //$NON-NLS-1$
-//			proposals.add(
-//					new EGLCompletionProposal(viewer,
-//						displayString,
-//						proposalString,
-//						UINlsStrings.CAProposal_VariableSystemWord,
-//						getDocumentOffset() - getPrefix().length(),
-//						getPrefix().length(),
-//						proposalString.length(),
-//						EGLCompletionProposal.RELEVANCE_SYSTEM_WORD));
-//		}
-//		return proposals;
-//	}
+	public static boolean needSetFunctionForTheField(IDataBinding dataBinding){
+		List<IAnnotationBinding> annArr = dataBinding.getAnnotations();
+		for (Iterator iterator = annArr.iterator(); iterator.hasNext();) {
+			IAnnotationBinding iAnnotationBinding = (IAnnotationBinding) iterator.next();
+			if ((iAnnotationBinding.getName().equalsIgnoreCase("Property") || 
+					iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))) {
+				AnnotationFieldBinding field = (AnnotationFieldBinding) iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD);
+				if(null != field.getValue() && field.getValue().equals("")){
+					return true;
+				}
+			}
+		}
+		
+		return(false);
+	}
 
 }
