@@ -31,6 +31,9 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -50,11 +53,11 @@ import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.osgi.framework.Version;
 
 public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperation {
 
 	private static final String WEBLIB_FOLDER = "WEB-INF/lib/"; //$NON-NLS-1$
-	private static final String ICU4J_NAME = "icu4j-4_4_2_2.jar"; //$NON-NLS-1$
 	
 	private IFolder projectRootFolder;
 
@@ -89,47 +92,41 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 		if (toCopy.size() > 0) {
 			for (EDTRuntimeContainer container : toCopy) {
 				for (EDTRuntimeContainerEntry entry : container.getEntries()) {
-					IPath path = entry.getClasspathEntry().getPath();
+					IClasspathEntry cpEntry = entry.getClasspathEntry();
+					if (cpEntry == null) {
+						continue;
+					}
+					
+					IPath path = cpEntry.getPath();
 					if (path != null) {
 						File file = path.toFile();
 						if (!file.exists()) {
 							continue;
 						}
 						
-						String targetName = entry.getBundleId() + ".jar"; //$NON-NLS-1$
+						// For the version, only keep major.minor.service, no qualifier.
+						Version version = new Version(entry.getBundleVersion());
+						StringBuilder bundleVersion = new StringBuilder(20);
+						bundleVersion.append(version.getMajor());
+						bundleVersion.append('.');
+						bundleVersion.append(version.getMinor());
+						bundleVersion.append('.');
+						bundleVersion.append(version.getMicro());
+						
+						String targetPrefix = entry.getBundleId() + "_"; //$NON-NLS-1$
+						String targetName =  targetPrefix + bundleVersion.toString() + ".jar"; //$NON-NLS-1$
 						InputStream fis = null;
+						ZipOutputStream zos = null;
 						try {
 							if (file.isDirectory()) {
-								if ("org.eclipse.edt.runtime.java".equals(entry.getBundleId())) { //$NON-NLS-1$
-									// Hack for the base runtime. It has special packaging during the build that adds icu4j into its jar. This code is only run
-									// when in development mode, so that things "just work" for developers. Official builds will go into the else block below.
-									InputStream icuIS = null;
-									try {
-										icuIS = new FileInputStream(new File(file.getParent(), ICU4J_NAME)); 
-										copyFile(icuIS, ICU4J_NAME, monitor);
-									}
-									catch (IOException ioe) {
-									}
-									finally {
-										try {
-											if (icuIS != null) {
-												icuIS.close();
-											}
-										}
-										catch (IOException ioe) {
-										}
-									}
-								}
-								
-								// Now package the directory into a jar and stick it in the target location.
+								// Package the directory into a jar and stick it in the target location.
 								ByteArrayOutputStream bos = new ByteArrayOutputStream();
 								Manifest manifest = new Manifest();
 								manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0"); //$NON-NLS-1$
 								
-						        ZipOutputStream zos = new JarOutputStream(bos, manifest);
+						        zos = new JarOutputStream(bos, manifest);
 						        CRC32 crc = new CRC32();
 						        createRuntimeJar(zos, crc, file, file.getPath().length());
-						        zos.close();
 						        fis = new ByteArrayInputStream(bos.toByteArray());
 							}
 							else {
@@ -137,13 +134,20 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 								fis = new FileInputStream(file);
 							}
 							
-							copyFile(fis, targetName, monitor);
+							copyFile(fis, targetName, targetPrefix, monitor);
 						}
 						catch (Exception e) {
 							resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR,
 									DeploymentUtilities.createExceptionMessage(e)));
 						}
 						finally {
+							if (zos != null) {
+								try {
+									zos.close();
+								}
+								catch (IOException ioe) {
+								}
+							}
 							if (fis != null) {
 								try {
 									fis.close();
@@ -158,16 +162,40 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 		}
 	}
 	
-	private void copyFile( InputStream fis, String targetName, IProgressMonitor monitor ) throws CoreException{
-		IPath path = new Path( WEBLIB_FOLDER + targetName );
-		IPath targetFilePath = projectRootFolder.getFullPath().append( path );
-		CoreUtility.createFolder( ResourcesPlugin.getWorkspace().getRoot().getFolder( targetFilePath.removeLastSegments( 1 ) ), true, true, monitor );
+	private void copyFile(InputStream fis, final String targetName, final String targetPrefix, final IProgressMonitor monitor) throws CoreException {
+		IPath path = new Path(WEBLIB_FOLDER + targetName);
+		IPath targetFilePath = projectRootFolder.getFullPath().append(path);
+		CoreUtility.createFolder(ResourcesPlugin.getWorkspace().getRoot().getFolder(targetFilePath.removeLastSegments(1)), true, true, monitor);
 		IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
-		if( targetFile.exists() ) {
+		if (targetFile.exists()) {
 			targetFile.setContents(fis, true, true, monitor);
-		} else {
+		}
+		else {
 			targetFile.create(fis, true, monitor);
-//				targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
+		}
+		
+		// Delete any other versions of the jar if they exist.
+		final IFolder targetFolder = ResourcesPlugin.getWorkspace().getRoot().getFolder(projectRootFolder.getFullPath().append( WEBLIB_FOLDER ));
+		if (targetFolder.exists()) {
+			targetFolder.accept(new IResourceProxyVisitor() {
+				@Override
+				public boolean visit(IResourceProxy proxy) throws CoreException {
+					switch (proxy.getType()) {
+						case IResource.FILE:
+							String name = proxy.getName();
+							if (name.startsWith(targetPrefix) && name.endsWith(".jar") && !name.equals(targetName)) {
+								proxy.requestResource().delete(true, monitor);
+							}
+							return false;
+						case IResource.FOLDER:
+							if (proxy.getName().equals(targetFolder.getName()) && proxy.requestResource().equals(targetFolder)) {
+								return true;
+							}
+							return false;
+					}
+					return false;
+				}
+			}, IResource.NONE);
 		}
 	}
 	
