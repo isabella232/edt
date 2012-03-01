@@ -15,25 +15,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IExecutableExtensionFactory;
-import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.deployment.ui.SOAMessages;
-import org.eclipse.edt.ide.ui.internal.wizards.EGLDDBindingWizardPage;
-import org.eclipse.edt.ide.ui.internal.wizards.EGLPartWizard;
-import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
-import org.eclipse.edt.ide.ui.internal.wizards.RestBindingWizardPage;
-import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.DialogField;
-import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IDialogFieldListener;
-import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringDialogField;
-import org.eclipse.edt.ide.ui.wizards.BindingBaseConfiguration;
-import org.eclipse.edt.ide.ui.wizards.BindingRestConfiguration;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 
 public class IBMiBindingWizardPageFactory  implements IExecutableExtensionFactory, IExecutableExtension {
 
@@ -41,12 +22,11 @@ public class IBMiBindingWizardPageFactory  implements IExecutableExtensionFactor
 	
 	@Override
 	public Object create() throws CoreException {
-		return new IBMiBindingWizardPage( pageName );
+		return new IBMiBindingWizardPage(pageName);
 	}
 
 	@Override
 	public void setInitializationData(IConfigurationElement contribution, String arg1, Object arg2) throws CoreException {
 		pageName = contribution.getAttribute("name");
-		
 	}
 }
