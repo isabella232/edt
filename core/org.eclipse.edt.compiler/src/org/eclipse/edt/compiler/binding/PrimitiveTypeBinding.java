@@ -435,7 +435,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	
 	@Override
 	public boolean isInstantiable() {
-		if (getPrimitive() == Primitive.STRING /*|| getPrimitive() == Primitive.DECIMAL || getPrimitive() == Primitive.NUMBER*/) {
+		if (getPrimitive() == Primitive.STRING || getPrimitive() == Primitive.DECIMAL || getPrimitive() == Primitive.NUMBER) {
 			return true;
 		}
 		return false;
