@@ -38,10 +38,13 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	private static String storeBaseURINameId = ".STORE_BASE_URI_NAME_ID";
 	private static String storeSessionCookieNameId = ".STORE_SESSION_COOKIE_NAME_ID";
 	
+	private final String fStoreBaseURINameId;
+	private final String fStoreSessionCookieNameId;
+	
 	public RestBindingWizardPage(String pageName){
 		super(pageName);
-		storeBaseURINameId = pageName + storeBaseURINameId;
-		storeSessionCookieNameId = pageName = storeSessionCookieNameId;
+		fStoreBaseURINameId = pageName + storeBaseURINameId;
+		fStoreSessionCookieNameId = pageName + storeSessionCookieNameId;
 		setTitle(NewWizardMessages.TitleAddRestBinding);
 		setDescription(NewWizardMessages.DescAddRestBinding);
 		nColumns = 4;
@@ -100,8 +103,9 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		fBaseUriField = new StringDialogField();
 		fBaseUriField.setLabelText(NewWizardMessages.LabelRestBaseURI);
 		IDialogSettings dialogSettings = getDialogSettings();
-		if(dialogSettings != null && (dialogSettings.get(storeBaseURINameId)) != null) {
-			fBaseUriField.setText(dialogSettings.get(storeBaseURINameId));	
+		if(dialogSettings != null && (dialogSettings.get(fStoreBaseURINameId)) != null) {
+			fBaseUriField.setText(dialogSettings.get(fStoreBaseURINameId));
+			getConfiguration().setBaseUri(fBaseUriField.getText());
 		}
 		createStringDialogField(composite, fBaseUriField, 
 				new IDialogFieldListener(){
@@ -142,8 +146,9 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		fSessionCookieId = new StringDialogField();
 		fSessionCookieId.setLabelText(NewWizardMessages.LabelSessionCookieId);
 		IDialogSettings dialogSettings = getDialogSettings();
-		if(dialogSettings != null && (dialogSettings.get(storeSessionCookieNameId) != null)) {
-			fSessionCookieId.setText(dialogSettings.get(storeSessionCookieNameId));	
+		if(dialogSettings != null && (dialogSettings.get(fStoreSessionCookieNameId) != null)) {
+			fSessionCookieId.setText(dialogSettings.get(fStoreSessionCookieNameId));
+			getConfiguration().setSessionCookieId(fSessionCookieId.getText());
 		}
 		createStringDialogField(composite, fSessionCookieId, 
 				new IDialogFieldListener(){
@@ -195,8 +200,8 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 	@Override
 	public HashMap<String, String> getStoredKeyValues() {
 		HashMap<String, String> ret = super.getStoredKeyValues();
-		ret.put(storeBaseURINameId, fBaseUriField.getText());
-		ret.put(storeSessionCookieNameId, fSessionCookieId.getText());
+		ret.put(fStoreBaseURINameId, fBaseUriField.getText());
+		ret.put(fStoreSessionCookieNameId, fSessionCookieId.getText());
 		return ret;
 	}
 }
