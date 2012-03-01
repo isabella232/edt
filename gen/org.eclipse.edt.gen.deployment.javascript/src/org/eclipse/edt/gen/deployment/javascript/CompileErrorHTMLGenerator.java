@@ -19,12 +19,22 @@ import org.eclipse.edt.gen.deployment.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.egl.Part;
 
 public class CompileErrorHTMLGenerator extends ErrorHTMLGenerator {
-	
+	private String message;
 	public CompileErrorHTMLGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor, ISystemEnvironment sysEnv, String message) {
 		super(processor, null, sysEnv, message);
+		this.message = message;
 	}
 	
 	public void generate(Object part) throws GenerationException {
 		this.generate((Part) part, JavaScriptTemplate.genCompileErrorHTML);
+	}
+	
+	public String generate() {
+		out.println("<html>");
+		out.println("<body>");
+		out.println(message);
+		out.println("</body>");
+		out.println("</html>");
+		return out.getWriter().toString();
 	}
 }
