@@ -21,6 +21,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause;
 import org.eclipse.edt.compiler.core.ast.IntoClause;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
@@ -101,6 +102,19 @@ public class ForEachStatementValidator extends AbstractSqlStatementValidator {
 	
 	private void initialize() {
 		statement.accept(new AbstractASTVisitor() {
+			
+			public boolean visit(ForEachStatement forEachStatement) {
+				
+				visit(forEachStatement.getTargets());
+				forEachStatement.getResultSet().accept(this);
+				visit(forEachStatement.getForeachOptions());
+				return false;
+			}
+			private void visit(List<Node> list) {
+				for (Node node : list) {
+					node.accept(this);
+				}
+			}
 			public boolean visit(FromOrToExpressionClause clause) {
 				if (from == null) {
 					from = clause;
