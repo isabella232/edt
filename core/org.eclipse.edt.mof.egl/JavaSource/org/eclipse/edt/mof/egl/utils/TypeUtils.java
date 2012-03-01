@@ -691,25 +691,31 @@ public class TypeUtils implements MofConversion {
 			for (int i=0; i<funcs1.size(); i++) {
 				T f1 = funcs1.get(i);
 				T f2 = null;
-				for (T func : funcs2) {
+	forLoop:	for (T func : funcs2) {
 					if ((func instanceof Constructor || f1.getName().equalsIgnoreCase(func.getName())) && f1.getParameters().size() == func.getParameters().size()) {
 						for (int j=0; j<f1.getParameters().size(); j++) {
 							FunctionParameter parm1 = f1.getParameters().get(j);
 							FunctionParameter parm2 = func.getParameters().get(j);
 							if ((parm1.getType() == null && parm2.getType() != null) || (parm1.getType() != null && parm2.getType() == null))
-								break;
+								continue forLoop;
 							if ((parm1.getType() != null) && !parm1.getType().equals(parm2.getType()))
-								break;
+								continue forLoop;
 							if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
-								break;
+								continue forLoop;
+							if (parm1.isNullable() != parm2.isNullable()) 
+								continue forLoop;
 						}
 						if ((f1.getType() == null && func.getType() != null) || (f1.getType() != null && func.getType() == null))
-							break;
+							break forLoop;
 						if ((f1.getType() != null) && !f1.getType().equals(func.getType())) {
-							break;
+							break forLoop;
 						}
+						if (f1.isNullable() != func.isNullable()) {
+							break forLoop;
+						}
+						
 						f2 = func;
-						break;
+						break forLoop;
 					}
 				}
 				if (f2 == null || f1.getAccessKind() != f2.getAccessKind() || f1.isStatic() != f2.isStatic())
