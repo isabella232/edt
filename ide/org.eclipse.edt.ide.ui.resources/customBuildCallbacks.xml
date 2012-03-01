@@ -21,7 +21,7 @@
 		<!-- These tasks create zips containing the three widget projects from the latest code in CVS. -->
 
 		<!-- Update these properties when the version numbers change. -->
-		<property name="edtVersion" value="0.7.0"/>
+		<property name="edtVersion" value="0.8.0"/>
 		<property name="dojoVersion" value="1.6.1"/>
 		
 		<!-- Check out the projects into a temporary directory. -->
@@ -78,6 +78,7 @@
 
 		<!-- Delete the temporary directory. -->
 		<delete dir="${build.result.folder}/widgetzips"/>
+	
 	</target>
 
 	<!-- ===================================================================== -->
