@@ -11,27 +11,29 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.internal.testserver;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jetty.util.log.StdErrLog;
 
 /**
- * Logger that keeps track of all the named loggers that are requested, so that when the debug setting changes,
- * we can apply it to all loggers. It's also extra quiet when debug messages are disabled.
+ * Logger that allows us to be really quiet.
  */
 public class Logger extends StdErrLog {
 	
-	private final Map<String, Logger> loggers;
-	
 	public Logger() {
 		super();
-		this.loggers = new HashMap<String, Logger>();
 	}
 	
 	public Logger(String name) {
 		super(name);
-		this.loggers = new HashMap<String, Logger>();
+	}
+	
+	@Override
+	protected org.eclipse.jetty.util.log.Logger newLogger(String name) {
+		Logger log = new Logger(name);
+		log.setDebugEnabled(isDebugEnabled());
+		log.setHideStacks(isHideStacks());
+		log.setPrintLongNames(isPrintLongNames());
+		log.setSource(isSource());
+		return log;
 	}
 	
 	@Override
@@ -56,25 +58,6 @@ public class Logger extends StdErrLog {
 	}
 
 	@Override
-	public org.eclipse.jetty.util.log.Logger getLogger(String s) {
-		// If our name matches, return this.
-		if ((s == null && getName() == null) || (s != null && s.equals(getName()))) {
-			return this;
-		}
-		
-		Logger log = loggers.get(s);
-		if (log != null) {
-			return log;
-		}
-		
-		// Need a new one.
-		log = new Logger(s);
-		log.setDebugEnabled(isDebugEnabled());
-		loggers.put(s, log);
-		return log;
-	}
-
-	@Override
 	public void info(Throwable t) {
 		if (isDebugEnabled()) {
 			super.info(t);
@@ -92,15 +75,6 @@ public class Logger extends StdErrLog {
 	public void info(String s, Throwable t) {
 		if (isDebugEnabled()) {
 			super.info(s, t);
-		}
-	}
-
-	@Override
-	public void setDebugEnabled(boolean b) {
-		super.setDebugEnabled(b);
-		
-		for (Logger log : loggers.values()) {
-			log.setDebugEnabled(b);
 		}
 	}
 
