@@ -50,7 +50,11 @@ public class JavaRuntimeContainerFilter extends ClasspathEntryFilter
 						{
 							for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
 							{
-								list.add( nextEntry.getClasspathEntry() );
+								IClasspathEntry cpEntry = nextEntry.getClasspathEntry();
+								if ( cpEntry != null )
+								{
+									list.add( cpEntry );
+								}
 							}
 						}
 					}
