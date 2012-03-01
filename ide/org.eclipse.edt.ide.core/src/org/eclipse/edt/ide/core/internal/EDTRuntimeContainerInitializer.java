@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
@@ -65,10 +68,14 @@ public class EDTRuntimeContainerInitializer extends ClasspathContainerInitialize
 			this.path = path;
 			this.description = description;
 			
-			this.classpathEntries = new IClasspathEntry[entries.length];
+			List<IClasspathEntry> list = new ArrayList<IClasspathEntry>(entries.length);
 			for (int i = 0; i < entries.length; i++) {
-				this.classpathEntries[i] = entries[i].getClasspathEntry();
+				IClasspathEntry entry = entries[i].getClasspathEntry();
+				if (entry != null) {
+					list.add(entry);
+				}
 			}
+			this.classpathEntries = list.toArray(new IClasspathEntry[list.size()]);
 		}
 		public IClasspathEntry[] getClasspathEntries() {
 			return classpathEntries;
