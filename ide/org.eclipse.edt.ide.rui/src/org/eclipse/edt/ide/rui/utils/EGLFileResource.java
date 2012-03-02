@@ -47,5 +47,9 @@ public class EGLFileResource implements EGLResource {
 	public InputStream getInputStream() throws IOException{
 		return new FileInputStream( resource );
 	}
+	
+	public long getLocalTimeStamp() {
+		return resource.lastModified();
+	}
 
 }

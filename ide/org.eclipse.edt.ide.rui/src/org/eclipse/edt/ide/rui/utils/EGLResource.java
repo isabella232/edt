@@ -23,6 +23,7 @@ public interface EGLResource {
 	InputStream getInputStream() throws IOException;
 	String getName();
 	String getFullName();
+	long getLocalTimeStamp();
 	
 	
 }

@@ -65,5 +65,9 @@ public class EGLARResource implements EGLResource {
 	public InputStream getInputStream() throws IOException {
 		return eglar.getInputStream( entry );
 	}
+	
+	public long getLocalTimeStamp() {
+		return this.entry.getTime();
+	}
 
 }
