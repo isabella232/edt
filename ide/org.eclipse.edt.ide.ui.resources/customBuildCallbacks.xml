@@ -22,13 +22,13 @@
 
 		<!-- Update these properties when the version numbers change. -->
 		<property name="edtVersion" value="0.8.0"/>
-		<property name="dojoVersion" value="1.6.1"/>
+		<property name="dojoVersion" value="1.7.1"/>
 		
 		<!-- Check out the projects into a temporary directory. -->
 		<mkdir dir="${build.result.folder}/widgetzips"/>
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion} org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
 		
 		<!-- Store the root of the extracted projects in a property. -->
 		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets"/>
@@ -60,7 +60,7 @@
 			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local_${dojoVersion}/WebContent"/>
 		</copy>
 		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote_${dojoVersion}/WebContent"/>
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote/WebContent"/>
 		</copy>
 		
 		<!-- Update .project file for org.eclipse.edt.rui.dojo to include a version number -->
