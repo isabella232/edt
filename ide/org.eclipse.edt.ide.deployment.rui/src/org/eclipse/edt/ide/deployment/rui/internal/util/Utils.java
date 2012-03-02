@@ -11,6 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.rui.internal.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.dojotoolkit.shrinksafe.Compressor;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -33,11 +39,24 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
+import org.mozilla.javascript.Context;
 
 public class Utils 
 {
 	public static final String SKIP_BIND_FILE_GENERATION = "SKIP_BIND_FILE_GENERATION";
 //	private static ElementFactory elementFactory;
+
+	public static boolean useCompression = true;
+	public static String[] excludedCompression = new String[]{"com.ibm.egl.rui.dojo.runtime.local_1.6"};
+	
+	static {
+		if("yes".equals(System.getProperty("EGL_RICH_UI_USE_COMPRESSION", "yes"))){
+			useCompression = true;
+		}else{
+			useCompression = false;
+		}
+	}
+
 	
 	//TODO - EDT
 //	public static void addAnnotation( Part part, String key, Object value)
@@ -229,5 +248,57 @@ public class Utils
 		}
 		return buf.toString();
 	}
+	
+	public static InputStream shrinkJavascript( InputStream in, String fileName ) {
+		if ( !useCompression || isExcludedCompression( fileName ) ) {
+			return in;
+		}
+		ByteArrayOutputStream bao = new ByteArrayOutputStream();
+		Context cx = Context.enter();
+		try {
+			byte b[] = new byte[1024];  
+			int len = 0;
+			while( (len = in.read(b))!=-1){
+			    bao.write(b, 0, len);
+			}  
+			String js = shrinkJavascript( bao.toString(), fileName );
+			ByteArrayInputStream bio = new ByteArrayInputStream( js.getBytes() );
+
+			return bio;
+		} catch (Exception e) {
+			return new ByteArrayInputStream( bao.toByteArray() );
+		} finally {
+			try {
+				in.close();
+				bao.close();
+			} catch (IOException e) {
+			}
+			Context.exit();
+		}
+	}
+	
+	public static String shrinkJavascript( String javascript, String fileName ) {
+		if ( !useCompression || isExcludedCompression( fileName ) ) {
+			return javascript;
+		}
+
+		try {
+			String compressedJS = Compressor.compressScript(javascript, 0, 1, true, null);
+			return compressedJS.replaceAll( "[\\r\\n]" , "");
+		} catch (Exception e) {
+			// Return the original javascript if any error happens.
+			return javascript;
+		} 
+	}
+	
+	private static boolean isExcludedCompression( String fileName ) {
+		for ( int i = 0; i < excludedCompression.length; i ++ ) {
+			if ( fileName.indexOf( excludedCompression[i]) > 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 }

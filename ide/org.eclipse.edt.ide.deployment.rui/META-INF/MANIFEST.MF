@@ -35,4 +35,6 @@ Export-Package: org.eclipse.edt.ide.deployment.rui,
  org.eclipse.edt.ide.deployment.rui.internal.model,
  org.eclipse.edt.ide.deployment.rui.internal.util
 Eclipse-BuddyPolicy: registered
-Bundle-ClassPath: runtime/src.jar
+Bundle-ClassPath: runtime/src.jar,
+ lib/js.jar,
+ lib/shrinksafe.jar

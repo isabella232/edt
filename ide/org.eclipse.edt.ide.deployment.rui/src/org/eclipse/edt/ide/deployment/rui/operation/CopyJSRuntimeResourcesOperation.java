@@ -76,28 +76,23 @@ public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation
 			InputStream is = null;
 			try {
 				IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
-				
-//				if( targetFile.exists() ) {
-//					if( file.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
-//						InputStream is = null;
-//						if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
-//							//TODO compress javascript
-//						} else {
-//							is = file.getContents();
-//						}
-//						targetFile.setContents(is, true, false, monitor);
-//						targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
-//					}
-//				}
-//				else {
 				is = resource.getInputStream();
+				
+				boolean isJS = targetFile.getFileExtension().equalsIgnoreCase( "js" ) ;
 				if( targetFile.exists() ) {
-					targetFile.setContents(is, true, true, monitor);
+					if( resource.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
+						if ( isJS ) {
+							is = Utils.shrinkJavascript( is,  resource.getFullName() );
+						}
+						targetFile.setContents(is, true, false, monitor);
+					}
 				} else {
+					if ( isJS ) {
+						is = Utils.shrinkJavascript( is,  resource.getFullName() );
+					}
 					targetFile.create(is, true, monitor);
-//					targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 				}
-//				DeploymentUtilities.copyFile(resource.getInputStream(), path.toFile().getPath() );
+				targetFile.setLocalTimeStamp(resource.getLocalTimeStamp());
 			} catch (IOException e) {
 			} finally {
 				try {

@@ -31,6 +31,7 @@ import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.ResourceDeploymentModel;
 import org.eclipse.edt.ide.deployment.rui.internal.nls.Messages;
+import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.rui.internal.util.WebUtilities;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
@@ -132,21 +133,21 @@ public class ResourceCopyOperation {
 						
 						if( targetFile.exists() ) {
 							if( file.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
-//								if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
-									//Compress JavaScript
-//								} else {
+								if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
+									is = Utils.shrinkJavascript( file.getContents(), file.getName() );
+								} else {
 									is = file.getContents();
-//								}
+								}
 								targetFile.setContents(is, true, false, monitor);
 								targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 							}
 						}
 						else {
-//							if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
-								//Compress JavaScript
-//							} else {
+							if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
+								is = Utils.shrinkJavascript( file.getContents(), file.getName() );
+							} else {
 								is = file.getContents();
-//							}
+							}
 							targetFile.create(is, true, monitor);
 							targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 						}
