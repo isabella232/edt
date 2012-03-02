@@ -925,7 +925,7 @@ Templates
 								value="org.eclipse.edt.ide.core.eglnature" />
 						</adapt>
 						<instanceof
-								value="org.eclipse.jdt.core.IJavaElement" />
+								value="org.eclipse.edt.ide.core.model.IEGLElement" />
  		        	</or>         					
 				</enablement>
 			</commonWizard>
@@ -1058,7 +1058,7 @@ Templates
        </wizard>
        <wizard
    		    name="%EGLExternalType"
-   		    icon="icons/ctool16/newrec_wiz.gif"
+   		    icon="icons/obj16/exttyp_obj.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
             class="org.eclipse.edt.ide.ui.internal.externaltype.NewExternalTypeWizard"
             id="org.eclipse.edt.ide.ui.NewExternalTypeWizard">
@@ -1560,6 +1560,16 @@ Templates
             codeTemplateID="org.eclipse.edt.ide.ui.templates.flexible_basic_externaltype"
             id="org.eclipse.edt.ide.ui.externaltypes.basic"
             description="%BasicExternalTypeDescription">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.externaltypes"
+            default="true"
+            description="%ExternalTypeFromJavaTypeDescription"
+            icon="icons/ctool16/record_template.gif"
+            id="org.eclipse.edt.ide.ui.externaltypes.javatype"
+            name="%ExternalTypeFromJavaType"
+            wizardClass="org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.ExternalTypeFromJavaWizard">
       </template>
       
     </extension>

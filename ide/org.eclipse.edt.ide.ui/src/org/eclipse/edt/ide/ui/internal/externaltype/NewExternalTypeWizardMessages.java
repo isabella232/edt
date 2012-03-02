@@ -28,4 +28,23 @@ public class NewExternalTypeWizardMessages extends NLS {
 	
 	public static String NewExternalTypeWizardPage_title;
 	public static String NewExternalTypeWizardPage_description;
+	public static String ExternalTypeFromJavaTypePage_Title;
+	public static String ExternalTypeFromJavaTypePage_Description;
+	
+	public static String ExternalTypeFromJavaPage_SelectedClass_label;
+	public static String NewExternalTypeWizardPage_selectedclass_button;
+	public static String NewExternalTypeWizardPage_SelectedClassDialog_title;
+	public static String NewExternalTypeWizardPage_SelectedClassDialog_message;
+	public static String NewExternalTypeWizardPage_SelectAll_message;
+	public static String NewExternalTypeWizardPage_DeSelectAll_message;
+	
+	public static String NewExternalTypeWizardPage_GeneratedAllSuperTypes_message;
+	public static String NewExternalTypeWizardPage_GeneratedAllReferencedTypes_message;
+	
+	public static String ExternalTypeSummaryPage_pageName;
+	public static String ExternalTypeSummaryPage_pageTitle;
+	public static String ExternalTypeSummaryPage_pageDescription;
+	
+	public static String ExternalTypeFromJavaPage_Validation_NoMember;
+	public static String ExternalTypeFromJavaPage_Validation_EGLBuiltinType;
 }
