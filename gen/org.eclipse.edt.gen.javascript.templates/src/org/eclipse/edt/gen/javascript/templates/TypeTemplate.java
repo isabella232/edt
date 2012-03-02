@@ -205,10 +205,10 @@ public class TypeTemplate extends JavaScriptTemplate {
 	public void genConversionOperation(Type type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (arg.getConversionOperation() != null) {
 			Operation op = arg.getConversionOperation();
-			out.print("(function(x){ return x == null ? x : ");
-			out.print(ctx.getNativeImplementationMapping((Classifier) arg.getConversionOperation().getContainer()) + '.');
+			out.print("egl.eglx.lang.convert(");			
+			out.print(ctx.getNativeImplementationMapping((Classifier) op.getContainer()) + '.');
 			out.print(CommonUtilities.getOpName(ctx, op));
-			out.print(".apply( this, arguments );})(");
+			out.print(",");
 			Expression objectExpr = arg.getObjectExpr();
 			if (objectExpr instanceof BoxingExpression){
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
