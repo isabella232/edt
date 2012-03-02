@@ -74,4 +74,5 @@ public interface Constants {
 	public static final String HELPER_PREFIX = "Eze_";
 	public static final String FUNCTION_HELPER_SUFFIX = "_IBMiProxy";
 	public static final String FUNCTION_HELPER_PREFIX = "eze_";
+	public static final String IBMI_RUNTIME_CONTAINER_ID = "org.eclipse.edt.ide.jtopen.ibmiContainer";
 }

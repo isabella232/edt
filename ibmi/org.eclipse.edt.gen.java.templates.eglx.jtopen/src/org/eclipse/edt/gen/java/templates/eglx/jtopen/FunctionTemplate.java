@@ -166,7 +166,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 	}
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		// Make sure IBMi runtime container is added to the build path.
-		ctx.requireRuntimeContainer("org.eclipse.edt.ide.jtopen.ibmiContainer");
+		ctx.requireRuntimeContainer(Constants.IBMI_RUNTIME_CONTAINER_ID);
 		
 		ctx.invokeSuper(this, genDeclaration, createFunction(function, ctx), ctx, out);
 		Function proxyFunction = CommonUtilities.createProxyFunction(function);
