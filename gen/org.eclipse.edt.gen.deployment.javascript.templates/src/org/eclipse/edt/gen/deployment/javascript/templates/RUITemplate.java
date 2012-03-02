@@ -321,7 +321,11 @@ public class RUITemplate extends JavaScriptTemplate {
 	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
 		out.println("egl.init(");
 		out.pushIndent();
-		out.println("function(){");
+		if(isDevelopment){
+			out.println("egl.startupInitCallback = function() {");	
+		}else{
+			out.println("function() {");	
+		}	
 		out.pushIndent();
 		out.println("if(egl." + getFullPartName(part) + "){");
 		out.pushIndent();
