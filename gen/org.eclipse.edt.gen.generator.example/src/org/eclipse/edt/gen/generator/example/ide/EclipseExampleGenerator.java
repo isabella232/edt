@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.generator.example.ide;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
@@ -46,9 +47,18 @@ public class EclipseExampleGenerator extends EGL2Example {
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = (String) getParameterMapping().get(Constants.parameter_output).getValue();
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
+			// The classpath needs to be refreshed if the output folder is already on the classpath but doesn't exist.
+			// This check needs to run before writeFileInEclipse, because that method will create the output folder.
+			boolean forceClasspathRefresh = false;
+			IContainer outputContainer = EclipseUtilities.getOutputContainer(outputFolder, eglFile, "");
+			if(!outputContainer.exists()){
+				forceClasspathRefresh = true;
+			}
+			
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 			// make sure it's a source folder
-			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder);
+			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder, forceClasspathRefresh);
+			
 			// Add required runtimes.
 			EclipseUtilities.addRuntimesToProject(outputFile.getProject(), generatorProvider.getRuntimeContainers());
 			// call back to the generator, to see if it wants to do any supplementary tasks
