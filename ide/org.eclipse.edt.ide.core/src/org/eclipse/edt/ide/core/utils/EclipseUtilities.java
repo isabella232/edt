@@ -227,9 +227,11 @@ public class EclipseUtilities {
 	 * @param project       The project containing the folder (used when outputFolder is a relative path)
 	 * @param outputFolder  The path of the folder. It may be project-relative, or workspace-relative. If workspace-relative
 	 *                      it should start with 'F/' for a folder or 'P/' for a project.
+	 * @param forceClasspathRefresh A classpath needs to be refreshed if an entry already exists for the output folder, but the folder has yet to be
+	 * 								created.  This can occur when a project is exported without a generation directory.
 	 * @throws CoreException
 	 */
-	public static void addToJavaBuildPathIfNecessary(IProject project, String outputFolder) throws CoreException {
+	public static void addToJavaBuildPathIfNecessary(IProject project, String outputFolder, boolean forceClasspathRefresh) throws CoreException {
 		if (project.hasNature(JavaCore.NATURE_ID)) {
 			IJavaProject javaProject = JavaCore.create(project);
 			if (javaProject.exists()) {
@@ -255,11 +257,15 @@ public class EclipseUtilities {
 					}
 				}
 				
-				if (needToAdd) {
+				if (needToAdd){
 					IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
 					System.arraycopy(entries, 0, newEntries, 0, entries.length);
 					newEntries[newEntries.length - 1] = JavaCore.newSourceEntry(fullPath);
 					javaProject.setRawClasspath(newEntries, null);
+				}
+				
+				if (!needToAdd && forceClasspathRefresh){
+					javaProject.setRawClasspath(javaProject.readRawClasspath(), javaProject.readOutputLocation(), null);
 				}
 			}
 		}
