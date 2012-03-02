@@ -23,6 +23,7 @@ import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.ide.compiler.gen.EclipseJavaScriptGenerator;
 import org.eclipse.edt.ide.compiler.gen.JavaScriptGenerator;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.utils.CompoundConditionExpander;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class JavaScriptDevGenerator extends JavaScriptGenerator {
@@ -46,6 +47,12 @@ public class JavaScriptDevGenerator extends JavaScriptGenerator {
 			args = arguments.toArray(new String[arguments.size()]);
 		}
 		cmd.generate(args, new EclipseJavaScriptGenerator(cmd, msgRequestor), env, null);
+	}
+	
+	@Override
+	protected void preprocess(Part part) {
+		//expand complex conditional expressions that contain function invocations
+		new CompoundConditionExpander(part);
 	}
 
 	@Override
