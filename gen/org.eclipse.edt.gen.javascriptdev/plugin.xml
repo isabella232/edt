@@ -26,7 +26,7 @@
 		<provider
 			id="org.eclipse.edt.ide.gen.VEJavaScriptDevGenProvider"
 			class="org.eclipse.edt.gen.javascriptdev.ide.VEJavaScriptDevGenerator"
-			name="%GeneratorName"
+			name="VE Generator"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
 			version="0.7.0"
 			provider="Eclipse.org"
