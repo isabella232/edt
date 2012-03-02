@@ -80,7 +80,7 @@
          <attribute name="version_desc" type="string">
             <annotation>
                <documentation>
-                  Additional message for version. For example the widget library is in version 0.8.0 which based in Dojo 1.6.1. Set Dojo 1.6.1 as version description will show as 0.8.0 (Dojo 1.6.1) at version column.
+                  Additional message for version. For example the widget library is in version 0.8.0 which based in Dojo 1.7.1. Set Dojo 1.7.1 as version description will show as 0.8.0 (Dojo 1.7.1) at version column.
                </documentation>
             </annotation>
          </attribute>
@@ -179,7 +179,7 @@
       &lt;/provider&gt;
       &lt;provider
             importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
-            libname=&quot;Dojo widgets v0.8.0 (Dojo Toolkit v1.6.1)&quot;
+            libname=&quot;Dojo widgets v0.8.0 (Dojo Toolkit v1.7.1)&quot;
             projectName=&quot;org.eclipse.edt.rui.dojo_0.8.0&quot;
             resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
             resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;
@@ -187,7 +187,7 @@
       &lt;/provider&gt;
       &lt;provider
             importClass=&quot;org.eclipse.edt.ide.ui.wizards.DefaultWidgetLibraryImporter&quot;
-            libname=&quot;Dojo widgets remote v0.8.0 (Google CDN Dojo Toolkit v1.6.1)&quot;
+            libname=&quot;Dojo widgets remote v0.8.0 (Google CDN Dojo Toolkit v1.7.1)&quot;
             projectName=&quot;org.eclipse.edt.rui.dojo.remote_0.8.0&quot;
             resourceFolder=&quot;/org.eclipse.edt.ide.ui.rui/&quot;
             resourcePluginName=&quot;org.eclipse.edt.ide.ui.resources&quot;

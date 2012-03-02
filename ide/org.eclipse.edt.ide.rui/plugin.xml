@@ -82,7 +82,7 @@ Register the Preference Pages
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="false"
             version="0.8.0"
-            version_desc="Dojo 1.6.1">
+            version_desc="Dojo 1.7.1">
       </provider>
       <provider
             conflictClass="org.eclipse.edt.ide.rui.internal.project.DojoConflictClass"
@@ -97,7 +97,7 @@ Register the Preference Pages
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
             selected="true"
             version="0.8.0"
-            version_desc="Dojo 1.6.1 Remote">
+            version_desc="Dojo 1.7.1 Remote">
       </provider>
    </extension>
 </plugin>
