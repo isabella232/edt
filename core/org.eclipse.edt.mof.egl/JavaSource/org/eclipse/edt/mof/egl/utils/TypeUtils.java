@@ -420,12 +420,17 @@ public class TypeUtils implements MofConversion {
 					return false;
 				if (!parm1.getParameterKind().equals(parm2.getParameterKind()))
 					return false;
+				if (parm1.isNullable() != parm2.isNullable())
+					return false;
 			}
 			Type rt1 = d1.getReturnType();
 			if (rt1 == null) {
 				return d2.getReturnType() == null;
 			}
-			return rt1.equals(d2.getReturnType());
+			if (!rt1.equals(d2.getReturnType())) {
+				return false;
+			}
+			return d1.isNullable() == d2.isNullable();
 		}
 		if (p1 instanceof EGLClass && p2 instanceof EGLClass) {
 			EGLClass s1 = (EGLClass)p1;
