@@ -947,7 +947,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 				setElementInformation(setting, stmt);
 				block.getStatements().add(stmt);
 			}
-			else if (setexpr instanceof SetValuesExpression) {
+			else if (setexpr instanceof SetValuesExpression && !(setting instanceof org.eclipse.edt.compiler.core.ast.NewExpression)) {
 				SetValuesExpression ex = (SetValuesExpression)setexpr;
 				//move the statements from the setValues block into this block
 				for (Statement stmt : ex.getSettings().getStatements()) {
@@ -956,9 +956,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else {
 				
-				arrayIndex++;
-				IntegerLiteral indexExpr = factory.createIntegerLiteral();
-				indexExpr.setValue(String.valueOf(arrayIndex));
 				QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
 				setElementInformation(setting, func);
 				func.setQualifier(ref);
