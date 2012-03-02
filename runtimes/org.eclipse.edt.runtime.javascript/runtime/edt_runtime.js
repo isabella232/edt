@@ -38,6 +38,12 @@ egl.defineClass( "eglx.lang", "AnyValue"
 	// TODO sbg In java RT, this is an interface;  do we need any methods on it here?
 }
 );
+egl.eglx.lang.convert = function(convertFunc, value){
+	if(value == null){
+		return value;
+	}
+    return convertFunc.apply(null, Array.prototype.slice.call(arguments, 1));
+};
 egl.eglx.lang.AnyValue.ezeCopyTo = function(source, target){
 	if (source == null) {
 		if (target != null) {
@@ -61,10 +67,17 @@ egl.defineClass( "eglx.lang", "EAny",
 {
 }
 );
+egl.eglx.lang.converNullValue = function(value, convertFunc, args){
+	if(value == null){
+		return value;
+	}
+	return convertFunc(value, args);
+};
 egl.eglx.lang.EAny.ezeWrap = function(obj){
 	return new egl.eglx.lang.AnyBoxedObject(obj);
 };
 egl.eglx.lang.EAny.ezeCast = function(obj, cons){
+	obj = egl.boxAny(obj);
 	return egl.convertAnyToRefType(obj, obj.eze$$signature, cons);
 };
 egl.eglx.lang.EAny.unbox = function(obj){
