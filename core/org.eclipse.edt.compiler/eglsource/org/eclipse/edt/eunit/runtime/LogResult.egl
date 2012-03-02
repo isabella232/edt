@@ -236,6 +236,32 @@ Library LogResult
 		return(isEqual);			
 	end	
 	
+	function assertSmallFloatEqual(message String in, expected smallfloat in, actual smallfloat in)
+		isEqual boolean = isSmallFloatEqual(expected, actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	
+	function assertSmallFloatEqual1(expected smallfloat in, actual smallfloat in)
+		assertSmallFloatEqual("", expected, actual);
+	end
+	
+	//private helper methods
+	private function isSmallFloatEqual(expected smallfloat in, actual smallfloat in) returns (boolean)
+		normalExpected, normalActual, delta smallfloat;
+		mantissaExpected, mantissaActual int;
+		signExpected, signActual String;
+		deltaLimit float = 1E-4;
+		normalExpected = normalSmallFloat(expected, mantissaExpected, signExpected);
+		normalActual = normalSmallFloat(actual, mantissaActual, signActual);
+		delta = normalExpected - normalActual;
+		delta = MathLib.abs(delta);
+		isEqual boolean = (signExpected == signActual) && 
+					(mantissaExpected == mantissaActual) &&
+					(delta < deltaLimit);
+					
+		return(isEqual);			
+	end	
+	
 	private function expectAssertTrue(message String in, expected any in, actual any in, isEqual boolean in)
 		failedReason String = buildFailedReason(message, expected, actual);
 		assertTrue(failedReason, isEqual);		
@@ -256,6 +282,27 @@ Library LogResult
     
     
     private function normalFloat(afloat float in, mantissa int out, sign string out) returns(float)
+        mantissa = 0;
+        if(aFloat >= 0)
+            sign = "+";
+        else
+            sign = "-";
+            aFloat = aFloat * -1;
+        end
+        if(aFloat != null && aFloat != 0)
+            while(aFloat < 1)
+                aFloat = aFloat * 10;
+                mantissa = mantissa - 1;
+            end
+            while(aFloat >= 10)
+                aFloat = aFloat / 10;
+                mantissa = mantissa + 1;
+            end
+        end
+        return(aFloat);
+    end
+    
+   private function normalSmallFloat(afloat smallfloat in, mantissa int out, sign string out) returns(smallfloat)
         mantissa = 0;
         if(aFloat >= 0)
             sign = "+";
