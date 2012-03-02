@@ -35,6 +35,8 @@ import org.eclipse.edt.compiler.core.ast.CallbackTarget;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.File;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocationStatement;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -182,6 +184,39 @@ public class AddFunctionProposal extends AbstractMethodCorrectionProposal {
 				if(assStmt.getOffset() <= errorOffset && errorOffset <= assStmt.getOffset() + assStmt.getLength()){
 					createDelegateFunction(assStmt.getAssignment(), functionTextBuffer, needImports, currImports, functionName, errorOffset, currPkg[0], newLineDelimiter);
 				}
+				return false;
+			}
+			
+			public boolean visit(FunctionInvocationStatement functionInvoke){
+				if(functionInvoke.getOffset() <= errorOffset && errorOffset<= functionInvoke.getOffset() + functionInvoke.getLength()){
+					FunctionInvocation functionInvocation = functionInvoke.getFunctionInvocation();
+					FunctionBinding functionBiding = (FunctionBinding)functionInvocation.getTarget().resolveTypeBinding();
+					List paraDefList = functionBiding.getParameters();
+					Iterator realIter = functionInvocation.getArguments().iterator();
+					
+					FunctionParameterBinding errorParaBinding = null;
+					ITypeBinding typeBinding = null;
+					String name = null;
+					
+					for (Iterator iterator = paraDefList.iterator(); iterator.hasNext();) {
+						Expression aSimpleName = (Expression) realIter.next();
+						if(aSimpleName.getOffset() <= errorOffset && errorOffset<= aSimpleName.getOffset() + aSimpleName.getLength()){
+							name = aSimpleName.getCanonicalString();
+							errorParaBinding = (FunctionParameterBinding)iterator.next();
+							typeBinding = errorParaBinding.getType();
+							break;
+						}
+						
+						iterator.next();
+					}
+					
+					if(null != typeBinding && typeBinding instanceof DelegateBinding){
+						getDelegateFunctionString((DelegateBinding)typeBinding, name, functionName, functionTextBuffer, newLineDelimiter, needImports, currImports, currPkg[0]);
+					}
+					
+					return(false);
+				}
+
 				return false;
 			}
 		});
