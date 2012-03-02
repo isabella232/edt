@@ -1,0 +1,5 @@
+#Fri Mar 02 14:53:31 EST 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.rui.dojo.runtime.remote/EGLSource/org_eclipse_edt_rui_dojo_runtime_remote.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
