@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
@@ -54,7 +55,17 @@ public class EclipseEGL2Java extends EGL2Java {
 
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = (String) getParameterMapping().get(Constants.parameter_output).getValue();
+		
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
+			
+			// The classpath needs to be refreshed if the output folder is already on the classpath but doesn't exist.
+			// This check needs to run before writeFileInEclipse, because that method will create the output folder.
+			boolean forceClasspathRefresh = false;
+			IContainer outputContainer = EclipseUtilities.getOutputContainer(outputFolder, eglFile, "");
+			if(!outputContainer.exists()){
+				forceClasspathRefresh = true;
+			}
+			
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 
 			// write out generation report if there is one
@@ -62,7 +73,7 @@ public class EclipseEGL2Java extends EGL2Java {
 			IProject targetProject = outputFile.getProject();
 			
 			// make sure it's a source folder
-			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder);
+			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder, forceClasspathRefresh);
 			
 			// Add required runtimes. This will be the core runtime plus anything registered by contributed templates.
 			EDTRuntimeContainer[] containersToAdd;
