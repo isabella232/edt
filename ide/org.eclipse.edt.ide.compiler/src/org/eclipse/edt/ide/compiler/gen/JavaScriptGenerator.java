@@ -40,8 +40,6 @@ public class JavaScriptGenerator extends AbstractGenerator {
 	}
 	
 	protected void preprocess(Part part) {
-		//expand complex conditional expressions that contain function invocations
-		new CompoundConditionExpander(part);
 	}
 
 	@Override
