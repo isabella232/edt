@@ -1,0 +1,5 @@
+#Sat Mar 03 14:43:57 EST 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.rui.dojo.runtime.local/EGLSource/org_eclipse_edt_rui_dojo_runtime_local.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider
