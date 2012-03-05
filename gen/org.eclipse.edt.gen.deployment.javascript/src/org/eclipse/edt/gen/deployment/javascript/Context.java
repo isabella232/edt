@@ -11,21 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.javascript;
 
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class Context extends EglContext {
 	
-	protected ISystemEnvironment sysEnv;
 
-	public Context(AbstractGeneratorCommand processor, ISystemEnvironment sysEnv) {
+	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
-		this.sysEnv = sysEnv;
 	}
 
 	/**
@@ -49,10 +45,6 @@ public class Context extends EglContext {
 	public void handleValidationError(Type ex) {
 		// TODO Auto-generated method stub
 
-	}
-	
-	public IEnvironment getSystemIREnvironment(){
-		return sysEnv.getIREnvironment();
 	}
 
 }

@@ -17,12 +17,13 @@ import java.util.List;
 public class Constants {
 
 	// EGL message id's
-	public static final String EGLMESSAGE_GENERATION_FAILED = "9990";
-	public static final String EGLMESSAGE_GENERATION_FAILED_HEADERMSG = "9991";
-	public static final String EGLMESSAGE_COMPILE_FAILED_HEADERMSG = "9992";
+	public static final String EGLMESSAGE_GENERATION_FAILED = "9990"; //$NON-NLS-1$
+	public static final String EGLMESSAGE_GENERATION_FAILED_HEADERMSG = "9991"; //$NON-NLS-1$
+	public static final String EGLMESSAGE_COMPILE_FAILED_HEADERMSG = "9992"; //$NON-NLS-1$
 	public static final String PROPERTIES_FOLDER_NAME = "properties"; //$NON-NLS-1$
 	public static final String RUNTIME_FOLDER_NAME = "runtime"; //$NON-NLS-1$
 	public static final String RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME = "egl/messages"; //$NON-NLS-1$
+
 	public static final String USES_SERVICELIB_BINDSERVICE_FUNCTION = "Uses ServiceLib.bindService function";
 	
 	/**
@@ -31,11 +32,15 @@ public class Constants {
 	 * Do NOT add a file to this list if you do not want its contents to be added to EVERY HTML file.
 	 * Also note that files are linked in the order they appear here.  Be aware of dependencies!
 	 */
-	public static final String RUI_RUNTIME_BOOTSTRAP_FILE = "edt_core.js";
-	public static final String RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE = "edt_runtime_all.js";
-	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>();
+	public static final String RUI_MESSAGE_FILE = "RuiMessages"; //$NON-NLS-1$
+	public static final String RUI_RUNTIME_BOOTSTRAP_FILE = "edt_core.js"; //$NON-NLS-1$
+	public static final String RUI_RUNTIME_LOADER_FILE = "dojo.js"; //$NON-NLS-1$
+//	public static final String RUI_RUNTIME_LOADER_FILE = "dojo.js.uncompressed.js"; //$NON-NLS-1$
+	public static final String RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE = "edt_runtime_all.js"; //$NON-NLS-1$
+	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>(); //$NON-NLS-1$
 	static{
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_BOOTSTRAP_FILE);  //$NON-NLS-1$
+		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_LOADER_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl.js");  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("egl_mathcontext.js");  //$NON-NLS-1$

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.deployment.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibm.icu.util.StringTokenizer;
 
 public class PropertiesFileUtil {
@@ -99,5 +102,38 @@ public class PropertiesFileUtil {
 		}
 		
 		return includeStatement + ".properties";
+	}
+	
+	/**
+	 * Returns the names of files where we might find the properties from the js file path.  
+	 * They are ordered from most specific to least specific.  For example, if the properties 
+	 * file name is "foo" and the locale is "en_GB_variant1", this method will return an array
+	 * with the following elements:
+	 * <OL>
+	 * <LI>foo-en_GB_variant1.properties</LI>
+	 * <LI>foo-en_GB.properties</LI>
+	 * <LI>foo-en.properties</LI>
+	 * <LI>foo.properties</LI>
+	 * </OL>
+	 * @param jsFileName
+	 *            the full js file name of a property.
+	 * @return the names of files where we might find the properties.
+	 */
+	public static String[] convertToProperitesFiles(String jsFileName){
+		List<String> names = new ArrayList<String>();
+		int bundleIndex = jsFileName.lastIndexOf(BUNDLE_SEPARATOR);
+		int lastIndex = jsFileName.lastIndexOf('.');
+		jsFileName = jsFileName.substring(0, lastIndex);
+		names.add(jsFileName + ".properties");
+		if(bundleIndex != -1){
+			while(lastIndex > bundleIndex) {			
+				jsFileName = jsFileName.substring(0, lastIndex);
+				names.add(jsFileName + ".properties");
+				lastIndex = jsFileName.lastIndexOf('_');
+			}
+			names.add(jsFileName.substring(0, bundleIndex) + ".properties");
+		}
+		
+		return names.toArray(new String[names.size()]);
 	}
 }
