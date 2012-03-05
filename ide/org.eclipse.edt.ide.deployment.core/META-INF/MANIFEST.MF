@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EGL deployment IDE Core
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.deployment.core;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.ide.deployment.core,
@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.emf.edit;bundle-version="2.6.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.5.0",
  org.eclipse.core.runtime;bundle-version="3.6.0",
  org.eclipse.emf.common.ui;bundle-version="2.6.0",
- org.eclipse.edt.runtime.java;bundle-version="0.7.0";visibility:=reexport
-Bundle-Vendor: Eclipse EGL Development Tools
+ org.eclipse.edt.runtime.java;bundle-version="0.8.0";visibility:=reexport
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
