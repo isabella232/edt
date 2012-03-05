@@ -113,50 +113,7 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.E
 	
 	@SuppressWarnings("unchecked")
 	public void genLibraries(EGLClass part, Context ctx, TabbedWriter out) {
-		ctx.invoke(Constants.genLoadScript4DependentParts, part, ctx, out);
-		ctx.invoke(Constants.genLoadCSS, part, ctx, out);
 
 		super.genLibraries(part, ctx, out);
-	}
-	
-	public void genLoadScript4DependentParts(EGLClass part, Context ctx, TabbedWriter out) {
-		Set<Part> refParts = IRUtils.getReferencedPartsFor(part);
-		for(Part refPart:refParts) {
-			//TODO Need figure out a dynamic way to determine a type is in Runtime.
-			String packageName = refPart.getPackageName();
-			if ( !refPart.equals( part ) && refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) && 
-					!(refPart instanceof Program) && !packageName.startsWith( "eglx." ) && !packageName.startsWith( "egl." ) ) {
-				if ( refPart instanceof ExternalType ) {
-					ctx.invoke(Constants.genLoadScript4DependentParts, refPart, ctx, out);
-					Annotation annot = refPart.getAnnotation( "eglx.javascript.JavaScriptObject" );
-					if (annot != null) {
-						String pkg = (String)annot.getValue( "relativePath" );
-						String name = (String)annot.getValue( "externalName" );
-						
-						if (pkg == null|| pkg.length() == 0) {
-							pkg = "";
-						} else {
-							pkg = pkg.replace( '/', '.' );
-						}
-						if (name == null || name.length() == 0) {
-							name = refPart.getName();
-						}
-						out.println("egl.loadScript( \"" + pkg + "\",\"" + name + "\" );" );
-					}
-				} else {
-					out.println("egl.loadScript( \"" + refPart.getPackageName() + "\",\"" + refPart.getName() + "\" );" );
-				}
-			}
-		}
-	}
-	
-	public void genLoadCSS(EGLClass part, Context ctx, TabbedWriter out) {
-		Annotation a = part.getAnnotation( CommonUtilities.isRUIHandler( part ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET );
-		if ( a != null ){
-			String fileName = (String)a.getValue( "cssFile" );
-			if ( fileName != null && fileName.length() > 0 ) {
-				out.println( "egl.loadCSS( \"" + fileName + "\" );" );
-			}
-		}
 	}
 }
