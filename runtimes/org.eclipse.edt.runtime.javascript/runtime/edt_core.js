@@ -26,6 +26,7 @@
 			egl.localeInfo.decimalSeparator = decimalSeparator;
 			egl.localeInfo.groupingSeparator = groupingSeparator;
 		}
+		require({baseUrl: "../" + egl__contextRoot});
 		
 	};
 	dojoConfig = {
