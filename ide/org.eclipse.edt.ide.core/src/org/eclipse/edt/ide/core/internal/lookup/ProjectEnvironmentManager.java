@@ -45,7 +45,6 @@ public class ProjectEnvironmentManager {
     }
     
     public void clear(IProject project) {
-    	System.out.println("clear");
     	// Clear the IR environment first, since the resetting the project environment will re-add the object stores to the environment.
     	ProjectIREnvironment env = irEnvironments.get(project);
     	if (env != null) {
