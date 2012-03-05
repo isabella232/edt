@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EGL Rich UI Visual Editor
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.ide.rui.visualeditor;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.edt.ide.rui.visualeditor.plugin.Activator
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.0",
  org.eclipse.core.runtime,
@@ -17,13 +17,13 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.4.0",
  org.eclipse.ui.workbench.texteditor;bundle-version="3.4.0",
  org.eclipse.ui.views;bundle-version="3.3.0",
  org.eclipse.debug.ui;bundle-version="3.4.0",
- org.eclipse.edt.compiler;bundle-version="0.7.0",
- org.eclipse.edt.ide.core;bundle-version="0.7.0",
- org.eclipse.edt.ide.ui;bundle-version="0.7.0",
- org.eclipse.edt.ide.rui;bundle-version="0.7.0",
- org.eclipse.edt.mof;bundle-version="0.7.0",
- org.eclipse.edt.mof.egl;bundle-version="0.7.0",
- org.eclipse.edt.runtime.java;bundle-version="0.7.0"
+ org.eclipse.edt.compiler;bundle-version="0.8.0",
+ org.eclipse.edt.ide.core;bundle-version="0.8.0",
+ org.eclipse.edt.ide.ui;bundle-version="0.8.0",
+ org.eclipse.edt.ide.rui;bundle-version="0.8.0",
+ org.eclipse.edt.mof;bundle-version="0.8.0",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.0",
+ org.eclipse.edt.runtime.java;bundle-version="0.8.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.ide.rui.visualeditor.plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
