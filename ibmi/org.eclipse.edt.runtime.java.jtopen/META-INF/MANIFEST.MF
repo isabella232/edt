@@ -6,4 +6,4 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.edt.runtime.java;bundle-version="0.7.0"
+Require-Bundle: org.eclipse.edt.runtime.java;bundle-version="0.8.0"
