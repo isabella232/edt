@@ -1,7 +1,7 @@
 To create an Eclipse product for the running platform:
 
 1. Make sure your target platform has the appropriate Eclipse base and EDT build. For
-   example, you could be using the Eclipse IDE for JEE Developers 3.7.1 build, with EDT 0.7.0
+   example, you could be using the Eclipse IDE for JEE Developers 3.7.1 build, with EDT 0.8.0
    installed into it. This is the basis for the plug-ins that get packaged.
 
 2. Update the version of org.eclipse.epp.package.edt and org.eclipse.epp.package.edt.feature, replacing
