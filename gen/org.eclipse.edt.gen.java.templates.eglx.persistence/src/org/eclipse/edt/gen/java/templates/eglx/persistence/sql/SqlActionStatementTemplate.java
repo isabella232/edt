@@ -34,6 +34,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String genClause = "genClause";
 	private static final String genStatementOptions = "genStatementOptions";
 	private static final String AnnotationSQLResultSetControl = "eglx.persistence.sql.SQLResultSetControl";
+	public static final String AnnotationSQLGeneratedValue = "eglx.persistence.sql.GeneratedValue";
 	public static final String genSelectClause = "genSelectClause";
 	public static final String var_connection = "ezeConn";
 	public static final String var_statement = "ezeStatement";
@@ -134,7 +135,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		genSetTargetFromResultSet(target, newOut.getCurrentLine(), var_resultSet, ctx, out);
 	}
 	
-	private void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
+	protected void genSetTargetFromResultSet(Expression target, Field field, String var_resultSet, int columnIndex, Context ctx, TabbedWriter out) {
 		TabbedWriter newOut = ctx.getTabbedWriter();
 		ctx.invoke(genName, field, ctx, newOut);
 		MemberAccess expr = ctx.getFactory().createMemberAccess();

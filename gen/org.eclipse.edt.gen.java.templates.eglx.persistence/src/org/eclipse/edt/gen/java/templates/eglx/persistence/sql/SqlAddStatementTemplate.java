@@ -6,6 +6,7 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
@@ -47,7 +48,7 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 				}
 				out.println(var_statement + ".execute();");
 			}
-			
+			genGetGeneratedColumns(addStmt, ctx, out);
 			genSqlStatementEnd(addStmt, ctx, out);
 		}
 		else {
@@ -55,6 +56,76 @@ public class SqlAddStatementTemplate extends SqlActionStatementTemplate {
 		}
 	}
 
+	private void genGetGeneratedColumns(SqlAddStatement addStmt, Context ctx, TabbedWriter out) {
+		if(hasGeneratedValues(addStmt)){
+			int idx = 1;
+			String generatedColumnsResultSet = ctx.nextTempName();
+			//java.sql.ResultSet eze$Temp2 = ezeStatement.getGeneratedKeys();
+			out.print("java.sql.ResultSet ");
+			out.print(generatedColumnsResultSet);
+			out.print(" = ");
+			out.print(var_statement);
+			out.println(".getGeneratedKeys();");
+			//if (eze$Temp2 != null && eze$Temp2.next()) {
+			out.print("if (");
+			out.print(generatedColumnsResultSet);
+			out.print(" != null && ");
+			out.print(generatedColumnsResultSet);
+			out.println(".next()) {");
+			boolean targetIsList = addStmt.getTarget().getType().getClassifier().equals(TypeUtils.Type_LIST);
+			EGLClass targetType = null;
+			if (targetIsList) {
+				//array are currently not supported by the add
+			}
+			else if (addStmt.getTargets().size() > 1) {
+				//scalars are not supported to set the identity
+			}
+			else{
+				targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
+				if(SQL.isMappedSQLType(targetType)){
+				}
+				else{
+					for(Field field : targetType.getFields()){
+				    	if(field.getAnnotation(SqlActionStatementTemplate.AnnotationSQLGeneratedValue) != null){
+				    		genSetTargetFromResultSet(addStmt.getTarget(), field, generatedColumnsResultSet, idx++, ctx, out);
+				    	}
+					}
+				}
+			}
+			out.println("}");
+		}
+	}
+	
+	public void genStatementOptions(SqlAddStatement addStmt, Context ctx, TabbedWriter out, MemberName member) {
+		if(hasGeneratedValues(addStmt)){
+			out.print(", java.sql.Statement.RETURN_GENERATED_KEYS");
+		}
+	}
+
+	private boolean hasGeneratedValues(SqlAddStatement addStmt){
+		boolean targetIsList = addStmt.getTarget().getType().getClassifier().equals(TypeUtils.Type_LIST);
+		EGLClass targetType = null;
+		if (targetIsList) {
+			//array are currently not supported by the add
+		}
+		else if (addStmt.getTargets().size() > 1) {
+			//scalars are not supported to set the identity
+		}
+		else{
+			targetType = (EGLClass)addStmt.getTarget().getType().getClassifier();
+			if(SQL.isMappedSQLType(targetType)){
+			}
+			else{
+				for(Field field : targetType.getFields()){
+			    	if(field.getAnnotation(SqlActionStatementTemplate.AnnotationSQLGeneratedValue) != null){
+			    		return true;
+			    	}
+				}
+			}
+		}
+		return false;
+	}
+	
 	private void genAddSingleValue(EGLClass type, String varName, Context ctx, TabbedWriter out) {		
 		int i = 1;
 		for (Field f : type.getFields()) {
