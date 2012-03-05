@@ -16,20 +16,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Handler;
 
 public class RUIHandlerTemplate extends RUITemplate {
 	
-	public void genDeploymentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			RUIDependencyList dependencyList) {		
-		genHTML(handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, dependencyList);
+	public void genDeploymentHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale) {		
+		genHTML(handler, ctx, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale);
 	}
 	
-	private void genHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, Set<String> propFiles, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale,
-			RUIDependencyList dependencyList){
-		genHTML(false, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, false, false, false, dependencyList);
+	private void genHTML(Handler handler, Context ctx, TabbedWriter out, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale){
+		genHTML(false, handler, ctx, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, false, false, false);
 	}
 	
 }

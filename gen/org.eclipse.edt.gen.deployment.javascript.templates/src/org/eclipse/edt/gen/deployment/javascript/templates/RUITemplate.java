@@ -17,11 +17,9 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,26 +30,18 @@ import org.eclipse.edt.compiler.internal.interfaces.IEGLMessageContributor;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.Constants;
 import org.eclipse.edt.gen.deployment.javascript.Context;
-import org.eclipse.edt.gen.deployment.util.CommonUtilities;
-import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.WorkingCopyGenerationResult;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Enumeration;
-import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 
 public class RUITemplate extends JavaScriptTemplate {	
 	
 	private static final String DEFAULT_THEME = "claro";
-	private RUIDependencyList dependencyList;
 	
 	private static final Map<String, String> JAVASCRIPT_NOT_SUPPORTED_STRINGS = new HashMap<String, String>();
 	static{
@@ -74,55 +64,36 @@ public class RUITemplate extends JavaScriptTemplate {
 	}	
 	
 	protected void genHTML(boolean isDevelopment, Handler handler, Context ctx, TabbedWriter out,
-			List<String> egldds, Set<String> propFiles, HashMap<String, String> eglParameters, String userMsgLocale,
-			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug, RUIDependencyList dependencyList) {
-		this.dependencyList = dependencyList;
+			List<String> egldds, HashMap<String, String> eglParameters, String userMsgLocale,
+			String runtimeMsgLocale, boolean enableEditing, boolean contextAware, boolean isDebug) {
 		
 		out.println( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" "+ //$NON-NLS-1$
 				"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"); //$NON-NLS-1$
 		preGenComment(out);
 		out.println( "<html>" ); //$NON-NLS-1$
-		out.println( "<head>" );
-		out.pushIndent();
+		out.println( "<head>" );		
 		out.println("<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"/>");
-		generateTitle(handler, out);		
-		out.println("<script type=\"text/javascript\" src=\"" + Constants.RUNTIME_FOLDER_NAME + "/edt_core.js\" ></script>");
+		generateTitle(handler, out);
+		out.println("<script type=\"text/javascript\" src=\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUI_RUNTIME_BOOTSTRAP_FILE + "\" ></script>");
+		out.println("<script type=\"text/javascript\" src=\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUI_RUNTIME_LOADER_FILE + "\" ></script>");
 		out.println("<script type=\"text/javascript\">"); //$NON-NLS-1$
-		out.pushIndent();
 		if(isDevelopment){
 			generateHeader(handler, out, enableEditing, contextAware, isDebug);
-		}
-		generateEGLParameters(out, eglParameters);
-		generatePropertiesFiles(handler, ctx, propFiles, runtimeMsgLocale, out);				
-		generateRuntimeFilePath(out);
-		if(isDevelopment){
-			generateDevelopmentRuntimeFilePath(out);
 		}		
-		generateDependentFilePath(handler, ctx, out, isDevelopment);
-		generateIncludeFiles(handler, ctx, out);
-		generateBindingFileImports(handler, ctx, out, egldds);				
-		out.popIndent();
-		out.println("</script>");		
-		generateCSSFiles(handler, ctx, out);
-		out.popIndent();
+		generateEGLParameters(out, eglParameters, runtimeMsgLocale);
+		out.println("</script>");//$NON-NLS-1$		
 		out.println("</head>");
-		out.println("<body class=\"" + getTheme(handler) + "\">");
-		out.pushIndent();
+		out.println("<body class=\"" + getTheme(handler) + "\">");		
 		generateNoJavaScriptCheck(runtimeMsgLocale, out);
 		out.println("<script type=\"text/javascript\">"); //$NON-NLS-1$
-		out.pushIndent();
-		generateStartupInit(handler, out, userMsgLocale, isDevelopment, isDebug);
-		out.popIndent();
-		out.println("</script>");//$NON-NLS-1$
-		out.popIndent();
-		out.println("</body>");
-		out.popIndent();
+		generateStartupInit(handler, ctx, out, userMsgLocale, isDevelopment, isDebug, egldds, enableEditing, contextAware, eglParameters, runtimeMsgLocale);
+		out.println("</script>");//$NON-NLS-1$		
+		out.println("</body>");		
 		out.println("</html>");	
 	}
 	
-	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List<String> egldds, Set<String> propFiles, HashMap<String, String> eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug,
-			RUIDependencyList dependencyList){
-		genHTML(true, handler, ctx, out, egldds, propFiles, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug, dependencyList);		
+	public void genDevelopmentHTML(Handler handler, Context ctx, TabbedWriter out, List<String> egldds, HashMap<String, String> eglParameters, String userMsgLocale, String runtimeMsgLocale, Boolean enableEditing, Boolean contextAware, Boolean isDebug){
+		genHTML(true, handler, ctx, out, egldds, eglParameters, userMsgLocale, runtimeMsgLocale, enableEditing, contextAware, isDebug);		
 	}	
 	
 	public void preGenComment(TabbedWriter out){
@@ -160,19 +131,12 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("egl__contextAware=" + contextAware + ";"); //$NON-NLS-1$
 	}
 	
-	private void generateEGLParameters(TabbedWriter out, HashMap<String, String> eglParameters) {
+	private void generateEGLParameters(TabbedWriter out, HashMap<String, String> eglParameters, String runtimeMsgLocale) {
 		/**
 		 * output all the passed egl parameters
 		 */
-//		if(eglParameters!=null){
-//			for (Iterator iterator = eglParameters.entrySet().iterator(); iterator.hasNext();) {
-//				Map.Entry mapEntry = (Map.Entry) iterator.next();
-//				out.println((String)mapEntry.getKey() + "=\"" + (String)mapEntry.getValue() + "\";");  //$NON-NLS-1$//$NON-NLS-2$
-//			}
-//		}
-		
 		String userMsgLocale = (String) eglParameters.get("egl__defaultRuntimeMessagesLocale");
-		String params = "\"" + eglParameters.get("egl__contextRoot") + "\", \"" + eglParameters.get("egl__defaultDeploymentDescriptor") + "\", \"" + userMsgLocale;
+		String params = "\"" + eglParameters.get("egl__contextRoot") + "\", \"" + eglParameters.get("egl__defaultDeploymentDescriptor") + "\", \"" + userMsgLocale + "\", \"" + runtimeMsgLocale;
 		Locale locale;
 		int idx = userMsgLocale.indexOf('_');
 		if (idx == -1) {
@@ -197,153 +161,83 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("egl.initParams(" + params + ");");
 	}
 	
-	private void generateCSSFiles(Handler handler, Context ctx, TabbedWriter out) {
-		LinkedHashSet<String> cssFiles = new LinkedHashSet<String>();
-		genCSSFiles(handler, cssFiles);
-
-		Set<Part> refParts = getDependencyList(handler, ctx).get();
-		for(Part refPart:refParts){
-			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart)){
-				genCSSFiles((Handler)refPart, cssFiles);
-			}
-		}		
-		
-		ArrayList<String> cssFileList = new ArrayList<String>(cssFiles);
-		Collections.reverse(cssFileList);
-		for (Iterator<String> iter = cssFileList.iterator(); iter.hasNext();) {
-			String cssFileString = (String)iter.next();
-			out.println( "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssFileString + "\" />"); //$NON-NLS-1$
-		}		
-	}	
-	
-	private void generatePropertiesFiles(Handler handler, Context ctx, Set<String> propFiles, String runtimeMsgLocale, TabbedWriter out){
-		if(runtimeMsgLocale == null){
-			runtimeMsgLocale = "en_US";
+	private void genModuleName(Handler part, boolean isDevelopment, StringBuilder buf) {
+		buf.append("\"");
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
 		}
-		// Add support for RUI Property file		
-		if (propFiles != null && propFiles.size() > 0) {
-			ArrayList<String> propFileList = new ArrayList<String>(propFiles);
-			Collections.reverse(propFileList);
-			
-			for (Iterator<String> iter = propFileList.iterator(); iter.hasNext();) {
-				String propertiesFile = (String)iter.next();
-				out.println("egl.require(\"" + pathToModule(Constants.PROPERTIES_FOLDER_NAME + "." + propertiesFile) + "\");");
-			}
-		}
+		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		if(isDevelopment){
+			buf.append(".js?contextKey=\" + egl__contextKey");
+		}else{
+			buf.append("\"");
+		}		
 	}
 	
-//	private void generateRuntimePropertiesFiles(TabbedWriter out) {
-//		String propertiesFile = "rununit";
-//		out.println("RUI_RUNTIME_JAVASCRIPT_FILES.push(\"" + RuntimePropertiesFileUtil.getJavascriptFileName(propertiesFile) + "\");");
-//	}
-	
-	private void generateBindingFileImports(Handler part, Context ctx, TabbedWriter out, List<String> egldds){
-		if (egldds == null || egldds.size() == 0) {
-			return;
-		}
-		
-		@SuppressWarnings("unchecked")
-		List<Type> processedParts = (List<Type>)ctx.get(genBindFiles);
-		if(processedParts == null){
-			processedParts = new ArrayList<Type>();
-			ctx.put(genBindFiles, processedParts);
-		}
-		processedParts.add(part);
-		try {
-			for ( int i = 0; i < egldds.size(); i ++ ) {
-				String next = (String)egldds.get(i);
-				if (next != null && next.length() > 0) {
-					out.println( "egl.includeBind(\"" + next + "\");" );
+	private void generateStartupInit(Handler part, Context ctx, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug, 
+			List<String> egldds, boolean enableEditing, boolean contextAware, HashMap<String, String> eglParameters, 
+			String runtimeMsgLocale) {		
+		StringBuilder buf = new StringBuilder();
+		genModuleName(part, isDevelopment, buf);
+		out.print("require([");
+		out.print("\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE + "\"");
+		if(isDevelopment){
+			for (String runtimeFile : Constants.RUI_DEVELOPMENT_JAVASCRIPT_FILES) {
+				if(!Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE.equals(runtimeFile)){
+					out.print(", \"" + Constants.RUNTIME_FOLDER_NAME + "/" + runtimeFile + "\"");
 				}
 			}
-
-			return;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-	}
-	
-
-	private void generateRuntimeFilePath(TabbedWriter out) {
-		boolean useAll = false;
-		
-		if (useAll) {
-			generateRuntimeRequire(out, Constants.RUI_RUNTIME_JAVASCRIPT_FILES);
 		}
-		else {
-			//Use all in one runtime file
-			final String prefix = Constants.RUNTIME_FOLDER_NAME + ".";
-			String path = "\""+ prefix + pathToModule(Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE) + "\"";
-			out.println("egl.require(" + path + ");");
-		}
-	}	
-	
-	private void generateDevelopmentRuntimeFilePath(TabbedWriter out) {
-		generateRuntimeRequire(out, Constants.RUI_DEVELOPMENT_JAVASCRIPT_FILES);
-	}
-	
-	private void generateRuntimeRequire(TabbedWriter out, List<String> runtimeList) {
-		final String prefix = Constants.RUNTIME_FOLDER_NAME + ".";	
-		for (String runtimeFile : runtimeList) {
-			if(!Constants.RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE.equals(runtimeFile)){
-				String path = prefix + pathToModule(runtimeFile);
-				out.println("egl.require(\"" + path + "\");");
+		out.println("], function() {");	
+		out.print("require([");		
+		out.print("\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/" + 
+				Constants.RUI_MESSAGE_FILE  + "-" + userMsgLocale + "\", ");
+		// Gen bnd file
+		if (egldds != null && egldds.size() > 0) {
+			@SuppressWarnings("unchecked")
+			List<Type> processedParts = (List<Type>)ctx.get(genBindFiles);
+			if(processedParts == null){
+				processedParts = new ArrayList<Type>();
+				ctx.put(genBindFiles, processedParts);
 			}
-		}
-	}
-	
-	private String pathToModule(String path){
-		int start = 0, offset = 3;
-		if(path.indexOf('\"') == 0){
-			start = 1;
-			offset = 4;
-		}
-		return path.substring(start, path.length()-offset).replace('/', '.');
-	}
-	
-	private void generateDependentFilePath(Handler handler, Context ctx, TabbedWriter out, boolean isDevelopment) {
-		LinkedHashSet<String> dependentFiles = new LinkedHashSet<String>();
-		ctx.invoke(genOutputFileName, handler, dependentFiles);
-
-		Set<Part> refParts = getDependencyList(handler, ctx).get();
-		for(Part refPart:refParts){
-			if((refPart instanceof EGLClass && !(refPart instanceof Service) && !(refPart instanceof Interface) ) || refPart instanceof Enumeration)
-				ctx.invoke(genOutputFileName, refPart, dependentFiles);
-		} 
-		
-		ArrayList<String> dependentFileList = new ArrayList<String>(dependentFiles);		
-		Collections.reverse(dependentFileList);		
-		for (Iterator<String> iter = dependentFileList.iterator(); iter.hasNext();) {
-			out.println("egl.require(\"" + pathToModule(iter.next()) + "\");");			
-		}
-	}
-	
-	private void generateStartupInit(Handler part, TabbedWriter out, String userMsgLocale, boolean isDevelopment, boolean isDebug) {
-		out.println("egl.init(");
-		out.pushIndent();
+			processedParts.add(part);
+			try {
+				for ( int i = 0; i < egldds.size(); i ++ ) {
+					String next = (String)egldds.get(i);
+					if (next != null && next.length() > 0) {
+						if(isDevelopment)
+							out.print("egl__href + ");
+						out.print("\"" + next + "-bnd.js\", ");
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}		
+		out.print(buf.toString());
 		if(isDevelopment){
-			out.println("egl.startupInitCallback = function() {");	
+			out.println("], egl.startupInitCallback = function() {");	
 		}else{
-			out.println("function() {");	
+			out.println("], function() {");	
 		}	
-		out.pushIndent();
+		
+		out.print("egl.init(");
+		out.println("function(){");
 		out.println("if(egl." + getFullPartName(part) + "){");
-		out.pushIndent();
 		if(isDevelopment){
 			generateDevelopmentRootHandler(part,out);
 		}else{
 			generateRootHandler(part,out);
 		}
-		out.popIndent();
 		out.println("}else{");
-		out.pushIndent();
 		out.println("egl.reportHandlerLoadError(\"egl." + getFullPartName(part) + "\");");
-		out.popIndent();
 		out.println("}");
-		out.popIndent();
 		out.println("}");
-		out.popIndent();
 		out.println(");");
+		out.println("});");
+		out.println("});");
 	}
 
 	private String getFullPartName(Handler part) {
@@ -354,27 +248,6 @@ public class RUITemplate extends JavaScriptTemplate {
 			packageName = "";
 		}
 		return packageName + part.getName();
-	}
-	
-	private void generateIncludeFiles(Handler handler, Context ctx, TabbedWriter out) {					
-		
-		LinkedHashSet<String> includeFiles = new LinkedHashSet<String>();
-		ctx.invoke(genIncludeFiles, handler, includeFiles);
-		
-		Set<Part> refParts = getDependencyList(handler, ctx).get();
-		for(Part refPart:refParts){
-			if(CommonUtilities.isRUIHandler(refPart) || CommonUtilities.isRUIWidget(refPart) || refPart instanceof ExternalType){
-				ctx.invoke(genIncludeFiles, refPart, includeFiles);
-			}
-		}		
-
-		if(!includeFiles.isEmpty()){			
-			ArrayList<String> includeFileList = new ArrayList<String>(includeFiles);
-			Collections.reverse(includeFileList);
-			for (Iterator<String> iter = includeFileList.iterator(); iter.hasNext();) {
-				out.println("egl.loadFile(\"" + iter.next() + "\");");
-			}			
-		}
 	}
 	
 	private void generateRootHandler( Handler part, TabbedWriter out ) {
@@ -552,32 +425,5 @@ public class RUITemplate extends JavaScriptTemplate {
 			return "CZE";
 		else
 			return "ENU";
-	}
-	
-	public void genCSSFiles(Handler handler, LinkedHashSet<String> cssFiles){
-		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
-		if ( a != null ){
-			String fileName = (String)a.getValue( "cssFile" );
-			if ( fileName != null && fileName.length() > 0 ){
-				cssFiles.add(fileName);
-			}
-		}
-	}	
-	
-	public void genIncludeFiles(Handler handler, LinkedHashSet<String> includeFiles){
-		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
-		if ( a != null ){
-			String fileName = (String)a.getValue( "includeFile" );
-			if ( fileName != null && fileName.length() > 0 ){
-				includeFiles.add(fileName);
-			}
-		}
-	}
-	
-	protected RUIDependencyList getDependencyList(Part part, Context ctx) {
-		if (dependencyList == null) {
-			dependencyList = new RUIDependencyList(ctx.getSystemIREnvironment(), part);
-		}
-		return dependencyList;
 	}
 }
