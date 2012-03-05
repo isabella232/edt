@@ -23,6 +23,7 @@ import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -108,50 +109,36 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genModuleName(ExternalType part, StringBuilder buf) {
-		Annotation annot = part.getAnnotation( "eglx.javascript.JavaScriptObject" );
-		String fullName = "";
-		if (annot != null) {
-			String pkg = (String)annot.getValue( "relativePath" );
-			String name = (String)annot.getValue( "externalName" );
-			
-			if (pkg == null || pkg.isEmpty()) {
-				pkg = part.getPackageName().replace( '.', '/' );
-			}
-			if (name == null || name.isEmpty()) {
-				name = part.getName();
-			}
-			if (pkg.length() > 0) {
-				fullName = JavaScriptAliaser.packageNameAlias(pkg.split("[/]"), '/');
-				if (fullName.charAt(fullName.length() - 1) != '/') {
-					fullName += "/" ;
-				}
-			}
-			fullName += JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(name));
+		buf.append("\"");
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
 		}
-		buf.append("\"" + fullName + "\"");
+		buf.append(JavaScriptAliaser.getAliasForExternalType(JavaScriptAliaser.getAlias(part.getId())));
+		buf.append("\"");
 	}
-
 	private String getExternalJSPath(ExternalType part) {
-		Annotation annot = part.getAnnotation( "eglx.javascript.JavaScriptObject" );
+		Annotation annot = part.getAnnotation( Constants.JACASCRIPT_OBJECT );
 		String fullName = "";
+		String pkg = null, name = null;
 		if (annot != null) {
-			String pkg = (String)annot.getValue( "relativePath" );
-			String name = (String)annot.getValue( "externalName" );
-			
-			if (pkg == null || pkg.isEmpty()) {
-				pkg = part.getPackageName().replace( '.', '/' );
-			}
-			if (name == null || name.isEmpty()) {
-				name = part.getName();
-			}
-			if (pkg.length() > 0) {
-				fullName = pkg;
-				if (pkg.charAt(pkg.length() - 1) != '/') {
-					fullName += "/" ;
-				}
-			}
-			fullName += name;
+			pkg = (String)annot.getValue( Constants.EXTERNALTYPE_RELATIVE_PATH );
+			name = (String)annot.getValue( Constants.EXTERNALTYPE_EXTERNAL_NAME );			
 		}
+		if (pkg == null || pkg.isEmpty()) {
+			pkg = part.getPackageName().replace( '.', '/' );
+		}
+		if (name == null || name.isEmpty()) {
+			name = part.getName();
+		}
+		if (pkg.length() > 0) {
+			fullName = pkg;
+			if (pkg.charAt(pkg.length() - 1) != '/') {
+				fullName += "/" ;
+			}
+		}
+		fullName += name;
 		return fullName;
 	}
 }
