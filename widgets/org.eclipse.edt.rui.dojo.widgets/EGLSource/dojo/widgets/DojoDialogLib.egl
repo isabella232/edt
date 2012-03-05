@@ -74,7 +74,7 @@ library DojoDialogLib {}
 		return(createDialog(title, message, content, buttons));	
 	end
 	
-	function promptForValue(title String in, message String in, callback promptSupplied) returns (DojoDialog)
+	function promptForValue(title String? in, message String in, callback promptSupplied) returns (DojoDialog)
 		promptField DojoTextField { width = "300px", style = "max-width: 500px"  };
 		
 		okButton DojoButton =  createButtonForPrompt("OK", ID_OK, promptField);
