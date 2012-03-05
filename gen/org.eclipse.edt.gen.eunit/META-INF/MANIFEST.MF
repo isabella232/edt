@@ -1,15 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EGL Compliance Kit
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.eunit
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Export-Package: org.eclipse.edt.gen.eunit,
  org.eclipse.edt.gen.eunit.templates,
  org.eclipse.edt.gen.eunit.templates.java,
  org.eclipse.edt.gen.eunit.templates.javascript
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.eclipse.edt.gen;bundle-version="0.7.0",
- org.eclipse.edt.mof;bundle-version="0.7.0",
- org.eclipse.edt.mof.egl;bundle-version="0.7.0",
- org.eclipse.edt.compiler;bundle-version="0.7.0"
-Bundle-Vendor: Eclipse EGL Development Tools
+Require-Bundle: org.eclipse.edt.gen;bundle-version="0.8.0",
+ org.eclipse.edt.mof;bundle-version="0.8.0",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.0",
+ org.eclipse.edt.compiler;bundle-version="0.8.0"
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
