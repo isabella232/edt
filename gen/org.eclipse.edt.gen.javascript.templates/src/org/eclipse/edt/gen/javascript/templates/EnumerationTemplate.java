@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import java.util.List;
 
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.EEnumLiteral;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Enumeration;
@@ -80,6 +81,17 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 
 	public void genAccessor(Enumeration part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genRuntimeTypeName, (Type)part, ctx, out, TypeNameKind.JavascriptImplementation);
+	}
+	
+	public void genModuleName(Enumeration part, StringBuilder buf) {
+		buf.append("\"");
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
+		}
+		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append("\"");
 	}
 
 }
