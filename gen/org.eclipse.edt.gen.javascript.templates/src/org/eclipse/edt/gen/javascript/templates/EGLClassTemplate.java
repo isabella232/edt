@@ -11,25 +11,35 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
@@ -100,6 +110,92 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 
 	public void preGenFunction(EGLClass part, Context ctx, Function arg) {
 		ctx.invoke(preGen, arg, ctx);
+	}
+	
+	public void genPart(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genAMDHeader, part, ctx, out);
+		ctx.invokeSuper(this, genPart, part, ctx, out);
+		out.println("});");
+	}
+	
+	public void genModuleName(EGLClass part, StringBuilder buf) {
+		buf.append("\"");
+		String pkg = part.getPackageName();
+		if (pkg.length() > 0) {
+			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+			buf.append('/');
+		}
+		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		buf.append("\"");
+	}
+	
+	public void genCSSFile(EGLClass part, TabbedWriter out){
+		
+	}
+	
+	private String getIncludeFileName(EGLClass part) {
+		Annotation a = null;
+		if(part instanceof Handler)
+			a = part.getAnnotation( CommonUtilities.isRUIHandler( part ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
+		else if(part instanceof ExternalType){
+			a = part.getAnnotation( "eglx.javascript.JavaScriptObject" );
+		}
+		if ( a != null ){
+			String fileName = (String)a.getValue( "includeFile" );
+			return fileName;
+		}
+		return null;
+	}
+	
+	public void genIncludeFile(EGLClass part, TabbedWriter out){
+		String fileName = getIncludeFileName(part);
+		if ( fileName != null && fileName.length() > 0 ){
+			out.println("egl.loadFile(\"" + fileName + "\",\"" +  part.getFullyQualifiedName() + "\");");
+		}
+	}	
+	
+	public void genIncludeFileDependent(EGLClass part, TabbedWriter out){
+		String fileName = getIncludeFileName(part);
+		if ( fileName != null && fileName.length() > 0  && (fileName.endsWith(".html") || fileName.endsWith(".htm"))){
+			out.print(".concat(egl.eze$$externalJS[\"" + part.getFullyQualifiedName() + "\"])");
+		}
+	}
+	
+	public void genAMDHeader(EGLClass part, Context ctx, TabbedWriter out) throws NoSuchMethodException {
+		ctx.invoke(genIncludeFile, part, out);
+		out.print("define([");
+		StringBuilder buf = new StringBuilder();
+		ctx.invoke(genDependent, part, ctx, out, buf);
+		if( buf.length() > 0){
+			String bufStr = buf.toString().substring(0, buf.length() - 2);
+			out.print(bufStr);
+		}
+		out.print("]");
+		ctx.invoke(genIncludeFileDependent, part, out);
+		out.println(",function(){");
+		ctx.invoke(genCSSFile, part, out);		
+	}
+	
+	public void genDependent(EGLClass part, Context ctx, TabbedWriter out, StringBuilder buf) throws NoSuchMethodException {
+		try {			
+			IEnvironment env = ctx.getEnvironment();
+			Method method = env.getClass().getMethod("getSystemEnvironment");
+			ISystemEnvironment sysEnv = (ISystemEnvironment) method.invoke(env);
+			for (Part refPart: IRUtils.getReferencedPartsFor(part)) {
+				if (!(refPart instanceof Delegate) && !(refPart instanceof Service) && 
+						!(refPart instanceof Interface) && 
+						!IRUtils.isSystemPart(refPart.getFullyQualifiedName(), sysEnv.getIREnvironment())) {
+					ctx.invoke(genModuleName, refPart, buf);
+					buf.append(", ");							
+				}
+			}			
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {

@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import java.util.List;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -100,5 +101,15 @@ public class HandlerTemplate extends JavaScriptTemplate {
 	}
 	public void genCloneMethod(Handler handler, Context ctx, TabbedWriter out) {
 		out.print(".eze$$clone()");
+	}
+	
+	public void genCSSFile(Handler handler, TabbedWriter out){
+		Annotation a = handler.getAnnotation( CommonUtilities.isRUIHandler( handler ) ? Constants.RUI_HANDLER : Constants.RUI_WIDGET);
+		if ( a != null ){
+			String fileName = (String)a.getValue( "cssFile" );
+			if ( fileName != null && fileName.length() > 0 ){
+				out.println("egl.loadCSS(\"" + fileName + "\");"); 
+			}
+		}
 	}
 }

@@ -168,4 +168,12 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println( "\t\t];" );
 		out.println( "}" );
 	}
+	
+	public void genDependent(Library library, Context ctx, TabbedWriter out, StringBuilder buf) throws NoSuchMethodException {
+		ctx.invokeSuper(this, "genDependent", library, ctx, out, buf);
+		if(CommonUtilities.isRUIPropertiesLibrary(library)){
+			String file = CommonUtilities.getPropertiesFile((Library)library);
+			buf.append("\"" + Constants.PROPERTIES_FOLDER_NAME + "/" + file + "-\" + egl__htmlLocale, ");
+		}
+	}
 }
