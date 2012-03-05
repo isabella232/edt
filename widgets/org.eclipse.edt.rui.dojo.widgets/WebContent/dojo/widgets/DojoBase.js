@@ -116,13 +116,15 @@ egl.defineClass(
 	},
 	"renderWhenDojoIsDoneLoading" : function() {
 		var eglWidget = this;
-		eglWidget.renderingStep = 0;
-		if (egl.IE)
-			setTimeout(function() {	
+		require(["dojo/main"], function(){			
+			eglWidget.renderingStep = 0;
+			if (egl.IE)
+				setTimeout(function() {	
+					eglWidget.renderWhenDojoIsDoneLoadingSafely();
+				},1);
+			else
 				eglWidget.renderWhenDojoIsDoneLoadingSafely();
-			},1);
-		else
-			eglWidget.renderWhenDojoIsDoneLoadingSafely();
+		});		
 	},
 	"renderWhenDojoIsDoneLoadingSafely" : function() {
 		var eglWidget = this;
