@@ -3,7 +3,7 @@
       id="org.eclipse.edt.sdk.feature"
       label="%featureName"
       version="0.8.0.qualifier"
-      provider-name="Eclipse EGL Development Tools">
+      provider-name="%providerName">
 
    <description>
       %description
