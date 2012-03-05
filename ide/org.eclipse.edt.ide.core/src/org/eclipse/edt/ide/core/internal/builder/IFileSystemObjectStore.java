@@ -13,7 +13,6 @@ package org.eclipse.edt.ide.core.internal.builder;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -309,4 +308,9 @@ public class IFileSystemObjectStore extends AbstractObjectStore implements Cachi
 		}
 	}
 	
+	@Override
+	public String toString() {
+		// For easier debugging.
+		return "IFileSystemObjectStore root=" + root;
+	}
 }

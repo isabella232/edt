@@ -57,6 +57,7 @@ public class Builder extends IncrementalProjectBuilder {
     protected static final boolean DEBUG = false;
     
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
+		System.out.println("build");
 
 		//get required projects here so we can return to eclipse if exception during build.
 		ProjectBuildPath projBP = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
