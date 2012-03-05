@@ -11,27 +11,23 @@
 
 package org.eclipse.edt.gen.generator.eglsource;
 
-import java.io.StringWriter;
+import java.util.Hashtable;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.EglContext;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.Generator;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class EglSourceGenerator extends Generator {
 
 	protected EglSourceContext context;
-	protected TabbedWriter out;
+	
 	protected AbstractGeneratorCommand generator;
 
 	public EglSourceGenerator(AbstractGeneratorCommand processor) {
 		this(processor, null);
 		generator = processor;
-		out = new TabbedWriter(new StringWriter());
-		out.setAutoIndent(false);
 	}
 
 	public EglSourceGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
@@ -39,16 +35,22 @@ public class EglSourceGenerator extends Generator {
 		generator = processor;
 	}
 
-	public EglContext makeContext(AbstractGeneratorCommand processor) {
+	public EglSourceContext makeContext(AbstractGeneratorCommand processor) {
+		return makeContext(processor, false);
+	}
+	
+	public EglSourceContext makeContext(AbstractGeneratorCommand processor, boolean needTabWritter){
+			
 		if(context == null){
 			context = new EglSourceContext(processor);
+			context.makeTabbedWriter();
 		}
 		return context;
 	}
 
 	public void generate(Object part) throws GenerationException {
 		try {
-			context.invoke("genObject", (Object) part, context, out);
+			context.invoke("genObject", (Object) part, context);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -70,7 +72,7 @@ public class EglSourceGenerator extends Generator {
 	}
 
 	@Override
-	public Object getResult() {
-		return out.getWriter().toString();
+	public Hashtable<String, String> getResult() {
+		return context.getSourceFileContentTable();
 	}
 }
