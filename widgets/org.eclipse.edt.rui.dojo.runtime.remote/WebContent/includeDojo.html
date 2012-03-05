@@ -1,10 +1,24 @@
 <script type="text/javascript">
-	var djConfig = {
-				modulePaths: {"bidi": "dojo/widgets/bidi"},
-				locale: egl__htmlLocale.replace(/_/, "-").toLowerCase() 
-	};	
+	require({
+		paths: {"bidi": "dojo/widgets/bidi"},
+		packages : [ {
+			name : 'dojo/samples',
+			location : '../dojo/samples'
+		}, {
+			name : 'dojo',
+			location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo'
+		}, {
+			name : 'dijit',
+			location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit'
+		}, {
+			name : 'dojox',
+			location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox'
+		} ],
+		locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
+	});
+ 	egl.urlPrefix = "";
+	egl.dojoProvider = "Remote Workspace, 1.6.1, project: org.eclipse.edt.rui.dojo.remote_0.7.0";
 </script>
-
 <style type="text/css">
 	@import "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/resources/dojo.css";	    
     @import "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/grid/resources/Grid.css";	
@@ -15,49 +29,7 @@
 <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/grid/resources/claroGrid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" />
 <link href="css/org.eclipse.edt.rui.dojo.css" type="text/css" rel="stylesheet" media="screen"/>
 
-<script type="text/javascript">	
-	//
-	// Insert your Google API key between the quotes below.
-	//
-	egl.googleAPIKey = "ABQIAAAAwQOysEjEuyVFQcAykVzb0RQhWplJaXdZ3rqxeeXjCXxknRvNiRTvSaRpNwSRXqkLeczavcQBj4CmSg";
 
-	if(egl.googleAPIKey && egl.googleAPIKey != ""){
-		var oScript = "http://www.google.com/jsapi?key=" + egl.googleAPIKey + "&callback=loadDojoLib";
-		document.writeln('<scri'+'pt src='+oScript+' type=text/javascript></sc'+'ript>');
-	}else{
-		document.location = "README_GOOGLE_RUNTIME.html";
-	}
-
-	function loadDojoLib(){
-		try {
-			egl.DOJO_VERSION = "1.7.1"; 
-			egl.urlPrefix = "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/";		
-			
-			if(typeof(google) === "undefined")
-				document.location = "README_GOOGLE_RUNTIME.html";
-			else
-				google.load("dojo", egl.DOJO_VERSION );
-			
-			google.setOnLoadCallback(function(){
-				try {
-					if (typeof(dojo) === "undefined") {
-			    		document.location = "README_GOOGLE_RUNTIME.html";
-			    	}
-					//dojo.i18n.normalizeLocale(egl__htmlLocale.replace(/_/, "-").toLowerCase());
-				}
-				catch (e) {
-					egl.printError("Cannot start Dojo", e);
-				}	
-			});
-			
-			egl.dojoProvider = "Google, "+egl.DOJO_VERSION+", http://ajax.googleapis.com/ajax/libs/dojo";
-			
-		}
-		catch (e) {
-			egl.printError("Cannot start Dojo", e);
-		}
-	}
-</script>
 <div id="egl_loader" style="padding:50px; position:absolute;" >
 	<img src="dojo/spinner.gif">
 </div>
