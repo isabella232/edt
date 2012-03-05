@@ -190,6 +190,9 @@ public class RuiBrowserHttpRequest
 					String nextToken = arg.nextToken();
 					String key = nextToken.substring(0, nextToken.indexOf("="));
 					String value = URLDecoder.decode(nextToken.substring(nextToken.indexOf("=") + 1), "UTF-8");
+					if("contextKey".equals(key)){
+						value = value.replace(".js", "");
+					}
 					arguments.put(key, value);
 				} catch (UnsupportedEncodingException e) {
 					// Ignore this argument
