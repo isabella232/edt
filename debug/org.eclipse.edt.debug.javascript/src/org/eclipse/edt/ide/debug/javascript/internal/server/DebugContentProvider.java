@@ -13,21 +13,18 @@ package org.eclipse.edt.ide.debug.javascript.internal.server;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.ide.debug.javascript.internal.generators.DebugHTMLGenerator;
 import org.eclipse.edt.ide.rui.server.SavedContentProvider;
 
 public class DebugContentProvider extends SavedContentProvider
 {
 	@Override
-	protected HTMLGenerator getDevelopmentGenerator( AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties,
-			String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList )
+	protected HTMLGenerator getDevelopmentGenerator( AbstractGeneratorCommand processor, List egldds, HashMap eglProperties,
+			String userMsgLocale, String runtimeMsgLocale )
 	{
-		return new DebugHTMLGenerator( processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList );
+		return new DebugHTMLGenerator( processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale );
 	}
 }
