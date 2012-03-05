@@ -1,16 +1,17 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT Java Persistence Generation
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.java.templates.eglx.persistence
-Bundle-Version: 0.7.0.qualifier
-Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.7.0",
- org.eclipse.edt.gen;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates;bundle-version="0.7.0",
- org.eclipse.edt.gen.java;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.7.0",
- org.eclipse.edt.compiler;bundle-version="0.7.0"
+Bundle-Version: 0.8.0.qualifier
+Require-Bundle: org.eclipse.edt.mof.eglx.persistence.sql;bundle-version="0.8.0",
+ org.eclipse.edt.gen;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java.templates;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.0",
+ org.eclipse.edt.compiler;bundle-version="0.8.0"
 Export-Package: org.eclipse.edt.gen.java.templates.eglx.persistence,
  org.eclipse.edt.gen.java.templates.eglx.persistence.annotation,
  org.eclipse.edt.gen.java.templates.eglx.persistence.sql
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Localization: plugin
