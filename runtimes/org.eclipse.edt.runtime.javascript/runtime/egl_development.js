@@ -90,16 +90,6 @@ if(egl.contextAware){
 	egl.parseURL();
 }
 
-egl.eval = function( codes ) {
-	if ( egl.IE && egl.IEVersion < 9) {
-		window.execScript( codes );
-	} else {
-	    var geval = function() {
-	    	window.eval.call( window, codes );
-	    };
-	    geval();
-	}
-};
 //Send a request to the IDE Gateway from the browser
 //A random key is appended to avoid having cached results returned
 egl.loadIDEURL = function(url, handler, synchronous, sendAsContent) {
@@ -130,50 +120,6 @@ egl.loadScript = function(packageName, className) {
 		   			if (e.name != "SyntaxError" && e != "missing" && egl && !egl.ptCrash) { // make sure the page is not destructed yet
 		   				egl.ptCrash = true;
 		   				document.location = document.location;
-   						return;
-		   			}
-		   		}
-		   		if ( !egl.ptCrash )
-		   			egl.canPrintToConsole = true;
-			}
-			, true, null );
-};
-
-egl.loadCSS = function(cssFile) {
-	if ( egl.ptCrash )
-		return;
-	if ( egl.cssFiles && egl.cssFiles.length == 0 ) {
-		var links = document.getElementsByTagName( "link" );
-		for ( var i = 0; i < links.length; i ++ ) {
-			var href = links[i].getAttribute( "href" );
-			if ( href ) {
-				egl.cssFiles[href] = href;
-			}
-		}
-	}
-	if ( egl.cssFiles[cssFile] ) {	return; }
-	egl.cssFiles[cssFile] = cssFile;
-    var objCSS = document.body.appendChild(document.createElement('link'));
-    objCSS.rel = 'stylesheet';
-    objCSS.href = cssFile;
-    objCSS.type = 'text/css';
-};
-
-egl.reloadHandler = function(packageName, className) {
-	var pkg = egl.makePackage( packageName );
-	if ( pkg[className] ) {	return; }
-	packageName = packageName.replace(/\./g,"/");
-	egl.loadURL( "___reloadHandler?key=" + Math.random() + "&contextKey=" + egl.getContextKey() + "&fileName=/" + egl__contextRoot + "/" + packageName + "/" + className + ".js", 
-			function( responseText ) {
-		        responseText = responseText.replace(/\<!--.*\-->/, "" );
-		        egl.canPrintToConsole = false;
-		        try {
-				    egl.eval( responseText );
-		   		}
-		   		catch (e) {
-		   			if (egl && !egl.ptCrash) { // make sure the page is not destructed yet
-		   				egl.ptCrash = true;
-   						document.location = document.location;
    						return;
 		   			}
 		   		}
@@ -1011,8 +957,8 @@ egl.getVariableValue = function(response) {
 						varValue = egl.eglx.lang.EString.fromEDate(value);
 					}
 //unsupported 0.7					else if (type == "eglx.lang.ETime") {
-//						varValue = egl.eglx.lang.EString.fromETime(value);
-//					}
+//							varValue = egl.eglx.lang.EString.fromETime(value);
+//						}
 					else {
 						varValue = egl.eglx.lang.EString.fromETimestamp(value);
 					}
@@ -1077,11 +1023,12 @@ egl.evTerminateReloadHandler = function() {
 			typeName = egl.rootHandler.eze$$typename;
 			egl.partialTerminateSession();
 		}
-		egl.reloadHandler(packageName, typeName);
-		egl.startupInitCallback();
-		egl.beginWidgetPosition();
-		egl.startVEWidgetTimer();
-		egl.canPrintError = true;
+		require(["___reloadHandler?key=" + Math.random() + "&contextKey=" + egl.getContextKey() + "&fileName=/" + egl__contextRoot + "/" + packageName + "/" + typeName + ".js"], function(){
+			egl.startupInitCallback();
+			egl.beginWidgetPosition();
+			egl.startVEWidgetTimer();
+			egl.canPrintError = true;
+		});
 	} catch ( e ) {
 		document.location = document.location;
 	}
@@ -1487,8 +1434,8 @@ if (egl.egl.ui) {
 	egl.instrumentFunctions("ServiceBinder", egl.eglx.services.ServiceBinder.prototype);
 	egl.instrumentFunctions("JSONParser", egl.eglx.json.JSONParser.prototype);
 	egl.instrumentFunctions("RUIHandler", egl.eglx.ui.rui.View.prototype);
-//	egl.instrumentFunctions("HttpRequest", egl.egl.core.HttpRequest.prototype);
-//	egl.instrumentFunctions("HttpResponse", egl.egl.core.HttpResponse.prototype);
+//		egl.instrumentFunctions("HttpRequest", egl.egl.core.HttpRequest.prototype);
+//		egl.instrumentFunctions("HttpResponse", egl.egl.core.HttpResponse.prototype);
 }
 
 egl.getTypename = function(object) {

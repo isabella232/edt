@@ -9,13 +9,16 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-
 egl.lastFunctionEntered = "???";
 egl.namespaceMap = {};
 egl.objectInNamespaceMap = {};
 egl.elements = [];
 egl.jobs = [];
 egl.eze$$userLibs = [];
+egl.eze$$rscBundles = {};
+egl.eze$$runtimeProperties = {};
+egl.cssFiles = {};
+egl.eze$$externalJS = {};
 
 window.onunload = function() {
 	try { egl.terminateSession(); } catch (e) {}
@@ -864,8 +867,6 @@ document.onselectstart = function(e) {
 	return egl.enableSelection;
 };
 
-egl.setEnableTextSelection(false);
-
 egl.onLoadReady = function(f) {
 	var p = window.onload;
 	if (typeof window.onload != 'function') {
@@ -987,6 +988,33 @@ egl.addEventListener = function(
 	return true;
 };
 
+if (typeof (XMLHttpRequest) != "undefined") {
+	egl.newXMLHttpRequest = function() {
+			return new XMLHttpRequest();
+		};
+		}
+else if (window.ActiveXObject) {
+	try {
+		new ActiveXObject( "Msxml2.XMLHTTP" ); 
+		egl.newXMLHttpRequest = function() {
+			return new ActiveXObject( "Msxml2.XMLHTTP" );
+		};
+	}
+	catch( e ) {
+		try {
+			new ActiveXObject( "Microsoft.XMLHTTP" ); 
+			egl.newXMLHttpRequest = function() {
+				return new ActiveXObject( "Microsoft.XMLHTTP" );
+	 		};
+	 	}
+		catch (e) {
+		}
+	}
+};
+if (!egl.newXMLHttpRequest) {
+	egl.printError(egl.getRuntimeMessage( "CRRUI2088E", []), null);	
+};
+
 egl.makePackage('egl.rui');
 
 egl.getStyle = function(element) {
@@ -1080,7 +1108,6 @@ egl.setLocalFunctionVariable = function() {};
 egl.enterBlock = function() {};
 egl.exitBlock = function() {};
 egl.showEditingFeedback = function() { };
-egl.setWidgetLocation = function() {};
 egl.loadScript = function() {};
 
 egl.startNewWork = function() {
@@ -1198,4 +1225,104 @@ egl.initDynamicLoadingHandler = function(pkg, handler){
 		egl.println(errorMessage);
 	};
 	pkg[handler]['needDynamicLoading'] = true;
+};
+//API
+egl.init = function( initFunc, errorFunc){
+	if(egl.Document.body == null)
+		egl.Document.body = egl.createWidget(document.body);
+	egl.setEnableTextSelection(false);
+	try {		
+		initFunc();
+	} catch (e) {
+		egl.crashTerminateSession();
+		if(e.name == "eze$$HandlerLoadErr")
+			egl.println(e.message);
+		else
+			egl.printError('Could not render UI', e); throw e;
+	}	
+};
+egl.reportHandlerLoadError = function(handler){
+	var err = new Error ();
+    err.name = "eze$$HandlerLoadErr";
+    err.message = "Internal generation error. Found no definition for " + handler + ". Try <b>Project > Clean...</b>";
+    throw err;
+};
+
+egl.eval = function( codes ) {
+	if ( egl.IE && egl.IEVersion < 9) {
+		window.execScript( codes );
+	} else {
+	    var geval = function() {
+	    	window.eval.call( window, codes );
+	    };
+	    geval();
+	}
+};
+
+egl.loadCSS = function(cssFile) {
+	if ( egl.ptCrash )
+		return;
+	if ( egl.cssFiles && egl.cssFiles.length == 0 ) {
+		var links = document.body.getElementsByTagName( "link" );
+		for ( var i = 0; i < links.length; i ++ ) {
+			var href = links[i].getAttribute( "href" );
+			if ( href ) {
+				egl.cssFiles[href] = href;
+			}
+		}
+	}
+	if ( egl.cssFiles[cssFile] ) {	return; }
+	egl.cssFiles[cssFile] = cssFile;
+	
+	var objCSS=document.createElement("link");
+	objCSS.setAttribute("rel", "stylesheet");
+	objCSS.setAttribute("type", "text/css");
+	objCSS.setAttribute("href", cssFile);
+	if(typeof objCSS!="undefined")
+		document.getElementsByTagName("head")[0].appendChild(objCSS);
+};
+
+egl.loadFile = function(include, part){	
+	var includeType = include.indexOf(".") >=0 ? include.substring(include.lastIndexOf(".") + 1, include.length) : "";
+	if(includeType == "css"){
+		egl.loadCSS(include);
+		return;
+	}
+	var xhr = egl.newXMLHttpRequest();
+	var htmlString = "";
+	var count;
+	var divChildren = [];
+	xhr.open( 'GET', include, false );
+	xhr.send( null );
+	if(includeType == "js")
+		egl.eval(xhr.responseText);
+	else if(includeType == "html"){
+		htmlString += xhr.responseText;
+		var div = document.createElement("div");
+		//IE cannot parse script and css correctly
+		div.innerHTML = "div<div>" + htmlString + "</div>";	
+		count = div.children[0].children.length;		
+		for(var i=0;i<count;i++){
+			divChildren.push(div.children[0].children[i]);
+		}
+		egl.eze$$externalJS[part] = [];
+		parseHTML(part);	
+	}	
+	
+	function parseHTML(part){
+		for(var i= 0 ; i<count; i++){
+			var node = divChildren[i];
+			var nodeName = ( node.nodeName || "" ).toLowerCase();
+			if(nodeName == "link" || nodeName == "style"){
+				document.getElementsByTagName("head")[0].appendChild(node);
+			}else if(nodeName !== "script"){
+				document.body.appendChild(node);
+			}else if(node.src == ""){
+				egl.eval(node.text);
+			}else{			
+				egl.eze$$externalJS[part].push(node.src);
+			}
+		}
+	}	
+	
 };
