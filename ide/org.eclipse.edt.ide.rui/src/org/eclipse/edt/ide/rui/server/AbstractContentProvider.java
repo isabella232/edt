@@ -19,13 +19,11 @@ import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.internal.core.utils.SoftLRUCache;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.Generator;
@@ -33,10 +31,8 @@ import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NLSPropertiesFileGenerator;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.gen.deployment.util.PropertiesFileUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
@@ -49,7 +45,6 @@ import org.eclipse.edt.ide.rui.utils.EGLResource;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
 import org.eclipse.edt.ide.rui.utils.IConstants;
 import org.eclipse.edt.ide.rui.utils.IFileLocator;
-import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -144,12 +139,16 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				}
 				else if(uri.endsWith(".js")){
 					// Attempt to load this file as a properties file for NLS
-					IFile ifile = findRequiredFile(PropertiesFileUtil.convertToProperitesFile(uri), projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
-					if(ifile != null && ifile.exists()){	
-						PropertiesFileUtil propFileUtil = new PropertiesFileUtil(uri);
-						NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
-						bytes = generator.generatePropertiesFile(ifile.getContents(), propFileUtil.getBundleName());
-					}
+					String[] propNames = PropertiesFileUtil.convertToProperitesFiles(uri);
+					for(String propName : propNames){
+						IFile ifile = findRequiredFile(propName, projectName, getIFileLocator(ResourcesPlugin.getWorkspace().getRoot().getProject(projectName)));
+						if(ifile != null && ifile.exists()){	
+							PropertiesFileUtil propFileUtil = new PropertiesFileUtil(uri);
+							NLSPropertiesFileGenerator generator = new NLSPropertiesFileGenerator();
+							bytes = generator.generatePropertiesFile(ifile.getContents(), propFileUtil.getBundleName());
+							break;
+						}
+					}					
 				}
 			}
 			if(bytes == null && uri.endsWith(".html")){ //$NON-NLS-1$
@@ -227,21 +226,15 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 				String egldd = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project).getPartName();
 				List<String> egldds = EclipseUtilities.getDependentDescriptors(project);
 				eglProperties.put(IConstants.DEFAULT_DD_PARAMETER_NAME, egldd);
-				
-				ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
-				RUIDependencyList dependencyList = new RUIDependencyList(sysEnv.getIREnvironment(), part);
-				
-				Set<String> propFiles = Util.findPropertiesFiles(part, dependencyList, getHandlerMessageLocale(), getFileLocator(project));
-				
-				Generator generator = getDevelopmentGenerator(cmd, egldds, propFiles, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale(), 
-						sysEnv, dependencyList);
+							
+				Generator generator = getDevelopmentGenerator(cmd, egldds, eglProperties, getHandlerMessageLocale(), getRuntimeMessageLocale());
 				String result = cmd.generate(part, generator, environment);
 				return result.getBytes();
 			}
 		} catch (Exception e) {
 			EGL2HTML4VE cmd = new EGL2HTML4VE();
 			String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
-			CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, null, message);
+			CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, message);
 			return generator.generate().getBytes();
 		}
 		finally{
@@ -257,8 +250,7 @@ public abstract class AbstractContentProvider implements IServerContentProvider 
 	protected abstract FileLocator getFileLocator(IProject project)throws CoreException;
 	protected abstract IFileLocator getIFileLocator(IProject project)throws CoreException;
 	
-	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv, RUIDependencyList dependencyList);
+	protected abstract HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale);
 
 	
 	protected String getRuntimeMessageLocale() {

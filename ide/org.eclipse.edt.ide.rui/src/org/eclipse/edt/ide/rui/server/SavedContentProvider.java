@@ -13,15 +13,12 @@ package org.eclipse.edt.ide.rui.server;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.NoContextHTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.utils.DebugFileLocator;
 import org.eclipse.edt.ide.rui.utils.DebugIFileLocator;
@@ -40,9 +37,9 @@ public class SavedContentProvider extends AbstractContentProvider {
 		return new DebugIFileLocator(project);
 	}
 	
-	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles,
-			HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale, ISystemEnvironment sysEnv, RUIDependencyList dependencyList) {
-		return new NoContextHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
+	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds,
+			HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale) {
+		return new NoContextHTMLGenerator(processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale);
 	}
 
 	@Override

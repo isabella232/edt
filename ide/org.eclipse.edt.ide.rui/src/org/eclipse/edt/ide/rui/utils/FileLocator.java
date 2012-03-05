@@ -204,7 +204,7 @@ public abstract class FileLocator {
 				result.put(fileName, file);
 
 				//append content to allInOneFile
-				if(os != null && !(fileName.equals(Constants.RUI_RUNTIME_BOOTSTRAP_FILE))){
+				if(os != null && !(fileName.equals(Constants.RUI_RUNTIME_BOOTSTRAP_FILE)) && !(fileName.equals(Constants.RUI_RUNTIME_LOADER_FILE))){
 					try {
 						DataInputStream is = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
 						bytes = new byte[is.available()];

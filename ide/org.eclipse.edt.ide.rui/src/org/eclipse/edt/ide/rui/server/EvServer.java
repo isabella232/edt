@@ -45,6 +45,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectInfo;
@@ -1027,7 +1028,9 @@ public class EvServer implements IClientProxy {
 						showFile(intContextKey, offset, length, ps);
 					}
 					else if (url.indexOf("___reloadHandler") != -1) {
-						loadFile((String)args.get("fileName"), intContextKey, ps);
+						String fileName = (String)args.get("fileName");
+						fileName = JavaScriptAliaser.packageNameAlias(fileName.substring(0, fileName.length() - 3).split("[/]"), '/', false);
+						loadFile(fileName + ".js", intContextKey, ps);
 						ps.flush();
 						ps.close();
 					}

@@ -20,7 +20,6 @@ import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.Bootstrap;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
@@ -32,12 +31,12 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
  * generate the temporary content to JS and HTML 
  * 
  */
-public class PreviewIREnvironment extends ProjectIREnvironment implements IEnvironment{
+public class PreviewIREnvironment extends ProjectIREnvironment{
 
 	private boolean projectEnvironmentInitialized;
 	private PreviewObjectStore contextStore;
 	
-	public PreviewIREnvironment(IEnvironment environment, File contextDirectory) {
+	public PreviewIREnvironment(ProjectIREnvironment environment, File contextDirectory) {
 		super();
 		
 		// Initialize the special context directory first, so that it's first in line when looking up IRs.
@@ -62,12 +61,12 @@ public class PreviewIREnvironment extends ProjectIREnvironment implements IEnvir
 	/**
 	 * Runs the bootstrapping on the environment and appends the project object stores, if necessary.
 	 */
-	public void initProjectEnvironment(IEnvironment environment) {
+	public void initProjectEnvironment(ProjectIREnvironment environment) {
 		if (projectEnvironmentInitialized) {
 			return;
 		}
-		
 		projectEnvironmentInitialized = true;
+		this.systemEnvironment = environment.getSystemEnvironment();
 		Bootstrap.initialize(this);
 		
 		Map<String, List<ObjectStore>> storeMap = environment.getObjectStores();
@@ -80,6 +79,8 @@ public class PreviewIREnvironment extends ProjectIREnvironment implements IEnvir
 			}
 		}
 	}
+	
+	
 	
 	@Override
 	protected boolean storeInObjectStoreCache(String key, EObject object) {

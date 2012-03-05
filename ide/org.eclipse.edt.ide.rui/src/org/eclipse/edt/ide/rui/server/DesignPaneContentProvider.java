@@ -13,13 +13,10 @@ package org.eclipse.edt.ide.rui.server;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.deployment.javascript.DesignPaneHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 
 
 
@@ -32,8 +29,7 @@ public class DesignPaneContentProvider extends WorkingCopyContentProvider {
 		super(editorProvider);
 	}
 
-	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, Set<String> propFiles, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale,
-			ISystemEnvironment sysEnv, RUIDependencyList dependencyList) {
-		return new DesignPaneHTMLGenerator(processor, egldds, propFiles, eglProperties, userMsgLocale, runtimeMsgLocale, sysEnv, dependencyList);
+	protected HTMLGenerator getDevelopmentGenerator(AbstractGeneratorCommand processor, List egldds, HashMap eglProperties, String userMsgLocale, String runtimeMsgLocale) {
+		return new DesignPaneHTMLGenerator(processor, egldds, eglProperties, userMsgLocale, runtimeMsgLocale);
 	}	
 }

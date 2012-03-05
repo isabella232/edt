@@ -374,6 +374,18 @@ public class EvEditorProvider {
 	public PropertyValue getLayoutPropertyValue( int iStatementOffset, int iStatementLength, String strPropertyName, String strPropertyType ) {
 		return _documentCache.getLayoutPropertyValue(iStatementOffset, iStatementLength, strPropertyName, strPropertyType);
 	}
+	
+	private String getPackageName( String[] pkg, char separator){
+		StringBuffer buff = new StringBuffer();
+		for ( int i = 0; i < pkg.length; i++ )
+		{
+			if ( i > 0 ){
+				buff.append( separator );
+			}
+			buff.append( pkg[i] );
+		}
+		return buff.toString();
+	}
 
 	/**
 	 * Returns a URL string that is the location of the web page that will be given to the design page and preview page browsers.
@@ -390,10 +402,9 @@ public class EvEditorProvider {
 			result.append("/");
 			result.append(modelFile.getEGLProject().getElementName());  // append the project name
 			result.append("/");
-			result.append(JavaScriptAliaser.packageNameAlias(packageName, '/'));  // alias and append the package name
+			result.append(getPackageName(packageName, '/'));
 			result.append("/");
-			// Alias and append the file name.  Replace .egl with .html
-			result.append(JavaScriptAliaser.getAlias(new Path(modelFile.getElementName()).removeFileExtension().addFileExtension("html").toString()));
+			result.append(new Path(modelFile.getElementName()).removeFileExtension().addFileExtension("html").toString());
 		}
 		return result.toString().replaceAll( " ", "%20" );
 	}

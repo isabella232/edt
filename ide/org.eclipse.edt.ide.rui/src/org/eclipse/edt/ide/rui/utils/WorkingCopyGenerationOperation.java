@@ -159,7 +159,7 @@ public class WorkingCopyGenerationOperation {
 					e.printStackTrace();
 					EGL2HTML4VE cmd = new EGL2HTML4VE();
 					String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {partName});
-					CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, null, message);
+					CompileErrorHTMLGenerator generator = new CompileErrorHTMLGenerator(cmd, null, message);
 					generator.generate();
 				}
 			}

@@ -28,11 +28,9 @@ import java.text.MessageFormat;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.deployment.javascript.CompileErrorHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.GenerationErrorHTMLGenerator;
 import org.eclipse.edt.gen.deployment.javascript.HTMLGenerator;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.internal.lookup.PreviewIREnvironmentManager;
 import org.eclipse.edt.ide.rui.internal.nls.EWTPreviewMessages;
@@ -81,16 +79,15 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 			
 			Part part = null;
 			EObject eObject = null;
-			ISystemEnvironment sysEnv = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getSystemEnvironment();
 			
 			try {
 				eObject = environment.find(PreviewIREnvironmentManager.makeEGLKey(resourceName.replace("/", ".")));
 			} catch (MofObjectNotFoundException e) {
 				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
-				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), message);
 			} catch (DeserializationException e) {
 				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
-				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				generator = new CompileErrorHTMLGenerator(cmd, result.getResult(), message);
 			}
 			
 			if(eObject!=null && eObject instanceof Part){
@@ -103,10 +100,10 @@ public abstract class WorkingCopyContentProvider extends AbstractContentProvider
 						Integer.toString(result.getResult().getNumGenErrors()),
 						Integer.toString(result.getResult().getNumGenWarnings())
 					});
-				generator = new GenerationErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				generator = new GenerationErrorHTMLGenerator(cmd, result.getResult(), message);
 			}else{
 				String message = MessageFormat.format(EWTPreviewMessages.COMPILEFAILEDPAGE_HEADERMSG, new Object[] {resourceName.replace("/", ".")});
-				CompileErrorHTMLGenerator compileErrorHTMLGenerator = new CompileErrorHTMLGenerator(cmd, result.getResult(), sysEnv, message);
+				CompileErrorHTMLGenerator compileErrorHTMLGenerator = new CompileErrorHTMLGenerator(cmd, result.getResult(), message);
 				return compileErrorHTMLGenerator.generate().getBytes();
 			}
 			
