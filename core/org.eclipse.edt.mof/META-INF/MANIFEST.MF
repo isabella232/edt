@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof
-Bundle-Version: 0.7.0.qualifier
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Version: 0.8.0.qualifier
+Bundle-Vendor: %providerName
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-BuddyPolicy: registered
 Export-Package: org.eclipse.edt.mof,
@@ -14,3 +14,4 @@ Export-Package: org.eclipse.edt.mof,
  org.eclipse.edt.mof.serialization.binary,
  org.eclipse.edt.mof.serialization.xml,
  org.eclipse.edt.mof.utils
+Bundle-Localization: plugin
