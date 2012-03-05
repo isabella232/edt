@@ -1,12 +1,21 @@
 <script type="text/javascript">
-var djConfig = {	
-				modulePaths: {"bidi": "dojo/widgets/bidi"},
-				locale: egl__htmlLocale.replace(/_/, "-").toLowerCase() };
-//	var djConfig = { locale: egl__htmlLocale.replace(/_/, "-").toLowerCase() };
-	egl.urlPrefix = "";
-	egl.dojoProvider = "Local Workspace, 1.7.1, project: org.eclipse.edt.rui.dojo_0.8.0";
+	require({
+    	paths: {"bidi": "dojo/widgets/bidi"},
+    	packages : [ {
+			name : 'dojo',
+			location : '../dojo'
+		}, {
+			name : 'dijit',
+			location : '../dijit'
+		}, {
+			name : 'dojox',
+			location : '../dojox'
+		} ],
+		locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
+  	});
+ 	egl.urlPrefix = "";
+	egl.dojoProvider = "Local Workspace, 1.6.1, project: org.eclipse.edt.rui.dojo_0.7.0";
 </script>
-<script src="dojo/dojo.js"></script>
 
 <style type="text/css">
 	@import "dojo/resources/dojo.css";		
@@ -14,7 +23,6 @@ var djConfig = {
 	
 	.dojoxGrid table { margin: 0; }
 </style>
-
 <link href="dijit/themes/claro/claro.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOTheme_CSS" />
 <link href="dojox/grid/resources/claroGrid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" />
 <link href="css/org.eclipse.edt.rui.dojo.css" type="text/css" rel="stylesheet" media="screen"/>
@@ -23,3 +31,4 @@ var djConfig = {
 <div id="egl_loader" style="padding:50px; position:absolute;" >
 	<img src="dojo/spinner.gif">
 </div>
+<script type="text/javascript" src="dojo/dojo.js"></script>
