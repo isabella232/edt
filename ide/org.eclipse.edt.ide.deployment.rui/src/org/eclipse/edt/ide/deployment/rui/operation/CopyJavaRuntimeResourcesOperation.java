@@ -16,7 +16,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -26,6 +25,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 import java.util.zip.CRC32;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.eclipse.core.resources.IFile;
@@ -46,6 +46,7 @@ import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
+import org.eclipse.edt.ide.deployment.rui.Activator;
 import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
@@ -126,7 +127,14 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 								
 						        zos = new JarOutputStream(bos, manifest);
 						        CRC32 crc = new CRC32();
+						        
+						        // Add initial '/' entry
+						        ZipEntry root = new ZipEntry("/");
+						        zos.putNextEntry(root);
+						        
 						        createRuntimeJar(zos, crc, file, file.getPath().length());
+						        zos.close();
+						        zos = null;
 						        fis = new ByteArrayInputStream(bos.toByteArray());
 							}
 							else {
@@ -199,24 +207,18 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 		}
 	}
 	
-	private void createRuntimeJar( ZipOutputStream zos, CRC32 crc, File runtimeLoc, int len ) {
+	private void createRuntimeJar(ZipOutputStream zos, CRC32 crc, File runtimeLoc, int len) {
         int bytesRead;
-        for (File file : runtimeLoc.listFiles( new FilenameFilter() {
-
-			@Override
-			public boolean accept(File dir, String name) {
-				if ( dir.getPath().indexOf( "bin" ) >= 0 || "bin".equals( name ) ) { //$NON-NLS-1$ //$NON-NLS-2$
-					return true;
-				}
-				return false;
-			}}) ) {
+        for (File file : runtimeLoc.listFiles()) {
         	try {
 	            if (file.isFile()) {
 	                byte[] buffer = new byte[1024];
 		            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-		            String fileName = file.getPath().substring( len + 1 );
-		            fileName = fileName.replace("\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
-
+		            String fileName = file.getPath().substring(len + 1);
+		            if (File.separatorChar == '\\') {
+		            	fileName = fileName.replace("\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+		            }
+		            
 		            JarEntry entry = new JarEntry(fileName);
 		            entry.setSize(file.length());
 		            entry.setTime( file.lastModified() );
@@ -227,18 +229,21 @@ public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperati
 		            bis.close();
 		            zos.closeEntry();
 	            } else {
-		            String fileName = file.getPath().substring( len );
-		            fileName = fileName.replace("\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
-		            if (!fileName.endsWith("/")) //$NON-NLS-1$
+		            String fileName = file.getPath().substring(len);
+		            if (File.separatorChar == '\\') {
+		            	fileName = fileName.replace("\\", "/"); //$NON-NLS-1$ //$NON-NLS-2$
+		            }
+		            if (!fileName.endsWith("/")) { //$NON-NLS-1$
 		            	fileName += "/"; //$NON-NLS-1$
-
+		            }
+		            
 		            JarEntry entry = new JarEntry(fileName);
 		            entry.setTime( file.lastModified() );
 		            zos.putNextEntry(entry);
-	            	createRuntimeJar( zos, crc, file, len );
+	            	createRuntimeJar(zos, crc, file, len);
 	            }
-        	} catch ( Exception e ) {
-        		e.printStackTrace();
+        	} catch (Exception e) {
+        		Activator.getDefault().log(e.getMessage(), e);
         	}
         }
 	}
