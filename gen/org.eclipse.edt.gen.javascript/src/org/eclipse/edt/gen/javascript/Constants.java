@@ -73,5 +73,8 @@ public class Constants {
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
 	
 	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
-	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
+	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";
+	public final static String JACASCRIPT_OBJECT = "eglx.javascript.JavaScriptObject";
+	public final static String EXTERNALTYPE_RELATIVE_PATH = "relativePath";
+	public final static String EXTERNALTYPE_EXTERNAL_NAME = "externalName";
 }
