@@ -1,14 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT Persistence SQL Model
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof.eglx.persistence.sql
-Bundle-Version: 0.7.0.qualifier
-Require-Bundle: org.eclipse.edt.mof;bundle-version="0.7.0";visibility:=reexport,
- org.eclipse.edt.mof.egl;bundle-version="0.7.0";visibility:=reexport,
+Bundle-Version: 0.8.0.qualifier
+Require-Bundle: org.eclipse.edt.mof;bundle-version="0.8.0";visibility:=reexport,
+ org.eclipse.edt.mof.egl;bundle-version="0.8.0";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.6.0"
 Eclipse-RegisterBuddy: org.eclipse.edt.mof
 Export-Package: org.eclipse.edt.mof.eglx.persistence.sql,
  org.eclipse.edt.mof.eglx.persistence.sql.impl,
  org.eclipse.edt.mof.eglx.persistence.sql.utils
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
