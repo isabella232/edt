@@ -43,6 +43,12 @@ public abstract class JavaScriptTemplate extends AbstractTemplate {
 	public static final String genCheckNullArgs = "genCheckNullArgs";
 	public static final String genClassBody = "genClassBody";
 	public static final String genClassFooter = "genClassFooter";
+	public static final String genAMDHeader = "genAMDHeader";
+	public static final String genModuleName = "genModuleName";
+	public static final String genCSSFile = "genCSSFile";
+	public static final String genIncludeFile = "genIncludeFile";
+	public static final String genDependent = "genDependent";
+	public static final String genIncludeFileDependent = "genIncludeFileDependent";	
 	public static final String genClassHeader = "genClassHeader";
 	public static final String genClassName = "genClassName";
 	public static final String genCloneMethod = "genCloneMethod";

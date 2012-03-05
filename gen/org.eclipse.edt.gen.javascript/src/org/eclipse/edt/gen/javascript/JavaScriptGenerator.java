@@ -26,6 +26,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Part;
 
 public class JavaScriptGenerator extends Generator {
@@ -125,13 +126,18 @@ public class JavaScriptGenerator extends Generator {
 	}
 
 	public String getRelativeFileName(Part part) {
-		StringBuilder buf = new StringBuilder(50);
+		StringBuilder buf = new StringBuilder(150);
 		String pkg = part.getPackageName();
 		if (pkg.length() > 0) {
 			buf.append(JavaScriptAliaser.packageNameAlias(pkg.split("[.]"), '/'));
 			buf.append('/');
 		}
-		buf.append(JavaScriptAliaser.getAlias(part.getId()));
+		String name = JavaScriptAliaser.getAlias(part.getId());
+		if(part instanceof ExternalType){
+			buf.append(JavaScriptAliaser.getAliasForExternalType(name));
+		}else{
+			buf.append(name);
+		}
 		buf.append(getFileExtension());
 		return buf.toString();
 	}

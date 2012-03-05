@@ -16,6 +16,7 @@ public class Constants {
 
 	// command parameter internal names
 	public static final String parameter_checkOverflow = "checkOverflow";
+	public static final String parameter_projectPaths = "projectPaths";
 
 	// these are sub key values used as context hashmap keys
 	public static final String SubKey_partBeingGenerated = "partBeingGenerated";
@@ -51,6 +52,8 @@ public class Constants {
 	public static final String Annotation_PropertyGetter = "getMethod";
 	public static final String Annotation_PropertySetter = "setMethod";
 	public static final String RUI_PROPERTIES_LIBRARY = "eglx.ui.rui.RUIPropertiesLibrary";
+	public static final String PROPERTIES_FOLDER_NAME = "properties"; //$NON-NLS-1$
+	public static final String WEB_CONTENT_FOLDER_NAME = "WebContent"; //$NON-NLS-1$	
 	
 	public static final String GetterPrefix = "get";
 	public static final String SetterPrefix = "set";
@@ -68,4 +71,7 @@ public class Constants {
 	public static final String EGLMESSAGE_GENERATION_REPORT_FAILED = "9992";
 	public static final String EGLMESSAGE_EXCEPTION_OCCURED = "9998";
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
+	
+	public final static String RUI_HANDLER = "eglx.ui.rui.RUIHandler";
+	public final static String RUI_WIDGET = "eglx.ui.rui.RUIWidget";	
 }

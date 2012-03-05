@@ -38,6 +38,8 @@ public class JavaScriptAliaser
 	/** Maps class names that cannot be used in JavaScript to aliases. */
 	private static final Properties javascriptNames = new Properties();
 	
+	private static final String EXTERNAL_TYPE_PREFIX = "eze$$"; //$NON-NLS-1$
+	
 	static
 	{
 		// List is taken from http://javascript.about.com/library/blreserved.htm
@@ -58,6 +60,9 @@ public class JavaScriptAliaser
 		keywordCache.put( "default", "ezekw$$default" );
 		keywordCache.put( "delete", "ezekw$$delete" );
 		keywordCache.put( "do", "ezekw$$do" );
+		keywordCache.put( "dojo", "ezekw$$dojo" );
+		keywordCache.put( "dijit", "ezekw$$dijit" );
+		keywordCache.put( "dojox", "ezekw$$dojox" );
 		
 		keywordCache.put( "double", "ezekw$$double" );
 		keywordCache.put( "else", "ezekw$$else" );
@@ -209,9 +214,7 @@ public class JavaScriptAliaser
 		}
 		
 		return result;
-	}
-	
-	
+	}	
 
 	/**
 	 * Returns an alias for a part name, using '_' as the escape character.
@@ -295,6 +298,10 @@ public class JavaScriptAliaser
 		JavaScriptAliaser.aliasCache.put( partName, alias );
 
 		return alias;
+	}
+	
+	public static String getAliasForExternalType( String partName ){
+		return EXTERNAL_TYPE_PREFIX + partName;		
 	}
 
 	/**

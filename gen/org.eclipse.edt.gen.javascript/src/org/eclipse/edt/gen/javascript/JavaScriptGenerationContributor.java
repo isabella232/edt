@@ -13,8 +13,8 @@ package org.eclipse.edt.gen.javascript;
 
 import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.CommandParameter;
-import org.eclipse.edt.gen.GenerationRegistry;
 import org.eclipse.edt.gen.GenerationContributor;
+import org.eclipse.edt.gen.GenerationRegistry;
 
 public class JavaScriptGenerationContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
@@ -28,7 +28,9 @@ public class JavaScriptGenerationContributor implements GenerationContributor {
 			new CommandOption(Constants.parameter_checkOverflow, new String[] { "checkOverflow", "overflow", "co" },
 				new CommandParameter(false, new Boolean[] { false, true }, false, "Overflow must be defined as true or false")),
 			new CommandOption(org.eclipse.edt.gen.Constants.parameter_report, new String[] { "report" },
-				new CommandParameter(false, new Boolean[] { false, true }, false, "Report must be defined as true or false"))
+				new CommandParameter(false, new Boolean[] { false, true }, false, "Report must be defined as true or false")),
+			new CommandOption(Constants.parameter_projectPaths, new String[] { "projectPaths" },
+				new CommandParameter(false, new String[] { null }, false, "Use this parameter to get the file content of external JS"))
 		};
 	}
 	// define the list of template directories for this generator
