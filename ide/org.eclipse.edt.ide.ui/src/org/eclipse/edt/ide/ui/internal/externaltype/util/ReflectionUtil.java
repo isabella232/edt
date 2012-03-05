@@ -89,7 +89,7 @@ public class ReflectionUtil {
 		for(Constructor<?> constructor : constructors) {
 			Class<?>[] paraTypes = constructor.getParameterTypes();
 			for(Class<?> paraType : paraTypes) {
-				paraType = getDeclaringClass(paraType);
+				paraType = getComponentClass(paraType);
 				if(!isBuiltinEglType(paraType)) {
 					referenced.add(paraType);
 				}
@@ -105,13 +105,13 @@ public class ReflectionUtil {
 		for(Method method : methods) {
 			Class<?>[] paraTypes = method.getParameterTypes();
 			for(Class<?> paraType : paraTypes) {
-				paraType = getDeclaringClass(paraType);
+				paraType = getComponentClass(paraType);
 				if(!isBuiltinEglType(paraType) && !Object.class.equals(paraType)) {
 					referenced.add(paraType);
 				}
 			}
 			
-			Class<?> returnType = getDeclaringClass(method.getReturnType());
+			Class<?> returnType = getComponentClass(method.getReturnType());
 			if(!Void.TYPE.equals(returnType) && !Object.class.equals(returnType)
 					&& !isBuiltinEglType(returnType)) {
 				referenced.add(returnType);
@@ -195,13 +195,13 @@ public class ReflectionUtil {
 	
 	public static boolean isBuiltinEglType(Class<?> paraType) {
 		String typeName;
-		paraType = getDeclaringClass(paraType);
+		paraType = getComponentClass(paraType);
 		typeName = JavaTypeConstants.JavaToEglMapping.get(paraType.getName());
 		
 		return (typeName != null);
 	}
 	
-	public static Class<?> getDeclaringClass(Class<?> paraType) {
+	public static Class<?> getComponentClass(Class<?> paraType) {
 		Class<?> clazz = paraType;
 		
 		while(clazz.isArray())

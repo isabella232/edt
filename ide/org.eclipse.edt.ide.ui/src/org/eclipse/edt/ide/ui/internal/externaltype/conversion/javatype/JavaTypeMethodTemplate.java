@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
@@ -22,7 +23,11 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class JavaTypeMethodTemplate extends AbstractTemplate {
 	public void genMethod(Method javaMethod, EglSourceContext ctx, TabbedWriter out){
-		out.print("   function ");
+		if(Modifier.isStatic(javaMethod.getModifiers())) {
+			out.print("   static function ");
+		} else {
+			out.print("   function ");
+		}
 		String methodName = javaMethod.getName();
 		boolean isEGLKeyWord = EGLNameValidator.isKeyword(methodName);
 		
