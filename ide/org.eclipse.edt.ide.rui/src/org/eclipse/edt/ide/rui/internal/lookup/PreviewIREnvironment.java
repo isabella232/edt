@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.tools.EGL2IR;
+import org.eclipse.edt.ide.core.internal.builder.IFileSystemObjectStore;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Type;
@@ -75,6 +76,7 @@ public class PreviewIREnvironment extends ProjectIREnvironment{
 			List<ObjectStore> stores = entry.getValue();
 			
 			for (ObjectStore store : stores) {
+				System.out.println("registering " + store);
 				registerObjectStore(scheme, store);
 			}
 		}
