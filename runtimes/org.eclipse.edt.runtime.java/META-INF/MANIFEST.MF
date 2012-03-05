@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT Java Runtime
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: javax.servlet;bundle-version="2.5.0";resolution:=optional,
  com.ibm.icu;bundle-version="4.2.0"
@@ -34,4 +34,5 @@ Export-Package: eglx.http,
  org.eclipse.edt.runtime.java.eglx.lang,
  resources,
  resources.edt.binding
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
