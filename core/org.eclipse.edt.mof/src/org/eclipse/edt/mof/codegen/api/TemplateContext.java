@@ -64,6 +64,10 @@ public class TemplateContext extends HashMap<Object, Object> {
 	public void setEnvironment(IEnvironment env) {
 		this.env = env;
 	}
+	
+	public IEnvironment getEnvironment() {
+		return this.env;
+	}
 
 	public void setTemplateFactory(TemplateFactory factory) {
 		this.tFactory = factory;
