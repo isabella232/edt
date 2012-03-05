@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EDT Example Generator
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.generator.example;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.edt.gen.generator.example.ide.Activator
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
@@ -12,17 +12,17 @@ Export-Package: org.eclipse.edt.gen.generator.example,
  org.eclipse.edt.gen.generator.example.templates
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
- org.eclipse.edt.gen;bundle-version="0.7.0",
- org.eclipse.edt.gen.generator.java;bundle-version="0.7.0",
- org.eclipse.edt.gen.java;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates;bundle-version="0.7.0",
- org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.7.0",
- org.eclipse.edt.mof;bundle-version="0.7.0",
- org.eclipse.edt.mof.egl;bundle-version="0.7.0",
+ org.eclipse.edt.gen;bundle-version="0.8.0",
+ org.eclipse.edt.gen.generator.java;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java.templates;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.0",
+ org.eclipse.edt.mof;bundle-version="0.8.0",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.0",
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipse.edt.ide.compiler;bundle-version="0.7.0",
- org.eclipse.edt.ide.core;bundle-version="0.7.0",
- org.eclipse.edt.ide.ui;bundle-version="0.7.0",
+ org.eclipse.edt.ide.compiler;bundle-version="0.8.0",
+ org.eclipse.edt.ide.core;bundle-version="0.8.0",
+ org.eclipse.edt.ide.ui;bundle-version="0.8.0",
  org.eclipse.jdt.core;bundle-version="3.0.0"
-Bundle-Vendor: Eclipse EGL Development Tools
+Bundle-Vendor: %providerName
