@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentHTMLGenerator;
-import org.eclipse.edt.gen.deployment.util.RUIDependencyList;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
@@ -31,7 +30,6 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.rui.internal.deployment.javascript.EGL2HTML4VE;
 import org.eclipse.edt.ide.rui.utils.FileLocator;
-import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -51,18 +49,16 @@ public class GenerateHTMLFile{
 	private String userMsgLocale;
 	private final String runtimeMsgLocale;
 	private List egldds;
-	private final RUIDependencyList dependencyList;
 	private FileLocator fileLocator;
 
 	public GenerateHTMLFile(IFile eglFile, HashMap eglParameters, 
-			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator, RUIDependencyList dependencyList){
+			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator){
 		this.eglFile = eglFile;
 		this.eglParameters = eglParameters;
 		this.runtimeMsgLocale = runtimeMsgLocale;
 		this.userMsgLocale = userMsgLocale;
 		this.egldds = egldds;
 		this.fileLocator = fileLocator;
-		this.dependencyList = dependencyList;
 	}
 
 	public byte[] execute(final IGenerationMessageRequestor messageRequestor) throws Exception {
@@ -134,8 +130,7 @@ public class GenerateHTMLFile{
 			if (part != null && !part.hasCompileErrors()) {
 				EGL2HTML4VE cmd = new EGL2HTML4VE();
 				Generator generator = new DeploymentHTMLGenerator(cmd, egldds,
-						Util.findPropertiesFiles(part, dependencyList, userMsgLocale, fileLocator),
-						eglParameters, userMsgLocale, runtimeMsgLocale, environment.getSystemEnvironment(), dependencyList);
+						eglParameters, userMsgLocale, runtimeMsgLocale);
 				String result = cmd.generate(part, generator, environment.getIREnvironment());
 				return result.getBytes();
 			}

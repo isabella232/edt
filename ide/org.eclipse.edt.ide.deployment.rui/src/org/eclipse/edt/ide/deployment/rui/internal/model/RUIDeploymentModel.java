@@ -432,7 +432,7 @@ public class RUIDeploymentModel {
 							}
 						}
 						if( bytes != null ){
-							propertiesFileByteArrays.put(name, new DeployableFile(bytes));
+							propertiesFileByteArrays.put(propertiesFileName + "-" + userLocaleCode, new DeployableFile(bytes));
 						}
 						else {
 							messageRequestor.addMessage(EGLMessage.createEGLDeploymentErrorMessage(
@@ -602,7 +602,7 @@ public class RUIDeploymentModel {
 			String userMsgLocale, String runtimeMsgLocale, List egldds, FileLocator fileLocator,
 			IGenerationMessageRequestor messageRequestor,
 			RUIDependencyList partRefCache) throws Exception  {
-		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds, fileLocator, partRefCache);
+		GenerateHTMLFile op = new GenerateHTMLFile(input, eglParameters, userMsgLocale, runtimeMsgLocale, egldds, fileLocator);
 		return op.execute(messageRequestor);
 	}
 	

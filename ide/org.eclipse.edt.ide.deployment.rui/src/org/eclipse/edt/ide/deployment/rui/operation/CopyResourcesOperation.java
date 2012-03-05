@@ -11,21 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.deployment.rui.operation;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
-import org.eclipse.edt.ide.deployment.operation.IDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.ResourceDeploymentModel;
-import org.eclipse.edt.ide.deployment.rui.internal.util.Utils;
 import org.eclipse.edt.ide.deployment.rui.tasks.ResourceCopyOperation;
 import org.eclipse.edt.ide.deployment.solution.DeploymentContext;
 import org.eclipse.edt.ide.deployment.utilities.DeploymentUtilities;
-import org.eclipse.edt.ide.rui.utils.DeployFileLocator;
 
 public class CopyResourcesOperation extends AbstractDeploymentOperation {
 
