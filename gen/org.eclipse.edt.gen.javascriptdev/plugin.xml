@@ -23,17 +23,6 @@
 			language="JavaScript"
 			enabledWith="org.eclipse.edt.ide.gen.JavaScriptGenProvider"
 		/>
-		<provider
-			id="org.eclipse.edt.ide.gen.VEJavaScriptDevGenProvider"
-			class="org.eclipse.edt.gen.javascriptdev.ide.VEJavaScriptDevGenerator"
-			name="VE Generator"
-			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.7.0"
-			provider="Eclipse.org"
-			description="%GeneratorDescription"
-			language="JavaScript"
-			enabledWith="org.eclipse.edt.ide.gen.JavaScriptDevGenProvider"
-		/>
    	</extension>
  <extension point="org.eclipse.ui.navigator.navigatorContent">
        <commonFilter
@@ -43,7 +32,6 @@
             name="%DevJavascriptGenFolder"            
             activeByDefault="true">
       </commonFilter>
-       
  </extension>
  <extension
        point="org.eclipse.edt.ide.core.GenerationContributors">
@@ -54,7 +42,7 @@
           requires="JavaScriptGenerationContributor">
     </GenerationContributor>
     <GenerationContributor
-          class="org.eclipse.edt.gen.javascriptdev.VEJavaScriptDevGenerationContributor"
+          class="org.eclipse.edt.gen.javascriptdev.JavaScriptDevGenerationContributor"
           provider="org.eclipse.edt.ide.gen.VEJavaScriptDevGenProvider"
           id="VEJavaScriptDevGenerationContributor"
           requires="JavaScriptDevGenerationContributor">
