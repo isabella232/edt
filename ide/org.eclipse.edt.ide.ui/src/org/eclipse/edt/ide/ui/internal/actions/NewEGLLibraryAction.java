@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.actions;
 
-import org.eclipse.edt.ide.ui.internal.wizards.LibraryWizard;
+import org.eclipse.edt.ide.ui.internal.libraries.wizards.LibraryWizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 

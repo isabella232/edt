@@ -70,8 +70,8 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 		out.println("");
 	}
 	
-	public void genObject(java.lang.Class<?> clazz, EglSourceContext ctx, TabbedWriter out){
-			genClass(clazz, ctx, out);
+	public void genObject(java.lang.Class<?> clazz, EglSourceContext ctx){
+			genClass(clazz, ctx, ctx.getTabbedWriter());
 	}
 	
 	private String getDirectSuperTypes(java.lang.Class<?> clazz) {

@@ -11,27 +11,33 @@
 
 package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
 
-import java.util.Locale;
-
 import org.eclipse.datatools.connectivity.sqm.core.definition.DatabaseDefinition;
 import org.eclipse.datatools.modelbase.sql.tables.Column;
-import org.eclipse.edt.compiler.core.EGLKeywordHandler;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.sql.StringToken;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLRetrieveUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLStructureItem;
 import org.eclipse.edt.ide.sql.SQLConstants;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DTO2EglSource;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsSqlTemplate;
 import org.eclipse.edt.ide.ui.internal.record.conversion.IMessageHandler;
-import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
 public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	
-	public void genColumn(Column column, EglSourceContext ctx, TabbedWriter out){
-		IMessageHandler messageHandler = (IMessageHandler)ctx.get(DataToolsObjectsToEglSource.DB_MESSAGE_HANDLER);
+	public void genColumn(Column column, EglSourceContext ctx){
+		if(!validateColumn(column, ctx)){
+			return;
+		} else {
+			ctx.appendVariableValue(RECORD_FILE_CONTENT, getFieldDefinition(column, ctx, true), "");
+		}
+	}
+	
+	protected boolean validateColumn(Column column, EglSourceContext ctx){
+		IMessageHandler messageHandler = (IMessageHandler)ctx.get(DTO2EglSource.DB_MESSAGE_HANDLER);
 		if(column.getContainedType() == null) {
 			messageHandler.addMessage("Cannot get valid message from column metadata.");
+			return false;
 		} else if(isUnsupportedColumnTpe(column.getContainedType().getName())){
 			StringBuilder builder = new StringBuilder();
 			builder.append("Column Type: ");
@@ -44,92 +50,109 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 			builder.append(column.getName());
 			builder.append(" is not supported yet and will be skipped for its generation");
 			messageHandler.addMessage(builder.toString());
+			return false;
 		} else {
-			EGLSQLStructureItem item = new EGLSQLStructureItem();
-			String colNameAlias = null;
-			
-			DatabaseDefinition def = (DatabaseDefinition)ctx.get(DataToolsObjectsToEglSource.DATA_DEFINITION_OBJECT);
-			
-			EGLSQLRetrieveUtility.getInstance().populateStructureItem(def, column, item);
-			StringBuilder builder = new StringBuilder();
-			
-			builder.append("    ");
-			
-			colNameAlias = getAliasName(item.getName().trim(),ctx);
-			if( colNameAlias != null) {
-				builder.append(StringToken.trim(colNameAlias));
-			} else {
-				builder.append(StringToken.trim(item.getName()));
-			}
-			builder.append(" ");
-			builder.append(item.getPrimitiveType());
-			if(item.getPrimitiveType().equals(IEGLConstants.KEYWORD_CHAR)
-					|| item.getPrimitiveType().equals(IEGLConstants.KEYWORD_MBCHAR) 
-					|| item.getPrimitiveType().equals(IEGLConstants.KEYWORD_UNICODE) 
-					|| item.getPrimitiveType().equals(SQLConstants.LIMITED_STRING) ) {
-				builder.append(SQLConstants.LPAREN);
-				builder.append(item.getLength());
-				builder.append(SQLConstants.RPAREN);
-			} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_DECIMAL)) {
-				builder.append(SQLConstants.LPAREN);
-				builder.append(item.getLength());
-				if(item.getDecimals() != null) {
-					builder.append(",");
-					builder.append(item.getDecimals());
-				}
-				builder.append(SQLConstants.RPAREN);
-			}
-			if (item.isNullable()) {
-				builder.append("?");
-			}
-			
-			boolean isPartOfPK = column.isPartOfPrimaryKey();
-			
-			if (isPartOfPK) {
-				builder.append("{");
-			}
-			if (column.isPartOfPrimaryKey()) {
-				builder.append(" @id ");
-			}		
-			if (colNameAlias!= null) {
-				if (column.isPartOfPrimaryKey()) {
-					builder.append(SQLConstants.COMMA_AND_SPACE);
-					builder.append("@column{ name =");
-				} else {
-					builder.append("{@column{ name =");
-				}
-				
-				builder.append(SQLConstants.DOUBLE_QUOTE);
-				builder.append(StringToken.trim(item.getColumnName()));
-				builder.append(SQLConstants.DOUBLE_QUOTE);
-				if (column.isPartOfPrimaryKey()) {
-					builder.append("}");
-				} else {
-					builder.append("}");
-					builder.append("}");
-				}
-				
-			}
-			
-			if (isPartOfPK) {
-				builder.append("}");
-			}
-			builder.append(";");
-			out.println(builder.toString());
+			return true;
+		}
+	}
+	protected String getFieldDefinition(Column column, EglSourceContext ctx, boolean isEntityRecord){
+
+		EGLSQLStructureItem item = new EGLSQLStructureItem();
+		String colNameAlias = null;
+		
+		DatabaseDefinition def = (DatabaseDefinition)ctx.get(DTO2EglSource.DATA_DEFINITION_OBJECT);
+		
+		EGLSQLRetrieveUtility.getInstance().populateStructureItem(def, column, item);				
+		colNameAlias = getAliasName(item.getName().trim());
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("\t");
+		builder.append(getFieldName(column, item));
+		builder.append(" ");
+		builder.append(getFieldType(column, item));
+		
+		if(isEntityRecord){
+			builder.append(getFieldAnnotation(column, colNameAlias, item));
+		}
+
+		builder.append(";");
+		return builder.toString();
+		
+	}
+	
+	protected String getFieldName(Column column, EGLSQLStructureItem item){
+		String colNameAlias = getAliasName(item.getName().trim());
+
+		if( colNameAlias != null) {
+			return StringToken.trim(colNameAlias);
+		} else {
+			return StringToken.trim(item.getName());
 		}
 	}
 	
-	private String getAliasName(String itemName,EglSourceContext ctx) {
-		String alias = null;
+	protected String getFieldType(Column column, EGLSQLStructureItem item){
+		StringBuilder builder = new StringBuilder();
+		builder.append(item.getPrimitiveType());
+		if(item.getPrimitiveType().equals(IEGLConstants.KEYWORD_CHAR)
+				|| item.getPrimitiveType().equals(IEGLConstants.KEYWORD_MBCHAR) 
+				|| item.getPrimitiveType().equals(IEGLConstants.KEYWORD_UNICODE) 
+				|| item.getPrimitiveType().equals(SQLConstants.LIMITED_STRING) ) {
+			builder.append(SQLConstants.LPAREN);
+			builder.append(item.getLength());
+			builder.append(SQLConstants.RPAREN);
+		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_DECIMAL)) {
+			builder.append(SQLConstants.LPAREN);
+			builder.append(item.getLength());
+			if(item.getDecimals() != null) {
+				builder.append(",");
+				builder.append(item.getDecimals());
+			}
+			builder.append(SQLConstants.RPAREN);
+		}
+		if (item.isNullable()) {
+			builder.append("?");
+		}
+		return builder.toString();
+	}
+	
+	protected String getFieldAnnotation(Column column, String colNameAlias, EGLSQLStructureItem item){
+		boolean isPartOfPK = column.isPartOfPrimaryKey();
+
+		StringBuilder builder = new StringBuilder();
 		
-		if(EGLKeywordHandler.getKeywordHashSet().contains(itemName.toLowerCase(Locale.ENGLISH))) {
-			alias = itemName + ctx.nextTempIndex();
-		} else {
-			alias = CoreUtility.getCamelCaseString(itemName);
+		if (isPartOfPK) {
+			builder.append("{");
+		}
+		if (column.isPartOfPrimaryKey()) {
+			builder.append(" @id ");
+		}		
+		if (colNameAlias!= null) {
+			if (column.isPartOfPrimaryKey()) {
+				builder.append(SQLConstants.COMMA_AND_SPACE);
+				builder.append("@column{ name =");
+			} else {
+				builder.append("{@column{ name =");
+			}
+			
+			builder.append(SQLConstants.DOUBLE_QUOTE);
+			//TODO why column.getname()?
+			builder.append(StringToken.trim(item.getColumnName()));
+			builder.append(SQLConstants.DOUBLE_QUOTE);
+			if (column.isPartOfPrimaryKey()) {
+				builder.append("}");
+			} else {
+				builder.append("}");
+				builder.append("}");
+			}
+			
 		}
 		
-		return alias;
+		if (isPartOfPK) {
+			builder.append("}");
+		}
+		return builder.toString();
 	}
+	
 	
 	private boolean isUnsupportedColumnTpe(String columnTypeName) {
 		boolean isUnSupported = false;

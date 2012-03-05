@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.edt.gen.EglContext;
+import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.externaltype.NewExternalTypeWizard;
@@ -200,13 +200,13 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 				break;
 			} else {
 				EglSourceGenerator generator = new EglSourceGenerator(d);
-				EglContext context = generator.makeContext(d);
+				EglSourceContext context = generator.makeContext(d);
 				context.put(JavaTypeConstants.TO_BE_GENERATED_TYPE, entry.getValue());
 				
 				Class<?> clazz = entry.getKey();
 				monitor.subTask(clazz.getName());
 				d.generate(clazz, generator, null);
-				buffer.append(generator.getResult());
+				buffer.append(context.getTabbedWriterContent());
 				
 				monitor.worked(1);
 			}

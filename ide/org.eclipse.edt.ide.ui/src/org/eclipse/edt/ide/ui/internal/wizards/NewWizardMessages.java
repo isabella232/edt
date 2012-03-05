@@ -278,6 +278,16 @@ public class NewWizardMessages extends NLS {
 //
 //	public static String NewTypeWizardPageOperationdesc;
 //	public static String NewTypeWizardPageWSDLTypenameLabel;
+
+	public static String NewEGLFilesPreviewFileSelection;
+	public static String NewEGLFilesPreviewFileName;
+	public static String NewEGLFilesPreviewNoFile;
+
+	public static String NewEGLFilesPreviewFormattingCode;
+	public static String NewEGLFilesPreviewStartFormattingCode;
+	
+	public static String NewEGLFilesPreviewPage_warningLabel;
+	public static String NewEGLFilesPreviewPage_warningLabel2;
 	
 	public static String ProjectTemplateSelectionPage;
 	public static String ProjectTemplateSelectionPage_title;
@@ -675,6 +685,9 @@ public class NewWizardMessages extends NLS {
 	public static String NewEGLServiceWizardPageTitle;
 	public static String NewEGLServiceWizardPageDescription;
 	public static String NewEGLServiceWizardPagePartlabel;
+	
+	public static String NewBasicEGLServiceWizardPageTitle;
+	public static String NewBasicEGLServiceWizardPageDescription;
 //
 	public static String NewEGLInterfaceWizardPageTitle;
 	public static String NewEGLInterfaceWizardPageDescription;
@@ -944,5 +957,25 @@ public class NewWizardMessages extends NLS {
 	public static String EGLSourceProjectWizardPage_DirectoryDialogTitle;
 	
 	public static String EGLCapabilityConfigurationPage;
+	
+	public static String TemplateSelectionPage_selectTemplate;
 
+
+	public static String FromSqlDatabasePage_DBConnectionlabel;
+	public static String FromSqlDatabasePage_CreateDBLink;
+	public static String FromSqlDatabasePage_Validation_UnableToConnect;
+	public static String FromSqlDatabasePage_Validation_NoTable;
+	public static String FromSqlDatabasePage_Validation_NoConnection;
+	public static String FromSqlDatabasePage_TablesLabel;
+	public static String FromSqlDatabasePage_TablesSelected;
+	public static String FromSqlDatabasePage_Title;
+	public static String FromSqlDatabasePage_Description;
+	public static String FromSqlDatabasePage_QualifyTableNames;
+	public static String FromSqlDatabasePage_SaveConnectionToDD;
+	public static String FromSqlDatabasePage_RetrievingTablesTask;
+	public static String FromSqlDatabasePage_Generating;
+	
+	public static String SaveEGLSourceFiles;
+	public static String SaveEGLSourceFile;
+	
 }

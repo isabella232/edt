@@ -13,34 +13,50 @@ package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
 
 import org.eclipse.datatools.modelbase.sql.tables.Table;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DTO2EglSource;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsSqlTemplate;
 
 public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 
-	public void genTable(org.eclipse.datatools.modelbase.sql.tables.Table table, EglSourceContext ctx, TabbedWriter out){
-		boolean isTableQualified = (Boolean)ctx.get(DataToolsObjectsToEglSource.TABLE_NAME_QUALIFIED);
-		
-		out.print("record " + table.getName() + " type Entity ");
-		if(isTableQualified) {
-			out.println("{ @table { name=\"" + table.getSchema().getName() + "." +table.getName() + "\" } }");		
-		} else {
-			out.println("{ @table { name=\"" + table.getName() + "\" } }");		
-		}
+	public void genTable(org.eclipse.datatools.modelbase.sql.tables.Table table, EglSourceContext ctx){
+		ctx.appendVariableValue(RECORD_FILE_CONTENT, getEntityRecordHeader(table, ctx), "");
 		
 		Object[] columns = table.getColumns().toArray();
 		for (Object column : columns) {
-			ctx.invoke(genColumn, (Object)column, ctx, out);	
-		}		
-		
-		out.println("end");
-		out.println("");
+			ctx.invoke(genColumn, (Object)column, ctx);	
+		}
+		ctx.appendVariableValue(RECORD_FILE_CONTENT, getRecordFooter(), "");
 	}
 	
-	public void genObject(org.eclipse.datatools.modelbase.sql.tables.Table object, EglSourceContext ctx, TabbedWriter out){
+	public void genObject(org.eclipse.datatools.modelbase.sql.tables.Table object, EglSourceContext ctx){
 		if (object instanceof Table) {
-			genTable((Table)object, ctx, out);
+			genTable((Table)object, ctx);
 		}
 	}
 	
+	public String getEntityRecordName(Table table){
+		return getValidName(table);
+	}
+	public String getValidName(Table table){
+		String aliasName = getAliasName(table.getName());
+		return (aliasName == null)?table.getName():aliasName;
+	}
+	
+	public String getEntityRecordHeader(org.eclipse.datatools.modelbase.sql.tables.Table table, EglSourceContext ctx){
+		
+		StringBuffer s = new StringBuffer("record " + getEntityRecordName(table) + " type Entity ");
+		boolean isTableQualified = (Boolean)ctx.get(DTO2EglSource.TABLE_NAME_QUALIFIED);
+		
+		if(isTableQualified) {
+			s.append("{ @table { name=\"" + table.getSchema().getName() + "." +table.getName() + "\" } }");		
+		} else {
+			s.append("{ @table { name=\"" + table.getName() + "\" } }");		
+		}
+		return s.toString();
+	}
+	
+	public String getRecordFooter(){
+		return "\nend\n";
+	}
 	
 }

@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
-import org.eclipse.edt.ide.ui.internal.record.NewRecordWizardMessages;
 import org.eclipse.edt.ide.ui.templates.ITemplate;
 import org.eclipse.edt.ide.ui.templates.TemplateManager;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizardNode;
@@ -38,7 +37,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -55,14 +53,25 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	
 	protected abstract String getTemplateID();
 	
+	public String getSelectedCodeTemplateId(){
+
+		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
+		if (o instanceof ITemplate) {
+			ITemplate template = (ITemplate) o;
+			return template.getCodeTemplateId();
+		}
+		return null;
+	}
+	
 	protected void createTemplateArea(Composite container, int nColumns) {
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, IUIHelpConstants.EGL_NEW_RECORD_TEMPLATE_SELECTION_PAGE);
 
-		Group ownerInfo = new Group(container, SWT.NONE);
-		ownerInfo.setText(NewWizardMessages.ProjectWizardMainPage_1);
+		Composite ownerInfo = new Composite(container, SWT.NONE);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = nColumns;
+		gridLayout.marginWidth = 0;
 		ownerInfo.setLayout(gridLayout);
+		
 		GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
 		gridData.horizontalSpan = nColumns;
 		ownerInfo.setLayoutData(gridData);
@@ -71,22 +80,16 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 		int descriptionCol = nColumns - templateCol;
 		
 		Label label = new Label(ownerInfo, 0);
-		label.setText(NewRecordWizardMessages.TemplateSelectionPage_templatesLabel);
+		label.setText(NewWizardMessages.TemplateSelectionPage_selectTemplate);
 		GridData gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gd.horizontalSpan= templateCol;
-		label.setLayoutData(gd);
-
-		label = new Label(ownerInfo, 0);
-		label.setText(NewRecordWizardMessages.TemplateSelectionPage_descriptionLabel);
-		gd= new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		gd.horizontalSpan= descriptionCol;
+		gd.horizontalSpan= nColumns;
 		label.setLayoutData(gd);
 
 		templateViewer = new TableViewer(ownerInfo, SWT.BORDER);
 		Table control = templateViewer.getTable();
 		GridData data = new GridData(GridData.FILL_BOTH);
 		data.heightHint = 250;
-		data.widthHint = 250;
+		data.widthHint = 200;
 		data.horizontalSpan= templateCol;
 		control.setLayoutData(data);
 		
@@ -102,6 +105,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 		descriptionText = new Text(ownerInfo, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
 		data = new GridData(GridData.FILL_BOTH);
 		descriptionText.setLayoutData(data);
+		data.widthHint = 200;
 		data.horizontalSpan= descriptionCol;
 		descriptionText.setBackground(control.getBackground());
 		descriptionText.setForeground(control.getForeground());

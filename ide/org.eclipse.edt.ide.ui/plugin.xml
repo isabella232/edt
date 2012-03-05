@@ -996,7 +996,7 @@ Templates
             name="%Library"
             icon="icons/ctool16/newlib_wiz.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
-            class="org.eclipse.edt.ide.ui.internal.wizards.LibraryWizard"
+            class="org.eclipse.edt.ide.ui.internal.libraries.wizards.LibraryWizard"
             id="org.eclipse.edt.ide.ui.newLibraryWizard">
          </wizard>
       	<wizard
@@ -1024,7 +1024,7 @@ Templates
             name="%Service"
             icon="icons/etool16/nsvc_wiz.gif" 
             category="org.eclipse.edt.ide.ui.wizards.new.category"
-            class="org.eclipse.edt.ide.ui.internal.wizards.ServiceWizard"
+            class="org.eclipse.edt.ide.ui.internal.services.wizards.ServiceWizard"
             id="org.eclipse.edt.ide.ui.newServicewizard">
        </wizard>
        <wizard
@@ -1058,7 +1058,7 @@ Templates
        </wizard>
        <wizard
    		    name="%EGLExternalType"
-   		    icon="icons/obj16/exttyp_obj.gif"
+   		    icon="icons/ctool16/newrec_wiz.gif"
             category="org.eclipse.edt.ide.ui.wizards.new.category"
             class="org.eclipse.edt.ide.ui.internal.externaltype.NewExternalTypeWizard"
             id="org.eclipse.edt.ide.ui.NewExternalTypeWizard">
@@ -1509,12 +1509,12 @@ Templates
       </template>
       
       <template
-            name="Records from SQL Database"
+            name="%EGLRecordFromDatabase"
             icon="icons/ctool16/record_template.gif"
             category="org.eclipse.edt.ide.ui.records"
             wizardClass="org.eclipse.edt.ide.ui.internal.record.wizards.sqldb.RecordFromSqlDatabaseWizard"
             id="org.eclipse.edt.ide.ui.records.sqldb"
-            description="Create entity records for fields defined in tables or views in a relational database.">
+            description="%EGLRecordFromDatabaseDescription">
       </template>      
       
     </extension>
@@ -1548,6 +1548,66 @@ Templates
             id="org.eclipse.edt.ide.ui.handlers.ruiwidget"
             description="%RUIWidgetDescription">
       </template>      
+     
+    </extension>
+
+    <extension point="org.eclipse.edt.ide.ui.eglTemplates">
+	
+	  <template
+         category="org.eclipse.edt.ide.ui.services"
+         codeTemplateID="org.eclipse.edt.ide.ui.templates.service"
+         default="true"
+         description="%BasicServiceDescription"
+         icon="icons/ctool16/newrec_wiz.gif"
+         id="org.eclipse.edt.ide.ui.service.basic"
+         name="%BasicService"
+         wizardClass="org.eclipse.edt.ide.ui.internal.services.wizards.BasicServiceWizard">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.services"
+            default="false"
+            description="%DataAccessServiceDescription"
+            icon="icons/ctool16/record_template.gif"
+            id="org.eclipse.edt.ide.ui.service.dataaccess"
+            name="%DataAccessService"
+            wizardClass="org.eclipse.edt.ide.ui.internal.services.wizards.ServiceFromDBWizard">
+      </template>
+     
+    </extension>
+    
+    
+    <extension point="org.eclipse.edt.ide.ui.eglTemplates">
+	
+	  <template
+         category="org.eclipse.edt.ide.ui.libraries"
+         codeTemplateID="org.eclipse.edt.ide.ui.templates.basic_library"
+         default="true"
+         description="%BasicLibraryDescription"
+         icon="icons/ctool16/newlib_wiz.gif"
+         id="org.eclipse.edt.ide.ui.library.basic"
+         name="%BasicLibrary">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.libraries"
+         	codeTemplateID="org.eclipse.edt.ide.ui.templates.ruiProp_library"
+            default="false"
+            description="%RUIPropertiesLibraryDescription"
+            icon="icons/ctool16/newlib_wiz.gif"
+            id="org.eclipse.edt.ide.ui.library.ruiproperties"
+            name="%RUIPropertiesLibrary">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.libraries"
+            default="false"
+            description="%DataAccessLibraryDescription"
+            icon="icons/ctool16/library_template.gif"
+            id="org.eclipse.edt.ide.ui.library.dataaccess"
+            name="%DataAccessLibrary"
+            wizardClass="org.eclipse.edt.ide.ui.internal.libraries.wizards.LibraryFromDBWizard">
+      </template>
      
     </extension>
     

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright 漏 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,7 @@
  *
  *******************************************************************************/
 
-package org.eclipse.edt.ide.ui.internal.record.wizards.sqldb;
+package org.eclipse.edt.ide.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -69,7 +69,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 
-public class RecordFromSqlDatabasePage extends WizardPage implements SelectionListener, ICheckStateListener {
+public class DTOConfigPage extends WizardPage implements SelectionListener, ICheckStateListener {
 
 	private IStatus fCurrStatus;
 	private boolean fPageVisible;
@@ -88,16 +88,8 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 	private StatusInfo databaseStatus, connectionStatus, tableStatus;
 	private boolean confirmOverwrite = false;
 
-	private RecordFromSqlDatabaseWizardConfiguration configuration;
+	private DTOConfiguration configuration;
 	private Hashtable existingConnections;
-
-	// @bd1a start
-	// Bidi Properties
-	// private Button bidiSettingsButton;
-	// static BidiPropertiesComposite bidiSettings;
-	// private HashMap dbAttributes = null;
-	// @bd1a end
-	// private DBContentBidiFormatComposite dbBidiSettings; //@bd2a
 
 	protected boolean isBidi = false; // @bd1a
 
@@ -106,10 +98,9 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 	 * 
 	 * @param pageName
 	 */
-	public RecordFromSqlDatabasePage(RecordFromSqlDatabaseWizardConfiguration config) {
-		super(RecordFromSqlDatabasePage.class.getName());
-		setTitle(NewRecordWizardMessages.RecordFromSqlDatabasePage_Title);
-		setDescription(NewRecordWizardMessages.RecordFromSqlDatabasePage_Description);
+	public DTOConfigPage(DTOConfiguration config) {
+		super(DTOConfigPage.class.getName());
+		setTitle(NewWizardMessages.FromSqlDatabasePage_Title);
 
 		this.configuration = config;
 
@@ -128,24 +119,16 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setFont(parent.getFont());
 
-		// PlatformUI.getWorkbench().getHelpSystem().setHelp(composite,
-		// IEGLMDDUIHelpConstants.EGL_DPP_MAIN_PAGE);
-
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;
 		composite.setLayout(layout);
 
 		createDatabaseControls(composite);
-		// @bd1a start
-		if (configuration instanceof RecordFromSqlDatabaseWizardConfigurationBidi) {
-			// creatBidiGroup(composite);
-		}
-		// @bd1a end
+		
 		createTableControls(composite);
-		// createTableButtons(composite);
-
+		
 		qualifyTableNamesCheckbox = new Button(composite, SWT.CHECK);
-		qualifyTableNamesCheckbox.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_QualifyTableNames);
+		qualifyTableNamesCheckbox.setText(NewWizardMessages.FromSqlDatabasePage_QualifyTableNames);
 		GridData data = new GridData();
 		data.horizontalSpan = 2;
 		qualifyTableNamesCheckbox.setLayoutData(data);
@@ -157,7 +140,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		});
 
 		saveConnectionToDDCheckbox = new Button(composite, SWT.CHECK);
-		saveConnectionToDDCheckbox.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_SaveConnectionToDD);
+		saveConnectionToDDCheckbox.setText(NewWizardMessages.FromSqlDatabasePage_SaveConnectionToDD);
 		data = new GridData();
 		data.horizontalSpan = 2;
 		saveConnectionToDDCheckbox.setLayoutData(data);
@@ -177,98 +160,9 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		Dialog.applyDialogFont(parent);
 	}
 
-	// @bd1a start
-	/**
-	 * Creates the bidi group composite.
-	 * 
-	 * @param composite
-	 *            the parent composite
-	 */
-	// public void creatBidiGroup(Composite composite) {
-	//
-	// //@bd2a Start
-	// Group mainPageBidiGroup = new Group(composite, SWT.NONE);
-	// mainPageBidiGroup.setText(WizardMessages.bidiAttributes_Label_BidiMainGroup);
-	//
-	// GridLayout bidiGroupLayout = new GridLayout();
-	// bidiGroupLayout.numColumns = 1;
-	// GridData bidiGroupData = new GridData(GridData.FILL_HORIZONTAL);
-	// bidiGroupData.horizontalSpan = 1;
-	//
-	// mainPageBidiGroup.setLayout(bidiGroupLayout);
-	// mainPageBidiGroup.setLayoutData(bidiGroupData);
-	// //@bd2a End
-	//
-	// bidiSettingsButton = new Button(mainPageBidiGroup, SWT.CHECK); //@bd2c
-	// bidiSettingsButton.setText(WizardMessages.bidiAttributes_bidirectionalSettings);
-	// bidiSettingsButton.setToolTipText(WizardMessages.bidiAttributes_bidirectionalSettings);
-	// bidiSettingsButton.addSelectionListener(this);
-	//
-	// Composite mainPageBidiComposite= new Composite(mainPageBidiGroup,
-	// SWT.NONE);
-	// mainPageBidiComposite.setFont(composite.getFont());
-	//
-	// GridLayout bidiLayout = new GridLayout();
-	// bidiLayout.numColumns = 2; //1; //@bd2c
-	// GridData bidiData = new GridData(GridData.FILL_BOTH |
-	// GridData.VERTICAL_ALIGN_BEGINNING); bidiData.horizontalSpan = 1; //@bd2c
-	// bidiData.verticalAlignment = SWT.TOP;
-	//
-	// mainPageBidiComposite.setLayout(bidiLayout);
-	// mainPageBidiComposite.setLayoutData(bidiData);
-	//
-	// bidiSettings = new BidiPropertiesComposite(mainPageBidiComposite,
-	// SWT.NONE, configuration);
-	// dbBidiSettings = new DBContentBidiFormatComposite(mainPageBidiComposite,
-	// SWT.NONE, configuration); //@bd2a
-	//
-	// }
-	// @bd1a end
 
 	public IWizardPage getNextPage() {
 		IWizardPage page = super.getNextPage();
-
-		// @bd1a start
-		// Set the selected tables bidi attributes according to the current set
-		// of database attributes
-		// if (isBidi) {
-		// setBidiAttributesForSelectedTables();
-		// //@bd2a Start
-		// if(configuration!=null &&
-		// dbBidiSettings.isBidiSettingsButtonSelected()){
-		// if(dbBidiSettings.getBidiContentHashMap()!=null &&
-		// dbBidiSettings.getBidiContentHashMap().size()>0)
-		// configuration.setBidiContentHashMap(dbBidiSettings.getBidiContentHashMap());
-		// if (dbBidiSettings.isClientVisual()){
-		// configuration.removeBct(RecordFromSqlDatabaseWizardConfiguration.DB_KEY);
-		// configuration.setClientVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// true);
-		// configuration.setDBVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBVisual());
-		// configuration.setDBRTL(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBRTLDirection());
-		// configuration.setDBSymSwap(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBSymSwap());
-		// configuration.setDBNumSwap(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isDBNumSwap());
-		// configuration.setClientRTL(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.isClientRTLDirection());
-		// }
-		// else if(dbBidiSettings.getBct()!=null){
-		// configuration.setClientVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// false);
-		// configuration.setBct(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// dbBidiSettings.getBct());
-		// }
-		// }else{
-		// configuration.setClientVisual(RecordFromSqlDatabaseWizardConfiguration.DB_KEY,
-		// false);
-		// configuration.removeBct(RecordFromSqlDatabaseWizardConfiguration.DB_KEY);
-		// }
-		// //@bd2a End
-		// }
-		// @bd1a end
-
 		return page;
 	}
 
@@ -288,7 +182,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 
 		// Create the database controls
 		Label dbLabel = new Label(dbComposite, SWT.NONE);
-		dbLabel.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_DBConnectionlabel);
+		dbLabel.setText(NewWizardMessages.FromSqlDatabasePage_DBConnectionlabel);
 
 		dbConnectionCombo = new Combo(dbComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
@@ -298,7 +192,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		new Label(dbComposite, SWT.NONE);
 
 		newDatabaseConnectionLink = new Link(dbComposite, SWT.PUSH);
-		newDatabaseConnectionLink.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_CreateDBLink);
+		newDatabaseConnectionLink.setText(NewWizardMessages.FromSqlDatabasePage_CreateDBLink);
 																				
 		newDatabaseConnectionLink.addSelectionListener(this);
 		gd = new GridData(GridData.HORIZONTAL_ALIGN_END);
@@ -321,7 +215,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		tableComposite.setLayoutData(tableData);
 
 		Label tableLabel = new Label(tableComposite, SWT.NONE);
-		tableLabel.setText(NewRecordWizardMessages.RecordFromSqlDatabasePage_TablesLabel);
+		tableLabel.setText(NewWizardMessages.FromSqlDatabasePage_TablesLabel);
 
 		dbTableViewer = new CheckboxTreeViewer(tableComposite);
 		dbTableViewer.setContentProvider(new DatabaseTableContentProvider());
@@ -458,7 +352,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		if(selectedConnection != null) {
 			IRunnableWithProgress runnable = new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor) throws InvocationTargetException {
-					monitor.beginTask(NewRecordWizardMessages.RecordFromSqlDatabasePage_RetrievingTablesTask, 1);
+					monitor.beginTask(NewWizardMessages.FromSqlDatabasePage_RetrievingTablesTask, 1);
 					
 					if(selectedConnection!=null) {
 						dbTableViewer.setInput(selectedConnection);
@@ -503,95 +397,20 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		configuration.setSelectedTables(selectedTables);
 		
 		Integer tableSelected = new Integer(selectedTables.size());
-		numSelectedLabel.setText(NewRecordWizardMessages.bind(NewRecordWizardMessages.RecordFromSqlDatabasePage_TablesSelected,new String[] {tableSelected.toString()}));
+		numSelectedLabel.setText(NewRecordWizardMessages.bind(NewWizardMessages.FromSqlDatabasePage_TablesSelected,new String[] {tableSelected.toString()}));
 		//numSelectedLabel.setText(selectedTables.size() + " table(s) selected.");
 		numSelectedLabel.getParent().layout();
 	}
 
-	// @bd1a start
-	/**
-	 * Sets the bidi attributes for selected tables.
-	 */
-	// private void setBidiAttributesForSelectedTables() {
-	// if (isBidi) {
-	// if (null != bidiSettings)
-	// dbAttributes = bidiSettings.getOptions();
-	//
-	// List selectedTablesList = configuration.getSelectedTables();
-	// if (null != selectedTablesList && (selectedTablesList.size() > 0)) {
-	// if (null != dbAttributes /*&& (dbAttributes.size() > 0)*/) { //@bd3c
-	// HashMap newTableAttrs = new HashMap(dbAttributes);
-	// newTableAttrs.put("TableInherits", "true");
-	// for (int i=0; i<selectedTablesList.size(); i++) {
-	// if (selectedTablesList.get(i) instanceof
-	// org.eclipse.datatools.modelbase.sql.tables.Table) {
-	// // Set the bidirectional options for the tables that inherits the
-	// database attributes
-	// // and for all tables that don't have attributes defined for them.
-	// org.eclipse.datatools.modelbase.sql.tables.Table tbl =
-	// (org.eclipse.datatools.modelbase.sql.tables.Table)
-	// selectedTablesList.get(i);
-	// if(!configuration.getMetadataInherit(tbl.getName()).equalsIgnoreCase("false")){
-	// //@bd2a
-	// HashMap tblAttrs = (HashMap)
-	// configuration.getBidiAttributes(tbl.getName());
-	// if ((null == tblAttrs || tblAttrs.size()==0) // Table does not have any
-	// bidirectional attributes //@bd2c
-	// || (null != tblAttrs && tblAttrs.containsKey("TableInherits"))) { //
-	// Table inherits
-	// //@bd3a Start
-	// boolean disable =false;
-	// if(configuration.isDisableMetadata(tbl.getName()))
-	// disable = true;
-	// //@bd3a End
-	// configuration.setBidiAttributes(tbl.getName(), newTableAttrs);
-	// //@bd3a Start
-	// if(disable)
-	// configuration.setDisableMetadata(tbl.getName(), true);
-	// //@bd3a End
-	// }
-	// }//@bd2a
-	// }
-	// }
-	// }
-	// /*@bd3d Start
-	// else {
-	// for (int i=0; i<selectedTablesList.size(); i++) {
-	// if (selectedTablesList.get(i) instanceof
-	// org.eclipse.datatools.modelbase.sql.tables.Table) {
-	// // Set the bidirectional options for the tables that inherits the
-	// database attributes
-	// // and for all tables that don't have attributes defined for them.
-	// org.eclipse.datatools.modelbase.sql.tables.Table tbl =
-	// (org.eclipse.datatools.modelbase.sql.tables.Table)
-	// selectedTablesList.get(i);
-	// if(!configuration.getMetadataInherit(tbl.getName()).equalsIgnoreCase("false")){
-	// //@bd2a
-	// HashMap tblAttrs = (HashMap)
-	// configuration.getBidiAttributes(tbl.getName());
-	// if (null != tblAttrs && tblAttrs.containsKey("TableInherits")) { // Table
-	// inherits
-	// configuration.setBidiAttributes(tbl.getName(), null);
-	// }
-	// }//@bd2a
-	// }
-	// }
-	// }
-	// */ //@bd3d End
-	// }
-	// }
-	// }
-	// //@bd1a end
-
 	protected void validateDatabaseConnection(IConnectionProfile dbConnection, StatusInfo status) {
 		if (dbConnection == null) {
-			status.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_NoConnection);
+			status.setError(NewWizardMessages.FromSqlDatabasePage_Validation_NoConnection);
 		}
 	}
 
 	protected void validateTables(List selectedTables, StatusInfo status) {
 		if (selectedTables == null || selectedTables.isEmpty()) {
-			status.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_NoTable);
+			status.setError(NewWizardMessages.FromSqlDatabasePage_Validation_NoTable);
 		}
 	}
 
@@ -844,7 +663,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 		IConnectionProfile profile = configuration.getDatabaseConnection();
 
 		if (profile == null) {
-			connectionStatus.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_UnableToConnect);
+			connectionStatus.setError(NewWizardMessages.FromSqlDatabasePage_Validation_UnableToConnect);
 			isConnected = false;
 		} else {
 			if (profile.getConnectionState() == IConnectionProfile.CONNECTED_STATE) {
@@ -852,7 +671,7 @@ public class RecordFromSqlDatabasePage extends WizardPage implements SelectionLi
 			} else {
 				IStatus status = RDBConnectionUtility.connectWithPromptIfNeeded(profile, SQLPlugin.getPlugin().getSQLPromptDialogOption());
 				if (!status.isOK()) {
-					connectionStatus.setError(NewRecordWizardMessages.RecordFromSqlDatabasePage_Validation_UnableToConnect);
+					connectionStatus.setError(NewWizardMessages.FromSqlDatabasePage_Validation_UnableToConnect);
 				} else {
 					isConnected = true;
 				}

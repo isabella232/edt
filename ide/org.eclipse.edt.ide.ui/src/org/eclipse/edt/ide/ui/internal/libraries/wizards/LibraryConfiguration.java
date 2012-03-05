@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2000, 2011 IBM Corporation and others.
+ * Copyright 漏 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,8 +9,9 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.wizards;
+package org.eclipse.edt.ide.ui.internal.libraries.wizards;
 
+import org.eclipse.edt.ide.ui.wizards.EGLPartConfiguration;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -25,6 +26,8 @@ public class LibraryConfiguration extends EGLPartConfiguration {
 	
 	/** The type of library */
 	private int libraryType;
+	
+	private String codeTemplateId;
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);

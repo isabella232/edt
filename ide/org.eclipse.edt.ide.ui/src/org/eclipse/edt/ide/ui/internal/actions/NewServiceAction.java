@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.actions;
 
-import org.eclipse.edt.ide.ui.internal.wizards.ServiceWizard;
+import org.eclipse.edt.ide.ui.internal.services.wizards.ServiceWizard;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 

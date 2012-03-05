@@ -134,6 +134,10 @@ public class BindingSQLDatabaseConfiguration extends BindingEGLConfiguration {
 		this.defaultSchema = defaultSchema;
 	}
 	
+	public String getValidBindingName(){
+		return getValidBindingName(getBindingName());
+	}
+	
 	public Object executeAddBinding(Bindings bindings){
 		Binding sqlBinding = DeploymentFactory.eINSTANCE.createBinding();
 		bindings.getBinding().add(sqlBinding);

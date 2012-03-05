@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2008, 2011 IBM Corporation and others.
+ * Copyright 漏 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,21 +10,29 @@
  *
  *******************************************************************************/
 
-package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
+package org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb;
 
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
-public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
+public class DTO2EglSource extends AbstractGeneratorCommand {
 	
 	public static final String DATA_DEFINITION_OBJECT = "dataDefinition";
 	public static final String TABLE_NAME_QUALIFIED = "tableNameQualified";
 	public static final String DB_MESSAGE_HANDLER = "dbMessageHandler";
+	public static final String PROGRESS_MONITOR = "monitor";
+	
+	private String contributionClass;
 
-	public DataToolsObjectsToEglSource() {
+	public DTO2EglSource() {
 		super();
+	}
+	
+	public DTO2EglSource(String contributionClass) {
+		super();
+		this.setContributionClass(contributionClass);
 	}
 
 	public void generate(Object object, EglSourceGenerator generator, IEnvironment environment) {
@@ -48,7 +56,7 @@ public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
 			}
 		}
 		catch (Exception e) {
-			System.out.print(e.getMessage());
+			e.printStackTrace();
 		}
 		finally {
 			if (environment != null){
@@ -74,8 +82,16 @@ public class DataToolsObjectsToEglSource extends AbstractGeneratorCommand {
 
 		// add the contribution
 		args[6] = "-c";
-		args[7] = "org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.DataToolsObjectsToEglContributor";
+		args[7] = contributionClass;
 
 		return args;
+	}	
+
+	public String getContributionClass() {
+		return contributionClass;
+	}
+
+	public void setContributionClass(String contributionClass) {
+		this.contributionClass = contributionClass;
 	}
 }

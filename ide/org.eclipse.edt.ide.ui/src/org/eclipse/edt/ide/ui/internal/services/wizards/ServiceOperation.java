@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2000, 2011 IBM Corporation and others.
+ * Copyright 漏 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,7 +9,7 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.wizards;
+package org.eclipse.edt.ide.ui.internal.services.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
@@ -17,11 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -33,7 +30,6 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Program;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Service;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
@@ -57,6 +53,12 @@ import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
 import org.eclipse.edt.ide.ui.internal.templates.TemplateEngine;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
+import org.eclipse.edt.ide.ui.wizards.EGLFileConfiguration;
+import org.eclipse.edt.ide.ui.wizards.EGLFileOperation;
+import org.eclipse.edt.ide.ui.wizards.EGLPartConfiguration;
+import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceConfiguration;
+import org.eclipse.edt.ide.ui.wizards.ExtractInterfaceOperation;
+import org.eclipse.edt.ide.ui.wizards.PartTemplateException;
 
 public class ServiceOperation extends EGLFileOperation {
 	
@@ -454,7 +456,7 @@ public class ServiceOperation extends EGLFileOperation {
         return null;
     }
         
-	protected String getFileContents() throws PartTemplateException {		
+	public String getFileContents() throws PartTemplateException {		
 		if(interfaces.isEmpty() && calledPrograms.isEmpty()) {
 		    return getFileContentsFromTemplate();		    
 		} else {

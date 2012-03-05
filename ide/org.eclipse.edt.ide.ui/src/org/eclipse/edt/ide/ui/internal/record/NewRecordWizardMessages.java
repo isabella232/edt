@@ -97,16 +97,7 @@ public class NewRecordWizardMessages extends NLS {
 	public static String RecordFromXMLSchemaPage_title;
 	public static String RecordFromXMLSchemaPage_description;
 	
-	public static String RecordFromSqlDatabasePage_DBConnectionlabel;
-	public static String RecordFromSqlDatabasePage_CreateDBLink;
-	public static String RecordFromSqlDatabasePage_Validation_UnableToConnect;
-	public static String RecordFromSqlDatabasePage_Validation_NoTable;
-	public static String RecordFromSqlDatabasePage_Validation_NoConnection;
-	public static String RecordFromSqlDatabasePage_TablesLabel;
-	public static String RecordFromSqlDatabasePage_TablesSelected;
-	public static String RecordFromSqlDatabasePage_Title;
 	public static String RecordFromSqlDatabasePage_Description;
-	public static String RecordFromSqlDatabasePage_QualifyTableNames;
-	public static String RecordFromSqlDatabasePage_SaveConnectionToDD;
-	public static String RecordFromSqlDatabasePage_RetrievingTablesTask;
+	
+	public static String GeneratingProgressMonitor_PromptionText;
 }

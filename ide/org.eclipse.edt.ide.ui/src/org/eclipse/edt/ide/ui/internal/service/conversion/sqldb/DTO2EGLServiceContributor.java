@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright Â© 2011 IBM Corporation and others.
+ * Copyright 漏 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,13 +9,14 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.internal.record.conversion.sqldb;
+
+package org.eclipse.edt.ide.ui.internal.service.conversion.sqldb;
 
 import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.GenerationRegistry;
 import org.eclipse.edt.gen.GenerationContributor;
 
-public class DataToolsObjectsToEglContributor implements GenerationContributor {
+public class DTO2EGLServiceContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
@@ -29,7 +30,7 @@ public class DataToolsObjectsToEglContributor implements GenerationContributor {
 	// define the list of template directories for this generator
 	static {
 		templatePath = new String[] { 
-			"org.eclipse.edt.ide.ui.internal.record.conversion.sqldb.templates"
+			"org.eclipse.edt.ide.ui.internal.service.conversion.sqldb.templates"
 		};
 	}
 	// define the list of native type directories for this generator

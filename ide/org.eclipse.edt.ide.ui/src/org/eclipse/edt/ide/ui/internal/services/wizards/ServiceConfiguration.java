@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2000, 2011 IBM Corporation and others.
+ * Copyright 漏 2000, 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,9 +9,10 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.ide.ui.wizards;
+package org.eclipse.edt.ide.ui.internal.services.wizards;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -24,6 +25,7 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.util.EGLModelUtility;
+import org.eclipse.edt.ide.ui.wizards.InterfaceListConfiguration;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 
@@ -41,11 +43,33 @@ public class ServiceConfiguration extends InterfaceListConfiguration {
 	private boolean genAsWebService;
 	private boolean genAsRestService;
 	
+	private List superInterfaces;
+	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
 		setDefaultAttributes();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	public List getSuperInterfaces() {
+		return superInterfaces;
+	}
+	
+	@Override
+	public void setFileName(String string) {
+		super.setFileName(string);
+		setServiceName(string);
+	}
+	/**
+	 * 
+	 * @param superInterfaces
+	 */
+	public void setSuperInterfaces(List superInterfaces) {
+		this.superInterfaces = superInterfaces;
+	}
 	/**
 	 * return the fully qualified selected program name
 	 * @param workbench

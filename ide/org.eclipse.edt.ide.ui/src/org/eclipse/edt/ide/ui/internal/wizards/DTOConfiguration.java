@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright 漏 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,21 +10,19 @@
  *
  *******************************************************************************/
 
-package org.eclipse.edt.ide.ui.internal.record.wizards.sqldb;
+package org.eclipse.edt.ide.ui.internal.wizards;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
-import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
+import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.internal.Model;
 
-public class RecordFromSqlDatabaseWizardConfiguration {
+public class DTOConfiguration {
 	
 	//Data from page 1	
 	private IConnectionProfile databaseConnection;
@@ -40,7 +38,7 @@ public class RecordFromSqlDatabaseWizardConfiguration {
 	private HashMap tablePageDataHashMap; //(Key: Table, Value: EGLDataPartsPagesWizardTablePageConfiguration)	
 	
 
-	public RecordFromSqlDatabaseWizardConfiguration() {
+	public DTOConfiguration() {
 		setDefaultValues();
 	}
 	
@@ -194,6 +192,12 @@ public class RecordFromSqlDatabaseWizardConfiguration {
 		if(fieldObject != null)
 			return fieldObject.getSummaryFieldList();
 		return new ArrayList();
+	}
+	
+
+	public String getDatabaseName() {
+		ConnectionDisplayProperty[] properties = EGLSQLUtility.getConnectionDisplayProperties(databaseConnection);
+		return properties[1].getValue();
 	}
 
 	public boolean isQualifiedTableNames() {
