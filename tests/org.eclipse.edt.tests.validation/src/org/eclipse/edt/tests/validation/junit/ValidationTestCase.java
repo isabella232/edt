@@ -40,7 +40,6 @@ import org.eclipse.edt.compiler.core.ast.ErrorCorrectingParser;
 import org.eclipse.edt.compiler.core.ast.ISyntaxErrorRequestor;
 import org.eclipse.edt.compiler.core.ast.Lexer;
 import org.eclipse.edt.compiler.core.ast.SyntaxError;
-import org.eclipse.edt.compiler.core.ast.VAGLexer;
 import org.eclipse.edt.compiler.internal.core.builder.DefaultProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -134,9 +133,7 @@ public class ValidationTestCase extends TestCase {
 					 * Remove the following block when EGLC reports syntax errors
 					 */
 					AccumulatingSyntaxErrorRequestor syntaxProblemRequestor = new AccumulatingSyntaxErrorRequestor();
-					Scanner lexer = isVAGCompatible ?
-						(Scanner) new VAGLexer(new FileInputStream(file)) :
-						new Lexer(new FileInputStream(file));
+					Scanner lexer =  new Lexer(new FileInputStream(file));
 					((org.eclipse.edt.compiler.core.ast.File) new ErrorCorrectingParser(lexer).parse().value).accept(syntaxProblemRequestor);
 					for(Iterator iter = syntaxProblemRequestor.getSyntaxErrors().iterator(); iter.hasNext();) {
 						SyntaxError synError = (SyntaxError) iter.next();
