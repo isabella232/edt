@@ -76,7 +76,7 @@ public class ClasspathUtil {
 		
 		// The project's JRE (not required for execution, but required for source lookup).
 		try {
-			IRuntimeClasspathEntry jreEntry = JavaRuntime.computeJREEntry(JavaCore.create(config.getProject()));
+			IRuntimeClasspathEntry jreEntry = JavaRuntime.computeJREEntry(JavaCore.create(project));
 			if (jreEntry != null) {
 				classpath.add(jreEntry.getMemento());
 			}
