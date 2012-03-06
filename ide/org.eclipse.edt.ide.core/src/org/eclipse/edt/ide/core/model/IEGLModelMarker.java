@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.model;
 
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+
 
 
 /**
@@ -74,7 +76,7 @@ public interface IEGLModelMarker {
 	 * This can be used to recognize those markers in the workspace that flag problems 
 	 * detected by the EGL tooling during eglpath setting.
 	 */
-	public static final String BUILDPATH_PROBLEM_MARKER = EGLCore.PLUGIN_ID + ".buildpath_problem"; //$NON-NLS-1$
+	public static final String BUILDPATH_PROBLEM_MARKER = EDTCoreIDEPlugin.PLUGIN_ID + ".buildpath_problem"; //$NON-NLS-1$
 	
 	/** 
 	 * EGLPath file format marker attribute (value <code>"eglpathFileFormat"</code>).

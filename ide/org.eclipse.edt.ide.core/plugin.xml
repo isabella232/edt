@@ -81,6 +81,18 @@
        <persistent value="true"/>
     </extension>
     
+	<extension 
+			id="buildpath_problem" 
+			name="%buildPathProblemName"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.core.resources.problemmarker"/>
+		<super type="org.eclipse.core.resources.textmarker"/>
+		<persistent value="true"/>
+		<attribute name ="cycleDetected"/>
+		<attribute name="id"/>
+		<attribute name="arguments"/>
+	</extension>
+
      <extension
       point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
