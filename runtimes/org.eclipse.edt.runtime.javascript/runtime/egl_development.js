@@ -1019,7 +1019,7 @@ egl.evTerminateReloadHandler = function() {
 	try {
 	    egl.canPrintError = false;
 		if ( egl.rootHandler ) {
-			packageName = egl.rootHandler.eze$$package;
+			packageName = egl.rootHandler.eze$$package.replace(/\./g, '/');
 			typeName = egl.rootHandler.eze$$typename;
 			egl.partialTerminateSession();
 		}
