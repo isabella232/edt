@@ -44,7 +44,7 @@ public class TestServerManager implements TerminationListener, IResourceChangeLi
 	private final Object syncObj;
 	private final HashMap<IProject, TestServerConfiguration> serverConfigMap;
 	
-	public static TestServerManager getInstance() {
+	public static synchronized TestServerManager getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new TestServerManager();
 		}
