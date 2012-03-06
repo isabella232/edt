@@ -1774,15 +1774,6 @@ Templates
 	</extension>
    
    <!-- EGL buildpath problems -->
-
-	<extension id="buildpath_problem" point="org.eclipse.core.resources.markers" name="%buildPathProblemName">
-		<super type="org.eclipse.core.resources.problemmarker"/>
-		<super type="org.eclipse.core.resources.textmarker"/>
-		<persistent value="true"/>
-		<attribute name ="cycleDetected"/>
-		<attribute name="id"/>
-		<attribute name="arguments"/>
-	</extension>
 	
 	 <extension
          point="org.eclipse.jdt.ui.classpathContainerPage">
