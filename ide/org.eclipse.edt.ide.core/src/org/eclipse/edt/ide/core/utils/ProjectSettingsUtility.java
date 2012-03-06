@@ -91,6 +91,11 @@ public class ProjectSettingsUtility {
 	private static final Map<ICompiler, String[]> preferenceNodes = new HashMap<ICompiler, String[]>();
 	
 	/**
+	 * Object to synchronize access to certain functions that could cause deadlock.
+	 */
+	private static final Object lock = new Object();
+	
+	/**
 	 * Returns the ICompiler registered for the given project. This returns null if there is no compiler.
 	 * 
 	 * @param project  The project.
@@ -122,7 +127,10 @@ public class ProjectSettingsUtility {
 	 */
 	public static String getCompilerId(IProject project) {
 		if (project != null) {
-			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
+			Preferences prefs;
+			synchronized (lock) {
+				prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
+			}
 			String setting = findSetting(project.getFullPath(), prefs, false);
 			if (setting != null) {
 				setting = setting.trim();
@@ -142,7 +150,10 @@ public class ProjectSettingsUtility {
 	 * @throws BackingStoreException
 	 */
 	public static void setCompiler(IProject project, String id) throws BackingStoreException {
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_COMPILER_ID);
+		}
 		
 		if (id == null || id.length() == 0) {
 			// Remove the setting
@@ -151,7 +162,9 @@ public class ProjectSettingsUtility {
 		else {
 			prefs.put(keyFor(project.getFullPath()), id);
 		}
-		prefs.flush();
+		synchronized (lock) {
+			prefs.flush();
+		}
 	}
 	
 	/**
@@ -245,7 +258,10 @@ public class ProjectSettingsUtility {
 	 */
 	public static String[] getGeneratorIds(IResource resource) {
 		IProject project = resource.getProject();
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		}
 		
 		// First check for the resource. If it doesn't exist, check its parent, then its grandparent, and so on, until at the project level.
 		String setting = findSetting(resource.getFullPath(), prefs, true);
@@ -276,7 +292,10 @@ public class ProjectSettingsUtility {
 	public static String[] getChildrenGeneratorIds(IResource resource) {
 		List<String> generators = new ArrayList<String>(0);
 		IProject project = resource.getProject();
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		}
 		
 		try {
 		    String[] keys = prefs.keys();
@@ -323,7 +342,10 @@ public class ProjectSettingsUtility {
 	 */
 	public static void setGeneratorIds(IResource resource, String[] ids) throws BackingStoreException {
 		IProject project = resource.getProject();
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		}
 		
 		if (ids == null) {
 			// Remove the setting
@@ -342,7 +364,10 @@ public class ProjectSettingsUtility {
 			}
 			prefs.put(keyFor(resource.getFullPath()), buf.toString());
 		}
-		prefs.flush();
+		
+		synchronized (lock) {
+			prefs.flush();
+		}
 	}
 	
 	/**
@@ -352,9 +377,16 @@ public class ProjectSettingsUtility {
 	 * @throws BackingStoreException
 	 */
 	public static void clearAllGeneratorIds(IProject project) throws BackingStoreException {
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_GENERATOR_IDS);
+		}
+		
 		prefs.clear();
-		prefs.flush();
+		
+		synchronized (lock) {
+			prefs.flush();
+		}
 	}
 	
 	/**
@@ -415,7 +447,11 @@ public class ProjectSettingsUtility {
 	 */
 	public static String getGenerationDirectory(IResource resource, IPreferenceStore store, IEclipsePreferences prefs,
 			String propertyID, String preferenceID) {
-		Preferences propertyPrefs = prefs.node(propertyID);
+		Preferences propertyPrefs;
+		synchronized (lock) {
+			propertyPrefs = prefs.node(propertyID);
+		}
+		
 		String setting = ProjectSettingsUtility.findSetting(resource.getFullPath(), propertyPrefs, true);
 		if (setting != null && setting.length() > 0) {
 			return setting;
@@ -445,7 +481,11 @@ public class ProjectSettingsUtility {
 	 */
 	public static String getGenerationArgument(IResource resource, IPreferenceStore store, IEclipsePreferences prefs,
 			String propertyID) {
-		Preferences propertyPrefs = prefs.node(propertyID);
+		Preferences propertyPrefs;
+		synchronized (lock) {
+			propertyPrefs = prefs.node(propertyID);
+		}
+		
 		String setting = ProjectSettingsUtility.findSetting(resource.getFullPath(), propertyPrefs, true);
 		if (setting != null && setting.length() > 0) {
 			return setting;
@@ -465,7 +505,11 @@ public class ProjectSettingsUtility {
 	 * @throws BackingStoreException
 	 */
 	public static void setGenerationDirectory(IResource resource, String value, IEclipsePreferences prefs, String propertyID) throws BackingStoreException {
-		Preferences propertyPrefs = prefs.node(propertyID);
+		Preferences propertyPrefs;
+		synchronized (lock) {
+			propertyPrefs = prefs.node(propertyID);
+		}
+		
 		if (value == null || value.length() == 0) {
 			// Remove setting
 			propertyPrefs.remove(keyFor(resource.getFullPath()));
@@ -474,7 +518,9 @@ public class ProjectSettingsUtility {
 			propertyPrefs.put(keyFor(resource.getFullPath()), value);
 		}
 		
-		propertyPrefs.flush();
+		synchronized (lock) {
+			propertyPrefs.flush();
+		}
 	}
 	
 	/**
@@ -487,7 +533,10 @@ public class ProjectSettingsUtility {
 	 * @throws BackingStoreException
 	 */
 	public static void setDefaultDeploymentDescriptor(IProject project, String pathValue) throws BackingStoreException {
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		}
 		
 		if (pathValue == null || pathValue.length() == 0) {
 			// Remove the setting
@@ -496,12 +545,18 @@ public class ProjectSettingsUtility {
 		else {
 			prefs.put(keyFor(project.getFullPath()), pathValue);
 		}
-		prefs.flush();
+		
+		synchronized (lock) {
+			prefs.flush();
+		}
 	}
 	
 	public static String getDefaultDeploymentDescriptor(IResource resource) {
 		IProject project = resource.getProject();
-		Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROJECT_DEFAULT_DEPLOYMENT_DESCRIPTOR);
+		}
 		
 		// First check for the resource. If it doesn't exist, check its parent, then its grandparent, and so on, until at the project level.
 		String setting = findSetting(resource.getFullPath(), prefs, true);
@@ -522,7 +577,11 @@ public class ProjectSettingsUtility {
 	 * @throws BackingStoreException
 	 */
 	public static void setGenerationArgument(IResource resource, String value, IEclipsePreferences prefs, String propertyID) throws BackingStoreException {
-		Preferences propertyPrefs = prefs.node(propertyID);
+		Preferences propertyPrefs;
+		synchronized (lock) {
+			propertyPrefs = prefs.node(propertyID);
+		}
+		
 		if (value == null || value.length() == 0) {
 			// Remove setting
 			propertyPrefs.remove(keyFor(resource.getFullPath()));
@@ -531,7 +590,9 @@ public class ProjectSettingsUtility {
 			propertyPrefs.put(keyFor(resource.getFullPath()), value);
 		}
 		
-		propertyPrefs.flush();
+		synchronized (lock) {
+			propertyPrefs.flush();
+		}
 	}	
 	
 	
@@ -546,13 +607,19 @@ public class ProjectSettingsUtility {
 		if (resource != null) {
 			//set flag to rebuild the project containing the resource, the preference change event will be caught by ProjectSettingsListenerManager
 			IProject project = resource.getProject();
-			Preferences prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
+			Preferences prefs;
+			synchronized (lock) {
+				prefs = new ProjectScope(project).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(EDTCorePreferenceConstants.BUILD_FLAG);
+			}
 			
 			String key = keyFor(resource.getFullPath());
 			int buildFlag = prefs.getInt(key, 0); 
 			buildFlag++;
 			prefs.putInt(key, buildFlag);
-			prefs.flush();
+			
+			synchronized (lock) {
+				prefs.flush();
+			}
 		}
 		else {
 			//set flag to force a rebuild for projects which inherit workspace compiler & generator setting
@@ -588,8 +655,7 @@ public class ProjectSettingsUtility {
 	}
 	
 	protected static String[] getGenerationDirectoryForLanguage(IProject project, String language) {
-		
-		if(language==null) {
+		if (language==null) {
 			return new String[0];
 		}
 
@@ -621,14 +687,25 @@ public class ProjectSettingsUtility {
 		}
 	}
     public static void replaceWorkspaceSettings(IProject project, IPath oldPath, IPath newPath) throws BackingStoreException {
-    	Preferences projectPrefs =
-    		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+    	Preferences projectPrefs;
+    	synchronized (lock) {
+    		projectPrefs = Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+    	}
+    	
     	String[] prefsFiles = getPreferenceNodes( project );
 		for (String file : prefsFiles) {
-		    Preferences prefs = projectPrefs.node(file); 
+		    Preferences prefs;
+		    synchronized (lock) {
+		    	prefs = projectPrefs.node(file); 
+		    }
+		    
 	    	String[] names = prefs.childrenNames();
 	    	for (String name : names) {
-	    	    Preferences nextNode = prefs.node(name);
+	    	    Preferences nextNode;
+	    	    synchronized (lock) {
+	    	    	nextNode = prefs.node(name);
+	    	    }
+	    	    
 	    	    String[] keys = nextNode.keys();
 	    	    for (String key : keys) {
 	    	    	String oldKey = keyFor(oldPath);
@@ -654,7 +731,10 @@ public class ProjectSettingsUtility {
 	    	        }
 	    	    }
 	    	}
-	    	prefs.flush();
+	    	
+	    	synchronized (lock) {
+	    		prefs.flush();
+	    	}
     	}
     }
     
@@ -668,14 +748,24 @@ public class ProjectSettingsUtility {
 	}
 	
     public static void removeWorkspaceSettings(IProject project, IPath path) throws BackingStoreException {
-    	Preferences projectPrefs =
-    		Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+    	Preferences projectPrefs;
+    	synchronized (lock) {
+    		projectPrefs = Platform.getPreferencesService().getRootNode().node(ProjectScope.SCOPE).node(project.getName());
+    	}
+    	
 		String[] prefsFiles = getPreferenceNodes( project );
 		for (String file : prefsFiles) {
-		    Preferences prefs = projectPrefs.node(file); 
+		    Preferences prefs;
+		    synchronized (lock) {
+		    	prefs = projectPrefs.node(file);
+		    }
+		    
 	    	String[] names = prefs.childrenNames();
 	    	for (String name : names) {
-	    	    Preferences nextNode = prefs.node(name);
+	    	    Preferences nextNode;
+	    	    synchronized (lock) {
+	    	    	nextNode = prefs.node(name);
+	    	    }
 	    	    String[] keys = nextNode.keys();
 	    	    for (String key : keys) {
 	    	    	String oldKey = keyFor(path);
@@ -687,7 +777,10 @@ public class ProjectSettingsUtility {
 	    	        }
 	    	    }
 	    	}
-	    	prefs.flush();
+	    	
+	    	synchronized (lock) {
+	    		prefs.flush();
+	    	}
     	}
     }
     
