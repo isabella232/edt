@@ -23,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IEGLMessageContributor;
@@ -191,9 +190,10 @@ public class RUITemplate extends JavaScriptTemplate {
 			}
 		}
 		out.println("], function() {");	
-		out.print("require([");		
-		out.print("\"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/" + 
-				Constants.RUI_MESSAGE_FILE  + "-" + userMsgLocale + "\", ");
+		out.print("require([");	
+		out.print(buf.toString());
+		out.print(", \"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/" + 
+				Constants.RUI_MESSAGE_FILE  + "-" + userMsgLocale + "\"");
 		// Gen bnd file
 		if (egldds != null && egldds.size() > 0) {
 			@SuppressWarnings("unchecked")
@@ -207,22 +207,21 @@ public class RUITemplate extends JavaScriptTemplate {
 				for ( int i = 0; i < egldds.size(); i ++ ) {
 					String next = (String)egldds.get(i);
 					if (next != null && next.length() > 0) {
+						out.print(", ");
 						if(isDevelopment)
 							out.print("egl__href + ");
-						out.print("\"" + next + "-bnd.js\", ");
+						out.print("\"" + next + "-bnd.js\"");
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}		
-		out.print(buf.toString());
 		if(isDevelopment){
 			out.println("], egl.startupInitCallback = function() {");	
 		}else{
 			out.println("], function() {");	
-		}	
-		
+		}		
 		out.print("egl.init(");
 		out.println("function(){");
 		out.println("if(egl." + getFullPartName(part) + "){");
