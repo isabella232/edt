@@ -713,7 +713,7 @@ handler DataGrid type RUIWidget{
         end
     end
 
-    function replaceMarker(s string, marker string in, value string in)
+    function replaceMarker(s string inout, marker string in, value string in)
         index int = s.indexOf( marker);
         ml int = marker.length();
         sl int = s.length();
