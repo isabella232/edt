@@ -96,12 +96,8 @@ public class LibraryWizardPage extends EGLTemplateWizardPage {
 					.getFirstElement();
 			if (o instanceof ITemplate) {
 				ITemplate template = (ITemplate) o;
-				if (template.getId().equals(
-						"org.eclipse.edt.ide.ui.service.dataaccess")) {
-					// ((ServiceWizard)this.getWizard()).setDataAccess(true);
-				} else {
-					// ((ServiceWizard)this.getWizard()).setDataAccess(false);
-				}
+				LibraryConfiguration config = ((LibraryConfiguration)((EGLPartWizard) getWizard()).getConfiguration());
+				config.setCodeTemplateId(template.getId());
 			}
 		}
 	}

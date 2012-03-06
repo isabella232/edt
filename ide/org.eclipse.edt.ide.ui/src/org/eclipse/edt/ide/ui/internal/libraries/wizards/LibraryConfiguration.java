@@ -20,6 +20,7 @@ public class LibraryConfiguration extends EGLPartConfiguration {
 	public final static int NATIVE_LIBRARY = 1;
 //	public final static int SERVICE_BINDING_LIBRARY = 2;
 	public final static int RUIPROP_LIBRARY = 2;
+	public final static int DATAACCESS_LIBRARY = 3;
 	
 	/** The name of the library */
 	private String libraryName;
@@ -63,5 +64,21 @@ public class LibraryConfiguration extends EGLPartConfiguration {
 	 */
 	public void setLibraryType(int libraryType) {
 		this.libraryType = libraryType;
+	}
+
+	public String getCodeTemplateId() {
+		return codeTemplateId;
+	}
+
+	public void setCodeTemplateId(String codeTemplateId) {
+		this.codeTemplateId = codeTemplateId;
+		if(codeTemplateId.equals("org.eclipse.edt.ide.ui.templates.basic_library")){
+			setLibraryType(BASIC_LIBRARY);
+		}else if(codeTemplateId.equals("org.eclipse.edt.ide.ui.templates.ruiProp_library")){
+			setLibraryType(RUIPROP_LIBRARY);
+		}else{
+			setLibraryType(DATAACCESS_LIBRARY);			
+		}
 	}	
+	
 }

@@ -69,7 +69,7 @@ public class LibraryWizard extends EGLPartWizard implements INewWizard {
 		if (!super.performFinish())
 			return false;
 
-		if(configuration.getLibraryType() != LibraryConfiguration.BASIC_LIBRARY || configuration.getLibraryType() != LibraryConfiguration.RUIPROP_LIBRARY ){
+		if(configuration.getLibraryType() == LibraryConfiguration.DATAACCESS_LIBRARY ){
 			return true;
 		}
 		IRunnableWithProgress operation = getOperation();
