@@ -1,7 +1,7 @@
 (function(){
 	egl = {};
 	egl.initParams = function(contextRoot, defaultDD, defaultLocale, runtimeLocale, nlsCode, shortMask, mediumMask, longMask, currencySymbol, 
-			decimalSeparator, groupingSeparator, folders){
+			decimalSeparator, groupingSeparator){
 		egl__contextRoot=contextRoot;
 		egl__defaultRuntimeMessagesLocale=defaultLocale;
 		egl__defaultDeploymentDescriptor=defaultDD;
@@ -25,9 +25,7 @@
 			egl.localeInfo.currencySymbol = currencySymbol;
 			egl.localeInfo.decimalSeparator = decimalSeparator;
 			egl.localeInfo.groupingSeparator = groupingSeparator;
-		}
-		require({baseUrl: "../" + egl__contextRoot});
-		
+		}		
 	};
 	dojoConfig = {
 		asyn: true

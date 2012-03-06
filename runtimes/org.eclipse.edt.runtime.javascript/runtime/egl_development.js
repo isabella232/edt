@@ -15,7 +15,7 @@ egl.debugg = window.egl__debugg;
 egl.sessionIsValid = true;
 egl.cssFiles = [];
 egl.canPrintError = true;
-
+require({baseUrl: "../" + egl__contextRoot});
 egl.defineClass( "egl.debug", "DebugTermination", {
 	"constructor" : function(msg) {
 		this.msg = msg;
