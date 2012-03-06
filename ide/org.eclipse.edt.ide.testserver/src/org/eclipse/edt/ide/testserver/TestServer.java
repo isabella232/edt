@@ -374,7 +374,7 @@ public class TestServer {
 		
 		if (!quiet) {
 			// Don't use logInfo(), otherwise the user only sees when messages are enabled and not when disabled.
-			System.out.println("Debug messages " + (debug ? "enabled" : "disabled")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			System.out.println("Tracing messages " + (debug ? "enabled" : "disabled")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 	
