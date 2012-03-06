@@ -503,7 +503,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 	
 	@Override
 	public String toString() {
-		return "Test server: project=" + (project == null ? "null" : project.getName())+ ", port=" + port + ", started=" + started; 
+		return "Test server: project=" + (project == null ? "null" : project.getName())+ ", port=" + port + ", started=" + started;  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	}
 	
 	/**
