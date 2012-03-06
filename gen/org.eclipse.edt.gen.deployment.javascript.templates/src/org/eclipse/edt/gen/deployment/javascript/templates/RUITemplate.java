@@ -79,7 +79,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		if(isDevelopment){
 			generateHeader(handler, out, enableEditing, contextAware, isDebug);
 		}		
-		generateEGLParameters(out, eglParameters, runtimeMsgLocale);
+		generateEGLParameters(out, eglParameters, userMsgLocale, runtimeMsgLocale);
 		out.println("</script>");//$NON-NLS-1$		
 		out.println("</head>");
 		out.println("<body class=\"" + getTheme(handler) + "\">");		
@@ -130,11 +130,10 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("egl__contextAware=" + contextAware + ";"); //$NON-NLS-1$
 	}
 	
-	private void generateEGLParameters(TabbedWriter out, HashMap<String, String> eglParameters, String runtimeMsgLocale) {
+	private void generateEGLParameters(TabbedWriter out, HashMap<String, String> eglParameters, String userMsgLocale, String runtimeMsgLocale) {
 		/**
 		 * output all the passed egl parameters
 		 */
-		String userMsgLocale = (String) eglParameters.get("egl__defaultRuntimeMessagesLocale");
 		String params = "\"" + eglParameters.get("egl__contextRoot") + "\", \"" + eglParameters.get("egl__defaultDeploymentDescriptor") + "\", \"" + userMsgLocale + "\", \"" + runtimeMsgLocale;
 		Locale locale;
 		int idx = userMsgLocale.indexOf('_');
@@ -193,7 +192,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.print("require([");	
 		out.print(buf.toString());
 		out.print(", \"" + Constants.RUNTIME_FOLDER_NAME + "/" + Constants.RUNTIME_MESSAGES_DEPLOYMENT_FOLDER_NAME + "/" + 
-				Constants.RUI_MESSAGE_FILE  + "-" + userMsgLocale + "\"");
+				Constants.RUI_MESSAGE_FILE  + "-" + runtimeMsgLocale + "\"");
 		// Gen bnd file
 		if (egldds != null && egldds.size() > 0) {
 			@SuppressWarnings("unchecked")
