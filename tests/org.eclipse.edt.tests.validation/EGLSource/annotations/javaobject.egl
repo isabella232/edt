@@ -1,0 +1,11 @@
+externalType et1 type javaObject
+	function f1(
+					p1 int,    //1
+					p2 int in, //0
+					p3 dictionary, //0
+					p4 dictionary inout, //1
+					p5 int[],  //0
+					p6 int[] out, //1
+					p7 int[] inout //1
+				);
+end

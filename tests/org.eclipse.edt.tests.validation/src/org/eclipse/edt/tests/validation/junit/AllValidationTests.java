@@ -16,6 +16,8 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.edt.tests.validation.junit.annotations.EglpropertyTest;
+import org.eclipse.edt.tests.validation.junit.annotations.JavaobjectTest;
+import org.eclipse.edt.tests.validation.junit.annotations.JavascriptobjectTest;
 import org.eclipse.edt.tests.validation.junit.annotations.PropertyTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.LocalFunctionCallTestsTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.RemoteFunctionCallTestsTest;
@@ -40,6 +42,8 @@ public class AllValidationTests {
 		suite.addTestSuite(PropertyTest.class);
 		suite.addTestSuite(Comparison1Test.class);
 		suite.addTestSuite(DynamicAccess1Test.class);
+		suite.addTestSuite(JavaobjectTest.class);
+		suite.addTestSuite(JavascriptobjectTest.class);
 //		suite.addTestSuite(SqlTest1Test.class);
 
 		//$JUnit-END$
