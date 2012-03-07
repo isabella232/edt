@@ -39,7 +39,8 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 		
 		Class<?>[] parameterTypes = javaMethod.getParameterTypes();
 		for(int i=0; i < parameterTypes.length; i++) {
-			out.print("arg" + i + SQLConstants.SPACE + ReflectionUtil.getTypeName(parameterTypes[i]));
+			out.print("arg" + i + SQLConstants.SPACE + ReflectionUtil.getTypeName(parameterTypes[i])
+					+ SQLConstants.SPACE + JavaTypeConstants.EGL_KEYWORD_IN);
 			if(i != parameterTypes.length -1) {
 				out.print(SQLConstants.COMMA);
 			}

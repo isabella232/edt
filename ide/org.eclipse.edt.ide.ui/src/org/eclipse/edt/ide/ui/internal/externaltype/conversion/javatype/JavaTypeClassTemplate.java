@@ -49,8 +49,21 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 			
 			out.println(" type JavaObject ");
-			out.print("{externalName = \"" + clazz.getSimpleName() +"\"");
-			out.println(", PackageName = \"" + packageName +"\"}");
+			out.print("{externalName = \"");
+			if(declaringClass.getEnclosingClass() == null) {
+				out.print(declaringClass.getSimpleName());
+			} else {
+				out.print(declaringClass.getEnclosingClass().getSimpleName() + SQLConstants.QUALIFICATION_DELIMITER);
+				out.print(declaringClass.getSimpleName());
+			}
+			
+			out.print("\"");
+			if(packageName != null && 
+				  packageName.equals((String)ctx.get(JavaTypeConstants.CONTAINING_EGL_PACKAGE))) {
+				out.println("}");
+			} else {
+				out.println(", PackageName = \"" + packageName +"\"}");
+			}
 			
 			for(Field javaField : toBeGenerated.getFields()) {
 				ctx.invoke(JavaTypeConstants.genField, javaField, ctx, out);	

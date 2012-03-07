@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -123,7 +124,7 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 		return new IRunnableWithProgress() {
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				if(messages != null){
+				if(messages != null) {
 					messages.clear();
 				}
 				final String results = generateExternalTypes(monitor,false);
@@ -147,50 +148,84 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 		StringBuilder buffer = new StringBuilder(200);
 		JavaObjectsToEglSource d = new JavaObjectsToEglSource();
 		
-		Iterator<Map.Entry<Class<?>,JavaType>> it = config.getToBeGenerated().entrySet().iterator();
-		while (it.hasNext()) {
-	        Map.Entry<Class<?>,JavaType> pairs = it.next();
-	        if(JavaType.DUMMY_REFERENCED_JAVATYPE.equals(pairs.getValue())
-	        	|| JavaType.DUMMY_SUPER_JAVATYPE.equals(pairs.getValue())) {
-	        	it.remove(); // avoids a ConcurrentModificationException
-	        }
-	    }
+		JavaType selectedJavaType = config.getToBeGenerated().get(config.getSelectedClazz());
+		config.getToBeGenerated().clear();
+		config.getToBeGenerated().put(config.getSelectedClazz(), selectedJavaType);
+		
+		//Get inner class(es), generate constructor/field/method from those classes.
+		ReflectionUtil.getInnerTypes(config.getSelectedClazz(), config.getToBeGenerated());
+		Map<Class<?>, JavaType> tempMap = new HashMap<Class<?>,JavaType>(20);
 		
 		if(config.isAllSuperTypesGenerated) {
-			Set<Class<?>> superTypes = ReflectionUtil.getAllSuperTypes(config.getSelectedClazz());
-			for(Class<?> superType : superTypes) {
-				if(!config.getToBeGenerated().containsKey(superType)) {
-					config.getToBeGenerated().put(superType, JavaType.DUMMY_SUPER_JAVATYPE);
-				}
-			}
-		}
-		
-		if(config.isAllReferencedTypesGenerated) {
-			JavaType selectedJavaType = config.getToBeGenerated().get(config.getSelectedClazz());
-			if(selectedJavaType != null) {
-				Set<Class<?>> referencedTypes = new HashSet<Class<?>>(30);
-				
-				List<Field> fields = selectedJavaType.getFields();
-				if(fields.size() > 0) {
-					referencedTypes.addAll(ReflectionUtil.getFieldReferencedTypes(fields));
-				}
-				
-				List<Constructor<?>> constructors = selectedJavaType.getConstructors();
-				if(constructors.size() > 0) {
-					referencedTypes.addAll(ReflectionUtil.getConReferencedTypes(constructors));
-				}
-				
-				List<Method> methods = selectedJavaType.getMethods();
-				if(methods.size() > 0) {
-					referencedTypes.addAll(ReflectionUtil.getMethodReferencedTypes(methods));
-				}
-				
-				for(Class<?> refType : referencedTypes) {
-					if(!config.getToBeGenerated().containsKey(refType)) {
-						config.getToBeGenerated().put(refType, JavaType.DUMMY_REFERENCED_JAVATYPE);
+			Set<Class<?>> superTypes; 
+			Iterator<Map.Entry<Class<?>,JavaType>> entries = config.getToBeGenerated().entrySet().iterator();
+			while(entries.hasNext()) {
+				Map.Entry<Class<?>,JavaType> entry = entries.next();
+				if(JavaType.SelectedType == entry.getValue().getSource()) {
+					superTypes = ReflectionUtil.getAllSuperTypes(entry.getKey());
+					for(Class<?> superType : superTypes) {
+						/*if(!config.getToBeGenerated().containsKey(superType)) {
+							config.getToBeGenerated().put(superType, JavaType.DUMMY_SUPER_JAVATYPE);
+						}*/
+						if(!tempMap.containsKey(superType)) {
+							tempMap.put(superType, JavaType.DUMMY_REFERENCED_JAVATYPE);
+						}
 					}
 				}
 			}
+			
+			for(Map.Entry<Class<?>, JavaType> entry : tempMap.entrySet()) {
+				if(!config.getToBeGenerated().containsKey(entry.getKey())) {
+					config.getToBeGenerated().put(entry.getKey(), entry.getValue());
+				}
+			}
+			tempMap.clear();
+		}
+		
+		if(config.isAllReferencedTypesGenerated) {
+			//selectedJavaType = config.getToBeGenerated().get(config.getSelectedClazz());
+			Iterator<Map.Entry<Class<?>,JavaType>> entries = config.getToBeGenerated().entrySet().iterator();
+			
+			while(entries.hasNext()) {
+				Map.Entry<Class<?>,JavaType> entry = entries.next();
+			
+				if(JavaType.SelectedType == entry.getValue().getSource()) {
+					selectedJavaType = entry.getValue();
+					
+					if(selectedJavaType != null) {
+						Set<Class<?>> referencedTypes = new HashSet<Class<?>>(30);
+						
+						List<Field> fields = selectedJavaType.getFields();
+						if(fields.size() > 0) {
+							referencedTypes.addAll(ReflectionUtil.getFieldReferencedTypes(fields));
+						}
+						
+						List<Constructor<?>> constructors = selectedJavaType.getConstructors();
+						if(constructors.size() > 0) {
+							referencedTypes.addAll(ReflectionUtil.getConReferencedTypes(constructors));
+						}
+						
+						List<Method> methods = selectedJavaType.getMethods();
+						if(methods.size() > 0) {
+							referencedTypes.addAll(ReflectionUtil.getMethodReferencedTypes(methods));
+						}
+						
+						for(Class<?> refType : referencedTypes) {
+							if(!tempMap.containsKey(refType)) {
+								tempMap.put(refType, JavaType.DUMMY_REFERENCED_JAVATYPE);
+							}
+						}
+					}
+					
+				}
+			}// while
+			
+			for(Map.Entry<Class<?>, JavaType> entry : tempMap.entrySet()) {
+				if(!config.getToBeGenerated().containsKey(entry.getKey())) {
+					config.getToBeGenerated().put(entry.getKey(), entry.getValue());
+				}
+			}
+			tempMap = null;
 		}
 		
 		monitor.beginTask("Generating external type parts", config.getToBeGenerated().size());
@@ -202,6 +237,8 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 				EglSourceGenerator generator = new EglSourceGenerator(d);
 				EglSourceContext context = generator.makeContext(d);
 				context.put(JavaTypeConstants.TO_BE_GENERATED_TYPE, entry.getValue());
+				context.put(JavaTypeConstants.CONTAINING_EGL_PACKAGE, 
+						  ((NewExternalTypeWizard) getParentWizard()).getConfiguration().getFPackage());
 				
 				Class<?> clazz = entry.getKey();
 				monitor.subTask(clazz.getName());

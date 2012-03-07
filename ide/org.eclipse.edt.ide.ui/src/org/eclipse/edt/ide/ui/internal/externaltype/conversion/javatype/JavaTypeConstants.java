@@ -21,6 +21,9 @@ public class JavaTypeConstants {
 	public static final String TO_BE_GENERATED_TYPE = "toBeGeneratedType";
 	public static final String JAVA_VOID_TYPE = "void";
 	public static final String UNDERSTORE_PREFIX = "_";
+	public static final String EGL_KEYWORD_IN = "IN";
+	
+	public static final String CONTAINING_EGL_PACKAGE = "eglPackage";
 	
 	public static java.util.Map<String,String> JavaToEglMapping = new java.util.HashMap<String,String>(30);
 	static {

@@ -15,14 +15,17 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
 import org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype.JavaTypeConstants;
+import org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.JavaType;
 
 public class ReflectionUtil {
 	
@@ -34,6 +37,47 @@ public class ReflectionUtil {
 		} 
 		
 		return null;
+	}
+	
+	/**
+	 * Get inner classes and its super types and referenced types
+	 */
+	public static void getInnerTypes(Class<?> clazz, Map<Class<?>,JavaType> toBeGenerated) {
+		JavaType javaType;
+		
+		Class<?>[] innerClasses = clazz.getDeclaredClasses();
+		if(innerClasses != null) {
+			for(Class<?> inner : innerClasses) {
+				javaType = new JavaType();
+				javaType.setSource(JavaType.SelectedType);
+				
+				List<Field> selectedFields = new ArrayList<Field>();
+				for(Field field : inner.getDeclaredFields()) {
+					 if (Modifier.isPublic(field.getModifiers())) {
+						 selectedFields.add(field);
+					 }
+				}
+				javaType.setFields(selectedFields);
+				
+				List<Constructor<?>> selectedCons = new ArrayList<Constructor<?>>();
+				for(Constructor<?> constr : inner.getDeclaredConstructors() ) {
+					 if (Modifier.isPublic(constr.getModifiers())) {
+						 selectedCons.add(constr);
+					 }
+				}
+				javaType.setConstructors(selectedCons);
+				
+				List<Method> selectedMethods = new ArrayList<Method>();
+				for(Method method : inner.getDeclaredMethods()) {
+					if (Modifier.isPublic(method.getModifiers())) {
+						selectedMethods.add(method);
+					 }
+				}
+				javaType.setMethods(selectedMethods);
+				
+				toBeGenerated.put(inner, javaType);
+			} //for
+		}
 	}
 	
 	public static Set<Class<?>> getAllSuperTypes(Class<?> clazz) {
