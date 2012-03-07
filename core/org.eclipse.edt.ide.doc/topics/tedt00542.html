@@ -43,48 +43,44 @@ a Resource Binding</span> page is displayed.</li>
 <li class="stepexpand"><span>Click <span class="uicontrol">SQL database binding</span> and then
 click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Add
 a SQL Database Binding</span> page is displayed.</li>
-<li class="stepexpand"><span>On the <span class="wintitle">Add a SQL Database Binding</span> page,
-you have several options:</span> <ul>
-<li>To specify where the binding details are stored, select one of
-the first three options:<ul>
-<li>To use connection details that are or will be specified in an
-Eclipse connection profile, select the first option. <strong>Reference
-an existing connection profile</strong> or press <strong>New</strong> to define one.
+<li class="stepexpand"><span>The <span class="wintitle">Add a SQL Database Binding</span> page
+is under review. The main point is this:  you can specify what detail
+is used at deployment time: either the connection profile (the first
+option) or details that you type at this screen (the second option).</span>
 </li>
-
-<li>To specify connection details directly in the binding definition,
-select the second option instead.
-</li>
-
-<li>To use an JNDI data source that is or will be defined in the application
-server, select the third option. In this case, the details that you
-specify are the only ones on this page.</li>
-
-</ul>
-</li>
-
-<li>If you intend to deploy your code to the Apache Tomcat server,
-you can configure a JNDI entry:     <ul>
-<li>Define most of the binding details by specifying the first or
-second option. </li>
-
-<li>Also select the fourth option. The JNDI name and other details
-that you specify here are associated with the details from the first
-or second option. The information is packaged during EGL deployment. </li>
-
-</ul>
-<p>The JNDI details result in a container-based authentication,
-which means that the server stores any user ID and password needed
-for database access.</p>
-</li>
-
-</ul>
-<p>
-If you select the first option, any subsequent change to the Eclipse
+<li class="stepexpand"><span>After you click <span class="uicontrol">Finish</span>, you can
+make additional changes in the <span class="uicontrol">SQL Database Binding</span> pane.
+There, you select one of the first two options to specify where the
+binding details are stored: </span> <ul>
+<li>To use connection details that are specified in an Eclipse connection
+profile, select the first option. Reference an existing connection
+profile or press <strong>New</strong> to define one. 
+<p>If you select this option, any subsequent change to the Eclipse
 connection profile is available to your code at development and deployment
 time. After the EGL deployer has packaged the application, though,
 the changes have no effect on the deployed code unless you redeploy
 the application.</p>
+</li>
+
+<li>To specify connection details directly in the binding definition,
+select the second option instead.</li>
+
+</ul>
+</li>
+<li class="stepexpand"><span>Also at the <span class="uicontrol">SQL Database Binding</span> pane,
+you can configure a JNDI entry as follows:</span> <ol type="a">
+<li>Define the connection by specifying the first or second option. </li>
+
+<li>Select the third option. In relation to Apache Tomcat, the JNDI
+name and other details that you specify here are associated with the
+other details. The information is packaged during EGL deployment.<p>By
+default, the JNDI details result in a container-based authentication,
+which means that the server stores any user ID and password needed
+for database access. If you are handling authentication in your code,
+select <span class="uicontrol">Use application-based authentication</span>.</p>
+</li>
+
+</ol>
 </li>
 </ol>
 

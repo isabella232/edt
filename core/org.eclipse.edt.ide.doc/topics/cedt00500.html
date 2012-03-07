@@ -247,7 +247,7 @@ program MyProgram
     end // for loop
 
     //Write the output to the console.
-    SysLib.writeStderr("The total cost for the order is $" + orderTotal);
+    SysLib.writeStderr(""""""""The total cost for the order is $"""""""" + orderTotal);
   end // main
 
   //Return a total price for a group of items 
@@ -260,9 +260,9 @@ program MyProgram
     //Discount 20% for more than 50 items.
     //Discount 5% for more than 20 items.
     case
-      when (itemQuantity &gt; 50)
+      when (itemQuantity &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 50)
         discountRate = 1/5;
-     when (itemQuantity &gt; 20 &amp;&amp; itemQuantity &lt;= 50)
+     when (itemQuantity &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 20 &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; itemQuantity &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 50)
        discountRate = 1/20;
      otherwise
        //bug - division by zero

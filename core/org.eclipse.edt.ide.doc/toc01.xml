@@ -27,7 +27,9 @@
       <topic label="Creating an EGL project" href="topics/tedt00517.html"/>
       <topic label="Creating an EGL source folder" href="topics/tedt00501.html"/>
       <topic label="Creating an EGL package" href="topics/tedt00521.html"/>
-      <topic label="Creating an EGL source file" href="topics/tedt00500.html"/>
+      <topic label="Creating an EGL source file" href="topics/tedt00500.html">
+         <topic label="Creating an EGL external type" href="topics/tedt00586.html"/>
+      </topic>
       <topic label="Creating an EGL deployment descriptor in the EDT IDE"
              href="topics/tedt00502.html"/>
       <topic label="Creating a linkage properties file in the EDT IDE"
@@ -109,7 +111,5 @@
    <topic label="Handling other tasks quickly">
       <topic label="Creating an Interface part from a Service or ExternalType part"
              href="topics/tedt00572.html"/>
-      <topic label="Accessing IBM i programs as web services: keystroke details"
-             href="topics/tedt00573.html"/>
    </topic>
 </toc>
