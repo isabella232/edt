@@ -32,6 +32,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.core.model.Restservice;
+import org.eclipse.edt.ide.testserver.LogLevel;
 import org.eclipse.edt.ide.testserver.TestServer;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JEERunUnit;
@@ -161,8 +162,8 @@ public class ConfigServlet extends HttpServlet {
 		basicDataSourceClassName = className;
 		
 		if (basicDataSourceClassName == null) {
-			TestServer.logWarning("Apache's BasicDataSource class is not on the classpath so connection pooling for JNDI data sources will not be used. " +
-					"To enable connection pooling you can add an Apache Tomcat runtime to your workspace via Preferences > Server > Runtime Environments.");
+			TestServer.logInfo("If you access a database, you will get the performance benefit of connection pooling only if you add the " +
+					"Apache Tomcat runtime code to your workspace. To add that code, go to Window > Preferences > Server > Runtime Environments.");
 		}
 	}
 
@@ -185,7 +186,7 @@ public class ConfigServlet extends HttpServlet {
 			parseDDFiles(removedDDs, false);
 		}
 		if (defaultDD != null) {
-			server.logInfo("Default DD changed: " + defaultDD); //$NON-NLS-1$
+			server.log("Default DD changed: " + defaultDD, LogLevel.INFO); //$NON-NLS-1$
 			try {
 				bindingProcessor.setDefaultDD(defaultDD);
 			}
@@ -221,10 +222,10 @@ public class ConfigServlet extends HttpServlet {
 		List<String[]> parsed = bindingProcessor.getResourceLocator().parseDDArgument(ddFiles, added);
 		for (String[] next : parsed) {
 			if (added) {
-				server.logInfo("DD file added or changed: " + next[0] + ", " + next[1]); //$NON-NLS-1$ //$NON-NLS-2$
+				server.log("DD file added or changed: " + next[0] + ", " + next[1], LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			else {
-				server.logInfo("DD file removed: " + next[0] + ", " + next[1]); //$NON-NLS-1$ //$NON-NLS-2$
+				server.log("DD file removed: " + next[0] + ", " + next[1], LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}
@@ -235,7 +236,7 @@ public class ConfigServlet extends HttpServlet {
 	 * @return true if the ordering of DD names has changed.
 	 */
 	public boolean parseOrderedDDs(String ddFiles) {
-		server.logInfo("Parsing DD file order argument: " + ddFiles);
+		server.log("Parsing DD file order argument: " + ddFiles, LogLevel.INFO);
 		List<String> oldNames = orderedDDNames;
 		
 		orderedDDNames = new ArrayList<String>();
@@ -279,7 +280,7 @@ public class ConfigServlet extends HttpServlet {
 					}
 					
 					previewServlet.addServiceMapping(uri, className, service.isStateful());
-					server.logInfo("rest service mapping added: " + uri);
+					server.log("rest service mapping added: " + uri, LogLevel.INFO);
 				}
 			}
 		}
@@ -394,7 +395,7 @@ public class ConfigServlet extends HttpServlet {
 				addedDataSources.add((NamingEntry)boundResource);
 			}
 			
-			server.logInfo("data source added: name=" + name + " class=" + className); //$NON-NLS-1$ //$NON-NLS-2$
+			server.log("data source added: name=" + name + " class=" + className, LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
         }
         finally {
         	Thread.currentThread().setContextClassLoader(savedLoader);
@@ -428,7 +429,7 @@ public class ConfigServlet extends HttpServlet {
 		Thread.currentThread().setContextClassLoader(server.getWebApp().getClassLoader());
         try {
         	dataSource.release();
-        	server.logInfo("data source removed: name=" + dataSource.getJndiName()); //$NON-NLS-1$
+        	server.log("data source removed: name=" + dataSource.getJndiName(), LogLevel.INFO); //$NON-NLS-1$
         	return true;
         }
         finally {
@@ -448,7 +449,7 @@ public class ConfigServlet extends HttpServlet {
 			if (!addedResourceRefs.contains(name)) {
 				addedResourceRefs.add(name);
 			}
-			server.logInfo("resource-ref added: name=" + name + " type=" + type.getCanonicalName()); //$NON-NLS-1$ //$NON-NLS-2$
+			server.log("resource-ref added: name=" + name + " type=" + type.getCanonicalName(), LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		catch (Exception e) {
 			server.log(e);
@@ -472,7 +473,7 @@ public class ConfigServlet extends HttpServlet {
 			}
 			InitialContext ctx = new InitialContext();
 			ctx.unbind(name);
-			server.logInfo("resource-ref removed: name=" + name); //$NON-NLS-1$
+			server.log("resource-ref removed: name=" + name, LogLevel.INFO); //$NON-NLS-1$
 			return true;
 		}
 		catch (Exception e) {
