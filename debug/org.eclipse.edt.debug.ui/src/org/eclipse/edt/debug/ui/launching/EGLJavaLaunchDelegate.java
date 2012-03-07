@@ -170,12 +170,6 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 				// Finally, add any JDBC jars that might be required.
 				DDUtil.addJDBCJars( project, new HashSet<IProject>(), new HashSet<IResource>(), classpath );
 				
-				String icu = ClasspathUtil.getClasspathEntry( "com.ibm.icu" ); //$NON-NLS-1$
-				if ( icu != null )
-				{
-					classpath.add( icu );
-				}
-				
 				copy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpath );
 				copy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false );
 				
