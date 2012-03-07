@@ -35,7 +35,7 @@ public class JavaGenerator extends AbstractGenerator {
 		super();
 	}
 	
-	protected EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
+	public EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
 		return new EDTRuntimeContainer[] {EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER};
 	}
 	

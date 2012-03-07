@@ -12,9 +12,7 @@
 package org.eclipse.edt.ide.compiler.gen;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -23,9 +21,6 @@ import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.java.EGL2Java;
-import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
-import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.mof.egl.Part;
@@ -76,22 +71,7 @@ public class EclipseEGL2Java extends EGL2Java {
 			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder, forceClasspathRefresh);
 			
 			// Add required runtimes. This will be the core runtime plus anything registered by contributed templates.
-			EDTRuntimeContainer[] containersToAdd;
-			Set<String> requiredContainers = ((Context)generator.getContext()).getRequiredRuntimeContainers();
-			if (requiredContainers.size() == 0) {
-				containersToAdd = new EDTRuntimeContainer[]{EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER};
-			}
-			else {
-				Set<EDTRuntimeContainer> containers = new HashSet<EDTRuntimeContainer>(10);
-				containers.add(EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER);
-				for (EDTRuntimeContainer container : generatorProvider.getRuntimeContainers()) {
-					if (requiredContainers.contains(container.getId())) {
-						containers.add(container);
-					}
-				}
-				containersToAdd = containers.toArray(new EDTRuntimeContainer[containers.size()]);
-			}
-			EclipseUtilities.addRuntimesToProject(targetProject, containersToAdd);
+			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider, generator.getContext());
 			
 			// Add the SMAP builder
 			EclipseUtilities.addSMAPBuilder(targetProject);

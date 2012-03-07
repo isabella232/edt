@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
+import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -35,6 +36,11 @@ public class JavaScriptGenerator extends AbstractGenerator {
 	private static final String PATHS = "projectPaths";
 	public JavaScriptGenerator() {
 		super();
+	}
+	
+	@Override
+	public EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
+		return new EDTRuntimeContainer[]{EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER};
 	}
 	
 	@Override
