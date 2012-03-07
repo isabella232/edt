@@ -424,7 +424,8 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 										// check if it should be filtered. If it should be filtered and the original location where the user issued
 										// the (unfiltered) step request is still in the stack, filter back to that point and then stop. If the
 										// original location is no longer in the stack (user explicitly stepped out of that frame) then: if the
-										// location is not filtered, we stop at it; if it is filtered then we will perform a resume instead of a step.
+										// location is not filtered, we stop at it; if it is filtered and there are no other EGL stratum frames then
+										// we will perform a resume instead of a step; otherwise if there is a valid EGL stratum we step to it.
 										// This is not ideal but this avoids cases where we infinitely run steps due to some loop like an event loop
 										// that sits around forever; the infinite stepping causes flickering and poor performance.
 										
@@ -444,38 +445,34 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 										
 										if ( filterType == FilterStepType.STEP_INTO || filterType == FilterStepType.STEP_RETURN )
 										{
-											boolean stepStartFound = false;
+											boolean forceResume = true;
 											IStackFrame[] frames = javaThread.getStackFrames();
 											for ( int j = 0; j < frames.length; j++ )
 											{
-												if ( frames[ j ] == stepStartFrame )
+												// If we find the starting step frame OR we have a valid EGL stratum, perform a step.
+												if ( frames[ j ] == stepStartFrame
+														|| (SMAPUtil.isEGLStratum( (IJavaStackFrame)frames[ j ] ) && frames[ j ].getLineNumber() != -1) )
 												{
-													stepStartFound = true;
+													forceResume = false;
 													break;
 												}
 											}
 											
-											if ( stepStartFound )
+											if ( forceResume )
 											{
-												if ( filterType == FilterStepType.STEP_INTO )
-												{
-													topJavaFrame.stepInto();
-												}
-												else
-												{
-													if ( topJavaFrame.canStepReturn() )
-													{
-														topJavaFrame.stepReturn();
-													}
-													else
-													{
-														// Resume when we can't step return (e.g. bottom frame, or above obsolete frame)
-														topJavaFrame.resume();
-													}
-												}
+												topJavaFrame.resume();
+											}
+											else if ( filterType == FilterStepType.STEP_INTO )
+											{
+												topJavaFrame.stepInto();
+											}
+											else if ( topJavaFrame.canStepReturn() )
+											{
+												topJavaFrame.stepReturn();
 											}
 											else
 											{
+												// Resume when we can't step return (e.g. bottom frame, or above obsolete frame)
 												topJavaFrame.resume();
 											}
 											break;
