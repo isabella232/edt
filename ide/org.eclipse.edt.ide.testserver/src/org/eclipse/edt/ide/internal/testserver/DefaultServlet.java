@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.edt.ide.testserver.LogLevel;
 import org.eclipse.edt.ide.testserver.TestServer;
 
 /**
@@ -52,7 +53,7 @@ public class DefaultServlet extends HttpServlet {
 			server.setDebug(Boolean.valueOf(debug), false);
 		}
 		else {
-			server.logInfo("Ping!"); //$NON-NLS-1$
+			server.log("Ping!", LogLevel.INFO); //$NON-NLS-1$
 		}
 	}
 }

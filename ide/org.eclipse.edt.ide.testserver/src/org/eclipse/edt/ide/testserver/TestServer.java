@@ -284,12 +284,12 @@ public class TestServer {
 	 */
 	public void appendConfiguration(Configuration config) throws Exception {
 		if (config == null) {
-			log("Attempted to add a null configuration."); //$NON-NLS-1$
+			log("Attempted to add a null configuration.", LogLevel.WARN); //$NON-NLS-1$
 			return;
 		}
 		
 		if (webApp == null) {
-			log("Attempted to add configuration class " + config.getClass().getCanonicalName() + " before the webapp was created."); //$NON-NLS-1$ //$NON-NLS-2$
+			log("Attempted to add configuration class " + config.getClass().getCanonicalName() + " before the webapp was created.", LogLevel.WARN); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 		
@@ -315,7 +315,7 @@ public class TestServer {
 		Class configClass = config.getClass();
 		for (Configuration next : configs) {
 			if (configClass.equals(next.getClass())) {
-				log("Configuration class " + configClass.getCanonicalName() + " was already added to the webapp - skipping."); //$NON-NLS-1$ //$NON-NLS-2$
+				log("Configuration class " + configClass.getCanonicalName() + " was already added to the webapp - skipping.", LogLevel.WARN); //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			}
 		}
@@ -324,7 +324,7 @@ public class TestServer {
 		System.arraycopy(configs, 0, newConfigs, 0, configs.length);
 		newConfigs[configs.length] = config;
 		webApp.setConfigurations(newConfigs);
-		logInfo("Configuration " + configClass.getCanonicalName() + " successfully added to the webapp."); //$NON-NLS-1$ //$NON-NLS-2$
+		log("Configuration " + configClass.getCanonicalName() + " successfully added to the webapp.", LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**
@@ -393,20 +393,24 @@ public class TestServer {
 	}
 	
 	/**
-	 * Logs a message to standard out if debug mode is enabled.
-	 */
-	public void logInfo(String msg) {
-		if (debug) {
-			System.out.println(msg);
-		}
-	}
-	
-	/**
 	 * Logs a message to standard err if debug mode is enabled.
 	 */
-	public void log(String msg) {
+	public void log(String msg, LogLevel level) {
 		if (debug) {
-			System.err.println(msg);
+			switch (level) {
+				case INFO:
+					System.out.println("INFO: " + msg); //$NON-NLS-1$
+					break;
+				case WARN:
+					System.err.println("WARN: " + msg); //$NON-NLS-1$
+					break;
+				case ERROR:
+					System.err.println("ERROR: " + msg); //$NON-NLS-1$
+					break;
+				default:
+					System.err.println(msg);
+					break;
+			}
 		}
 	}
 	
@@ -422,5 +426,12 @@ public class TestServer {
 	 */
 	public static void logWarning(String msg) {
 		System.err.println("WARN: " + msg); //$NON-NLS-1$
+	}
+	
+	/**
+	 * Logs a message to standard out if debug mode is enabled.
+	 */
+	public static void logInfo(String msg) {
+		System.out.println("INFO: " + msg); //$NON-NLS-1$
 	}
 }
