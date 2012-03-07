@@ -49,12 +49,6 @@ ExternalType Object type RootJavaObject
 	}
 	    
 	Function toString() returns (string);     
-	Function getClass() returns (Class);   
 	Function equals(obj Object in) returns (boolean);
 end
 
-ExternalType Class extends Object type RootJavaObject
-	{
-		packageName = "java.lang"
-	}
-end
