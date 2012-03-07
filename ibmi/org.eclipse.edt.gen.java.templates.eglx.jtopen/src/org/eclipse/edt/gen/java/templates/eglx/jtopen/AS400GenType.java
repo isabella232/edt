@@ -179,7 +179,7 @@ public class AS400GenType {
 		out.print(")");
 	}
 	private void genAS400AnnotationIBMiSeparatorChar(Annotation annot, Context ctx, TabbedWriter out){
-		String ibmiSeperator = annot == null ? null : (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
+		String ibmiSeperator = annot == null ? "" : (String)annot.getValue(Constants.subKey_ibmiSeparatorChar);
 		if(ibmiSeperator != null){
 			out.print(", \"");
 			out.print(ibmiSeperator);
