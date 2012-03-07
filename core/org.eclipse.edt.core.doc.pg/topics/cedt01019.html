@@ -31,16 +31,16 @@ this case is also called an <em>event handler</em>.</p>
 <div class="section"><h2 class="sectiontitle">Events</h2><p>The next table lists the available
 events, though widgets of specific types respond to specific events.
 For example, buttons respond to onClick, but not to onChange. Also
-note that two user actions involve "gaining the focus" (by tabbing
-to or selecting the widget) or "losing the focus" (by tabbing to or
+note that two user actions involve """"""""gaining the focus"""""""" (by tabbing
+to or selecting the widget) or """"""""losing the focus"""""""" (by tabbing to or
 selecting a different widget).</p>
 <div class="p">
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Events</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" align="center" valign="bottom" width="21.390374331550802%" id="d9006e54">Event</th>
+<th class="cellrowborder" align="center" valign="bottom" width="21.390374331550802%" id="d9012e54">Event</th>
 
-<th class="cellrowborder" align="center" valign="bottom" width="78.6096256684492%" id="d9006e57">Meaning</th>
+<th class="cellrowborder" align="center" valign="bottom" width="78.6096256684492%" id="d9012e57">Meaning</th>
 
 </tr>
 
@@ -48,42 +48,42 @@ selecting a different widget).</p>
 
 <tbody>
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onChange</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onChange</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onChange occurs when the user changes a widget
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onChange occurs when the user changes a widget
 and moves the on-screen focus from that widget, even if the user has
 reversed the change.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onClick</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onClick</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onClick occurs when the user clicks the widget.</td>
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onClick occurs when the user clicks the widget.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onFocusGained</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onFocusGained</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onFocusGained occurs when the widget gains the
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onFocusGained occurs when the widget gains the
 focus.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onFocusLost</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onFocusLost</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onFocusLost occurs when the widget loses the
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onFocusLost occurs when the widget loses the
 focus. The equivalent event in JavaScript is
 onBlur.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onKeyDown</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyDown</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onKeyDown occurs when the user presses any key.
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyDown occurs when the user presses any key.
 On many browsers, the event occurs repeatedly for as long as the user
 is pressing the key. Each occurrence of onKeyDown is followed by an
 occurrence of onKeyPress.</td>
@@ -91,9 +91,9 @@ occurrence of onKeyPress.</td>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onKeyPress</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyPress</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onKeyPress occurs when the user presses any
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyPress occurs when the user presses any
 key. On many browsers, the event occurs repeatedly for as long as
 the user is pressing the key. Each occurrence of onKeyPress is preceded
 by an occurrence of onKeyDown.</td>
@@ -101,42 +101,42 @@ by an occurrence of onKeyDown.</td>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onKeyUp</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyUp</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onKeyUp occurs when the user (having pressed
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyUp occurs when the user (having pressed
 a key) releases it.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onMouseDown</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseDown</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onMouseDown occurs when the user presses any
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseDown occurs when the user presses any
 mouse button.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onMouseMove</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseMove</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onMouseMove occurs repeatedly when the user
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseMove occurs repeatedly when the user
 moves the mouse while the on-screen cursor is within the boundary
 of the widget.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onMouseOut</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseOut</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onMouseOut occurs when the user moves the mouse,
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseOut occurs when the user moves the mouse,
 just as the on-screen cursor moves away from the widget.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onMouseOver</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseOver</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onMouseOver is an event that JavaScript could have named onMouseIn.
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseOver is an event that JavaScript could have named onMouseIn.
 The event occurs when the user moves the mouse, just as the on-screen
 cursor moves into the widget. You can use this event, for example,
 to change the cursor symbol for a particular part of the page.</td>
@@ -144,17 +144,17 @@ to change the cursor symbol for a particular part of the page.</td>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onMouseUp</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseUp</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onMouseUp occurs when the user (having pressed
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseUp occurs when the user (having pressed
 a mouse button) releases it.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9006e54 ">onSelect</td>
+<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onSelect</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9006e57 ">onSelect occurs when text is selected in a textArea
+<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onSelect occurs when text is selected in a textArea
 or textField widget.</td>
 
 </tr>
@@ -166,7 +166,7 @@ or textField widget.</td>
  </div>
 <div class="p">The following syntax, for example, declares a Button
 widget, and the function named click is invoked when the user clicks
-the widget:<pre class="codeblock">myButton Button { text = "Copy Input to Output", onClick ::= click };</pre>
+the widget:<pre class="codeblock">myButton Button { text = """"""""Copy Input to Output"""""""", onClick ::= click };</pre>
 </div>
 <p>The
 operator <samp class="codeph">::=</samp> appends the function named click to
@@ -176,7 +176,7 @@ each array named for an event.</p>
 <div class="p">If you specify multiple event
 handlers for a given event, the order in which the event handlers
 will run is the order of elements in the array. Here is an example
-of the syntax: <pre class="codeblock">myButton Button { text = "Start", onClick ::= click, onClick ::= function02 };</pre>
+of the syntax: <pre class="codeblock">myButton Button { text = """"""""Start"""""""", onClick ::= click, onClick ::= function02 };</pre>
 </div>
 <div class="p">You
 can also use the operator <samp class="codeph">::=</samp> in your code, to add
@@ -260,8 +260,8 @@ following functions, each of which is without parameters:<dl>
 <dd>Prevents the browser from fulfilling a default behavior. For example,
 you might want to avoid the typical result of a user's clicking a
 hypertext link. In the following outline, the user's click is passed
-to the browser only if a specified condition is in effect: <pre class="codeblock">hLink HyperLink { text = "www.ibm.com", 
-                  href = "http://www.ibm.com", 
+to the browser only if a specified condition is in effect: <pre class="codeblock">hLink HyperLink { text = """"""""www.ibm.com"""""""", 
+                  href = """"""""http://www.ibm.com"""""""", 
                   onClick ::= handleClickLink };
 
 function handleClickLink(e Event in)

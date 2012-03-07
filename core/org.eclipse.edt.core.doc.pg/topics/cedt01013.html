@@ -125,7 +125,7 @@ the <span class="synph"><span class="kwd">text</span></span> property of the Tex
 
 handler MyHandlerPart type RUIhandler{onConstructionFunction = initialization}
 
-   myHelloField TextField{readOnly = true, text = "Hello"};
+   myHelloField TextField{readOnly = true, text = """"""""Hello""""""""};
 
    function initialization()
       	myInternalFunction(myHelloField);
@@ -136,7 +136,7 @@ handler MyHandlerPart type RUIhandler{onConstructionFunction = initialization}
       case 
          when (theWidget isa TextField)
             myTextField TextField = theWidget as TextField;
-            myString STRING = myTextField.text + " World";
+            myString STRING = myTextField.text + """""""" World"""""""";
             sysLib.writeStdOut(myString);
          when (theWidget isa Button)
             ;

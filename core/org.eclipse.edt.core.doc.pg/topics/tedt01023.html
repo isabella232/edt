@@ -29,27 +29,47 @@
 <div><p>In Rich UI, the <span class="synph"><span class="kwd">call</span></span> statement
 is used to invoke a service asynchronously:</p>
 
-<pre class="codeblock">call 	<var class="varname">serviceName</var>.<var class="varname">operationName</var>(<var class="varname">argumentList</var>)
-   returning to <var class="varname">myCallbackFunction</var> onException <var class="varname">myExceptionHandler</var>
-   {timeout = <em>milliseconds</em>};</pre>
+<pre class="codeblock">call 	<var class="varname">InterfaceTypeName</var>.<var class="varname">operationName</var>(<var class="varname">argumentList</var>)
+   using <var class="varname">bindingVariable</var>
+   returning to <var class="varname">myCallbackFunction</var>
+   onException <var class="varname">myExceptionHandler</var>;</pre>
 
 <dl>
-<dt class="dlterm"><span class="synph"><span class="var">serviceName</span></span> </dt>
+<dt class="dlterm"><span class="synph"><span class="var">InterfaceTypeName</span></span> </dt>
 
-<dd>The name of a variable that is based on an Interface part</dd>
+<dd>The name of an Interface type or, for dedicated services, of a
+Service or Interface type.</dd>
 
 
 <dt class="dlterm"><span class="synph"><span class="var">operationName</span></span> </dt>
 
-<dd>The name of the Interface part function prototype</dd>
+<dd>The name of the operation; either the name of a function in a
+Service type or the name of a function prototype in an Interface type.</dd>
 
 
 <dt class="dlterm"><span class="synph"><span class="var">argumentList</span></span> </dt>
 
-<dd>A list of arguments, each of which is separated from the next
-by a comma <p>For
+<dd>A list of arguments, one separated from the next by a comma <p>For
 restrictions on arguments, see “Restrictions in the prototypes used
 for service access.”</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">bindingVariable</span></span> </dt>
+
+<dd>A variable that holds the access detail:<ul>
+<li>When you access a REST or REST-RPC service, the variable type
+is HTTPRest. <div class="p">In this case, the primary way to declare the variable
+in this case is to include a Resource annotation that refers to an
+EGL deployment descriptor entry:<pre class="codeblock">myBindingVar HTTPRest {@Resource {uri = """"""""binding:myEntry""""""""}};</pre>
+</div>
+</li>
+
+<li>When you access a dedicated service, the variable type is HTTPProxy.</li>
+
+</ul>
+<p>The primary way to declare the variable is by including a
+Resource annotation that refers to </p>
 </dd>
 
 
@@ -63,77 +83,12 @@ is described later in this topic.</dd>
 
 <dt class="dlterm"><span class="synph"><span class="var">myExceptionHandler</span></span> </dt>
 
-<dd>Optional. The name of an exception handler or a delegate that
-is available to the <span class="synph"><span class="kwd">call</span></span> statement.  In
-most cases, the exception handler or delegate is in the same Rich
-UI handler or in a library. The exception handler is described later
-in this topic. <div class="p">If you do not have your own exception handler, you
-can specify the following delegate: <span class="synph"><span class="kwd">serviceLib.serviceExceptionHandler</span></span>.
-Here are the implications:<ul>
-<li>By default, specifying that delegate automatically invokes a system
-function that writes the content of the exception <span class="synph"><span class="kwd">message</span></span> field
-to the standard output. In the product, the standard output is the
-console view. In an external browser, the standard output is the bottom
-of the web page.</li>
-
-<li>Alternatively, the delegate might cause the invocation of a custom
-exception handler. You can even use this alternative to make custom
-error handling be consistent throughout a set of applications. <div class="p">For
-example, you might do as follows:<ol>
-<li>Create a library named <samp class="codeph">myLibrary</samp> and include
-both a custom exception handler named <samp class="codeph">myExceptionHandler</samp> and
-a setup function.</li>
-
-<li>In the setup function, include the following statement:<pre class="codeblock">serviceLib.serviceExceptionHandler = myLibrary.myExceptionHandler;</pre>
-</li>
-
-<li>Invoke the setup function in each of your Rich UI applications,
-in the <span class="synph"><span class="kwd">on-construction</span></span> function.</li>
-
-</ol>
-</div>
-<p>For every service that is invoked by a <span class="synph"><span class="kwd">call</span></span> statement
-(if the statement includes <span class="synph"><span class="kwd">serviceLib.serviceExceptionHandler</span></span>),
-the EGL runtime code responds to a runtime exception by running the
-customized exception handler; in this case, by running <samp class="codeph">myLibrary.myExceptionHandler</samp>.</p>
-</li>
-
-</ul>
-</div>
-</dd>
+<dd>The name of an exception handler or a delegate that is available
+to the <span class="synph"><span class="kwd">call</span></span> statement.  In most cases, the
+exception handler or delegate is in the same Rich UI handler or in
+a library. The exception handler is described later in this topic. </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">milliseconds</span></span> </dt>
-
-<dd>The maximum valid number of milliseconds that elapse between when
-the EGL Rich UI proxy (on the application server) invokes a web service
-and when the proxy receives a response. If more time elapses, the
-EGL runtime code throws a <span class="synph"><span class="kwd">ServiceInvocationException</span></span>.
-However, no timeout is enforced during access of a dedicated service.<div class="p">To
-set a timeout:<ul>
-<li>Consider various factors, such as local network traffic, internet
-traffic, and server response time. Those factors mean that two invocations
-of the same service are likely to take a different amount of time
-under different conditions. </li>
-
-<li>Consider the nature of your application. If your code is waiting
-for a credit approval, you might set a high timeout value to avoid
-charging the user twice. If your code is making a bid in an online
-auction, you might set a low timeout value so that the user can make
-another bid quickly.</li>
-
-<li>Use timeout values that vary from one another by one or more seconds.</li>
-
-</ul>
-</div>
-<p>You can set a default value for <span class="synph"><span class="var">milliseconds</span></span> in
-the <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> build descriptor
-option. The <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> build
-descriptor option has no default value set. If you do not specify
-a value for either <span class="synph"><span class="kwd">defaultServiceTimeout</span></span> or
-for <span class="synph"><span class="var">milliseconds</span></span>, the service call will
-not time out. For more information, see “defaultServiceTimeout.”</p>
-</dd>
 
 </dl>
 
@@ -147,14 +102,7 @@ you can select one. </li>
 <li>If you type the <span class="synph"><span class="kwd">call</span></span> statement with
 the ending semicolon and include a reference to a callback or an onException
 function that does not exist, you can request that the workbench create
-the missing logic:<ul>
-<li>Press Ctrl+1.</li>
-
-<li>Alternatively, right click after the semicolon and select <span class="uicontrol">Create
-Callback Functions</span>.</li>
-
-</ul>
-</li>
+the missing logic. The keystroke is Ctrl+1.</li>
 
 </ul>
 </div>
@@ -181,11 +129,12 @@ end
 </pre>
 </li>
 
-<li>This example shows an interface declaration and <span class="synph"><span class="kwd">call</span></span> statement
-used to invoke the service:<pre class="codeblock">myInterface EmployeeService;
-
-call myInterface.GetEmployeeDetail("A123", 25.8, "Full-time")
-     returning to myCallback onException myExceptionHandler;
+<li>This example shows a binding-variable declaration and <span class="synph"><span class="kwd">call</span></span> statement
+used to invoke the service:<pre class="codeblock">myBindingVariable HTTPRest{@Resource{uri=""""""""binding:myBinding""""""""}};
+call MyInterface.GetEmployeeDetail(""""""""A123"""""""", 25.8, """"""""Full-time"""""""")
+   using myBindingVariable
+   returning to myCallback 
+   onException myExceptionHandler;
 </pre>
 </li>
 
@@ -213,7 +162,7 @@ includes an additional parameter to accept the return value.</li>
 
 <li>The <span class="synph"><span class="kwd">callback</span></span> function can include an
 optional final parameter that provides access to the HTTP request
-and response data. The parameter is of type <span class="synph"><span class="kwd">Ihttp</span></span>,
+and response data. The parameter is of type <span class="synph"><span class="kwd">IHTTP</span></span>,
 as described in the language reference topic named “eglx.http package.”</li>
 
 <li>Each parameter in the function has the IN modifier.</li>
@@ -261,6 +210,16 @@ UI Proxy</li>
 <p>A problem in a service binding results in a <span class="synph"><span class="kwd">ServiceBindingException</span></span>.
 Other problems result in a <span class="synph"><span class="kwd">ServiceInvocationException</span></span> or
 a <span class="synph"><span class="kwd">RuntimeException</span></span>, which is less likely.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">For more examples</h2><div class="p">For more examples, see
+the following topics:<ul>
+<li><a href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a></li>
+
+<li><a href="tedt01025.html" title="In EGL, you can use the following Interface part to access a third-party REST service:">Using a provided Interface part for a 3rd-party REST service</a></li>
+
+</ul>
+</div>
 </div>
 
 </div>

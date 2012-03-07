@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Declaring a variable to access a remote service"></meta>
-<meta name="abstract" content="When you declare a variable to access a remote service or IBM i service program, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor."></meta>
-<meta name="description" content="When you declare a variable to access a remote service or IBM i service program, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor."></meta>
+<meta name="abstract" content="When you declare a variable to access a remote service, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor. However, the specific usage described here is deprecated."></meta>
+<meta name="description" content="When you declare a variable to access a remote service, you can use the Resource annotation to indicate that the binding detail for service access is in the resource binding section of the EGL deployment descriptor. However, the specific usage described here is deprecated."></meta>
 <meta name="DC.subject" content="services, EGL, remote, variables, access"></meta>
 <meta name="keywords" content="services, EGL, remote, variables, access"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
@@ -26,13 +26,15 @@
 
 
 
-<div><p>When you declare a variable to access a remote service
-or IBM i service program, you
-can use the <span class="synph"><span class="kwd">Resource</span></span> annotation to indicate
+<div><p>When you declare a variable to access a remote service,
+you can use the <span class="synph"><span class="kwd">Resource</span></span> annotation to indicate
 that the binding detail for service access is in the resource binding
-section of the EGL deployment descriptor.</p>
+section of the EGL deployment descriptor. However, the specific usage
+described here is <strong>deprecated</strong>.</p>
 
-<div class="p">This example shows a variable declaration: <pre class="codeblock">myService MyInterfaceType? {@Resource{uri="binding:MyBinding"}};</pre>
+<p>For details on the preferred usage, see <a href="tedt01002.html" title="In EGL, you can access several different types of services. To learn the access procedures, see the links in the following table.">Accessing a service</a>.</p>
+
+<div class="p">This example shows a variable declaration: <pre class="codeblock">myService MyInterfaceType? {@Resource{uri=""""""""binding:MyBinding""""""""}};</pre>
 </div>
 
 <p>For details on the Resource annotation, see the topic named “EGL

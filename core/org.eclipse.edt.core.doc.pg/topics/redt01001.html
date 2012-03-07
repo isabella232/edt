@@ -34,7 +34,7 @@ than hard-coding the text in your Rich UI application. </p>
 You can also use an implicit function in a Rich UI properties library
 to substitute values in any string.</p>
 
-<div class="p">Here is an example of a Rich UI properties library:<pre class="codeblock">Library myLibrary type RUIPropertiesLibrary {propertiesFile="myFile")
+<div class="p">Here is an example of a Rich UI properties library:<pre class="codeblock">Library myLibrary type RUIPropertiesLibrary {propertiesFile=""""""""myFile"""""""")
    entryForInputRequired STRING;
    entryForOthers STRING;
    someText STRING;
@@ -42,29 +42,29 @@ end </pre>
 </div>
 
 <p>Any value assigned directly in a declaration (for example, <samp class="codeph">someText
-String = "Click!";</samp>) has no effect. Every runtime value comes
+String = """"""""Click!"""""""";</samp>) has no effect. Every runtime value comes
 from an external file, with one exception: if the file does not include
 a particular entry (for example, if the file does not include an entry
 for <samp class="codeph">someText</samp>), the value at run time is the string
-equivalent of the variable name (for example, "someText").</p>
+equivalent of the variable name (for example, """"""""someText"""""""").</p>
 
 <div class="section"><h2 class="sectiontitle">propertiesFile field</h2><div class="p">The <span class="synph"><span class="kwd">propertiesFile</span></span> field
 refers to the root name of the file. The file (or files, if multiple
 translations are available) must reside directly in the project's
 WebContent/properties directory. Do <em>not</em> include any of the
 following details in the root name: <ul>
-<li>Path information such as "properties/myFile"</li>
+<li>Path information such as """"""""properties/myFile""""""""</li>
 
 <li>Hyphens</li>
 
-<li>Translation-specific information such "en_US"</li>
+<li>Translation-specific information such """"""""en_US""""""""</li>
 
 <li>The file extension, which is necessarily <em>properties</em></li>
 
 </ul>
 </div>
 <p>The default value for <span class="synph"><span class="kwd">propertiesFile</span></span> is
-the name of the library; in this case, "myLibrary".</p>
+the name of the library; in this case, """"""""myLibrary"""""""".</p>
 </div>
 
 <div class="section"><h2 class="sectiontitle">Function getMessage</h2><div class="p">Every RUI properties
@@ -74,17 +74,17 @@ file or from a string in your code. For example, the following message
 in a properties file requires two inserts: <pre class="codeblock">someText=Promote {0} in the {1} department</pre>
 </div>
 <div class="p">Here
-is example code that writes the string "Promote Jeff in the Sales
-department" to a label: <pre class="codeblock">employeeName, departmentName String;
-employeeName = "Jeff";
-departmentName = "Sales";
+is example code that writes the string """"""""Promote Jeff in the Sales
+department"""""""" to a label: <pre class="codeblock">employeeName, departmentName String;
+employeeName = """"""""Jeff"""""""";
+departmentName = """"""""Sales"""""""";
 
 myLabel TextLabel {text = 
    myLibrary.getMessage(myLibrary.someText, [employeeName, departmentName]);</pre>
 </div>
 <div class="p">An
 alternative invocation has the same effect as the previous one but
-does not access a properties file:<pre class="codeblock">myMessage STRING = "Promote {0} in the {1} department";
+does not access a properties file:<pre class="codeblock">myMessage STRING = """"""""Promote {0} in the {1} department"""""""";
 myLabel TextLabel {text = 
    myLibrary.getMessage(myMessage, [employeeName, departmentName]); </pre>
 </div>
@@ -116,8 +116,8 @@ at 0, and the placeholders in the message may be in any order and
 do not need to be in sequence. If an insert does not match a placeholder
 by number, the insert is unused. If a placeholder is unresolved, the
 placeholder itself is in the returned message. For example, the returned
-message is "Promote Jeff in the {1} department" in the following case:<pre class="codeblock">employeeName STRING = "Jeff";
-myMessage STRING = "Promote {0} in the {1} department";
+message is """"""""Promote Jeff in the {1} department"""""""" in the following case:<pre class="codeblock">employeeName STRING = """"""""Jeff"""""""";
+myMessage STRING = """"""""Promote {0} in the {1} department"""""""";
 myLabel TextLabel {text = 
    myLibrary.getMessage(myMessage, [employeeName]); </pre>
 </div>

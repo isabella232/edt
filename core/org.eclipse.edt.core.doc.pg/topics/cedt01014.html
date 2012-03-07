@@ -151,39 +151,39 @@ Widget-type development and provides access to a parent DOM element.</li>
 </div>
 <div class="p">The following fields are for interacting with users who
 read Arabic or Hebrew:<ul>
-<li><span class="synph"><span class="kwd">numericSwap</span></span> takes a string ("Yes" or
-"No") that lets you use Hindi numerals in Arabic. To use Hindi numerals,
+<li><span class="synph"><span class="kwd">numericSwap</span></span> takes a string (""""""""Yes"""""""" or
+""""""""No"""""""") that lets you use Hindi numerals in Arabic. To use Hindi numerals,
 set <span class="uicontrol">numericSwap</span> and <span class="uicontrol">reverseTextDirection</span> to
-"Yes".</li>
+""""""""Yes"""""""".</li>
 
 <li><span class="synph"><span class="kwd">reverseTextDirection</span></span> takes a string
-("Yes" or "No") that indicates whether to reverse the text direction
+(""""""""Yes"""""""" or """"""""No"""""""") that indicates whether to reverse the text direction
 in the widget.</li>
 
-<li><span class="synph"><span class="kwd">symmetricSwap</span></span> takes a string ("Yes"
-or "No") that indicates whether to replace pairs of special characters
+<li><span class="synph"><span class="kwd">symmetricSwap</span></span> takes a string (""""""""Yes""""""""
+or """"""""No"""""""") that indicates whether to replace pairs of special characters
 to preserve the logical meaning of the presented text. If the value
-is "Yes", the effect is to replace paired characters such as &lt;,
-&gt;, [, and { with &gt;, &lt;, ], and }.</li>
+is """"""""Yes"""""""", the effect is to replace paired characters such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;,
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;, [, and { with &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;, &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;, ], and }.</li>
 
 <li><span class="synph"><span class="kwd">textLayout</span></span> takes one of two strings:
-either "Visual" or "Logical":<ul>
-<li>If the setting is "Visual" and the user types "A" and then "B"
-(and if "A" and "B" are characters in a bidirectional language), the
-displayed characters are "AB". The order of display is the order of
+either """"""""Visual"""""""" or """"""""Logical"""""""":<ul>
+<li>If the setting is """"""""Visual"""""""" and the user types """"""""A"""""""" and then """"""""B""""""""
+(and if """"""""A"""""""" and """"""""B"""""""" are characters in a bidirectional language), the
+displayed characters are """"""""AB"""""""". The order of display is the order of
 input, left to right, which is also the order in which the data is
 stored in local memory. </li>
 
-<li>If the setting is "Logical", the displayed characters are "BA". </li>
+<li>If the setting is """"""""Logical"""""""", the displayed characters are """"""""BA"""""""". </li>
 
 </ul>
-<p>In most cases, the setting "Visual" is appropriate for Arabic
+<p>In most cases, the setting """"""""Visual"""""""" is appropriate for Arabic
 or Hebrew content derived from a machine that runs z/OS or IBM i.</p>
 </li>
 
 <li><span class="synph"><span class="kwd">widgetOrientation</span></span> is for Arabic and
-Hebrew text. This field takes one of two strings: either "LTR" (left-to-right)
-or "RTL" (right to left). When you specify "LTR", the widgets acts
+Hebrew text. This field takes one of two strings: either """"""""LTR"""""""" (left-to-right)
+or """"""""RTL"""""""" (right to left). When you specify """"""""LTR"""""""", the widgets acts
 as a standard non-bidirectional widget. When you specify RTL, the
 widgets are mirrored; that is, scroll bars for dropdown lists appear
 on the left, the text-typing orientation for input fields is right-to-left,
@@ -197,7 +197,7 @@ provided for assistive technology; that is, for screen readers that
 are able to notify users of updates to screen regions. The specification
 for such technology is here:<p><a href="http://www.w3.org/TR/wai-aria" target="_blank">http://www.w3.org/TR/wai-aria</a></p>
 <p>The <span class="synph"><span class="kwd">ariaLive</span></span> value
-is a quoted string ("off", "polite". "assertive", or "rude"), each
+is a quoted string (""""""""off"""""""", """"""""polite"""""""". """"""""assertive"""""""", or """"""""rude""""""""), each
 of which is described in the specification's section on <em>property:
 live</em>.</p>
 </li>
@@ -205,7 +205,7 @@ live</em>.</p>
 <li><span class="synph"><span class="kwd">ariaRole</span></span> indicates the role specified
 for the widget, as used for assistive technology. For details, see
 the specification mentioned earlier.<p>The <span class="synph"><span class="kwd">ariaRole</span></span> value
-is a quoted string such as "button" or "listbox", each of which is
+is a quoted string such as """"""""button"""""""" or """"""""listbox"""""""", each of which is
 described in the specification's section on <em>Roles</em>.</p>
 </li>
 
@@ -220,7 +220,7 @@ of subordinate widgets. Every element in the array refers to a named
 widget or to an anonymous one, as described here: <ul>
 <li>A named widget is declared outside the children array, as is the
 case for every widget in the following code: <pre class="codeblock">myInTextField TextField{};
-myButton Button{ text = "Input to Output", onClick ::= click };
+myButton Button{ text = """"""""Input to Output"""""""", onClick ::= click };
 myOutTextField TextField{};
 
 myBox Box{ columns = 3, 
@@ -237,7 +237,7 @@ myTextOutField TextField{};
 
 myBox box{columns=3, 
           children=[myInTextField,
-                    <strong>new Button{ text = "Input to Output", onClick ::= click}</strong>,
+                    <strong>new Button{ text = """"""""Input to Output"""""""", onClick ::= click}</strong>,
                     myOutTextField]};
 </pre>
 </li>
@@ -316,7 +316,7 @@ you can cause the widget to be the child of a different parent. We
 refer to the reassignment as <em>re-parenting</em> the child widget.</p>
 <div class="p">Consider
 the following declaration of <samp class="codeph">myTopBox</samp>, which is the
-parent of two other boxes:<pre class="codeblock">   myTopBox Box{padding = 8, columns = 1, backgroundColor = "Aqua",
+parent of two other boxes:<pre class="codeblock">   myTopBox Box{padding = 8, columns = 1, backgroundColor = """"""""Aqua"""""""",
       children =[myBox02, myBox03 ]};
 </pre>
 </div>
@@ -339,18 +339,18 @@ import egl.ui.rui.Event;
 
 handler MyTest type RUIhandler{initialUI =[myBox03]}
  
-   myTopBox Box{padding = 8, columns = 1, backgroundColor = "Aqua", 
+   myTopBox Box{padding = 8, columns = 1, backgroundColor = """"""""Aqua"""""""", 
       children =[myBox02, myBox03 ]};
  
-   myBox02 Box{padding = 8, columns = 2, backgroundColor = "DarkGray", 
+   myBox02 Box{padding = 8, columns = 2, backgroundColor = """"""""DarkGray"""""""", 
       children =[myHelloField ]};
  
-   myBox03 Box{padding = 8, columns = 3, backgroundColor = "CadetBlue", 
+   myBox03 Box{padding = 8, columns = 3, backgroundColor = """"""""CadetBlue"""""""", 
       children =[myInTextField, myButton, myOutTextField] };
  
-   myHelloField TextField{readOnly = true, text = "Hello"};
+   myHelloField TextField{readOnly = true, text = """"""""Hello""""""""};
    myInTextField TextField{};
-   myButton Button{text = "Input to Output", onClick ::= click};
+   myButton Button{text = """"""""Input to Output"""""""", onClick ::= click};
    myOutTextField TextField{};
  
    function click(e EVENT in)

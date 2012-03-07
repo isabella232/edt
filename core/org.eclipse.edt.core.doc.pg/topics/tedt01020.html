@@ -5,11 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Creating an Interface part to access a REST service"></meta>
-<meta name="abstract" content="You define an EGL Interface part in a file that is made available to the requester of that service. The Interface part can be in the same EGL package or can be imported from a separate package."></meta>
-<meta name="description" content="You define an EGL Interface part in a file that is made available to the requester of that service. The Interface part can be in the same EGL package or can be imported from a separate package."></meta>
-<meta name="DC.subject" content="Interface parts, REST service access, creating interfaces"></meta>
-<meta name="keywords" content="Interface parts, REST service access, creating interfaces"></meta>
+<meta name="DC.Title" content="Creating an Interface type to access a REST service"></meta>
+<meta name="abstract" content="You define an EGL Interface type in a file that is made available to the requester of that service. The Interface type can be in the same EGL package or can be imported from a separate package."></meta>
+<meta name="description" content="You define an EGL Interface type in a file that is made available to the requester of that service. The Interface type can be in the same EGL package or can be imported from a separate package."></meta>
+<meta name="DC.subject" content="Interface types, REST service access, creating interfaces"></meta>
+<meta name="keywords" content="Interface types, REST service access, creating interfaces"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -17,31 +17,31 @@
 <meta name="DC.Identifier" content="tedt01020"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Creating an Interface part to access a REST service</title>
+<title>Creating an Interface type to access a REST service</title>
 </head>
 <body id="tedt01020"><a name="tedt01020"><!-- --></a>
 
 
-<h1 class="topictitle1">Creating an Interface part to access a REST service</h1>
+<h1 class="topictitle1">Creating an Interface type to access a REST service</h1>
 
 
 
-<div><p>You define an EGL Interface part in a file that is made
-available to the requester of that service. The Interface part can
+<div><p>You define an EGL Interface type in a file that is made
+available to the requester of that service. The Interface type can
 be in the same EGL package or can be imported from a separate package.</p>
 
 <p>An EGL
-Interface part includes one or more <dfn class="term">function prototypes</dfn>,
+Interface type includes one or more <dfn class="term">function prototypes</dfn>,
 which are descriptions of how to write code to access a given service
 operation. A function prototype includes the operation name, parameters
 (if any), and a return type (if any). The prototype does not include
 the logic of the operation, which is available in the service only.</p>
 
-<p>The Interface part of an EGL REST-RPC service is simpler than an
-Interface part for a third-party REST service.</p>
+<p>The Interface type of an EGL REST-RPC service is simpler than an
+Interface type for a third-party REST service.</p>
 
-<div class="section"><h2 class="sectiontitle">Interface part for accessing an EGL REST-RPC service</h2><div class="p">This
-example shows an Interface part for accessing an EGL REST-RPC service.
+<div class="section"><h2 class="sectiontitle">Interface type for accessing an EGL REST-RPC service</h2><div class="p">This
+example shows an Interface type for accessing an EGL REST-RPC service.
 The example includes a single function prototype:<pre class="codeblock">Interface EmployeeService
    Function GetEmployeeDetail(employeeCode STRING IN, 
                               employeeSalary FLOAT OUT, 
@@ -53,29 +53,29 @@ end
 <p>You can specify various EGL data types and can
 use the modifiers IN, OUT, and INOUT.</p>
 <div class="p">To create the Interface
-part in the EDT IDE: <ol>
+type in the IDE: <ol>
 <li>In the Project Explorer view, right-click the EGL file that defines
 the service</li>
 
 <li>Click <span class="menucascade"><span class="uicontrol">EGL Services</span> &gt; <span class="uicontrol">Extract
 EGL Interface</span></span>.</li>
 
-<li>In the New EGL Interface part window, specify the appropriate
+<li>In the New EGL Interface type window, specify the appropriate
 details, and click <span class="uicontrol">Finish</span>.</li>
 
 </ol>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Interface part for accessing a third-party REST service</h2><div class="p">This
-example shows Interface part for accessing a third-party REST service:<pre class="codeblock">Interface WeatherForecast
+<div class="section"><h2 class="sectiontitle">Interface type for accessing a third-party REST service</h2><div class="p">This
+example shows Interface type for accessing a third-party REST service:<pre class="codeblock">Interface WeatherForecast
    Function GetWeatherByZipCode(zipcode string in) returns(myRecordPart)
-      {@GetRest{uriTemplate="/GetWeatherByZipCode?zipCode={zipcode}",
+      {@GetRest{uriTemplate=""""""""/GetWeatherByZipCode?zipCode={zipcode}"""""""",
                 requestFormat = JSON,
                 responseFormat = JSON}};
 end</pre>
 </div>
-<div class="p">If the purpose of the Interface part is to describe
+<div class="p">If the purpose of the Interface type is to describe
 the operations that are available in a third-party REST service (not
 an EGL REST-RPC service), you must specify an annotation for each
 function prototype. The name of the annotation indicates the HTTP
@@ -134,11 +134,10 @@ in use</li>
 <p>For restrictions on the arguments sent to a service, see
 “Restrictions in the prototypes used for service access.”</p>
 <p>You
-do not need to create an Interface part. Instead, you can use IRest,
-which is an Interface part that is provided for you and that can be
+do not need to create an Interface type. Instead, you can use IRest,
+which is an Interface type that is provided for you and that can be
 the basis of a variable that is used to access a third-party REST
-service. For more information about that Interface part, see “Using
-a provided Interface for a third-party REST service.”</p>
+service. For more information about that Interface type, see <a href="tedt01025.html" title="In EGL, you can use the following Interface part to access a third-party REST service:">Using a provided Interface part for a 3rd-party REST service</a>.</p>
 </div>
 
 <div class="section"><h2 class="sectiontitle">xREST annotations used for third-party REST services</h2><p>Each
@@ -151,12 +150,12 @@ and <span class="synph"><span class="kwd">responseFormat</span></span>.</p>
 a relative URI, which identifies the last qualifiers in the URI that
 are used to access the service.<div class="p">The first URI qualifiers are specified
 in one of the following ways:<ul>
-<li>When you declare a variable based on the Interface part, you can
+<li>When you declare a variable based on the Interface type, you can
 identify an entry in a deployment descriptor. In this case, an initial
 value for the URI is in the deployment descriptor, and at configuration
 time, a code installer can change that value.</li>
 
-<li>You can update the URI at run time, as described in "Binding an
+<li>You can update the URI at run time, as described in """"""""Binding an
 access variable dynamically.”</li>
 
 </ul>
@@ -192,8 +191,8 @@ EGL runtime code automatically completes a URI encoding on each substitution
 value that is specified in a service invocation statement, with one
 exception. </p>
 <p>For example, if your service-invocation statement
-indicates that the value for a given substitution variable is "Jeff
-Smith", the EGL runtime code converts the string to "Jeff%20Smith"
+indicates that the value for a given substitution variable is """"""""Jeff
+Smith"""""""", the EGL runtime code converts the string to """"""""Jeff%20Smith""""""""
 so that the URI is valid. However, if the value of a substitution
 value begins with <em>http</em>, the EGL runtime code does no URI encoding
 because the service-invocation statement is specifying an argument
@@ -223,13 +222,13 @@ that is compatible with a string, and is sent as is</li>
 <li>FORM, to indicate that the format is form data, which is a record
 composed of argument-value pairs. In the following example of the
 content sent to the service, each pair is separated from the next
-by an ampersand (&amp;):<pre class="codeblock">division=Consumer&amp;dept=Sales</pre>
+by an ampersand (&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;):<pre class="codeblock">division=Consumer&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;dept=Sales</pre>
 <div class="p">For
-a given field in the Record part that is the basis of form data, you
+a given field in the Record type that is the basis of form data, you
 can specify the <span class="synph"><span class="kwd">FormName</span></span> annotation. You
 can use that annotation to work with an argument name that is an EGL
 reserved word or is not valid in EGL. Here is an example use of the <span class="synph"><span class="kwd">FormName</span></span> annotation:<pre class="codeblock">record anyRecord
-   continue boolean {FormName="continue-content"};
+   continue boolean {FormName=""""""""continue-content""""""""};
 end</pre>
 </div>
 <div class="p">The runtime code uses the value of the <span class="synph"><span class="kwd">FormName</span></span> annotation
@@ -241,7 +240,7 @@ default value of the <span class="synph"><span class="kwd">FormName</span></span
 is the name of the record field. In this example, the default is <samp class="codeph">continue</samp>.</p>
 <p>You
 cannot override the value of the <span class="synph"><span class="kwd">FormName</span></span> annotation
-when you declare a record that is based on the Record part.</p>
+when you declare a record that is based on the Record type.</p>
 </li>
 
 </ul>
@@ -272,7 +271,7 @@ returned to the requester: <ul>
 format</li>
 
 </ul>
-<p>If the return value in the Interface part function prototype
+<p>If the return value in the Interface type function prototype
 is a string or a value that is compatible with a string, the default
 value of <span class="synph"><span class="kwd">responseFormat</span></span> is <em>NONE</em>,
 which is the only valid format. If the return value is a record, the
@@ -291,7 +290,7 @@ end</pre>
 <div class="p">The lack of annotation fields indicates these
 behaviors:<ul>
 <li>You must provide the complete REST service URI, such as http://www.mycompany.com/myservice,
-without providing detail in the Interface part. For information about
+without providing detail in the Interface type. For information about
 the three choices for specifying the base URI, see the description
 of <span class="synph"><span class="kwd">uriTemplate</span></span> in this topic.</li>
 

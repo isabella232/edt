@@ -149,7 +149,7 @@ end
 <div class="p">The fields in the JSONRPCError record are as follows:<dl>
 <dt class="dlterm">name</dt>
 
-<dd>The value "JSONRPCError".</dd>
+<dd>The value """"""""JSONRPCError"""""""".</dd>
 
 
 <dt class="dlterm">code</dt>
@@ -166,7 +166,7 @@ end
 
 <dd>A set of fields represented in the EglRpcException record. First
 is the <samp class="codeph">name</samp> field, which contains the fully qualified
-name of an exception record; in most cases, "egl.core.ServiceInvocationException".
+name of an exception record; in most cases, """"""""egl.core.ServiceInvocationException"""""""".
 The other fields are from the EGL exception, as described in “EGL
 exception records.” </dd>
 
@@ -205,31 +205,31 @@ end</pre>
 <p>Here are examples of the content passed when a request succeeds:</p>
 
 <div class="p"><pre class="codeblock">No parameters:
-   Request body:{"method" : "emptyParams", "params" : []}
+   Request body:{""""""""method"""""""" : """"""""emptyParams"""""""", """"""""params"""""""" : []}
    Response body:{}
 
 One return parameter:
-   Request body:{"method" : "singleReturnParam", "params" : ["Joe"]}
-   Response body:{"result" : "Hello Joe"}
+   Request body:{""""""""method"""""""" : """"""""singleReturnParam"""""""", """"""""params"""""""" : [""""""""Joe""""""""]}
+   Response body:{""""""""result"""""""" : """"""""Hello Joe""""""""}
 
 Multiple return parameters:
-   Request body:{"method" : "multipleReturnParams", "params" : ["Joe"]}
-   Response body:{"result" : ["Hello Joe", {"text" : "Hello Joe", "length" : 9}]}</pre>
+   Request body:{""""""""method"""""""" : """"""""multipleReturnParams"""""""", """"""""params"""""""" : [""""""""Joe""""""""]}
+   Response body:{""""""""result"""""""" : [""""""""Hello Joe"""""""", {""""""""text"""""""" : """"""""Hello Joe"""""""", """"""""length"""""""" : 9}]}</pre>
  </div>
 
 <p>The following example gives an abbreviated error message but otherwise
 shows the content passed when a service throws an exception:</p>
 
-<div class="p"><pre class="codeblock">   Request body:{"method" : "throwsException", "params" : []}
+<div class="p"><pre class="codeblock">   Request body:{""""""""method"""""""" : """"""""throwsException"""""""", """"""""params"""""""" : []}
    Response body:
-   {"error" : 
-      { "name"   : "JSONRPCError", "code" : "EGL1539E", 
-        "message" : "EGL1539E An exception occurred...",
-        "error"  : 
-           {"messageID" : "EGL1539E", "message" : "EGL1539E An exception occurred...", 
-            "source" : 4, "detail1" : "500", "detail2" : "FAILED", 
-            "detail3" : "java.net.ConnectException:Connection refused", 
-            "name" : "egl.core.ServiceInvocationException"
+   {""""""""error"""""""" : 
+      { """"""""name""""""""   : """"""""JSONRPCError"""""""", """"""""code"""""""" : """"""""EGL1539E"""""""", 
+        """"""""message"""""""" : """"""""EGL1539E An exception occurred..."""""""",
+        """"""""error""""""""  : 
+           {""""""""messageID"""""""" : """"""""EGL1539E"""""""", """"""""message"""""""" : """"""""EGL1539E An exception occurred..."""""""", 
+            """"""""source"""""""" : 4, """"""""detail1"""""""" : """"""""500"""""""", """"""""detail2"""""""" : """"""""FAILED"""""""", 
+            """"""""detail3"""""""" : """"""""java.net.ConnectException:Connection refused"""""""", 
+            """"""""name"""""""" : """"""""egl.core.ServiceInvocationException""""""""
            }
       }
    }</pre>

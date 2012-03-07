@@ -73,20 +73,20 @@ entire application.</p>
 necessary CSS files into your CSS file. You can import multiple themes
 in this way.<ul>
 <li>For Rich UI widgets:<div class="p">Code the appropriate import in the <span class="filepath">com.ibm.eg.rui_2.0.0.css</span> file,
-which is in <span class="filepath">com.ibm.egl.rui_2.0.0/WebContent/css</span> directory.<pre class="codeblock">@import url("<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css");</pre>
+which is in <span class="filepath">com.ibm.egl.rui_2.0.0/WebContent/css</span> directory.<pre class="codeblock">@import url(""""""""<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css"""""""");</pre>
 Where <span class="synph"><span class="var">theme_name</span></span> is
 the name of the desired theme. For example, if using the Claro theme,
-the statement would look like the following:<pre class="codeblock">@import url("claro/claro.css");</pre>
+the statement would look like the following:<pre class="codeblock">@import url(""""""""claro/claro.css"""""""");</pre>
 </div>
 </li>
 
 <li>For Dojo widgets:<div class="p">Code the appropriate set of two link statements
-in the <span class="filepath">includeDojo.html</span> file, which is in <span class="filepath">com.ibm.eg.rui.dojo.runtime.<var class="varname">&lt;runtime&gt;</var>_1.5/WebContent/config</span>. <pre class="codeblock">&lt;link href="dijit/themes/<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOTheme_CSS" /&gt;
-&lt;link href="dojox/grid/resources/<span class="synph"><span class="var">theme_name</span></span>Grid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" /&gt;</pre>
+in the <span class="filepath">includeDojo.html</span> file, which is in <span class="filepath">com.ibm.eg.rui.dojo.runtime.<var class="varname">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;runtime&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</var>_1.5/WebContent/config</span>. <pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dijit/themes/<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dojox/grid/resources/<span class="synph"><span class="var">theme_name</span></span>Grid.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOGridTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 Where <span class="synph"><span class="var">theme_name</span></span> is
 the name of the desired theme. For example, if using the Claro theme,
-code the following statements:<pre class="codeblock">&lt;link href="dijit/themes/claro/claro.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOTheme_CSS" /&gt;
-&lt;link href="dojox/grid/resources/claroGrid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" /&gt;</pre>
+code the following statements:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dijit/themes/claro/claro.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dojox/grid/resources/claroGrid.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOGridTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
 </li>
 

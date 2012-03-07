@@ -38,7 +38,7 @@ the embedded handler:<pre class="codeblock">Handler EmbeddingHandler type RUIHan
    embeddedHandler EmbeddedHandler;
    
    function onConstructionFunction()
-      myString STRING = "Received from somewhere";
+      myString STRING = """"""""Received from somewhere"""""""";
       embeddedHandler.function01(myString);
    end
 end </pre>
@@ -63,8 +63,8 @@ embedded handler, Page2, which declares the delegate named switch:</p>
                                 initialUI = [content] }
 	
 	content Box{children = [secondLabel, button], columns = 1};
-	secondLabel TextLabel{text = "page2!"};
-	button Button{text="switch back to first page", onClick ::= switchToFirst};
+	secondLabel TextLabel{text = """"""""page2!""""""""};
+	button Button{text=""""""""switch back to first page"""""""", onClick ::= switchToFirst};
 	
 	//declaration of a delegate
 	switch switchPart{};
@@ -84,8 +84,8 @@ handler, Page1, which assigns its own function to the delegate:</p>
   { onConstructionFunction = myFirstFunction, initialUI = [page] }
 	
 	 page Box{ columns = 1, children = [firstLabel, button]};
-	 firstLabel TextLabel{text = "page1!"};
-	 button Button{text = "switch to page 2", onClick ::= switchTo2};	
+	 firstLabel TextLabel{text = """"""""page1!""""""""};
+	 button Button{text = """"""""switch to page 2"""""""", onClick ::= switchTo2};	
 	
 	 page2 Page2{};	
 		
@@ -116,26 +116,25 @@ this example, the Delegate part takes a string and has no return value:<pre clas
 </div>
 <p>Three
 Rich UI handlers are involved here. Here is the output of the first,
-ButtonHandler, which shows the available options:<br></br><img src="../images/regl_ui_richui_communication_button.jpg" alt="Output of ButtonHandler"></img><br></br></p>
-<div class="p">In
-reviewing the code, note that <samp class="codeph">switchFunction</samp> is a
-delegate and that its invocations refer to logic that resides in MainHandler,
-which is shown later:<pre class="codeblock">handler ButtonHandler type RUIHandler{initialUI = [button1, button2, button3]}
+ButtonHandler, which shows the available options:<br></br><img src="../images/redt_ui_richui_communication_button.jpg" alt="Output of ButtonHandler"></img><br></br></p>
+<div class="p">In reviewing the code, note that <samp class="codeph">switchFunction</samp> is
+a delegate and that its invocations refer to logic that resides in
+MainHandler, which is shown later:<pre class="codeblock">handler ButtonHandler type RUIHandler{initialUI = [button1, button2, button3]}
    switchFunction SwitchToPagePart;
-   button1 Button{text = "Go To Main Page", onClick::= toMain};
-   button2 Button {text = "Stay Here"};
-   button3 Button{text = "Go to TextField", oncLick::=toText};
+   button1 Button{text = """"""""Go To Main Page"""""""", onClick::= toMain};
+   button2 Button {text = """"""""Stay Here""""""""};
+   button3 Button{text = """"""""Go to TextField"""""""", oncLick::=toText};
    
    function toMain(e Event in)
-		   switchFunction("MainHandler");
+		   switchFunction(""""""""MainHandler"""""""");
    end
 
    function toText(e Event in)
-		   switchFunction("TextFieldHandler");
+		   switchFunction(""""""""TextFieldHandler"""""""");
    end
 end</pre>
 </div>
-<p>Here is the output of the second handler, TextFieldHandler:<br></br><img src="../images/regl_ui_richui_communication_textfield.jpg" alt="Output of TextFieldHandler"></img><br></br></p>
+<p>Here is the output of the second handler, TextFieldHandler:<br></br><img src="../images/redt_ui_richui_communication_textfield.jpg" alt="Output of TextFieldHandler"></img><br></br></p>
 <div class="p">In
 reviewing the code, note that this Rich UI handler also declares a
 delegate that is based on SwitchToPagePart and that the user can specify
@@ -145,43 +144,43 @@ of what web pages are available:<pre class="codeblock">handler TextFieldHandler 
 
    // a delegate
    switchFunction SwitchToPagePart;
-   instructions TextLabel {text = "Type a page name and click the button."}; 
+   instructions TextLabel {text = """"""""Type a page name and click the button.""""""""}; 
    Field1 Textfield{width = 200};
-   myButton Button{text = "Go to the specified page", onClick ::= handleEvent};
+   myButton Button{text = """"""""Go to the specified page"""""""", onClick ::= handleEvent};
 
    function handleEvent(e Event in)
       switchFunction(Field1.text);
    end
 end</pre>
 </div>
-<div class="p">Last, MainHandler simply displays the text "Click
-to see your options," but could display a splash screen. Here is the
+<div class="p">Last, MainHandler simply displays the text """"""""Click
+to see your options,"""""""" but could display a splash screen. Here is the
 code, including logic that displays content stored in other handlers: <pre class="codeblock">handler MainHandler type RUIHandler{initialUI = [mainBox]}
 
    mainBox Box{columns = 1, children = [mainLabel]};
    mainLabel TextLabel{
-      text = "Click to see your options.", 
+      text = """"""""Click to see your options."""""""", 
       onClick::= mainEvent};
    buttonHandler ButtonHandler{switchFunction = switchTo};
    textFieldHandler TextFieldHandler{switchFunction = switchTo};
 	
    function switchTo(target string in)
       case (strlib.upperCase(target))
-         when ("TEXTFIELDHANDLER")
+         when (""""""""TEXTFIELDHANDLER"""""""")
             mainBox.children = [textFieldHandler.instructions,
                                 textFieldHandler.Field1, 
                                 textFieldHandler.myButton];
-         when ("BUTTONHANDLER")
+         when (""""""""BUTTONHANDLER"""""""")
             mainBox.children = [buttonHandler.button1, 
                                 buttonHandler.button2, 
                                 buttonHandler.button3];
-         when ("MAINHANDLER")
+         when (""""""""MAINHANDLER"""""""")
             mainBox.children = [mainLabel];
       end
    end
 
    function mainEvent (e Event in)
-      switchTo("ButtonHandler");
+      switchTo(""""""""ButtonHandler"""""""");
    end
 end</pre>
 </div>

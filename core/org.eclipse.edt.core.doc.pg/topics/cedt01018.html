@@ -52,7 +52,7 @@ following example: <pre class="codeblock">handler MainHandler type RUIhandler {o
    function start() 
    
    // Load the first page    
-   DynamicLoader.loadHandler("myPkg.Secondary");
+   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
 end</pre>
 </li>
 
@@ -186,7 +186,7 @@ this way respond to events at run time. Here is an example use:<pre class="codeb
    // Set handler for the event that the page has been loaded
    DynamicLoader.loadDoneListeners ::= processLoadDone;
 
-   DynamicLoader.loadHandler("myPkg.Secondary");
+   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
 end
 
 function processLoadDone (event HandlerLoadedEvent in)
@@ -260,7 +260,7 @@ end</pre>
 </div>
 <div class="p">Here is an example:<pre class="codeblock">function start()
    DynamicLoader.loadFailListeners ::= processLoadFail;
-   DynamicLoader.loadHandler("myPkg.Secondary");
+   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
 end    
 
 Function processLoadFail (handlerName string in, msg string in)    
@@ -343,7 +343,7 @@ loader.</li>
 </div>
 <div class="p">Here is an example:<pre class="codeblock">function start()
    DynamicLoader.loadInfoListeners ::= processLoadInfo;
-   DynamicLoader.loadHandler("myPkg.Secondary");
+   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
 end
 
 function processLoadInfo (handlerName string, 
@@ -418,7 +418,7 @@ files, even if you would not otherwise reference them. For example,
 if Handler A does not use EGL Dojo widgets and refers to Handler B
 only by string, and if Handler B uses EGL Dojo widgets, you must set
 the <span class="synph"><span class="kwd">includeFile</span></span> field of Handler A to reference
-the Dojo runtime code, as shown here:<pre class="codeblock">{ includeFile = "config/includeDojo.html" }</pre>
+the Dojo runtime code, as shown here:<pre class="codeblock">{ includeFile = """"""""config/includeDojo.html"""""""" }</pre>
 </li>
 
 </ul>

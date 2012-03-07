@@ -33,9 +33,9 @@ interact with the user interface while the requester waits for the
 service to respond.</p>
 
 <div class="section"><div class="p">The following code accesses the implementation that is
-shown in “EGL support for SOA”:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
+shown in “EGL support for SOA”:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = """"""""MyBinding""""""""}};
 
-call myService.myEcho("world")
+call myService.myEcho(""""""""world"""""""")
      returning to myCallBack
      onException serviceLib.serviceExceptionHandler;</pre>
 </div>

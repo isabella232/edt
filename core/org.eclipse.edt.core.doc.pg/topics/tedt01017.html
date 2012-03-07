@@ -25,9 +25,13 @@
 
 
 <div><div><span>After you code an EGL Service part, you can use
-that part as the basis of a service-access variable.</span>
- Two
-cases are possible:</div>
+that part as the basis of a service-access variable. However, this
+usage is <strong>deprecated</strong>.</span>
+ </div>
+
+<p>For the details on the preferred usage, see <a href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a>.</p>
+
+<p>In the deprecated process, two cases are possible:</p>
 
 <ul>
 <li>If you are working in Rich UI, the only accessible EGL service
@@ -38,7 +42,7 @@ the package name in which the Service type resides: <pre class="codeblock">mySer
 </pre>
 <div class="p">If you use an Interface part, set the <strong>serviceName</strong> annotation
 field to the name of the Service type:<pre class="codeblock">myService MyInterfaceType?
-   {@dedicatedService{serviceName = "server.MyServiceType"}};
+   {@dedicatedService{serviceName = """"""""server.MyServiceType""""""""}};
 </pre>
 </div>
 <p>After declaring the variable, use it in a <span class="synph"><span class="kwd">call</span></span> statement.
@@ -67,7 +71,7 @@ in “Invoking a service synchronously from outside of Rich UI.”</p>
 
 <div class="section" id="tedt01017__interfacepart"><a name="tedt01017__interfacepart"><!-- --></a><h2 class="sectiontitle">Defining an Interface part to access
 a dedicated or local EGL service</h2><div class="p">Here is an example Interface
-part that might be used to access an EGL service: <pre class="codeblock">Interface MyInterfacePart
+type that might be used to access a dedicated service: <pre class="codeblock">Interface MyInterfaceType
    Function GetEmployeeDetail(employeeCode STRING IN, 
                               employeeSalary FLOAT OUT, 
                               employeeStatus STRING INOUT) 
@@ -84,7 +88,7 @@ the Service part:<ol>
 <li>In the Project Explorer, right click the EGL file that defines
 the service.</li>
 
-<li>Click <span class="uicontrol">EGL Services &gt; Extract EGL Interface</span>.</li>
+<li>Click <span class="uicontrol">EGL Services &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Extract EGL Interface</span>.</li>
 
 <li>In the <span class="uicontrol">New EGL Interface part</span> window, specify
 the appropriate details and click <span class="uicontrol">Finish</span>.</li>

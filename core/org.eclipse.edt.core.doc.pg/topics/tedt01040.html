@@ -43,7 +43,7 @@ that define a new widget and that is referenced by the external type.</li>
 for the JavaScript to
 use as a canvas when painting a button</li>
 
-<li>Silverlight.html, which includes a &lt;script&gt; tag for inclusion
+<li>Silverlight.html, which includes a &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;script&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; tag for inclusion
 in the EGL-generated JavaScript.</li>
 
 <li>SilverDemo.egl, which demonstrates the functionality.</li>
@@ -66,13 +66,13 @@ type.</p>
 
 ExternalType Button extends Widget type JavaScriptObject 
    {
-      relativePath = "silverlight",
-      javaScriptName = "Button",
-      includeFile = "silverlight/Silverlight.html"
+      relativePath = """"""""silverlight"""""""",
+      javaScriptName = """"""""Button"""""""",
+      includeFile = """"""""silverlight/Silverlight.html""""""""
    }       
    text String
       { @JavaScriptProperty
-         { getMethod="getText", setMethod="setText" } };
+         { getMethod=""""""""getText"""""""", setMethod=""""""""setText"""""""" } };
 end</pre>
 </div>
 </div>
@@ -96,23 +96,23 @@ EGL event handling for the onClick event.</li>
    'egl.ui.rui', 'Widget',    // the super class
    'div',                     // dom element type name
    {
-      "setText" : function( /*String*/ text ) {
+      """"""""setText"""""""" : function( /*String*/ text ) {
          this.text = text;
          this.eze$$update();
       },
 
-      "getText" : function() {
+      """"""""getText"""""""" : function() {
          return this.text;
       },
   	
-      "eze$$update" : function() {
+      """"""""eze$$update"""""""" : function() {
          width = Math.max(85, 8 * this.text.length);
          var xamlFragment = 
-         '&lt;Canvas Canvas.Left="0" Canvas.Top="0" Width="'+width+'" Height="24" &gt;' + 
-         '&lt;Rectangle Canvas.Top="0" Canvas.Left="0" Width="' + width +
-         '" Height="24" Fill="#FFFFFFFF" Stroke="#FF000000" StrokeThickness="1" /&gt;' +
-         '&lt;TextBlock Foreground="#FF000000" Canvas.Left="5" Canvas.Top="2"&gt;' + 
-         this.text + '&lt;/TextBlock&gt;' + '&lt;/Canvas&gt;';
+         '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Canvas Canvas.Left=""""""""0"""""""" Canvas.Top=""""""""0"""""""" Width=""""""""'+width+'"""""""" Height=""""""""24"""""""" &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;' + 
+         '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Rectangle Canvas.Top=""""""""0"""""""" Canvas.Left=""""""""0"""""""" Width=""""""""' + width +
+         '"""""""" Height=""""""""24"""""""" Fill=""""""""#FFFFFFFF"""""""" Stroke=""""""""#FF000000"""""""" StrokeThickness=""""""""1"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;' +
+         '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;TextBlock Foreground=""""""""#FF000000"""""""" Canvas.Left=""""""""5"""""""" Canvas.Top=""""""""2""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;' + 
+         this.text + '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/TextBlock&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;' + '&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Canvas&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;';
 
          var eglButton = this;
 
@@ -123,63 +123,63 @@ EGL event handling for the onClick event.</li>
          var rectangle = sender.children.getItem(0).children.getItem(0);
          var canvas = sender.children.getItem(0).children.getItem(0);
 
-         textBlock.addEventListener("MouseLeftButtonDown", function(sender, eventArgs)
+         textBlock.addEventListener(""""""""MouseLeftButtonDown"""""""", function(sender, eventArgs)
          { 
             rectangle.StrokeThickness = 3;
             var handlers = eglButton.getOnClick();
 
             // find each EGL eventhandler
-            for (var n=0; n&lt;handlers.length; n++) {
+            for (var n=0; n&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;handlers.length; n++) {
                handlers[n]({ widget: eglButton});
                // call it
       				} 			
          });
 
-         textBlock.addEventListener("MouseLeftButtonUp", function(sender, eventArgs){
+         textBlock.addEventListener(""""""""MouseLeftButtonUp"""""""", function(sender, eventArgs){
             rectangle.StrokeThickness = 1;	
          }); 
 
-         textBlock.addEventListener("MouseEnter", function(sender, eventArgs){
-            canvas.fill="orange";
+         textBlock.addEventListener(""""""""MouseEnter"""""""", function(sender, eventArgs){
+            canvas.fill=""""""""orange"""""""";
          });
 
-         textBlock.addEventListener("MouseLeave", function(sender, eventArgs) {
-            canvas.fill="white";
+         textBlock.addEventListener(""""""""MouseLeave"""""""", function(sender, eventArgs) {
+            canvas.fill=""""""""white"""""""";
          }); 
 
-         canvas.addEventListener("MouseEnter", function(sender, eventArgs) {
-            sender.fill="orange"; 			}); 	        
+         canvas.addEventListener(""""""""MouseEnter"""""""", function(sender, eventArgs) {
+            sender.fill=""""""""orange""""""""; 			}); 	        
 
-         canvas.addEventListener("MouseLeave", function(sender, eventArgs) {
-            sender.fill="white";
+         canvas.addEventListener(""""""""MouseLeave"""""""", function(sender, eventArgs) {
+            sender.fill=""""""""white"""""""";
          }); 
       } 		
 
       try { 			
-         Silverlight.createObject( "silverlight/canvas.xaml",
+         Silverlight.createObject( """"""""silverlight/canvas.xaml"""""""",
          this.eze$$DOMElement,
-         "uniqueID",
-         { width: String(width), height: "24", version:'1.0' },
+         """"""""uniqueID"""""""",
+         { width: String(width), height: """"""""24"""""""", version:'1.0' },
          { onError: 
             function (sender, errorArgs) {
-            var errorMsg = "Silverlight Error: \n\n";
-                errorMsg += "Error Type:    " + errorArgs.errorType + "\n";
-                errorMsg += "Error Message: " + errorArgs.errorMessage + "\n";
-                errorMsg += "Error Code:    " + errorArgs.errorCode + "\n";
+            var errorMsg = """"""""Silverlight Error: \n\n"""""""";
+                errorMsg += """"""""Error Type:    """""""" + errorArgs.errorType + """"""""\n"""""""";
+                errorMsg += """"""""Error Message: """""""" + errorArgs.errorMessage + """"""""\n"""""""";
+                errorMsg += """"""""Error Code:    """""""" + errorArgs.errorCode + """"""""\n"""""""";
 
             switch(errorArgs.errorType) { 
-               case "RuntimeError":
+               case """"""""RuntimeError"""""""":
                   if (errorArgs.lineNumber != 0) {
-                  errorMsg += "Line: " + errorArgs.lineNumber + "\n";
-                  errorMsg += "Position: " +  errorArgs.charPosition + "\n"; }
-                  errorMsg += "MethodName: " + errorArgs.methodName + "\n";
+                  errorMsg += """"""""Line: """""""" + errorArgs.lineNumber + """"""""\n"""""""";
+                  errorMsg += """"""""Position: """""""" +  errorArgs.charPosition + """"""""\n""""""""; }
+                  errorMsg += """"""""MethodName: """""""" + errorArgs.methodName + """"""""\n"""""""";
                   break;
-               case "ParserError":
-                  errorMsg += "Xaml File:      " + errorArgs.xamlFile + "\n";
-                  errorMsg += "Xml Element:    " + errorArgs.xmlElement    + "\n";
-                  errorMsg += "Xml Attribute:  " + errorArgs.xmlAttribute  + "\n";
-                  errorMsg += "Line:           " + errorArgs.lineNumber    + "\n";
-                  errorMsg += "Position:       " + errorArgs.charPosition  + "\n";
+               case """"""""ParserError"""""""":
+                  errorMsg += """"""""Xaml File:      """""""" + errorArgs.xamlFile + """"""""\n"""""""";
+                  errorMsg += """"""""Xml Element:    """""""" + errorArgs.xmlElement    + """"""""\n"""""""";
+                  errorMsg += """"""""Xml Attribute:  """""""" + errorArgs.xmlAttribute  + """"""""\n"""""""";
+                  errorMsg += """"""""Line:           """""""" + errorArgs.lineNumber    + """"""""\n"""""""";
+                  errorMsg += """"""""Position:       """""""" + errorArgs.charPosition  + """"""""\n"""""""";
                   break;
                default:
                    break;
@@ -195,7 +195,7 @@ EGL event handling for the onClick event.</li>
    } 		
    catch (e) { 
       egl.printError(
-         "Silverlight error. Please make sure you included Silverlight.html. ", e); 
+         """"""""Silverlight error. Please make sure you included Silverlight.html. """""""", e); 
    }
 } });</pre>
 </div>
@@ -204,9 +204,9 @@ EGL event handling for the onClick event.</li>
 <div class="section"><h2 class="sectiontitle">canvas.xaml</h2><p>Canvas.xaml contains an empty
 container for Button.js to use as a canvas when painting a button.</p>
 <div class="p">Here
-is the content, which goes in <span class="filepath">WebContent/silverlight</span>:<pre class="codeblock">&lt;Canvas xmlns="http://schemas.microsoft.com/client/2007" 
-        Loaded="eze$$silverlight_canvasLoaded"&gt;
-&lt;/Canvas&gt;</pre>
+is the content, which goes in <span class="filepath">WebContent/silverlight</span>:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Canvas xmlns=""""""""http://schemas.microsoft.com/client/2007"""""""" 
+        Loaded=""""""""eze$$silverlight_canvasLoaded""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Canvas&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
 </div>
 
@@ -214,8 +214,8 @@ is the content, which goes in <span class="filepath">WebContent/silverlight</spa
 is an HTML file that contains a script tag for inclusion in the EGL-generated JavaScript.</p>
 <div class="p">Here is
 the content, which goes in <span class="filepath">WebContent/silverlight</span> and
-includes a security warning:<pre class="codeblock">&lt;script type="text/javascript" 
-        src="http://silverlight.net/samples/1.0/clock/js/Silverlight.js"&gt;</pre>
+includes a security warning:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;script type=""""""""text/javascript"""""""" 
+        src=""""""""http://silverlight.net/samples/1.0/clock/js/Silverlight.js""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
 </div>
 
@@ -229,20 +229,20 @@ import com.ibm.egl.rui.widgets.Box;
 
 Handler SilverDemo Type RUIHandler { initialUI = [ui] }
 
-   ui Box { columns=1, backgroundColor="#EEDDEE", width=110, children = 
+   ui Box { columns=1, backgroundColor=""""""""#EEDDEE"""""""", width=110, children = 
    [
-      new myPkg.Button { margin=5, text="Silverlight", onClick ::= click },
-      new dojo.widgets.DojoButton { margin=5, text="Dojo", onClick ::= click },
-      new com.ibm.egl.rui.widgets.Button { margin=5, text="EGL", onClick ::= click}]};
+      new myPkg.Button { margin=5, text=""""""""Silverlight"""""""", onClick ::= click },
+      new dojo.widgets.DojoButton { margin=5, text=""""""""Dojo"""""""", onClick ::= click },
+      new com.ibm.egl.rui.widgets.Button { margin=5, text=""""""""EGL"""""""", onClick ::= click}]};
 	
    function click(e Event in)
       buttonText String = (e.widget as Button).text;
       strlen INT = strLib.characterLen(buttonText);
 
-      if (buttonText[strlen:strlen] == "!")
+      if (buttonText[strlen:strlen] == """"""""!"""""""")
          buttonText = buttonText[1:strlen-1];
       else
-         buttonText = buttonText + "!";
+         buttonText = buttonText + """"""""!"""""""";
       end
 
       (e.widget as Button).text = buttonText;	  		

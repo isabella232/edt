@@ -37,11 +37,11 @@ embedding handler can use: <pre class="codeblock">Handler embeddedHandler Type R
    feedback TextLabel;
 
    function start()
-      InfoBus.subscribe("com.mycompany.sample.test", showPublish);
+      InfoBus.subscribe(""""""""com.mycompany.sample.test"""""""", showPublish);
    end
 
    function showPublish(eventName STRING in, data ANY in)
-      feedback.text = "The " + eventName + " event occurred and passed " + data;
+      feedback.text = """"""""The """""""" + eventName + """""""" event occurred and passed """""""" + data;
    end
 end  </pre>
 </div>
@@ -61,11 +61,11 @@ for a service</em>: </p>
 <div class="p"><pre class="codeblock">Handler InfoBusTest Type RUIHandler
    { initialUI = [myButton, myDiv] }
 
-   myButton Button{text = "Publish the event", onClick ::= clickHandler};
+   myButton Button{text = """"""""Publish the event"""""""", onClick ::= clickHandler};
    myDiv Div { children = [new embeddedHandler{}.feedback] };
 
    function clickHandler(e Event in)
-      InfoBus.publish("com.mycompany.sample.test", "input data for a service");
+      InfoBus.publish(""""""""com.mycompany.sample.test"""""""", """"""""input data for a service"""""""");
    end
 end	</pre>
 </div>
@@ -126,11 +126,11 @@ whose name matches the event name regardless of the token that you
 specify in place of the asterisk. For example, if Infobus.subscribe
 identifies the event name as <em>com.mycompany.update.*.new.employee</em>,
 the function registered by <strong>Infobus.subscribe</strong> is invoked in
-response to any of the following invocations:<pre class="codeblock">InfoBus.publish("com.mycompany.update.sales.new.employee", "some data");
+response to any of the following invocations:<pre class="codeblock">InfoBus.publish(""""""""com.mycompany.update.sales.new.employee"""""""", """"""""some data"""""""");
 
-InfoBus.publish("com.mycompany.update.marketing.new.employee", "some data");
+InfoBus.publish(""""""""com.mycompany.update.marketing.new.employee"""""""", """"""""some data"""""""");
 
-InfoBus.publish("com.mycompany.update.outreach.new.employee", "some data");</pre>
+InfoBus.publish(""""""""com.mycompany.update.outreach.new.employee"""""""", """"""""some data"""""""");</pre>
 </li>
 
 <li>If a double asterisk (**) is used in place of the last token,
@@ -140,11 +140,11 @@ of the <em>series</em> of tokens (and intervening dots) that you specify
 in place of the asterisk. For example, if Infobus.subscribe identifies
 the event name as <em>com.mycompany.update.sales.**</em>, the function
 registered by <strong>Infobus.subscribe</strong> is invoked in response to any
-of the following invocations:<pre class="codeblock">InfoBus.publish("com.mycompany.update.sales.new.employee", "some data");
+of the following invocations:<pre class="codeblock">InfoBus.publish(""""""""com.mycompany.update.sales.new.employee"""""""", """"""""some data"""""""");
 
-InfoBus.publish("com.mycompany.update.sales.temporary.employee", "some data");
+InfoBus.publish(""""""""com.mycompany.update.sales.temporary.employee"""""""", """"""""some data"""""""");
 
-InfoBus.publish("com.mycompany.update.sales.outreach.new.temporary.employee", "some data");</pre>
+InfoBus.publish(""""""""com.mycompany.update.sales.outreach.new.temporary.employee"""""""", """"""""some data"""""""");</pre>
 </li>
 
 </ul>
@@ -157,7 +157,7 @@ need further details on this mechanism, but can get them as follows: <ol>
 <li>Go to the OpenAjax alliance website:<p>   <a href="http://www.openajax.org/index.php" target="_blank">http://www.openajax.org/index.php</a></p>
 </li>
 
-<li>Click <span class="uicontrol">Wikis &gt; Member Wiki</span></li>
+<li>Click <span class="uicontrol">Wikis &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Member Wiki</span></li>
 
 <li>Type the following string in the <span class="uicontrol">Search</span> field: <em>OpenAjax
 Hub 1.0 Specification PublishSubscribe</em></li>

@@ -52,11 +52,11 @@ ways:     <ul>
   </div>
 <div class="p">Here is an example use of the function, which can be
 invoked only inside an EGL function: <pre class="codeblock">myService MyInterfaceType?;
-myService = SysLib.getResource("binding:myBinding"); </pre>
+myService = SysLib.getResource(""""""""binding:myBinding""""""""); </pre>
 </div>
 <div class="p">Here
 is the equivalent annotation, which you can specify anywhere that
-you can declare a variable:<pre class="codeblock">myService MyInterfaceType?{@Resource{uri="binding:myBinding"}};
+you can declare a variable:<pre class="codeblock">myService MyInterfaceType?{@Resource{uri=""""""""binding:myBinding""""""""}};
 
 // another declaration
 myService02 MyOtherInterfaceType?{@Resource};</pre>
@@ -64,16 +64,16 @@ myService02 MyOtherInterfaceType?{@Resource};</pre>
 <div class="p">The
 uri annotation field is optional and refers by default to a resource
 binding that has the same name as the variable. For example, in the
-preceding annotation, the missing value for the uri field is <samp class="codeph">"binding:myService02"</samp>.
+preceding annotation, the missing value for the uri field is <samp class="codeph">""""""""binding:myService02""""""""</samp>.
  Whether you specify the function or annotation:<ul>
 <li>Access to the stored binding occurs at run time, when the generated
 output invokes code that is equivalent to the SysLib.getResource function.</li>
 
 <li>You can explicitly identify an EGL deployment descriptor: <pre class="codeblock">myService MyInterfaceType?;
-myService = SysLib.getResource("binding:file:myDDFile#myBinding"); 
+myService = SysLib.getResource(""""""""binding:file:myDDFile#myBinding""""""""); 
 
 // equivalent annotation
-myService MyInterfaceType?(@Resource{uri = "binding:file:myDDFile#myBinding"}};</pre>
+myService MyInterfaceType?(@Resource{uri = """"""""binding:file:myDDFile#myBinding""""""""}};</pre>
 </li>
 
 <li>If you do not identify an EGL deployment descriptor, the referenced
@@ -109,7 +109,7 @@ fields in your code.</li>
 give further details: <ul>
 <li><a href="cedt01032.html" title="If the purpose of a resource binding is service access, the definition is called a service binding. The main detail is in one of three categories:">Service bindings</a></li>
 
-<li><a href="cedt01033.html" title="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding.">Database bindings</a></li>
+<li><a href="cedt01033.html" title="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a SQL database binding.">SQL database bindings</a></li>
 
 </ul>
 </div>

@@ -35,7 +35,7 @@ drag and drop; Rich UI does not define the behavior.</p>
 in a widget declaration and by writing functions that are referenced
 in the corresponding property values. For example, here is the declaration
 of a button:<pre class="codeblock">b1 Button { 
-   text = "Button 1", position="absolute",	x=10, y=10,
+   text = """"""""Button 1"""""""", position=""""""""absolute"""""""",	x=10, y=10,
    <strong>onStartDrag = start, onDrag = drag, onDropOnTarget = drop</strong>};
 </pre>
 </div>
@@ -89,7 +89,7 @@ value.</p>
 
 handler MyHandler type RUIHandler{initialUI =[myTextField]}
    myTextField TextField{text = 
-                   "What a drag!", position = "absolute", x = 110, y = 210, width = 120, 
+                   """"""""What a drag!"""""""", position = """"""""absolute"""""""", x = 110, y = 210, width = 120, 
                    onStartDrag = start, onDrag = drag, onDropOnTarget = drop};
    dx, dy int;
 

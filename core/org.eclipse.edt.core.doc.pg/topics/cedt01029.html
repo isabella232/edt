@@ -52,14 +52,14 @@ at run time.</li>
 a connection that is specified directly in your logic or to reference
 a database binding in the EGL deployment descriptor:<ul>
 <li>Here is an example in which the connection is specified directly
-in the logic:<pre class="codeblock">connectURL string = "jdbc:derby:SomeDB;create=true;";
-properties Dictionary{user = "MyID", password = "MyPassword"};
+in the logic:<pre class="codeblock">connectURL string = """"jdbc:derby:SomeDB;create=true;"""";
+properties Dictionary{user = """"MyID"""", password = """"MyPassword""""};
 ds SQLDataSource? = new SQLDataSource(connectURL, properties);
 </pre>
 </li>
 
 <li>Here is an example of a reference to an EGL deployment descriptor
-entry named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{uri = "binding:MyDatabaseBinding"}};  </pre>
+entry named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{uri = """"binding:MyDatabaseBinding""""}};  </pre>
 </li>
 
 </ul>

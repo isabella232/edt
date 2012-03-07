@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Database bindings"></meta>
-<meta name="abstract" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding."></meta>
-<meta name="description" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a database binding."></meta>
+<meta name="DC.Title" content="SQL database bindings"></meta>
+<meta name="abstract" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a SQL database binding."></meta>
+<meta name="description" content="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a SQL database binding."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -15,40 +15,42 @@
 <meta name="DC.Identifier" content="cedt01033"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
-<title>Database bindings</title>
+<title>SQL database bindings</title>
 </head>
 <body id="cedt01033"><a name="cedt01033"><!-- --></a>
 
 
-<h1 class="topictitle1">Database bindings</h1>
+<h1 class="topictitle1">SQL database bindings</h1>
 
 
 <div id="body"><a name="body"><!-- --></a><p>If the purpose of a resource binding is to specify
 the connection used for database access, the definition is called
-a <dfn class="term">database binding</dfn>. </p>
+a <dfn class="term">SQL database binding</dfn>. </p>
 
-<div class="p">You can place the binding in the EGL deployment descriptor or can
-include the connection information directly in your code. Here are
-other capabilities:<ul>
-<li>If you place the binding in the EGL deployment descriptor, you
-can specify the connections details there or use connection details
-that are specified in an Eclipse connection profile. <p>If you reference
-an Eclipse connection profile, any subsequent change to that profile
-is available to your code at development and deployment time. After
-the EGL deployer has packaged the application, though, the changes
-have no effect on the deployed code unless you redeploy the application.</p>
+<div class="p">When you define an SQL database binding, you specify connection
+details that are used at development time. In addition, you can identify
+a JNDI name:
+<ul>
+<li>If you are deploying to the Apache Tomcat Server, the EGL technology
+uses both the JNDI name and the connection details to create the JNDI
+entry that will be used at run time.
+<p>If the same-name JNDI entry is already in place, your connection
+details supplement the existing entry. The fields that are available
+in the EGL deployment descriptor override the equivalent attributes
+in the existing entry. The override occurs even if you do not specify
+a value at all. However, if a JNDI attribute is not represented, the
+JNDI attribute in the existing entry is unaffected.</p>
 </li>
 
-<li>You can use an JNDI data source that is or will be defined in
-the application server. If code is running on an application server
-that is compliant with Java Enterprise Edition, JNDI allows for fast
-database access across multiple users.</li>
+<li>If you are deploying to IBM WebSphere Application Server, the
+connection details you specify are not used to configure the server,
+but the name will be used at run time. In this case, you need to configure
+the data source at the Administrative Console of that server.</li>
 
-<li>If you intend to deploy your code to the Apache Tomcat server,
-you can configure a JNDI deployment entry when you define an SQL database
-binding in the EGL deployment descriptor. The entry results in a container-based
-authentication, which means that the server stores any user ID and
-password needed for database access.</li>
+<li>If you are deploying to another server, the connection details
+you specify are not used to configure the server, but the name will
+be used at run time. For details on the configuring the data source,
+consult the server documentation.</li>
 
 </ul>
 </div>
@@ -61,21 +63,19 @@ in the EGL deployment descriptor, see <a href="../../org.eclipse.edt.ide.doc/top
 <div class="section"><h2 class="sectiontitle">Retrieving an SQL database binding in your code </h2><p>You
 enable a future connection to a database by declaring a connection
 variable. The connection itself occurs when you first run a database-access
-statement that uses the variable. 
-</p>
-<div class="p">One way to enable a future connection is to retrieve an SQL
-database binding from the EGL deployment descriptor. For example,
-here is the declaration of a connection variable: 
-<pre class="codeblock">myDataSource SQLDataSource? { @Resource {uri="binding:"MyDatabaseBinding"} }; 
+statement that uses the variable.  </p>
+<div class="p">One way to enable a future
+connection is to retrieve an SQL database binding from the EGL deployment
+descriptor. For example, here is the declaration of a connection variable:
+ <pre class="codeblock">myDataSource SQLDataSource? { @Resource {uri=""""""""binding:""""""""MyDatabaseBinding""""""""} }; 
 
 </pre>
 </div>
 <div class="p">That declaration is valid whether the binding is
 for JNDI or not. You can specify a connection variable that is specific
 to a JNDI data source, but will cause a runtime error if the binding
-refers to a non-JNDI data source:
-<pre class="codeblock">myJNDIDataSource SQLJNDIDataSource? { 
-   { @Resource {uri="binding:MyDatabaseJNDIBinding"} };
+refers to a non-JNDI data source: <pre class="codeblock">myJNDIDataSource SQLJNDIDataSource? { 
+   { @Resource {uri=""""""""binding:MyDatabaseJNDIBinding""""""""} };
 </pre>
 </div>
 <p>Your code interacts with either variable in the
@@ -85,38 +85,38 @@ to test whether a variable is of type SQLDataSource or SQLJNDIDataSource,
 you must use the SQLJNDIDataSource type for JNDI data sources and
 must use the SQLDataSource type for others.</p>
 <div class="p">You can also access
-SQL database bindings in your logic, as shown here:  
-<pre class="codeblock">myDataSource SQLDataSource? = 
-   SysLib.getResource("binding:MyBinding");
+SQL database bindings in your logic, as shown here:   <pre class="codeblock">myDataSource SQLDataSource? = 
+   SysLib.getResource(""""""""binding:MyBinding"""""""");
+
+myOtherDataSource SQLDataSource? =
+   SysLib.getResource(""""""""binding:file:MyFile#MyBinding2""""""""); 
 
 myJNDIDataSource SQLDataSource? = 
-   SysLib.getResource("binding:MyJNDIBinding");
+   SysLib.getResource(""""""""binding:MyJNDIBinding"""""""");
 
 myOtherJNDIDataSource SQLJNDIDataSource? = 
-   SysLib.getResource("binding:MyOtherJNDIBinding"); </pre>
+   SysLib.getResource(""""""""binding:MyOtherJNDIBinding""""""""); </pre>
 </div>
 </div>
 
 <div class="section"><h2 class="sectiontitle">Creating an SQL database binding in your code</h2><div class="p">You
 can create an SQL database binding in your code, in which case the
 EGL deployment descriptor is not involved. For example, the following
-code enables a database connection for a non-JNDI data source: 
-<pre class="codeblock">connectURL string = "jdbc:derby:SomeDB;create=true;";
-properties Dictionary{user = "MyID", password = "MyPassword"};
+code enables a database connection for a non-JNDI data source:  <pre class="codeblock">connectURL string = """"""""jdbc:derby:SomeDB;create=true;"""""""";
+properties Dictionary{user = """"""""MyID"""""""", password = """"""""MyPassword""""""""};
 myDataSource SQLDataSource? = new SQLDataSource(connectURL, properties);
 </pre>
 </div>
 <div class="p">Here is equivalent code that is specifically for
-a JNDI data source:<pre class="codeblock">connectURL string = "jdbc/myDataSource";
-properties Dictionary{user = "MyID", password = "MyPassword"};
+a JNDI data source:<pre class="codeblock">connectURL string = """"""""jdbc/myDataSource"""""""";
+properties Dictionary{user = """"""""MyID"""""""", password = """"""""MyPassword""""""""};
 myJNDIDataSource SQLJNDIDataSource? = new SQLJNDIDataSource(connectURL, properties);
 </pre>
 </div>
 <div class="p">As noted earlier, any connection variable can be
 based on the SQLDataSource type.  Here is code that enables a JNDI
 connection in the usual case, when container-managed security is in
-effect: 
-<pre class="codeblock">connectURL string = "jdbc/myDataSource";
+effect:  <pre class="codeblock">connectURL string = """"""""jdbc/myDataSource"""""""";
 myJNDIDataSource SQLJNDIDataSource? = new SQLJNDIDataSource(connectURL);
 </pre>
 </div>
@@ -128,8 +128,7 @@ by the specific Java DataSource class in use.</p>
 </div>
 
 <div class="section"><h2 class="sectiontitle">Using the connection variable for additional purposes</h2><div class="p">You
-can use the connection variable for the following, additional purposes:
-<ul>
+can use the connection variable for the following, additional purposes: <ul>
 <li>To set or get the <em>isolation level</em>, which specifies the
 level of independence of one user's database transaction from another
 user's database transaction.</li>
@@ -146,8 +145,8 @@ by your code.</li>
 
 </ul>
 </div>
-<p>For details on these capabilities, see the "SQLDataSource
-external type" help topic, which is subordinate to "eglx.persistence.sql.package."
+<p>For details on these capabilities, see the """"""""SQLDataSource
+external type"""""""" help topic, which is subordinate to """"""""eglx.persistence.sql.package.""""""""
  The details there apply to both SQLDataSource and SQLJNDIDataSource. </p>
 </div>
 

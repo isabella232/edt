@@ -87,12 +87,12 @@ here:<pre class="codeblock">myService MyInterfaceType?;
       a Resource annotation, as shown here:
 
       myService MyInterfaceType? 
-         { @Resource {uri="binding:MyGermanBinding"} };    */
+         { @Resource {uri=""""""""binding:MyGermanBinding""""""""} };    */
 
 if ( ... )
-   myService = SysLib.getResource("binding:MyEnglishBinding");
+   myService = SysLib.getResource(""""""""binding:MyEnglishBinding"""""""");
 else
-   myService = SysLib.getResource("binding:MyFrenchBinding");
+   myService = SysLib.getResource(""""""""binding:MyFrenchBinding"""""""");
 end
 
 /* here, you can access the service operations of 
@@ -104,7 +104,7 @@ end
 <div class="section"><h2 class="sectiontitle">Retrieving a service binding and changing it in your
 code</h2><div class="p">Here is an example of preparing a variable and then
 using it to access a third-party REST service:<pre class="codeblock">myService MyServiceType?;
-http HttpRest{@Resource{uri="binding:myService"}};        
+http HttpRest{@Resource{uri=""""""""binding:myService""""""""}};        
 http.request.encoding = encoding.json;
 call myService.myFunction() using http returning to myCallBackFunction
                                        onException myExceptionHandler;
@@ -124,10 +124,10 @@ a higher-level URI such as <samp class="codeph">http://www.example.com/myproject
 from a service binding in the EGL deployment descriptor. If you do
 not specify a <span class="synph"><span class="kwd">uri</span></span> annotation field, the
 name of the service binding is assumed to be the name of the variable.
-In the example, the value of the annotation field defaults to <samp class="codeph">"binding:http"</samp>. </p>
+In the example, the value of the annotation field defaults to <samp class="codeph">""""""""binding:http""""""""</samp>. </p>
 <p>For
-details on the HttpRest object, see the help topic named "eglx.http
-package."</p>
+details on the HttpRest object, see the help topic named """"""""eglx.http
+package.""""""""</p>
 </li>
 
 <li>Adds detail to the HTTPRest object; for example, to ensure that
@@ -146,14 +146,14 @@ second statement in the following code for the object declaration
 that was shown in the preceding section: <pre class="codeblock">myService IMyService?; 
 http HttpRest = new HttpRest{
    restType = eglx.rest.ServiceType.TrueRest, 
-   uri = "www.example.com/myproject/restservices/weather_service"};
+   uri = """"""""www.example.com/myproject/restservices/weather_service""""""""};
 myBinding.request.encoding = Encoding.json;
 call myService.myFunction() using http returning to myCallBackFunction
                                        onException myExceptionHandler;
 </pre>
 </div>
 <p>For details on the HttpRest object,
-see the help topic named "eglx.http package."</p>
+see the help topic named """"""""eglx.http package.""""""""</p>
 </div>
 
 </div>

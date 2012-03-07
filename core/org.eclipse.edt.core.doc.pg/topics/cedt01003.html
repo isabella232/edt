@@ -46,10 +46,10 @@ service.”]</p>
 
 <div class="p">With EGL, you start to develop a service by coding a Service part
 like the following one:<pre class="codeblock">Service MyServicePart
-   value STRING = "Hello, ";
+   value STRING = """"""""Hello, """""""";
    
    function myEcho(myString STRING IN) returns (STRING)
-      return (value + myString + "!");
+      return (value + myString + """"""""!"""""""");
    end
 end</pre>
 </div>
@@ -152,7 +152,7 @@ workbench to create the Interface part from an EGL Service part.</li>
 
 <li>Declare a variable for which the Interface part is the type definition.
 The documentation typically refers to the variable as a <dfn class="term">service-access
-variable</dfn>. <div class="p">Here is an example declaration:<pre class="codeblock">myService IMyService?{@Resource{bindingKey = "myBinding"}};</pre>
+variable</dfn>. <div class="p">Here is an example declaration:<pre class="codeblock">myService IMyService?{@Resource{bindingKey = """"""""myBinding""""""""}};</pre>
 </div>
 <p>The <span class="synph"><span class="kwd">Resource</span></span> annotation
 causes the variable named <samp class="codeph">myService</samp> to reference
@@ -179,8 +179,8 @@ if it is changeable or confidential.</p>
 a variable to access details can vary from what was shown earlier:<ul>
 <li>The variable declaration can explicitly identify the EGL deployment
 descriptor that contains the service binding. Here is an example: <pre class="codeblock">myService IMyService?{
-   @Resource{bindingKey = "myBinding",
-             <strong>propertyFileName = "myDeploymentDescriptor"</strong>}};</pre>
+   @Resource{bindingKey = """"""""myBinding"""""""",
+             <strong>propertyFileName = """"""""myDeploymentDescriptor""""""""</strong>}};</pre>
 <p>If
 you do not reference the <span class="synph"><span class="kwd">propertyFileName</span></span> annotation
 field, its value is the name of the EGL deployment descriptor that
@@ -215,7 +215,7 @@ the requester and service.</p>
 
 <li>When you generate a SOAP service that is based on Java, the output is a set of Java classes. When you generate or deploy the
 deployment descriptor, the output includes a Java class that is known as a <dfn class="term">service
-wrapper</dfn>. This service wrapper is distinct from the "Java wrappers” that you can generate
+wrapper</dfn>. This service wrapper is distinct from the """"""""Java wrappers” that you can generate
 with EGL. <p>The runtime platform is an application server that is
 compliant with Java EE. The
 application server invokes the service wrapper, which in turn invokes

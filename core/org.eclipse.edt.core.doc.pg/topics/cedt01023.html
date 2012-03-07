@@ -91,7 +91,7 @@ also, the EGL Runtime provides that page name to your function.</p>
 <div class="p">Here
 is an example event handler that is invoked after a new-page event,
 with <samp class="codeph">myLabel</samp> assumed to be a widget in the user display:<pre class="codeblock">function myHistoryChanged(newPageName String in)
-   myLabel.text = "History was changed. Current page name is "+ newPageName;
+   myLabel.text = """"""""History was changed. Current page name is """"""""+ newPageName;
 end</pre>
 </div>
 <p>You can register multiple new-page event handlers
@@ -116,7 +116,7 @@ event returns a string. That string is displayed in a dialog box that
 lets the user confirm or reverse the browser close.</p>
 <div class="p">Here is
 an example event handler that is invoked after a close-browser event:<pre class="codeblock">function stayHere() returns(String)
-		return ("Close the application?");
+		return (""""""""Close the application?"""""""");
 	end</pre>
 </div>
 </li>
@@ -131,7 +131,7 @@ an example event handler that is invoked after a close-browser event:<pre class=
 <div class="section"><h2 class="sectiontitle">Adding an entry to a browser history</h2><div class="p">You
 add an entry to the application-specific browser history by invoking
 the function <strong>addToHistory</strong>. The following example adds a page
-named <samp class="codeph">myNewPage</samp>.<pre class="codeblock">myHistory.addToHistory("myNewPage");</pre>
+named <samp class="codeph">myNewPage</samp>.<pre class="codeblock">myHistory.addToHistory(""""""""myNewPage"""""""");</pre>
 </div>
 <div class="p">The
 implication is as follows:<ul>

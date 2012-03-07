@@ -70,16 +70,16 @@ library MyTestCases
       // do processing here, as appropriate for the test case.
       a int = 100;
       b int = 50;
-      success boolean = a &gt; b;
-      LogResult.assertTrue("Test for one integer greater than the other. ", success);
+      success boolean = a &gt;&gt;&gt;&gt; b;
+      LogResult.assertTrue(""""Test for one integer greater than the other. """", success);
    end
 
     	
    function test02() {@Test {targetLang = [Java, JavaScript]}}
       // do processing here, as appropriate for the test case.
-      a string = "first";
-      b string = "last";
-      LogResult.assertStringEqual("Test for two equal strings. ", a, b);
+      a string = """"first"""";
+      b string = """"last"""";
+      LogResult.assertStringEqual(""""Test for two equal strings. """", a, b);
    end
 
    function test03() {@Test}
@@ -88,14 +88,14 @@ library MyTestCases
       myFalse boolean = true;
       // expected myFalse to be false
       if (myTrue==myFalse)
-         LogResult.failed("Failed to distinguish between true and false. ");
+         LogResult.failed(""""Failed to distinguish between true and false. """");
       else
-         LogResult.passed("Logic is correct.");
+         LogResult.passed(""""Logic is correct."""");
       end
    end
 
    function test04() {@Test}
-      LogResult.skipped("Waiting to resolve bug 2525");
+      LogResult.skipped(""""Waiting to resolve bug 2525"""");
       return;
       // remove the previous two lines when the bug is resolved.
 
@@ -107,7 +107,7 @@ library MyTestCases
       try     
 
          // do processing here, as appropriate for the test case.
-         throw new MyExceptionType{message = "An unexpected exception"};
+         throw new MyExceptionType{message = """"An unexpected exception""""};
 
          onException (except AnyException)
             LogResult.error(except.message);
@@ -219,7 +219,7 @@ and then the <span class="uicontrol">eunitgen</span> package.</li>
 <li>If the test driver is for Java, do as follows:<ol type="a">
 <li>Right click <span class="uicontrol">RunAllTests_pgm.egl</span>.</li>
 
-<li>Click <span class="uicontrol">Run as &gt; EGL Java Main Application</span>.</li>
+<li>Click <span class="uicontrol">Run as &gt;&gt;&gt;&gt; EGL Java Main Application</span>.</li>
 
 </ol>
 </li>
@@ -229,7 +229,7 @@ and then the <span class="uicontrol">eunitgen</span> package.</li>
 <li>If the test driver is for JavaScript, do as follows: <ol type="a">
 <li>Right click <span class="uicontrol">RunAllTests_rui.egl</span>.</li>
 
-<li>Click <span class="uicontrol">Run as &gt; EGL Rich UI Application</span>.</li>
+<li>Click <span class="uicontrol">Run as &gt;&gt;&gt;&gt; EGL Rich UI Application</span>.</li>
 
 </ol>
 </li>

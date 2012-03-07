@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Accessing a dedicated service"></meta>
+<meta name="abstract" content="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application."></meta>
+<meta name="description" content="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt01010"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Accessing a dedicated service</title>
+</head>
+<body id="tedt01010"><a name="tedt01010"><!-- --></a>
+
+
+<h1 class="topictitle1">Accessing a dedicated service</h1>
+
+
+<div id="body"><a name="body"><!-- --></a><p>When you write and deploy a Rich UI application,
+you can access an EGL service that is deployed on the application
+server, along with the Rich UI handlers. One benefit is that you don't
+need to configure the service-location detail when you write or deploy
+the application.</p>
+
+<div class="p">You can access the dedicated service by a two-step process:<ol>
+<li>Specify a connection variable, which is of type HTTPProxy. Here
+is an example:<pre class="codeblock">myConnVar HttpProxy;
+</pre>
+</li>
+
+<li>Reference the connection variable in a <strong>call</strong> statement like
+this one:<pre class="codeblock">call MyService.myFunctionName(InField.text) 
+   using myConnVar
+   returning to handleResponse
+   onException serviceExceptionHandler;</pre>
+</li>
+
+</ol>
+</div>
+
+<div class="p">You can combine the two steps:<pre class="codeblock">call MyService.myFunctionName(InField.text) 
+   using new HttpProxy
+   returning to handleResponse
+   onException serviceExceptionHandler</pre>
+</div>
+
+<div class="p">If you intend to deploy the dedicated service as an EGL REST-RPC
+service later, you might want to use an Interface type in the <strong>call</strong> statement.
+In that case, you must instantiate the connection variable and specify
+the Service type. Here is an example:<pre class="codeblock">myConnVar HttpProxy = new HttpProxy(""""""""server.MyService"""""""");
+call MyInterfaceType.myfunctionName(InField.text) 
+   using myConnVar
+   returning to handleResponse
+   onException serviceExceptionHandler;</pre>
+</div>
+
+<div class="p">If you have access to the IDE, you can create the Interface typet
+easily from the Service type:<ol>
+<li>In the Project Explorer, right click the EGL file that defines
+the service.</li>
+
+<li>Click <span class="uicontrol">EGL Services &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Extract EGL Interface</span>.</li>
+
+<li>In the <span class="uicontrol">New EGL Interface part</span> window, specify
+the appropriate details and click <span class="uicontrol">Finish</span>.</li>
+
+</ol>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>

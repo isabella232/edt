@@ -64,7 +64,7 @@ which is a box that is displayed when the user hovers over an area
 on the page. A <dfn class="term">tooltip provider</dfn> is a function that returns
 the box to be displayed, and the code for that function might be as
 follows: <pre class="codeblock">Function myProvider (widget any in) returns(Box) 
-   return (new Box {children = [new Button{text = "Memory leak"}]});
+   return (new Box {children = [new Button{text = """"""""Memory leak""""""""}]});
 end</pre>
 </div>
 <p>In this example, the tooltip provider creates
@@ -75,7 +75,7 @@ to a memory-management function.</p>
 <div class="p">To avoid the problem in this
 example, declare the box outside the tooltip provider:<pre class="codeblock">myBox Box{};
 Function myProvider (widget any in) returns(Box) 
-   myBox.children = [ new Button{text = "Problem solved"} ];       
+   myBox.children = [ new Button{text = """"""""Problem solved""""""""} ];       
    return(myBox);
 end</pre>
 </div>

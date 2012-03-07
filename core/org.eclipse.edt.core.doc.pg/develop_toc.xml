@@ -4,7 +4,7 @@
    <topic label="EGL process from development to run time" href="topics/cedt01001.html">
       <topic label="Resource bindings" href="topics/cedt01030.html">
          <topic label="Service bindings" href="topics/cedt01032.html"/>
-         <topic label="Database bindings" href="topics/cedt01033.html"/>
+         <topic label="SQL database bindings" href="topics/cedt01033.html"/>
       </topic>
    </topic>
    <topic label="EGL support for SOA" href="topics/cedt01003.html">
@@ -19,13 +19,14 @@
       <topic label="EGL support for accessing SOAP headers" href="topics/cedt01009.html"/>
       <topic label="EGL REST-RPC message structure" href="topics/cedt01010.html"/>
       <topic label="Accessing a service" href="topics/tedt01002.html">
+         <topic label="Accessing a dedicated service" href="topics/tedt01010.html"/>
          <topic label="Declaring a variable to access a dedicated or local EGL service"
                 href="topics/tedt01017.html"/>
          <topic label="Declaring a variable to access a remote service"
                 href="topics/tedt01018.html"/>
          <topic label="Editing the EGL deployment descriptor manually"
                 href="topics/tedt01043.html"/>
-         <topic label="Creating an Interface part to access a REST service"
+         <topic label="Creating an Interface type to access a REST service"
                 href="topics/tedt01020.html"/>
          <topic label="Creating an Interface part to access a SOAP service"
                 href="topics/tedt01016.html"/>

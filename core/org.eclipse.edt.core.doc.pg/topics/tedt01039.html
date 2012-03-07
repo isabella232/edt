@@ -55,17 +55,17 @@ that function.</li>
 </ul>
 </div>
 <div class="p">Here is the outline of an H3 definition, which requires
-no <strong>import</strong> statements:<pre class="codeblock">Handler H3 type RUIWidget{tagName = "h3", onConstructionFunction = start,
+no <strong>import</strong> statements:<pre class="codeblock">Handler H3 type RUIWidget{tagName = """"""""h3"""""""", onConstructionFunction = start,
    @VEWidget{
-				category = "New Widgets",
-				template = "my.package.H3{ text=\"The Heading Text\" }",
-				smallIcon = "icons/h3small.gif",
-				largeIcon = "icons/h3large.gif" 	}}
+				category = """"""""New Widgets"""""""",
+				template = """"""""my.package.H3{ text=\""""""""The Heading Text\"""""""" }"""""""",
+				smallIcon = """"""""icons/h3small.gif"""""""",
+				largeIcon = """"""""icons/h3large.gif"""""""" 	}}
 
    text String  { @EGLProperty { getMethod=getText, setMethod=setText }, 
                   @VEProperty{}};
    function start()
-      class = "EglRuiH3";
+      class = """"""""EglRuiH3"""""""";
    end
 
    function setText(textIn String in)
@@ -81,7 +81,7 @@ end</pre>
 <div class="p">Given this definition, you can create widgets
 that are based on the type H3. For example, the following declaration
 creates a box with a nested H3 widget:<pre class="codeblock">ui Box { children = [ 
-            new H3 { text = "Summary" }
+            new H3 { text = """"""""Summary"""""""" }
        	]};  	</pre>
 </div>
 </div>
@@ -122,16 +122,16 @@ choice), specify <span class="synph"><span class="kwd">egl.ui.rui</span></span>.
 </li>
 
 <li>Within the curly brackets ( { } ), define the JavaScript functions to reflect the following
-outline, separating one function from the next with a comma:<pre class="codeblock">"functionName" : function(/*parameters*/)
+outline, separating one function from the next with a comma:<pre class="codeblock">""""""""functionName"""""""" : function(/*parameters*/)
 { //JavaScript Source }</pre>
-<div class="p">Here is an example:<pre class="codeblock">"getSelected" : function() {
+<div class="p">Here is an example:<pre class="codeblock">""""""""getSelected"""""""" : function() {
    return this.check.checked;
 },
-"setSelected" : function(value) {
+""""""""setSelected"""""""" : function(value) {
    this.check.checked = value;
 },
-"toString" : function() {
-   return "[CheckBox, text=\""+this.egl$$DOMElement.innerHTML+"\"]";
+""""""""toString"""""""" : function() {
+   return """"""""[CheckBox, text=\""""""""""""""""+this.egl$$DOMElement.innerHTML+""""""""\""""""""]"""""""";
 }
 </pre>
 </div>
@@ -176,20 +176,23 @@ handled in the same way as any other widget:<ul>
 <li>As set on a widget field, <span class="synph"><span class="kwd">EGLProperty</span></span> identifies
 the functions that get or set field values. Those values are set when
 a developer declares or updates a widget that is based on the widget
-type that you are creating. <p>The <span class="synph"><span class="kwd">EGLProperty</span></span> property
-is only for Rich UI widgets. The equivalent property for external-type
-widgets is <strong>JavaScriptProperty</strong>, as described in “External type
-for JavaScript code.”</p>
+type that you are creating. <p>The <span class="synph"><span class="kwd">EGLProperty</span></span> annotation
+is only for Rich UI widgets. The equivalent annotation for external-type
+widgets is described here:  <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></p>
 </li>
 
 
-<li>As set on a widget type definition, <span class="synph"><span class="kwd">MVCView</span></span> enables
-users to use the widget as a controller view. For background information
-on controllers and controller views, see “Rich UI validating and formatting.”</li>
+<li>The following annotations are available on a widget type definition:<ul>
+<li><span class="synph"><span class="kwd">VEWidget</span></span> indicates that the user can
+add a widget-specific entry to the palette used by the Rich UI editor.</li>
 
-<li>As set on a function, <span class="synph"><span class="kwd">Override</span></span> indicates
-that you are overriding a function typically provided for any Rich
-UI or external-type widget.</li>
+<li><span class="synph"><span class="kwd">MVCView</span></span> enables users to use the widget
+as a controller view. For background information on controllers and
+controller views, see <a href="cedt01020.html">Rich UI validation and formatting</a>.</li>
+
+</ul>
+</li>
+
 
 <li>As set on an array declaration, <span class="synph"><span class="kwd">VEEvent</span></span> indicates
 that the user can use the Rich UI editor to assign event handlers
@@ -197,10 +200,6 @@ to that array, for a specific kind of event such as <span class="synph"><span cl
 
 <li>As set on a field declaration, <span class="synph"><span class="kwd">VEProperty</span></span> indicates
 that the user can use the Rich UI editor to set a value into the field.</li>
-
-<li>As set on a widget type definition, <span class="synph"><span class="kwd">VEWidget</span></span> indicates
-that the user can add a widget-specific entry to the palette used
-by the Rich UI editor.</li>
 
 </ul>
 </li>

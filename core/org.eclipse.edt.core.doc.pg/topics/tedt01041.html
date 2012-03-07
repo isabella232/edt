@@ -55,8 +55,8 @@ Those variable names are case sensitive.</p>
 in a type definition or variable declaration, along with other validation
 and formatting fields. Here is an example declaration:<pre class="codeblock">name STRING {inputRequired = yes,
              lowercase = yes,
-             inputRequiredMsgKey = "entryForInputRequired",
-             typeChkMsgKey = "entryForOthers",
+             inputRequiredMsgKey = """"""""entryForInputRequired"""""""",
+             typeChkMsgKey = """"""""entryForOthers"""""""",
              validationPropertiesLibrary=myLibrary };</pre>
 <p>The
 <strong>validationPropertiesLibrary</strong> field is used only when you are
@@ -78,10 +78,10 @@ in the Rich UI properties library.</p>
 </div>
 <div class="p">Here are the implications of the current example: <ul>
 <li>An input-required error at run time results in display of the
-message "You must specify a value," which is identified by the name <samp class="codeph">entryForInputRequired</samp>.</li>
+message """"""""You must specify a value,"""""""" which is identified by the name <samp class="codeph">entryForInputRequired</samp>.</li>
 
 <li>An input of an uppercase letter at run time also results in display
-of the message "Your input is incorrect." This outcome occurs because
+of the message """"""""Your input is incorrect."""""""" This outcome occurs because
 the value of the <strong>typeChkMsgKey</strong> field is used in response to
 a variety of errors; in this case, in response to a user input (the
 uppercase letter) that is disallowed by the lowercase property.</li>
@@ -98,7 +98,7 @@ associated with each of the following fields:<ul>
 <li><strong>validValues</strong></li>
 
 </ul>
-<p>The override relies on one of the following three "MsgKey"
+<p>The override relies on one of the following three """"""""MsgKey""""""""
 fields: inputRequiredMsgKey, minimumInputMsgKey, and validValuesMsgKey.</p>
 </li>
 
@@ -148,7 +148,7 @@ for reasons other than overriding a default message:<ul>
 <li>The rules for EGL library access apply. For example, assume that
 you have a Rich UI properties library named <samp class="codeph">myLibrary</samp> and
 a button named <samp class="codeph">myButton</samp>. Here is one way to assign
-text (in our example, the string "Not mentioned") to the button in
+text (in our example, the string """"""""Not mentioned"""""""") to the button in
 your application:<pre class="codeblock">myButton.text = myLibrary.someText;</pre>
 <p>Alternatively,
 you can reference <samp class="codeph">myLibrary</samp> in a <strong>use</strong> statement,
@@ -210,7 +210,7 @@ for each language that you are supporting. The user requests the HTML
 file for a specific locale by invoking the HTML file by name, perhaps
 as a result of clicking a hypertext link that you provide. For example,
 here is the HTML that invokes the German version of MyApplication.html
-from www.example.com, if a German version was deployed there:<pre class="codeblock">   &lt;a href="www.example.com/MyApplication-de.html"&gt;German version&lt;/a&gt;</pre>
+from www.example.com, if a German version was deployed there:<pre class="codeblock">   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;a href=""""""""www.example.com/MyApplication-de.html""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;German version&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/a&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
 <p>You
 store properties files in the WebContent/properties folder of your

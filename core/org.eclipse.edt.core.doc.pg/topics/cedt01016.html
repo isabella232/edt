@@ -45,7 +45,7 @@ part in either of two ways:<ul>
 <li>You can set the part field <span class="synph"><span class="kwd">cssFile</span></span>,
 which accepts a path relative to the WebContent directory. <div class="p">Here
 is an example setting:<pre class="codeblock">Handler ButtonTest Type RUIHandler 
-   { children = [ui], cssFile = "buttontest/coolblue.css" }</pre>
+   { children = [ui], cssFile = """"""""buttontest/coolblue.css"""""""" }</pre>
 </div>
 <div class="p">Here
 is an example CSS file:<pre class="codeblock">.EglRuiGridTable 
@@ -69,7 +69,7 @@ takes precedence.</p>
 <li>You can set the part field <span class="synph"><span class="kwd">includeFile</span></span>,
 which also accepts a path relative to the WebContent directory.<div class="p">Here
 is an example setting:<pre class="codeblock">Handler ButtonTest Type RUIHandler 
-   { children = [ui], includeFile = "buttontest/coolblue.css" }</pre>
+   { children = [ui], includeFile = """"""""buttontest/coolblue.css"""""""" }</pre>
 </div>
 <p>For
 details on this option, see <em>Rich UI handler part</em>.</p>
@@ -109,7 +109,7 @@ Firebug to inspect the styling of a displayed widget.</p>
  </li>
 
 <li>You can override a style class by setting the widget field <span class="synph"><span class="kwd">class</span></span>,
-as shown here:<pre class="codeblock">loginBox	Box { numColumns=2, class="NormalBoxStyle" };</pre>
+as shown here:<pre class="codeblock">loginBox	Box { numColumns=2, class=""""""""NormalBoxStyle"""""""" };</pre>
 <div class="p">Here
 is an example of the related content in the CSS file: <pre class="codeblock">.NormalBoxStyle 
    {  color:black; 	
@@ -125,15 +125,15 @@ except when a widget overrides a style, as noted later.</p>
 Here is an example, which includes (in the field value) the syntax
 used in CSS files: <pre class="codeblock">loginBox	Box 
    { numColumns=2,
-     style="background-color:lightgreen;border-style:solid;" };      </pre>
+     style=""""""""background-color:lightgreen;border-style:solid;"""""""" };      </pre>
 <div class="p">All
 the CSS styles are available if you use the <span class="synph"><span class="kwd">style</span></span> field.
 However, for most purposes you can assign values to individual style-related
 properties. The following declaration is equivalent to the previous
 one and does not involve CSS syntax: <pre class="codeblock">loginBox	Box 
    { columns=2,
-     backgroundColor="lightgreen",
-     borderStyle="solid" };      </pre>
+     backgroundColor=""""""""lightgreen"""""""",
+     borderStyle=""""""""solid"""""""" };      </pre>
 </div>
 <p>Here are the EGL
 style-related properties:</p>

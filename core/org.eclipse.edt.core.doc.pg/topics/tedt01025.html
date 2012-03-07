@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Using a provided Interface part for a 3rd-party REST service"></meta>
-<meta name="abstract" content="In EGL, you can use the following Interface part to access a third-party REST service."></meta>
-<meta name="description" content="In EGL, you can use the following Interface part to access a third-party REST service."></meta>
+<meta name="abstract" content="In EGL, you can use the following Interface part to access a third-party REST service:"></meta>
+<meta name="description" content="In EGL, you can use the following Interface part to access a third-party REST service:"></meta>
 <meta name="DC.subject" content="services, REST, non-EGL, REST services, Interface parts, REST service access"></meta>
 <meta name="keywords" content="services, REST, non-EGL, REST services, Interface parts, REST service access"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
@@ -28,66 +28,67 @@
 
 
 <div><p>In EGL, you can use the following Interface part to access
-a third-party REST service.</p>
+a third-party REST service:</p>
 
 <pre class="codeblock">interface IRest
    function invokeGet(reqURL string in) returns(string)  
-      {@getRest {uriTemplate="{reqURL}"}};
+      {@getRest {uriTemplate=""""""""{reqURL}""""""""}};
    function invokePost(reqURL string in, representation string in) returns(string)
-      {@postRest {uriTemplate="{reqURL}"}};
+      {@postRest {uriTemplate=""""""""{reqURL}""""""""}};
    function invokePut(reqURL string in, representation string in) returns(string)
-      {@putRest {uriTemplate="{reqURL}"}};
+      {@putRest {uriTemplate=""""""""{reqURL}""""""""}};
    function invokeDelete(reqURL string in, representation string in) returns(string) 
-      {@deleteRest {uriTemplate="{reqURL}"}};
+      {@deleteRest {uriTemplate=""""""""{reqURL}""""""""}};
 end
 </pre>
 
 <p>By using this Interface part as is, you do not have to write one.
-However, the work required to code the service-invocation statement
-is different. </p>
+However, you write the call statement with one or two arguments, and
+you construct the URI in any of the following ways:</p>
 
-<div class="p">Here is an example for asynchronous access, as occurs in Rich UI
-applications:<pre class="codeblock">myVar IRest?;
-myResource String = JSONLib.convertToJson(myRec);
-call myVar.invokePost("http://www.example.com", myResource) 
-    returning to myCallbackfunction;</pre>
-</div>
 
-<div class="p">Here is an example for synchronous access, as occurs elsewhere:<pre class="codeblock">myString STRING:
-myVar IRest?;
-myResource String = JSONLib.convertToJson(myRec);
-myString = myVar.invokePost("http://www.example.com", myResource);</pre>
-</div>
 
-<div class="p">The differences between synchronous and asynchronous access are
-as follows:<ul>
-<li> You do not pass multiple arguments that are used as substitution
-values. Here are different ways to construct the URI:<ul>
-<li>You can pass the whole URI, as shown in the examples</li>
 
-<li>You can also specify the whole URI in the variable declaration,
-as shown here:<pre class="codeblock">myVar IRest? {@RESTService {baseURI="http://www.example.com"};
-myResource String = JSONLib.convertToJSON(myRec);
-call myVar.invokePost("", myResource) 
-    returning to myCallbackfunction; </pre>
+<div class="p"><ul>
+<li>You might pass the whole URI, as shown here: <pre class="codeblock">myResource String = JSONLib.convertToJson(myRec);
+call IRest.invokePost(""""""""http://www.example.com"""""""", myResource)
+    returning to myCallbackFunction
+    onException myExceptionHandler;</pre>
 </li>
 
-<li>You can rely on the variable declaration to provide the base URI
-and then pass a relative URI</li>
+<li>You might declare a binding variable and reference an EGL deployment
+descriptor entry that specifies the whole URI:<pre class="codeblock">myBindingVar IHTTP{@Resource {uri = """"""""binding:myEntry""""""""}};
+myResource String = JSONLib.convertToJSON(myRec);
+call IRest.invokePost("""""""""""""""", myResource) 
+   using myBindingVar
+   returning to myCallbackFunction
+   onException myExceptionHandler;
+</pre>
+</li>
+
+<li>You might rely on the EGL deployment descriptor entry for the
+start of the URI such as """"""""http://www.example.com/"""""""" and include the
+rest of the URI in the <strong>call</strong> statement: <pre class="codeblock">myBindingVar IHTTP{@Resource {uri = """"""""binding:myEntry""""""""}};
+myResource String = JSONLib.convertToJSON(myRec);
+myCustomerNumber String = """"""""100"""""""";
+call IRest.invokePost(""""""""customer/"""""""" + myCustomerNumber, myResource) 
+   using myBindingVar
+   returning to myCallbackFunction
+   onException myExceptionHandler;
+</pre>
+</li>
 
 </ul>
-</li>
+</div>
 
-<li>When you invoke a service by using the POST, PUT, or DELETE methods,
+
+<div class="p">When you invoke a service by using the POST, PUT, or DELETE methods,
 make sure that the representation (a string) is in the format that
-is required by the REST service. The following functions show the
-required formats:<ul>
+is required by the REST service. The following functions provide output
+in the required formats:<ul>
 <li>For JSON conversion: <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span></li>
 
 <li>For XML conversion: <span class="synph"><span class="kwd">XMLLib.convertToXML</span></span></li>
-
-</ul>
-</li>
 
 </ul>
 </div>
@@ -97,7 +98,7 @@ such as a DELETE operation that does not require you to pass a representation.
 In that case, create a similar Interface part, but change the <tt>InvokeDelete</tt> function
 prototype or add a prototype with a different name. Here is a changed
 prototype:<pre class="codeblock">function invokeDelete(reqURL string in) returns(string) 
-   {@deleteRest {uriTemplate="{reqURL}"}};</pre>
+   {@deleteRest {uriTemplate=""""""""{reqURL}""""""""}};</pre>
 </div>
 
 </div>
