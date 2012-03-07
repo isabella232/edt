@@ -59,6 +59,11 @@ public class EDTRuntimeContainerInitializer extends ClasspathContainerInitialize
 		return path != null && path.segmentCount() == 2 && EDTCoreIDEPlugin.EDT_CONTAINER_ID.equals(path.segment(0));
 	}
 	
+	@Override
+	public Object getComparisonID(IPath containerPath, IJavaProject project) {
+		return containerPath;
+	}
+	
 	private static class EDTContainer implements IClasspathContainer {
 		private final IPath path;
 		private final IClasspathEntry[] classpathEntries;
