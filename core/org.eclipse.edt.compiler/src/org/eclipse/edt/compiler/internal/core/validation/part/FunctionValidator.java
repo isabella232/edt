@@ -424,24 +424,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 		}
 	}
 	
-	private void checkForExternalTypeParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		if (!Binding.isValidBinding(parmType)) {
-			return;
-		}
-		
-		if (parmType.getKind() == ITypeBinding.EXTERNALTYPE_BINDING ) {
-			problemRequestor.acceptProblem(
-            		functionParameter,
-					IProblemRequestor.IN_MODIFIER_REQUIRED_FOR_EXTERNALTYPE,
-					new String[] {functionParameter.getName().getCanonicalString()});
-		}
-		
-		
-	}
-
 	private void checkOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
 		checkInputOrOutputParm(functionParameter, parmType);
-		checkForExternalTypeParm(functionParameter, parmType);
 		if(ITypeBinding.PRIMITIVE_TYPE_BINDING == parmType.getKind()) {
 			switch(((PrimitiveTypeBinding) parmType).getPrimitive().getType()) {
 //			case Primitive.NUMBER_PRIMITIVE:
@@ -470,7 +454,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	private void checkExplicitInputOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
 		checkInputOrOutputOrInputOutputParm(functionParameter, parmType);
-		checkForExternalTypeParm(functionParameter, parmType);
 		
 		if (functionParameter.isParmConst()) {
 			validatePrimitiveConst(functionParameter.getType());
@@ -479,7 +462,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkImplicitInputOutputParm(FunctionParameter functionParameter, ITypeBinding parmType) {
-		checkForExternalTypeParm(functionParameter, parmType);
 		
 		if (functionParameter.isParmConst()) {
 			validatePrimitiveConst(functionParameter.getType());
