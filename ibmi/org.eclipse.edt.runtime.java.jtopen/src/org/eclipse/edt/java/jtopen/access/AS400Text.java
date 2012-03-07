@@ -36,7 +36,7 @@ public class AS400Text extends com.ibm.as400.access.AS400Text {
 
 	private static String getSystemEncoding(IBMiConnection conn){
 		String encoding = null;
-		if(conn != null && (encoding = conn.getTimezone()) != null && !encoding.isEmpty()){
+		if(conn != null && (encoding = conn.getEncoding()) != null && !encoding.isEmpty()){
 			return encoding;
 		}
 		else if(conn != null){
