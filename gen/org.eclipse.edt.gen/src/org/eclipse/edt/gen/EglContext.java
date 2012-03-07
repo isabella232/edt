@@ -15,10 +15,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
@@ -61,6 +63,8 @@ public abstract class EglContext extends TemplateContext {
 	private int tempIndex;
 
 	private Annotation lastStatementLocation;
+	
+	private final Set<String> requiredRuntimeContainers = new HashSet<String>();
 
 	public EglContext(AbstractGeneratorCommand processor) {
 		factory = IrFactory.INSTANCE;
@@ -455,5 +459,17 @@ public abstract class EglContext extends TemplateContext {
 
 	public void setLastStatementLocation(Annotation lastStatementLocation) {
 		this.lastStatementLocation = lastStatementLocation;
+	}
+	
+	/**
+	 * Adds a runtime container to be added to the build path when generation is finished.
+	 * @param id  The runtime container id to be added.
+	 */
+	public void requireRuntimeContainer(String id) {
+		requiredRuntimeContainers.add(id);
+	}
+	
+	public Set<String> getRequiredRuntimeContainers() {
+		return requiredRuntimeContainers;
 	}
 }
