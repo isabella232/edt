@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.testserver.AbstractConfigurator;
+import org.eclipse.edt.ide.testserver.LogLevel;
 import org.eclipse.edt.ide.testserver.TestServer;
 import org.eclipse.edt.javart.ide.IDEBindingResourceProcessor;
 import org.eclipse.edt.javart.ide.IDEResourceLocator;
@@ -122,7 +123,7 @@ public class ServicesConfigurator extends AbstractConfigurator {
 			bindingProcessor.getResourceLocator().setDDParser(DeploymentDesc.class.getMethod("createDeploymentDescriptor", new Class[]{String.class, InputStream.class})); //$NON-NLS-1$
 		}
 		catch (Exception e) {
-			server.log("Could not use full deployment descriptor parser. REST services will not be available!"); //$NON-NLS-1$ //$NON-NLS-2$
+			server.log("Could not use full deployment descriptor parser. REST services will not be available!", LogLevel.WARN); //$NON-NLS-1$ //$NON-NLS-2$
 			server.log(e);
 		}
 		
