@@ -46,7 +46,7 @@ of functions that in turn validate user input. Those functions are
 referenced by the <span class="synph"><span class="kwd">validators</span></span> field and are
 referred to as <dfn class="term">validator functions</dfn>.<div class="p">The content of
 the dictionary is appropriate to your business need. Here is an example
-assignment:<pre class="codeblock">constraints = new Dictionary{minimumHour = "11:30 AM"}};</pre>
+assignment:<pre class="codeblock">constraints = new Dictionary{minimumHour = """"""""11:30 AM""""""""}};</pre>
 </div>
 <p>In
 this case, a validator function might return an error message if the
@@ -77,7 +77,7 @@ is true, the time text box has no content, and the box gains focus
 after having lost focus. The message is displayed in an output field
 or tooltip that is provided for you.<p>If the <span class="synph"><span class="kwd">inputRequiredMessage</span></span> field
 is not present, the error message is the following string, as appropriate
-to the locale: <span class="synph">"This value is required"</span>.</p>
+to the locale: <span class="synph">""""""""This value is required""""""""</span>.</p>
 </dd>
 
 

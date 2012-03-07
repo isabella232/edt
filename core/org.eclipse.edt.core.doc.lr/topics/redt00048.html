@@ -43,28 +43,28 @@ Dictionary is EDictionary.</p>
 <dd><div class="p">Here is a dictionary declaration:<pre class="codeblock">myRef Dictionary 
 {
    ID        = 5,
-   lastName  = "Twain",
-   firstName = "Mark"
+   lastName  = """"""""Twain"""""""",
+   firstName = """"""""Mark""""""""
 };</pre>
 </div>
 <p>When you include entries in the declaration,
 each key name is an EGL identifier that must be consistent with EGL
 naming conventions. When you add entries at run time, you have greater
-flexibility; see "Dynamic types and dynamic access."</p>
+flexibility; see """"""""Dynamic types and dynamic access.""""""""</p>
 <div class="p">The following
 assignments that add new key/value pairs to the dictionary:<pre class="codeblock">myRef.age = 30;
-myRef["Credit"] = 700;</pre>
+myRef[""""""""Credit""""""""] = 700;</pre>
 </div>
 <div class="p">If you attempt to assign
 a key that already exists, you override the existing key/value entry.
-The following assignment is valid and replaces "Twain" with "Clemens": <pre class="codeblock">myRef.lastname = "Clemens";</pre>
+The following assignment is valid and replaces """"""""Twain"""""""" with """"""""Clemens"""""""": <pre class="codeblock">myRef.lastname = """"""""Clemens"""""""";</pre>
 </div>
 <div class="p">You
 can also use assignments to retrieve data: <pre class="codeblock">lastname STRING
 age, credit INT;
 
 lastname = myRef.lastname; 
-age = myRef["age"];
+age = myRef[""""""""age""""""""];
 credit = myRef.credit;</pre>
 </div>
 <p>The value in a key/value
@@ -142,7 +142,7 @@ externalType EDictionary extends EAny type ClassType
 	 * @throws DynamicAccessException  if there's no key with the given name.
 	 */
 static function $Lookup(dict EDictionary in, key EString in) 
-       returns(EAny) {@Operation{"['"}};
+       returns(EAny) {@Operation{""""""""['""""""""}};
 
 	/**
 	 * Default constructor
@@ -247,9 +247,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00048__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00048__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d21821e133">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d21971e133">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d21821e136">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d21971e136">Issue</th>
 
 </tr>
 
@@ -258,17 +258,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00048__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d21821e133 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d21971e133 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d21821e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d21971e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00048__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d21821e133 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d21971e133 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d21821e136 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d21971e136 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

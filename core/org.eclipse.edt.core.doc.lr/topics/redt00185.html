@@ -121,33 +121,33 @@ import eglx.ui.rui.RUIHandler;
 
 handler MyHandler type RUIhandler {initialUI = [ myBox1 ]}
 
-   myBox1 Box{ backgroundColor = "yellow", padding=8, columns = 1,
+   myBox1 Box{ backgroundColor = """"""""yellow"""""""", padding=8, columns = 1,
                children = [ myTextArea, myTree ] };
 
    myTextArea TextArea {numRows = 5, numColumns = 50,
-               text = " This tree shows 2 children, each with 2 children."}; 
+               text = """""""" This tree shows 2 children, each with 2 children.""""""""}; 
 	
-   myTreeNodeA TreeNode{backgroundColor = "cyan",text="Child 1", 
+   myTreeNodeA TreeNode{backgroundColor = """"""""cyan"""""""",text=""""""""Child 1"""""""", 
                         children =[myTreeNode1, myTreeNode2] };
 
-   myTreeNode1 TreeNode{backgroundColor = "lightblue",text="Gchild 1-1" };
-   myTreeNode2 TreeNode{backgroundColor = "lightgreen",text="Gchild 1-2" };
+   myTreeNode1 TreeNode{backgroundColor = """"""""lightblue"""""""",text=""""""""Gchild 1-1"""""""" };
+   myTreeNode2 TreeNode{backgroundColor = """"""""lightgreen"""""""",text=""""""""Gchild 1-2"""""""" };
 
-   myTreeNodeB TreeNode{backgroundColor = "orange", text="Child 2", 
+   myTreeNodeB TreeNode{backgroundColor = """"""""orange"""""""", text=""""""""Child 2"""""""", 
            children =[myTreeNode3,
-                      new TreeNode{backgroundColor = "burlywood", text = "Gchild 2-2"}] };
+                      new TreeNode{backgroundColor = """"""""burlywood"""""""", text = """"""""Gchild 2-2""""""""}] };
 
-   myTreeNode3 TreeNode{backgroundColor = "lightpink", text="Gchild 2-1" };
+   myTreeNode3 TreeNode{backgroundColor = """"""""lightpink"""""""", text=""""""""Gchild 2-1"""""""" };
 	
    myBehaviors TreeNodeBehavior[] = [ click, tooltip.setTooltips ];
 
-   myTree Tree{backgroundColor = "lavender", behaviors = myBehaviors, 
+   myTree Tree{backgroundColor = """"""""lavender"""""""", behaviors = myBehaviors, 
                children =[myTreeNodeA, myTreenodeB]};
 
    tooltip TreeTooltip { provider = showTooltip, tooltip.delay = 1000 };
 
    function click(node TreeNode in)
-      node.span.cursor = "pointer";
+      node.span.cursor = """"""""pointer"""""""";
       node.onClick ::= handleNodeClick;
       node.onMouseOver ::= showFeedback;
       node.onMouseOut ::= hideFeedback;
@@ -156,30 +156,30 @@ handler MyHandler type RUIhandler {initialUI = [ myBox1 ]}
    function showTooltip(node TreeNode) returns(Box)
       tooltipText TextLabel { };
       tooltipResponse Box { children = [ tooltipText ] };
-      tooltipText.text = "Tooltip for " + node.text;
+      tooltipText.text = """"""""Tooltip for """""""" + node.text;
       return (tooltipResponse);
    end
 	
    function showFeedback(e Event in)
       node TreeNode = e.widget;
       color any = node.backgroundColor; 
-      node.setAttribute("originalBG", color);
-      node.span.backgroundColor = "yellow";
+      node.setAttribute(""""""""originalBG"""""""", color);
+      node.span.backgroundColor = """"""""yellow"""""""";
 	 end
 	
    function hideFeedback(e Event in)
       node TreeNode = e.widget;
-		  node.span.backgroundColor = node.getAttribute("originalBG");
+		  node.span.backgroundColor = node.getAttribute(""""""""originalBG"""""""");
    end
 	
    function handleNodeClick(e Event in)
       node TreeNode = e.widget;
-      if (node.span.color == "red")
-			   node.span.color = "black";
-         node.span.fontWeight = "normal";
+      if (node.span.color == """"""""red"""""""")
+			   node.span.color = """"""""black"""""""";
+         node.span.fontWeight = """"""""normal"""""""";
       else
-         node.span.color = "red";
-         node.span.fontWeight = "bold";
+         node.span.color = """"""""red"""""""";
+         node.span.fontWeight = """"""""bold"""""""";
       end
    end
 end</pre>

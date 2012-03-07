@@ -72,7 +72,7 @@ on the specific INTERVAL type. An example pattern is ddddHHss; in
 this case, four digits for day, two for hour, and two for second. </p>
 <div class="p">You
 specify the pattern when you declare a field of an INTERVAL type,
-as shown here:<pre class="codeblock">myInterval INTERVAL("<strong>ddddHHss</strong>");</pre>
+as shown here:<pre class="codeblock">myInterval INTERVAL(""""""""<strong>ddddHHss</strong>"""""""");</pre>
 </div>
 </td>
 
@@ -102,7 +102,7 @@ second.</td>
 <td class="cellrowborder" valign="top" width="53.42857142857142%" headers="d3220e51 ">TIMESTAMP values are stored along with a type
 pattern. The default pattern is yyyyMMddHHmmss, which is a concatenation
 of the type patterns for DATE and TIME. <div class="p">You can specify a type
-pattern when you declare a field of a TIMESTAMP type, as shown here: <pre class="codeblock">myTimestamp TIMESTAMP("<strong>ddHHmmssffffff</strong>");</pre>
+pattern when you declare a field of a TIMESTAMP type, as shown here: <pre class="codeblock">myTimestamp TIMESTAMP(""""""""<strong>ddHHmmssffffff</strong>"""""""");</pre>
 </div>
 <p>The
 last six characters refer to digits for microseconds.</p>

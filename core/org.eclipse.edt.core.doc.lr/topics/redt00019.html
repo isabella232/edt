@@ -85,19 +85,19 @@ program MyProgram
       i int = 3;
 
       myLabel1: while(i == 3)
-         SysLib.writeStdOut("labeled");
+         SysLib.writeStdOut(""""""""labeled"""""""");
 
          for(x int from 1 to 5)
-            Syslib.writeStdOut("in for loop for x = " + x);
+            Syslib.writeStdOut(""""""""in for loop for x = """""""" + x);
 
             if(x == 4)
-               syslib.writeStdOut("x = " + x);
+               syslib.writeStdOut(""""""""x = """""""" + x);
                i = 4;
                exit myLabel1;
             end
       end	
    end
-   syslib.writestdout("leaving");
+   syslib.writestdout(""""""""leaving"""""""");
 end      
 </pre>
 </div>
@@ -107,9 +107,9 @@ end
 <div class="tablenoborder"><a name="redt00019__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00019__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d11565e203">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d11715e203">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d11565e206">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d11715e206">Issue</th>
 
 </tr>
 
@@ -118,17 +118,17 @@ end
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00019__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d11565e203 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11715e203 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d11565e206 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11715e206 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00019__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d11565e203 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d11715e203 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d11565e206 ">Support is provided only for following variations
+<td class="cellrowborder" valign="top" width="50%" headers="d11715e206 ">Support is provided only for following variations
 of the <span class="synph"><span class="kwd">exit</span></span> statement: <strong>exit case</strong>, <strong>exit
 for</strong>, <strong>exit if</strong>, and <strong>exit while</strong>. <p class="compat_javascript_more"></p>
 </td>

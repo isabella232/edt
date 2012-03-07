@@ -76,7 +76,7 @@ import egl.javascript.Job;
 
 handler MyHandler type RUIhandler {
    initialUI = [ ui ], onConstructionFunction = start, 
-   cssFile="css/MyRichUIProject.css", title="MyHandler"}
+   cssFile=""""""""css/MyRichUIProject.css"""""""", title=""""""""MyHandler""""""""}
 
    ui GridLayout{ columns = 3, rows = 4, cellPadding = 4, 
                   children = [ myButton, myCalendar ] };
@@ -85,29 +85,29 @@ handler MyHandler type RUIhandler {
                             value = DateTimeLib.currentDate() };
 
    myButton DojoButton{ layoutData = new GridLayoutData{ row = 4, column = 2 }, 
-                            text = "Is the month selector open?", 
+                            text = """"""""Is the month selector open?"""""""", 
                             onClick ::= myEventHandler};
 
    doThis Job{runFunction = myRunFunction};
 	
    function start()  
-	     strLib.defaultDateFormat = "yyyy/MM/dd";
+	     strLib.defaultDateFormat = """"""""yyyy/MM/dd"""""""";
    end
 
    function myEventHandler( e event in)
       doThis.repeat(1000);
-      myCalendar.value = "2012/04/08";
+      myCalendar.value = """"""""2012/04/08"""""""";
    end
 
    function myRunFunction()
       isListBoxOpen Boolean = myCalendar.isSelectorOpen();
-      writestdout ("The selector is open:  " + isListBoxOpen);
+      writestdout (""""""""The selector is open:  """""""" + isListBoxOpen);
 
       if (isListBoxOpen)
          doThis.cancel();
       end
 
-      writestdout ("The date is " + myCalendar.value);
+      writestdout (""""""""The date is """""""" + myCalendar.value);
    end
 end</pre>
 </div>

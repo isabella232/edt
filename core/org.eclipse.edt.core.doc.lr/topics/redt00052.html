@@ -42,7 +42,7 @@ for Date is EDate.</p>
 <dd>After the following code runs, the value of <samp class="codeph">result</samp> is
 the current date, and the value of <samp class="codeph">result02</samp> is January
 4, 2009:<pre class="codeblock">result Date; 
-result02 Date = "01-04-2009";</pre>
+result02 Date = """"""""01-04-2009"""""""";</pre>
 <anchor id="use_more"></anchor></dd>
 
 
@@ -57,40 +57,40 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
  */
 externalType EDate extends AnyValue type ClassType
 /**
-	 * {@Operation &lt;} Compares two dates.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two dates.
 	 */
 static function $LT(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{"&lt;"}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-	 * {@Operation &gt;} Compares two dates.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two dates.
 	 */
 static function $GT(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{"&gt;"}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-	 * {@Operation &lt;=} Compares two dates.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two dates.
 */
 static function $LTE(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{"&lt;="}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-	 * {@Operation &gt;=} Compares two dates.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two dates.
 */
 static function $GTE(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{"&gt;="}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
 	 * {@Operation ==} Compares two dates.
 */
 static function $EQ(lvalue EDate in, rvalue EDate in) 
-       returns(EBoolean) {@Operation{"=="}};
+       returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
  * {@Operation !=} Compares two dates.
 */
 static function $NEQ(lvalue EDate in, rvalue EDate in) 
-       returns(EBoolean) {@Operation{"!="}};
+       returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a string to a date.  The string is parsed
@@ -105,7 +105,7 @@ static function $NEQ(lvalue EDate in, rvalue EDate in)
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
 static function asDate(value EString in) 
-       returns (EDate) {@Operation{"narrow"}};
+       returns (EDate) {@Operation{""""""""narrow""""""""}};
 	
 	// this replaces date-time math: date - date = int
 	/**
@@ -145,9 +145,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00052__table_comments"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00052__table_comments" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. For additional information</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" id="d22797e97">Conversion rules</th>
+<th class="cellrowborder" valign="bottom" id="d22947e97">Conversion rules</th>
 
-<th class="cellrowborder" valign="bottom" id="d22797e100">Reference</th>
+<th class="cellrowborder" valign="bottom" id="d22947e100">Reference</th>
 
 </tr>
 
@@ -155,20 +155,20 @@ end</pre>
 
 <tbody>
 <tr>
-<td class="cellrowborder" valign="top" headers="d22797e97 ">To convert a string to a date.</td>
+<td class="cellrowborder" valign="top" headers="d22947e97 ">To convert a string to a date.</td>
 
-<td class="cellrowborder" valign="top" headers="d22797e100 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
+<td class="cellrowborder" valign="top" headers="d22947e100 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d22797e97 ">To convert a date to a string, in the absence
+<td class="cellrowborder" valign="top" headers="d22947e97 ">To convert a date to a string, in the absence
 of a format.</td>
 
-<td class="cellrowborder" valign="top" headers="d22797e100 ">See “String and EString types”; in particular,
+<td class="cellrowborder" valign="top" headers="d22947e100 ">See “String and EString types”; in particular,
 the comments for the <span class="synph"><span class="kwd">asString</span></span> function.
 As suggested in the following example, the <span class="synph"><span class="kwd">as String</span></span> clause
-invokes that function: <pre class="codeblock">result03 Date = "01/04/2009";
+invokes that function: <pre class="codeblock">result03 Date = """"""""01/04/2009"""""""";
 sysLib.writeStdOut(result03 as String);</pre>
 <div class="p">Here is the
 example output:<pre class="codeblock">2009-01-04 12:01</pre>
@@ -178,10 +178,10 @@ example output:<pre class="codeblock">2009-01-04 12:01</pre>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d22797e97 ">To convert a date to a string, in the presence
+<td class="cellrowborder" valign="top" headers="d22947e97 ">To convert a date to a string, in the presence
 of a format. </td>
 
-<td class="cellrowborder" valign="top" headers="d22797e100 ">See “StringLib.format.” Also, note the set of
+<td class="cellrowborder" valign="top" headers="d22947e100 ">See “StringLib.format.” Also, note the set of
 useful date formats in “Constants library.”</td>
 
 </tr>
@@ -199,9 +199,9 @@ useful date formats in “Constants library.”</td>
 <div class="tablenoborder"><a name="redt00052__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00052__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22797e174">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d22947e174">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22797e177">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d22947e177">Issue</th>
 
 </tr>
 
@@ -210,17 +210,17 @@ useful date formats in “Constants library.”</td>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00052__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22797e174 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22947e174 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22797e177 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22947e177 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00052__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22797e174 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22947e174 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22797e177 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d22947e177 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

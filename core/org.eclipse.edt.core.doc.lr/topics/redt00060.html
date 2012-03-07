@@ -52,85 +52,85 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 /**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
-static function $Plus(value EFloat in) returns (EFloat) {@Operation{"+"}};
+static function $Plus(value EFloat in) returns (EFloat) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation +} Adds two numbers.
 	 */
 static function $Plus(lvalue EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"+"}};
+       returns (EFloat) {@Operation{""""""""+""""""""}};
 
 	/**
 	 * {@Operation -} Negates the value.
 	 */
 static function $Minus(value EFloat in) 
-        returns (EFloat) {@Operation{"-"}};
+        returns (EFloat) {@Operation{""""""""-""""""""}};
 
 	/**
 	 * {@Operation -} Subtracts one number from another.
 	 */
 static function $Minus(lvalue EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"-"}};
+       returns (EFloat) {@Operation{""""""""-""""""""}};
 
 	/**
 	 * {@Operation *} Multiplies two numbers.
 	 */
 static function $Multiply(value EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"*"}};
+       returns (EFloat) {@Operation{""""""""*""""""""}};
 
 /**
 	 * {@Operation /} Divides one number by another.
 	 */
 static function $Divide(value EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"/"}};
+       returns (EFloat) {@Operation{""""""""/""""""""}};
 
 /**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
 static function $Modulo(lvalue EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"%"}};
+       returns (EFloat) {@Operation{""""""""%""""""""}};
 
 	/**
 	 * {@Operation **} Computes lvalue to the power of rvalue.
 	 */
 static function $PowerOf(value EFloat in, rvalue EFloat in) 
-       returns (EFloat) {@Operation{"**"}};
+       returns (EFloat) {@Operation{""""""""**""""""""}};
 
 /**
-	 * {@Operation &lt;} Compares two numbers.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
 	 */
 static function $LT(lvalue EFloat in, rvalue EFloat in) 
-       returns (EBoolean) {@Operation{"&lt;"}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-	 * {@Operation &gt;} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
 	 */
 static function $GT(lvalue EFloat in, rvalue EFloat in) 
-       returns (EBoolean) {@Operation{"&gt;"}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 	/**
-	 * {@Operation &lt;=} Compares two numbers.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
 	 */
 static function $LTE(lvalue EFloat in, rvalue EFloat in) 
-       returns (EBoolean) {@Operation{"&lt;="}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-	 * {@Operation &gt;=} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
 	 */
 static function $GTE(lvalue EFloat in, rvalue EFloat in) 
-       returns (EBoolean) {@Operation{"&gt;="}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
 	 * {@Operation ==} Compares two numbers.
 	 */
 static function $EQ(lvalue EFloat in, rvalue EFloat in)
-       returns(EBoolean) {@Operation{"=="}};
+       returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
 	 * {@Operation !=} Compares two numbers.
 	 */
 static function $NEQ(lvalue EFloat in, rvalue EFloat in) 
-       returns(EBoolean) {@Operation{"!="}};
+       returns(EBoolean) {@Operation{""""""""!=""""""""}};
 	
 /**
 	 * {@Operation narrow} Converts a string to a float.  The string is parsed
@@ -143,28 +143,28 @@ static function $NEQ(lvalue EFloat in, rvalue EFloat in)
 	 * @throws TypeCastException if the string can't be parsed into a float.
 	 */
 static function asFloat(value EString in) 
-       returns(EFloat) {@Operation{"narrow"}};
+       returns(EFloat) {@Operation{""""""""narrow""""""""}};
 
 static function asFloat(value ESmallint in) 
-       returns(EFloat) {@Operation{"widen"}};
+       returns(EFloat) {@Operation{""""""""widen""""""""}};
 
 static function asFloat(value ESmallfloat in) 
-       returns(EFloat) {@Operation{"widen"}};
+       returns(EFloat) {@Operation{""""""""widen""""""""}};
 
 static function asFloat(value EDecimal in) 
-       returns(EFloat) {@Operation{"widen"}};
+       returns(EFloat) {@Operation{""""""""widen""""""""}};
 
 static function asFloat(value EInt in) 
-       returns(EFloat) {@Operation{"widen"}};
+       returns(EFloat) {@Operation{""""""""widen""""""""}};
 
 static function asFloat(value EBigint in) 
-       returns(EFloat) {@Operation{"narrow"}};
+       returns(EFloat) {@Operation{""""""""narrow""""""""}};
 
 static function asFloat(value ENumber in) 
-       returns(EFloat) {@Operation{"narrow"}};
+       returns(EFloat) {@Operation{""""""""narrow""""""""}};
 
 static function asNumber(value EFloat in) 
-       returns(ENumber) {@Operation{"widen"}};
+       returns(ENumber) {@Operation{""""""""widen""""""""}};
 
 end</pre>
  <anchor id="detail_more"></anchor></dd>
@@ -182,9 +182,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00060__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00060__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d24957e99">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d25107e99">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d24957e102">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d25107e102">Issue</th>
 
 </tr>
 
@@ -193,17 +193,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00060__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d24957e99 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d25107e99 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24957e102 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d25107e102 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00060__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d24957e99 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d25107e99 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24957e102 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d25107e102 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

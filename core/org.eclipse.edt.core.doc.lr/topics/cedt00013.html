@@ -46,7 +46,7 @@ string “yes!”, and the Boolean value TRUE. For details, see “Literals.”<
 
 <dd>Symbols that affect <dfn class="term">operands</dfn>, which might be keywords,
 identifiers, or literals. An operand is on the left or right of an
-operator. For example, the <span class="synph"><span class="kwd">&lt;</span></span> operator
+operator. For example, the <span class="synph"><span class="kwd">&lt;&lt;&lt;&lt;</span></span> operator
 is part of a condition that tests whether the operand on the left
 has a lesser value than the operand on the right. <p>For details,
 see “Operators and precedence.”</p>
@@ -64,7 +64,7 @@ list, see “Reserved words.” </dd>
 
 <dd>Punctuation marks that divide tokens, as necessary for the parsing
 done by the EGL compiler. For example, parentheses (<span class="synph"><span class="kwd">(
-)</span></span>) surround a condition such <samp class="codeph">(myVariable &lt;
+)</span></span>) surround a condition such <samp class="codeph">(myVariable &lt;&lt;&lt;&lt;
 yourVariable)</samp>.<p>For details, see “Special characters.”</p>
 </dd>
 
@@ -108,7 +108,7 @@ is in place of an instruction. You might use an empty statement as
 a placeholder or for visual clarity.</p>
 <div class="p">Most statements begin with
 an EGL keyword. For example, the following statement writes “yes!”
-to the standard output:<pre class="codeblock">SysLib.writeStdOut("yes!");</pre>
+to the standard output:<pre class="codeblock">SysLib.writeStdOut(""yes!"");</pre>
 </div>
 <p>For
 details, see “Statements table.”</p>
@@ -118,7 +118,7 @@ details, see “Statements table.”</p>
 <dt class="dlterm">Set-values blocks</dt>
 
 <dd>Code areas that set annotations and field values and are delimited
-by curly brackets ({}), as shown in the following declaration:<pre class="codeblock">myCarCount NumberOfCars <strong>{ InputRequired = yes, DisplayName = "Number of cars:  " }</strong>;</pre>
+by curly brackets ({}), as shown in the following declaration:<pre class="codeblock">myCarCount NumberOfCars <strong>{ InputRequired = yes, DisplayName = ""Number of cars:  "" }</strong>;</pre>
 <p>The
 example set-values block assigns values to the <span class="synph"><span class="kwd">InputRequired</span></span> and <span class="synph"><span class="kwd">DisplayName</span></span> annotations
 for the <samp class="codeph">myCarCount</samp> variable.</p>

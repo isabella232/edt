@@ -38,20 +38,20 @@ import org.eclipse.edt.rui.widgets.TextArea;
 handler MyHandler type RUIHandler{initialUI =[myTextArea, myRadioGroup]}
 
    myTextArea TextArea{
-      text = "Monday? I'm really busy on Monday. How about Tuesday?", 
+      text = """"""""Monday? I'm really busy on Monday. How about Tuesday?"""""""", 
       numColumns = 15, 
       numRows = 5};
 
    myRadioGroup RadioGroup{
-      groupName = "abc", 
-      options =["Monday", "Tuesday"], 
+      groupName = """"""""abc"""""""", 
+      options =[""""""""Monday"""""""", """"""""Tuesday""""""""], 
       onClick ::= myRadio};
 
    function myRadio(e Event in)
-      if (myRadioGroup.selected == "Tuesday")
-         myTextArea.text = "No, on Monday!";
+      if (myRadioGroup.selected == """"""""Tuesday"""""""")
+         myTextArea.text = """"""""No, on Monday!"""""""";
       else
-         myTextArea.text = "No, on Tuesday!";
+         myTextArea.text = """"""""No, on Tuesday!"""""""";
       end
    end
 end</pre>

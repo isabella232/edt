@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Call statement"></meta>
-<meta name="abstract" content="The call statement invokes a service asynchronously from a Rich UI application."></meta>
-<meta name="description" content="The call statement invokes a service asynchronously from a Rich UI application."></meta>
+<meta name="abstract" content="The call statement has two current uses: to invoke a service asynchronously from a Rich UI application; or to call a program on IBM i."></meta>
+<meta name="description" content="The call statement has two current uses: to invoke a service asynchronously from a Rich UI application; or to call a program on IBM i."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,15 +23,52 @@
 <h1 class="topictitle1">Call statement</h1>
 
 
-<div><p>The <dfn class="term">call</dfn> statement invokes a service asynchronously
-from a Rich UI application.</p>
+<div><p>The <strong>call</strong> statement has two current uses: to invoke
+a service asynchronously from a Rich UI application; or to call a
+program on IBM i.</p>
 
-<p>For details, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01023.html" title="In Rich UI, the call statement is used to invoke a service asynchronously:">Invoking a service asynchronously from a Rich UI application</a>.</p>
+
+<p>You typically work with the <strong>call</strong> statement as you do with
+any of the other action statements such as <strong>add</strong> or <strong>get</strong>:</p>
+
+<div class="p"><ol>
+<li>Declare a binding variable to hold the access detail. Here is
+an example for code that accesses a service:<pre class="codeblock">myBindingDetail IHTTP {@Resource{uri=""""""""binding:myBinding""""""""}};</pre>
+<div class="p">You
+might assign the access detail in one of two ways:<ul>
+<li>By referencing a resource binding that resides in an EGL deployment
+descriptor, as is true in the current example; or </li>
+
+<li>By specifying the necessary detail in your code.</li>
+
+</ul>
+</div>
+</li>
+
+<li>When you code the action statement, reference the binding variable
+in the <strong>using</strong> clause. Here is a <strong>call</strong> statement that references
+the <samp class="codeph">myBindingDetail</samp> variable:<pre class="codeblock">call MyInterfaceType.myOperation() using myBindingDetail 
+   returning to myCallbackFunction
+   onException myExceptionHandler;</pre>
+</li>
+
+</ol>
+</div>
+
+<div class="p">The following topics include the details necessary to use the <strong>call</strong> statement
+for one or another purpose:<ul>
+<li><a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01023.html" title="In Rich UI, the call statement is used to invoke a service asynchronously:">Invoking a service asynchronously from a Rich UI application</a></li>
+
+<li><a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01042.html" title="As an EGL developer, you can access IBM i called programs, as well as procedures in IBM service programs.">Accessing an IBM i called or service program</a></li>
+
+</ul>
+</div>
 
 </div>
 
 
 <anchor id="related_links"></anchor>
+
 
 </body>
 </html>

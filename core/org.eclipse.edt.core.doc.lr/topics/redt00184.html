@@ -49,10 +49,10 @@ Handler MyHandler Type RUIHandler {
    onConstructionFunction= begin 
    }
 
-   theButton Button { text = "Start", onClick ::= click };
+   theButton Button { text = """"""""Start"""""""", onClick ::= click };
 
    theToolTip Tooltip { 
-      text = "To toggle the text, click the button!", 
+      text = """"""""To toggle the text, click the button!"""""""", 
       delay = 1000 };
 
    myBox Box{};
@@ -62,10 +62,10 @@ Handler MyHandler Type RUIHandler {
    end
 
    Function click(e Event in) 
-      if (theButton.text == "Start")
-         theButton.text = "Stop";
+      if (theButton.text == """"""""Start"""""""")
+         theButton.text = """"""""Stop"""""""";
       else
-         theButton.text = "Start";
+         theButton.text = """"""""Start"""""""";
       end
    end
 end</pre>
@@ -82,7 +82,7 @@ the display of the hover help</li>
 
 <li><span class="synph"><span class="kwd">provider</span></span>, which refers to a function
 that returns a box for display within the hover help. For example,
-assume your Rich UI handler displays a button that says "Start". You
+assume your Rich UI handler displays a button that says """"""""Start"""""""". You
 can create a tooltip that is enabled for the button and that displays
 a hypertext link in the hover help:<br></br><img src="../images/redt_ui_richui_tooltip.jpg" alt="Output of the Tooltip Provider GoToWebsite"></img><br></br><div class="p">Here is the example
 code with a provider function that makes the output possible:<pre class="codeblock">package client;
@@ -97,9 +97,9 @@ import eglx.ui.rui.RUIHandler;
 Handler MyHandler Type RUIHandler {
    initialUI = [theButton], 
    onConstructionFunction= begin }
-   theButton Button { text = "Start", onClick ::= click };
+   theButton Button { text = """"""""Start"""""""", onClick ::= click };
    theToolTip Tooltip { 
-      text = "To toggle the text, click the button!", 
+      text = """"""""To toggle the text, click the button!"""""""", 
       delay = 800, 
       <strong>provider = GoToWebsite </strong>};
 
@@ -110,17 +110,17 @@ Handler MyHandler Type RUIHandler {
    end
 
    Function click(e Event in) 
-      if (theButton.text == "Start")
-         theButton.text = "Stop";
+      if (theButton.text == """"""""Start"""""""")
+         theButton.text = """"""""Stop"""""""";
       else
-         theButton.text = "Start";
+         theButton.text = """"""""Start"""""""";
       end
    end
 <strong>
    Function GoToWebsite(myWidget any in) returns(Box)
       myLink html
-         {text = "Do more with " +
-         "target = \"_blank\", href=\"http://www.org.eclipse/edt\"&gt;EGL&lt;/a&gt;"};
+         {text = """"""""Do more with """""""" +
+         """"""""target = \""""""""_blank\"""""""", href=\""""""""http://www.org.eclipse/edt\""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;EGL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/a&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""};
       myBox.children = [mylink]; 
       return (myBox); 	
    end</strong>

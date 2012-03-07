@@ -57,71 +57,71 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * {@Operation +} Concatenates two strings.
   */
    static function $Plus(lvalue EString in, rvalue EString in) 
-          returns(EString) {@Operation{"+"}};
+          returns(EString) {@Operation{""""""""+""""""""}};
 
 /**
   * {@Operation ::} Concatenates two strings.
   */
    static function $Concat(value EString in, rvalue EString in) 
-          returns (EString) {@Operation{"::"}};
+          returns (EString) {@Operation{""""""""::""""""""}};
 
 /**
   * {@Operation ?:} Concatenates two strings.  
   * If either is null then null is returned.
   */
    static function $ConcatNull(value EString in, rvalue EString in) 
-          returns(EString) {@Operation{"?:"}};
+          returns(EString) {@Operation{""""""""?:""""""""}};
 
 /**
-  * {@Operation &lt;} Compares two strings.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two strings.
   */
    static function $LT(lvalue EString in, rvalue EString in) 
-          returns (EBoolean) {@Operation{"&lt;"}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-  * {@Operation &gt;} Compares two strings.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two strings.
   */
    static function $GT(lvalue EString in, rvalue EString in) 
-          returns (EBoolean) {@Operation{"&gt;"}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-  * {@Operation &lt;=} Compares two strings.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two strings.
   */
    static function $LTE(lvalue EString in, rvalue EString in) 
-          returns (EBoolean) {@Operation{"&lt;="}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-  * {@Operation &gt;=} Compares two strings.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two strings.
   */
    static function $GTE(lvalue EString in, rvalue EString in) 
-          returns (EBoolean) {@Operation{"&gt;="}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
   * {@Operation ==} Compares two strings.
   */
    static function $EQ(lvalue EString in, rvalue EString in) 
-          returns(EBoolean) {@Operation{"=="}};
+          returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
   * {@Operation !=} Compares two strings.
   */
    static function $NEQ(lvalue EString in, rvalue EString in) 
-          returns(EBoolean) {@Operation{"!="}};
+          returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
   * {@Operation [:} Returns the substring starting 
   * at fromIndex and ending at toIndex.
   * @throws InvalidIndexException  if index is out of range or 
-  * if fromIndex is &gt; toIndex.
+  * if fromIndex is &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; toIndex.
   */
    static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in)
-          returns(EString) {@Operation{"[:"}};
+          returns(EString) {@Operation{""""""""[:""""""""}};
 
    static function asNumber(value EString in) 
-          returns(ENumber) {@Operation{"narrow"}};
+          returns(ENumber) {@Operation{""""""""narrow""""""""}};
 
    static function asString(value ENumber in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a bigint to a string.  
@@ -129,21 +129,21 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * It will begin with a - sign if the value is negative.
   */
    static function asString(value EBigint in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
-  * {@Operation{"widen"} Converts a boolean to "true" or "false".
+  * {@Operation{""""""""widen""""""""} Converts a boolean to """"""""true"""""""" or """"""""false"""""""".
   */
    static function asString(value EBoolean in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
-  * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
+  * {@Operation widen} Converts a date to a string in the format """"""""MM/dd/yyyy"""""""".
   * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
-  * converted to "04/01/0009".
+  * converted to """"""""04/01/0009"""""""".
   */
    static function asString(value EDate in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a decimal to a string.  
@@ -152,7 +152,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * will begin with a - sign if the value is negative.
   */
    static function asString(value EDecimal in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a float to a string.  
@@ -163,7 +163,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * followed by one or more digit characters.
   */
    static function asString(value EFloat in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts an int to a string.  
@@ -171,7 +171,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * It will begin with a - sign if the value is negative.
   */
    static function asString(value EInt in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a smallfloat to a string.  
@@ -182,7 +182,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * followed by one or more digit characters.
   */
    static function asString(value ESmallfloat in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a smallint to a string.  
@@ -190,18 +190,18 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * It will begin with a - sign if the value is negative.
   */
    static function asString(value ESmallint in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation widen} Converts a timestamp to a string.  
   * The 26-character result will include all possible fields 
   * of a timestamp, from years down to fractions of seconds, 
-  * in the format "yyyy-MM-dd HH:mm:ss.SSSSSS".  Leading zeros are 
+  * in the format """"""""yyyy-MM-dd HH:mm:ss.SSSSSS"""""""".  Leading zeros are 
   * included in each field of the string when necessary, e.g. January is 
-  * represented as "01" not "1". 
+  * represented as """"""""01"""""""" not """"""""1"""""""". 
   */
    static function asString(value ETimestamp in) 
-          returns (EString) {@Operation{"widen"}};
+          returns (EString) {@Operation{""""""""widen""""""""}};
 
 /**
   * A pattern-matching function which compares this string to a pattern using
@@ -381,9 +381,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00051__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00051__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22520e97">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d22670e97">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22520e100">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d22670e100">Issue</th>
 
 </tr>
 
@@ -392,17 +392,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00051__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22520e97 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22670e97 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22520e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22670e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00051__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22520e97 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d22670e97 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22520e100 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d22670e100 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

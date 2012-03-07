@@ -54,91 +54,91 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 /**
   * {@Operation +} A unary plus (has no effect on the numeric value).
   */
-   static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};
+   static function $Plus(value ESmallint in) returns (EInt) {@Operation{""""""""+""""""""}};
 
 /**
   * {@Operation +} Adds two numbers.
   */
    static function $Plus(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EInt) {@Operation{"+"}};
+          returns (EInt) {@Operation{""""""""+""""""""}};
 
 /**
   * {@Operation -} Negates the value.
   */
    static function $Minus(value ESmallint in) 
-          returns (EInt) {@Operation{"-"}};
+          returns (EInt) {@Operation{""""""""-""""""""}};
 
 /**
   * {@Operation -} Subtracts one number from another.
   */
   static function $Minus(lvalue ESmallint in, rvalue ESmallint in) 
-         returns (EInt) {@Operation{"-"}};
+         returns (EInt) {@Operation{""""""""-""""""""}};
 
 /**
   * {@Operation *} Multiplies two numbers.
   */
   static function $Multiply(lvalue ESmallint in, rvalue ESmallint in) 
-         returns (EInt) {@Operation{"*"}};
+         returns (EInt) {@Operation{""""""""*""""""""}};
 
 /**
   * {@Operation /} Divides one number by another.
   */
    static function $Divide(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EDecimal) {@Operation{"/"}};
+          returns (EDecimal) {@Operation{""""""""/""""""""}};
 
 /**
   * {@Operation %} Computes the remainder of dividing one number by another.
   */
    static function $Modulo(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EInt) {@Operation{"%"}};
+          returns (EInt) {@Operation{""""""""%""""""""}};
 
    /**
      * {@Operation **} Computes lvalue to the power of rvalue.
      */
    static function $PowerOf(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EFloat) {@Operation{"**"}};
+          returns (EFloat) {@Operation{""""""""**""""""""}};
 
 /**
-  * {@Operation &lt;} Compares two numbers.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
   */
    static function $LT(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{"&lt;"}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-  * {@Operation &gt;} Compares two numbers.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
   */
    static function $GT(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{"&gt;"}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-  * {@Operation &lt;=} Compares two numbers.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
   */
    static function $LTE(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{"&lt;="}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-  * {@Operation &gt;=} Compares two numbers.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
   */
    static function $GTE(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{"&gt;="}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
   * {@Operation ==} Compares two numbers.
   */
    static function $EQ(lvalue ESmallint in, rvalue ESmallint in) 
-          returns(EBoolean) {@Operation{"=="}};
+          returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
   * {@Operation !=} Compares two numbers.
   */
    static function $NEQ(lvalue ESmallint in, rvalue ESmallint in) 
-          returns(EBoolean) {@Operation{"!="}};
+          returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
   * {@Operation widen} Converts a smallint to a number.
   */
    static function asNumber(value ESmallint in) 
-          returns(ENumber) {@Operation{"widen"}};
+          returns(ENumber) {@Operation{""""""""widen""""""""}};
 
 /**
   * {@Operation narrow} Converts a decimal to a smallint.  Digits after the
@@ -147,7 +147,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the decimal is out of range for a smallint.
   */
    static function asSmallint(value EDecimal in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts a float to a smallint.  Digits after the
@@ -156,7 +156,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the float is out of range for a smallint.
   */
    static function asSmallint(value EFloat in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts an int to a smallint.
@@ -164,7 +164,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the int is out of range for a smallint.
   */
    static function asSmallint(value EInt in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts a string to a smallint.  The string is parsed
@@ -175,7 +175,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the string can't be parsed into a smallint.
   */
    static function asSmallint(value EString in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts a smallfloat to a smallint.  Digits after the
@@ -184,7 +184,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the smallfloat is out of range for a smallint.
   */
    static function asSmallint(value ESmallfloat in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts a bigint to a smallint.
@@ -192,7 +192,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the bigint is out of range for a smallint.
   */
    static function asSmallint(value EBigint in)
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation narrow} Converts a number to a smallint.  Digits after the
@@ -201,7 +201,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the number is out of range for a smallint.
   */
    static function asSmallint(value ENumber in) 
-          returns(ESmallint) {@Operation{"narrow"}};
+          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
@@ -217,9 +217,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00056__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00056__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d23824e98">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23974e98">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d23824e101">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23974e101">Issue</th>
 
 </tr>
 
@@ -228,17 +228,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00056__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d23824e98 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23974e98 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23824e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23974e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00056__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d23824e98 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23974e98 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23824e101 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d23974e101 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

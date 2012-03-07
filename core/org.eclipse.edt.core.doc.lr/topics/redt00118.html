@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Span widget"></meta>
-<meta name="abstract" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
-<meta name="description" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
+<meta name="abstract" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
+<meta name="description" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, Span, Span Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, Span, Span Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
@@ -28,7 +28,7 @@
 
 <div><p>A Rich UI span lets you display a string that the user
 cannot change. The widget is different from a text label because inclusion
-of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes
+of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes
 the display of HTML-coded content such as <strong>this boldfaced code</strong>.</p>
 
 <div class="p">Here is an example:<pre class="codeblock">package client;
@@ -39,10 +39,10 @@ import org.eclipse.edt.rui.widgets.Span;
 handler MyHandler type RUIHandler{initialUI =[myDiv]}
 
    myDiv Div{children = [mySpan01, mySpan02, mySpan03]};
-   mySpan01 Span{text = "mix blue ", color = "blue"};
-   mySpan02 Span{text = " and yellow ",
-                 backgroundColor = "black", color = "yellow"};
-   mySpan03 Span{text = " to see green", color = "green"};
+   mySpan01 Span{text = """"""""mix blue """""""", color = """"""""blue""""""""};
+   mySpan02 Span{text = """""""" and yellow """""""",
+                 backgroundColor = """"""""black"""""""", color = """"""""yellow""""""""};
+   mySpan03 Span{text = """""""" to see green"""""""", color = """"""""green""""""""};
 end</pre>
 </div>
 

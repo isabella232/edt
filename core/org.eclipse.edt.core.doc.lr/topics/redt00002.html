@@ -37,16 +37,16 @@ override that rule. To access the program-global declaration, qualify
 the reference with the keyword <span class="synph"><span class="kwd">this</span></span>. </p>
 <div class="p">Here
 is an example: <pre class="codeblock">program myProgram
-   myString STRING = "From the program-global variable";
+   myString STRING = """"From the program-global variable"""";
 
    function main()
-      myString STRING = "In main";
+      myString STRING = """"In main"""";
 
       myFunction();
    end
 
    function myFunction()
-      myString STRING = "In myFunction";
+      myString STRING = """"In myFunction"""";
       Syslib.writeStdErr(this.myString);
    end
 end

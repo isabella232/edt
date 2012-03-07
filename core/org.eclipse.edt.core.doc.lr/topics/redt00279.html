@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="ExternalType stereotype JavaScriptObject"></meta>
+<meta name="abstract" content="With EGL, your Rich UI application can access non-generated JavaScript. You might be making general logic available—for example, to provide a random number generator—or you might be referencing a non-EGL widget—for example, to allow use of a Dojo widget inside your code."></meta>
+<meta name="description" content="With EGL, your Rich UI application can access non-generated JavaScript. You might be making general logic available—for example, to provide a random number generator—or you might be referencing a non-EGL widget—for example, to allow use of a Dojo widget inside your code."></meta>
+<meta name="DC.subject" content="ExternalType classifier, JavaScript, language elements, EGL external mappings, EGL, ExternalType, JavaScriptObject stereotype"></meta>
+<meta name="keywords" content="ExternalType classifier, JavaScript, language elements, EGL external mappings, EGL, ExternalType, JavaScriptObject stereotype"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt00038.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00279"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>ExternalType stereotype JavaScriptObject</title>
+</head>
+<body id="redt00279"><a name="redt00279"><!-- --></a>
+
+
+<h1 class="topictitle1">ExternalType stereotype JavaScriptObject</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>With EGL, your Rich UI application can access
+non-generated JavaScript.
+You might be making general logic available—for example, to provide
+a random number generator—or you might be referencing a non-EGL widget—for
+example, to allow use of a Dojo widget inside your code. </p>
+
+<p>In either case, your tasks are twofold:</p>
+
+<div class="p"><ol>
+<li>To develop an EGL external type that makes the JavaScript logic available to a Rich UI
+application. The JavaScript is
+said to be the <dfn class="term">implementation</dfn> of the external type.</li>
+
+<li>To write a non-generated JavaScript class,
+unless the external type references a built-in JavaScript class such as Math or Number.</li>
+
+</ol>
+</div>
+
+<div class="p">If your external type is implemented by a JavaScript source file, the next statements
+apply:<ul>
+<li>When you define the external type, set the <span class="synph"><span class="kwd">relativePath</span></span> property,
+which indicates the location of the JavaScript source file in relation to
+the WebContent folder.</li>
+
+<li>When you write the JavaScript code,
+do as follows: <ul>
+<li>Invoke an EGL-specific function, whether <span class="synph"><span class="kwd">egl.defineClass</span></span>,
+for general logic, or <span class="synph"><span class="kwd">egl.defineWidget</span></span>,
+for a widget definition. In each case, the JavaScript is solely for use by EGL and
+is likely to be invoking other JavaScript that
+is available to you.</li>
+
+<li>Ensure that the name of the JavaScript source
+file is the same as the JavaScript class
+name and that the source-file extension is <span class="filepath">.js</span>.</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+
+<p>If your external type is implemented by a built-in JavaScript class, do not set the <span class="synph"><span class="kwd">relativePath</span></span> property
+of the external type.</p>
+
+<p>Regardless of how you implement the external type, if the name
+of the JavaScript class
+is different from the name of the external type, you must set the <span class="synph"><span class="kwd">javaScriptName</span></span> property
+to the name of the class.</p>
+
+<p>To avoid errors at run time, avoid using multiple versions of the
+same runtime library in a given Rich UI application.</p>
+
+<p>This topic describes the use of <span class="synph"><span class="kwd">egl.defineClass</span></span>.
+For details about defining a new widget, see “Extending the Rich UI
+widget set.”</p>
+
+<div class="section"><h2 class="sectiontitle">Structure of general-use JavaScript code</h2><div class="p">If you are making
+general logic available—for example, a random number generator—place
+your JavaScript file in
+a subdirectory of the WebContent folder. The file invokes the <span class="synph"><span class="kwd">egl.defineClass</span></span> JavaScript function:<pre class="codeblock">egl.defineClass(
+   '<em>packageName</em>', '<em>className</em>',
+   '<em>superclassPackageName</em>', <em>superclassName</em>,
+    {
+      """"""""constructor"""""""": function() 
+      { },
+
+      """"""""<em>otherFunction</em>"""""""": function(<em>parameterList</em>)
+      { }
+    }
+);</pre>
+</div>
+<div class="p">The parameters are as follows:<dl>
+<dt class="dlterm"><span class="synph"><span class="var">packageName</span></span></dt>
+
+<dd>The name of the package in which the custom JavaScript resides.  The package name
+is required, is case sensitive, and identifies the WebContent subfolder.
+Include dots in place of a forward slash for every subfolder under
+the first. For example, if your JavaScript is
+in the <span class="filepath">WebContent/myPkg/test</span> folder, the packageName
+value is <span class="filepath">myPkg.test</span>.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">className</span></span></dt>
+
+<dd>An identifier that you are assigning as the JavaScript class name. The class is a
+predefined collection of functions. The name must be the name of the
+EGL external type <span class="synph"><span class="kwd">JavaScriptName</span></span> property,
+which defaults to the name of the external type. The class name is
+case sensitive and is required.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">superclassPackageName</span></span></dt>
+
+<dd>Optional. The name of the package in which the EGL external type
+for a super class resides. The package name is case sensitive. If
+you specify this value, you must also specify the superclassName value.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">superclassName</span></span></dt>
+
+<dd>Optional. The name of a super class, which is also the name of
+an EGL external type that makes the superclass available to EGL source
+code. The superclass name is case sensitive. If you specify this value,
+you must also specify superclassPackageName value.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">otherFunction</span></span></dt>
+
+<dd>A function that is in addition to the one named """"""""constructor,""""""""
+which is described later. You can specify any number of additional
+functions.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">parameterList</span></span></dt>
+
+<dd>A list of function parameters</dd>
+
+</dl>
+</div>
+<p>The function named """"""""constructor"""""""" is optional
+and, if present, runs as soon as you declare an EGL variable of the
+external type. That function cannot have parameters and can be in
+any position in the list of functions. </p>
+<div class="p">You can define multiple
+classes in a single JavaScript file,
+but the convention is to include only one class, with the same name
+as the file. For example, here is the code in the <span class="filepath">RandomNumberGenerator.js</span> file,
+which makes available a random number generator: <pre class="codeblock">egl.defineClass(
+   'randomNumber', 'RandomNumberGenerator',	
+
+   {	
+	     """"""""constructor"""""""" : function()
+      {
+         this.upperLimit = 100;
+      },
+
+      """"""""setUpperLimit"""""""" : function(limit)
+      {
+         this.upperLimit = limit;
+      },
+
+      """"""""getUpperLimit"""""""" : function()
+      {
+         return this.upperLimit;
+      },
+
+      """"""""generateRandomNumber"""""""" : function()
+      {
+         return Math.floor(Math.random()*this.upperLimit);
+      }
+   }
+);</pre>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">The external type stereotype</h2><div class="p">In relation
+to JavaScript, the EGL
+External type stereotype is <span class="synph"><span class="kwd">JavaScriptObject</span></span>,
+as shown in the following example:<pre class="codeblock">package client;
+
+ExternalType RandomNumberGenerator type JavaScriptObject
+   {
+      relativePath = """"""""randomnumber"""""""",
+      externalName = """"""""RandomNumberGenerator""""""""
+   }
+
+   upperLimit int {@Property{getMethod = """"""""getUpperLimit"""""""", 
+                             setMethod = """"""""setUpperLimit""""""""}};
+  
+   function generateRandomNumber() returns(int);
+end</pre>
+</div>
+<div class="p">The external type can include the <span class="synph"><span class="kwd">extends</span></span> clause,
+to reference an external type that represents a super class, as in
+the following example outline:<pre class="codeblock">ExternalType MyType extends OtherType type JavaScriptObject
+
+end</pre>
+</div>
+<div class="p">The external type also can include the following
+type-level properties, each of which takes a string:<dl>
+<dt class="dlterm"><span class="synph"><span class="kwd">relativePath</span></span></dt>
+
+<dd>The location of the JavaScript file
+in relation to the WebContent folder. The property setting is optional.
+If the JavaScript file
+is stored directly in the WebContent folder and not in a subfolder,
+set the <span class="synph"><span class="kwd">relativePath</span></span> property to an empty
+string. In any case, do not include a file name in the property value.<p>When
+the external type is implemented by a JavaScript file, you must set the <span class="synph"><span class="kwd">relativePath</span></span> property.
+When the external type is implemented by a built-in class, do not
+set the property.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">externalName</span></span></dt>
+
+<dd>Specifies the name of the JavaScript class.
+Do not specify the file extension <span class="filepath">.js</span>, which
+is assumed. <p>The property setting is optional. If you do not specify
+a value, the name of the JavaScript class
+is assumed to be the name of the external type.</p>
+<div class="p">You might use
+the <span class="synph"><span class="kwd">externalName</span></span> property to access a JavaScript class for which
+the name is an EGL reserved word.  For example, the following external
+type makes possible the access of a JavaScript class named <samp class="codeph">add</samp>,
+which is in the <samp class="codeph">WebContent/part1/part2/add.js</samp> file: <pre class="codeblock">ExternalType SumType type JavaScriptObject 
+                          {relativePath = """"""""part1/part2"""""""", externalName = """"""""add"""""""" }
+    ;
+end</pre>
+</div>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">includeFile</span></span></dt>
+
+<dd>Identifies an HTML file or other CSS or JavaScript files that are made available
+at run time. The path specified in <span class="synph"><span class="kwd">includeFile</span></span> is
+relative to the WebContent directory. An example is """"""""JS/myFile.js"""""""". <div class="p">The
+following file might be used if you were using the external type to
+reference a Dojo widget: <pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;script type=""""""""text/javascript"""""""" src=""""""""http://o.aolcdn.com/dojo/1.0.0/dojo/dojo.xd.js""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/script&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;style type=""""""""text/css""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   @import """"""""http://o.aolcdn.com/dojo/1.0.0/dijit/themes/dijit.css"""""""";
+   @import """"""""http://o.aolcdn.com/dojo/1.0.0/dijit/themes/tundra/tundra.css"""""""";
+   @import """"""""http://o.aolcdn.com/dojo/1.0.0/dojo/resources/dojo.css""""""""
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/style&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+        
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;script&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   dojo.require(""""""""dijit.form.Button"""""""");
+   dojo.require(""""""""dijit.form.Slider"""""""");
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/script&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
+</div>
+<p>That file loads the Dojo widget library
+and Dojo CSS files and starts the Dojo run time.</p>
+</dd>
+
+</dl>
+</div>
+<div class="p">As shown in the example of an external type,
+a field in that type can include the following field-level annotation:<dl>
+
+<dt class="dlterm"><span class="synph"><span class="kwd">Property</span></span></dt>
+
+<dd>This annotation is required if you want to access, from your EGL
+code, a JavaScript global
+field (a field of the form <samp class="codeph">this.myField</samp>). If you
+want to assign a value from your EGL code, the JavaScript must define the field in the
+function named """"""""constructor"""""""". However, you can retrieve a value from
+the JavaScript field regardless
+of where the field is defined in the JavaScript.<div class="p">In general, <span class="synph"><span class="kwd">Property</span></span> identifies JavaScript functions that
+get and set the JavaScript field
+value. You can use this property without specifying function names
+if the names of the functions are built with the word <dfn class="term">get</dfn> or <dfn class="term">set</dfn> followed
+by the variable name. For example, if the variable is <samp class="codeph">UpperLimit</samp> and
+the JavaScript class includes
+functions named <samp class="codeph">getUpperLimit()</samp> and <samp class="codeph">setUpperLimit()</samp>,
+you only need to add the complex property, as in this example: <pre class="codeblock">UpperLimit INT { @Property{} };</pre>
+</div>
+<div class="p">The
+fields in the <span class="synph"><span class="kwd">Property</span></span> are as follows:<dl>
+
+<dt class="dlterm"><span class="synph"><span class="kwd">getMethod</span></span></dt>
+
+<dd>A string (enclosed in quotation marks) containing the name of
+the get method for the specified variable (do not include parentheses).
+The method has no parameters, and its return value has the same type
+as the field.</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">setMethod</span></span></dt>
+
+<dd>A string (enclosed in quotation marks) containing the name of
+the set method for the specified variable (do not include parentheses).
+The method has one parameter that has the same type as the field.
+By convention the setMethod does not have a return value, but no error
+condition results if the method returns a value.</dd>
+
+</dl>
+</div>
+<p>If you specify only one of the two property
+fields, EGL assumes that the unspecified function is not available.
+An error does not occur unless an expression causes invocation of
+the function that is assumed to be missing.</p>
+<p>JavaScript field names are case sensitive,
+as is the field name in the external type. </p>
+</dd>
+
+</dl>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">Relationship of EGL and JavaScript data types</h2><div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. EGL and JavaScript data
+types</span></caption>
+<thead align="left">
+<tr valign="bottom">
+<th class="cellrowborder" align="left" valign="bottom" id="d97101e543">EGL type</th>
+
+<th class="cellrowborder" align="left" valign="bottom" id="d97101e546">JavaScript type
+(case-sensitive)</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+<tr>
+<td class="cellrowborder" valign="top" headers="d97101e543 ">STRING</td>
+
+<td class="cellrowborder" valign="top" headers="d97101e546 ">String</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d97101e543 ">BOOLEAN</td>
+
+<td class="cellrowborder" valign="top" headers="d97101e546 ">Boolean</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d97101e543 ">SMALLINT, INT, FLOAT, SMALLFLOAT</td>
+
+<td class="cellrowborder" valign="top" headers="d97101e546 ">Number</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d97101e543 ">BIGINT, DECIMAL, MONEY, NUM</td>
+
+<td class="cellrowborder" valign="top" headers="d97101e546 ">egl.javascript.BigDecimal (as described in a
+later section)</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" headers="d97101e543 ">DATE, TIME, TIMESTAMP</td>
+
+<td class="cellrowborder" valign="top" headers="d97101e546 ">Date</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+</div>
+<p>EGL arrays are passed to JavaScript as JavaScript arrays.  If an EGL type (such
+as an array) is set to null, the JavaScript code
+receives a JavaScript null.</p>
+</div>
+
+<div class="section"><h2 class="sectiontitle">egl.javascript.BigDecimal</h2><p>The supplied JavaScript class egl.javascript.BigDecimal
+can precisely represent numbers that have a very large number of digits.
+This class also has methods for performing mathematical operations
+with BigDecimals.  </p>
+<p>The native numeric type in JavaScript is the Number class, which
+is a floating-point representation of numbers. The class is imprecise
+and cannot represent many values. Rounding errors might occur when
+you do math with values of the Number class.  </p>
+<div class="p">A BigDecimal
+object cannot be changed after it has been created.  For example,
+to add two BigDecimal values, write the code as follows:<pre class="codeblock">   var result = bigDecimal1.add( bigDecimal2 ); </pre>
+</div>
+<div class="p">The
+result is lost if you write the code as follows:<pre class="codeblock">   bigDecimal1.add( bigDecimal2 ); </pre>
+</div>
+<div class="p">The
+egl.javascript.BigDecimal constructor takes one argument, which is
+a String that contains the wanted value for the BigDecimal. Numbers
+in String form must have at least one digit and cannot contain a blank.
+They can have a leading sign, can have a decimal point, and can be
+in exponential notation. Here are some valid arguments:<ul>
+<li>""""""""0""""""""</li>
+
+<li>""""""""12""""""""</li>
+
+<li>""""""""-76""""""""</li>
+
+<li>""""""""12.70""""""""</li>
+
+<li>""""""""+0.003""""""""</li>
+
+<li>""""""""17.""""""""</li>
+
+<li>"""""""".5""""""""</li>
+
+<li>""""""""4E+9""""""""</li>
+
+<li>""""""""0.73e-7""""""""</li>
+
+</ul>
+</div>
+<div class="p">Here are JavaScript methods
+that use objects of egl.javascript.BigDecimal (such objects are identified
+as <em>bd</em>, and Number objects are identified as <em>n</em>):<ul>
+<li>abs() returns the absolute value of the BigDecimal</li>
+
+<li>add(<em>bd</em>) returns the sum of the current object and the argument.
+ </li>
+
+<li>compareTo(<em>bd</em>) returns -1 if the current object is less
+than the argument, 1 if the current object is greater than the argument,
+or 0 if they are equal.  </li>
+
+<li>divide(<em>bd</em>) returns the result of dividing the current object
+by the argument.</li>
+
+<li>divideInteger(<em>bd</em>) returns the integer part of the result
+of dividing the current object by the argument.  </li>
+
+<li>equals(<em>obj</em>) returns true if the argument, which can be
+any object, is a BigDecimal with the same value and scale (number
+of decimal digits) as the current object. This method returns false
+if the argument is not a BigDecimal, or is a BigDecimal with a different
+value or scale. The obj parameter is any object.</li>
+
+<li>max(<em>bd</em>) returns the current object or the argument, whichever
+is greater.</li>
+
+<li>min(<em>bd</em>) returns the current object or the parameter, whichever
+is smaller.  </li>
+
+<li>movePointLeft(<em>n</em>) returns a BigDecimal that is equivalent
+to the current object (a Number), but with the decimal point shifted
+to the left by the specified number of positions.  </li>
+
+<li>movePointRight(<em> n</em>) returns a BigDecimal that is equivalent
+to the current object (a Number), but with the decimal point shifted
+to the right by the specified number of positions.</li>
+
+<li>multiply(<em>bd</em>) returns the result of multiplying the current
+object by the argument.  </li>
+
+<li>negate() returns the negation of the current object.  </li>
+
+<li>pow(<em>bd</em>) returns the result of raising the current object
+to the specified power. The power must be in the range -999999999
+through 999999999 and must have a decimal part of zero.  </li>
+
+<li>remainder(<em>bd</em>) divides the current object by the argument
+and returns the remainder.  </li>
+
+<li>setScale(<em>n</em>, <em>mode</em>) returns a BigDecimal with the
+given <em>scale</em> (number of decimal digits). The argument <em>n</em> is
+a Number, and the optional argument <em>mode</em> is a constant, as
+described later.<div class="p">If <em>n</em> is larger than the current scale, the
+method adds trailing zeros to the decimal part of the number. If <em>n</em> is
+smaller than the current scale, the method removes trailing digits
+from the decimal part of the number, and <em>mode</em> indicates how
+to round the remaining digits. Here are the possible values of <em>mode</em>: <ul>
+<li>The default (egl.javascript.BigDecimal.prototype.ROUND_UNNECESSARY)
+indicates that no rounding is necessary.</li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_CEILING causes rounding
+to a more positive number.  </li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_DOWN causes rounding
+toward zero.  </li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_FLOOR causes rounding
+to a more negative number.  </li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_HALF_DOWN causes rounding
+to the nearest neighbor, where an equidistant value is rounded down.</li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_HALF_EVEN causes rounding
+to the nearest neighbor, where an equidistant value is rounded to
+the nearest even neighbor.</li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_HALF_UP causes rounding
+to the nearest neighbor, where an equidistant value is rounded up.
+  </li>
+
+<li>egl.javascript.BigDecimal.prototype.ROUND_UP causes rounding away
+from zero.</li>
+
+</ul>
+</div>
+<p> </p>
+</li>
+
+<li>scale() returns the number of digits after the decimal point,
+as a Number.  </li>
+
+<li>signum() returns -1 if the number is negative, zero if the number
+is zero, and 1 if the number is positive.  </li>
+
+<li>subtract(<em>bd</em>) returns the result of subtracting the parameter
+from the current object.  </li>
+
+<li>toString() returns a String representation of the BigDecimal object. </li>
+
+</ul>
+</div>
+<div class="p">The following constants are also defined by BigDecimal:<ul>
+<li>egl.javascript.BigDecimal.prototype.ZERO is BigDecimal with the
+value zero.</li>
+
+<li>egl.javascript.BigDecimal.prototype.ONE is a BigDecimal with the
+value one.</li>
+
+<li>egl.javascript.BigDecimal.prototype.TEN is a BigDecimal with the
+value ten.</li>
+
+</ul>
+</div>
+</div>
+
+<div class="section"><h2 class="sectiontitle">JavaScriptObjectException</h2><p>If a non-generated JavaScript function is invoked
+by way of an external type and if the function throws an error, the
+invocation causes an EGL <span class="synph"><span class="kwd">JavaScriptObjectException</span></span>.
+ Like every EGL exception, the <span class="synph"><span class="kwd">JavaScriptObjectException</span></span> has <span class="synph"><span class="kwd">message</span></span> and <span class="synph"><span class="kwd">messageID</span></span> fields.</p>
+<p>If
+a JavaScript error object
+is caught, the <span class="synph"><span class="kwd">message</span></span> field is set from
+the equivalent field of the error object. Otherwise, the <span class="synph"><span class="kwd">message</span></span> field
+receives a string that is equivalent to the value thrown by the JavaScript function.</p>
+<div class="p">Here
+is the additional field in <span class="synph"><span class="kwd">JavaScriptObjectException</span></span>:<dl>
+
+<dt class="dlterm"><span class="synph"><span class="kwd">name</span></span></dt>
+
+<dd>If a JavaScript error
+object is caught, the <span class="synph"><span class="kwd">name</span></span> field is set
+from the equivalent field of the error object. Otherwise, the <span class="synph"><span class="kwd">name</span></span> field
+receives an empty string.</dd>
+
+</dl>
+</div>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>

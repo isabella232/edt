@@ -46,17 +46,17 @@ import org.eclipse.edt.rui.widgets.TextField;
 
 handler MyHandler type RUIHandler{initialUI =[myTextField, myRadioGroup]}
 
-   myTextField TextField{text = "On Monday?"};
+   myTextField TextField{text = """"""""On Monday?""""""""};
 
-   myRadioGroup RadioGroup{groupName = "abc", 
-                           options =["Monday", "Tuesday"], 
+   myRadioGroup RadioGroup{groupName = """"""""abc"""""""", 
+                           options =[""""""""Monday"""""""", """"""""Tuesday""""""""], 
                            onClick ::= myRadio};
 
    function myRadio(e Event in)
-      if(myRadioGroup.selected == "Tuesday")
-         myTextField.text = "No, on Monday!";
+      if(myRadioGroup.selected == """"""""Tuesday"""""""")
+         myTextField.text = """"""""No, on Monday!"""""""";
       else
-         myTextField.text = "No, on Tuesday!";
+         myTextField.text = """"""""No, on Tuesday!"""""""";
       end
    end
 end</pre>

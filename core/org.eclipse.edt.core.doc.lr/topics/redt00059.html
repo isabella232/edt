@@ -63,91 +63,91 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 */
 static function $Plus(value EDecimal in) 
-       returns (EDecimal) {@Operation{"+"}};
+       returns (EDecimal) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation +} Adds two numbers.
 */
 static function $Plus(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EDecimal) {@Operation{"+"}};
+       returns (EDecimal) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation -} Negates the value.
 */
 static function $Minus(value EDecimal in) 
-       returns (EDecimal) {@Operation{"-"}};
+       returns (EDecimal) {@Operation{""""""""-""""""""}};
 
 /**
 	 * {@Operation -} Subtracts one number from another.
 */
 static function $Minus(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EDecimal) {@Operation{"-"}};
+       returns (EDecimal) {@Operation{""""""""-""""""""}};
 
 /**
 	 * {@Operation *} Multiplies two numbers.
 */
 static function $Multiply(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EDecimal) {@Operation{"*"}};
+       returns (EDecimal) {@Operation{""""""""*""""""""}};
 
 /**
 	 * {@Operation /} Divides one number by another.
 */
 static function $Divide(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EDecimal) {@Operation{"/"}};
+       returns (EDecimal) {@Operation{""""""""/""""""""}};
 
 /**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 */
 static function $Modulo(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EDecimal) {@Operation{"%"}};
+       returns (EDecimal) {@Operation{""""""""%""""""""}};
 
 /**
 	 * {@Operation **} Computes lvalue to the power of rvalue.
 */
 static function $PowerOf(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EFloat) {@Operation{"**"}};
+       returns (EFloat) {@Operation{""""""""**""""""""}};
 
 /**
-* {@Operation &lt;} Compares two numbers.
+* {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
 */
 static function $LT(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EBoolean) {@Operation{"&lt;"}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-	 * {@Operation &gt;} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
 */
 static function $GT(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EBoolean) {@Operation{"&gt;"}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-	 * {@Operation &lt;=} Compares two numbers.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
 */
 static function $LTE(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EBoolean) {@Operation{"&lt;="}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-	 * {@Operation &gt;=} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
 */
 static function $GTE(lvalue EDecimal in, rvalue EDecimal in) 
-       returns (EBoolean) {@Operation{"&gt;="}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
 	 * {@Operation ==} Compares two numbers.
 */
 static function $EQ(lvalue EDecimal in, rvalue EDecimal in) 
-       returns(EBoolean) {@Operation{"=="}};
+       returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
 	 * {@Operation !=} Compares two numbers.
 */
 static function $NEQ(lvalue EDecimal in, rvalue EDecimal in) 
-       returns(EBoolean) {@Operation{"!="}};
+       returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
  * {@Operation widen} Converts a bigint to a decimal of arbitrary precision.
 */
 static function asDecimal(value EBigint in) 
-       returns(EDecimal) {@Operation{"widen"}};
+       returns(EDecimal) {@Operation{""""""""widen""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a bigint to a decimal with the specified precision.
@@ -155,7 +155,7 @@ static function asDecimal(value EBigint in)
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 */
 static function asDecimal(value EBigint in, length EInt in, decimals EInt in)
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
 	* {@Operation narrow} Converts any decimal to a decimal with the specified precision.
@@ -163,13 +163,13 @@ static function asDecimal(value EBigint in, length EInt in, decimals EInt in)
 * @throws TypeCastException if the value can't be represented with the specified precision.
 */
 static function asDecimal(value EDecimal in, length EInt in, decimals EInt in)
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation widen} Converts a smallint to a decimal of arbitrary precision.
 */
 static function asDecimal(value ESmallint in) 
-       returns(EDecimal) {@Operation{"widen"}};
+       returns(EDecimal) {@Operation{""""""""widen""""""""}};
 
 /**
  * {@Operation narrow} Converts a smallint to a decimal with the specified precision.
@@ -177,7 +177,7 @@ static function asDecimal(value ESmallint in)
  * @throws TypeCastException if the value can't be represented with the specified precision.
 */
 static function asDecimal(value ESmallint in, length EInt in, decimals EInt in)
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a smallfloat to a decimal of arbitrary precision.
@@ -185,7 +185,7 @@ static function asDecimal(value ESmallint in, length EInt in, decimals EInt in)
 	 * @throws TypeCastException if the value is out of range.
 */
 static function asDecimal(value ESmallfloat in) 
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
  * {@Operation narrow} Converts a smallfloat to a decimal with the specified precision.
@@ -193,13 +193,13 @@ static function asDecimal(value ESmallfloat in)
  * @throws TypeCastException if the value can't be represented with the specified precision.
 */
 static function asDecimal(value ESmallfloat in, length EInt in, decimals EInt in)
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
 	* {@Operation widen} Converts an int to a decimal of arbitrary precision.
 */
 static function asDecimal(value EInt in) 
-       returns(EDecimal) {@Operation{"widen"}};
+       returns(EDecimal) {@Operation{""""""""widen""""""""}};
 
 /**
  * {@Operation narrow} Converts an int to a decimal with the specified precision.
@@ -207,7 +207,7 @@ static function asDecimal(value EInt in)
  * @throws TypeCastException if the value can't be represented with the specified precision.
 */
 static function asDecimal(value EInt in, length EInt in, decimals EInt in) 
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 	/**
   * {@Operation narrow} Converts a float to a decimal of arbitrary precision.
@@ -215,7 +215,7 @@ static function asDecimal(value EInt in, length EInt in, decimals EInt in)
   * @throws TypeCastException if the value is out of range.
 */
 static function asDecimal(value EFloat in) 
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 	/**
 	 * {@Operation narrow} Converts a float to a decimal with the specified precision.
@@ -223,7 +223,7 @@ static function asDecimal(value EFloat in)
 	 * @throws TypeCastException if the value is out of range.
 	 */
 	static function asDecimal(value EFloat in, length EInt in, decimals EInt in)
-        returns(EDecimal) {@Operation{"narrow"}};
+        returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 	
 	/**
 	 * {@Operation narrow} Converts a string to a decimal.  The string is parsed
@@ -234,20 +234,20 @@ static function asDecimal(value EFloat in)
 	 * @throws TypeCastException if the string can't be parsed into a decimal.
 	 */
 	static function asDecimal(value EString in) 
-        returns(EDecimal) {@Operation{"narrow"}};
+        returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 	
 static function asDecimal(value EString in, length EInt in, decimals EInt in)
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 
 static function asDecimal(value ENumber in) 
-       returns(EDecimal) {@Operation{"narrow"}};
+       returns(EDecimal) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation widen} Converts a decimal to a number.
 */
 static function asNumber(value EDecimal in) 
-       returns(ENumber) {@Operation{"widen"}};
+       returns(ENumber) {@Operation{""""""""widen""""""""}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
@@ -263,9 +263,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00059__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00059__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d24655e107">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24805e107">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d24655e110">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24805e110">Issue</th>
 
 </tr>
 
@@ -274,17 +274,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00059__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d24655e107 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24805e107 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24655e110 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24805e110 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00059__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d24655e107 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24805e107 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24655e110 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d24805e110 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

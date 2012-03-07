@@ -32,7 +32,7 @@ use the Class classifier to define custom types. </p>
 <div class="section"><h2 class="sectiontitle">ANY</h2><p>A field of type ANY can reference an
 instance of any type. For example, if you assign the value 5 to the
 field, the field is referencing an instance of type INT. If you then
-assign the value “yes!," a new memory area is assigned the value,
+assign the value “yes!,"""" a new memory area is assigned the value,
 and the field references that area, which is of type STRING. </p>
 <p>One
 purpose of a field of type ANY is to store different types of values
@@ -44,8 +44,8 @@ an ordered sequence of elements, and you can increase or decrease
 the number of those elements at run time.</p>
 <div class="p">The following code
 initializes named lists with literal values:<pre class="codeblock">myINTList     INT[] = [1,2,3];
-mySTRINGList  STRING[] = ["bye", "ciao"];
-myBooleanList BOOLEAN[] = [ (10000 &gt; 50000), (10000 &lt; 50000) ];   
+mySTRINGList  STRING[] = [""""bye"""", """"ciao""""];
+myBooleanList BOOLEAN[] = [ (10000 &gt;&gt;&gt;&gt; 50000), (10000 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 50000) ];   
 my2Dimension  INT[][] = [[1,2],[3,4]];
 </pre>
 </div>
@@ -90,8 +90,8 @@ a dictionary, which is an instance that is based on the Dictionary
 type:<pre class="codeblock">myDictionary Dictionary
 {
    driverID  = myInteger,
-   lastName  = "Twain",
-   firstName = "Mark"
+   lastName  = """"Twain"""",
+   firstName = """"Mark""""
 	};</pre>
 </div>
 <p>As shown, a dictionary is composed of a set

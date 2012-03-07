@@ -70,9 +70,9 @@ EGL: <pre class="codeblock"><strong>function booleanAsString(value boolean in) r
 * Accept a Boolean value and return the equivalent string.           *
 **********************************************************************/
    if ( value )
-      return( "true" );
+      return( """"true"""" );
    else
-      return( "false" );
+      return( """"false"""" );
    end
 	end
 
@@ -135,7 +135,7 @@ end
 /********************************************************************* 
 * Accept a date and format it in accordance with an input pattern.   *
 * For details on values for the second parameter, see                *
-* "Pattern characters used to format non-string values to strings."  *
+* """"Pattern characters used to format non-string values to strings.""""  *
 **********************************************************************/
    if ( dateValue == null || format == null )
       return( null );
@@ -170,7 +170,7 @@ end
 /******************************************************************** 
 * Accept a numeric value and format it in accordance with an input  *
 * pattern. For details on values for the second parameter, see      *
-* "Pattern characters used to format non-string values to strings." *
+* """"Pattern characters used to format non-string values to strings."""" *
 *********************************************************************/
    if ( value == null || format == null )
       return( null );
@@ -179,7 +179,7 @@ end
    end
 end
 
-<strong>function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in) 
+<strong>function formatTimeStamp(timestampvalue timestamp(""""yyyyMMddHHmmssffffff"""")? in) 
          returns(string?)</strong>
 /********************************************************************* 
 * Accept a timestamp value and format it in accordance               *
@@ -192,13 +192,13 @@ end
    end
 end
 	
-<strong>function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in,
+<strong>function formatTimeStamp(timestampvalue timestamp(""""yyyyMMddHHmmssffffff"""")? in,
                          format string? in)
          returns (string?)</strong>
 /********************************************************************* 
 * Accept a timestamp value and format it in accordance with an input *
 * pattern. For details on values for the second parameter, see       *
-* "Pattern characters used to format non-string values to strings."  *
+* """"Pattern characters used to format non-string values to strings.""""  *
 **********************************************************************/
    if ( timestampvalue == null || format == null )
       return( null );
@@ -302,12 +302,12 @@ end
       return( null );
    else
       result string;
-      fiftyBlanks string = "                                                  ";
-      while ( characterCount &gt;= 50 )
+      fiftyBlanks string = """"                                                  """";
+      while ( characterCount &gt;&gt;&gt;&gt;= 50 )
          result ::= fiftyBlanks;
          characterCount -= 50;
       end
-      if ( characterCount &gt; 0 )
+      if ( characterCount &gt;&gt;&gt;&gt; 0 )
          result ::= fiftyBlanks[1:characterCount];
       end
       return( result );
@@ -342,9 +342,9 @@ as an EGL library, not as an EGL external type.</p>
 <div class="tablenoborder"><a name="redt00239__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00239__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d80014e261">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d80164e261">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d80014e264">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d80164e264">Issue</th>
 
 </tr>
 
@@ -353,17 +353,17 @@ as an EGL library, not as an EGL external type.</p>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00239__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d80014e261 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d80164e261 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d80014e264 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d80164e264 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00239__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d80014e261 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d80164e261 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d80014e264 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d80164e264 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

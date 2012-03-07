@@ -35,7 +35,7 @@ dynamic access when you refer to any of the following fields:<ul>
 </ul>
 </div>
 
-<div class="p">Here are examples of the last case:<pre class="codeblock">myCustomer["customerName"]
+<div class="p">Here are examples of the last case:<pre class="codeblock">myCustomer[""""customerName""""]
 </pre>
 </div>
 
@@ -54,14 +54,14 @@ EGL uses dynamic access on any fields that follow. </p>
 <div class="p">The following example shows various methods of dynamic access:<pre class="codeblock">// Define a Dictionary named point
 point Dictionary{x=1, y=1};
 
-// Access value at key "x" of point
-anInt = point["x"];
+// Access value at key """"x"""" of point
+anInt = point[""""x""""];
 
 // Access point using normal data access syntax
 anInt = point.x ;
 
-// Access X using variable with value "x"
-str String = "x";
+// Access X using variable with value """"x""""
+str String = """"x"""";
 anInt = point[ str ];
 </pre>
 </div>

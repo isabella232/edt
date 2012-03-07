@@ -73,9 +73,9 @@ BorderContainer DojoBorderContainer{
                             children = [myLabel, myOtherTextField]}
    	 ]};
 
-   myTextField DojoTextField {text = "Read!", readonly = true};
-   myButton DojoButton{text = "Click!", onClick ::= myButtonResponse};
-   myLabel TextLabel {text = "Write: "};
+   myTextField DojoTextField {text = """"""""Read!"""""""", readonly = true};
+   myButton DojoButton{text = """"""""Click!"""""""", onClick ::= myButtonResponse};
+   myLabel TextLabel {text = """"""""Write: """"""""};
    myOtherTextField DojoTextField {readonly = false};
    
    function myButtonResponse(e Event in)

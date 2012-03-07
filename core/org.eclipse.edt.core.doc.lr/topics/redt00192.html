@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="TextLabel widget"></meta>
-<meta name="abstract" content="A Rich UI textLabel widget displays a string that the user cannot change. The widget is different from a span because inclusion of an HTML segment (such as &lt;b&gt;this code&lt;/b&gt;) is displayed as is, including the angle brackets."></meta>
-<meta name="description" content="A Rich UI textLabel widget displays a string that the user cannot change. The widget is different from a span because inclusion of an HTML segment (such as &lt;b&gt;this code&lt;/b&gt;) is displayed as is, including the angle brackets."></meta>
+<meta name="abstract" content="A Rich UI textLabel widget displays a string that the user cannot change. The widget is different from a span because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) is displayed as is, including the angle brackets."></meta>
+<meta name="description" content="A Rich UI textLabel widget displays a string that the user cannot change. The widget is different from a span because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) is displayed as is, including the angle brackets."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -25,7 +25,7 @@
 
 <div><p>A Rich UI textLabel widget displays a string that the user
 cannot change. The widget is different from a span because inclusion
-of an HTML segment (such as &lt;b&gt;this code&lt;/b&gt;) is displayed as
+of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) is displayed as
 is, including the angle brackets. </p>
 
 <div class="p">Here is an example:<pre class="codeblock">package client;
@@ -35,11 +35,11 @@ import org.eclipse.edt.rui.widgets.TextLabel;
 
 handler MyHandler type RUIHandler{initialUI =[myDiv]}
    myDiv Div{children = [myLabel01, myLabel02, myLabel03]};
-   myLabel01 TextLabel{text = "mix blue ", color = "blue"};
-   myLabel02 TextLabel{text = " and yellow ", 
-                       backgroundColor = "black", 
-                       color = "yellow"};
-   myLabel03 TextLabel{text = " to see green", color = "green"};
+   myLabel01 TextLabel{text = """"""""mix blue """""""", color = """"""""blue""""""""};
+   myLabel02 TextLabel{text = """""""" and yellow """""""", 
+                       backgroundColor = """"""""black"""""""", 
+                       color = """"""""yellow""""""""};
+   myLabel03 TextLabel{text = """""""" to see green"""""""", color = """"""""green""""""""};
 end
 </pre>
 </div>

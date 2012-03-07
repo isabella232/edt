@@ -41,9 +41,9 @@ for EGL Developers, the type definition for Timestamp is ETimestamp.</p>
 <dt class="dlterm"><a name="redt00053__use"><!-- --></a>Example use</dt>
 
 <dd>After the following code runs, the value of <samp class="codeph">result</samp> is
-the current timestamp:<pre class="codeblock">result Timestamp("yyyyMMddHHmm");
+the current timestamp:<pre class="codeblock">result Timestamp(""""""""yyyyMMddHHmm"""""""");
 </pre>
-<div class="p">Here is a way to assign a timestamp instance: <pre class="codeblock">result02 Timestamp? = new Timestamp("yyyyMMddHHmm");</pre>
+<div class="p">Here is a way to assign a timestamp instance: <pre class="codeblock">result02 Timestamp? = new Timestamp(""""""""yyyyMMddHHmm"""""""");</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -59,40 +59,40 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 }
 
 /**
-  * {@Operation &lt;} Compares two timestamps.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two timestamps.
   */
    static function $LT(lvalue ETimestamp in, rvalue ETimestamp in) 
-          returns (EBoolean) {@Operation{"&lt;"}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-  * {@Operation &gt;} Compares two timestamps.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two timestamps.
   */
     static function $GT(lvalue ETimestamp in, rvalue ETimestamp in) 
-           returns (EBoolean) {@Operation{"&gt;"}};
+           returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-  * {@Operation &lt;=} Compares two timestamps.
+  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two timestamps.
   */
    static function $LTE(lvalue ETimestamp in, rvalue ETimestamp in) 
-          returns (EBoolean) {@Operation{"&lt;="}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-  * {@Operation &gt;=} Compares two timestamps.
+  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two timestamps.
   */
    static function $GTE(lvalue ETimestamp in, rvalue ETimestamp in) 
-          returns (EBoolean) {@Operation{"&gt;="}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
   * {@Operation ==} Compares two timestamps.
   */
    static function $EQ(lvalue ETimestamp in, rvalue ETimestamp in) 
-          returns(EBoolean) {@Operation{"=="}};
+          returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
   * {@Operation !=} Compares two timestamps.
   */
    static function $NEQ(lvalue ETimestamp in, rvalue ETimestamp in) 
-          returns(EBoolean) {@Operation{"!="}};
+          returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
   * {@Operation narrow} Converts a string to a timestamp.  
@@ -108,14 +108,14 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * or the pattern is invalid.
   */
    static function asTimestamp(value EString in, pattern EString in) 
-          returns (ETimestamp) {@Operation{"narrow"}};
+          returns (ETimestamp) {@Operation{""""""""narrow""""""""}};
 
 /**
   * {@Operation widen} Converts any timestamp to a timestamp 
   * with the specified pattern.
   */
    static function asTimestamp(value ETimestamp in, pattern EString in) 
-          returns (ETimestamp) {@Operation{"widen"}};
+          returns (ETimestamp) {@Operation{""""""""widen""""""""}};
 
    function dayOf() returns(EInt);
 
@@ -127,7 +127,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 
    function dateOf() returns(EDate);
 
-   //TODO this really should return ETimestamp("hhmmss").
+   //TODO this really should return ETimestamp(""""""""hhmmss"""""""").
    function timeOf() returns(ETimestamp);
 
    function extend(timeSpanPattern EString in) returns(ETimestamp);
@@ -144,9 +144,9 @@ specific, and fewer digits might be supported.<p></p>
 <div class="tablenoborder"><a name="redt00053__table_comments"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__table_comments" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. For additional information</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" id="d23304e101">Conversion rules</th>
+<th class="cellrowborder" valign="bottom" id="d23454e101">Conversion rules</th>
 
-<th class="cellrowborder" valign="bottom" id="d23304e104">Reference</th>
+<th class="cellrowborder" valign="bottom" id="d23454e104">Reference</th>
 
 </tr>
 
@@ -154,21 +154,21 @@ specific, and fewer digits might be supported.<p></p>
 
 <tbody>
 <tr>
-<td class="cellrowborder" valign="top" headers="d23304e101 ">To convert a string to a timestamp.</td>
+<td class="cellrowborder" valign="top" headers="d23454e101 ">To convert a string to a timestamp.</td>
 
-<td class="cellrowborder" valign="top" headers="d23304e104 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
+<td class="cellrowborder" valign="top" headers="d23454e104 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d23304e101 ">To convert a timestamp to a string, in the absence
+<td class="cellrowborder" valign="top" headers="d23454e101 ">To convert a timestamp to a string, in the absence
 of a format.</td>
 
-<td class="cellrowborder" valign="top" headers="d23304e104 ">See “String and EString types”; in particular,
+<td class="cellrowborder" valign="top" headers="d23454e104 ">See “String and EString types”; in particular,
 the comments for the <span class="synph"><span class="kwd">asString</span></span> function.
 As suggested in the following example, the <span class="synph"><span class="kwd">as String</span></span> clause
-invokes that function: <pre class="codeblock">result Timestamp("yyyyMMddHHmm") 
-   = "200401241201";
+invokes that function: <pre class="codeblock">result Timestamp(""""""""yyyyMMddHHmm"""""""") 
+   = """"""""200401241201"""""""";
 sysLib.writeStdOut(result as String);</pre>
 <div class="p">Here is the example
 output:<pre class="codeblock">2004-01-24 12:01</pre>
@@ -178,10 +178,10 @@ output:<pre class="codeblock">2004-01-24 12:01</pre>
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" headers="d23304e101 ">To convert a timestamp to a string, in the presence
+<td class="cellrowborder" valign="top" headers="d23454e101 ">To convert a timestamp to a string, in the presence
 of a format. </td>
 
-<td class="cellrowborder" valign="top" headers="d23304e104 ">See “StringLib.format.” Also, note the set of
+<td class="cellrowborder" valign="top" headers="d23454e104 ">See “StringLib.format.” Also, note the set of
 useful formats in “Constants library.”</td>
 
 </tr>
@@ -199,9 +199,9 @@ useful formats in “Constants library.”</td>
 <div class="tablenoborder"><a name="redt00053__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00053__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d23304e178">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23454e178">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d23304e181">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d23454e181">Issue</th>
 
 </tr>
 
@@ -210,17 +210,17 @@ useful formats in “Constants library.”</td>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00053__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d23304e178 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23454e178 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23304e181 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23454e181 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00053__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d23304e178 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d23454e178 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23304e181 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d23454e181 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

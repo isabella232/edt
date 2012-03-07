@@ -28,8 +28,8 @@ even if you mix reference and value types. For example, if you declare
 a constant of a reference type such as STRING, the assigned value
 is protected: </p>
 
-<div class="p"><pre class="codeblock">const myString STRING = "Unchanging";
-myString = "Error!";   // not valid    </pre>
+<div class="p"><pre class="codeblock">const myString STRING = """"Unchanging"""";
+myString = """"Error!"""";   // not valid    </pre>
 </div>
 
 <div class="p">A constant of a reference type other than a simple type <em>can</em> be

@@ -53,102 +53,102 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 /**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
-static function $Plus(value EInt in) returns (EInt) {@Operation{"+"}};
+static function $Plus(value EInt in) returns (EInt) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation +} Adds two numbers.
 	 */
 static function $Plus(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"+"}};
+       returns (EInt) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation -} Negates the value.
 	 */
-static function $Minus(value EInt in) returns (EInt) {@Operation{"-"}};
+static function $Minus(value EInt in) returns (EInt) {@Operation{""""""""-""""""""}};
 
 /**
 	 * {@Operation -} Subtracts one number from another.
 	 */
 static function $Minus(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"-"}};
+       returns (EInt) {@Operation{""""""""-""""""""}};
 
 	/**
 	 * {@Operation *} Multiplies two numbers.
 	 */
 static function $Multiply(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"*"}};
+       returns (EInt) {@Operation{""""""""*""""""""}};
 
 /**
 	 * {@Operation /} Divides one number by another.
 	 */
 static function $Divide(lvalue EInt in, rvalue EInt in) 
-       returns (EDecimal) {@Operation{"/"}};
+       returns (EDecimal) {@Operation{""""""""/""""""""}};
 
 /**
 	 * {@Operation %} Computes the remainder of dividing one number by another.
 	 */
 static function $Modulo(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"%"}};
+       returns (EInt) {@Operation{""""""""%""""""""}};
 
 /**
 	 * {@Operation **} Computes lvalue to the power of rvalue.
 	 */
 static function $PowerOf(lvalue EInt in, rvalue EInt in) 
-       returns (EFloat) {@Operation{"**"}};
+       returns (EFloat) {@Operation{""""""""**""""""""}};
 
 /**
-	 * {@Operation &amp;} Computes the bitwise AND of two numbers.
+	 * {@Operation &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;} Computes the bitwise AND of two numbers.
 	 */
 static function $BitAnd(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"&amp;"}};
+       returns (EInt) {@Operation{""""""""&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;""""""""}};
 
 /**
 	 * {@Operation |} Computes the bitwise OR of two numbers.
 	 */
 static function $BitOr(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"|"}};
+       returns (EInt) {@Operation{""""""""|""""""""}};
 
 /**
 	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
 	 */
 static function $BitXor(lvalue EInt in, rvalue EInt in) 
-       returns (EInt) {@Operation{"xor"}};
+       returns (EInt) {@Operation{""""""""xor""""""""}};
 
 /**
-	 * {@Operation &lt;} Compares two numbers.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
 	 */
 static function $LT(lvalue EInt in, rvalue EInt in) 
-       returns (EBoolean) {@Operation{"&lt;"}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
 /**
-	 * {@Operation &gt;} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
 	 */
 static function $GT(lvalue EInt in, rvalue EInt in) 
-       returns (EBoolean) {@Operation{"&gt;"}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
 /**
-	 * {@Operation &lt;=} Compares two numbers.
+	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
 	 */
 static function $LTE(lvalue EInt in, rvalue EInt in) 
-       returns (EBoolean) {@Operation{"&lt;="}};
+       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
 /**
-	 * {@Operation &gt;=} Compares two numbers.
+	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
 	 */
 static function $GTE(lvalue EInt in, rvalue EInt in) 
-       returns (EBoolean) {@Operation{"&gt;="}};
+       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
 /**
 	 * {@Operation ==} Compares two numbers.
 	 */
 static function $EQ(lvalue EInt in, rvalue EInt in) 
-       returns(EBoolean) {@Operation{"=="}};
+       returns(EBoolean) {@Operation{""""""""==""""""""}};
 
 /**
 	 * {@Operation !=} Compares two numbers.
 	 */
 static function $NEQ(lvalue EInt in, rvalue EInt in) 
-       returns(EBoolean) {@Operation{"!="}};
+       returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a string to an int.  The string is parsed
@@ -159,13 +159,13 @@ static function $NEQ(lvalue EInt in, rvalue EInt in)
 	 * @throws TypeCastException if the string can't be parsed into an int.
 	 */
 static function asInt(value EString in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 	
 /**
 	 * {@Operation widen} Converts an int to a smallint.
 	 */
 static function asInt(value ESmallint in) 
-       returns(EInt) {@Operation{"widen"}};
+       returns(EInt) {@Operation{""""""""widen""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a smallfloat to an int.  Digits after the
@@ -174,7 +174,7 @@ static function asInt(value ESmallint in)
 	 * @throws TypeCastException if the smallfloat is out of range for an int.
 	 */
 static function asInt(value ESmallfloat in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a decimal to an int.  Digits after the
@@ -183,7 +183,7 @@ static function asInt(value ESmallfloat in)
 	 * @throws TypeCastException if the decimal is out of range for an int.
 	 */
 static function asInt(value EDecimal in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a float to an int.  Digits after the
@@ -192,7 +192,7 @@ static function asInt(value EDecimal in)
 	 * @throws TypeCastException if the float is out of range for an int.
 	 */
 static function asInt(value EFloat in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 
 	/**
 	 * {@Operation narrow} Converts a bigint to an int.
@@ -200,7 +200,7 @@ static function asInt(value EFloat in)
 	 * @throws TypeCastException if the bigint is out of range for an int.
 	 */
 static function asInt(value EBigint in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 
 /**
 	 * {@Operation narrow} Converts a number to an int.  Digits after the
@@ -209,13 +209,13 @@ static function asInt(value EBigint in)
 	 * @throws TypeCastException if the number is out of range for an int.
 	 */
 static function asInt(value ENumber in) 
-       returns(EInt) {@Operation{"narrow"}};
+       returns(EInt) {@Operation{""""""""narrow""""""""}};
 	
 /**
 	 * {@Operation widen} Converts an int to a number.
 	 */
 static function asNumber(value EInt in) 
-       returns(ENumber) {@Operation{"widen"}};
+       returns(ENumber) {@Operation{""""""""widen""""""""}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
@@ -231,9 +231,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00057__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00057__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d24101e97">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24251e97">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d24101e100">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24251e100">Issue</th>
 
 </tr>
 
@@ -242,17 +242,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00057__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d24101e97 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24251e97 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24101e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24251e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00057__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d24101e97 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24251e97 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24101e100 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d24251e100 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

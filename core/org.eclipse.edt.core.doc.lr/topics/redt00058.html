@@ -54,59 +54,59 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
 
    /* Unary + has no effect on the numeric value.                       */
    static function $Plus(value EBigint in) 
-          returns (EBigint) {@Operation{"+"}};
+          returns (EBigint) {@Operation{""""""""+""""""""}};
 
    /* Operation + adds two numbers.                                     */
    static function $Plus(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBigint) {@Operation{"+"}};
+          returns (EBigint) {@Operation{""""""""+""""""""}};
 
    /* Operation - negates the value.                                    */
    static function $Minus(value EBigint in) 
-          returns (EBigint) {@Operation{"-"}};
+          returns (EBigint) {@Operation{""""""""-""""""""}};
 
    /* Operation - subtracts one number from another.                    */
    static function $Minus(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBigint) {@Operation{"-"}};
+          returns (EBigint) {@Operation{""""""""-""""""""}};
 
    /* Operation * multiplies two numbers.                               */
    static function $Multiply(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBigint) {@Operation{"*"}};
+          returns (EBigint) {@Operation{""""""""*""""""""}};
 
    /* Operation / divides one number by another.                        */
    static function $Divide(lvalue EBigint in, rvalue EBigint in) 
-          returns (EDecimal) {@Operation{"/"}};
+          returns (EDecimal) {@Operation{""""""""/""""""""}};
 
    /* Operation % computes the remainder of division.                   */
    static function $Modulo(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBigint) {@Operation{"%"}};
+          returns (EBigint) {@Operation{""""""""%""""""""}};
 
    /* Operation ** computes lvalue to the power of rvalue.              */
    static function $PowerOf(lvalue EBigint in, rvalue EBigint in) 
-          returns (EFloat) {@Operation{"**"}};
+          returns (EFloat) {@Operation{""""""""**""""""""}};
 
-   /* Operation &lt; compares two numbers.                                 */
+   /* Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; compares two numbers.                                 */
    static function $LT(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBoolean) {@Operation{"&lt;"}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
 
-   /* Operation &gt; compares two numbers.                                 */
+   /* Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; compares two numbers.                                 */
    static function $GT(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBoolean) {@Operation{"&gt;"}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
 
-   /* Operation &lt;= compares two numbers.                                */
+   /* Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= compares two numbers.                                */
    static function $LTE(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBoolean) {@Operation{"&lt;="}};
+          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
 
-   /* Operation &gt;= compares two numbers.                                */
+   /* Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;= compares two numbers.                                */
    static function $GTE(lvalue EBigint in, rvalue EBigint in) 
-          returns (EBoolean) {@Operation{"&gt;="}};
+          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
 
    /* Operation == compares two numbers.                                */
    static function $EQ(lvalue EBigint in, rvalue EBigint in) 
-          returns(EBoolean) {@Operation{"=="}};
+          returns(EBoolean) {@Operation{""""""""==""""""""}};
 
    /* Operation != compares two numbers.                                */
    static function $NEQ(lvalue EBigint in, rvalue EBigint in)
-          returns(EBoolean) {@Operation{"!="}};
+          returns(EBoolean) {@Operation{""""""""!=""""""""}};
 
    /* Operation narrow converts a string to a bigint.                    *
    *  The string might begin with an optional + or - sign.               *
@@ -116,47 +116,47 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
    *  A TypeCastException is thrown if the string can't be parsed        *
    *  into a bigint.                                                    */
    static function asBigint(value EString in) 
-          returns(EBigint) {@Operation{"narrow"}};
+          returns(EBigint) {@Operation{""""""""narrow""""""""}};
 
    /* Operation narrow converts a smallfloat to a bigint.                *
    *  Digits after the decimal point are discarded.                      *
    *  A TypeCastException is thrown if the smallfloat is out of range    *
    *  for a bigint.                                                     */
    static function asBigint(value ESmallfloat in) 
-          returns(EBigint) {@Operation{"narrow"}};
+          returns(EBigint) {@Operation{""""""""narrow""""""""}};
 
    /* Operation narrow converts a float to a bigint.                     *
    *  Digits after the decimal point are discarded.                      *
    *  A TypeCastException is thrown                                      *
    *  if the float is out of range for a bigint.                        */
    static function asBigint(value EFloat in) 
-          returns(EBigint) {@Operation{"narrow"}};
+          returns(EBigint) {@Operation{""""""""narrow""""""""}};
 
    /* Operation narrow converts a decimal to a bigint.                   *
    *  Digits after the decimal point are discarded.                      *
    *  A TypeCastException is thrown if the decimal is                    *
    *  out of range for a bigint.                                        */
    static function asBigint(value EDecimal in) 
-          returns(EBigint) {@Operation{"narrow"}};
+          returns(EBigint) {@Operation{""""""""narrow""""""""}};
 
    /* Operation narrow converts a number to a bigint.                    *
    *  Digits after the decimal point are discarded.                      *
    *  A TypeCastException is thrown if the number is out of              *
    *  range for a bigint.                                               */
    static function asBigint(value ENumber in) 
-          returns(EBigint) {@Operation{"narrow"}};
+          returns(EBigint) {@Operation{""""""""narrow""""""""}};
 
    /* Operation widen converts a smallint to a bigint.                  */
    static function asBigint(value ESmallint in)  
-          returns(EBigint) {@Operation{"widen"}};  
+          returns(EBigint) {@Operation{""""""""widen""""""""}};  
 
    /* Operation widen converts an int to a bigint.                      */
    static function asBigint(value EInt in) 
-          returns(EBigint) {@Operation{"widen"}};
+          returns(EBigint) {@Operation{""""""""widen""""""""}};
 
    /* Operation widen converts a bigint to a number.                    */
    static function asNumber(value EBigint in) 
-          returns(ENumber) {@Operation{"widen"}};
+          returns(ENumber) {@Operation{""""""""widen""""""""}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
@@ -172,9 +172,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00058__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00058__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d24378e98">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24528e98">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d24378e101">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d24528e101">Issue</th>
 
 </tr>
 
@@ -183,17 +183,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00058__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d24378e98 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24528e98 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24378e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24528e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00058__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d24378e98 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d24528e98 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d24378e101 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d24528e101 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

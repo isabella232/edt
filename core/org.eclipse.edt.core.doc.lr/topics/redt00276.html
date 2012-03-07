@@ -80,14 +80,14 @@ Library TestListMgr
    function nextTest()	
       testId String = getTestIdString();
 
-      SysLib.writeStdOut("Running test: " + testId);
+      SysLib.writeStdOut(""""""""Running test: """""""" + testId);
 
       /* acculmulate the status of each test method result 
        * into the multiStatus for one library
        */
       ms.addStatus(testId);
 
-      if(testIndex &lt; runTestMtds.getSize())
+      if(testIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; runTestMtds.getSize())
          testIndex += 1;
          runTestMtds[testIndex]();
       end
@@ -95,23 +95,23 @@ Library TestListMgr
 
    private function getTestIdString() returns (String)
       testMethodNamesSize int = testMethodNames.getSize();
-      testId String = testLibName + "::";
+      testId String = testLibName + """"""""::"""""""";
 
-      if(testIndex &lt;= testMethodNamesSize)
+      if(testIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= testMethodNamesSize)
          testId += testMethodNames[testIndex];
       else
 
          if(testIndex == (testMethodNamesSize+1))
-            testId += "endTest";
+            testId += """"""""endTest"""""""";
          else
-            testId +="INVALIDINDEXFOUND!!!";
+            testId +=""""""""INVALIDINDEXFOUND!!!"""""""";
          end
       end
       return (testId);
    end
 
    function nextTestLibrary()
-      if(libIndex &lt; LibraryStartTests.getSize())
+      if(libIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; LibraryStartTests.getSize())
          libIndex += 1;
          LibraryStartTests[libIndex]();	
       end	
@@ -119,21 +119,21 @@ Library TestListMgr
 
    /* helper functions to handle asynchronize call exceptions */
    function handleCallBackException(exp AnyException in, http IHttp in)
-      str String = "Caught service exception: " + 
-                   exp.messageID + ": " + exp.message;
+      str String = """"""""Caught service exception: """""""" + 
+                   exp.messageID + """""""": """""""" + exp.message;
 
       if(exp isa ServiceInvocationException)
          sexp ServiceInvocationException = exp as ServiceInvocationException;
-         s1 String = "detail1:" + sexp.detail1;
-         s2 String = "detail2:" + sexp.detail2;
-         s3 String = "detail3:" + sexp.detail3;
+         s1 String = """"""""detail1:"""""""" + sexp.detail1;
+         s2 String = """"""""detail2:"""""""" + sexp.detail2;
+         s3 String = """"""""detail3:"""""""" + sexp.detail3;
          str = str + ConstantsLib.NEWLINE;
          str = str + s1 + ConstantsLib.NEWLINE;
          str = str + s2 + ConstantsLib.NEWLINE;
          str = str + s3 + ConstantsLib.NEWLINE;
-         str = str + "Original request body: " + 
+         str = str + """"""""Original request body: """""""" + 
                http.getRequest().body + ConstantsLib.NEWLINE;
-         str = str + "Raw response body: " + 
+         str = str + """"""""Raw response body: """""""" + 
                      http.getResponse().body + ConstantsLib.NEWLINE;
       end
       LogResult.error(str);
@@ -143,14 +143,14 @@ Library TestListMgr
 
    /* prepend the assertion failure error message to Status */
    function caughtFailedAssertion(exp AssertionFailedException in)
-      sysLib.writeStdOut("AssertionFail - " + exp.message);	
+      sysLib.writeStdOut(""""""""AssertionFail - """""""" + exp.message);	
    end	
 
    /* caught the exception from the test */
    function caughtAnyException(exp AnyException in)
-      expMsg String = "uncaught exception for: " + getTestIdString();
-      expMsg += ConstantsLib.NEWLINE + "    =&gt; " + 
-                exp.messageID + ": " + exp.message;
+      expMsg String = """"""""uncaught exception for: """""""" + getTestIdString();
+      expMsg += ConstantsLib.NEWLINE + """"""""    =&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; """""""" + 
+                exp.messageID + """""""": """""""" + exp.message;
 
       LogResult.error(expMsg);
    end
@@ -158,13 +158,13 @@ Library TestListMgr
    function getBindingTypeString(bType ServiceBindingType) returns (String)
       case(bType)
          when(ServiceBindingType.DEDICATED)
-            return ("DEDICATED_BINDING");
+            return (""""""""DEDICATED_BINDING"""""""");
          when(ServiceBindingType.DEVELOP)
-            return ("DEVELOP_BINDING");
+            return (""""""""DEVELOP_BINDING"""""""");
          when(ServiceBindingType.DEPLOYED)
-            return ("DEPLOYED_BINDING");
+            return (""""""""DEPLOYED_BINDING"""""""");
          otherwise
-            return ("UNKNOWN Binding Type - NOT supported");	
+            return (""""""""UNKNOWN Binding Type - NOT supported"""""""");	
       end	
    end
 end</pre>
@@ -184,9 +184,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00276__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00276__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d95754e100">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d95886e100">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d95754e103">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d95886e103">Issue</th>
 
 </tr>
 
@@ -195,17 +195,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00276__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d95754e100 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d95886e100 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95754e103 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d95886e103 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00276__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d95754e100 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d95886e100 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95754e103 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d95886e103 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

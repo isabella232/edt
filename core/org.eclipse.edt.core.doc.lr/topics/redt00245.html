@@ -34,28 +34,40 @@ an API for accessing details in HTTP messages. </p>
 <tbody>
 <tr id="redt00245__compat_java">
 <td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">enumeration HttpMethod
-  _GET = 1,
-  POST = 2,
-  _DELETE = 3,
-  PUT = 4
+   _GET = 1,
+   POST = 2,
+   _DELETE = 3,
+   PUT = 4
 end</pre>
 </td>
 
 </tr>
 
 <tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler HttpRest implements IHttp
-   request Request;
-   response Response;
-   restType eglx.rest.ServiceType?;
-	
-   function getRequest()returns(Request)
-      return(request);
-   end
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType IHttp type NativeType 
+   private constructor();
+   function getRequest() returns (eglx.http.Request);
+   function getResponse() returns (eglx.http.Response);
+end</pre>
+</td>
 
-   function getResponse()returns(Response)
-      return(response);
-   end
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType HttpProxy extends HttpRest type NativeType
+   constructor();
+   constructor(serviceName string in);
+end</pre>
+</td>
+
+</tr>
+
+<tr>
+<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType HttpRest extends IHttp type NativeType
+   constructor();
+   request Request{@Property {}};
+   response Response{@Property {}};
+   restType eglx.rest.ServiceType?;
 end</pre>
 </td>
 
@@ -66,8 +78,8 @@ end</pre>
    uri string?;  							// Complete URL, encoded for HTTP use
    method HttpMethod?;			// Method being invoked. Default is _GET.
    encoding Encoding?;			// As described in relation to the eglx.services package.
-   charset string?;    		// character encoding; for example, "UTF-8".
-   contentType string?;		// content type; for example, "text/html".
+   charset string?;    		// character encoding; for example, """"""""UTF-8"""""""".
+   contentType string?;		// content type; for example, """"""""text/html"""""""".
    headers dictionary?;		// each entry identifies a header name and content.
    body string?;							// content of transported message.
    timeout int?;							// as described next.
@@ -103,10 +115,7 @@ make an additional bid quickly.</li>
 
 </ul>
 </div>
-<p>For Rich UI, you can override the value by setting the <span class="synph"><span class="kwd">timeout</span></span> property
-on the <span class="synph"><span class="kwd">call</span></span> statement that invokes the service.</p>
-<p>The
-default is an infinite wait.</p>
+<p>The default is an infinite wait.</p>
 </td>
 
 </tr>
@@ -153,9 +162,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00245__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00245__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d82298e152">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d82448e159">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d82298e155">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d82448e162">Issue</th>
 
 </tr>
 
@@ -164,17 +173,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00245__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d82298e152 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d82448e159 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82298e155 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d82448e162 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00245__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d82298e152 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d82448e159 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82298e155 ">See type-specific topics.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d82448e162 ">See type-specific topics.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -42,9 +42,8 @@ a token from a substring.</p>
 <dd><pre class="codeblock" id="redt00234__syntax_block"><a name="redt00234__syntax_block"><!-- --></a>static function getNextToken (source string in, 
                               index int inout, 
                               delimiters string in) 
-                returns (string);</pre>
+                returns (string?);</pre>
 <a name="redt00234__syntax_list"><!-- --></a><dl id="redt00234__syntax_list">
-
 <dt class="dlterm"><var class="varname">source</var></dt>
 
 <dd>Takes a source string.</dd>
@@ -74,32 +73,32 @@ with no characters separating one from the next.</dd>
 or 40 bytes:</p>
 <pre class="codeblock" id="redt00234__use_block"><a name="redt00234__use_block"><!-- --></a>program MyProgram type BasicProgram{}
 
-   source string = "CALL PROG1 arg1,arg2";
-   delimiters string = ", ";
+   source string = """"""""CALL PROG1 arg1,arg2"""""""";
+   delimiters string = """""""", """""""";
    index int = 1;
    max int;
    tokens string[];
-   token string? = "";
+   token string? = """""""""""""""";
 
    function main()
       max = source.length();
-      SysLib.writeStdout("max = " + max);
+      SysLib.writeStdout(""""""""max = """""""" + max);
 
-      while(index &lt; max)
+      while(index &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; max)
          token = StringLib.getNextToken(source, index, delimiters);
 
          if(token != null)
-            SysLib.writeStdout(token + " &lt;--- " + index);
+            SysLib.writeStdout(token + """""""" &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- """""""" + index);
          end
       end
    end
  end</pre>
 <div class="p">Here is the output, which tells the change in the
 value of <samp class="codeph">index</samp>:<pre class="codeblock">max = 20
-CALL &lt;--- 5
-PROG1 &lt;--- 11
-arg1 &lt;--- 16
-arg2 &lt;--- 21</pre>
+CALL &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 5
+PROG1 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 11
+arg1 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 16
+arg2 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 21</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -116,9 +115,9 @@ arg2 &lt;--- 21</pre>
 <div class="tablenoborder"><a name="redt00234__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00234__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d72255e141">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d72405e142">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d72255e144">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d72405e145">Issue</th>
 
 </tr>
 
@@ -127,17 +126,17 @@ arg2 &lt;--- 21</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00234__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d72255e141 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d72405e142 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72255e144 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d72405e145 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00234__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d72255e141 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d72405e142 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72255e144 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d72405e145 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

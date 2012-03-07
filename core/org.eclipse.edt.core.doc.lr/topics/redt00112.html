@@ -135,11 +135,11 @@ Here is the record declaration:<pre class="codeblock">myLayoutData GridLayoutDat
 of <samp class="codeph">Button2</samp> and <samp class="codeph">Button3</samp> are in the
 widget declarations themselves. Here are the declarations of all three
 buttons:</p>
-<pre class="codeblock">Button1 Button{ layoutData = myLayoutData, text = "Button1", onClick ::= respond };
+<pre class="codeblock">Button1 Button{ layoutData = myLayoutData, text = """"""""Button1"""""""", onClick ::= respond };
 Button2 Button{ layoutData = new GridLayoutData{ row = 2, column = 3 },
-                text = "Button2" };
+                text = """"""""Button2"""""""" };
 Button3 Button{ layoutData = new GridLayoutData{ row = 3, column = 4 },
-                text = "Button3" };
+                text = """"""""Button3"""""""" };
 </pre>
 <p>If a record of type <span class="synph"><span class="kwd">GridLayoutData</span></span> is
 assigned to the <span class="synph"><span class="kwd">layoutData</span></span> field of a widget
@@ -170,7 +170,7 @@ you might want the user's click of <samp class="codeph">Button1</samp> to cause
 the following display:</p>
 <p><br></br><img src="../images/redt_ui_richui_layout02.jpg" alt="Rich UI GridLayout example 3"></img><br></br></p>
 <div class="p">Here is a revised <samp class="codeph">respond</samp> function:<pre class="codeblock">function respond(e Event in)
-   myLabel TextLabel {text="replace button 2"};
+   myLabel TextLabel {text=""""""""replace button 2""""""""};
    myLabel.layoutData = new GridLayoutData {row=2, column=3};
    Button2.layoutData = null;
    myGridLayout.appendChild(myLabel);
@@ -214,18 +214,18 @@ second column and is centered in those two columns.</li>
    };
 
   myLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column=1},
-                     text = "Label: " };
+                     text = """"""""Label: """""""" };
 
   myTextField TextField{ layoutData = new GridLayoutData{ row = 1, column = 2,
-                         horizontalSpan = 2 }, text = "Text field"};
+                         horizontalSpan = 2 }, text = """"""""Text field""""""""};
 	
   myCheckBox CheckBox{ layoutData = new GridLayoutData{ row = 2, column = 2, 
-                       verticalSpan = 2 }, text="Check box" };
+                       verticalSpan = 2 }, text=""""""""Check box"""""""" };
 
   myButton Button{ layoutData = new GridLayoutData{ row = 4, column = 1,
                        horizontalSpan = 2, 
                        horizontalAlignment = GridLayoutLib.Align_Center }, 
-                       text="Button" };
+                       text=""""""""Button"""""""" };
 end
 </pre>
 </div>

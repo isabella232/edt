@@ -54,7 +54,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
  * The size may be zero.
  */
 externalType EList type ClassType {  
-   typeParameters = ["E"] }
+   typeParameters = [""""""""E""""""""] }
 
 /**
 	 * {@Operation +} Creates a new list consisting of the first operand's elements
@@ -63,7 +63,7 @@ externalType EList type ClassType {
 	 * operand to the end of the first operand.
 	 */
 static function $Plus(lvalue EList in, rvalue EAny in) 
-       returns (EList) {@Operation{"+"}};
+       returns (EList) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -72,7 +72,7 @@ static function $Plus(lvalue EList in, rvalue EAny in)
 	 * operand to the end of the first operand.
 	 */
 static function $Concat(value EList in, rvalue EAny in) 
-       returns (EList) {@Operation{"::"}};
+       returns (EList) {@Operation{""""""""::""""""""}};
 
 /**
 	 * {@Operation +} Creates a new list consisting of the first operand followed 
@@ -81,7 +81,7 @@ static function $Concat(value EList in, rvalue EAny in)
 	 * operand to the front of the first operand.
 	 */
 static function $Plus(lvalue EAny in, rvalue EList in) 
-       returns (EList) {@Operation{"+"}};
+       returns (EList) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation ::} Creates a new list consisting of the first operand followed 
@@ -90,7 +90,7 @@ static function $Plus(lvalue EAny in, rvalue EList in)
 	 * operand to the front of the first operand.
 	 */
 static function $Concat(value EAny in, rvalue EList in) 
-       returns (EList) {@Operation{"::"}};
+       returns (EList) {@Operation{""""""""::""""""""}};
 
 /**
 	 * {@Operation +} Creates a new list consisting of the first operand's elements
@@ -99,7 +99,7 @@ static function $Concat(value EAny in, rvalue EList in)
 	 * second operand's elements to the end of the first operand.
 	 */
 static function $Plus(lvalue EList in, rvalue EList in) 
-       returns (EList) {@Operation{"+"}};
+       returns (EList) {@Operation{""""""""+""""""""}};
 
 /**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements
@@ -108,14 +108,14 @@ static function $Plus(lvalue EList in, rvalue EList in)
 	 * second operand's elements to the end of the first operand.
 	 */
 static function $Concat(value EList in, rvalue EList in) 
-       returns (EList) {@Operation{"::"}};
+       returns (EList) {@Operation{""""""""::""""""""}};
 
 /**
 	 * {@Operation []} Returns the element at the specified index.
 	 * @throws InvalidIndexException  if the index is less than 1 or greater than the size.
 	 */
 static function $Get(value EList in, index EInt in) 
-       returns(EAny) {@Operation{"[]"}};
+       returns(EAny) {@Operation{""""""""[]""""""""}};
 	
 /**
 	 * Adds an element to the end of this list.
@@ -222,7 +222,7 @@ end
  *
  * @param a  the first value.
  * @param b  the second value.
- * @return zero if a == b, a positive number if a &gt; b, or a negative number if a &lt; b.
+ * @return zero if a == b, a positive number if a &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; b, or a negative number if a &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; b.
  */
 Delegate
    SortFunction(a any in, b any in) returns (int)
@@ -241,9 +241,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00088__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00088__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d34003e97">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d34153e97">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d34003e100">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d34153e100">Issue</th>
 
 </tr>
 
@@ -252,17 +252,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00088__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d34003e97 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34153e97 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34003e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34153e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00088__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d34003e97 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d34153e97 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34003e100 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d34153e100 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

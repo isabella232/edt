@@ -38,10 +38,10 @@ import org.eclipse.edt.rui.widgets.TextLabel;
 
 handler MyHandler type RUIHandler{initialUI =[myShadow]}
 
-   myTextLabel TextLabel{text = "Text with a Shadow"};
+   myTextLabel TextLabel{text = """"""""Text with a Shadow""""""""};
    myShadow Shadow{x = 20, y = 20, width = 100,
                    div = new Div{padding = 5,
-                         backgroundColor = "salmon", children =[myTextLabel]}};
+                         backgroundColor = """"""""salmon"""""""", children =[myTextLabel]}};
 end</pre>
 </div>
 
@@ -60,19 +60,19 @@ handler MyHandler type RUIHandler{initialUI =[myBox, shadow, myOtherBox]}
    const OTHERBOXY INT = 50;
 
    myTextField TextField{
-		   text = "What a drag!", 
+		   text = """"""""What a drag!"""""""", 
 		   width = 120, 
-		   backgroundColor = "white", 
+		   backgroundColor = """"""""white"""""""", 
 		   onStartDrag = start, onDrag = drag, onDropOnTarget = drop};
 
    myBox Box { children = [ myTextField{}	]};
 	
-   shadow Shadow { zIndex = 2, position = "absolute", visibility="hidden", 
+   shadow Shadow { zIndex = 2, position = """"""""absolute"""""""", visibility=""""""""hidden"""""""", 
                    div = new Div { } };
     
-   myOtherBox Box {position = "absolute", zIndex = 1, 
+   myOtherBox Box {position = """"""""absolute"""""""", zIndex = 1, 
                    x = OTHERBOXX, y = OTHERBOXY, 
-                   width = 200, height = 200, backgroundColor = "blue"};
+                   width = 200, height = 200, backgroundColor = """"""""blue""""""""};
     
    dx, dy int;
   
@@ -80,9 +80,9 @@ handler MyHandler type RUIHandler{initialUI =[myBox, shadow, myOtherBox]}
       dx = x - myWidget.x;
       dy = y - myWidget.y;
                 
-      myTextField.position = "static";
+      myTextField.position = """"""""static"""""""";
       shadow.div.children = [ myTextField ];
-      shadow.visibility = "visible";
+      shadow.visibility = """"""""visible"""""""";
       return(true);
    end
 
@@ -94,8 +94,8 @@ handler MyHandler type RUIHandler{initialUI =[myBox, shadow, myOtherBox]}
 
    function drop(widget Widget in, drop Widget in, x int in, y int in)
         
-      shadow.visibility = "hidden";
-      myTextField.position = "relative";
+      shadow.visibility = """"""""hidden"""""""";
+      myTextField.position = """"""""relative"""""""";
       myTextField.x = shadow.x - OTHERBOXX;
       myTextField.y = shadow.y - OTHERBOXY; 
             
@@ -117,39 +117,39 @@ handler MyHandler type RUIHandler{
    initialUI =[shadow, myBox, myOtherBox1, myOtherBox2]}
 
    myTextField TextField{
-      text="What a drag!", width=120, backgroundColor="white",
+      text=""""""""What a drag!"""""""", width=120, backgroundColor=""""""""white"""""""",
       onMouseOver::=mouseOver, onMouseOut::=mouseOut, 
       onStartDrag=start, onDrag=drag, onDropOnTarget=drop	};
 
    myBox Box { children=[ 	myTextField{} ]};
    
-   shadow Shadow { zIndex=2, position="absolute", 
-                   visibility="hidden", div=new Div { } };
+   shadow Shadow { zIndex=2, position=""""""""absolute"""""""", 
+                   visibility=""""""""hidden"""""""", div=new Div { } };
     
    myOtherBox1 Box {
-      padding=10, margin=10, width=200, height=200, backgroundColor="lightblue", 
-      borderColor="black", borderWidth=2, borderStyle="solid" };
+      padding=10, margin=10, width=200, height=200, backgroundColor=""""""""lightblue"""""""", 
+      borderColor=""""""""black"""""""", borderWidth=2, borderStyle=""""""""solid"""""""" };
 
    myOtherBox2 Box { padding=10, margin=10, width=200, height=200, 
-                     backgroundColor="lightyellow", 
-                     borderColor="black", borderWidth=2, borderStyle="solid" };
+                     backgroundColor=""""""""lightyellow"""""""", 
+                     borderColor=""""""""black"""""""", borderWidth=2, borderStyle=""""""""solid"""""""" };
     
    dx, dy int;
     
    function mouseOver(e Event in)
-      myTextField.cursor = "move";
+      myTextField.cursor = """"""""move"""""""";
    end
    
    function mouseOut(e Event in)
-      myTextField.cursor = "";
+      myTextField.cursor = """""""""""""""";
    end
     
    function start(myWidget Widget in, x int in, y int in) returns(boolean)
       dx = x - myWidget.x;
       dy = y - myWidget.y;                
-      myTextField.position="static";
+      myTextField.position=""""""""static"""""""";
       shadow.div.children=[ myTextField ];
-      shadow.visibility="visible";
+      shadow.visibility=""""""""visible"""""""";
       return(true);
    end
 
@@ -158,21 +158,21 @@ handler MyHandler type RUIHandler{
       shadow.y=y - dy;
 
       if (inside(x, y, myOtherBox1))
-         myOtherBox1.backgroundColor = "lightgreen";
+         myOtherBox1.backgroundColor = """"""""lightgreen"""""""";
       else
-        	myOtherBox1.backgroundColor = "lightblue";
+        	myOtherBox1.backgroundColor = """"""""lightblue"""""""";
       end
       
       if (inside(x, y, myOtherBox2))
-        	myOtherBox2.backgroundColor = "lightgreen";
+        	myOtherBox2.backgroundColor = """"""""lightgreen"""""""";
       else
-          myOtherBox2.backgroundColor = "lightyellow";
+          myOtherBox2.backgroundColor = """"""""lightyellow"""""""";
       end
    end
 
    function drop(widget Widget in, drop Widget in, x int in, y int in)
-      shadow.visibility="hidden";
-      myTextField.position="static";
+      shadow.visibility=""""""""hidden"""""""";
+      myTextField.position=""""""""static"""""""";
 
       if (inside(x, y, myOtherBox1))
          myOtherBox1.children=[ myTextField ];
@@ -184,8 +184,8 @@ handler MyHandler type RUIHandler{
    end
     
    function inside(x int in, y int in, widget Widget in) returns(boolean)
-      return (x&gt;=widget.x &amp;&amp; x&lt;=widget.pixelWidth + widget.x &amp;&amp; 
-              y&gt;=widget.y &amp;&amp; y&lt;=widget.pixelHeight + widget.y);
+      return (x&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=widget.x &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; x&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=widget.pixelWidth + widget.x &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; 
+              y&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=widget.y &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; y&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=widget.pixelHeight + widget.y);
    end
 end 
 </pre>

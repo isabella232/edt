@@ -82,8 +82,8 @@ later, in the declaration of the grid columns.</p>
 </li>
 
 <li>Declare the array of data records, as in the following example:<pre class="codeblock">stockList Stock[] = [
-   new Stock{SelectQuote = false, Symbol = "Company1", Quote = 100.00, NumShares = 40 },
-   new Stock{SelectQuote = false, Symbol = "Company2", Quote = 200.00, NumShares = 10 } ]; </pre>
+   new Stock{SelectQuote = false, Symbol = """"""""Company1"""""""", Quote = 100.00, NumShares = 40 },
+   new Stock{SelectQuote = false, Symbol = """"""""Company2"""""""", Quote = 200.00, NumShares = 10 } ]; </pre>
 <p>The
 order of fields in a given data record is not meaningful. However,
 by default, the order of the data records in the array is the order
@@ -97,11 +97,11 @@ declaration typically includes the <span class="synph"><span class="kwd">columns
 <li>For the <span class="synph"><span class="kwd">columns</span></span> field, assign an array
 of records of type DataGridColumn. <div class="p">Here is the setting for the
 current example:<pre class="codeblock">columns = [
-   new DataGridColumn { name = "Symbol", displayName = "Company Symbol"},
-   new DataGridColumn { name = "Quote", displayName = "Price Per Share" },
-   new DataGridColumn { name = "NumShares", displayName = "Number of Shares" },
-   new DataGridColumn { name = "Total", 
-                        displayName = "Value of Shares",
+   new DataGridColumn { name = """"""""Symbol"""""""", displayName = """"""""Company Symbol""""""""},
+   new DataGridColumn { name = """"""""Quote"""""""", displayName = """"""""Price Per Share"""""""" },
+   new DataGridColumn { name = """"""""NumShares"""""""", displayName = """"""""Number of Shares"""""""" },
+   new DataGridColumn { name = """"""""Total"""""""", 
+                        displayName = """"""""Value of Shares"""""""",
                         formatters = [totalFormatter] }
 ]</pre>
 </div>
@@ -319,7 +319,7 @@ the second.</li>
 </div>
 <div class="p">Here is an example function, which might be used if the
 previous example were extended to include company names <samp class="codeph">Company3</samp> through <samp class="codeph">Company10</samp>:<pre class="codeblock">Function CompareTwo(myFirst ANY in, mySecond ANY in) returns (int)
-   if ( (myFirst as string )[8:8] == "6")
+   if ( (myFirst as string )[8:8] == """"""""6"""""""")
       return(-1);
    else
       return(1);  
@@ -515,9 +515,9 @@ in response to the user's selections:<pre class="codeblock">function myListener(
    columnRetrieve = grid.getChecked() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt; 0)
+   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is checked.");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is checked."""""""");
        end
    end
 end</pre>
@@ -726,9 +726,9 @@ in response to the user's selections:<pre class="codeblock">function myListener(
    columnRetrieve = grid.getSelection() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt; 0)
+   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is selected.");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is selected."""""""");
        end
    end
 end</pre>
@@ -759,7 +759,7 @@ end</pre>
 </div>
 <p>Here is an example function:</p>
 <pre class="codeblock">function mySortListener(grid DataGrid in, sortColumn DataGridColumn in)
-   syslib.writeStdOut("You sorted the " + sortColumn.displayName + " column. ");
+   syslib.writeStdOut(""""""""You sorted the """""""" + sortColumn.displayName + """""""" column. """""""");
 end</pre>
 </li>
 
@@ -889,9 +889,9 @@ event handler, which displays stock symbols:<pre class="codeblock">function myRe
    columnRetrieve = grid.getChecked() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt; 0)
+   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is checked.");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is checked."""""""");
       end
    end
 end</pre>
@@ -922,13 +922,13 @@ clicking a button:<pre class="codeblock">function myResponse (e event in)
    columnRetrieve = grid.getSelection() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt; 0)
+   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is selected.");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is selected."""""""");
       end
       grid.deSelectAll();
    else
-      sysLib.writeStdOut("Select one or more rows.");                    
+      sysLib.writeStdOut(""""""""Select one or more rows."""""""");                    
    end 
 end</pre>
 </div>
@@ -1046,8 +1046,8 @@ end</pre>
 <dd>The row provided to the function. You can use the input argument
 to access a specific value. For example, consider the case in which
 the data is as follows:<pre class="codeblock">stocks Stock[] = [
-		 new Stock{Symbol = "Company1", Quote = 100, NumShares = 40, SelectQuote = false}, 
-		 new Stock{Symbol = "Company2", Quote = 200, NumShares = 10, SelectQuote = false}
+		 new Stock{Symbol = """"""""Company1"""""""", Quote = 100, NumShares = 40, SelectQuote = false}, 
+		 new Stock{Symbol = """"""""Company2"""""""", Quote = 200, NumShares = 10, SelectQuote = false}
 	]; </pre>
 <div class="p">Inside the provider function, you can determine
 which row is being hovered over by writing code such as this: <pre class="codeblock">if (rowData.Quote as int == 200)
@@ -1101,18 +1101,18 @@ end
 handler MyHandler type RUIhandler { initialUI = [ grid ], 
                                       onConstructionFunction = start }
    stockList Stock[] = [
-      new Stock{Symbol = "Company1", Quote = 100.00, NumShares = 40 }, 
-      new Stock{Symbol = "Company2", Quote = 200.00, NumShares = 10 },
-      new Stock{Symbol = "Company3", Quote = 100.00, NumShares = 40 } ]; 
+      new Stock{Symbol = """"""""Company1"""""""", Quote = 100.00, NumShares = 40 }, 
+      new Stock{Symbol = """"""""Company2"""""""", Quote = 200.00, NumShares = 10 },
+      new Stock{Symbol = """"""""Company3"""""""", Quote = 100.00, NumShares = 40 } ]; 
 
    grid DataGrid { 
       data = stockList as any[],
       behaviors = [myDataGridToolTip.setToolTips],
       pageSize = 15,
       columns = [
-         new DataGridColumn { name = "Symbol", displayName = "Symbol Display"},    
-         new DataGridColumn { name = "Quote", displayName = "Quote Display"},
-         new DataGridColumn { name = "NumShares", displayName = "NumShares Display"  }]};
+         new DataGridColumn { name = """"""""Symbol"""""""", displayName = """"""""Symbol Display""""""""},    
+         new DataGridColumn { name = """"""""Quote"""""""", displayName = """"""""Quote Display""""""""},
+         new DataGridColumn { name = """"""""NumShares"""""""", displayName = """"""""NumShares Display""""""""  }]};
 
    myDataGridTooltip DataGridTooltip { provider = tooltipText, tooltip.delay = 1000 };
 
@@ -1127,11 +1127,11 @@ handler MyHandler type RUIhandler { initialUI = [ grid ],
       tooltipArea TextArea { width=450, height=100, paddingLeft=7, marginLeft=7 };
       tooltipBox.children = [ tooltipArea ];	
       tooltipArea.text = 
-      "In function tooltipText (a tooltip provider):" + 
-      "\n   o  fieldName is the column name ('"+fieldName+"')." +
-      "\nYou can access cell content:" +
-      "\n   o  td.innerText is '"+td.innerText+"'." +
-      "\n   o  rowData["+fieldName+"] is '"+rowData[fieldName] + "'."; 
+      """"""""In function tooltipText (a tooltip provider):"""""""" + 
+      """"""""\n   o  fieldName is the column name ('""""""""+fieldName+""""""""')."""""""" +
+      """"""""\nYou can access cell content:"""""""" +
+      """"""""\n   o  td.innerText is '""""""""+td.innerText+""""""""'."""""""" +
+      """"""""\n   o  rowData[""""""""+fieldName+""""""""] is '""""""""+rowData[fieldName] + """"""""'.""""""""; 
       return (tooltipBox); 
    end
 end</pre>

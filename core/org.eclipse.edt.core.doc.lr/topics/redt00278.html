@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="ExternalType stereotype JavaObject"></meta>
+<meta name="abstract" content="An ExternalType part with the JavaObject stereotype defines how you can access an external Java class or interface from your EGL code. The part typically identifies all the public fields, methods, and constructors of the class or interface, but might identify a subset of interest."></meta>
+<meta name="description" content="An ExternalType part with the JavaObject stereotype defines how you can access an external Java class or interface from your EGL code. The part typically identifies all the public fields, methods, and constructors of the class or interface, but might identify a subset of interest."></meta>
+<meta name="DC.subject" content="ExternalType parts, Java, JavaObject, JavaObject stereotype, ExternalType EGL parts"></meta>
+<meta name="keywords" content="ExternalType parts, Java, JavaObject, JavaObject stereotype, ExternalType EGL parts"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt00038.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00278"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>ExternalType stereotype JavaObject</title>
+</head>
+<body id="redt00278"><a name="redt00278"><!-- --></a>
+
+
+<h1 class="topictitle1">ExternalType stereotype JavaObject</h1>
+
+
+
+<div id="body"><a name="body"><!-- --></a><p>An ExternalType part with the <span class="synph"><span class="kwd">JavaObject</span></span> stereotype
+defines how you can access an external Java class
+or interface from your EGL code. The part typically identifies all
+the public fields, methods, and constructors of the class or interface,
+but might identify a subset of interest.</p>
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+<div class="nested1" xml:lang="en-us" id="syntax"><a name="syntax"><!-- --></a>
+<h2 class="topictitle2">Syntax</h2>
+
+<div>
+<div class="fignone">
+<br></br><img src="../images/redt_core_et_javaobject.gif" alt="Syntax diagram for the external type"></img><br></br>
+</div>
+
+<dl>
+<dt class="dlterm"><span class="synph"><span class="var">name</span></span></dt>
+
+<dd>The name of the external type</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">ExternalType</span></span></dt>
+
+<dd>An external type that the current one extends or implements, depending
+on whether <span class="synph"><span class="var">ExternalType</span></span> represents a Java class or interface. The external
+type being defined includes the fields and function prototypes from <span class="synph"><span class="var">ExternalType</span></span>,
+but not the constructor prototypes.<p>EGL predefines the <samp class="codeph">Serializable</samp> external
+type, which you can reference if you are defining an external type
+that is based on a Java class
+that itself implements the java.io.Serializable interface. If the
+external type that you are defining does not extend the EGL <samp class="codeph">Serializable</samp> external
+type, any EGL variables that are based on that external type are marked
+as transient in the generated Java code.
+ Transient variables are not preserved when a Java object is serialized by a runtime platform
+such as an application server. For example, serialization might occur
+when the server creates a backup copy of the object in response to
+a shut down.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">annotation</span></span></dt>
+
+<dd><div class="p">The following type-level annotations are available:<dl>
+<dt class="dlterm">packageName</dt>
+
+<dd>A string that holds the package name for the external Java type. </dd>
+
+
+<dt class="dlterm">externalName </dt>
+
+<dd>A string that holds the Java type
+name. This value is optional and defaults to the name of the external
+type. However, you must set this value in some cases; for example,
+if the Java type name is an EGL reserved word, the external type name
+must be different from the Java type name.</dd>
+
+</dl>
+</div>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="kwd">static</span></span></dt>
+
+<dd>An indicator to state that the variable or function is global
+to the class and is independent of whether the class has any objects.
+You can access a static variable or function by referencing the external
+type without referencing an object (for example, <samp class="codeph">MyType.theStaticVariable</samp>),
+or by referencing an object (for example, <samp class="codeph">MyObject.theStaticVariable</samp>).</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">constructorPrototype</span></span></dt>
+
+<dd>An EGL function prototype that corresponds to a Java constructor. You can pass the following
+kinds of parameters:<ul>
+<li>A primitive-type value. You must specify the <span class="synph"><span class="kwd">in</span></span> modifier.</li>
+
+<li>A dynamic array. You can specify the <span class="synph"><span class="kwd">in</span></span>, <span class="synph"><span class="kwd">out</span></span>,
+or <span class="synph"><span class="kwd">inout</span> modifier.</span></li>
+
+<li>A structured record. You must specify the <span class="synph"><span class="kwd">inout</span> modifier.</span></li>
+
+</ul>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">functionPrototype</span></span></dt>
+
+<dd>An EGL function prototype that corresponds to a Java method. You can pass the following kinds
+of parameters:<ul>
+<li>A primitive-type value. You must specify the <span class="synph"><span class="kwd">in</span></span> modifier.</li>
+
+<li>A dynamic array. You can specify the <span class="synph"><span class="kwd">in</span></span>, <span class="synph"><span class="kwd">out</span></span>,
+or <span class="synph"><span class="kwd">inout</span> modifier.</span></li>
+
+<li>A structured record. You must specify the <span class="synph"><span class="kwd">inout</span> modifier.</span></li>
+
+</ul>
+<p>The function can return a primitive-type value, an array,
+or no value at all. The function cannot return a record.</p>
+</dd>
+
+
+<dt class="dlterm"><span class="synph"><span class="var">variableList</span></span></dt>
+
+<dd>An EGL variable or comma-separated list of EGL variables. Each
+EGL variable corresponds to a Java field
+and might be based on a Java primitive,
+an EGL external type, or an array of primitives or external types.</dd>
+
+</dl>
+
+<div class="p">Variable or function declarations can include the following property:<dl>
+
+<dt class="dlterm"><span class="synph"><span class="kwd">externalName</span></span></dt>
+
+<dd>A string that contains the name of the related field or method
+in the Java class. This property
+is optional and defaults to the name of the variable or function in
+the external type. However, you must specify a custom name in some
+cases (for example, if the field name is an EGL reserved word), and
+in those cases, you must specify the <span class="synph"><span class="kwd">externalName</span></span> property.
+Here is an example: <pre class="codeblock">Function nextElement() { externalName = """"""""next"""""""" };</pre>
+</dd>
+
+</dl>
+</div>
+
+<div class="p">Variable declarations can also include the following annotations:<ul>
+<li><a href="../../org.eclipse.edt.core.doc.lr/topics/redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></li>
+
+<li><a href="redt00083.html" title="EventListener lets you write an event handler for a Java environment, giving the EGL generator the information needed to create code that conforms to the Java event-listener pattern. The annotation is used in an external type of stereotypeJavaObject.">EventListener annotation</a></li>
+
+</ul>
+</div>
+
+<p>When you reference Java field
+and method names in the code, remember that they are case sensitive,
+even though the equivalent EGL names are not.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

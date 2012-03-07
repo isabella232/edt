@@ -39,7 +39,7 @@ fields in a Record type.</p>
 
 <dt class="dlterm"><a name="redt00261__use"><!-- --></a>Example use</dt>
 
-<dd>See "Annotation fields" later.<anchor id="use_more"></anchor></dd>
+<dd>See """"""""Annotation fields"""""""" later.<anchor id="use_more"></anchor></dd>
 
 
 <dt class="dlterm"><a name="redt00261__annorec"><!-- --></a>Annotation detail</dt>
@@ -80,10 +80,10 @@ Record type and XML string are related:<pre class="codeblock">Record Employee {X
    LastName STRING;
 end
 
-&lt;Employee&gt;
-   &lt;EmpNo&gt;10&lt;/EmpNo&gt;
-   &lt;LastName&gt;Smith&lt;/LastName&gt; 
-&lt;/Employee&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;10&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
 </pre>
 </dd>
 
@@ -97,17 +97,17 @@ the following Record type:<pre class="codeblock">Record Employee{XMLStructure = 
    YearsOfCitizenship INT?;
 end
 </pre>
-<div class="p">Either of the following XML strings is valid:<pre class="codeblock">&lt;Employee&gt;
-   &lt;ImmigrationStatus&gt;A1&lt;/ImmigrationStatus&gt;
-&lt;/Employee&gt;</pre>
-<pre class="codeblock">&lt;Employee&gt;
-   &lt;YearsOfCitizenship&gt;20&lt;/YearsOfCitizenship&gt;
-&lt;/Employee&gt;</pre>
+<div class="p">Either of the following XML strings is valid:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;ImmigrationStatus&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;A1&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/ImmigrationStatus&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
+<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;YearsOfCitizenship&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/YearsOfCitizenship&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
 <p>In this case, the XML string cannot
 include both kinds of elements.</p>
 <p>If a record has the XMLStructure
-value "choice", each field must be nullable, as is indicated by the
+value """"""""choice"""""""", each field must be nullable, as is indicated by the
 question marks in our example. Furthermore, the value of one field
 must be nonnull, and the value of only one field can be nonnull. The
 function <span class="synph"><span class="kwd">XMLLib.convertToXML</span></span> issues a <span class="synph"><span class="kwd">RuntimeException</span></span> if
@@ -131,10 +131,10 @@ end
   	value INT; // any field name is acceptable here
 end
 </strong>
-&lt;Employee&gt;
-   &lt;EmpNo <strong>type="Sales"</strong>&gt;<strong>10</strong>&lt;/EmpNo&gt;
-   &lt;LastName&gt;Smith&lt;/LastName&gt; 
-&lt;/Employee&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo <strong>type=""""""""Sales""""""""</strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<strong>10</strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
 </pre>
 <p>The subordinate record (here, <samp class="codeph">EmpNumber</samp>)
 may include zero to many fields that are of type STRING and that have
@@ -154,15 +154,15 @@ following Record type describes either of the subsequent XML strings:<pre class=
    LastName STRING;
 end
 
-&lt;Employee&gt;
-   &lt;LastName&gt;Jones&lt;/LastName&gt; 
-   &lt;EmpNo&gt;20&lt;/EmpNo&gt;
-&lt;/Employee&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Jones&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
 
-&lt;Employee&gt;
-   &lt;EmpNo&gt;20&lt;/EmpNo&gt;
-   &lt;LastName&gt;Jones&lt;/LastName&gt; 
-&lt;/Employee&gt;
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Jones&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
+&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
 </pre>
 </dd>
 
@@ -186,9 +186,9 @@ end
 <div class="tablenoborder"><a name="redt00261__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00261__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d90846e204">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d90978e204">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d90846e207">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d90978e207">Issue</th>
 
 </tr>
 
@@ -197,17 +197,17 @@ end
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00261__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d90846e204 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d90978e204 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d90846e207 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d90978e207 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00261__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d90846e204 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d90978e204 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d90846e207 ">No issues.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d90978e207 ">No issues.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>

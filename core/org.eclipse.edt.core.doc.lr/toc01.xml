@@ -10,7 +10,10 @@
          <topic label="DataItem classifier overview" href="topics/cedt00030.html"/>
          <topic label="Delegate classifier overview" href="topics/cedt00039.html"/>
          <topic label="Enumeration classifier overview" href="topics/cedt00032.html"/>
-         <topic label="ExternalType classifier overview" href="topics/cedt00038.html"/>
+         <topic label="ExternalType classifier overview" href="topics/cedt00038.html">
+            <topic label="ExternalType stereotype JavaObject" href="topics/redt00278.html"/>
+            <topic label="ExternalType stereotype JavaScriptObject" href="topics/redt00279.html"/>
+         </topic>
          <topic label="Handler classifier overview" href="topics/cedt00036.html"/>
          <topic label="Interface classifier overview" href="topics/cedt00037.html"/>
          <topic label="Library classifier overview" href="topics/cedt00034.html"/>

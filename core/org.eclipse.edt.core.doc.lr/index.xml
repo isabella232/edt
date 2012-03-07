@@ -4,20 +4,20 @@
 <topic href="topics/redt00002.html#redt00002" title="this keyword"/>
 <entry keyword="***">
 <topic href="topics/cedt00002.html#cedt00002" title="EGL language overview"/>
-<topic href="topics/cedt00013.html#cedt00013" title="EGL Syntax"/>
-<topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
-<topic href="topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
-<topic href="topics/cedt00039.html#cedt00039" title="Delegate classifier overview"/>
-<topic href="topics/cedt00030.html#cedt00030" title="DataItem classifier overview"/>
-<topic href="topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
-<topic href="topics/cedt00038.html#cedt00038" title="ExternalType classifier overview"/>
-<topic href="topics/cedt00011.html#cedt00011" title="Run units"/>
-<topic href="topics/cedt00033.html#cedt00033" title="Program classifier overview"/>
-<topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
 <topic href="topics/cedt00025.html#cedt00025" title="Boxing and unboxing conversions"/>
 <topic href="topics/cedt00029.html#cedt00029" title="Class classifier overview"/>
-<topic href="topics/cedt00032.html#cedt00032" title="Enumeration classifier overview"/>
 <topic href="topics/cedt00036.html#cedt00036" title="Handler classifier overview"/>
+<topic href="topics/cedt00013.html#cedt00013" title="EGL Syntax"/>
+<topic href="topics/cedt00037.html#cedt00037" title="Interface classifier overview"/>
+<topic href="topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
+<topic href="topics/cedt00032.html#cedt00032" title="Enumeration classifier overview"/>
+<topic href="topics/cedt00038.html#cedt00038" title="ExternalType classifier overview"/>
+<topic href="topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
+<topic href="topics/cedt00030.html#cedt00030" title="DataItem classifier overview"/>
+<topic href="topics/cedt00031.html#cedt00031" title="Record classifier overview"/>
+<topic href="topics/cedt00011.html#cedt00011" title="Run units"/>
+<topic href="topics/cedt00039.html#cedt00039" title="Delegate classifier overview"/>
+<topic href="topics/cedt00033.html#cedt00033" title="Program classifier overview"/>
 </entry>
 <entry keyword="parameterized">
 <topic href="topics/cedt00018.html#cedt00018" title="Simple types"/>
@@ -75,7 +75,7 @@
 <topic href="topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
 </entry>
 <entry keyword="Property">
-<topic href="topics/redt00074.html#redt00074" title="Property"/>
+<topic href="topics/redt00074.html#redt00074" title="Property annotation"/>
 </entry>
 <entry keyword="Resource">
 <topic href="topics/redt00087.html#redt00087" title="Resource annotation"/>
@@ -210,9 +210,9 @@
 </entry>
 </entry>
 <entry keyword="continue EGL statement">
-<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 <topic href="topics/redt00014.html#redt00014" title="Case statement"/>
 <topic href="topics/redt00020.html#redt00020" title="Continue statement"/>
+<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 </entry>
 <entry keyword="convertFromJSON EGL function">
 <topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
@@ -261,23 +261,30 @@
 <entry keyword="dateFromJulian EGL function">
 <topic href="topics/redt00241.html#redt00241" title="DateTimeLib.dateFromJulian system function"/>
 </entry>
-<entry keyword="DateTimeLib EGL external type">
+<entry keyword="DateTimeLib
+EGL external type">
 <entry keyword="dateFromInt">
 <topic href="topics/redt00242.html#redt00242" title="DateTimeLib.dateFromInt function"/>
 </entry>
 <entry keyword="dateFromJulian">
 <topic href="topics/redt00241.html#redt00241" title="DateTimeLib.dateFromJulian system function"/>
 </entry>
+</entry>
+<entry keyword="DateTimeLib
+EGL system library">
+<entry keyword="dateFromGregorian">
+<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
+</entry>
+</entry>
+<entry keyword="DateTimeLib EGL
+external type">
 <entry keyword="mdy">
 <topic href="topics/redt00243.html#redt00243" title="DateTimeLib.mdy system function"/>
 </entry>
+</entry>
+<entry keyword="DateTimeLib EGL external type">
 <entry keyword="overview">
 <topic href="topics/redt00069.html#redt00069" title="DateTimeLib external type"/>
-</entry>
-</entry>
-<entry keyword="DateTimeLib EGL system library">
-<entry keyword="dateFromGregorian">
-<topic href="topics/redt00244.html#redt00244" title="DateTimeLib.dateFromGregorian system function"/>
 </entry>
 </entry>
 <entry keyword="Decimal">
@@ -296,7 +303,8 @@
 <entry keyword="deployment descriptors">
 <entry keyword="options">
 <entry keyword="services">
-<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment
+descriptor"/>
 </entry>
 </entry>
 </entry>
@@ -362,7 +370,8 @@
 <entry keyword="DojoLineGraph Rich UI widget">
 <topic href="topics/redt00141.html#redt00141" title="DojoLineGraph widget"/>
 </entry>
-<entry keyword="DojoMenuItem Rich UI widget">
+<entry keyword="DojoMenuItem
+Rich UI widget">
 <topic href="topics/redt00143.html#redt00143" title="DojoMenuItem widget"/>
 </entry>
 <entry keyword="DojoMenuWidget Rich UI widget">
@@ -412,6 +421,11 @@
 </entry>
 <entry keyword="dynamic types">
 <topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
+</entry>
+<entry keyword="EGL">
+<entry keyword="ExternalType">
+<topic href="topics/redt00279.html#redt00279" title="ExternalType stereotype JavaScriptObject"/>
+</entry>
 </entry>
 <entry keyword="EGL external types">
 <entry keyword="ConstantsLib">
@@ -659,9 +673,9 @@
 <topic href="topics/redt00022.html#redt00022" title="Close statement for a relational database"/>
 </entry>
 <entry keyword="continue">
-<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 <topic href="topics/redt00014.html#redt00014" title="Case statement"/>
 <topic href="topics/redt00020.html#redt00020" title="Continue statement"/>
+<topic href="topics/redt00015.html#redt00015" title="If statement"/>
 </entry>
 <entry keyword="delete">
 <topic href="topics/redt00023.html#redt00023" title="Delete statement for a relational database"/>
@@ -722,27 +736,27 @@
 </entry>
 </entry>
 <entry keyword="EGL type">
-<topic href="topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
-<topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
-<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
-<topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
-<topic href="topics/redt00269.html#redt00269" title="SQLWarning external type"/>
-<topic href="topics/redt00272.html#redt00272" title="AnyDelegate type"/>
-<topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
-<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
-<topic href="topics/redt00177.html#redt00177" title="SQLStatement external type"/>
-<topic href="topics/redt00268.html#redt00268" title="SQLException external type"/>
-<topic href="topics/redt00271.html#redt00271" title="AnyEnumeration type"/>
-<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
-<topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
-<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
-<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
-<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
-<topic href="topics/redt00164.html#redt00164" title="DataSource external type"/>
-<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
-<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
 <topic href="topics/redt00058.html#redt00058" title="Bigint and EBigint types"/>
+<topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
+<topic href="topics/redt00163.html#redt00163" title="SQLResultSet external type"/>
+<topic href="topics/redt00270.html#redt00270" title="AnyException type"/>
+<topic href="topics/redt00050.html#redt00050" title="Any and EAny types"/>
+<topic href="topics/redt00056.html#redt00056" title="Smallint and ESmallint types"/>
+<topic href="topics/redt00053.html#redt00053" title="Timestamp and ETimestamp types"/>
+<topic href="topics/redt00060.html#redt00060" title="Float and EFloat types"/>
+<topic href="topics/redt00272.html#redt00272" title="AnyDelegate type"/>
+<topic href="topics/redt00088.html#redt00088" title="List and EList types"/>
+<topic href="topics/redt00162.html#redt00162" title="SQLDataSource external type"/>
+<topic href="topics/redt00165.html#redt00165" title="ScrollableDataSource external type"/>
 <topic href="topics/redt00061.html#redt00061" title="Smallfloat and ESmallfloat types"/>
+<topic href="topics/redt00177.html#redt00177" title="SQLStatement external type"/>
+<topic href="topics/redt00269.html#redt00269" title="SQLWarning external type"/>
+<topic href="topics/redt00268.html#redt00268" title="SQLException external type"/>
+<topic href="topics/redt00263.html#redt00263" title="NullType external type"/>
+<topic href="topics/redt00271.html#redt00271" title="AnyEnumeration type"/>
+<topic href="topics/redt00164.html#redt00164" title="DataSource external type"/>
+<topic href="topics/redt00062.html#redt00062" title="Number and ENumber type"/>
+<topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
 </entry>
 <entry keyword="EGL types">
 <entry keyword="Any">
@@ -896,8 +910,19 @@
 <topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
 </entry>
 <entry keyword="ExternalType classifier">
-<entry keyword="Entity stereotype">
+<entry keyword="Entity
+stereotype">
 <topic href="topics/redt00081.html#redt00081" title="Entity stereotype"/>
+</entry>
+<entry keyword="JavaScript">
+<topic href="topics/redt00279.html#redt00279" title="ExternalType stereotype JavaScriptObject"/>
+</entry>
+</entry>
+<entry keyword="ExternalType parts">
+<entry keyword="Java">
+<entry keyword="JavaObject">
+<topic href="topics/redt00278.html#redt00278" title="ExternalType stereotype JavaObject"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="Float">
@@ -931,8 +956,10 @@
 </entry>
 <entry keyword="generation">
 <entry keyword="services">
-<entry keyword="deployment options">
-<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+<entry keyword="deployment
+options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment
+descriptor"/>
 </entry>
 </entry>
 </entry>
@@ -960,17 +987,27 @@
 <topic href="topics/redt00188.html#redt00188" title="Grouping widget"/>
 </entry>
 <entry keyword="Handler classifier">
-<entry keyword="Entity stereotype">
+<entry keyword="Entity
+stereotype">
 <topic href="topics/redt00081.html#redt00081" title="Entity stereotype"/>
 </entry>
 </entry>
 <entry keyword="HTML Rich UI widget">
 <topic href="topics/redt00115.html#redt00115" title="HTML widget"/>
 </entry>
-<entry keyword="HTTPLib EGL external type">
+<entry keyword="HTTPLib
+EGL external type">
 <entry keyword="convertToURLEncoded">
 <topic href="topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
 </entry>
+</entry>
+<entry keyword="HTTPLib
+EGL system library">
+<entry keyword="convertFromURLEncoded">
+<topic href="topics/redt00252.html#redt00252" title="HTTPLib.convertFromURLEncoded"/>
+</entry>
+</entry>
+<entry keyword="HTTPLib EGL external type">
 <entry keyword="setHTTPBasicAuthentication">
 <topic href="topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
 </entry>
@@ -979,15 +1016,19 @@
 </entry>
 </entry>
 <entry keyword="HTTPLib EGL system library">
-<entry keyword="convertFromURLEncoded">
-<topic href="topics/redt00252.html#redt00252" title="HTTPLib.convertFromURLEncoded"/>
-</entry>
 <entry keyword="overview">
 <topic href="topics/redt00073.html#redt00073" title="HTTPLib external type"/>
 </entry>
 </entry>
 <entry keyword="Hyperlink Rich UI widget">
 <topic href="topics/redt00189.html#redt00189" title="Hyperlink widget"/>
+</entry>
+<entry keyword="IBM i">
+<entry keyword="access of called or service programs">
+<entry keyword="overview">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01042.html#tedt01042" title="Accessing an IBM i called or service program"/>
+</entry>
+</entry>
 </entry>
 <entry keyword="ID EGL annotation">
 <topic href="topics/redt00166.html#redt00166" title="ID annotation"/>
@@ -998,6 +1039,32 @@
 <entry keyword="Int">
 <topic href="topics/redt00057.html#redt00057" title="Int and EInt types"/>
 </entry>
+<entry keyword="Interface
+parts">
+<entry keyword="REST service access">
+<entry keyword="non-EGL">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="Java">
+<entry keyword="ExternalType EGL parts">
+<entry keyword="JavaObject">
+<topic href="topics/redt00278.html#redt00278" title="ExternalType stereotype JavaObject"/>
+</entry>
+</entry>
+</entry>
+<entry keyword="JavaObject stereotype">
+<topic href="topics/redt00278.html#redt00278" title="ExternalType stereotype JavaObject"/>
+</entry>
+<entry keyword="JavaScript">
+<entry keyword="ExternalType classifier">
+<topic href="topics/redt00279.html#redt00279" title="ExternalType stereotype JavaScriptObject"/>
+</entry>
+</entry>
+<entry keyword="JavaScriptObject stereotype">
+<topic href="topics/redt00279.html#redt00279" title="ExternalType stereotype JavaScriptObject"/>
+</entry>
 <entry keyword="JoinColumn EGL annotation">
 <topic href="topics/redt00267.html#redt00267" title="JoinColumn annotation"/>
 </entry>
@@ -1006,15 +1073,25 @@
 <topic href="topics/redt00253.html#redt00253" title="Correspondence between a JSON string and an EGL variable"/>
 </entry>
 </entry>
-<entry keyword="JSONLib EGL external type">
+<entry keyword="JSONLib
+EGL external type">
 <entry keyword="convertFromJSON">
 <topic href="topics/redt00250.html#redt00250" title="JSONLib.convertFromJSON function"/>
 </entry>
 <entry keyword="convertToJSON">
 <topic href="topics/redt00251.html#redt00251" title="JSONLib.convertToJSON function"/>
 </entry>
+</entry>
+<entry keyword="JSONLib EGL external type">
 <entry keyword="overview">
 <topic href="topics/redt00249.html#redt00249" title="JSONLib external type"/>
+</entry>
+</entry>
+<entry keyword="language elements">
+<entry keyword="EGL external mappings">
+<entry keyword="JavaScript">
+<topic href="topics/redt00279.html#redt00279" title="ExternalType stereotype JavaScriptObject"/>
+</entry>
 </entry>
 </entry>
 <entry keyword="large object">
@@ -1049,7 +1126,20 @@
 <entry keyword="ManyToOne EGL annotation">
 <topic href="topics/redt00169.html#redt00169" title="ManyToOne annotation"/>
 </entry>
-<entry keyword="MathLib EGL external type">
+<entry keyword="MathLib EGL
+external type">
+<entry keyword="ceiling">
+<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling function"/>
+</entry>
+<entry keyword="decimals">
+<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
+</entry>
+<entry keyword="precision">
+<topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
+</entry>
+</entry>
+<entry keyword="MathLib EGL external
+type">
 <entry keyword="abs">
 <topic href="topics/redt00206.html#redt00206" title="MathLib.abs function"/>
 </entry>
@@ -1065,17 +1155,11 @@
 <entry keyword="atan2">
 <topic href="topics/redt00210.html#redt00210" title="MathLib.atan2 function"/>
 </entry>
-<entry keyword="ceiling">
-<topic href="topics/redt00211.html#redt00211" title="MathLib.ceiling function"/>
-</entry>
 <entry keyword="cos">
 <topic href="topics/redt00212.html#redt00212" title="MathLib.cos function"/>
 </entry>
 <entry keyword="cosh">
 <topic href="topics/redt00213.html#redt00213" title="MathLib.cosh function"/>
-</entry>
-<entry keyword="decimals">
-<topic href="topics/redt00214.html#redt00214" title="MathLib.decimals function"/>
 </entry>
 <entry keyword="exp">
 <topic href="topics/redt00215.html#redt00215" title="MathLib.exp function"/>
@@ -1104,14 +1188,8 @@
 <entry keyword="modf">
 <topic href="topics/redt00223.html#redt00223" title="MathLib.modf function"/>
 </entry>
-<entry keyword="overview">
-<topic href="topics/redt00067.html#redt00067" title="MathLib external type"/>
-</entry>
 <entry keyword="pow">
 <topic href="topics/redt00224.html#redt00224" title="MathLib.pow function"/>
-</entry>
-<entry keyword="precision">
-<topic href="topics/redt00225.html#redt00225" title="MathLib.precision function"/>
 </entry>
 <entry keyword="random">
 <topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
@@ -1133,6 +1211,11 @@
 </entry>
 <entry keyword="tanh">
 <topic href="topics/redt00232.html#redt00232" title="MathLib.tanh function"/>
+</entry>
+</entry>
+<entry keyword="MathLib EGL external type">
+<entry keyword="overview">
+<topic href="topics/redt00067.html#redt00067" title="MathLib external type"/>
 </entry>
 </entry>
 <entry keyword="max EGL function">
@@ -1209,12 +1292,13 @@
 <topic href="topics/redt00173.html#redt00173" title="SecondaryTables annotation and related types"/>
 </entry>
 <entry keyword="Program classifier">
-<entry keyword="BasicProgram stereotype">
+<entry keyword="BasicProgram
+stereotype">
 <topic href="topics/redt00102.html#redt00102" title="BasicProgram stereotype"/>
 </entry>
 </entry>
 <entry keyword="Property EGL annotation">
-<topic href="topics/redt00074.html#redt00074" title="Property"/>
+<topic href="topics/redt00074.html#redt00074" title="Property annotation"/>
 </entry>
 <entry keyword="RadioGroup Rich UI widget">
 <entry keyword="overview">
@@ -1225,7 +1309,8 @@
 <topic href="topics/redt00226.html#redt00226" title="MathLib.random function"/>
 </entry>
 <entry keyword="Record classifier">
-<entry keyword="Entity stereotype">
+<entry keyword="Entity
+stereotype">
 <topic href="topics/redt00081.html#redt00081" title="Entity stereotype"/>
 </entry>
 </entry>
@@ -1240,6 +1325,12 @@
 <entry keyword="Resource EGL annotation">
 <topic href="topics/redt00087.html#redt00087" title="Resource annotation"/>
 </entry>
+<entry keyword="REST
+services">
+<entry keyword="non-EGL">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>
+</entry>
+</entry>
 <entry keyword="REST binding">
 <topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
@@ -1253,7 +1344,8 @@
 </entry>
 <entry keyword="Rich UI">
 <entry keyword="services">
-<entry keyword="invoking asynchronously">
+<entry keyword="invoking
+asynchronously">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01023.html#tedt01023" title="Invoking a service asynchronously from a Rich UI application"/>
 </entry>
 </entry>
@@ -1333,7 +1425,8 @@
 <entry keyword="DojoLineGraph">
 <topic href="topics/redt00141.html#redt00141" title="DojoLineGraph widget"/>
 </entry>
-<entry keyword="DojoMenuItem widget">
+<entry keyword="DojoMenuItem
+widget">
 <topic href="topics/redt00143.html#redt00143" title="DojoMenuItem widget"/>
 </entry>
 <entry keyword="DojoMenuWidget">
@@ -1461,17 +1554,27 @@
 <topic href="../org.eclipse.edt.ide.doc/topics/tedt00539.html#tedt00539" title="Adding a REST binding to the EGL deployment descriptor"/>
 </entry>
 </entry>
-<entry keyword="deployment descriptor options">
+<entry keyword="deployment
+descriptor options">
 <entry keyword="list">
-<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment
+descriptor"/>
 </entry>
 </entry>
 <entry keyword="EGL">
-<entry keyword="service-access variables">
+<entry keyword="service-access
+variables">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
 </entry>
-<entry keyword="Rich UI">
+<entry keyword="non-EGL">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>
+</entry>
+<entry keyword="REST">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01025.html#tedt01025" title="Using a provided Interface part for a 3rd-party REST service"/>
+</entry>
+<entry keyword="Rich
+UI">
 <entry keyword="asynchronous invocation">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01023.html#tedt01023" title="Invoking a service asynchronously from a Rich UI application"/>
 </entry>
@@ -1537,16 +1640,20 @@
 <entry keyword="String">
 <topic href="topics/redt00051.html#redt00051" title="String and EString types"/>
 </entry>
-<entry keyword="StringLib EGL external type">
-<entry keyword="format">
-<topic href="topics/redt00233.html#redt00233" title="StringLib.format function"/>
-</entry>
+<entry keyword="StringLib
+EGL external type">
 <entry keyword="fromCharCount">
 <topic href="topics/redt00236.html#redt00236" title="StringLib.fromCharCode function"/>
 </entry>
 <entry keyword="getNextToken">
-<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
 <topic href="topics/redt00234.html#redt00234" title="StringLib.GetNextToken function"/>
+<topic href="topics/redt00235.html#redt00235" title="StringLib.getTokenCount function"/>
+</entry>
+</entry>
+<entry keyword="StringLib EGL
+external type">
+<entry keyword="format">
+<topic href="topics/redt00233.html#redt00233" title="StringLib.format function"/>
 </entry>
 <entry keyword="spaces">
 <topic href="topics/redt00237.html#redt00237" title="StringLib.spaces function"/>
@@ -1565,21 +1672,19 @@
 <entry keyword="Syntax diagrams">
 <topic href="topics/cedt00040.html#cedt00040" title="Syntax diagram for EGL statements"/>
 </entry>
-<entry keyword="SysLib EGL external type">
-<entry keyword="callCmd">
-<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
+<entry keyword="SysLib
+EGL external type">
+<entry keyword="writeStdError">
+<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError function"/>
 </entry>
-<entry keyword="commit">
-<topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
 </entry>
+<entry keyword="SysLib EGL
+external type">
 <entry keyword="getProperty">
 <topic href="topics/redt00200.html#redt00200" title="SysLib.getProperty function"/>
 </entry>
 <entry keyword="getResource">
 <topic href="topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
-</entry>
-<entry keyword="overview">
-<topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
 </entry>
 <entry keyword="rollback">
 <topic href="topics/redt00199.html#redt00199" title="SysLib.rollback function"/>
@@ -1590,14 +1695,25 @@
 <entry keyword="startCmd">
 <topic href="topics/redt00197.html#redt00197" title="SysLib.startCmd function"/>
 </entry>
+<entry keyword="writeStdOut">
+<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut function"/>
+</entry>
+</entry>
+<entry keyword="SysLib EGL external
+type">
+<entry keyword="callCmd">
+<topic href="topics/redt00145.html#redt00145" title="SysLib.callCmd function"/>
+</entry>
+<entry keyword="commit">
+<topic href="topics/redt00198.html#redt00198" title="SysLib.commit function"/>
+</entry>
 <entry keyword="wait">
 <topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
 </entry>
-<entry keyword="writeStdError">
-<topic href="topics/redt00203.html#redt00203" title="SysLib.writeStdError function"/>
 </entry>
-<entry keyword="writeStdOut">
-<topic href="topics/redt00204.html#redt00204" title="SysLib.writeStdOut function"/>
+<entry keyword="SysLib EGL external type">
+<entry keyword="overview">
+<topic href="topics/redt00066.html#redt00066" title="SysLib system library"/>
 </entry>
 </entry>
 <entry keyword="Table EGL annotation">
@@ -1636,7 +1752,8 @@
 <topic href="topics/redt00185.html#redt00185" title="Tree widget and related types"/>
 </entry>
 <entry keyword="types">
-<entry keyword="dynamic runtime checks">
+<entry keyword="dynamic
+runtime checks">
 <topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
 </entry>
 </entry>
@@ -1644,7 +1761,8 @@
 <topic href="topics/redt00005.html#redt00005" title="Use statement"/>
 </entry>
 <entry keyword="variables">
-<entry keyword="dynamic runtime checks">
+<entry keyword="dynamic
+runtime checks">
 <topic href="topics/redt00264.html#redt00264" title="Dynamic types and access"/>
 </entry>
 </entry>
@@ -1652,8 +1770,10 @@
 <topic href="topics/redt00202.html#redt00202" title="SysLib.wait function"/>
 </entry>
 <entry keyword="web services">
-<entry keyword="deployment descriptor options">
-<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment descriptor"/>
+<entry keyword="deployment
+descriptor options">
+<topic href="../org.eclipse.edt.ide.doc/topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment
+descriptor"/>
 </entry>
 </entry>
 <entry keyword="Web services">
@@ -1686,13 +1806,16 @@
 <entry keyword="XMLElement EGL annotation">
 <topic href="topics/redt00090.html#redt00090" title="XMLElement annotation"/>
 </entry>
-<entry keyword="XMLLib EGL external type">
+<entry keyword="XMLLib
+EGL external type">
 <entry keyword="convertFromXML">
 <topic href="topics/redt00255.html#redt00255" title="XMLLib.convertFromXML function"/>
 </entry>
 <entry keyword="convertToJSON">
 <topic href="topics/redt00256.html#redt00256" title="XMLLib.convertToXML function"/>
 </entry>
+</entry>
+<entry keyword="XMLLib EGL external type">
 <entry keyword="overview">
 <topic href="topics/redt00257.html#redt00257" title="XMLLib external type"/>
 </entry>

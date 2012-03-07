@@ -52,11 +52,11 @@ a system command asynchronously and does not return a value. </p>
 <dt class="dlterm"><a name="redt00197__use"><!-- --></a>Example use</dt>
 
 <dd><div class="p">The system command that is run must be visible to the code
-that invokes the function. For example, consider the following statement:<pre class="codeblock">SysLib.callCmd("mySpecialProgram.exe")</pre>
+that invokes the function. For example, consider the following statement:<pre class="codeblock">SysLib.callCmd(""""""""mySpecialProgram.exe"""""""")</pre>
 The
-program <samp class="codeph">"mySpecialProgram.exe"</samp> must be in a directory
+program <samp class="codeph">""""""""mySpecialProgram.exe""""""""</samp> must be in a directory
 to which the PATH variable points. You can also specify the complete
-directory location, as in the following example:<pre class="codeblock">SysLib.callCmd("program files/myWork/mySpecialProgram.exe")</pre>
+directory location, as in the following example:<pre class="codeblock">SysLib.callCmd(""""""""program files/myWork/mySpecialProgram.exe"""""""")</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -74,9 +74,9 @@ directory location, as in the following example:<pre class="codeblock">SysLib.ca
 <div class="tablenoborder"><a name="redt00197__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00197__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d59261e118">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d59411e118">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d59261e121">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d59411e121">Issue</th>
 
 </tr>
 
@@ -85,17 +85,17 @@ directory location, as in the following example:<pre class="codeblock">SysLib.ca
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00197__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d59261e118 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d59411e118 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d59261e121 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d59411e121 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00197__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d59261e118 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d59411e118 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d59261e121 ">The <span class="synph"><span class="kwd">SysLib.startCmd</span></span> function
+<td class="cellrowborder" valign="top" width="50%" headers="d59411e121 ">The <span class="synph"><span class="kwd">SysLib.startCmd</span></span> function
 is not supported. <p class="compat_javascript_more"></p>
 </td>
 
