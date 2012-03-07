@@ -13,9 +13,7 @@ package org.eclipse.edt.gen.java;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
@@ -51,8 +49,6 @@ public class Context extends EglContext {
 	private StringBuffer smapExtension = new StringBuffer();
 	private List<String> smapFiles = new ArrayList<String>();
 	
-	private final Set<String> requiredRuntimeContainers = new HashSet<String>();
-
 	public Context(AbstractGeneratorCommand processor) {
 		super(processor);
 		smapData.append(Constants.smap_header);
@@ -297,17 +293,5 @@ public class Context extends EglContext {
 		EGLMessage message = EGLMessage.createEGLMessage(getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE,
 			obj, details, getLastStatementLocation());
 		getMessageRequestor().addMessage(message);
-	}
-	
-	/**
-	 * Adds a runtime container to be added to the build path when generation is finished.
-	 * @param id  The runtime container id to be added.
-	 */
-	public void requireRuntimeContainer(String id) {
-		requiredRuntimeContainers.add(id);
-	}
-	
-	public Set<String> getRequiredRuntimeContainers() {
-		return requiredRuntimeContainers;
 	}
 }
