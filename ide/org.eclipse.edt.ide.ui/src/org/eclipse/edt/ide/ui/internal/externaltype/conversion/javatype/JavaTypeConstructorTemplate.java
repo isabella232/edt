@@ -26,7 +26,8 @@ public class JavaTypeConstructorTemplate extends AbstractTemplate {
 		
 		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		for(int i=0; i < parameterTypes.length; i++) {
-			builder.append("arg" + i + SQLConstants.SPACE + ReflectionUtil.getTypeName(parameterTypes[i]));
+			builder.append("arg" + i + SQLConstants.SPACE + ReflectionUtil.getTypeName(parameterTypes[i])
+					+ SQLConstants.SPACE + JavaTypeConstants.EGL_KEYWORD_IN);
 			if(i != parameterTypes.length -1) {
 				builder.append(SQLConstants.COMMA);
 			}
