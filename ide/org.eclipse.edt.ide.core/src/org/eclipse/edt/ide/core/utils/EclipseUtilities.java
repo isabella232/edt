@@ -16,8 +16,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.externaltools.internal.model.BuilderCoreUtils;
 import org.eclipse.core.externaltools.internal.model.ExternalToolBuilder;
@@ -35,9 +38,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.edt.gen.EglContext;
+import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.CoreIDEPluginStrings;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
+import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -302,10 +308,34 @@ public class EclipseUtilities {
 	 * not a Java project.
 	 * 
 	 * @param project   The Java project.
-	 * @param runtimes  The runtimes to be added if not already present.
+	 * @param generator  The generator provider.
+	 * @param ctx  The generation context.
 	 */
-	public static void addRuntimesToProject(IProject project, EDTRuntimeContainer[] runtimes) {
-		if (runtimes == null || runtimes.length == 0) {
+	public static void addRuntimesToProject(IProject project, IGenerator generator, EglContext ctx) {
+		EDTRuntimeContainer[] baseRuntimes = generator instanceof AbstractGenerator ? ((AbstractGenerator)generator).resolveBaseRuntimeContainers() : null;
+		
+		EDTRuntimeContainer[] containersToAdd;
+		Set<String> requiredContainers = ctx.getRequiredRuntimeContainers();
+		if (requiredContainers.size() == 0) {
+			if (baseRuntimes == null || baseRuntimes.length == 0) {
+				return;
+			}
+			containersToAdd = baseRuntimes;
+		}
+		else {
+			Set<EDTRuntimeContainer> containers = new HashSet<EDTRuntimeContainer>(10);
+			if (baseRuntimes != null && baseRuntimes.length > 0) {
+				containers.addAll(Arrays.asList(baseRuntimes));
+			}
+			for (EDTRuntimeContainer container : generator.getRuntimeContainers()) {
+				if (requiredContainers.contains(container.getId())) {
+					containers.add(container);
+				}
+			}
+			containersToAdd = containers.toArray(new EDTRuntimeContainer[containers.size()]);
+		}
+		
+		if (containersToAdd == null || containersToAdd.length == 0) {
 			return;
 		}
 		
@@ -316,8 +346,8 @@ public class EclipseUtilities {
 				
 				List<IClasspathEntry> additions = new ArrayList<IClasspathEntry>();
 				
-				for (int i = 0; i < runtimes.length; i++) {
-					IPath path = runtimes[i].getPath();
+				for (int i = 0; i < containersToAdd.length; i++) {
+					IPath path = containersToAdd[i].getPath();
 					boolean found = false;
 					for (int j = 0; j < classpath.length; j++) {
 						if (classpath[j].getEntryKind()== IClasspathEntry.CPE_CONTAINER

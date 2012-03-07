@@ -104,7 +104,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	 * This may return null.
 	 * @see AbstractGenerator#getRuntimeContainers()
 	 */
-	protected EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
+	public EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
 		return null;
 	}
 	
@@ -113,7 +113,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 	 * This may return null, and subclasses may override this behavior.
 	 * @see AbstractGenerator#getRuntimeContainers()
 	 */
-	protected EDTRuntimeContainer[] resolveContributedRuntimeContainers() {
+	public EDTRuntimeContainer[] resolveContributedRuntimeContainers() {
 		initContributionsIfNecessary();
 		
 		if (contributionsUsed == null || contributionsUsed.size() == 0) {
