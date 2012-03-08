@@ -724,7 +724,7 @@ public class ProjectSettingsUtility {
 	    	        	String newValue = EclipseUtilities.convertToInternalPath(keyFor(newPath));
 	    	        	value = value.replace( oldValue1, newValue );
 	    	        	nextNode.put(key, value);
-	    	        } else if ( pathStartWith( key, oldKey ) ) {
+	    	        } else if ( !PROJECT_KEY.equals(key) && pathStartWith( key, oldKey ) ) {
 	    	            nextNode.remove(key);
 	    	            key = key.replace( oldKey, keyFor(newPath));
 	    	            nextNode.put(key, value);
