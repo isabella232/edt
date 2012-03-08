@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -28,10 +27,9 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.compiler.tools.IRUtils;
 import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
@@ -74,6 +72,9 @@ public class DeploymentDescriptorFinder {
 		return buf.toString();
 	}
 	
+	/**
+	 * @return the dd file names (just the names) in the string format expected by the Jetty server.
+	 */
 	public static String toOrderedArgumentString(Collection<DDFile> ddFiles) {
 		if (ddFiles.size() == 0) {
 			return ""; //$NON-NLS-1$
@@ -133,14 +134,10 @@ public class DeploymentDescriptorFinder {
 	}
 	
 	private static void addDDFiles(IProject project, Set<IProject> seenProjects, final Set<IResource> seenDDs, final List<DDFile> ddFiles) {
-		// First add the project's default DD if it has one.
-		PartWrapper defaultDD = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(project);
-		if (defaultDD.getPartPath() != null && defaultDD.getPartPath().length() > 0) {
-			IFile ddFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(defaultDD.getPartPath()));
-			if (ddFile.exists()) {
-				parseDD(ddFile, seenDDs, ddFiles);
-			}
+		if (seenProjects.contains(project)) {
+			return;
 		}
+		seenProjects.add(project);
 		
 		try {
 			if (!project.hasNature(EGLCore.NATURE_ID)) {
@@ -158,7 +155,7 @@ public class DeploymentDescriptorFinder {
 					@Override
 					public boolean visit(IResourceProxy proxy) throws CoreException {
 						if (proxy.getType() == IResource.FILE) {
-							if (IRUtils.matchesFileName( proxy.getName(), ClasspathUtil.SUFFIX_egldd, ClasspathUtil.SUFFIX_EGLDD)) {
+							if (IRUtils.matchesFileName(proxy.getName(), ClasspathUtil.SUFFIX_egldd, ClasspathUtil.SUFFIX_EGLDD)) {
 								parseDD(proxy.requestResource(), seenDDs, ddFiles);
 							}
 							return false;
@@ -166,6 +163,17 @@ public class DeploymentDescriptorFinder {
 						return true;
 					}
 				}, IResource.NONE);
+			}
+			
+			// Finally do the same for any projects in its EGL path.
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			for (IEGLPathEntry entry : eglProject.getResolvedEGLPath(true)) {
+				if (entry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
+					IResource resource = root.findMember(entry.getPath());
+					if (resource != null && resource.getType() == IResource.PROJECT && resource.isAccessible()) {
+						addDDFiles((IProject)resource, seenProjects, seenDDs, ddFiles);
+					}
+				}
 			}
 		}
 		catch (CoreException e) {
@@ -194,18 +202,6 @@ public class DeploymentDescriptorFinder {
 			
 			if (!found) {
 				resolvedFiles.add(new DDFile(dd.getName().toLowerCase(), absPath, dd.getBindings(), dd.getServices()));
-			}
-			
-			// We also need anything it included, even if we didn't add it above.
-			List<String> includes = dd.getIncludes();
-			if (includes.size() > 0) {
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-				for (String include : includes) {
-					IResource member = root.findMember(include);
-					if (member != null && member.getType() == IResource.FILE) {
-						parseDD(member, seenDDs, resolvedFiles);
-					}
-				}
 			}
 		}
 		catch (Exception e) {
