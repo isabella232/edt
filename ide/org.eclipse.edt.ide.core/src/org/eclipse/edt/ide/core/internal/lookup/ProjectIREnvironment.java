@@ -33,7 +33,6 @@ public class ProjectIREnvironment extends Environment {
 	//TODO once we support multiple bin directories, override getDefaultSerializeStore() (or have the builder change it before saving)
 	
 	private boolean systemPartsInitialized;
-	protected ISystemEnvironment systemEnvironment;	
 
 	public ProjectIREnvironment() {
 		super();
@@ -53,7 +52,7 @@ public class ProjectIREnvironment extends Environment {
 		if (systemPartsInitialized) {
 			return;
 		}
-		systemEnvironment = environment;
+		
 		systemPartsInitialized = true;
 		Bootstrap.initialize(this);
 		
@@ -66,10 +65,6 @@ public class ProjectIREnvironment extends Environment {
 				registerObjectStore(scheme, store);
 			}
 		}
-	}
-	
-	public ISystemEnvironment getSystemEnvironment() {
-		return systemEnvironment;
 	}
 	
 	@Override
