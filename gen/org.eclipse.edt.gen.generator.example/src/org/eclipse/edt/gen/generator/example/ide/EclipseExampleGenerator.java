@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
@@ -56,11 +57,14 @@ public class EclipseExampleGenerator extends EGL2Example {
 			}
 			
 			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
+			IProject targetProject = outputFile.getProject();
+			
 			// make sure it's a source folder
 			EclipseUtilities.addToJavaBuildPathIfNecessary(outputFile.getProject(), outputFolder, forceClasspathRefresh);
 			
 			// Add required runtimes.
-			EclipseUtilities.addRuntimesToProject(outputFile.getProject(), generatorProvider.getRuntimeContainers());
+			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider, generator.getContext());
+			
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 		} else {
