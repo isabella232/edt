@@ -33,12 +33,14 @@ public class Constants {
 	 * Also note that files are linked in the order they appear here.  Be aware of dependencies!
 	 */
 	public static final String RUI_MESSAGE_FILE = "RuiMessages"; //$NON-NLS-1$
+	public static final String RUI_RUNTIME_MODULE_FILE = "runtime_module.js"; //$NON-NLS-1$
 	public static final String RUI_RUNTIME_BOOTSTRAP_FILE = "edt_core.js"; //$NON-NLS-1$
 	public static final String RUI_RUNTIME_LOADER_FILE = "dojo.js"; //$NON-NLS-1$
 //	public static final String RUI_RUNTIME_LOADER_FILE = "dojo.js.uncompressed.js"; //$NON-NLS-1$
 	public static final String RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE = "edt_runtime_all.js"; //$NON-NLS-1$
 	public static final List<String> RUI_RUNTIME_JAVASCRIPT_FILES = new ArrayList<String>(); //$NON-NLS-1$
 	static{
+		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_MODULE_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_BOOTSTRAP_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_LOADER_FILE);  //$NON-NLS-1$
 		RUI_RUNTIME_JAVASCRIPT_FILES.add(RUI_RUNTIME_JAVASCRIPT_ALL_IN_ONE_FILE);  //$NON-NLS-1$
