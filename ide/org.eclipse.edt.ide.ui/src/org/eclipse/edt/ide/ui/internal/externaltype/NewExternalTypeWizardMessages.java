@@ -38,6 +38,8 @@ public class NewExternalTypeWizardMessages extends NLS {
 	public static String NewExternalTypeWizardPage_SelectAll_message;
 	public static String NewExternalTypeWizardPage_DeSelectAll_message;
 	
+	public static String NewExternalTypeWizardPage_PaneTitle_message;
+	
 	public static String NewExternalTypeWizardPage_GeneratedAllSuperTypes_message;
 	public static String NewExternalTypeWizardPage_GeneratedAllReferencedTypes_message;
 	

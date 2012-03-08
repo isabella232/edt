@@ -1612,23 +1612,13 @@ Templates
     </extension>
     
     <extension point="org.eclipse.edt.ide.ui.eglTemplates">
-    
-       <template
-     		name="%BasicExternalType"
-     		icon="icons/ctool16/newrec_wiz.gif"
-            category="org.eclipse.edt.ide.ui.externaltypes"
-            codeTemplateID="org.eclipse.edt.ide.ui.templates.flexible_basic_externaltype"
-            id="org.eclipse.edt.ide.ui.externaltypes.basic"
-            description="%BasicExternalTypeDescription">
-      </template>
-      
       <template
             category="org.eclipse.edt.ide.ui.externaltypes"
             default="true"
             description="%ExternalTypeFromJavaTypeDescription"
             icon="icons/ctool16/record_template.gif"
             id="org.eclipse.edt.ide.ui.externaltypes.javatype"
-            name="%ExternalTypeFromJavaType"
+            name="%ExternalTypeFromJavaTypes"
             wizardClass="org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.ExternalTypeFromJavaWizard">
       </template>
       

@@ -282,8 +282,8 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	
 	protected void createTreeViewer(Composite parent,int nColumns) {
 		initializeDialogUnits(parent);
-		ViewerPane pane= new ViewerPane(parent, SWT.BORDER | SWT.FLAT);
-		pane.setText("Select class(s) to generate external types.");
+		ViewerPane pane= new ViewerPane(parent, SWT.BORDER | SWT.FLAT);//
+		pane.setText(NewExternalTypeWizardMessages.NewExternalTypeWizardPage_PaneTitle_message);
 		
 		javaTypeViewer = new CheckboxTreeViewer(pane);
 		fContentProvider = new ExternalTypeContentProvider();
@@ -311,7 +311,6 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		pane.setLayoutData(gd);
 		
 		ToolBarManager manager= pane.getToolBarManager();
-		//manager.add(new OverrideFlatTreeAction()); // create after tree is created
 		manager.update(true);
 		javaTypeViewer.getTree().setFocus();
 	}

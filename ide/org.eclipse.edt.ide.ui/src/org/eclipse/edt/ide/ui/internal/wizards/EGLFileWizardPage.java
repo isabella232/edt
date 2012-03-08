@@ -363,6 +363,7 @@ public class EGLFileWizardPage extends EGLPackageWizardPage {
 		fPackageDialogField.setButtonLabel(NewWizardMessages.NewTypeWizardPagePackageButton);
 		fPackageDialogField.setStatusWidthHint(NewWizardMessages.NewTypeWizardPageDefault);
 		fPackageDialogField.setText(getFileConfiguration().getFPackage());
+		updatePackageStatusLabel();
 		fPackageDialogField.setDialogFieldListener(adapter);
 		fPackageDialogField.doFillIntoGrid(parent, nColumns - 1);
 		DialogField.createEmptySpace(parent);

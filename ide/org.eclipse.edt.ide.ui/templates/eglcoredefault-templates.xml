@@ -147,16 +147,6 @@ record ${recordName}
 end
 </template>
 
-<template name="externaltype" description="%Templates.flexible_basic_externaltype" id="org.eclipse.edt.ide.ui.templates.flexible_basic_externaltype" context = "egl-core" enabled="true">// basic external type
-//
-ExternalType ${externalTypeName} type JavaObject
-{
-  externalName = "${externalTypeName}", 
-  PackageName = "${packageName}"
-}
-end
-</template>
-
 <!-- File records aren't supported in EDT 0.7
 <template name="record" description="%Templates.fixed_serial_record" id="org.eclipse.edt.ide.ui.templates.fixed_serial_record" context = "egl-core" enabled="true">// structured serial record
 //
