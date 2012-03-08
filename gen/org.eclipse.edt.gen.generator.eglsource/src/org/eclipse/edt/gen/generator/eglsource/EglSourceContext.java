@@ -36,19 +36,16 @@ public class EglSourceContext extends EglContext {
 
 	@Override
 	public void handleValidationError(Element ex) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void handleValidationError(Annotation ex) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void handleValidationError(Type ex) {
-		// TODO Auto-generated method stub
 
 	}
 
