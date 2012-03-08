@@ -11,11 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
-import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
@@ -26,6 +23,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -39,7 +37,6 @@ import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.serialization.IEnvironment;
 
 public class EGLClassTemplate extends JavaScriptTemplate {
 
@@ -59,11 +56,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 			}
 			catch (Exception e) {}
 		}
-		addNamespaceMap(part, ctx);
-		
-		
-		
-		
+		addNamespaceMap(part, ctx);		
 	}
 
 	private void addNamespaceMap(EGLClass part, Context ctx) {
@@ -178,21 +171,17 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	
 	public void genDependent(EGLClass part, Context ctx, TabbedWriter out, StringBuilder buf) throws NoSuchMethodException {
 		try {			
-			IEnvironment env = ctx.getEnvironment();
-			Method method = env.getClass().getMethod("getSystemEnvironment");
-			ISystemEnvironment sysEnv = (ISystemEnvironment) method.invoke(env);
 			for (Part refPart: IRUtils.getReferencedPartsFor(part)) {
-				if (!(refPart instanceof Delegate) && !(refPart instanceof Service) && 
-						!(refPart instanceof Interface) && 
-						!IRUtils.isSystemPart(refPart.getFullyQualifiedName(), sysEnv.getIREnvironment())) {
+				if ( (refPart instanceof Enumeration 
+						|| (refPart instanceof EGLClass && !(refPart instanceof Delegate) && !(refPart instanceof Service) && !(refPart instanceof Interface)  && !(refPart instanceof ExternalType))
+						|| (refPart instanceof ExternalType && refPart.getAnnotation( Constants.JACASCRIPT_OBJECT ) != null))
+						&& !(refPart instanceof Annotation)
+						&& (!refPart.getPackageName().startsWith("eglx.lang"))
+				){
 					ctx.invoke(genModuleName, refPart, buf);
 					buf.append(", ");							
 				}
-			}			
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			}
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} 
