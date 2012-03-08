@@ -17,6 +17,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsObjectsToEGLUtils;
 import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsSqlTemplateConstants;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizard;
 import org.eclipse.edt.ide.ui.internal.record.NewRecordWizardMessages;
@@ -24,6 +25,7 @@ import org.eclipse.edt.ide.ui.internal.record.RecordConfiguration;
 import org.eclipse.edt.ide.ui.internal.wizards.AbstractDataAccessWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.DTOConfigPage;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLCodePreviewPage;
+import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class RecordFromSqlDatabaseWizard extends AbstractDataAccessWizard {
@@ -40,7 +42,7 @@ public class RecordFromSqlDatabaseWizard extends AbstractDataAccessWizard {
 		sqlDbPage.setDescription(NewRecordWizardMessages.RecordFromSqlDatabasePage_Description);
 
 		summaryPage = new EGLCodePreviewPage(NewRecordWizardMessages.NewRecordSummaryPage_pageName, NewRecordWizardMessages.NewRecordSummaryPage_pageTitle,
-				NewRecordWizardMessages.NewRecordSummaryPage_pageDescription);
+				NewWizardMessages.NewEGLFilesPreviewPageDescription);
 		generatingProgressMonitorText = NewRecordWizardMessages.GeneratingProgressMonitor_PromptionText;
 	}
 
@@ -70,5 +72,11 @@ public class RecordFromSqlDatabaseWizard extends AbstractDataAccessWizard {
 		
 		RecordConfiguration conf = getConfiguration();		
 		context.getVariables().put(DataToolsSqlTemplateConstants.RECORD_FILE_NAME, conf.getFileName());
+	}
+	
+
+	public String getMainEGLFile(){
+		return DataToolsObjectsToEGLUtils.getEGLFilePath(getConfiguration().getFPackage(), getConfiguration().getFileName());
+		
 	}
 }

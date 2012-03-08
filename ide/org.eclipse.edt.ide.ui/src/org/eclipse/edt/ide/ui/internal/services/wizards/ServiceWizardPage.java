@@ -14,8 +14,10 @@ package org.eclipse.edt.ide.ui.internal.services.wizards;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLTemplateWizardPage;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
+import org.eclipse.edt.ide.ui.templates.ITemplate;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,7 +26,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 public class ServiceWizardPage extends EGLTemplateWizardPage {
-	protected TableViewer templateViewer;
 	protected Text descriptionText;
 
 	public ServiceWizardPage(ISelection selection, String pageName) {
@@ -74,4 +75,15 @@ public class ServiceWizardPage extends EGLTemplateWizardPage {
 		return "org.eclipse.edt.ide.ui.services";
 	}
 
+	@Override
+	protected void handleSelectedTemplate() {
+		super.handleSelectedTemplate();
+		Object o = ((IStructuredSelection) templateViewer.getSelection()).getFirstElement();
+		if (o instanceof ITemplate) {
+			ITemplate template = (ITemplate) o;
+			((ServiceConfiguration)((ServiceWizard) getWizard()).getConfiguration()).setTemplateTypeByTemplateID(template.getId());
+		}
+	}
+
+	
 }

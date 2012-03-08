@@ -278,7 +278,7 @@ public class NewWizardMessages extends NLS {
 //
 //	public static String NewTypeWizardPageOperationdesc;
 //	public static String NewTypeWizardPageWSDLTypenameLabel;
-
+	public static String NewEGLFilesPreviewPageDescription;
 	public static String NewEGLFilesPreviewFileSelection;
 	public static String NewEGLFilesPreviewFileName;
 	public static String NewEGLFilesPreviewNoFile;

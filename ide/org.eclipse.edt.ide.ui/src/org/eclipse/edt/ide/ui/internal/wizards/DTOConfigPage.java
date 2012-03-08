@@ -548,7 +548,6 @@ public class DTOConfigPage extends WizardPage implements SelectionListener, IChe
 
 		@Override
 		public boolean hasChildren(Object arg0) {
-			// TODO Auto-generated method stub
 			if (arg0 instanceof Schema) {
 				Schema schema = (Schema) arg0;
 				// return schema.getTables().size() > 0;

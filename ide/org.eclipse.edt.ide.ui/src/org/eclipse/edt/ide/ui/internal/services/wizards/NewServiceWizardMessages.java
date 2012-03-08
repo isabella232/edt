@@ -28,7 +28,6 @@ public class NewServiceWizardMessages extends NLS {
 	
 	public static String NewServiceSummaryPage_pageName;
 	public static String NewServiceSummaryPage_pageTitle;
-	public static String NewServiceSummaryPage_pageDescription;
 	public static String NewServiceSummaryPage_previewLabel;
 	
 	public static String ServiceFromSqlDatabasePage_Description;

@@ -27,7 +27,6 @@ public class NewLibraryWizardMessages extends NLS {
 	
 	public static String NewLibrarySummaryPage_pageName;
 	public static String NewLibrarySummaryPage_pageTitle;
-	public static String NewLibrarySummaryPage_pageDescription;
 	public static String NewLibrarySummaryPage_previewLabel;
 	
 	public static String LibraryFromSqlDatabasePage_Description;

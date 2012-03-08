@@ -14,10 +14,12 @@ package org.eclipse.edt.ide.ui.internal.services.wizards;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
+import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsObjectsToEGLUtils;
 import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsSqlTemplateConstants;
 import org.eclipse.edt.ide.ui.internal.wizards.AbstractDataAccessWizard;
 import org.eclipse.edt.ide.ui.internal.wizards.DTOConfigPage;
 import org.eclipse.edt.ide.ui.internal.wizards.EGLCodePreviewPage;
+import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 
 public class ServiceFromDBWizard extends AbstractDataAccessWizard {
 
@@ -33,7 +35,7 @@ public class ServiceFromDBWizard extends AbstractDataAccessWizard {
 		sqlDbPage.setDescription(NewServiceWizardMessages.ServiceFromSqlDatabasePage_Description);
 		
 		summaryPage = new EGLCodePreviewPage(NewServiceWizardMessages.NewServiceSummaryPage_pageName, NewServiceWizardMessages.NewServiceSummaryPage_pageTitle,
-				NewServiceWizardMessages.NewServiceSummaryPage_pageDescription);
+				NewWizardMessages.NewEGLFilesPreviewPageDescription);
 		generatingProgressMonitorText = NewServiceWizardMessages.GeneratingProgressMonitor_PromptionText;
 	}
 
@@ -48,5 +50,10 @@ public class ServiceFromDBWizard extends AbstractDataAccessWizard {
 		
 		ServiceConfiguration servConf = getConfiguration();	
 		context.getVariables().put(DataToolsSqlTemplateConstants.SERVICE_NAME, servConf.getServiceName());
+	}
+	
+	public String getMainEGLFile(){
+		return DataToolsObjectsToEGLUtils.getEGLFilePath(this.javaPackageName, getConfiguration().getServiceName());
+		
 	}
 }

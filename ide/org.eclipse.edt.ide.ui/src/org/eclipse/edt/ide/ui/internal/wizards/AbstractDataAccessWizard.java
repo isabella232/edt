@@ -56,6 +56,7 @@ import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizard;
 import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLPartConfiguration;
+import org.eclipse.edt.ide.ui.wizards.MultiEGLFileOperation;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
 import org.eclipse.edt.ide.ui.wizards.SimpleEGLFileOperation;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
@@ -198,22 +199,19 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 					ConnectionInfo connection = getConnectionInfo();
 					sourceFileContents = generateEGLCode(monitor, connection);
 				}
+				
+				
 				EGLPartConfiguration epc = getConfiguration();
-				Set<String> fileNames = sourceFileContents.keySet();
-				for (String fileName : fileNames) {
-					if (monitor.isCanceled()) {
-						break;
-					}
-					epc.setFileName(DataToolsObjectsToEGLUtils.getEGLFileName(fileName));
-					epc.setFPackage(DataToolsObjectsToEGLUtils.getPackageName(fileName));
-					SimpleEGLFileOperation mefo = new SimpleEGLFileOperation(epc);
-					mefo.setFileContent(sourceFileContents.get(fileName));
-					try {
-						mefo.perform(monitor);
-					} catch (CoreException e) {
-						throw new InterruptedException(e.toString());
-					}
+
+				MultiEGLFileOperation mefo = new MultiEGLFileOperation(epc, sourceFileContents);
+				try {
+					mefo.execute(monitor);
+					epc.setFile(mefo.getFile(getMainEGLFile()));
+				} catch (CoreException e) {
+					throw new InterruptedException(e.toString());
 				}
+				
+				
 				if(needConfigGenerator){
 					setupPackageGenerator();
 				}
@@ -224,6 +222,8 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 		};
 	}
 
+	public abstract String getMainEGLFile();
+	
 	public void setupPackageGenerator() {
 		EGLPartConfiguration epc = getConfiguration();
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(epc.getProjectName());

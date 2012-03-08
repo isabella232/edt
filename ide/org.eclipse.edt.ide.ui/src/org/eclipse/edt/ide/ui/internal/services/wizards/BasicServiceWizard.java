@@ -55,71 +55,8 @@ public class BasicServiceWizard extends TemplateWizard {
 	public boolean performFinish() {
 		getConfiguration().setSuperInterfaces(intfSelectionPage.getSuperInterfaces());
 
-		try {
-			getContainer().run(((ServiceWizard) getParentWizard()).canRunForked(), true, getServiceOperation());
-		} catch (InterruptedException e) {
-			boolean dialogResult = false;
-			if (e.getMessage().indexOf(':') != -1) {
-				PartTemplateException pe = new PartTemplateException(e.getMessage());
-				if (pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_NOT_FOUND) == 0) {
-					dialogResult = ((EGLPartWizardPage) this.getPage(ServiceWizard.WIZPAGENAME_ServiceWizardPage)).handleTemplateError(pe.getPartType(),
-							pe.getPartDescription()); //$NON-NLS-1$
-				} else if (pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_DISABLED) == 0) {
-					// is there a way to tell this?
-				} else if (pe.getTemplateExcpetion().compareTo(EGLFileConfiguration.TEMPLATE_CORRUPTED) == 0) {
-					dialogResult = ((EGLPartWizardPage) this.getPage(ServiceWizard.WIZPAGENAME_ServiceWizardPage)).handleTemplateError(pe.getPartType(),
-							pe.getPartDescription()); //$NON-NLS-1$
-				}
-
-				if (dialogResult)
-					return performFinish();
-				else
-					return false;
-			} else {
-				e.printStackTrace();
-				EGLLogger.log(this, e);
-				return false;
-			}
-		} catch (InvocationTargetException e) {
-			if (e.getTargetException() instanceof CoreException) {
-				ErrorDialog.openError(getContainer().getShell(), null, null, ((CoreException) e.getTargetException()).getStatus());
-			} else {
-				e.printStackTrace();
-				EGLLogger.log(this, e);
-			}
-			return false;
-		}
-
 		return true;
 	}
 
-	protected ServiceOperation getServiceOperation() {
-		ISchedulingRule rule = ((ServiceWizard) getParentWizard()).getCurrentSchedulingRule();
-		ServiceOperation operation = null;
-		ServiceConfiguration configuration = (ServiceConfiguration) getConfiguration();
-		if (rule != null) {
-			operation = new ServiceOperation(configuration, configuration.getSuperInterfaces(), new ArrayList() /*
-																												 * Not
-																												 * support
-																												 * called
-																												 * basic
-																												 * program
-																												 * in
-																												 * EDT
-																												 * 0.8
-																												 */, rule);
-		} else {
-			operation = new ServiceOperation(configuration, configuration.getSuperInterfaces(), new ArrayList() /*
-																												 * Not
-																												 * support
-																												 * called
-																												 * basic
-																												 * program
-																												 * in
-																												 * EDT
-																												 * 0.8
-																												 */);
-		}
-		return (operation);
-	}
+
 }

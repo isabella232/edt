@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.services.wizards;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -44,6 +45,9 @@ public class ServiceConfiguration extends InterfaceListConfiguration {
 	private boolean genAsRestService;
 	
 	private List superInterfaces;
+	private ETemplateType templateType;
+	
+	public enum ETemplateType{BASIC, DATA_ACCESS};
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		super.init(workbench, selection);
@@ -155,6 +159,7 @@ public class ServiceConfiguration extends InterfaceListConfiguration {
 	private void setDefaultAttributes() {
 	    serviceName = ""; //$NON-NLS-1$
 	    calledPgms = new Hashtable<String,IPart>();
+	    superInterfaces = new ArrayList();
 	    calledProgramPgmHash = new Hashtable();
 	    genAsWebService = false;
 	    genAsRestService = false;
@@ -210,4 +215,18 @@ public class ServiceConfiguration extends InterfaceListConfiguration {
 	public void setGenAsRestService(boolean genAsRest) {
 		this.genAsRestService = genAsRest;
 	}
+
+	public ETemplateType getTemplateType() {
+		return templateType;
+	}
+
+	public void setTemplateTypeByTemplateID(String templateID) {
+		if(templateID.equals("org.eclipse.edt.ide.ui.service.basic")){
+			templateType = ETemplateType.BASIC;
+		}else if(templateID.equals("org.eclipse.edt.ide.ui.service.dataaccess")){
+			templateType = ETemplateType.DATA_ACCESS;
+		}
+	}
+	
+	
 }
