@@ -25,14 +25,17 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.Member;
@@ -44,6 +47,7 @@ import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -724,5 +728,25 @@ public class CommonUtilities {
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Returns if the part can be generated to javascript
+	 * @param part
+	 * @return boolean
+	 */
+	public static boolean canBeGeneratedToJavaScript(Part part){
+		return (part instanceof Enumeration 
+				|| (part instanceof EGLClass && !(part instanceof Delegate) && !(part instanceof Service) && !(part instanceof Interface)  && !(part instanceof ExternalType))
+				|| (part instanceof ExternalType && part.getAnnotation( Constants.JACASCRIPT_OBJECT ) != null));
+	}
+	
+	/**
+	 * Returns if a part is a system native type
+	 * @param part
+	 * @return boolean
+	 */
+	public static boolean isNativeType(Part part){
+		return !(part instanceof Annotation) && !part.getPackageName().startsWith("eglx.lang");
 	}
 }
