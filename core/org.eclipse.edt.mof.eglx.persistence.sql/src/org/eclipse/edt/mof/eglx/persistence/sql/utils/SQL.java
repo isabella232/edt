@@ -90,7 +90,11 @@ public class SQL {
 				!isKeyField(field) &&
 		 		!isAssociationField(field) &&
 		 		!isTransient(field) &&
-		 		(field.getAnnotation("eglx.persistence.sql.Column") == null ||
+		 		hasUpdateableAnnotation(field);
+	}
+	
+	public static boolean hasUpdateableAnnotation(Field field) {
+		return (field.getAnnotation("eglx.persistence.sql.Column") == null ||
 		 				((Boolean)field.getAnnotation("eglx.persistence.sql.Column").getValue("updateable")).booleanValue());
 	}
 	

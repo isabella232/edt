@@ -48,7 +48,7 @@ public class SqlReplaceStatementImpl extends SqlIOStatementImpl implements SqlRe
 		sql += " SET ";
 		boolean doComma = false;
 		for (Field f : targetType.getFields()) {
-			if (!SQL.isKeyField(f) && SQL.isUpdateable(f)) {
+			if (SQL.hasUpdateableAnnotation(f) || (!SQL.isKeyField(f) && SQL.isUpdateable(f))) {
 				if (doComma) sql += ", ";
 				sql += SQL.getColumnName(f);
 				sql += " = ?";
