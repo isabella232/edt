@@ -12,23 +12,53 @@
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ResourceTemplate extends JavaScriptTemplate {
 
-	public void genDefaultValue(AnnotationType type, Context ctx, TabbedWriter out, Annotation annot, Field field) {
-		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys); //.clone();
+	public void preGen(AnnotationType type, Context ctx, Annotation annot, Field field){
+		AssignmentStatement assignmentStatement = ctx.getFactory().createAssignmentStatement();
+		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			assignmentStatement.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+		assignmentStatement.setContainer(field.getContainer());
+		Assignment assignment = factory.createAssignment();
+		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			assignment.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+		assignmentStatement.setAssignment(assignment);
+		MemberName nameExpression = factory.createMemberName();
+		if (field.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			nameExpression.addAnnotation(field.getAnnotation(IEGLConstants.EGL_LOCATION));
+		nameExpression.setMember(field);
+		nameExpression.setId(field.getName());
+		assignment.setLHS(nameExpression);
+		assignment.setRHS(getLibraryInvocation(annot, field));
+		// add the assignment to the declaration statement block
+		StatementBlock declarationBlock = field.getInitializerStatements();
+		if(declarationBlock == null){
+			declarationBlock = factory.createStatementBlock();
+			declarationBlock.setContainer(field.getContainer());
+			field.setInitializerStatements(declarationBlock);
+		}
+		declarationBlock.getStatements().add(declarationBlock.getStatements().size(), assignmentStatement);
+	}
+	
+	private QualifiedFunctionInvocation getLibraryInvocation( Annotation annot, Field field) {
+		ExternalType serviceLib = (ExternalType)TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys).clone();
 		QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 		PartName partName  = factory.createPartName();
 		partName.setType(serviceLib);
@@ -42,6 +72,6 @@ public class ResourceTemplate extends JavaScriptTemplate {
 		else{
 			uri.setValue("binding:" + field.getName());
 		}
-		ctx.invoke(genExpression, invocation, ctx, out);
+		return invocation;
 	}
 }
