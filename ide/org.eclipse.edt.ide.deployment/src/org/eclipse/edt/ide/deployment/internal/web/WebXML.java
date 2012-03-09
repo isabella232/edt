@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.EnvEntry;
@@ -694,10 +695,11 @@ public class WebXML {
 		final IModelProvider provider = ModelProviderManager.getModelProvider( project );		
 		if( provider != null )
 		{
+			IPath path = (provider.getModelObject() instanceof org.eclipse.jst.javaee.web.WebApp) ? IModelProvider.FORCESAVE : null;
 			provider.modify(new Runnable(){
 				public void run() {
 					Object object =  provider.getModelObject(); 
-			
+					
 					EglWebApp webApp = null;
 					if (object instanceof org.eclipse.jst.javaee.web.WebApp) 
 					{
@@ -736,7 +738,7 @@ public class WebXML {
 						}
 					}
 				}
-			}, null);
+			}, path);
 		}
 	}
 	
