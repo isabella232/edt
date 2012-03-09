@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.util.EGLMessage;
 import org.eclipse.edt.gen.deployment.javascript.DeploymentDescGenerator;
-import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.deployment.core.model.DeploymentDesc;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.DeploymentResultMessageRequestor;
@@ -37,17 +36,13 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 	
 	public static final String BIND_JS_FILE_SUFFIX = "-bnd.js";
 	
-	private String targetProjectName;
-	private DeploymentDesc ddModel;
-	private DeploymentContext context;
-	
 	@Override
 	public void preCheck(DeploymentContext context,
 			IDeploymentResultsCollector resultsCollector,
 			IProgressMonitor monitor) throws CoreException {
 		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
 			DeploymentDesc desc = context.getDeploymentDesc();
-			if ( desc.getRestBindings() != null && desc.getRestBindings().size() > 0 ) {
+			if ( desc.getBindings() != null && desc.getBindings().size() > 0 ) {
 				context.setStatus( DeploymentContext.STATUS_SHOULD_RUN );
 			}
 		}
@@ -59,10 +54,6 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 			return;
 		}
 		
-		this.context = context;
-		ddModel = context.getDeploymentDesc();
-		
-//		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
 		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
 
 		generateBindFile(context.getDeploymentDesc(), context.getTargetProject(), monitor, messageRequestor);
@@ -92,7 +83,6 @@ public class GenerateServiceBindJSFileOperation extends AbstractDeploymentOperat
 				targetFile.setContents(is, true, true, monitor);
 			} else {
 				targetFile.create(is, true, monitor);
-	//			targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 			}
 	
 			is.close();
