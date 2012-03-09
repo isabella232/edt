@@ -2519,6 +2519,7 @@ egl.convertAnyToString = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
+			case 'T':
 				return any.eze$$value;
 			
 			case 'K':
