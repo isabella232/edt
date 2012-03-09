@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
-Delegate CellFormatter(class String, value String, rowData any in) end
+Delegate CellFormatter(class String inout, value String inout, rowData any in) end
 Delegate ColumnComparator(data1 any in, data2 any in) returns (int) end
 
 handler DataGridColumn 
