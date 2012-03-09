@@ -1,0 +1,251 @@
+externalType etImpDefConst type JavascriptObject
+//ET with implicit default constructor
+end
+
+externalType etExpDefConst type JavascriptObject
+//ET with explicit default constructor
+  constructor();
+end
+
+externalType etPrivDefConst type JavascriptObject
+//ET with explicit, private default constructor
+	private constructor();
+end
+
+externalType etImpDefExpNonDefConst type JavascriptObject
+//ET with implicit default and explicit non-default constructor
+	constructor(p1 int in);
+end
+
+record rec1
+	etImpDefConst etImpDefConst;		//0
+	etExpDefConst etExpDefConst;		//0
+	etPrivDefConst etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConst etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstA etImpDefConst = new etImpDefConst;	//0
+	etExpDefConstA etExpDefConst = new etExpDefConst;	//0
+	etPrivDefConstA etPrivDefConst = new etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConstA etImpDefExpNonDefConst = new etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstB etImpDefConst = new etImpDefConst();		//0
+	etExpDefConstB etExpDefConst = new etExpDefConst();		//0
+	etPrivDefConstB etPrivDefConst = new etPrivDefConst();    //1 is private
+	etImpDefExpNonDefConstB etImpDefExpNonDefConst = new etImpDefExpNonDefConst();        //0
+
+	etImpDefConstC etImpDefConst?;		//0
+	etExpDefConstC etExpDefConst?;		//0
+	etPrivDefConstC etPrivDefConst?;    //0
+	etImpDefExpNonDefConstC etImpDefExpNonDefConst?;        //0
+	
+	etImpDefConstD etImpDefConst? = new etImpDefConst;	//0
+	etExpDefConstD etExpDefConst? = new etExpDefConst;	//0
+	etPrivDefConstD etPrivDefConst? = new etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConstD etImpDefExpNonDefConst? = new etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstE etImpDefConst? = new etImpDefConst();		//0
+	etExpDefConstE etExpDefConst? = new etExpDefConst();		//0
+	etPrivDefConstE etPrivDefConst? = new etPrivDefConst();    //1 is private
+	etImpDefExpNonDefConstE etImpDefExpNonDefConst? = new etImpDefExpNonDefConst();        //0
+
+	etImpDefConstF etImpDefConst[];		//0
+	etExpDefConstF etExpDefConst[];		//0
+	etPrivDefConstF etPrivDefConst[];    //0
+	etImpDefExpNonDefConstF etImpDefExpNonDefConst[];        //0
+	
+	etImpDefConstG etImpDefConst[] = new etImpDefConst[];	//0
+	etExpDefConstG etExpDefConst[] = new etExpDefConst[];	//0
+	etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];    //0
+	etImpDefExpNonDefConstG etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[];        //0
+
+	etImpDefConstH etImpDefConst[] = new etImpDefConst[0];	//0
+	etExpDefConstH etExpDefConst[] = new etExpDefConst[0];	//0
+	etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];    //0
+	etImpDefExpNonDefConstH etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[0];        //0
+
+	etImpDefConstI etImpDefConst[] = new etImpDefConst[5];	//0
+	etExpDefConstI etExpDefConst[] = new etExpDefConst[5];	//0
+	etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];    //1 not instantiable
+	etImpDefExpNonDefConstI etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5];        //0
+
+	etImpDefConstJ etImpDefConst[] = new etImpDefConst[5] ();	//0
+	etExpDefConstJ etExpDefConst[] = new etExpDefConst[5] ();	//0
+	etPrivDefConstJ etPrivDefConst[] = new etPrivDefConst[5] ();    //1 not instantiable
+	etImpDefExpNonDefConstJ etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5] ();        //0
+
+	etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];	//0
+	etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];	//0
+	etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];    //0
+	etImpDefExpNonDefConstK etImpDefExpNonDefConst?[] = new etImpDefExpNonDefConst?[5];        //0
+	
+	etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5] ();	//0
+	etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5] ();	//0
+	etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5] ();    //1 not instantiable
+	etImpDefExpNonDefConstL etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][5] ();        //0
+
+	etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0] ();	//0
+	etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][] ();	//0
+	etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0] ();    //0
+	etImpDefExpNonDefConstM etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][] ();        //0
+
+	etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5] ();	//0
+	etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5] ();	//0
+	etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5] ();    //0
+	etImpDefExpNonDefConstN etImpDefExpNonDefConst?[][] = new etImpDefExpNonDefConst?[1][5] ();        //0
+end
+
+library lib1
+
+	etImpDefConst etImpDefConst;		//0
+	etExpDefConst etExpDefConst;		//0
+	etPrivDefConst etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConst etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstA etImpDefConst = new etImpDefConst;	//0
+	etExpDefConstA etExpDefConst = new etExpDefConst;	//0
+	etPrivDefConstA etPrivDefConst = new etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConstA etImpDefExpNonDefConst = new etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstB etImpDefConst = new etImpDefConst();		//0
+	etExpDefConstB etExpDefConst = new etExpDefConst();		//0
+	etPrivDefConstB etPrivDefConst = new etPrivDefConst();    //1 is private
+	etImpDefExpNonDefConstB etImpDefExpNonDefConst = new etImpDefExpNonDefConst();        //0
+
+	etImpDefConstC etImpDefConst?;		//0
+	etExpDefConstC etExpDefConst?;		//0
+	etPrivDefConstC etPrivDefConst?;    //0
+	etImpDefExpNonDefConstC etImpDefExpNonDefConst?;        //0
+	
+	etImpDefConstD etImpDefConst? = new etImpDefConst;	//0
+	etExpDefConstD etExpDefConst? = new etExpDefConst;	//0
+	etPrivDefConstD etPrivDefConst? = new etPrivDefConst;    //1 not instantiable
+	etImpDefExpNonDefConstD etImpDefExpNonDefConst? = new etImpDefExpNonDefConst;        //0
+	
+	etImpDefConstE etImpDefConst? = new etImpDefConst();		//0
+	etExpDefConstE etExpDefConst? = new etExpDefConst();		//0
+	etPrivDefConstE etPrivDefConst? = new etPrivDefConst();    //1 is private
+	etImpDefExpNonDefConstE etImpDefExpNonDefConst? = new etImpDefExpNonDefConst();        //0
+
+	etImpDefConstF etImpDefConst[];		//0
+	etExpDefConstF etExpDefConst[];		//0
+	etPrivDefConstF etPrivDefConst[];    //0
+	etImpDefExpNonDefConstF etImpDefExpNonDefConst[];        //0
+	
+	etImpDefConstG etImpDefConst[] = new etImpDefConst[];	//0
+	etExpDefConstG etExpDefConst[] = new etExpDefConst[];	//0
+	etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];    //0
+	etImpDefExpNonDefConstG etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[];        //0
+
+	etImpDefConstH etImpDefConst[] = new etImpDefConst[0];	//0
+	etExpDefConstH etExpDefConst[] = new etExpDefConst[0];	//0
+	etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];    //0
+	etImpDefExpNonDefConstH etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[0];        //0
+
+	etImpDefConstI etImpDefConst[] = new etImpDefConst[5];	//0
+	etExpDefConstI etExpDefConst[] = new etExpDefConst[5];	//0
+	etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];    //1 not instantiable
+	etImpDefExpNonDefConstI etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5];        //0
+
+	etImpDefConstJ etImpDefConst[] = new etImpDefConst[5] ();	//0
+	etExpDefConstJ etExpDefConst[] = new etExpDefConst[5] ();	//0
+	etPrivDefConstJ etPrivDefConst[] = new etPrivDefConst[5] ();    //1 not instantiable
+	etImpDefExpNonDefConstJ etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5] ();        //0
+
+	etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];	//0
+	etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];	//0
+	etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];    //0
+	etImpDefExpNonDefConstK etImpDefExpNonDefConst?[] = new etImpDefExpNonDefConst?[5];        //0
+	
+	etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5] ();	//0
+	etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5] ();	//0
+	etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5] ();    //1 not instantiable
+	etImpDefExpNonDefConstL etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][5] ();        //0
+
+	etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0] ();	//0
+	etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][] ();	//0
+	etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0] ();    //0
+	etImpDefExpNonDefConstM etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][] ();        //0
+
+	etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5] ();	//0
+	etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5] ();	//0
+	etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5] ();    //0
+	etImpDefExpNonDefConstN etImpDefExpNonDefConst?[][] = new etImpDefExpNonDefConst?[1][5] ();        //0
+	
+	function f1()
+		etImpDefConst etImpDefConst;		//0
+		etExpDefConst etExpDefConst;		//0
+		etPrivDefConst etPrivDefConst;    //1 not instantiable
+		etImpDefExpNonDefConst etImpDefExpNonDefConst;        //0
+		
+		etImpDefConstA etImpDefConst = new etImpDefConst;	//0
+		etExpDefConstA etExpDefConst = new etExpDefConst;	//0
+		etPrivDefConstA etPrivDefConst = new etPrivDefConst;    //1 not instantiable
+		etImpDefExpNonDefConstA etImpDefExpNonDefConst = new etImpDefExpNonDefConst;        //0
+		
+		etImpDefConstB etImpDefConst = new etImpDefConst();		//0
+		etExpDefConstB etExpDefConst = new etExpDefConst();		//0
+		etPrivDefConstB etPrivDefConst = new etPrivDefConst();    //1 is private
+		etImpDefExpNonDefConstB etImpDefExpNonDefConst = new etImpDefExpNonDefConst();        //0
+	
+		etImpDefConstC etImpDefConst?;		//0
+		etExpDefConstC etExpDefConst?;		//0
+		etPrivDefConstC etPrivDefConst?;    //0
+		etImpDefExpNonDefConstC etImpDefExpNonDefConst?;        //0
+		
+		etImpDefConstD etImpDefConst? = new etImpDefConst;	//0
+		etExpDefConstD etExpDefConst? = new etExpDefConst;	//0
+		etPrivDefConstD etPrivDefConst? = new etPrivDefConst;    //1 not instantiable
+		etImpDefExpNonDefConstD etImpDefExpNonDefConst? = new etImpDefExpNonDefConst;        //0
+		
+		etImpDefConstE etImpDefConst? = new etImpDefConst();		//0
+		etExpDefConstE etExpDefConst? = new etExpDefConst();		//0
+		etPrivDefConstE etPrivDefConst? = new etPrivDefConst();    //1 is private
+		etImpDefExpNonDefConstE etImpDefExpNonDefConst? = new etImpDefExpNonDefConst();        //0
+	
+		etImpDefConstF etImpDefConst[];		//0
+		etExpDefConstF etExpDefConst[];		//0
+		etPrivDefConstF etPrivDefConst[];    //0
+		etImpDefExpNonDefConstF etImpDefExpNonDefConst[];        //0
+		
+		etImpDefConstG etImpDefConst[] = new etImpDefConst[];	//0
+		etExpDefConstG etExpDefConst[] = new etExpDefConst[];	//0
+		etPrivDefConstG etPrivDefConst[] = new etPrivDefConst[];    //0
+		etImpDefExpNonDefConstG etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[];        //0
+	
+		etImpDefConstH etImpDefConst[] = new etImpDefConst[0];	//0
+		etExpDefConstH etExpDefConst[] = new etExpDefConst[0];	//0
+		etPrivDefConstH etPrivDefConst[] = new etPrivDefConst[0];    //0
+		etImpDefExpNonDefConstH etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[0];        //0
+	
+		etImpDefConstI etImpDefConst[] = new etImpDefConst[5];	//0
+		etExpDefConstI etExpDefConst[] = new etExpDefConst[5];	//0
+		etPrivDefConstI etPrivDefConst[] = new etPrivDefConst[5];    //1 not instantiable
+		etImpDefExpNonDefConstI etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5];        //0
+	
+		etImpDefConstJ etImpDefConst[] = new etImpDefConst[5] ();	//0
+		etExpDefConstJ etExpDefConst[] = new etExpDefConst[5] ();	//0
+		etPrivDefConstJ etPrivDefConst[] = new etPrivDefConst[5] ();    //1 not instantiable
+		etImpDefExpNonDefConstJ etImpDefExpNonDefConst[] = new etImpDefExpNonDefConst[5] ();        //0
+	
+		etImpDefConstK etImpDefConst?[] = new etImpDefConst?[5];	//0
+		etExpDefConstK etExpDefConst?[] = new etExpDefConst?[5];	//0
+		etPrivDefConstK etPrivDefConst?[] = new etPrivDefConst?[5];    //0
+		etImpDefExpNonDefConstK etImpDefExpNonDefConst?[] = new etImpDefExpNonDefConst?[5];        //0
+		
+		etImpDefConstL etImpDefConst[][] = new etImpDefConst[1][5] ();	//0
+		etExpDefConstL etExpDefConst[][] = new etExpDefConst[1][5] ();	//0
+		etPrivDefConstL etPrivDefConst[][] = new etPrivDefConst[1][5] ();    //1 not instantiable
+		etImpDefExpNonDefConstL etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][5] ();        //0
+	
+		etImpDefConstM etImpDefConst[][] = new etImpDefConst[1][0] ();	//0
+		etExpDefConstM etExpDefConst[][] = new etExpDefConst[1][] ();	//0
+		etPrivDefConstM etPrivDefConst[][] = new etPrivDefConst[1][0] ();    //0
+		etImpDefExpNonDefConstM etImpDefExpNonDefConst[][] = new etImpDefExpNonDefConst[1][] ();        //0
+
+		etImpDefConstN etImpDefConst?[][] = new etImpDefConst?[1][5] ();	//0
+		etExpDefConstN etExpDefConst?[][] = new etExpDefConst?[1][5] ();	//0
+		etPrivDefConstN etPrivDefConst?[][] = new etPrivDefConst?[1][5] ();    //0
+		etImpDefExpNonDefConstN etImpDefExpNonDefConst?[][] = new etImpDefExpNonDefConst?[1][5] ();        //0
+	end
+	
+end

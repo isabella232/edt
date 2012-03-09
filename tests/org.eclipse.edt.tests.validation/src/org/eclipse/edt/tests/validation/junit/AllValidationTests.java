@@ -16,7 +16,9 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.eclipse.edt.tests.validation.junit.annotations.EglpropertyTest;
+import org.eclipse.edt.tests.validation.junit.annotations.Javaobject2Test;
 import org.eclipse.edt.tests.validation.junit.annotations.JavaobjectTest;
+import org.eclipse.edt.tests.validation.junit.annotations.Javascriptobject2Test;
 import org.eclipse.edt.tests.validation.junit.annotations.JavascriptobjectTest;
 import org.eclipse.edt.tests.validation.junit.annotations.PropertyTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.LocalFunctionCallTestsTest;
@@ -24,7 +26,6 @@ import org.eclipse.edt.tests.validation.junit.callStatement.RemoteFunctionCallTe
 import org.eclipse.edt.tests.validation.junit.expressions.Comparison1Test;
 import org.eclipse.edt.tests.validation.junit.expressions.DynamicAccess1Test;
 import org.eclipse.edt.tests.validation.junit.ibmi.IBMiTest1Test;
-import org.eclipse.edt.tests.validation.junit.statements.sql.SqlTest1Test;
 
 
 public class AllValidationTests {
@@ -44,7 +45,9 @@ public class AllValidationTests {
 		suite.addTestSuite(DynamicAccess1Test.class);
 		suite.addTestSuite(JavaobjectTest.class);
 		suite.addTestSuite(JavascriptobjectTest.class);
-//		suite.addTestSuite(SqlTest1Test.class);
+		suite.addTestSuite(Javaobject2Test.class);
+		suite.addTestSuite(Javascriptobject2Test.class);
+///		suite.addTestSuite(SqlTest1Test.class);
 
 		//$JUnit-END$
 		return suite;
