@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
 public class LibraryWizardPage extends EGLTemplateWizardPage {
-	protected TableViewer templateViewer;
 	protected Text descriptionText;
 	private StatusInfo fLibraryStatus;
 	
