@@ -103,6 +103,9 @@ UI">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01020.html#cedt01020" title="Rich UI validation and formatting"/>
 </entry>
 </entry>
+<entry keyword="convertToURLEncoded EGL function">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
+</entry>
 <entry keyword="debugging">
 <entry keyword="EGL">
 <entry keyword="creating a launch configuration">
@@ -215,12 +218,26 @@ in EDT IDE">
 <topic href="topics/tedt00502.html#tedt00502" title="Creating an EGL deployment descriptor in the EDT IDE"/>
 </entry>
 </entry>
+<entry keyword="EGL function">
+<entry keyword="setHTTPBasicAuthentication">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
+</entry>
+<entry keyword="setProxyBasicAuthentication">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
+</entry>
+</entry>
 <entry keyword="EGL functions">
+<entry keyword="convertToURLEncoded">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
+</entry>
 <entry keyword="getResource">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00205.html#redt00205" title="SysLib.getResource function"/>
 </entry>
 </entry>
 <entry keyword="EGL packages">
+<entry keyword="eglx.http">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00245.html#redt00245" title="eglx.http package"/>
+</entry>
 <entry keyword="eglx.persistence.sql">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00266.html#redt00266" title="eglx.persistence.sql package"/>
 </entry>
@@ -265,6 +282,11 @@ assist">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00025.html#redt00023" title="Replace statement for a relational database"/>
 </entry>
 </entry>
+<entry keyword="EGL system libraries">
+<entry keyword="HTTPLib">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00073.html#redt00073" title="HTTPLib external type"/>
+</entry>
+</entry>
 <entry keyword="EGL test server">
 <entry keyword="preferences">
 <topic href="topics/tedt00578.html#tedt00578" title="Setting EGL test server preferences"/>
@@ -293,6 +315,9 @@ assist">
 <entry keyword="SQLWarning">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00269.html#redt00269" title="SQLWarning external type"/>
 </entry>
+</entry>
+<entry keyword="eglx.http EGL package">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00245.html#redt00245" title="eglx.http package"/>
 </entry>
 <entry keyword="eglx.persistence.sql EGL package">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00266.html#redt00266" title="eglx.persistence.sql package"/>
@@ -387,6 +412,25 @@ descriptor"/>
 <entry keyword="globalization">
 <entry keyword="Rich UI">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01041.html#tedt01041" title="Using properties files for displayable text in Rich UI"/>
+</entry>
+</entry>
+<entry keyword="HTTPLib
+EGL external type">
+<entry keyword="convertToURLEncoded">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00246.html#redt00246" title="HTTPLib.convertToURLEncoded"/>
+</entry>
+</entry>
+<entry keyword="HTTPLib EGL external type">
+<entry keyword="setHTTPBasicAuthentication">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
+</entry>
+<entry keyword="setProxyBasicAuthentication">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
+</entry>
+</entry>
+<entry keyword="HTTPLib EGL system library">
+<entry keyword="overview">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00073.html#redt00073" title="HTTPLib external type"/>
 </entry>
 </entry>
 <entry keyword="import statements">
@@ -658,6 +702,12 @@ variables">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
 </entry>
+</entry>
+<entry keyword="setHTTPBasicAuthentication EGL function">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
+</entry>
+<entry keyword="setProxyBasicAuthentication EGL function">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/redt00248.html#redt00248" title="HTTPLib.setProxyBasicAuthentication"/>
 </entry>
 <entry keyword="SOAP services">
 <entry keyword="binding">
