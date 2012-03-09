@@ -28,14 +28,22 @@ public class DataToolsSqlTableTemplate extends org.eclipse.edt.ide.ui.internal.r
 		DataToolsObjectsToEGLUtils.cleanTableVariable(variables);
 		variables.put(ENTITY_NAME, this.getEntityRecordName(table));
 		variables.put(ENTITY_RECORD_NAME, this.getEntityRecordName(table));
+		
+
+		boolean isTableQualified = (Boolean)ctx.get(DTO2EglSource.TABLE_NAME_QUALIFIED);
+		if(isTableQualified) {
+			variables.put(SCHEMA_NAME, table.getSchema().getName());
+			variables.put(SCHEMA_PREFIX, table.getSchema().getName() + ".");
+		} else {
+			variables.put(SCHEMA_NAME, table.getSchema().getName());
+			variables.put(SCHEMA_PREFIX, table.getSchema().getName() + ".");
+		}
 
 		genRecordEGLFile(table, ctx);
 		updateCRUDMethod(ctx);
 	}
 	
 	public void updateCRUDMethod(EglSourceContext ctx){
-		//TODO need optimize the performance, use StringBuilder for variables.
-
 		Hashtable<String, String> variables = ctx.getVariables();
 		
 		String addMethod = DataToolsObjectsToEGLUtils.getReplacedString(EGLCodeTemplate.mdd_addMethods, variables);
@@ -67,12 +75,11 @@ public class DataToolsSqlTableTemplate extends org.eclipse.edt.ide.ui.internal.r
 	public void genRecordEGLFile(Table table, EglSourceContext ctx){
 
 		Hashtable<String, String> variable = ctx.getVariables();
-		String fileName = getValidName(table);
+		String fileName = getEntityRecordName(table);
 		String packageName = variable.get(JAVA_JS_PACKAGE_NAME);
 		String filePath = DataToolsObjectsToEGLUtils.getEGLFilePath(packageName, fileName);
 		
 		StringBuilder recordsDef = new StringBuilder();
-//		recordsDef.append(DataToolsObjectsToEGLUtils.getReplacedString(EGLCodeTemplate.mdd_recordPackageDefine, ctx.getVariables()));
 		
 		recordsDef.append(getEntityRecordHeader(table, ctx));		
 		Object[] columns = table.getColumns().toArray();
@@ -93,7 +100,7 @@ public class DataToolsSqlTableTemplate extends org.eclipse.edt.ide.ui.internal.r
 	
 	
 	protected String getSearchRecordName(Table table){
-		return table.getName() + "Search";
+		return getEntityRecordName(table) + "Search";
 	}
 	
 	protected String getSearchRecordHeader(Table table, EglSourceContext ctx){

@@ -82,11 +82,10 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 	
 	protected String getFieldName(Column column, EGLSQLStructureItem item){
 		String colNameAlias = getAliasName(item.getName().trim());
-
 		if( colNameAlias != null) {
-			return StringToken.trim(colNameAlias);
+			return StringToken.trim(colNameAlias).toLowerCase();
 		} else {
-			return StringToken.trim(item.getName());
+			return StringToken.trim(item.getName()).toLowerCase();
 		}
 	}
 	

@@ -35,8 +35,17 @@ public class DataToolsSqlTableTemplate extends DataToolsSqlTemplate {
 	}
 	
 	public String getEntityRecordName(Table table){
-		return getValidName(table);
+		String name = getValidName(table).toLowerCase();
+		char[] arr = name.toCharArray();
+		for(int i = 0; i < arr.length; i++){
+			if(Character.isLetter(arr[i])){
+				arr[i] = Character.toUpperCase(arr[i]);
+				break;
+			}
+		}
+		return String.valueOf(arr);
 	}
+	
 	public String getValidName(Table table){
 		String aliasName = getAliasName(table.getName());
 		return (aliasName == null)?table.getName():aliasName;

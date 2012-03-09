@@ -13,11 +13,14 @@
 package org.eclipse.edt.ide.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.ide.ui.editor.EGLCodeFormatterUtil;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLPreferenceConstants;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
@@ -58,6 +61,7 @@ public class EGLCodePreviewPage extends WizardPage {
 	private Table messageList;
 	private Combo fileSelector;
 	private Hashtable<String, String> sourceFileContentTable;
+	private String deafultSelectFile;
 	private Hashtable<String, IDocument> formattedSourceFileContentTable = new Hashtable<String, IDocument>();
 	private Composite messageComposite;
 	private Composite codeViewerSelectorContainer;
@@ -169,6 +173,9 @@ public class EGLCodePreviewPage extends WizardPage {
 	public void setsourceFileContentTable(Hashtable<String, String> sourceFileContentTable) {
 		this.sourceFileContentTable = sourceFileContentTable;
 		Set<String> fileNames = sourceFileContentTable.keySet();
+		List<String> list = new ArrayList<String>(fileNames);
+		java.util.Collections.sort(list);
+
 		if (fileNames.size() < 1) {
 			addSingleFileInformationLabel(NewWizardMessages.NewEGLFilesPreviewNoFile);
 		} else if (fileNames.size() == 1) {
@@ -177,7 +184,7 @@ public class EGLCodePreviewPage extends WizardPage {
 		} else {
 			addMultiFileSelectorContainer();
 			fileSelector.removeAll();
-			for (String fileName : fileNames) {
+			for (String fileName : list) {
 				fileSelector.add(fileName);
 			}
 		}
@@ -191,7 +198,11 @@ public class EGLCodePreviewPage extends WizardPage {
 			String fileName = (String) fileNames.toArray()[0];
 			setContentByFileName(fileName);
 		} else {
-			fileSelector.select(0);
+			if(deafultSelectFile != null){
+				fileSelector.setText(deafultSelectFile);
+			}else{
+				fileSelector.select(0);
+			}
 			setContentByFileName(fileSelector.getText());
 		}
 	}
@@ -214,8 +225,11 @@ public class EGLCodePreviewPage extends WizardPage {
 				}
 			});
 		} catch (InterruptedException ex) {
-			;
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 		} catch (Exception ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 		}
 	}
 
@@ -229,8 +243,9 @@ public class EGLCodePreviewPage extends WizardPage {
 		try {
 			TextEdit edit = EGLCodeFormatterUtil.format(document, null);
 			edit.apply(document);
-		} catch (Exception e) {
-			// TODO process the exception
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 		}
 		return document;
 	}
@@ -291,5 +306,10 @@ public class EGLCodePreviewPage extends WizardPage {
 			getParent().layout(true);
 		}
 	}
+
+	public void setDeafultSelectFile(String deafultSelectFile) {
+		this.deafultSelectFile = deafultSelectFile;
+	}
+	
 
 }

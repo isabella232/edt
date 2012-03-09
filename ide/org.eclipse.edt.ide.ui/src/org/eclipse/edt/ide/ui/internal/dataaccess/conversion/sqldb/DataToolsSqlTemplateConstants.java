@@ -27,6 +27,9 @@ public interface DataToolsSqlTemplateConstants {
 	
 	public static final String ENTITY_NAME = "entityName";
 	public static final String ENTITY_RECORD_NAME = "entityRecordName";
+	public static final String SCHEMA_NAME = "schemaName";
+	public static final String SCHEMA_PREFIX = "schemaPrefix";
+	
 	
 	public static final String SEARCH_METHOD_PARAM_DEF = "searchMethodParamDef";
 	public static final String SEARCH_METHOD_PARAM = "searchMethodParam";

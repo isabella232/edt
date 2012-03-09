@@ -274,10 +274,7 @@ public class NewWizardMessages extends NLS {
 	public static String NewTypeWizardPageErrorTypeNameExists;
 //	public static String NewTypeWizardPageErrorInvalidTypeName;
 	public static String NewTypeWizardPageErrorQualifiedName;
-//	public static String NewTypeWizardPageWarningTypeNameDiscouraged;
-//
-//	public static String NewTypeWizardPageOperationdesc;
-//	public static String NewTypeWizardPageWSDLTypenameLabel;
+	
 	public static String NewEGLFilesPreviewPageDescription;
 	public static String NewEGLFilesPreviewFileSelection;
 	public static String NewEGLFilesPreviewFileName;

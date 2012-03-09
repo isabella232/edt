@@ -16,7 +16,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -40,15 +39,14 @@ import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.internal.sql.util.EGLSQLUtility;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DTO2EglSource;
-import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsObjectsToEGLUtils;
 import org.eclipse.edt.ide.ui.internal.dataaccess.conversion.sqldb.DataToolsSqlTemplateConstants;
 import org.eclipse.edt.ide.ui.internal.deployment.Binding;
 import org.eclipse.edt.ide.ui.internal.deployment.Bindings;
 import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
-import org.eclipse.edt.ide.ui.internal.deployment.Parameter;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
 import org.eclipse.edt.ide.ui.internal.record.conversion.IMessageHandler;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
@@ -58,8 +56,6 @@ import org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration;
 import org.eclipse.edt.ide.ui.wizards.EGLPartConfiguration;
 import org.eclipse.edt.ide.ui.wizards.MultiEGLFileOperation;
 import org.eclipse.edt.ide.ui.wizards.ProjectConfiguration;
-import org.eclipse.edt.ide.ui.wizards.SimpleEGLFileOperation;
-import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
@@ -117,8 +113,13 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 		try {
 			getContainer().run(true, true, createFinishOperation());
 		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 			return false;
 		} catch (Exception ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
+			return false;
 		}
 		return true;
 	}
@@ -139,8 +140,11 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 				getContainer().run(true, true, op);
 			} catch (InterruptedException ex) {
 				event.doit = false;
+				ex.printStackTrace();
+				EGLLogger.log(this, ex.toString());	
 			} catch (Exception ex) {
 				ex.printStackTrace();
+				EGLLogger.log(this, ex.toString());	
 			}
 		}
 	}
@@ -167,6 +171,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							summaryPage.setsourceFileContentTable(sourceFileContents);
+							summaryPage.setDeafultSelectFile(getMainEGLFile());
 							List<String> messages = getMessages();
 							if (messages != null && messages.size() > 0) {
 								summaryPage.setMessages(messages);
@@ -174,7 +179,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 						}
 					});
 				} else {
-					// TODO process Error message...
+					throw new InterruptedException("Can not get the data base connection!");
 				}
 
 			}
@@ -238,10 +243,12 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 			frag = root.getPackageFragment(javaJsPackageName);
 			ProjectSettingsUtility.setGeneratorIds(frag.getResource(), new String[] { ProjectConfiguration.JAVA_GENERATOR_ID,  ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID});
 
-		} catch (EGLModelException e) {
-			e.printStackTrace();
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
+		} catch (EGLModelException ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
+		} catch (BackingStoreException ex) {
+			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 		}
 	}
 
@@ -263,9 +270,8 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 		try {
 			d.generate(config, generator, null);
 		} catch (Exception ex) {
-			// TODO need to test
 			addMessage(ex.getMessage());
-			ex.printStackTrace();
+			EGLLogger.log(this, ex.toString());	
 		}
 
 		if (monitor.isCanceled()) {
@@ -287,7 +293,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 				IConnectionProfile profile = connection.getConnectionProfile();
 				ConnectionDisplayProperty[] properties = EGLSQLUtility.getConnectionDisplayProperties(profile);
 				UISQLUtility.setBindingSQLDatabaseConfiguration(sqlConfig, properties);
-
+				sqlConfig.setUseUri(true);
 				Deployment deployment = deploymentRoot.getDeployment();
 				DeploymentFactory factory = DeploymentFactory.eINSTANCE;
 
@@ -301,13 +307,10 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 				boolean existed = false;
 				for (Binding binding : existedBindings) {
 					if (org.eclipse.edt.javart.resources.egldd.Binding.BINDING_DB_SQL.equals(binding.getType())) {
-						if (binding.getParameters() != null) {
-							for (Parameter p : binding.getParameters().getParameter()) {
-								if (SQLDatabaseBinding.ATTRIBUTE_BINDING_SQL_dbms.equals(p.getName()) && sqlConfig.getDbms().equals(p.getValue())) {
-									existed = true;
-									bindingName = binding.getName();
-									break;
-								}
+						if(binding.isUseURI()){
+							if(binding.getUri()!=null && binding.getUri().equals("workspace://" + profile.getName())){
+								existed = true;
+								bindingName = binding.getName();
 							}
 						}
 					}
@@ -319,6 +322,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 
 				if (!existed) {
 					if (isSaved) {
+						sqlConfig.setUri("workspace://" + profile.getName());
 						Binding b = (Binding) sqlConfig.executeAddBinding(bindings);
 						bindingName = b.getName();
 					} else {
