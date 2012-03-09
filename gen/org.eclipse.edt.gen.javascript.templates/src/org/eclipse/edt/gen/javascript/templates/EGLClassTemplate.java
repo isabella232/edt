@@ -170,21 +170,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 	
 	public void genDependent(EGLClass part, Context ctx, TabbedWriter out, StringBuilder buf) throws NoSuchMethodException {
-		try {			
-			for (Part refPart: IRUtils.getReferencedPartsFor(part)) {
-				if ( (refPart instanceof Enumeration 
-						|| (refPart instanceof EGLClass && !(refPart instanceof Delegate) && !(refPart instanceof Service) && !(refPart instanceof Interface)  && !(refPart instanceof ExternalType))
-						|| (refPart instanceof ExternalType && refPart.getAnnotation( Constants.JACASCRIPT_OBJECT ) != null))
-						&& !(refPart instanceof Annotation)
-						&& (!refPart.getPackageName().startsWith("eglx.lang"))
-				){
-					ctx.invoke(genModuleName, refPart, buf);
-					buf.append(", ");							
-				}
+		for (Part refPart: IRUtils.getReferencedPartsFor(part)) {
+			if ( CommonUtilities.canBeGeneratedToJavaScript(refPart) && CommonUtilities.isNativeType(refPart)){
+				ctx.invoke(genModuleName, refPart, buf);
+				buf.append(", ");							
 			}
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} 
+		}		
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
