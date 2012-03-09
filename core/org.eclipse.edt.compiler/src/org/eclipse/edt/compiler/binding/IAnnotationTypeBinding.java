@@ -39,6 +39,8 @@ public interface IAnnotationTypeBinding extends ITypeBinding{
     
     public List getFieldAccessAnnotations();
     
+    public List getInstantiationValidators();
+    
     public Object getDefaultValue();
     public Object getDefaultValueForField(String fieldName);
     

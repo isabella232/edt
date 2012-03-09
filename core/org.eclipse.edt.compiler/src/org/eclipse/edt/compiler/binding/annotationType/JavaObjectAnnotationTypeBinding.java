@@ -18,7 +18,9 @@ import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedFieldContentAnnotationValidationRule;
+import org.eclipse.edt.compiler.binding.UserDefinedInstantiationValidationRule;
 import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectFieldTypeValidator;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.JavaObjectInstantiationValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -33,6 +35,11 @@ public class JavaObjectAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     private static final List subPartTypeAnnotations = new ArrayList();
     static {
     	subPartTypeAnnotations.add(new UserDefinedFieldContentAnnotationValidationRule(JavaObjectFieldTypeValidator.class));
+    }
+    
+    private static final List instantiationValidators = new ArrayList();
+    static {
+    	instantiationValidators.add(new UserDefinedInstantiationValidationRule(JavaObjectInstantiationValidator.class));
     }
         
     public JavaObjectAnnotationTypeBinding() {
@@ -53,5 +60,9 @@ public class JavaObjectAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     
     public List getPartSubTypeAnnotations() {
     	return subPartTypeAnnotations;
+    }
+    
+    public List getInstantiationValidators() {
+    	return instantiationValidators;
     }
 }

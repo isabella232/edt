@@ -108,10 +108,6 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     
     
 	public void endVisit(ExternalType externalType) {
-		if(externalTypeBinding.getConstructors().isEmpty()) {
-			//Add default constructor
-			externalTypeBinding.addConstructor(new ConstructorBinding(externalTypeBinding));
-		}
 		processSettingsBlocks();
 		externalTypeBinding.setValid(true);
 	}

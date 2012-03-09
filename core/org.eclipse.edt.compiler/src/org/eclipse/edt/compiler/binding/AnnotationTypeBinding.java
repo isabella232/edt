@@ -552,6 +552,11 @@ public abstract class AnnotationTypeBinding extends TypeBinding implements IAnno
 		return Collections.EMPTY_LIST;
 	}
 	
+	@Override
+	public List getInstantiationValidators() {
+		return Collections.EMPTY_LIST;
+	}
+	
 	public IAnnotationTypeBinding getValidationProxy() {
 		return this;
 	}

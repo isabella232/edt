@@ -1557,13 +1557,15 @@ public abstract class DefaultBinder extends AbstractBinder {
 				IDataBinding matchingConstructor = resolver.findMatchingFunction(constructors, getArgumentTypes(newExpression.getArguments()), false);
 				
 				if(IBinding.NOT_FOUND_BINDING == matchingConstructor || AmbiguousDataBinding.getInstance() == matchingConstructor) {
-					problemRequestor.acceptProblem(
-						newExpression.getType(),
-						IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
-						new String[] {
-							targetType.getCaseSensitiveName()
-						});
-					newExpression.setConstructorBinding(IBinding.NOT_FOUND_BINDING);
+					if (newExpression.getArguments().size() > 0) {
+						problemRequestor.acceptProblem(
+							newExpression.getType(),
+							IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
+							new String[] {
+								targetType.getCaseSensitiveName()
+							});
+						newExpression.setConstructorBinding(IBinding.NOT_FOUND_BINDING);
+					}
 				}
 				else {
 					newExpression.setConstructorBinding(matchingConstructor);
@@ -1584,28 +1586,23 @@ public abstract class DefaultBinder extends AbstractBinder {
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
 						new String[] {newExpression.getType().getCanonicalName()});
 				}
-				else {
-					//prevent the expression:  new any[10]
-					//you cannot create an array of non-instantiable types
-					Type currType = newExpression.getType();
-					while (currType.isArrayType()) {
-						ArrayType arrayType = (ArrayType) currType;
-						if (arrayType.hasInitialSize() && !isZeroLiteral(arrayType.getInitialSize())) {
-							tBinding = arrayType.getElementType().resolveTypeBinding();
-							if (Binding.isValidBinding(tBinding) && tBinding.isReference() && !tBinding.isInstantiable() && !tBinding.isNullable() && currentScope.getPartBinding() != tBinding) {
-								problemRequestor.acceptProblem(arrayType.getElementType(),
-										IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
-									new String[] {arrayType.getElementType().getCanonicalName()});
-							}
-						}
-						currType = arrayType.getElementType();
-					}
-				}
 			}
 		}
 		
 		if(newExpression.getType().isArrayType()) {
 			
+			//prevent the expression:  new any[10]
+			//you cannot create an array of non-instantiable types
+			ArrayType arrType = (ArrayType)newExpression.getType();
+			if (arrType.hasInitialSize() && !isZeroLiteral(arrType.getInitialSize())) {
+				ITypeBinding tBinding = arrType.getElementType().resolveTypeBinding();
+				if (Binding.isValidBinding(tBinding) && Binding.isValidBinding(tBinding.getBaseType()) && tBinding.getBaseType().isReference() && !tBinding.getBaseType().isInstantiable() && !tBinding.getBaseType().isNullable() && currentScope.getPartBinding() != tBinding.getBaseType()) {
+					problemRequestor.acceptProblem(arrType.getBaseType(),
+							IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
+						new String[] {tBinding.getBaseType().getCaseSensitiveName()});
+				}
+			}
+	
 			final boolean[] hasInitialSize = new boolean[1];
 			newExpression.getType().accept(new AbstractASTVisitor() {
 				public boolean visit(ArrayType arrayType) {
