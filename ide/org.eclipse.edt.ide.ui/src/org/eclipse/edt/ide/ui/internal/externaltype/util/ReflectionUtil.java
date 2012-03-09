@@ -48,34 +48,36 @@ public class ReflectionUtil {
 		Class<?>[] innerClasses = clazz.getDeclaredClasses();
 		if(innerClasses != null) {
 			for(Class<?> inner : innerClasses) {
-				javaType = new JavaType();
-				javaType.setSource(JavaType.SelectedType);
-				
-				List<Field> selectedFields = new ArrayList<Field>();
-				for(Field field : inner.getDeclaredFields()) {
-					 if (Modifier.isPublic(field.getModifiers())) {
-						 selectedFields.add(field);
-					 }
+				if (Modifier.isPublic(inner.getModifiers())) {
+					javaType = new JavaType();
+					javaType.setSource(JavaType.SelectedType);
+					
+					List<Field> selectedFields = new ArrayList<Field>();
+					for(Field field : inner.getDeclaredFields()) {
+						 if (Modifier.isPublic(field.getModifiers())) {
+							 selectedFields.add(field);
+						 }
+					}
+					javaType.setFields(selectedFields);
+					
+					List<Constructor<?>> selectedCons = new ArrayList<Constructor<?>>();
+					for(Constructor<?> constr : inner.getDeclaredConstructors() ) {
+						 if (Modifier.isPublic(constr.getModifiers())) {
+							 selectedCons.add(constr);
+						 }
+					}
+					javaType.setConstructors(selectedCons);
+					
+					List<Method> selectedMethods = new ArrayList<Method>();
+					for(Method method : inner.getDeclaredMethods()) {
+						if (Modifier.isPublic(method.getModifiers())) {
+							selectedMethods.add(method);
+						 }
+					}
+					javaType.setMethods(selectedMethods);
+					
+					toBeGenerated.put(inner, javaType);
 				}
-				javaType.setFields(selectedFields);
-				
-				List<Constructor<?>> selectedCons = new ArrayList<Constructor<?>>();
-				for(Constructor<?> constr : inner.getDeclaredConstructors() ) {
-					 if (Modifier.isPublic(constr.getModifiers())) {
-						 selectedCons.add(constr);
-					 }
-				}
-				javaType.setConstructors(selectedCons);
-				
-				List<Method> selectedMethods = new ArrayList<Method>();
-				for(Method method : inner.getDeclaredMethods()) {
-					if (Modifier.isPublic(method.getModifiers())) {
-						selectedMethods.add(method);
-					 }
-				}
-				javaType.setMethods(selectedMethods);
-				
-				toBeGenerated.put(inner, javaType);
 			} //for
 		}
 	}
@@ -84,9 +86,9 @@ public class ReflectionUtil {
 		Set<Class<?>> superTypes = new HashSet<Class<?>>();
 		
 		Class<?> declaringClass = clazz;
-		while(!declaringClass.equals(Object.class)) {
+		while(declaringClass!=null && !declaringClass.equals(Object.class)) {
 			Class<?> superClass = declaringClass.getSuperclass();
-			if(!superClass.equals(Object.class)) {
+			if(superClass!=null && !superClass.equals(Object.class)) {
 				superTypes.add(superClass);
 			}
 			
