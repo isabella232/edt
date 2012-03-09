@@ -29,8 +29,8 @@ public class ExternalTypeFromJavaWizardConfiguration {
 		selectedClazz = null;
 		toBeGenerated = new HashMap<Class<?>,JavaType>(20);
 		
-		isAllSuperTypesGenerated = false;
-		isAllReferencedTypesGenerated = false;
+		isAllSuperTypesGenerated = true;
+		isAllReferencedTypesGenerated = true;
 	}
 
 	public Class<?> getSelectedClazz() {

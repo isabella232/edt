@@ -172,6 +172,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		GridData data = new GridData();
 		data.horizontalSpan = nColumns;
 		generatedAllSuperTypesCheckbox.setLayoutData(data);
+		generatedAllSuperTypesCheckbox.setSelection(true);
 		generatedAllSuperTypesCheckbox.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
  				boolean isSelected = ((Button)e.widget).getSelection();
@@ -184,6 +185,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		data = new GridData();
 		data.horizontalSpan = nColumns;
 		generatedAllReferencedTypesCheckbox.setLayoutData(data);
+		generatedAllReferencedTypesCheckbox.setSelection(true);
 		generatedAllReferencedTypesCheckbox.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				boolean isSelected = ((Button)e.widget).getSelection();
