@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Invoking a service asynchronously from a Rich UI application"></meta>
-<meta name="abstract" content="In Rich UI, the call statement is used to invoke a service asynchronously:"></meta>
-<meta name="description" content="In Rich UI, the call statement is used to invoke a service asynchronously:"></meta>
+<meta name="abstract" content="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic."></meta>
+<meta name="description" content="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic."></meta>
 <meta name="DC.subject" content="Rich UI, services, invoking asynchronously, Rich UI, asynchronous invocation"></meta>
 <meta name="keywords" content="Rich UI, services, invoking asynchronously, Rich UI, asynchronous invocation"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
@@ -26,8 +26,13 @@
 
 
 
-<div><p>In Rich UI, the <span class="synph"><span class="kwd">call</span></span> statement
-is used to invoke a service asynchronously:</p>
+<div><p>In Rich UI, you invoke a service asynchronously by declaring
+a binding variable and then accessing a <span class="synph"><span class="kwd">call</span></span> statement
+version that is described in the current topic.</p>
+
+<p>For background detail, see <a href="cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application.">Resource bindings</a>.</p>
+
+<p>Here is the asynchronous version of the <strong>call</strong> statement:</p>
 
 <pre class="codeblock">call 	<var class="varname">InterfaceTypeName</var>.<var class="varname">operationName</var>(<var class="varname">argumentList</var>)
    using <var class="varname">bindingVariable</var>
@@ -60,16 +65,22 @@ for service access.”</p>
 <dd>A variable that holds the access detail:<ul>
 <li>When you access a REST or REST-RPC service, the variable type
 is HTTPRest. <div class="p">In this case, the primary way to declare the variable
-in this case is to include a Resource annotation that refers to an
-EGL deployment descriptor entry:<pre class="codeblock">myBindingVar HTTPRest {@Resource {uri = """"""""binding:myEntry""""""""}};</pre>
+is to include a Resource annotation that refers to an EGL deployment
+descriptor entry:<pre class="codeblock">myBindingVar HttpRest {@Resource {uri = """"""""binding:myEntry""""""""}};</pre>
 </div>
 </li>
 
-<li>When you access a dedicated service, the variable type is HTTPProxy.</li>
+<li>When you access a dedicated service, the variable type is HTTPProxy,
+and no deployment descriptor is involved:<pre class="codeblock">myBindingVar HttpProxy;</pre>
+<div class="p">Here
+is code that declares a binding-variable value in the <strong>call</strong> statement
+itself: <pre class="codeblock">call MyInterface.myOperation() using new HttpProxy
+                               returning to myCallBackFunction
+                               onException myExceptionHandler;</pre>
+</div>
+</li>
 
 </ul>
-<p>The primary way to declare the variable is by including a
-Resource annotation that refers to </p>
 </dd>
 
 
@@ -130,9 +141,9 @@ end
 </li>
 
 <li>This example shows a binding-variable declaration and <span class="synph"><span class="kwd">call</span></span> statement
-used to invoke the service:<pre class="codeblock">myBindingVariable HTTPRest{@Resource{uri=""""""""binding:myBinding""""""""}};
+used to invoke the service:<pre class="codeblock">myBindingVar HttpRest{@Resource{uri=""""""""binding:myEntry""""""""}};
 call MyInterface.GetEmployeeDetail(""""""""A123"""""""", 25.8, """"""""Full-time"""""""")
-   using myBindingVariable
+   using myBindingVar
    returning to myCallback 
    onException myExceptionHandler;
 </pre>

@@ -127,12 +127,11 @@ of a binding is a specific EGL deployment descriptor. <div class="p">To specify
 a particular descriptor, you code the descriptor name in either of
 two locations:<ul>
 <li>When you include the <span class="uicontrol">Resource</span> annotation
-in the statement that declares a <dfn class="term">resource-access variable</dfn>,
-which is the variable that makes possible the access of a service
-or database.</li>
+in the statement that declares a <dfn class="term">binding variable</dfn>, which
+is the variable that makes possible the access of a service or database.</li>
 
-<li>Alternatively, when you code <span class="synph"><span class="kwd">SysLib.getResource</span></span>,
-which makes a deployment descriptor entry available dynamically.</li>
+<li>Alternatively, when you use the <span class="synph"><span class="kwd">SysLib.getResource</span></span> function
+to assign a value to a binding variable.</li>
 
 </ul>
 </div>

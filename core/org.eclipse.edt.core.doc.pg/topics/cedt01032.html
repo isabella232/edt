@@ -56,13 +56,20 @@ tab. You must arrange for service deployment.</div>
 
 <li>If a Rich UI application includes a Service type that will be
 deployed as a dedicated service, an Internal Test Server enables you
-to debug the code. In this case, the EGL deployment descriptor is
-never used. The only binding detail is the <strong>DedicatedService</strong> annotation,
-which is part of the service-access variable declaration.<div class="p">If a Service
-part named <samp class="codeph">MyServiceType</samp> is a dedicated service,
-the declaration might be as follows:  <pre class="codeblock">myService MyServiceType {@DedicatedService};</pre>
+to debug the code. <div class="p">In this case, the EGL deployment descriptor
+is never used. You declare a binding variable of type <samp class="codeph">HttpProxy</samp> and
+issue a <strong>call</strong> statement, as shown here:<pre class="codeblock">myBindingVar HttpProxy;
+call MyInterface.myOperation() using myBindingVar
+                               returning to myCallBackFunction
+                               onException myExceptionHandler;</pre>
 </div>
-</li>
+<div class="p">Here
+is alternative code that has the same effect, but declares a binding-variable
+value in the <strong>call</strong> statement itself: <pre class="codeblock">call MyInterface.myOperation() using new HttpProxy
+                               returning to myCallBackFunction
+                               onException myExceptionHandler;</pre>
+</div>
+ </li>
 
 </ul>
 </div>
@@ -79,61 +86,36 @@ you are defining a workspace binding, you must also deploy the Service
 type. For details, see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00536.html" title="You can update the EGL deployment descriptor with details that are needed to deploy SOAP and EGL REST-RPC services.">Adding web-service deployment details to the EGL deployment descriptor</a>.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Retrieving one or another service binding in your
-code</h2><div class="p">You can rebind a service-access variable, as shown
-here:<pre class="codeblock">myService MyInterfaceType?; 
-
-   /* that declaration could have included 
-      a Resource annotation, as shown here:
-
-      myService MyInterfaceType? 
-         { @Resource {uri=""""""""binding:MyGermanBinding""""""""} };    */
-
-if ( ... )
-   myService = SysLib.getResource(""""""""binding:MyEnglishBinding"""""""");
-else
-   myService = SysLib.getResource(""""""""binding:MyFrenchBinding"""""""");
-end
-
-/* here, you can access the service operations of 
-   one or the other service, assuming that the two 
-   have similar interfaces.                             */    </pre>
-</div>
-</div>
-
 <div class="section"><h2 class="sectiontitle">Retrieving a service binding and changing it in your
-code</h2><div class="p">Here is an example of preparing a variable and then
-using it to access a third-party REST service:<pre class="codeblock">myService MyServiceType?;
-http HttpRest{@Resource{uri=""""""""binding:myService""""""""}};        
-http.request.encoding = encoding.json;
-call myService.myFunction() using http returning to myCallBackFunction
-                                       onException myExceptionHandler;
+code</h2><div class="p">Here is an example of preparing a binding variable
+and then using it to access a third-party REST service:<pre class="codeblock">myBindingVar HttpRest{@Resource{uri=""""""""binding:myEntry""""""""}};        
+myBindingVar.request.encoding = encoding.json;
+myBindingVar.request.headers = new dictionary;
+myBindingVar.request.headers[""""""""edt.proxy.invocation.timeout""""""""] = 6;
+call MyInterfaceType.myFunction() 
+   using myBindingVar
+   returning to myCallBackFunction
+   onException myExceptionHandler;
 </pre>
 </div>
 <div class="p">The code acts as follows: <ol>
-<li>Declares an access variable.  <p>The declaration references an
-Interface type that typically includes one or more uriTemplate annotation
-fields, each of which is a set of lower-level URI qualifiers that
-are resolved at run time. A resolved template might be this: <samp class="codeph">/GetWeatherByZipCode?zipCode=27709</samp></p>
+<li>Declares a binding variable that refers to the <strong>myEntry</strong> entry
+in the deployment descriptor that is used by default. In this way,
+the code is accessing a new instance of an HttpRest object.<p>For
+details on the HttpRest object, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
 </li>
 
-<li>Accesses a new instance of an HTTPRest object.<p>That object provides
-a higher-level URI such as <samp class="codeph">http://www.example.com/myproject/restservices/weather_service</samp>.
- </p>
-<p>In this case, the object contains details that are retrieved
-from a service binding in the EGL deployment descriptor. If you do
-not specify a <span class="synph"><span class="kwd">uri</span></span> annotation field, the
-name of the service binding is assumed to be the name of the variable.
-In the example, the value of the annotation field defaults to <samp class="codeph">""""""""binding:http""""""""</samp>. </p>
-<p>For
-details on the HttpRest object, see the help topic named """"""""eglx.http
-package.""""""""</p>
+<li>Adds detail to the binding variable, in this example, the detail
+has the following purpose: <ul>
+<li>To ensure that data is transferred to and from the service in
+JSON format; and</li>
+
+<li>To establish a timeout value of 6 seconds.</li>
+
+</ul>
 </li>
 
-<li>Adds detail to the HTTPRest object; for example, to ensure that
-data is transferred to and from the service in JSON format.</li>
-
-<li>Uses the HTTPRest object when calling the service.</li>
+<li>Includes the binding variable in the <strong>call</strong> statement <strong>using</strong> clause.</li>
 
 </ol>
 </div>
@@ -141,19 +123,18 @@ data is transferred to and from the service in JSON format.</li>
 
 <div class="section"><h2 class="sectiontitle">Creating a service binding in your code</h2><div class="p">You
 can create a service binding in your code, in which case the EGL deployment
-descriptor is not involved. For example, you might substitute the
-second statement in the following code for the object declaration
-that was shown in the preceding section: <pre class="codeblock">myService IMyService?; 
-http HttpRest = new HttpRest{
+descriptor is not involved. For example, you might declare the binding
+variable as shown in the next example: <pre class="codeblock">myBindingVar HttpRest = new HttpRest{
    restType = eglx.rest.ServiceType.TrueRest, 
    uri = """"""""www.example.com/myproject/restservices/weather_service""""""""};
-myBinding.request.encoding = Encoding.json;
-call myService.myFunction() using http returning to myCallBackFunction
-                                       onException myExceptionHandler;
+myBindingVar.request.encoding = Encoding.json;
+call MyInterfaceType.myFunction() 
+   using myBindingVar
+   returning to myCallBackFunction
+   onException myExceptionHandler;
 </pre>
 </div>
-<p>For details on the HttpRest object,
-see the help topic named """"""""eglx.http package.""""""""</p>
+<p>For details on the HttpRest object, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
 </div>
 
 </div>

@@ -37,50 +37,64 @@ developing or deploying your application.</p>
 
 <p>This use of the deployment descriptor is safe and flexible. You
 can change the details stored there and redeploy the code without
-changing the logic and without spending the time to regenerate output. </p>
+changing the logic and without spending the time to regenerate output.</p>
 
 <div class="section"><h2 class="sectiontitle">The typical process</h2><div class="p">The binding mechanism
-is the same for service and database access. The typical process is
-to write a resource binding in an EGL deployment descriptor and to
-relate a variable to the stored resource binding in either of two
-ways:     <ul>
+equivalent for accessing a service or database. The typical process
+is as follows: <ol>
+<li>Write a resource binding in an EGL deployment descriptor.</li>
+
+<li>Relate a variable to the stored resource binding in either of
+two ways: <ul>
 <li>By invoking the<strong> SysLib.getResource</strong> function; or</li>
 
 <li>By writing a <strong>Resource</strong> annotation.</li>
 
 </ul>
-  </div>
-<div class="p">Here is an example use of the function, which can be
-invoked only inside an EGL function: <pre class="codeblock">myService MyInterfaceType?;
-myService = SysLib.getResource(""""""""binding:myBinding""""""""); </pre>
-</div>
-<div class="p">Here
-is the equivalent annotation, which you can specify anywhere that
-you can declare a variable:<pre class="codeblock">myService MyInterfaceType?{@Resource{uri=""""""""binding:myBinding""""""""}};
-
-// another declaration
-myService02 MyOtherInterfaceType?{@Resource};</pre>
-</div>
-<div class="p">The
-uri annotation field is optional and refers by default to a resource
-binding that has the same name as the variable. For example, in the
-preceding annotation, the missing value for the uri field is <samp class="codeph">""""""""binding:myService02""""""""</samp>.
- Whether you specify the function or annotation:<ul>
-<li>Access to the stored binding occurs at run time, when the generated
-output invokes code that is equivalent to the SysLib.getResource function.</li>
-
-<li>You can explicitly identify an EGL deployment descriptor: <pre class="codeblock">myService MyInterfaceType?;
-myService = SysLib.getResource(""""""""binding:file:myDDFile#myBinding""""""""); 
-
-// equivalent annotation
-myService MyInterfaceType?(@Resource{uri = """"""""binding:file:myDDFile#myBinding""""""""}};</pre>
+<p>A variable that includes binding detail is called a <strong>binding
+variable</strong>.</p>
 </li>
 
-<li>If you do not identify an EGL deployment descriptor, the referenced
-file is the one that is currently in use. At development time, the
-one that is currently in use is identified in the following project
-property: <strong>Development Deployment Descriptor</strong>. At deployment
-time, the referenced deployment descriptor is the one that you deploy.</li>
+<li>Place the binding variable in an EGL statement. If you are accessing
+external logic, use the <strong>call</strong> statement. If you are accessing
+a database, use one of the statements that read or write data; for
+example, the <strong>add</strong> or <strong>get</strong> statement.</li>
+
+</ol>
+</div>
+<div class="p">Here is an example use of the <strong>SysLib.getResource</strong> function,
+which can be invoked only inside an EGL function: <pre class="codeblock">myBindingVar HttpRest? = SysLib.getResource(""""""""binding:myEntry"""""""");
+</pre>
+</div>
+<p>The function call requires a single argument, which
+identifies an entry in the EGL deployment descriptor.</p>
+<div class="p">Here is
+an example use of the equivalent <strong>Resource</strong> annotation, which
+you can specify anywhere that you can declare a variable:<pre class="codeblock">myBindingVar HttpRest?{@Resource{uri=""""""""binding:myEntry""""""""}};
+</pre>
+</div>
+<p>The reference to a <strong>uri</strong> annotation field
+is optional and refers by default to a resource binding that has the
+same name as the binding variable. For example, the missing value
+for the <strong>uri</strong> field in the preceding annotation is <samp class="codeph">""""""""binding:myBindingVar""""""""</samp>. </p>
+<div class="p">Whether
+you specify the <strong>SysLib.getResource</strong> function or <strong>Resource</strong> annotation,
+you can use an extended format (""""""""binding:file:#<em>entry</em>"""""""") to identify
+the EGL deployment descriptor that contains the entry. Here is an
+example:<pre class="codeblock">myBindingVar HttpRest? = SysLib.getResource(""""""""binding:file:myDDFile#myEntry""""""""); 
+
+// equivalent annotation
+myBindingVar HttpRest?(@Resource{uri = """"""""binding:file:myDDFile#myEntry""""""""}};</pre>
+</div>
+<div class="p">If
+you do not use the extended format, the referenced EGL deployment
+descriptor is as follows:<ul>
+<li>At development time, the code is referencing the development deployment
+descriptor. That descriptor is the one that is identified in the following
+project property: <strong>Development Deployment Descriptor</strong>.</li>
+
+<li>At deployment time, the code is referencing the deployment descriptor
+that you deploy.</li>
 
 </ul>
 </div>
