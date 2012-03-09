@@ -34,8 +34,6 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 	
 	public static final String BIND_XML_FILE_SUFFIX = "-bnd.xml";
 	
-	private String targetProjectName;
-	private DeploymentDesc ddModel;
 	private DeploymentContext context;
 	
 	@Override
@@ -44,7 +42,7 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 			IProgressMonitor monitor) throws CoreException {
 		if ( context.getStatus() != DeploymentContext.STATUS_SHOULD_RUN ) {
 			DeploymentDesc desc = context.getDeploymentDesc();
-			if ( desc.getRestBindings() != null && desc.getRestBindings().size() > 0 ) {
+			if (desc.getBindings() != null && desc.getBindings().size() > 0) {
 				context.setStatus( DeploymentContext.STATUS_SHOULD_RUN );
 			}
 		}
@@ -53,16 +51,21 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor)
 			throws CoreException {
 		this.context = context;
-		ddModel = context.getDeploymentDesc();
 		
 		DeploymentResultMessageRequestor messageRequestor = new DeploymentResultMessageRequestor(resultsCollector);
-
 		String javaSourceFolder = EclipseUtilities.getJavaSourceFolderName( context.getTargetProject() );
-
-		try {
-			InputStream is = new ByteArrayInputStream(DeploymentDescUtil.convertToBindXML(ddModel, context.getTargetProject()).getBytes("UTF-8"));
 		
-			IPath targetFilePath = new Path( "/" + context.getTargetProject().getName() + "/" + javaSourceFolder + "/" + ddModel.getName().toLowerCase() + BIND_XML_FILE_SUFFIX ); 
+		generateBindFile(context.getDeploymentDesc(), javaSourceFolder, monitor, messageRequestor);
+		for (DeploymentDesc egldd: context.getDependentModels()) {
+			generateBindFile(egldd, javaSourceFolder, monitor, messageRequestor);
+		}
+	}
+	
+	private void generateBindFile(DeploymentDesc egldd, String javaSourceFolder, IProgressMonitor monitor, DeploymentResultMessageRequestor messageRequestor) {
+		try {
+			InputStream is = new ByteArrayInputStream(DeploymentDescUtil.convertToBindXML(egldd, context.getTargetProject()).getBytes("UTF-8"));
+		
+			IPath targetFilePath = new Path( "/" + context.getTargetProject().getName() + "/" + javaSourceFolder + "/" + egldd.getName().toLowerCase() + BIND_XML_FILE_SUFFIX ); 
 			
 			IFile targetFile = ResourcesPlugin.getWorkspace().getRoot().getFile(targetFilePath);
 	
@@ -70,7 +73,6 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 				targetFile.setContents(is, true, true, monitor);
 			} else {
 				targetFile.create(is, true, monitor);
-	//			targetFile.setLocalTimeStamp(file.getLocalTimeStamp());
 			}
 	
 			is.close();
@@ -85,7 +87,6 @@ public class GenerateServiceBindXMLFileOperation extends AbstractDeploymentOpera
 					null,
 					new String[] { DeploymentUtilities.createExceptionMessage(e) }));
 		}
-
 	}
 	
 }
