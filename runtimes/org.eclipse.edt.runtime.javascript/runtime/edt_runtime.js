@@ -1025,6 +1025,7 @@ egl.defineClass( "eglx.lang", "ENumber",
 {
 }
 );
+egl.eglx.lang.ENumber.ZERO =  {eze$$value : 0, eze$$signature : "N;"};
 egl.eglx.lang.ENumber.fromEInt16 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };
