@@ -95,6 +95,7 @@ public class EGLCodePreviewPage extends WizardPage {
 		layout.numColumns = 1;
 
 		codeViewerSelectorContainer = new Composite(container, SWT.NULL);
+		codeViewerSelectorContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		GridLayout codeViewerSelectorContainerLayout = new GridLayout(2, false);
 		codeViewerSelectorContainerLayout.marginWidth = 0;
@@ -145,6 +146,7 @@ public class EGLCodePreviewPage extends WizardPage {
 	private void addMultiFileSelectorContainer() {
 		clearCodeViewerSelectorContainer();
 		multiFileSelectorContainer = new Composite(codeViewerSelectorContainer, SWT.NULL);
+		multiFileSelectorContainer.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout fileSelectorContainerLayout = new GridLayout(2, false);
 		fileSelectorContainerLayout.marginWidth = 0;
 		multiFileSelectorContainer.setLayout(fileSelectorContainerLayout);
@@ -153,7 +155,6 @@ public class EGLCodePreviewPage extends WizardPage {
 		fileSelectorLabel.setText(NewWizardMessages.NewEGLFilesPreviewFileSelection);
 		fileSelector = new Combo(multiFileSelectorContainer, SWT.READ_ONLY | SWT.BORDER);
 		GridData fsgd = new GridData(GridData.FILL_HORIZONTAL);
-		fsgd.widthHint = 250;
 		fileSelector.setLayoutData(fsgd);
 
 		fileSelector.addSelectionListener(new SelectionListener() {
