@@ -10,25 +10,61 @@ handler hand1
 	
 	function test()
 		temp int;
+		arr int[];
 		
 		field2 = 3;  //1
 		temp = field3; //1
 		
 		field4 = 3; //0
 		temp = field4; //0
+		
+		temp = field2 + 1; //0
+		temp = arr[field2]; //0
+		temp = -field2;     //0
+
+		temp = field3 + 1; //1
+		temp = arr[field3]; //1
+		temp = -field3;     //1
+		
 	end
+end
+
+record rec1
+	recField1 int;
+	recField2 int;
+	recField3 int;
+	recField4 int;
+	recField5 int;
+	recField6 int;
 end
 
 library lib1
 	hand1 hand1;
 	temp int;
-	
+	arr int[];
+	rec1 rec1 {
+		recField1 = hand1.field2,   //0
+		recField2 = hand1.field3,   //1
+		recfield3 = arr[hand1.field2],  //0
+		recfield4 = arr[hand1.field3],  //1
+		recfield4 = -hand1.field2,  //0
+		recfield5 = -hand1.field3   //1
+	};
+		
 	function f1()
 		hand1.field2 = 3;  //1
 		temp = hand1.field3; //1
 		
 		hand1.field4 = 3; //0
 		temp = hand1.field4; //0
+		
+		temp = hand1.field2 + 1; //0
+		temp = arr[hand1.field2]; //0
+		temp = -hand1.field2;     //0
+
+		temp = hand1.field3 + 1; //1
+		temp = arr[hand1.field3]; //1
+		temp = -hand1.field3;     //1
 		
 	end
 	
@@ -69,6 +105,7 @@ handler hand2
 		myhandA hand2 {
 			arrFieldSet ::= 3,   //1 not a get method
 			arrFieldGet ::= 3		 //0
+			
 		};
 		
 		myHandB hand2 = new hand2 {
