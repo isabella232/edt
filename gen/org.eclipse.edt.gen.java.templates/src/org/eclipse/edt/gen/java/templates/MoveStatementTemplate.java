@@ -13,7 +13,17 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.*;
+import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.Assignment;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MoveStatement;
+import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MoveStatementTemplate extends JavaTemplate 
@@ -36,9 +46,6 @@ public class MoveStatementTemplate extends JavaTemplate
 			out.print( ") org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeDeepCopy(" );
 			ctx.invoke( genExpression, sourceExpr, ctx, out );
 			out.println( ");" );
-			// as this is an expression that also creates a new line with the above println method, it throws off the
-			// smap ending line number by 1. We need to issue a call to correct this
-			ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 		}
 		else
 		{
@@ -46,10 +53,6 @@ public class MoveStatementTemplate extends JavaTemplate
 			if ( needTemp )
 			{
 				out.println( '{' );
-				// as this is an expression that also creates a new line with the above println method, it throws off the
-				// smap ending line number by 1. We need to issue a call to correct this
-				ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-				
 				if ( !(targetExpr instanceof Name) )
 				{
 					// Save the target in a temp variable.
@@ -61,10 +64,6 @@ public class MoveStatementTemplate extends JavaTemplate
 					out.print( " = " );				
 					ctx.invoke( genExpression, targetExpr, ctx, out );
 					out.println( ';' );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-
 					// Create a Name to be the new target.
 					targetExpr = nameForTemp( temp, ctx, targetExpr.getType() );
 				}
@@ -80,10 +79,6 @@ public class MoveStatementTemplate extends JavaTemplate
 					out.print( " = " );				
 					ctx.invoke( genExpression, sourceExpr, ctx, out );
 					out.println( ';' );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-
 					// Create a Name to be the new source.
 					sourceExpr = nameForTemp( temp, ctx, sourceExpr.getType() );
 				}
@@ -116,9 +111,6 @@ public class MoveStatementTemplate extends JavaTemplate
 							
 							ctx.invoke( genExpression, assign, ctx, out );
 							out.println( ';' );
-							// as this is an expression that also creates a new line with the above println method, it throws off the
-							// smap ending line number by 1. We need to issue a call to correct this
-							ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 						}
 					}
 					break;
@@ -148,15 +140,7 @@ public class MoveStatementTemplate extends JavaTemplate
 						out.print( ".getSize())" );
 					}					
 					out.println( "; " + counter + " > 0; " + counter + "-- )" );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-
 					out.println( '{' );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-					
 					Assignment assign = ctx.getFactory().createAssignment();
 					assign.setOperator( "=" );
 					
@@ -174,23 +158,13 @@ public class MoveStatementTemplate extends JavaTemplate
 
 					ctx.invoke( genExpression, assign, ctx, out );
 					out.println( ';' );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-					
 					out.println( '}' );
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 					break;
 			}
 
 			if ( needTemp )
 			{
 				out.println( '}' );
-				// as this is an expression that also creates a new line with the above println method, it throws off the
-				// smap ending line number by 1. We need to issue a call to correct this
-				ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 			}
 		}
 	}

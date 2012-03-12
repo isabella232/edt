@@ -124,6 +124,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genFields(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
 			ctx.invoke(genField, part, ctx, out, field);
+			ctx.writeSmapLine();
 		}
 		// create the type constraint static hashmap, only if there are some parameterized types
 		boolean needConstraints = false;
@@ -160,6 +161,7 @@ public class EGLClassTemplate extends JavaTemplate {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed);
 		for (Library library : libraries) {
 			ctx.invoke(genLibrary, part, ctx, out, library);
+			ctx.writeSmapLine();
 		}
 	}
 
@@ -212,13 +214,17 @@ public class EGLClassTemplate extends JavaTemplate {
 		}
 		// now process the fields that don't have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() == null)
+			if (field.getInitializerStatements() == null) {
 				ctx.invoke(genInitializeMethod, part, ctx, out, field);
+				ctx.writeSmapLine();
+			}
 		}
 		// now process the fields that do have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() != null)
+			if (field.getInitializerStatements() != null) {
 				ctx.invoke(genInitializeMethod, part, ctx, out, field);
+				ctx.writeSmapLine();
+			}
 		}
 	}
 
@@ -231,6 +237,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
 			ctx.invoke(genGetterSetter, part, ctx, out, field);
+			ctx.writeSmapLine();
 		}
 	}
 
@@ -242,6 +249,7 @@ public class EGLClassTemplate extends JavaTemplate {
 		List<Library> libraries = (List<Library>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed);
 		for (Library library : libraries) {
 			ctx.invoke(genLibraryAccessMethod, part, ctx, out, library);
+			ctx.writeSmapLine();
 		}
 	}
 
@@ -267,6 +275,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Function function : part.getFunctions()) {
 			ctx.invoke(genFunction, part, ctx, out, function);
+			ctx.writeSmapLine();
 		}
 	}
 

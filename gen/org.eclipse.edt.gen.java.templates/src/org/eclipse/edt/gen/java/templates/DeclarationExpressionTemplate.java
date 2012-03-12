@@ -48,11 +48,8 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 					field)) {
 				if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
 					out.println(";");
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 					// we need to run the temporary variables separately, otherwise we might not get wraps
-					ctx.invoke(genInitializeStatement, field, ctx, out, true);
+					ctx.invoke(genInitializeStatement, field, ctx, out);
 				} else {
 					// as this is a value type that doesn't map to a primitive, we are going to end up doing an ezeCopyTo, so
 					// simply assign the result to the variable
@@ -63,17 +60,11 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 					if (rhs instanceof NewExpression && rhs.getType().equals(field.getType())) {
 						ctx.invoke(genExpression, rhs, ctx, out);
 						out.println(";");
-						// as this is an expression that also creates a new line with the above println method, it throws off
-						// the smap ending line number by 1. We need to issue a call to correct this
-						ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 					} else {
 						out.print("null");
 						out.println(";");
-						// as this is an expression that also creates a new line with the above println method, it throws off
-						// the smap ending line number by 1. We need to issue a call to correct this
-						ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 						// we need to run the temporary variables separately, otherwise we might not get wraps
-						ctx.invoke(genInitializeStatement, field, ctx, out, true);
+						ctx.invoke(genInitializeStatement, field, ctx, out);
 					}
 				}
 			} else {
@@ -81,13 +72,11 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 				// this logic will not combine, because it isn't safe to
 				ctx.invoke(genInitialization, field, ctx, out);
 				out.println(";");
-				// as this is an expression that also creates a new line with the above println method, it throws off the
-				// smap ending line number by 1. We need to issue a call to correct this
-				ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
 				// now check for any statements to be processed
 				if (field.getInitializerStatements() != null)
 					ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 			}
+			ctx.writeSmapLine();
 		}
 	}
 }

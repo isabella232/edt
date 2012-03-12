@@ -103,14 +103,6 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genInitializeStatement(Field field, Context ctx, TabbedWriter out) {
-		processInitializeStatement(field, ctx, out, false);
-	}
-
-	public void genInitializeStatement(Field field, Context ctx, TabbedWriter out, Boolean adjustSmap) {
-		processInitializeStatement(field, ctx, out, adjustSmap);
-	}
-
-	public void processInitializeStatement(Field field, Context ctx, TabbedWriter out, boolean adjustSmap) {
 		if (field.getInitializerStatements() == null || field.getInitializerStatements().getStatements().isEmpty()) {
 			// there are no initializer statements, so just initialize the field
 			ctx.invoke(genName, field, ctx, out);
@@ -129,11 +121,6 @@ public class FieldTemplate extends JavaTemplate {
 				out.print(" = ");
 				ctx.invoke(genInitialization, field, ctx, out);
 				out.println(";");
-				if (adjustSmap) {
-					// as this is an expression that also creates a new line with the above println method, it throws off the
-					// smap ending line number by 1. We need to issue a call to correct this
-					ctx.setSmapLastJavaLineNumber(out.getLineNumber() - 1);
-				}
 			}
 			// now process the initializer statements
 			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);

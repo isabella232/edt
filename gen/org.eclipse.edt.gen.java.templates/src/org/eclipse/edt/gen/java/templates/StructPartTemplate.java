@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import java.io.StringWriter;
 import java.util.List;
 
 import org.eclipse.edt.gen.java.CommonUtilities;
@@ -31,7 +30,7 @@ public class StructPartTemplate extends JavaTemplate {
 	}
 
 	public static String getInterfaces(StructPart part, Context ctx){
-		TabbedWriter out = new TabbedWriter(new StringWriter());
+		TabbedWriter out = ctx.getTabbedWriter();
 		List<StructPart> extndsAry = part.getSuperTypes();
 		boolean appendComma = false;
 		if (extndsAry != null) {

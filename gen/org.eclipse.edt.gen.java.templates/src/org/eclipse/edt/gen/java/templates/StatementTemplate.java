@@ -24,11 +24,13 @@ public class StatementTemplate extends JavaTemplate {
 	public void genStatement(Statement stmt, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStatementBody, stmt, ctx, out);
 		ctx.invoke(genStatementEnd, stmt, ctx, out);
+		ctx.writeSmapLine();
 	}
 
 	public void genStatementNoBraces(Statement stmt, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStatementBodyNoBraces, stmt, ctx, out);
 		ctx.invoke(genStatementEnd, stmt, ctx, out);
+		ctx.writeSmapLine();
 	}
 
 	public void genStatementEnd(Statement stmt, Context ctx, TabbedWriter out) {
