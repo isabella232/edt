@@ -36,14 +36,17 @@ import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
 import org.eclipse.edt.ide.core.EDTRuntimeContainerEntry;
 import org.eclipse.edt.ide.core.IGenerator;
+import org.eclipse.edt.ide.deployment.core.model.RUIApplication;
 import org.eclipse.edt.ide.deployment.operation.AbstractDeploymentOperation;
 import org.eclipse.edt.ide.deployment.results.IDeploymentResultsCollector;
 import org.eclipse.edt.ide.deployment.rui.Activator;
@@ -54,117 +57,173 @@ import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 public class CopyJavaRuntimeResourcesOperation extends AbstractDeploymentOperation {
 
 	private static final String WEBLIB_FOLDER = "WEB-INF/lib/"; //$NON-NLS-1$
+	private static final String JAVA_RUNTIME_PROJECT = "org.eclipse.edt.runtime.java"; //$NON-NLS-1$
+	private static final String ICU_PROJECT = "com.ibm.icu"; //$NON-NLS-1$
 	
 	private IFolder projectRootFolder;
 
 	public void execute(DeploymentContext context, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) throws CoreException {
 		
-		// We only deal with Java projects.
-		if (!context.getSourceProject().hasNature(JavaCore.NATURE_ID)) {
-			return;
-		}
-		
+		boolean deployedJavaRuntime = false;
+		boolean deployedICU = false;
 		projectRootFolder = Utils.getContextDirectory(context.getTargetProject());
 		
-		IJavaProject javaProject = JavaCore.create(context.getSourceProject());
-		Set<IClasspathEntry> entries = new HashSet<IClasspathEntry>();
-		getClasspathContainers(javaProject, new HashSet<IJavaProject>(10), entries);
-		
-		Set<EDTRuntimeContainer> toCopy = new HashSet<EDTRuntimeContainer>(entries.size());
-		IGenerator[] generators = EDTCoreIDEPlugin.getPlugin().getGenerators();
-		for (IGenerator gen : generators) {
-			EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
-			for (EDTRuntimeContainer container : containers) {
-				IPath path = container.getPath();
-				for (IClasspathEntry entry : entries) {
-					if (entry.getPath().equals(path)) {
-						toCopy.add(container);
-						break;
+		if (context.getSourceProject().hasNature(JavaCore.NATURE_ID)) {
+			IJavaProject javaProject = JavaCore.create(context.getSourceProject());
+			Set<IClasspathEntry> entries = new HashSet<IClasspathEntry>();
+			getClasspathContainers(javaProject, new HashSet<IJavaProject>(10), entries);
+			
+			Set<EDTRuntimeContainer> toCopy = new HashSet<EDTRuntimeContainer>(entries.size());
+			IGenerator[] generators = EDTCoreIDEPlugin.getPlugin().getGenerators();
+			for (IGenerator gen : generators) {
+				EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
+				for (EDTRuntimeContainer container : containers) {
+					IPath path = container.getPath();
+					for (IClasspathEntry entry : entries) {
+						if (entry.getPath().equals(path)) {
+							toCopy.add(container);
+							break;
+						}
+					}
+				}
+			}
+			
+			if (toCopy.size() > 0) {
+				for (EDTRuntimeContainer container : toCopy) {
+					for (EDTRuntimeContainerEntry entry : container.getEntries()) {
+						IClasspathEntry cpEntry = entry.getClasspathEntry();
+						if (cpEntry == null) {
+							continue;
+						}
+						
+						IPath path = cpEntry.getPath();
+						if (path != null) {
+							File file = path.toFile();
+							if (!file.exists()) {
+								continue;
+							}
+							
+							// For the version, only keep major.minor.service, no qualifier.
+							Version version = new Version(entry.getBundleVersion());
+							StringBuilder bundleVersion = new StringBuilder(20);
+							bundleVersion.append(version.getMajor());
+							bundleVersion.append('.');
+							bundleVersion.append(version.getMinor());
+							bundleVersion.append('.');
+							bundleVersion.append(version.getMicro());
+							
+							String targetPrefix = entry.getBundleId() + "_"; //$NON-NLS-1$
+							String targetName =  targetPrefix + bundleVersion.toString() + ".jar"; //$NON-NLS-1$
+							
+							if (!deployedJavaRuntime && targetPrefix.equals(JAVA_RUNTIME_PROJECT + "_")) { //$NON-NLS-1$
+								deployedJavaRuntime = true;
+							}
+							else if (!deployedICU && targetPrefix.equals(ICU_PROJECT + "_")) { //$NON-NLS-1$
+								deployedICU = true;
+							}
+							
+							deployRuntime(file, targetPrefix, targetName, resultsCollector, monitor);
+						}
 					}
 				}
 			}
 		}
 		
-		if (toCopy.size() > 0) {
-			for (EDTRuntimeContainer container : toCopy) {
-				for (EDTRuntimeContainerEntry entry : container.getEntries()) {
-					IClasspathEntry cpEntry = entry.getClasspathEntry();
-					if (cpEntry == null) {
-						continue;
-					}
-					
-					IPath path = cpEntry.getPath();
-					if (path != null) {
-						File file = path.toFile();
-						if (!file.exists()) {
-							continue;
-						}
-						
-						// For the version, only keep major.minor.service, no qualifier.
-						Version version = new Version(entry.getBundleVersion());
-						StringBuilder bundleVersion = new StringBuilder(20);
-						bundleVersion.append(version.getMajor());
-						bundleVersion.append('.');
-						bundleVersion.append(version.getMinor());
-						bundleVersion.append('.');
-						bundleVersion.append(version.getMicro());
-						
-						String targetPrefix = entry.getBundleId() + "_"; //$NON-NLS-1$
-						String targetName =  targetPrefix + bundleVersion.toString() + ".jar"; //$NON-NLS-1$
-						InputStream fis = null;
-						ZipOutputStream zos = null;
-						try {
-							if (file.isDirectory()) {
-								// Package the directory into a jar and stick it in the target location.
-								ByteArrayOutputStream bos = new ByteArrayOutputStream();
-								Manifest manifest = new Manifest();
-								manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0"); //$NON-NLS-1$
-								
-						        zos = new JarOutputStream(bos, manifest);
-						        CRC32 crc = new CRC32();
-						        
-						        // Add initial '/' entry
-						        ZipEntry root = new ZipEntry("/");
-						        zos.putNextEntry(root);
-						        
-						        createRuntimeJar(zos, crc, file, file.getPath().length());
-						        zos.close();
-						        zos = null;
-						        fis = new ByteArrayInputStream(bos.toByteArray());
-							}
-							else {
-								// Already a jar - copy it.
-								fis = new FileInputStream(file);
-							}
-							
-							copyFile(fis, targetName, targetPrefix, monitor);
-						}
-						catch (Exception e) {
-							resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR,
-									DeploymentUtilities.createExceptionMessage(e)));
-						}
-						finally {
-							if (zos != null) {
-								try {
-									zos.close();
-								}
-								catch (IOException ioe) {
-								}
-							}
-							if (fis != null) {
-								try {
-									fis.close();
-								}
-								catch (IOException ioe) {
-								}
-							}
-						}
-					}
+		// RUI apps always need the Java runtime.
+		RUIApplication ruiApp = context.getDeploymentDesc().getRUIApplication();
+		if (ruiApp != null && (ruiApp.deployAllHandlers() || (ruiApp.getRUIHandlers() != null && ruiApp.getRUIHandlers().size() > 0))) {
+			if (!deployedJavaRuntime) {
+				deployProject(JAVA_RUNTIME_PROJECT, resultsCollector, monitor);
+			}
+			if (!deployedICU) {
+				deployProject(ICU_PROJECT, resultsCollector, monitor);
+			}
+		}
+	}
+		
+	private void deployProject(String projectName, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) {
+		try {
+			Bundle bundle = Platform.getBundle(projectName);
+			File javaRuntimeFile = FileLocator.getBundleFile(bundle);
+			
+			// For the version, only keep major.minor.service, no qualifier.
+			Version version = bundle.getVersion();
+			StringBuilder bundleVersion = new StringBuilder(20);
+			bundleVersion.append(version.getMajor());
+			bundleVersion.append('.');
+			bundleVersion.append(version.getMinor());
+			bundleVersion.append('.');
+			bundleVersion.append(version.getMicro());
+			
+			String targetPrefix = projectName + "_"; //$NON-NLS-1$
+			String targetName = targetPrefix + bundleVersion.toString() + ".jar"; //$NON-NLS-1$
+			if (javaRuntimeFile.isDirectory()) {
+				// We really want its bin directory
+				File bin = new File(javaRuntimeFile, "bin"); //$NON-NLS-1$
+				if (bin.exists()) {
+					javaRuntimeFile = bin;
+				}
+			}
+			deployRuntime(javaRuntimeFile, targetPrefix, targetName, resultsCollector, monitor);
+		}
+		catch (IOException ioe) {
+			resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR,
+					DeploymentUtilities.createExceptionMessage(ioe)));
+		}
+	}
+	
+	private void deployRuntime(File file, String targetPrefix, String targetName, IDeploymentResultsCollector resultsCollector, IProgressMonitor monitor) {
+		ZipOutputStream zos = null;
+		InputStream fis = null;
+		try {
+			if (file.isDirectory()) {
+				// Package the directory into a jar and stick it in the target location.
+				ByteArrayOutputStream bos = new ByteArrayOutputStream();
+				Manifest manifest = new Manifest();
+				manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0"); //$NON-NLS-1$
+				
+		        zos = new JarOutputStream(bos, manifest);
+		        CRC32 crc = new CRC32();
+		        
+		        // Add initial '/' entry
+		        ZipEntry root = new ZipEntry("/");
+		        zos.putNextEntry(root);
+		        
+		        createRuntimeJar(zos, crc, file, file.getPath().length());
+		        zos.close();
+		        zos = null;
+		        fis = new ByteArrayInputStream(bos.toByteArray());
+			}
+			else {
+				// Already a jar - copy it.
+				fis = new FileInputStream(file);
+			}
+			
+			copyFile(fis, targetName, targetPrefix, monitor);
+		}
+		catch (Exception e) {
+			resultsCollector.addMessage(DeploymentUtilities.createDeployMessage(IStatus.ERROR,
+					DeploymentUtilities.createExceptionMessage(e)));
+		}
+		finally {
+			if (zos != null) {
+				try {
+					zos.close();
+				}
+				catch (IOException ioe) {
+				}
+			}
+			if (fis != null) {
+				try {
+					fis.close();
+				}
+				catch (IOException ioe) {
 				}
 			}
 		}
