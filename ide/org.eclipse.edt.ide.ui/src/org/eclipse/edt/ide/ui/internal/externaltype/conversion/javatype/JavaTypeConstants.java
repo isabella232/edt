@@ -42,8 +42,8 @@ public class JavaTypeConstants {
 		JavaToEglMapping.put("java.lang.Integer", "int?");//$NON-NLS-1$
 		JavaToEglMapping.put("long", "bigint");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Long", "bigint?");//$NON-NLS-1$
-		JavaToEglMapping.put("java.math.BigDecimal", "decimal(32,8)");//$NON-NLS-1$
-		JavaToEglMapping.put("java.math.BigInteger", "number?");//$NON-NLS-1$
+		JavaToEglMapping.put("java.math.BigDecimal", "decimal?");//$NON-NLS-1$
+		JavaToEglMapping.put("java.math.BigInteger", "decimal?");//$NON-NLS-1$
 		
 		JavaToEglMapping.put("float", "smallfloat");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Float", "smallfloat?");//$NON-NLS-1$

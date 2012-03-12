@@ -541,7 +541,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 			} else if (element instanceof java.lang.reflect.Constructor) {
 				labelName = ReflectionUtil.getConstructorLabel((java.lang.reflect.Constructor<?>)element);
 			} else if (element instanceof java.lang.reflect.Field) {
-				labelName = ReflectionUtil.getFieldLabel((java.lang.reflect.Field)element);
+				labelName = ReflectionUtil.getJavaFieldLabel((java.lang.reflect.Field)element);
 			}
 			return labelName;
 		}

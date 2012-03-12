@@ -200,6 +200,17 @@ public class ReflectionUtil {
 		return buffer.toString();
 	}
 	
+	public static String getJavaFieldLabel(java.lang.reflect.Field field) {
+		StringBuilder buffer = new StringBuilder(60);
+		if(Modifier.isStatic(field.getModifiers())) {
+			buffer.append("static ");
+		}
+		
+		buffer.append(field.getName() + SQLConstants.SPACE + getTypeName(field.getType()));
+		
+		return buffer.toString();
+	}
+	
 	public static String getFieldLabel(java.lang.reflect.Field field) {
 		StringBuilder buffer = new StringBuilder(60);
 		if(Modifier.isStatic(field.getModifiers())) {
@@ -210,12 +221,12 @@ public class ReflectionUtil {
 		if(isEGLKeyWord) {
 			buffer.append(JavaTypeConstants.UNDERSTORE_PREFIX);
 		}
-		buffer.append(field.getName() + SQLConstants.SPACE + getTypeName(field.getType()));
+		buffer.append(field.getName() + SQLConstants.SPACE + getEGLTypeName(field.getType()));
 		
 		return buffer.toString();
 	}
 	
-	public static String getTypeName(Class<?> paraType) {
+	public static String getEGLTypeName(Class<?> paraType) {
 		String typeName;
 		int dim = 0;
 		while(paraType.isArray()) {
@@ -231,6 +242,24 @@ public class ReflectionUtil {
 		if(isEGLPart) {
 			typeName = JavaTypeConstants.UNDERSTORE_PREFIX + typeName;
 		}
+		while(dim > 0) {
+			typeName = typeName + SQLConstants.LEFT_BRACKET + SQLConstants.RIGHT_BRACKET;
+			dim--;
+		}
+		
+		return typeName;
+	}
+	
+	public static String getTypeName(Class<?> paraType) {
+		String typeName;
+		int dim = 0;
+		while(paraType.isArray()) {
+			dim++;
+			paraType = paraType.getComponentType();
+		}
+		
+		typeName = paraType.getSimpleName();
+		
 		while(dim > 0) {
 			typeName = typeName + SQLConstants.LEFT_BRACKET + SQLConstants.RIGHT_BRACKET;
 			dim--;
