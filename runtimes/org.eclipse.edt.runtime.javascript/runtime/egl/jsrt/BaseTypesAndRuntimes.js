@@ -1044,7 +1044,7 @@ egl.convertFloatToInteger = function( x, upper, lower, creatx )
 
 	if ( x > 0 )
 	{
-		x = Math.round( x );
+		x = Math.floor( x );
 		if ( x > upper )
 		{
 			var target = upper == 2147483647 ? "int" : "smallint";
@@ -1057,7 +1057,7 @@ egl.convertFloatToInteger = function( x, upper, lower, creatx )
 	}
 	else if ( x < 0 )
 	{
-		x = -Math.round( -x );
+		x = -Math.floor( -x );
 		if ( x < lower )
 		{
 			var target = upper == 2147483647 ? "int" : "smallint";
