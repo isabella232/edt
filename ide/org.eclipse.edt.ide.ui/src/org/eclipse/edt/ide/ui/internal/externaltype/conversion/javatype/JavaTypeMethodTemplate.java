@@ -30,8 +30,9 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 		}
 		String methodName = javaMethod.getName();
 		boolean isEGLKeyWord = EGLNameValidator.isKeyword(methodName);
+		boolean isStartWithEze = methodName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
 		
-		if(isEGLKeyWord) {
+		if(isEGLKeyWord || isStartWithEze) {
 			methodName = JavaTypeConstants.UNDERSTORE_PREFIX + methodName;
 		}
 		
@@ -53,7 +54,7 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 					SQLConstants.RPAREN);
 		} 
 		
-		if(isEGLKeyWord) {
+		if(isEGLKeyWord || isStartWithEze) {
 			out.print("   {externalName = " + SQLConstants.DOUBLE_QUOTE + javaMethod.getName()
 					  + SQLConstants.DOUBLE_QUOTE + "}" );
 		}

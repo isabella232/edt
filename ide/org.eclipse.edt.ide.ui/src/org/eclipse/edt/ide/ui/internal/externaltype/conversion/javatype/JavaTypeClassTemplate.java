@@ -35,7 +35,9 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			String packageName = declaringClass.getPackage().getName();
 			String eglName = declaringClass.getSimpleName();
 			boolean isEGLKeyWord = EGLNameValidator.isKeyword(eglName);
-			if(isEGLKeyWord) {//Alias EGL keywords
+			boolean isStartWithEze = eglName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
+			
+			if(isEGLKeyWord || isStartWithEze) {//Alias EGL keywords
 				eglName = JavaTypeConstants.UNDERSTORE_PREFIX + eglName;
 			}
 			out.print("externalType " + eglName);
@@ -52,7 +54,7 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 				notNeedPackage = true;
 			}
 			out.println(" type JavaObject ");
-			if(isEGLKeyWord) {
+			if(isEGLKeyWord || isStartWithEze) {
 				out.print("{externalName = " + SQLConstants.DOUBLE_QUOTE);
 				if(declaringClass.getEnclosingClass() == null) {
 					out.print(declaringClass.getSimpleName());

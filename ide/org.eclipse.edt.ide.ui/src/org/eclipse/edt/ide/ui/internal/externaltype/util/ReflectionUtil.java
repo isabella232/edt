@@ -218,10 +218,17 @@ public class ReflectionUtil {
 		}
 		
 		boolean isEGLKeyWord = EGLNameValidator.isKeyword(field.getName());
-		if(isEGLKeyWord) {
+		boolean isStartWithEze = field.getName().toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
+		if(isEGLKeyWord || isStartWithEze) {
 			buffer.append(JavaTypeConstants.UNDERSTORE_PREFIX);
-		}
+		} 
+		
 		buffer.append(field.getName() + SQLConstants.SPACE + getEGLTypeName(field.getType()));
+		if(isStartWithEze) {
+			buffer.append(SQLConstants.SPACE);
+			buffer.append("{externalName = " + SQLConstants.DOUBLE_QUOTE + field.getName()
+					+ SQLConstants.DOUBLE_QUOTE +"}");
+		}
 		
 		return buffer.toString();
 	}
@@ -239,7 +246,8 @@ public class ReflectionUtil {
 			typeName = paraType.getSimpleName();
 		
 		boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(typeName.toLowerCase(Locale.ENGLISH));
-		if(isEGLPart) {
+		boolean isStartWithEze = typeName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
+		if(isEGLPart || isStartWithEze) {
 			typeName = JavaTypeConstants.UNDERSTORE_PREFIX + typeName;
 		}
 		while(dim > 0) {
