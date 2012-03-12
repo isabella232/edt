@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,6 +24,12 @@ egl.defineWidget(
 		this._mergeArgs({
 			label: this.text || ""
 		});
+		this._args._onClick = function(e){
+			eglWidget.handleEvent(eglWidget.getOnClick(), "onClick", e);
+			if(this.valueNode){
+				egl.stopEventPropagation(e);
+			}
+		};
 		this.dojoWidget = new dijit.form.Button(this._args, parent);
 		this.dojoWidget.setDisabled(this.disabled ? true : false);
 		if(this.width){
