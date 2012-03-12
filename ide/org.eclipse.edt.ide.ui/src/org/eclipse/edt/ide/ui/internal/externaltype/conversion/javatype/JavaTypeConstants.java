@@ -50,7 +50,7 @@ public class JavaTypeConstants {
 		JavaToEglMapping.put("java.lang.Float", "smallfloat?");//$NON-NLS-1$
 		JavaToEglMapping.put("double", "float");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Double", "float?");//$NON-NLS-1$
-		JavaToEglMapping.put("java.lang.Class", "Class");//$NON-NLS-1$
+		//JavaToEglMapping.put("java.lang.Class", "Class");//$NON-NLS-1$
 		
 		JavaToEglMapping.put("java.sql.Date", "date?");//$NON-NLS-1$
 		JavaToEglMapping.put("java.sql.Time", "time?");//$NON-NLS-1$

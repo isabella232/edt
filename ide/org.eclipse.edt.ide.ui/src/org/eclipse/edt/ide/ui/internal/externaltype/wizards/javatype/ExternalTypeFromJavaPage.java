@@ -134,10 +134,11 @@ public class ExternalTypeFromJavaPage extends WizardPage
 				for(IPackageFragmentRoot pRoot : roots) {
 					if(pRoot.isArchive() && pRoot.isExternal()) {
 						classPathURLs.add(pRoot.getResolvedClasspathEntry().getPath().toFile().toURI().toURL());
-					} else {
-						classPathURLs.add(proRoot.append(outputRelPath).toFile().toURI().toURL());
+					} else if(pRoot.isArchive() && pRoot.getResource() != null){
+						classPathURLs.add(proRoot.append(pRoot.getResource().getProjectRelativePath()).toFile().toURI().toURL());
 					}
 				}
+				classPathURLs.add(proRoot.append(outputRelPath).toFile().toURI().toURL());
 			} catch(Throwable ee) {
 				ee.printStackTrace();
 			}
