@@ -47,8 +47,10 @@ import org.eclipse.edt.compiler.binding.annotationType.StereotypeAnnotationTypeB
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
+import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.Assignment;
+import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.DataItem;
@@ -75,6 +77,7 @@ import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.Type;
+import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -82,6 +85,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.statement.RValueValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
 
 
@@ -140,7 +144,7 @@ public class AnnotationValidator {
 					}
 				}
 				
-				validateNewExpressions(record);
+				validateExpressions(record);
 
 				if(partSubTypeBinding == null) {
 					return false;
@@ -222,7 +226,7 @@ public class AnnotationValidator {
 					}
 				}
 				
-				validateNewExpressions(functionContainerPart);
+				validateExpressions(functionContainerPart);
 
 				if(partSubTypeBinding == null) {
 					return false;
@@ -330,12 +334,41 @@ public class AnnotationValidator {
 				return false;
 			}
 			
-			private void validateNewExpressions(Part part) {
+			private void validateExpressions(Part part) {
 				if (!Binding.isValidBinding(part.getName().resolveBinding())) {
 					return;
 				}
 				final IPartBinding partBinding = (IPartBinding)part.getName().resolveBinding();
 				part.accept(new AbstractASTVisitor() {
+					
+					public boolean visit(BinaryExpression binaryExpression) {
+						if (binaryExpression.getFirstExpression() != null) {
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getFirstExpression().resolveDataBinding(), binaryExpression.getFirstExpression());
+							validator.validate();
+						}
+						if (binaryExpression.getSecondExpression() != null) {
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, binaryExpression.getSecondExpression().resolveDataBinding(), binaryExpression.getSecondExpression());
+							validator.validate();
+						}
+						
+						return true;
+					}
+					
+					public boolean visit(UnaryExpression unaryExpression) {
+						RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, unaryExpression.getExpression().resolveDataBinding(), unaryExpression.getExpression());
+						validator.validate();
+						return true;
+					}
+					
+					public boolean visit(ArrayAccess arrayAccess) {
+						Iterator i = arrayAccess.getIndices().iterator();
+						while (i.hasNext()) {
+							Expression expr = (Expression)i.next();
+							RValueValidator validator =  new RValueValidator(problemRequestor, compilerOptions, expr.resolveDataBinding(), expr);
+							validator.validate();
+						}
+						return true;
+					}
 					
 					public boolean visit(NewExpression newExpression) {
 						if (Binding.isValidBinding(newExpression.resolveTypeBinding())) {

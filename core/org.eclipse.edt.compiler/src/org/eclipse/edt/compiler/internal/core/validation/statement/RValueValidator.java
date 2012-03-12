@@ -42,6 +42,10 @@ public class RValueValidator {
 	public boolean validate() {
 		boolean result = true;
 		
+		if (!Binding.isValidBinding(dBinding)) {
+			return result;
+		}
+
 		if(!checkFunctionDelegation()) {
 			result = false;
 		}
@@ -57,9 +61,6 @@ public class RValueValidator {
 		//Run field access rules defined by annotations on the field
 		boolean result = true;
 
-		if (!Binding.isValidBinding(dBinding)) {
-			return result;
-		}
 		Iterator i = dBinding.getAnnotations().iterator();
 		while (i.hasNext()) {
 			IAnnotationBinding ann = (IAnnotationBinding)i.next();
