@@ -110,7 +110,7 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 		if (!Binding.isValidBinding(cbType)) {
 			return;
 		}
-		if (cbType.getKind() != ITypeBinding.FUNCTION_BINDING && cbType.getKind() != ITypeBinding.DELEGATE_BINDING) {
+		if (cbType.getKind() != ITypeBinding.FUNCTION_BINDING) {
 			problemRequestor.acceptProblem(expr, IProblemRequestor.FUNCTION_CALLBACK_MUST_BE_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {});
 			return;
 		}
