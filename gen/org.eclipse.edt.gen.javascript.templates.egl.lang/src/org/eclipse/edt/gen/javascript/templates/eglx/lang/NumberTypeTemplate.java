@@ -12,13 +12,13 @@
 package org.eclipse.edt.gen.javascript.templates.eglx.lang;
 
 import org.eclipse.edt.gen.javascript.CommonUtilities;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
@@ -44,7 +44,7 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 	}
 
 	// this method gets invoked when there is a generic (unknown) fixed precision needed
-	public void genDefaultValue(ParameterizableType type, Context ctx, TabbedWriter out) {
+	public void genDefaultValue(Type type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
 			processDefaultValue(type, ctx, out);
 		}
@@ -54,7 +54,7 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void processDefaultValue(Type type, Context ctx, TabbedWriter out) {
-		out.print("egl.javascript.BigDecimal.prototype.ZERO");
+		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("eglx.lang.ENumber") + ".ZERO");
 	}
 
 	// this method gets invoked when there is a specific fixed precision needed
@@ -183,9 +183,7 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 		if (op.equals(expr.Op_MULTIPLY))
 			return "egl.multiplyEGLNumber(";
 		if (op.equals(expr.Op_DIVIDE))
-			return "egl.divideEGLNumber(";
-		if (op.equals(expr.Op_NE))
-			return "!(";
+			return "egl.divideEGLNumber(";		
 		if (op.equals(expr.Op_MODULO))
 			return "egl.remainderEGLNumber(";
 		if (op.equals(expr.Op_EQ))
