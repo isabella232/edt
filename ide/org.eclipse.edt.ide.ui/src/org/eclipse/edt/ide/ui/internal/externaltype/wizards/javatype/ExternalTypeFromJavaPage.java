@@ -397,14 +397,14 @@ public class ExternalTypeFromJavaPage extends WizardPage
 				Class<?> clazz = (Class<?>)parentElement;
 				
 				HashSet<Field> fields = new HashSet<Field>();
-				for(Field field : clazz.getFields()) {
+				for(Field field : clazz.getDeclaredFields()) {
 					 if (Modifier.isPublic(field.getModifiers())) {
 						 fields.add(field);
 					 }
 				}
 				
 				HashSet<Constructor<?>> pubConstructors = new HashSet<Constructor<?>>();
-				for(Constructor<?> pubCon : clazz.getConstructors()) {
+				for(Constructor<?> pubCon : clazz.getDeclaredConstructors()) {
 					if(Modifier.isPublic(pubCon.getModifiers())) {
 						pubConstructors.add(pubCon);
 					}
