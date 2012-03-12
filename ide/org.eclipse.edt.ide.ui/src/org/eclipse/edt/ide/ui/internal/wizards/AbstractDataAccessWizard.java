@@ -283,7 +283,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 	protected String setupSqlBinding(ConnectionInfo connection, boolean isSaved) {
 		String bindingName = null;
 		BindingSQLDatabaseConfiguration sqlConfig = new BindingSQLDatabaseConfiguration();
-		IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(sqlConfig);// getEGLDDFileHandle(sqlConfig);
+		IFile eglddFile = CoreUtility.getOrCreateEGLDDFileHandle(getConfiguration());
 
 		if (eglddFile != null) {
 			EGLDeploymentRoot deploymentRoot = null;
