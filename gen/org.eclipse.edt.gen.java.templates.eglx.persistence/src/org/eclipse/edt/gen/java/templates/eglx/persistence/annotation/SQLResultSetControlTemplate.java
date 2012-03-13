@@ -6,8 +6,6 @@ import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.EnumerationEntry;
-import org.eclipse.edt.mof.egl.MemberAccess;
 
 public class SQLResultSetControlTemplate extends JavaTemplate {
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
@@ -35,8 +33,8 @@ public class SQLResultSetControlTemplate extends JavaTemplate {
 				out.print(", java.sql.ResultSet.CONCUR_READ_ONLY");
 			}
 			if(holdability != null){
-				id = CommonUtilities.getEnumerationName(concurrency);
-				if("CLOSE_CURSORS_AT_COMMIT".equalsIgnoreCase(((Enum)holdability).name())){
+				id = CommonUtilities.getEnumerationName(holdability);
+				if("CLOSE_CURSORS_AT_COMMIT".equalsIgnoreCase(id)){
 					out.print(", java.sql.ResultSet.CLOSE_CURSORS_AT_COMMIT");
 				}
 				else{
