@@ -265,7 +265,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		IJavaSearchScope scope= SearchEngine.createJavaSearchScope(elements);
 
 		FilteredTypesSelectionDialog dialog= new FilteredTypesSelectionDialog(getShell(), false,
-			getWizard().getContainer(), scope, IJavaSearchConstants.CLASS);
+			getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE);
 		
 		dialog.setTitle(NewExternalTypeWizardMessages.NewExternalTypeWizardPage_SelectedClassDialog_title);
 		dialog.setMessage(NewExternalTypeWizardMessages.NewExternalTypeWizardPage_SelectedClassDialog_message);
