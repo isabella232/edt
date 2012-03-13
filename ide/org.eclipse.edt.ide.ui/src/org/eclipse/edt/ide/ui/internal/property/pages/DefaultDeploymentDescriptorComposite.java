@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.property.pages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.ide.ui.internal.IUIHelpConstants;
@@ -36,14 +37,12 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 public class DefaultDeploymentDescriptorComposite extends Composite {
 	protected static final int INDENT_SIZE = 20;
 	
-	private String compositeTitle;
 	private Button specifyValueButton;
 	private DDSettings defaultDDSettings;
 	private IProject containingProject = null;
 	
 	public DefaultDeploymentDescriptorComposite( Composite parent, int style, IResource resource) {
 		super( parent, style );
-		this.compositeTitle = UINlsStrings.DefaultDDPropertiesPageRuntimeLabelText;
 		if(resource != null) {
 			containingProject = resource.getProject();
 		}
@@ -119,13 +118,21 @@ public class DefaultDeploymentDescriptorComposite extends Composite {
 			} );
 		}
 		
-	   protected void clickBrowseButton( Button button, Text text, String dialogDescription,IProject resource) {
-			ElementTreeSelectionDialog dialog = FileBrowseDialog.openBrowseFileDialog(shell, 
-					resource, null, true, true, IUIHelpConstants.EGLDDWIZ_INCLUDEEGLDD, 
+		protected void clickBrowseButton( Button button, Text text, String dialogDescription,IProject resource) {
+			IFile initialSelection = null;
+			if (currentDD != null && currentDD.getPartPath() != null) {
+				IResource r = ResourcesPlugin.getWorkspace().getRoot().findMember(currentDD.getPartPath());
+				if (r != null && r.getType() == IResource.FILE) {
+					initialSelection = (IFile)r;
+				}
+			}
+			
+			ElementTreeSelectionDialog dialog = FileBrowseDialog.openBrowseFileOnEGLPathDialog(shell, 
+					resource, initialSelection, IUIHelpConstants.EGLDDWIZ_INCLUDEEGLDD, 
 					EGLDDRootHelper.EXTENSION_EGLDD,
 					SOAMessages.DefaultDeploymentDescription,
 					SOAMessages.IncludeDialogDescription,
-					SOAMessages.IncludeDialogMsg);
+					SOAMessages.IncludeDialogMsg, null, null);
 			
 			if(dialog.open() == IDialogConstants.OK_ID) {
 				Object obj = dialog.getFirstResult();

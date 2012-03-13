@@ -11,9 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.deployment.ui;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -193,4 +198,136 @@ public class FileBrowseDialog {
 		return dialog;
 	}
 	
+	/**
+	 * @return a file selection dialog where the only files displayed are on the EGL path of the project, and inside source folders.
+	 */
+	public static ElementTreeSelectionDialog openBrowseFileOnEGLPathDialog(Shell shell, 
+			final IProject project,
+			IFile initFile, 
+			final String helpId, 
+			final String filterFileExtension, 
+			String dialogTitle,
+			String dialogDescription,
+			final String validationMsgInsert,
+			final EList<Include> includes,
+			final IFile currentFile) {
+		
+		IEGLProject eglProject = EGLCore.create(project);
+		
+		ILabelProvider lp= new EGLElementLabelProvider(EGLElementLabelProvider.SHOW_DEFAULT);
+		ITreeContentProvider cp = new StandardEGLElementContentProvider();	
+		Object input = eglProject.getEGLModel();
+		ElementTreeSelectionDialog dialog= new ElementTreeSelectionDialog(shell, lp, cp){
+			protected Control createDialogArea(Composite parent) {
+				Control control = super.createDialogArea(parent);
+				if(helpId != null)
+					PlatformUI.getWorkbench().getHelpSystem().setHelp(control, helpId);
+				return control;
+			}
+		};
+		dialog.setSorter(new EGLElementSorter());
+		dialog.setTitle(dialogTitle);
+		dialog.setMessage(dialogDescription);
+		
+		dialog.setInput(input);
+		
+		//set up validator
+		ISelectionStatusValidator validator = new ISelectionStatusValidator(){
+			public IStatus validate(Object[] selection) {
+				if(selection.length == 1 && selection[0] instanceof IResource)
+				{
+					IResource resource = (IResource)selection[0];
+					if(resource.getType() == IResource.FILE && resource.getFileExtension().equalsIgnoreCase(filterFileExtension))
+					{
+						if(currentFile!=null && resource.equals(currentFile)){
+							return new StatusInfo(IStatus.ERROR, NewWizardMessages.ChooseEGLDDDialog_Error_CurrentDD);				
+						}
+						if(includes!=null){
+							for (Include include : includes) {
+								if(include.getLocation().equalsIgnoreCase(resource.getFullPath().toString())){
+									return new StatusInfo(IStatus.ERROR, NewWizardMessages.ChooseEGLDDDialog_Error_ImportedDD);				
+								}
+							}
+						}
+						return new StatusInfo();
+					}
+				}
+				return new StatusInfo(IStatus.ERROR, NewWizardMessages.bind(NewWizardMessages.WSDLFileSelectionError, validationMsgInsert));				
+			}
+			
+		};				
+		dialog.setValidator(validator);
+		
+		//set up filter, we only want the DD files under the EGLSource path
+		final HashSet<String> refProjectNames = new HashSet<String>();
+		getProjectPath(eglProject, refProjectNames, new HashSet<IEGLProject>());
+		
+		Class[] acceptedClasses= new Class[] { IEGLModel.class, IPackageFragmentRoot.class, IPackageFragment.class, IEGLProject.class, IResource.class };
+		ViewerFilter filter= new TypedViewerFilter(acceptedClasses, null) {
+			public boolean select(Viewer viewer, Object parent, Object element) {
+				if (element instanceof IPackageFragmentRoot) {
+					try {
+						return (((IPackageFragmentRoot)element).getKind() == IPackageFragmentRoot.K_SOURCE);
+					} catch (EGLModelException e) {
+						EGLLogger.log(this, e);
+						return false;
+					}
+				}
+				else if(element instanceof IResource){
+					if(parent instanceof IEGLProject) {		//filter out the resource under the project
+						return false;
+					}
+					IResource resource = (IResource)element;
+					if(resource.getType() == IResource.FILE){
+						if(resource.getFileExtension().equalsIgnoreCase(filterFileExtension))
+							return true;
+						else 
+							return false;
+					}
+					return true;
+				}
+				else if(element instanceof IEGLProject){						
+					IEGLProject eglProj = (IEGLProject)element;
+					if(eglProj.getProject().equals(project) || refProjectNames.contains(eglProj.getElementName())){
+						return true;
+					}
+					return false;
+				}
+				return super.select(viewer, parent, element);
+			}
+		};
+		dialog.addFilter(filter);			
+		
+		if (initFile != null) {
+			dialog.setInitialSelection(initFile);
+		}
+		
+		return dialog;
+	}
+	
+	private static void getProjectPath(IEGLProject project, HashSet<String> projectNames, HashSet<IEGLProject> seen) {
+		if (seen.contains(project)) {
+			return;
+		}
+		seen.add(project);
+		
+		try {
+			String[] projects = project.getRequiredProjectNames();
+			projectNames.addAll(Arrays.asList(projects));
+			
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			for (String next : projects) {
+				IProject p = root.getProject(next);
+				if (p.isAccessible()) {
+					IEGLProject eglProj = EGLCore.create(p);
+					if (eglProj != null) {
+						getProjectPath(eglProj, projectNames, seen);
+					}
+				}
+			}
+		}
+		catch (EGLModelException e) {
+			e.printStackTrace();
+		}
+	}
 }

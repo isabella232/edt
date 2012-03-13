@@ -295,8 +295,8 @@ public class EGLDDImportsFormPage extends EGLDDBaseFormPage {
 		EGLDeploymentRoot root = getModelRoot();
 		Deployment deployment = root.getDeployment();
 		
-		ElementTreeSelectionDialog dialog = FileBrowseDialog.openBrowseFileDialog(getSite().getShell(), 
-				proj, null, true, true, IUIHelpConstants.EGLDDWIZ_INCLUDEEGLDD, 
+		ElementTreeSelectionDialog dialog = FileBrowseDialog.openBrowseFileOnEGLPathDialog(getSite().getShell(), 
+				proj, null, IUIHelpConstants.EGLDDWIZ_INCLUDEEGLDD, 
 				EGLDDRootHelper.EXTENSION_EGLDD,
 				SOAMessages.IncludeDialogTitle,
 				SOAMessages.IncludeDialogDescription,
