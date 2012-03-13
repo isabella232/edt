@@ -40,6 +40,7 @@ public interface IAnnotationTypeBinding extends ITypeBinding{
     public List getFieldAccessAnnotations();
     
     public List getInstantiationValidators();
+    public List getInvocationValidators();
     
     public Object getDefaultValue();
     public Object getDefaultValueForField(String fieldName);

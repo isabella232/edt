@@ -21,6 +21,7 @@ import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.AnnotationBinding;
 import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
+import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
@@ -59,6 +60,7 @@ import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Interface;
@@ -376,6 +378,11 @@ public class AnnotationValidator {
 						}
 						return true;
 					}
+					
+					public boolean visit(FunctionInvocation functionInvocation) {
+						validateInvocation(functionInvocation, functionInvocation.getTarget().resolveTypeBinding(), partBinding);
+						return true;
+					}
 				});					
 			}
 			
@@ -393,7 +400,29 @@ public class AnnotationValidator {
 				}
 				
 			}
-			
+
+			private void validateInvocation(Node node, ITypeBinding type, IPartBinding declPart) {
+				if (Binding.isValidBinding(type)) {
+					Iterator annIter = type.getAnnotations().iterator();
+					while (annIter.hasNext()) {
+						IAnnotationBinding ann =  (IAnnotationBinding)annIter.next();
+						if (Binding.isValidBinding(ann.getType())) {
+							AnnotationTypeBinding annType = (AnnotationTypeBinding) ann.getType();
+							if (annType.getValidationProxy() != null) {
+								IAnnotationTypeBinding proxy = annType.getValidationProxy();
+								Iterator i = proxy.getInvocationValidators().iterator();
+								while (i.hasNext()) {
+									InstantiationValidationRule rule = (InstantiationValidationRule) i.next();
+									rule.validate(node, type, declPart, problemRequestor, compilerOptions);
+								}
+							}
+							
+						}
+					}				
+				}
+				
+			}
+
 			public boolean visit(UseStatement useStatement) {			
 				UsedTypeBinding usedTypeBinding = useStatement.getUsedTypeBinding();
 				if(usedTypeBinding != null) {

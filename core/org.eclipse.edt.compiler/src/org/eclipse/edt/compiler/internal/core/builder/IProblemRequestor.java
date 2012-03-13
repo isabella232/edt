@@ -454,7 +454,7 @@ public interface IProblemRequestor {
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE = 3425;
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE_UNLESS_PROPERTY_SPECIFIED = 3426;
 	public static final int INTERFACE_MUST_EXTEND_INTERFACE = 3427;
-	
+	public static final int INVOCATION_MUST_BE_IN_TRY = 3428;
 	public static final int NO_DEFAULT_CONSTRUCTOR = 3429;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PART = 3430;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PROGRAM_PARAMETER = 3431;
