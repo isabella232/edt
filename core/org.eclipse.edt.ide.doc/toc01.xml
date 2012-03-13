@@ -29,6 +29,8 @@
       <topic label="Creating an EGL package" href="topics/tedt00521.html"/>
       <topic label="Creating an EGL source file" href="topics/tedt00500.html">
          <topic label="Creating an EGL external type" href="topics/tedt00586.html"/>
+         <topic label="Creating an EGL Library type" href="topics/tedt00588.html"/>
+         <topic label="Creating an EGL Service type" href="topics/tedt00587.html"/>
       </topic>
       <topic label="Creating an EGL deployment descriptor in the EDT IDE"
              href="topics/tedt00502.html"/>

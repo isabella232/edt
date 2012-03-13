@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Creating an EGL Service type"></meta>
+<meta name="abstract" content="You can create an EGL Service type with a few keystrokes. In an important variation, you can invoke the data-access wizard, which automatically creates data-access service functions for each database table that you specify."></meta>
+<meta name="description" content="You can create an EGL Service type with a few keystrokes. In an important variation, you can invoke the data-access wizard, which automatically creates data-access service functions for each database table that you specify."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00500.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt00587"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Creating an EGL Service type</title>
+</head>
+<body id="tedt00587"><a name="tedt00587"><!-- --></a>
+
+
+<h1 class="topictitle1">Creating an EGL Service type</h1>
+
+
+<div id="body"><a name="body"><!-- --></a><p>You can create an EGL Service type with a few
+keystrokes. In an important variation, you can invoke the <em>data-access
+wizard</em>, which automatically creates data-access service functions
+for each database table that you specify.</p>
+
+<div class="p">The steps are as follows:<ol>
+<li>Right click a package and do the fastest process available:<ul>
+<li>Click <span class="menucascade"><span class="uicontrol">New</span> &gt; <span class="uicontrol">Service</span>
+</span>; or</li>
+
+<li>Click <span class="menucascade"><span class="uicontrol">New</span> &gt; <span class="uicontrol">Other</span>
+</span>, expand <strong>EGL</strong>, and click <strong>Service</strong>.</li>
+
+</ul>
+<p>The New Service wizard is displayed.</p>
+</li>
+
+<li>Specify the file name.</li>
+
+<li>If you are creating a service without basing it on database tables,
+do as follows:<ol type="a">
+<li>Click <strong>Basic</strong> and then <strong>Next</strong>. The New basic EGL Service
+page is displayed.</li>
+
+<li>If you want to specify an Interface type that the new Service
+type will implement, use the Browse mechanism to select the Interface
+type. The created Service type will include a function that matches
+every function prototype in the Interface type.</li>
+
+<li>If you want to create a deployment descriptor entry to cause deployment
+of the Service type as an EGL REST-RPC service, click the checkbox
+for <strong>Create as web (EGL REST-RPC service)</strong>.</li>
+
+<li>To create the Service type, click <strong>Finish</strong>.</li>
+
+</ol>
+</li>
+
+<li>Alternatively, if you are invoking the data-access wizard, do
+as follows:<ol type="a">
+<li>Click <strong>Service from a database</strong> and then <strong>Next</strong>. The
+Database tables page is displayed.</li>
+
+<li>Use the topmost dropdown menu to select an existing connection,
+or click <strong>Create new connection</strong> and work through the subsequent
+pages to create a connection that will provide access to the database
+at development time.<div class="note"><span class="notetitle">Note:</span> If you save connection detail that you then
+want to change, go to the Data Source Explorer view:<ol type="i">
+<li>To access the view in the Database Development perspective, click <span class="menucascade">
+<span class="uicontrol">Window</span> &gt; <span class="uicontrol">Open Perspective</span>
+ &gt; <span class="uicontrol"> Other</span></span> and, at the Open Perspective
+page, click <span class="uicontrol">Database Development</span>. To add the
+view to your current perspective instead, click <span class="menucascade"><span class="uicontrol">Window</span>
+ &gt; <span class="uicontrol"> Show</span> &gt; <span class="uicontrol"> View</span> &gt; <span class="uicontrol"> Other</span>
+</span>, expand <span class="uicontrol">Data Management</span>, and
+click <span class="uicontrol">Data Source Explorer</span>.</li>
+
+<li>To update the connection details, right click the connection;
+click <strong>Properties</strong>; make the required changes, particularly in
+the <strong>JDBC connection properties</strong> pane; and click <strong>OK</strong>.</li>
+
+</ol>
+ </div>
+</li>
+
+<li>Select one or more tables. The output code provides access to
+each table individually and does not include logic for table joins.</li>
+
+<li>If you want to include a schema name wherever a table name is
+referenced, click <strong>Qualify table names with schema</strong>.</li>
+
+<li>If you want to create an EGL deployment descriptor entry that
+will be referenced by a binding variable in the code that is being
+created for you, click <strong>Create SQL database binding in the development
+deployment descriptor</strong>.</li>
+
+<li>Click <strong>Next</strong>. The Summary page is displayed, and you can
+review any of several files that are listed in the <strong>Preview file</strong> combo
+box.</li>
+
+<li>Click <strong>Finish</strong>.</li>
+
+</ol>
+</li>
+
+</ol>
+</div>
+
+<div class="p">See also the following topics:<ul>
+<li><a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01029.html" title="When you work with EGL, many of the details of data access are in variables that you customize and then include in statements such as add or delete. The customized variables include details that are specific to a particular kind of data store, whether the kind is a relational database; a file; or, in the future, some other form of persistent storage. By including the kind-specific detail in a variable rather than in the statement itself, the EGL design allows most data-access statements to be structured in a particular way, regardless of which kind of data store is accessed.">EGL support for relational databases</a></li>
+
+<li><a href="../../org.eclipse.edt.core.doc.lr/topics/cedt00035.html" title="The capabilities of the Service classifier are made available when you code a service. The type is like a program that has multiple entry points.">Service classifier overview</a></li>
+
+<li><a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01003.html" title="EGL provides two kinds of support for service-oriented architecture (SOA): service development and service access.">EGL support for SOA</a></li>
+
+</ul>
+</div>
+
+</div>
+
+<div>
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>

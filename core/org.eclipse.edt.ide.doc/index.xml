@@ -1,5 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <index>
+<entry keyword="***">
+<entry keyword="***">
+<topic href="../org.eclipse.edt.core.doc.lr/topics/cedt00034.html#cedt00034" title="Library classifier overview"/>
+<topic href="../org.eclipse.edt.core.doc.lr/topics/cedt00035.html#cedt00035" title="Service classifier overview"/>
+</entry>
+</entry>
 <entry keyword="add EGL statement">
 <entry keyword="relational database">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00021.html#redt00021" title="Add statement for a relational database"/>
@@ -702,6 +708,9 @@ variables">
 <topic href="../org.eclipse.edt.core.doc.pg/topics/tedt01017.html#tedt01017" title="Declaring a variable to access a dedicated or local EGL service"/>
 </entry>
 </entry>
+<entry keyword="EGL support">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01003.html#cedt01003" title="EGL support for SOA"/>
+</entry>
 </entry>
 <entry keyword="setHTTPBasicAuthentication EGL function">
 <topic href="../org.eclipse.edt.core.doc.lr/topics/redt00247.html#redt00247" title="HTTPLib.setHTTPBasicAuthentication system function"/>
@@ -819,6 +828,9 @@ external type">
 descriptor options">
 <topic href="topics/tedt00536.html#tedt00536" title="Adding web-service deployment details to the EGL deployment
 descriptor"/>
+</entry>
+<entry keyword="types">
+<topic href="../org.eclipse.edt.core.doc.pg/topics/cedt01003.html#cedt01003" title="EGL support for SOA"/>
 </entry>
 </entry>
 <entry keyword="Web services">
