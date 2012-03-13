@@ -156,7 +156,7 @@ public class DTOConfigPage extends WizardPage implements SelectionListener, IChe
 
 		setControl(composite);
 
-		// validatePage();
+		validatePage();
 		Dialog.applyDialogFont(parent);
 	}
 

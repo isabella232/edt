@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -29,6 +30,7 @@ import org.eclipse.datatools.connectivity.IManagedConnection;
 import org.eclipse.datatools.connectivity.sqm.core.connection.ConnectionInfo;
 import org.eclipse.datatools.connectivity.sqm.internal.core.util.ConnectionUtil;
 import org.eclipse.datatools.connectivity.ui.dse.dialogs.ConnectionDisplayProperty;
+import org.eclipse.edt.compiler.core.EGLKeywordHandler;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceContext;
 import org.eclipse.edt.gen.generator.eglsource.EglSourceGenerator;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -48,6 +50,7 @@ import org.eclipse.edt.ide.ui.internal.deployment.Deployment;
 import org.eclipse.edt.ide.ui.internal.deployment.DeploymentFactory;
 import org.eclipse.edt.ide.ui.internal.deployment.EGLDeploymentRoot;
 import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDDRootHelper;
+import org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype.JavaTypeConstants;
 import org.eclipse.edt.ide.ui.internal.record.conversion.IMessageHandler;
 import org.eclipse.edt.ide.ui.internal.util.CoreUtility;
 import org.eclipse.edt.ide.ui.internal.util.UISQLUtility;
@@ -372,10 +375,21 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 		
 
 		if(needConfigGenerator){
-			if (basePackage == null || basePackage.equals("")) {
-				javaPackageName = config.getDatabaseName();
+			String dbName = config.getDatabaseName();
+			String dbPkg = dbName;
+			if(EGLKeywordHandler.getKeywordHashSet().contains(dbName.toLowerCase(Locale.ENGLISH))) {
+				dbPkg = JavaTypeConstants.UNDERSTORE_PREFIX + dbName;
 			} else {
-				javaPackageName = basePackage + "." + config.getDatabaseName();
+				String camelStr = CoreUtility.getCamelCaseString(dbName);
+				if( camelStr != null){
+					dbPkg = camelStr;
+				}
+			}
+			
+			if (basePackage == null || basePackage.equals("")) {
+				javaPackageName = dbPkg;
+			} else {
+				javaPackageName = basePackage + "." + dbPkg;
 			}
 			javaJsPackageName = javaPackageName + ".common";
 			context.getVariables().put(DataToolsSqlTemplateConstants.JAVA_PACKAGE_NAME, javaPackageName);

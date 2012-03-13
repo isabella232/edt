@@ -173,5 +173,6 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "graphic", //$NON-NLS-1$
 		   "time", //$NON-NLS-1$
 		   "vargraphic", //$NON-NLS-1$
+		   "binary", //$NON-NLS-1$
 		};
 }

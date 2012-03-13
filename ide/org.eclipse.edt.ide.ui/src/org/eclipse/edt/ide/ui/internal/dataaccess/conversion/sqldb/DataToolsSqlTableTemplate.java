@@ -35,8 +35,8 @@ public class DataToolsSqlTableTemplate extends org.eclipse.edt.ide.ui.internal.r
 			variables.put(SCHEMA_NAME, table.getSchema().getName());
 			variables.put(SCHEMA_PREFIX, table.getSchema().getName() + ".");
 		} else {
-			variables.put(SCHEMA_NAME, table.getSchema().getName());
-			variables.put(SCHEMA_PREFIX, table.getSchema().getName() + ".");
+			variables.put(SCHEMA_NAME, "");
+			variables.put(SCHEMA_PREFIX, "");
 		}
 
 		genRecordEGLFile(table, ctx);
