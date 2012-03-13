@@ -234,4 +234,8 @@ public abstract class AbstractEnvironment implements IEnvironment {
 	public Map<String, LookupDelegate> getLookupDelegates() {
 		return lookupDelegates;
 	}
+	
+	protected Map<Object, EObject> getObjectCache() {
+		return objectCache;
+	}
 }
