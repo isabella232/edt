@@ -14,5 +14,4 @@ handler Request
 	contentType string?;
 	headers dictionary?;
 	body string?;
-	timeout int?;	
 end
