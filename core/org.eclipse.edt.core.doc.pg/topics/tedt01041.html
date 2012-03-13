@@ -44,7 +44,7 @@ be used more widely.</li>
 you wish to override validation or formatting messages, do as follows:<ul>
 <li>Ensure that you are using the controller mechanism described in <a href="cedt01020.html">Rich UI validation and formatting</a>.</li>
 
-<li>Create a Rich UI properties library—a library part that has the
+<li>Create a Rich UI properties library—a library type that has the
 stereotype <strong>RUIProperties</strong>. Details are here: <a href="redt01001.html" title="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application.">RUIPropertiesLibrary stereotype</a>.<p>For an example that follows, the
 library name is <samp class="codeph">myLibrary</samp>, and the library includes
 declarations of strings named <samp class="codeph">entryForInputRequired</samp> and <samp class="codeph">entryForOthers</samp>.
@@ -58,9 +58,8 @@ and formatting fields. Here is an example declaration:<pre class="codeblock">nam
              inputRequiredMsgKey = """"""""entryForInputRequired"""""""",
              typeChkMsgKey = """"""""entryForOthers"""""""",
              validationPropertiesLibrary=myLibrary };</pre>
-<p>The
-<strong>validationPropertiesLibrary</strong> field is used only when you are
-overriding validation and formatting messages.</p>
+<p>The <strong>validationPropertiesLibrary</strong> field
+is used only when you are overriding validation and formatting messages.</p>
 </li>
 
 <li>Set up a properties file and include entries (name-value pairs)
@@ -212,9 +211,8 @@ as a result of clicking a hypertext link that you provide. For example,
 here is the HTML that invokes the German version of MyApplication.html
 from www.example.com, if a German version was deployed there:<pre class="codeblock">   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;a href=""""""""www.example.com/MyApplication-de.html""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;German version&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/a&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
 </div>
-<p>You
-store properties files in the WebContent/properties folder of your
-project. The root of the property file name (for example, <samp class="codeph">myLibrary</samp>)
+<p>You store properties files in the WebContent/properties
+folder of your project. The root of the property file name (for example, <samp class="codeph">myLibrary</samp>)
 must be the name specified in the<strong> propertiesFile</strong> annotation
 in the Rich UI properties library.</p>
 <div class="p">The EGL deployer ensures
