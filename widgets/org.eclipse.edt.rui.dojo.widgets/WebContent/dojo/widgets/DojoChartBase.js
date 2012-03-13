@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -35,11 +35,11 @@ egl.chartsToRedraw = [];egl.defineWidget(
 		this.dojoWidget = new dojox.charting.Chart2D(parent);
 		if (!egl.IE || egl.IEVersion >= 9){
 			if(egl.IE && egl.IEVersion == 9){
-				this.dojoWidget.surface.rawNode.attributes[0].nodeValue = "" + (parseInt(this.width) - 1);
-				this.dojoWidget.surface.rawNode.attributes[1].nodeValue = "" + (parseInt(this.height) - 2);
+				this.dojoWidget.surface.rawNode.attributes[1].nodeValue = "" + (parseInt(this.width) - 1);
+				this.dojoWidget.surface.rawNode.attributes[2].nodeValue = "" + (parseInt(this.height) - 2);
 			}else{
-				this.dojoWidget.surface.rawNode.attributes[0].nodeValue = "" + parseInt(this.width);
-				this.dojoWidget.surface.rawNode.attributes[1].nodeValue = "" + parseInt(this.height);
+				this.dojoWidget.surface.rawNode.attributes[1].nodeValue = "" + parseInt(this.width);
+				this.dojoWidget.surface.rawNode.attributes[2].nodeValue = "" + parseInt(this.height);
 			}			
 		}
 		this.dojoWidget.addPlot("default", plot);
