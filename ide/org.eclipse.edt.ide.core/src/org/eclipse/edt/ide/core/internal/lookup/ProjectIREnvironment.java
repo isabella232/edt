@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.impl.Bootstrap;
@@ -24,6 +27,7 @@ import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.serialization.IEnvironment.LookupDelegate;
 
 /**
  * The IR environment for a project within the IDE. This will contain object stores for all the
@@ -44,7 +48,7 @@ public class ProjectIREnvironment extends Environment {
 		registerLookupDelegate(Type.EGL_KeyScheme, new EglLookupDelegate());
 		systemPartsInitialized = false;
 	}
-	
+		
 	/**
 	 * Runs the bootstrapping on the environment and appends the system object stores, if necessary.
 	 */
@@ -101,6 +105,36 @@ public class ProjectIREnvironment extends Environment {
 				}
 			}
 		}
+		
+		removeFromObjectCache(key);
+	}
+	
+	//Must remove all the keys that refer to a list of the input key
+	private void removeFromObjectCache(String key) {
+
+		Map<Object, EObject> cache = getObjectCache();
+		LookupDelegate delegate = getDelegateForKey(key);
+		String storeKey = delegate.normalizeKey(key);
+		List<Object> keysToRemove = new ArrayList<Object>();
+ 
+		for (Object cacheKey : cache.keySet()) {
+			EObject obj = cache.get(cacheKey);
+			if (obj instanceof ArrayType) {			
+				if (storeKey.equals(delegate.normalizeKey(getBaseElementType((ArrayType)obj).getMofSerializationKey()))) {
+					keysToRemove.add(cacheKey);
+				}
+			}
+		}
+		for (Object cacheKey : keysToRemove) {
+			cache.remove(cacheKey);
+		}
+	}
+	
+	private Type getBaseElementType(ArrayType arr) {
+		if (arr.getElementType() instanceof ArrayType) {
+			return getBaseElementType((ArrayType)arr.getElementType());
+		}
+		return arr.getElementType();
 	}
 	
 	@Override
