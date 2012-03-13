@@ -24,7 +24,6 @@ egl.defineClass('eglx.http', 'Request',
 			this.contentType = null;
 			this.headers = null;
 			this.body = null;
-			this.timeout = null;
 		}
 		,
 		"eze$$setInitial": function() {
@@ -41,7 +40,6 @@ egl.defineClass('eglx.http', 'Request',
 			ezert$$2.contentType = ezert$$1.contentType === null ? null : ezert$$1.contentType;
 			ezert$$2.headers = ezert$$1.headers === null ? null : ezert$$1.headers;
 			ezert$$2.body = ezert$$1.body === null ? null : ezert$$1.body;
-			ezert$$2.timeout = ezert$$1.timeout === null ? null : ezert$$1.timeout;
 			return ezert$$2;
 		}
 		,
@@ -85,10 +83,6 @@ egl.defineClass('eglx.http', 'Request',
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("body", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("body");
 				this.fieldInfos[6] =new egl.eglx.services.FieldInfo("body", "body", "S;", String, annotations);
-				annotations = {};
-				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("timeout", null, false, false);
-				annotations["JsonName"] = new egl.eglx.json.JsonName("timeout");
-				this.fieldInfos[7] =new egl.eglx.services.FieldInfo("timeout", "timeout", "I;", Number, annotations);
 			}
 			return this.fieldInfos;
 		}
@@ -110,8 +104,7 @@ egl.defineClass('eglx.http', 'Request',
 			{name: "charset", value : eze$$parent.charset, type : "eglx.lang.EString", jsName : "charset"},
 			{name: "contentType", value : eze$$parent.contentType, type : "eglx.lang.EString", jsName : "contentType"},
 			{name: "headers", value : eze$$parent.headers, type : "eglx.lang.EDictionary", jsName : "headers"},
-			{name: "body", value : eze$$parent.body, type : "eglx.lang.EString", jsName : "body"},
-			{name: "timeout", value : eze$$parent.timeout, type : "eglx.lang.EInt", jsName : "timeout"}
+			{name: "body", value : eze$$parent.body, type : "eglx.lang.EString", jsName : "body"}
 			];
 		}
 	}
