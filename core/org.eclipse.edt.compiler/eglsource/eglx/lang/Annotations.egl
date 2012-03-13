@@ -64,3 +64,12 @@ Record EventListener type Annotation
 	listenerType String;
 	method String;
 end
+
+Record Throws type Annotation
+{
+	targets = [ElementKind.FunctionMbr],
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationTypeBinding"
+} 
+	getMethod FunctionMemberRef;
+	setMethod FunctionMemberRef;
+end
