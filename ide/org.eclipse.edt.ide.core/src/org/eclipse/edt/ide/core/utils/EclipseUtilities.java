@@ -480,17 +480,16 @@ public class EclipseUtilities {
 			dependentPro.accept( new IResourceVisitor() {
 				@Override
 				public boolean visit(IResource resource) throws CoreException {
-					if ( resource.getFullPath().equals( outputPath ) ) {
-						return false;
-					}
-					if ( resource instanceof IFile && "egldd".equals( resource.getFileExtension() ) ) {
-						try {
-							egldds.add( resource.getFullPath().toString() );
-						} catch (Exception e) {
+					if (outputPath.isPrefixOf(resource.getFullPath())) {
+						if ( resource instanceof IFile && "egldd".equals( resource.getFileExtension() ) ) {
+							try {
+								egldds.add( resource.getFullPath().toString() );
+							} catch (Exception e) {
+							}
+							return false;
 						}
-						return false;
 					}
-					return true;
+					return resource.getFullPath().isPrefixOf(outputPath);
 				}
 			});
 		}
