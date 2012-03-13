@@ -96,6 +96,8 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		setTitle(NewExternalTypeWizardMessages.ExternalTypeFromJavaTypePage_Title);
 		setDescription(NewExternalTypeWizardMessages.ExternalTypeFromJavaTypePage_Description);
 		
+		setPageComplete(false);
+		
 		this.configuration = config;
 		
 		TypeFieldsAdapter adapter= new TypeFieldsAdapter();
@@ -441,15 +443,45 @@ public class ExternalTypeFromJavaPage extends WizardPage
 				int memLen = fields.size() + pubConstructors.size() + publicMethods.size();
 				Object[] members = new Object[memLen];
 				int counter = 0;
-				for(Field field : fields) {
-					members[counter++] = field;
+				int i,j;
+				
+				//Sort the Fields
+				Field[] sortedFields = new Field[fields.size()];
+				sortedFields = fields.toArray(sortedFields);
+				Field field;
+				for(i=1; i< sortedFields.length; i++) {
+					j = i;
+					field = sortedFields[i];
+					while(j>0 && sortedFields[j-1].getName().compareToIgnoreCase(field.getName())>0 ) {
+						sortedFields[j] = sortedFields[j-1];
+						j--;
+					}
+					sortedFields[j] = field;
+				}
+				
+				for(Field element : sortedFields) {
+					members[counter++] = element;
 				}
 				
 				for(Constructor<?> pubCon : pubConstructors) {
 					members[counter++] = pubCon;
 				}
 				
-				for(Method m : publicMethods) {
+				//Sort the Method
+				Method[] sortedMethods = new Method[publicMethods.size()];
+				sortedMethods = publicMethods.toArray(sortedMethods);
+				Method method;
+				for(i=1; i< sortedMethods.length; i++) {
+					j = i;
+					method = sortedMethods[i];
+					while(j>0 && sortedMethods[j-1].getName().compareToIgnoreCase(method.getName())>0 ) {
+						sortedMethods[j] = sortedMethods[j-1];
+						j--;
+					}
+					sortedMethods[j] = method;
+				}
+						
+				for(Method m : sortedMethods) {
 					members[counter++] = m;
 				}
 				 
@@ -658,8 +690,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		fPageVisible = visible;
-		
-		updateStatus(fCurrStatus);
+		//updateStatus(fCurrStatus);
 	}
 	
 	protected void updateStatus(IStatus status) {
