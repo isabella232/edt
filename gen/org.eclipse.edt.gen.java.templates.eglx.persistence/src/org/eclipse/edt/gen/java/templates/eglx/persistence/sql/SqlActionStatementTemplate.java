@@ -176,15 +176,18 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		if (stmt.getPreparedStatement() == null || stmt instanceof SqlPrepareStatement) {
 			Integer stmtNumber = getNextStatementKey(ctx);
 			String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
-			if (!stmtDeclared)
-				if (isCall) {
+			if (isCall) {
+				if (!stmtDeclared){
 					out.print(class_CallableStatement + " ");
-					out.print(var_stmt + " = (" + class_CallableStatement + ")");
 				}
-				else {
+				out.print(var_stmt + " = (" + class_CallableStatement + ")");
+			}
+			else {
+				if (!stmtDeclared){
 					out.print(class_PreparedStatement + " ");
-					out.print(var_stmt + " = (" + class_PreparedStatement + ")");
 				}
+				out.print(var_stmt + " = (" + class_PreparedStatement + ")");
+			}
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
 			out.println(".getStatement(" + typeSignature + ", " + stmtNumber + ");");
 			out.println("if (" + var_stmt + "== null) {");
