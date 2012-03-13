@@ -14,10 +14,8 @@ import eglx.http.HttpMethod;
 import java.lang.String;
 
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
-import java.lang.Integer;
 import eglx.services.Encoding;
 @javax.xml.bind.annotation.XmlRootElement(name="Request")
 public class Request extends ExecutableBase {
@@ -36,8 +34,6 @@ public class Request extends ExecutableBase {
 	public eglx.lang.EDictionary headers;
 	@org.eclipse.edt.javart.json.Json(name="body", clazz=EString.class, asOptions={})
 	public String body;
-	@org.eclipse.edt.javart.json.Json(name="timeout", clazz=EInt.class, asOptions={})
-	public Integer timeout;
 	
 	public Request() {
 		super();
@@ -51,6 +47,5 @@ public class Request extends ExecutableBase {
 		contentType = null;
 		headers = null;
 		body = null;
-		timeout = null;
 	}
 }
