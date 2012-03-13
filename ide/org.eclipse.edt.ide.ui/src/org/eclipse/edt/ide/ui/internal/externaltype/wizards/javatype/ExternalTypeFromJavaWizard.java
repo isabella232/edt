@@ -152,7 +152,6 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 		config.getToBeGenerated().clear();
 		config.getToBeGenerated().put(config.getSelectedClazz(), selectedJavaType);
 		
-		//Get inner class(es), generate constructor/field/method from those classes.
 		ReflectionUtil.getInnerTypes(config.getSelectedClazz(), config.getToBeGenerated());
 		Map<Class<?>, JavaType> tempMap = new HashMap<Class<?>,JavaType>(20);
 		
@@ -164,9 +163,6 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 				if(JavaType.SelectedType == entry.getValue().getSource()) {
 					superTypes = ReflectionUtil.getAllSuperTypes(entry.getKey());
 					for(Class<?> superType : superTypes) {
-						/*if(!config.getToBeGenerated().containsKey(superType)) {
-							config.getToBeGenerated().put(superType, JavaType.DUMMY_SUPER_JAVATYPE);
-						}*/
 						if(!tempMap.containsKey(superType)) {
 							tempMap.put(superType, JavaType.DUMMY_REFERENCED_JAVATYPE);
 						}
@@ -183,7 +179,6 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 		}
 		
 		if(config.isAllReferencedTypesGenerated) {
-			//selectedJavaType = config.getToBeGenerated().get(config.getSelectedClazz());
 			Iterator<Map.Entry<Class<?>,JavaType>> entries = config.getToBeGenerated().entrySet().iterator();
 			
 			while(entries.hasNext()) {
@@ -239,6 +234,7 @@ public class ExternalTypeFromJavaWizard extends TemplateWizard
 				context.put(JavaTypeConstants.TO_BE_GENERATED_TYPE, entry.getValue());
 				context.put(JavaTypeConstants.CONTAINING_EGL_PACKAGE, 
 						  ((NewExternalTypeWizard) getParentWizard()).getConfiguration().getFPackage());
+				context.put(JavaTypeConstants.ALL_CLASS_META, config.getToBeGenerated().keySet());
 				
 				Class<?> clazz = entry.getKey();
 				monitor.subTask(clazz.getName());

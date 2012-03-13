@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Locale;
+import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
 import org.eclipse.edt.compiler.internal.sql.SQLConstants;
@@ -42,13 +44,12 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 			out.print("externalType " + eglName);
 			
-			//All referenced types will not generate super type
-			if(JavaType.ReferencedType != toBeGenerated.getSource()) {
-				String superTypes = getDirectSuperTypes(clazz);
-				if(superTypes != null && !superTypes.isEmpty()) {
-					out.print(" extends " + superTypes);
-				}
+			Set<Class<?>> allClassMeta = (Set<Class<?>>)ctx.get(JavaTypeConstants.ALL_CLASS_META);
+			String superTypes = getDirectSuperTypes(clazz,toBeGenerated.getSource(),allClassMeta);
+			if(superTypes != null && !superTypes.isEmpty()) {
+				out.print(" extends " + superTypes);
 			}
+			
 			boolean notNeedPackage = false;
 			if(packageName != null && packageName.equals((String)ctx.get(JavaTypeConstants.CONTAINING_EGL_PACKAGE))) {
 				notNeedPackage = true;
@@ -112,18 +113,33 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			genClass(clazz, ctx, ctx.getTabbedWriter());
 	}
 	
-	private String getDirectSuperTypes(java.lang.Class<?> clazz) {
+	private String getDirectSuperTypes(java.lang.Class<?> clazz,int source,Set<Class<?>> allClassMeta) {
 		StringBuilder buffer = new StringBuilder(25);
 		
 		Class<?>[] interfaces = clazz.getInterfaces();
 		for(Class<?> interfaceClass : interfaces) {
-			buffer.append(SQLConstants.COMMA);
-			buffer.append(interfaceClass.getSimpleName());
+			if(JavaType.SelectedType == source
+				 || allClassMeta.contains(interfaceClass)) {
+				buffer.append(SQLConstants.COMMA);
+				boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(interfaceClass.getSimpleName().toLowerCase(Locale.ENGLISH));
+				if(isEGLPart) {
+					buffer.append(JavaTypeConstants.UNDERSTORE_PREFIX );
+				}
+				buffer.append(interfaceClass.getSimpleName());
+			}
 		}
 		
 		Class<?> superclass = clazz.getSuperclass();
 		if(superclass != null && !superclass.equals(Object.class)) {
-			buffer.insert(0, superclass.getSimpleName());
+			if(JavaType.SelectedType == source
+					 || allClassMeta.contains(superclass)) {
+				String simpleName = superclass.getSimpleName();
+				boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(simpleName.toLowerCase(Locale.ENGLISH));
+				if(isEGLPart) {
+					simpleName = JavaTypeConstants.UNDERSTORE_PREFIX + simpleName;
+				}
+				buffer.insert(0, simpleName);
+			}
 		} else if(buffer.length() > 0){
 			buffer.deleteCharAt(0);
 		}

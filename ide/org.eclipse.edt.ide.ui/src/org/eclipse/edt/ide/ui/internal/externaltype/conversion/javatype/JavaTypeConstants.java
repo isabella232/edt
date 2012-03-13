@@ -19,10 +19,11 @@ public class JavaTypeConstants {
 	
 	public static final String JAVA_TYPE_MESSAGE_HANDLER = "javaTypeMessageHandler";
 	public static final String TO_BE_GENERATED_TYPE = "toBeGeneratedType";
+	public static final String ALL_CLASS_META = "allClassMeta";
 	public static final String JAVA_VOID_TYPE = "void";
 	public static final String UNDERSTORE_PREFIX = "_";
-	public static final String EZE_PREFIX = "eze";
 	
+	public static final String EZE_PREFIX = "eze";
 	public static final String EGL_KEYWORD_IN = "IN";
 	public static final String CONTAINING_EGL_PACKAGE = "eglPackage";
 	
