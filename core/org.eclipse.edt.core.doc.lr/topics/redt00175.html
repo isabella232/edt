@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="GeneratedValue annotation"></meta>
-<meta name="abstract" content="GeneratedValue marks a field that is related to a table column for which the value is computed automatically by the database."></meta>
-<meta name="description" content="GeneratedValue marks a field that is related to a table column for which the value is computed automatically by the database."></meta>
+<meta name="abstract" content="GeneratedValue marks a field for which the corresponding table column receives a value that is assigned by the database management system. The assignment occurs during an add statement, which also places the DBMS-generated value into the field."></meta>
+<meta name="description" content="GeneratedValue marks a field for which the corresponding table column receives a value that is assigned by the database management system. The assignment occurs during an add statement, which also places the DBMS-generated value into the field."></meta>
 <meta name="DC.subject" content="GeneratedValue EGL annotation, annotations, GeneratedValue"></meta>
 <meta name="keywords" content="GeneratedValue EGL annotation, annotations, GeneratedValue"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00266.html"></meta>
@@ -27,8 +27,10 @@
 
 
 <div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">GeneratedValue</span></span> marks
-a field that is related to a table column for which the value is computed
-automatically by the database.</p>
+a field for which the corresponding table column receives a value
+that is assigned by the database management system. The assignment
+occurs during an <strong>add</strong> statement, which also places the DBMS-generated
+value into the field.</p>
 
 <a name="redt00175__main"><!-- --></a><dl id="redt00175__main">
 <dt class="dlterm"><a name="redt00175__package"><!-- --></a>EGL package name</dt>
@@ -39,7 +41,33 @@ automatically by the database.</p>
 
 <dt class="dlterm"><a name="redt00175__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p"><pre class="codeblock"></pre>
+<dd><div class="p">Consider this custom type:<pre class="codeblock">Record PaymentRec  { @Table {name="PAYMENT"} } 
+   paymentId int {@ID, @GeneratedValue, @Column { name="PAYMENT_ID" } };
+   description string? { @Column { name="DESCRIPTION"} } ;	
+   amount decimal(10,2) { @Column { name="AMOUNT"} } ;
+End</pre>
+</div>
+<div class="p">You declare a record of that type:<pre class="codeblock">mypayment PaymentRec;
+mypayment.description = "shoes";
+mypayment.amount = 123.50;</pre>
+</div>
+<div class="p">The next declaration
+lets your code open a database connection at the first database access
+and in accordance with connection details that are stored in the EGL
+deployment descriptor entry named <samp class="codeph">ds</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource};</pre>
+</div>
+<div class="p">Here
+is an <strong>add</strong> statement, which places a DBMS-generated value into
+the PAYMENT_ID column of a new row and into the <samp class="codeph">paymentID</samp> field
+of the record being added:<pre class="codeblock">function addPayment(newPayment PaymentRec in)
+   try
+      add newPayment to ds;
+      onException(ex sqlException)
+ 
+         // invokes a custom exception handler.
+         logException(ex);        
+    end
+end</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
@@ -70,9 +98,9 @@ end</pre>
 <div class="tablenoborder"><a name="redt00175__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00175__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead align="left">
 <tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d56379e105">Target</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d56379e133">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d56379e108">Issue</th>
+<th class="cellrowborder" valign="bottom" width="50%" id="d56379e136">Issue</th>
 
 </tr>
 
@@ -81,17 +109,17 @@ end</pre>
 <tbody>
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00175__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e105 ">Java</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56379e133 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e108 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56379e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00175__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e105 ">JavaScript</td>
+<td class="cellrowborder" valign="top" width="50%" headers="d56379e133 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e108 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="cellrowborder" valign="top" width="50%" headers="d56379e136 ">Database access is not supported.<p class="compat_javascript_more"></p>
 </td>
 
 </tr>
