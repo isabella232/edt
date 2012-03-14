@@ -416,21 +416,26 @@ public class ExternalTypeFromJavaPage extends WizardPage
 				boolean skipped;
 				HashSet<Method> publicMethods = new HashSet<Method>(16);
 				for (Method m : clazz.getDeclaredMethods()) {
-					 if (Modifier.isPublic(m.getModifiers())) {
+					 if (Modifier.isPublic(m.getModifiers())
+							 && !m.isBridge()) {
 						 skipped = false;
 						 Class<?>[] pTypes = m.getParameterTypes();
 						 Class<?> componentType;
 						 for(Class<?> pType : pTypes) {
 							 componentType = ReflectionUtil.getComponentClass(pType);
 							 if(Byte.TYPE.equals(componentType)
-								  || Byte.class.equals(componentType)) {
+								  || Byte.class.equals(componentType)
+								  || Character.TYPE.equals(componentType)
+								  || Character.class.equals(componentType)) {
 								 skipped = true;
 							 }
 						 }
 						 
 						 componentType = ReflectionUtil.getComponentClass(m.getReturnType());
 						 if(Byte.TYPE.equals(componentType)
-							  || Byte.class.equals(componentType)) {
+							  || Byte.class.equals(componentType)
+							  || Character.TYPE.equals(componentType)
+							  || Character.class.equals(componentType)) {
 							 skipped = true;
 						 }
 						 

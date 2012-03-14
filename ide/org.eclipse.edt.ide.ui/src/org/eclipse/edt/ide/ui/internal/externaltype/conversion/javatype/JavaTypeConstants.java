@@ -29,7 +29,7 @@ public class JavaTypeConstants {
 	
 	public static java.util.Map<String,String> JavaToEglMapping = new java.util.HashMap<String,String>(30);
 	static {
-		JavaToEglMapping.put("char", "string");//$NON-NLS-1$
+		//JavaToEglMapping.put("char", "string");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Character", "string?");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.String", "string");//$NON-NLS-1$
 		JavaToEglMapping.put("byte", "bytes");//$NON-NLS-1$
