@@ -21,11 +21,13 @@ import org.eclipse.edt.mof.egl.StructPart;
 
 public class ServiceTemplate extends JavaTemplate {
 
+	@SuppressWarnings("unchecked")
 	public void preGenPart(StructPart part, Context ctx) {
 		ctx.invokeSuper(this, preGenPart, part, ctx);
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
 		typesImported.add("org.eclipse.edt.javart.services.*");
 		typesImported.add("org.eclipse.edt.javart.json.Json");
+		typesImported.add("org.eclipse.edt.javart.Runtime");
 	}
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out) {
 		out.print("ServiceBase");
@@ -41,6 +43,10 @@ public class ServiceTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, service, ctx, out);
 		out.println(");");
+		out.println("if(Runtime.getRunUnit().getActiveExecutable() == null){");
+		out.println("Runtime.getRunUnit().setActiveExecutable(this);");
+		out.println("}");
+
 		out.println("ezeInitialize();");
 		out.println("}");
 	}
