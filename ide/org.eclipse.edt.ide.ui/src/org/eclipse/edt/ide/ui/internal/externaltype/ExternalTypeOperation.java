@@ -58,10 +58,6 @@ public class ExternalTypeOperation extends PartOperation {
 			ex.printStackTrace();
 		}
 		
-		if(contents != null && contents.contains("privateconstructor")) {
-			contents = contents.replaceAll("privateconstructor", "private constructor");
-		}
-		
 		return contents;
 	}
 }

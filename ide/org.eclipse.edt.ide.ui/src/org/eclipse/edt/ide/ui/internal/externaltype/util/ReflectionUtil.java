@@ -291,4 +291,17 @@ public class ReflectionUtil {
 			clazz = clazz.getComponentType();
 		return clazz;
 	}
+	
+	public static boolean isSkippedType(Class<?> paraType) {
+		boolean skipped = false;
+		if(Byte.TYPE.equals(paraType)
+				  || Byte.class.equals(paraType)
+				  || Character.TYPE.equals(paraType)
+				  || Character.class.equals(paraType)) {
+			skipped = true;
+		}
+		
+		return skipped;
+	}
+	
 }

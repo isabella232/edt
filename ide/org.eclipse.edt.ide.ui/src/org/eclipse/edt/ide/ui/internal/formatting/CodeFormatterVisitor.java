@@ -4447,6 +4447,12 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 				numOfBlankLines = 0;
 			}
 			
+			switch(fPrevToken.sym){
+			  case NodeTypes.PRIVATE:
+				addSpace = true;
+				break;
+			}
+			
 			//add one white space before the line comments 
 			//if this line comments does not start the line
 //			if(fCurrToken.sym == NodeTypes.LINE_COMMENT)

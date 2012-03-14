@@ -398,22 +398,43 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		public Object[] getChildren(Object parentElement) {
 			if(parentElement instanceof Class) {//return public methods of a Java Class
 				Class<?> clazz = (Class<?>)parentElement;
+				boolean skipped;
 				
 				HashSet<Field> fields = new HashSet<Field>();
 				for(Field field : clazz.getDeclaredFields()) {
+					 skipped = false;
 					 if (Modifier.isPublic(field.getModifiers())) {
-						 fields.add(field);
+						 Class<?> componentType = ReflectionUtil.getComponentClass(field.getType());
+						 if(ReflectionUtil.isSkippedType(componentType)) {
+							 skipped = true;
+						 }
+						 
+						 if(!skipped) {
+							 fields.add(field); 
+						 }
 					 }
 				}
 				
 				HashSet<Constructor<?>> pubConstructors = new HashSet<Constructor<?>>();
 				for(Constructor<?> pubCon : clazz.getDeclaredConstructors()) {
 					if(Modifier.isPublic(pubCon.getModifiers())) {
-						pubConstructors.add(pubCon);
+						skipped = false;
+						Class<?>[] pTypes = pubCon.getParameterTypes();
+						Class<?> componentType;
+						for(Class<?> pType : pTypes) {
+							componentType = ReflectionUtil.getComponentClass(pType);
+							if(ReflectionUtil.isSkippedType(componentType)) {
+								skipped = true;
+								break;
+							}
+						}
+						
+						if(!skipped) {
+							pubConstructors.add(pubCon);
+						}
 					}
 				}
 				
-				boolean skipped;
 				HashSet<Method> publicMethods = new HashSet<Method>(16);
 				for (Method m : clazz.getDeclaredMethods()) {
 					 if (Modifier.isPublic(m.getModifiers())
@@ -423,19 +444,14 @@ public class ExternalTypeFromJavaPage extends WizardPage
 						 Class<?> componentType;
 						 for(Class<?> pType : pTypes) {
 							 componentType = ReflectionUtil.getComponentClass(pType);
-							 if(Byte.TYPE.equals(componentType)
-								  || Byte.class.equals(componentType)
-								  || Character.TYPE.equals(componentType)
-								  || Character.class.equals(componentType)) {
+							 if(ReflectionUtil.isSkippedType(componentType)) {
 								 skipped = true;
+								 break;
 							 }
 						 }
 						 
 						 componentType = ReflectionUtil.getComponentClass(m.getReturnType());
-						 if(Byte.TYPE.equals(componentType)
-							  || Byte.class.equals(componentType)
-							  || Character.TYPE.equals(componentType)
-							  || Character.class.equals(componentType)) {
+						 if(!skipped && ReflectionUtil.isSkippedType(componentType)) {
 							 skipped = true;
 						 }
 						 
