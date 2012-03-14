@@ -1585,6 +1585,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 					problemRequestor.acceptProblem(newExpression.getType(),
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE_2,
 						new String[] {newExpression.getType().getCanonicalName()});
+					newExpression.setConstructorBinding(IBinding.NOT_FOUND_BINDING);
+				}
+				else {
+					newExpression.setConstructorBinding(getDefaultConstructor(targetType));
 				}
 			}
 		}
@@ -1675,7 +1679,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 	}
 	
-	private boolean isZeroLiteral(Expression expr) {
+	public static boolean isZeroLiteral(Expression expr) {
 		
 		final boolean[] isZero = new boolean[1];
 		expr.accept(new DefaultASTVisitor(){
@@ -1704,8 +1708,24 @@ public abstract class DefaultBinder extends AbstractBinder {
 		return result;
 	}
 
-	private OverloadedFunctionSet getConstructors(ITypeBinding targetType) {
+	public static ConstructorBinding getDefaultConstructor(ITypeBinding targetType) {
+		OverloadedFunctionSet set = getConstructors(targetType);
+		Iterator i = set.getNestedFunctionBindings().iterator();
+		while (i.hasNext()) {
+			ConstructorBinding binding = (ConstructorBinding)i.next();
+			if (binding.getParameters().size() == 0) {
+				return binding;
+			}
+		}
+		return null;
+	}
+	
+	
+	private static OverloadedFunctionSet getConstructors(ITypeBinding targetType) {
 		OverloadedFunctionSet constructors = new OverloadedFunctionSet();
+		if (!Binding.isValidBinding(targetType)) {
+			return constructors;
+		}
 		constructors.setName(InternUtil.internCaseSensitive(IEGLConstants.KEYWORD_CONSTRUCTOR));
 		if(ITypeBinding.EXTERNALTYPE_BINDING == targetType.getKind()) {
 			for(Iterator iter = ((ExternalTypeBinding) targetType).getConstructors().iterator(); iter.hasNext();) {

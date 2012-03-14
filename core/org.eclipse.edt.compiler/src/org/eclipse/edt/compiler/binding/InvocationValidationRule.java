@@ -27,5 +27,5 @@ public abstract class InvocationValidationRule extends ValidationAnnotationTypeB
 		super(caseSensitiveInternedName);
 	}
 
-	public abstract void validate(Node node, ITypeBinding typeBinding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
+	public abstract void validate(Node node, IBinding binding, IPartBinding declaringPart, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions);
 }

@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -266,6 +267,15 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     	});
     	
     	externalTypeBinding.addConstructor(constructorBinding);
+    	
+    	if (constructor.hasSettingsBlock()) {
+            FunctionScope functionScope = new FunctionScope(currentScope, (FunctionBinding)constructorBinding.getType());
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding, -1, externalTypeBinding);
+            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, externalTypeBinding, scope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.getSettingsBlock().accept(blockCompletor);
+    		
+    	}
     	
     	return false;
     }

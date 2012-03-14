@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  * @author svihovec
  *
  */
-public class UserDefinedInvocationValidationRule extends InstantiationValidationRule {
+public class UserDefinedInvocationValidationRule extends InvocationValidationRule {
 
 	private Class validatorClass;
 
@@ -33,11 +33,11 @@ public class UserDefinedInvocationValidationRule extends InstantiationValidation
 	}	
 
 	@Override
-	public void validate(Node node, ITypeBinding typeBinding,
+	public void validate(Node node, IBinding binding,
 			IPartBinding declaringPart, IProblemRequestor problemRequestor,
 			ICompilerOptions compilerOptions) {
 		try {
-			((IInvocationValidationRule)validatorClass.newInstance()).validate(node, typeBinding, declaringPart, problemRequestor, compilerOptions);
+			((IInvocationValidationRule)validatorClass.newInstance()).validate(node, binding, declaringPart, problemRequestor, compilerOptions);
 		} catch (InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {

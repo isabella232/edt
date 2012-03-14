@@ -11,14 +11,12 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
-import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 public class JavaObjectInstantiationValidator implements
@@ -35,21 +33,21 @@ public class JavaObjectInstantiationValidator implements
 		
 		node.accept(new DefaultASTVisitor() {
 			public boolean visit(StructureItem structureItem) {
-				if (!structureItem.hasInitializer() && !hasDefaultConstructor(typeBinding)) {
+				if (!hasDefaultConstructor(typeBinding)) {
 					errorNoDefaultConstructor(structureItem.getType());
 				}
 				return false;
 			}
 			
 			public boolean visit(ClassDataDeclaration classDataDeclaration) {
-				if (!classDataDeclaration.hasInitializer() && !hasDefaultConstructor(typeBinding)) {
+				if (!hasDefaultConstructor(typeBinding)) {
 					errorNoDefaultConstructor(classDataDeclaration.getType());
 				}
 				return false;
 			}
 			
 			public boolean visit(FunctionDataDeclaration functionDataDeclaration) {
-				if (!functionDataDeclaration.hasInitializer() && !hasDefaultConstructor(typeBinding)) {
+				if (!hasDefaultConstructor(typeBinding)) {
 					errorNoDefaultConstructor(functionDataDeclaration.getType());
 				}
 				return false;
@@ -58,7 +56,7 @@ public class JavaObjectInstantiationValidator implements
 			public boolean visit(NewExpression newExpression) {
 				if (newExpression.getType().resolveTypeBinding().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
 					ArrayType arrType = (ArrayType)newExpression.getType();
-					if (arrType.hasInitialSize() && !isZeroLiteral(arrType.getInitialSize())) {
+					if (arrType.hasInitialSize() && !DefaultBinder.isZeroLiteral(arrType.getInitialSize())) {
 						if (!hasDefaultConstructor(typeBinding)) {
 							errorNoDefaultConstructor(arrType.getBaseType());
 						}
@@ -108,16 +106,4 @@ public class JavaObjectInstantiationValidator implements
 		return false;
 	}
 	
-	private boolean isZeroLiteral(Expression expr) {
-		
-		final boolean[] isZero = new boolean[1];
-		expr.accept(new DefaultASTVisitor(){
-			public boolean visit(IntegerLiteral integerLiteral) {
-				isZero[0] = Integer.valueOf(integerLiteral.getValue()) == 0;
-				return false;
-			}
-		});
-		return isZero[0];
-	}
-
 }

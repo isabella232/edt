@@ -23,6 +23,7 @@ import org.eclipse.edt.compiler.binding.AnnotationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -204,6 +205,9 @@ public class AnnotationTypeBindingImpl extends AnnotationTypeBinding implements 
 					}
 					break;
 				case ElementKind.CONSTRUCTORMBR_CONSTANT:
+					if(targetBinding instanceof ConstructorBinding) {
+						return true;
+					}
 					break;
 				case ElementKind.ANNOTATIONTYPE_CONSTANT:
 					break;
