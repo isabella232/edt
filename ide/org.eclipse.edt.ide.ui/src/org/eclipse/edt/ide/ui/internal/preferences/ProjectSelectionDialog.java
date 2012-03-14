@@ -25,6 +25,7 @@ import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementLabelProvider;
 import org.eclipse.edt.ide.ui.internal.packageexplorer.EGLElementSorter;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -42,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionStatusDialog;
 
 public class ProjectSelectionDialog extends SelectionStatusDialog {
@@ -103,7 +105,7 @@ public class ProjectSelectionDialog extends SelectionStatusDialog {
 		data.widthHint= SIZING_SELECTION_WIDGET_WIDTH;
 		fTableViewer.getTable().setLayoutData(data);
 
-		fTableViewer.setLabelProvider(new EGLElementLabelProvider());
+		fTableViewer.setLabelProvider(new DecoratingLabelProvider(new EGLElementLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator()));
 		fTableViewer.setContentProvider(new StandardEGLElementContentProvider());
 		fTableViewer.setSorter(new EGLElementSorter());
 		fTableViewer.getControl().setFont(font);

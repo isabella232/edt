@@ -56,6 +56,11 @@ public class RecordFromSqlDatabaseWizard extends AbstractDataAccessWizard {
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
+				if(sourceFileContents == null){
+					ConnectionInfo connection = getConnectionInfo();
+					sourceFileContents = generateEGLCode(monitor, connection);
+				}
+				
 				Set<String> fileNames = sourceFileContents.keySet();
 				for (String fileName : fileNames) {
 					((NewRecordWizard) getParentWizard()).setContentObj(sourceFileContents.get(fileName));

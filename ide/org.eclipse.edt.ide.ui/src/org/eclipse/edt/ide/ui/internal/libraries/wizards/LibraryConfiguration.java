@@ -18,7 +18,6 @@ import org.eclipse.ui.IWorkbench;
 public class LibraryConfiguration extends EGLPartConfiguration {
 	public final static int BASIC_LIBRARY = 0;
 	public final static int NATIVE_LIBRARY = 1;
-//	public final static int SERVICE_BINDING_LIBRARY = 2;
 	public final static int RUIPROP_LIBRARY = 2;
 	public final static int DATAACCESS_LIBRARY = 3;
 	
@@ -72,11 +71,15 @@ public class LibraryConfiguration extends EGLPartConfiguration {
 
 	public void setCodeTemplateId(String codeTemplateId) {
 		this.codeTemplateId = codeTemplateId;
-		if(codeTemplateId.equals("org.eclipse.edt.ide.ui.templates.basic_library")){
+	}
+	
+	public void setLibraryTypeByTemplateID(String templateId){
+		if(templateId == null || templateId.equals("org.eclipse.edt.ide.ui.library.basic")){
+			//set basic library as the default library type if no template is specified
 			setLibraryType(BASIC_LIBRARY);
-		}else if(codeTemplateId.equals("org.eclipse.edt.ide.ui.templates.ruiProp_library")){
+		}else if(templateId.equals("org.eclipse.edt.ide.ui.library.ruiproperties")){
 			setLibraryType(RUIPROP_LIBRARY);
-		}else{
+		}else if(templateId.equals("org.eclipse.edt.ide.ui.library.dataaccess")){
 			setLibraryType(DATAACCESS_LIBRARY);			
 		}
 	}	

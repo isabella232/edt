@@ -96,7 +96,8 @@ public class LibraryWizardPage extends EGLTemplateWizardPage {
 			if (o instanceof ITemplate) {
 				ITemplate template = (ITemplate) o;
 				LibraryConfiguration config = ((LibraryConfiguration)((EGLPartWizard) getWizard()).getConfiguration());
-				config.setCodeTemplateId(template.getId());
+				config.setCodeTemplateId(template.getCodeTemplateId());
+				config.setLibraryTypeByTemplateID(template.getId());
 			}
 		}
 	}
