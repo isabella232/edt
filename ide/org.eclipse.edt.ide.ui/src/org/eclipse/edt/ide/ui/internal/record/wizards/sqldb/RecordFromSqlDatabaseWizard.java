@@ -64,7 +64,11 @@ public class RecordFromSqlDatabaseWizard extends AbstractDataAccessWizard {
 				Set<String> fileNames = sourceFileContents.keySet();
 				for (String fileName : fileNames) {
 					((NewRecordWizard) getParentWizard()).setContentObj(sourceFileContents.get(fileName));
-					return;
+					break;
+				}
+				
+				if (config.isSaveConnectionToDeploymentDescriptor()) {
+					setupSqlBinding(getConnectionInfo(), true);
 				}
 			}
 		};
