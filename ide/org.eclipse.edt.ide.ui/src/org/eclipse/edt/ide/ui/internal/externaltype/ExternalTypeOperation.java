@@ -55,7 +55,11 @@ public class ExternalTypeOperation extends PartOperation {
 			edit.apply(doc);
 			contents = doc.get();
 		} catch (Exception ex) {
-			
+			ex.printStackTrace();
+		}
+		
+		if(contents != null && contents.contains("privateconstructor")) {
+			contents = contents.replaceAll("privateconstructor", "private constructor");
 		}
 		
 		return contents;

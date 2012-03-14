@@ -95,9 +95,13 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 				ctx.invoke(JavaTypeConstants.genField, javaField, ctx, out);	
 			}
 			
-			for(Constructor<?> javaCon : toBeGenerated.getConstructors()) {
-				ctx.invoke(JavaTypeConstants.genConstructor, javaCon, ctx, out);	
-			}
+			if(clazz.getDeclaredConstructors().length == 0) {
+				out.println("  private constructor();");
+			} else {
+				for(Constructor<?> javaCon : toBeGenerated.getConstructors()) {
+					ctx.invoke(JavaTypeConstants.genConstructor, javaCon, ctx, out);	
+				}
+			}		
 			
 			for(Method javaMethod : toBeGenerated.getMethods()) {
 				ctx.invoke(JavaTypeConstants.genMethod, javaMethod, ctx, out);	
