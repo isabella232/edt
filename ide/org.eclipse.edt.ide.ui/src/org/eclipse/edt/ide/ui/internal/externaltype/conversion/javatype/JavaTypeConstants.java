@@ -26,6 +26,7 @@ public class JavaTypeConstants {
 	public static final String EZE_PREFIX = "eze";
 	public static final String EGL_KEYWORD_IN = "IN";
 	public static final String CONTAINING_EGL_PACKAGE = "eglPackage";
+	public static final String EGL_THROWS_ANNOTATION = "@Throws";
 	
 	public static java.util.Map<String,String> JavaToEglMapping = new java.util.HashMap<String,String>(30);
 	static {

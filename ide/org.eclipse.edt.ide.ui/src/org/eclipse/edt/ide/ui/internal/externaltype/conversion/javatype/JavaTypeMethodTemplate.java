@@ -56,7 +56,13 @@ public class JavaTypeMethodTemplate extends AbstractTemplate {
 		
 		if(isEGLKeyWord || isStartWithEze) {
 			out.print("   {externalName = " + SQLConstants.DOUBLE_QUOTE + javaMethod.getName()
-					  + SQLConstants.DOUBLE_QUOTE + "}" );
+					  + SQLConstants.DOUBLE_QUOTE);
+			if(javaMethod.getExceptionTypes().length > 0) {
+				out.print(SQLConstants.COMMA + JavaTypeConstants.EGL_THROWS_ANNOTATION);
+			}
+			out.print("}");
+		} else if(javaMethod.getExceptionTypes().length > 0) {
+			out.print("{" + JavaTypeConstants.EGL_THROWS_ANNOTATION + "}");
 		}
 		
 		out.println(SQLConstants.SEMICOLON);
