@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -18,41 +18,40 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Setting EGL SQL preferences</title>
 </head>
-<body id="tedt00577"><a name="tedt00577"><!-- --></a>
+<body id="tedt00577">
 
 
 
-<h1 class="topictitle1">Setting EGL SQL preferences</h1>
+<h1 class="title topictitle1">Setting EGL SQL preferences</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>When you are developing code, you can use the
+<div class="body taskbody" id="body"><p class="shortdesc">When you are developing code, you can use the
 SQL retrieve feature to create a Record type from the columns of an
 SQL table.</p>
 
-<div class="section"><p>For details on creating the Record type, see <a href="tedt00551.html" title="Use the SQL retrieve feature to create an EGL Record type from the columns of an SQL table.">Retrieving SQL table data into a Record type</a>. </p>
-<p>To set preferences for the SQL
+<div class="section context"><p class="p">For details on creating the Record type, see <a class="xref" href="tedt00551.html" title="Use the SQL retrieve feature to create an EGL Record type from the columns of an SQL table.">Retrieving SQL table data into a Record type</a>. </p>
+<p class="p">To set preferences for the SQL
 retrieve feature, do as follows:</p>
 </div>
 
-<ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
- &gt; <span class="uicontrol">Preferences</span></span>. </span> The <span class="wintitle">Preferences</span> window
+<ol class="ol steps"><li class="li step"><span class="ph cmd">From the main menu, click <span class="ph menucascade"><span class="ph uicontrol">Window</span> &gt; <span class="ph uicontrol">Preferences</span></span>. </span> The <span class="keyword wintitle">Preferences</span> window
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> menu, expand <span class="uicontrol">EGL</span>and
-click <span class="uicontrol">SQL</span>.</span> The <span class="wintitle">SQL</span> pane
+<li class="li step"><span class="ph cmd">In the <span class="keyword wintitle">Preferences</span> menu, expand <span class="ph uicontrol">EGL</span>and
+click <span class="ph uicontrol">SQL</span>.</span> The <span class="keyword wintitle">SQL</span> pane
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">SQL</span> pane, specify the rules
+<li class="li step"><span class="ph cmd">In the <span class="keyword wintitle">SQL</span> pane, specify the rules
 for creating each record field that the SQL retrieve feature creates: </span>
- <ol type="a">
-<li>Specify the case of the record field name: <ul>
-<li><strong>Do not change case</strong> (the default) means that the case of
+ <ol class="ol" type="a">
+<li class="li">Specify the case of the record field name: <ul class="ul">
+<li class="li"><strong class="ph b">Do not change case</strong> (the default) means that the case of
 the record field name is the same as the case of the related table
 column name.</li>
 
-<li><strong>Change to lower case</strong> means that the record field name is
+<li class="li"><strong class="ph b">Change to lower case</strong> means that the record field name is
 a lowercase version of the table column name.</li>
 
-<li><strong>Change to lower case and capitalize first letter after underscore</strong> also
+<li class="li"><strong class="ph b">Change to lower case and capitalize first letter after underscore</strong> also
 means that the record field name is a lowercase version of the table
 column name, except that a letter in the record field name is rendered
 in uppercase if, in the table column name, the letter immediately
@@ -61,25 +60,25 @@ follows an underscore.</li>
 </ul>
 </li>
 
-<li>Specify how the underscores in the table column name are reflected
-in the record field name:<ul>
-<li><span class="uicontrol">Do not change underscores</span> (the default)
+<li class="li">Specify how the underscores in the table column name are reflected
+in the record field name:<ul class="ul">
+<li class="li"><span class="ph uicontrol">Do not change underscores</span> (the default)
 means that underscores in the table column name are included in the
 record field name.</li>
 
-<li><span class="uicontrol">Remove underscores</span> means that underscores
+<li class="li"><span class="ph uicontrol">Remove underscores</span> means that underscores
 in the table column name are not included in the record field name.</li>
 
 </ul>
 </li>
 
-<li>Specify which types are specified for the EGL fields that correspond
-to SQL date and timestamp columns:<ul>
-<li><span class="uicontrol">Use EGL date, time, and timestamp</span> is the
+<li class="li">Specify which types are specified for the EGL fields that correspond
+to SQL date and timestamp columns:<ul class="ul">
+<li class="li"><span class="ph uicontrol">Use EGL date, time, and timestamp</span> is the
 default.</li>
 
-<li><span class="uicontrol">Use EGL type string</span> uses EGL String fields.<p>The
-value <span class="uicontrol">Set sqlDataCode on char, Unicode, and string fields</span> is
+<li class="li"><span class="ph uicontrol">Use EGL type string</span> uses EGL String fields.<p class="p">The
+value <span class="ph uicontrol">Set sqlDataCode on char, Unicode, and string fields</span> is
 not in use.</p>
 </li>
 
@@ -88,17 +87,17 @@ not in use.</p>
 
 </ol>
 </li>
-<li class="stepexpand"><span>If you want new SQL records to have the <strong>ID</strong> annotation
-set, select <span class="uicontrol">Retrieve primary key information from the system
+<li class="li step"><span class="ph cmd">If you want new SQL records to have the <strong class="ph b">ID</strong> annotation
+set, select <span class="ph uicontrol">Retrieve primary key information from the system
 catalog</span>.</span></li>
-<li class="stepexpand"><span>If you want to be prompted for a database password if you
+<li class="li step"><span class="ph cmd">If you want to be prompted for a database password if you
 did not supply one when you created the connection in the workbench,
-select <span class="uicontrol">Prompt for SQL user ID and password when needed</span>.</span>
+select <span class="ph uicontrol">Prompt for SQL user ID and password when needed</span>.</span>
 </li>
-<li class="stepexpand"><span>To save the changes and remain in the <span class="wintitle">Preferences</span> window,
-click <span class="uicontrol">Apply</span>. To save the changes and exit the
-window, click <span class="uicontrol">OK</span>. To cancel the changes and
-exit the window, click <span class="uicontrol">Cancel</span>.</span></li>
+<li class="li step"><span class="ph cmd">To save the changes and remain in the <span class="keyword wintitle">Preferences</span> window,
+click <span class="ph uicontrol">Apply</span>. To save the changes and exit the
+window, click <span class="ph uicontrol">OK</span>. To cancel the changes and
+exit the window, click <span class="ph uicontrol">Cancel</span>.</span></li>
 </ol>
 
 </div>

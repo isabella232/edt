@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,192 +19,188 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Creating widgets by dragging data onto the EGL Rich UI editor</title>
 </head>
-<body id="tedt00566"><a name="tedt00566"><!-- --></a>
+<body id="tedt00566">
 
 
 
-<h1 class="topictitle1">Creating widgets by dragging data onto the EGL Rich UI editor</h1>
+<h1 class="title topictitle1">Creating widgets by dragging data onto the EGL Rich UI editor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can drag a variable from the EGL Data view
+<div class="body" id="body"><p class="shortdesc">You can drag a variable from the EGL Data view
 to the Design surface of the EGL Rich UI editor. The purpose is to
 place widgets that will hold business data. You can also add controllers
 and a form manager.</p>
 
-<p>For details on controllers, see <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01020.html">Rich UI validation and formatting</a>. For
-details on form managers, see <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01021.html" title="Rich UI provides a way to implement the kind of form processing that is traditional in business software. The processing depends on the Rich UI controller, which is a definition that relates a single view—a widget—with a single model—a data field. For details on Rich UI controllers, see “Rich UI validation and formatting.”">Form processing with Rich UI</a>.</p>
+<p class="p">For details on controllers, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01020.html">Rich UI validation and formatting</a>. For
+details on form managers, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01021.html" title="Rich UI provides a way to implement the kind of form processing that is traditional in business software. The processing depends on the Rich UI controller, which is a definition that relates a single view—a widget—with a single model—a data field. For details on Rich UI controllers, see “Rich UI validation and formatting.”">Form processing with Rich UI</a>.</p>
 
-<div class="p">To add data to a Rich UI page display: <ol>
-<li>Open a Rich UI Handler part in the EGL editor and, if necessary,
+<div class="p">To add data to a Rich UI page display: <ol class="ol">
+<li class="li">Open a Rich UI Handler part in the EGL editor and, if necessary,
 click the Design tab. Notice the EGL Data view, which is located by
 default in the lower left corner of the workbench.</li>
 
-<li>In the EGL Data view, ensure that the tree under the handler is
+<li class="li">In the EGL Data view, ensure that the tree under the handler is
 expanded to display all the global variables that are in the handler.</li>
 
-<li>To create a new global variable in the handler:<ol type="a">
-<li>Right-click the background of the EGL Data view, then click <span class="menucascade">
-<span class="uicontrol">New</span> &gt; <span class="uicontrol">EGL Variable</span>
-</span>.</li>
+<li class="li">To create a new global variable in the handler:<ol class="ol" type="a">
+<li class="li">Right-click the background of the EGL Data view, then click <span class="ph menucascade"><span class="ph uicontrol">New</span> &gt; <span class="ph uicontrol">EGL Variable</span></span>.</li>
 
-<li>In the <span class="wintitle">Create a new EGL Data Variable</span> window,
-under <span class="uicontrol">Type Selection</span>, click a variable type.</li>
+<li class="li">In the <span class="keyword wintitle">Create a new EGL Data Variable</span> window,
+under <span class="ph uicontrol">Type Selection</span>, click a variable type.</li>
 
-<li>For Primitive variables, click the <span class="uicontrol">Data Type</span> from
-a list, and supply a size in the <span class="uicontrol">Dimensions</span> fields
+<li class="li">For Primitive variables, click the <span class="ph uicontrol">Data Type</span> from
+a list, and supply a size in the <span class="ph uicontrol">Dimensions</span> fields
 if appropriate.</li>
 
-<li>For a record or primitive variable, select an existing part from
+<li class="li">For a record or primitive variable, select an existing part from
 the list. To narrow the list, you can specify initial characters for
-the part name in <span class="uicontrol">Enter the name of the [Record | DataItem]
+the part name in <span class="ph uicontrol">Enter the name of the [Record | DataItem]
 part to search</span>.</li>
 
-<li>For a record or primitive variable, you can select the <span class="uicontrol">Array</span> option
-under <span class="uicontrol">Array Properties</span>. You can specify a <span class="uicontrol">Size</span> for
+<li class="li">For a record or primitive variable, you can select the <span class="ph uicontrol">Array</span> option
+under <span class="ph uicontrol">Array Properties</span>. You can specify a <span class="ph uicontrol">Size</span> for
 the initial number of elements in the dynamic array, or you can leave
 the field blank. </li>
 
-<li>Specify a name for the new variable in <span class="uicontrol">Enter the name
+<li class="li">Specify a name for the new variable in <span class="ph uicontrol">Enter the name
 of the field</span>.</li>
 
-<li>Click <span class="uicontrol">Finish</span>.</li>
+<li class="li">Click <span class="ph uicontrol">Finish</span>.</li>
 
 </ol>
 </li>
 
-<li>Drag a variable from the EGL Data view onto the editor. The purpose
+<li class="li">Drag a variable from the EGL Data view onto the editor. The purpose
 here is to add widgets and related code. You can drag an array of
 records, but cannot drag an array of variables that are based on primitive
 types or data items.<div class="p">When you position the cursor over a valid area
 to drop the variable, the background of that area turns green. Other
 available areas have yellow backgrounds. You can change these default
-colors by clicking <span class="menucascade"><span class="uicontrol">Window</span> &gt; <span class="uicontrol">Preferences</span>
- &gt; <span class="uicontrol">EGL</span> &gt; <span class="uicontrol">Rich UI</span> &gt; <span class="uicontrol">Appearance</span>
-</span>.</div>
+colors by clicking <span class="ph menucascade"><span class="ph uicontrol">Window</span> &gt; <span class="ph uicontrol">Preferences</span> &gt; <span class="ph uicontrol">EGL</span> &gt; <span class="ph uicontrol">Rich UI</span> &gt; <span class="ph uicontrol">Appearance</span></span>.</div>
 </li>
 
-<li>The Insert Widget wizard opens. Use this wizard to specify the
-types of widgets that EGL creates from the fields in the record. <p>For
+<li class="li">The Insert Widget wizard opens. Use this wizard to specify the
+types of widgets that EGL creates from the fields in the record. <p class="p">For
 non-array variables, the wizard adds widget pairs, as follows: a widget
 that displays business data, plus a label for that widget. The wizard
 creates a new grid layout and embeds the new widgets into that layout.
 The following set of radio buttons further affects the code that is
 provided for you:</p>
-<div class="p"><a name="tedt00566__widget_set"><!-- --></a><dl id="tedt00566__widget_set">
-<dt class="dlterm">Read-only data</dt>
+<div class="p"><dl class="dl" id="tedt00566__widget_set">
+<dt class="dt dlterm">Read-only data</dt>
 
-<dd>The widgets that display business data are read only. If you want
-the wizard to add a controller for each widget pair, select the <span class="uicontrol">Add
+<dd class="dd">The widgets that display business data are read only. If you want
+the wizard to add a controller for each widget pair, select the <span class="ph uicontrol">Add
 support for formatting and validation</span> check box.</dd>
 
 
-<dt class="dlterm">Editable data</dt>
+<dt class="dt dlterm">Editable data</dt>
 
-<dd><p>The widgets that display business data accept user input. If
+<dd class="dd"><p class="p">The widgets that display business data accept user input. If
 you want the wizard to add a controller for each widget pair, along
 with a form manager and related functions that apply to all the content
-in the new grid layout, select the <span class="uicontrol">Add support for formatting
+in the new grid layout, select the <span class="ph uicontrol">Add support for formatting
 and validation</span> check box. </p>
 <div class="p">In relation to setting
 up error-message handling for controller-level validation, the default
-behavior of the wizard is as follows:<ul>
-<li>If you are using one of the EGL Dojo widgets that support view-level
+behavior of the wizard is as follows:<ul class="ul">
+<li class="li">If you are using one of the EGL Dojo widgets that support view-level
 validation, the messages that result from controller-level validation
 are placed in a tooltip near the widget, when the widget gains focus.</li>
 
-<li>If you are using another widget, you handle the errors by writing
-a function and assigning it to the controller-specific <span class="synph"><span class="kwd">validStateSetter</span></span> property.
-Use the controller-specific function <strong>getErrorMessage</strong> to access
+<li class="li">If you are using another widget, you handle the errors by writing
+a function and assigning it to the controller-specific <span class="ph synph"><span class="keyword kwd">validStateSetter</span></span> property.
+Use the controller-specific function <strong class="ph b">getErrorMessage</strong> to access
 a message.</li>
 
 </ul>
 </div>
-<p>If you want to use an error label to display error messages
-automatically from a controller-level validation, select <span class="uicontrol">Use
+<p class="p">If you want to use an error label to display error messages
+automatically from a controller-level validation, select <span class="ph uicontrol">Use
 error label to support error messages</span>.</p>
 </dd>
 
 
-<dt class="dlterm">Combination of read-only and editable data</dt>
+<dt class="dt dlterm">Combination of read-only and editable data</dt>
 
-<dd><p>The widgets that display business data are initially read only,
+<dd class="dd"><p class="p">The widgets that display business data are initially read only,
 and you can change the settings in the code as necessary. If you want
 the wizard to add a controller for each widget pair, along with a
 form manager and related functions that apply to all the content in
-the new grid layout, select the <span class="uicontrol">Add support for formatting
-and validation</span> check box. To include an error label, select <span class="uicontrol">Use
+the new grid layout, select the <span class="ph uicontrol">Add support for formatting
+and validation</span> check box. To include an error label, select <span class="ph uicontrol">Use
 error label to support error messages</span>.</p>
 </dd>
 
 </dl>
 </div>
-<p>For record arrays, the wizard creates a new
+<p class="p">For record arrays, the wizard creates a new
 grid layout and embeds a data grid into that layout. At this time,
 the data grid is always read only, and the code provided for you is
 solely the data grid regardless of your selection on the first set
 of radio buttons.</p>
 </li>
 
-<li>Under <span class="uicontrol">Fields to display</span>, select each field
+<li class="li">Under <span class="ph uicontrol">Fields to display</span>, select each field
 you want to display in the interface. For each field, you can change
-the information in the following columns:<a name="tedt00566__fields2display"><!-- --></a><dl id="tedt00566__fields2display">
+the information in the following columns:<dl class="dl" id="tedt00566__fields2display">
 
-<dt class="dlterm">Field name</dt>
+<dt class="dt dlterm">Field name</dt>
 
-<dd>Select the fields to include in your code. This column is useful
-for records and record arrays.<p>To select all fields, click <span class="uicontrol">All</span>.
-To select no fields so you can add the fields one by one, click <span class="uicontrol">None</span>.</p>
+<dd class="dd">Select the fields to include in your code. This column is useful
+for records and record arrays.<p class="p">To select all fields, click <span class="ph uicontrol">All</span>.
+To select no fields so you can add the fields one by one, click <span class="ph uicontrol">None</span>.</p>
 </dd>
 
 
-<dt class="dlterm">Label</dt>
+<dt class="dt dlterm">Label</dt>
 
-<dd>Enter the name that you want EGL to display next to the field
+<dd class="dd">Enter the name that you want EGL to display next to the field
 in the interface. For arrays of records, the label is used for the
 column header.</dd>
 
 
-<dt class="dlterm">Widget Type</dt>
+<dt class="dt dlterm">Widget Type</dt>
 
-<dd>Click the arrow next to the default selection to display a list
+<dd class="dd">Click the arrow next to the default selection to display a list
 of possible widget types for the field. This option is not available
 for arrays of records.</dd>
 
 
-<dt class="dlterm">Widget Name</dt>
+<dt class="dt dlterm">Widget Name</dt>
 
-<dd>Enter a variable name to associate with the widget in the source
+<dd class="dd">Enter a variable name to associate with the widget in the source
 code.</dd>
 
 </dl>
 </li>
 
-<li>You can change the order of fields in the code that will be created
-for you. Here is the process: <ol type="a">
-<li>Select one row by clicking at the leftmost part of the row. If
+<li class="li">You can change the order of fields in the code that will be created
+for you. Here is the process: <ol class="ol" type="a">
+<li class="li">Select one row by clicking at the leftmost part of the row. If
 a row is already selected, you can select a different one by pressing
 the up or down arrows on your keyboard.</li>
 
-<li>If you also want to select a single adjacent row, click that second
+<li class="li">If you also want to select a single adjacent row, click that second
 row while holding down the Ctrl key. Alternatively, if you want to
 select a range of adjacent rows, click the last row in the range while
 holding down the Shift key.</li>
 
-<li>Click the up or down arrow at the right of the <span class="wintitle">Configure
+<li class="li">Click the up or down arrow at the right of the <span class="keyword wintitle">Configure
 data widgets</span> page.</li>
 
 </ol>
 </li>
 
-<li>Click <span class="uicontrol">Finish</span>. </li>
+<li class="li">Click <span class="ph uicontrol">Finish</span>. </li>
 
 </ol>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

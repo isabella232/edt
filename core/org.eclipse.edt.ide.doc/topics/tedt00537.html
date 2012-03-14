@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -19,127 +19,127 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Adding Rich UI deployment details to the EGL deployment descriptor</title>
 </head>
-<body id="tedt00537"><a name="tedt00537"><!-- --></a>
+<body id="tedt00537">
 
 
 
-<h1 class="topictitle1">Adding Rich UI deployment details to the EGL deployment descriptor</h1>
+<h1 class="title topictitle1">Adding Rich UI deployment details to the EGL deployment descriptor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can update the EGL deployment descriptor
+<div class="body taskbody" id="body"><p class="shortdesc">You can update the EGL deployment descriptor
 with details that are needed to deploy Rich UI applications.</p>
 
-<div class="section">To add Rich UI deployment details to the EGL deployment descriptor,
+<div class="section context">To add Rich UI deployment details to the EGL deployment descriptor,
 do as follows:</div>
 
-<ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
+<ol class="ol steps"><li class="li step"><span class="ph cmd">Open the EGL Deployment Descriptor editor by double-clicking
 an EGL deployment descriptor.</span> </li>
-<li class="stepexpand"><span>Click the <span class="uicontrol">Rich UI Deployment</span> tab.</span>
- The <span class="uicontrol">Rich UI Deployment</span> page is
+<li class="li step"><span class="ph cmd">Click the <span class="ph uicontrol">Rich UI Deployment</span> tab.</span>
+ The <span class="ph uicontrol">Rich UI Deployment</span> page is
 displayed.</li>
-<li class="stepexpand"><span>If you want to deploy all the Rich UI handlers in the project
+<li class="li step"><span class="ph cmd">If you want to deploy all the Rich UI handlers in the project
 without dynamic loading and if you accept the default HTML file names,
-select <span class="uicontrol">Deploy All Rich UI Handlers</span> and proceed
-to Step <a href="#tedt00537__locale">9</a></span></li>
-<li class="stepexpand"><span>Clear <span class="uicontrol">Deploy All Rich UI Handlers</span>. </span>
+select <span class="ph uicontrol">Deploy All Rich UI Handlers</span> and proceed
+to Step <a class="xref" href="#tedt00537__locale">9</a></span></li>
+<li class="li step"><span class="ph cmd">Clear <span class="ph uicontrol">Deploy All Rich UI Handlers</span>. </span>
 </li>
-<li class="stepexpand" id="tedt00537__checkboxes"><a name="tedt00537__checkboxes"><!-- --></a><span>In the highlighted area on the left of
+<li class="li step" id="tedt00537__checkboxes"><span class="ph cmd">In the highlighted area on the left of
 the window, selecting a check box means that when the EGL deployment
 descriptor file is deployed, an HTML file is created that includes
-all the code necessary to run the related handler.</span> <div class="note"><span class="notetitle">Note:</span> A
+all the code necessary to run the related handler.</span> <div class="note note"><span class="notetitle">Note:</span> A
 handler might be deployed in multiple HTML files. Leaving aside the
 possible use of dynamic loading, consider the following example: A
 handler references a second handler by type. That second handler is
 in the same HTML file as the first handler regardless of whether an
 HTML file is also created for the second handler.</div>
 <div class="p">You can
-select a single check box or can use the following shortcuts:<ul>
-<li>To select all the check boxes, click <span class="uicontrol">Enable All</span>.</li>
+select a single check box or can use the following shortcuts:<ul class="ul">
+<li class="li">To select all the check boxes, click <span class="ph uicontrol">Enable All</span>.</li>
 
-<li>To clear all the check boxes, click <span class="uicontrol">Disable All</span>.</li>
+<li class="li">To clear all the check boxes, click <span class="ph uicontrol">Disable All</span>.</li>
 
 </ul>
 </div>
 </li>
-<li class="stepexpand"><span>You can open the handler code in the EGL editor. To open
+<li class="li step"><span class="ph cmd">You can open the handler code in the EGL editor. To open
 one handler, click the handler entry rather than the check box and
-then click <span class="uicontrol">Open</span>. To open multiple handlers,
+then click <span class="ph uicontrol">Open</span>. To open multiple handlers,
 do as follows: </span>
-<ol type="a">
-<li><span>Either press the Ctrl key and click the entries of interest,
+<ol type="a" class="ol substeps">
+<li class="li substep"><span class="ph cmd">Either press the Ctrl key and click the entries of interest,
 or select a contiguous set of names by clicking one name, pressing
 the Shift key, and clicking the last name of interest.</span></li>
 
-<li><span>Click <span class="uicontrol">Open</span>.</span></li>
+<li class="li substep"><span class="ph cmd">Click <span class="ph uicontrol">Open</span>.</span></li>
 
 </ol>
 
 </li>
-<li class="stepexpand"><span>You can identify the HTML file that receives the JavaScript for a given handler.
+<li class="li step"><span class="ph cmd">You can identify the HTML file that receives the JavaScript™ for a given handler.
 To specify the file name, click the HTML File Name column and type
 the name.</span> The deployment step adds locale detail
-to the name, along with the file extension <span class="filepath">.html</span>.
-For example, if you specify <kbd class="userinput">myFile.htm</kbd> and,
+to the name, along with the file extension <span class="ph filepath">.html</span>.
+For example, if you specify <kbd class="ph userinput">myFile.htm</kbd> and,
 as described later, you request an output for the American English
-locale, the deployment step creates the file named <span class="filepath">myFile.htm_en_US.html</span>.
+locale, the deployment step creates the file named <span class="ph filepath">myFile.htm_en_US.html</span>.
 </li>
-<li class="stepexpand"><span><strong>This step is not available in version .7. </strong>If you
-selected a single handler in Step <a href="#tedt00537__checkboxes">5</a>,
+<li class="li step"><span class="ph cmd"><strong class="ph b">This step is not available in version .7. </strong>If you
+selected a single handler in Step <a class="xref" href="#tedt00537__checkboxes">5</a>,
 you can specify which handlers the selected handler will download
 dynamically:</span>
-<ol type="a">
-<li class="substepexpand"><span>In the section at the bottom left, click <span class="synph"><span class="kwd">Configure</span></span>.</span>
- The <span class="synph"><span class="kwd">Configure Rich UI Dynamic Loading</span></span> page
+<ol type="a" class="ol substeps">
+<li class="li substep"><span class="ph cmd">In the section at the bottom left, click <span class="ph synph"><span class="keyword kwd">Configure</span></span>.</span>
+ The <span class="ph synph"><span class="keyword kwd">Configure Rich UI Dynamic Loading</span></span> page
 is displayed. At the left is a list of all the Rich UI handlers on
 the EGL build path of the project being deployed. At the right is
 a list of all the Rich UI handlers that will be deployed dynamically.
 </li>
 
-<li class="substepexpand"><span>Use the displayed buttons to move handlers between the
+<li class="li substep"><span class="ph cmd">Use the displayed buttons to move handlers between the
 two lists. The terms on the buttons refer to the effect on the rightmost
-list: </span> <ul>
-<li><span class="uicontrol">Add</span> adds the handlers that are selected
+list: </span> <ul class="ul">
+<li class="li"><span class="ph uicontrol">Add</span> adds the handlers that are selected
 on the left.</li>
 
-<li>The following buttons let you move a set of handlers that might
-be dynamically deployed; then, you can remove those that are not:<ul>
-<li><span class="uicontrol">Add Referenced</span> adds handlers that were
+<li class="li">The following buttons let you move a set of handlers that might
+be dynamically deployed; then, you can remove those that are not:<ul class="ul">
+<li class="li"><span class="ph uicontrol">Add Referenced</span> adds handlers that were
 referenced by type inside the selected handlers.</li>
 
-<li><span class="uicontrol">Add All</span> adds all the handlers that are
+<li class="li"><span class="ph uicontrol">Add All</span> adds all the handlers that are
 listed on the left.</li>
 
 </ul>
 </li>
 
-<li><span class="uicontrol">Remove</span> removes the handlers that are selected
+<li class="li"><span class="ph uicontrol">Remove</span> removes the handlers that are selected
 on the right.</li>
 
-<li><span class="uicontrol">Remove All</span> removes all the handlers that
+<li class="li"><span class="ph uicontrol">Remove All</span> removes all the handlers that
 are selected on the right.</li>
 
 </ul>
 </li>
 
-<li class="substepexpand"><span>Click <span class="synph"><span class="kwd">Finish</span></span>.</span></li>
+<li class="li substep"><span class="ph cmd">Click <span class="ph synph"><span class="keyword kwd">Finish</span></span>.</span></li>
 
 </ol>
 
 </li>
-<li class="stepexpand" id="tedt00537__locale"><a name="tedt00537__locale"><!-- --></a><span>In the Locale Settings area, select or clear
+<li class="li step" id="tedt00537__locale"><span class="ph cmd">In the Locale Settings area, select or clear
 check boxes to identify the locales that you want to support for all
-handlers. </span> <p>The list of available locales is derived
-from a Rich UI preference, which you can access by clicking <span class="uicontrol">Configure</span>.
+handlers. </span> <p class="p">The list of available locales is derived
+from a Rich UI preference, which you can access by clicking <span class="ph uicontrol">Configure</span>.
 A second preference specifies which locales are selected by default
-on the <span class="uicontrol">Rich UI Deployment</span> tab.</p>
+on the <span class="ph uicontrol">Rich UI Deployment</span> tab.</p>
 <div class="p">Here are
-sources of further information about locales:<ul>
-<li>For background, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01041.html">Using properties files for displayable text in Rich UI</a>.</li>
+sources of further information about locales:<ul class="ul">
+<li class="li">For background, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01041.html">Using properties files for displayable text in Rich UI</a>.</li>
 
-<li>For details about setting the list of available locales, see <a href="tedt00516.html" title="You can set EGL Rich UI preferences for locales, appearance, and deployment.">Setting EGL preferences for Rich UI</a>.</li>
+<li class="li">For details about setting the list of available locales, see <a class="xref" href="tedt00516.html" title="You can set EGL Rich UI preferences for locales, appearance, and deployment.">Setting EGL preferences for Rich UI</a>.</li>
 
-<li>For details about specifying the default locales, see <a href="tedt00576.html" title="The deployment preferences affect the Rich UI deployment tab of the EGL Deployment Descriptor editor.">Setting preferences for EGL Rich UI deployment</a>.</li>
+<li class="li">For details about specifying the default locales, see <a class="xref" href="tedt00576.html" title="The deployment preferences affect the Rich UI deployment tab of the EGL Deployment Descriptor editor.">Setting preferences for EGL Rich UI deployment</a>.</li>
 
 </ul>
 </div>

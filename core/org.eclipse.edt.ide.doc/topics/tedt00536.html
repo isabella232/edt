@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -19,44 +19,44 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Adding web-service deployment details to the EGL deployment descriptor</title>
 </head>
-<body id="tedt00536"><a name="tedt00536"><!-- --></a>
+<body id="tedt00536">
 
 
 
 
-<h1 class="topictitle1">Adding web-service deployment details to the EGL deployment
+<h1 class="title topictitle1">Adding web-service deployment details to the EGL deployment
 descriptor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can update the EGL deployment descriptor
+<div class="body taskbody" id="body"><p class="shortdesc">You can update the EGL deployment descriptor
 with details that are needed to deploy SOAP and EGL REST-RPC services.</p>
 
-<div class="p">Before you can perform this task you need to have access to
+<div class="section prereq p">Before you can perform this task you need to have access to
 an EGL deployment descriptor. An EGL deployment descriptor is created
 when you create an EGL project.</div>
 
-<div class="section">To add web service deployment details, do as follows:</div>
+<div class="section context">To add web service deployment details, do as follows:</div>
 
-<ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
-the name of an EGL deployment descriptor in the <span class="filepath">EGLSource</span> folder.</span>
+<ol class="ol steps"><li class="li step"><span class="ph cmd">Open the EGL Deployment Descriptor editor by double-clicking
+the name of an EGL deployment descriptor in the <span class="ph filepath">EGLSource</span> folder.</span>
  For details about creating the file, see <span class="q">"Creating an EGL
 deployment descriptor."</span></li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Service Deployment</span>. </span>
- The <span class="uicontrol">Web Service Deployment</span> tab
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Service Deployment</span>. </span>
+ The <span class="ph uicontrol">Web Service Deployment</span> tab
 is displayed.</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Add</span>.</span> The <span class="wintitle">Add
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Add</span>.</span> The <span class="keyword wintitle">Add
 Web Services</span> window opens.</li>
-<li class="stepexpand"><span>Select or clear the check boxes that indicate whether to
+<li class="li step"><span class="ph cmd">Select or clear the check boxes that indicate whether to
 deploy a SOAP service, an EGL REST-RPC service, or both.</span></li>
-<li class="stepexpand">
+<li class="li step">
 
-<span>Add one or more Service parts from the <span class="uicontrol">EGL service
-parts found</span> list to the <span class="uicontrol">EGL service parts to
+<span class="ph cmd">Add one or more Service parts from the <span class="ph uicontrol">EGL service
+parts found</span> list to the <span class="ph uicontrol">EGL service parts to
 be generated as web services</span> list. You can do this in
 any of the following ways:</span>
-<ul>
-<li>Type the beginning of a name into the <span class="uicontrol">Locate EGL
+<ul class="ul choices">
+<li class="li choice">Type the beginning of a name into the <span class="ph uicontrol">Locate EGL
 Service Parts</span> field. Specifically, type the beginning
 of the package name (if any) or the beginning of the Service part
 name (if the part is in the default package). You can use the following
@@ -64,34 +64,34 @@ wildcard characters: a question mark (?) to accept one character of
 any kind, or an asterisk (*) to accept a series of characters of any
 kind.</li>
 
-<li>Select a service name in the <span class="uicontrol">EGL service parts
+<li class="li choice">Select a service name in the <span class="ph uicontrol">EGL service parts
 found</span> list by clicking the name. To select multiple names,
 press the Ctrl key and click the names. To select a contiguous set
 of names, click a name, press the Shift key, and click the last name
-of interest. Then click <span class="uicontrol">Add</span>.</li>
+of interest. Then click <span class="ph uicontrol">Add</span>.</li>
 
-<li>Select all of the listed Service parts by clicking <span class="uicontrol">Add
+<li class="li choice">Select all of the listed Service parts by clicking <span class="ph uicontrol">Add
 all</span>.</li>
 
 </ul>
 
- To remove one or more Service parts from the <span class="uicontrol">EGL
+ To remove one or more Service parts from the <span class="ph uicontrol">EGL
 service parts to be generated as web services</span> list and
-move the selected names back to the <span class="uicontrol">EGL service parts found</span>,
+move the selected names back to the <span class="ph uicontrol">EGL service parts found</span>,
 select the names as described in the second choice for adding parts
-and click <span class="uicontrol">Remove</span>. To move all of the names
-back to that list, click <span class="uicontrol">Remove All</span>.
+and click <span class="ph uicontrol">Remove</span>. To move all of the names
+back to that list, click <span class="ph uicontrol">Remove All</span>.
 </li>
-<li class="stepexpand"><span>When the list of Service parts in the <span class="uicontrol">EGL service
+<li class="li step"><span class="ph cmd">When the list of Service parts in the <span class="ph uicontrol">EGL service
 parts to be generated as web services</span> list reflects your
-intent, click <span class="uicontrol">Finish</span>.</span> The <span class="uicontrol">Web
+intent, click <span class="ph uicontrol">Finish</span>.</span> The <span class="ph uicontrol">Web
 Service Deployment</span> tab is available again, with an entry
 for each Service part being deployed.</li>
-<li class="stepexpand"><span>To change the output type for a given Service part, click
+<li class="li step"><span class="ph cmd">To change the output type for a given Service part, click
 an entry in the Services Deployment grid, in the Generate column,
 and make a different selection.</span></li>
-<li class="stepexpand"><span>To change values for a given Service part, click an entry
-in the Services Deployment grid. In the <span class="uicontrol">URI</span> field,
+<li class="li step"><span class="ph cmd">To change values for a given Service part, click an entry
+in the Services Deployment grid. In the <span class="ph uicontrol">URI</span> field,
 you can specify the low-level qualifier for the address to be used
 to access the REST service.</span> In most cases, it is recommended
 that you accept the default.

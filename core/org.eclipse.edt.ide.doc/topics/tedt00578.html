@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -18,66 +18,65 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Setting EGL test server preferences</title>
 </head>
-<body id="tedt00578"><a name="tedt00578"><!-- --></a>
+<body id="tedt00578">
 
 
-<h1 class="topictitle1">Setting EGL test server preferences</h1>
+<h1 class="title topictitle1">Setting EGL test server preferences</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>You can set EGL preferences for every project-specific
+<div class="body taskbody" id="body"><p class="shortdesc">You can set EGL preferences for every project-specific
 test server.</p>
 
-<div class="section"><p>For an overview, see <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
-<p>To
+<div class="section context"><p class="p">For an overview, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+<p class="p">To
 set the preferences, do as follows:</p>
 </div>
 
-<ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
- &gt; <span class="uicontrol">Preferences</span></span>. </span> The <span class="wintitle">Preferences</span> window
+<ol class="ol steps"><li class="li step"><span class="ph cmd">From the main menu, click <span class="ph menucascade"><span class="ph uicontrol">Window</span> &gt; <span class="ph uicontrol">Preferences</span></span>. </span> The <span class="keyword wintitle">Preferences</span> window
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> menu, expand <span class="uicontrol">EGL</span> and
-click <span class="uicontrol">Test Server</span>.</span> The <span class="wintitle">Test
+<li class="li step"><span class="ph cmd">In the <span class="keyword wintitle">Preferences</span> menu, expand <span class="ph uicontrol">EGL</span> and
+click <span class="ph uicontrol">Test Server</span>.</span> The <span class="keyword wintitle">Test
 Server</span> pane is displayed.</li>
-<li class="stepexpand"><span>If you check the first check box (<span class="uicontrol">Show tracing
+<li class="li step"><span class="ph cmd">If you check the first check box (<span class="ph uicontrol">Show tracing
 messages in the console view</span>), the Console view displays
 noncritical messages as work is done by the EGL test server. In any
 case, the Console view displays error messages that come from the
 test server. </span></li>
-<li class="stepexpand"><span>In the first radio group, click a button to indicate how
+<li class="li step"><span class="ph cmd">In the first radio group, click a button to indicate how
 the test server will respond when the server classpath changes:</span>
- <ul>
-<li><span class="wintitle">Prompt</span> (the default) causes the server to
+ <ul class="ul">
+<li class="li"><span class="keyword wintitle">Prompt</span> (the default) causes the server to
 prompt you for direction.</li>
 
-<li><span class="wintitle">Do nothing</span> means that the changes do not
+<li class="li"><span class="keyword wintitle">Do nothing</span> means that the changes do not
 take effect until you terminate the server and then access another
 service in the workbench.</li>
 
-<li><span class="wintitle">Terminate server</span> causes the server to stop
+<li class="li"><span class="keyword wintitle">Terminate server</span> causes the server to stop
 running until you access another service in the workbench.</li>
 
 </ul>
 </li>
-<li class="stepexpand"><span>For <span class="wintitle">Hot Code Replace</span>, click a button
+<li class="li step"><span class="ph cmd">For <span class="keyword wintitle">Hot Code Replace</span>, click a button
 for each of several outcomes that occur after you try a hot code replace
 in the EGL debugger. Your choices and the default in each case are
-as described in the previous step.</span> Here are the outcomes:<ul>
-<li>When the replace fails, and the debugger continues as if you had
+as described in the previous step.</span> Here are the outcomes:<ul class="ul">
+<li class="li">When the replace fails, and the debugger continues as if you had
 not changed the code.</li>
 
-<li>When the replace is not supported, and the debugger continues
+<li class="li">When the replace is not supported, and the debugger continues
 as if you had not changed the code.</li>
 
-<li>When obsolete methods remain on the stack. In this case, the debugger’s
+<li class="li">When obsolete methods remain on the stack. In this case, the debugger’s
 behavior is unpredictable.</li>
 
 </ul>
 </li>
-<li class="stepexpand"><span>To save the changes and remain in the <span class="wintitle">Preferences</span> window,
-click <span class="uicontrol">Apply</span>. To save the changes and exit the
-window, click <span class="uicontrol">OK</span>. To cancel the changes and
-exit the window, click <span class="uicontrol">Cancel</span>.</span></li>
+<li class="li step"><span class="ph cmd">To save the changes and remain in the <span class="keyword wintitle">Preferences</span> window,
+click <span class="ph uicontrol">Apply</span>. To save the changes and exit the
+window, click <span class="ph uicontrol">OK</span>. To cancel the changes and
+exit the window, click <span class="ph uicontrol">Cancel</span>.</span></li>
 </ol>
 
 </div>

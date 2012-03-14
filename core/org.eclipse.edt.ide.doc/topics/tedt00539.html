@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -19,73 +19,73 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Adding a REST binding to the EGL deployment descriptor</title>
 </head>
-<body id="tedt00539"><a name="tedt00539"><!-- --></a>
+<body id="tedt00539">
 
 
 
-<h1 class="topictitle1">Adding a REST binding to the EGL deployment descriptor</h1>
+<h1 class="title topictitle1">Adding a REST binding to the EGL deployment descriptor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>A REST service binding gives details necessary
+<div class="body taskbody" id="body"><p class="shortdesc">A REST service binding gives details necessary
 to access a REST or EGL REST-RPC service. </p>
 
-<div class="section">To add a REST binding to an EGL deployment descriptor, do
+<div class="section context">To add a REST binding to an EGL deployment descriptor, do
 as follows:</div>
 
-<ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
+<ol class="ol steps"><li class="li step"><span class="ph cmd">Open the EGL Deployment Descriptor editor by double-clicking
 the name of an EGL deployment descriptor.</span></li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Resource Bindings</span>.</span>
- The <span class="uicontrol">Resource Bindings Configuration</span> tab
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Resource Bindings</span>.</span>
+ The <span class="ph uicontrol">Resource Bindings Configuration</span> tab
 is displayed.</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Add</span>.</span> The <span class="wintitle">Add
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Add</span>.</span> The <span class="keyword wintitle">Add
 a Resource Binding</span> page is displayed.</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">REST service binding</span> and then
-click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Add
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">REST service binding</span> and then
+click <span class="ph uicontrol">Next</span>.</span> The <span class="keyword wintitle">Add
 a REST Service Binding</span> page is displayed.</li>
-<li class="stepexpand"><span>In the <span class="uicontrol">REST service binding name</span> field,
+<li class="li step"><span class="ph cmd">In the <span class="ph uicontrol">REST service binding name</span> field,
 specify the service-binding name, which is also called a key. </span>
 
  You specify the service-binding name when you declare a service-access
-variable and set the <span class="synph"><span class="kwd">Resource</span></span> annotation, <span class="synph"><span class="kwd">uri</span></span> field;
-or when you invoke the <span class="synph"><span class="kwd">SysLib.getResource</span></span> function.
+variable and set the <span class="ph synph"><span class="keyword kwd">Resource</span></span> annotation, <span class="ph synph"><span class="keyword kwd">uri</span></span> field;
+or when you invoke the <span class="ph synph"><span class="keyword kwd">SysLib.getResource</span></span> function.
 </li>
-<li class="stepexpand"><span>In the <span class="uicontrol">baseURI</span> field, specify a
-Universal Resource Identifier (URI):</span> <ul>
-<li>If you are accessing an EGL REST-RPC service, specify the complete
+<li class="li step"><span class="ph cmd">In the <span class="ph uicontrol">baseURI</span> field, specify a
+Universal Resource Identifier (URI):</span> <ul class="ul">
+<li class="li">If you are accessing an EGL REST-RPC service, specify the complete
 URI. If you specify a workspace URI, remember to set up the deployment
 detail on the Service Deployment tab.</li>
 
-<li>If you are accessing a third-party REST service, you might decide
+<li class="li">If you are accessing a third-party REST service, you might decide
 to include only high-level details and to supplement them with values
 that are stored in an Interface type. Alternatively, you might decide
-to include no details in the <span class="uicontrol">baseURI</span> field
-and to rely on values in the Interface type. <p>For specifics, see
-the following help topic: """"""""Creating an Interface part to access a
-REST service.""""""""</p>
+to include no details in the <span class="ph uicontrol">baseURI</span> field
+and to rely on values in the Interface type. <p class="p">For specifics, see
+the following help topic: "Creating an Interface part to access a
+REST service."</p>
 </li>
 
 </ul>
 </li>
-<li class="stepexpand"><span>The <span class="uicontrol">sessionCookieID</span> field is not
+<li class="li step"><span class="ph cmd">The <span class="ph uicontrol">sessionCookieID</span> field is not
 in use. </span>
 
 </li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Finish</span>.</span> The <span class="uicontrol">Service
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Finish</span>.</span> The <span class="ph uicontrol">Service
 Bindings Configuration</span> tab is available again.
 </li>
 </ol>
 
-<div class="section">In the future, you can update the service binding that you
-just defined: <ol>
-<li>Open the <span class="uicontrol">Resource Bindings</span> tab.</li>
+<div class="section postreq">In the future, you can update the service binding that you
+just defined: <ol class="ol">
+<li class="li">Open the <span class="ph uicontrol">Resource Bindings</span> tab.</li>
 
-<li>Select the binding.</li>
+<li class="li">Select the binding.</li>
 
-<li>Edit the displayed information.</li>
+<li class="li">Edit the displayed information.</li>
 
 </ol>
-<p>The tab includes the <span class="synph"><span class="kwd">enableGenerate</span></span> check
+<p class="p">The tab includes the <span class="ph synph"><span class="keyword kwd">enableGenerate</span></span> check
 box. The purpose of that check box is to specify whether to deploy
 the binding information. If you are using a workspace URI or want
 to keep the binding detail out of the deployed WAR file, clear the

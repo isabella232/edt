@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -18,79 +18,77 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Setting preferences for organizing import statements in the EGL editor</title>
 </head>
-<body id="tedt00513"><a name="tedt00513"><!-- --></a>
+<body id="tedt00513">
 
 
 
 
-<h1 class="topictitle1">Setting preferences for organizing <span class="synph"><span class="kwd">import</span></span> statements
+<h1 class="title topictitle1">Setting preferences for organizing <span class="ph synph"><span class="keyword kwd">import</span></span> statements
 in the EGL editor</h1>
 
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>EGL can automatically organize the <span class="synph"><span class="kwd">import</span></span> statements
+<div class="body taskbody" id="body"><p class="shortdesc">EGL can automatically organize the <span class="ph synph"><span class="keyword kwd">import</span></span> statements
 in your code. The process orders and groups those statements by package
-name and removes unnecessary <span class="synph"><span class="kwd">import</span></span> statements.</p>
+name and removes unnecessary <span class="ph synph"><span class="keyword kwd">import</span></span> statements.</p>
 
-<div class="section"><p>Do as follows:</p>
+<div class="section context"><p class="p">Do as follows:</p>
 </div>
 
-<ol><li class="stepexpand"><span>From the main menu, click <span class="menucascade"><span class="uicontrol">Window</span>
- &gt; <span class="uicontrol">Preferences</span></span>.</span> The <span class="wintitle">Preferences</span> window
+<ol class="ol steps"><li class="li step"><span class="ph cmd">From the main menu, click <span class="ph menucascade"><span class="ph uicontrol">Window</span> &gt; <span class="ph uicontrol">Preferences</span></span>.</span> The <span class="keyword wintitle">Preferences</span> window
 is displayed.</li>
-<li class="stepexpand"><span>In the <span class="wintitle">Preferences</span> window, expand <span class="menucascade">
-<span class="uicontrol">EGL</span> &gt; <span class="uicontrol">Editor</span></span> and
-click <span class="uicontrol">Organize Imports</span>.</span> The <span class="wintitle">Organize
+<li class="li step"><span class="ph cmd">In the <span class="keyword wintitle">Preferences</span> window, expand <span class="ph menucascade"><span class="ph uicontrol">EGL</span> &gt; <span class="ph uicontrol">Editor</span></span> and
+click <span class="ph uicontrol">Organize Imports</span>.</span> The <span class="keyword wintitle">Organize
 Imports</span> pane is displayed.</li>
-<li class="stepexpand"><span>On the <span class="wintitle">Organize Imports</span> pane of the <span class="wintitle">Preferences</span> window,
-set the order for <span class="synph"><span class="kwd">import</span></span> statements in the
-list of package names:</span> <ul>
-<li>To add a new import statement (package or prefix) to the list,
-click <span class="uicontrol">New</span> and type the new name. You can use
+<li class="li step"><span class="ph cmd">On the <span class="keyword wintitle">Organize Imports</span> pane of the <span class="keyword wintitle">Preferences</span> window,
+set the order for <span class="ph synph"><span class="keyword kwd">import</span></span> statements in the
+list of package names:</span> <ul class="ul">
+<li class="li">To add a new import statement (package or prefix) to the list,
+click <span class="ph uicontrol">New</span> and type the new name. You can use
 the asterisk character as a wild card at the end of the package name.</li>
 
-<li>To edit an import statement, select the name of the package or
-prefix name and click <span class="uicontrol">Edit</span>.</li>
+<li class="li">To edit an import statement, select the name of the package or
+prefix name and click <span class="ph uicontrol">Edit</span>.</li>
 
-<li>To remove an import statement from the import list, select the
-name of the package or prefix and click <span class="uicontrol">Remove</span>.</li>
+<li class="li">To remove an import statement from the import list, select the
+name of the package or prefix and click <span class="ph uicontrol">Remove</span>.</li>
 
-<li>To reorder the import statements, click a package or prefix in
-the list to select it and then click <span class="uicontrol">Up</span> or <span class="uicontrol">Down</span>.</li>
+<li class="li">To reorder the import statements, click a package or prefix in
+the list to select it and then click <span class="ph uicontrol">Up</span> or <span class="ph uicontrol">Down</span>.</li>
 
-<li>To import an import statement, click <span class="uicontrol">Import</span> and
+<li class="li">To import an import statement, click <span class="ph uicontrol">Import</span> and
 specify the XML file that contains the import statement to be imported.</li>
 
-<li>To export an import statement, click <span class="uicontrol">Export</span><span class="uicontrol"></span> and
+<li class="li">To export an import statement, click <span class="ph uicontrol">Export</span><span class="ph uicontrol"></span> and
 specify the location and name of the XML file to contain the import
 statement.</li>
 
 </ul>
 </li>
-<li class="stepexpand"><span>In the <span class="uicontrol">Number of imports needed</span> field,
-enter the minimum number of individual <span class="synph"><span class="kwd">import</span></span> statements
-in the same package to simplify into an <span class="synph"><span class="kwd">import</span></span> statement
+<li class="li step"><span class="ph cmd">In the <span class="ph uicontrol">Number of imports needed</span> field,
+enter the minimum number of individual <span class="ph synph"><span class="keyword kwd">import</span></span> statements
+in the same package to simplify into an <span class="ph synph"><span class="keyword kwd">import</span></span> statement
 with a wild card character.</span> For example, your file might
-have the following similar <span class="synph"><span class="kwd">import</span></span> statements:<pre class="codeblock">import com.mypackage.myPart1;
+have the following similar <span class="ph synph"><span class="keyword kwd">import</span></span> statements:<pre class="pre codeblock">import com.mypackage.myPart1;
 import com.mypackage.myPart2;
 import com.mypackage.myPart3;</pre>
-If you set the <span class="uicontrol">Number
-of imports needed</span> field to <samp class="codeph">3</samp>, the editor
-will simplify these <span class="synph"><span class="kwd">import</span></span> statements into
-the following single <span class="synph"><span class="kwd">import</span></span> statement:<pre class="codeblock">import com.mypackage.*;</pre>
+If you set the <span class="ph uicontrol">Number
+of imports needed</span> field to <samp class="ph codeph">3</samp>, the editor
+will simplify these <span class="ph synph"><span class="keyword kwd">import</span></span> statements into
+the following single <span class="ph synph"><span class="keyword kwd">import</span></span> statement:<pre class="pre codeblock">import com.mypackage.*;</pre>
 
 </li>
-<li class="stepexpand"><span>To save the changes and remain in the <span class="wintitle">Preferences</span> window,
-click <span class="uicontrol">Apply</span>. To save the changes and exit the
-window, click <span class="uicontrol">OK</span>.</span></li>
+<li class="li step"><span class="ph cmd">To save the changes and remain in the <span class="keyword wintitle">Preferences</span> window,
+click <span class="ph uicontrol">Apply</span>. To save the changes and exit the
+window, click <span class="ph uicontrol">OK</span>.</span></li>
 </ol>
 
-<div class="section">To organize your <span class="synph"><span class="kwd">import</span></span> statements,
-open a source file in the editor, right-click the file, and then click <span class="uicontrol">Organize
-Imports</span>. Alternatively, you can organize the <span class="synph"><span class="kwd">import</span></span> statements
+<div class="section postreq">To organize your <span class="ph synph"><span class="keyword kwd">import</span></span> statements,
+open a source file in the editor, right-click the file, and then click <span class="ph uicontrol">Organize
+Imports</span>. Alternatively, you can organize the <span class="ph synph"><span class="keyword kwd">import</span></span> statements
 for every file in a project or package by right-clicking the project
-or package in the Project Explorer view and then clicking <span class="uicontrol">Organize
+or package in the Project Explorer view and then clicking <span class="ph uicontrol">Organize
 Imports</span>.</div>
 
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="task"></meta>
@@ -19,78 +19,78 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Adding an SQL database binding to the EGL deployment descriptor</title>
 </head>
-<body id="tedt00542"><a name="tedt00542"><!-- --></a>
+<body id="tedt00542">
 
 
 
-<h1 class="topictitle1">Adding an SQL database binding to the EGL deployment descriptor</h1>
+<h1 class="title topictitle1">Adding an SQL database binding to the EGL deployment descriptor</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>An SQL database binding gives details necessary
+<div class="body taskbody" id="body"><p class="shortdesc">An SQL database binding gives details necessary
 to access an SQL service. </p>
 
-<div class="section">To add an SQL database binding to an EGL deployment descriptor,
+<div class="section context">To add an SQL database binding to an EGL deployment descriptor,
 do as follows:</div>
 
-<ol><li class="stepexpand"><span>Open the EGL Deployment Descriptor editor by double-clicking
+<ol class="ol steps"><li class="li step"><span class="ph cmd">Open the EGL Deployment Descriptor editor by double-clicking
 the name of an EGL deployment descriptor.</span></li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Resource Bindings</span>.</span>
- The <span class="uicontrol">Resource Bindings Configuration</span> tab
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Resource Bindings</span>.</span>
+ The <span class="ph uicontrol">Resource Bindings Configuration</span> tab
 is displayed.</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">Add</span>.</span> The <span class="wintitle">Add
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">Add</span>.</span> The <span class="keyword wintitle">Add
 a Resource Binding</span> page is displayed.</li>
-<li class="stepexpand"><span>Click <span class="uicontrol">SQL database binding</span> and then
-click <span class="uicontrol">Next</span>.</span> The <span class="wintitle">Add
+<li class="li step"><span class="ph cmd">Click <span class="ph uicontrol">SQL database binding</span> and then
+click <span class="ph uicontrol">Next</span>.</span> The <span class="keyword wintitle">Add
 a SQL Database Binding</span> page is displayed.</li>
-<li class="stepexpand"><span>The <span class="wintitle">Add a SQL Database Binding</span> page
+<li class="li step"><span class="ph cmd">The <span class="keyword wintitle">Add a SQL Database Binding</span> page
 is under review. The main point is this:  you can specify what detail
 is used at deployment time: either the connection profile (the first
 option) or details that you type at this screen (the second option).</span>
 </li>
-<li class="stepexpand"><span>After you click <span class="uicontrol">Finish</span>, you can
-make additional changes in the <span class="uicontrol">SQL Database Binding</span> pane.
+<li class="li step"><span class="ph cmd">After you click <span class="ph uicontrol">Finish</span>, you can
+make additional changes in the <span class="ph uicontrol">SQL Database Binding</span> pane.
 There, you select one of the first two options to specify where the
-binding details are stored: </span> <ul>
-<li>To use connection details that are specified in an Eclipse connection
+binding details are stored: </span> <ul class="ul">
+<li class="li">To use connection details that are specified in an Eclipse connection
 profile, select the first option. Reference an existing connection
-profile or press <strong>New</strong> to define one. 
-<p>If you select this option, any subsequent change to the Eclipse
+profile or press <strong class="ph b">New</strong> to define one. 
+<p class="p">If you select this option, any subsequent change to the Eclipse
 connection profile is available to your code at development and deployment
 time. After the EGL deployer has packaged the application, though,
 the changes have no effect on the deployed code unless you redeploy
 the application.</p>
 </li>
 
-<li>To specify connection details directly in the binding definition,
+<li class="li">To specify connection details directly in the binding definition,
 select the second option instead.</li>
 
 </ul>
 </li>
-<li class="stepexpand"><span>Also at the <span class="uicontrol">SQL Database Binding</span> pane,
-you can configure a JNDI entry as follows:</span> <ol type="a">
-<li>Define the connection by specifying the first or second option. </li>
+<li class="li step"><span class="ph cmd">Also at the <span class="ph uicontrol">SQL Database Binding</span> pane,
+you can configure a JNDI entry as follows:</span> <ol class="ol" type="a">
+<li class="li">Define the connection by specifying the first or second option. </li>
 
-<li>Select the third option. In relation to Apache Tomcat, the JNDI
+<li class="li">Select the third option. In relation to Apache Tomcat, the JNDI
 name and other details that you specify here are associated with the
-other details. The information is packaged during EGL deployment.<p>By
+other details. The information is packaged during EGL deployment.<p class="p">By
 default, the JNDI details result in a container-based authentication,
 which means that the server stores any user ID and password needed
 for database access. If you are handling authentication in your code,
-select <span class="uicontrol">Use application-based authentication</span>.</p>
+select <span class="ph uicontrol">Use application-based authentication</span>.</p>
 </li>
 
 </ol>
 </li>
 </ol>
 
-<div class="section">In the future, you can update the service binding that you
-just defined: <ol>
-<li>Open the <span class="uicontrol">Resource Bindings</span> tab.</li>
+<div class="section postreq">In the future, you can update the service binding that you
+just defined: <ol class="ol">
+<li class="li">Open the <span class="ph uicontrol">Resource Bindings</span> tab.</li>
 
-<li>Select the binding.</li>
+<li class="li">Select the binding.</li>
 
-<li>Edit the displayed information.</li>
+<li class="li">Edit the displayed information.</li>
 
 </ol>
 </div>

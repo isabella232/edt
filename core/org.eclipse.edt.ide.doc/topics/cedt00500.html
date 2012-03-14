@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -20,112 +20,112 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Debugging EGL source code in the EDT IDE</title>
 </head>
-<body id="cedt00500"><a name="cedt00500"><!-- --></a>
+<body id="cedt00500">
 
 
-<h1 class="topictitle1">Debugging EGL source code in the EDT IDE</h1>
+<h1 class="title topictitle1">Debugging EGL source code in the EDT IDE</h1>
 
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>When you run a program, service, or Rich UI
+<div class="body" id="body"><p class="shortdesc">When you run a program, service, or Rich UI
 handler in the EGL debugger, you set a breakpoint to suspend execution
 and then run the code in a controlled way. You can investigate the
 execution paths in your logic and the changing values of variables.</p>
 
 <div class="p">When you are debugging logic that is outside of Rich UI, you can
-also do a “hot code replace”: <ol>
-<li>When the debugger suspends execution on a statement, you change
+also do a “hot code replace”: <ol class="ol">
+<li class="li">When the debugger suspends execution on a statement, you change
 the code that runs subsequent to the statement.</li>
 
-<li>The subsequent code and the debugger behave as if the changes
+<li class="li">The subsequent code and the debugger behave as if the changes
 had been in place before the debugging session.</li>
 
 </ol>
 </div>
 
-<p>The debugger always starts debugging from the program or Rich UI
+<p class="p">The debugger always starts debugging from the program or Rich UI
 handler that runs initially. If you want to debug a service that is
 available in the workbench or to debug a library, you must step into
 the service or library from other logic. In some cases, you might
 want to write a simple program or Rich UI handler to call the logic
 that you want to debug.</p>
 
-<p>The EGL debugger does not step into code that was deployed and
+<p class="p">The EGL debugger does not step into code that was deployed and
 is running on an application server. However, when you are debugging
 a service for which the Service type is in your workspace, you gain
-the benefit of a test server, as described in <a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+the benefit of a test server, as described in <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
 
-<div class="p">This introductory topic includes the following sections:<ul>
-<li><a href="#cedt00500__breakpoints">Breakpoints</a></li>
+<div class="p">This introductory topic includes the following sections:<ul class="ul">
+<li class="li"><a class="xref" href="#cedt00500__breakpoints">Breakpoints</a></li>
 
-<li><a href="#cedt00500__debug">The Debug perspective</a></li>
+<li class="li"><a class="xref" href="#cedt00500__debug">The Debug perspective</a></li>
 
-<li><a href="#cedt00500__practice">A short practice session</a></li>
+<li class="li"><a class="xref" href="#cedt00500__practice">A short practice session</a></li>
 
-<li><a href="#cedt00500__info">For further information</a></li>
+<li class="li"><a class="xref" href="#cedt00500__info">For further information</a></li>
 
 </ul>
 </div>
 
-<div class="section" id="cedt00500__breakpoints"><a name="cedt00500__breakpoints"><!-- --></a><h2 class="sectiontitle">Breakpoints</h2><div class="p">You can add
+<div class="section" id="cedt00500__breakpoints"><h2 class="title sectiontitle">Breakpoints</h2><div class="p">You can add
 a breakpoint at most EGL logic statements, though not at the following
-ones: <ul>
-<li>A variable declaration that does not include an assignment.</li>
+ones: <ul class="ul">
+<li class="li">A variable declaration that does not include an assignment.</li>
 
-<li>A line of code that begins a logical unit or that gives a directive.
-Examples are the <span class="synph"><span class="kwd">package</span></span> declaration or
-the line that begins with <span class="synph"><span class="kwd">program</span></span>. </li>
+<li class="li">A line of code that begins a logical unit or that gives a directive.
+Examples are the <span class="ph synph"><span class="keyword kwd">package</span></span> declaration or
+the line that begins with <span class="ph synph"><span class="keyword kwd">program</span></span>. </li>
 
-<li>An <span class="synph"><span class="kwd">end</span></span> statement.</li>
+<li class="li">An <span class="ph synph"><span class="keyword kwd">end</span></span> statement.</li>
 
-<li>A blank line or a line that consists only of a comment.</li>
+<li class="li">A blank line or a line that consists only of a comment.</li>
 
 </ul>
 </div>
-<p>Breakpoints do not affect the source code or generated
+<p class="p">Breakpoints do not affect the source code or generated
 output, but are meaningful only during the debugging session.</p>
 </div>
 
-<div class="section" id="cedt00500__debug"><a name="cedt00500__debug"><!-- --></a><h2 class="sectiontitle">The Debug perspective</h2><p>The Debug
+<div class="section" id="cedt00500__debug"><h2 class="title sectiontitle">The Debug perspective</h2><p class="p">The Debug
 perspective gives you the easiest access to the capabilities of the
 EGL debugger. </p>
 <div class="p">In the Debug view, the following capabilities
 are available if you press the appropriate toolbar button or if you
-right click and then select a menu option:<dl>
-<dt class="dlterm">Drop to frame</dt>
+right click and then select a menu option:<dl class="dl">
+<dt class="dt dlterm">Drop to frame</dt>
 
-<dd>Works with the <dfn class="term">stack</dfn>, which is a list of runtime
+<dd class="dd">Works with the <dfn class="term">stack</dfn>, which is a list of runtime
 functions that contributed to the current execution status. Included
 in that list is the <dfn class="term">initialization function</dfn>, which contains
-the statements that initialize global variables. <p>The <span class="synph"><span class="kwd">Drop
+the statements that initialize global variables. <p class="p">The <span class="ph synph"><span class="keyword kwd">Drop
 to frame</span></span> command lets you return to the first statement
 in any function in the stack, but does not change the values of variables
 that were changed since that first statement ran.</p>
-<p>The <span class="synph"><span class="kwd">Drop
+<p class="p">The <span class="ph synph"><span class="keyword kwd">Drop
 to frame</span></span> command is not available for debugging code
 written for JavaScript.</p>
 </dd>
 
 
-<dt class="dlterm">Resume</dt>
+<dt class="dt dlterm">Resume</dt>
 
-<dd>Continues to run your code until the next breakpoint is found
+<dd class="dd">Continues to run your code until the next breakpoint is found
 or until the run unit ends. </dd>
 
 
-<dt class="dlterm">Step into</dt>
+<dt class="dt dlterm">Step into</dt>
 
-<dd>Runs the next EGL statement and pauses. If you issue this command
+<dd class="dd">Runs the next EGL statement and pauses. If you issue this command
 for a function invocation, execution stops at the first statement
 in the function. Similarly, if you issue this command for a service
 call and if the Service type is available in the workspace, execution
-stops at the first statement in the service.<p>If you invoke code
+stops at the first statement in the service.<p class="p">If you invoke code
 that is not available in the workspace, the command runs the external
 code and stops execution at the first statement where your logic resumes.
 In Rich UI, where service invocation is asynchronous, execution continues
 at the first statement in the callback function or exception handler.</p>
-<p>If
+<p class="p">If
 you issue this command for a statement that is the last one running
 in the function and if the statement does not explicitly return control
 to the invoker or terminate the logic, the debugger pauses so that
@@ -133,92 +133,92 @@ you can inspect variable values.</p>
 </dd>
 
 
-<dt class="dlterm">Step over</dt>
+<dt class="dt dlterm">Step over</dt>
 
-<dd>Runs the next EGL statement and pauses. If you invoke a function
+<dd class="dd">Runs the next EGL statement and pauses. If you invoke a function
 or service, the command runs that code and stops execution at the
 first statement where your current logic resumes. In Rich UI, execution
 continues at the first statement in the callback function or exception
-handler for that service. <p>If you issue this command for a statement
+handler for that service. <p class="p">If you issue this command for a statement
 that is the last one running in the function and if the statement
 does not explicitly return control to the invoker or terminate the
 logic, the debugger pauses so that you can inspect variable values.</p>
 </dd>
 
 
-<dt class="dlterm">Step return</dt>
+<dt class="dt dlterm">Step return</dt>
 
-<dd>Runs the statements needed to return to the logic that invoked
+<dd class="dd">Runs the statements needed to return to the logic that invoked
 the code that you are debugging. After returning to that logic, the
 command pauses at the statement that receives control.</dd>
 
 
 
-<dt class="dlterm">Suspend</dt>
+<dt class="dt dlterm">Suspend</dt>
 
-<dd>Causes the debugger to pause at the next opportunity. This button
+<dd class="dd">Causes the debugger to pause at the next opportunity. This button
 is available only while execution is in progress.</dd>
 
 
-<dt class="dlterm">Terminate</dt>
+<dt class="dt dlterm">Terminate</dt>
 
-<dd>Terminates the program without running any further instructions.<p>In
-the Debug view, the <span class="uicontrol">Terminate and Relaunch</span> menu
+<dd class="dd">Terminates the program without running any further instructions.<p class="p">In
+the Debug view, the <span class="ph uicontrol">Terminate and Relaunch</span> menu
 option lets you end the run and immediately begin another.</p>
 </dd>
 
 
-<dt class="dlterm">Use step filters</dt>
+<dt class="dt dlterm">Use step filters</dt>
 
-<dd>Has no effect when you are working with EGL code.</dd>
+<dd class="dd">Has no effect when you are working with EGL code.</dd>
 
 </dl>
 </div>
 <div class="p">If you right click the gray border to the left
 of a line of code, the following debugging options are available in
-the context menu:<dl>
-<dt class="dlterm">Disable breakpoint</dt>
+the context menu:<dl class="dl">
+<dt class="dt dlterm">Disable breakpoint</dt>
 
-<dd>Retains an existing breakpoint so that you recall its position,
+<dd class="dd">Retains an existing breakpoint so that you recall its position,
 but disables use of that breakpoint.</dd>
 
 
-<dt class="dlterm">Enable breakpoint</dt>
+<dt class="dt dlterm">Enable breakpoint</dt>
 
-<dd>Enables a breakpoint that you formerly set and then disabled.</dd>
-
-
-<dt class="dlterm">Show line numbers</dt>
-
-<dd>Displays the line numbers in the code you are debugging.</dd>
+<dd class="dd">Enables a breakpoint that you formerly set and then disabled.</dd>
 
 
-<dt class="dlterm">Toggle breakpoint</dt>
+<dt class="dt dlterm">Show line numbers</dt>
 
-<dd>Sets or clears a breakpoint. You can accomplish the task without
+<dd class="dd">Displays the line numbers in the code you are debugging.</dd>
+
+
+<dt class="dt dlterm">Toggle breakpoint</dt>
+
+<dd class="dd">Sets or clears a breakpoint. You can accomplish the task without
 opening the context menu, by double clicking on the gray area.</dd>
 
 </dl>
 </div>
 <div class="p">If you right click in the code that you are
 debugging, the following debugging option in available in the context
-menu:<dl>
-<dt class="dlterm">Run to line</dt>
+menu:<dl class="dl">
+<dt class="dt dlterm">Run to line</dt>
 
-<dd>Runs all statements up to, but not including, the statement on
+<dd class="dd">Runs all statements up to, but not including, the statement on
 a specified line.</dd>
 
 </dl>
 </div>
-<p>As noted in the next section, the Debug perspective
+<p class="p">As noted in the next section, the Debug perspective
 includes views to see variable values and to quickly enable or disable
 breakpoints.</p>
 </div>
 
-<div class="section" id="cedt00500__practice"><a name="cedt00500__practice"><!-- --></a><h2 class="sectiontitle">A short practice session</h2><div class="p">To
-debug a sample program, do as follows:<ol>
-<li>Create an EGL basic project, create a package named <samp class="codeph">myPkg</samp> and
-copy the following code into a source file in that package:<pre class="codeblock">package common;
+<div class="section" id="cedt00500__practice"><h2 class="title sectiontitle">A short practice session</h2><div class="p">To
+debug a sample program, do as follows:<ol class="ol">
+<li class="li">Create an EGL basic project, create a package named <samp class="ph codeph">myPkg</samp> and
+copy the following code into a source file in that package:<pre class="pre codeblock">package common;
 
 program MyProgram 
 
@@ -247,7 +247,7 @@ program MyProgram
     end // for loop
 
     //Write the output to the console.
-    SysLib.writeStderr(""""""""The total cost for the order is $"""""""" + orderTotal);
+    SysLib.writeStderr("The total cost for the order is $" + orderTotal);
   end // main
 
   //Return a total price for a group of items 
@@ -260,9 +260,9 @@ program MyProgram
     //Discount 20% for more than 50 items.
     //Discount 5% for more than 20 items.
     case
-      when (itemQuantity &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 50)
+      when (itemQuantity &gt; 50)
         discountRate = 1/5;
-     when (itemQuantity &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 20 &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; itemQuantity &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 50)
+     when (itemQuantity &gt; 20 &amp;&amp; itemQuantity &lt;= 50)
        discountRate = 1/20;
      otherwise
        //bug - division by zero
@@ -286,47 +286,47 @@ Record Items
 end</pre>
 </li>
 
-<li>Add breakpoints at four statements in the <samp class="codeph">discountPrice</samp> function,
-as shown here: <br></br><img src="../images/tedt00579.jpg" alt="Breakpoints in the code."></img><br></br>To set a given breakpoint,
+<li class="li">Add breakpoints at four statements in the <samp class="ph codeph">discountPrice</samp> function,
+as shown here: <br></br><img class="image" src="../images/tedt00579.jpg" alt="Breakpoints in the code."></img><br></br>To set a given breakpoint,
 double-click the gray margin to the left of the statement. Each breakpoint
 is marked with a blue circle in that margin.</li>
 
-<li>In the Project Explorer view, right-click the EGL source program
-and click <span class="menucascade"><span class="uicontrol">Debug as</span> &gt; <span class="uicontrol">EGL
+<li class="li">In the Project Explorer view, right-click the EGL source program
+and click <span class="ph menucascade"><span class="ph uicontrol">Debug as</span> &gt; <span class="ph uicontrol">EGL
 Java Main Application</span></span>. </li>
 
-<li>If you are asked whether to open the Debug perspective, click <span class="uicontrol">Yes</span>.
+<li class="li">If you are asked whether to open the Debug perspective, click <span class="ph uicontrol">Yes</span>.
 The debugger begins running the program.</li>
 
-<li>At the first breakpoint, the debugger suspends the run: <ul>
-<li>The EGL editor highlights the line about to be executed.</li>
+<li class="li">At the first breakpoint, the debugger suspends the run: <ul class="ul">
+<li class="li">The EGL editor highlights the line about to be executed.</li>
 
-<li>The Variables view shows the value of all the variables in the
+<li class="li">The Variables view shows the value of all the variables in the
 current logic. You can use this view to track the value of a variable
 through the program. </li>
 
-<li>The Debug view lists the threads running within the current run
+<li class="li">The Debug view lists the threads running within the current run
 unit. Use this view to resume or stop the debugging process.</li>
 
-<li>The Breakpoints view lists the breakpoints in the program. From
+<li class="li">The Breakpoints view lists the breakpoints in the program. From
 this view, you can disable a breakpoint temporarily by clearing its
 check box.</li>
 
 </ul>
 </li>
 
-<li>When you want the debugger to continue, press F11 or click the <span class="uicontrol">Resume</span> button
-at the top of the Debug view. <p>Run the example program from breakpoint
-to breakpoint until the debugger reaches the line <samp class="codeph">discountRate
+<li class="li">When you want the debugger to continue, press F11 or click the <span class="ph uicontrol">Resume</span> button
+at the top of the Debug view. <p class="p">Run the example program from breakpoint
+to breakpoint until the debugger reaches the line <samp class="ph codeph">discountRate
 = 1/0;</samp>, at which point the run ends with an error.</p>
 </li>
 
-<li>Right click in the Debug view and click <span class="uicontrol">Relaunch</span>.
+<li class="li">Right click in the Debug view and click <span class="ph uicontrol">Relaunch</span>.
 When the debugger suspends execution at the first breakpoint, click
 one or the other step button so that the program runs the next line
 and then pauses. Try different options.</li>
 
-<li>When you are finished with the practice session, click the <span class="uicontrol">Terminate</span> button
+<li class="li">When you are finished with the practice session, click the <span class="ph uicontrol">Terminate</span> button
 at the top of the Debug view and return to the coding task by clicking
 the EGL perspective icon at the top right of the workbench.</li>
 
@@ -334,13 +334,13 @@ the EGL perspective icon at the top right of the workbench.</li>
 </div>
 </div>
 
-<div class="section" id="cedt00500__info"><a name="cedt00500__info"><!-- --></a><h2 class="sectiontitle">For further information</h2><div class="p">The following
-topics are also available:<ul>
-<li><a href="tedt00582.html" title="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you.">Debugging a program with the EGL debugger</a></li>
+<div class="section" id="cedt00500__info"><h2 class="title sectiontitle">For further information</h2><div class="p">The following
+topics are also available:<ul class="ul">
+<li class="li"><a class="xref" href="tedt00582.html" title="When debugging a program written in EGL you use a launch configuration, which specifies where your logic resides and aspects of the runtime environment. In many cases, you can use a launch configuration that is provided for you.">Debugging a program with the EGL debugger</a></li>
 
-<li><a href="tedt00583.html" title="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger.">Debugging a Rich UI application with the EGL debugger</a></li>
+<li class="li"><a class="xref" href="tedt00583.html" title="When debugging a Rich UI application, you use a launch configuration that is created for you and then move back and forth between an external browser and the EGL debugger.">Debugging a Rich UI application with the EGL debugger</a></li>
 
-<li><a href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a></li>
+<li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a></li>
 
 </ul>
 </div>
