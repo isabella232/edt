@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,18 +19,18 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Combo widget</title>
 </head>
-<body id="redt00125"><a name="redt00125"><!-- --></a>
+<body id="redt00125">
 
 
-<h1 class="topictitle1">Combo widget</h1>
+<h1 class="title topictitle1">Combo widget</h1>
 
 
 
-<div><p>A Rich UI combo widget defines a combo box, which presents
+<div class="body"><p class="shortdesc">A Rich UI combo widget defines a combo box, which presents
 one of several selectable options and lets the user temporarily open
 a dropdown list to select a different option.</p>
 
-<div class="p">Here is example code:<pre class="codeblock">package client;
+<div class="p">Here is example code:<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.Combo;
@@ -44,7 +44,7 @@ Handler MyHandler Type RUIHandler
 
    myCombo Combo
    {
-      values = [""""""""one"""""""", """"""""two"""""""", """"""""three"""""""", """"""""four""""""""],
+      values = ["one", "two", "three", "four"],
       selection = 2, onChange ::= changeFunction
    };
 
@@ -57,25 +57,25 @@ Handler MyHandler Type RUIHandler
 end </pre>
 </div>
 
-<div class="p">The following fields are supported:<ul>
-<li><span class="synph"><span class="kwd">values</span></span>, which holds an array of strings
+<div class="p">The following fields are supported:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">values</span></span>, which holds an array of strings
 that each represent a selectable option.</li>
 
-<li><span class="synph"><span class="kwd">selection</span></span>, which is integer that represents
-the position of the string in the array. If you set the value of <span class="synph"><span class="kwd">selection</span></span> before
+<li class="li"><span class="ph synph"><span class="keyword kwd">selection</span></span>, which is integer that represents
+the position of the string in the array. If you set the value of <span class="ph synph"><span class="keyword kwd">selection</span></span> before
 displaying the combo box, the specified string is displayed initially;
-otherwise, the first string is displayed initially.<p>The first string
+otherwise, the first string is displayed initially.<p class="p">The first string
 in the array is at position 1, not 0.</p>
 </li>
 
 </ul>
 </div>
 
-<div class="p">The following functions are for general use:<ul>
-<li><span class="synph"><span class="kwd">getValues</span></span>, which takes no parameters
+<div class="p">The following functions are for general use:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">getValues</span></span>, which takes no parameters
 and returns an array of strings that each represent a selectable option.</li>
 
-<li><span class="synph"><span class="kwd">setValues</span></span>, which takes an array of strings
+<li class="li"><span class="ph synph"><span class="keyword kwd">setValues</span></span>, which takes an array of strings
 that each represent a selectable option. The function does not return
 a value.</li>
 
@@ -83,16 +83,16 @@ a value.</li>
 </div>
 
 
-<p>The functions <span class="synph"><span class="kwd">getSelection</span></span> and <span class="synph"><span class="kwd">setSelection</span></span> are
+<p class="p">The functions <span class="ph synph"><span class="keyword kwd">getSelection</span></span> and <span class="ph synph"><span class="keyword kwd">setSelection</span></span> are
 available; but in most cases, retrieve a value or assign a value to
-the <span class="synph"><span class="kwd">selection</span></span> property rather than invoking
+the <span class="ph synph"><span class="keyword kwd">selection</span></span> property rather than invoking
 a function.</p>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Combo;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Combo;</pre>
 </div>
 
 </div>

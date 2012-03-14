@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,68 +18,68 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Correspondence between an XML string and an EGL variable</title>
 </head>
-<body id="redt00254"><a name="redt00254"><!-- --></a>
+<body id="redt00254">
 
 
-<h1 class="topictitle1">Correspondence between an XML string and an EGL variable</h1>
+<h1 class="title topictitle1">Correspondence between an XML string and an EGL variable</h1>
 
 
 
-<div><p>This topic describes the EGL record or handler
+<div class="body"><p class="shortdesc">This topic describes the EGL record or handler
 that corresponds to an Extensible Markup Language (XML) string. Other
-topics describe the <span class="synph"><span class="kwd">serviceLib.convertFromXML</span></span> and <span class="synph"><span class="kwd">serviceLib.convertToXML</span></span>functions
+topics describe the <span class="ph synph"><span class="keyword kwd">serviceLib.convertFromXML</span></span> and <span class="ph synph"><span class="keyword kwd">serviceLib.convertToXML</span></span>functions
 that are used by a Rich UI developer to convert XML data to or from
 a variable, as might be necessary to access a third-party REST service.</p>
 
-<div class="section"><h2 class="sectiontitle">XML and EGL records or handlers</h2><p>You can
+<div class="section"><h2 class="title sectiontitle">XML and EGL records or handlers</h2><p class="p">You can
 define an EGL Record or Handler type that is the basis of a record
 (or array of records) used to process an XML string. The type includes
 details that are found in an XML Schema, which is a language for validating
 an XML string.</p>
-<p>When you use the function <strong>XMLLib.convertToXML</strong>,
+<p class="p">When you use the function <strong class="ph b">XMLLib.convertToXML</strong>,
 you write the content of the EGL record to an XML string. When you
-use the function <strong>XMLLib.convertFromXML</strong>, you write the XML string
+use the function <strong class="ph b">XMLLib.convertFromXML</strong>, you write the XML string
 into the EGL record; and if the string does not fulfill a validation
-rule specified in the record, the EGL Runtime issues a <span class="synph"><span class="kwd">RuntimeException</span></span>.</p>
-<p>In
+rule specified in the record, the EGL Runtime issues a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span>.</p>
+<p class="p">In
 a Rich UI application, XML may be the format of a message sent to
 or received from a REST service, but is never the format used in relation
 to a web (SOAP) service. The EGL Rich UI Proxy expects the data submitted
-from the application to a web (SOAP) service to be in JavaScript Object Notation (JSON) format,
+from the application to a web (SOAP) service to be in JavaScript™ Object Notation (JSON) format,
 and the Proxy returns web (SOAP) service data to the application in
 JSON format.</p>
 <div class="p">Here is an example XML string, which is shown on
-several lines for clarity: <pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;10&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;
-	   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Name&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Name&gt;&gt;&gt;&gt; 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;</pre>
+several lines for clarity: <pre class="pre codeblock">&lt;Employee&gt;
+   &lt;EmpNo&gt;10&lt;/EmpNo&gt;
+	   &lt;Name&gt;Smith&lt;/Name&gt; 
+&lt;/Employee&gt;</pre>
 </div>
 <div class="p">Here is a Record type that matches
-the example XML string: <pre class="codeblock">Record Employee {XMLValue = XMLStructureKind.sequence}
+the example XML string: <pre class="pre codeblock">Record Employee {XMLValue = XMLStructureKind.sequence}
    EmpNo INT;
    Name STRING;
 end
 </pre>
 </div>
-<p>In most cases, the Record type includes a set of
+<p class="p">In most cases, the Record type includes a set of
 field names that each match (in character and case) the name of an
 element or attribute in the XML string. If the names do not match,
 you use EGL properties to specify the XML element or attribute name.</p>
 <div class="p">EGL
-support for XML has two aspects: <ul>
-<li>Assigning the XML string from a record. If you are converting
+support for XML has two aspects: <ul class="ul">
+<li class="li">Assigning the XML string from a record. If you are converting
 a record to an XML string, you can accept defaults when creating the
 string or can explicitly specify details such as the name that the
 EGL Runtime assigns to an element or attribute in the XML string.</li>
 
-<li>Validating the XML string being written to a record. If you are
-writing an XML string to a record, the EGL Runtime issues a <span class="synph"><span class="kwd">RuntimeException</span></span> in
-the following cases:<ul>
-<li>An element or attribute name does not match an equivalent record-field
+<li class="li">Validating the XML string being written to a record. If you are
+writing an XML string to a record, the EGL Runtime issues a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> in
+the following cases:<ul class="ul">
+<li class="li">An element or attribute name does not match an equivalent record-field
 name (or does not match an override that you specify in a property
 field); or</li>
 
-<li>There is a mismatch in the structure of the XML string and the
+<li class="li">There is a mismatch in the structure of the XML string and the
 related record.</li>
 
 </ul>
@@ -87,14 +87,14 @@ related record.</li>
 
 </ul>
 </div>
-<p>Keep in mind this twofold usage: in one case, for XML-string
+<p class="p">Keep in mind this twofold usage: in one case, for XML-string
 assignment, and in another case, for validation.</p>
 <div class="p">Here is an
-example of an XML string that includes an attribute:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Sample color=""""green""""&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Sample&gt;&gt;&gt;&gt;
+example of an XML string that includes an attribute:<pre class="pre codeblock">&lt;Sample color="green"&gt;&lt;/Sample&gt;
 </pre>
 </div>
-<div class="p">The attribute value for <samp class="codeph">color</samp> is
-stored in a second record. The two Record types are as follows:<pre class="codeblock">   Record root 
+<div class="p">The attribute value for <samp class="ph codeph">color</samp> is
+stored in a second record. The two Record types are as follows:<pre class="pre codeblock">   Record root 
     		Sample Sample? {@XMLElement {nillable = true}};
    end
    
@@ -104,27 +104,27 @@ stored in a second record. The two Record types are as follows:<pre class="codeb
 	 	end</pre>
 </div>
 <div class="p">The EGL Runtime can read the XML shortcut
-(<samp class="codeph">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Sample color=""""green""""/&gt;&gt;&gt;&gt;</samp>), but can write only
-the longer form:<ul>
-<li>The written output is as follows if <samp class="codeph">root.Sample</samp> is
-an empty string (""""""""):<pre class="codeblock">	&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;root&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Sample color=""""green""""&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Sample&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/root&gt;&gt;&gt;&gt;
+(<samp class="ph codeph">&lt;Sample color="green"/&gt;</samp>), but can write only
+the longer form:<ul class="ul">
+<li class="li">The written output is as follows if <samp class="ph codeph">root.Sample</samp> is
+an empty string (""):<pre class="pre codeblock">	&lt;root&gt;&lt;Sample color="green"&gt;&lt;/Sample&gt;&lt;/root&gt;
 </pre>
 </li>
 
-<li>The written output is as follows if <samp class="codeph">root.Sample</samp> is
-null and if (as mentioned later) the property field <span class="synph"><span class="kwd">nillable</span></span> is
-set:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;root&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Sample xsi:nil=""""true&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Sample&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/root&gt;&gt;&gt;&gt;
+<li class="li">The written output is as follows if <samp class="ph codeph">root.Sample</samp> is
+null and if (as mentioned later) the property field <span class="ph synph"><span class="keyword kwd">nillable</span></span> is
+set:<pre class="pre codeblock">&lt;root&gt;&lt;Sample xsi:nil="true&gt;&lt;/Sample&gt;&lt;/root&gt;
 </pre>
 </li>
 
 </ul>
 </div>
-<div class="p">Here is a third example XML string:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo department=""""Sales""""&gt;&gt;&gt;&gt;10&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Name&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Name&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;</pre>
+<div class="p">Here is a third example XML string:<pre class="pre codeblock">&lt;Employee&gt;
+   &lt;EmpNo department="Sales"&gt;10&lt;/EmpNo&gt;
+   &lt;Name&gt;Smith&lt;/Name&gt;
+&lt;/Employee&gt;</pre>
 </div>
-<div class="p">Here as the two Record types:<pre class="codeblock">Record Employee{XMLStructure = xmlStructureKind.sequence}
+<div class="p">Here as the two Record types:<pre class="pre codeblock">Record Employee{XMLStructure = xmlStructureKind.sequence}
    EmpNo EmpNumber;
    LastName STRING;
 end
@@ -136,115 +136,115 @@ end
 </pre>
 </div>
 <div class="p">Any of the following data types is valid for a
-Record field:<ul>
-<li>STRING or one of the following types, which are assignment-compatible
+Record field:<ul class="ul">
+<li class="li">STRING or one of the following types, which are assignment-compatible
 with STRING: FLOAT, BIN, or one of the integer equivalents to BIN
 (INT, SMALLINT, or BIGINT).</li>
 
-<li>A data item that is based on one of those primitive types.</li>
+<li class="li">A data item that is based on one of those primitive types.</li>
 
-<li>Another non-structured Record type. The fields of that type are
+<li class="li">Another non-structured Record type. The fields of that type are
 restricted to the previously stated types or to another non-structured
 Record type. A Record type referenced within a Record type can only
 include fields of the types listed here.</li>
 
-<li>Arrays of the preceding types.</li>
+<li class="li">Arrays of the preceding types.</li>
 
 </ul>
 </div>
-<p>Fields of type ANY are not supported.</p>
-<p>One Record
+<p class="p">Fields of type ANY are not supported.</p>
+<p class="p">One Record
 type can be referenced from another Record type at any level of nesting.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Nullable fields</h2><div class="p">A record field related to
+<div class="section"><h2 class="title sectiontitle">Nullable fields</h2><div class="p">A record field related to
 an XML element may be nullable as indicated by a question mark. For
-example, the following <samp class="codeph">EmpNo</samp> field is not nullable,
-but the <samp class="codeph">name</samp> field is: <pre class="codeblock">Record Employee
+example, the following <samp class="ph codeph">EmpNo</samp> field is not nullable,
+but the <samp class="ph codeph">name</samp> field is: <pre class="pre codeblock">Record Employee
    EmpNo INT;
    Name STRING?;
 end
 </pre>
 </div>
 <div class="p">Two rules apply when the EGL Runtime is reading
-an XML String into a record:<ul>
-<li>If the field (for example, <samp class="codeph">EmpNo</samp>) is not nullable,
-the EGL Runtime throws a <span class="synph"><span class="kwd">RuntimeException</span></span> when
+an XML String into a record:<ul class="ul">
+<li class="li">If the field (for example, <samp class="ph codeph">EmpNo</samp>) is not nullable,
+the EGL Runtime throws a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> when
 trying to read an element that is missing or has no value</li>
 
-<li>If the field (for example, <samp class="codeph">Name</samp>) is nullable,
+<li class="li">If the field (for example, <samp class="ph codeph">Name</samp>) is nullable,
 the EGL Runtime does not throw an exception when trying to read an
 element that is missing or has no value; and in the latter case, any
 attributes in the valueless element are retained</li>
 
 </ul>
 </div>
-<p>For details on the different ways the EGL Runtime treats
-a null when writing a record to an XML string, see the <span class="synph"><span class="kwd">XMLElement</span></span> or <span class="synph"><span class="kwd">XMLRootElement</span></span> annotation, <span class="synph"><span class="kwd">nillable</span></span> field.</p>
+<p class="p">For details on the different ways the EGL Runtime treats
+a null when writing a record to an XML string, see the <span class="ph synph"><span class="keyword kwd">XMLElement</span></span> or <span class="ph synph"><span class="keyword kwd">XMLRootElement</span></span> annotation, <span class="ph synph"><span class="keyword kwd">nillable</span></span> field.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Type annotations</h2><div class="p">You can use the following
-annotations when you define a Record or Handler type: <ul>
-<li>The <span class="synph"><span class="kwd">XMLRootElement</span></span> annotation provides
+<div class="section"><h2 class="title sectiontitle">Type annotations</h2><div class="p">You can use the following
+annotations when you define a Record or Handler type: <ul class="ul">
+<li class="li">The <span class="ph synph"><span class="keyword kwd">XMLRootElement</span></span> annotation provides
 naming and data-type details about the root XML element, which is
 the topmost, most inclusive element in the XML string.</li>
 
-<li>The <span class="synph"><span class="kwd">XMLValue</span></span> annotation identifies the
+<li class="li">The <span class="ph synph"><span class="keyword kwd">XMLValue</span></span> annotation identifies the
 characteristics of a set of XML elements.</li>
 
 </ul>
 </div>
-<p>You cannot override those annotations when you declare
+<p class="p">You cannot override those annotations when you declare
 a record based on the Record type.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Field annotations</h2><div class="p">You can use the following
+<div class="section"><h2 class="title sectiontitle">Field annotations</h2><div class="p">You can use the following
 annotations when you define a field in a Record or Handler type or
-when you declare a variable based on that type:<ul>
-<li>The<span class="synph"><span class="kwd">XMLElement</span></span> annotation provides details
+when you declare a variable based on that type:<ul class="ul">
+<li class="li">The<span class="ph synph"><span class="keyword kwd">XMLElement</span></span> annotation provides details
 for a record field that represents an XML element. By default, that
 annotation is in effect.</li>
 
-<li>The <span class="synph"><span class="kwd">XMLAttribute</span></span> annotation provides
+<li class="li">The <span class="ph synph"><span class="keyword kwd">XMLAttribute</span></span> annotation provides
 details for a record field that represents an XML attribute.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Namespaces</h2><p>Rich
+<div class="section"><h2 class="title sectiontitle">Namespaces</h2><p class="p">Rich
 UI supports reading and writing XML strings that contain namespaces.
- You can reference a namespace in the following annotations: <span class="synph"><span class="kwd">RootElement</span></span>, <span class="synph"><span class="kwd">XMLElement</span></span>,
-and <span class="synph"><span class="kwd">XMLAttribute</span></span>.</p>
-<p>If the XML contains
+ You can reference a namespace in the following annotations: <span class="ph synph"><span class="keyword kwd">RootElement</span></span>, <span class="ph synph"><span class="keyword kwd">XMLElement</span></span>,
+and <span class="ph synph"><span class="keyword kwd">XMLAttribute</span></span>.</p>
+<p class="p">If the XML contains
 a default namespace, you must reference the namespace when defining
 the record fields for each XML element in that namespace. Note that
 an XML attribute is never in a default namespace; an attribute either
 has a namespace prefix or is not in a namespace.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Additional information on XML</h2><div class="p">Many web sites
+<div class="section"><h2 class="title sectiontitle">Additional information on XML</h2><div class="p">Many web sites
 give background detail on XML and on the most popular XML-validation
 format, XML Schema (XSD). Here are a few suggestions that are present
-at this writing:<ul>
-<li>W3 Schools offers XML and XSD tutorials, which you can access
-at the following site, where you search for XML or XSD: <p>             <a href="http://www.w3schools.com " target="_blank">http://www.w3schools.com </a></p>
+at this writing:<ul class="ul">
+<li class="li">W3 Schools offers XML and XSD tutorials, which you can access
+at the following site, where you search for XML or XSD: <p class="lines">             <a class="xref" href="http://www.w3schools.com " target="_blank">http://www.w3schools.com </a></p>
 </li>
 
-<li>Both XML and XSD are covered in <em>SOA for the Business Developer</em> by
+<li class="li">Both XML and XSD are covered in <em class="ph i">SOA for the Business Developer</em> by
 Margolis and Sharpe (MC Press, May 2007), which is available from
-the following site:<p>             <a href="http://www.mc-store.com/5079.html" target="_blank">http://www.mc-store.com/5079.html</a></p>
+the following site:<p class="lines">             <a class="xref" href="http://www.mc-store.com/5079.html" target="_blank">http://www.mc-store.com/5079.html</a></p>
 </li>
 
-<li>A detailed overview of XML Schema is available from the World
-Wide Web Consortium:<p>             <a href="http://www.w3.org/TR/xmlschema-0/" target="_blank">http://www.w3.org/TR/xmlschema-0/</a></p>
+<li class="li">A detailed overview of XML Schema is available from the World
+Wide Web Consortium:<p class="lines">             <a class="xref" href="http://www.w3.org/TR/xmlschema-0/" target="_blank">http://www.w3.org/TR/xmlschema-0/</a></p>
 </li>
 
 </ul>
 </div>
-<p>To gain a full understanding of the alternatives available
+<p class="p">To gain a full understanding of the alternatives available
 to you in EGL, review the topics for the XML-related annotations.
-Also note the EGL Runtime issues an <span class="synph"><span class="kwd">XMLProcessingException</span></span> in
+Also note the EGL Runtime issues an <span class="ph synph"><span class="keyword kwd">XMLProcessingException</span></span> in
 some cases, as stated in “eglx.xml package.”</p>
 </div>
 

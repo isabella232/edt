@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,113 +19,113 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>XMLAttribute annotation</title>
 </head>
-<body id="redt00089"><a name="redt00089"><!-- --></a>
+<body id="redt00089">
 
 
-<h1 class="topictitle1">XMLAttribute annotation</h1>
+<h1 class="title topictitle1">XMLAttribute annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">XMLAttribute</span></span>  provides
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">XMLAttribute</span></span>  provides
 details for a Record field that represents an XML attribute.</p>
 
-<a name="redt00089__main"><!-- --></a><dl id="redt00089__main">
-<dt class="dlterm"><a name="redt00089__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00089__main">
+<dt class="dt dlterm"><a name="redt00089__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.xml.binding.annotation</p>
+<dd class="dd"><p class="p">eglx.xml.binding.annotation</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00089__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00089__use"><!-- --></a>Example use</dt>
 
-<dd>See “Correspondence between an XML string and an EGL variable.”<anchor id="use_more"></anchor></dd>
+<dd class="dd">See “Correspondence between an XML string and an EGL variable.”<anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00089__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00089__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record XMLAttribute type Annotation {targets = [ ElementKind.fieldMbr ]}
-   name string  = """"""""##default"""""""";
-   namespace string = """"""""##default"""""""";
+<dd class="dd"><pre class="pre codeblock">Record XMLAttribute type Annotation {targets = [ ElementKind.fieldMbr ]}
+   name string  = "##default";
+   namespace string = "##default";
    required boolean = false;
 end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00089__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00089__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">name</span></span></dt>
+<dd class="dd"><dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">name</span></span></dt>
 
-<dd>The name of the XML attribute. The default value is the name of
-the record field.<p>If you are writing a record to an XML string,
+<dd class="dd pd">The name of the XML attribute. The default value is the name of
+the record field.<p class="p">If you are writing a record to an XML string,
 the value of the property field is assigned to the attribute in the
 XML string. If you are reading an XML string into a record, the EGL
-Runtime issues a <span class="synph"><span class="kwd">RuntimeException</span></span> if a mismatch
+Runtime issues a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> if a mismatch
 is found between the actual and expected attributes.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">namespace</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">namespace</span></span></dt>
 
-<dd><div class="p">The XML namespace associated with the XML attribute. If you
+<dd class="dd pd"><div class="p">The XML namespace associated with the XML attribute. If you
 are writing the record to an XML string, the possibilities are as
-follows:<ul>
-<li>If you specify a namespace, the EGL Runtime places the attribute
+follows:<ul class="ul">
+<li class="li">If you specify a namespace, the EGL Runtime places the attribute
 in that namespace, assigning a prefix to the attribute name</li>
 
-<li>If you do not specify a namespace, the attribute is not in any
+<li class="li">If you do not specify a namespace, the attribute is not in any
 namespace </li>
 
 </ul>
 </div>
-<p>When reading an XML string into the record, the EGL Runtime
-issues <span class="synph"><span class="kwd">RuntimeException</span></span> if a mismatch is
+<p class="p">When reading an XML string into the record, the EGL Runtime
+issues <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> if a mismatch is
 found between the actual and expected namespace status of the attribute.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">required</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">required</span></span></dt>
 
-<dd>Indicates whether the attribute must be specified in the XML.</dd>
+<dd class="dd pd">Indicates whether the attribute must be specified in the XML.</dd>
 
 </dl>
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00089__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00089__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="annocomments_more"></anchor></dd>
+<dd class="dd"><anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00089__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00089__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00089__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00089__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d34436e154">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00089__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d40602e154">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d34436e157">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d40602e157">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00089__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d34436e154 ">Java</td>
+<tr id="redt00089__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d40602e154 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34436e157 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d40602e157 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00089__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d34436e154 ">JavaScript</td>
+<tr id="redt00089__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d40602e154 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d34436e157 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d40602e157 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

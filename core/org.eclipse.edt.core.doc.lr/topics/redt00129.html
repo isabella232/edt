@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,54 +19,54 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DojoCalendar widget</title>
 </head>
-<body id="redt00129"><a name="redt00129"><!-- --></a>
+<body id="redt00129">
 
 
-<h1 class="topictitle1">DojoCalendar widget</h1>
+<h1 class="title topictitle1">DojoCalendar widget</h1>
 
 
 
-<div><p>The DojoCalendar widget creates a calendar and displays
+<div class="body"><p class="shortdesc">The DojoCalendar widget creates a calendar and displays
 a value of type Date.</p>
 
-<div class="p">The user can set the date with a click, as shown here:<div class="fignone" id="redt00129__myCalendar01"><a name="redt00129__myCalendar01"><!-- --></a><img src="../images/regl_dojo_widget_calendar01.jpg" alt="A Dojo calendar"></img></div>
+<div class="p">The user can set the date with a click, as shown here:<div class="fig fignone" id="redt00129__myCalendar01"><img class="image" src="../images/regl_dojo_widget_calendar01.jpg" alt="A Dojo calendar"></img></div>
 </div>
 
 <div class="p">The user can change the month by clicking the upper left or right
 arrow. Alternatively, the user can click the upper middle arrow and
-then click an entry in the month selector, as shown here:<div class="fignone" id="redt00129__myCalendar02"><a name="redt00129__myCalendar02"><!-- --></a><img src="../images/regl_dojo_widget_calendar02.jpg" alt="A Dojo calendar"></img></div>
+then click an entry in the month selector, as shown here:<div class="fig fignone" id="redt00129__myCalendar02"><img class="image" src="../images/regl_dojo_widget_calendar02.jpg" alt="A Dojo calendar"></img></div>
 </div>
 
-<p>The user can change the year by clicking the left or right year
+<p class="p">The user can change the year by clicking the left or right year
 at the bottom of the calendar.</p>
 
-<div class="p">Here is a supported property:<dl>
-<dt class="dlterm">value</dt>
+<div class="p">Here is a supported property:<dl class="dl">
+<dt class="dt dlterm">value</dt>
 
-<dd>A Date value that represents a calendar date. <p>You can get or
+<dd class="dd">A Date value that represents a calendar date. <p class="p">You can get or
 set the date. The default is the current date.</p>
 </dd>
 
 </dl>
 </div>
 
-<div class="p">Here is a supported function:<dl>
-<dt class="dlterm">isSelectorOpen</dt>
+<div class="p">Here is a supported function:<dl class="dl">
+<dt class="dt dlterm">isSelectorOpen</dt>
 
-<dd>Indicates whether the month selector is open.<div class="p">Here is the function
-prototype:<pre class="codeblock">function isSelectorOpen() returns (boolean);</pre>
+<dd class="dd">Indicates whether the month selector is open.<div class="p">Here is the function
+prototype:<pre class="pre codeblock">function isSelectorOpen() returns (boolean);</pre>
 </div>
 </dd>
 
 </dl>
 </div>
 
-<p>Other supported properties and functions are described in “Widget
+<p class="p">Other supported properties and functions are described in “Widget
 properties and functions” and “Widget styles.”</p>
 
-<div class="section"><h2 class="sectiontitle">Example</h2><div class="p">You can try different aspects of
+<div class="section"><h2 class="title sectiontitle">Example</h2><div class="p">You can try different aspects of
 the calendar by working with the following code, which also demonstrates
-use of the EGL job scheduler:<pre class="codeblock">package myPkg;
+use of the EGL job scheduler:<pre class="pre codeblock">package myPkg;
 
 import com.ibm.egl.rui.widgets.GridLayout;
 import com.ibm.egl.rui.widgets.GridLayoutData;
@@ -76,7 +76,7 @@ import egl.javascript.Job;
 
 handler MyHandler type RUIhandler {
    initialUI = [ ui ], onConstructionFunction = start, 
-   cssFile=""""""""css/MyRichUIProject.css"""""""", title=""""""""MyHandler""""""""}
+   cssFile="css/MyRichUIProject.css", title="MyHandler"}
 
    ui GridLayout{ columns = 3, rows = 4, cellPadding = 4, 
                   children = [ myButton, myCalendar ] };
@@ -85,29 +85,29 @@ handler MyHandler type RUIhandler {
                             value = DateTimeLib.currentDate() };
 
    myButton DojoButton{ layoutData = new GridLayoutData{ row = 4, column = 2 }, 
-                            text = """"""""Is the month selector open?"""""""", 
+                            text = "Is the month selector open?", 
                             onClick ::= myEventHandler};
 
    doThis Job{runFunction = myRunFunction};
 	
    function start()  
-	     strLib.defaultDateFormat = """"""""yyyy/MM/dd"""""""";
+	     strLib.defaultDateFormat = "yyyy/MM/dd";
    end
 
    function myEventHandler( e event in)
       doThis.repeat(1000);
-      myCalendar.value = """"""""2012/04/08"""""""";
+      myCalendar.value = "2012/04/08";
    end
 
    function myRunFunction()
       isListBoxOpen Boolean = myCalendar.isSelectorOpen();
-      writestdout (""""""""The selector is open:  """""""" + isListBoxOpen);
+      writestdout ("The selector is open:  " + isListBoxOpen);
 
       if (isListBoxOpen)
          doThis.cancel();
       end
 
-      writestdout (""""""""The date is """""""" + myCalendar.value);
+      writestdout ("The date is " + myCalendar.value);
    end
 end</pre>
 </div>

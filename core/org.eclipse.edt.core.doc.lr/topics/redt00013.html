@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,49 +17,49 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Try statement</title>
 </head>
-<body id="redt00013"><a name="redt00013"><!-- --></a>
+<body id="redt00013">
 
 
-<h1 class="topictitle1">Try statement</h1>
+<h1 class="title topictitle1">Try statement</h1>
 
 
-<div><p>A <strong>try</strong> statement embeds a set of statements and makes
+<div class="body"><p class="shortdesc">A <strong class="ph b">try</strong> statement embeds a set of statements and makes
 it possible for your code to handle an exception that occurs when
 those statements run.</p>
 
-<div class="section"><h2 class="sectiontitle">Background on exception handling</h2><div class="p">If a statement
-causes an exception and is embedded in a <strong>try</strong> statement, the
-result is as follows:<ol>
-<li>Processing continues in one of the <strong>onException</strong> blocks that
-is within the <strong>try</strong> statement. Each block handles a particular
+<div class="section"><h2 class="title sectiontitle">Background on exception handling</h2><div class="p">If a statement
+causes an exception and is embedded in a <strong class="ph b">try</strong> statement, the
+result is as follows:<ol class="ol">
+<li class="li">Processing continues in one of the <strong class="ph b">onException</strong> blocks that
+is within the <strong class="ph b">try</strong> statement. Each block handles a particular
 kind of exception, and, at most, only one block runs in response to
-the exception that occurs. <p>In most cases, the first block that
+the exception that occurs. <p class="p">In most cases, the first block that
 matches the exception is the block that runs. However, AnyException
 is the most general kind of exception, and any block reserved for
 AnyException is the last to be considered.</p>
-<p>If an <strong>onException</strong> block
-runs, the exception is handled, and processing continues after the <strong>try</strong> block.</p>
+<p class="p">If an <strong class="ph b">onException</strong> block
+runs, the exception is handled, and processing continues after the <strong class="ph b">try</strong> block.</p>
 </li>
 
-<li>If the exception does not match any of the <strong>onException</strong> blocks,
+<li class="li">If the exception does not match any of the <strong class="ph b">onException</strong> blocks,
 the exception <dfn class="term">propagates</dfn>. The term means that the exception
 is processed as if it had occurred in the function that invoked the
-function where the exception occurred: <ul>
-<li>If the function invocation was itself in a <strong>try</strong> statement,
+function where the exception occurred: <ul class="ul">
+<li class="li">If the function invocation was itself in a <strong class="ph b">try</strong> statement,
 processing continues as described in step 1, but in the invoking function. </li>
 
-<li>If the exception does not match any of the <strong>onException</strong> blocks
+<li class="li">If the exception does not match any of the <strong class="ph b">onException</strong> blocks
 in the invoking function, or if the function invocation was not in
-a <strong>try</strong> statement at all, the exception propagates further, to
+a <strong class="ph b">try</strong> statement at all, the exception propagates further, to
 the function that invoked the higher-level function.</li>
 
 </ul>
 <div class="p">Propagation continues until the exception is handled or until
-no other functions are in the function stack: <ul>
-<li>If the exception is handled, processing continues at the statement
-that follows the <strong>try</strong> statement that cleared the exception.</li>
+no other functions are in the function stack: <ul class="ul">
+<li class="li">If the exception is handled, processing continues at the statement
+that follows the <strong class="ph b">try</strong> statement that cleared the exception.</li>
 
-<li>Alternatively, if no other functions are in the function stack,
+<li class="li">Alternatively, if no other functions are in the function stack,
 the run unit terminates.</li>
 
 </ul>
@@ -68,46 +68,46 @@ the run unit terminates.</li>
 
 </ol>
 </div>
-<p>If a statement causes an exception and is not embedded
-in a <strong>try</strong> statement, the exception propagates to the invoking
+<p class="p">If a statement causes an exception and is not embedded
+in a <strong class="ph b">try</strong> statement, the exception propagates to the invoking
 function and potentially to yet higher-level functions, as suggested
 earlier.</p>
-<p>If none of the statements in a <strong>try</strong> statement
+<p class="p">If none of the statements in a <strong class="ph b">try</strong> statement
 cause an exception or invoke a function from which an exception is
-propagated, none of the <strong>onException</strong> blocks in the try block
+propagated, none of the <strong class="ph b">onException</strong> blocks in the try block
 run.</p>
-<p>Use of a <strong>try</strong> block slows processing, so you might
+<p class="p">Use of a <strong class="ph b">try</strong> block slows processing, so you might
 include only statements that are more likely than others to cause
 an exception. Examples include database-access statements and service
 invocations.</p>
-<p>You can code a <strong>throw</strong> statement to explicitly
+<p class="p">You can code a <strong class="ph b">throw</strong> statement to explicitly
 cause an exception, which is then processed as any other exception
 is processed. For details, see “throw statement.”</p>
 </div>
 
 <anchor id="intro_more"></anchor>
 
-<div class="section" id="redt00013__sql_syntax"><a name="redt00013__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00013__syntax_figure"><a name="redt00013__syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_core_try.gif" alt="Syntax diagram for the try statement"></img><br></br>
+<div class="section" id="redt00013__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00013__syntax_figure">
+<br></br><img class="image" src="../images/redt_core_try.gif" alt="Syntax diagram for the try statement"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">exceptionRecordVariable</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">exceptionRecordVariable</var></dt>
 
-<dd>A declaration of a record with the Exception stereotype. The record
-includes the <span class="synph"><span class="kwd">messageID</span></span> and <span class="synph"><span class="kwd">message</span></span> field
+<dd class="dd">A declaration of a record with the Exception stereotype. The record
+includes the <span class="ph synph"><span class="keyword kwd">messageID</span></span> and <span class="ph synph"><span class="keyword kwd">message</span></span> field
 and possible additional fields as well, depending on the Record type.</dd>
 
 
-<dt class="dlterm"><var class="varname">statement</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
 
-<dd>An EGL statement.</dd>
+<dd class="dd">An EGL statement.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></div>
 
-<div class="example" id="redt00013__example"><a name="redt00013__example"><!-- --></a><p>The following <strong>try</strong> statement embeds
+<div class="example" id="redt00013__example"><p class="p">The following <strong class="ph b">try</strong> statement embeds
 a statement that accesses a database, but could access several statements:</p>
-<pre class="codeblock">try
+<pre class="pre codeblock">try
    add myPayment to ds;
 
    onException(ex SQLException)
@@ -117,37 +117,37 @@ a statement that accesses a database, but could access several statements:</p>
      SysLib.writeStdOut(ex.message);
 end
 </pre>
-<p>The code responds to the exception by writing a message
+<p class="p">The code responds to the exception by writing a message
 that is provided in the exception record. Other tasks might include
 rolling back a logical unit of work.</p>
 <anchor id="example_more"></anchor></div>
 
-<div class="section" id="redt00013__compat"><a name="redt00013__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00013__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00013__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d8958e178">Target</th>
+<div class="section" id="redt00013__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00013__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d10488e178">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d8958e181">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d10488e181">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00013__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d8958e178 ">Java</td>
+<tr id="redt00013__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d10488e178 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d8958e181 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d10488e181 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00013__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d8958e178 ">JavaScript</td>
+<tr id="redt00013__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d10488e178 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d8958e181 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d10488e181 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -162,7 +162,7 @@ rolling back a logical unit of work.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

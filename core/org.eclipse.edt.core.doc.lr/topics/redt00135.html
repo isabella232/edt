@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,64 +19,64 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DojoCurrencyTextBox widget</title>
 </head>
-<body id="redt00135"><a name="redt00135"><!-- --></a>
+<body id="redt00135">
 
 
-<h1 class="topictitle1">DojoCurrencyTextBox widget</h1>
+<h1 class="title topictitle1">DojoCurrencyTextBox widget</h1>
 
 
 
-<div><p>The DojoCurrencyTextBox widget defines a text box that
+<div class="body"><p class="shortdesc">The DojoCurrencyTextBox widget defines a text box that
 contains a numeric currency value. This widget is based on the Dojo
 dijit.form.CurrencyTextBox definition.</p>
 
-<div class="p">Here are the supported fields: <dl>
-<dt class="dlterm">constraints</dt>
+<div class="p">Here are the supported fields: <dl class="dl">
+<dt class="dt dlterm">constraints</dt>
 
-<dd>A dictionary that is used as an argument during the invocation
+<dd class="dd">A dictionary that is used as an argument during the invocation
 of functions that in turn validate user input. Those functions are
-referenced by the <span class="synph"><span class="kwd">validators</span></span> field and are
-referred to as <dfn class="term">validator functions</dfn>.<p>The content of
+referenced by the <span class="ph synph"><span class="keyword kwd">validators</span></span> field and are
+referred to as <dfn class="term">validator functions</dfn>.<p class="p">The content of
 the dictionary is appropriate to your business need.</p>
 </dd>
 
 
-<dt class="dlterm">currency</dt>
+<dt class="dt dlterm">currency</dt>
 
-<dd>A 3-letter currency code, in string format. For a list of the
+<dd class="dd">A 3-letter currency code, in string format. For a list of the
 currency codes, many of which are supported in Dojo, see the International
 Organization for Standardization (ISO) standard 4217 at the following
-web site:<ul class="simple">
-<li><a href="http://www.iso.org/iso/support/currency_codes_list-1.htm" target="_blank">http://www.iso.org/iso/support/currency_codes_list-1.htm</a></li>
+web site:<ul class="sl simple">
+<li class="sli"><a class="xref" href="http://www.iso.org/iso/support/currency_codes_list-1.htm" target="_blank">http://www.iso.org/iso/support/currency_codes_list-1.htm</a></li>
 
 </ul>
  </dd>
 
 
-<dt class="dlterm">errorMessage</dt>
+<dt class="dt dlterm">errorMessage</dt>
 
-<dd>The message that is displayed when the input is present but invalid.
+<dd class="dd">The message that is displayed when the input is present but invalid.
 The message is displayed in an output field that is provided for you.</dd>
 
 
-<dt class="dlterm">inputRequired</dt>
+<dt class="dt dlterm">inputRequired</dt>
 
-<dd>A Boolean value that indicates whether input is required. The
-error message in this case is the value of the <span class="synph"><span class="kwd">inputRequiredMessage</span></span> field. <p>This
+<dd class="dd">A Boolean value that indicates whether input is required. The
+error message in this case is the value of the <span class="ph synph"><span class="keyword kwd">inputRequiredMessage</span></span> field. <p class="p">This
 validation precedes any others, but is active only after the text
 box gains focus after having lost focus.</p>
 </dd>
 
 
-<dt class="dlterm">inputRequiredMessage</dt>
+<dt class="dt dlterm">inputRequiredMessage</dt>
 
-<dd>A string that is displayed when the <span class="synph"><span class="kwd">InputRequired</span></span> field
+<dd class="dd">A string that is displayed when the <span class="ph synph"><span class="keyword kwd">InputRequired</span></span> field
 is true, the currency text box has no content, and the box gains focus
 after having lost focus. The message is displayed in an output field
-that is provided for you.<p>If the <span class="synph"><span class="kwd">inputRequiredMessage</span></span> field
+that is provided for you.<p class="p">If the <span class="ph synph"><span class="keyword kwd">inputRequiredMessage</span></span> field
 is not present, the error message is the following string, as appropriate
-to the locale: <span class="synph">“This value is required”</span>.</p>
-<div class="note"><span class="notetitle">Note:</span> To
+to the locale: <span class="ph synph">“This value is required”</span>.</p>
+<div class="note note"><span class="notetitle">Note:</span> To
 set the locale used in the Rich UI editor, see the directions for
 the Languages tab in “Setting preferences for Rich UI appearance.”
 To set the runtime locale at deployment time, see “Adding Rich UI
@@ -84,42 +84,42 @@ deployment entries in the EGL deployment descriptor.”</div>
 </dd>
 
 
-<dt class="dlterm">placeholder</dt>
+<dt class="dt dlterm">placeholder</dt>
 
-<dd>A string that is displayed in the currency text box but that is
+<dd class="dd">A string that is displayed in the currency text box but that is
 removed as soon as the user clicks into the box. The string is re-displayed
 in the field whenever the box is empty and the user is not working
 there.</dd>
 
 
-<dt class="dlterm">promptMessage</dt>
+<dt class="dt dlterm">promptMessage</dt>
 
-<dd>A string that prompts the user's input. When the currency text
+<dd class="dd">A string that prompts the user's input. When the currency text
 box gains focus, the string is displayed next to the box, in an output
 field that is provided for you, and the display continues until the
 user begins adding or changing content. To further set the string
-position, set the <span class="synph"><span class="kwd">tooltipPosition</span></span> field.</dd>
+position, set the <span class="ph synph"><span class="keyword kwd">tooltipPosition</span></span> field.</dd>
 
 
-<dt class="dlterm">readOnly</dt>
+<dt class="dt dlterm">readOnly</dt>
 
-<dd>A Boolean value that indicates whether the currency text box is
+<dd class="dd">A Boolean value that indicates whether the currency text box is
 protected from user input.</dd>
 
 
-<dt class="dlterm">selectOnClick</dt>
+<dt class="dt dlterm">selectOnClick</dt>
 
-<dd>A Boolean value that indicates what happens when the user clicks
-from outside the currency text box into the box: <dl>
-<dt class="dlterm">False (the default)</dt>
+<dd class="dd">A Boolean value that indicates what happens when the user clicks
+from outside the currency text box into the box: <dl class="dl">
+<dt class="dt dlterm">False (the default)</dt>
 
-<dd>The content of the currency text box is not selected. The update
+<dd class="dd">The content of the currency text box is not selected. The update
 cursor is displayed at the click position.</dd>
 
 
-<dt class="dlterm">True</dt>
+<dt class="dt dlterm">True</dt>
 
-<dd>The content of the currency text box is selected. Any subsequent
+<dd class="dd">The content of the currency text box is selected. Any subsequent
 click displays the update cursor at the click position, and the content
 of the currency text box is no longer selected.</dd>
 
@@ -127,89 +127,89 @@ of the currency text box is no longer selected.</dd>
 </dd>
 
 
-<dt class="dlterm">validators</dt>
+<dt class="dt dlterm">validators</dt>
 
-<dd>An array of validator functions that are invoked in array-element
+<dd class="dd">An array of validator functions that are invoked in array-element
 order. If the user's input passed validation in a given function,
 that function indicates the success by returning a null or blank;
 and only in that case is the next function in the array invoked. If
 the user's input did not pass validation, the function indicates a
-failure by returning a nonblank string.<p>The sequence of validators
+failure by returning a nonblank string.<p class="p">The sequence of validators
 is invoked when the widget loses focus. </p>
-<p>If the Dojo currency
+<p class="p">If the Dojo currency
 text box is referenced by a controller, you can code controller-specific
 validator functions, which are wholly separate from the functions
 being described. The controller-specific functions are invoked only
 if the field-specific validation is successful and only after the
 widget loses focus.</p>
-<p>For details on controllers, see “Rich UI
+<p class="p">For details on controllers, see “Rich UI
 validation and formatting.” </p>
 <div class="p">Each of the field-specific validator
-functions conforms to the following Delegate part:<pre class="codeblock">Delegate Validator(input String in, constraints dictionary in)
+functions conforms to the following Delegate part:<pre class="pre codeblock">Delegate Validator(input String in, constraints dictionary in)
          returns(string?) end</pre>
-<dl>
-<dt class="dlterm">input</dt>
+<dl class="dl">
+<dt class="dt dlterm">input</dt>
 
-<dd>The user's input, including characters from previous keystrokes
+<dd class="dd">The user's input, including characters from previous keystrokes
 in the same Dojo currency text box.</dd>
 
 
-<dt class="dlterm">constraints</dt>
+<dt class="dt dlterm">constraints</dt>
 
-<dd>A dictionary that provides information used to construct a regular
+<dd class="dd">A dictionary that provides information used to construct a regular
 expression or to guide processing inside the validator functions.
 For example, the dictionary might specify the user's level of security.</dd>
 
 
-<dt class="dlterm">string?</dt>
+<dt class="dt dlterm">string?</dt>
 
-<dd>A null or blank (if no error occurred) or a nonblank string (to
+<dd class="dd">A null or blank (if no error occurred) or a nonblank string (to
 indicate that an error occurred).</dd>
 
 </dl>
 </div>
-<p>You might want to invoke, from your validator,
+<p class="p">You might want to invoke, from your validator,
 one or more of the functions provided in the DojoLib library.</p>
 </dd>
 
 
-<dt class="dlterm">value</dt>
+<dt class="dt dlterm">value</dt>
 
-<dd>The numeric value, without the currency symbol.</dd>
+<dd class="dd">The numeric value, without the currency symbol.</dd>
 
 </dl>
 </div>
 
 <div class="p">The following functions are specific to the EGL Dojo widget types
 that support view-level validation, as listed in “Rich UI validation
-and formatting”: <dl>
-<dt class="dlterm">getValidState</dt>
+and formatting”: <dl class="dl">
+<dt class="dt dlterm">getValidState</dt>
 
-<dd>Is solely for internal use.</dd>
+<dd class="dd">Is solely for internal use.</dd>
 
 
-<dt class="dlterm">showErrorIndicator</dt>
+<dt class="dt dlterm">showErrorIndicator</dt>
 
-<dd>Accepts a Boolean value that sets or clears the error indicator
-in the widget. Here is the function prototype:<pre class="codeblock">function showErrorIndicator(aboolean boolean in);</pre>
+<dd class="dd">Accepts a Boolean value that sets or clears the error indicator
+in the widget. Here is the function prototype:<pre class="pre codeblock">function showErrorIndicator(aboolean boolean in);</pre>
 </dd>
 
 
-<dt class="dlterm">showErrorMessage</dt>
+<dt class="dt dlterm">showErrorMessage</dt>
 
-<dd>Accepts an error message for display in the error-message tooltip
+<dd class="dd">Accepts an error message for display in the error-message tooltip
 near the widget. The tooltip is shown when the widget gains focus
-and is hidden when the widget loses focus. Here is the function prototype:<pre class="codeblock">function showErrorMessage(msg string in);</pre>
+and is hidden when the widget loses focus. Here is the function prototype:<pre class="pre codeblock">function showErrorMessage(msg string in);</pre>
 </dd>
 
 </dl>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import dojo.widgets.DojoCurrencyTextBox;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import dojo.widgets.DojoCurrencyTextBox;</pre>
 </div>
 
 </div>

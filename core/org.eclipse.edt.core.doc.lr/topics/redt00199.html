@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,74 +19,74 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>SysLib.rollback function</title>
 </head>
-<body id="redt00199"><a name="redt00199"><!-- --></a>
+<body id="redt00199">
 
 
-<h1 class="topictitle1">SysLib.rollback function</h1>
+<h1 class="title topictitle1">SysLib.rollback function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.rollback</span></span> reverses
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">SysLib.rollback</span></span> reverses
 updates that were made to recoverable resources since the last commit.</p>
 
-<a name="redt00199__main"><!-- --></a><dl id="redt00199__main">
-<dt class="dlterm"><a name="redt00199__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00199__main">
+<dt class="dt dlterm"><a name="redt00199__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00199__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00199__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00199__syntax_block"><a name="redt00199__syntax_block"><!-- --></a>static function rollback(); </pre>
+<dd class="dd"><pre class="pre codeblock" id="redt00199__syntax_block">static function rollback(); </pre>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00199__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00199__use"><!-- --></a>Example use</dt>
 
-<dd><p>Here is example code:</p>
-<pre class="codeblock">SysLib.rollback( )</pre>
+<dd class="dd"><p class="p">Here is example code:</p>
+<pre class="pre codeblock">SysLib.rollback( )</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00199__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00199__comments"><!-- --></a>Comments</dt>
 
-<dd><p>If a program ends because of an error, a rollback occurs automatically.</p>
-<pre class="codeblock"></pre>
+<dd class="dd"><p class="p">If a program ends because of an error, a rollback occurs automatically.</p>
+<pre class="pre codeblock"></pre>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00199__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00199__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00199__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00199__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d60141e100">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00199__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d72947e100">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d60141e103">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d72947e103">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00199__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d60141e100 ">Java</td>
+<tr id="redt00199__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d72947e100 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d60141e103 "><ul>
-<li><span class="synph"><span class="kwd">sysLib.rollback()</span></span> reverses changes to
-the following resources:<ul>
-<li>Relational databases</li>
+<td class="entry" valign="top" width="50%" headers="d72947e103 "><ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">sysLib.rollback()</span></span> reverses changes to
+the following resources:<ul class="ul">
+<li class="li">Relational databases</li>
 
 
 </ul>
 </li>
 
-<li>Do not call <span class="synph"><span class="kwd">sysLib.rollback()</span></span> from a
-generated Java program that
+<li class="li">Do not call <span class="ph synph"><span class="keyword kwd">sysLib.rollback()</span></span> from a
+generated Java™ program that
 you invoked through an Enterprise JavaBean (EJB). EJBs cannot touch
 the transaction in which they run.</li>
 
@@ -96,11 +96,11 @@ the transaction in which they run.</li>
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00199__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d60141e100 ">JavaScript</td>
+<tr id="redt00199__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d72947e100 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d60141e103 "><span class="synph"><span class="kwd">SysLib.rollback</span></span> is
-not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d72947e103 "><span class="ph synph"><span class="keyword kwd">SysLib.rollback</span></span> is
+not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -115,7 +115,7 @@ not supported.<p class="compat_javascript_more"></p>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

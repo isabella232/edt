@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,55 +16,55 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Class classifier overview</title>
 </head>
-<body id="cedt00029"><a name="cedt00029"><!-- --></a>
+<body id="cedt00029">
 
 
-<h1 class="topictitle1">Class classifier overview</h1>
+<h1 class="title topictitle1">Class classifier overview</h1>
 
 
 
-<div><p>The Class classifier is the basis of the ANY type, List
+<div class="body"><p class="shortdesc">The Class classifier is the basis of the ANY type, List
 types and Dictionary type, all of which are reference types. You cannot
 use the Class classifier to define custom types. </p>
 
-<p>The following sections further describe the types.</p>
+<p class="p">The following sections further describe the types.</p>
 
-<div class="section"><h2 class="sectiontitle">ANY</h2><p>A field of type ANY can reference an
+<div class="section"><h2 class="title sectiontitle">ANY</h2><p class="p">A field of type ANY can reference an
 instance of any type. For example, if you assign the value 5 to the
 field, the field is referencing an instance of type INT. If you then
-assign the value “yes!,"""" a new memory area is assigned the value,
+assign the value “yes!," a new memory area is assigned the value,
 and the field references that area, which is of type STRING. </p>
-<p>One
+<p class="p">One
 purpose of a field of type ANY is to store different types of values
 in a single dictionary or list.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">List types</h2><p>An instance of a List type includes
+<div class="section"><h2 class="title sectiontitle">List types</h2><p class="p">An instance of a List type includes
 an ordered sequence of elements, and you can increase or decrease
 the number of those elements at run time.</p>
 <div class="p">The following code
-initializes named lists with literal values:<pre class="codeblock">myINTList     INT[] = [1,2,3];
-mySTRINGList  STRING[] = [""""bye"""", """"ciao""""];
-myBooleanList BOOLEAN[] = [ (10000 &gt;&gt;&gt;&gt; 50000), (10000 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 50000) ];   
+initializes named lists with literal values:<pre class="pre codeblock">myINTList     INT[] = [1,2,3];
+mySTRINGList  STRING[] = ["bye", "ciao"];
+myBooleanList BOOLEAN[] = [ (10000 &gt; 50000), (10000 &lt; 50000) ];   
 my2Dimension  INT[][] = [[1,2],[3,4]];
 </pre>
 </div>
-<div class="p">Each variable is not of type List, but of type <em>xyz</em> List
-or <em>xyz</em>[], where <em>xyz</em> is the type that is specified in
-the variable declaration. The <em>xyz</em> List and <em>xyz</em>[] usages
-are equivalent. Here are details on the example: <ul>
-<li><samp class="codeph">myIntList</samp> is a variable of type INT List or INT[].
+<div class="p">Each variable is not of type List, but of type <em class="ph i">xyz</em> List
+or <em class="ph i">xyz</em>[], where <em class="ph i">xyz</em> is the type that is specified in
+the variable declaration. The <em class="ph i">xyz</em> List and <em class="ph i">xyz</em>[] usages
+are equivalent. Here are details on the example: <ul class="ul">
+<li class="li"><samp class="ph codeph">myIntList</samp> is a variable of type INT List or INT[].
 The second element is of type INT and contains the value 2.</li>
 
-<li><samp class="codeph">mySTRINGList</samp> is a variable of type STRING list
+<li class="li"><samp class="ph codeph">mySTRINGList</samp> is a variable of type STRING list
 or STRING[]. Its second element is of type STRING and contains the
 value “ciao”.</li>
 
-<li><samp class="codeph">myBooleanList</samp> is a variable of type BOOLEAN list
+<li class="li"><samp class="ph codeph">myBooleanList</samp> is a variable of type BOOLEAN list
 or BOOLEAN[]. Its second element is of type BOOLEAN and contains the
 value TRUE.</li>
 
-<li><samp class="codeph">my2Dimension</samp> is a two-dimension list; it is of
+<li class="li"><samp class="ph codeph">my2Dimension</samp> is a two-dimension list; it is of
 type INT[][]. The second element is of type INT[] and references the
 list [3, 4]. The second element of that second list is of type INT
 and contains the value 4.</li>
@@ -72,39 +72,39 @@ and contains the value 4.</li>
 </ul>
 </div>
 <div class="p">In each case, your code identifies the specific element
-by a list name and an index; for example: <ul>
-<li>The second element of <samp class="codeph">myIntList</samp> is <samp class="codeph">myIntList[2]</samp>. </li>
+by a list name and an index; for example: <ul class="ul">
+<li class="li">The second element of <samp class="ph codeph">myIntList</samp> is <samp class="ph codeph">myIntList[2]</samp>. </li>
 
-<li>The second element of <samp class="codeph">my2Dimension</samp> is <samp class="codeph">my2Dimension[2]</samp>.</li>
+<li class="li">The second element of <samp class="ph codeph">my2Dimension</samp> is <samp class="ph codeph">my2Dimension[2]</samp>.</li>
 
-<li>The second element of <samp class="codeph">my2Dimension[2]</samp> is <samp class="codeph">my2Dimension[2][2]</samp>.</li>
+<li class="li">The second element of <samp class="ph codeph">my2Dimension[2]</samp> is <samp class="ph codeph">my2Dimension[2][2]</samp>.</li>
 
 </ul>
 </div>
-<p>This usage shows that a type can be the basis of an unnamed
+<p class="p">This usage shows that a type can be the basis of an unnamed
 instance. Such an instance can be referenced only by use of an index.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Dictionary type</h2><div class="p">Here is a declaration of
+<div class="section"><h2 class="title sectiontitle">Dictionary type</h2><div class="p">Here is a declaration of
 a dictionary, which is an instance that is based on the Dictionary
-type:<pre class="codeblock">myDictionary Dictionary
+type:<pre class="pre codeblock">myDictionary Dictionary
 {
    driverID  = myInteger,
-   lastName  = """"Twain"""",
-   firstName = """"Mark""""
+   lastName  = "Twain",
+   firstName = "Mark"
 	};</pre>
 </div>
-<p>As shown, a dictionary is composed of a set
+<p class="p">As shown, a dictionary is composed of a set
 of entries, each of which is a key and related value. You can read,
 update, and delete the key-value pairs at run time and can add new
 ones. A later section gives further details.</p>
-<p>When you add a
-variable such as <samp class="codeph">myInteger</samp> to a dictionary, you add
+<p class="p">When you add a
+variable such as <samp class="ph codeph">myInteger</samp> to a dictionary, you add
 a copy of the variable. Changes to the variable outside the dictionary
 do not change the value of the related entry in the dictionary.</p>
-<p>By
-default, a dictionary is not case sensitive: <samp class="codeph">driverID</samp> is
-the same as <samp class="codeph">DRiverID</samp>. </p>
+<p class="p">By
+default, a dictionary is not case sensitive: <samp class="ph codeph">driverID</samp> is
+the same as <samp class="ph codeph">DRiverID</samp>. </p>
 </div>
 
 </div>

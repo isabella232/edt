@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -29,70 +29,70 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>eglx.persistence.sql package</title>
 </head>
-<body id="redt00266"><a name="redt00266"><!-- --></a>
+<body id="redt00266">
 
 
-<h1 class="topictitle1">eglx.persistence.sql package</h1>
+<h1 class="title topictitle1">eglx.persistence.sql package</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">eglx.persistence.sql</span></span>  </p>
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">eglx.persistence.sql</span></span>  </p>
 
-<div class="p" id="redt00266__types"><a name="redt00266__types"><!-- --></a>
-<div class="tablenoborder"><a name="redt00266__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00266__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00174.html" title="Column identifies the database column that corresponds to the field.">Column annotation</a></td>
-
-</tr>
-
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00175.html" title="GeneratedValue marks a field that is related to a table column for which the value is computed automatically by the database.">GeneratedValue annotation</a></td>
+<div class="p" id="redt00266__types">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00266__types_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00174.html" title="Column identifies the database column that corresponds to the field.">Column annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00267.html" title="JoinColumn indicates that a field is related to a column on which a database join is based. This annotation is not available in version .7.">JoinColumn annotation</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00175.html" title="GeneratedValue marks a field for which the corresponding table column receives a value that is assigned by the database management system. The assignment occurs during an add statement, which also places the DBMS-generated value into the field.">GeneratedValue annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00173.html" title="SecondaryTables identifies other database tables to which an entity is related. This annotation is not available in version .7.">SecondaryTables annotation and related types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00267.html" title="JoinColumn indicates that a field is related to a column on which a database join is based. This annotation is not available in version .7.">JoinColumn annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00162.html" title="SQLDataSource represents a connection to a database. An instance of this type is used in the EGL statements that interact with a database.">SQLDataSource external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00173.html" title="SecondaryTables identifies other database tables to which an entity is related. This annotation is not available in version .7.">SecondaryTables annotation and related types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00268.html" title="SQLException is the type of exception record that is returned after a database access fails.">SQLException external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00162.html" title="SQLDataSource represents a connection to a database. An instance of this type is used in the EGL statements that interact with a database.">SQLDataSource external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00163.html" title="SQLResultSet represents a result set that is returned from the execution of an SQL query.">SQLResultSet external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00268.html" title="SQLException is the type of exception record that is returned after a database access fails.">SQLException external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00075.html" title="SQLResultSetControl ...">SQLResultSetControl annotation and related types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00163.html" title="SQLResultSet represents a result set that is returned from the execution of an SQL query.">SQLResultSet external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00177.html" title="SQLStatement represents a dynamically prepared SQL statement. Instances of this type can be create only by using the Prepare statement.">SQLStatement external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00075.html" title="SQLResultSetControl ...">SQLResultSetControl annotation and related types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00269.html" title="SQLWarning is a set of error-type details that result from an interaction with a relational database. In some cases warnings are thrown like other errors, but in other cases you must access the error object by invoking the getWarnings function of either the SQL data source or the SQL result set. A warning is less significant than another kind of error.">SQLWarning external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00177.html" title="SQLStatement represents a dynamically prepared SQL statement. Instances of this type can be create only by using the Prepare statement.">SQLStatement external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00172.html" title="Table represents the primary database table to which you are relating an external type, Record type, or Handler type.">Table annotation</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00269.html" title="SQLWarning is a set of error-type details that result from an interaction with a relational database. In some cases warnings are thrown like other errors, but in other cases you must access the error object by invoking the getWarnings function of either the SQL data source or the SQL result set. A warning is less significant than another kind of error.">SQLWarning external type</a></td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00172.html" title="Table represents the primary database table to which you are relating an external type, Record type, or Handler type.">Table annotation</a></td>
 
 </tr>
 
@@ -103,31 +103,31 @@
 </div>
 
 <div class="p">
-<div class="tablenoborder"><a name="redt00266__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00266__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d92847e215">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00266__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d111420e229">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d92847e218">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d111420e232">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00266__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d92847e215 ">Java</td>
+<tr id="redt00266__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d111420e229 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d92847e218 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d111420e232 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00266__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d92847e215 ">JavaScript</td>
+<tr id="redt00266__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d111420e229 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d92847e218 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d111420e232 ">Database access is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

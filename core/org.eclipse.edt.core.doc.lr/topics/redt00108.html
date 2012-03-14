@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,16 +19,16 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Box widget</title>
 </head>
-<body id="redt00108"><a name="redt00108"><!-- --></a>
+<body id="redt00108">
 
 
-<h1 class="topictitle1">Box widget</h1>
+<h1 class="title topictitle1">Box widget</h1>
 
 
 
-<div><p>A Rich UI box widget defines a box that embeds other widgets.</p>
+<div class="body"><p class="shortdesc">A Rich UI box widget defines a box that embeds other widgets.</p>
 
-<p>You can indicate how many columns are in the box. If the number
+<p class="p">You can indicate how many columns are in the box. If the number
 of columns is three, for example, the first three embedded widgets
 are on the first row in the box, the fourth through sixth are on the
 second row, and so forth. If the number of columns is one, all the
@@ -37,28 +37,28 @@ a column equals the width of the largest widget in the column, and
 you can indicate whether the embedded widgets in a given column are
 aligned at the column's center, right, or left.</p>
 
-<p>Vertical and horizontal scroll bars appear if necessary to give
+<p class="p">Vertical and horizontal scroll bars appear if necessary to give
 the user access to widgets that are out of sight.</p>
 
-<div class="p">The following fields are supported: <ul>
-<li><span class="synph"><span class="kwd">alignment</span></span>, which holds an integer value
+<div class="p">The following fields are supported: <ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">alignment</span></span>, which holds an integer value
 that indicates how the content is aligned in each column: 0 for left,
 1 for center, or 2 for right</li>
 
-<li><span class="synph"><span class="kwd">children</span></span>, which holds an array of widgets,
+<li class="li"><span class="ph synph"><span class="keyword kwd">children</span></span>, which holds an array of widgets,
 as described in “Rich UI widget fields.”</li>
 
-<li><span class="synph"><span class="kwd">columns</span></span>, which holds an integer that
+<li class="li"><span class="ph synph"><span class="keyword kwd">columns</span></span>, which holds an integer that
 identifies the number of columns in the box</li>
 
 </ul>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Box;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Box;</pre>
 </div>
 
 </div>

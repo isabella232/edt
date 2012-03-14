@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="copyright" content="(C) Copyright 2005"></meta>
@@ -16,113 +16,113 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL Syntax</title>
 </head>
-<body id="cedt00013"><a name="cedt00013"><!-- --></a>
+<body id="cedt00013">
 
 
-<h1 class="topictitle1">EGL Syntax</h1>
+<h1 class="title topictitle1">EGL Syntax</h1>
 
 
 
-<div><p>EGL source code is a sequence of <dfn class="term">tokens</dfn>, which
+<div class="body"><p class="shortdesc">EGL source code is a sequence of <dfn class="term">tokens</dfn>, which
 are the smallest units of meaning. At a more composite level, the
 language includes the following constructs: type definitions, expressions,
 statements, and set-values blocks.</p>
 
-<div class="p">The EGL tokens are as follows:<dl>
-<dt class="dlterm">Identifiers</dt>
+<div class="p">The EGL tokens are as follows:<dl class="dl">
+<dt class="dt dlterm">Identifiers</dt>
 
-<dd>The names of parts, functions, variables, and constants. An example
-is <samp class="codeph">myCarCount</samp>, which might be a variable name. For
+<dd class="dd">The names of parts, functions, variables, and constants. An example
+is <samp class="ph codeph">myCarCount</samp>, which might be a variable name. For
 details, see “Naming conventions.”</dd>
 
 
-<dt class="dlterm">Literals</dt>
+<dt class="dt dlterm">Literals</dt>
 
-<dd>Fixed values of a given type. Examples are the integer 5, the
+<dd class="dd">Fixed values of a given type. Examples are the integer 5, the
 string “yes!”, and the Boolean value TRUE. For details, see “Literals.”</dd>
 
 
-<dt class="dlterm">Operators</dt>
+<dt class="dt dlterm">Operators</dt>
 
-<dd>Symbols that affect <dfn class="term">operands</dfn>, which might be keywords,
+<dd class="dd">Symbols that affect <dfn class="term">operands</dfn>, which might be keywords,
 identifiers, or literals. An operand is on the left or right of an
-operator. For example, the <span class="synph"><span class="kwd">&lt;&lt;&lt;&lt;</span></span> operator
+operator. For example, the <span class="ph synph"><span class="keyword kwd">&lt;</span></span> operator
 is part of a condition that tests whether the operand on the left
-has a lesser value than the operand on the right. <p>For details,
+has a lesser value than the operand on the right. <p class="p">For details,
 see “Operators and precedence.”</p>
 </dd>
 
 
-<dt class="dlterm">Reserved words</dt>
+<dt class="dt dlterm">Reserved words</dt>
 
-<dd>Identifiers that can be used only in a particular context. For
-example, <span class="synph"><span class="kwd">add</span></span> is a statement name. For a
+<dd class="dd">Identifiers that can be used only in a particular context. For
+example, <span class="ph synph"><span class="keyword kwd">add</span></span> is a statement name. For a
 list, see “Reserved words.” </dd>
 
 
-<dt class="dlterm">Special characters</dt>
+<dt class="dt dlterm">Special characters</dt>
 
-<dd>Punctuation marks that divide tokens, as necessary for the parsing
-done by the EGL compiler. For example, parentheses (<span class="synph"><span class="kwd">(
-)</span></span>) surround a condition such <samp class="codeph">(myVariable &lt;&lt;&lt;&lt;
-yourVariable)</samp>.<p>For details, see “Special characters.”</p>
+<dd class="dd">Punctuation marks that divide tokens, as necessary for the parsing
+done by the EGL compiler. For example, parentheses (<span class="ph synph"><span class="keyword kwd">(
+)</span></span>) surround a condition such <samp class="ph codeph">(myVariable &lt;
+yourVariable)</samp>.<p class="p">For details, see “Special characters.”</p>
 </dd>
 
 </dl>
 </div>
 
 <div class="p">At a more composite level, the language includes the following
-constructs:<dl>
-<dt class="dlterm">Type definitions</dt>
+constructs:<dl class="dl">
+<dt class="dt dlterm">Type definitions</dt>
 
-<dd>Sequences of tokens that define a part. Here is an example:<pre class="codeblock">DataItem
+<dd class="dd">Sequences of tokens that define a part. Here is an example:<pre class="pre codeblock">DataItem
    NumberOfCars INT
 End</pre>
-<p>For an overview, see “Overview of the classifiers.”</p>
+<p class="p">For an overview, see “Overview of the classifiers.”</p>
 </dd>
 
 
-<dt class="dlterm">Expressions</dt>
+<dt class="dt dlterm">Expressions</dt>
 
-<dd>Sequences of tokens that express unnamed instances. For example, <samp class="codeph">4
+<dd class="dd">Sequences of tokens that express unnamed instances. For example, <samp class="ph codeph">4
 + 5</samp> might be assigned to a variable, but is itself a value
-of type INT.<p>For details, see “Expressions.”</p>
+of type INT.<p class="p">For details, see “Expressions.”</p>
 </dd>
 
 
-<dt class="dlterm">Statements</dt>
+<dt class="dt dlterm">Statements</dt>
 
-<dd>An instruction that causes work to occur at run time or that organizes
-code at development and transformation time: <ul>
-<li>The runtime work might be variable declaration, data manipulation,
+<dd class="dd">An instruction that causes work to occur at run time or that organizes
+code at development and transformation time: <ul class="ul">
+<li class="li">The runtime work might be variable declaration, data manipulation,
 logic invocation, input to (or output from) a user interface or persistent
 data storage, and so forth. </li>
 
-<li>The organization work might include assigning types to packages,
+<li class="li">The organization work might include assigning types to packages,
 importing types from other packages, and enabling a shortcut for referencing
 identifiers that are in libraries.</li>
 
 </ul>
-<p>Also valid is an empty statement: a semicolon (;) that stands
+<p class="p">Also valid is an empty statement: a semicolon (;) that stands
 is in place of an instruction. You might use an empty statement as
 a placeholder or for visual clarity.</p>
 <div class="p">Most statements begin with
 an EGL keyword. For example, the following statement writes “yes!”
-to the standard output:<pre class="codeblock">SysLib.writeStdOut(""yes!"");</pre>
+to the standard output:<pre class="pre codeblock">SysLib.writeStdOut("yes!");</pre>
 </div>
-<p>For
+<p class="p">For
 details, see “Statements table.”</p>
 </dd>
 
 
-<dt class="dlterm">Set-values blocks</dt>
+<dt class="dt dlterm">Set-values blocks</dt>
 
-<dd>Code areas that set annotations and field values and are delimited
-by curly brackets ({}), as shown in the following declaration:<pre class="codeblock">myCarCount NumberOfCars <strong>{ InputRequired = yes, DisplayName = ""Number of cars:  "" }</strong>;</pre>
-<p>The
-example set-values block assigns values to the <span class="synph"><span class="kwd">InputRequired</span></span> and <span class="synph"><span class="kwd">DisplayName</span></span> annotations
-for the <samp class="codeph">myCarCount</samp> variable.</p>
-<p>Set-values blocks
+<dd class="dd">Code areas that set annotations and field values and are delimited
+by curly brackets ({}), as shown in the following declaration:<pre class="pre codeblock">myCarCount NumberOfCars <strong class="ph b">{ InputRequired = yes, DisplayName = "Number of cars:  " }</strong>;</pre>
+<p class="p">The
+example set-values block assigns values to the <span class="ph synph"><span class="keyword kwd">InputRequired</span></span> and <span class="ph synph"><span class="keyword kwd">DisplayName</span></span> annotations
+for the <samp class="ph codeph">myCarCount</samp> variable.</p>
+<p class="p">Set-values blocks
 are used in various ways in type definitions, statements, expressions,
 and other set-values blocks. For details, see “Set-values blocks.”</p>
 </dd>

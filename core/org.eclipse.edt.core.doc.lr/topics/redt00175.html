@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,47 +19,47 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>GeneratedValue annotation</title>
 </head>
-<body id="redt00175"><a name="redt00175"><!-- --></a>
+<body id="redt00175">
 
 
-<h1 class="topictitle1">GeneratedValue annotation</h1>
+<h1 class="title topictitle1">GeneratedValue annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">GeneratedValue</span></span> marks
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">GeneratedValue</span></span> marks
 a field for which the corresponding table column receives a value
 that is assigned by the database management system. The assignment
-occurs during an <strong>add</strong> statement, which also places the DBMS-generated
+occurs during an <strong class="ph b">add</strong> statement, which also places the DBMS-generated
 value into the field.</p>
 
-<a name="redt00175__main"><!-- --></a><dl id="redt00175__main">
-<dt class="dlterm"><a name="redt00175__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00175__main">
+<dt class="dt dlterm"><a name="redt00175__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.persistence.sql</p>
+<dd class="dd"><p class="p">eglx.persistence.sql</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00175__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00175__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p">Consider this custom type:<pre class="codeblock">Record PaymentRec  { @Table {name="PAYMENT"} } 
+<dd class="dd"><div class="p">Consider this custom type:<pre class="pre codeblock">Record PaymentRec  { @Table {name="PAYMENT"} } 
    paymentId int {@ID, @GeneratedValue, @Column { name="PAYMENT_ID" } };
-   description string? { @Column { name="DESCRIPTION"} } ;	
-   amount decimal(10,2) { @Column { name="AMOUNT"} } ;
+   description string? { @Column { name="DESCRIPTION" } } ;	
+   amount decimal(10,2) { @Column { name="AMOUNT" } } ;
 End</pre>
 </div>
-<div class="p">You declare a record of that type:<pre class="codeblock">mypayment PaymentRec;
+<div class="p">You declare a record of that type:<pre class="pre codeblock">mypayment PaymentRec;
 mypayment.description = "shoes";
 mypayment.amount = 123.50;</pre>
 </div>
 <div class="p">The next declaration
 lets your code open a database connection at the first database access
 and in accordance with connection details that are stored in the EGL
-deployment descriptor entry named <samp class="codeph">ds</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource};</pre>
+deployment descriptor entry named <samp class="ph codeph">ds</samp>:<pre class="pre codeblock">ds SQLDataSource?{@Resource};</pre>
 </div>
 <div class="p">Here
-is an <strong>add</strong> statement, which places a DBMS-generated value into
-the PAYMENT_ID column of a new row and into the <samp class="codeph">paymentID</samp> field
-of the record being added:<pre class="codeblock">function addPayment(newPayment PaymentRec in)
+is an <strong class="ph b">add</strong> statement, which places a DBMS-generated value into
+the PAYMENT_ID column of a new row and into the <samp class="ph codeph">paymentID</samp> field
+of the record being added:<pre class="pre codeblock">function addPayment(newPayment PaymentRec in)
    try
       add newPayment to ds;
       onException(ex sqlException)
@@ -72,54 +72,54 @@ end</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00175__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00175__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record GeneratedValue type Annotation {
+<dd class="dd"><pre class="pre codeblock">Record GeneratedValue type Annotation {
    targets=[FieldMbr]
    }
 end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00175__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00175__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd>None.<anchor id="annofields_more"></anchor></dd>
-
-
-<dt class="dlterm"><a name="redt00175__comments"><!-- --></a>Comments</dt>
-
-<dd><anchor id="annocomments_more"></anchor></dd>
+<dd class="dd">None.<anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00175__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00175__comments"><!-- --></a>Comments</dt>
 
-<dd><p></p>
+<dd class="dd"><anchor id="annocomments_more"></anchor></dd>
 
-<div class="tablenoborder"><a name="redt00175__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00175__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d56379e133">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d56379e136">Issue</th>
+<dt class="dt dlterm"><a name="redt00175__compat"><!-- --></a>Compatibility</dt>
+
+<dd class="dd"><p class="p"></p>
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00175__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d68182e133">Target</th>
+
+<th class="entry" valign="bottom" width="50%" id="d68182e136">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00175__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e133 ">Java</td>
+<tr id="redt00175__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d68182e133 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d68182e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00175__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e133 ">JavaScript</td>
+<tr id="redt00175__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d68182e133 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56379e136 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d68182e136 ">Database access is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

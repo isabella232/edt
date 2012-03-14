@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,32 +19,32 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>XMLRootElement annotation</title>
 </head>
-<body id="redt00091"><a name="redt00091"><!-- --></a>
+<body id="redt00091">
 
 
-<h1 class="topictitle1">XMLRootElement annotation</h1>
+<h1 class="title topictitle1">XMLRootElement annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">XMLRootElement</span></span>  provides
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">XMLRootElement</span></span>  provides
 naming and data-type details about the root XML element, which is
 the topmost, most inclusive element in the XML string.</p>
 
-<a name="redt00091__main"><!-- --></a><dl id="redt00091__main">
-<dt class="dlterm"><a name="redt00091__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00091__main">
+<dt class="dt dlterm"><a name="redt00091__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.xml.binding.annotation</p>
+<dd class="dd"><p class="p">eglx.xml.binding.annotation</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00091__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00091__use"><!-- --></a>Example use</dt>
 
-<dd>See “Correspondence between an XML string and an EGL variable.”<anchor id="use_more"></anchor></dd>
+<dd class="dd">See “Correspondence between an XML string and an EGL variable.”<anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00091__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00091__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record XMLRootElement type Annotation
+<dd class="dd"><pre class="pre codeblock">Record XMLRootElement type Annotation
    { targets = [ 
       ElementKind.libraryPart,
       ElementKind.programPart,
@@ -53,49 +53,49 @@ the topmost, most inclusive element in the XML string.</p>
       ElementKind.servicePart,
       ElementKind.interfacePart
     ]}
-   name string = """"""""##default"""""""";
-   namespace string = """"""""##default"""""""";
+   name string = "##default";
+   namespace string = "##default";
    nillable boolean;
 end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00091__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00091__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">name</span></span></dt>
+<dd class="dd"><dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">name</span></span></dt>
 
-<dd>The name of the root XML element. The default value is the name
-of the Record part.<p>If you are writing a record to an XML string,
+<dd class="dd pd">The name of the root XML element. The default value is the name
+of the Record part.<p class="p">If you are writing a record to an XML string,
 the value of the property field is assigned to the topmost element
 in the XML string. If you are reading an XML string into a record,
-the EGL Runtime issues a <span class="synph"><span class="kwd">RuntimeException</span></span> if
+the EGL Runtime issues a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> if
 the name of the topmost XML element does not match the value of the
 property field. </p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">namespace</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">namespace</span></span></dt>
 
-<dd>The XML namespace (if any) that is associated with the root XML
+<dd class="dd pd">The XML namespace (if any) that is associated with the root XML
 element. You must specify the namespace explicitly even if it is a
 default namespace.<div class="p">If you specify a namespace, the following statements
-apply:<ul>
-<li>If you are writing a record to an XML string, a namespace is assigned.
+apply:<ul class="ul">
+<li class="li">If you are writing a record to an XML string, a namespace is assigned.
 In this case, the EGL Runtime assigns a namespace prefix</li>
 
-<li>If you are reading an XML string into a record, a <span class="synph"><span class="kwd">RuntimeException</span></span> occurs
+<li class="li">If you are reading an XML string into a record, a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> occurs
 if the element is not in the specified namespace, whether the namespace
 in the XML string is specified by a prefix or by a namespace default</li>
 
 </ul>
 </div>
 <div class="p">If you do not specify a namespace, the following statements
-apply:<ul>
-<li>If you are writing a record to an XML string, a namespace prefix
+apply:<ul class="ul">
+<li class="li">If you are writing a record to an XML string, a namespace prefix
 is not specified, and the element is not in a namespace</li>
 
-<li>If you are reading an XML string into a record, a <span class="synph"><span class="kwd">RuntimeException</span></span> occurs
+<li class="li">If you are reading an XML string into a record, a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> occurs
 if the element is in a namespace</li>
 
 </ul>
@@ -103,20 +103,20 @@ if the element is in a namespace</li>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">nillable</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">nillable</span></span></dt>
 
-<dd>A Boolean value that indicates whether the element to be written
-to an XML string is nillable. The choice is as follows:<ul>
-<li>If the value is <em>false</em> (the default), the EGL Runtime does
+<dd class="dd pd">A Boolean value that indicates whether the element to be written
+to an XML string is nillable. The choice is as follows:<ul class="ul">
+<li class="li">If the value is <em class="ph i">false</em> (the default), the EGL Runtime does
 not write an element to the XML string when the content is null</li>
 
-<li>If the value is <em>true</em>, an attempt to write a null from the
+<li class="li">If the value is <em class="ph i">true</em>, an attempt to write a null from the
 record to the XML string results in an empty element that includes
-the attribute value <samp class="codeph">xsi:nil=""""""""true""""""""</samp> and has no other
+the attribute value <samp class="ph codeph">xsi:nil="true"</samp> and has no other
 attributes</li>
 
 </ul>
-<p>The nullable aspect of a record field affects what occurs
+<p class="p">The nullable aspect of a record field affects what occurs
 when the EGL Runtime reads an XML string into a record. </p>
 </dd>
 
@@ -124,41 +124,41 @@ when the EGL Runtime reads an XML string into a record. </p>
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00091__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00091__comments"><!-- --></a>Comments</dt>
 
-<dd>You cannot override the <span class="synph"><span class="kwd">RootElement</span></span> annotation
+<dd class="dd">You cannot override the <span class="ph synph"><span class="keyword kwd">RootElement</span></span> annotation
 when you declare a record based on the Record type.<anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00091__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00091__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00091__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00091__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d35389e233">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00091__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d41794e233">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d35389e236">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d41794e236">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00091__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d35389e233 ">Java</td>
+<tr id="redt00091__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d41794e233 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d35389e236 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d41794e236 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00091__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d35389e233 ">JavaScript</td>
+<tr id="redt00091__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d41794e233 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d35389e236 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d41794e236 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

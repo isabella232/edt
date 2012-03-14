@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,31 +16,31 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Run units</title>
 </head>
-<body id="cedt00011"><a name="cedt00011"><!-- --></a>
+<body id="cedt00011">
 
 
-<h1 class="topictitle1">Run units</h1>
+<h1 class="title topictitle1">Run units</h1>
 
 
 
-<div><p>The <dfn class="term">run unit</dfn> is composed of a set of logical
+<div class="body"><p class="shortdesc">The <dfn class="term">run unit</dfn> is composed of a set of logical
 units that are derived from EGL parts, are located on the same system,
 and refer to each other through direct references, transfers to programs,
 and local calls.</p>
 
-<p>All of the logic in a run unit share resources such as files and
+<p class="p">All of the logic in a run unit share resources such as files and
 database connections. Also, if a runtime exception occurs that is
 not handled by a member of the run unit, the run unit ends.  A member
 can handle the exception, as can the member's caller or the caller
 of that caller, to any level.</p>
 
-<p>In Java, a run unit also
+<p class="p">In Java™, a run unit also
 has a set of properties that help determine the runtime behavior.
  The properties are loaded when the run unit starts and do not change
 during its lifetime.  The properties are loaded from properties files
 or a JEE deployment descriptor, depending on where the code is running.</p>
 
-<p>In JavaScript, a run
+<p class="p">In JavaScript™, a run
 unit is the runtime application, including all JavaScript that is downloaded to the browser
 and executed.</p>
 

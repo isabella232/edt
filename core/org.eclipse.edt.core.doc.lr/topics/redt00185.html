@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,35 +19,35 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Tree widget and related types</title>
 </head>
-<body id="redt00185"><a name="redt00185"><!-- --></a>
+<body id="redt00185">
 
 
-<h1 class="topictitle1">Tree widget and related types</h1>
+<h1 class="title topictitle1">Tree widget and related types</h1>
 
 
 
-<div><p>A Rich UI tree widget defines a set of tree nodes.</p>
+<div class="body"><p class="shortdesc">A Rich UI tree widget defines a set of tree nodes.</p>
 
-<div class="p">The tree itself has two fields:<ul>
-<li><span class="synph"><span class="kwd">children</span></span> is a dynamic array that points
+<div class="p">The tree itself has two fields:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">children</span></span> is a dynamic array that points
 to the subordinate tree nodes. </li>
 
-<li><span class="synph"><span class="kwd">behaviors</span></span> is an array of function references.
+<li class="li"><span class="ph synph"><span class="keyword kwd">behaviors</span></span> is an array of function references.
 When a node is added to the tree, the referenced functions run in
 array-element order, Each function can update node characteristics.
 Those functions can set style characteristics and can perform actions
-such as showing or hiding the node.<p>For each function listed in
-the <span class="synph"><span class="kwd">behaviors</span></span> fields of a tree widget, the
+such as showing or hiding the node.<p class="p">For each function listed in
+the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> fields of a tree widget, the
 parameter list must match the following Delegate part, and the function
 must not return a value:</p>
-<pre class="codeblock">Delegate TreeNodeBehavior(node TreeNode) end</pre>
+<pre class="pre codeblock">Delegate TreeNodeBehavior(node TreeNode) end</pre>
 <div class="p">Rich
-UI provides a number of functions that can be referenced in the <span class="synph"><span class="kwd">behaviors</span></span> field.
+UI provides a number of functions that can be referenced in the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> field.
 For details, see the following files in  the com.ibm.egl.rui project,
-EGLSource folder, com.ibm.egl.rui.widgets package:<ul>
-<li>TreeBehaviors.egl</li>
+EGLSource folder, com.ibm.egl.rui.widgets package:<ul class="ul">
+<li class="li">TreeBehaviors.egl</li>
 
-<li>TreeToolTip.egl</li>
+<li class="li">TreeToolTip.egl</li>
 
 </ul>
 </div>
@@ -57,57 +57,57 @@ EGLSource folder, com.ibm.egl.rui.widgets package:<ul>
 </div>
 
 <div class="p">The following rules relate to the behaviors of either a tree or
-(as noted later) a tree node:<ul>
-<li>Except in the case of the referenced widgets in <span class="synph"><span class="kwd">children</span></span> or <span class="synph"><span class="kwd">initialUI</span></span> fields,
+(as noted later) a tree node:<ul class="ul">
+<li class="li">Except in the case of the referenced widgets in <span class="ph synph"><span class="keyword kwd">children</span></span> or <span class="ph synph"><span class="keyword kwd">initialUI</span></span> fields,
 Rich UI requires that you declare a value before you reference it.
-If the <span class="synph"><span class="kwd">behaviors</span></span> field refers to an array
+If the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> field refers to an array
 external to the tree or tree node declaration (as in our example),
 that array must be specified before the declaration.</li>
 
-<li>When you declare a tree or tree node, ensure that you list the <span class="synph"><span class="kwd">behaviors</span></span> field
-first; in particular, before the <span class="synph"><span class="kwd">children</span></span> field.</li>
+<li class="li">When you declare a tree or tree node, ensure that you list the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> field
+first; in particular, before the <span class="ph synph"><span class="keyword kwd">children</span></span> field.</li>
 
-<li>If, when writing statements in functions, you change the value
-of the <span class="synph"><span class="kwd">behaviors</span></span> field, invoke the tree-specific
-(or tree-node-specific) function <span class="synph"><span class="kwd">layouts()</span></span> to
+<li class="li">If, when writing statements in functions, you change the value
+of the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> field, invoke the tree-specific
+(or tree-node-specific) function <span class="ph synph"><span class="keyword kwd">layouts()</span></span> to
 reset the widget.</li>
 
 </ul>
 </div>
 
-<p>Other supported fields and functions for Tree and TreeNode are
+<p class="p">Other supported fields and functions for Tree and TreeNode are
 described in the following topics in the EGL Programmer’s Guide: “Rich
 UI widget fields” and ”Rich UI widget functions.”</p>
 
-<div class="p">Use of a tree requires the following statements:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Tree;
+<div class="p">Use of a tree requires the following statements:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Tree;
 import org.eclipse.edt.rui.widgets.TreeBehaviors;
 import org.eclipse.edt.rui.widgets.TreeNode;
 import org.eclipse.edt.rui.widgets.TreeTooltip;</pre>
 </div>
 
-<div class="section"><h2 class="sectiontitle">TreeNode</h2><div class="p">The Rich UI tree widget includes
+<div class="section"><h2 class="title sectiontitle">TreeNode</h2><div class="p">The Rich UI tree widget includes
 a set of tree nodes, each of which is a widget of type TreeNode. Here
-are the tree-node fields:<ul>
-<li><span class="synph"><span class="kwd">text</span></span> is the value displayed for the
+are the tree-node fields:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">text</span></span> is the value displayed for the
 node.</li>
 
-<li><span class="synph"><span class="kwd">children</span></span> is a dynamic array that points
+<li class="li"><span class="ph synph"><span class="keyword kwd">children</span></span> is a dynamic array that points
 to the subordinate tree nodes.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">TreeToolTip</h2><p>The tree tooltip is equivalent
+<div class="section"><h2 class="title sectiontitle">TreeToolTip</h2><p class="p">The tree tooltip is equivalent
 to the widget described in “Tooltip widget.” However, in this case,
 the provider function accepts a tree node. </p>
-<p>The example in the
+<p class="p">The example in the
 next section shows use of a tree tooltip.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Example</h2><p>The example in this section displays
-the following tree:<br></br><img src="../images/redt_ui_richui_tree.jpg" alt="Example of tree and the tree tooltip"></img><br></br></p>
-<div class="p">Here is the code:<pre class="codeblock">package client;
+<div class="section"><h2 class="title sectiontitle">Example</h2><p class="p">The example in this section displays
+the following tree:<br></br><img class="image" src="../images/redt_ui_richui_tree.jpg" alt="Example of tree and the tree tooltip"></img><br></br></p>
+<div class="p">Here is the code:<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.TextArea;
@@ -121,33 +121,33 @@ import eglx.ui.rui.RUIHandler;
 
 handler MyHandler type RUIhandler {initialUI = [ myBox1 ]}
 
-   myBox1 Box{ backgroundColor = """"""""yellow"""""""", padding=8, columns = 1,
+   myBox1 Box{ backgroundColor = "yellow", padding=8, columns = 1,
                children = [ myTextArea, myTree ] };
 
    myTextArea TextArea {numRows = 5, numColumns = 50,
-               text = """""""" This tree shows 2 children, each with 2 children.""""""""}; 
+               text = " This tree shows 2 children, each with 2 children."}; 
 	
-   myTreeNodeA TreeNode{backgroundColor = """"""""cyan"""""""",text=""""""""Child 1"""""""", 
+   myTreeNodeA TreeNode{backgroundColor = "cyan",text="Child 1", 
                         children =[myTreeNode1, myTreeNode2] };
 
-   myTreeNode1 TreeNode{backgroundColor = """"""""lightblue"""""""",text=""""""""Gchild 1-1"""""""" };
-   myTreeNode2 TreeNode{backgroundColor = """"""""lightgreen"""""""",text=""""""""Gchild 1-2"""""""" };
+   myTreeNode1 TreeNode{backgroundColor = "lightblue",text="Gchild 1-1" };
+   myTreeNode2 TreeNode{backgroundColor = "lightgreen",text="Gchild 1-2" };
 
-   myTreeNodeB TreeNode{backgroundColor = """"""""orange"""""""", text=""""""""Child 2"""""""", 
+   myTreeNodeB TreeNode{backgroundColor = "orange", text="Child 2", 
            children =[myTreeNode3,
-                      new TreeNode{backgroundColor = """"""""burlywood"""""""", text = """"""""Gchild 2-2""""""""}] };
+                      new TreeNode{backgroundColor = "burlywood", text = "Gchild 2-2"}] };
 
-   myTreeNode3 TreeNode{backgroundColor = """"""""lightpink"""""""", text=""""""""Gchild 2-1"""""""" };
+   myTreeNode3 TreeNode{backgroundColor = "lightpink", text="Gchild 2-1" };
 	
    myBehaviors TreeNodeBehavior[] = [ click, tooltip.setTooltips ];
 
-   myTree Tree{backgroundColor = """"""""lavender"""""""", behaviors = myBehaviors, 
+   myTree Tree{backgroundColor = "lavender", behaviors = myBehaviors, 
                children =[myTreeNodeA, myTreenodeB]};
 
    tooltip TreeTooltip { provider = showTooltip, tooltip.delay = 1000 };
 
    function click(node TreeNode in)
-      node.span.cursor = """"""""pointer"""""""";
+      node.span.cursor = "pointer";
       node.onClick ::= handleNodeClick;
       node.onMouseOver ::= showFeedback;
       node.onMouseOut ::= hideFeedback;
@@ -156,30 +156,30 @@ handler MyHandler type RUIhandler {initialUI = [ myBox1 ]}
    function showTooltip(node TreeNode) returns(Box)
       tooltipText TextLabel { };
       tooltipResponse Box { children = [ tooltipText ] };
-      tooltipText.text = """"""""Tooltip for """""""" + node.text;
+      tooltipText.text = "Tooltip for " + node.text;
       return (tooltipResponse);
    end
 	
    function showFeedback(e Event in)
       node TreeNode = e.widget;
       color any = node.backgroundColor; 
-      node.setAttribute(""""""""originalBG"""""""", color);
-      node.span.backgroundColor = """"""""yellow"""""""";
+      node.setAttribute("originalBG", color);
+      node.span.backgroundColor = "yellow";
 	 end
 	
    function hideFeedback(e Event in)
       node TreeNode = e.widget;
-		  node.span.backgroundColor = node.getAttribute(""""""""originalBG"""""""");
+		  node.span.backgroundColor = node.getAttribute("originalBG");
    end
 	
    function handleNodeClick(e Event in)
       node TreeNode = e.widget;
-      if (node.span.color == """"""""red"""""""")
-			   node.span.color = """"""""black"""""""";
-         node.span.fontWeight = """"""""normal"""""""";
+      if (node.span.color == "red")
+			   node.span.color = "black";
+         node.span.fontWeight = "normal";
       else
-         node.span.color = """"""""red"""""""";
-         node.span.fontWeight = """"""""bold"""""""";
+         node.span.color = "red";
+         node.span.fontWeight = "bold";
       end
    end
 end</pre>

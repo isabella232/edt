@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,14 +19,14 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Use statement</title>
 </head>
-<body id="redt00005"><a name="redt00005"><!-- --></a>
+<body id="redt00005">
 
 
-<h1 class="topictitle1">Use statement</h1>
+<h1 class="title topictitle1">Use statement</h1>
 
 
 
-<div><p>The <span class="synph"><span class="kwd">use</span></span> statement identifies
+<div class="body"><p class="shortdesc">The <span class="ph synph"><span class="keyword kwd">use</span></span> statement identifies
 one or more types so that subsequent logic can refer to the members
 in those types without including the type name in the reference. The
 statement is a convenience and can identify Library and Enumeration
@@ -34,22 +34,22 @@ types.</p>
 
 <anchor id="intro_more"></anchor>
 
-<div class="section" id="redt00005__sql_syntax"><a name="redt00005__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00005__syntax_figure"><a name="redt00005__syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_core_use.gif" alt="Syntax diagram for the throw statement"></img><br></br>
+<div class="section" id="redt00005__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00005__syntax_figure">
+<br></br><img class="image" src="../images/redt_core_use.gif" alt="Syntax diagram for the throw statement"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">typeName</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">typeName</var></dt>
 
-<dd>The name of a Library or Enumeration type.</dd>
+<dd class="dd">The name of a Library or Enumeration type.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></div>
 
-<div class="example" id="redt00005__example"><a name="redt00005__example"><!-- --></a><div class="p">Assume that the <samp class="codeph">MyLibrary</samp> library
-declares the <samp class="codeph">myFunction</samp> function, the <samp class="codeph">myVariable</samp> variable,
-and the <samp class="codeph">MYCONSTANT</samp> constant. The presence of the <span class="synph"><span class="kwd">use</span></span> statement
+<div class="example" id="redt00005__example"><div class="p">Assume that the <samp class="ph codeph">MyLibrary</samp> library
+declares the <samp class="ph codeph">myFunction</samp> function, the <samp class="ph codeph">myVariable</samp> variable,
+and the <samp class="ph codeph">MYCONSTANT</samp> constant. The presence of the <span class="ph synph"><span class="keyword kwd">use</span></span> statement
 allows the following program to refer to those members without including
-the library name in each reference:<pre class="codeblock">package common;
+the library name in each reference:<pre class="pre codeblock">package common;
 
 program MyProgram
    use MyLibrary;
@@ -62,32 +62,32 @@ end</pre>
 </div>
 <anchor id="example_more"></anchor></div>
 
-<div class="section" id="redt00005__compat"><a name="redt00005__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00005__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00005__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d7852e95">Target</th>
+<div class="section" id="redt00005__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00005__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d9182e95">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d7852e98">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d9182e98">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00005__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d7852e95 ">Java</td>
+<tr id="redt00005__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d9182e95 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d7852e98 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d9182e98 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00005__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d7852e95 ">JavaScript</td>
+<tr id="redt00005__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d9182e95 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d7852e98 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d9182e98 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

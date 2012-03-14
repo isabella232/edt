@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,97 +19,97 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Any and EAny types</title>
 </head>
-<body id="redt00050"><a name="redt00050"><!-- --></a>
+<body id="redt00050">
 
 
-<h1 class="topictitle1">Any and EAny types</h1>
+<h1 class="title topictitle1">Any and EAny types</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Any type is a reference type that lets
+<div class="body" id="body"><p class="shortdesc">The EGL Any type is a reference type that lets
 you create a variable whose data type is not fixed. The EDT implementation
 of Any is EAny.</p>
 
-<a name="redt00050__main"><!-- --></a><dl id="redt00050__main">
-<dt class="dlterm"><a name="redt00050__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00050__main">
+<dt class="dt dlterm"><a name="redt00050__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00050__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00050__use"><!-- --></a>Example use</dt>
 
-<dd>You typically need to use the <span class="synph"><span class="kwd">as</span></span> operator
-to cast a variable as a non-Any type, as in the following example:<pre class="codeblock">myInt INT = 42;
+<dd class="dd">You typically need to use the <span class="ph synph"><span class="keyword kwd">as</span></span> operator
+to cast a variable as a non-Any type, as in the following example:<pre class="pre codeblock">myInt INT = 42;
 myAny ANY = myInt;
-<strong>myInt = myAny as INT + 38;</strong></pre>
+<strong class="ph b">myInt = myAny as INT + 38;</strong></pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00050__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00050__detail"><!-- --></a>Type detail</dt>
 
-<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+<dd class="dd">In the following detail, the <span class="ph synph"><span class="keyword kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values, not “$EQ”. Two exceptions are the
 widen and narrow operations, which are invoked during data conversions;
-for example, when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">   /*********************************************************************
+for example, when the <span class="ph synph"><span class="keyword kwd">as</span></span> operator is used. <pre class="pre codeblock">   /*********************************************************************
    * The supertype of all other types; can reference any type of value. *
    *********************************************************************/
 externalType EAny type ClassType
 
    /* {@Operation ==} compares two values of type any.                 */
    static function $EQ(lvalue EAny in, rvalue EAny in)
-      returns(EBoolean) {@Operation{""""""""==""""""""}};
+      returns(EBoolean) {@Operation{"=="}};
 
    /* {@Operation !=} compares two values of type any.                 */
    static function $NEQ(lvalue EAny in, rvalue EAny in) 
-      returns(EBoolean) {@Operation{""""""""!=""""""""}};
+      returns(EBoolean) {@Operation{"!="}};
 
    /* {@Operation widen} Converts to an any,
    *  as used in a boxing conversion                                   */
    static function asAny(value EAny in) 
-      returns(EAny) {@Operation{""""""""widen""""""""}};
+      returns(EAny) {@Operation{"widen"}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00050__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00050__comments"><!-- --></a>Comments</dt>
 
-<dd>When you assign a value to an Any type variable, EGL knows the
+<dd class="dd">When you assign a value to an Any type variable, EGL knows the
 type of that value at run time, but not at development or generation
 time. You can assign an Int value to an Any type variable at one point
 in your program, and assign a String or Hex value to the same variable
 at a later time. <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00050__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00050__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00050__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00050__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22374e106">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00050__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d26403e106">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22374e109">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d26403e109">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00050__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22374e106 ">Java</td>
+<tr id="redt00050__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d26403e106 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22374e109 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d26403e109 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00050__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22374e106 ">JavaScript</td>
+<tr id="redt00050__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d26403e106 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22374e109 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d26403e109 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Boxing and unboxing conversions"></meta>
-<meta name="abstract" content="Assignments to and from simple-type fields are straightforward even if you mix reference and value types. For example, if you declare a constant of a reference type such as STRING, the assigned value is protected:"></meta>
-<meta name="description" content="Assignments to and from simple-type fields are straightforward even if you mix reference and value types. For example, if you declare a constant of a reference type such as STRING, the assigned value is protected:"></meta>
+<meta name="abstract" content="Assignments to and from compatible fields are straightforward even if you mix reference and value types:"></meta>
+<meta name="description" content="Assignments to and from compatible fields are straightforward even if you mix reference and value types:"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -16,38 +16,25 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Boxing and unboxing conversions</title>
 </head>
-<body id="cedt00025"><a name="cedt00025"><!-- --></a>
+<body id="cedt00025">
 
 
-<h1 class="topictitle1">Boxing and unboxing conversions</h1>
+<h1 class="title topictitle1">Boxing and unboxing conversions</h1>
 
 
 
-<div><p>Assignments to and from simple-type fields are straightforward
-even if you mix reference and value types. For example, if you declare
-a constant of a reference type such as STRING, the assigned value
-is protected: </p>
+<div class="body"><p class="shortdesc">Assignments to and from compatible fields are straightforward
+even if you mix reference and value types:</p>
 
-<div class="p"><pre class="codeblock">const myString STRING = """"Unchanging"""";
-myString = """"Error!"""";   // not valid    </pre>
-</div>
-
-<div class="p">A constant of a reference type other than a simple type <em>can</em> be
-updated. For example, you can update the elements in a constant of
-type INT[] because INT[] is a reference type, and only the reference
-to the list is constant. However, the first of the following two rules
-indicates the difference between a constant of type STRING and a constant
-of type INT[]:<ul>
-<li>When a simple-type reference field receives a value from a value
+<div class="p"><ul class="ul">
+<li class="li">When a simple-type reference field receives a value from a value
 field or literal, a <dfn class="term">boxing conversion</dfn> occurs. The source
 value is assigned to a new memory area, and the address of that area
-is assigned to the reference field. The attempt to update a constant
-of type STRING is not valid because the constant cannot reference
-a different memory area.</li>
+is assigned to the reference field. </li>
 
-<li>When a simple-type value field receives a value from a reference
+<li class="li">When a simple-type value field receives a value from a reference
 field, an <dfn class="term">unboxing conversion</dfn> occurs. The value field
-receives the business value to which the reference field refers.</li>
+receives the value to which the reference field refers.</li>
 
 </ul>
 </div>

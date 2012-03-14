@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,27 +19,27 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>MathLib.precision function</title>
 </head>
-<body id="redt00225"><a name="redt00225"><!-- --></a>
+<body id="redt00225">
 
 
-<h1 class="topictitle1">MathLib.precision function</h1>
+<h1 class="title topictitle1">MathLib.precision function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">MathLib.precision</span></span> returns
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">MathLib.precision</span></span> returns
 the maximum number of digits that are possible in a variable value.</p>
 
 
-<a name="redt00225__main"><!-- --></a><dl id="redt00225__main">
-<dt class="dlterm"><a name="redt00225__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00225__main">
+<dt class="dt dlterm"><a name="redt00225__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00225__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00225__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00225__syntax_block"><a name="redt00225__syntax_block"><!-- --></a>static function precision(value smallint in) returns(int);
+<dd class="dd"><pre class="pre codeblock" id="redt00225__syntax_block">static function precision(value smallint in) returns(int);
 
 static function precision(value int in) returns(int);
 
@@ -50,69 +50,69 @@ static function precision(value float in) returns(int);
 static function precision(value smallfloat in) returns(int);
 
 static function precision(value decimal in) returns(int);</pre>
-<a name="redt00225__syntax_list"><!-- --></a><dl id="redt00225__syntax_list">
-<dt class="dlterm"><var class="varname">value</var></dt>
+<dl class="dl" id="redt00225__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">value</var></dt>
 
-<dd>Takes a numeric value.</dd>
+<dd class="dd">Takes a numeric value.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00225__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00225__use"><!-- --></a>Example use</dt>
 
-<dd><p>After the following code runs, the value of <samp class="codeph">result</samp> is
+<dd class="dd"><p class="p">After the following code runs, the value of <samp class="ph codeph">result</samp> is
 9:</p>
-<pre class="codeblock" id="redt00225__use_block"><a name="redt00225__use_block"><!-- --></a>result, myVar INT;
+<pre class="pre codeblock" id="redt00225__use_block">result, myVar INT;
 
 result = mathLib.precision(myVar);</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00225__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00225__comments"><!-- --></a>Comments</dt>
 
-<dd><p>In EGL, <span class="synph"><span class="var">precision</span></span> is the total number
+<dd class="dd"><p class="p">In EGL, <span class="ph synph"><span class="ph var">precision</span></span> is the total number
 of digits a variable value, not just the number of decimal places.
 For example, the precision of an INT value is 9. For floating-point
 numbers, the precision is the maximum number of digits that the number
 can represent on the system on which the precisionic is running.</p>
-<p>In
-the case of Java, EGL uses methods
+<p class="p">In
+the case of Java™, EGL uses methods
 in the Java StrictMath class
 that are equivalent to the EGL functions. This usage ensures that
 the runtime behavior is the same for every Java Virtual Machine.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00225__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00225__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00225__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00225__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d69295e131">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00225__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d83946e131">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d69295e134">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d83946e134">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00225__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d69295e131 ">Java</td>
+<tr id="redt00225__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d83946e131 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69295e134 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d83946e134 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00225__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d69295e131 ">JavaScript</td>
+<tr id="redt00225__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d83946e131 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69295e134 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d83946e134 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -127,7 +127,7 @@ the runtime behavior is the same for every Java Virtual Machine.</p>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

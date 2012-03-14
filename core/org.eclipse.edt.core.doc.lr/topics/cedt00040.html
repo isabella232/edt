@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,66 +19,66 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Syntax diagram for EGL statements</title>
 </head>
-<body id="cedt00040"><a name="cedt00040"><!-- --></a>
+<body id="cedt00040">
 
 
-<h1 class="topictitle1">Syntax diagram for EGL statements</h1>
+<h1 class="title topictitle1">Syntax diagram for EGL statements</h1>
 
 
 
-<div><p></p>
+<div class="body"><p class="shortdesc"></p>
 
-<p>The syntax diagrams let you see quickly how to construct an EGL
+<p class="p">The syntax diagrams let you see quickly how to construct an EGL
 statement. Here is an example diagram:</p>
 
-<div class="p"> <div class="fignone">
-<br></br><img src="../images/cedt_core_syntax_diagrams.gif" alt="Example of a syntax diagram"></img><br></br>
+<div class="p"> <div class="fig fignone">
+<br></br><img class="image" src="../images/cedt_core_syntax_diagrams.gif" alt="Example of a syntax diagram"></img><br></br>
 </div>
 </div>
 
-<p>Read the diagram from left-to-right, top-to-bottom, following the <span class="synph"><span class="var">main
+<p class="p">Read the diagram from left-to-right, top-to-bottom, following the <span class="ph synph"><span class="ph var">main
 path</span></span>, which is the line that begins on the left with
-double arrowheads (&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;). As you follow the main path you may select
+double arrowheads (&gt;&gt;). As you follow the main path you may select
 an entry on a subordinate path, in which case you continue reading
 from left-to-right along the subordinate path.</p>
 
-<p>In the example, the main path is composed of four line segments.
+<p class="p">In the example, the main path is composed of four line segments.
 It is important to see this. The second and third line segments of
-the main path each begins with a single arrowhead (&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) and includes
+the main path each begins with a single arrowhead (&gt;) and includes
 subordinate information. The fourth line segment of the main path
-line also begins with a single arrowhead (&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;), includes returning arrows
+line also begins with a single arrowhead (&gt;), includes returning arrows
 and subordinate information, and ends with two arrowheads facing each
-other (&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;).</p>
+other (&gt;&lt;).</p>
 
 <div class="p">A term (or symbol) that is not in italics must be specified exactly
-as shown. In the example, you specify the term <strong>RequiredTerm</strong> as
+as shown. In the example, you specify the term <strong class="ph b">RequiredTerm</strong> as
 is. In contrast, a term in italics is a placeholder for a value that
 you specify. In the example, you might include any of the following
-symbols in place of <em>RequiredValue</em>: <pre class="codeblock">  myVariable
+symbols in place of <em class="ph i">RequiredValue</em>: <pre class="pre codeblock">  myVariable
   50
-  """"""""Oh!""""""""</pre>
+  "Oh!"</pre>
 </div>
 
-<p>The specific requirements for an italicized term (for example,
+<p class="p">The specific requirements for an italicized term (for example,
 whether a string or number is appropriate) are explained in the text
 that follows the syntax diagram, not in the syntax diagram itself.</p>
 
-<p>If a diagram shows a nonalphanumeric character, you type that character
-as part of the syntax. After you specify a value for <span class="synph"><span class="var">RequiredValue</span></span>,
+<p class="p">If a diagram shows a nonalphanumeric character, you type that character
+as part of the syntax. After you specify a value for <span class="ph synph"><span class="ph var">RequiredValue</span></span>,
 for instance, you type a colon (:) and a blank. </p>
 
-<p>If you are allowed to select from any of several terms, the terms
-are shown in a stack. In the example, you can specify the term <span class="synph"><span class="kwd">Alternative01</span></span> or <span class="synph"><span class="kwd">Alternative02</span></span>. </p>
+<p class="p">If you are allowed to select from any of several terms, the terms
+are shown in a stack. In the example, you can specify the term <span class="ph synph"><span class="keyword kwd">Alternative01</span></span> or <span class="ph synph"><span class="keyword kwd">Alternative02</span></span>. </p>
 
-<p>If (as in this case) you <em>must select</em> a term from those listed
+<p class="p">If (as in this case) you <em class="ph i">must select</em> a term from those listed
 in a stack, one of the choices (arbitrarily specified) is on the top
 line of the stack. If you are not required to select a term, the terms
-are all below the top line of the stack, as is true of <strong>OptionalTerm01</strong>.</p>
+are all below the top line of the stack, as is true of <strong class="ph b">OptionalTerm01</strong>.</p>
 
 <div class="p">A value that is on a path but is shown in an elevated way (as is
-true of <span class="synph"><span class="kwd">= yes</span></span>) is the default value for
+true of <span class="ph synph"><span class="keyword kwd">= yes</span></span>) is the default value for
 the stack in which the value appears. The example indicates that you
-can specify any of the following strings, and the first two are equivalent: <pre class="codeblock">optionalTerm01 = yes
+can specify any of the following strings, and the first two are equivalent: <pre class="pre codeblock">optionalTerm01 = yes
 
 optionalTerm01
 
@@ -87,14 +87,14 @@ optionalTerm01 = no
 OptionalTerm02</pre>
 </div>
 
-<p>An arrow returning to the left above a term indicates that you
-can use the term repeatedly. In the example, you specify values for <span class="synph"><span class="var">property</span></span>,
+<p class="p">An arrow returning to the left above a term indicates that you
+can use the term repeatedly. In the example, you specify values for <span class="ph synph"><span class="ph var">property</span></span>,
 each separated from the next with a comma.</p>
 
 <div class="p">An arrow returning to the left above a vertical stack means that
 you can choose from the list of entries in any order. In the example,
 each of the following strings is valid (as are other variations),
-but none is required: <pre class="codeblock">  OptionalTerm04 OptionalTerm05
+but none is required: <pre class="pre codeblock">  OptionalTerm04 OptionalTerm05
   OptionalTerm06
   OptionalTerm04 OptionalTerm06 OptionalTerm05
 </pre>

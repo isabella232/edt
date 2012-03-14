@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,186 +19,186 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL numeric types</title>
 </head>
-<body id="cedt00021"><a name="cedt00021"><!-- --></a>
+<body id="cedt00021">
 
 
-<h1 class="topictitle1">EGL numeric types</h1>
+<h1 class="title topictitle1">EGL numeric types</h1>
 
 
 
-<div><p>The next table lists the simple numeric types. All but
+<div class="body"><p class="shortdesc">The next table lists the simple numeric types. All but
 NUMBER are value types.</p>
 
 <div class="p">
-<div class="tablenoborder"><a name="cedt00021__char_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00021__char_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="27.27272727272727%" id="d1999e45">Type</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00021__char_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="27.27272727272727%" id="d2314e45">Type</th>
 
-<th class="cellrowborder" valign="bottom" width="45.45454545454545%" id="d1999e48">Limits</th>
+<th class="entry" valign="bottom" width="45.45454545454545%" id="d2314e48">Limits</th>
 
-<th class="cellrowborder" valign="bottom" width="27.27272727272727%" id="d1999e51">Comments</th>
+<th class="entry" valign="bottom" width="27.27272727272727%" id="d2314e51">Comments</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">BIGINT </td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">BIGINT </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">Values range from<p>-9,223,372,036,854,775,808
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">Values range from<p class="p">-9,223,372,036,854,775,808
 to 9,223,372,036,854,775,807; no decimal places. </p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">BIGINT is equivalent to BIN(18) without decimal
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">BIGINT is equivalent to BIN(18) without decimal
 places.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">BIN(<em>n</em>)</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">BIN(<em class="ph i">n</em>)</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 "><p>Specify 4, 9, or 18 digits; however,
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 "><p class="p">Specify 4, 9, or 18 digits; however,
 the number of digits in a value can be one higher, as demonstrated
 by the ranges for BIGINT, INT, and SMALLINT.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
-<em>n</em> is the number of positive digits, including
-decimal places. <p>The internal format is numeric binary.</p>
+<em class="ph i">n</em> is the number of positive digits, including
+decimal places. <p class="p">The internal format is numeric binary.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">DECIMAL(<em>n</em>), <p>DECIMAL(<em>n</em>, <em>p</em>) </p>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">DECIMAL(<em class="ph i">n</em>), <p class="p">DECIMAL(<em class="ph i">n</em>, <em class="ph i">p</em>) </p>
 </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">32 digits.</td>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">32 digits.</td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><em>n</em> is the number of positive digits, <em>p</em> is
-the number of decimal places. <p>The internal format is packed decimal.</p>
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><em class="ph i">n</em> is the number of positive digits, <em class="ph i">p</em> is
+the number of decimal places. <p class="p">The internal format is packed decimal.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">FLOAT</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">FLOAT</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">In Java output, positive values range from
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">In Java output, positive values range from
 4.9e-324 to 1.7976931348623157e308.</td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">FLOAT is the basis of a 64-bit double-precision
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">FLOAT is the basis of a 64-bit double-precision
 floating-point value.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">INT </td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">INT </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">Values range from<p>-2,147,483,648 to 2,147,483,647;
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">Values range from<p class="p">-2,147,483,648 to 2,147,483,647;
 no decimal places.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">INT is equivalent to BIN(9) without decimal
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">INT is equivalent to BIN(9) without decimal
 places.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">MONEY, <p>MONEY(<em>n</em>),</p>
-<p>MONEY(<em>n</em>, <em>p</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">MONEY, <p class="p">MONEY(<em class="ph i">n</em>),</p>
+<p class="p">MONEY(<em class="ph i">n</em>, <em class="ph i">p</em>)</p>
  </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">32 digits.</td>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">32 digits.</td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 MONEY is equivalent to DECIMAL, but has 2 decimal
 places and a currency symbol by default. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">NUM, <p>NUM(<em>n</em>),</p>
-<p>NUM(<em>n</em>, <em>p</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">NUM, <p class="p">NUM(<em class="ph i">n</em>),</p>
+<p class="p">NUM(<em class="ph i">n</em>, <em class="ph i">p</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 "><p>31 digits.</p>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 "><p class="p">31 digits.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 The value is zoned decimal, for use with mainframe
-data. <p>Each byte in the value is a character that represents a digit.
+data. <p class="p">Each byte in the value is a character that represents a digit.
 The sign is represented by a sign-specific hexadecimal value in the
 left half of the rightmost byte: EBCDIC F for positive, D for negative.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">NUMBER</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">NUMBER</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 "></td>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 "></td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">This reference type is available only as a function
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">This reference type is available only as a function
 parameter outside of a library or service.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">NUMC(<em>n</em>)</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">NUMC(<em class="ph i">n</em>)</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 "><p>18 digits.</p>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 "><p class="p">18 digits.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 The value is zoned decimal, for use with mainframe
-data.<p>Each byte is a numeric character that represents a digit.
+data.<p class="p">Each byte is a numeric character that represents a digit.
 The sign is represented by a sign-specific hexadecimal value in the
 left half of the rightmost byte: EBCDIC C for positive, D for negative.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">PACF(<em>n</em>)</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">PACF(<em class="ph i">n</em>)</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 "><p>18 digits.</p>
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 "><p class="p">18 digits.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 The value is packed decimal, for use with mainframe
-data.<p> The sign is represented in the rightmost byte: EBCDIC F for
+data.<p class="p"> The sign is represented in the rightmost byte: EBCDIC F for
 positive, D for negative.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">SMALLFLOAT</td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">SMALLFLOAT</td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">In Java output, positive values range from
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">In Java output, positive values range from
 1.40239846e-45 to 3.40282347e+38.</td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">SMALLFLOAT is the basis of a 32-bit single-precision
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">SMALLFLOAT is the basis of a 32-bit single-precision
 floating-point value.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e45 ">SMALLINT </td>
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e45 ">SMALLINT </td>
 
-<td class="cellrowborder" valign="top" width="45.45454545454545%" headers="d1999e48 ">Values range from<p>-32,768 to +32,767;
+<td class="entry" valign="top" width="45.45454545454545%" headers="d2314e48 ">Values range from<p class="p">-32,768 to +32,767;
 no decimal places.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="27.27272727272727%" headers="d1999e51 ">INT is equivalent to BIN(4) without decimal
+<td class="entry" valign="top" width="27.27272727272727%" headers="d2314e51 ">INT is equivalent to BIN(4) without decimal
 places.</td>
 
 </tr>
@@ -209,26 +209,26 @@ places.</td>
 </div>
 </div>
 
-<p></p>
+<p class="p"></p>
 
-<div class="section" id="cedt00021__compat_section"><a name="cedt00021__compat_section"><!-- --></a><h2 class="sectiontitle">Compatibility considerations</h2><div class="p">
-<div class="tablenoborder"><a name="cedt00021__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00021__compat_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="29.145728643216078%" id="d1999e313">Platform</th>
+<div class="section" id="cedt00021__compat_section"><h2 class="title sectiontitle">Compatibility considerations</h2><div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00021__compat_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="29.145728643216078%" id="d2314e313">Platform</th>
 
-<th class="cellrowborder" valign="bottom" width="70.85427135678391%" id="d1999e316">Issue</th>
+<th class="entry" valign="bottom" width="70.85427135678391%" id="d2314e316">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="cedt00021__compat_javascript">
-<td class="cellrowborder" valign="top" width="29.145728643216078%" headers="d1999e313 ">JavaScript generation</td>
+<tr id="cedt00021__compat_javascript" class="row">
+<td class="entry" valign="top" width="29.145728643216078%" headers="d2314e313 ">JavaScript generation</td>
 
-<td class="cellrowborder" valign="top" width="70.85427135678391%" headers="d1999e316 "><p>BIN is supported only if the type has no
+<td class="entry" valign="top" width="70.85427135678391%" headers="d2314e316 "><p class="p">BIN is supported only if the type has no
 decimal places.</p>
 </td>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,124 +19,124 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>StringLib.GetNextToken function</title>
 </head>
-<body id="redt00234"><a name="redt00234"><!-- --></a>
+<body id="redt00234">
 
 
-<h1 class="topictitle1">StringLib.GetNextToken function</h1>
+<h1 class="title topictitle1">StringLib.GetNextToken function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">StringLib.getNextToken</span></span> returns
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">StringLib.getNextToken</span></span> returns
 a token from a substring.</p>
 
 
-<a name="redt00234__main"><!-- --></a><dl id="redt00234__main">
-<dt class="dlterm"><a name="redt00234__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00234__main">
+<dt class="dt dlterm"><a name="redt00234__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00234__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00234__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00234__syntax_block"><a name="redt00234__syntax_block"><!-- --></a>static function getNextToken (source string in, 
+<dd class="dd"><pre class="pre codeblock" id="redt00234__syntax_block">static function getNextToken (source string in, 
                               index int inout, 
                               delimiters string in) 
                 returns (string?);</pre>
-<a name="redt00234__syntax_list"><!-- --></a><dl id="redt00234__syntax_list">
-<dt class="dlterm"><var class="varname">source</var></dt>
+<dl class="dl" id="redt00234__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">source</var></dt>
 
-<dd>Takes a source string.</dd>
+<dd class="dd">Takes a source string.</dd>
 
 
-<dt class="dlterm"><var class="varname">index</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">index</var></dt>
 
-<dd>Takes the starting position at which to begin searching for a
+<dd class="dd">Takes the starting position at which to begin searching for a
 token, given that the first character in source is at position 1.
 If a token is found, the value in index is changed to the index of
 the first character that follows the token. If no token is found,
 index is set to one plus the length of the source string. </dd>
 
 
-<dt class="dlterm"><var class="varname">delimiters</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">delimiters</var></dt>
 
-<dd>Takes a string that contains one or more delimiter characters,
+<dd class="dd">Takes a string that contains one or more delimiter characters,
 with no characters separating one from the next.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00234__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00234__use"><!-- --></a>Example use</dt>
 
-<dd><p>In the following code, <samp class="codeph">source</samp> is 20 characters,
+<dd class="dd"><p class="p">In the following code, <samp class="ph codeph">source</samp> is 20 characters,
 or 40 bytes:</p>
-<pre class="codeblock" id="redt00234__use_block"><a name="redt00234__use_block"><!-- --></a>program MyProgram type BasicProgram{}
+<pre class="pre codeblock" id="redt00234__use_block">program MyProgram type BasicProgram{}
 
-   source string = """"""""CALL PROG1 arg1,arg2"""""""";
-   delimiters string = """""""", """""""";
+   source string = "CALL PROG1 arg1,arg2";
+   delimiters string = ", ";
    index int = 1;
    max int;
    tokens string[];
-   token string? = """""""""""""""";
+   token string? = "";
 
    function main()
       max = source.length();
-      SysLib.writeStdout(""""""""max = """""""" + max);
+      SysLib.writeStdout("max = " + max);
 
-      while(index &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; max)
+      while(index &lt; max)
          token = StringLib.getNextToken(source, index, delimiters);
 
          if(token != null)
-            SysLib.writeStdout(token + """""""" &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- """""""" + index);
+            SysLib.writeStdout(token + " &lt;--- " + index);
          end
       end
    end
  end</pre>
 <div class="p">Here is the output, which tells the change in the
-value of <samp class="codeph">index</samp>:<pre class="codeblock">max = 20
-CALL &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 5
-PROG1 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 11
-arg1 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 16
-arg2 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 21</pre>
+value of <samp class="ph codeph">index</samp>:<pre class="pre codeblock">max = 20
+CALL &lt;--- 5
+PROG1 &lt;--- 11
+arg1 &lt;--- 16
+arg2 &lt;--- 21</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00234__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00234__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="comments_more"></anchor></dd>
+<dd class="dd"><anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00234__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00234__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00234__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00234__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d72411e142">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00234__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d87686e142">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d72411e145">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d87686e145">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00234__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d72411e142 ">Java</td>
+<tr id="redt00234__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d87686e142 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72411e145 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d87686e145 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00234__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d72411e142 ">JavaScript</td>
+<tr id="redt00234__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d87686e142 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72411e145 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d87686e145 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -151,7 +151,7 @@ arg2 &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;--- 21</pre
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

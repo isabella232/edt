@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,30 +16,30 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service classifier overview</title>
 </head>
-<body id="cedt00035"><a name="cedt00035"><!-- --></a>
+<body id="cedt00035">
 
 
-<h1 class="topictitle1">Service classifier overview</h1>
+<h1 class="title topictitle1">Service classifier overview</h1>
 
 
 
-<div><p>The capabilities of the Service classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the Service classifier are made available
 when you code a <dfn class="term">service</dfn>. The type is like a program that
 has multiple entry points.</p>
 
-<p>The logic in an EGL-written service is <dfn class="term">stateless</dfn>,
+<p class="p">The logic in an EGL-written service is <dfn class="term">stateless</dfn>,
 which means that the value of each variable is specific to the invocation.</p>
 
-<p>Any EGL logic type can request a service. When you code the requester,
+<p class="p">Any EGL logic type can request a service. When you code the requester,
 you declare a variable for service access, and that variable is based
 on a type. If the service was written in EGL, you can use the Service
 type as the type. Otherwise, you can only use an Interface type for
 that purpose. </p>
 
-<p>For further details on service invocation, see details on the Interface
+<p class="p">For further details on service invocation, see details on the Interface
 classifier in “Classifiers for defining EGL prototype parts.”</p>
 
-<div class="p">Here is an example of a service:<pre class="codeblock">Service MyService{}
+<div class="p">Here is an example of a service:<pre class="pre codeblock">Service MyService{}
 
    // variables and constants can be here
 
@@ -60,7 +60,7 @@ classifier in “Classifiers for defining EGL prototype parts.”</p>
 end</pre>
 </div>
 
-<p>A Service type does not include a stereotype.</p>
+<p class="p">A Service type does not include a stereotype.</p>
 
 </div>
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Span widget"></meta>
-<meta name="abstract" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
-<meta name="description" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
+<meta name="abstract" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
+<meta name="description" content="A Rich UI span lets you display a string that the user cannot change. The widget is different from a text label because inclusion of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes the display of HTML-coded content such as this boldfaced code."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, Span, Span Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, Span, Span Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00031.html"></meta>
@@ -19,19 +19,19 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Span widget</title>
 </head>
-<body id="redt00118"><a name="redt00118"><!-- --></a>
+<body id="redt00118">
 
 
-<h1 class="topictitle1">Span widget</h1>
+<h1 class="title topictitle1">Span widget</h1>
 
 
 
-<div><p>A Rich UI span lets you display a string that the user
+<div class="body"><p class="shortdesc">A Rich UI span lets you display a string that the user
 cannot change. The widget is different from a text label because inclusion
-of an HTML segment (such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;this boldfaced code&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/b&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;) causes
-the display of HTML-coded content such as <strong>this boldfaced code</strong>.</p>
+of an HTML segment (such as &lt;b&gt;this boldfaced code&lt;/b&gt;) causes
+the display of HTML-coded content such as <strong class="ph b">this boldfaced code</strong>.</p>
 
-<div class="p">Here is an example:<pre class="codeblock">package client;
+<div class="p">Here is an example:<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Div;
 import org.eclipse.edt.rui.widgets.Span;
@@ -39,21 +39,21 @@ import org.eclipse.edt.rui.widgets.Span;
 handler MyHandler type RUIHandler{initialUI =[myDiv]}
 
    myDiv Div{children = [mySpan01, mySpan02, mySpan03]};
-   mySpan01 Span{text = """"""""mix blue """""""", color = """"""""blue""""""""};
-   mySpan02 Span{text = """""""" and yellow """""""",
-                 backgroundColor = """"""""black"""""""", color = """"""""yellow""""""""};
-   mySpan03 Span{text = """""""" to see green"""""""", color = """"""""green""""""""};
+   mySpan01 Span{text = "mix blue ", color = "blue"};
+   mySpan02 Span{text = " and yellow ",
+                 backgroundColor = "black", color = "yellow"};
+   mySpan03 Span{text = " to see green", color = "green"};
 end</pre>
 </div>
 
-<p>The main supported property is <span class="synph"><span class="kwd">text</span></span>,
+<p class="p">The main supported property is <span class="ph synph"><span class="keyword kwd">text</span></span>,
 which takes the string to display. </p>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Span;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Span;</pre>
 </div>
 
 </div>

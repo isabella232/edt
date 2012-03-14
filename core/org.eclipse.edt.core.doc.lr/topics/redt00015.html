@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="If statement"></meta>
+<meta name="abstract" content="The EGL if statement runs a set of statements if and only if a logical expression resolves to true. The optional keyword else marks the start of an alternative set of statements that run only if the logical expression resolves to false."></meta>
+<meta name="description" content="The EGL if statement runs a set of statements if and only if a logical expression resolves to true. The optional keyword else marks the start of an alternative set of statements that run only if the logical expression resolves to false."></meta>
 <meta name="DC.subject" content="EGL statements, continue, continue EGL statement"></meta>
 <meta name="keywords" content="EGL statements, continue, continue EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
@@ -17,81 +19,81 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>If statement</title>
 </head>
-<body id="redt00015"><a name="redt00015"><!-- --></a>
+<body id="redt00015">
 
 
-<h1 class="topictitle1">If statement</h1>
+<h1 class="title topictitle1">If statement</h1>
 
 
 
-<div><div><span> The EGL  <span class="synph"><span class="kwd">if</span></span> statement
+<div class="body"><div class="abstract"><span class="shortdesc"> The EGL  <span class="ph synph"><span class="keyword kwd">if</span></span> statement
 runs a set of statements if and only if a logical expression resolves
-to true. The optional keyword <span class="synph"><span class="kwd">else</span></span> marks
+to true. The optional keyword <span class="ph synph"><span class="keyword kwd">else</span></span> marks
 the start of an alternative set of statements that run only if the
 logical expression resolves to false.</span>
 </div>
 
 <anchor id="intro_more"></anchor>
 
-<div class="section" id="redt00015__sql_syntax"><a name="redt00015__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00015__syntax_figure"><a name="redt00015__syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_core_if_else.gif" alt="Syntax diagram for the if statement"></img><br></br>
+<div class="section" id="redt00015__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00015__syntax_figure">
+<br></br><img class="image" src="../images/redt_core_if_else.gif" alt="Syntax diagram for the if statement"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">label</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">label</var></dt>
 
-<dd>A label that an <span class="synph"><span class="kwd">exit</span></span> statement can reference.</dd>
-
-
-<dt class="dlterm"><var class="varname">logicalExpression</var></dt>
-
-<dd>An expression that resolves to true or false.</dd>
+<dd class="dd">A label that an <span class="ph synph"><span class="keyword kwd">exit</span></span> statement can reference.</dd>
 
 
-<dt class="dlterm"><var class="varname">statement</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">logicalExpression</var></dt>
 
-<dd>An EGL statement.</dd>
+<dd class="dd">An expression that resolves to true or false.</dd>
+
+
+<dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
+
+<dd class="dd">An EGL statement.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></div>
 
-<div class="example" id="redt00015__example"><a name="redt00015__example"><!-- --></a><p>The following <strong>if</strong> statement runs in
+<div class="example" id="redt00015__example"><p class="p">The following <strong class="ph b">if</strong> statement runs in
 a Rich UI application:</p>
-<pre class="codeblock">if (myRadioGroup.selected == """"""""Tuesday"""""""")
-   myTextArea.text = """"""""No, on Monday!"""""""";
+<pre class="pre codeblock">if (myRadioGroup.selected == "Tuesday")
+   myTextArea.text = "No, on Monday!";
 else
-   myTextArea.text = """"""""No, on Tuesday!"""""""";
+   myTextArea.text = "No, on Tuesday!";
 end</pre>
-<p>The code assigns a string to a text area in response
+<p class="p">The code assigns a string to a text area in response
 to the user’s selection of one or another radio button in a radio
 group.</p>
 <anchor id="example_more"></anchor></div>
 
-<div class="section" id="redt00015__compat"><a name="redt00015__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00015__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00015__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d10059e110">Target</th>
+<div class="section" id="redt00015__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00015__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d11845e110">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d10059e113">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d11845e113">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00015__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d10059e110 ">Java</td>
+<tr id="redt00015__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d11845e110 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d10059e113 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d11845e113 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00015__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d10059e110 ">JavaScript</td>
+<tr id="redt00015__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d11845e110 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d10059e113 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d11845e113 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

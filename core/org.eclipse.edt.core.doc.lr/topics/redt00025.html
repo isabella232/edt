@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Replace statement for a relational database"></meta>
+<meta name="abstract" content="You can use the EGL replace statement to update a row in a relational database."></meta>
+<meta name="description" content="You can use the EGL replace statement to update a row in a relational database."></meta>
 <meta name="DC.subject" content="EGL statements, replace, replace EGL statement, relational database"></meta>
 <meta name="keywords" content="EGL statements, replace, replace EGL statement, relational database"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
@@ -17,120 +19,120 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Replace statement for a relational database</title>
 </head>
-<body id="redt00023"><a name="redt00023"><!-- --></a>
+<body id="redt00023">
 
 
-<h1 class="topictitle1">Replace statement for a relational database</h1>
+<h1 class="title topictitle1">Replace statement for a relational database</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><div><span>You can use the EGL <span class="synph"><span class="kwd">replace</span></span> statement
+<div class="body" id="body"><div class="abstract"><span class="shortdesc">You can use the EGL <span class="ph synph"><span class="keyword kwd">replace</span></span> statement
 to update a row in a relational database.</span>
  </div>
 
 <anchor id="sql_intro_more"></anchor>
 
-<div class="section" id="redt00023__sql_syntax"><a name="redt00023__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00023__sql_syntax_figure"><a name="redt00023__sql_syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_data_sql_replace.gif" alt="Syntax diagram for the replace statement with SQL"></img><br></br>
+<div class="section" id="redt00023__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00023__sql_syntax_figure">
+<br></br><img class="image" src="../images/redt_data_sql_replace.gif" alt="Syntax diagram for the replace statement with SQL"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">entity</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">entity</var></dt>
 
-<dd>Name of the entity, which is a variable based on an External type,
+<dd class="dd">Name of the entity, which is a variable based on an External type,
 Handler type, or Record type. The values in that entity are used in
 the corresponding SQL UPDATE statement. If you specify the SQL data
-source but not an SQL statement, the following default is used: <pre class="codeblock">UPDATE <em>tableName</em> 
-   SET <em>column_1</em> = ?,
-       <em>column_2</em> = ?,
+source but not an SQL statement, the following default is used: <pre class="pre codeblock">UPDATE <em class="ph i">tableName</em> 
+   SET <em class="ph i">column_1</em> = ?,
+       <em class="ph i">column_2</em> = ?,
        ... 
-       <em>column_n</em> = ?
+       <em class="ph i">column_n</em> = ?
    WHERE
-       <em>ID_column_1</em> = ? AND
-       <em>ID_column_2</em> = ? AND
+       <em class="ph i">ID_column_1</em> = ? AND
+       <em class="ph i">ID_column_2</em> = ? AND
        ... 
-       <em>ID_column_n</em> = ?</pre>
+       <em class="ph i">ID_column_n</em> = ?</pre>
 <div class="p">When an entity is used
-from a SQL data source, the basic idea is as follows: <ul>
-<li>A subset of entity fields are available. Those fields are updatable,
+from a SQL data source, the basic idea is as follows: <ul class="ul">
+<li class="li">A subset of entity fields are available. Those fields are updatable,
 with values that are neither generated nor transient.</li>
 
-<li>The available entity fields are split into two categories. The
+<li class="li">The available entity fields are split into two categories. The
 non-key fields are used in the SET clause. The key fields are candidates
 to be used in the WHERE clause.</li>
 
-<li>If the <strong>using</strong> clause is present, the values in that clause
-are used in the WHERE clause. The <strong>using</strong> clause is an override.</li>
+<li class="li">If the <strong class="ph b">using</strong> clause is present, the values in that clause
+are used in the WHERE clause. The <strong class="ph b">using</strong> clause is an override.</li>
 
 </ul>
 </div>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">field</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">field</var></dt>
 
-<dd>A value of an EGL simple type that is compatible with the corresponding
-database column. <p>The field values are assigned to the question
+<dd class="dd">A value of an EGL simple type that is compatible with the corresponding
+database column. <p class="p">The field values are assigned to the question
 marks in the WHERE clause of the SQL UPDATE statement. </p>
 </dd>
 
 
 
 
-<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLDataSource</var></dt>
 
-<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+<dd class="dd">A variable of type <strong class="ph b">SQLDataSource</strong>. The variable includes
 connection details or references an EGL deployment descriptor entry
-that provides access to the connection details. <p>If you issue a
+that provides access to the connection details. <p class="p">If you issue a
 prepared statement, the variable is optional and is ignored if present.</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLResultSet</var></dt>
 
-<dd>An SQL result set that was established by an <strong>open</strong> statement.
-In this case, the <strong>Replace</strong> statement updates the current row.
+<dd class="dd">An SQL result set that was established by an <strong class="ph b">open</strong> statement.
+In this case, the <strong class="ph b">Replace</strong> statement updates the current row.
 An attempt to update the row a second time results in an exception.</dd>
 
 
-<dt class="dlterm"><var class="varname">stmt</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">stmt</var></dt>
 
-<dd>A single SQL UPDATE statement, which is not required to end with
+<dd class="dd">A single SQL UPDATE statement, which is not required to end with
 a semicolon but can. The statement format is as shown in the description
-of <em>entity</em>.<p>You can use a prepared statement in place of #sql{<em>stmt</em>}.</p>
+of <em class="ph i">entity</em>.<p class="p">You can use a prepared statement in place of #sql{<em class="ph i">stmt</em>}.</p>
 </dd>
 
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00023__sql_example"><a name="redt00023__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<div class="example" id="redt00023__sql_example"><pre class="pre codeblock"></pre>
 <anchor id="sql_example_more"></anchor></div>
 
-<div class="section" id="redt00023__compat"><a name="redt00023__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00023__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00023__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d14847e215">Target</th>
+<div class="section" id="redt00023__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00023__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d17721e215">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d14847e218">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d17721e218">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00023__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d14847e215 ">Java</td>
+<tr id="redt00023__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d17721e215 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14847e218 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d17721e218 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00023__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d14847e215 ">JavaScript</td>
+<tr id="redt00023__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d17721e215 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d14847e218 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d17721e218 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

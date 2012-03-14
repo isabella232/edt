@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,45 +19,45 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DataSource external type</title>
 </head>
-<body id="redt00164"><a name="redt00164"><!-- --></a>
+<body id="redt00164">
 
 
-<h1 class="topictitle1">DataSource external type</h1>
+<h1 class="title topictitle1">DataSource external type</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>DataSource</strong> is the supertype of types
+<div class="body" id="body"><p class="shortdesc"><strong class="ph b">DataSource</strong> is the supertype of types
 that are the basis of <dfn class="term">data sources</dfn>, which are values
 that identify where data is persisted. Two kinds of data sources are
 connections and result sets.</p>
 
-<a name="redt00164__main"><!-- --></a><dl id="redt00164__main">
-<dt class="dlterm"><a name="redt00164__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00164__main">
+<dt class="dt dlterm"><a name="redt00164__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.persistence</p>
+<dd class="dd"><p class="p">eglx.persistence</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00164__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00164__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd class="dd"><anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00164__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00164__detail"><!-- --></a>Type detail</dt>
 
-<dd><pre class="codeblock">externalType DataSource type NativeType
+<dd class="dd"><pre class="pre codeblock">externalType DataSource type NativeType
    private constructor();
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00164__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00164__comments"><!-- --></a>Comments</dt>
 
-<dd>Here are subtypes of DataSource:<ul>
-<li>One subtype is eglx.persistence.sql.SQLDataSource. Each value
+<dd class="dd">Here are subtypes of DataSource:<ul class="ul">
+<li class="li">One subtype is eglx.persistence.sql.SQLDataSource. Each value
 of that subtype represents a connection to a relational database.</li>
 
-<li>A second subtype is eglx.persistence.ScrollableDataSource, which
+<li class="li">A second subtype is eglx.persistence.ScrollableDataSource, which
 lists functions for scrolling through a result set. A subtype of ScrollableDataSource
 is eglx.persistence.sql.SQLScrollableDataSource. A value based on
 SQLScrollableDataSource represents a result set that was returned
@@ -67,34 +67,34 @@ from an SQL query.</li>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00164__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00164__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00164__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00164__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d52659e102">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00164__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d63728e102">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d52659e105">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d63728e105">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00164__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d52659e102 ">Java</td>
+<tr id="redt00164__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d63728e102 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d52659e105 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d63728e105 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00164__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d52659e102 ">JavaScript</td>
+<tr id="redt00164__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d63728e102 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d52659e105 ">Access of persisted data is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d63728e105 ">Access of persisted data is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

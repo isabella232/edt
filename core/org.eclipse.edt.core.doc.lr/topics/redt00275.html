@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,47 +19,47 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>LogResult external type</title>
 </head>
-<body id="redt00275"><a name="redt00275"><!-- --></a>
+<body id="redt00275">
 
 
-<h1 class="topictitle1">LogResult external type</h1>
+<h1 class="title topictitle1">LogResult external type</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">LogResult</span></span> contains
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">LogResult</span></span> contains
 functions that are invoked by the EUnit test framework, by custom
 test cases that run in the EUnit test framework, or by both.</p>
 
-<a name="redt00275__main"><!-- --></a><dl id="redt00275__main">
-<dt class="dlterm"><a name="redt00275__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00275__main">
+<dt class="dt dlterm"><a name="redt00275__package"><!-- --></a>Package</dt>
 
-<dd><p>org.eclipse.edt.eunit.runtime</p>
+<dd class="dd"><p class="p">org.eclipse.edt.eunit.runtime</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00275__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00275__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd class="dd"><anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00275__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00275__detail"><!-- --></a>Type detail</dt>
 
-<dd><pre class="codeblock">Library LogResult
+<dd class="dd"><pre class="pre codeblock">Library LogResult
 
    private outR Log;
    private s Status;	
 
-   private const ACTUALHEADER string = """"""""Actual value = """""""";
-   private const EXPECTEDHEADER string = """"""""Expected value = """""""";
-   private const ACTUALSIZEHEADER string = """"""""Actual array size = """""""";
-   private const EXPECTEDSIZEHEADER string = """"""""Exepcted array size = """""""";
+   private const ACTUALHEADER string = "Actual value = ";
+   private const EXPECTEDHEADER string = "Expected value = ";
+   private const ACTUALSIZEHEADER string = "Actual array size = ";
+   private const EXPECTEDSIZEHEADER string = "Exepcted array size = ";
 
    /* remove all messages in the log to this point, 
     * but leave the result data unaffected.
    function clearResults()
-      outR.msg = """""""""""""""";
+      outR.msg = "";
       s.code = -1;
-      s.reason = """""""""""""""";
+      s.reason = "";
    end
 	
    // used by the EUnit framework; do not use.
@@ -81,39 +81,39 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    /**
-     * set status as passed, specifying text that defaults to """"""""OK""""""""
+     * set status as passed, specifying text that defaults to "OK"
      */
    function passed(str String in)
       s.code = ConstantsLib.SPASSED;
 
-      if(str == null || str == """""""""""""""")
-         str = """"""""OK"""""""";
+      if(str == null || str == "")
+         str = "OK";
       end
       s.reason = str;
    end
 
    /**
-     * set status as failed, specifying text that is appended to """"""""Failed""""""""
+     * set status as failed, specifying text that is appended to "Failed"
      */
    function failed(str String in)
       s.code = ConstantsLib.SFAILED;
-      str = """"""""FAILED - """""""" + str;
+      str = "FAILED - " + str;
       s.reason = str;
    end
 	
    // set this to specify a different category of mistake; 
-   // the input string is logged, and the test case ends with an """"""""error""""""""
+   // the input string is logged, and the test case ends with an "error"
    // rather than failure.
    function error(str String in)
       s.code = ConstantsLib.SERROR;
-      str = """"""""ERROR - """""""" + str;
+      str = "ERROR - " + str;
       s.reason = str;
    end
 
    // indicates that the test case was skipped
    function skipped(str String in)
       s.code = ConstantsLib.SNOT_RUN;
-      str = """"""""SKIPPED - """""""" + str;
+      str = "SKIPPED - " + str;
       s.reason = str;
    end
 
@@ -123,7 +123,7 @@ test cases that run in the EUnit test framework, or by both.</p>
                              throwsFailException boolean in)
 
       if(testCondition)
-         passed(""""""""OK"""""""");
+         passed("OK");
       else
          failed(failedReason);
 
@@ -151,11 +151,11 @@ test cases that run in the EUnit test framework, or by both.</p>
 
    /**
      * @description method to pass in empty string for the failed reason, 
-                    so the report will only state """"""""FAILED""""""""
+                    so the report will only state "FAILED"
      * @throws AssertionFailedException when testCondition is false
     **/
    function assertTrue1(testCondition boolean in)
-      assertTrue("""""""""""""""", testCondition);
+      assertTrue("", testCondition);
    end
 
    /**
@@ -170,7 +170,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    function assertBigIntEqual1(expected bigint in, actual bigint in)
-      assertBigIntEqual("""""""""""""""", expected, actual);
+      assertBigIntEqual("", expected, actual);
    end
 
    function assertStringEqual(message String in, 
@@ -181,7 +181,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    function assertStringEqual1(expected String in, actual String in)
-      assertStringEqual("""""""""""""""", expected, actual);
+      assertStringEqual("", expected, actual);
    end
 
    function assertStringArrayEqual(message String in, 
@@ -194,15 +194,15 @@ test cases that run in the EUnit test framework, or by both.</p>
       failedReason String;
 
       if(expectedSize == actualSize)
-         failedHeader String = """"""""Array element No.["""""""";
-         expectedValues String = EXPECTEDHEADER + """"""""["""""""";
-         actualValues String = ACTUALHEADER + """"""""["""""""";
+         failedHeader String = "Array element No.[";
+         expectedValues String = EXPECTEDHEADER + "[";
+         actualValues String = ACTUALHEADER + "[";
 
          for(i int from 1 to expectedSize)
 
             if(expected[i] != actual[i])
                if(!isArrayEqual)
-                  failedHeader += """""""", """""""";
+                  failedHeader += ", ";
                end
 
                isArrayEqual = false;
@@ -213,30 +213,30 @@ test cases that run in the EUnit test framework, or by both.</p>
             actualValues += actual[i];
 
             if(i != expectedSize)
-               expectedValues += """""""", """""""";
-               actualValues += """""""", """""""";
+               expectedValues += ", ";
+               actualValues += ", ";
             end
          end // for
 
-         failedHeader += """"""""] differs; """""""";
-         expectedValues += """"""""]; """""""";
-         actualValues += """"""""] """""""";
+         failedHeader += "] differs; ";
+         expectedValues += "]; ";
+         actualValues += "] ";
          failedReason = failedHeader + expectedValues + actualValues;
       else
          isArrayEqual = false;
-         failedReason = """"""""Failed: """""""" + EXPECTEDSIZEHEADER + """"""""'"""""""" + expectedSize + 
-                        """"""""' """""""" + ACTUALSIZEHEADER + """"""""'"""""""" + actualSize + """"""""' """""""";
+         failedReason = "Failed: " + EXPECTEDSIZEHEADER + "'" + expectedSize + 
+                        "' " + ACTUALSIZEHEADER + "'" + actualSize + "' ";
       end
 
-      if(message != null &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; message != """""""""""""""");
-         failedReason = message + """""""" - """""""" + failedReason;
+      if(message != null &amp;&amp; message != "");
+         failedReason = message + " - " + failedReason;
       end
       
       assertTrue(failedReason, isArrayEqual);
    end
 
    function assertStringArrayEqual1(expected String[] in, actual String[] in)
-      assertStringArrayEqual("""""""""""""""", expected, actual);
+      assertStringArrayEqual("", expected, actual);
    end
 
    function assertDateEqual(message String in,
@@ -247,7 +247,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    function assertDateEqual1(expected Date in, actual Date in)
-      assertDateEqual("""""""""""""""", expected, actual);
+      assertDateEqual("", expected, actual);
    end
 
    function assertTimestampEqual(message String in, 
@@ -258,7 +258,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 	
    function assertTimestampEqual1(expected Timestamp in, actual Timestamp in)
-      assertTimestampEqual("""""""""""""""", expected, actual);
+      assertTimestampEqual("", expected, actual);
    end
 
    function assertDecimalEqual(message String in, 
@@ -269,7 +269,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    function assertDecimalEqual1(expected decimal in, actual decimal in)
-      assertDecimalEqual("""""""""""""""", expected, actual);
+      assertDecimalEqual("", expected, actual);
    end
 
    function assertFloatEqual(message String in, 
@@ -281,7 +281,7 @@ test cases that run in the EUnit test framework, or by both.</p>
    end
 
    function assertFloatEqual1(expected float in, actual float in)
-      assertFloatEqual("""""""""""""""", expected, actual);
+      assertFloatEqual("", expected, actual);
    end
 
    //private helper methods
@@ -297,9 +297,9 @@ test cases that run in the EUnit test framework, or by both.</p>
       delta = normalExpected - normalActual;
       delta = MathLib.abs(delta);
 
-      isEqual boolean = (signExpected == signActual) &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-                        (mantissaExpected == mantissaActual) &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;
-                        (delta &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; deltaLimit);
+      isEqual boolean = (signExpected == signActual) &amp;&amp;
+                        (mantissaExpected == mantissaActual) &amp;&amp;
+                        (delta &lt; deltaLimit);
 
       return(isEqual);	
    end	
@@ -317,16 +317,16 @@ test cases that run in the EUnit test framework, or by both.</p>
 
       failedReason String = expect(expected, actual);
 
-      if(message != null &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; message != """""""""""""""")
-         failedReason = message + """""""" - """""""" + failedReason;
+      if(message != null &amp;&amp; message != "")
+         failedReason = message + " - " + failedReason;
       end
       return (failedReason);
    end
 
    private function expect(expected any in, actual any in) returns (String)
-      standardMsg string = """"""""Failed: """""""" + EXPECTEDHEADER + 
-                           """"""""'"""""""" + expected + """"""""' """""""" + 
-                           ACTUALHEADER + """"""""'"""""""" + actual + """"""""' """""""";
+      standardMsg string = "Failed: " + EXPECTEDHEADER + 
+                           "'" + expected + "' " + 
+                           ACTUALHEADER + "'" + actual + "' ";
       return (standardMsg);
    end
 
@@ -335,21 +335,21 @@ test cases that run in the EUnit test framework, or by both.</p>
                                 returns(float)
       mantissa = 0;
 
-      if(aFloat &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;= 0)
-         sign = """"""""+"""""""";
+      if(aFloat &gt;= 0)
+         sign = "+";
       else
-         sign = """"""""-"""""""";
+         sign = "-";
          aFloat = aFloat * -1;
       end
 
-      if(aFloat != null &amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp; aFloat != 0)
+      if(aFloat != null &amp;&amp; aFloat != 0)
 
-         while(aFloat &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 1)
+         while(aFloat &lt; 1)
             aFloat = aFloat * 10;
             mantissa = mantissa - 1;
          end
 
-         while(aFloat &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;= 10)
+         while(aFloat &gt;= 10)
             aFloat = aFloat / 10;
             mantissa = mantissa + 1;
          end
@@ -360,41 +360,41 @@ end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00275__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00275__comments"><!-- --></a>Comments</dt>
 
-<dd><p>For a description of how to use the framework, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html" title="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package.">Developing and running test cases with EUnit</a>.</p>
+<dd class="dd"><p class="p">For a description of how to use the framework, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html" title="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package.">Developing and running test cases with EUnit</a>.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00275__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00275__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00275__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00275__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d95608e100">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00275__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d114639e101">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d95608e103">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d114639e104">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00275__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d95608e100 ">Java</td>
+<tr id="redt00275__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d114639e101 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95608e103 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d114639e104 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00275__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d95608e100 ">JavaScript</td>
+<tr id="redt00275__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d114639e101 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95608e103 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d114639e104 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

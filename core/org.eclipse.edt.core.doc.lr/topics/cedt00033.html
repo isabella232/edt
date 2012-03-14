@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,24 +16,24 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Program classifier overview</title>
 </head>
-<body id="cedt00033"><a name="cedt00033"><!-- --></a>
+<body id="cedt00033">
 
 
-<h1 class="topictitle1">Program classifier overview</h1>
+<h1 class="title topictitle1">Program classifier overview</h1>
 
 
 
-<div><p>The capabilities of the Program classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the Program classifier are made available
 when you code a <dfn class="term">program</dfn>, which has a single entry point:
-a function named <span class="synph"><span class="kwd">main</span></span>. The type is static;
+a function named <span class="ph synph"><span class="keyword kwd">main</span></span>. The type is static;
 you do not create variables based on it.</p>
 
-<p>A program has no parameters. It is started by a system command
+<p class="p">A program has no parameters. It is started by a system command
 or by a transfer from another program. In the latter case, the program
 does not return control. </p>
 
 
-<div class="p">Here is an example of a program: <pre class="codeblock">program MyProgram01 type BasicProgram {}
+<div class="p">Here is an example of a program: <pre class="pre codeblock">program MyProgram01 type BasicProgram {}
 	
    function main()
       MyGradeList INT[3]{80, 90, 100}; 
@@ -55,34 +55,34 @@ does not return control. </p>
 end</pre>
 </div>
 
-<p>In the example, <span class="synph"><span class="kwd">main</span></span> declares variables,
-invokes a second function named <samp class="codeph">calculate</samp>, and passes
+<p class="p">In the example, <span class="ph synph"><span class="keyword kwd">main</span></span> declares variables,
+invokes a second function named <samp class="ph codeph">calculate</samp>, and passes
 a list of three integers. The invoked function returns the average
-value, and <span class="synph"><span class="kwd">main</span></span> writes that value to the
+value, and <span class="ph synph"><span class="keyword kwd">main</span></span> writes that value to the
 standard output.</p>
 
 
-<p>The next table lists the stereotypes that are available for a Program
+<p class="p">The next table lists the stereotypes that are available for a Program
 type.</p>
 
 <div class="p">
-<div class="tablenoborder"><a name="cedt00033__stereo_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00033__stereo_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="23.195876288659793%" id="d5233e85">Stereotype</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00033__stereo_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="23.195876288659793%" id="d6026e85">Stereotype</th>
 
-<th class="cellrowborder" valign="bottom" width="76.80412371134021%" id="d5233e88">Purpose</th>
+<th class="entry" valign="bottom" width="76.80412371134021%" id="d6026e88">Purpose</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="stereo_rows_start"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="23.195876288659793%" headers="d5233e85 ">BasicProgram (the default)</td>
+<tr class="row">
+<td class="entry" valign="top" width="23.195876288659793%" headers="d6026e85 ">BasicProgram (the default)</td>
 
-<td class="cellrowborder" valign="top" width="76.80412371134021%" headers="d5233e88 ">To define a program that might perform calculations,
+<td class="entry" valign="top" width="76.80412371134021%" headers="d6026e88 ">To define a program that might perform calculations,
 might access databases and files, and can use most EGL statements.
 A basic program does not accept real-time input from the user.</td>
 

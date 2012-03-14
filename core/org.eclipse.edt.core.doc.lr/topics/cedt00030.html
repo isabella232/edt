@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,40 +16,40 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DataItem classifier overview</title>
 </head>
-<body id="cedt00030"><a name="cedt00030"><!-- --></a>
+<body id="cedt00030">
 
 
-<h1 class="topictitle1">DataItem classifier overview</h1>
+<h1 class="title topictitle1">DataItem classifier overview</h1>
 
 
 
-<div><p>The capabilities of the DataItem classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the DataItem classifier are made available
 when you code a <dfn class="term">data item</dfn>. A data item is an alias of
 another type and can include multiple field-level annotations. </p>
 
-<div class="p">For example, you might define the <samp class="codeph">NumberOfCars</samp> alias
-and use it in place of INT. Here is the alias definition:<pre class="codeblock">DataItem
+<div class="p">For example, you might define the <samp class="ph codeph">NumberOfCars</samp> alias
+and use it in place of INT. Here is the alias definition:<pre class="pre codeblock">DataItem
    NumberOfCars INT
 End</pre>
 </div>
 
-<div class="p">Here is a second type, which defines the <samp class="codeph">NumberOfDrivers</samp> alias:<pre class="codeblock">DataItem 
+<div class="p">Here is a second type, which defines the <samp class="ph codeph">NumberOfDrivers</samp> alias:<pre class="pre codeblock">DataItem 
    NumberOfDrivers INT 
 End </pre>
 </div>
 
-<p>As suggested by the examples, each alias is called a <dfn class="term">data
+<p class="p">As suggested by the examples, each alias is called a <dfn class="term">data
 item</dfn>. A data item is an EGL type.</p>
 
 <div class="p">Your logic can include variables and constants that are based on
-a data item. Here are examples:<pre class="codeblock">myCarCount NumberOfCars;
+a data item. Here are examples:<pre class="pre codeblock">myCarCount NumberOfCars;
 const myAntiqueCarCount NumberOfCars = 5;</pre>
 </div>
 
-<p>A data item is not only for simple types, but for other native
+<p class="p">A data item is not only for simple types, but for other native
 and custom types.</p>
 
-<p>A data item does not include a stereotype.</p>
+<p class="p">A data item does not include a stereotype.</p>
 
 </div>
 

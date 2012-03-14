@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,59 +19,59 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EventListener annotation</title>
 </head>
-<body id="redt00083"><a name="redt00083"><!-- --></a>
+<body id="redt00083">
 
 
-<h1 class="topictitle1">EventListener annotation</h1>
+<h1 class="title topictitle1">EventListener annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">EventListener</span></span> lets
-you write an event handler for a Java environment,
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">EventListener</span></span> lets
+you write an event handler for a Java™ environment,
 giving the EGL generator the information needed to create code that
 conforms to the Java event-listener
-pattern. The annotation is used in an external type of stereotype<span class="synph"><span class="kwd">JavaObject</span></span>.</p>
+pattern. The annotation is used in an external type of stereotype<span class="ph synph"><span class="keyword kwd">JavaObject</span></span>.</p>
 
-<a name="redt00083__main"><!-- --></a><dl id="redt00083__main">
-<dt class="dlterm"><a name="redt00083__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00083__main">
+<dt class="dt dlterm"><a name="redt00083__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00083__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00083__use"><!-- --></a>Example use</dt>
 
-<dd>Consider the <span class="synph"><span class="kwd">java.beans</span></span> package, which
+<dd class="dd">Consider the <span class="ph synph"><span class="keyword kwd">java.beans</span></span> package, which
 a Java developer uses to code
 a kind of Java class typically
 known as a Java bean or, more
 simply, a <dfn class="term">bean</dfn>. Among its capabilities, a bean can invoke
 a method of a Java object in
 response to a runtime event. The rest of this description assumes
-that the runtime event is a change of a property value in the bean.<p>The Java developer registers that type
-of event by invoking the <span class="synph"><span class="kwd">addPropertyChangeListener</span></span> method
-of the bean and by passing a <span class="synph"><span class="kwd">PropertyChangeListener</span></span> object.
-In general terms, the <span class="synph"><span class="kwd">PropertyChangeListener</span></span> object
+that the runtime event is a change of a property value in the bean.<p class="p">The Java developer registers that type
+of event by invoking the <span class="ph synph"><span class="keyword kwd">addPropertyChangeListener</span></span> method
+of the bean and by passing a <span class="ph synph"><span class="keyword kwd">PropertyChangeListener</span></span> object.
+In general terms, the <span class="ph synph"><span class="keyword kwd">PropertyChangeListener</span></span> object
 is an <dfn class="term">event listener</dfn>.</p>
-<p>After a property value changes,
-the bean calls the event listener. Specifically, the bean calls the <span class="synph"><span class="kwd">propertyChange</span></span> method
-of the <span class="synph"><span class="kwd">PropertyChangeListener</span></span> object and
-passes a <span class="synph"><span class="kwd">PropertyChangeEvent</span></span> object that
+<p class="p">After a property value changes,
+the bean calls the event listener. Specifically, the bean calls the <span class="ph synph"><span class="keyword kwd">propertyChange</span></span> method
+of the <span class="ph synph"><span class="keyword kwd">PropertyChangeListener</span></span> object and
+passes a <span class="ph synph"><span class="keyword kwd">PropertyChangeEvent</span></span> object that
 gives details about the change.</p>
-<p>A further detail is that the
+<p class="p">A further detail is that the
 event listener is based on a Java interface,
-and the <span class="synph"><span class="kwd">propertyChange</span></span> method is specific
-to a business application. The EGL developer's use of the <span class="synph"><span class="kwd">@eventListener</span></span> property
-means that the EGL-generated <span class="synph"><span class="kwd">propertyChange</span></span> method
+and the <span class="ph synph"><span class="keyword kwd">propertyChange</span></span> method is specific
+to a business application. The EGL developer's use of the <span class="ph synph"><span class="keyword kwd">@eventListener</span></span> property
+means that the EGL-generated <span class="ph synph"><span class="keyword kwd">propertyChange</span></span> method
 invokes logic that is derived from a developer-coded EGL function.</p>
-<p>Before
+<p class="p">Before
 continuing this example, review the annotation detail and fields.</p>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00083__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00083__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record EventListener type Annotation
+<dd class="dd"><pre class="pre codeblock">Record EventListener type Annotation
 {
    targets = [
       ElementKind.FieldMbr
@@ -84,32 +84,32 @@ end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00083__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00083__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">addMethod</span></span></dt>
+<dd class="dd"><dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">addMethod</span></span></dt>
 
-<dd>A string that contains the name of the Java method that registers an event listener.
-Do not include parentheses when identifying the method. <p>In the
-previous example, the value of <span class="synph"><span class="kwd">addMethod</span></span> is
+<dd class="dd pd">A string that contains the name of the Java method that registers an event listener.
+Do not include parentheses when identifying the method. <p class="p">In the
+previous example, the value of <span class="ph synph"><span class="keyword kwd">addMethod</span></span> is
 “addPropertyChangeListener”.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">listenerType</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">listenerType</span></span></dt>
 
-<dd>A string that contains the name of a Java class
-that acts as a listener. Include the package name for that class.<p>In
-the previous example, the value of <span class="synph"><span class="kwd">listenerType</span></span> is
+<dd class="dd pd">A string that contains the name of a Java class
+that acts as a listener. Include the package name for that class.<p class="p">In
+the previous example, the value of <span class="ph synph"><span class="keyword kwd">listenerType</span></span> is
 “java.beans.PropertyChangeListener”.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">method</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">method</span></span></dt>
 
-<dd>A string that contains the name of a Java method
-that is in the listener and that is invoked when the event occurs.<p>In
-the previous example, the value of <span class="synph"><span class="kwd">method</span></span> is
+<dd class="dd pd">A string that contains the name of a Java method
+that is in the listener and that is invoked when the event occurs.<p class="p">In
+the previous example, the value of <span class="ph synph"><span class="keyword kwd">method</span></span> is
 “propertyChange”.</p>
 </dd>
 
@@ -117,91 +117,91 @@ the previous example, the value of <span class="synph"><span class="kwd">method<
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00083__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00083__comments"><!-- --></a>Comments</dt>
 
-<dd><div class="p">Continuing the example, consider EGL code that defines an external
-type for a bean named <samp class="codeph">MyBean</samp>.  The external type
-includes a field named <samp class="codeph">onPropertyChange</samp>, which is
-based on a Delegate part shown later: <pre class="codeblock">ExternalType MyBean type JavaObject
+<dd class="dd"><div class="p">Continuing the example, consider EGL code that defines an external
+type for a bean named <samp class="ph codeph">MyBean</samp>.  The external type
+includes a field named <samp class="ph codeph">onPropertyChange</samp>, which is
+based on a Delegate part shown later: <pre class="pre codeblock">ExternalType MyBean type JavaObject
    onPropertyChange PropertyChangeDelegate
-      { @eventListener{ addMethod = """"""""addPropertyChangeListener"""""""", 
-                        listenerType = """"""""java.beans.PropertyChangeListener"""""""", 
-                        method = """"""""propertyChange"""""""" } };
+      { @eventListener{ addMethod = "addPropertyChangeListener", 
+                        listenerType = "java.beans.PropertyChangeListener", 
+                        method = "propertyChange" } };
 end
 </pre>
 </div>
-<p>The <samp class="codeph">onPropertyChange</samp> field is
+<p class="p">The <samp class="ph codeph">onPropertyChange</samp> field is
 not in the bean, but is present so that the listener pattern is available
 in your EGL code, where you assign that EGL function that will be
 invoked when an event occurs.</p>
-<div class="p">In keeping with the <span class="synph"><span class="kwd">propertyChange</span></span> method,
-the <samp class="codeph">PropertyChangeDelegate</samp> Delegate part has a single
-parameter, which is an external type that is based on the <span class="synph"><span class="kwd">PropertyChangeEvent</span></span> object.<pre class="codeblock">Delegate PropertyChangeDelegate( evt PropertyChangeEvent in ) 
+<div class="p">In keeping with the <span class="ph synph"><span class="keyword kwd">propertyChange</span></span> method,
+the <samp class="ph codeph">PropertyChangeDelegate</samp> Delegate part has a single
+parameter, which is an external type that is based on the <span class="ph synph"><span class="keyword kwd">PropertyChangeEvent</span></span> object.<pre class="pre codeblock">Delegate PropertyChangeDelegate( evt PropertyChangeEvent in ) 
 end
 
-ExternalType PropertyChangeEvent type JavaObject { packageName = """"""""java.beans"""""""" }
+ExternalType PropertyChangeEvent type JavaObject { packageName = "java.beans" }
    function getPropertyName() returns ( string );
    // You might make available other methods of java.beans.PropertyChangeEvent.
 end</pre>
 </div>
-<div class="p">To see the use of the <samp class="codeph">MyBean</samp> external
-type, consider the following EGL program: <pre class="codeblock">program MyEGLProgram
+<div class="p">To see the use of the <samp class="ph codeph">MyBean</samp> external
+type, consider the following EGL program: <pre class="pre codeblock">program MyEGLProgram
    function main()
       mb MyBean{ onPropertyChange = propChange };
    end
 
    function propChange( evt PropertyChangeEvent in )
-      writeStdout( """"""""Property """""""" :: evt.getPropertyName() :: """""""" has changed."""""""" );
+      writeStdout( "Property " :: evt.getPropertyName() :: " has changed." );
    end
 end</pre>
 </div>
-<p>The program creates a variable of type <samp class="codeph">MyBean</samp>,
-assigns a function to the <samp class="codeph">onPropertyChange</samp> field
+<p class="p">The program creates a variable of type <samp class="ph codeph">MyBean</samp>,
+assigns a function to the <samp class="ph codeph">onPropertyChange</samp> field
 of that type, and defines the function itself. When a property value
-changes in the bean, the function is invoked and uses <span class="synph"><span class="kwd">getPropertyName</span></span>,
-which is the one method that was made available from the <span class="synph"><span class="kwd">PropertyChangeEvent</span></span> object.</p>
-<p>Always
-assign the <span class="synph"><span class="kwd">@eventListener</span></span> property to a
+changes in the bean, the function is invoked and uses <span class="ph synph"><span class="keyword kwd">getPropertyName</span></span>,
+which is the one method that was made available from the <span class="ph synph"><span class="keyword kwd">PropertyChangeEvent</span></span> object.</p>
+<p class="p">Always
+assign the <span class="ph synph"><span class="keyword kwd">@eventListener</span></span> property to a
 variable that is based on a Delegate part. The characteristics of
-the Delegate part must conform to an event-handling method such as <span class="synph"><span class="kwd">propertyChange</span></span>,
+the Delegate part must conform to an event-handling method such as <span class="ph synph"><span class="keyword kwd">propertyChange</span></span>,
 which is in a specific Java event
-listener such as <span class="synph"><span class="kwd">PropertyChangeListener</span></span>.</p>
-<p>When
+listener such as <span class="ph synph"><span class="keyword kwd">PropertyChangeListener</span></span>.</p>
+<p class="p">When
 you reference Java field and
 method names in the code, remember that they are case sensitive, even
 though the equivalent EGL names are not.</p>
 <anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00083__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00083__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00083__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00083__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d32871e318">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00083__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d38655e318">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d32871e321">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d38655e321">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00083__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d32871e318 ">Java</td>
+<tr id="redt00083__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d38655e318 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d32871e321 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d38655e321 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00083__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d32871e318 ">JavaScript</td>
+<tr id="redt00083__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d38655e318 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d32871e321 ">Not in use.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d38655e321 ">Not in use.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

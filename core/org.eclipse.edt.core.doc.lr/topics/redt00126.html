@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,33 +19,33 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DojoBorderContainer widget</title>
 </head>
-<body id="redt00126"><a name="redt00126"><!-- --></a>
+<body id="redt00126">
 
 
-<h1 class="topictitle1">DojoBorderContainer widget</h1>
+<h1 class="title topictitle1">DojoBorderContainer widget</h1>
 
 
 
-<div><p>The DojoBorderContainer widget creates a container partitioned
+<div class="body"><p class="shortdesc">The DojoBorderContainer widget creates a container partitioned
 into up to five regions: left, right, top, bottom, and center.</p>
 
-<div class="section"><h2 class="sectiontitle">Fields</h2><dl>
-<dt class="dlterm">borders</dt>
+<div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
+<dt class="dt dlterm">borders</dt>
 
-<dd>A Boolean value that indicates whether the borders should be visible.
+<dd class="dd">A Boolean value that indicates whether the borders should be visible.
 A border line can be drawn around the container and each region (similar
 to table row and column borders). </dd>
 
 </dl>
-<p>Other supported fields and functions are described
+<p class="p">Other supported fields and functions are described
 in the following topics in the EGL Programmer’s Guide: “Rich UI widget
 fields” and ”Rich UI widget functions.”</p>
 <div class="p">Use of this widget requires
-the following statement:<pre class="codeblock">import dojo.widgets.DojoBorderContainer;</pre>
+the following statement:<pre class="pre codeblock">import dojo.widgets.DojoBorderContainer;</pre>
 </div>
 </div>
 
-<div class="example"><h2 class="sectiontitle">Examples</h2><pre class="codeblock">package client;
+<div class="example"><h2 class="title sectiontitle">Examples</h2><pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.TextLabel;
 import dojo.widgets.DojoBorderContainer;
@@ -73,9 +73,9 @@ BorderContainer DojoBorderContainer{
                             children = [myLabel, myOtherTextField]}
    	 ]};
 
-   myTextField DojoTextField {text = """"""""Read!"""""""", readonly = true};
-   myButton DojoButton{text = """"""""Click!"""""""", onClick ::= myButtonResponse};
-   myLabel TextLabel {text = """"""""Write: """"""""};
+   myTextField DojoTextField {text = "Read!", readonly = true};
+   myButton DojoButton{text = "Click!", onClick ::= myButtonResponse};
+   myLabel TextLabel {text = "Write: "};
    myOtherTextField DojoTextField {readonly = false};
    
    function myButtonResponse(e Event in)

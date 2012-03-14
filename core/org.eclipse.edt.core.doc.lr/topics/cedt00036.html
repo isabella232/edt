@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,47 +16,47 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Handler classifier overview</title>
 </head>
-<body id="cedt00036"><a name="cedt00036"><!-- --></a>
+<body id="cedt00036">
 
 
-<h1 class="topictitle1">Handler classifier overview</h1>
+<h1 class="title topictitle1">Handler classifier overview</h1>
 
 
 
-<div><p>The capabilities of the Handler classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the Handler classifier are made available
 when you code a <dfn class="term">handler</dfn>. The type defines a series of
 interactions with the user or with other EGL logic, as necessary to
 support one or another user interface technology. Different kinds
 of handlers have different structure and use.</p>
 
-<p>The next table lists the stereotypes that are available for a Handler
+<p class="p">The next table lists the stereotypes that are available for a Handler
 type.</p>
 
 <div class="p">
-<div class="tablenoborder"><a name="cedt00036__stereo_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00036__stereo_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="22.613065326633166%" id="d5793e42">Stereotype</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00036__stereo_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="22.613065326633166%" id="d6673e42">Stereotype</th>
 
-<th class="cellrowborder" valign="bottom" width="77.38693467336684%" id="d5793e45">Purpose</th>
+<th class="entry" valign="bottom" width="77.38693467336684%" id="d6673e45">Purpose</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="stereo_rows_start"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d5793e42 ">none specified</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d6673e42 ">none specified</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d5793e45 ">To provide an object that might include both
+<td class="entry" valign="top" width="77.38693467336684%" headers="d6673e45 ">To provide an object that might include both
 fields and functions.<div class="p">You can used the handler to build an EGL <dfn class="term">text
 report</dfn>, which is a character-based output that you can develop
 quickly. In this case, an EGL program or other logic might act as
-follows:<ul>
-<li>Declare a variable based on the handler.</li>
+follows:<ul class="ul">
+<li class="li">Declare a variable based on the handler.</li>
 
-<li>Use the variable to invoke a set of functions, one after the next,
+<li class="li">Use the variable to invoke a set of functions, one after the next,
 so as to structure the report and to embed business data into it.</li>
 
 </ul>
@@ -66,23 +66,23 @@ so as to structure the report and to embed business data into it.</li>
 </tr>
 
 <anchor id="stereo_rows_post_basichandler"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d5793e42 ">BIRTHandler</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d6673e42 ">BIRTHandler</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d5793e45 ">To customize a Business Intelligence and Reporting
+<td class="entry" valign="top" width="77.38693467336684%" headers="d6673e45 ">To customize a Business Intelligence and Reporting
 Tools (BIRT) report, which is a graphically sophisticated output whose
 structure is based on a pre-specified design file. For details on
-BIRT, see <a href="http://www.eclipse.org/birt" target="_blank">http://www.eclipse.org/birt</a>.<div class="p">An
-EGL program or other logic might act as follows:<ul>
-<li>Declare a handler; that is, a variable that is based on the Handler
+BIRT, see <a class="xref" href="http://www.eclipse.org/birt" target="_blank">http://www.eclipse.org/birt</a>.<div class="p">An
+EGL program or other logic might act as follows:<ul class="ul">
+<li class="li">Declare a handler; that is, a variable that is based on the Handler
 type.</li>
 
-<li>Use EGL syntax to create a BIRT report engine (a Java object) and to provide to that engine a
+<li class="li">Use EGL syntax to create a BIRT report engine (a Java™ object) and to provide to that engine a
 reference to the design file and to the handler.</li>
 
-<li>Place business data into the handler, for inclusion in the report.</li>
+<li class="li">Place business data into the handler, for inclusion in the report.</li>
 
-<li>Invoke one of the engine's report-creation methods.</li>
+<li class="li">Invoke one of the engine's report-creation methods.</li>
 
 </ul>
 </div>
@@ -93,15 +93,15 @@ reference to the design file and to the handler.</li>
 <anchor id="stereo_rows_post_birthandler"></anchor>
 <anchor id="stereo_rows_post_birthandler"></anchor>
 <anchor id="stereo_rows_post_entity"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d5793e42 ">RUIHandler</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d6673e42 ">RUIHandler</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d5793e45 ">To provide client-side web applications.<p>In brief, the
+<td class="entry" valign="top" width="77.38693467336684%" headers="d6673e45 ">To provide client-side web applications.<p class="p">In brief, the
 handler places EGL and Dojo widgets on a web page and responds to
 events such as a user's button click. The technology supports
 data validation, access of remote services, and quick update of sections
 on the web page.</p>
-<p>A Rich UI handler is not necessarily the basis
+<p class="p">A Rich UI handler is not necessarily the basis
 of a variable. However, if one handler creates a variable that is
 based on a second, the first handler can display the widgets and access
 the functions, widgets, and other fields that were declared in the
@@ -111,10 +111,10 @@ second.</p>
 </tr>
 
 <anchor id="stereo_rows_post_ruihandler"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d5793e42 ">RUIWidget</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d6673e42 ">RUIWidget</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d5793e45 ">To define a new widget for use by other EGL
+<td class="entry" valign="top" width="77.38693467336684%" headers="d6673e45 ">To define a new widget for use by other EGL
 Rich UI developers.</td>
 
 </tr>

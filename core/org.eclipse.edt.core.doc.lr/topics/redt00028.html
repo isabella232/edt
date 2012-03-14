@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Open statement for a relational database"></meta>
+<meta name="abstract" content="The open statement opens a result set, which is a variable of type SQLResultSet. That variable can be instantiated only by issuing the open statement."></meta>
+<meta name="description" content="The open statement opens a result set, which is a variable of type SQLResultSet. That variable can be instantiated only by issuing the open statement."></meta>
 <meta name="DC.subject" content="EGL statements, open, open EGL statement, relational database"></meta>
 <meta name="keywords" content="EGL statements, open, open EGL statement, relational database"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
@@ -17,79 +19,79 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Open statement for a relational database</title>
 </head>
-<body id="redt00028"><a name="redt00028"><!-- --></a>
+<body id="redt00028">
 
 
-<h1 class="topictitle1">Open statement for a relational database</h1>
+<h1 class="title topictitle1">Open statement for a relational database</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><div><span>The <strong>open</strong> statement opens a
-result set, which is a variable of type <span class="synph"><span class="kwd">SQLResultSet</span></span>.
-That variable can be instantiated only by issuing the <strong>open</strong> statement.</span>
+<div class="body" id="body"><div class="abstract"><span class="shortdesc">The <strong class="ph b">open</strong> statement opens a
+result set, which is a variable of type <span class="ph synph"><span class="keyword kwd">SQLResultSet</span></span>.
+That variable can be instantiated only by issuing the <strong class="ph b">open</strong> statement.</span>
  </div>
 
 <anchor id="sql_intro_more"></anchor>
 
-<div class="section" id="redt00028__sql_syntax"><a name="redt00028__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00028__sql_syntax_figure"><a name="redt00028__sql_syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_data_sql_open.gif" alt="Syntax diagram for the open statement with SQL"></img><br></br>
+<div class="section" id="redt00028__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00028__sql_syntax_figure">
+<br></br><img class="image" src="../images/redt_data_sql_open.gif" alt="Syntax diagram for the open statement with SQL"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">entity</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">entity</var></dt>
 
-<dd>Name of the entity, which is a variable based on an External type,
+<dd class="dd">Name of the entity, which is a variable based on an External type,
 Handler type, or Record type. The values in that entity are used in
 the corresponding SQL SELECT statement. <div class="p">If you specify an entity
-and do not specify the SQL statement, the following default is used: <pre class="codeblock">SELECT 
-   <em>column_1</em>, <em>column_2</em>... <em>column_n</em>
-   FROM <em>tableName</em>
-   WHERE <em>ID_column_1</em> = ? AND <em>ID_column_2</em> = ? ... AND <em>ID_column_n = ?</em></pre>
+and do not specify the SQL statement, the following default is used: <pre class="pre codeblock">SELECT 
+   <em class="ph i">column_1</em>, <em class="ph i">column_2</em>... <em class="ph i">column_n</em>
+   FROM <em class="ph i">tableName</em>
+   WHERE <em class="ph i">ID_column_1</em> = ? AND <em class="ph i">ID_column_2</em> = ? ... AND <em class="ph i">ID_column_n = ?</em></pre>
 </div>
 <div class="p">The
-default SELECT statement retrieves data from all columns in the table:<ul>
-<li> The order of the column fields in the statement reflects the
+default SELECT statement retrieves data from all columns in the table:<ul class="ul">
+<li class="li"> The order of the column fields in the statement reflects the
 order of the fields in the type definition.</li>
 
-<li>A <em>column</em> entry such as <em>column_1</em> is a name; specifically,
-the value of the <strong>Column</strong> annotation for a field in the type
+<li class="li">A <em class="ph i">column</em> entry such as <em class="ph i">column_1</em> is a name; specifically,
+the value of the <strong class="ph b">Column</strong> annotation for a field in the type
 definition. If that annotation is missing from the field in the type
 definition, the name in the statement is the name of the field in
 the type definition.</li>
 
 </ul>
 </div>
-<p>The value of <em>tableName</em> is the value of the <strong>Table</strong> annotation
+<p class="p">The value of <em class="ph i">tableName</em> is the value of the <strong class="ph b">Table</strong> annotation
 that is set on the entity type. If that annotation is missing from
-the type definition, the value of <em>tableName</em> is the type name.</p>
-<p>The
-default WHERE clause references only the <em>key fields</em>, which
-are the entity fields that have an <strong>ID</strong> annotation. The order
+the type definition, the value of <em class="ph i">tableName</em> is the type name.</p>
+<p class="p">The
+default WHERE clause references only the <em class="ph i">key fields</em>, which
+are the entity fields that have an <strong class="ph b">ID</strong> annotation. The order
 of the columns listed in the WHERE clause reflects the order of the
 key fields. </p>
 <div class="p">When you are specifying an entity, each question
-mark is replaced with a value:<ul>
-<li>For default processing, the behavior is as follows:<ul>
-<li>If you do not specify the <strong>using</strong> clause, the replacement
+mark is replaced with a value:<ul class="ul">
+<li class="li">For default processing, the behavior is as follows:<ul class="ul">
+<li class="li">If you do not specify the <strong class="ph b">using</strong> clause, the replacement
 value is the corresponding value in the entity.</li>
 
-<li>If you specify a <strong>using</strong> clause, the replacement value is
-the corresponding value in the <strong>using</strong> clause.</li>
+<li class="li">If you specify a <strong class="ph b">using</strong> clause, the replacement value is
+the corresponding value in the <strong class="ph b">using</strong> clause.</li>
 
 </ul>
 </li>
 
-<li>If you specify an entity and a custom SQL SELECT statement, the
-behavior is as follows:<ul>
-<li>If you do not specify the <strong>using</strong> clause, the replacement
-value is the corresponding value in the entity. <p>A question mark
+<li class="li">If you specify an entity and a custom SQL SELECT statement, the
+behavior is as follows:<ul class="ul">
+<li class="li">If you do not specify the <strong class="ph b">using</strong> clause, the replacement
+value is the corresponding value in the entity. <p class="p">A question mark
 represents the value of a key field, with the first question mark
 corresponding to the first key field, the second question mark to
 the second key field, and so forth. The statement can include fewer
 question marks than the number of key fields but cannot include more.</p>
 </li>
 
-<li>If you specify a <strong>using</strong> clause, the replacement value is
-the corresponding value in the <strong>using</strong> clause. In this case,
+<li class="li">If you specify a <strong class="ph b">using</strong> clause, the replacement value is
+the corresponding value in the <strong class="ph b">using</strong> clause. In this case,
 you can reference fields other than key fields.</li>
 
 </ul>
@@ -100,74 +102,74 @@ you can reference fields other than key fields.</li>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">field</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">field</var></dt>
 
-<dd>A value of an EGL simple type that is compatible with the corresponding
+<dd class="dd">A value of an EGL simple type that is compatible with the corresponding
 database column. The list of simple values is assigned to the question
 marks in the SQL DELETE statement.</dd>
 
 
-<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLDataSource</var></dt>
 
-<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+<dd class="dd">A variable of type <strong class="ph b">SQLDataSource</strong>. The variable includes
 connection details or references an EGL deployment descriptor entry
-that provides access to the connection details. <p>If you issue a
+that provides access to the connection details. <p class="p">If you issue a
 prepared statement, the variable is optional and is ignored if present.</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLResultSet</var></dt>
 
-<dd>An SQL result set that was established by an <strong>open</strong> statement.
-In this case, the <strong>Delete</strong> statement deletes the current row.
+<dd class="dd">An SQL result set that was established by an <strong class="ph b">open</strong> statement.
+In this case, the <strong class="ph b">Delete</strong> statement deletes the current row.
 An attempt to delete the row a second time results in an exception.</dd>
 
 
-<dt class="dlterm"><var class="varname">SQLStmt</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLStmt</var></dt>
 
-<dd>A prepared statement, which is a variable of type <span class="synph"><span class="kwd">SQLStatement</span></span>.
-The variable must have been instantiated by issuing the EGL <strong>prepare</strong> statement.</dd>
+<dd class="dd">A prepared statement, which is a variable of type <span class="ph synph"><span class="keyword kwd">SQLStatement</span></span>.
+The variable must have been instantiated by issuing the EGL <strong class="ph b">prepare</strong> statement.</dd>
 
 
-<dt class="dlterm"><var class="varname">stmt</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">stmt</var></dt>
 
-<dd>A single SQL DELETE statement, which is not required to end with
-a semicolon but can. The statement format is as shown for <em>entity</em>.<p>You
-can use a prepared statement in place of #sql{<em>delStmt</em>}.</p>
+<dd class="dd">A single SQL DELETE statement, which is not required to end with
+a semicolon but can. The statement format is as shown for <em class="ph i">entity</em>.<p class="p">You
+can use a prepared statement in place of #sql{<em class="ph i">delStmt</em>}.</p>
 </dd>
 
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00028__sql_example"><a name="redt00028__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<div class="example" id="redt00028__sql_example"><pre class="pre codeblock"></pre>
 <anchor id="sql_example_more"></anchor></div>
 
-<div class="section" id="redt00028__compat"><a name="redt00028__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00028__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00028__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d16288e266">Target</th>
+<div class="section" id="redt00028__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00028__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d19532e266">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d16288e269">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d19532e269">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00028__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d16288e266 ">Java</td>
+<tr id="redt00028__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d19532e266 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d16288e269 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d19532e269 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00028__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d16288e266 ">JavaScript</td>
+<tr id="redt00028__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d19532e266 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d16288e269 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d19532e269 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Continue statement"></meta>
+<meta name="abstract" content="The EGL continue statement returns control to the start of a block of code controlled by a for, forEach, or while statement."></meta>
+<meta name="description" content="The EGL continue statement returns control to the start of a block of code controlled by a for, forEach, or while statement."></meta>
 <meta name="DC.subject" content="EGL statements, continue, continue EGL statement"></meta>
 <meta name="keywords" content="EGL statements, continue, continue EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
@@ -17,52 +19,52 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Continue statement</title>
 </head>
-<body id="redt00020"><a name="redt00020"><!-- --></a>
+<body id="redt00020">
 
 
-<h1 class="topictitle1">Continue statement</h1>
+<h1 class="title topictitle1">Continue statement</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><div><span>The EGL <span class="synph"><span class="kwd">continue</span></span> statement
-returns control to the start of a block of code controlled by a <span class="synph"><span class="kwd">for</span></span>, <span class="synph"><span class="kwd">forEach</span></span>,
-or <span class="synph"><span class="kwd">while</span></span> statement. </span>
+<div class="body" id="body"><div class="abstract"><span class="shortdesc">The EGL <span class="ph synph"><span class="keyword kwd">continue</span></span> statement
+returns control to the start of a block of code controlled by a <span class="ph synph"><span class="keyword kwd">for</span></span>, <span class="ph synph"><span class="keyword kwd">forEach</span></span>,
+or <span class="ph synph"><span class="keyword kwd">while</span></span> statement. </span>
 EGL evaluates
 the conditions for continuing the loop at that point, and either continues
 running the loop or exits and continues processing with the next statement
 after the loop.</div>
 
-<p>The <span class="synph"><span class="kwd">continue</span></span> statement must be in the
+<p class="p">The <span class="ph synph"><span class="keyword kwd">continue</span></span> statement must be in the
 same function as the containing statement. You cannot get the return
-of control by putting the <span class="synph"><span class="kwd">continue</span></span> statement
+of control by putting the <span class="ph synph"><span class="keyword kwd">continue</span></span> statement
 in a function that you call from inside the loop.</p>
 
 <anchor id="intro_more"></anchor>
 
-<div class="section" id="redt00020__syntax"><a name="redt00020__syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00020__syntax_figure"><a name="redt00020__syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_core_continue.gif" alt="Syntax diagram for the continue statement"></img><br></br>
+<div class="section" id="redt00020__syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00020__syntax_figure">
+<br></br><img class="image" src="../images/redt_core_continue.gif" alt="Syntax diagram for the continue statement"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">statement</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
 
-<dd>You can specify the type of EGL statement that you want to continue,
-whether <span class="synph"><span class="kwd">for</span></span>, <span class="synph"><span class="kwd">forEach</span></span>,
-or <span class="synph"><span class="kwd">while</span></span> statement. This option is useful
+<dd class="dd">You can specify the type of EGL statement that you want to continue,
+whether <span class="ph synph"><span class="keyword kwd">for</span></span>, <span class="ph synph"><span class="keyword kwd">forEach</span></span>,
+or <span class="ph synph"><span class="keyword kwd">while</span></span> statement. This option is useful
 when you are deep in nested loops. Processing continues with the nearest
 embedding statement of the specified type. </dd>
 
 
-<dt class="dlterm"><var class="varname">label</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">label</var></dt>
 
-<dd>A label that is attached to an enclosing <span class="synph"><span class="kwd">for</span></span>, <span class="synph"><span class="kwd">forEach</span></span>,
-or <span class="synph"><span class="kwd">while</span></span> statement. Processing continues
+<dd class="dd">A label that is attached to an enclosing <span class="ph synph"><span class="keyword kwd">for</span></span>, <span class="ph synph"><span class="keyword kwd">forEach</span></span>,
+or <span class="ph synph"><span class="keyword kwd">while</span></span> statement. Processing continues
 with the referenced statement.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></div>
 
-<div class="example" id="redt00020__example"><a name="redt00020__example"><!-- --></a><div class="p">The following example assumes that you have
-coded a print function named <samp class="codeph">printReport</samp>. <pre class="codeblock">for (i from 1 to 100 by 1)
+<div class="example" id="redt00020__example"><div class="p">The following example assumes that you have
+coded a print function named <samp class="ph codeph">printReport</samp>. <pre class="pre codeblock">for (i from 1 to 100 by 1)
    printReport(myList[i]);
    if ((i % 10) != 0)
       continue;
@@ -71,36 +73,36 @@ coded a print function named <samp class="codeph">printReport</samp>. <pre class
 end // for
 </pre>
 </div>
-<p>That code prints the members of a list, inserting
+<p class="p">That code prints the members of a list, inserting
 a blank line between each group of ten.</p>
 <anchor id="example_more"></anchor></div>
 
-<div class="section" id="redt00020__compat"><a name="redt00020__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00020__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00020__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d12353e141">Target</th>
+<div class="section" id="redt00020__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00020__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d14654e141">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d12353e144">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d14654e144">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00020__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d12353e141 ">Java</td>
+<tr id="redt00020__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d14654e141 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d12353e144 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d14654e144 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00020__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d12353e141 ">JavaScript</td>
+<tr id="redt00020__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d14654e141 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d12353e144 "><span class="synph"><span class="kwd">continue</span></span> is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d14654e144 "><span class="ph synph"><span class="keyword kwd">continue</span></span> is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

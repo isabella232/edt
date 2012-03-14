@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,72 +19,72 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>SysLib.writeStdError function</title>
 </head>
-<body id="redt00203"><a name="redt00203"><!-- --></a>
+<body id="redt00203">
 
 
-<h1 class="topictitle1">SysLib.writeStdError function</h1>
+<h1 class="title topictitle1">SysLib.writeStdError function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">SysLib.writeStdErr</span></span> writes
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">SysLib.writeStdErr</span></span> writes
 a string to the standard error destination.</p>
 
 
-<a name="redt00203__main"><!-- --></a><dl id="redt00203__main">
-<dt class="dlterm"><a name="redt00203__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00203__main">
+<dt class="dt dlterm"><a name="redt00203__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00203__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00203__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00203__syntax_block"><a name="redt00203__syntax_block"><!-- --></a>static function writeStderr(text string in);</pre>
-<a name="redt00203__syntax_list"><!-- --></a><dl id="redt00203__syntax_list">
-<dt class="dlterm"><var class="varname">text</var></dt>
+<dd class="dd"><pre class="pre codeblock" id="redt00203__syntax_block">static function writeStderr(text string in);</pre>
+<dl class="dl" id="redt00203__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">text</var></dt>
 
-<dd>The text to write.</dd>
+<dd class="dd">The text to write.</dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00203__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00203__use"><!-- --></a>Example use</dt>
 
-<dd><p>Here is example code:</p>
-<pre class="codeblock">SysLib.writeStdErr(""""""""Opened file"""""""");</pre>
+<dd class="dd"><p class="p">Here is example code:</p>
+<pre class="pre codeblock">SysLib.writeStdErr("Opened file");</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00203__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00203__comments"><!-- --></a>Comments</dt>
 
-<dd><p><span class="synph"><span class="kwd">sysLib.writeStdErr()</span></span> is typically
+<dd class="dd"><p class="p"><span class="ph synph"><span class="keyword kwd">sysLib.writeStdErr()</span></span> is typically
 for debugging.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00203__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00203__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00203__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00203__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d61718e117">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00203__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d74867e117">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d61718e120">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d74867e120">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00203__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d61718e117 ">Java</td>
+<tr id="redt00203__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d74867e117 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d61718e120 ">The output goes to the System.err output stream
-of the Java Virtual Machine (JVM). <p>The default is to route the
+<td class="entry" valign="top" width="50%" headers="d74867e120 ">The output goes to the System.err output stream
+of the Java Virtual Machine (JVM). <p class="p">The default is to route the
 output to the console, but when you start the JVM, you can route the
 output to a different location.</p>
 <anchor id="compat_java_more"></anchor></td>
@@ -92,10 +92,10 @@ output to a different location.</p>
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00203__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d61718e117 ">JavaScript</td>
+<tr id="redt00203__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d74867e117 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d61718e120 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d74867e120 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -110,7 +110,7 @@ output to a different location.</p>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

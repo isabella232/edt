@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,32 +19,32 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>XMLValue annotation</title>
 </head>
-<body id="redt00261"><a name="redt00261"><!-- --></a>
+<body id="redt00261">
 
 
-<h1 class="topictitle1">XMLValue annotation</h1>
+<h1 class="title topictitle1">XMLValue annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">XMLValue</span></span> identifies
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">XMLValue</span></span> identifies
 the potential structure of the XML elements that are represented by
 fields in a Record type.</p>
 
-<a name="redt00261__main"><!-- --></a><dl id="redt00261__main">
-<dt class="dlterm"><a name="redt00261__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00261__main">
+<dt class="dt dlterm"><a name="redt00261__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.xml.binding.annotation</p>
+<dd class="dd"><p class="p">eglx.xml.binding.annotation</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00261__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00261__use"><!-- --></a>Example use</dt>
 
-<dd>See """"""""Annotation fields"""""""" later.<anchor id="use_more"></anchor></dd>
+<dd class="dd">See "Annotation fields" later.<anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00261__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00261__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record XMLValue type Annotation
+<dd class="dd"><pre class="pre codeblock">Record XMLValue type Annotation
 {
    targets = [
       ElementKind.libraryPart,
@@ -60,109 +60,109 @@ end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00261__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00261__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">kind</span></span></dt>
+<dd class="dd"><dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">kind</span></span></dt>
 
-<dd><p>The explanations that follow describe what happens when you
+<dd class="dd pd"><p class="p">The explanations that follow describe what happens when you
 transfer record data to an XML string. However, the relationships
 also apply in the opposite direction, when the EGL Runtime validates
 the transfer of an XML string to an input record.</p>
 <div class="p">Here are the
-supported values:<dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">XMLStructureKind.sequence</span></span> (the default)</dt>
+supported values:<dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">XMLStructureKind.sequence</span></span> (the default)</dt>
 
-<dd>On output, the XML string must include every field in the Record
+<dd class="dd pd">On output, the XML string must include every field in the Record
 type, in the order in which the Record fields are listed. The following
-Record type and XML string are related:<pre class="codeblock">Record Employee {XMLValue = XMLStructureKind.sequence}
+Record type and XML string are related:<pre class="pre codeblock">Record Employee {XMLValue = XMLStructureKind.sequence}
    EmpNo INT;
    LastName STRING;
 end
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;10&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;Employee&gt;
+   &lt;EmpNo&gt;10&lt;/EmpNo&gt;
+   &lt;LastName&gt;Smith&lt;/LastName&gt; 
+&lt;/Employee&gt;
 </pre>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">XMLStructureKind.choice</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">XMLStructureKind.choice</span></span></dt>
 
-<dd>On output, the XML string must include one and only one subordinate
+<dd class="dd pd">On output, the XML string must include one and only one subordinate
 element that corresponds to a record field. For example, consider
-the following Record type:<pre class="codeblock">Record Employee{XMLStructure = XMLStructureKind.choice}
+the following Record type:<pre class="pre codeblock">Record Employee{XMLStructure = XMLStructureKind.choice}
    ImmigrationStatus STRING?; 
    YearsOfCitizenship INT?;
 end
 </pre>
-<div class="p">Either of the following XML strings is valid:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;ImmigrationStatus&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;A1&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/ImmigrationStatus&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
-<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;YearsOfCitizenship&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/YearsOfCitizenship&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
+<div class="p">Either of the following XML strings is valid:<pre class="pre codeblock">&lt;Employee&gt;
+   &lt;ImmigrationStatus&gt;A1&lt;/ImmigrationStatus&gt;
+&lt;/Employee&gt;</pre>
+<pre class="pre codeblock">&lt;Employee&gt;
+   &lt;YearsOfCitizenship&gt;20&lt;/YearsOfCitizenship&gt;
+&lt;/Employee&gt;</pre>
 </div>
-<p>In this case, the XML string cannot
+<p class="p">In this case, the XML string cannot
 include both kinds of elements.</p>
-<p>If a record has the XMLStructure
-value """"""""choice"""""""", each field must be nullable, as is indicated by the
+<p class="p">If a record has the XMLStructure
+value "choice", each field must be nullable, as is indicated by the
 question marks in our example. Furthermore, the value of one field
 must be nonnull, and the value of only one field can be nonnull. The
-function <span class="synph"><span class="kwd">XMLLib.convertToXML</span></span> issues a <span class="synph"><span class="kwd">RuntimeException</span></span> if
+function <span class="ph synph"><span class="keyword kwd">XMLLib.convertToXML</span></span> issues a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span> if
 all fields in the input record are null or if more than one field
 is nonnull.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">XMLStructureKind.simpleContent</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">XMLStructureKind.simpleContent</span></span></dt>
 
-<dd>On output, the simple content transferred to an XML string is
+<dd class="dd pd">On output, the simple content transferred to an XML string is
 the value of a field declared in a superior Record type, along with
 a set of attributes. For example, the following boldface Record type
-and XML content are related:<pre class="codeblock">Record Employee{XMLValue = XMLStructureKind.sequence}
+and XML content are related:<pre class="pre codeblock">Record Employee{XMLValue = XMLStructureKind.sequence}
    EmpNo EmpNumber;
    LastName STRING;
 end
 
-<strong>Record EmpNumber {XMLValue = XMLStructureKind.simpleContent}
+<strong class="ph b">Record EmpNumber {XMLValue = XMLStructureKind.simpleContent}
   	type STRING {@XMLAttribute{}};
   	value INT; // any field name is acceptable here
 end
 </strong>
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo <strong>type=""""""""Sales""""""""</strong>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<strong>10</strong>&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Smith&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;Employee&gt;
+   &lt;EmpNo <strong class="ph b">type="Sales"</strong>&gt;<strong class="ph b">10</strong>&lt;/EmpNo&gt;
+   &lt;LastName&gt;Smith&lt;/LastName&gt; 
+&lt;/Employee&gt;
 </pre>
-<p>The subordinate record (here, <samp class="codeph">EmpNumber</samp>)
+<p class="p">The subordinate record (here, <samp class="ph codeph">EmpNumber</samp>)
 may include zero to many fields that are of type STRING and that have
-the <span class="synph"><span class="kwd">XMLAttribute</span></span> annotation. The annotation
+the <span class="ph synph"><span class="keyword kwd">XMLAttribute</span></span> annotation. The annotation
 indicates that a given field represents an attribute. The same subordinate
-record might have a field that lacks the property <span class="synph"><span class="kwd">XMLAttribute</span></span>;
+record might have a field that lacks the property <span class="ph synph"><span class="keyword kwd">XMLAttribute</span></span>;
 and that non-attribute field, if any, holds the value of the related
 element. The non-attribute field can have any name.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">XMLStructureKind.unordered</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">XMLStructureKind.unordered</span></span></dt>
 
-<dd>The XML string includes the specified elements in any order. The
-following Record type describes either of the subsequent XML strings:<pre class="codeblock">Record Employee {XMLValue = XMLStructureKind.unordered}
+<dd class="dd pd">The XML string includes the specified elements in any order. The
+following Record type describes either of the subsequent XML strings:<pre class="pre codeblock">Record Employee {XMLValue = XMLStructureKind.unordered}
    EmpNo INT;
    LastName STRING;
 end
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Jones&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;Employee&gt;
+   &lt;LastName&gt;Jones&lt;/LastName&gt; 
+   &lt;EmpNo&gt;20&lt;/EmpNo&gt;
+&lt;/Employee&gt;
 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;20&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/EmpNo&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;Jones&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/LastName&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/Employee&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+&lt;Employee&gt;
+   &lt;EmpNo&gt;20&lt;/EmpNo&gt;
+   &lt;LastName&gt;Jones&lt;/LastName&gt; 
+&lt;/Employee&gt;
 </pre>
 </dd>
 
@@ -174,40 +174,40 @@ end
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00261__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00261__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="annocomments_more"></anchor></dd>
+<dd class="dd"><anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00261__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00261__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00261__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00261__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d90984e204">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00261__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d109171e204">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d90984e207">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d109171e207">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00261__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d90984e204 ">Java</td>
+<tr id="redt00261__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d109171e204 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d90984e207 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d109171e207 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00261__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d90984e204 ">JavaScript</td>
+<tr id="redt00261__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d109171e204 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d90984e207 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d109171e207 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,40 +19,40 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>MathLib.round function</title>
 </head>
-<body id="redt00227"><a name="redt00227"><!-- --></a>
+<body id="redt00227">
 
 
-<h1 class="topictitle1">MathLib.round function</h1>
+<h1 class="title topictitle1">MathLib.round function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">MathLib.round</span></span> rounds
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">MathLib.round</span></span> rounds
 a value and returns the result.</p>
 
 
-<a name="redt00227__main"><!-- --></a><dl id="redt00227__main">
-<dt class="dlterm"><a name="redt00227__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00227__main">
+<dt class="dt dlterm"><a name="redt00227__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00227__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00227__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00227__syntax_block"><a name="redt00227__syntax_block"><!-- --></a>static function round(val1 float in, powOf10 int in) returns (float);
+<dd class="dd"><pre class="pre codeblock" id="redt00227__syntax_block">static function round(val1 float in, powOf10 int in) returns (float);
 
 static function round(val1 smallfloat in, powOf10 int in) returns (smallfloat);
 
 static function round(val1 decimal in, powOf10 int in) returns (decimal);</pre>
-<a name="redt00227__syntax_list"><!-- --></a><dl id="redt00227__syntax_list">
-<dt class="dlterm"><var class="varname">val1</var></dt>
+<dl class="dl" id="redt00227__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">val1</var></dt>
 
-<dd>Takes the numeric value being rounded.</dd>
+<dd class="dd">Takes the numeric value being rounded.</dd>
 
 
-<dt class="dlterm">powOf10</dt>
+<dt class="dt dlterm">powOf10</dt>
 
-<dd>Takes the number of places by which the value is rounded. Specify
+<dd class="dd">Takes the number of places by which the value is rounded. Specify
 a positive number to round the left of the decimal point. Specify
 a negative number to round to the right.</dd>
 
@@ -60,21 +60,21 @@ a negative number to round to the right.</dd>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00227__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00227__use"><!-- --></a>Example use</dt>
 
-<dd><p>The next code sets <samp class="codeph">balance</samp> to 12000.0000:</p>
-<pre class="codeblock" id="redt00227__use_block"><a name="redt00227__use_block"><!-- --></a>balance FLOAT = 12345.6789;
+<dd class="dd"><p class="p">The next code sets <samp class="ph codeph">balance</samp> to 12000.0000:</p>
+<pre class="pre codeblock" id="redt00227__use_block">balance FLOAT = 12345.6789;
 rounder INT = 3;
 balance = mathLib.round(balance, rounder);
 </pre>
-<div class="p">The next code sets <span class="synph"><span class="var">balance</span></span> to
-13000.0000:<pre class="codeblock" id="redt00227__use_block"><a name="redt00227__use_block"><!-- --></a>balance FLOAT = 12845.6789;
+<div class="p">The next code sets <span class="ph synph"><span class="ph var">balance</span></span> to
+13000.0000:<pre class="pre codeblock" id="redt00227__use_block">balance FLOAT = 12845.6789;
 rounder INT = 3;
 balance = mathLib.round(balance, rounder);
 </pre>
 </div>
-<div class="p">The next code sets <span class="synph"><span class="var">balance</span></span> to
-12345.68:<pre class="codeblock" id="redt00227__use_block2"><a name="redt00227__use_block2"><!-- --></a>balance FLOAT = 12345.6789;
+<div class="p">The next code sets <span class="ph synph"><span class="ph var">balance</span></span> to
+12345.68:<pre class="pre codeblock" id="redt00227__use_block2">balance FLOAT = 12345.6789;
 rounder INT = -2;
 balance = mathLib.round(balance, rounder);
 </pre>
@@ -82,55 +82,55 @@ balance = mathLib.round(balance, rounder);
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00227__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00227__comments"><!-- --></a>Comments</dt>
 
-<dd><div class="p">Here is the rounding algorithm:<ol>
-<li>Add 5 to the digit at the right of the rounding point.</li>
+<dd class="dd"><div class="p">Here is the rounding algorithm:<ol class="ol">
+<li class="li">Add 5 to the digit at the right of the rounding point.</li>
 
-<li>Increment the value of the digit at the rounding point, if step
+<li class="li">Increment the value of the digit at the rounding point, if step
 1 made that change appropriate.</li>
 
-<li>Set to zero both the digit to which the 5 was added and all subsequent
+<li class="li">Set to zero both the digit to which the 5 was added and all subsequent
 digits.</li>
 
 </ol>
 </div>
-<p>In the case of Java,
+<p class="p">In the case of Java™,
 EGL uses methods in the Java StrictMath
 class that are equivalent to the EGL functions. This usage ensures
 that the runtime behavior is the same for every Java Virtual Machine.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00227__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00227__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00227__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00227__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d69955e162">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00227__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d84735e162">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d69955e165">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d84735e165">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00227__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d69955e162 ">Java</td>
+<tr id="redt00227__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d84735e162 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69955e165 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d84735e165 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00227__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d69955e162 ">JavaScript</td>
+<tr id="redt00227__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d84735e162 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d69955e165 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d84735e165 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -145,7 +145,7 @@ that the runtime behavior is the same for every Java Virtual Machine.</p>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

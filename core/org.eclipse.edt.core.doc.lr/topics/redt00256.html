@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,48 +19,48 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>XMLLib.convertToXML function</title>
 </head>
-<body id="redt00256"><a name="redt00256"><!-- --></a>
+<body id="redt00256">
 
 
-<h1 class="topictitle1">XMLLib.convertToXML function</h1>
+<h1 class="title topictitle1">XMLLib.convertToXML function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">XMLLib.convertToXML</span></span> copies
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">XMLLib.convertToXML</span></span> copies
 an EGL record or handler to an XML string.</p>
 
-<a name="redt00256__main"><!-- --></a><dl id="redt00256__main">
-<dt class="dlterm"><a name="redt00256__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00256__main">
+<dt class="dt dlterm"><a name="redt00256__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.xml</p>
+<dd class="dd"><p class="p">eglx.xml</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00256__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00256__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00256__syntax_block"><a name="redt00256__syntax_block"><!-- --></a>static function convertToXML(eglType any const in, 
+<dd class="dd"><pre class="pre codeblock" id="redt00256__syntax_block">static function convertToXML(eglType any const in, 
                              document boolean in) 
                 returns(string);</pre>
-<a name="redt00256__syntax_list"><!-- --></a><dl id="redt00256__syntax_list">
+<dl class="dl" id="redt00256__syntax_list">
 
-<dt class="dlterm"><var class="varname">eglType</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">eglType</var></dt>
 
-<dd>Takes an EGL record, handler, or dictionary.</dd>
+<dd class="dd">Takes an EGL record, handler, or dictionary.</dd>
 
 
-<dt class="dlterm"><var class="varname">document</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">document</var></dt>
 
-<dd>Indicates whether the output is a well-formed XML document:<dl>
+<dd class="dd">Indicates whether the output is a well-formed XML document:<dl class="dl">
 
-<dt class="dlterm">True</dt>
+<dt class="dt dlterm">True</dt>
 
-<dd>The function returns well-formed output that includes an XML declaration
+<dd class="dd">The function returns well-formed output that includes an XML declaration
 and a root element.</dd>
 
 
-<dt class="dlterm">False</dt>
+<dt class="dt dlterm">False</dt>
 
-<dd>The function returns an XML fragment.</dd>
+<dd class="dd">The function returns an XML fragment.</dd>
 
 </dl>
 </dd>
@@ -69,50 +69,50 @@ and a root element.</dd>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00256__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00256__use"><!-- --></a>Example use</dt>
 
-<dd><pre class="codeblock" id="redt00256__use_block"><a name="redt00256__use_block"><!-- --></a></pre>
+<dd class="dd"><pre class="pre codeblock" id="redt00256__use_block"></pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00256__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00256__comments"><!-- --></a>Comments</dt>
 
-<dd><p>For other details on the conversion, see “Correspondence between
+<dd class="dd"><p class="p">For other details on the conversion, see “Correspondence between
 an XML string and an EGL variable.”</p>
-<p><span class="synph"><span class="kwd">JSONLib.convertToXML</span></span> is
-the complement of the <span class="synph"><span class="kwd">JSONLib.convertFromXML</span></span> function.</p>
+<p class="p"><span class="ph synph"><span class="keyword kwd">JSONLib.convertToXML</span></span> is
+the complement of the <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromXML</span></span> function.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00256__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00256__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00256__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00256__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d87659e144">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00256__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d105395e144">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d87659e147">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d105395e147">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00256__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d87659e144 ">Java</td>
+<tr id="redt00256__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d105395e144 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d87659e147 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d105395e147 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00256__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d87659e144 ">JavaScript</td>
+<tr id="redt00256__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d105395e144 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d87659e147 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d105395e147 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -127,7 +127,7 @@ the complement of the <span class="synph"><span class="kwd">JSONLib.convertFromX
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

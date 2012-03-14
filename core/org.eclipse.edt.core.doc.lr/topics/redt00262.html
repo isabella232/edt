@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,48 +19,48 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGLProperty</title>
 </head>
-<body id="redt00262"><a name="redt00262"><!-- --></a>
+<body id="redt00262">
 
 
-<h1 class="topictitle1">EGLProperty</h1>
+<h1 class="title topictitle1">EGLProperty</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">EGLProperty</span></span>  identifies
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">EGLProperty</span></span>  identifies
 functions that get and set the EGL field values. The annotation is
-useful when you create a widget by authoring a handler, stereotype <span class="synph"><samp class="codeph">RUIWidget</samp></span>.</p>
+useful when you create a widget by authoring a handler, stereotype <span class="ph synph"><samp class="ph codeph">RUIWidget</samp></span>.</p>
 
-<a name="redt00262__main"><!-- --></a><dl id="redt00262__main">
-<dt class="dlterm"><a name="redt00262__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00262__main">
+<dt class="dt dlterm"><a name="redt00262__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00262__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00262__use"><!-- --></a>Example use</dt>
 
-<dd><p>If you declare an <samp class="codeph">UpperLimit</samp> field for use
+<dd class="dd"><p class="p">If you declare an <samp class="ph codeph">UpperLimit</samp> field for use
 by EGL developers, you can specify the declaration as follows to indicate
 use of functions that you coded:</p>
-<pre class="codeblock">UpperLimit INT { @EGLProperty{ getMethod = getUpper, 
+<pre class="pre codeblock">UpperLimit INT { @EGLProperty{ getMethod = getUpper, 
                                setMethod = setUpper };</pre>
 <div class="p">You
 can avoid specifying function names if the names of the functions
-are specified with the word <em>get</em> or <em>set</em> followed by the
-variable name. For example, if the variable is <samp class="codeph">UpperLimit</samp> and
-a Rich UI Widget type includes functions named <samp class="codeph">getUpperLimit()</samp> and <samp class="codeph">setUpperLimit()</samp>,
-you only need to add the annotation as follows: <pre class="codeblock">UpperLimit INT { @EGLProperty{} };</pre>
+are specified with the word <em class="ph i">get</em> or <em class="ph i">set</em> followed by the
+variable name. For example, if the variable is <samp class="ph codeph">UpperLimit</samp> and
+a Rich UI Widget type includes functions named <samp class="ph codeph">getUpperLimit()</samp> and <samp class="ph codeph">setUpperLimit()</samp>,
+you only need to add the annotation as follows: <pre class="pre codeblock">UpperLimit INT { @EGLProperty{} };</pre>
 </div>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00262__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00262__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">Record EGLProperty type Annotation
+<dd class="dd"><pre class="pre codeblock">Record EGLProperty type Annotation
 {
    targets = [ElementKind.FieldMbr],
    validationProxy = 
-   """"""""org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationTypeBinding""""""""
+   "org.eclipse.edt.compiler.binding.annotationType.EGLPropertyAnnotationTypeBinding"
 } 
    getMethod FunctionMemberRef;
    setMethod FunctionMemberRef;
@@ -69,19 +69,19 @@ end
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00262__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00262__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">getMethod</span></span></dt>
+<dd class="dd"><dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">getMethod</span></span></dt>
 
-<dd>A reference to the get method for the specified variable. The
+<dd class="dd pd">A reference to the get method for the specified variable. The
 method has no parameters, and its return value is of the same type
 as the field.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">setMethod</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">setMethod</span></span></dt>
 
-<dd>A reference to the set method for the specified variable. The
+<dd class="dd pd">A reference to the set method for the specified variable. The
 method has one parameter that has the same type as the field. By convention
 the setMethod does not have a return value, but no error condition
 results if the method returns a value.</dd>
@@ -90,48 +90,48 @@ results if the method returns a value.</dd>
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00262__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00262__comments"><!-- --></a>Comments</dt>
 
-<dd><p>To indicate that a field is read only or write only, you can
+<dd class="dd"><p class="p">To indicate that a field is read only or write only, you can
 specify only one of the two annotation fields. If the application
 tries to read or write to an application field for which the read
 or write is not supported, an error occurs during compilation.</p>
-<p>An
-annotation that is equivalent to <span class="synph"><span class="kwd">EGLProperty</span></span> is
+<p class="p">An
+annotation that is equivalent to <span class="ph synph"><span class="keyword kwd">EGLProperty</span></span> is
 available for external types; for example, for external-type widgets.
-For details, see <a href="redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a>.</p>
+For details, see <a class="xref" href="redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a>.</p>
 <anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00262__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00262__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00262__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00262__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d91557e170">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00262__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d109892e171">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d91557e173">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d109892e174">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00262__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d91557e170 ">Java</td>
+<tr id="redt00262__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d109892e171 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d91557e173 ">Not in use.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d109892e174 ">Not in use.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00262__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d91557e170 ">JavaScript</td>
+<tr id="redt00262__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d109892e171 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d91557e173 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d109892e174 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

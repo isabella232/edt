@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,27 +19,27 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>StringLib.format function</title>
 </head>
-<body id="redt00233"><a name="redt00233"><!-- --></a>
+<body id="redt00233">
 
 
-<h1 class="topictitle1">StringLib.format function</h1>
+<h1 class="title topictitle1">StringLib.format function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">StringLib.format</span></span> accepts
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">StringLib.format</span></span> accepts
 a non-string value and a pattern and returns the corresponding string.</p>
 
 
-<a name="redt00233__main"><!-- --></a><dl id="redt00233__main">
-<dt class="dlterm"><a name="redt00233__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00233__main">
+<dt class="dt dlterm"><a name="redt00233__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00233__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00233__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00233__syntax_block"><a name="redt00233__syntax_block"><!-- --></a>static function format(intValue smallint in, pattern string in) returns (string);
+<dd class="dd"><pre class="pre codeblock" id="redt00233__syntax_block">static function format(intValue smallint in, pattern string in) returns (string);
 
 static function format(intValue int in, pattern string in) returns (string);
 
@@ -54,68 +54,68 @@ static function format(floatValue float in, pattern string in) returns (string);
 static function format(d date in, pattern string in) returns(string);
 
 static function format(ts timestamp in, pattern string in) returns(string);</pre>
-<a name="redt00233__syntax_list"><!-- --></a><dl id="redt00233__syntax_list">
-<dt class="dlterm"><var class="varname">intValue</var>, <var class="varname">decValue</var>, <var class="varname">floatValue</var>, <var class="varname">d</var>, <var class="varname">ts</var></dt>
+<dl class="dl" id="redt00233__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">intValue</var>, <var class="keyword varname">decValue</var>, <var class="keyword varname">floatValue</var>, <var class="keyword varname">d</var>, <var class="keyword varname">ts</var></dt>
 
-<dd>Takes the value to be formatted.</dd>
+<dd class="dd">Takes the value to be formatted.</dd>
 
 
-<dt class="dlterm"><var class="varname">pattern</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">pattern</var></dt>
 
-<dd>A pattern that is composed of the characters listed in “Pattern
+<dd class="dd">A pattern that is composed of the characters listed in “Pattern
 characters used to format non-string values to strings.” If you are
 formatting dates or timestamps, you can also use one of the patterns
-that are in the <span class="synph"><span class="kwd">Constants</span></span> system library.</dd>
+that are in the <span class="ph synph"><span class="keyword kwd">Constants</span></span> system library.</dd>
 
 </dl>
-<p>If the pattern cannot be used to format the specified
+<p class="p">If the pattern cannot be used to format the specified
 value, the function returns a string of asterisks.</p>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00233__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00233__use"><!-- --></a>Example use</dt>
 
-<dd><p>After the following code runs, the value of <samp class="codeph">result</samp> is
+<dd class="dd"><p class="p">After the following code runs, the value of <samp class="ph codeph">result</samp> is
 in the European format, “07.04.2030”: </p>
-<pre class="codeblock" id="redt00233__use_block"><a name="redt00233__use_block"><!-- --></a>myDate Date = """"""""04/07/2030"""""""";
+<pre class="pre codeblock" id="redt00233__use_block">myDate Date = "04/07/2030";
 result String = StringLib.format(myDate, Constants.eurDateFormat);</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00233__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00233__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="comments_more"></anchor></dd>
+<dd class="dd"><anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00233__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00233__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00233__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00233__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d72028e141">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00233__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d87223e141">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d72028e144">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d87223e144">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00233__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d72028e141 ">Java</td>
+<tr id="redt00233__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d87223e141 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72028e144 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d87223e144 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00233__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d72028e141 ">JavaScript</td>
+<tr id="redt00233__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d87223e141 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d72028e144 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d87223e144 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -130,7 +130,7 @@ result String = StringLib.format(myDate, Constants.eurDateFormat);</pre>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

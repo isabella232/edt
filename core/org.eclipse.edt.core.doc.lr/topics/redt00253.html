@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,147 +18,147 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Correspondence between a JSON string and an EGL variable</title>
 </head>
-<body id="redt00253"><a name="redt00253"><!-- --></a>
+<body id="redt00253">
 
 
-<h1 class="topictitle1">Correspondence between a JSON string and an EGL variable</h1>
+<h1 class="title topictitle1">Correspondence between a JSON string and an EGL variable</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>This topic describes the EGL record that corresponds
-to a JavaScript Object
-Notation (JSON) string. Other topics describe the <strong>JSONLib.convertFromJSON</strong> and <strong>JSONLib.convertToJSON</strong> functions,
+<div class="body" id="body"><p class="shortdesc">This topic describes the EGL record that corresponds
+to a JavaScript™ Object
+Notation (JSON) string. Other topics describe the <strong class="ph b">JSONLib.convertFromJSON</strong> and <strong class="ph b">JSONLib.convertToJSON</strong> functions,
 which are used by a Rich UI developer to convert JSON data to or from
 a variable, as might be necessary to access a third-party REST service.
  </p>
 
-<div class="section"><h2 class="sectiontitle">JSON and EGL records or handlers</h2><div class="p">You can
+<div class="section"><h2 class="title sectiontitle">JSON and EGL records or handlers</h2><div class="p">You can
 define a Record or Handler type to use when accessing a JSON string
-such as the following one: <pre class="codeblock">{ """"EmpNo"""":10,""""LastName"""":""""Smith"""" }  </pre>
+such as the following one: <pre class="pre codeblock">{ "EmpNo":10,"LastName":"Smith" }  </pre>
 </div>
 <div class="p">Within
 the brackets of a JSON string, each identifier-and-value pair (such
-as """"Empno"""":10) is the name and value of a JSON field. To create a
+as "Empno":10) is the name and value of a JSON field. To create a
 Record type that matches the JSON string, ensure that each field name
 in the Record type exactly matches (in character and case) each corresponding
-field name in the JSON string, as shown in the following example: <pre class="codeblock">Record MyRecordPart
+field name in the JSON string, as shown in the following example: <pre class="pre codeblock">Record MyRecordPart
    EmpNo INT;
    LastName STRING;
 end
 </pre>
 </div>
-<p>You can use any primitive type other than BLOB
+<p class="p">You can use any primitive type other than BLOB
 or CLOB. An EGL record field is also valid if based on a DataItem
 type that is, in turn, based on one of the supported primitive types.</p>
 <div class="p">The
-EGL annotation<span class="synph"><span class="kwd">JSONName</span></span> lets you work with
+EGL annotation<span class="ph synph"><span class="keyword kwd">JSONName</span></span> lets you work with
 a JSON string in which a field name is an EGL reserved word or is
-not valid in EGL. Here is a variation of the example JSON string: <pre class="codeblock">{ <strong>""""Emp-No""""</strong>:10,""""LastName"""":""""Smith"""" }  </pre>
+not valid in EGL. Here is a variation of the example JSON string: <pre class="pre codeblock">{ <strong class="ph b">"Emp-No"</strong>:10,"LastName":"Smith" }  </pre>
 </div>
 <div class="p">The
 problem in this case is that you cannot create an EGL record-field
-name that includes a hyphen. However, you can use the property <span class="synph"><span class="kwd">JSONName</span></span> to
-retain the JSON field name in the Record type, as shown here: <pre class="codeblock">Record MyRecordPart
-   EmpNo INT; <strong>{JSONName = """"Emp-No""""}</strong>
+name that includes a hyphen. However, you can use the property <span class="ph synph"><span class="keyword kwd">JSONName</span></span> to
+retain the JSON field name in the Record type, as shown here: <pre class="pre codeblock">Record MyRecordPart
+   EmpNo INT; <strong class="ph b">{JSONName = "Emp-No"}</strong>
    LastName STRING;
 end
 </pre>
 </div>
-<p>(You cannot override the value of <span class="synph"><span class="kwd">JSONName</span></span> when
+<p class="p">(You cannot override the value of <span class="ph synph"><span class="keyword kwd">JSONName</span></span> when
 you declare a record that is based on the Record type.)</p>
 <div class="p">In many
 situations, the record you use to access a JSON string includes records.
-However, when you are using records and invoke <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> or <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span>,
+However, when you are using records and invoke <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> or <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span>,
 you reference only a single record, which is based on the topmost
 (most inclusive) Record type of all the Record types needed. For example,
 the following JSON string might be returned from a getTime service
-that calculates the number of seconds since January 1, 1970:<pre class="codeblock">{""""Result"""":{""""aTimestamp"""":1191871152}}
+that calculates the number of seconds since January 1, 1970:<pre class="pre codeblock">{"Result":{"aTimestamp":1191871152}}
 </pre>
 </div>
-<p>A general rule is that each bracketed clause in
+<p class="p">A general rule is that each bracketed clause in
 the JSON string is the content of a runtime <dfn class="term">JSON object</dfn>,
 which is equivalent to an EGL record. </p>
 <div class="p">In the current example,
-you need to define two Record types. The record you would use in <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> or <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span> is
-based on the following type, which has a field called Result: <pre class="codeblock">Record MyTopPart
+you need to define two Record types. The record you would use in <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> or <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span> is
+based on the following type, which has a field called Result: <pre class="pre codeblock">Record MyTopPart
    Result MyTimestampPart;
 end
 </pre>
 </div>
 <div class="p">Given the structure of the JSON string, the next
-Record type has a field named <samp class="codeph">aTimestamp</samp>: <pre class="codeblock">Record MyTimestampPart
+Record type has a field named <samp class="ph codeph">aTimestamp</samp>: <pre class="pre codeblock">Record MyTimestampPart
    aTimestamp BIGINT;
 end
 </pre>
 </div>
-<p>As shown, each JSON identifier (which precedes
+<p class="p">As shown, each JSON identifier (which precedes
 a colon) requires the presence of a field in a record. If a JSON field
-name is an EGL reserved word (for example, """"TimeStamp""""), you must
-access <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> or <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span> by
+name is an EGL reserved word (for example, "TimeStamp"), you must
+access <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> or <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span> by
 using a dictionary rather than a record. We show this variation later
 in this topic.</p>
 <div class="p">Here is another example, which (although reformatted
-for readability) is from <a href="http://json.org/" target="_blank">http://json.org/</a>, a website that describes JSON in detail: <pre class="codeblock">{""""Menu"""": 
-  { """"id"""": """"file"""", """"value"""": """"File"""", """"popup"""": 
-     {""""Menuitem"""": 
+for readability) is from <a class="xref" href="http://json.org/" target="_blank">http://json.org/</a>, a website that describes JSON in detail: <pre class="pre codeblock">{"Menu": 
+  { "id": "file", "value": "File", "popup": 
+     {"Menuitem": 
        [
-         {""""value"""": """"New"""", """"onClick"""": """"CreateNewDoc()""""},
-         {""""value"""": """"Open"""", """"onClick"""": """"OpenDoc()""""},
-         {""""value"""": """"Close"""", """"onClick"""": """"CloseDoc()""""}
+         {"value": "New", "onClick": "CreateNewDoc()"},
+         {"value": "Open", "onClick": "OpenDoc()"},
+         {"value": "Close", "onClick": "CloseDoc()"}
        ]   
      }
   }
 }</pre>
 </div>
-<p>(At this writing, that example and others are
-at <a href="http://json.org/example.html" target="_blank">http://json.org/example.html</a>.)</p>
+<p class="p">(At this writing, that example and others are
+at <a class="xref" href="http://json.org/example.html" target="_blank">http://json.org/example.html</a>.)</p>
 <div class="p">The topmost (most inclusive) Record
-type includes a field named <samp class="codeph">Menu</samp>:<pre class="codeblock">Record MyTopPart
+type includes a field named <samp class="ph codeph">Menu</samp>:<pre class="pre codeblock">Record MyTopPart
    Menu MyMenuPart;
 end</pre>
 </div>
 <div class="p">To build the other Record types, we consider
-each bracketed clause in the JSON string. The next Record type (<samp class="codeph">MyMenuPart</samp>)
-includes fields named <samp class="codeph">id</samp>, <samp class="codeph">value</samp>,
-and <samp class="codeph">popup</samp>: <pre class="codeblock">Record MyMenuPart
+each bracketed clause in the JSON string. The next Record type (<samp class="ph codeph">MyMenuPart</samp>)
+includes fields named <samp class="ph codeph">id</samp>, <samp class="ph codeph">value</samp>,
+and <samp class="ph codeph">popup</samp>: <pre class="pre codeblock">Record MyMenuPart
    id STRING; 
    value STRING;
    popup MyPopupPart;
 end</pre>
 </div>
-<div class="p">The next Record type includes an array named <samp class="codeph">MenuItem</samp>:<pre class="codeblock">Record MyPopupPart
+<div class="p">The next Record type includes an array named <samp class="ph codeph">MenuItem</samp>:<pre class="pre codeblock">Record MyPopupPart
    MenuItem MyElementPart[];
 end</pre>
 </div>
-<div class="p">The last Record type includes fields named <samp class="codeph">value</samp> and <samp class="codeph">onClick</samp>:<pre class="codeblock">Record MyElementPart
+<div class="p">The last Record type includes fields named <samp class="ph codeph">value</samp> and <samp class="ph codeph">onClick</samp>:<pre class="pre codeblock">Record MyElementPart
    value STRING; 
    onClick STRING;
 end</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">JSON and EGL dictionaries</h2><div class="p">An EGL dictionary
+<div class="section"><h2 class="title sectiontitle">JSON and EGL dictionaries</h2><div class="p">An EGL dictionary
 contains a set of entries, each comprising both a key and a value
-of any type, as in the following variable declaration:<pre class="codeblock">myRef Dictionary 
+of any type, as in the following variable declaration:<pre class="pre codeblock">myRef Dictionary 
 { 
    ID = 5,
-   lastName = """"Twain"""",
-   firstName = """"Mark""""
+   lastName = "Twain",
+   firstName = "Mark"
 };</pre>
 </div>
 <div class="p">The following JSON string might be returned from
 a getTime service that calculates the number of seconds since January
-1, 1970:<pre class="codeblock">{""""Result"""":{""""aTimestamp"""":1191871152}}
+1, 1970:<pre class="pre codeblock">{"Result":{"aTimestamp":1191871152}}
 </pre>
 </div>
 <div class="p">You can decide to translate the JSON string (from
 the leftmost to the rightmost bracket) to a dictionary named myTime,
-which is declared without detail:<pre class="codeblock">myTime Dictionary;</pre>
+which is declared without detail:<pre class="pre codeblock">myTime Dictionary;</pre>
 </div>
-<p>A
+<p class="p">A
 general rule is that each bracketed clause in the JSON string is equivalent
 to an EGL dictionary. In relation to our example JSON string, the
-function <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> treats
+function <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> treats
 the symbol at the left of the first colon (:) as the key of a dictionary
 entry. The key is Result, which is case sensitive. Here (as in all
 cases) the content to the right of a colon is the value associated
@@ -167,125 +167,125 @@ with the key whose name is at the left of the colon. </p>
 brackets indicate that the value of Result is an anonymous dictionary.
 As before, the colon within those brackets distinguish between a key
 (aTimestamp) and a value (1191871152). In short, you can think of
-the output of the function <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> as
-follows:<pre class="codeblock">myTime Dictionary 
+the output of the function <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> as
+follows:<pre class="pre codeblock">myTime Dictionary 
 { 
    Result = new Dictionary{ aTimestamp = 1191871152 }
 };   </pre>
 </div>
 <div class="p">You can access the content of aTimestamp by
-using dotted syntax:<pre class="codeblock">numberOfSeconds BIGINT = myTime.Result.aTimestamp;</pre>
+using dotted syntax:<pre class="pre codeblock">numberOfSeconds BIGINT = myTime.Result.aTimestamp;</pre>
 </div>
 <div class="p">On
 occasion, dotted syntax is not valid. The Yahoo getTime service, for
 example, returned the following content, including the EGL reserved
-word <em>Timestamp</em>:<pre class="codeblock">{""""Result"""":{""""Timestamp"""":1191871152}}
+word <em class="ph i">Timestamp</em>:<pre class="pre codeblock">{"Result":{"Timestamp":1191871152}}
 </pre>
 </div>
 <div class="p">To access a value whose key is an EGL reserved
 word, you must use bracket syntax. The following EGL code is valid
-for the data returned from the Yahoo getTime service: <pre class="codeblock">numberOfSeconds BIGINT = myTime.Result[""""Timestamp""""];</pre>
+for the data returned from the Yahoo getTime service: <pre class="pre codeblock">numberOfSeconds BIGINT = myTime.Result["Timestamp"];</pre>
 </div>
 <div class="p">Here
-again is the Menu example from <a href="http://json.org/">http://json.org/</a>: <pre class="codeblock">{""""Menu"""": 
-  { """"id"""": """"file"""", """"value"""": """"File"""", """"popup"""": 
-     {""""Menuitem"""": 
+again is the Menu example from <a class="xref" href="http://json.org/">http://json.org/</a>: <pre class="pre codeblock">{"Menu": 
+  { "id": "file", "value": "File", "popup": 
+     {"Menuitem": 
        [
-         {""""value"""": """"New"""", """"onClick"""": """"CreateNewDoc()""""},
-         {""""value"""": """"Open"""", """"onClick"""": """"OpenDoc()""""},
-         {""""value"""": """"Close"""", """"onClick"""": """"CloseDoc()""""}
+         {"value": "New", "onClick": "CreateNewDoc()"},
+         {"value": "Open", "onClick": "OpenDoc()"},
+         {"value": "Close", "onClick": "CloseDoc()"}
        ]   
      }
   }
 }</pre>
 </div>
-<p>In this example, the dictionary has a single entry
+<p class="p">In this example, the dictionary has a single entry
 whose key is named Menu. The value associated with that key is an
 anonymous dictionary, as indicated by the brackets that embed the
-string """"id"""" and all the strings that follow. That anonymous dictionary
-includes the keys <samp class="codeph">id</samp>, <samp class="codeph">value</samp>, and <samp class="codeph">popup</samp>,
+string "id" and all the strings that follow. That anonymous dictionary
+includes the keys <samp class="ph codeph">id</samp>, <samp class="ph codeph">value</samp>, and <samp class="ph codeph">popup</samp>,
 along with the values of those keys. You may never have the kind of
-complexity introduced by the key called <samp class="codeph">popup</samp>, but
+complexity introduced by the key called <samp class="ph codeph">popup</samp>, but
 the problem is workable. You can see the relationships in the example
 JSON string. </p>
-<p>Here is a question for you to consider: What statement
-is necessary to access the string """"OpenDoc()"""", assuming that the function <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> has
+<p class="p">Here is a question for you to consider: What statement
+is necessary to access the string "OpenDoc()", assuming that the function <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> has
 copied the previous JSON string to a dictionary called myMenu?</p>
 <div class="p">The
-answer is as follows:<pre class="codeblock">myString STRING = myMenu.Menu.popup.MenuItem[2].onClick;</pre>
+answer is as follows:<pre class="pre codeblock">myString STRING = myMenu.Menu.popup.MenuItem[2].onClick;</pre>
 </div>
 <div class="p">The
-following EGL dictionary reflects the current example: <pre class="codeblock">myMenu Dictionary
+following EGL dictionary reflects the current example: <pre class="pre codeblock">myMenu Dictionary
 {  Menu = new Dictionary
-   { id = """"file"""",
-     value = """"File"""",
+   { id = "file",
+     value = "File",
      popup = new Dictionary 
      { MenuItem = new Dictionary[]
-       { new dictionary {value = """"New"""", onClick = """"CreateNewDoc()"""" },
-         new dictionary {value = """"Open"""", onClick = """"OpenDoc()"""" },
-         new dictionary {value = """"Close"""", onClick = """"CloseDoc()""""}
+       { new dictionary {value = "New", onClick = "CreateNewDoc()" },
+         new dictionary {value = "Open", onClick = "OpenDoc()" },
+         new dictionary {value = "Close", onClick = "CloseDoc()"}
        } 
      } 
    }
 };     
 </pre>
 </div>
-<div class="p">To work with the function <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span>,
+<div class="p">To work with the function <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span>,
 begin by creating a dictionary that is structured as shown in the
-previous examples. The following two rules apply:<ul>
-<li>Each dictionary in a hierarchy of dictionaries is equivalent to
+previous examples. The following two rules apply:<ul class="ul">
+<li class="li">Each dictionary in a hierarchy of dictionaries is equivalent to
 a bracketed clause in the JSON string</li>
 
-<li>Each key is assigned a primitive value, a dictionary, a record,
+<li class="li">Each key is assigned a primitive value, a dictionary, a record,
 or an array of dictionaries or records.</li>
 
 </ul>
 </div>
-<p>To further explore how to use a dictionary record when
+<p class="p">To further explore how to use a dictionary record when
 accessing a JSON string, see the Rich UI sample geocode.dictionaries.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">JSON and all variables</h2><div class="p">You can mix records
-or handlers with dictionaries in the following cases:<ul>
-<li>When you prepare to invoke <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> with
+<div class="section"><h2 class="title sectiontitle">JSON and all variables</h2><div class="p">You can mix records
+or handlers with dictionaries in the following cases:<ul class="ul">
+<li class="li">When you prepare to invoke <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> with
 a record or handler</li>
 
-<li>When you prepare to invoke <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span> with
+<li class="li">When you prepare to invoke <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span> with
 a record, handler, or dictionary</li>
 
 </ul>
 </div>
 <div class="p">You might include a dictionary in a record to access the
-following JSON string: <pre class="codeblock">{""""Result"""":{""""Timestamp"""":1191871152}}
+following JSON string: <pre class="pre codeblock">{"Result":{"Timestamp":1191871152}}
 </pre>
 </div>
-<div class="p">You can define the following type:<pre class="codeblock">Record ResultRecordPart
+<div class="p">You can define the following type:<pre class="pre codeblock">Record ResultRecordPart
    Result Dictionary;
 end</pre>
 </div>
 <div class="p">Your code can access the timestamp value as
-follows:<pre class="codeblock">   myResult ResultRecordPart;
+follows:<pre class="pre codeblock">   myResult ResultRecordPart;
    milliseconds BIGINT;
 		JSONLib.convertFromJSON(resp.body, myResult);
-		milliseconds = myResult.Result[""""Timestamp""""] as BIGINT;</pre>
+		milliseconds = myResult.Result["Timestamp"] as BIGINT;</pre>
 </div>
 <div class="p">A
 general rule is that, if you associate an incoming JSON clause with
 a dictionary, you can access data within the clause only by using
-a dictionary syntax. A complex example is as follows:<pre class="codeblock">{""""Menu"""": 
-  { """"id"""": """"file"""", """"value"""": """"File"""", """"popup"""": 
-     {""""Menuitem"""": 
+a dictionary syntax. A complex example is as follows:<pre class="pre codeblock">{"Menu": 
+  { "id": "file", "value": "File", "popup": 
+     {"Menuitem": 
        [
-         {""""value"""": """"New"""", """"onClick"""": """"CreateNewDoc()""""},
-         {""""value"""": """"Open"""", """"onClick"""": """"OpenDoc()""""},
-         {""""value"""": """"Close"""", """"onClick"""": """"CloseDoc()""""}
+         {"value": "New", "onClick": "CreateNewDoc()"},
+         {"value": "Open", "onClick": "OpenDoc()"},
+         {"value": "Close", "onClick": "CloseDoc()"}
        ]   
      }
   }
 }</pre>
 </div>
 <div class="p">To prepare to access the content, you can define
-the following types:<pre class="codeblock">Record MyTopPart
+the following types:<pre class="pre codeblock">Record MyTopPart
    Menu MyMenuPart;
 end
 
@@ -297,20 +297,20 @@ end
 </pre>
 </div>
 <div class="p">The following EGL dictionary reflects the structure
-named <samp class="codeph">popup</samp>: <pre class="codeblock">   popup Dictionary 
+named <samp class="ph codeph">popup</samp>: <pre class="pre codeblock">   popup Dictionary 
    { MenuItem = new Dictionary[]
-      { new Dictionary {value = """"New"""", onClick = """"CreateNewDoc()"""" },
-        new Dictionary {value = """"Open"""", onClick = """"OpenDoc()"""" },
-        new Dictionary {value = """"Close"""", onClick = """"CloseDoc()""""}
+      { new Dictionary {value = "New", onClick = "CreateNewDoc()" },
+        new Dictionary {value = "Open", onClick = "OpenDoc()" },
+        new Dictionary {value = "Close", onClick = "CloseDoc()"}
       } 
    } 
 </pre>
 </div>
-<p>(We show that dictionary for illustration. The
-substructure of a Dictionary may be useful when you are invoking <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span>,
-but is not used when you are invoking <span class="synph"><span class="kwd">JSONLib.convertFromJSON</span></span> .)</p>
+<p class="p">(We show that dictionary for illustration. The
+substructure of a Dictionary may be useful when you are invoking <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span>,
+but is not used when you are invoking <span class="ph synph"><span class="keyword kwd">JSONLib.convertFromJSON</span></span> .)</p>
 <div class="p">The
-following code accesses the string """"OpenDoc()"""":<pre class="codeblock">   myTop MyTopPart;
+following code accesses the string "OpenDoc()":<pre class="pre codeblock">   myTop MyTopPart;
    itemString STRING;
    JSONLib.convertFromJSON(resp.body, myTop);
    itemString = myTop.Menu.popup.MenuItem[2].onClick;</pre>

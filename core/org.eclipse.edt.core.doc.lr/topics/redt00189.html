@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,64 +19,64 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Hyperlink widget</title>
 </head>
-<body id="redt00189"><a name="redt00189"><!-- --></a>
+<body id="redt00189">
 
 
-<h1 class="topictitle1">Hyperlink widget</h1>
+<h1 class="title topictitle1">Hyperlink widget</h1>
 
 
 
-<div><p>A Rich UI hyperlink defines a link that, if clicked, causes
+<div class="body"><p class="shortdesc">A Rich UI hyperlink defines a link that, if clicked, causes
 presentation of the target content.</p>
 
-<div class="p">The following fields are supported:<ul>
-<li><span class="synph"><span class="kwd">text</span></span> specifies the string displayed
+<div class="p">The following fields are supported:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">text</span></span> specifies the string displayed
 on the page</li>
 
-<li><span class="synph"><span class="kwd">target</span></span> specifies a string that identifies
-the window in which the new web page opens. Here are the valid values:<ul>
-<li>""""""""_top"""""""" opens the page in the current window, taking up the entire
-page. This behavior is also in effect if you specify """"""""_self"""""""", """"""""_parent"""""""",
-or no value for <span class="synph"><span class="kwd">target</span></span>.</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">target</span></span> specifies a string that identifies
+the window in which the new web page opens. Here are the valid values:<ul class="ul">
+<li class="li">"_top" opens the page in the current window, taking up the entire
+page. This behavior is also in effect if you specify "_self", "_parent",
+or no value for <span class="ph synph"><span class="keyword kwd">target</span></span>.</li>
 
-<li>""""""""_blank"""""""" opens the page is a different browser or browser window.</li>
+<li class="li">"_blank" opens the page is a different browser or browser window.</li>
 
 </ul>
 </li>
 
-<li><span class="synph"><span class="kwd">href</span></span> specifies the web address of interest</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">href</span></span> specifies the web address of interest</li>
 
 </ul>
 </div>
 
 <div class="p">The following example renders a link to the web site for EGL Development
-Tools, and the displayed text is “Do more with EGL”: <pre class="codeblock">Handler Hyper type RUIHandler {children = [myHyperlink]}
+Tools, and the displayed text is “Do more with EGL”: <pre class="pre codeblock">Handler Hyper type RUIHandler {children = [myHyperlink]}
 
    myHyperlink HyperLink
    {
-      text = """"""""Do more with EGL"""""""",        
-      target = """"""""_blank"""""""",
-      href = """"""""http://www.eclipse.org/edt""""""""
+      text = "Do more with EGL",        
+      target = "_blank",
+      href = "http://www.eclipse.org/edt"
    };
 
 end</pre>
 </div>
 
 <div class="p">If the web page to which you are linking takes up the Preview view,
-you can clear the page as follows:<ul>
-<li>Double-click the <span class="uicontrol">Link Preview with Editor</span> button
+you can clear the page as follows:<ul class="ul">
+<li class="li">Double-click the <span class="ph uicontrol">Link Preview with Editor</span> button
 (the two arrows); or</li>
 
-<li>Load an EGL file that contains a different Rich UI handler.</li>
+<li class="li">Load an EGL file that contains a different Rich UI handler.</li>
 
 </ul>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Hyperlink;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Hyperlink;</pre>
 </div>
 
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,198 +19,198 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Number and ENumber type</title>
 </head>
-<body id="redt00062"><a name="redt00062"><!-- --></a>
+<body id="redt00062">
 
 
-<h1 class="topictitle1">Number and ENumber type</h1>
+<h1 class="title topictitle1">Number and ENumber type</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Number type is a non-instantiable reference
+<div class="body" id="body"><p class="shortdesc">The EGL Number type is a non-instantiable reference
 type that can refer to any numeric value. In Eclipse IDE for EGL Developers,
 the type definition for Number is ENumber.</p>
 
-<a name="redt00062__main"><!-- --></a><dl id="redt00062__main">
-<dt class="dlterm"><a name="redt00062__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00062__main">
+<dt class="dt dlterm"><a name="redt00062__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00062__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00062__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd class="dd"><anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00062__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00062__detail"><!-- --></a>Type detail</dt>
 
-<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+<dd class="dd">In the following detail, the <span class="ph synph"><span class="keyword kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values, not “$EQ”. Two exceptions are the
 widen and narrow operations, which are invoked during data conversions;
-for example, when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">externalType ENumber extends AnyValue type ClassType
+for example, when the <span class="ph synph"><span class="keyword kwd">as</span></span> operator is used. <pre class="pre codeblock">externalType ENumber extends AnyValue type ClassType
    /**
     * {@Operation +} A unary plus (has no effect on the numeric value).
     */
    static function $Plus(value ENumber in) 
-          returns (ENumber) {@Operation{""""""""+""""""""}};
+          returns (ENumber) {@Operation{"+"}};
 
    /**
     * {@Operation +} Adds two numbers.
     */
    static function $Plus(lvalue ENumber in, rvalue ENumber in) 
-          returns (ENumber) {@Operation{""""""""+""""""""}};
+          returns (ENumber) {@Operation{"+"}};
 
    /**
     * {@Operation -} Negates the value.
     */
    static function $Minus(value ENumber in) 
-          returns (ENumber) {@Operation{""""""""-""""""""}};
+          returns (ENumber) {@Operation{"-"}};
 
    /**
     * {@Operation -} Subtracts one number from another.
     */
    static function $Minus(lvalue ENumber in, rvalue ENumber in) 
-          returns (ENumber) {@Operation{""""""""-""""""""}};
+          returns (ENumber) {@Operation{"-"}};
 
    /**
     * {@Operation *} Multiplies two numbers.
     */
    static function $Multiply(lvalue ENumber in, rvalue ENumber in) 
-          returns (ENumber) {@Operation{""""""""*""""""""}};
+          returns (ENumber) {@Operation{"*"}};
 
    /**
     * {@Operation /} Divides one number by another.
     */
    static function $Divide(lvalue ENumber in, rvalue ENumber in) 
-          returns (ENumber) {@Operation{""""""""/""""""""}};
+          returns (ENumber) {@Operation{"/"}};
 
    /**
     * {@Operation %} Computes the remainder of dividing one number by another.
     */
 	  static function $Modulo(lvalue ENumber in, rvalue ENumber in)
-          returns (ENumber) {@Operation{""""""""%""""""""}};
+          returns (ENumber) {@Operation{"%"}};
 
    /**
     * {@Operation **} Computes lvalue to the power of rvalue.
     */
    static function $PowerOf(lvalue ENumber in, rvalue ENumber in) 
-          returns (ENumber) {@Operation{""""""""**""""""""}};
+          returns (ENumber) {@Operation{"**"}};
 
    /**
-    * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
+    * {@Operation &lt;} Compares two numbers.
     */
    static function $LT(lvalue ENumber in, rvalue ENumber in) 
-          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
+          returns (EBoolean) {@Operation{"&lt;"}};
 
    /**
-    * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
+    * {@Operation &gt;} Compares two numbers.
     */
    static function $GT(lvalue ENumber in, rvalue ENumber in) 
-          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
+          returns (EBoolean) {@Operation{"&gt;"}};
 
    /**
-    * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
+    * {@Operation &lt;=} Compares two numbers.
     */
    static function $LTE(lvalue ENumber in, rvalue ENumber in) 
-          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
+          returns (EBoolean) {@Operation{"&lt;="}};
 
    /**
-    * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
+    * {@Operation &gt;=} Compares two numbers.
     */
    static function $GTE(lvalue ENumber in, rvalue ENumber in) 
-          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
+          returns (EBoolean) {@Operation{"&gt;="}};
 
    /**
     * {@Operation ==} Compares two numbers.
     */
    static function $EQ(lvalue ENumber in, rvalue ENumber in) 
-          returns(EBoolean) {@Operation{""""""""==""""""""}};
+          returns(EBoolean) {@Operation{"=="}};
 
    /**
     * {@Operation !=} Compares two numbers.
     */
    static function $NEQ(lvalue ENumber in, rvalue ENumber in) 
-          returns(EBoolean) {@Operation{""""""""!=""""""""}};
+          returns(EBoolean) {@Operation{"!="}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts a bigint to a number.
+    * {@Operation{"widen"} Converts a bigint to a number.
     */
    static function asNumber(value EBigint in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts a decimal to a number.
+    * {@Operation{"widen"} Converts a decimal to a number.
     */
    static function asNumber(value EDecimal in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts a float to a number.
+    * {@Operation{"widen"} Converts a float to a number.
     */
    static function asNumber(value EFloat in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts an int to a number.
+    * {@Operation{"widen"} Converts an int to a number.
     */
    static function asNumber(value EInt in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts a smallfloat to a number.
+    * {@Operation{"widen"} Converts a smallfloat to a number.
     */
    static function asNumber(value ESmallfloat in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""widen""""""""} Converts a smallint to a number.
+    * {@Operation{"widen"} Converts a smallint to a number.
     */
    static function asNumber(value ESmallint in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
    /**
-    * {@Operation{""""""""narrow""""""""} Converts a string to a number.
+    * {@Operation{"narrow"} Converts a string to a number.
     */
    static function asNumber(value EString in) 
-          returns(ENumber) {@Operation{""""""""narrow""""""""}};
+          returns(ENumber) {@Operation{"narrow"}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00062__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00062__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd class="dd"> <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00062__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00062__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00062__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00062__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d25673e97">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00062__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d30306e97">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d25673e100">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d30306e100">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00062__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d25673e97 ">Java</td>
+<tr id="redt00062__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d30306e97 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d25673e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d30306e100 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00062__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d25673e97 ">JavaScript</td>
+<tr id="redt00062__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d30306e97 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d25673e100 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d30306e100 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

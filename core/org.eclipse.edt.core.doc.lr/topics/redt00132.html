@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,48 +19,48 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DojoComboBox widget</title>
 </head>
-<body id="redt00132"><a name="redt00132"><!-- --></a>
+<body id="redt00132">
 
 
-<h1 class="topictitle1">DojoComboBox widget</h1>
+<h1 class="title topictitle1">DojoComboBox widget</h1>
 
 
 
-<div><p>A Rich UI combo widget defines a combo box, which presents
+<div class="body"><p class="shortdesc">A Rich UI combo widget defines a combo box, which presents
 one of several selectable options and lets the user temporarily open
 a dropdown list to select a different option. This widget is based
 on the Dojo dijit.form.ComboBox definition.</p>
 
-<div class="section"><h2 class="sectiontitle">Fields</h2><dl>
-<dt class="dlterm">editable</dt>
+<div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
+<dt class="dt dlterm">editable</dt>
 
-<dd>A boolean that indicates whether the user can change the text
+<dd class="dd">A boolean that indicates whether the user can change the text
 in the current selection. The changed text becomes the current selection
 but neither adds to the preset list of values nor changes a listed
 value permanently. The default is true.</dd>
 
 
-<dt class="dlterm">pageSize</dt>
+<dt class="dt dlterm">pageSize</dt>
 
-<dd>The number of values that are displayed in the dropdown list.</dd>
+<dd class="dd">The number of values that are displayed in the dropdown list.</dd>
 
 
-<dt class="dlterm">value</dt>
+<dt class="dt dlterm">value</dt>
 
-<dd>The current selection, which is visible. You can get and set this
+<dd class="dd">The current selection, which is visible. You can get and set this
 value, which is processed as a string and, in keeping with EGL conversion
-rules, can be a number. <p>When the Dojo combo box is the view component
+rules, can be a number. <p class="p">When the Dojo combo box is the view component
 of a controller, the value that the view receives from the model component
 of the controller can take precedence over the value that you assign
-to the <span class="synph"><span class="kwd">value</span></span> property of the combo box.
+to the <span class="ph synph"><span class="keyword kwd">value</span></span> property of the combo box.
 For details on controllers, see “Rich UI validation and formatting.”</p>
 </dd>
 
 
-<dt class="dlterm">values</dt>
+<dt class="dt dlterm">values</dt>
 
-<dd>An array of strings. The content is the list of all values that
-are available to the user. <p>If you assign to the <span class="synph"><span class="kwd">value</span></span> property
+<dd class="dd">An array of strings. The content is the list of all values that
+are available to the user. <p class="p">If you assign to the <span class="ph synph"><span class="keyword kwd">value</span></span> property
 a value that is not in the array, the assigned value will be visible;
 but if the user selects a value from the dropdown list, the assigned
 value is no longer available.</p>
@@ -69,11 +69,11 @@ value is no longer available.</p>
 </dl>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import dojo.widgets.DojoComboBox;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import dojo.widgets.DojoComboBox;</pre>
 </div>
 
 </div>

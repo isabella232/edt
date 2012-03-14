@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -21,25 +21,25 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>org.eclipse.edt.eunit.runtime package</title>
 </head>
-<body id="redt00273"><a name="redt00273"><!-- --></a>
+<body id="redt00273">
 
 
-<h1 class="topictitle1">org.eclipse.edt.eunit.runtime package</h1>
+<h1 class="title topictitle1">org.eclipse.edt.eunit.runtime package</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">org.eclipse.edt.eunit.runtime</span></span> defines
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">org.eclipse.edt.eunit.runtime</span></span> defines
 an API for developing and automating test cases.</p>
 
-<p>For an overview of this capability, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.dita">../../org.eclipse.edt.core.doc.pg/topics/tedt01006.dita</a>.</p>
+<p class="p">For an overview of this capability, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html">../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html</a>.</p>
 
-<div class="p" id="redt00273__types"><a name="redt00273__types"><!-- --></a>
-<div class="tablenoborder"><a name="redt00273__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00273__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
-<tbody>
-<tr id="redt00273__compat_java">
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Library ConstantsLib
-   const NEWLINE string = """"""""\r\n"""""""";
-   const EXIT_PREFIX string = """"""""STATUS: """""""";
+<div class="p" id="redt00273__types">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00273__types_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody class="tbody">
+<tr id="redt00273__compat_java" class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Library ConstantsLib
+   const NEWLINE string = "\r\n";
+   const EXIT_PREFIX string = "STATUS: ";
    const SPASSED int = 0;
    const SFAILED int = 1;
    const SERROR int = 2;
@@ -50,14 +50,14 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Record AssertionFailedException type Exception end</pre>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Record AssertionFailedException type Exception end</pre>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">/* content of logged messages */
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">/* content of logged messages */
 Record Log {@xmlrootelement {}}
    msg String;
 end</pre>
@@ -65,19 +65,19 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00275.html" title="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both.">LogResult external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00275.html" title="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both.">LogResult external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Delegate runTestMethod() end</pre>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Delegate runTestMethod() end</pre>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Enumeration ServiceBindingType
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Enumeration ServiceBindingType
    DEDICATED = 1,
    DEVELOP = 2,
    DEPLOYED = 3
@@ -86,8 +86,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Record Status
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Record Status
    code int;
    reason String;
 end</pre>
@@ -95,8 +95,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Enumeration targetLangKind
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Enumeration targetLangKind
    JAVA = 1,
    JAVASCRIPT = 2
 end</pre>
@@ -104,21 +104,21 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Record Test type Annotation{ targets = [ ElementKind.functionMbr]	}
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Record Test type Annotation{ targets = [ ElementKind.functionMbr]	}
    targetLang targetLangKind[];
 end</pre>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00276.html" title="TestListManager is used for managing the EUnit test framework.">TestListManager library</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00276.html" title="TestListManager is used for managing the EUnit test framework.">TestListManager library</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00277.html" title="MultiStatus stores details on the test cases run under the EUnit test framework.">MultiStatus handler</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00277.html" title="MultiStatus stores details on the test cases run under the EUnit test framework.">MultiStatus handler</a></td>
 
 </tr>
 
@@ -129,31 +129,31 @@ end</pre>
 </div>
 
 <div class="p">
-<div class="tablenoborder"><a name="redt00273__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00273__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d95087e164">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00273__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d114045e167">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d95087e167">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d114045e170">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00273__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d95087e164 ">Java</td>
+<tr id="redt00273__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d114045e167 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95087e167 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d114045e170 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00273__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d95087e164 ">JavaScript</td>
+<tr id="redt00273__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d114045e167 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95087e167 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d114045e170 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -166,7 +166,7 @@ end</pre>
 </div>
 </div>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

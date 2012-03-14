@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,126 +19,126 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Smallint and ESmallint types</title>
 </head>
-<body id="redt00056"><a name="redt00056"><!-- --></a>
+<body id="redt00056">
 
 
-<h1 class="topictitle1">Smallint and ESmallint types</h1>
+<h1 class="title topictitle1">Smallint and ESmallint types</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL Smallint type is a value type that lets
+<div class="body" id="body"><p class="shortdesc">The EGL Smallint type is a value type that lets
 you create a four-byte value that ranges from -32,768 to 32,767, inclusive,
 with no decimal places. In Eclipse IDE for EGL Developers, the type
 definition for Smallint is ESmallint.</p>
 
-<a name="redt00056__main"><!-- --></a><dl id="redt00056__main">
-<dt class="dlterm"><a name="redt00056__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00056__main">
+<dt class="dt dlterm"><a name="redt00056__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00056__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00056__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd class="dd"><anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00056__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00056__detail"><!-- --></a>Type detail</dt>
 
-<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+<dd class="dd">In the following detail, the <span class="ph synph"><span class="keyword kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values, not “$EQ”. Two exceptions are the
 widen and narrow operations, which are invoked during data conversions;
-for example, when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">externalType ESmallint extends ENumber type ClassType
+for example, when the <span class="ph synph"><span class="keyword kwd">as</span></span> operator is used. <pre class="pre codeblock">externalType ESmallint extends ENumber type ClassType
 
 /**
   * {@Operation +} A unary plus (has no effect on the numeric value).
   */
-   static function $Plus(value ESmallint in) returns (EInt) {@Operation{""""""""+""""""""}};
+   static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};
 
 /**
   * {@Operation +} Adds two numbers.
   */
    static function $Plus(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EInt) {@Operation{""""""""+""""""""}};
+          returns (EInt) {@Operation{"+"}};
 
 /**
   * {@Operation -} Negates the value.
   */
    static function $Minus(value ESmallint in) 
-          returns (EInt) {@Operation{""""""""-""""""""}};
+          returns (EInt) {@Operation{"-"}};
 
 /**
   * {@Operation -} Subtracts one number from another.
   */
   static function $Minus(lvalue ESmallint in, rvalue ESmallint in) 
-         returns (EInt) {@Operation{""""""""-""""""""}};
+         returns (EInt) {@Operation{"-"}};
 
 /**
   * {@Operation *} Multiplies two numbers.
   */
   static function $Multiply(lvalue ESmallint in, rvalue ESmallint in) 
-         returns (EInt) {@Operation{""""""""*""""""""}};
+         returns (EInt) {@Operation{"*"}};
 
 /**
   * {@Operation /} Divides one number by another.
   */
    static function $Divide(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EDecimal) {@Operation{""""""""/""""""""}};
+          returns (EDecimal) {@Operation{"/"}};
 
 /**
   * {@Operation %} Computes the remainder of dividing one number by another.
   */
    static function $Modulo(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EInt) {@Operation{""""""""%""""""""}};
+          returns (EInt) {@Operation{"%"}};
 
    /**
      * {@Operation **} Computes lvalue to the power of rvalue.
      */
    static function $PowerOf(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EFloat) {@Operation{""""""""**""""""""}};
+          returns (EFloat) {@Operation{"**"}};
 
 /**
-  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two numbers.
+  * {@Operation &lt;} Compares two numbers.
   */
    static function $LT(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
+          returns (EBoolean) {@Operation{"&lt;"}};
 
 /**
-  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two numbers.
+  * {@Operation &gt;} Compares two numbers.
   */
    static function $GT(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
+          returns (EBoolean) {@Operation{"&gt;"}};
 
 /**
-  * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two numbers.
+  * {@Operation &lt;=} Compares two numbers.
   */
    static function $LTE(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
+          returns (EBoolean) {@Operation{"&lt;="}};
 
 /**
-  * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two numbers.
+  * {@Operation &gt;=} Compares two numbers.
   */
    static function $GTE(lvalue ESmallint in, rvalue ESmallint in) 
-          returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
+          returns (EBoolean) {@Operation{"&gt;="}};
 
 /**
   * {@Operation ==} Compares two numbers.
   */
    static function $EQ(lvalue ESmallint in, rvalue ESmallint in) 
-          returns(EBoolean) {@Operation{""""""""==""""""""}};
+          returns(EBoolean) {@Operation{"=="}};
 
 /**
   * {@Operation !=} Compares two numbers.
   */
    static function $NEQ(lvalue ESmallint in, rvalue ESmallint in) 
-          returns(EBoolean) {@Operation{""""""""!=""""""""}};
+          returns(EBoolean) {@Operation{"!="}};
 
 /**
   * {@Operation widen} Converts a smallint to a number.
   */
    static function asNumber(value ESmallint in) 
-          returns(ENumber) {@Operation{""""""""widen""""""""}};
+          returns(ENumber) {@Operation{"widen"}};
 
 /**
   * {@Operation narrow} Converts a decimal to a smallint.  Digits after the
@@ -147,7 +147,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the decimal is out of range for a smallint.
   */
    static function asSmallint(value EDecimal in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts a float to a smallint.  Digits after the
@@ -156,7 +156,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the float is out of range for a smallint.
   */
    static function asSmallint(value EFloat in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts an int to a smallint.
@@ -164,7 +164,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the int is out of range for a smallint.
   */
    static function asSmallint(value EInt in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts a string to a smallint.  The string is parsed
@@ -175,7 +175,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the string can't be parsed into a smallint.
   */
    static function asSmallint(value EString in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts a smallfloat to a smallint.  Digits after the
@@ -184,7 +184,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the smallfloat is out of range for a smallint.
   */
    static function asSmallint(value ESmallfloat in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts a bigint to a smallint.
@@ -192,7 +192,7 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the bigint is out of range for a smallint.
   */
    static function asSmallint(value EBigint in)
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 
 /**
   * {@Operation narrow} Converts a number to a smallint.  Digits after the
@@ -201,44 +201,44 @@ for example, when the <span class="synph"><span class="kwd">as</span></span> ope
   * @throws TypeCastException if the number is out of range for a smallint.
   */
    static function asSmallint(value ENumber in) 
-          returns(ESmallint) {@Operation{""""""""narrow""""""""}};
+          returns(ESmallint) {@Operation{"narrow"}};
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00056__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00056__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd class="dd"> <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00056__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00056__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00056__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00056__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d23980e98">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00056__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d28299e98">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d23980e101">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d28299e101">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00056__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d23980e98 ">Java</td>
+<tr id="redt00056__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d28299e98 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23980e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d28299e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00056__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d23980e98 ">JavaScript</td>
+<tr id="redt00056__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d28299e98 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d23980e101 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d28299e101 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

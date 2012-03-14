@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="ForEach statement for a relational database"></meta>
+<meta name="abstract" content="The forEach statement defines a loop that retrieves each row in an SQL result set and operates on the most recently retrieved row by running a block of embedded EGL statements. After processing all rows, the forEach statement closes the result set. If an exception occurs, the result set stays open."></meta>
+<meta name="description" content="The forEach statement defines a loop that retrieves each row in an SQL result set and operates on the most recently retrieved row by running a block of embedded EGL statements. After processing all rows, the forEach statement closes the result set. If an exception occurs, the result set stays open."></meta>
 <meta name="DC.subject" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
 <meta name="keywords" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
@@ -17,81 +19,81 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>ForEach statement for a relational database</title>
 </head>
-<body id="redt00018"><a name="redt00018"><!-- --></a>
+<body id="redt00018">
 
 
-<h1 class="topictitle1">ForEach statement for a relational database</h1>
+<h1 class="title topictitle1">ForEach statement for a relational database</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><div><span>The <span class="synph"><span class="kwd">forEach</span></span> statement
+<div class="body" id="body"><div class="abstract"><span class="shortdesc">The <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement
 defines a loop that retrieves each row in an SQL result set and operates
 on the most recently retrieved row by running a block of embedded
-EGL statements. After processing all rows, the <span class="synph"><span class="kwd">forEach</span></span> statement
+EGL statements. After processing all rows, the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement
 closes the result set. If an exception occurs, the result set stays
 open.</span>
  </div>
 
 <anchor id="sql_intro_more"></anchor>
 
-<div class="section" id="redt00018__sql_syntax"><a name="redt00018__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00018__sql_syntax_figure"><a name="redt00018__sql_syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_data_sql_for_each.gif" alt="Syntax diagram for the forEach statement with SQL"></img><br></br>
+<div class="section" id="redt00018__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00018__sql_syntax_figure">
+<br></br><img class="image" src="../images/redt_data_sql_for_each.gif" alt="Syntax diagram for the forEach statement with SQL"></img><br></br>
 </div>
-<p></p>
-<dl>
-<dt class="dlterm"><var class="varname">entity</var></dt>
+<p class="p"></p>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">entity</var></dt>
 
-<dd>Name of the entity, which is a variable based on an External type,
+<dd class="dd">Name of the entity, which is a variable based on an External type,
 Handler type, or Record type. </dd>
 
 
-<dt class="dlterm"><var class="varname">simpleVar</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">simpleVar</var></dt>
 
-<dd>A field of an EGL simple type that is compatible with the corresponding
+<dd class="dd">A field of an EGL simple type that is compatible with the corresponding
 column in the result set.</dd>
 
 
-<dt class="dlterm"><var class="varname">SQLResultSet</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLResultSet</var></dt>
 
-<dd>An SQL result set that was established by an <strong>open</strong> statement.</dd>
+<dd class="dd">An SQL result set that was established by an <strong class="ph b">open</strong> statement.</dd>
 
 
-<dt class="dlterm"><var class="varname">statement</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
 
-<dd>An EGL statement.</dd>
+<dd class="dd">An EGL statement.</dd>
 
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00018__sql_example"><a name="redt00018__sql_example"><!-- --></a><pre class="codeblock"></pre>
+<div class="example" id="redt00018__sql_example"><pre class="pre codeblock"></pre>
 <anchor id="sql_example_more"></anchor></div>
 
-<div class="section" id="redt00018__compat"><a name="redt00018__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00018__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00018__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d11374e115">Target</th>
+<div class="section" id="redt00018__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00018__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d13449e115">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d11374e118">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d13449e118">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00018__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d11374e115 ">Java</td>
+<tr id="redt00018__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d13449e115 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d11374e118 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d13449e118 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00018__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d11374e115 ">JavaScript</td>
+<tr id="redt00018__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d13449e115 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d11374e118 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d13449e118 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

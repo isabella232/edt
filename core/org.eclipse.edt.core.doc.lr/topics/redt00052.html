@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,78 +19,78 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Date and EDate types</title>
 </head>
-<body id="redt00052"><a name="redt00052"><!-- --></a>
+<body id="redt00052">
 
 
-<h1 class="topictitle1">Date and EDate types</h1>
+<h1 class="title topictitle1">Date and EDate types</h1>
 
 
 
-<div><p>The EGL Date type is a value type that lets you create
+<div class="body"><p class="shortdesc">The EGL Date type is a value type that lets you create
 a date value. In Eclipse IDE for EGL Developers, the type definition
 for Date is EDate.</p>
 
-<a name="redt00052__main"><!-- --></a><dl id="redt00052__main">
-<dt class="dlterm"><a name="redt00052__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00052__main">
+<dt class="dt dlterm"><a name="redt00052__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00052__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00052__use"><!-- --></a>Example use</dt>
 
-<dd>After the following code runs, the value of <samp class="codeph">result</samp> is
-the current date, and the value of <samp class="codeph">result02</samp> is January
-4, 2009:<pre class="codeblock">result Date; 
-result02 Date = """"""""01-04-2009"""""""";</pre>
+<dd class="dd">After the following code runs, the value of <samp class="ph codeph">result</samp> is
+the current date, and the value of <samp class="ph codeph">result02</samp> is January
+4, 2009:<pre class="pre codeblock">result Date; 
+result02 Date = "01-04-2009";</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00052__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00052__detail"><!-- --></a>Type detail</dt>
 
-<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+<dd class="dd">In the following detail, the <span class="ph synph"><span class="keyword kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values, not “$EQ”. Two exceptions are the
 widen and narrow operations, which are invoked during data conversions;
-for example, when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">/**
+for example, when the <span class="ph synph"><span class="keyword kwd">as</span></span> operator is used. <pre class="pre codeblock">/**
  * A date stores a day, month, and year.
  */
 externalType EDate extends AnyValue type ClassType
 /**
-	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;} Compares two dates.
+	 * {@Operation &lt;} Compares two dates.
 	 */
 static function $LT(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;""""""""}};
+       returns (EBoolean) {@Operation{"&lt;"}};
 
 /**
-	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;} Compares two dates.
+	 * {@Operation &gt;} Compares two dates.
 	 */
 static function $GT(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""}};
+       returns (EBoolean) {@Operation{"&gt;"}};
 
 /**
-	 * {@Operation &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=} Compares two dates.
+	 * {@Operation &lt;=} Compares two dates.
 */
 static function $LTE(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{""""""""&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;=""""""""}};
+       returns (EBoolean) {@Operation{"&lt;="}};
 
 /**
-	 * {@Operation &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=} Compares two dates.
+	 * {@Operation &gt;=} Compares two dates.
 */
 static function $GTE(lvalue EDate in, rvalue EDate in) 
-       returns (EBoolean) {@Operation{""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;=""""""""}};
+       returns (EBoolean) {@Operation{"&gt;="}};
 
 /**
 	 * {@Operation ==} Compares two dates.
 */
 static function $EQ(lvalue EDate in, rvalue EDate in) 
-       returns(EBoolean) {@Operation{""""""""==""""""""}};
+       returns(EBoolean) {@Operation{"=="}};
 
 /**
  * {@Operation !=} Compares two dates.
 */
 static function $NEQ(lvalue EDate in, rvalue EDate in) 
-       returns(EBoolean) {@Operation{""""""""!=""""""""}};
+       returns(EBoolean) {@Operation{"!="}};
 
 /**
 	 * {@Operation narrow} Converts a string to a date.  The string is parsed
@@ -105,7 +105,7 @@ static function $NEQ(lvalue EDate in, rvalue EDate in)
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
 static function asDate(value EString in) 
-       returns (EDate) {@Operation{""""""""narrow""""""""}};
+       returns (EDate) {@Operation{"narrow"}};
 	
 	// this replaces date-time math: date - date = int
 	/**
@@ -139,49 +139,49 @@ end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00052__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00052__comments"><!-- --></a>Comments</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00052__table_comments"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00052__table_comments" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. For additional information</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" id="d22953e97">Conversion rules</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00052__table_comments" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. For additional information</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" id="d27092e97">Conversion rules</th>
 
-<th class="cellrowborder" valign="bottom" id="d22953e100">Reference</th>
+<th class="entry" valign="bottom" id="d27092e100">Reference</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" headers="d22953e97 ">To convert a string to a date.</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" headers="d27092e97 ">To convert a string to a date.</td>
 
-<td class="cellrowborder" valign="top" headers="d22953e100 ">See the earlier comments for the <span class="synph"><span class="kwd">asString</span></span> function.</td>
+<td class="entry" valign="top" headers="d27092e100 ">See the earlier comments for the <span class="ph synph"><span class="keyword kwd">asString</span></span> function.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" headers="d22953e97 ">To convert a date to a string, in the absence
+<tr class="row">
+<td class="entry" valign="top" headers="d27092e97 ">To convert a date to a string, in the absence
 of a format.</td>
 
-<td class="cellrowborder" valign="top" headers="d22953e100 ">See “String and EString types”; in particular,
-the comments for the <span class="synph"><span class="kwd">asString</span></span> function.
-As suggested in the following example, the <span class="synph"><span class="kwd">as String</span></span> clause
-invokes that function: <pre class="codeblock">result03 Date = """"""""01/04/2009"""""""";
+<td class="entry" valign="top" headers="d27092e100 ">See “String and EString types”; in particular,
+the comments for the <span class="ph synph"><span class="keyword kwd">asString</span></span> function.
+As suggested in the following example, the <span class="ph synph"><span class="keyword kwd">as String</span></span> clause
+invokes that function: <pre class="pre codeblock">result03 Date = "01/04/2009";
 sysLib.writeStdOut(result03 as String);</pre>
 <div class="p">Here is the
-example output:<pre class="codeblock">2009-01-04 12:01</pre>
+example output:<pre class="pre codeblock">2009-01-04 12:01</pre>
 </div>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" headers="d22953e97 ">To convert a date to a string, in the presence
+<tr class="row">
+<td class="entry" valign="top" headers="d27092e97 ">To convert a date to a string, in the presence
 of a format. </td>
 
-<td class="cellrowborder" valign="top" headers="d22953e100 ">See “StringLib.format.” Also, note the set of
+<td class="entry" valign="top" headers="d27092e100 ">See “StringLib.format.” Also, note the set of
 useful date formats in “Constants library.”</td>
 
 </tr>
@@ -193,34 +193,34 @@ useful date formats in “Constants library.”</td>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00052__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00052__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00052__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00052__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d22953e174">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00052__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d27092e174">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d22953e177">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d27092e177">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00052__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d22953e174 ">Java</td>
+<tr id="redt00052__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d27092e174 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22953e177 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d27092e177 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00052__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d22953e174 ">JavaScript</td>
+<tr id="redt00052__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d27092e174 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d22953e177 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d27092e177 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

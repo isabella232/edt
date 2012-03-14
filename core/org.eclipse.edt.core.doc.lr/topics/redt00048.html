@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,67 +19,67 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Dictionary and EDictionary types</title>
 </head>
-<body id="redt00048"><a name="redt00048"><!-- --></a>
+<body id="redt00048">
 
 
-<h1 class="topictitle1">Dictionary and EDictionary types</h1>
+<h1 class="title topictitle1">Dictionary and EDictionary types</h1>
 
 
 
-<div><p>The EGL Dictionary type is a reference type that lets you
+<div class="body"><p class="shortdesc">The EGL Dictionary type is a reference type that lets you
 create an instance that is composed of a set of keys and their related
 values. In Eclipse IDE for EGL Developers, the type definition for
 Dictionary is EDictionary.</p>
 
-<a name="redt00048__main"><!-- --></a><dl id="redt00048__main">
-<dt class="dlterm"><a name="redt00048__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00048__main">
+<dt class="dt dlterm"><a name="redt00048__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00048__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00048__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p">Here is a dictionary declaration:<pre class="codeblock">myRef Dictionary 
+<dd class="dd"><div class="p">Here is a dictionary declaration:<pre class="pre codeblock">myRef Dictionary 
 {
    ID        = 5,
-   lastName  = """"""""Twain"""""""",
-   firstName = """"""""Mark""""""""
+   lastName  = "Twain",
+   firstName = "Mark"
 };</pre>
 </div>
-<p>When you include entries in the declaration,
+<p class="p">When you include entries in the declaration,
 each key name is an EGL identifier that must be consistent with EGL
 naming conventions. When you add entries at run time, you have greater
-flexibility; see """"""""Dynamic types and dynamic access.""""""""</p>
+flexibility; see "Dynamic types and dynamic access."</p>
 <div class="p">The following
-assignments that add new key/value pairs to the dictionary:<pre class="codeblock">myRef.age = 30;
-myRef[""""""""Credit""""""""] = 700;</pre>
+assignments that add new key/value pairs to the dictionary:<pre class="pre codeblock">myRef.age = 30;
+myRef["Credit"] = 700;</pre>
 </div>
 <div class="p">If you attempt to assign
 a key that already exists, you override the existing key/value entry.
-The following assignment is valid and replaces """"""""Twain"""""""" with """"""""Clemens"""""""": <pre class="codeblock">myRef.lastname = """"""""Clemens"""""""";</pre>
+The following assignment is valid and replaces "Twain" with "Clemens": <pre class="pre codeblock">myRef.lastname = "Clemens";</pre>
 </div>
 <div class="p">You
-can also use assignments to retrieve data: <pre class="codeblock">lastname STRING
+can also use assignments to retrieve data: <pre class="pre codeblock">lastname STRING
 age, credit INT;
 
 lastname = myRef.lastname; 
-age = myRef[""""""""age""""""""];
+age = myRef["age"];
 credit = myRef.credit;</pre>
 </div>
-<p>The value in a key/value
+<p class="p">The value in a key/value
 entry is ANY type, so you can put different kinds of information into
 a single dictionary. You can put any value into a dictionary entry. </p>
 <div class="p">Adding
 a variable to a dictionary assigns a copy of the variable. Consider
-the following Record type: <pre class="codeblock">Record ExampleRecord
+the following Record type: <pre class="pre codeblock">Record ExampleRecord
    x int;
 end
 </pre>
 </div>
-<p>The next example places an <samp class="codeph">ExampleRecord</samp> variable
+<p class="p">The next example places an <samp class="ph codeph">ExampleRecord</samp> variable
 into the dictionary, then changes the value of the original variable:</p>
-<div class="p"><pre class="codeblock">testValue int;
+<div class="p"><pre class="pre codeblock">testValue int;
 
 myRecord ExampleRecord;
 
@@ -101,7 +101,7 @@ testValue = myRef.theRecord.x;
 <div class="p">Assigning one dictionary to another replaces the
 target content with the source content and overrides the fields of
 the target dictionary. For example, the conditional statement in the
-following code is true:<pre class="codeblock">  myRef Dictionary { age = 30 };
+following code is true:<pre class="pre codeblock">  myRef Dictionary { age = 30 };
   newRef Dictionary { age = 50 };
   newRef = myRef;
 
@@ -114,13 +114,13 @@ following code is true:<pre class="codeblock">  myRef Dictionary { age = 30 };
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00048__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00048__detail"><!-- --></a>Type detail</dt>
 
-<dd>In the following detail, the <span class="synph"><span class="kwd">Operation</span></span> annotation
+<dd class="dd">In the following detail, the <span class="ph synph"><span class="keyword kwd">Operation</span></span> annotation
 indicates that the specified operation is available. For example,
 use “==” to compare two values. Two exceptions are the widen and narrow
 operations, which are invoked during data conversions; for example,
-when the <span class="synph"><span class="kwd">as</span></span> operator is used. <pre class="codeblock">/**
+when the <span class="ph synph"><span class="keyword kwd">as</span></span> operator is used. <pre class="pre codeblock">/**
  * An EDictionary, the class for EGL's dictionary type, stores named values.
  * The name of a value -- its key -- is used to access that value.  The keys are
  * strings and the values are of type Any.
@@ -142,7 +142,7 @@ externalType EDictionary extends EAny type ClassType
 	 * @throws DynamicAccessException  if there's no key with the given name.
 	 */
 static function $Lookup(dict EDictionary in, key EString in) 
-       returns(EAny) {@Operation{""""""""['""""""""}};
+       returns(EAny) {@Operation{"['"}};
 
 	/**
 	 * Default constructor
@@ -236,39 +236,39 @@ end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00048__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00048__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="comments_more"></anchor></dd>
+<dd class="dd"><anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00048__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00048__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00048__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00048__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d21977e133">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00048__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d25928e133">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d21977e136">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d25928e136">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00048__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d21977e133 ">Java</td>
+<tr id="redt00048__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d25928e133 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d21977e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d25928e136 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00048__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d21977e133 ">JavaScript</td>
+<tr id="redt00048__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d25928e133 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d21977e136 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d25928e136 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -285,7 +285,7 @@ end</pre>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

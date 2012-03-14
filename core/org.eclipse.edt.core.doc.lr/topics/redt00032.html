@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -46,41 +46,41 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>eglx.lang package</title>
 </head>
-<body id="redt00032"><a name="redt00032"><!-- --></a>
+<body id="redt00032">
 
 
-<h1 class="topictitle1">eglx.lang package</h1>
+<h1 class="title topictitle1">eglx.lang package</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">eglx.lang</span></span> defines
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">eglx.lang</span></span> defines
 the primary language types in Eclipse IDE for EGL Developers.</p>
 
-<div class="p" id="redt00032__types"><a name="redt00032__types"><!-- --></a>
-<div class="tablenoborder"><a name="redt00032__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00032__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00050.html" title="The EGL Any type is a reference type that lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny.">Any and EAny types</a></td>
+<div class="p" id="redt00032__types">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00032__types_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00050.html" title="The EGL Any type is a reference type that lets you create a variable whose data type is not fixed. The EDT implementation of Any is EAny.">Any and EAny types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00272.html" title="AnyDelegate is the supertype of every enumeration type.">AnyDelegate type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00272.html" title="AnyDelegate is the supertype of every enumeration type.">AnyDelegate type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00271.html" title="AnyEnumeration is the supertype of every enumeration type.">AnyEnumeration type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00271.html" title="AnyEnumeration is the supertype of every enumeration type.">AnyEnumeration type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00270.html" title="AnyException is the supertype of every exception type.">AnyException type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00270.html" title="AnyException is the supertype of every exception type.">AnyException type</a></td>
 
 </tr>
 
-<tr id="redt00032__compat_javascript">
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+<tr id="redt00032__compat_javascript" class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*******************************************************************
    * The supertype of every Record type.                              *
    *******************************************************************/
 externalType AnyRecord extends AnyStruct type ClassType {isAbstract=yes} end</pre>
@@ -88,8 +88,8 @@ externalType AnyRecord extends AnyStruct type ClassType {isAbstract=yes} end</pr
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*******************************************************************
    * The supertype of every Struct type.  For future use with Record. *
    *******************************************************************/
 externalType AnyStruct extends AnyValue type ClassType {isAbstract=yes} end</pre>
@@ -97,8 +97,8 @@ externalType AnyStruct extends AnyValue type ClassType {isAbstract=yes} end</pre
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*******************************************************************
    * The supertype of every type that represents a set of characters. *
    *******************************************************************/
 externalType AnyText extends AnyValue type ClassType {isAbstract=yes} end</pre>
@@ -106,8 +106,8 @@ externalType AnyText extends AnyValue type ClassType {isAbstract=yes} end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /********************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /********************************************************************
    * The supertype of every value type, not reference type             *
    ********************************************************************/
 externalType AnyValue extends EAny type ClassType {isAbstract=yes} end</pre>
@@ -115,28 +115,28 @@ externalType AnyValue extends EAny type ClassType {isAbstract=yes} end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00102.html" title="BasicProgram indicates that a program that does not accept realtime input from the user and is not specialized for a UI technology. This stereotype is the default when you use the Program classifier to write a custom type.">BasicProgram stereotype</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00102.html" title="BasicProgram indicates that a program that does not accept realtime input from the user and is not specialized for a UI technology. This stereotype is the default when you use the Program classifier to write a custom type.">BasicProgram stereotype</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00058.html" title="The EGL Bigint type is a value type that lets you create an eight-byte value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Bigint is EBigint.">Bigint and EBigint types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00058.html" title="The EGL Bigint type is a value type that lets you create an eight-byte value that ranges from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Bigint is EBigint.">Bigint and EBigint types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00176.html" title="The EGL Boolean type is a value type that lets you create a logical value. In Eclipse IDE for EGL Developers, the type definition for Boolean is EBoolean.">Boolean and EBoolean types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00176.html" title="The EGL Boolean type is a value type that lets you create a logical value. In Eclipse IDE for EGL Developers, the type definition for Boolean is EBoolean.">Boolean and EBoolean types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00240.html" title="Constants contains a set of constant strings that you can use as patterns to format numeric, date, and timestamp values into strings. The primary formatting function is StringLib.format.">Constants library</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00240.html" title="Constants contains a set of constant strings that you can use as patterns to format numeric, date, and timestamp values into strings. The primary formatting function is StringLib.format.">Constants library</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*********************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*********************************************************************
    * Marks a type that must be available in content assist.            *
    **********************************************************************/
 Record ContentAssist type Annotation
@@ -148,45 +148,45 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00069.html" title="DateTimeLib contains functions that return date values in response to numeric input.">DateTimeLib external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00069.html" title="DateTimeLib contains functions that return date values in response to numeric input.">DateTimeLib external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*********************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*********************************************************************
    * The supertype of all other types; can reference any type of value. *
    *********************************************************************/
 externalType EAny type ClassType
 
    /* {@Operation ==} compares two values of type any.                 */
    static function $EQ(lvalue EAny in, rvalue EAny in)
-      returns(EBoolean) {@Operation{""""""""==""""""""}};
+      returns(EBoolean) {@Operation{"=="}};
 
    /* {@Operation !=} compares two values of type any.                 */
    static function $NEQ(lvalue EAny in, rvalue EAny in) 
-      returns(EBoolean) {@Operation{""""""""!=""""""""}};
+      returns(EBoolean) {@Operation{"!="}};
 
    /* {@Operation widen} Converts to an any, as used in boxing         */
    static function asAny(value EAny in) 
-      returns(EAny) {@Operation{""""""""widen""""""""}};
+      returns(EAny) {@Operation{"widen"}};
 end</pre>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00262.html" title="EGLProperty identifies functions that get and set the EGL field values. The annotation is useful when you create a widget by authoring a handler, stereotype RUIWidget.">EGLProperty</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00262.html" title="EGLProperty identifies functions that get and set the EGL field values. The annotation is useful when you create a widget by authoring a handler, stereotype RUIWidget.">EGLProperty</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00083.html" title="EventListener lets you write an event handler for a Java environment, giving the EGL generator the information needed to create code that conforms to the Java event-listener pattern. The annotation is used in an external type of stereotypeJavaObject.">EventListener annotation</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00083.html" title="EventListener lets you write an event handler for a Java environment, giving the EGL generator the information needed to create code that conforms to the Java event-listener pattern. The annotation is used in an external type of stereotypeJavaObject.">EventListener annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*******************************************************************
    * The stereotype for all exceptions.                               *
    *******************************************************************/
 Record Exception type Annotation
@@ -200,13 +200,13 @@ end
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00080.html" title="Several Exception Record types are provided in eglx.lang.">Exception Record types in eglx.lang</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00080.html" title="Several Exception Record types are provided in eglx.lang.">Exception Record types in eglx.lang</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">   /*******************************************************************
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">   /*******************************************************************
    * Identifies an alias for the name of a field or function in an    *
    * external type. You must use this if the name is not a valid      *
    * EGL identifier.                                                  *
@@ -225,28 +225,28 @@ end
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00060.html" title="The EGL Float type is a value type that lets you create a 64-bit double-precision floating-point value. In Eclipse IDE for EGL Developers, the type definition for Float is EFloat.">Float and EFloat types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00060.html" title="The EGL Float type is a value type that lets you create a 64-bit double-precision floating-point value. In Eclipse IDE for EGL Developers, the type definition for Float is EFloat.">Float and EFloat types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00057.html" title="The EGL Int type is a value type that lets you create an eight-byte value that ranges from -2,147,483,648 to 2,147,483,647, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Int is EInt.">Int and EInt types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00057.html" title="The EGL Int type is a value type that lets you create an eight-byte value that ranges from -2,147,483,648 to 2,147,483,647, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Int is EInt.">Int and EInt types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00088.html" title="The EGL List type is a reference type that provides a type-specific dynamic array. In Eclipse IDE for EGL Developers, the type definition for List is EList.">List and EList types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00088.html" title="The EGL List type is a reference type that provides a type-specific dynamic array. In Eclipse IDE for EGL Developers, the type definition for List is EList.">List and EList types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00067.html" title="MathLib includes mathematical and trigonometric functions.">MathLib external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00067.html" title="MathLib includes mathematical and trigonometric functions.">MathLib external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">Record NativeType type Annotation { 
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">Record NativeType type Annotation { 
    targets = [ElementKind.ExternalTypePart],
    @Stereotype { memberAnnotations = [EventListener] }}
 end</pre>
@@ -254,43 +254,43 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00062.html" title="The EGL Number type is a non-instantiable reference type that can refer to any numeric value. In Eclipse IDE for EGL Developers, the type definition for Number is ENumber.">Number and ENumber type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00062.html" title="The EGL Number type is a non-instantiable reference type that can refer to any numeric value. In Eclipse IDE for EGL Developers, the type definition for Number is ENumber.">Number and ENumber type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00087.html" title="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor.">Resource annotation</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00087.html" title="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor.">Resource annotation</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00061.html" title="The EGL Smallfloat type is a value type that is the basis of a 32-bit single-precision floating-point value. In Java output, positive values range from 1.40239846e-45 to 3.40282347e+38. In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat.">Smallfloat and ESmallfloat types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00061.html" title="The EGL Smallfloat type is a value type that is the basis of a 32-bit single-precision floating-point value. In Java output, positive values range from 1.40239846e-45 to 3.40282347e+38. In Eclipse IDE for EGL Developers, the type definition for Smallfloat is ESmallfloat.">Smallfloat and ESmallfloat types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00056.html" title="The EGL Smallint type is a value type that lets you create a four-byte value that ranges from -32,768 to 32,767, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Smallint is ESmallint.">Smallint and ESmallint types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00056.html" title="The EGL Smallint type is a value type that lets you create a four-byte value that ranges from -32,768 to 32,767, inclusive, with no decimal places. In Eclipse IDE for EGL Developers, the type definition for Smallint is ESmallint.">Smallint and ESmallint types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00051.html" title="The EGL String type is an instantiable reference type and can be declared with or without a length parameter. (However, in version .7, the type is a value type if it is declared without a length parameter.) In Eclipse IDE for EGL Developers, the type definition for String is EString.">String and EString types</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00051.html" title="The EGL String type is an instantiable reference type and can be declared with or without a length parameter. (However, in version .7, the type is a value type if it is declared without a length parameter.) In Eclipse IDE for EGL Developers, the type definition for String is EString.">String and EString types</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00068.html" title="StringLib includes functions to work with strings.">StringLib external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00068.html" title="StringLib includes functions to work with strings.">StringLib external type</a></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00066.html" title="SysLib provides a set of EGL system functions that are generally useful.">SysLib system library</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00066.html" title="SysLib provides a set of EGL system functions that are generally useful.">SysLib system library</a></td>
 
 </tr>
 
@@ -301,31 +301,31 @@ end</pre>
 </div>
 
 <div class="p">
-<div class="tablenoborder"><a name="redt00032__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00032__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d19872e423">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00032__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d23567e447">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d19872e426">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d23567e450">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00032__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d19872e423 ">Java</td>
+<tr id="redt00032__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d23567e447 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d19872e426 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d23567e450 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00032__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d19872e423 ">JavaScript</td>
+<tr id="redt00032__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d23567e447 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d19872e426 ">See type-specific topics.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d23567e450 ">See type-specific topics.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

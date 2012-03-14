@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,43 +19,43 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Listmulti widget</title>
 </head>
-<body id="redt00180"><a name="redt00180"><!-- --></a>
+<body id="redt00180">
 
 
-<h1 class="topictitle1">Listmulti widget</h1>
+<h1 class="title topictitle1">Listmulti widget</h1>
 
 
 
-<div><p>The Rich UI listMulti widget defines a list from which
+<div class="body"><p class="shortdesc">The Rich UI listMulti widget defines a list from which
 the user can select multiple entries. </p>
 
-<div class="p">The following fields are supported:<ul>
-<li><span class="synph"><span class="kwd">values</span></span>, which holds an array of strings
+<div class="p">The following fields are supported:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">values</span></span>, which holds an array of strings
 that each represent a selectable option.</li>
 
-<li><span class="synph"><span class="kwd">selection</span></span>, which holds an array of integer
-that represent the position of the strings in the <span class="synph"><span class="kwd">values</span></span> array.
-If you set the value of <span class="synph"><span class="kwd">selection</span></span> before
-displaying the list box, the specified strings are displayed in boldface.<p>The
+<li class="li"><span class="ph synph"><span class="keyword kwd">selection</span></span>, which holds an array of integer
+that represent the position of the strings in the <span class="ph synph"><span class="keyword kwd">values</span></span> array.
+If you set the value of <span class="ph synph"><span class="keyword kwd">selection</span></span> before
+displaying the list box, the specified strings are displayed in boldface.<p class="p">The
 first string in the array is at position 1, not 0.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">size</span></span>, which holds an integer that indicates
-how many strings to display from the <span class="synph"><span class="kwd">values</span></span> array.
-The default is to display all the strings, with no scroll bar:<ul>
-<li>If the value of <span class="synph"><span class="kwd">size</span></span> is smaller than
+<li class="li"><span class="ph synph"><span class="keyword kwd">size</span></span>, which holds an integer that indicates
+how many strings to display from the <span class="ph synph"><span class="keyword kwd">values</span></span> array.
+The default is to display all the strings, with no scroll bar:<ul class="ul">
+<li class="li">If the value of <span class="ph synph"><span class="keyword kwd">size</span></span> is smaller than
 the number of strings, only the specified number of strings is displayed.
-A scroll bar provides access to the other strings. <p>Initially, only
+A scroll bar provides access to the other strings. <p class="p">Initially, only
 the last strings are displayed.</p>
 </li>
 
-<li>If the value of <span class="synph"><span class="kwd">size</span></span> is greater than
+<li class="li">If the value of <span class="ph synph"><span class="keyword kwd">size</span></span> is greater than
 the number of strings, additional spaces are added to the bottom of
 the list box. The user cannot select content from one of those spaces,
 which are only for display.</li>
 
 </ul>
-<p>If you do not set the <span class="synph"><span class="kwd">size</span></span> field,
+<p class="p">If you do not set the <span class="ph synph"><span class="keyword kwd">size</span></span> field,
 Internet Explorer 6 displays the widget as a combo box (a combination
 text box and list box).</p>
  </li>
@@ -63,11 +63,11 @@ text box and list box).</p>
 </ul>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Listmulti;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Listmulti;</pre>
 </div>
 
 </div>

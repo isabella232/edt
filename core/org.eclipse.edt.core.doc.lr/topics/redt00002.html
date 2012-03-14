@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,48 +16,48 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>this keyword</title>
 </head>
-<body id="redt00002"><a name="redt00002"><!-- --></a>
+<body id="redt00002">
 
 
-<h1 class="topictitle1">this keyword</h1>
+<h1 class="title topictitle1">this keyword</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>The EGL <span class="synph"><span class="kwd">this</span></span> keyword
+<div class="body" id="body"><p class="shortdesc">The EGL <span class="ph synph"><span class="keyword kwd">this</span></span> keyword
 is used primarily to access a program-global declaration even if a
 local declaration has the same name. A secondary use is in a set-values
 block, where the keyword allows access of a record field at run time
 even if the field name is also the name of a stereotype field or annotation.</p>
 
 <anchor id="top_comments"></anchor>
-<div class="section" id="redt00002__use"><a name="redt00002__use"><!-- --></a><h2 class="sectiontitle">With program-global declarations</h2><p>If
+<div class="section" id="redt00002__use"><h2 class="title sectiontitle">With program-global declarations</h2><p class="p">If
 a local declaration has the same name as the program-global declaration,
 only the local declaration is visible to the expression; but you can
 override that rule. To access the program-global declaration, qualify
-the reference with the keyword <span class="synph"><span class="kwd">this</span></span>. </p>
+the reference with the keyword <span class="ph synph"><span class="keyword kwd">this</span></span>. </p>
 <div class="p">Here
-is an example: <pre class="codeblock">program myProgram
-   myString STRING = """"From the program-global variable"""";
+is an example: <pre class="pre codeblock">program myProgram
+   myString STRING = "From the program-global variable";
 
    function main()
-      myString STRING = """"In main"""";
+      myString STRING = "In main";
 
       myFunction();
    end
 
    function myFunction()
-      myString STRING = """"In myFunction"""";
+      myString STRING = "In myFunction";
       Syslib.writeStdErr(this.myString);
    end
 end
 </pre>
 </div>
-<p>The program displays the phrase “From the program-global
+<p class="p">The program displays the phrase “From the program-global
 variable” at the standard output.</p>
 <anchor id="use_more"></anchor></div>
 
-<div class="section" id="redt00002__use02"><a name="redt00002__use02"><!-- --></a><h2 class="sectiontitle">With
-set-value blocks</h2><p></p>
+<div class="section" id="redt00002__use02"><h2 class="title sectiontitle">With
+set-value blocks</h2><p class="p"></p>
 <anchor id="use02_more"></anchor></div>
 
 </div>

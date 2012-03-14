@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,70 +16,70 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Record classifier overview</title>
 </head>
-<body id="cedt00031"><a name="cedt00031"><!-- --></a>
+<body id="cedt00031">
 
 
-<h1 class="topictitle1">Record classifier overview</h1>
+<h1 class="title topictitle1">Record classifier overview</h1>
 
 
 
-<div><p>The capabilities of the Record classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the Record classifier are made available
 when you code a <dfn class="term">Record type</dfn>, which contains a set of
 fields.</p>
 
-<div class="p">Here is an example:<pre class="codeblock">Record CarPolicy {}
+<div class="p">Here is an example:<pre class="pre codeblock">Record CarPolicy {}
    thePolicyID STRING; 
    theCarCount NumberOfCars;
    theDriverCount NumberofDrivers;
 end</pre>
 </div>
 
-<div class="p">The following code shows a record declaration with data assignments:<pre class="codeblock">myCarPolicy CarPolicy;
-myCarPolicy.thePolicyID = """"ABC123"""";
+<div class="p">The following code shows a record declaration with data assignments:<pre class="pre codeblock">myCarPolicy CarPolicy;
+myCarPolicy.thePolicyID = "ABC123";
 myCarPolicy.theCarCount = 2;
 myCarPolicy.theDriverCount = 2;</pre>
 </div>
 
 <div class="p">The next table lists the stereotypes that are available for a Record
 type.
-<div class="tablenoborder"><a name="cedt00031__stereo_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00031__stereo_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="22.613065326633166%" id="d4856e50">Stereotype</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00031__stereo_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="22.613065326633166%" id="d5585e50">Stereotype</th>
 
-<th class="cellrowborder" valign="bottom" width="77.38693467336684%" id="d4856e53">Purpose</th>
+<th class="entry" valign="bottom" width="77.38693467336684%" id="d5585e53">Purpose</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="stereo_rows_start"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d4856e50 ">none specified</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d5585e50 ">none specified</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d4856e53 ">To handle data in memory instead of than interacting
+<td class="entry" valign="top" width="77.38693467336684%" headers="d5585e53 ">To handle data in memory instead of than interacting
 with an external technology such as a database management system.</td>
 
 </tr>
 
 <anchor id="stereo_rows_post_basicrecord"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d4856e50 ">Entity </td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d5585e50 ">Entity </td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d4856e53 ">To mark a type that has fields to be persisted
+<td class="entry" valign="top" width="77.38693467336684%" headers="d5585e53 ">To mark a type that has fields to be persisted
 in a database or other data store. In version 1.0, you can indicate
-a relationship among types that have the Entity stereotype. <p>This
+a relationship among types that have the Entity stereotype. <p class="p">This
 stereotype applies to ExternalType, Handler, and Record types.</p>
 </td>
 
 </tr>
 
 <anchor id="stereo_rows_post_entity"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d4856e50 ">Exception</td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d5585e50 ">Exception</td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d4856e53 ">To make data available
+<td class="entry" valign="top" width="77.38693467336684%" headers="d5585e53 ">To make data available
 to a function that is invoked automatically in response to a runtime
 error. Such a function is called an <dfn class="term">exception handler</dfn>. </td>
 

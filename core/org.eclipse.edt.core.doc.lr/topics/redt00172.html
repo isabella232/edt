@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,27 +19,27 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Table annotation</title>
 </head>
-<body id="redt00172"><a name="redt00172"><!-- --></a>
+<body id="redt00172">
 
 
-<h1 class="topictitle1">Table annotation</h1>
+<h1 class="title topictitle1">Table annotation</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">Table</span></span> represents the
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">Table</span></span> represents the
 primary database table to which you are relating an external type,
 Record type, or Handler type.</p>
 
-<a name="redt00172__main"><!-- --></a><dl id="redt00172__main">
-<dt class="dlterm"><a name="redt00172__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00172__main">
+<dt class="dt dlterm"><a name="redt00172__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.persistence.sql</p>
+<dd class="dd"><p class="p">eglx.persistence.sql</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00172__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00172__use"><!-- --></a>Example use</dt>
 
-<dd><div class="p"><pre class="codeblock">Record Customer {@Table{name = """"""""CUSTOMER_TABLE""""""""}}
+<dd class="dd"><div class="p"><pre class="pre codeblock">Record Customer {@Table{name = "CUSTOMER_TABLE"}}
    identifier STRING {@ID};
    corporateName STRING;
 end</pre>
@@ -47,9 +47,9 @@ end</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00172__annorec"><!-- --></a>Annotation detail</dt>
+<dt class="dt dlterm"><a name="redt00172__annorec"><!-- --></a>Annotation detail</dt>
 
-<dd><pre class="codeblock">record Table type Annotation {
+<dd class="dd"><pre class="pre codeblock">record Table type Annotation {
    targets=[RecordPart, HandlerPart, ExternalTypePart]
    }
    name string;
@@ -60,69 +60,69 @@ end</pre>
 <anchor id="annorec_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00172__annofields"><!-- --></a>Annotation fields</dt>
+<dt class="dt dlterm"><a name="redt00172__annofields"><!-- --></a>Annotation fields</dt>
 
-<dd><dl>
-<dt class="dlterm">name</dt>
+<dd class="dd"><dl class="dl">
+<dt class="dt dlterm">name</dt>
 
-<dd>The table name. The default is the name of the type that is being
+<dd class="dd">The table name. The default is the name of the type that is being
 annotated. The default name in the previous example would be “Customer”.</dd>
 
 
-<dt class="dlterm">shortName</dt>
+<dt class="dt dlterm">shortName</dt>
 
-<dd>The table-name alias, as might be used in a SELECT statement.</dd>
+<dd class="dd">The table-name alias, as might be used in a SELECT statement.</dd>
 
 
-<dt class="dlterm">catalog</dt>
+<dt class="dt dlterm">catalog</dt>
 
-<dd>The name of the database catalog that holds metadata about the
+<dd class="dd">The name of the database catalog that holds metadata about the
 table.</dd>
 
 
-<dt class="dlterm">schema</dt>
+<dt class="dt dlterm">schema</dt>
 
-<dd>The schema name used when referring to the table.</dd>
+<dd class="dd">The schema name used when referring to the table.</dd>
 
 </dl>
-<p>All of those fields are optional.</p>
+<p class="p">All of those fields are optional.</p>
 <anchor id="annofields_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00172__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00172__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="annocomments_more"></anchor></dd>
+<dd class="dd"><anchor id="annocomments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00172__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00172__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00172__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00172__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d55117e139">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00172__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d66650e139">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d55117e142">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d66650e142">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00172__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d55117e139 ">Java</td>
+<tr id="redt00172__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d66650e139 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d55117e142 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d66650e142 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00172__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d55117e139 ">JavaScript</td>
+<tr id="redt00172__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d66650e139 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d55117e142 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d66650e142 ">Database access is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

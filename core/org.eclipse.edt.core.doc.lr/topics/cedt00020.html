@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,14 +19,14 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL character types</title>
 </head>
-<body id="cedt00020"><a name="cedt00020"><!-- --></a>
+<body id="cedt00020">
 
 
-<h1 class="topictitle1">EGL character types</h1>
+<h1 class="title topictitle1">EGL character types</h1>
 
 
 
-<div><p>The next table lists the simple character types. Noted
+<div class="body"><p class="shortdesc">The next table lists the simple character types. Noted
 here is the <dfn class="term">encoding</dfn>, which is a mapping of each display
 character such as “A” and the related binary value such as 01000001.
 The <dfn class="term">code page</dfn>. is a table of such encodings and is important
@@ -34,145 +34,145 @@ for globalization.</p>
 
 
 <div class="p">
-<div class="tablenoborder"><a name="cedt00020__char_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__char_table" frame="border" border="1" rules="all">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__char_table" class="table" frame="border" border="1" rules="all">
 
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="18.84057971014493%" id="d726e58">Type</th>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="18.84057971014493%" id="d908e58">Type</th>
 
-<th class="cellrowborder" valign="bottom" width="16.563146997929607%" id="d726e61">Meaning of <em>n</em> </th>
+<th class="entry" valign="bottom" width="16.563146997929607%" id="d908e61">Meaning of <em class="ph i">n</em> </th>
 
-<th class="cellrowborder" valign="bottom" width="17.184265010351968%" id="d726e67">Limits</th>
+<th class="entry" valign="bottom" width="17.184265010351968%" id="d908e67">Limits</th>
 
-<th class="cellrowborder" valign="bottom" width="23.395445134575567%" id="d726e70">Value or reference type?</th>
+<th class="entry" valign="bottom" width="23.395445134575567%" id="d908e70">Value or reference type?</th>
 
-<th class="cellrowborder" valign="bottom" width="24.016563146997928%" id="d726e73">Comments</th>
+<th class="entry" valign="bottom" width="24.016563146997928%" id="d908e73">Comments</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>BYTES, BYTES(<em>n</em>)</p>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">BYTES, BYTES(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 ">&#xA0;</td>
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "> </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 ">&#xA0;</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "> </td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">BYTES is a reference type, BYTES(n) is a
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">BYTES is a reference type, BYTES(n) is a
 value type.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 ">&#xA0;</td>
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>CHAR(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">CHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of one-byte characters, with single-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of one-byte characters, with single-byte
 blanks used as padding, if necessary.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 32767.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 32767.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>DBCHAR(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">DBCHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of two-byte characters, with double-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte characters, with double-byte
 blanks used as padding, if necessary.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 16383.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>HEX(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">HEX(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of four-bit HEX digits, with binary
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of four-bit HEX digits, with binary
 zeros used as padding, if necessary.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 65534; the <em>n</em> must
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 65534; the <em class="ph i">n</em> must
 be even.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 The only valid characters are the hexadecimal digits
 0-9, a-f, and A-F. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>MBCHAR(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">MBCHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of one-byte characters; with single-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of one-byte characters; with single-byte
 characters used as padding; however, an instance typically includes
 one- and two-byte characters.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 32767.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 32767.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 ">STRING, <p>STRING(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 ">STRING, <p class="p">STRING(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of two-byte UNICODE characters.</p>
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte UNICODE characters.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 16383; here, <em>n</em> represents
-a limit on length, making STRING(<em>n</em>) similar to the SQL VARCHAR
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383; here, <em class="ph i">n</em> represents
+a limit on length, making STRING(<em class="ph i">n</em>) similar to the SQL VARCHAR
 type.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Reference.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Reference.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 ">Encoding is UNICODE; specifically, UTF-16. </td>
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 ">Encoding is UNICODE; specifically, UTF-16. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="18.84057971014493%" headers="d726e58 "><p>UNICODE(<em>n</em>)</p>
+<tr class="row">
+<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">UNICODE(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="16.563146997929607%" headers="d726e61 "><p>Number of two-byte UNICODE characters, with
+<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte UNICODE characters, with
 UNICODE characters used as padding.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="17.184265010351968%" headers="d726e67 "><em>n</em> &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= 16383.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383.</td>
 
-<td class="cellrowborder" valign="top" width="23.395445134575567%" headers="d726e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
 
-<td class="cellrowborder" valign="top" width="24.016563146997928%" headers="d726e73 "><p><strong>Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is UNICODE; specifically, UTF-16. </td>
 
@@ -184,24 +184,24 @@ Encoding is UNICODE; specifically, UTF-16. </td>
 </div>
 </div>
 
-<div class="section" id="cedt00020__compat_section"><a name="cedt00020__compat_section"><!-- --></a><h2 class="sectiontitle">Compatibility considerations</h2>
-<div class="tablenoborder"><a name="cedt00020__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__compat_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="29.145728643216078%" id="d726e291">Platform</th>
+<div class="section" id="cedt00020__compat_section"><h2 class="title sectiontitle">Compatibility considerations</h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__compat_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="29.145728643216078%" id="d908e291">Platform</th>
 
-<th class="cellrowborder" valign="bottom" width="70.85427135678391%" id="d726e294">Issue</th>
+<th class="entry" valign="bottom" width="70.85427135678391%" id="d908e294">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="cedt00020__compat_javascript">
-<td class="cellrowborder" valign="top" width="29.145728643216078%" headers="d726e291 ">JavaScript generation</td>
+<tr id="cedt00020__compat_javascript" class="row">
+<td class="entry" valign="top" width="29.145728643216078%" headers="d908e291 ">JavaScript generation</td>
 
-<td class="cellrowborder" valign="top" width="70.85427135678391%" headers="d726e294 ">The reference type STRING is the only supported
+<td class="entry" valign="top" width="70.85427135678391%" headers="d908e294 ">The reference type STRING is the only supported
 character type. </td>
 
 </tr>

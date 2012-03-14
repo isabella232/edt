@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,31 +19,31 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>TestListManager library</title>
 </head>
-<body id="redt00276"><a name="redt00276"><!-- --></a>
+<body id="redt00276">
 
 
-<h1 class="topictitle1">TestListManager library</h1>
+<h1 class="title topictitle1">TestListManager library</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">TestListManager</span></span> is
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">TestListManager</span></span> is
 used for managing the EUnit test framework.</p>
 
-<a name="redt00276__main"><!-- --></a><dl id="redt00276__main">
-<dt class="dlterm"><a name="redt00276__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00276__main">
+<dt class="dt dlterm"><a name="redt00276__package"><!-- --></a>Package</dt>
 
-<dd><p>org.eclipse.edt.eunit.runtime</p>
+<dd class="dd"><p class="p">org.eclipse.edt.eunit.runtime</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00276__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00276__use"><!-- --></a>Example use</dt>
 
-<dd><anchor id="use_more"></anchor></dd>
+<dd class="dd"><anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00276__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00276__detail"><!-- --></a>Type detail</dt>
 
-<dd><pre class="codeblock">/**
+<dd class="dd"><pre class="pre codeblock">/**
   * managing 2 lists
   * 1. list of libraries 
   * 2. list of test methods in the library that's running
@@ -80,14 +80,14 @@ Library TestListMgr
    function nextTest()	
       testId String = getTestIdString();
 
-      SysLib.writeStdOut(""""""""Running test: """""""" + testId);
+      SysLib.writeStdOut("Running test: " + testId);
 
       /* acculmulate the status of each test method result 
        * into the multiStatus for one library
        */
       ms.addStatus(testId);
 
-      if(testIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; runTestMtds.getSize())
+      if(testIndex &lt; runTestMtds.getSize())
          testIndex += 1;
          runTestMtds[testIndex]();
       end
@@ -95,23 +95,23 @@ Library TestListMgr
 
    private function getTestIdString() returns (String)
       testMethodNamesSize int = testMethodNames.getSize();
-      testId String = testLibName + """"""""::"""""""";
+      testId String = testLibName + "::";
 
-      if(testIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;= testMethodNamesSize)
+      if(testIndex &lt;= testMethodNamesSize)
          testId += testMethodNames[testIndex];
       else
 
          if(testIndex == (testMethodNamesSize+1))
-            testId += """"""""endTest"""""""";
+            testId += "endTest";
          else
-            testId +=""""""""INVALIDINDEXFOUND!!!"""""""";
+            testId +="INVALIDINDEXFOUND!!!";
          end
       end
       return (testId);
    end
 
    function nextTestLibrary()
-      if(libIndex &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; LibraryStartTests.getSize())
+      if(libIndex &lt; LibraryStartTests.getSize())
          libIndex += 1;
          LibraryStartTests[libIndex]();	
       end	
@@ -119,21 +119,21 @@ Library TestListMgr
 
    /* helper functions to handle asynchronize call exceptions */
    function handleCallBackException(exp AnyException in, http IHttp in)
-      str String = """"""""Caught service exception: """""""" + 
-                   exp.messageID + """""""": """""""" + exp.message;
+      str String = "Caught service exception: " + 
+                   exp.messageID + ": " + exp.message;
 
       if(exp isa ServiceInvocationException)
          sexp ServiceInvocationException = exp as ServiceInvocationException;
-         s1 String = """"""""detail1:"""""""" + sexp.detail1;
-         s2 String = """"""""detail2:"""""""" + sexp.detail2;
-         s3 String = """"""""detail3:"""""""" + sexp.detail3;
+         s1 String = "detail1:" + sexp.detail1;
+         s2 String = "detail2:" + sexp.detail2;
+         s3 String = "detail3:" + sexp.detail3;
          str = str + ConstantsLib.NEWLINE;
          str = str + s1 + ConstantsLib.NEWLINE;
          str = str + s2 + ConstantsLib.NEWLINE;
          str = str + s3 + ConstantsLib.NEWLINE;
-         str = str + """"""""Original request body: """""""" + 
+         str = str + "Original request body: " + 
                http.getRequest().body + ConstantsLib.NEWLINE;
-         str = str + """"""""Raw response body: """""""" + 
+         str = str + "Raw response body: " + 
                      http.getResponse().body + ConstantsLib.NEWLINE;
       end
       LogResult.error(str);
@@ -143,14 +143,14 @@ Library TestListMgr
 
    /* prepend the assertion failure error message to Status */
    function caughtFailedAssertion(exp AssertionFailedException in)
-      sysLib.writeStdOut(""""""""AssertionFail - """""""" + exp.message);	
+      sysLib.writeStdOut("AssertionFail - " + exp.message);	
    end	
 
    /* caught the exception from the test */
    function caughtAnyException(exp AnyException in)
-      expMsg String = """"""""uncaught exception for: """""""" + getTestIdString();
-      expMsg += ConstantsLib.NEWLINE + """"""""    =&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; """""""" + 
-                exp.messageID + """""""": """""""" + exp.message;
+      expMsg String = "uncaught exception for: " + getTestIdString();
+      expMsg += ConstantsLib.NEWLINE + "    =&gt; " + 
+                exp.messageID + ": " + exp.message;
 
       LogResult.error(expMsg);
    end
@@ -158,54 +158,54 @@ Library TestListMgr
    function getBindingTypeString(bType ServiceBindingType) returns (String)
       case(bType)
          when(ServiceBindingType.DEDICATED)
-            return (""""""""DEDICATED_BINDING"""""""");
+            return ("DEDICATED_BINDING");
          when(ServiceBindingType.DEVELOP)
-            return (""""""""DEVELOP_BINDING"""""""");
+            return ("DEVELOP_BINDING");
          when(ServiceBindingType.DEPLOYED)
-            return (""""""""DEPLOYED_BINDING"""""""");
+            return ("DEPLOYED_BINDING");
          otherwise
-            return (""""""""UNKNOWN Binding Type - NOT supported"""""""");	
+            return ("UNKNOWN Binding Type - NOT supported");	
       end	
    end
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00276__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00276__comments"><!-- --></a>Comments</dt>
 
-<dd><p>For a description of how to use the framework, see <a href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html" title="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package.">Developing and running test cases with EUnit</a>.</p>
+<dd class="dd"><p class="p">For a description of how to use the framework, see <a class="xref" href="../../org.eclipse.edt.core.doc.pg/topics/tedt01006.html" title="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package.">Developing and running test cases with EUnit</a>.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00276__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00276__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00276__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00276__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d95892e100">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00276__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d114973e101">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d95892e103">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d114973e104">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00276__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d95892e100 ">Java</td>
+<tr id="redt00276__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d114973e101 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95892e103 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d114973e104 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00276__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d95892e100 ">JavaScript</td>
+<tr id="redt00276__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d114973e101 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d95892e103 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d114973e104 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

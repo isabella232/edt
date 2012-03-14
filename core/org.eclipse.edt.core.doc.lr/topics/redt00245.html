@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,21 +19,21 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>eglx.http package</title>
 </head>
-<body id="redt00245"><a name="redt00245"><!-- --></a>
+<body id="redt00245">
 
 
-<h1 class="topictitle1">eglx.http package</h1>
+<h1 class="title topictitle1">eglx.http package</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">eglx.http</span></span> defines
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">eglx.http</span></span> defines
 an API for accessing details in HTTP messages. </p>
 
-<div class="p" id="redt00245__types"><a name="redt00245__types"><!-- --></a>
-<div class="tablenoborder"><a name="redt00245__types_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00245__types_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
-<tbody>
-<tr id="redt00245__compat_java">
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">enumeration HttpMethod
+<div class="p" id="redt00245__types">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00245__types_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Types</span></caption>
+<tbody class="tbody">
+<tr id="redt00245__compat_java" class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">enumeration HttpMethod
    _GET = 1,
    POST = 2,
    _DELETE = 3,
@@ -43,8 +43,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType IHttp type NativeType 
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">externalType IHttp type NativeType 
    private constructor();
    function getRequest() returns (eglx.http.Request);
    function getResponse() returns (eglx.http.Response);
@@ -53,8 +53,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType HttpProxy extends HttpRest type NativeType
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">externalType HttpProxy extends HttpRest type NativeType
    constructor();
    constructor(serviceName string in);
 end</pre>
@@ -62,8 +62,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">externalType HttpRest extends IHttp type NativeType
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">externalType HttpRest extends IHttp type NativeType
    constructor();
    request Request{@Property {}};
    response Response{@Property {}};
@@ -73,55 +73,55 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler Request 
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">handler Request 
    uri string?;  							// Complete URL, encoded for HTTP use
    method HttpMethod?;			// Method being invoked. Default is _GET.
    encoding Encoding?;			// As described in relation to the eglx.services package.
-   charset string?;    		// character encoding; for example, """"""""UTF-8"""""""".
-   contentType string?;		// content type; for example, """"""""text/html"""""""".
+   charset string?;    		// character encoding; for example, "UTF-8".
+   contentType string?;		// content type; for example, "text/html".
    headers dictionary?;		// each entry identifies a header name and content.
    body string?;							// content of transported message.
    timeout int?;							// as described next.
 end</pre>
-<div class="p"><span class="synph"><span class="kwd">timeout</span></span> specifies the
-maximum valid number of seconds that elapse between two events: <ul>
-<li>In the case of a Rich UI application, the events are when the
+<div class="p"><span class="ph synph"><span class="keyword kwd">timeout</span></span> specifies the
+maximum valid number of seconds that elapse between two events: <ul class="ul">
+<li class="li">In the case of a Rich UI application, the events are when the
 EGL Rich UI proxy (on the application server) invokes a web service
 and when the proxy receives a response.</li>
 
-<li>In the case of an EGL-generated Java requester, the events are
+<li class="li">In the case of an EGL-generated Java requester, the events are
 when the EGL Runtime invokes a web service and when that code receives
 a response.</li>
 
 </ul>
 </div>
-<p>If the response takes longer than the specified maximum,
-the EGL Runtime throws a <span class="synph"><span class="kwd">ServiceInvocationException</span></span>.</p>
+<p class="p">If the response takes longer than the specified maximum,
+the EGL Runtime throws a <span class="ph synph"><span class="keyword kwd">ServiceInvocationException</span></span>.</p>
 <div class="p">Setting
-a timeout is partly a matter of trial and error:<ul>
-<li>Take into account a variety of factors, such as local network
+a timeout is partly a matter of trial and error:<ul class="ul">
+<li class="li">Take into account a variety of factors, such as local network
 traffic, internet traffic, and server response time. Those factors
 mean that two invocations of the same service are likely to take a
 different amount of time under different conditions.</li>
 
-<li>Consider the nature of your application. If your code is waiting
+<li class="li">Consider the nature of your application. If your code is waiting
 for a credit approval, you might set a high timeout value to avoid
 charging the user twice. If your code is making a bid in an online
 auction bid, you might set a low timeout value so that the user can
 make an additional bid quickly.</li>
 
-<li>Use various timeout values.</li>
+<li class="li">Use various timeout values.</li>
 
 </ul>
 </div>
-<p>The default is an infinite wait.</p>
+<p class="p">The default is an infinite wait.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">handler Response 
+<tr class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">handler Response 
    status int?;
    statusMessage string?;
    encoding Encoding?;
@@ -134,8 +134,8 @@ end</pre>
 
 </tr>
 
-<tr id="redt00245__compat_javascript">
-<td class="cellrowborder" valign="top" width="100%"><pre class="codeblock">interface IHttp
+<tr id="redt00245__compat_javascript" class="row">
+<td class="entry" valign="top" width="100%"><pre class="pre codeblock">interface IHttp
    function getRequest() 
       returns 
       (eglx.http.Request);
@@ -147,8 +147,8 @@ end</pre>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="100%"><a href="redt00073.html" title="HTTPLib contains functions that are useful specifically in applications that access the web.">HTTPLib external type</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="100%"><a class="xref" href="redt00073.html" title="HTTPLib contains functions that are useful specifically in applications that access the web.">HTTPLib external type</a></td>
 
 </tr>
 
@@ -159,31 +159,31 @@ end</pre>
 </div>
 
 <div class="p">
-<div class="tablenoborder"><a name="redt00245__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00245__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d82454e159">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00245__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d99059e160">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d82454e162">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d99059e163">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00245__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d82454e159 ">Java</td>
+<tr id="redt00245__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d99059e160 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82454e162 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d99059e163 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00245__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d82454e159 ">JavaScript</td>
+<tr id="redt00245__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d99059e160 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82454e162 ">See type-specific topics.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d99059e163 ">See type-specific topics.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

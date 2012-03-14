@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,27 +19,27 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Image widget</title>
 </head>
-<body id="redt00116"><a name="redt00116"><!-- --></a>
+<body id="redt00116">
 
 
-<h1 class="topictitle1">Image widget</h1>
+<h1 class="title topictitle1">Image widget</h1>
 
 
 
-<div><p>A Rich UI image widget presents a graphic.</p>
+<div class="body"><p class="shortdesc">A Rich UI image widget presents a graphic.</p>
 
-<div class="p">The following fields are supported:<ul>
-<li><span class="synph"><span class="kwd">src</span></span>, which holds the web address for
+<div class="p">The following fields are supported:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">src</span></span>, which holds the web address for
 the graphic.</li>
 
-<li><span class="synph"><span class="kwd">text</span></span>, which holds the text shown in
+<li class="li"><span class="ph synph"><span class="keyword kwd">text</span></span>, which holds the text shown in
 browsers that cannot display the graphic or when the mouse hovers
 over the image.</li>
 
 </ul>
 </div>
 
-<div class="p">The following example renders a graphic or the string “EGL is here!”: <pre class="codeblock">package client;
+<div class="p">The following example renders a graphic or the string “EGL is here!”: <pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Image;
 import eglx.ui.rui.RUIHandler;	
@@ -49,18 +49,18 @@ Handler MyHandler type RUIHandler {initialUI = [myImage]}
    myImage Image
    {
       src = 
-      """"""""http://www.planeteclipse.org/planet/images/planet_header.jpg"""""""",
-      text = """"""""EGL is here!""""""""
+      "http://www.planeteclipse.org/planet/images/planet_header.jpg",
+      text = "EGL is here!"
    };
 
 end</pre>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Image;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Image;</pre>
 </div>
 
 </div>

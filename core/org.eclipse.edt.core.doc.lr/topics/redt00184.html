@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,24 +19,24 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Tooltip widget</title>
 </head>
-<body id="redt00184"><a name="redt00184"><!-- --></a>
+<body id="redt00184">
 
 
-<h1 class="topictitle1">Tooltip widget</h1>
+<h1 class="title topictitle1">Tooltip widget</h1>
 
 
 
-<div><p>A Rich UI tooltip widget defines <dfn class="term">hover help</dfn>:
+<div class="body"><p class="shortdesc">A Rich UI tooltip widget defines <dfn class="term">hover help</dfn>:
 a rectangle that includes text and widgets and is displayed only when
 the user hovers over a widget.</p>
 
-<p>A tooltip is displayed only if you enable the tooltip widget, as
+<p class="p">A tooltip is displayed only if you enable the tooltip widget, as
 described in this section. You can use the same tooltip for several
 widgets, and you can enable the tooltip for a given widget in response
 to a runtime event.</p>
 
 <div class="p">Here is an example Rich UI handler, which displays a button and
-assigns hover help that says, “To toggle the text, click the button!”:<pre class="codeblock">package client;
+assigns hover help that says, “To toggle the text, click the button!”:<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.Button;
@@ -49,10 +49,10 @@ Handler MyHandler Type RUIHandler {
    onConstructionFunction= begin 
    }
 
-   theButton Button { text = """"""""Start"""""""", onClick ::= click };
+   theButton Button { text = "Start", onClick ::= click };
 
    theToolTip Tooltip { 
-      text = """"""""To toggle the text, click the button!"""""""", 
+      text = "To toggle the text, click the button!", 
       delay = 1000 };
 
    myBox Box{};
@@ -62,30 +62,30 @@ Handler MyHandler Type RUIHandler {
    end
 
    Function click(e Event in) 
-      if (theButton.text == """"""""Start"""""""")
-         theButton.text = """"""""Stop"""""""";
+      if (theButton.text == "Start")
+         theButton.text = "Stop";
       else
-         theButton.text = """"""""Start"""""""";
+         theButton.text = "Start";
       end
    end
 end</pre>
 </div>
 
-<div class="p">The following tooltip widget fields are supported: <ul>
-<li><span class="synph"><span class="kwd">text</span></span>, which holds a string for display.
-If you specify a string here, the <span class="synph"><span class="kwd">provider</span></span> property
+<div class="p">The following tooltip widget fields are supported: <ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">text</span></span>, which holds a string for display.
+If you specify a string here, the <span class="ph synph"><span class="keyword kwd">provider</span></span> property
 is not used.</li>
 
-<li><span class="synph"><span class="kwd">delay</span></span>, which holds an integer that represents
+<li class="li"><span class="ph synph"><span class="keyword kwd">delay</span></span>, which holds an integer that represents
 the number of milliseconds between the start of the user's hover and
 the display of the hover help</li>
 
-<li><span class="synph"><span class="kwd">provider</span></span>, which refers to a function
+<li class="li"><span class="ph synph"><span class="keyword kwd">provider</span></span>, which refers to a function
 that returns a box for display within the hover help. For example,
-assume your Rich UI handler displays a button that says """"""""Start"""""""". You
+assume your Rich UI handler displays a button that says "Start". You
 can create a tooltip that is enabled for the button and that displays
-a hypertext link in the hover help:<br></br><img src="../images/redt_ui_richui_tooltip.jpg" alt="Output of the Tooltip Provider GoToWebsite"></img><br></br><div class="p">Here is the example
-code with a provider function that makes the output possible:<pre class="codeblock">package client;
+a hypertext link in the hover help:<br></br><img class="image" src="../images/redt_ui_richui_tooltip.jpg" alt="Output of the Tooltip Provider GoToWebsite"></img><br></br><div class="p">Here is the example
+code with a provider function that makes the output possible:<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.Button;
@@ -97,11 +97,11 @@ import eglx.ui.rui.RUIHandler;
 Handler MyHandler Type RUIHandler {
    initialUI = [theButton], 
    onConstructionFunction= begin }
-   theButton Button { text = """"""""Start"""""""", onClick ::= click };
+   theButton Button { text = "Start", onClick ::= click };
    theToolTip Tooltip { 
-      text = """"""""To toggle the text, click the button!"""""""", 
+      text = "To toggle the text, click the button!", 
       delay = 800, 
-      <strong>provider = GoToWebsite </strong>};
+      <strong class="ph b">provider = GoToWebsite </strong>};
 
    myBox Box{};
 
@@ -110,47 +110,47 @@ Handler MyHandler Type RUIHandler {
    end
 
    Function click(e Event in) 
-      if (theButton.text == """"""""Start"""""""")
-         theButton.text = """"""""Stop"""""""";
+      if (theButton.text == "Start")
+         theButton.text = "Stop";
       else
-         theButton.text = """"""""Start"""""""";
+         theButton.text = "Start";
       end
    end
-<strong>
+<strong class="ph b">
    Function GoToWebsite(myWidget any in) returns(Box)
       myLink html
-         {text = """"""""Do more with """""""" +
-         """"""""target = \""""""""_blank\"""""""", href=\""""""""http://www.org.eclipse/edt\""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;EGL&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/a&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;""""""""};
+         {text = "Do more with " +
+         "target = \"_blank\", href=\"http://www.org.eclipse/edt\"&gt;EGL&lt;/a&gt;"};
       myBox.children = [mylink]; 
       return (myBox); 	
    end</strong>
 end</pre>
 </div>
 <div class="p">A Delegate part named ToolTipTextProvider describes
-the access characteristics of any function that is referenced by the <samp class="codeph">provider</samp> property.
+the access characteristics of any function that is referenced by the <samp class="ph codeph">provider</samp> property.
 Specifically, the Delegate part indicates that the provider function
-has one parameter type and returns a box: <pre class="codeblock">Delegate TooltipTextProvider(widget any in) returns(Box) end</pre>
+has one parameter type and returns a box: <pre class="pre codeblock">Delegate TooltipTextProvider(widget any in) returns(Box) end</pre>
 </div>
-<p>If
-your users are accessing a Rich UI application by way of Microsoft Internet Explorer 8 or less,
+<p class="p">If
+your users are accessing a Rich UI application by way of Microsoft™ Internet Explorer 8 or less,
 be aware of the issue described in “Rich UI memory management for Microsoft Internet Explorer.”</p>
 </li>
 
 </ul>
 </div>
 
-<div class="p">The following tooltip widget function is supported:<ul>
-<li><samp class="codeph">enable(<em>widget</em> in)</samp> enables the tooltip
+<div class="p">The following tooltip widget function is supported:<ul class="ul">
+<li class="li"><samp class="ph codeph">enable(<em class="ph i">widget</em> in)</samp> enables the tooltip
 for a particular widget, as shown in our first example.</li>
 
 </ul>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.Tooltip;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.Tooltip;</pre>
 </div>
 
 </div>

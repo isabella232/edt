@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,32 +19,32 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DataGrid widget and related types</title>
 </head>
-<body id="redt00113"><a name="redt00113"><!-- --></a>
+<body id="redt00113">
 
 
-<h1 class="topictitle1">DataGrid widget and related types</h1>
+<h1 class="title topictitle1">DataGrid widget and related types</h1>
 
 
 
-<div><p>A Rich UI dataGrid widget defines an array of row values
+<div class="body"><p class="shortdesc">A Rich UI dataGrid widget defines an array of row values
 in a table. This topic gives general information about the widget
 and then provides reference detail.</p>
 
-<div class="section"><h2 class="sectiontitle">Introduction</h2><div class="p">An understanding of the data
-grid requires that you be familiar with the following issues:<ul>
-<li>How to define column headings and data rows.</li>
+<div class="section"><h2 class="title sectiontitle">Introduction</h2><div class="p">An understanding of the data
+grid requires that you be familiar with the following issues:<ul class="ul">
+<li class="li">How to define column headings and data rows.</li>
 
-<li>How to define a <dfn class="term">behavior</dfn>, which is a field that takes
+<li class="li">How to define a <dfn class="term">behavior</dfn>, which is a field that takes
 an array of functions. The functions for a given behavior run in array-element
 order when the grid is being rendered. </li>
 
-<li>How to define a <dfn class="term">listener</dfn>, which is also a field that
+<li class="li">How to define a <dfn class="term">listener</dfn>, which is also a field that
 takes an array of functions. The functions for a given listener run
 in array-element order in response to a user action such as a click
 or, in some cases, in response to a function call that selects or
 deselects a row or that updates a check box.</li>
 
-<li>How to customize a mechanism for sorting the grid by column.</li>
+<li class="li">How to customize a mechanism for sorting the grid by column.</li>
 
 </ul>
 </div>
@@ -53,79 +53,79 @@ and can invoke logic of various kinds; for example, to cause a sort
 by column; to access a service; to calculate a value and place it
 into a grid column; or to configure a widget and place it into a grid
 column. You can build on these ideas in various ways; for example,
-you might do as follows:<ol>
-<li>Access a user ID from a row of the data grid.</li>
+you might do as follows:<ol class="ol">
+<li class="li">Access a user ID from a row of the data grid.</li>
 
-<li>Use that ID in a REST service invocation that returns a photograph
+<li class="li">Use that ID in a REST service invocation that returns a photograph
 to a callback function.</li>
 
-<li>Embed that photograph in an image widget, which is defined globally
+<li class="li">Embed that photograph in an image widget, which is defined globally
 in the handler.</li>
 
-<li>Place that widget in a data grid column, in the same row as the
+<li class="li">Place that widget in a data grid column, in the same row as the
 user ID.</li>
 
 </ol>
 </div>
-<div class="p">The following example offers a simpler beginning:<ol>
-<li>Define a Record part to be the basis of an array of records. Each
+<div class="p">The following example offers a simpler beginning:<ol class="ol">
+<li class="li">Define a Record part to be the basis of an array of records. Each
 record holds a set of values that you want to display in a single
-row of a data grid. <p>Here is the Record part:</p>
-<pre class="codeblock">Record Stock type BasicRecord
+row of a data grid. <p class="p">Here is the Record part:</p>
+<pre class="pre codeblock">Record Stock type BasicRecord
    Symbol STRING;
    NumShares INT;
    Quote  DECIMAL(5,2);
    SelectQuote Boolean;
 end</pre>
-<p>The field names are important because they are referenced
+<p class="p">The field names are important because they are referenced
 later, in the declaration of the grid columns.</p>
 </li>
 
-<li>Declare the array of data records, as in the following example:<pre class="codeblock">stockList Stock[] = [
-   new Stock{SelectQuote = false, Symbol = """"""""Company1"""""""", Quote = 100.00, NumShares = 40 },
-   new Stock{SelectQuote = false, Symbol = """"""""Company2"""""""", Quote = 200.00, NumShares = 10 } ]; </pre>
-<p>The
+<li class="li">Declare the array of data records, as in the following example:<pre class="pre codeblock">stockList Stock[] = [
+   new Stock{SelectQuote = false, Symbol = "Company1", Quote = 100.00, NumShares = 40 },
+   new Stock{SelectQuote = false, Symbol = "Company2", Quote = 200.00, NumShares = 10 } ]; </pre>
+<p class="p">The
 order of fields in a given data record is not meaningful. However,
 by default, the order of the data records in the array is the order
 of rows in the data grid.</p>
 </li>
 
-<li>Declare the data grid in a location that follows the previous
-record declaration. Here is an example data grid:<pre class="codeblock">myGrid DataGrid{...};</pre>
+<li class="li">Declare the data grid in a location that follows the previous
+record declaration. Here is an example data grid:<pre class="pre codeblock">myGrid DataGrid{...};</pre>
 <div class="p">The
-declaration typically includes the <span class="synph"><span class="kwd">columns</span></span> and <strong>data</strong> fields:<ul>
-<li>For the <span class="synph"><span class="kwd">columns</span></span> field, assign an array
+declaration typically includes the <span class="ph synph"><span class="keyword kwd">columns</span></span> and <strong class="ph b">data</strong> fields:<ul class="ul">
+<li class="li">For the <span class="ph synph"><span class="keyword kwd">columns</span></span> field, assign an array
 of records of type DataGridColumn. <div class="p">Here is the setting for the
-current example:<pre class="codeblock">columns = [
-   new DataGridColumn { name = """"""""Symbol"""""""", displayName = """"""""Company Symbol""""""""},
-   new DataGridColumn { name = """"""""Quote"""""""", displayName = """"""""Price Per Share"""""""" },
-   new DataGridColumn { name = """"""""NumShares"""""""", displayName = """"""""Number of Shares"""""""" },
-   new DataGridColumn { name = """"""""Total"""""""", 
-                        displayName = """"""""Value of Shares"""""""",
+current example:<pre class="pre codeblock">columns = [
+   new DataGridColumn { name = "Symbol", displayName = "Company Symbol"},
+   new DataGridColumn { name = "Quote", displayName = "Price Per Share" },
+   new DataGridColumn { name = "NumShares", displayName = "Number of Shares" },
+   new DataGridColumn { name = "Total", 
+                        displayName = "Value of Shares",
                         formatters = [totalFormatter] }
 ]</pre>
 </div>
-<p>Each of the first three declarations of type DataGridColumn
-references a record field in the array of <samp class="codeph">Stock</samp> records.
+<p class="p">Each of the first three declarations of type DataGridColumn
+references a record field in the array of <samp class="ph codeph">Stock</samp> records.
 The fourth declaration identifies a <dfn class="term">calculated column</dfn>,
 which is a column that has no corresponding record field; in this
-case, no record field named <samp class="codeph">Total</samp>.</p>
-<p>The order
+case, no record field named <samp class="ph codeph">Total</samp>.</p>
+<p class="p">The order
 of the DataGridColumn elements determines the order in which the columns
 are displayed.</p>
 </li>
 
-<li>For the <span class="synph"><span class="kwd">data</span></span> field, assign the array
-of records of type <samp class="codeph">Stock</samp>. Here is an example setting: <pre class="codeblock">data = stockList as any[]</pre>
-<p>Each
+<li class="li">For the <span class="ph synph"><span class="keyword kwd">data</span></span> field, assign the array
+of records of type <samp class="ph codeph">Stock</samp>. Here is an example setting: <pre class="pre codeblock">data = stockList as any[]</pre>
+<p class="p">Each
 element in the array provides a subset of the data required for a
 row in the data grid.</p>
 </li>
 
 </ul>
 </div>
-<p>In most cases, Rich UI requires that you declare variables
-before you reference them. In this example, <samp class="codeph">stockList</samp> must
+<p class="p">In most cases, Rich UI requires that you declare variables
+before you reference them. In this example, <samp class="ph codeph">stockList</samp> must
 be declared before the data grid.</p>
 </li>
 
@@ -134,104 +134,104 @@ be declared before the data grid.</p>
 <div class="p">You set the behaviors and listeners by assigning values
 to fields. Each of those fields is related to a Delegate type, which
 identifies the parameter list and return value that are required for
-any of the functions assigned to the field. In the example, the DataGridColumn <span class="synph"><span class="kwd">formatters</span></span> field
+any of the functions assigned to the field. In the example, the DataGridColumn <span class="ph synph"><span class="keyword kwd">formatters</span></span> field
 is set for the fourth column and causes the invocation of a function
-that takes three parameters and has no return value. Here is the function:<pre class="codeblock">function totalFormatter(class String inout, value String inout, rowData any in)
+that takes three parameters and has no return value. Here is the function:<pre class="pre codeblock">function totalFormatter(class String inout, value String inout, rowData any in)
 
    // display the total value of the shares after calculating the value 
    //    from the content of two other columns in the same row
    value = rowData.NumShares as INT * rowData.Quote as DECIMAL(5,2);
 end</pre>
 </div>
-<p>The invocation of a function referenced in the <span class="synph"><span class="kwd">formatters</span></span> field
+<p class="p">The invocation of a function referenced in the <span class="ph synph"><span class="keyword kwd">formatters</span></span> field
 occurs once per row, before the grid is rendered. The content of the
 entire row is available in the third parameter, and you can update
 the column-specific cell by setting either the first parameter, which
 controls the CSS class, or the second parameter, which controls the
 value.</p>
-<div class="cautiontitle">CAUTION:</div><div class="caution">When you are writing a behavior function,
+<div class="cautiontitle">CAUTION:</div><div class="note caution">When you are writing a behavior function,
 do not cause the grid to re-render, whether by invoking the widget-specific
 render function or by setting a data-grid or data-column field. A
-re-rendering causes a long delay or, in many cases, a runtime termination. <p>Re-render
+re-rendering causes a long delay or, in many cases, a runtime termination. <p class="p">Re-render
 the grid only in an on-construction function, in a listener, or in
 another event handler such as one that runs in response to a button
 click.</p>
 </div>
 <div class="p">The DataGrid widget provides two ways of identifying
-that a row is of interest: <ul>
-<li>First is a mechanism for selecting rows, for deselecting rows,
+that a row is of interest: <ul class="ul">
+<li class="li">First is a mechanism for selecting rows, for deselecting rows,
 for and reviewing the current selections. </li>
 
-<li>Second is a mechanism for checking a set of check boxes that are
+<li class="li">Second is a mechanism for checking a set of check boxes that are
 provided automatically, for clearing them, and for reviewing the status
 of those check boxes.</li>
 
 </ul>
 </div>
 <div class="p">Those two mechanisms are independent of one another. First,
-consider selection:<ul>
-<li>Four functions are used: <span class="synph"><span class="kwd">setSelection</span></span>, <span class="synph"><span class="kwd">selectAll</span></span>, <span class="synph"><span class="kwd">deSelectAll</span></span>,
-and <span class="synph"><span class="kwd">getSelection</span></span>. </li>
+consider selection:<ul class="ul">
+<li class="li">Four functions are used: <span class="ph synph"><span class="keyword kwd">setSelection</span></span>, <span class="ph synph"><span class="keyword kwd">selectAll</span></span>, <span class="ph synph"><span class="keyword kwd">deSelectAll</span></span>,
+and <span class="ph synph"><span class="keyword kwd">getSelection</span></span>. </li>
 
-<li>The value of the DataGrid <span class="synph"><span class="kwd">selectionMode</span></span> field
+<li class="li">The value of the DataGrid <span class="ph synph"><span class="keyword kwd">selectionMode</span></span> field
 specifies whether row selection is valid and, if so, how many rows
 can be selected. That field affects row selection by the user or by
 the code.</li>
 
-<li>When row selection is valid, listener functions run in response
+<li class="li">When row selection is valid, listener functions run in response
 to the user's clicking a row or in response to the invocation of any
-of the following functions: <span class="synph"><span class="kwd">setSelection</span></span>, <span class="synph"><span class="kwd">selectAll</span></span>,
-or <span class="synph"><span class="kwd">deSelectAll</span></span>.</li>
+of the following functions: <span class="ph synph"><span class="keyword kwd">setSelection</span></span>, <span class="ph synph"><span class="keyword kwd">selectAll</span></span>,
+or <span class="ph synph"><span class="keyword kwd">deSelectAll</span></span>.</li>
 
-<li>The listener functions are referenced from the DataGrid <span class="synph"><span class="kwd">selectionListeners</span></span> field.</li>
+<li class="li">The listener functions are referenced from the DataGrid <span class="ph synph"><span class="keyword kwd">selectionListeners</span></span> field.</li>
 
 </ul>
 </div>
-<div class="p">Second, consider the check boxes:<ul>
-<li>Four functions are used in relation to the provided check boxes: <span class="synph"><span class="kwd">setChecked</span></span>, <span class="synph"><span class="kwd">checkAll</span></span>, <span class="synph"><span class="kwd">unCheckAll</span></span>,
-and <span class="synph"><span class="kwd">getChecked</span></span>.</li>
+<div class="p">Second, consider the check boxes:<ul class="ul">
+<li class="li">Four functions are used in relation to the provided check boxes: <span class="ph synph"><span class="keyword kwd">setChecked</span></span>, <span class="ph synph"><span class="keyword kwd">checkAll</span></span>, <span class="ph synph"><span class="keyword kwd">unCheckAll</span></span>,
+and <span class="ph synph"><span class="keyword kwd">getChecked</span></span>.</li>
 
-<li>Your code can check, clear, and process the check boxes regardless
+<li class="li">Your code can check, clear, and process the check boxes regardless
 of whether they are visible. You change the visibility of those check
-boxes by assigning a value to the DataGrid <span class="synph"><span class="kwd">showCheckBoxes</span></span> f.</li>
+boxes by assigning a value to the DataGrid <span class="ph synph"><span class="keyword kwd">showCheckBoxes</span></span> f.</li>
 
-<li>Listener functions run in response to the user's selecting or
+<li class="li">Listener functions run in response to the user's selecting or
 clearing a check box or in response to the invocation of any of the
-following functions: <span class="synph"><span class="kwd">setChecked</span></span>, <span class="synph"><span class="kwd">checkAll</span></span>,
-or <span class="synph"><span class="kwd">unCheckAll</span></span>.</li>
+following functions: <span class="ph synph"><span class="keyword kwd">setChecked</span></span>, <span class="ph synph"><span class="keyword kwd">checkAll</span></span>,
+or <span class="ph synph"><span class="keyword kwd">unCheckAll</span></span>.</li>
 
-<li>The listener functions are referenced from the DataGrid <span class="synph"><span class="kwd">checkBoxListeners</span></span> field.</li>
+<li class="li">The listener functions are referenced from the DataGrid <span class="ph synph"><span class="keyword kwd">checkBoxListeners</span></span> field.</li>
 
 </ul>
 </div>
-<p>As noted, a data grid supports column sorting. A sort
+<p class="p">As noted, a data grid supports column sorting. A sort
 occurs when the user clicks the column header, but only if the value
-of the DataGridColumn <span class="synph"><span class="kwd">enableSorting</span></span> field
-is true. By default, the <span class="synph"><span class="kwd">enableSorting</span></span> field
+of the DataGridColumn <span class="ph synph"><span class="keyword kwd">enableSorting</span></span> field
+is true. By default, the <span class="ph synph"><span class="keyword kwd">enableSorting</span></span> field
 is true, and a sort orders the column content in accordance with the
-ASCII string value of the cells. The value of the DataGridColumn <span class="synph"><span class="kwd">ignoreCase</span></span> field
+ASCII string value of the cells. The value of the DataGridColumn <span class="ph synph"><span class="keyword kwd">ignoreCase</span></span> field
 also affects the default sort. You can customize the sort behavior
-by setting the DataGridColumn <span class="synph"><span class="kwd">comparatorFunction</span></span> field
+by setting the DataGridColumn <span class="ph synph"><span class="keyword kwd">comparatorFunction</span></span> field
 and by writing the function to which that field refers.</p>
 <div class="p">When
 sorting is enabled, reference the grid's array data only by referring
-to the <span class="synph"><span class="kwd">data</span></span> field. The reason is that the
-user's sort does not change the array to which the <span class="synph"><span class="kwd">data</span></span> field
-refers. In our example, the user's sort has no effect on the <samp class="codeph">stockList</samp> array,
-but the following expression always refers to the third row in the <samp class="codeph">myGrid</samp> data
-grid:   <pre class="codeblock">myGrid.data[3];</pre>
+to the <span class="ph synph"><span class="keyword kwd">data</span></span> field. The reason is that the
+user's sort does not change the array to which the <span class="ph synph"><span class="keyword kwd">data</span></span> field
+refers. In our example, the user's sort has no effect on the <samp class="ph codeph">stockList</samp> array,
+but the following expression always refers to the third row in the <samp class="ph codeph">myGrid</samp> data
+grid:   <pre class="pre codeblock">myGrid.data[3];</pre>
 </div>
-<p>In addition to
+<p class="p">In addition to
 sorting columns, the user can drag a column and drop it to another
 position. This capability is always enabled.</p>
 <div class="p">When you have more
 rows than you want to show at one time, set one of the following DataGrid
-fields to true: <ul>
-<li><span class="synph"><span class="kwd">showButtonBar</span></span>, in which case the user
+fields to true: <ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">showButtonBar</span></span>, in which case the user
 has access to a <dfn class="term">button bar</dfn>, which is a horizontal display
 of buttons; or</li>
 
-<li><span class="synph"><span class="kwd">showScrollBar</span>, in which case the user has access
+<li class="li"><span class="ph synph"><span class="keyword kwd">showScrollBar</span>, in which case the user has access
 to a scroll bar.</span></li>
 
 </ul>
@@ -239,350 +239,350 @@ to a scroll bar.</span></li>
 <div class="p">Some of the functions used in behaviors, listeners, and
 sorting are provided for you. Please review the following files, which
 are in the org.eclipse.edt.rui project, EGLSource folder, org.eclipse.edt.rui.widgets
-package:<ul>
-<li>DataGridBehaviors.egl</li>
+package:<ul class="ul">
+<li class="li">DataGridBehaviors.egl</li>
 
-<li>DataGridFormatters.egl</li>
+<li class="li">DataGridFormatters.egl</li>
 
-<li>DataGridSelector.egl</li>
+<li class="li">DataGridSelector.egl</li>
 
-<li>DataGridSorter.egl</li>
+<li class="li">DataGridSorter.egl</li>
 
-<li>DataGridToolTip.egl</li>
+<li class="li">DataGridToolTip.egl</li>
 
 </ul>
 </div>
 <div class="p">The following files include the primary functionality
-for a data grid:<ul>
-<li>DataGrid.egl</li>
+for a data grid:<ul class="ul">
+<li class="li">DataGrid.egl</li>
 
-<li>DataGridColumn.egl</li>
+<li class="li">DataGridColumn.egl</li>
 
-<li>DataGridLib.egl</li>
+<li class="li">DataGridLib.egl</li>
 
 </ul>
 </div>
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.DataGrid;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.DataGrid;</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">DataGridColumn fields</h2><div class="p">You assign an array
-of records of type DataGridColumn when you set the <span class="synph"><span class="kwd">columns</span></span> field
-for a data grid. Each of those records includes the following fields:<ul>
-<li><span class="synph"><span class="kwd">alignment</span></span>: an constant integer that
-affects the horizontal alignment in the displayed column: <dl>
+<div class="section"><h2 class="title sectiontitle">DataGridColumn fields</h2><div class="p">You assign an array
+of records of type DataGridColumn when you set the <span class="ph synph"><span class="keyword kwd">columns</span></span> field
+for a data grid. Each of those records includes the following fields:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">alignment</span></span>: an constant integer that
+affects the horizontal alignment in the displayed column: <dl class="dl parml">
 
-<dt class="dlterm">DataGridLib.ALIGN_LEFT (the default)</dt>
+<dt class="dt pt dlterm">DataGridLib.ALIGN_LEFT (the default)</dt>
 
-<dd>The column content is left aligned</dd>
-
-
-<dt class="dlterm">DataGridLib.ALIGN_RIGHT</dt>
-
-<dd>The column content is right aligned.</dd>
+<dd class="dd pd">The column content is left aligned</dd>
 
 
-<dt class="dlterm">DataGridLib.ALIGN_CENTER</dt>
+<dt class="dt pt dlterm">DataGridLib.ALIGN_RIGHT</dt>
 
-<dd>The column content is center aligned.</dd>
+<dd class="dd pd">The column content is right aligned.</dd>
+
+
+<dt class="dt pt dlterm">DataGridLib.ALIGN_CENTER</dt>
+
+<dd class="dd pd">The column content is center aligned.</dd>
 
 </dl>
 </li>
 
-<li><span class="synph"><span class="kwd">columnComparator</span></span>: references a <dfn class="term">comparator
+<li class="li"><span class="ph synph"><span class="keyword kwd">columnComparator</span></span>: references a <dfn class="term">comparator
 function</dfn> during a column sort. A comparator function is invoked
 repeatedly to order the cell content. <div class="p">Here is the Delegate part
-to which a custom function must conform:<pre class="codeblock">Delegate ColumnComparator(data1 any in, data2 any in) returns (int) end</pre>
-<dl>
+to which a custom function must conform:<pre class="pre codeblock">Delegate ColumnComparator(data1 any in, data2 any in) returns (int) end</pre>
+<dl class="dl parml">
 
-<dt class="dlterm">data1</dt>
+<dt class="dt pt dlterm">data1</dt>
 
-<dd>The content of the first cell being compared</dd>
+<dd class="dd pd">The content of the first cell being compared</dd>
 
 
-<dt class="dlterm">data2</dt>
+<dt class="dt pt dlterm">data2</dt>
 
-<dd>The content of the second cell.</dd>
+<dd class="dd pd">The content of the second cell.</dd>
 
 </dl>
 </div>
 <div class="p">The function returns the following integer
-value:<ul>
-<li>-1 if the content of the first cell is less than the content of
+value:<ul class="ul">
+<li class="li">-1 if the content of the first cell is less than the content of
 the second.</li>
 
-<li>1 if the opposite is true.</li>
+<li class="li">1 if the opposite is true.</li>
 
-<li>0 if the content of the two cells are equal.</li>
+<li class="li">0 if the content of the two cells are equal.</li>
 
 </ul>
 </div>
 <div class="p">Here is an example function, which might be used if the
-previous example were extended to include company names <samp class="codeph">Company3</samp> through <samp class="codeph">Company10</samp>:<pre class="codeblock">Function CompareTwo(myFirst ANY in, mySecond ANY in) returns (int)
-   if ( (myFirst as string )[8:8] == """"""""6"""""""")
+previous example were extended to include company names <samp class="ph codeph">Company3</samp> through <samp class="ph codeph">Company10</samp>:<pre class="pre codeblock">Function CompareTwo(myFirst ANY in, mySecond ANY in) returns (int)
+   if ( (myFirst as string )[8:8] == "6")
       return(-1);
    else
       return(1);  
    end
 end</pre>
 </div>
-<p>If the <span class="synph"><span class="kwd">columnComparator</span></span> field
-refers to the <samp class="codeph">CompareTo</samp> function, the user's click
-places <samp class="codeph">Company6</samp> at the top or bottom of the column.</p>
+<p class="p">If the <span class="ph synph"><span class="keyword kwd">columnComparator</span></span> field
+refers to the <samp class="ph codeph">CompareTo</samp> function, the user's click
+places <samp class="ph codeph">Company6</samp> at the top or bottom of the column.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">displayName</span></span>: a string to display as
-the column title. If the <span class="synph"><span class="kwd">displayName</span></span> field
-is not specified, the column title is the value of the <span class="synph"><span class="kwd">name</span></span> field.</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">displayName</span></span>: a string to display as
+the column title. If the <span class="ph synph"><span class="keyword kwd">displayName</span></span> field
+is not specified, the column title is the value of the <span class="ph synph"><span class="keyword kwd">name</span></span> field.</li>
 
-<li><span class="synph"><span class="kwd">enableSorting</span></span>: a Boolean value to indicate
+<li class="li"><span class="ph synph"><span class="keyword kwd">enableSorting</span></span>: a Boolean value to indicate
 whether the user can sort the column with a click. The default value
-is true. the sort is affected by the setting of the <span class="synph"><span class="kwd">ignoreCase</span></span> field,
-but only if you do not specify the <span class="synph"><span class="kwd">columnComparator</span></span> field.</li>
+is true. the sort is affected by the setting of the <span class="ph synph"><span class="keyword kwd">ignoreCase</span></span> field,
+but only if you do not specify the <span class="ph synph"><span class="keyword kwd">columnComparator</span></span> field.</li>
 
-<li><span class="synph"><span class="kwd">formatters</span></span>: an array of functions that
+<li class="li"><span class="ph synph"><span class="keyword kwd">formatters</span></span>: an array of functions that
 run in array-element order before the grid is rendered. These functions
 run once for every cell in the column. <div class="p">Here is the Delegate part
-to which each function must conform:<pre class="codeblock">Delegate CellFormatter(class String inout, value String inout, rowData any in) end</pre>
-<dl>
+to which each function must conform:<pre class="pre codeblock">Delegate CellFormatter(class String inout, value String inout, rowData any in) end</pre>
+<dl class="dl parml">
 
-<dt class="dlterm">class</dt>
+<dt class="dt pt dlterm">class</dt>
 
-<dd>The CSS class for the cell in the column.</dd>
+<dd class="dd pd">The CSS class for the cell in the column.</dd>
 
 
-<dt class="dlterm">value</dt>
+<dt class="dt pt dlterm">value</dt>
 
-<dd>The cell content, which is always of type STRING. If the content
+<dd class="dd pd">The cell content, which is always of type STRING. If the content
 is a checkbox, the value is true or false.</dd>
 
 
-<dt class="dlterm">rowData</dt>
+<dt class="dt pt dlterm">rowData</dt>
 
-<dd>The data of the row in which the cell resides. The example in
+<dd class="dd pd">The data of the row in which the cell resides. The example in
 the Introduction shows how to handle the input.</dd>
 
 </dl>
 </div>
-<p>The functions for the <span class="synph"><span class="kwd">formatters</span></span> field
+<p class="p">The functions for the <span class="ph synph"><span class="keyword kwd">formatters</span></span> field
 are invoked in the order in which the DataGridColumn entries are defined
-in the DataGrid <span class="synph"><span class="kwd">columns</span></span> field. Those functions
+in the DataGrid <span class="ph synph"><span class="keyword kwd">columns</span></span> field. Those functions
 run before the functions specified in the following DataGrid fields,
-which are listed in runtime order: <span class="synph"><span class="kwd">headerBehaviors</span></span>, <span class="synph"><span class="kwd">behaviors</span></span>,
-and <span class="synph"><span class="kwd">editingBehaviors</span></span>.</p>
-<p>A set of functions
-are provided for use with the <span class="synph"><span class="kwd">formatters</span></span> field.
+which are listed in runtime order: <span class="ph synph"><span class="keyword kwd">headerBehaviors</span></span>, <span class="ph synph"><span class="keyword kwd">behaviors</span></span>,
+and <span class="ph synph"><span class="keyword kwd">editingBehaviors</span></span>.</p>
+<p class="p">A set of functions
+are provided for use with the <span class="ph synph"><span class="keyword kwd">formatters</span></span> field.
 For details, see the following file in the org.eclipse.edt.rui project,
 org.eclipse.edt.rui.widgets package: DataGridFormatters.egl.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">headerAlignment</span></span>: an integer value that
+<li class="li"><span class="ph synph"><span class="keyword kwd">headerAlignment</span></span>: an integer value that
 affects the horizontal alignment in the displayed header. The values
-are as follows: <dl>
-<dt class="dlterm">DataGridLib.ALIGN_LEFT (the default)</dt>
+are as follows: <dl class="dl parml">
+<dt class="dt pt dlterm">DataGridLib.ALIGN_LEFT (the default)</dt>
 
-<dd>The column content is left aligned</dd>
-
-
-<dt class="dlterm">DataGridLib.ALIGN_RIGHT</dt>
-
-<dd>The column content is right aligned.</dd>
+<dd class="dd pd">The column content is left aligned</dd>
 
 
-<dt class="dlterm">DataGridLib.ALIGN_CENTER</dt>
+<dt class="dt pt dlterm">DataGridLib.ALIGN_RIGHT</dt>
 
-<dd>The column content is center aligned.</dd>
+<dd class="dd pd">The column content is right aligned.</dd>
+
+
+<dt class="dt pt dlterm">DataGridLib.ALIGN_CENTER</dt>
+
+<dd class="dd pd">The column content is center aligned.</dd>
 
 </dl>
 <div class="p">You can set all the column headers by including
-a entry like the following one in the CSS file, specifying <samp class="codeph">left</samp>, <samp class="codeph">center</samp>,
-or <samp class="codeph">right</samp> for the <samp class="codeph">text-align</samp> attribute: <pre class="codeblock">.EglRuiDataGridHeaderCell {
+a entry like the following one in the CSS file, specifying <samp class="ph codeph">left</samp>, <samp class="ph codeph">center</samp>,
+or <samp class="ph codeph">right</samp> for the <samp class="ph codeph">text-align</samp> attribute: <pre class="pre codeblock">.EglRuiDataGridHeaderCell {
    text-align: center;
 }</pre>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">ignoreCase</span></span>: a Boolean value to indicate
+<li class="li"><span class="ph synph"><span class="keyword kwd">ignoreCase</span></span>: a Boolean value to indicate
 whether the case of the column content is ignored during the default
 sort. The default is false. The field value has an effect only if
-you do not set the <span class="synph"><span class="kwd">columnComparator</span></span> field.</li>
+you do not set the <span class="ph synph"><span class="keyword kwd">columnComparator</span></span> field.</li>
 
-<li><span class="synph"><span class="kwd">name</span></span>: a string that is both the default
+<li class="li"><span class="ph synph"><span class="keyword kwd">name</span></span>: a string that is both the default
 column title and the name of the record field that provides the column
 value.</li>
 
-<li><span class="synph"><span class="kwd">sortDirection</span></span>: one of the following
+<li class="li"><span class="ph synph"><span class="keyword kwd">sortDirection</span></span>: one of the following
 constants, to indicate what the user's next request for a sort will
-do: <dl>
-<dt class="dlterm">DataGridLib.SORT_UP (the initial default)</dt>
+do: <dl class="dl parml">
+<dt class="dt pt dlterm">DataGridLib.SORT_UP (the initial default)</dt>
 
-<dd>The user's click will sort the column in ascending order.</dd>
-
-
-<dt class="dlterm">DataGridLib.SORT_DOWN</dt>
-
-<dd>The user's click will sort the column in descending order.</dd>
+<dd class="dd pd">The user's click will sort the column in ascending order.</dd>
 
 
-<dt class="dlterm">DataGridLib.SORT_NONE</dt>
+<dt class="dt pt dlterm">DataGridLib.SORT_DOWN</dt>
 
-<dd>The user's click will have no effect.</dd>
+<dd class="dd pd">The user's click will sort the column in descending order.</dd>
+
+
+<dt class="dt pt dlterm">DataGridLib.SORT_NONE</dt>
+
+<dd class="dd pd">The user's click will have no effect.</dd>
 
 </dl>
-<p>You might access the <span class="synph"><span class="kwd">sortDirection</span></span> field
+<p class="p">You might access the <span class="ph synph"><span class="keyword kwd">sortDirection</span></span> field
 in a comparator function.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">width</span></span>: an integer that specifies the
+<li class="li"><span class="ph synph"><span class="keyword kwd">width</span></span>: an integer that specifies the
 column width, in pixels.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">DataGrid fields</h2><div class="p">The following fields are
-supported in the DataGrid widget:<ul>
-<li><span class="synph"><span class="kwd">behaviors</span></span>: an array of function references.
+<div class="section"><h2 class="title sectiontitle">DataGrid fields</h2><div class="p">The following fields are
+supported in the DataGrid widget:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">behaviors</span></span>: an array of function references.
 The functions are invoked sequentially for each grid cell when the
 data grid is rendered. This field does not apply to the header cells.<div class="p">Here
-is the Delegate part to which each function must conform:<pre class="codeblock">Delegate 
+is the Delegate part to which each function must conform:<pre class="pre codeblock">Delegate 
    DataCellBehavior(grid DataGrid in, cell Widget in, rowData ANY in, 
                 rowNumber INT in, column DataGridColumn in)
 end</pre>
-<dl>
-<dt class="dlterm"><em>grid</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">grid</em></dt>
 
-<dd>The data grid.</dd>
+<dd class="dd pd">The data grid.</dd>
 
 
-<dt class="dlterm"><em>cell</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">cell</em></dt>
 
-<dd>A widget that represents the grid cell. That widget is based on
+<dd class="dd pd">A widget that represents the grid cell. That widget is based on
 the HTML DIV tag.</dd>
 
 
-<dt class="dlterm"><em>rowData</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">rowData</em></dt>
 
-<dd>The record that represents the row data.</dd>
+<dd class="dd pd">The record that represents the row data.</dd>
 
 
-<dt class="dlterm"><em>rowNumber</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">rowNumber</em></dt>
 
-<dd>The row number, which ranges from 1 to the number of rows in the
+<dd class="dd pd">The row number, which ranges from 1 to the number of rows in the
 grid.</dd>
 
 
-<dt class="dlterm"><em>column</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">column</em></dt>
 
-<dd>The record that represents the column description.</dd>
+<dd class="dd pd">The record that represents the column description.</dd>
 
 </dl>
 </div>
-<p>The DataGrid fields are processed in the
-following order: <span class="synph"><span class="kwd">headerBehaviors</span></span>, <span class="synph"><span class="kwd">behaviors</span></span>,
-and <span class="synph"><span class="kwd">editingBehaviors</span></span>.</p>
+<p class="p">The DataGrid fields are processed in the
+following order: <span class="ph synph"><span class="keyword kwd">headerBehaviors</span></span>, <span class="ph synph"><span class="keyword kwd">behaviors</span></span>,
+and <span class="ph synph"><span class="keyword kwd">editingBehaviors</span></span>.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">cellBorder</span></span>: an integer value that specifies,
+<li class="li"><span class="ph synph"><span class="keyword kwd">cellBorder</span></span>: an integer value that specifies,
 in pixels, the width of the cell border. The cell border is only on
 the right side of the column, and the value of this field does not
 affect the last column in each row. The default value is 1.</li>
 
-<li><span class="synph"><span class="kwd">cellPadding</span></span>: an integer value that specifies,
+<li class="li"><span class="ph synph"><span class="keyword kwd">cellPadding</span></span>: an integer value that specifies,
 in pixels, the width of the padding that is added in two locations: above
 the content in a cell and to the left of the content in a cell. The
 default value is 4.</li>
 
-<li><span class="synph"><span class="kwd">checkBoxListeners</span></span>: an array of function
+<li class="li"><span class="ph synph"><span class="keyword kwd">checkBoxListeners</span></span>: an array of function
 references. The listener functions run in response to the user's selecting
 or clearing a check box or in response to the invocation of any of
-the following functions: <span class="synph"><span class="kwd">setChecked</span></span>, <span class="synph"><span class="kwd">checkAll</span></span>,
-or <span class="synph"><span class="kwd">unCheckAll</span></span>.<div class="p">Here is the Delegate part
-to which each listener function must conform:<pre class="codeblock">Delegate 
+the following functions: <span class="ph synph"><span class="keyword kwd">setChecked</span></span>, <span class="ph synph"><span class="keyword kwd">checkAll</span></span>,
+or <span class="ph synph"><span class="keyword kwd">unCheckAll</span></span>.<div class="p">Here is the Delegate part
+to which each listener function must conform:<pre class="pre codeblock">Delegate 
    CheckBoxListener(grid DataGrid in) end
 end</pre>
-<dl>
-<dt class="dlterm"><em>dataGrid</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">dataGrid</em></dt>
 
-<dd>The data grid.</dd>
+<dd class="dd pd">The data grid.</dd>
 
 </dl>
 </div>
 <div class="p">In relation to the first example in the current
 topic, consider the following listener, which displays stock symbols
-in response to the user's selections:<pre class="codeblock">function myListener(grid DataGrid in)
+in response to the user's selections:<pre class="pre codeblock">function myListener(grid DataGrid in)
    columnRetrieve Stock[];
    columnRetrieve = grid.getChecked() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
+   if (numberOfRows &gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is checked."""""""");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is checked.");
        end
    end
 end</pre>
 </div>
-<p>For details on setting check boxes from your
-code, see the later description of the DataGrid <span class="synph"><span class="kwd">checkAll</span></span> and <span class="synph"><span class="kwd">setChecked</span></span> functions.</p>
+<p class="p">For details on setting check boxes from your
+code, see the later description of the DataGrid <span class="ph synph"><span class="keyword kwd">checkAll</span></span> and <span class="ph synph"><span class="keyword kwd">setChecked</span></span> functions.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">checkBoxWidth</span></span>: an integer value that
+<li class="li"><span class="ph synph"><span class="keyword kwd">checkBoxWidth</span></span>: an integer value that
 specifies the width of the system-provided check boxes, in pixels.
 The default value is 20.</li>
 
-<li><span class="synph"><span class="kwd">columns</span></span>: an array of records of type
+<li class="li"><span class="ph synph"><span class="keyword kwd">columns</span></span>: an array of records of type
 DataGridColumn.</li>
 
-<li><span class="synph"><span class="kwd">data</span></span>: an array of records. The field
+<li class="li"><span class="ph synph"><span class="keyword kwd">data</span></span>: an array of records. The field
 is of type ANY[].</li>
 
-<li><span class="synph"><span class="kwd">dataLoader</span></span>: a function reference. The
+<li class="li"><span class="ph synph"><span class="keyword kwd">dataLoader</span></span>: a function reference. The
 function itself is hereafter called the <dfn class="term">data loader</dfn> and
 is invoked repeatedly at run time to provide a subset of values for
 display on the grid. Typically, each subset is a page of data, and
-you set the <span class="synph"><span class="kwd">showButtonBar</span></span> field to true
+you set the <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> field to true
 so that the user can click from one page to the next. By using a data
 loader, you access a subset of data in response to the user's request,
 rather than accessing all the data at once.<div class="p">Here is the Delegate
-part to which each function must conform:<pre class="codeblock">Delegate DataLoader(startRow int in, endRow int in, sortFieldName string in, 
+part to which each function must conform:<pre class="pre codeblock">Delegate DataLoader(startRow int in, endRow int in, sortFieldName string in, 
                     sortDirection int in) returns(boolean)
 end
 </pre>
-<dl>
-<dt class="dlterm"><em>startRow</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">startRow</em></dt>
 
-<dd>The number of the first row for which data is being requested.</dd>
-
-
-<dt class="dlterm"><em>endRow</em></dt>
-
-<dd>The number of the last row for which data is being requested.</dd>
+<dd class="dd pd">The number of the first row for which data is being requested.</dd>
 
 
-<dt class="dlterm"><em>sortFieldName</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">endRow</em></dt>
 
-<dd>The value of the <span class="synph"><span class="kwd">name</span></span> field of the column
+<dd class="dd pd">The number of the last row for which data is being requested.</dd>
+
+
+<dt class="dt pt dlterm"><em class="ph i">sortFieldName</em></dt>
+
+<dd class="dd pd">The value of the <span class="ph synph"><span class="keyword kwd">name</span></span> field of the column
 that the user last sorted. If the user did not sort a column, this
 value is the name of the leftmost column in the grid.</dd>
 
 
-<dt class="dlterm"><em>sortDirection</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">sortDirection</em></dt>
 
-<dd>One of the following constants, to indicate what the user's next
-request for a sort will do: <dl>
-<dt class="dlterm">DataGridLib.SORT_UP (the initial default)</dt>
+<dd class="dd pd">One of the following constants, to indicate what the user's next
+request for a sort will do: <dl class="dl parml">
+<dt class="dt pt dlterm">DataGridLib.SORT_UP (the initial default)</dt>
 
-<dd>The user's click will sort the column in ascending order.</dd>
-
-
-<dt class="dlterm">DataGridLib.SORT_DOWN</dt>
-
-<dd>The user's click will sort the column in descending order.</dd>
+<dd class="dd pd">The user's click will sort the column in ascending order.</dd>
 
 
-<dt class="dlterm">DataGridLib.SORT_NONE</dt>
+<dt class="dt pt dlterm">DataGridLib.SORT_DOWN</dt>
 
-<dd>The user's click will have no effect.</dd>
+<dd class="dd pd">The user's click will sort the column in descending order.</dd>
+
+
+<dt class="dt pt dlterm">DataGridLib.SORT_NONE</dt>
+
+<dd class="dd pd">The user's click will have no effect.</dd>
 
 </dl>
 </dd>
@@ -593,42 +593,42 @@ request for a sort will do: <dl>
 was already loaded for the specified rows. Set this value to false
 to indicate that your logic is going to update the data array. Set
 the value to true to prevent the data loader from running unnecessarily.
-For example, your code might read as follows: <pre class="codeblock">if (dataComplete) 
+For example, your code might read as follows: <pre class="pre codeblock">if (dataComplete) 
    return(true);
 else
    // do the processing needed to add data to the specified rows
 end  </pre>
 </div>
-<p>The example assume that, after a service provides
-all that data that can be shown, you are setting a variable named <samp class="codeph">dataComplete</samp> to
-true. The condition in the <span class="synph"><span class="kwd">if</span></span> statement
+<p class="p">The example assume that, after a service provides
+all that data that can be shown, you are setting a variable named <samp class="ph codeph">dataComplete</samp> to
+true. The condition in the <span class="ph synph"><span class="keyword kwd">if</span></span> statement
 prevents the data loader from doing subsequent work in your application.</p>
 <div class="p">Here
-are additional details:<ul>
-<li>If the <span class="synph"><span class="kwd">dataLoader</span></span> field is set in the
+are additional details:<ul class="ul">
+<li class="li">If the <span class="ph synph"><span class="keyword kwd">dataLoader</span></span> field is set in the
 dataGrid declaration, the data loader is invoked before the on-construction
 function. In any case, the data loader is invoked whenever a value
 is assigned to the data field and during other assignments.<div class="p"> To
 keep the data loader from accessing Rich UI handler fields before
-they are initialized, omit the <span class="synph"><span class="kwd">data</span></span> and <span class="synph"><span class="kwd">dataLoader</span></span> fields
+they are initialized, omit the <span class="ph synph"><span class="keyword kwd">data</span></span> and <span class="ph synph"><span class="keyword kwd">dataLoader</span></span> fields
 from the dataGrid declaration. Include statements like the following
-two at the end of the on-construction function:<pre class="codeblock">myGrid.dataLoader = myDataLoader;
+two at the end of the on-construction function:<pre class="pre codeblock">myGrid.dataLoader = myDataLoader;
 myGrid.data = myDataList as ANY[];</pre>
 </div>
 </li>
 
-<li>The process of loading a subset of data starts with an invocation
+<li class="li">The process of loading a subset of data starts with an invocation
 of the data loader and continues as values are placed in the data
-array. You end the process by invoking the grid-specific <span class="synph"><span class="kwd">render</span></span> function;
+array. You end the process by invoking the grid-specific <span class="ph synph"><span class="keyword kwd">render</span></span> function;
 for example, in the callback function that you set up to retrieve
 data from a service. </li>
 
-<li>If the data loader cannot receive data for a given set of rows,
-invoke the grid-specific <span class="synph"><span class="kwd">cancelDataLoader</span></span> function;
+<li class="li">If the data loader cannot receive data for a given set of rows,
+invoke the grid-specific <span class="ph synph"><span class="keyword kwd">cancelDataLoader</span></span> function;
 for example, in the exception handler that you set up to respond to
 a service failure.</li>
 
-<li>Your use of a button bar will work best if you provide a complete
+<li class="li">Your use of a button bar will work best if you provide a complete
 data array early in processing, even if the content of that array
 is provided as the user clicks the button bar. You can preset the
 number of elements, but might fulfill a process like this: include
@@ -639,326 +639,326 @@ of elements during a first invocation of a stateful service.</li>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">editorBehaviors</span></span>: an array of function
+<li class="li"><span class="ph synph"><span class="keyword kwd">editorBehaviors</span></span>: an array of function
 references. The functions are invoked sequentially for each cell when
 the data grid is rendered. The purpose is to place a widget in each
-cell.<div class="p">Here is the Delegate part to which each function must conform:<pre class="codeblock">Delegate 
+cell.<div class="p">Here is the Delegate part to which each function must conform:<pre class="pre codeblock">Delegate 
    EditorBehavior(grid dataGrid in, cell Widget in, rowData any in, 
                   rowNumber INT in, column DataGridColumn in, value ANY in) 
                   returns (Widget)
 end
 </pre>
-<dl>
-<dt class="dlterm"><em>grid</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">grid</em></dt>
 
-<dd>The data grid.</dd>
+<dd class="dd pd">The data grid.</dd>
 
 
-<dt class="dlterm"><em>cell</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">cell</em></dt>
 
-<dd>A widget that represents the grid cell. That widget is based on
+<dd class="dd pd">A widget that represents the grid cell. That widget is based on
 the HTML DIV tag. Its content includes the effects, if any, that are
-caused by the <span class="synph"><span class="kwd">formatters</span></span> field setting.</dd>
+caused by the <span class="ph synph"><span class="keyword kwd">formatters</span></span> field setting.</dd>
 
 
-<dt class="dlterm"><em>rowData</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">rowData</em></dt>
 
-<dd>The record that represents the row data.</dd>
+<dd class="dd pd">The record that represents the row data.</dd>
 
 
-<dt class="dlterm"><em>rowNumber</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">rowNumber</em></dt>
 
-<dd>The row number, which ranges from 1 to the number of rows in the
+<dd class="dd pd">The row number, which ranges from 1 to the number of rows in the
 grid.</dd>
 
 
-<dt class="dlterm"><em>column</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">column</em></dt>
 
-<dd>The record that represents the column description.</dd>
+<dd class="dd pd">The record that represents the column description.</dd>
 
 
-<dt class="dlterm"><em>value</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">value</em></dt>
 
-<dd>The content of the cell. This content include the effects, if
-any, that are caused by the DataGridColumn <span class="synph"><span class="kwd">formatters</span></span> field
+<dd class="dd pd">The content of the cell. This content include the effects, if
+any, that are caused by the DataGridColumn <span class="ph synph"><span class="keyword kwd">formatters</span></span> field
 setting.</dd>
 
 </dl>
 </div>
-<p>The return value is a widget or null.</p>
-<p>The
-DataGrid fields are processed in the following order: <span class="synph"><span class="kwd">headerBehaviors</span></span>, <span class="synph"><span class="kwd">behaviors</span></span>,
-and <span class="synph"><span class="kwd">editingBehaviors</span></span>.</p>
+<p class="p">The return value is a widget or null.</p>
+<p class="p">The
+DataGrid fields are processed in the following order: <span class="ph synph"><span class="keyword kwd">headerBehaviors</span></span>, <span class="ph synph"><span class="keyword kwd">behaviors</span></span>,
+and <span class="ph synph"><span class="keyword kwd">editingBehaviors</span></span>.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">headerBehaviors</span></span>: an array of function
+<li class="li"><span class="ph synph"><span class="keyword kwd">headerBehaviors</span></span>: an array of function
 references. The functions are invoked sequentially for each header
 cell whenever the data grid is rendered. Each function is based on
-the Delegate part that is described in the entry for the <span class="synph"><span class="kwd">behaviors</span></span> field.</li>
+the Delegate part that is described in the entry for the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> field.</li>
 
-<li><span class="synph"><span class="kwd">pageSize</span></span>: an integer that indicates
+<li class="li"><span class="ph synph"><span class="keyword kwd">pageSize</span></span>: an integer that indicates
 how many rows to display. The default value is 10. For further details,
-see the entries for the <span class="synph"><span class="kwd">showButtonBar</span></span> and <span class="synph"><span class="kwd">showScrollBar</span></span> fields.</li>
+see the entries for the <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> and <span class="ph synph"><span class="keyword kwd">showScrollBar</span></span> fields.</li>
 
-<li><span class="synph"><span class="kwd">rowHeight</span></span>: an integer value that specifies,
+<li class="li"><span class="ph synph"><span class="keyword kwd">rowHeight</span></span>: an integer value that specifies,
 in pixels, the minimum height of a row. If any content requires more
 vertical space, the height of the row reflects the need.</li>
 
-<li><span class="synph"><span class="kwd">selectionListeners</span></span>: an array of function
+<li class="li"><span class="ph synph"><span class="keyword kwd">selectionListeners</span></span>: an array of function
 references. When row selection is valid, the selection listeners run
 in response to the user's clicking a row or in response to the invocation
-of any of the following functions: <span class="synph"><span class="kwd">setSelection</span></span>, <span class="synph"><span class="kwd">selectAll</span></span>,
-or <span class="synph"><span class="kwd">deSelectAll</span></span>.<div class="p">Here is the Delegate part
-to which each selection listener must conform:<pre class="codeblock">Delegate 
+of any of the following functions: <span class="ph synph"><span class="keyword kwd">setSelection</span></span>, <span class="ph synph"><span class="keyword kwd">selectAll</span></span>,
+or <span class="ph synph"><span class="keyword kwd">deSelectAll</span></span>.<div class="p">Here is the Delegate part
+to which each selection listener must conform:<pre class="pre codeblock">Delegate 
    SelectionListener(grid DataGrid in) end
 end</pre>
-<dl>
-<dt class="dlterm"><em>dataGrid</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">dataGrid</em></dt>
 
-<dd>The data grid that is passed to the function.</dd>
+<dd class="dd pd">The data grid that is passed to the function.</dd>
 
 </dl>
 </div>
 <div class="p">In relation to the first example in the current
 topic, consider the following listener, which displays stock symbols
-in response to the user's selections:<pre class="codeblock">function myListener(grid DataGrid in)
+in response to the user's selections:<pre class="pre codeblock">function myListener(grid DataGrid in)
    columnRetrieve Stock[];
    columnRetrieve = grid.getSelection() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
+   if (numberOfRows &gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is selected."""""""");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is selected.");
        end
    end
 end</pre>
 </div>
-<p>For details on row selection in your code, see
-the later description of the DataGrid <span class="synph"><span class="kwd">selectAll</span></span> and <span class="synph"><span class="kwd">setSelection</span></span> functions.</p>
+<p class="p">For details on row selection in your code, see
+the later description of the DataGrid <span class="ph synph"><span class="keyword kwd">selectAll</span></span> and <span class="ph synph"><span class="keyword kwd">setSelection</span></span> functions.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">sortListeners</span></span>: an array of function
+<li class="li"><span class="ph synph"><span class="keyword kwd">sortListeners</span></span>: an array of function
 references. The functions are invoked sequentially when the user sorts
 a column. The functions are invoked only if the sort occurs, as is
-possible only if the value of the DataGrid <span class="synph"><span class="kwd">enableSort</span></span> field
+possible only if the value of the DataGrid <span class="ph synph"><span class="keyword kwd">enableSort</span></span> field
 is true. <div class="p">Here is the Delegate part to which each function must
-conform:<pre class="codeblock">Delegate 
+conform:<pre class="pre codeblock">Delegate 
    SortListener(grid DataGrid in, sortColumn DataGridColumn in) end
 end</pre>
-<dl>
-<dt class="dlterm"><em>grid</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">grid</em></dt>
 
-<dd>The data grid that was sorted.</dd>
+<dd class="dd pd">The data grid that was sorted.</dd>
 
 
-<dt class="dlterm">sortColumn</dt>
+<dt class="dt pt dlterm">sortColumn</dt>
 
-<dd>The column that was sorted.</dd>
+<dd class="dd pd">The column that was sorted.</dd>
 
 </dl>
 </div>
-<p>Here is an example function:</p>
-<pre class="codeblock">function mySortListener(grid DataGrid in, sortColumn DataGridColumn in)
-   syslib.writeStdOut(""""""""You sorted the """""""" + sortColumn.displayName + """""""" column. """""""");
+<p class="p">Here is an example function:</p>
+<pre class="pre codeblock">function mySortListener(grid DataGrid in, sortColumn DataGridColumn in)
+   syslib.writeStdOut("You sorted the " + sortColumn.displayName + " column. ");
 end</pre>
 </li>
 
-<li><span class="synph"><span class="kwd">startRow</span></span>: an integer that indicates
+<li class="li"><span class="ph synph"><span class="keyword kwd">startRow</span></span>: an integer that indicates
 a row to display on the first page, when a button bar is present.
-The default value is 1. For further details, see the entry for <span class="synph"><span class="kwd">showButtonBar</span></span>.</li>
+The default value is 1. For further details, see the entry for <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span>.</li>
 
-<li><span class="synph"><span class="kwd">selectionMode</span></span>: A constant that indicates
+<li class="li"><span class="ph synph"><span class="keyword kwd">selectionMode</span></span>: A constant that indicates
 whether the user or code can select multiple rows. This constant also
-specifies whether the functions <span class="synph"><span class="kwd">setSelection</span></span> and <span class="synph"><span class="kwd">selectAll</span></span> can
-select multiple rows. One of these values:<dl>
-<dt class="dlterm">DataGridLib.MULTIPLE_SELECTION (the default)</dt>
+specifies whether the functions <span class="ph synph"><span class="keyword kwd">setSelection</span></span> and <span class="ph synph"><span class="keyword kwd">selectAll</span></span> can
+select multiple rows. One of these values:<dl class="dl parml">
+<dt class="dt pt dlterm">DataGridLib.MULTIPLE_SELECTION (the default)</dt>
 
-<dd>The user can select a single row or can select multiple rows in
-either of two ways:<ul>
-<li>By holding down the CTRL key when clicking each row after the
+<dd class="dd pd">The user can select a single row or can select multiple rows in
+either of two ways:<ul class="ul">
+<li class="li">By holding down the CTRL key when clicking each row after the
 first; or, </li>
 
-<li>By holding down the SHIFT key when clicking the last row in a
+<li class="li">By holding down the SHIFT key when clicking the last row in a
 set of contiguous rows. </li>
 
 </ul>
-<p>The selected rows can span multiple grid pages.</p>
+<p class="p">The selected rows can span multiple grid pages.</p>
 </dd>
 
 
-<dt class="dlterm">DataGridLib.SINGLE_SELECTION</dt>
+<dt class="dt pt dlterm">DataGridLib.SINGLE_SELECTION</dt>
 
-<dd>The user can select a single row. Selection of a second row deselects
+<dd class="dd pd">The user can select a single row. Selection of a second row deselects
 the first.</dd>
 
 
-<dt class="dlterm">DataGridLib.DISABLE_SELECTION</dt>
+<dt class="dt pt dlterm">DataGridLib.DISABLE_SELECTION</dt>
 
-<dd>The user cannot select any rows.</dd>
+<dd class="dd pd">The user cannot select any rows.</dd>
 
 </dl>
 </li>
 
-<li><span class="synph"><span class="kwd">showButtonBar</span></span>: a Boolean value that
+<li class="li"><span class="ph synph"><span class="keyword kwd">showButtonBar</span></span>: a Boolean value that
 specifies whether to include a button bar, which is a navigation bar
 at the bottom of the grid so that the user can click to another page,
 whether that page is next, previous, first, or last. If the value
-of the <span class="synph"><span class="kwd">showButtonBar</span></span> field is true, the
-following fields are also relevant:<ul>
-<li><span class="synph"><span class="kwd">pageSize</span></span> specifies how many rows to
+of the <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> field is true, the
+following fields are also relevant:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">pageSize</span></span> specifies how many rows to
 display at one time.</li>
 
-<li><span class="synph"><span class="kwd">startRow</span></span> tells which row must be displayed
-to the user. For example, if you have 20 rows, <span class="synph"><span class="kwd">pageSize</span></span> =
-4, and <span class="synph"><span class="kwd">startRow</span></span> = 6, the second page is
+<li class="li"><span class="ph synph"><span class="keyword kwd">startRow</span></span> tells which row must be displayed
+to the user. For example, if you have 20 rows, <span class="ph synph"><span class="keyword kwd">pageSize</span></span> =
+4, and <span class="ph synph"><span class="keyword kwd">startRow</span></span> = 6, the second page is
 displayed, with row 6 in the second position.</li>
 
 </ul>
-<div class="p">The <span class="synph"><span class="kwd">showButtonBar</span></span> field can have
-an effect only in the following case: <ul>
-<li>The value of the <span class="synph"><span class="kwd">pageSize</span></span> field is greater
+<div class="p">The <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> field can have
+an effect only in the following case: <ul class="ul">
+<li class="li">The value of the <span class="ph synph"><span class="keyword kwd">pageSize</span></span> field is greater
 than the number of rows available to the grid; and</li>
 
-<li>The value of the <span class="synph"><span class="kwd">showScrollBar</span></span> field
+<li class="li">The value of the <span class="ph synph"><span class="keyword kwd">showScrollBar</span></span> field
 is false.</li>
 
 </ul>
 </div>
-<p>If you set the <span class="synph"><span class="kwd">showButtonBar</span></span> field
+<p class="p">If you set the <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> field
 to false when more rows are available than can be seen, and if you
-do not set the <span class="synph"><span class="kwd">showScrollBar</span></span> field to true,
+do not set the <span class="ph synph"><span class="keyword kwd">showScrollBar</span></span> field to true,
 the user cannot access the unseen rows.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">showCheckBoxes</span></span>: a Boolean value that
+<li class="li"><span class="ph synph"><span class="keyword kwd">showCheckBoxes</span></span>: a Boolean value that
 indicates whether to make the system-provided check boxes visible.
 The default is false. When the check boxes are visible, they are displayed
 at the left of each row. <div class="p">The user's check box selections are retained
-even if you set the <span class="synph"><span class="kwd">showCheckBoxes</span></span> to false
+even if you set the <span class="ph synph"><span class="keyword kwd">showCheckBoxes</span></span> to false
 at run time. Also, your code can always do as follows, regardless
-of whether the check boxes are visible:<ul>
-<li>Check some or all of the hidden check boxes by invoking the <span class="synph"><span class="kwd">setChecked</span></span> or <span class="synph"><span class="kwd">checkAll</span></span> function.</li>
+of whether the check boxes are visible:<ul class="ul">
+<li class="li">Check some or all of the hidden check boxes by invoking the <span class="ph synph"><span class="keyword kwd">setChecked</span></span> or <span class="ph synph"><span class="keyword kwd">checkAll</span></span> function.</li>
 
-<li>Use the <span class="synph"><span class="kwd">getChecked</span></span> function to review
+<li class="li">Use the <span class="ph synph"><span class="keyword kwd">getChecked</span></span> function to review
 the status of the check boxes in each row.</li>
 
 </ul>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">showHeader</span></span>: a Boolean value that indicates
+<li class="li"><span class="ph synph"><span class="keyword kwd">showHeader</span></span>: a Boolean value that indicates
 whether to display the grid header. The default is true.</li>
 
-<li><span class="synph"><span class="kwd">showScrollBar</span></span>: a Boolean value that
+<li class="li"><span class="ph synph"><span class="keyword kwd">showScrollBar</span></span>: a Boolean value that
 indicates whether to display the rows with a scrollbar so that the
 user can navigate to other rows. The default is false. If the value
-of this field is true, the <span class="synph"><span class="kwd">pageSize</span></span> field
-specifies how many rows to display at one time, and the <span class="synph"><span class="kwd">showButtonBar</span></span> field
+of this field is true, the <span class="ph synph"><span class="keyword kwd">pageSize</span></span> field
+specifies how many rows to display at one time, and the <span class="ph synph"><span class="keyword kwd">showButtonBar</span></span> field
 has no effect.</li>
 
 </ul>
 </div>
-<p>Other supported functions are described in “Rich UI widget
+<p class="p">Other supported functions are described in “Rich UI widget
 fields,” in the EGL Programmer’s Guide.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">DataGrid functions</h2><div class="p">The following functions
-are supported in the DataGrid widget:<ul>
-<li><span class="synph"><span class="kwd">cancelDataLoader</span></span>: Used primarily in
+<div class="section"><h2 class="title sectiontitle">DataGrid functions</h2><div class="p">The following functions
+are supported in the DataGrid widget:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">cancelDataLoader</span></span>: Used primarily in
 an exception handler to indicate that the data required by the data
-loader is not available. The <span class="synph"><span class="kwd">cancelDataLoader</span></span> function
+loader is not available. The <span class="ph synph"><span class="keyword kwd">cancelDataLoader</span></span> function
 does not stop subsequent invocations of the data loader, but has two
 effects: it ends the animation that is characteristic of a waiting
 data loader, and it re-renders the grid with the data that was last
 provided.</li>
 
-<li><span class="synph"><span class="kwd">checkAll</span></span>: to check all the system-provided
+<li class="li"><span class="ph synph"><span class="keyword kwd">checkAll</span></span>: to check all the system-provided
 check boxes. You can check the check boxes even when they are hidden.</li>
 
-<li><span class="synph"><span class="kwd">deSelectAll</span></span>: to deselect all the rows
+<li class="li"><span class="ph synph"><span class="keyword kwd">deSelectAll</span></span>: to deselect all the rows
 that are currently selected. This function is part of the row-selection
 mechanism, which is independent of the system-provided check boxes.</li>
 
-<li><span class="synph"><span class="kwd">getChecked</span></span>: to retrieve the data in
+<li class="li"><span class="ph synph"><span class="keyword kwd">getChecked</span></span>: to retrieve the data in
 the rows where the system-provided check boxes are selected. Here
-is the function signature:<pre class="codeblock">function getChecked() returns (any[])</pre>
+is the function signature:<pre class="pre codeblock">function getChecked() returns (any[])</pre>
 <div class="p">In
 relation to the first example in the current topic, consider the following
-event handler, which displays stock symbols:<pre class="codeblock">function myResponse (e event in)
+event handler, which displays stock symbols:<pre class="pre codeblock">function myResponse (e event in)
    columnRetrieve Stock[];
    columnRetrieve = grid.getChecked() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
+   if (numberOfRows &gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is checked."""""""");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is checked.");
       end
    end
 end</pre>
 </div>
-<p>The <span class="synph"><span class="kwd">getChecked</span></span> function
-retrieves the records referenced by the DataGrid <span class="synph"><span class="kwd">data</span></span> field.
+<p class="p">The <span class="ph synph"><span class="keyword kwd">getChecked</span></span> function
+retrieves the records referenced by the DataGrid <span class="ph synph"><span class="keyword kwd">data</span></span> field.
 However, the order in which the data is returned depends on the current
 display, which is affected by the user's sort.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">getCurrentPageIndex</span></span>: to get the current
-page number. Here is the function signature:<pre class="codeblock">function getCurrentPageIndex() returns (int)
+<li class="li"><span class="ph synph"><span class="keyword kwd">getCurrentPageIndex</span></span>: to get the current
+page number. Here is the function signature:<pre class="pre codeblock">function getCurrentPageIndex() returns (int)
 </pre>
 </li>
 
-<li><span class="synph"><span class="kwd">getPageCount</span></span>: to get the number of pages
-available. Here is the function signature:<pre class="codeblock">function getPageCount() returns (int)
+<li class="li"><span class="ph synph"><span class="keyword kwd">getPageCount</span></span>: to get the number of pages
+available. Here is the function signature:<pre class="pre codeblock">function getPageCount() returns (int)
 </pre>
 </li>
 
-<li><span class="synph"><span class="kwd">getSelection</span></span>: to retrieve the data in
-the currently selected rows. Here is the function signature:<pre class="codeblock">function getSelection() returns (any[])</pre>
+<li class="li"><span class="ph synph"><span class="keyword kwd">getSelection</span></span>: to retrieve the data in
+the currently selected rows. Here is the function signature:<pre class="pre codeblock">function getSelection() returns (any[])</pre>
 <div class="p">In
 relation to the first example in the current topic, consider the following
 event handler, which displays stock symbols in response to the user's
-clicking a button:<pre class="codeblock">function myResponse (e event in)
+clicking a button:<pre class="pre codeblock">function myResponse (e event in)
    columnRetrieve Stock[];
    columnRetrieve = grid.getSelection() as Stock[];
    numberOfRows int = columnRetrieve.getSize();
 
-   if (numberOfRows &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; 0)
+   if (numberOfRows &gt; 0)
       for (i int from 1 to numberOfRows)
-         sysLib.writeStdOut(columnRetrieve[i].Symbol + """""""" is selected."""""""");
+         sysLib.writeStdOut(columnRetrieve[i].Symbol + " is selected.");
       end
       grid.deSelectAll();
    else
-      sysLib.writeStdOut(""""""""Select one or more rows."""""""");                    
+      sysLib.writeStdOut("Select one or more rows.");                    
    end 
 end</pre>
 </div>
-<p>The <span class="synph"><span class="kwd">getSelection</span></span> function
-retrieves the records referenced by the DataGrid <span class="synph"><span class="kwd">data</span></span> field.
+<p class="p">The <span class="ph synph"><span class="keyword kwd">getSelection</span></span> function
+retrieves the records referenced by the DataGrid <span class="ph synph"><span class="keyword kwd">data</span></span> field.
 However, the order in which the data is returned depends on the current
 display, which is affected by the user's sort.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">goToPage</span></span>: to display the specified page.
+<li class="li"><span class="ph synph"><span class="keyword kwd">goToPage</span></span>: to display the specified page.
 If you specify a page number that is less than or equal to 1, the
 first page is displayed. If you specify a page number that is greater
 than or equal to the number of the last page, the last page is displayed. <div class="p">Here
-is the function signature:<pre class="codeblock">function goToPage(pageNumber int in)
+is the function signature:<pre class="pre codeblock">function goToPage(pageNumber int in)
 </pre>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">selectAll</span></span>: to select all rows in the
+<li class="li"><span class="ph synph"><span class="keyword kwd">selectAll</span></span>: to select all rows in the
 data grid.</li>
 
-<li><span class="synph"><span class="kwd">setChecked</span></span>: to select one or more of
+<li class="li"><span class="ph synph"><span class="keyword kwd">setChecked</span></span>: to select one or more of
 the system-provided check boxes. You can select check boxes even when
-they are hidden. <div class="p">Here is the function signature:<pre class="codeblock">function setChecked(selection any[] in)</pre>
+they are hidden. <div class="p">Here is the function signature:<pre class="pre codeblock">function setChecked(selection any[] in)</pre>
 </div>
 <div class="p">When
-you invoke the <span class="synph"><span class="kwd">setChecked</span></span> function, specify
+you invoke the <span class="ph synph"><span class="keyword kwd">setChecked</span></span> function, specify
 elements from the data array. For example, here is an on-construction
-function that invokes the <span class="synph"><span class="kwd">setChecked</span></span> function
-in two ways: <pre class="codeblock">function start()
+function that invokes the <span class="ph synph"><span class="keyword kwd">setChecked</span></span> function
+in two ways: <pre class="pre codeblock">function start()
 
 	  grid.setChecked([grid.data[2], grid.data[3]]);
 
@@ -969,14 +969,14 @@ end</pre>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">setSelection</span></span>: to select one or more
+<li class="li"><span class="ph synph"><span class="keyword kwd">setSelection</span></span>: to select one or more
 rows in the data grid. In most cases, the purpose is to preset the
-grid before it is rendered. Here is the function signature:<pre class="codeblock">function setSelection(selection any[] in)</pre>
+grid before it is rendered. Here is the function signature:<pre class="pre codeblock">function setSelection(selection any[] in)</pre>
 <div class="p">When
-you invoke the <span class="synph"><span class="kwd">setSelection</span></span> function, specify
+you invoke the <span class="ph synph"><span class="keyword kwd">setSelection</span></span> function, specify
 elements from the data array. For example, here is an on-construction
-function that invokes the <span class="synph"><span class="kwd">setSelection</span></span> function
-in two ways: <pre class="codeblock">function start()
+function that invokes the <span class="ph synph"><span class="keyword kwd">setSelection</span></span> function
+in two ways: <pre class="pre codeblock">function start()
 
 	  grid.setSelection([grid.data[3], grid.data[2]]);
 
@@ -985,32 +985,32 @@ in two ways: <pre class="codeblock">function start()
    grid.setSelection(myAny);
 end</pre>
 </div>
-<p>The ability to select rows depends on the setting
-of the DataGrid <span class="synph"><span class="kwd">selectionMode</span></span> field. For
-example, only the first entry submitted to the <span class="synph"><span class="kwd">setSelection</span></span> function
-is selected if your code tries to select two rows when the <span class="synph"><span class="kwd">selectionMode</span></span> field
+<p class="p">The ability to select rows depends on the setting
+of the DataGrid <span class="ph synph"><span class="keyword kwd">selectionMode</span></span> field. For
+example, only the first entry submitted to the <span class="ph synph"><span class="keyword kwd">setSelection</span></span> function
+is selected if your code tries to select two rows when the <span class="ph synph"><span class="keyword kwd">selectionMode</span></span> field
 allows only one.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">unCheckAll</span></span>: to clear all the system-provided
+<li class="li"><span class="ph synph"><span class="keyword kwd">unCheckAll</span></span>: to clear all the system-provided
 check boxes. You can clear the check boxes even when they are hidden.</li>
 
 </ul>
 </div>
-<p>Other supported functions are described in “Rich UI widget
+<p class="p">Other supported functions are described in “Rich UI widget
 functions,” in the EGL Programmer’s Guide.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">DataGrid Tooltips</h2><div class="p">If you wish to include
-a tooltip for a data grid, you have two main alternatives: <ul>
-<li>If you wish the tooltip to be displayed whenever the cursor hovers
+<div class="section"><h2 class="title sectiontitle">DataGrid Tooltips</h2><div class="p">If you wish to include
+a tooltip for a data grid, you have two main alternatives: <ul class="ul">
+<li class="li">If you wish the tooltip to be displayed whenever the cursor hovers
 over the data grid and not to vary according to the cell, row, or
 column, assign the data grid as a whole to a tooltip. For details,
 see “Rich UI Tooltip.” You might declare a tooltip as a global widget
 and enable it (making it active) in some function; for example, in
-the on-construction function or in a function identified in the <span class="synph"><span class="kwd">behaviors</span></span> or <span class="synph"><span class="kwd">headerBehaviors</span></span> property.</li>
+the on-construction function or in a function identified in the <span class="ph synph"><span class="keyword kwd">behaviors</span></span> or <span class="ph synph"><span class="keyword kwd">headerBehaviors</span></span> property.</li>
 
-<li>If you wish the tooltip to specify different tooltip information
+<li class="li">If you wish the tooltip to specify different tooltip information
 for a given cell, row, or column outside of the header, you can specify
 a data- grid tooltip, which is similar to a tooltip but always requires
 that you specify a grid-tooltip provider function. That function returns
@@ -1019,60 +1019,60 @@ only one tooltip.</li>
 
 </ul>
 </div>
-<div class="p">Here is the process for creating a data-grid tooltip:<ul>
-<li>Declare a grid-tooltip handler globally, as in the following example,
+<div class="p">Here is the process for creating a data-grid tooltip:<ul class="ul">
+<li class="li">Declare a grid-tooltip handler globally, as in the following example,
 which references a grid-tooltip provider (the function to invoke)
 and a delay (the number of milliseconds between the start of the hover
-and the invocation of the provider): <pre class="codeblock">gridTooltip DataGridTooltip { provider = tooltipText, tooltip.delay = 1000 };</pre>
+and the invocation of the provider): <pre class="pre codeblock">gridTooltip DataGridTooltip { provider = tooltipText, tooltip.delay = 1000 };</pre>
 <div class="p">That
-declaration requires that you include the following import statement: <pre class="codeblock">import egl.rui.widgets.DataGridToolTip;</pre>
+declaration requires that you include the following import statement: <pre class="pre codeblock">import egl.rui.widgets.DataGridToolTip;</pre>
 </div>
 </li>
 
-<li>Reference a function in the grid-tooltip handler when you assign
-an array for the <strong>behaviors</strong> property. In this example, the function
-is <samp class="codeph">gridToolTip.setToolTips</samp>. </li>
+<li class="li">Reference a function in the grid-tooltip handler when you assign
+an array for the <strong class="ph b">behaviors</strong> property. In this example, the function
+is <samp class="ph codeph">gridToolTip.setToolTips</samp>. </li>
 
-<li> Create a grid-tooltip provider function with the name specified
-in the DataGridToolTip <strong>provider</strong> property (in this example,
-the function is <samp class="codeph">tooltipText</samp>). The grid-tooltip provider
+<li class="li"> Create a grid-tooltip provider function with the name specified
+in the DataGridToolTip <strong class="ph b">provider</strong> property (in this example,
+the function is <samp class="ph codeph">tooltipText</samp>). The grid-tooltip provider
 function has the parameter and return-value characteristics outlined
-in the following Delegate part: <pre class="codeblock">Delegate DataGridTooltipTextProvider(rowData any in, fieldName String in, 
+in the following Delegate part: <pre class="pre codeblock">Delegate DataGridTooltipTextProvider(rowData any in, fieldName String in, 
                                      td Widget in) returns(Box)
 end</pre>
-<dl>
-<dt class="dlterm"><var class="varname">row</var></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><var class="keyword varname">row</var></dt>
 
-<dd>The row provided to the function. You can use the input argument
+<dd class="dd pd">The row provided to the function. You can use the input argument
 to access a specific value. For example, consider the case in which
-the data is as follows:<pre class="codeblock">stocks Stock[] = [
-		 new Stock{Symbol = """"""""Company1"""""""", Quote = 100, NumShares = 40, SelectQuote = false}, 
-		 new Stock{Symbol = """"""""Company2"""""""", Quote = 200, NumShares = 10, SelectQuote = false}
+the data is as follows:<pre class="pre codeblock">stocks Stock[] = [
+		 new Stock{Symbol = "Company1", Quote = 100, NumShares = 40, SelectQuote = false}, 
+		 new Stock{Symbol = "Company2", Quote = 200, NumShares = 10, SelectQuote = false}
 	]; </pre>
 <div class="p">Inside the provider function, you can determine
-which row is being hovered over by writing code such as this: <pre class="codeblock">if (rowData.Quote as int == 200)
+which row is being hovered over by writing code such as this: <pre class="pre codeblock">if (rowData.Quote as int == 200)
    // place content in a box (the tooltip) and return the tooltip
 end</pre>
 </div>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">fieldName</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">fieldName</var></dt>
 
-<dd>Name of the column provided to the function.</dd>
+<dd class="dd pd">Name of the column provided to the function.</dd>
 
 
-<dt class="dlterm"><em>td</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">td</em></dt>
 
-<dd>An internal widget that represents the grid cell. </dd>
+<dd class="dd pd">An internal widget that represents the grid cell. </dd>
 
 </dl>
 </li>
 
-<li>You do not enable the data-grid tooltip; it is enabled as soon
+<li class="li">You do not enable the data-grid tooltip; it is enabled as soon
 as you declare it.</li>
 
-<li>If your users are accessing a Rich UI application by way of Microsoft Internet Explorer
+<li class="li">If your users are accessing a Rich UI application by way of Microsoft™ Internet Explorer
 8 or less, be aware of the issue described in “Rich UI memory management
 for Microsoft Internet
 Explorer.”</li>
@@ -1081,9 +1081,9 @@ Explorer.”</li>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Example</h2><p>Here is an example that you can
+<div class="section"><h2 class="title sectiontitle">Example</h2><p class="p">Here is an example that you can
 try in your workspace:</p>
-<pre class="codeblock">package client;
+<pre class="pre codeblock">package client;
 
 import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.DataGrid;
@@ -1101,18 +1101,18 @@ end
 handler MyHandler type RUIhandler { initialUI = [ grid ], 
                                       onConstructionFunction = start }
    stockList Stock[] = [
-      new Stock{Symbol = """"""""Company1"""""""", Quote = 100.00, NumShares = 40 }, 
-      new Stock{Symbol = """"""""Company2"""""""", Quote = 200.00, NumShares = 10 },
-      new Stock{Symbol = """"""""Company3"""""""", Quote = 100.00, NumShares = 40 } ]; 
+      new Stock{Symbol = "Company1", Quote = 100.00, NumShares = 40 }, 
+      new Stock{Symbol = "Company2", Quote = 200.00, NumShares = 10 },
+      new Stock{Symbol = "Company3", Quote = 100.00, NumShares = 40 } ]; 
 
    grid DataGrid { 
       data = stockList as any[],
       behaviors = [myDataGridToolTip.setToolTips],
       pageSize = 15,
       columns = [
-         new DataGridColumn { name = """"""""Symbol"""""""", displayName = """"""""Symbol Display""""""""},    
-         new DataGridColumn { name = """"""""Quote"""""""", displayName = """"""""Quote Display""""""""},
-         new DataGridColumn { name = """"""""NumShares"""""""", displayName = """"""""NumShares Display""""""""  }]};
+         new DataGridColumn { name = "Symbol", displayName = "Symbol Display"},    
+         new DataGridColumn { name = "Quote", displayName = "Quote Display"},
+         new DataGridColumn { name = "NumShares", displayName = "NumShares Display"  }]};
 
    myDataGridTooltip DataGridTooltip { provider = tooltipText, tooltip.delay = 1000 };
 
@@ -1127,11 +1127,11 @@ handler MyHandler type RUIhandler { initialUI = [ grid ],
       tooltipArea TextArea { width=450, height=100, paddingLeft=7, marginLeft=7 };
       tooltipBox.children = [ tooltipArea ];	
       tooltipArea.text = 
-      """"""""In function tooltipText (a tooltip provider):"""""""" + 
-      """"""""\n   o  fieldName is the column name ('""""""""+fieldName+""""""""')."""""""" +
-      """"""""\nYou can access cell content:"""""""" +
-      """"""""\n   o  td.innerText is '""""""""+td.innerText+""""""""'."""""""" +
-      """"""""\n   o  rowData[""""""""+fieldName+""""""""] is '""""""""+rowData[fieldName] + """"""""'.""""""""; 
+      "In function tooltipText (a tooltip provider):" + 
+      "\n   o  fieldName is the column name ('"+fieldName+"')." +
+      "\nYou can access cell content:" +
+      "\n   o  td.innerText is '"+td.innerText+"'." +
+      "\n   o  rowData["+fieldName+"] is '"+rowData[fieldName] + "'."; 
       return (tooltipBox); 
    end
 end</pre>

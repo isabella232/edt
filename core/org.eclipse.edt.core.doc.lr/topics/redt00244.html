@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,80 +19,80 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DateTimeLib.dateFromGregorian system function</title>
 </head>
-<body id="redt00244"><a name="redt00244"><!-- --></a>
+<body id="redt00244">
 
 
-<h1 class="topictitle1">DateTimeLib.dateFromGregorian system function</h1>
+<h1 class="title topictitle1">DateTimeLib.dateFromGregorian system function</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><span class="synph"><span class="kwd">DateTimeLib.dateFromGregorian</span></span> returns
+<div class="body" id="body"><p class="shortdesc"><span class="ph synph"><span class="keyword kwd">DateTimeLib.dateFromGregorian</span></span> returns
 a DATE value corresponding to an integer value that has the following
 format: YYYYMMdd.</p>
 
 
-<a name="redt00244__main"><!-- --></a><dl id="redt00244__main">
-<dt class="dlterm"><a name="redt00244__package"><!-- --></a>Package</dt>
+<dl class="dl" id="redt00244__main">
+<dt class="dt dlterm"><a name="redt00244__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.lang</p>
+<dd class="dd"><p class="p">eglx.lang</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00244__syntax"><!-- --></a>Syntax</dt>
+<dt class="dt dlterm"><a name="redt00244__syntax"><!-- --></a>Syntax</dt>
 
-<dd><pre class="codeblock" id="redt00244__syntax_block"><a name="redt00244__syntax_block"><!-- --></a>static function dateFromGregorian(gregorianDateAsInteger EInt in) 
+<dd class="dd"><pre class="pre codeblock" id="redt00244__syntax_block">static function dateFromGregorian(gregorianDateAsInteger EInt in) 
        returns (EDate);</pre>
-<a name="redt00244__syntax_list"><!-- --></a><dl id="redt00244__syntax_list">
-<dt class="dlterm"><var class="varname">gregorianDateAsInteger</var></dt>
+<dl class="dl" id="redt00244__syntax_list">
+<dt class="dt dlterm"><var class="keyword varname">gregorianDateAsInteger</var></dt>
 
-<dd>An integer value that has the format YYYYMMdd. </dd>
+<dd class="dd">An integer value that has the format YYYYMMdd. </dd>
 
 </dl>
 <anchor id="syntax_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00244__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00244__use"><!-- --></a>Example use</dt>
 
-<dd><p>After the following code runs, the value of <samp class="codeph">result</samp> is
+<dd class="dd"><p class="p">After the following code runs, the value of <samp class="ph codeph">result</samp> is
 1 February 1999:</p>
-<pre class="codeblock" id="redt00244__use_block"><a name="redt00244__use_block"><!-- --></a>result Date = DateTimeLib.dateFromGregorian(19990201);</pre>
+<pre class="pre codeblock" id="redt00244__use_block">result Date = DateTimeLib.dateFromGregorian(19990201);</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00244__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00244__comments"><!-- --></a>Comments</dt>
 
-<dd><anchor id="comments_more"></anchor></dd>
+<dd class="dd"><anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00244__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00244__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00244__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00244__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d82132e115">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00244__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d98676e115">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d82132e118">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d98676e118">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00244__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d82132e115 ">Java</td>
+<tr id="redt00244__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d98676e115 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82132e118 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d98676e118 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00244__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d82132e115 ">JavaScript</td>
+<tr id="redt00244__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d98676e115 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d82132e118 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d98676e118 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
@@ -107,7 +107,7 @@ format: YYYYMMdd.</p>
 
 </dl>
 
-<p></p>
+<p class="p"></p>
 
 </div>
 

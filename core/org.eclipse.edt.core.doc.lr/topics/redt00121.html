@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,53 +19,53 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>BidiTextArea widget</title>
 </head>
-<body id="redt00121"><a name="redt00121"><!-- --></a>
+<body id="redt00121">
 
 
-<h1 class="topictitle1">BidiTextArea widget</h1>
+<h1 class="title topictitle1">BidiTextArea widget</h1>
 
 
 
-<div><p>A bidiTextArea widget defines a rectangle that contains
+<div class="body"><p class="shortdesc">A bidiTextArea widget defines a rectangle that contains
 one or more lines of bidirectional text.</p>
 
-<div class="p">The following fields are supported:<ul>
-<li><span class="synph"><span class="kwd">numColumns</span></span>, which holds an integer that
+<div class="p">The following fields are supported:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">numColumns</span></span>, which holds an integer that
 represents the number of columns in the text area</li>
 
-<li><span class="synph"><span class="kwd">numRows</span></span>, which holds an integer that
+<li class="li"><span class="ph synph"><span class="keyword kwd">numRows</span></span>, which holds an integer that
 represents the number of rows in the text area</li>
 
-<li><span class="synph"><span class="kwd">readOnly</span></span>, which holds a Boolean that
+<li class="li"><span class="ph synph"><span class="keyword kwd">readOnly</span></span>, which holds a Boolean that
 indicates whether the text area is protected from user input</li>
 
-<li><span class="synph"><span class="kwd">text</span></span>, which holds a string for display
+<li class="li"><span class="ph synph"><span class="keyword kwd">text</span></span>, which holds a string for display
 in the text area</li>
 
 </ul>
 </div>
 
 <div class="p">The following functions are available, none of which returns a
-value:<ul>
-<li><span class="synph"><span class="kwd">append</span></span> adds content to the content already
+value:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">append</span></span> adds content to the content already
 in the text area. The only parameter is the string to be added.</li>
 
-<li><span class="synph"><span class="kwd">setRedraw</span></span> redraws the text area. The
+<li class="li"><span class="ph synph"><span class="keyword kwd">setRedraw</span></span> redraws the text area. The
 only parameter is a Boolean, which indicates whether to redraw the
 area.</li>
 
-<li><span class="synph"><span class="kwd">select</span></span> causes the widget to receive
+<li class="li"><span class="ph synph"><span class="keyword kwd">select</span></span> causes the widget to receive
 focus and, on most browsers, selects the text. The function has no
 parameters.</li>
 
 </ul>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import org.eclipse.edt.rui.widgets.BidiTextArea;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import org.eclipse.edt.rui.widgets.BidiTextArea;</pre>
 </div>
 
 </div>

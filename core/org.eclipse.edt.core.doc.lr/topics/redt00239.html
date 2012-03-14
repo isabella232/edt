@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,65 +18,65 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>eglx.rbd package and its StrLib library</title>
 </head>
-<body id="redt00239"><a name="redt00239"><!-- --></a>
+<body id="redt00239">
 
 
-<h1 class="topictitle1">eglx.rbd package and its StrLib library</h1>
+<h1 class="title topictitle1">eglx.rbd package and its StrLib library</h1>
 
 
 
-<div><p>The <span class="synph"><span class="kwd">eglx.rbd</span></span> package
-contains the <span class="synph"><span class="kwd">StrLib</span></span> library, which includes
+<div class="body"><p class="shortdesc">The <span class="ph synph"><span class="keyword kwd">eglx.rbd</span></span> package
+contains the <span class="ph synph"><span class="keyword kwd">StrLib</span></span> library, which includes
 functions and constants that are particularly convenient for a subset
-of users who are migrating code from IBM Rational products. For new
-development, use the more efficient functions in the <span class="synph"><span class="kwd">StringLib</span></span> library
+of users who are migrating code from IBM<sup>®</sup> Rational<sup>®</sup> products. For new
+development, use the more efficient functions in the <span class="ph synph"><span class="keyword kwd">StringLib</span></span> library
 and in the EDT STRING type.</p>
 
-<dl>
-<dt class="dlterm"><a name="redt00239__package"><!-- --></a>Package</dt>
+<dl class="dl">
+<dt class="dt dlterm"><a name="redt00239__package"><!-- --></a>Package</dt>
 
-<dd><p>eglx.rbd</p>
+<dd class="dd"><p class="p">eglx.rbd</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00239__constants"><!-- --></a>Variables</dt>
+<dt class="dt dlterm"><a name="redt00239__constants"><!-- --></a>Variables</dt>
 
-<dd>Each of the following <span class="synph"><span class="kwd">StrLib</span></span> variables
-is of the EGL STRING type:<ul>
-<li><span class="synph"><span class="kwd">StrLib.defaultDateFormat</span></span></li>
+<dd class="dd">Each of the following <span class="ph synph"><span class="keyword kwd">StrLib</span></span> variables
+is of the EGL STRING type:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">StrLib.defaultDateFormat</span></span></li>
 
-<li><span class="synph"><span class="kwd">StrLib.defaultTimeFormat</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">StrLib.defaultTimeFormat</span></span></li>
 
-<li><span class="synph"><span class="kwd">StrLib.defaultTimeStampFormat</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">StrLib.defaultTimeStampFormat</span></span></li>
 
-<li><span class="synph"><span class="kwd">StrLib.MoneyFormat</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">StrLib.MoneyFormat</span></span></li>
 
-<li><span class="synph"><span class="kwd">StrLib NumericFormat</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">StrLib NumericFormat</span></span></li>
 
 </ul>
-<p>As shown later, <span class="synph"><span class="kwd">StrLib.defaultDateFormat</span></span>, <span class="synph"><span class="kwd">StrLib.defaultTimesStampFormat</span></span>,
-and <span class="synph"><span class="kwd">StrLib.defaultNumericFormat</span></span> affect the
-behavior of a related formatting function in the <span class="synph"><span class="kwd">StrLib</span></span> library.
+<p class="p">As shown later, <span class="ph synph"><span class="keyword kwd">StrLib.defaultDateFormat</span></span>, <span class="ph synph"><span class="keyword kwd">StrLib.defaultTimesStampFormat</span></span>,
+and <span class="ph synph"><span class="keyword kwd">StrLib.defaultNumericFormat</span></span> affect the
+behavior of a related formatting function in the <span class="ph synph"><span class="keyword kwd">StrLib</span></span> library.
 In addition, you might use any of those variables to provide pattern
-details when you invoke the <span class="synph"><span class="kwd">StringLib.format</span></span> function.</p>
+details when you invoke the <span class="ph synph"><span class="keyword kwd">StringLib.format</span></span> function.</p>
 </dd>
 
 
-<dt class="dlterm"><a name="redt00239__functions"><!-- --></a>Functions</dt>
+<dt class="dt dlterm"><a name="redt00239__functions"><!-- --></a>Functions</dt>
 
-<dd>The <span class="synph"><span class="kwd">StrLib</span></span> functions are written in
-EGL: <pre class="codeblock"><strong>function booleanAsString(value boolean in) returns(string)</strong>
+<dd class="dd">The <span class="ph synph"><span class="keyword kwd">StrLib</span></span> functions are written in
+EGL: <pre class="pre codeblock"><strong class="ph b">function booleanAsString(value boolean in) returns(string)</strong>
 /*********************************************************************
 * Accept a Boolean value and return the equivalent string.           *
 **********************************************************************/
    if ( value )
-      return( """"true"""" );
+      return( "true" );
    else
-      return( """"false"""" );
+      return( "false" );
    end
 	end
 
-<strong>function characterLen(text string in) returns(int)</strong>
+<strong class="ph b">function characterLen(text string in) returns(int)</strong>
 /********************************************************************* 
 * Accept a string, remove leading and trailing blanks and nulls,     * 
 * and return the number of characters.                               * 
@@ -84,7 +84,7 @@ EGL: <pre class="codeblock"><strong>function booleanAsString(value boolean in) r
 	  return( text.clip().length() );
 end
 	
-<strong>function clip(source string? in) returns(string?)</strong>
+<strong class="ph b">function clip(source string? in) returns(string?)</strong>
 /********************************************************************* 
 * Accept a string, remove leading and trailing blanks and nulls,     * 
 * and return the string.                                             * 
@@ -96,7 +96,7 @@ end
    end
 end
 	
-<strong>function clip(source string? in, clipType int? in) returns(string?)</strong>
+<strong class="ph b">function clip(source string? in, clipType int? in) returns(string?)</strong>
 /********************************************************************* 
 * Accept a string; remove leading blanks and nulls (clipType = 1),   *  
 * trailing blanks and nulls (clipType = 2), or both (clipType = 0);  * 
@@ -119,7 +119,7 @@ end
    end
 end
 	
-<strong>function formatDate(dateValue date? in) returns(string?)</strong>
+<strong class="ph b">function formatDate(dateValue date? in) returns(string?)</strong>
 /********************************************************************* 
 * Accept a date and format it in accordance                          *
 * with the value of StrLib.defaultDateFormat.                        *
@@ -131,11 +131,11 @@ end
    end
 end
 	
-<strong>function formatDate(dateValue date? in, format string? in) returns(string?)</strong>
+<strong class="ph b">function formatDate(dateValue date? in, format string? in) returns(string?)</strong>
 /********************************************************************* 
 * Accept a date and format it in accordance with an input pattern.   *
 * For details on values for the second parameter, see                *
-* """"Pattern characters used to format non-string values to strings.""""  *
+* "Pattern characters used to format non-string values to strings."  *
 **********************************************************************/
    if ( dateValue == null || format == null )
       return( null );
@@ -144,12 +144,12 @@ end
    end
 end
 	
-<strong>function formatNumber(value smallint?   in) returns (string?)</strong>
-<strong>function formatNumber(value int?        in) returns (string?)</strong>
-<strong>function formatNumber(value bigint?     in) returns (string?)</strong>
-<strong>function formatNumber(value decimal?    in) returns (string?)</strong>
-<strong>function formatNumber(value smallfloat? in) returns (string?)</strong>
-<strong>function formatNumber(value float?      in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value smallint?   in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value int?        in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value bigint?     in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value decimal?    in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value smallfloat? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value float?      in) returns (string?)</strong>
 /********************************************************************* 
 * Accept a numeric value and format it in accordance                 *
 * with the value of StrLib.defaultNumericFormat.                     *
@@ -161,16 +161,16 @@ end
    end
 end
 	
-<strong>function formatNumber(value smallint?   in, format string? in) returns (string?)</strong>
-<strong>function formatNumber(value int?        in, format string? in) returns (string?)</strong>
-<strong>function formatNumber(value bigint?     in, format string? in) returns (string?)</strong>
-<strong>function formatNumber(value decimal?    in, format string? in) returns (string?)</strong>
-<strong>function formatNumber(value smallfloat? in, format string? in) returns (string?)</strong>
-<strong>function formatNumber(value float?      in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value smallint?   in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value int?        in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value bigint?     in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value decimal?    in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value smallfloat? in, format string? in) returns (string?)</strong>
+<strong class="ph b">function formatNumber(value float?      in, format string? in) returns (string?)</strong>
 /******************************************************************** 
 * Accept a numeric value and format it in accordance with an input  *
 * pattern. For details on values for the second parameter, see      *
-* """"Pattern characters used to format non-string values to strings."""" *
+* "Pattern characters used to format non-string values to strings." *
 *********************************************************************/
    if ( value == null || format == null )
       return( null );
@@ -179,7 +179,7 @@ end
    end
 end
 
-<strong>function formatTimeStamp(timestampvalue timestamp(""""yyyyMMddHHmmssffffff"""")? in) 
+<strong class="ph b">function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in) 
          returns(string?)</strong>
 /********************************************************************* 
 * Accept a timestamp value and format it in accordance               *
@@ -192,13 +192,13 @@ end
    end
 end
 	
-<strong>function formatTimeStamp(timestampvalue timestamp(""""yyyyMMddHHmmssffffff"""")? in,
+<strong class="ph b">function formatTimeStamp(timestampvalue timestamp("yyyyMMddHHmmssffffff")? in,
                          format string? in)
          returns (string?)</strong>
 /********************************************************************* 
 * Accept a timestamp value and format it in accordance with an input *
 * pattern. For details on values for the second parameter, see       *
-* """"Pattern characters used to format non-string values to strings.""""  *
+* "Pattern characters used to format non-string values to strings."  *
 **********************************************************************/
    if ( timestampvalue == null || format == null )
       return( null );
@@ -207,7 +207,7 @@ end
    end
 end
 
-<strong>function getNextToken(source string inout, index int inout, delimiters string in)
+<strong class="ph b">function getNextToken(source string inout, index int inout, delimiters string in)
          returns (string?)</strong>
 /********************************************************************* 
 * Returns a token from a substring that starts at a specified        *
@@ -234,7 +234,7 @@ end
    return( token );
 end
 	
-<strong>function getTokenCount(source string in, delimiters string in) returns (int)</strong>
+<strong class="ph b">function getTokenCount(source string in, delimiters string in) returns (int)</strong>
 /********************************************************************* 
 * Returns the number of tokens in a source string                    *
 *                                                                    *
@@ -247,7 +247,7 @@ end
    return( StringLib.getTokenCount( source, delimiters ) );
 end
 
-<strong>function indexOf(source string inout, pattern string in) returns (int)</strong>
+<strong class="ph b">function indexOf(source string inout, pattern string in) returns (int)</strong>
 /*********************************************************************
 * Returns an index into a string of characters. The index indicates  *
 * the first character position at which a specified pattern starts.  *
@@ -261,7 +261,7 @@ end
    return( source.indexOf( pattern ) );
 end
 	
-<strong>function indexOf(source string inout, pattern string in, startIndex int in)
+<strong class="ph b">function indexOf(source string inout, pattern string in, startIndex int in)
          returns (int)</strong>
 /********************************************************************* 
 * Returns an index into a string of characters. The index indicates  *
@@ -282,7 +282,7 @@ end
    return( source.indexOf( pattern, startIndex ) );
 end
 	
-<strong>function lowerCase(characterItem string? in) returns(string?)</strong>
+<strong class="ph b">function lowerCase(characterItem string? in) returns(string?)</strong>
 /********************************************************************* 
 * Converts all uppercase values in a character string to lowercase   *
 * values. Numeric and existing lowercase values are not affected.    *
@@ -294,7 +294,7 @@ end
    end
 end
 
-<strong>function spaces(characterCount int? in) returns(string?)</strong>
+<strong class="ph b">function spaces(characterCount int? in) returns(string?)</strong>
 /********************************************************************* 
 * Returns a string of spaces of the specified length.                *
 **********************************************************************/
@@ -302,19 +302,19 @@ end
       return( null );
    else
       result string;
-      fiftyBlanks string = """"                                                  """";
-      while ( characterCount &gt;&gt;&gt;&gt;= 50 )
+      fiftyBlanks string = "                                                  ";
+      while ( characterCount &gt;= 50 )
          result ::= fiftyBlanks;
          characterCount -= 50;
       end
-      if ( characterCount &gt;&gt;&gt;&gt; 0 )
+      if ( characterCount &gt; 0 )
          result ::= fiftyBlanks[1:characterCount];
       end
       return( result );
    end
 end
 
-<strong>function upperCase(characterItem string? in) returns(string?)</strong>
+<strong class="ph b">function upperCase(characterItem string? in) returns(string?)</strong>
 /********************************************************************* 
 * Converts all lowercase values in a character string to uppercase   *
 * values. Numeric and existing uppercase values are not affected.    *
@@ -328,42 +328,42 @@ end
 </dd>
 
 
-<dt class="dlterm"><a name="redt00239__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00239__comments"><!-- --></a>Comments</dt>
 
-<dd><p>The <span class="synph"><span class="kwd">StrLib</span></span> library is implemented
+<dd class="dd"><p class="p">The <span class="ph synph"><span class="keyword kwd">StrLib</span></span> library is implemented
 as an EGL library, not as an EGL external type.</p>
 <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00239__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00239__compat"><!-- --></a>Compatibility</dt>
 
-<dd><p></p>
+<dd class="dd"><p class="p"></p>
 
-<div class="tablenoborder"><a name="redt00239__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00239__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d80170e261">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00239__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d96283e261">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d80170e264">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d96283e264">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00239__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d80170e261 ">Java</td>
+<tr id="redt00239__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d96283e261 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d80170e264 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d96283e264 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00239__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d80170e261 ">JavaScript</td>
+<tr id="redt00239__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d96283e261 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d80170e264 ">No issues.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d96283e264 ">No issues.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

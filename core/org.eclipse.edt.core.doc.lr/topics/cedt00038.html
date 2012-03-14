@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,53 +18,53 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>ExternalType classifier overview</title>
 </head>
-<body id="cedt00038"><a name="cedt00038"><!-- --></a>
+<body id="cedt00038">
 
 
-<h1 class="topictitle1">ExternalType classifier overview</h1>
+<h1 class="title topictitle1">ExternalType classifier overview</h1>
 
 
 
-<div><p>The capabilities of the ExternalType classifier are made
+<div class="body"><p class="shortdesc">The capabilities of the ExternalType classifier are made
 available when you code an <dfn class="term">external type</dfn>, which is the
 basis of a variable that provides access to non-EGL code.</p>
 
-<p>In some situations, you access a predefined external type to work
+<p class="p">In some situations, you access a predefined external type to work
 with a technology that EGL supports. For example, you must declare
 a variable that creates a BIRT report engine before you can process
 a BIRT report. The type of the variable is a predefined EGL external
-type that is based on a Java class.</p>
+type that is based on a Java™ class.</p>
 
 <div class="p">The next table lists the stereotypes that are available for an
 ExternalType type.
-<div class="tablenoborder"><a name="cedt00038__stereo_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="cedt00038__stereo_table" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="22.613065326633166%" id="d6448e49">Stereotype</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00038__stereo_table" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="22.613065326633166%" id="d7456e49">Stereotype</th>
 
-<th class="cellrowborder" valign="bottom" width="77.38693467336684%" id="d6448e52">Purpose</th>
+<th class="entry" valign="bottom" width="77.38693467336684%" id="d7456e52">Purpose</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="stereo_rows_start"></anchor>
 <anchor id="stereo_rows_post_birthandler"></anchor>
 <anchor id="stereo_rows_post_entity"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6448e49 "><a href="redt00278.html" title="An ExternalType part with the JavaObject stereotype defines how you can access an external Java class or interface from your EGL code. The part typically identifies all the public fields, methods, and constructors of the class or interface, but might identify a subset of interest.">JavaObject</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d7456e49 "><a class="xref" href="redt00278.html" title="An ExternalType part with the JavaObject stereotype defines how you can access an external Java class or interface from your EGL code. The part typically identifies all the public fields, methods, and constructors of the class or interface, but might identify a subset of interest.">JavaObject</a></td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6448e52 ">To reference constructors, methods, and fields
+<td class="entry" valign="top" width="77.38693467336684%" headers="d7456e52 ">To reference constructors, methods, and fields
 in a Java type.</td>
 
 </tr>
 
 <anchor id="stereo_rows_postjavaobject"></anchor>
-<tr>
-<td class="cellrowborder" valign="top" width="22.613065326633166%" headers="d6448e49 "><a href="redt00279.html" title="With EGL, your Rich UI application can access non-generated JavaScript. You might be making general logic available—for example, to provide a random number generator—or you might be referencing a non-EGL widget—for example, to allow use of a Dojo widget inside your code.">JavaScriptObject</a></td>
+<tr class="row">
+<td class="entry" valign="top" width="22.613065326633166%" headers="d7456e49 "><a class="xref" href="redt00279.html" title="With EGL, your Rich UI application can access non-generated JavaScript. You might be making general logic available—for example, to provide a random number generator—or you might be referencing a non-EGL widget—for example, to allow use of a Dojo widget inside your code.">JavaScriptObject</a></td>
 
-<td class="cellrowborder" valign="top" width="77.38693467336684%" headers="d6448e52 ">To support Rich UI applications; specifically,
+<td class="entry" valign="top" width="77.38693467336684%" headers="d7456e52 ">To support Rich UI applications; specifically,
 to make available a EGL widget that is not written in EGL or to make
 available some general JavaScript logic
 such as a random number generator.</td>

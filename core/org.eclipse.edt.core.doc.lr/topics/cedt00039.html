@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,64 +16,64 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Delegate classifier overview</title>
 </head>
-<body id="cedt00039"><a name="cedt00039"><!-- --></a>
+<body id="cedt00039">
 
 
-<h1 class="topictitle1">Delegate classifier overview</h1>
+<h1 class="title topictitle1">Delegate classifier overview</h1>
 
 
 
-<div><p>The capabilities of the Delegate classifier are made available
+<div class="body"><p class="shortdesc">The capabilities of the Delegate classifier are made available
 when you code a <dfn class="term">Delegate type</dfn>, which is the basis of
 a variable that references an EGL function. </p>
 
 <div class="p">For example, consider the following statement, which is in a Rich
-UI handler that you might code:<pre class="codeblock">call myService.myFunction()
+UI handler that you might code:<pre class="pre codeblock">call myService.myFunction()
    returning to myCallbackFunction 
-             onException <strong>ServiceLib.serviceExceptionHandler</strong>;</pre>
+             onException <strong class="ph b">ServiceLib.serviceExceptionHandler</strong>;</pre>
 </div>
 
-<div class="p">The statement calls the function <samp class="codeph">myFunction</samp> in
+<div class="p">The statement calls the function <samp class="ph codeph">myFunction</samp> in
 a remote service and ensures that an exception handler (a second function)
-is invoked if the call returns an error. However, <span class="synph"><span class="kwd">ServiceLib.serviceExceptionHandler</span> is
-not the name of a function. Rather, </span> <span class="synph"><span class="kwd">ServiceLib.serviceExceptionHandler</span></span> is
-the fully qualified name of a variable declared in the <span class="synph"><span class="kwd">ServiceLib</span></span> system
+is invoked if the call returns an error. However, <span class="ph synph"><span class="keyword kwd">ServiceLib.serviceExceptionHandler</span> is
+not the name of a function. Rather, </span> <span class="ph synph"><span class="keyword kwd">ServiceLib.serviceExceptionHandler</span></span> is
+the fully qualified name of a variable declared in the <span class="ph synph"><span class="keyword kwd">ServiceLib</span></span> system
 library. The variable is based on a Delegate type that is essentially
-as follows: <pre class="codeblock">Delegate SystemDelegateType
+as follows: <pre class="pre codeblock">Delegate SystemDelegateType
     (exp AnyException in) 
 end</pre>
 </div>
 
 <div class="p">In short, a declaration similar to the following one is found in
-the <span class="synph"><span class="kwd">ServiceLib</span></span> system library: <pre class="codeblock">   serviceExceptionHandler SystemDelegateType;</pre>
+the <span class="ph synph"><span class="keyword kwd">ServiceLib</span></span> system library: <pre class="pre codeblock">   serviceExceptionHandler SystemDelegateType;</pre>
 </div>
 
-<div class="p">The mechanism provides flexibility: <ul>
-<li>EGL system code assigns a value to the <span class="synph"><span class="kwd">serviceExceptionHandler</span></span> variable.
+<div class="p">The mechanism provides flexibility: <ul class="ul">
+<li class="li">EGL system code assigns a value to the <span class="ph synph"><span class="keyword kwd">serviceExceptionHandler</span></span> variable.
 The value refers to an exception handler that is invoked by default
 if your call to a service returns an error.</li>
 
-<li>You can write code to assign your own function to the <span class="synph"><span class="kwd">serviceExceptionHandler</span></span> variable
+<li class="li">You can write code to assign your own function to the <span class="ph synph"><span class="keyword kwd">serviceExceptionHandler</span></span> variable
 and in this way cause your function to be invoked instead. Here is
-an example assignment:<pre class="codeblock">ServiceLib.serviceExceptionHandler = myExceptionHandler;</pre>
+an example assignment:<pre class="pre codeblock">ServiceLib.serviceExceptionHandler = myExceptionHandler;</pre>
 </li>
 
 </ul>
 </div>
 
-<div class="p">The function you might have written has the following outline:<pre class="codeblock">Function myExceptionHandler(exp AnyException in)
+<div class="p">The function you might have written has the following outline:<pre class="pre codeblock">Function myExceptionHandler(exp AnyException in)
    ;
 end</pre>
 </div>
 
-<p>Please note that the characteristics of the <samp class="codeph">myExceptionHandler</samp> function
-are the same as the characteristics of the <samp class="codeph">SystemDelegateType</samp> type.
-That is, the <samp class="codeph">SystemDelegateType</samp> type describes a
-function that accepts a single parameter of type <span class="synph"><span class="kwd">AnyException</span></span> and
+<p class="p">Please note that the characteristics of the <samp class="ph codeph">myExceptionHandler</samp> function
+are the same as the characteristics of the <samp class="ph codeph">SystemDelegateType</samp> type.
+That is, the <samp class="ph codeph">SystemDelegateType</samp> type describes a
+function that accepts a single parameter of type <span class="ph synph"><span class="keyword kwd">AnyException</span></span> and
 does not return a value. That sameness is what enables you to substitute
 your function for the one that is used by default.</p>
 
-<p>A Delegate type does not include a stereotype.</p>
+<p class="p">A Delegate type does not include a stereotype.</p>
 
 </div>
 

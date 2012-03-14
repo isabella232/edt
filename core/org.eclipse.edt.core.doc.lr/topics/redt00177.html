@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,30 +19,30 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>SQLStatement external type</title>
 </head>
-<body id="redt00177"><a name="redt00177"><!-- --></a>
+<body id="redt00177">
 
 
-<h1 class="topictitle1">SQLStatement external type</h1>
+<h1 class="title topictitle1">SQLStatement external type</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p><strong>SQLStatement</strong> represents a dynamically
+<div class="body" id="body"><p class="shortdesc"><strong class="ph b">SQLStatement</strong> represents a dynamically
 prepared SQL statement. Instances of this type can be create only
-by using the <span class="synph"><span class="kwd">Prepare</span></span> statement.</p>
+by using the <span class="ph synph"><span class="keyword kwd">Prepare</span></span> statement.</p>
 
-<a name="redt00177__main"><!-- --></a><dl id="redt00177__main">
-<dt class="dlterm"><a name="redt00177__package"><!-- --></a>EGL package name</dt>
+<dl class="dl" id="redt00177__main">
+<dt class="dt dlterm"><a name="redt00177__package"><!-- --></a>EGL package name</dt>
 
-<dd><p>eglx.persistence.sql</p>
+<dd class="dd"><p class="p">eglx.persistence.sql</p>
 <anchor id="package_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00177__use"><!-- --></a>Example use</dt>
+<dt class="dt dlterm"><a name="redt00177__use"><!-- --></a>Example use</dt>
 
-<dd>The following code prepares an SQL statement from a dynamically
+<dd class="dd">The following code prepares an SQL statement from a dynamically
 constructed string; opens a result set that is based on that SQL statement;
-and retrieves the retrieved string into a list.<pre class="codeblock">// the data source is instantiated with a connection string.
-connectURL string = """"""""jdbc:derby:SomeDB;create=true;"""""""";
+and retrieves the retrieved string into a list.<pre class="pre codeblock">// the data source is instantiated with a connection string.
+connectURL string = "jdbc:derby:SomeDB;create=true;";
 ds SQLDataSource = new SQLDataSource(connectURL);
 
 // the SQL statement is instantiated later, by the prepare statement
@@ -51,7 +51,7 @@ sqlStatement SQLStatement?;
 // the result set is instantiated later, by the open statement
 rs SQLResultSet?;
 
-statementString String = """"""""Select name from """""""";
+statementString String = "Select name from ";
 
 // assume that a function returns a table name at run time
 statementString += getTableName();
@@ -72,47 +72,47 @@ end</pre>
 <anchor id="use_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00177__detail"><!-- --></a>Type detail</dt>
+<dt class="dt dlterm"><a name="redt00177__detail"><!-- --></a>Type detail</dt>
 
-<dd><pre class="codeblock">externalType SQLStatement type NativeType
+<dd class="dd"><pre class="pre codeblock">externalType SQLStatement type NativeType
    private constructor();
 end</pre>
 <anchor id="detail_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00177__comments"><!-- --></a>Comments</dt>
+<dt class="dt dlterm"><a name="redt00177__comments"><!-- --></a>Comments</dt>
 
-<dd> <anchor id="comments_more"></anchor></dd>
+<dd class="dd"> <anchor id="comments_more"></anchor></dd>
 
 
-<dt class="dlterm"><a name="redt00177__compat"><!-- --></a>Compatibility</dt>
+<dt class="dt dlterm"><a name="redt00177__compat"><!-- --></a>Compatibility</dt>
 
-<dd>
-<div class="tablenoborder"><a name="redt00177__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00177__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d56996e98">Target</th>
+<dd class="dd">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00177__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d69000e98">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d56996e101">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d69000e101">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00177__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d56996e98 ">Java</td>
+<tr id="redt00177__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d69000e98 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56996e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d69000e101 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00177__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d56996e98 ">JavaScript</td>
+<tr id="redt00177__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d69000e98 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d56996e101 ">Database access is not supported.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d69000e101 ">Database access is not supported.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

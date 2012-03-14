@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,36 +18,36 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Logical unit of work</title>
 </head>
-<body id="cedt00042"><a name="cedt00042"><!-- --></a>
+<body id="cedt00042">
 
 
-<h1 class="topictitle1">Logical unit of work</h1>
+<h1 class="title topictitle1">Logical unit of work</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p> </p>
+<div class="body" id="body"><p class="shortdesc"> </p>
 
-<p>When you change <span class="synph"><span class="var">non-recoverable</span></span> resources, that
+<p class="p">When you change <span class="ph synph"><span class="ph var">non-recoverable</span></span> resources, that
 change is relatively permanent; neither your code nor EGL runtime
-services can rescind the changes without notice. When you change <span class="synph"><span class="var">recoverable</span></span> resources,
+services can rescind the changes without notice. When you change <span class="ph synph"><span class="ph var">recoverable</span></span> resources,
 such as databases, your code or EGL runtime services can either commit
 the changes to make them permanent or roll back the changes to return
 to content that was in effect the last time changes were committed.</p>
 
 
-<div class="p">A <em>logical unit of work</em> identifies input operations that
+<div class="p">A <em class="ph i">logical unit of work</em> identifies input operations that
 are either committed or rolled back as a group. A unit of work begins
 when your code changes a recoverable resource and ends when the first
-of the following events occurs: <ul>
-<li>Your code invokes the <span class="synph"><span class="kwd">SysLib.commit</span></span> or <span class="synph"><span class="kwd">SysLib.rollback</span></span> functions
+of the following events occurs: <ul class="ul">
+<li class="li">Your code invokes the <span class="ph synph"><span class="keyword kwd">SysLib.commit</span></span> or <span class="ph synph"><span class="keyword kwd">SysLib.rollback</span></span> functions
 to commit or roll back the changes.</li>
 
-<li>EGL runtime services performs a rollback in response to a hard
+<li class="li">EGL runtime services performs a rollback in response to a hard
 error that is not handled in your code; in this case, all the programs
 in the run unit are removed from memory.</li>
 
-<li>An implicit commit occurs, as in the following cases: <ul>
-<li>A run unit ends successfully; see “Run units.”</li>
+<li class="li">An implicit commit occurs, as in the following cases: <ul class="ul">
+<li class="li">A run unit ends successfully; see “Run units.”</li>
 
 
 </ul>
@@ -56,17 +56,17 @@ in the run unit are removed from memory.</li>
 </ul>
 </div>
 
-<p>EGL
+<p class="p">EGL
 performs a single phase commit that calls each recoverable resource
 manager separately.</p>
 
 <div class="p">The following considerations apply to the interaction of EGL and
-non-EGL programs.<ul>
-<li>If an EGL program calls a non-EGL program and both programs access
+non-EGL programs.<ul class="ul">
+<li class="li">If an EGL program calls a non-EGL program and both programs access
 SQL tables, you must close all cursors before the call if the non-EGL
 program causes a commit or rollback.</li>
 
-<li>If
+<li class="li">If
 any of the EGL programs in a run unit does not perform SQL, but calls
 or transfers to a non-EGL program that does SQL I/O, then EGL does
 not issue a commit at the end of the run unit.</li>
@@ -76,36 +76,36 @@ not issue a commit at the end of the run unit.</li>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="compatibility"><a name="compatibility"><!-- --></a>
-<h2 class="topictitle2">Compatibility</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="compatibility">
+<h2 class="title topictitle2">Compatibility</h2>
 
-<div>
+<div class="body">
 
-<div class="tablenoborder"><a name="compatibility__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="compatibility__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d7167e137">Target</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="compatibility__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d8337e137">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d7167e140">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d8337e140">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="compatibility__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d7167e137 ">Java</td>
+<tr id="compatibility__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d8337e137 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d7167e140 "><ul>
-<li>When any of the Java programs
+<td class="entry" valign="top" width="50%" headers="d8337e140 "><ul class="ul">
+<li class="li">When any of the Java™ programs
 ends with a hard error, the effect is equivalent to performing rollbacks,
 closing cursors, and releasing locks.</li>
 
-<li>When the run unit ends successfully, EGL performs a commit, closes
+<li class="li">When the run unit ends successfully, EGL performs a commit, closes
 cursors, and releases locks.</li>
 
-<li>You can use multiple connections to read from multiple databases,
+<li class="li">You can use multiple connections to read from multiple databases,
 but do not update more than one database in a unit of work because
 only a one-phase commit is available. </li>
 
@@ -116,11 +116,11 @@ only a one-phase commit is available. </li>
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="compatibility__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d7167e137 ">JavaScript</td>
+<tr id="compatibility__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d8337e137 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d7167e140 ">Access of files, databases, and queues is only
-indirect, by way of services.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d8337e140 ">Access of files, databases, and queues is only
+indirect, by way of services.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

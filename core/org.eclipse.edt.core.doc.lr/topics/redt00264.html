@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,30 +16,30 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Dynamic types and access</title>
 </head>
-<body id="redt00264"><a name="redt00264"><!-- --></a>
+<body id="redt00264">
 
 
-<h1 class="topictitle1">Dynamic types and access</h1>
+<h1 class="title topictitle1">Dynamic types and access</h1>
 
 
-<div>
-<div class="p">A variable is of a <em>dynamic type</em> if the EGL runtime code
+<div class="body">
+<div class="p">A variable is of a <em class="ph i">dynamic type</em> if the EGL runtime code
 resolves access to the variable by name. In practice, you are performing
-dynamic access when you refer to any of the following fields:<ul>
-<li>A field in a variable of type Any.</li>
+dynamic access when you refer to any of the following fields:<ul class="ul">
+<li class="li">A field in a variable of type Any.</li>
 
-<li>A dictionary field, which is necessarily of type Any.</li>
+<li class="li">A dictionary field, which is necessarily of type Any.</li>
 
-<li>A field written in bracket syntax.</li>
+<li class="li">A field written in bracket syntax.</li>
 
 </ul>
 </div>
 
-<div class="p">Here are examples of the last case:<pre class="codeblock">myCustomer[""""customerName""""]
+<div class="p">Here are examples of the last case:<pre class="pre codeblock">myCustomer["customerName"]
 </pre>
 </div>
 
-<p>Access to expressions that use dot syntax (such as <samp class="codeph">myRecord.myField</samp>)
+<p class="p">Access to expressions that use dot syntax (such as <samp class="ph codeph">myRecord.myField</samp>)
 can be dynamic. The following rule dictates the behavior: If the leftmost
 part of a field-access expression (a series of names separated by
 dots) is a dynamic type, or another expression whose type is Any,
@@ -47,21 +47,21 @@ EGL uses dynamic access on any fields that follow. </p>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="example"><a name="example"><!-- --></a>
-<h2 class="topictitle2">Example</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="example">
+<h2 class="title topictitle2">Example</h2>
 
-<div>
-<div class="p">The following example shows various methods of dynamic access:<pre class="codeblock">// Define a Dictionary named point
+<div class="body">
+<div class="p">The following example shows various methods of dynamic access:<pre class="pre codeblock">// Define a Dictionary named point
 point Dictionary{x=1, y=1};
 
-// Access value at key """"x"""" of point
-anInt = point[""""x""""];
+// Access value at key "x" of point
+anInt = point["x"];
 
 // Access point using normal data access syntax
 anInt = point.x ;
 
-// Access X using variable with value """"x""""
-str String = """"x"""";
+// Access X using variable with value "x"
+str String = "x";
 anInt = point[ str ];
 </pre>
 </div>

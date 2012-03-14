@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,47 +19,47 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>DojoTextArea widget</title>
 </head>
-<body id="redt00151"><a name="redt00151"><!-- --></a>
+<body id="redt00151">
 
 
-<h1 class="topictitle1">DojoTextArea widget</h1>
+<h1 class="title topictitle1">DojoTextArea widget</h1>
 
 
 
-<div><p>The DojoTextField widget defines a text box containing
+<div class="body"><p class="shortdesc">The DojoTextField widget defines a text box containing
 one or more lines of text. This widget is based on the Dojo dijit.form.SimpleTextarea
 definition.</p>
 
-<div class="p">Here are supported fields: <dl>
-<dt class="dlterm">numRows</dt>
+<div class="p">Here are supported fields: <dl class="dl">
+<dt class="dt dlterm">numRows</dt>
 
-<dd>The number of rows in the text area.</dd>
-
-
-<dt class="dlterm">numColumns</dt>
-
-<dd>The number of columns in the text area.</dd>
+<dd class="dd">The number of rows in the text area.</dd>
 
 
-<dt class="dlterm">readOnly</dt>
+<dt class="dt dlterm">numColumns</dt>
 
-<dd>A Boolean value that indicates whether the text field is protected
+<dd class="dd">The number of columns in the text area.</dd>
+
+
+<dt class="dt dlterm">readOnly</dt>
+
+<dd class="dd">A Boolean value that indicates whether the text field is protected
 from user input.</dd>
 
 
-<dt class="dlterm">selectOnClick</dt>
+<dt class="dt dlterm">selectOnClick</dt>
 
-<dd>A Boolean value that indicates what happens when the user clicks
-from outside the text field into the field: <dl>
-<dt class="dlterm">False (the default)</dt>
+<dd class="dd">A Boolean value that indicates what happens when the user clicks
+from outside the text field into the field: <dl class="dl">
+<dt class="dt dlterm">False (the default)</dt>
 
-<dd>The content of the text field is not selected. The update cursor
+<dd class="dd">The content of the text field is not selected. The update cursor
 is displayed at the click position.</dd>
 
 
-<dt class="dlterm">True</dt>
+<dt class="dt dlterm">True</dt>
 
-<dd>The content of the text field is selected. Any subsequent click
+<dd class="dd">The content of the text field is selected. Any subsequent click
 displays the update cursor at the click position, and the content
 of the text field is no longer selected.</dd>
 
@@ -67,54 +67,54 @@ of the text field is no longer selected.</dd>
 </dd>
 
 
-<dt class="dlterm">text</dt>
+<dt class="dt dlterm">text</dt>
 
-<dd>The string content of the Dojo text field.</dd>
+<dd class="dd">The string content of the Dojo text field.</dd>
 
 
-<dt class="dlterm">textCase</dt>
+<dt class="dt dlterm">textCase</dt>
 
-<dd>A string constant that indicates what happens to the case of the
+<dd class="dd">A string constant that indicates what happens to the case of the
 input when the user finishes typing and navigates to another field.
-One of the following values:<dl>
-<dt class="dlterm">CASE_NONE (the default)</dt>
+One of the following values:<dl class="dl">
+<dt class="dt dlterm">CASE_NONE (the default)</dt>
 
-<dd>The user's string is left as is.</dd>
-
-
-<dt class="dlterm">UPPER_CASE</dt>
-
-<dd>The user's string is set to uppercase.</dd>
+<dd class="dd">The user's string is left as is.</dd>
 
 
-<dt class="dlterm">LOWER_CASE</dt>
+<dt class="dt dlterm">UPPER_CASE</dt>
 
-<dd>The user's string is set to lowercase.</dd>
+<dd class="dd">The user's string is set to uppercase.</dd>
 
 
-<dt class="dlterm">PROPER_CASE</dt>
+<dt class="dt dlterm">LOWER_CASE</dt>
 
-<dd>The first letter in each word is set to uppercase, as if the string
+<dd class="dd">The user's string is set to lowercase.</dd>
+
+
+<dt class="dt dlterm">PROPER_CASE</dt>
+
+<dd class="dd">The first letter in each word is set to uppercase, as if the string
 were a title.</dd>
 
 </dl>
 </dd>
 
 
-<dt class="dlterm">trim</dt>
+<dt class="dt dlterm">trim</dt>
 
-<dd>A Boolean value that indicates whether preceding and trailing
+<dd class="dd">A Boolean value that indicates whether preceding and trailing
 blanks are removed when the user finishes typing and navigates to
 another field.</dd>
 
 </dl>
 </div>
 
-<p>Other supported fields and functions are described in the following
+<p class="p">Other supported fields and functions are described in the following
 topics in the EGL Programmer’s Guide: “Rich UI widget fields” and
 ”Rich UI widget functions.”</p>
 
-<div class="p">Use of this widget requires the following statement:<pre class="codeblock">import dojo.widgets.DojoTextArea;</pre>
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import dojo.widgets.DojoTextArea;</pre>
 </div>
 
 </div>

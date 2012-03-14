@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Add statement for a relational database"></meta>
+<meta name="abstract" content="You can use the EGL add statement to add a row to a relational database table. The content can come from an external type, handler, or record; or from a set of simple values."></meta>
+<meta name="description" content="You can use the EGL add statement to add a row to a relational database table. The content can come from an external type, handler, or record; or from a set of simple values."></meta>
 <meta name="DC.subject" content="EGL statements, add, add EGL statement, relational database"></meta>
 <meta name="keywords" content="EGL statements, add, add EGL statement, relational database"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
@@ -17,14 +19,14 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Add statement for a relational database</title>
 </head>
-<body id="redt00021"><a name="redt00021"><!-- --></a>
+<body id="redt00021">
 
 
-<h1 class="topictitle1">Add statement for a relational database</h1>
+<h1 class="title topictitle1">Add statement for a relational database</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><div><span>You can use the EGL <span class="synph"><span class="kwd">add</span></span> statement
+<div class="body" id="body"><div class="abstract"><span class="shortdesc">You can use the EGL <span class="ph synph"><span class="keyword kwd">add</span></span> statement
 to add a row to a relational database table. The content can come
 from an external type, handler, or record; or from a set of simple
 values.</span>
@@ -32,68 +34,68 @@ values.</span>
 
 <anchor id="sql_intro_more"></anchor>
 
-<div class="section" id="redt00021__sql_syntax"><a name="redt00021__sql_syntax"><!-- --></a><h2 class="sectiontitle">Syntax</h2><div class="fignone" id="redt00021__sql_syntax_figure"><a name="redt00021__sql_syntax_figure"><!-- --></a>
-<br></br><img src="../images/redt_data_sql_add.gif" alt="Syntax diagram for the add statement with SQL"></img><br></br>
+<div class="section" id="redt00021__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00021__sql_syntax_figure">
+<br></br><img class="image" src="../images/redt_data_sql_add.gif" alt="Syntax diagram for the add statement with SQL"></img><br></br>
 </div>
-<dl>
-<dt class="dlterm"><var class="varname">addStatement</var></dt>
+<dl class="dl">
+<dt class="dt dlterm"><var class="keyword varname">addStatement</var></dt>
 
-<dd>A single SQL INSERT statement, which is not required to end with
-a semicolon but can. The format is as shown for <em>entity</em>. <p>You
-can use a prepared statement in place of #sql{<em>addStatement</em>}.</p>
+<dd class="dd">A single SQL INSERT statement, which is not required to end with
+a semicolon but can. The format is as shown for <em class="ph i">entity</em>. <p class="p">You
+can use a prepared statement in place of #sql{<em class="ph i">addStatement</em>}.</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">entity</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">entity</var></dt>
 
-<dd>Name of the entity, which is a variable based on an External type,
+<dd class="dd">Name of the entity, which is a variable based on an External type,
 Handler type, or Record type. The values in that entity are used in
 the corresponding SQL INSERT statement. If you do not specify the
-SQL statement, the following default is used: <pre class="codeblock">INSERT INTO <em>tableName</em> (<em>column_1</em>, <em>column_2</em>... <em>column_n</em>)
+SQL statement, the following default is used: <pre class="pre codeblock">INSERT INTO <em class="ph i">tableName</em> (<em class="ph i">column_1</em>, <em class="ph i">column_2</em>... <em class="ph i">column_n</em>)
        VALUES (?, ?, ?)       </pre>
-<p>The value of <em>tableName</em> is
-the value of the <strong>Table</strong> annotation that is set on the entity
+<p class="p">The value of <em class="ph i">tableName</em> is
+the value of the <strong class="ph b">Table</strong> annotation that is set on the entity
 type. If that annotation is missing from the type definition, the
-value of <em>tableName</em> is the type name.</p>
-<p>The order of the
+value of <em class="ph i">tableName</em> is the type name.</p>
+<p class="p">The order of the
 column fields in the statement reflects the order of the fields in
 the type definition. Each question mark in the VALUES clause is replaced
 with the corresponding value in the entity.</p>
-<p>A <em>column</em> entry
-such as <em>column_1</em> is a name; specifically, the value of the <strong>Column</strong> annotation
+<p class="p">A <em class="ph i">column</em> entry
+such as <em class="ph i">column_1</em> is a name; specifically, the value of the <strong class="ph b">Column</strong> annotation
 for a field in the type definition. If that annotation is missing
 from the field in the type definition, the name in the statement is
 the name of the field in the type definition.</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">simpleValue</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">simpleValue</var></dt>
 
-<dd>A value of an EGL simple type that is compatible with the corresponding
+<dd class="dd">A value of an EGL simple type that is compatible with the corresponding
 database column. The list of simple values is set into the values
-clause to match the list of column entries.<p>If you are adding simple
+clause to match the list of column entries.<p class="p">If you are adding simple
 values instead of an entity, you must specify an SQL INSERT statement.
-The statement format is as shown for <em>entity</em>.</p>
+The statement format is as shown for <em class="ph i">entity</em>.</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">SQLDataSource</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">SQLDataSource</var></dt>
 
-<dd>A variable of type <strong>SQLDataSource</strong>. The variable includes
+<dd class="dd">A variable of type <strong class="ph b">SQLDataSource</strong>. The variable includes
 connection details or references an EGL deployment descriptor entry
-that provides access to the connection details. <p>If you issue a
+that provides access to the connection details. <p class="p">If you issue a
 prepared statement, the variable is optional and is ignored if present.</p>
 </dd>
 
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00021__sql_example"><a name="redt00021__sql_example"><!-- --></a><pre class="codeblock">// you can use an entity such as record named myPayment
+<div class="example" id="redt00021__sql_example"><pre class="pre codeblock">// you can use an entity such as record named myPayment
 add myPayment to ds;
 
 // alternatively, you can use a set of simple values 
 // and specify the SQL INSERT statement.
-add 6, """"""""Services"""""""", 12.00, myPayment.due_date to ds with #sql{
+add 6, "Services", 12.00, myPayment.due_date to ds with #sql{
    insert into Payment
       (category, description, amount, due_date)
    values
@@ -102,32 +104,32 @@ add 6, """"""""Services"""""""", 12.00, myPayment.due_date to ds with #sql{
 </pre>
 <anchor id="sql_example_more"></anchor></div>
 
-<div class="section" id="redt00021__compat"><a name="redt00021__compat"><!-- --></a><h2 class="sectiontitle">Compatibility </h2>
-<div class="tablenoborder"><a name="redt00021__compat_table"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="redt00021__compat_table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="50%" id="d12806e164">Target</th>
+<div class="section" id="redt00021__compat"><h2 class="title sectiontitle">Compatibility </h2>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00021__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="50%" id="d15209e164">Target</th>
 
-<th class="cellrowborder" valign="bottom" width="50%" id="d12806e167">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d15209e167">Issue</th>
 
 </tr>
 
 </thead>
 
-<tbody>
+<tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
-<tr id="redt00021__compat_java">
-<td class="cellrowborder" valign="top" width="50%" headers="d12806e164 ">Java</td>
+<tr id="redt00021__compat_java" class="row">
+<td class="entry" valign="top" width="50%" headers="d15209e164 ">Java</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d12806e167 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d15209e167 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
-<tr id="redt00021__compat_javascript">
-<td class="cellrowborder" valign="top" width="50%" headers="d12806e164 ">JavaScript</td>
+<tr id="redt00021__compat_javascript" class="row">
+<td class="entry" valign="top" width="50%" headers="d15209e164 ">JavaScript</td>
 
-<td class="cellrowborder" valign="top" width="50%" headers="d12806e167 ">Database access is not supported in JavaScript.<p class="compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d15209e167 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
