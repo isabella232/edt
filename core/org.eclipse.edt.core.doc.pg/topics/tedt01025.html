@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,59 +19,59 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Sample Interface part that you can use to access a third-party REST service</title>
 </head>
-<body id="tedt01025"><a name="tedt01025"><!-- --></a>
+<body id="tedt01025">
 
 
-<h1 class="topictitle1">Using a provided Interface part for a 3rd-party REST service</h1>
+<h1 class="title topictitle1">Using a provided Interface part for a 3rd-party REST service</h1>
 
 
 
 
-<div><p>In EGL, you can use the following Interface part to access
+<div class="body"><p class="shortdesc">In EGL, you can use the following Interface part to access
 a third-party REST service:</p>
 
-<pre class="codeblock">interface IRest
+<pre class="pre codeblock">interface IRest
    function invokeGet(reqURL string in) returns(string)  
-      {@getRest {uriTemplate=""""""""{reqURL}""""""""}};
+      {@getRest {uriTemplate="{reqURL}"}};
    function invokePost(reqURL string in, representation string in) returns(string)
-      {@postRest {uriTemplate=""""""""{reqURL}""""""""}};
+      {@postRest {uriTemplate="{reqURL}"}};
    function invokePut(reqURL string in, representation string in) returns(string)
-      {@putRest {uriTemplate=""""""""{reqURL}""""""""}};
+      {@putRest {uriTemplate="{reqURL}"}};
    function invokeDelete(reqURL string in, representation string in) returns(string) 
-      {@deleteRest {uriTemplate=""""""""{reqURL}""""""""}};
+      {@deleteRest {uriTemplate="{reqURL}"}};
 end
 </pre>
 
-<p>By using this Interface part as is, you do not have to write one.
+<p class="p">By using this Interface part as is, you do not have to write one.
 However, you write the call statement with one or two arguments, and
 you construct the URI in any of the following ways:</p>
 
 
 
 
-<div class="p"><ul>
-<li>You might pass the whole URI, as shown here: <pre class="codeblock">myResource String = JSONLib.convertToJson(myRec);
-call IRest.invokePost(""""""""http://www.example.com"""""""", myResource)
+<div class="p"><ul class="ul">
+<li class="li">You might pass the whole URI, as shown here: <pre class="pre codeblock">myResource String = JSONLib.convertToJson(myRec);
+call IRest.invokePost("http://www.example.com", myResource)
     returning to myCallbackFunction
     onException myExceptionHandler;</pre>
 </li>
 
-<li>You might declare a binding variable and reference an EGL deployment
-descriptor entry that specifies the whole URI:<pre class="codeblock">myBindingVar IHTTP{@Resource {uri = """"""""binding:myEntry""""""""}};
+<li class="li">You might declare a binding variable and reference an EGL deployment
+descriptor entry that specifies the whole URI:<pre class="pre codeblock">myBindingVar IHTTP{@Resource {uri = "binding:myEntry"}};
 myResource String = JSONLib.convertToJSON(myRec);
-call IRest.invokePost("""""""""""""""", myResource) 
+call IRest.invokePost("", myResource) 
    using myBindingVar
    returning to myCallbackFunction
    onException myExceptionHandler;
 </pre>
 </li>
 
-<li>You might rely on the EGL deployment descriptor entry for the
-start of the URI such as """"""""http://www.example.com/"""""""" and include the
-rest of the URI in the <strong>call</strong> statement: <pre class="codeblock">myBindingVar IHTTP{@Resource {uri = """"""""binding:myEntry""""""""}};
+<li class="li">You might rely on the EGL deployment descriptor entry for the
+start of the URI such as "http://www.example.com/" and include the
+rest of the URI in the <strong class="ph b">call</strong> statement: <pre class="pre codeblock">myBindingVar IHTTP{@Resource {uri = "binding:myEntry"}};
 myResource String = JSONLib.convertToJSON(myRec);
-myCustomerNumber String = """"""""100"""""""";
-call IRest.invokePost(""""""""customer/"""""""" + myCustomerNumber, myResource) 
+myCustomerNumber String = "100";
+call IRest.invokePost("customer/" + myCustomerNumber, myResource) 
    using myBindingVar
    returning to myCallbackFunction
    onException myExceptionHandler;
@@ -85,25 +85,25 @@ call IRest.invokePost(""""""""customer/"""""""" + myCustomerNumber, myResource)
 <div class="p">When you invoke a service by using the POST, PUT, or DELETE methods,
 make sure that the representation (a string) is in the format that
 is required by the REST service. The following functions provide output
-in the required formats:<ul>
-<li>For JSON conversion: <span class="synph"><span class="kwd">JSONLib.convertToJSON</span></span></li>
+in the required formats:<ul class="ul">
+<li class="li">For JSON conversion: <span class="ph synph"><span class="keyword kwd">JSONLib.convertToJSON</span></span></li>
 
-<li>For XML conversion: <span class="synph"><span class="kwd">XMLLib.convertToXML</span></span></li>
+<li class="li">For XML conversion: <span class="ph synph"><span class="keyword kwd">XMLLib.convertToXML</span></span></li>
 
 </ul>
 </div>
 
 <div class="p">You might need a function prototype that has a different characteristic,
 such as a DELETE operation that does not require you to pass a representation.
-In that case, create a similar Interface part, but change the <tt>InvokeDelete</tt> function
+In that case, create a similar Interface part, but change the <tt class="ph tt">InvokeDelete</tt> function
 prototype or add a prototype with a different name. Here is a changed
-prototype:<pre class="codeblock">function invokeDelete(reqURL string in) returns(string) 
-   {@deleteRest {uriTemplate=""""""""{reqURL}""""""""}};</pre>
+prototype:<pre class="pre codeblock">function invokeDelete(reqURL string in) returns(string) 
+   {@deleteRest {uriTemplate="{reqURL}"}};</pre>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

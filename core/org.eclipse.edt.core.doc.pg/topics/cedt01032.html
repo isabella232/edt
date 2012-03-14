@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,55 +17,55 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service bindings</title>
 </head>
-<body id="cedt01032"><a name="cedt01032"><!-- --></a>
+<body id="cedt01032">
 
 
-<h1 class="topictitle1">Service bindings</h1>
+<h1 class="title topictitle1">Service bindings</h1>
 
 
-<div id="body"><a name="body"><!-- --></a><p>If the purpose of a resource binding is service
+<div class="body" id="body"><p class="shortdesc">If the purpose of a resource binding is service
 access, the definition is called a <dfn class="term">service binding</dfn>. The
 main detail is in one of three categories:</p>
 
-<div class="p"><ul>
-<li>If the service is deployed on an application server, you can specify
+<div class="p"><ul class="ul">
+<li class="li">If the service is deployed on an application server, you can specify
 a Universal Resource Identifier (URI) that begins with the http: or
-https: prefix. Here is an example:<ul class="simple">
-<li><samp class="codeph">http://myserver:8080/myproject/restservices/myservice</samp></li>
+https: prefix. Here is an example:<ul class="sl simple">
+<li class="sli"><samp class="ph codeph">http://myserver:8080/myproject/restservices/myservice</samp></li>
 
 </ul>
-<p>Although you can run the deployed service during an EGL debugging
+<p class="p">Although you can run the deployed service during an EGL debugging
 session, the EGL debugger does not step into the service.</p>
 </li>
 
-<li>If the service is available in your workspace and was written
+<li class="li">If the service is available in your workspace and was written
 in EGL, you can use a <dfn class="term">workspace URI</dfn> , which is an identifier
-that points to a workspace location. Here is an example:<ul class="simple">
-<li><samp class="codeph">workspace://mySourceProject/servicepackage.myservice</samp></li>
+that points to a workspace location. Here is an example:<ul class="sl simple">
+<li class="sli"><samp class="ph codeph">workspace://mySourceProject/servicepackage.myservice</samp></li>
 
 </ul>
-<p>A workspace URI is useful only at development time, and an
+<p class="p">A workspace URI is useful only at development time, and an
 internal Test Server enables you to debug the code. The Test Server
-is described here: <a href="cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
-<div class="p"><div class="note"><span class="notetitle">Note:</span> In
+is described here: <a class="xref" href="cedt01031.html" title="EGL uses a test server to invoke services from the service logic in your workspace rather than from a deployment site. The server is based on Jetty technology, which is described here:">EGL test server</a>.</p>
+<div class="p"><div class="note note"><span class="notetitle">Note:</span> In
 this case, your task in the EGL Deployment Descriptor editor is twofold:
 to update the Service Deployment tab as well as the Resource Bindings
 tab. You must arrange for service deployment.</div>
 </div>
 </li>
 
-<li>If a Rich UI application includes a Service type that will be
+<li class="li">If a Rich UI application includes a Service type that will be
 deployed as a dedicated service, an Internal Test Server enables you
 to debug the code. <div class="p">In this case, the EGL deployment descriptor
-is never used. You declare a binding variable of type <samp class="codeph">HttpProxy</samp> and
-issue a <strong>call</strong> statement, as shown here:<pre class="codeblock">myBindingVar HttpProxy;
+is never used. You declare a binding variable of type <samp class="ph codeph">HttpProxy</samp> and
+issue a <strong class="ph b">call</strong> statement, as shown here:<pre class="pre codeblock">myBindingVar HttpProxy;
 call MyInterface.myOperation() using myBindingVar
                                returning to myCallBackFunction
                                onException myExceptionHandler;</pre>
 </div>
 <div class="p">Here
 is alternative code that has the same effect, but declares a binding-variable
-value in the <strong>call</strong> statement itself: <pre class="codeblock">call MyInterface.myOperation() using new HttpProxy
+value in the <strong class="ph b">call</strong> statement itself: <pre class="pre codeblock">call MyInterface.myOperation() using new HttpProxy
                                returning to myCallBackFunction
                                onException myExceptionHandler;</pre>
 </div>
@@ -74,59 +74,59 @@ value in the <strong>call</strong> statement itself: <pre class="codeblock">call
 </ul>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Defining a service binding in the EGL deployment descriptor</h2><p>At
+<div class="section"><h2 class="title sectiontitle">Defining a service binding in the EGL deployment descriptor</h2><p class="p">At
 this writing, you can bind to a REST or EGL REST-RPC service. The
-distinctions among the service types are explained here: <a href="http://www.eclipse.org/edt/papers/topics/egl_soa_overview.html " target="_blank">Service-oriented architecture (SOA) for EGL developers
+distinctions among the service types are explained here: <a class="xref" href="http://www.eclipse.org/edt/papers/topics/egl_soa_overview.html " target="_blank">Service-oriented architecture (SOA) for EGL developers
 (http://www.eclipse.org/edt/papers/topics/egl_soa_overview.html)</a>.</p>
-<p>For
+<p class="p">For
 details on defining a service binding in the EGL deployment descriptor,
-see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00539.html" title="A REST service binding gives details necessary to access a REST or EGL REST-RPC service.">Adding a REST binding to the EGL deployment descriptor</a>.</p>
-<p>If
+see <a class="xref" href="../../org.eclipse.edt.ide.doc/topics/tedt00539.html" title="A REST service binding gives details necessary to access a REST or EGL REST-RPC service.">Adding a REST binding to the EGL deployment descriptor</a>.</p>
+<p class="p">If
 you are defining a workspace binding, you must also deploy the Service
-type. For details, see <a href="../../org.eclipse.edt.ide.doc/topics/tedt00536.html" title="You can update the EGL deployment descriptor with details that are needed to deploy SOAP and EGL REST-RPC services.">Adding web-service deployment details to the EGL deployment descriptor</a>.</p>
+type. For details, see <a class="xref" href="../../org.eclipse.edt.ide.doc/topics/tedt00536.html" title="You can update the EGL deployment descriptor with details that are needed to deploy SOAP and EGL REST-RPC services.">Adding web-service deployment details to the EGL deployment descriptor</a>.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Retrieving a service binding and changing it in your
+<div class="section"><h2 class="title sectiontitle">Retrieving a service binding and changing it in your
 code</h2><div class="p">Here is an example of preparing a binding variable
-and then using it to access a third-party REST service:<pre class="codeblock">myBindingVar HttpRest{@Resource{uri=""""""""binding:myEntry""""""""}};        
+and then using it to access a third-party REST service:<pre class="pre codeblock">myBindingVar HttpRest{@Resource{uri="binding:myEntry"}};        
 myBindingVar.request.encoding = encoding.json;
 myBindingVar.request.headers = new dictionary;
-myBindingVar.request.headers[""""""""edt.proxy.invocation.timeout""""""""] = 6;
+myBindingVar.request.headers["edt.proxy.invocation.timeout"] = 6;
 call MyInterfaceType.myFunction() 
    using myBindingVar
    returning to myCallBackFunction
    onException myExceptionHandler;
 </pre>
 </div>
-<div class="p">The code acts as follows: <ol>
-<li>Declares a binding variable that refers to the <strong>myEntry</strong> entry
+<div class="p">The code acts as follows: <ol class="ol">
+<li class="li">Declares a binding variable that refers to the <strong class="ph b">myEntry</strong> entry
 in the deployment descriptor that is used by default. In this way,
-the code is accessing a new instance of an HttpRest object.<p>For
-details on the HttpRest object, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
+the code is accessing a new instance of an HttpRest object.<p class="p">For
+details on the HttpRest object, see <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
 </li>
 
-<li>Adds detail to the binding variable, in this example, the detail
-has the following purpose: <ul>
-<li>To ensure that data is transferred to and from the service in
+<li class="li">Adds detail to the binding variable, in this example, the detail
+has the following purpose: <ul class="ul">
+<li class="li">To ensure that data is transferred to and from the service in
 JSON format; and</li>
 
-<li>To establish a timeout value of 6 seconds.</li>
+<li class="li">To establish a timeout value of 6 seconds.</li>
 
 </ul>
 </li>
 
-<li>Includes the binding variable in the <strong>call</strong> statement <strong>using</strong> clause.</li>
+<li class="li">Includes the binding variable in the <strong class="ph b">call</strong> statement <strong class="ph b">using</strong> clause.</li>
 
 </ol>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Creating a service binding in your code</h2><div class="p">You
+<div class="section"><h2 class="title sectiontitle">Creating a service binding in your code</h2><div class="p">You
 can create a service binding in your code, in which case the EGL deployment
 descriptor is not involved. For example, you might declare the binding
-variable as shown in the next example: <pre class="codeblock">myBindingVar HttpRest = new HttpRest{
+variable as shown in the next example: <pre class="pre codeblock">myBindingVar HttpRest = new HttpRest{
    restType = eglx.rest.ServiceType.TrueRest, 
-   uri = """"""""www.example.com/myproject/restservices/weather_service""""""""};
+   uri = "www.example.com/myproject/restservices/weather_service"};
 myBindingVar.request.encoding = Encoding.json;
 call MyInterfaceType.myFunction() 
    using myBindingVar
@@ -134,12 +134,12 @@ call MyInterfaceType.myFunction()
    onException myExceptionHandler;
 </pre>
 </div>
-<p>For details on the HttpRest object, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
+<p class="p">For details on the HttpRest object, see <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00245.html" title="eglx.http defines an API for accessing details in HTTP messages. ">eglx.http package</a>.</p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

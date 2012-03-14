@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,74 +19,74 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Themes used with EGL Dojo widgets</title>
 </head>
-<body id="cedt01017"><a name="cedt01017"><!-- --></a>
+<body id="cedt01017">
 
 
-<h1 class="topictitle1">Themes used with EGL Dojo widgets</h1>
+<h1 class="title topictitle1">Themes used with EGL Dojo widgets</h1>
 
 
 
-<div><p>Themes provide a consistent appearance for all the Dojo
+<div class="body"><p class="shortdesc">Themes provide a consistent appearance for all the Dojo
 widgets in your Rich UI application.</p>
 
-<p>You can specify either the Claro or Tundra theme. The default value
+<p class="p">You can specify either the Claro or Tundra theme. The default value
 is Claro. If you are coding an application that includes Dojo widgets,
 the Nihilo and Soria themes are also available, but that specification
 affects only the Dojo widgets. If a widget has no theme, the style
 is specific to the widget.</p>
 
-<div class="p">The following examples show each theme. <dl>
-<dt class="dlterm">Claro</dt>
+<div class="p">The following examples show each theme. <dl class="dl">
+<dt class="dt dlterm">Claro</dt>
 
-<dd><br></br><img src="../images/regl_ui_richui_theme_claro.gif" alt="Example of the Claro theme"></img><br></br></dd>
-
-
-<dt class="dlterm">Nihilo</dt>
-
-<dd><br></br><img src="../images/regl_ui_richui_theme_nihilo.gif" alt="Example of the Nihilo theme"></img><br></br></dd>
+<dd class="dd"><br></br><img class="image" src="../images/regl_ui_richui_theme_claro.gif" alt="Example of the Claro theme"></img><br></br></dd>
 
 
-<dt class="dlterm">Soria</dt>
+<dt class="dt dlterm">Nihilo</dt>
 
-<dd><br></br><img src="../images/regl_ui_richui_theme_soria.gif" alt="Example of the Soria theme"></img><br></br></dd>
+<dd class="dd"><br></br><img class="image" src="../images/regl_ui_richui_theme_nihilo.gif" alt="Example of the Nihilo theme"></img><br></br></dd>
 
 
-<dt class="dlterm">Tundra</dt>
+<dt class="dt dlterm">Soria</dt>
 
-<dd><br></br><img src="../images/regl_ui_richui_theme_tundra.gif" alt="Example of the Tundra theme"></img><br></br></dd>
+<dd class="dd"><br></br><img class="image" src="../images/regl_ui_richui_theme_soria.gif" alt="Example of the Soria theme"></img><br></br></dd>
+
+
+<dt class="dt dlterm">Tundra</dt>
+
+<dd class="dd"><br></br><img class="image" src="../images/regl_ui_richui_theme_tundra.gif" alt="Example of the Tundra theme"></img><br></br></dd>
 
 </dl>
 </div>
 
-<div class="section" id="cedt01017__themeImports"><a name="cedt01017__themeImports"><!-- --></a><h2 class="sectiontitle">Defining the theme</h2><p>To
-set a theme, code the <span class="synph"><span class="kwd">theme</span></span> field of the
+<div class="section" id="cedt01017__themeImports"><h2 class="title sectiontitle">Defining the theme</h2><p class="p">To
+set a theme, code the <span class="ph synph"><span class="keyword kwd">theme</span></span> field of the
 topmost Rich UI Handler part. This field defines the theme for the
 entire application.</p>
-<div class="p">These functions are also related to themes:<ul>
-<li><span class="synph"><span class="kwd">ruiLib.setTheme()</span></span></li>
+<div class="p">These functions are also related to themes:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">ruiLib.setTheme()</span></span></li>
 
-<li><span class="synph"><span class="kwd">ruiLib.getTheme()</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">ruiLib.getTheme()</span></span></li>
 
 </ul>
 </div>
 <div class="p">To use a theme, you must code statements that import the
 necessary CSS files into your CSS file. You can import multiple themes
-in this way.<ul>
-<li>For Rich UI widgets:<div class="p">Code the appropriate import in the <span class="filepath">com.ibm.eg.rui_2.0.0.css</span> file,
-which is in <span class="filepath">com.ibm.egl.rui_2.0.0/WebContent/css</span> directory.<pre class="codeblock">@import url(""""""""<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css"""""""");</pre>
-Where <span class="synph"><span class="var">theme_name</span></span> is
+in this way.<ul class="ul">
+<li class="li">For Rich UI widgets:<div class="p">Code the appropriate import in the <span class="ph filepath">com.ibm.eg.rui_2.0.0.css</span> file,
+which is in <span class="ph filepath">com.ibm.egl.rui_2.0.0/WebContent/css</span> directory.<pre class="pre codeblock">@import url("<span class="ph synph"><span class="ph var">theme_name</span></span>/<span class="ph synph"><span class="ph var">theme_name</span></span>.css");</pre>
+Where <span class="ph synph"><span class="ph var">theme_name</span></span> is
 the name of the desired theme. For example, if using the Claro theme,
-the statement would look like the following:<pre class="codeblock">@import url(""""""""claro/claro.css"""""""");</pre>
+the statement would look like the following:<pre class="pre codeblock">@import url("claro/claro.css");</pre>
 </div>
 </li>
 
-<li>For Dojo widgets:<div class="p">Code the appropriate set of two link statements
-in the <span class="filepath">includeDojo.html</span> file, which is in <span class="filepath">com.ibm.eg.rui.dojo.runtime.<var class="varname">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;runtime&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</var>_1.5/WebContent/config</span>. <pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dijit/themes/<span class="synph"><span class="var">theme_name</span></span>/<span class="synph"><span class="var">theme_name</span></span>.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dojox/grid/resources/<span class="synph"><span class="var">theme_name</span></span>Grid.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOGridTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
-Where <span class="synph"><span class="var">theme_name</span></span> is
+<li class="li">For Dojo widgets:<div class="p">Code the appropriate set of two link statements
+in the <span class="ph filepath">includeDojo.html</span> file, which is in <span class="ph filepath">com.ibm.eg.rui.dojo.runtime.<var class="keyword varname">&lt;runtime&gt;</var>_1.5/WebContent/config</span>. <pre class="pre codeblock">&lt;link href="dijit/themes/<span class="ph synph"><span class="ph var">theme_name</span></span>/<span class="ph synph"><span class="ph var">theme_name</span></span>.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOTheme_CSS" /&gt;
+&lt;link href="dojox/grid/resources/<span class="ph synph"><span class="ph var">theme_name</span></span>Grid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" /&gt;</pre>
+Where <span class="ph synph"><span class="ph var">theme_name</span></span> is
 the name of the desired theme. For example, if using the Claro theme,
-code the following statements:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dijit/themes/claro/claro.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
-&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;link href=""""""""dojox/grid/resources/claroGrid.css"""""""" type=""""""""text/css"""""""" rel=""""""""stylesheet"""""""" media=""""""""screen"""""""" id=""""""""EGLDOJOGridTheme_CSS"""""""" /&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
+code the following statements:<pre class="pre codeblock">&lt;link href="dijit/themes/claro/claro.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOTheme_CSS" /&gt;
+&lt;link href="dojox/grid/resources/claroGrid.css" type="text/css" rel="stylesheet" media="screen" id="EGLDOJOGridTheme_CSS" /&gt;</pre>
 </div>
 </li>
 
@@ -96,7 +96,7 @@ code the following statements:<pre class="codeblock">&lt;&lt;&lt;&lt;&lt;&lt;&lt
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

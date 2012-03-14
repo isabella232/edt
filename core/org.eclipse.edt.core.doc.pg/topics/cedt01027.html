@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,54 +17,54 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Non-Infobus communication between Rich UI handlers</title>
 </head>
-<body id="cedt01027"><a name="cedt01027"><!-- --></a>
+<body id="cedt01027">
 
 
-<h1 class="topictitle1">Non-Infobus communication between Rich UI handlers</h1>
+<h1 class="title topictitle1">Non-Infobus communication between Rich UI handlers</h1>
 
 
-<div>
-<p>One way to organize your application is to separate the user interaction,
+<div class="body">
+<p class="p">One way to organize your application is to separate the user interaction,
 as expressed in one Rich UI handler, from the back-end processing
 of business data, as expressed in a second Rich UI handler. This section
 outlines some mechanisms—aside from the Infobus—by which one handler
 can communicate with another.</p>
 
-<div class="section"><h2 class="sectiontitle">Pushing data from the embedding handler</h2><div class="p">In
+<div class="section"><h2 class="title sectiontitle">Pushing data from the embedding handler</h2><div class="p">In
 the simplest case, the embedding handler can invoke a function in
-the embedded handler:<pre class="codeblock">Handler EmbeddingHandler type RUIHandler 
+the embedded handler:<pre class="pre codeblock">Handler EmbeddingHandler type RUIHandler 
    { onConstructionFunction = onConstructionFunction }
 
    embeddedHandler EmbeddedHandler;
    
    function onConstructionFunction()
-      myString STRING = """"""""Received from somewhere"""""""";
+      myString STRING = "Received from somewhere";
       embeddedHandler.function01(myString);
    end
 end </pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Using delegates</h2><p>Another possibility is to
+<div class="section"><h2 class="title sectiontitle">Using delegates</h2><p class="p">Another possibility is to
 cause the embedded handler to invoke a function in the embedding one.
 In this case, the embedding handler updates the value assigned to
-a <em>delegate</em> in the embedded handler. A delegate is a variable
-that references a function of a specific <em>type</em>; that is, the
+a <em class="ph i">delegate</em> in the embedded handler. A delegate is a variable
+that references a function of a specific <em class="ph i">type</em>; that is, the
 variable provides access to a function that has a specific set of
 characteristics.</p>
 <div class="p">An example can help you to see the relationships.
 Consider the following EGL Delegate part, which defines a function
-that has no parameters or return value:<pre class="codeblock">delegate switchPart() end</pre>
+that has no parameters or return value:<pre class="pre codeblock">delegate switchPart() end</pre>
 </div>
-<p>The
+<p class="p">The
 next example shows how to toggle between two web pages. Here is the
 embedded handler, Page2, which declares the delegate named switch:</p>
-<div class="p"><pre class="codeblock">handler Page2 type RUIHandler { onConstructionFunction = myFirstFunction, 
+<div class="p"><pre class="pre codeblock">handler Page2 type RUIHandler { onConstructionFunction = myFirstFunction, 
                                 initialUI = [content] }
 	
 	content Box{children = [secondLabel, button], columns = 1};
-	secondLabel TextLabel{text = """"""""page2!""""""""};
-	button Button{text=""""""""switch back to first page"""""""", onClick ::= switchToFirst};
+	secondLabel TextLabel{text = "page2!"};
+	button Button{text="switch back to first page", onClick ::= switchToFirst};
 	
 	//declaration of a delegate
 	switch switchPart{};
@@ -77,15 +77,15 @@ embedded handler, Page2, which declares the delegate named switch:</p>
 	end	
 end</pre>
 </div>
-<p>The question is, what logic runs when switch()
+<p class="p">The question is, what logic runs when switch()
 is invoked inside the switchToFirst? The answer is in the embedding
 handler, Page1, which assigns its own function to the delegate:</p>
-<div class="p"><pre class="codeblock">handler Page1 type RUIHandler 
+<div class="p"><pre class="pre codeblock">handler Page1 type RUIHandler 
   { onConstructionFunction = myFirstFunction, initialUI = [page] }
 	
 	 page Box{ columns = 1, children = [firstLabel, button]};
-	 firstLabel TextLabel{text = """"""""page1!""""""""};
-	 button Button{text = """"""""switch to page 2"""""""", onClick ::= switchTo2};	
+	 firstLabel TextLabel{text = "page1!"};
+	 button Button{text = "switch to page 2", onClick ::= switchTo2};	
 	
 	 page2 Page2{};	
 		
@@ -104,7 +104,7 @@ end</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Using delegates to navigate to any of several pages</h2><p>An
+<div class="section"><h2 class="title sectiontitle">Using delegates to navigate to any of several pages</h2><p class="p">An
 extension of the previous example is to define a page handler (we
 call it MainHandler) that controls the user's subsequent navigation
 to any of several web pages. Again, we are creating a page-by-page
@@ -112,97 +112,97 @@ flow of events, as is the traditional approach to web applications.
 You can start with an approach like this, keeping in mind that Rich
 UI lets you update parts of a web page in response to a runtime event.</p>
 <div class="p">In
-this example, the Delegate part takes a string and has no return value:<pre class="codeblock">delegate SwitchToPagePart( TargetPage STRING in) end</pre>
+this example, the Delegate part takes a string and has no return value:<pre class="pre codeblock">delegate SwitchToPagePart( TargetPage STRING in) end</pre>
 </div>
-<p>Three
+<p class="p">Three
 Rich UI handlers are involved here. Here is the output of the first,
-ButtonHandler, which shows the available options:<br></br><img src="../images/redt_ui_richui_communication_button.jpg" alt="Output of ButtonHandler"></img><br></br></p>
-<div class="p">In reviewing the code, note that <samp class="codeph">switchFunction</samp> is
+ButtonHandler, which shows the available options:<br></br><img class="image" src="../images/redt_ui_richui_communication_button.jpg" alt="Output of ButtonHandler"></img><br></br></p>
+<div class="p">In reviewing the code, note that <samp class="ph codeph">switchFunction</samp> is
 a delegate and that its invocations refer to logic that resides in
-MainHandler, which is shown later:<pre class="codeblock">handler ButtonHandler type RUIHandler{initialUI = [button1, button2, button3]}
+MainHandler, which is shown later:<pre class="pre codeblock">handler ButtonHandler type RUIHandler{initialUI = [button1, button2, button3]}
    switchFunction SwitchToPagePart;
-   button1 Button{text = """"""""Go To Main Page"""""""", onClick::= toMain};
-   button2 Button {text = """"""""Stay Here""""""""};
-   button3 Button{text = """"""""Go to TextField"""""""", oncLick::=toText};
+   button1 Button{text = "Go To Main Page", onClick::= toMain};
+   button2 Button {text = "Stay Here"};
+   button3 Button{text = "Go to TextField", oncLick::=toText};
    
    function toMain(e Event in)
-		   switchFunction(""""""""MainHandler"""""""");
+		   switchFunction("MainHandler");
    end
 
    function toText(e Event in)
-		   switchFunction(""""""""TextFieldHandler"""""""");
+		   switchFunction("TextFieldHandler");
    end
 end</pre>
 </div>
-<p>Here is the output of the second handler, TextFieldHandler:<br></br><img src="../images/redt_ui_richui_communication_textfield.jpg" alt="Output of TextFieldHandler"></img><br></br></p>
+<p class="p">Here is the output of the second handler, TextFieldHandler:<br></br><img class="image" src="../images/redt_ui_richui_communication_textfield.jpg" alt="Output of TextFieldHandler"></img><br></br></p>
 <div class="p">In
 reviewing the code, note that this Rich UI handler also declares a
 delegate that is based on SwitchToPagePart and that the user can specify
 the web page to present next, even though this handler is not aware
-of what web pages are available:<pre class="codeblock">handler TextFieldHandler type RUIHandler
+of what web pages are available:<pre class="pre codeblock">handler TextFieldHandler type RUIHandler
    {initialUI = [instructions, Field1, myButton]}
 
    // a delegate
    switchFunction SwitchToPagePart;
-   instructions TextLabel {text = """"""""Type a page name and click the button.""""""""}; 
+   instructions TextLabel {text = "Type a page name and click the button."}; 
    Field1 Textfield{width = 200};
-   myButton Button{text = """"""""Go to the specified page"""""""", onClick ::= handleEvent};
+   myButton Button{text = "Go to the specified page", onClick ::= handleEvent};
 
    function handleEvent(e Event in)
       switchFunction(Field1.text);
    end
 end</pre>
 </div>
-<div class="p">Last, MainHandler simply displays the text """"""""Click
-to see your options,"""""""" but could display a splash screen. Here is the
-code, including logic that displays content stored in other handlers: <pre class="codeblock">handler MainHandler type RUIHandler{initialUI = [mainBox]}
+<div class="p">Last, MainHandler simply displays the text "Click
+to see your options," but could display a splash screen. Here is the
+code, including logic that displays content stored in other handlers: <pre class="pre codeblock">handler MainHandler type RUIHandler{initialUI = [mainBox]}
 
    mainBox Box{columns = 1, children = [mainLabel]};
    mainLabel TextLabel{
-      text = """"""""Click to see your options."""""""", 
+      text = "Click to see your options.", 
       onClick::= mainEvent};
    buttonHandler ButtonHandler{switchFunction = switchTo};
    textFieldHandler TextFieldHandler{switchFunction = switchTo};
 	
    function switchTo(target string in)
       case (strlib.upperCase(target))
-         when (""""""""TEXTFIELDHANDLER"""""""")
+         when ("TEXTFIELDHANDLER")
             mainBox.children = [textFieldHandler.instructions,
                                 textFieldHandler.Field1, 
                                 textFieldHandler.myButton];
-         when (""""""""BUTTONHANDLER"""""""")
+         when ("BUTTONHANDLER")
             mainBox.children = [buttonHandler.button1, 
                                 buttonHandler.button2, 
                                 buttonHandler.button3];
-         when (""""""""MAINHANDLER"""""""")
+         when ("MAINHANDLER")
             mainBox.children = [mainLabel];
       end
    end
 
    function mainEvent (e Event in)
-      switchTo(""""""""ButtonHandler"""""""");
+      switchTo("ButtonHandler");
    end
 end</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Notifying the embedding handler after a service call</h2><p>The
+<div class="section"><h2 class="title sectiontitle">Notifying the embedding handler after a service call</h2><p class="p">The
 embedded handler may have no widgets at all, but may call a service.
-As noted in <em>Accessing a Service in Rich UI</em>, service invocation
-in Rich UI is always <em>asynchronous</em>, which means that the requester—the
+As noted in <em class="ph i">Accessing a Service in Rich UI</em>, service invocation
+in Rich UI is always <em class="ph i">asynchronous</em>, which means that the requester—the
 Rich UI handler—continues running without waiting for a response from
 the service. The user can still interact with the user interface while
 the Rich UI handler waits for the service to respond. After the invocation,
 the service does some task and (in most cases) responds to the requester
 by invoking a function that you code in the Rich UI handler. That
-function is called a <em>callback function</em>.</p>
+function is called a <em class="ph i">callback function</em>.</p>
 <div class="p">From within the
 callback function, the embedded handler might notify the embedding
 handler. Consider the following EGL Delegate part, which defines a
-function that has no parameters or return value:<pre class="codeblock">delegate notifyPart() end</pre>
+function that has no parameters or return value:<pre class="pre codeblock">delegate notifyPart() end</pre>
 </div>
 <div class="p">Here's
-an outline of an embedded handler:<pre class="codeblock">handler MyModel type RUIHandler { onConstructionFunction = myFirstFunction }
+an outline of an embedded handler:<pre class="pre codeblock">handler MyModel type RUIHandler { onConstructionFunction = myFirstFunction }
    //declaration of a delegate
    notify notifyPart{};
 
@@ -216,7 +216,7 @@ an outline of an embedded handler:<pre class="codeblock">handler MyModel type RU
 end</pre>
 </div>
 <div class="p">As before, the embedding handler assigns its
-own function to the delegate:<pre class="codeblock">handler MyHandler type RUIHandler { onConstructionFunction = myFirstFunction }
+own function to the delegate:<pre class="pre codeblock">handler MyHandler type RUIHandler { onConstructionFunction = myFirstFunction }
 
    theModel MyModel;
 
@@ -233,7 +233,7 @@ end</pre>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

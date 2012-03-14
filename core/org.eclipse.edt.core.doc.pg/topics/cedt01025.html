@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,74 +17,74 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI memory management for Microsoft Internet Explorer</title>
 </head>
-<body id="cedt01025"><a name="cedt01025"><!-- --></a>
+<body id="cedt01025">
 
 
-<h1 class="topictitle1">Rich UI memory management for Microsoft Internet Explorer</h1>
+<h1 class="title topictitle1">Rich UI memory management for Microsoft Internet Explorer</h1>
 
 
-<div><p>Two memory-management functions are available for avoiding
+<div class="body"><p class="shortdesc">Two memory-management functions are available for avoiding
 memory leaks, which are possible if your users are accessing a Rich
-UI application by way of Microsoft Internet
+UI application by way of Microsoft™ Internet
 Explorer version 8 or less. The leaks slow your application and can
 cause the browser to crash.</p>
 
-<p>The issue arises primarily if you declare a widget or embedded
+<p class="p">The issue arises primarily if you declare a widget or embedded
 handler within a function. These in-function declarations allocate
 memory at run time, but even after the function ends, Internet Explorer
 returns the memory to the operating system only after the user has
 closed the browser tab.</p>
 
-<p>Each of the memory-management functions requests that Internet
+<p class="p">Each of the memory-management functions requests that Internet
 Explorer return memory. Internet Explorer typically fulfills the request
 after a delay, but while the application is still running.</p>
 
-<p>The functions are as follows:</p>
+<p class="p">The functions are as follows:</p>
 
-<ul>
-<li><span class="synph"><span class="kwd">UtilLib.destroyWidget (myWidget Widget in)</span></span> requests
+<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">UtilLib.destroyWidget (myWidget Widget in)</span></span> requests
 removal of the specified widget.</li>
 
-<li><span class="synph"><span class="kwd">UtilLib.destroyWidgetChildren (myWidget Widget in) </span></span> requests
+<li class="li"><span class="ph synph"><span class="keyword kwd">UtilLib.destroyWidgetChildren (myWidget Widget in) </span></span> requests
 removal of the children of the specified widget</li>
 
 </ul>
 
-<p>Neither function returns a value.</p>
+<p class="p">Neither function returns a value.</p>
 
 <div class="p">If you are affected by the issue just described, consider these
-coding conventions:<ul>
-<li>Use the memory-management functions to return allocated memory
+coding conventions:<ul class="ul">
+<li class="li">Use the memory-management functions to return allocated memory
 that is no longer needed.</li>
 
-<li>In a function, use anonymous declarations only if you have access
+<li class="li">In a function, use anonymous declarations only if you have access
 to the <dfn class="term">named container</dfn>, which is the named widget that
 embeds the anonymous declaration. <div class="p">For example, consider a tooltip,
 which is a box that is displayed when the user hovers over an area
 on the page. A <dfn class="term">tooltip provider</dfn> is a function that returns
 the box to be displayed, and the code for that function might be as
-follows: <pre class="codeblock">Function myProvider (widget any in) returns(Box) 
-   return (new Box {children = [new Button{text = """"""""Memory leak""""""""}]});
+follows: <pre class="pre codeblock">Function myProvider (widget any in) returns(Box) 
+   return (new Box {children = [new Button{text = "Memory leak"}]});
 end</pre>
 </div>
-<p>In this example, the tooltip provider creates
+<p class="p">In this example, the tooltip provider creates
 a box that cannot be referenced from outside the function, and the
 box itself includes an anonymous widget. The inability to reference
 the box means that you cannot pass the box or its anonymous child
 to a memory-management function.</p>
 <div class="p">To avoid the problem in this
-example, declare the box outside the tooltip provider:<pre class="codeblock">myBox Box{};
+example, declare the box outside the tooltip provider:<pre class="pre codeblock">myBox Box{};
 Function myProvider (widget any in) returns(Box) 
-   myBox.children = [ new Button{text = """"""""Problem solved""""""""} ];       
+   myBox.children = [ new Button{text = "Problem solved"} ];       
    return(myBox);
 end</pre>
 </div>
-<div class="p">Elsewhere in your application, you can now pass <samp class="codeph">myBox</samp> to
-a memory-management function, as in the following example:<pre class="codeblock">UtilLib.destroyWidgetChildren(myBox);</pre>
+<div class="p">Elsewhere in your application, you can now pass <samp class="ph codeph">myBox</samp> to
+a memory-management function, as in the following example:<pre class="pre codeblock">UtilLib.destroyWidgetChildren(myBox);</pre>
 </div>
 </li>
 
-<li>After you use the <span class="synph"><span class="kwd">removeChild</span></span> or <span class="synph"><span class="kwd">removeChildren</span></span> function
+<li class="li">After you use the <span class="ph synph"><span class="keyword kwd">removeChild</span></span> or <span class="ph synph"><span class="keyword kwd">removeChildren</span></span> function
 to remove widgets from the DOM tree, remove the memory that was allocated
 for those widgets. For details on those functions, see “Widget properties
 and functions.”</li>
@@ -94,7 +94,7 @@ and functions.”</li>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

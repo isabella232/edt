@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,92 +19,92 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service-location details for web service deployment</title>
 </head>
-<body id="cedt01007"><a name="cedt01007"><!-- --></a>
+<body id="cedt01007">
 
 
-<h1 class="topictitle1">Service-location details for web service deployment</h1>
+<h1 class="title topictitle1">Service-location details for web service deployment</h1>
 
 
 
-<div><p>Before you deploy a web service, make sure that you know
+<div class="body"><p class="shortdesc">Before you deploy a web service, make sure that you know
 the details of the deployment.</p>
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>
-<div class="nested1" xml:lang="en-us" id="java_ee_servers"><a name="java_ee_servers"><!-- --></a>
-<h2 class="topictitle2">For application servers that are compliant with Java EE</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="java_ee_servers">
+<h2 class="title topictitle2">For application servers that are compliant with Java EE</h2>
 
-<div>
-<div class="p">For an application server that is compliant with Java EE, the web service is deployed to a web
-archive (WAR) file, and this URI pattern is used:<pre class="codeblock">http://<var class="varname">domain:portNumber</var>/<var class="varname">contextRoot</var>/<var class="varname">serviceConstant</var>/<var class="varname">serviceName</var></pre>
-<dl>
+<div class="body">
+<div class="p">For an application server that is compliant with Java™ EE, the web service is deployed to a web
+archive (WAR) file, and this URI pattern is used:<pre class="pre codeblock">http://<var class="keyword varname">domain:portNumber</var>/<var class="keyword varname">contextRoot</var>/<var class="keyword varname">serviceConstant</var>/<var class="keyword varname">serviceName</var></pre>
+<dl class="dl">
 
-<dt class="dlterm"><var class="varname">domain</var><var class="varname">:portNumber</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">domain</var><var class="keyword varname">:portNumber</var></dt>
 
-<dd>The <var class="varname">domain</var> value is the IP address of the server
-to which the project is deployed. The colon (:) and subsequent <var class="varname">portNumber</var> value
-is the port, as determined by the application-server configuration. <p>When
-you are using IBM WebSphere Application Server, the value
+<dd class="dd">The <var class="keyword varname">domain</var> value is the IP address of the server
+to which the project is deployed. The colon (:) and subsequent <var class="keyword varname">portNumber</var> value
+is the port, as determined by the application-server configuration. <p class="p">When
+you are using IBM<sup>®</sup> WebSphere<sup>®</sup> Application Server, the value
 is localhost:9080 by default. However, your installation of that product
 can access a different port. This situation might occur if you previously
 installed WebSphere Application
 Server on the same machine. </p>
-<p>To change the domain and port number
+<p class="p">To change the domain and port number
 that are included in the WSDL file generated with a SOAP service,
 see “Setting preferences for service generation.”</p>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">contextRoot</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">contextRoot</var></dt>
 
-<dd>The context root to which the service is deployed. By default,
+<dd class="dd">The context root to which the service is deployed. By default,
 this value is the project name. <div class="p">To override the default in the
-EDT IDE:<ol>
-<li>Right-click the project.</li>
+EDT IDE:<ol class="ol">
+<li class="li">Right-click the project.</li>
 
-<li>Click <span class="uicontrol">Properties</span> to display the Properties
+<li class="li">Click <span class="ph uicontrol">Properties</span> to display the Properties
 page.</li>
 
-<li>Click <span class="uicontrol">Web project settings</span> and type a new
+<li class="li">Click <span class="ph uicontrol">Web project settings</span> and type a new
 context root.</li>
 
-<li>Click <span class="uicontrol">OK</span>.</li>
+<li class="li">Click <span class="ph uicontrol">OK</span>.</li>
 
 </ol>
 </div>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">serviceConstant</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">serviceConstant</var></dt>
 
-<dd>One of two values: <ul>
-<li>For a SOAP service:<span class="synph"><span class="kwd">services</span></span></li>
+<dd class="dd">One of two values: <ul class="ul">
+<li class="li">For a SOAP service:<span class="ph synph"><span class="keyword kwd">services</span></span></li>
 
-<li>For an EGL REST-RPC service:<span class="synph"><span class="kwd">restservices</span></span></li>
+<li class="li">For an EGL REST-RPC service:<span class="ph synph"><span class="keyword kwd">restservices</span></span></li>
 
 </ul>
 </dd>
 
 
-<dt class="dlterm"><var class="varname">serviceName</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">serviceName</var></dt>
 
-<dd>For a SOAP service, <span class="synph"><span class="kwd">serviceName</span></span> is the
-value of the <span class="synph"><span class="kwd">name</span></span> field in the <span class="synph"><span class="kwd">@xml</span></span> complex
+<dd class="dd">For a SOAP service, <span class="ph synph"><span class="keyword kwd">serviceName</span></span> is the
+value of the <span class="ph synph"><span class="keyword kwd">name</span></span> field in the <span class="ph synph"><span class="keyword kwd">@xml</span></span> complex
 property. By default, the value of that field is the name of the Service
-part, not the name of the <span class="synph"><span class="kwd">alias</span></span> property. <div class="p">For
-a REST service, <span class="synph"><span class="kwd">serviceName</span></span> is the value
-of the <span class="uicontrol">URI</span> text box on the <span class="uicontrol">Web Service
+part, not the name of the <span class="ph synph"><span class="keyword kwd">alias</span></span> property. <div class="p">For
+a REST service, <span class="ph synph"><span class="keyword kwd">serviceName</span></span> is the value
+of the <span class="ph uicontrol">URI</span> text box on the <span class="ph uicontrol">Web Service
 Deployment</span> tab of the Deployment Descriptor editor. If
-that text box is blank, the value is the following concatenation: <ul>
-<li>The package name, with an underscore (<strong>_</strong>) in place of every
+that text box is blank, the value is the following concatenation: <ul class="ul">
+<li class="li">The package name, with an underscore (<strong class="ph b">_</strong>) in place of every
 period</li>
 
-<li>An underscore (<strong>_</strong>)</li>
+<li class="li">An underscore (<strong class="ph b">_</strong>)</li>
 
-<li>The service name</li>
+<li class="li">The service name</li>
 
 </ul>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,18 +19,18 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Function prototypes for service access</title>
 </head>
-<body id="cedt01006"><a name="cedt01006"><!-- --></a>
+<body id="cedt01006">
 
 
-<h1 class="topictitle1">Function prototypes for service access</h1>
+<h1 class="title topictitle1">Function prototypes for service access</h1>
 
 
 
-<div><p>When you specify parameters in a function prototype to
+<div class="body"><p class="shortdesc">When you specify parameters in a function prototype to
 access a service, you must follow the rules described here.</p>
 
 <div class="p">An Interface part is used for service access and includes function
-prototypes such as the following one: <pre class="codeblock">Function GetEmployeeDetail(employeeCode STRING IN,                             
+prototypes such as the following one: <pre class="pre codeblock">Function GetEmployeeDetail(employeeCode STRING IN,                             
                            employeeSalary FLOAT OUT,
                            employeeStatus STRING INOUT)
          returns(myEmployeeRecordPart);
@@ -38,44 +38,44 @@ prototypes such as the following one: <pre class="codeblock">Function GetEmploye
 </div>
 
 <div class="p">If the prototype is used to access an EGL REST-RPC service, the
-following rules apply: <ul>
-<li>The prototype can include IN, OUT, and INOUT parameters.</li>
+following rules apply: <ul class="ul">
+<li class="li">The prototype can include IN, OUT, and INOUT parameters.</li>
 
-<li>The data received and returned by the service is always in JSON
+<li class="li">The data received and returned by the service is always in JSON
 format. JSON cannot include HEX, BLOB, or CLOB data.</li>
 
-<li>The service always returns a JSON string. In a Rich UI application,
+<li class="li">The service always returns a JSON string. In a Rich UI application,
 the EGL runtime code rounds any numeric data that is returned by the
 service and is greater than 15 significant digits. The rounding does
-not occur when JSON is returned to EGL-generated Java code.</li>
+not occur when JSON is returned to EGL-generated Java™ code.</li>
 
 </ul>
 </div>
 
-<p>If the prototype is used to access a SOAP service, the prototype
+<p class="p">If the prototype is used to access a SOAP service, the prototype
 can include IN, OUT, and INOUT parameters.</p>
 
 <div class="p">If the prototype is used to access a third-party REST service,
-the following rules apply:<ul>
-<li>The IN modifier is required for each parameter.</li>
+the following rules apply:<ul class="ul">
+<li class="li">The IN modifier is required for each parameter.</li>
 
-<li>If a parameter is used to construct the URI or the query string,
-the following rules apply:<ul>
-<li>The name of the parameter must match the name of the substitution
+<li class="li">If a parameter is used to construct the URI or the query string,
+the following rules apply:<ul class="ul">
+<li class="li">The name of the parameter must match the name of the substitution
 variable in the URI template.</li>
 
-<li>The data type of the parameter can be a primitive type or related
+<li class="li">The data type of the parameter can be a primitive type or related
 data item.</li>
 
-<li>If the requester is being generated to JavaScript, the primitive type must be
+<li class="li">If the requester is being generated to JavaScript™, the primitive type must be
 STRING or one the following types, which are assignment-compatible
 with STRING: FLOAT, BIN, or one of the integer equivalents to BIN
 (INT, SMALLINT, or BIGINT).</li>
 
-<li>If the requester is being generated to Java, any primitive type is valid other than
+<li class="li">If the requester is being generated to Java, any primitive type is valid other than
 HEX, BLOB, or CLOB. </li>
 
-<li>If the REST service returns a JSON string to a Rich UI application,
+<li class="li">If the REST service returns a JSON string to a Rich UI application,
 the EGL runtime code rounds any numeric data that is returned by the
 service and is greater than 15 significant digits. The rounding does
 not occur when JSON is returned to EGL-generated Java code.</li>
@@ -83,12 +83,12 @@ not occur when JSON is returned to EGL-generated Java code.</li>
 </ul>
 </li>
 
-<li>The value of a representation parameter can be a string, one of
+<li class="li">The value of a representation parameter can be a string, one of
 the previously mentioned assignment-compatible types, or a non-structured
-Record part whose only fields fulfill the following rules: <ul>
-<li>The field is of type STRING or is assignment-compatible with STRING.</li>
+Record part whose only fields fulfill the following rules: <ul class="ul">
+<li class="li">The field is of type STRING or is assignment-compatible with STRING.</li>
 
-<li>The field can be based on a Record part that includes only strings
+<li class="li">The field can be based on a Record part that includes only strings
 (or assignment-compatible values) or other Record
 parts. Records can be nested within records to any level.</li>
 
@@ -101,7 +101,7 @@ parts. Records can be nested within records to any level.</li>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

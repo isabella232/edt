@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,45 +19,45 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service-location details for web service access</title>
 </head>
-<body id="cedt01008"><a name="cedt01008"><!-- --></a>
+<body id="cedt01008">
 
 
-<h1 class="topictitle1">Service-location details for web service access</h1>
+<h1 class="title topictitle1">Service-location details for web service access</h1>
 
 
 
-<div><p>You can place the service-location details of a web service
-in the EGL deployment descriptor and then specify the <span class="synph"><span class="kwd">Resource</span></span> annotation
+<div class="body"><p class="shortdesc">You can place the service-location details of a web service
+in the EGL deployment descriptor and then specify the <span class="ph synph"><span class="keyword kwd">Resource</span></span> annotation
 when you declare a service-access variable. </p>
 
-<p>The <span class="synph"><span class="kwd">Resource</span></span> annotation refers to an
+<p class="p">The <span class="ph synph"><span class="keyword kwd">Resource</span></span> annotation refers to an
 entry in the EGL deployment description, specifically, to an entry
 in the resource bindings section of the EGL deployment descriptor. </p>
 
 <div class="p">The entry in the service bindings section behaves differently depending
-on the type of service that you access:<ul>
-<li>If you access a SOAP service, the entry in the service bindings
+on the type of service that you access:<ul class="ul">
+<li class="li">If you access a SOAP service, the entry in the service bindings
 section refers to a WSDL file that in turn refers to the service location.
 If a service location changes, you do not need to change the code
 or deployment descriptor. You must change the WSDL file only.</li>
 
-<li>If you access any other type of service, the entry in the service
+<li class="li">If you access any other type of service, the entry in the service
 bindings section refers to the service itself.</li>
 
 </ul>
 </div>
 
 <div class="p">When you access a third-party REST service, you must distinguish
-between the following types of information:<ul>
-<li><strong>URI</strong>, which is a set of high-level qualifiers for the service
-location. For example: <samp class="codeph">www.example.com/myproject/restservices/employee</samp>.
+between the following types of information:<ul class="ul">
+<li class="li"><strong class="ph b">URI</strong>, which is a set of high-level qualifiers for the service
+location. For example: <samp class="ph codeph">www.example.com/myproject/restservices/employee</samp>.
 Specify the base URI in the resource binding or in the related HttpRest
 object.</li>
 
-<li><strong>URI template</strong>, which is a set of lower-level qualifiers
+<li class="li"><strong class="ph b">URI template</strong>, which is a set of lower-level qualifiers
 that are concatenated to the base URI. Those details are specific
 to an operation, such as GET, and you specify them in the Interface
-part that is used to create a service-access variable.<p>If you change
+part that is used to create a service-access variable.<p class="p">If you change
 the URI template, you must change it in the Interface part and redeploy
 the code internally. You cannot include the template in a runtime
 configuration file because the template generally includes values
@@ -67,12 +67,12 @@ that are set at run time.</p>
 </ul>
 </div>
 
-<p>You can access a third-party REST service by specifying all the
+<p class="p">You can access a third-party REST service by specifying all the
 details in either the URI or a URI template.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

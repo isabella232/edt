@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,20 +17,20 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI job scheduler</title>
 </head>
-<body id="cedt01024"><a name="cedt01024"><!-- --></a>
+<body id="cedt01024">
 
 
-<h1 class="topictitle1">Rich UI job scheduler</h1>
+<h1 class="title topictitle1">Rich UI job scheduler</h1>
 
 
-<div>
-<div class="p">You can try the following example in your workspace:<pre class="codeblock">import com.ibm.egl.rui.widgets.Button;
+<div class="body">
+<div class="p">You can try the following example in your workspace:<pre class="pre codeblock">import com.ibm.egl.rui.widgets.Button;
 import egl.javascript.Job; 
 
 handler MyHandler type RUIhandler { initialUI = [stopButton],
                                     onConstructionFunction = initialization }
 
-   stopButton Button{text=""""""""Stop!"""""""", onclick ::= pleaseStop};	
+   stopButton Button{text="Stop!", onclick ::= pleaseStop};	
    doThis Job{runFunction = myRunFunction};
 
    function initialization()
@@ -47,56 +47,56 @@ handler MyHandler type RUIhandler { initialUI = [stopButton],
 end</pre>
 </div>
 
-<div class="p">Use of this capability requires that you type the following <strong>import</strong> statement: <pre class="codeblock">   import egl.javascript.Job; </pre>
+<div class="p">Use of this capability requires that you type the following <strong class="ph b">import</strong> statement: <pre class="pre codeblock">   import egl.javascript.Job; </pre>
 </div>
 
-<p>You cannot add that statement with the <strong>Ctrl-Shift-O</strong> mechanism
+<p class="p">You cannot add that statement with the <strong class="ph b">Ctrl-Shift-O</strong> mechanism
 that is available for Widget types.</p>
 
-<div class="p">Two definitions may clarify the relationships:<ul>
-<li>The <em>run function</em> is the function that is invoked when the
-job is scheduled. The run function in our example is <samp class="codeph">myRunFunction</samp>.</li>
+<div class="p">Two definitions may clarify the relationships:<ul class="ul">
+<li class="li">The <em class="ph i">run function</em> is the function that is invoked when the
+job is scheduled. The run function in our example is <samp class="ph codeph">myRunFunction</samp>.</li>
 
-<li>The <em>current function</em> is the function that is running while
+<li class="li">The <em class="ph i">current function</em> is the function that is running while
 the timer is running.</li>
 
 </ul>
 </div>
 
 <div class="p">The job scheduler is a variable based on an EGL external type named
-Job. When you declare the variable, you can set the following properties:<dl>
+Job. When you declare the variable, you can set the following properties:<dl class="dl parml">
 
-<dt class="dlterm"><span class="keyword">name</span></dt>
+<dt class="dt pt dlterm"><span class="keyword">name</span></dt>
 
-<dd>Used by the EGL debugger to identify the job scheduler. If you
-omit this property, the value of <strong>name</strong> is the variable name.</dd>
+<dd class="dd pd">Used by the EGL debugger to identify the job scheduler. If you
+omit this property, the value of <strong class="ph b">name</strong> is the variable name.</dd>
 
 
-<dt class="dlterm"><span class="keyword">runFunction</span></dt>
+<dt class="dt pt dlterm"><span class="keyword">runFunction</span></dt>
 
-<dd>Identifies the run function, which has no parameters and no return
+<dd class="dd pd">Identifies the run function, which has no parameters and no return
 value.</dd>
 
 </dl>
 </div>
 
-<div class="p">You can use a job scheduler to invoke the following functions:<dl>
+<div class="p">You can use a job scheduler to invoke the following functions:<dl class="dl parml">
 
-<dt class="dlterm"><span class="keyword">schedule (int</span> <var class="varname">milliseconds</var><span class="keyword">)</span></dt>
+<dt class="dt pt dlterm"><span class="keyword">schedule (int</span> <var class="keyword varname">milliseconds</var><span class="keyword">)</span></dt>
 
-<dd>Sets a timer immediately for the specified number of milliseconds
+<dd class="dd pd">Sets a timer immediately for the specified number of milliseconds
 and causes a subsequent invocation of the run function. The invocation
 occurs, at earliest, when the timer elapses or when the current function
-ends, whichever happens last. If you omit <var class="varname">milliseconds</var>,
+ends, whichever happens last. If you omit <var class="keyword varname">milliseconds</var>,
 the invocation occurs, at earliest, as soon as the current function
 ends.</dd>
 
 </dl>
-<dl>
-<dt class="dlterm"><span class="keyword">repeat (int</span> <var class="varname">milliseconds</var><span class="keyword">)</span></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><span class="keyword">repeat (int</span> <var class="keyword varname">milliseconds</var><span class="keyword">)</span></dt>
 
-<dd>Sets a timer immediately for the specified number of milliseconds
-and then causes repeated invocation of the run function. <p>The timer
+<dd class="dd pd">Sets a timer immediately for the specified number of milliseconds
+and then causes repeated invocation of the run function. <p class="p">The timer
 is reset each time the run function starts. The rule for each invocation
 of the run function, including the first, is that the invocation occurs,
 at earliest, when the timer elapses or when the current function ends,
@@ -104,14 +104,14 @@ whichever happens last.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="keyword">cancel()</span></dt>
+<dt class="dt pt dlterm"><span class="keyword">cancel()</span></dt>
 
-<dd>Cancels later invocations of the job.</dd>
+<dd class="dd pd">Cancels later invocations of the job.</dd>
 
 </dl>
 </div>
 
-<p>The invocation of a run function never interrupts the execution
+<p class="p">The invocation of a run function never interrupts the execution
 of another function. For example, between the time when a job is scheduled
 and the time when the invocation of the run function is possible,
 the user might click a button to cause scheduling of an event handler.
@@ -119,16 +119,16 @@ In that case, the invocation of the job function waits at least until
 the event handler invokes its own subordinate functions, if any, and
 ends.</p>
 
-<p>You can create multiple variables of type JOB and in this way schedule
+<p class="p">You can create multiple variables of type JOB and in this way schedule
 multiple jobs and even invoke the same run function. In all cases,
 only one function can run at a given time, and it runs to completion.</p>
 
-<p>If you use the same variable to reschedule a job, the previous
+<p class="p">If you use the same variable to reschedule a job, the previous
 use of that variable is canceled.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

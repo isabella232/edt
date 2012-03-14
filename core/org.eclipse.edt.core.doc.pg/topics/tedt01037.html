@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,67 +19,67 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Preparing to use the EGL Dojo widgets</title>
 </head>
-<body id="tedt01037"><a name="tedt01037"><!-- --></a>
+<body id="tedt01037">
 
 
-<h1 class="topictitle1">Preparing to use the EGL Dojo widgets</h1>
+<h1 class="title topictitle1">Preparing to use the EGL Dojo widgets</h1>
 
 
 
-<div><p>You can develop with the EGL Dojo widgets by using either
+<div class="body"><p class="shortdesc">You can develop with the EGL Dojo widgets by using either
 a local or remote version of the Dojo Toolkit. In either case, you
 must specify the Dojo Toolkit provider on your EGL build path.</p>
 
-<dl>
-<dt class="dlterm">Local</dt>
+<dl class="dl">
+<dt class="dt dlterm">Local</dt>
 
-<dd>The Dojo Toolkit must be imported into your workspace to provide
+<dd class="dd">The Dojo Toolkit must be imported into your workspace to provide
 the necessary code for the EGL Dojo widgets to run locally.</dd>
 
 
-<dt class="dlterm">Remote</dt>
+<dt class="dt dlterm">Remote</dt>
 
-<dd>To use the Dojo Toolkit remotely, you must connect to the toolkit
+<dd class="dd">To use the Dojo Toolkit remotely, you must connect to the toolkit
 though a provider such as Google or AOL. The provider hosts the Dojo
 Toolkit for use by Dojo developers.</dd>
 
 </dl>
 
-<p>You might use a local version of the toolkit instead of a remote
+<p class="p">You might use a local version of the toolkit instead of a remote
 version for many reasons. The next table reviews the advantages and
 disadvantages of local and remote access.</p>
 
 
-<div class="tablenoborder"><a name="tedt01037__localorremote"><!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="tedt01037__localorremote" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Considerations for accessing the
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="tedt01037__localorremote" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Considerations for accessing the
 Dojo Toolkit locally or remotely</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" id="d22636e70">Local </th>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" id="d28916e70">Local </th>
 
-<th class="cellrowborder" valign="bottom" id="d22636e73">Remote</th>
+<th class="entry" valign="bottom" id="d28916e73">Remote</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" headers="d22636e70 ">Flexibility  <ul>
-<li>You do not need the Internet to access to the toolkit.</li>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" headers="d28916e70 ">Flexibility  <ul class="ul">
+<li class="li">You do not need the Internet to access to the toolkit.</li>
 
-<li>You control where the toolkit is accessed from.</li>
+<li class="li">You control where the toolkit is accessed from.</li>
 
-<li>You can develop new Dojo widgets and debug the JavaScript.</li>
+<li class="li">You can develop new Dojo widgets and debug the JavaScript™.</li>
 
 </ul>
 </td>
 
-<td class="cellrowborder" valign="top" headers="d22636e73 ">Performance<ul>
-<li>Performance is better because the browser caches more resources.</li>
+<td class="entry" valign="top" headers="d28916e73 ">Performance<ul class="ul">
+<li class="li">Performance is better because the browser caches more resources.</li>
 
-<li>The workbench runs faster.</li>
+<li class="li">The workbench runs faster.</li>
 
-<li>You deploy only your own application and do not have to deploy
+<li class="li">You deploy only your own application and do not have to deploy
 the Dojo Toolkit files.</li>
 
 </ul>
@@ -87,28 +87,28 @@ the Dojo Toolkit files.</li>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" headers="d22636e70 ">Slower at deployment and run time<ul>
-<li>When you deploy your application, the Dojo Toolkit files are copied
+<tr class="row">
+<td class="entry" valign="top" headers="d28916e70 ">Slower at deployment and run time<ul class="ul">
+<li class="li">When you deploy your application, the Dojo Toolkit files are copied
 to your web server.</li>
 
-<li>You must access the Dojo files from your server at run time, potentially
+<li class="li">You must access the Dojo files from your server at run time, potentially
 using extra bandwidth.</li>
 
-<li>The startup time for your application might be slower because
+<li class="li">The startup time for your application might be slower because
 of aspects of browser behavior, including caching.</li>
 
 </ul>
  </td>
 
-<td class="cellrowborder" valign="top" headers="d22636e73 ">Dependency on third parties<ul>
-<li>You must be connected to the Internet. If you do not have a fast
+<td class="entry" valign="top" headers="d28916e73 ">Dependency on third parties<ul class="ul">
+<li class="li">You must be connected to the Internet. If you do not have a fast
 speed connection, the first run might be slow.</li>
 
-<li>Hosted servers usually implement usage tracking, which you might
+<li class="li">Hosted servers usually implement usage tracking, which you might
 want to avoid.</li>
 
-<li>You must rely on a third party to maintain the integrity of the
+<li class="li">You must rely on a third party to maintain the integrity of the
 Dojo Toolkit libraries.</li>
 
 </ul>
@@ -121,7 +121,7 @@ Dojo Toolkit libraries.</li>
 </table>
 </div>
 
-<p>One scenario is to develop with a remote version of the toolkit
+<p class="p">One scenario is to develop with a remote version of the toolkit
 and to deploy with a local version. In this way, you have the fastest
 development experience and can control the version of the Dojo toolkit
 that is hosted on the application server to which you deploy your
@@ -129,7 +129,7 @@ application.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

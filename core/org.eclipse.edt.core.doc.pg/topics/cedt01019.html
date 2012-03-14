@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,144 +17,144 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Event handling in Rich UI</title>
 </head>
-<body id="cedt01019"><a name="cedt01019"><!-- --></a>
+<body id="cedt01019">
 
 
-<h1 class="topictitle1">Event handling in Rich UI</h1>
+<h1 class="title topictitle1">Event handling in Rich UI</h1>
 
 
-<div>
-<p>Every widget includes a set of properties for specifying which
+<div class="body">
+<p class="p">Every widget includes a set of properties for specifying which
 function is invoked in response to a runtime event. The function in
-this case is also called an <em>event handler</em>.</p>
+this case is also called an <em class="ph i">event handler</em>.</p>
 
-<div class="section"><h2 class="sectiontitle">Events</h2><p>The next table lists the available
+<div class="section"><h2 class="title sectiontitle">Events</h2><p class="p">The next table lists the available
 events, though widgets of specific types respond to specific events.
 For example, buttons respond to onClick, but not to onChange. Also
-note that two user actions involve """"""""gaining the focus"""""""" (by tabbing
-to or selecting the widget) or """"""""losing the focus"""""""" (by tabbing to or
+note that two user actions involve "gaining the focus" (by tabbing
+to or selecting the widget) or "losing the focus" (by tabbing to or
 selecting a different widget).</p>
 <div class="p">
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Events</span></caption>
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" align="center" valign="bottom" width="21.390374331550802%" id="d9012e54">Event</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Events</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" align="center" valign="bottom" width="21.390374331550802%" id="d11617e54">Event</th>
 
-<th class="cellrowborder" align="center" valign="bottom" width="78.6096256684492%" id="d9012e57">Meaning</th>
+<th class="entry" align="center" valign="bottom" width="78.6096256684492%" id="d11617e57">Meaning</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onChange</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onChange</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onChange occurs when the user changes a widget
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onChange occurs when the user changes a widget
 and moves the on-screen focus from that widget, even if the user has
 reversed the change.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onClick</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onClick</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onClick occurs when the user clicks the widget.</td>
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onClick occurs when the user clicks the widget.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onFocusGained</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onFocusGained</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onFocusGained occurs when the widget gains the
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onFocusGained occurs when the widget gains the
 focus.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onFocusLost</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onFocusLost</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onFocusLost occurs when the widget loses the
-focus. The equivalent event in JavaScript is
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onFocusLost occurs when the widget loses the
+focus. The equivalent event in JavaScript™ is
 onBlur.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyDown</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onKeyDown</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyDown occurs when the user presses any key.
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onKeyDown occurs when the user presses any key.
 On many browsers, the event occurs repeatedly for as long as the user
 is pressing the key. Each occurrence of onKeyDown is followed by an
 occurrence of onKeyPress.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyPress</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onKeyPress</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyPress occurs when the user presses any
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onKeyPress occurs when the user presses any
 key. On many browsers, the event occurs repeatedly for as long as
 the user is pressing the key. Each occurrence of onKeyPress is preceded
 by an occurrence of onKeyDown.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onKeyUp</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onKeyUp</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onKeyUp occurs when the user (having pressed
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onKeyUp occurs when the user (having pressed
 a key) releases it.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseDown</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onMouseDown</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseDown occurs when the user presses any
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onMouseDown occurs when the user presses any
 mouse button.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseMove</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onMouseMove</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseMove occurs repeatedly when the user
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onMouseMove occurs repeatedly when the user
 moves the mouse while the on-screen cursor is within the boundary
 of the widget.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseOut</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onMouseOut</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseOut occurs when the user moves the mouse,
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onMouseOut occurs when the user moves the mouse,
 just as the on-screen cursor moves away from the widget.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseOver</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onMouseOver</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseOver is an event that JavaScript could have named onMouseIn.
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onMouseOver is an event that JavaScript could have named onMouseIn.
 The event occurs when the user moves the mouse, just as the on-screen
 cursor moves into the widget. You can use this event, for example,
 to change the cursor symbol for a particular part of the page.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onMouseUp</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onMouseUp</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onMouseUp occurs when the user (having pressed
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onMouseUp occurs when the user (having pressed
 a mouse button) releases it.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="21.390374331550802%" headers="d9012e54 ">onSelect</td>
+<tr class="row">
+<td class="entry" valign="top" width="21.390374331550802%" headers="d11617e54 ">onSelect</td>
 
-<td class="cellrowborder" valign="top" width="78.6096256684492%" headers="d9012e57 ">onSelect occurs when text is selected in a textArea
+<td class="entry" valign="top" width="78.6096256684492%" headers="d11617e57 ">onSelect occurs when text is selected in a textArea
 or textField widget.</td>
 
 </tr>
@@ -166,102 +166,102 @@ or textField widget.</td>
  </div>
 <div class="p">The following syntax, for example, declares a Button
 widget, and the function named click is invoked when the user clicks
-the widget:<pre class="codeblock">myButton Button { text = """"""""Copy Input to Output"""""""", onClick ::= click };</pre>
+the widget:<pre class="pre codeblock">myButton Button { text = "Copy Input to Output", onClick ::= click };</pre>
 </div>
-<p>The
-operator <samp class="codeph">::=</samp> appends the function named click to
+<p class="p">The
+operator <samp class="ph codeph">::=</samp> appends the function named click to
 a dynamic array. One implication is that, when you declare the widget,
 a set of event-related arrays is immediately available to you, with
 each array named for an event.</p>
 <div class="p">If you specify multiple event
 handlers for a given event, the order in which the event handlers
 will run is the order of elements in the array. Here is an example
-of the syntax: <pre class="codeblock">myButton Button { text = """"""""Start"""""""", onClick ::= click, onClick ::= function02 };</pre>
+of the syntax: <pre class="pre codeblock">myButton Button { text = "Start", onClick ::= click, onClick ::= function02 };</pre>
 </div>
 <div class="p">You
-can also use the operator <samp class="codeph">::=</samp> in your code, to add
-event handlers to the dynamic array. Here is an example: <pre class="codeblock">myButton.onClick ::= function03;
+can also use the operator <samp class="ph codeph">::=</samp> in your code, to add
+event handlers to the dynamic array. Here is an example: <pre class="pre codeblock">myButton.onClick ::= function03;
 </pre>
 </div>
-<p>In this examples, a user click causes the invocation
+<p class="p">In this examples, a user click causes the invocation
 of the functions click, then function02, then function03.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Event record</h2><div class="p">Each event handler receives
+<div class="section"><h2 class="title sectiontitle">Event record</h2><div class="p">Each event handler receives
 a record that provides details about the event. The event record is
-of type Event and includes the following fields:<dl>
-<dt class="dlterm">ch INT</dt>
+of type Event and includes the following fields:<dl class="dl parml">
+<dt class="dt pt dlterm">ch INT</dt>
 
-<dd>The ASCII code for the keystroke, if any, that caused the event.</dd>
+<dd class="dd pd">The ASCII code for the keystroke, if any, that caused the event.</dd>
 
 
-<dt class="dlterm">x INT</dt>
+<dt class="dt pt dlterm">x INT</dt>
 
-<dd>The x coordinate (in pixels) relative to the left of a given widget.
+<dd class="dd pd">The x coordinate (in pixels) relative to the left of a given widget.
 For example, if the user clicks in the exact middle of a button that
 is 10 by 10, the value of x is 5.</dd>
 
 
-<dt class="dlterm">y INT</dt>
+<dt class="dt pt dlterm">y INT</dt>
 
-<dd>The y coordinate (in pixels) relative to the top of a given widget.
+<dd class="dd pd">The y coordinate (in pixels) relative to the top of a given widget.
 For example, if the user clicks in the exact middle of a button that
 is 10 by 10, the value of y is 5.</dd>
 
 
-<dt class="dlterm">clientX INT</dt>
+<dt class="dt pt dlterm">clientX INT</dt>
 
-<dd>The x coordinate of the mouse pointer (in pixels) relative to
+<dd class="dd pd">The x coordinate of the mouse pointer (in pixels) relative to
 the left of the browser window. For example, if two buttons, each
 10 by 10, are side-by-side at the top left of the browser window and
 the user clicks the exact middle of the second, the value of x is
 15.</dd>
 
 
-<dt class="dlterm">clientY INT</dt>
+<dt class="dt pt dlterm">clientY INT</dt>
 
-<dd>The y coordinate of the mouse pointer (in pixels) relative to
+<dd class="dd pd">The y coordinate of the mouse pointer (in pixels) relative to
 the top of the browser window. For example, if two buttons, each 10
 by 10, are side-by-side at the top left of the browser window and
 the user clicks the exact middle of the second, the value of y is
 5.</dd>
 
 
-<dt class="dlterm">screenX INT</dt>
+<dt class="dt pt dlterm">screenX INT</dt>
 
-<dd>The x coordinate of the mouse pointer (in pixels) relative to
+<dd class="dd pd">The x coordinate of the mouse pointer (in pixels) relative to
 the left of the screen. The value varies in accordance with the display
 resolution of the workstation.</dd>
 
 
-<dt class="dlterm">screenY INT</dt>
+<dt class="dt pt dlterm">screenY INT</dt>
 
-<dd>The y coordinate of the mouse pointer (in pixels) relative to
+<dd class="dd pd">The y coordinate of the mouse pointer (in pixels) relative to
 the top of the screen. The value varies in accordance with the display
 resolution of the workstation.</dd>
 
 
-<dt class="dlterm">widget ANY</dt>
+<dt class="dt pt dlterm">widget ANY</dt>
 
-<dd>The widget to which the event is attached.</dd>
+<dd class="dd pd">The widget to which the event is attached.</dd>
 
 
-<dt class="dlterm">mousebutton INT</dt>
+<dt class="dt pt dlterm">mousebutton INT</dt>
 
-<dd>A number that indicates which mouse button was pressed.</dd>
+<dd class="dd pd">A number that indicates which mouse button was pressed.</dd>
 
 </dl>
 </div>
 <div class="p">The record of type Event also includes the
-following functions, each of which is without parameters:<dl>
+following functions, each of which is without parameters:<dl class="dl parml">
 
-<dt class="dlterm">preventDefault()</dt>
+<dt class="dt pt dlterm">preventDefault()</dt>
 
-<dd>Prevents the browser from fulfilling a default behavior. For example,
+<dd class="dd pd">Prevents the browser from fulfilling a default behavior. For example,
 you might want to avoid the typical result of a user's clicking a
 hypertext link. In the following outline, the user's click is passed
-to the browser only if a specified condition is in effect: <pre class="codeblock">hLink HyperLink { text = """"""""www.ibm.com"""""""", 
-                  href = """"""""http://www.ibm.com"""""""", 
+to the browser only if a specified condition is in effect: <pre class="pre codeblock">hLink HyperLink { text = "www.ibm.com", 
+                  href = "http://www.ibm.com", 
                   onClick ::= handleClickLink };
 
 function handleClickLink(e Event in)
@@ -275,16 +275,16 @@ end</pre>
 </dd>
 
 
-<dt class="dlterm">stopPropagation()</dt>
+<dt class="dt pt dlterm">stopPropagation()</dt>
 
-<dd>Used by Rich UI event definitions to cause a behavior that is
+<dd class="dd pd">Used by Rich UI event definitions to cause a behavior that is
 described in “Event propagation.”</dd>
 
 </dl>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Event propagation</h2><p>When a widget within a
+<div class="section"><h2 class="title sectiontitle">Event propagation</h2><p class="p">When a widget within a
 container does not have a set of event handlers of a given type, the
 event is made available to the container. For example, if a button
 is within a box (named B) and if the button does not handle an onClick
@@ -293,20 +293,20 @@ propagation</dfn>, and it extends to containers of containers, to
 any level in a container hierarchy. For example, if B is itself within
 a box (A) and if neither the button nor B handles the onClick event,
 the event is made available to A.</p>
-<p>After an event <em>is</em> handled
+<p class="p">After an event <em class="ph i">is</em> handled
 by a widget at any level in a container hierarchy, the event does
 not propagate to an embedding widget. </p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Custom event types</h2><p>Rich UI provides a way
+<div class="section"><h2 class="title sectiontitle">Custom event types</h2><p class="p">Rich UI provides a way
 for you to define event types that are specific to your organization.
 For details, see “Extending the Rich UI widget set”; in particular,
-the reference to the <strong>VEEvent</strong> annotation.</p>
+the reference to the <strong class="ph b">VEEvent</strong> annotation.</p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

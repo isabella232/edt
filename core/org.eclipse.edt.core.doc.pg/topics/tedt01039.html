@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,53 +19,53 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Extending the Rich UI widget set</title>
 </head>
-<body id="tedt01039"><a name="tedt01039"><!-- --></a>
+<body id="tedt01039">
 
 
-<h1 class="topictitle1">Extending the Rich UI widget set</h1>
+<h1 class="title topictitle1">Extending the Rich UI widget set</h1>
 
 
 
-<div><p>You can use EGL to create a new widget type or can use JavaScript.</p>
+<div class="body"><p class="shortdesc">You can use EGL to create a new widget type or can use JavaScript™.</p>
 
-<div class="section"><h2 class="sectiontitle">Rich UI widgets</h2><div class="p">A Rich UI widget is written
-in EGL and is of type <samp class="codeph">RUIWidget</samp> (specifically, egl.ui.rui.RUIWidget).
-You often need to do only as follows:<ul>
-<li>Specify an HTML tag name in the <strong>tagName</strong> field. Alternatively,
-specify a declared Widget in the <strong>targetWidget</strong> field, in which
-case the following statements apply:<ul>
-<li>The HTML tag that is the basis of the referenced widget's type
+<div class="section"><h2 class="title sectiontitle">Rich UI widgets</h2><div class="p">A Rich UI widget is written
+in EGL and is of type <samp class="ph codeph">RUIWidget</samp> (specifically, egl.ui.rui.RUIWidget).
+You often need to do only as follows:<ul class="ul">
+<li class="li">Specify an HTML tag name in the <strong class="ph b">tagName</strong> field. Alternatively,
+specify a declared Widget in the <strong class="ph b">targetWidget</strong> field, in which
+case the following statements apply:<ul class="ul">
+<li class="li">The HTML tag that is the basis of the referenced widget's type
 is the basis of the Widget type that you are defining</li>
 
-<li>You can use the name of the referenced widget to access the fields
+<li class="li">You can use the name of the referenced widget to access the fields
 and functions defined for that widget's type</li>
 
 </ul>
-<p>If you specify both <strong>tagName</strong> and <strong>targetWidget</strong>,
+<p class="p">If you specify both <strong class="ph b">tagName</strong> and <strong class="ph b">targetWidget</strong>,
 the latter applies.</p>
 </li>
 
-<li>Specify some or all of the fields that are listed in a later section.</li>
+<li class="li">Specify some or all of the fields that are listed in a later section.</li>
 
-<li>Specify an on-construction function and set a CSS class name in
+<li class="li">Specify an on-construction function and set a CSS class name in
 that function.</li>
 
-<li>Build the functionality from other widgets.</li>
+<li class="li">Build the functionality from other widgets.</li>
 
 </ul>
 </div>
 <div class="p">Here is the outline of an H3 definition, which requires
-no <strong>import</strong> statements:<pre class="codeblock">Handler H3 type RUIWidget{tagName = """"""""h3"""""""", onConstructionFunction = start,
+no <strong class="ph b">import</strong> statements:<pre class="pre codeblock">Handler H3 type RUIWidget{tagName = "h3", onConstructionFunction = start,
    @VEWidget{
-				category = """"""""New Widgets"""""""",
-				template = """"""""my.package.H3{ text=\""""""""The Heading Text\"""""""" }"""""""",
-				smallIcon = """"""""icons/h3small.gif"""""""",
-				largeIcon = """"""""icons/h3large.gif"""""""" 	}}
+				category = "New Widgets",
+				template = "my.package.H3{ text=\"The Heading Text\" }",
+				smallIcon = "icons/h3small.gif",
+				largeIcon = "icons/h3large.gif" 	}}
 
    text String  { @EGLProperty { getMethod=getText, setMethod=setText }, 
                   @VEProperty{}};
    function start()
-      class = """"""""EglRuiH3"""""""";
+      class = "EglRuiH3";
    end
 
    function setText(textIn String in)
@@ -80,87 +80,87 @@ end</pre>
 </div>
 <div class="p">Given this definition, you can create widgets
 that are based on the type H3. For example, the following declaration
-creates a box with a nested H3 widget:<pre class="codeblock">ui Box { children = [ 
-            new H3 { text = """"""""Summary"""""""" }
+creates a box with a nested H3 widget:<pre class="pre codeblock">ui Box { children = [ 
+            new H3 { text = "Summary" }
        	]};  	</pre>
 </div>
 </div>
 
 
-<div class="section"><h2 class="sectiontitle">External type widgets</h2><p>You can create an
+<div class="section"><h2 class="title sectiontitle">External type widgets</h2><p class="p">You can create an
 external type widget by writing custom JavaScript or by accessing specialized JavaScript libraries.</p>
 <div class="p">To
-create a new Rich UI widget based on JavaScript, do as follows: <ol>
-<li>Create a JavaScript file
+create a new Rich UI widget based on JavaScript, do as follows: <ol class="ol">
+<li class="li">Create a JavaScript file
 to contain the code for the widget. Invoke egl.defineWidget and specify
-the following arguments: <ul>
-<li>The name of the package in which the custom JavaScript resides.  The package name
+the following arguments: <ul class="ul">
+<li class="li">The name of the package in which the custom JavaScript resides.  The package name
 is required, is case sensitive, and identifies the WebContent subfolder
-that contains the JavaScript.<p>Include
+that contains the JavaScript.<p class="p">Include
 dots in place of a forward slash for every subfolder under the first.
 For example, if your JavaScript is
-in folder <samp class="codeph">WebContent/myPkg/test</samp>, the <span class="synph"><span class="var">packageName</span></span> value
-is <samp class="codeph">myPkg.test</samp>.</p>
+in folder <samp class="ph codeph">WebContent/myPkg/test</samp>, the <span class="ph synph"><span class="ph var">packageName</span></span> value
+is <samp class="ph codeph">myPkg.test</samp>.</p>
 </li>
 
-<li>The name of the widget class (for example, <span class="synph"><span class="kwd">Button</span></span>);
+<li class="li">The name of the widget class (for example, <span class="ph synph"><span class="keyword kwd">Button</span></span>);
 that class name is the name of the external type you will create.</li>
 
-<li>The package name of the EGL external type that defines the parent
+<li class="li">The package name of the EGL external type that defines the parent
 widget; however, if that parent type is widget (the most elemental
-choice), specify <span class="synph"><span class="kwd">egl.ui.rui</span></span>.</li>
+choice), specify <span class="ph synph"><span class="keyword kwd">egl.ui.rui</span></span>.</li>
 
-<li>The name of the parent widget class (for example, <span class="synph"><span class="kwd">Label</span></span>).</li>
+<li class="li">The name of the parent widget class (for example, <span class="ph synph"><span class="keyword kwd">Label</span></span>).</li>
 
-<li>The HTML element type (for example, <span class="synph"><span class="kwd">button</span></span>).</li>
+<li class="li">The HTML element type (for example, <span class="ph synph"><span class="keyword kwd">button</span></span>).</li>
 
 </ul>
-<div class="p">Here is the example: <pre class="codeblock">egl.defineWidget( 'egl.rui.widgets', 'Button',
+<div class="p">Here is the example: <pre class="pre codeblock">egl.defineWidget( 'egl.rui.widgets', 'Button',
                   'egl.rui.widgets', 'Label',
                   'button', { } );</pre>
 </div>
 </li>
 
-<li>Within the curly brackets ( { } ), define the JavaScript functions to reflect the following
-outline, separating one function from the next with a comma:<pre class="codeblock">""""""""functionName"""""""" : function(/*parameters*/)
+<li class="li">Within the curly brackets ( { } ), define the JavaScript functions to reflect the following
+outline, separating one function from the next with a comma:<pre class="pre codeblock">"functionName" : function(/*parameters*/)
 { //JavaScript Source }</pre>
-<div class="p">Here is an example:<pre class="codeblock">""""""""getSelected"""""""" : function() {
+<div class="p">Here is an example:<pre class="pre codeblock">"getSelected" : function() {
    return this.check.checked;
 },
-""""""""setSelected"""""""" : function(value) {
+"setSelected" : function(value) {
    this.check.checked = value;
 },
-""""""""toString"""""""" : function() {
-   return """"""""[CheckBox, text=\""""""""""""""""+this.egl$$DOMElement.innerHTML+""""""""\""""""""]"""""""";
+"toString" : function() {
+   return "[CheckBox, text=\""+this.egl$$DOMElement.innerHTML+"\"]";
 }
 </pre>
 </div>
 </li>
 
-<li>Each widget can specify the following functions for the JavaScript runtime to invoke: <ul>
-<li>The function <span class="synph"><span class="kwd">constructor</span></span> is invoked
+<li class="li">Each widget can specify the following functions for the JavaScript runtime to invoke: <ul class="ul">
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">constructor</span></span> is invoked
 whenever a new widget instance is created, and that function can be
 used, for example, to initialize data</li>
 
-<li>The function <span class="synph"><span class="kwd">egl$$initializeDOMElement</span></span> is
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">egl$$initializeDOMElement</span></span> is
 invoked whenever the HTML element is being created for the widget,
 and that function can be used, for example, to set initial properties
 on the element</li>
 
-<li>The function <span class="synph"><span class="kwd">childrenChanged</span></span> is invoked
-whenever the application developer updates the new widget's <span class="synph"><span class="kwd">children</span></span> field,
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">childrenChanged</span></span> is invoked
+whenever the application developer updates the new widget's <span class="ph synph"><span class="keyword kwd">children</span></span> field,
 if any. </li>
 
 </ul>
-<p>Each widget also has a field called <span class="synph"><span class="kwd">this.egl$$DOMElement</span></span>,
+<p class="p">Each widget also has a field called <span class="ph synph"><span class="keyword kwd">this.egl$$DOMElement</span></span>,
 which represents the HTML element (or top-level HTML element) created
 for the widget.</p>
 </li>
 
-<li>In an EGL source file, create an EGL external type that extends
+<li class="li">In an EGL source file, create an EGL external type that extends
 from egl.ui.rui.Widget or from an existing widget. The External Type
-needs a stereotype of <span class="synph"><span class="kwd">JavaScriptObject</span></span>,
-as described in “External type for JavaScript.”<p>When
+needs a stereotype of <span class="ph synph"><span class="keyword kwd">JavaScriptObject</span></span>,
+as described in “External type for JavaScript.”<p class="p">When
 you create the external type, specify some or all of the properties
 that are listed in the next section.</p>
 </li>
@@ -169,36 +169,36 @@ that are listed in the next section.</p>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">EGL annotations for extending the widget set</h2><ul>
-<li>When you create a new EGL or external-type widget, set some or
+<div class="section"><h2 class="title sectiontitle">EGL annotations for extending the widget set</h2><ul class="ul">
+<li class="li">When you create a new EGL or external-type widget, set some or
 all of the following EGL annotations to ensure that the widget is
-handled in the same way as any other widget:<ul>
-<li>As set on a widget field, <span class="synph"><span class="kwd">EGLProperty</span></span> identifies
+handled in the same way as any other widget:<ul class="ul">
+<li class="li">As set on a widget field, <span class="ph synph"><span class="keyword kwd">EGLProperty</span></span> identifies
 the functions that get or set field values. Those values are set when
 a developer declares or updates a widget that is based on the widget
-type that you are creating. <p>The <span class="synph"><span class="kwd">EGLProperty</span></span> annotation
+type that you are creating. <p class="p">The <span class="ph synph"><span class="keyword kwd">EGLProperty</span></span> annotation
 is only for Rich UI widgets. The equivalent annotation for external-type
-widgets is described here:  <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></p>
+widgets is described here:  <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00074.html" title="Property identifies functions that get and set the EGL field values in an external type; for example, in an external type that implements a widget or provides access to a Java class.">Property annotation</a></p>
 </li>
 
 
-<li>The following annotations are available on a widget type definition:<ul>
-<li><span class="synph"><span class="kwd">VEWidget</span></span> indicates that the user can
+<li class="li">The following annotations are available on a widget type definition:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">VEWidget</span></span> indicates that the user can
 add a widget-specific entry to the palette used by the Rich UI editor.</li>
 
-<li><span class="synph"><span class="kwd">MVCView</span></span> enables users to use the widget
+<li class="li"><span class="ph synph"><span class="keyword kwd">MVCView</span></span> enables users to use the widget
 as a controller view. For background information on controllers and
-controller views, see <a href="cedt01020.html">Rich UI validation and formatting</a>.</li>
+controller views, see <a class="xref" href="cedt01020.html">Rich UI validation and formatting</a>.</li>
 
 </ul>
 </li>
 
 
-<li>As set on an array declaration, <span class="synph"><span class="kwd">VEEvent</span></span> indicates
+<li class="li">As set on an array declaration, <span class="ph synph"><span class="keyword kwd">VEEvent</span></span> indicates
 that the user can use the Rich UI editor to assign event handlers
-to that array, for a specific kind of event such as <span class="synph"><span class="kwd">onClick</span></span>.</li>
+to that array, for a specific kind of event such as <span class="ph synph"><span class="keyword kwd">onClick</span></span>.</li>
 
-<li>As set on a field declaration, <span class="synph"><span class="kwd">VEProperty</span></span> indicates
+<li class="li">As set on a field declaration, <span class="ph synph"><span class="keyword kwd">VEProperty</span></span> indicates
 that the user can use the Rich UI editor to set a value into the field.</li>
 
 </ul>
@@ -209,7 +209,7 @@ that the user can use the Rich UI editor to set a value into the field.</li>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

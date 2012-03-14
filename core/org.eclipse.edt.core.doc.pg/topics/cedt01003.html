@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -27,48 +27,48 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL support for SOA</title>
 </head>
-<body id="cedt01003"><a name="cedt01003"><!-- --></a>
+<body id="cedt01003">
 
 
-<h1 class="topictitle1">EGL support for SOA</h1>
+<h1 class="title topictitle1">EGL support for SOA</h1>
 
 
 
-<div><p>EGL provides two kinds of support for service-oriented
+<div class="body"><p class="shortdesc">EGL provides two kinds of support for service-oriented
 architecture (SOA): service development and service access.</p>
 
-<p>For a more basic introduction, see [insert reference for “Service-oriented
+<p class="p">For a more basic introduction, see [insert reference for “Service-oriented
 architecture (SOA) for EGL developers,” an essay that is going on
 a web site. Remove the section there on “Location of an EGL-generated
 service.”]</p>
 
-<div class="section"><h2 class="sectiontitle">Service development</h2></div>
+<div class="section"><h2 class="title sectiontitle">Service development</h2></div>
 
 <div class="p">With EGL, you start to develop a service by coding a Service part
-like the following one:<pre class="codeblock">Service MyServicePart
-   value STRING = """"""""Hello, """""""";
+like the following one:<pre class="pre codeblock">Service MyServicePart
+   value STRING = "Hello, ";
    
    function myEcho(myString STRING IN) returns (STRING)
-      return (value + myString + """"""""!"""""""");
+      return (value + myString + "!");
    end
 end</pre>
 </div>
 
-<p>The content of the Service part is the service implementation.
+<p class="p">The content of the Service part is the service implementation.
 In this case, the implementation accepts an input string such as “world”
 and returns to the requester the concatenation of “Hello,” the input
 string, and an exclamation point. You can make several functions,
 or <dfn class="term">service operations</dfn>, accessible to service requesters.</p>
 
 <div class="p">When you create a Service part, you specify how to deploy it. You
-can deploy a Service part as one of the following kinds of services:<dl>
+can deploy a Service part as one of the following kinds of services:<dl class="dl">
 
-<dt class="dlterm">EGL service</dt>
+<dt class="dt dlterm">EGL service</dt>
 
-<dd>An EGL service exchanges data in a binary format that is specific
+<dd class="dd">An EGL service exchanges data in a binary format that is specific
 to EGL. An EGL service is accessible to other EGL code, and the access
 is relatively fast. However, the EGL service is not a web service
-and is not accessible to code that is written in another language.<p>If
+and is not accessible to code that is written in another language.<p class="p">If
 an EGL service is deployed with a Rich UI application, the service
 is identified as a <dfn class="term">dedicated service</dfn>, which means that
 the Rich UI application has access to the service logic without referencing
@@ -77,54 +77,54 @@ to be aware of a separate address for service access.</p>
 </dd>
 
 
-<dt class="dlterm">EGL REST-RPC service</dt>
+<dt class="dt dlterm">EGL REST-RPC service</dt>
 
-<dd>An EGL REST-RPC service is accessible to EGL-generated, web-based
+<dd class="dd">An EGL REST-RPC service is accessible to EGL-generated, web-based
 requesters. The data is always in JSON format, which cannot include
-HEX, BLOB, or CLOB data. <p>An EGL REST-RPC service access always
+HEX, BLOB, or CLOB data. <p class="p">An EGL REST-RPC service access always
 uses a POST method, but that detail is hidden to the requester. For
 other details that are meaningful when you access an EGL REST-RPC
 service from logic written in another language, see “EGL REST-RPC
 message structure.”</p>
-<p>In a Rich UI application, the EGL runtime
+<p class="p">In a Rich UI application, the EGL runtime
 code rounds any numeric data that is returned by the service and is
 greater than 15 significant digits. The rounding does not occur when
-JSON is returned to EGL-generated Java code.</p>
+JSON is returned to EGL-generated Java™ code.</p>
 </dd>
 
 
-<dt class="dlterm">SOAP service</dt>
+<dt class="dt dlterm">SOAP service</dt>
 
-<dd>A SOAP service is a traditional web service and is accessed by
-code that is written in any language. <p><strong>Neither development nor
+<dd class="dd">A SOAP service is a traditional web service and is accessed by
+code that is written in any language. <p class="p"><strong class="ph b">Neither development nor
 access of SOAP services is available in version .7</strong></p>
 </dd>
 
 </dl>
 </div>
 
-<p>Access to a generated service always conforms to the RPC style
+<p class="p">Access to a generated service always conforms to the RPC style
 rather than to the RESTful style. The parameters and a return value
 identify the data to exchange. Access to the service does not involve
 path variables or query parameters.</p>
 
-<div class="section"><h2 class="sectiontitle">Code development for service access</h2><div class="p">Any
+<div class="section"><h2 class="title sectiontitle">Code development for service access</h2><div class="p">Any
 EGL logic part can act as a service requester; even a Service part.
- You can access the following kinds of services:<ul>
-<li>An EGL service.</li>
+ You can access the following kinds of services:<ul class="ul">
+<li class="li">An EGL service.</li>
 
-<li>An EGL REST-RPC service.</li>
+<li class="li">An EGL REST-RPC service.</li>
 
-<li>A SOAP service, whether or not it is generated. </li>
+<li class="li">A SOAP service, whether or not it is generated. </li>
 
 
-<li>A third-party REST service that largely fulfills the REST style.
-The following variations are supported:<ul>
-<li>Some REST services use a POST request for tasks other than creating
+<li class="li">A third-party REST service that largely fulfills the REST style.
+The following variations are supported:<ul class="ul">
+<li class="li">Some REST services use a POST request for tasks other than creating
 a resource. When you access a third-party REST service with a POST
 request, you can avoid sending business data.</li>
 
-<li>Some REST services require that a DELETE request include a representation
+<li class="li">Some REST services require that a DELETE request include a representation
 (the business data) rather than relying on the URI to identify the
 resource to delete. EGL supports the access of REST services that
 require a representation for a DELETE request, but also supports access
@@ -135,216 +135,216 @@ of REST services that do not have that requirement.</li>
 
 </ul>
 </div>
-<div class="p">Service access typically involves the following steps:<ol>
-<li>Specify a <dfn class="term">resource binding</dfn> in the EGL deployment
+<div class="p">Service access typically involves the following steps:<ol class="ol">
+<li class="li">Specify a <dfn class="term">resource binding</dfn> in the EGL deployment
 descriptor. The binding in this case is called a <dfn class="term">service binding</dfn> because
 it has the details necessary to access the service. Configuration
 personnel can update the binding without updating and regenerating
-the requester.<p>For services as for SQL, a resource binding has a
+the requester.<p class="p">For services as for SQL, a resource binding has a
 type. For example, the type for REST or REST-RPC services is HttpRest.</p>
 </li>
 
-<li>Create an Interface part that is based on the service. The Interface
+<li class="li">Create an Interface part that is based on the service. The Interface
 part includes <dfn class="term">function prototypes</dfn>, which are definitions
 that identify the parameters and return-value types for each accessible
 function. You can write the Interface part manually or can use the
 workbench to create the Interface part from an EGL Service part.</li>
 
-<li>Declare a variable for which the Interface part is the type definition.
+<li class="li">Declare a variable for which the Interface part is the type definition.
 The documentation typically refers to the variable as a <dfn class="term">service-access
-variable</dfn>. <div class="p">Here is an example declaration:<pre class="codeblock">myService IMyService?{@Resource{bindingKey = """"""""myBinding""""""""}};</pre>
+variable</dfn>. <div class="p">Here is an example declaration:<pre class="pre codeblock">myService IMyService?{@Resource{bindingKey = "myBinding"}};</pre>
 </div>
-<p>The <span class="synph"><span class="kwd">Resource</span></span> annotation
-causes the variable named <samp class="codeph">myService</samp> to reference
-the HTTPRest object named <samp class="codeph">myBinding</samp>, which has values
+<p class="p">The <span class="ph synph"><span class="keyword kwd">Resource</span></span> annotation
+causes the variable named <samp class="ph codeph">myService</samp> to reference
+the HTTPRest object named <samp class="ph codeph">myBinding</samp>, which has values
 that you specified in the EGL deployment descriptor. If you do not
-specify the <span class="synph"><span class="kwd">bindingKey</span></span> field in the annotation,
+specify the <span class="ph synph"><span class="keyword kwd">bindingKey</span></span> field in the annotation,
 the EGL runtime code accesses those values from the binding entry
 that is named for the variable.</p>
 </li>
 
-<li>Use the service-access variable in a service-invocation statement.
+<li class="li">Use the service-access variable in a service-invocation statement.
 For details about that statement, see “Service access in Rich UI”
 and “Service access outside of Rich UI.”</li>
 
 </ol>
 </div>
-<p>If you are accessing a service that was written in EGL,
+<p class="p">If you are accessing a service that was written in EGL,
 you do not need to create an Interface part, but can use the Service
 part as if it were an Interface part. However, your use of a separate
 Interface part lets you avoid distributing a service implementation
 to another developer. You might avoid distributing the implementation
 if it is changeable or confidential.</p>
 <div class="p">The process for binding
-a variable to access details can vary from what was shown earlier:<ul>
-<li>The variable declaration can explicitly identify the EGL deployment
-descriptor that contains the service binding. Here is an example: <pre class="codeblock">myService IMyService?{
-   @Resource{bindingKey = """"""""myBinding"""""""",
-             <strong>propertyFileName = """"""""myDeploymentDescriptor""""""""</strong>}};</pre>
-<p>If
-you do not reference the <span class="synph"><span class="kwd">propertyFileName</span></span> annotation
+a variable to access details can vary from what was shown earlier:<ul class="ul">
+<li class="li">The variable declaration can explicitly identify the EGL deployment
+descriptor that contains the service binding. Here is an example: <pre class="pre codeblock">myService IMyService?{
+   @Resource{bindingKey = "myBinding",
+             <strong class="ph b">propertyFileName = "myDeploymentDescriptor"</strong>}};</pre>
+<p class="p">If
+you do not reference the <span class="ph synph"><span class="keyword kwd">propertyFileName</span></span> annotation
 field, its value is the name of the EGL deployment descriptor that
 is used at deployment time.</p>
-<p>When you set the <span class="synph"><span class="kwd">propertyFileName</span></span> annotation
+<p class="p">When you set the <span class="ph synph"><span class="keyword kwd">propertyFileName</span></span> annotation
 field, do not include a file extension. The name of the file that
 is accessed at run time includes the following suffix: -bind.xml.</p>
 </li>
 
-<li>You can update binding details at run time, as shown in “Binding
+<li class="li">You can update binding details at run time, as shown in “Binding
 an access variable dynamically.” </li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Web service deployment</h2><p>The runtime architecture
+<div class="section"><h2 class="title sectiontitle">Web service deployment</h2><p class="p">The runtime architecture
 for all EGL web service deployments has the same pattern: generated
 or runtime code acts as an intermediary between the requester and
 the service. The intermediary code converts data between the text-based
 format of a service message and the binary format required by the
 service.</p>
-<div class="p">Here is the overview for each kind of deployment:<ul>
-<li>When you generate an EGL REST-RPC service, the output is a set
+<div class="p">Here is the overview for each kind of deployment:<ul class="ul">
+<li class="li">When you generate an EGL REST-RPC service, the output is a set
 of Java classes. When you generate
 or deploy the deployment descriptor, the output includes an XML file
-that identifies the service location. <p>The runtime platform is an
+that identifies the service location. <p class="p">The runtime platform is an
 application server that is compliant with Java EE. There, the EGL runtime code reads the
 XML file, invokes the service, and acts as an intermediary between
 the requester and service.</p>
 </li>
 
-<li>When you generate a SOAP service that is based on Java, the output is a set of Java classes. When you generate or deploy the
+<li class="li">When you generate a SOAP service that is based on Java, the output is a set of Java classes. When you generate or deploy the
 deployment descriptor, the output includes a Java class that is known as a <dfn class="term">service
-wrapper</dfn>. This service wrapper is distinct from the """"""""Java wrappers” that you can generate
-with EGL. <p>The runtime platform is an application server that is
+wrapper</dfn>. This service wrapper is distinct from the "Java wrappers” that you can generate
+with EGL. <p class="p">The runtime platform is an application server that is
 compliant with Java EE. The
 application server invokes the service wrapper, which in turn invokes
 the service and acts as the intermediary between the requester and
 service. The service wrapper and service are local to one another.</p>
-<p><strong>Neither
+<p class="p"><strong class="ph b">Neither
 development nor access of SOAP services is available in version .7</strong></p>
 </li>
 
 
 </ul>
 </div>
-<p></p>
+<p class="p"></p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Service access</h2><p>Service access from an EGL-generated
+<div class="section"><h2 class="title sectiontitle">Service access</h2><p class="p">Service access from an EGL-generated
 requester has a consistent pattern: a proxy acts as an intermediary
 between the generated requester and the service. The proxy converts
 data between the format used by the requester and the format required
 by the service. </p>
-<p>The next
+<p class="p">The next
 table gives further details, by service type.</p>
 <div class="p">
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="33.33333333333333%" id="d762e280">Characteristic of the requested service</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d964e280">Characteristic of the requested service</th>
 
-<th class="cellrowborder" valign="bottom" width="33.33333333333333%" id="d762e283">Characteristic of the deployed requester </th>
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d964e283">Characteristic of the deployed requester </th>
 
-<th class="cellrowborder" valign="bottom" width="33.33333333333333%" id="d762e286">Characteristic of the proxy</th>
+<th class="entry" valign="bottom" width="33.33333333333333%" id="d964e286">Characteristic of the proxy</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">dedicated EGL</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 ">dedicated EGL</td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e283 ">An HTML file that embeds JavaScript</td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e283 ">An HTML file that embeds JavaScript™</td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is in the EGL runtime code and invokes
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is in the EGL runtime code and invokes
 the service locally, without an HTTP request.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e280 ">local EGL: <strong>not
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e280 ">local EGL: <strong class="ph b">not
 yet available</strong>.</td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e283 ">EGL-generated Java code</td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e283 ">EGL-generated Java code</td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e286 ">No proxy is in use.</td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e286 ">No proxy is in use.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">&#xA0;</td>
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e280 ">remote EGL: <strong>not
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e280 ">remote EGL: <strong class="ph b">not
 yet available</strong>.</td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e283 ">EGL-generated Java code </td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e283 ">EGL-generated Java code </td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is in the
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is in the
 EGL runtime code. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">&#xA0;</td>
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">EGL REST-RPC: <strong>available only from JavaScript</strong>.</td>
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 ">EGL REST-RPC: <strong class="ph b">available only from JavaScript</strong>.</td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e283 ">EGL-generated Java code
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e283 ">EGL-generated Java code
 or an HTML file that embeds JavaScript </td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is in the EGL runtime code. </td>
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is in the EGL runtime code. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e280 ">REST <strong>available
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e280 ">REST <strong class="ph b">available
 only from JavaScript</strong></td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e283 ">EGL-generated Java code or an HTML file that embeds JavaScript </td>
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e283 ">EGL-generated Java code or an HTML file that embeds JavaScript </td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is in the EGL runtime
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is in the EGL runtime
 code. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">&#xA0;</td>
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" rowspan="3" valign="top" width="33.33333333333333%" headers="d762e280 ">SOAP: <strong>not yet
+<tr class="row">
+<td class="entry" rowspan="3" valign="top" width="33.33333333333333%" headers="d964e280 ">SOAP: <strong class="ph b">not yet
 available</strong>.</td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e283 ">EGL-generated Java code
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e283 ">EGL-generated Java code
 or an HTML file that embeds JavaScript and
 that is deployed on an application server that is fully compliant
-with Java EE, such as IBM WebSphere Application Server</td>
+with Java EE, such as IBM<sup>®</sup> WebSphere<sup>®</sup> Application Server</td>
 
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is a Java class
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is a Java class
 that is generated from the requester-specific deployment descriptor.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e283 ">An EGL-generated Java code or an HTML file that embeds JavaScript and that is deployed
+<tr class="row">
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e283 ">An EGL-generated Java code or an HTML file that embeds JavaScript and that is deployed
 on any other platform </td>
 
-<td class="cellrowborder" rowspan="2" valign="top" width="33.33333333333333%" headers="d762e286 ">The proxy is in the EGL runtime
+<td class="entry" rowspan="2" valign="top" width="33.33333333333333%" headers="d964e286 ">The proxy is in the EGL runtime
 code. </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="d762e280 ">&#xA0;</td>
+<tr class="row">
+<td class="entry" valign="top" width="33.33333333333333%" headers="d964e280 "> </td>
 
 </tr>
 
@@ -353,14 +353,14 @@ code. </td>
 </table>
 </div>
 </div>
-<p>Another
+<p class="p">Another
 aspect of service access is the location of service-binding detail.
 For all EGL-generated requesters, the detail is
 in an XML file that is generated from the requester-specific deployment
 descriptor and that is deployed with the requester. </p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Protocols</h2><p>Access of web services always
+<div class="section"><h2 class="title sectiontitle">Protocols</h2><p class="p">Access of web services always
 involves the HTTP protocol, but other protocols are used for accessing
 EGL services. </p>
 </div>
@@ -369,7 +369,7 @@ EGL services. </p>
 
 </div>
 
-<div></div>
+<div class="related-links"></div>
 
 </body>
 </html>

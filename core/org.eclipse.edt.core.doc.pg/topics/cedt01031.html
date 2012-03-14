@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,121 +17,121 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL test server</title>
 </head>
-<body id="cedt01031"><a name="cedt01031"><!-- --></a>
+<body id="cedt01031">
 
 
-<h1 class="topictitle1">EGL test server</h1>
+<h1 class="title topictitle1">EGL test server</h1>
 
 
 
-<div id="body"><a name="body"><!-- --></a><p>EGL uses a test server to invoke services from
+<div class="body" id="body"><p class="shortdesc">EGL uses a test server to invoke services from
 the service logic in your workspace rather than from a deployment
 site. The server is based on Jetty technology, which is described
 here:</p>
 
-<div class="p"><ul class="simple">
-<li><a href="http://www.eclipse.org/jetty" target="_blank">www.eclipse.org/jetty</a></li>
+<div class="p"><ul class="sl simple">
+<li class="sli"><a class="xref" href="http://www.eclipse.org/jetty" target="_blank">www.eclipse.org/jetty</a></li>
 
 </ul>
 </div>
 
 <div class="p">Two situations cause the server to access service logic in your
-workspace: <ul>
-<li>The test server responds if the service binding in your EGL deployment
+workspace: <ul class="ul">
+<li class="li">The test server responds if the service binding in your EGL deployment
 descriptor includes a <dfn class="term">workspace URI</dfn>, which is an identifier
 that points to a workspace location. The format of the workspace URI
-is as follows:<pre class="codeblock">workspace://<em>project_name</em>/<em>fully_qualified_service_name</em></pre>
-<dl>
+is as follows:<pre class="pre codeblock">workspace://<em class="ph i">project_name</em>/<em class="ph i">fully_qualified_service_name</em></pre>
+<dl class="dl">
 
-<dt class="dlterm"><var class="varname">project_name</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">project_name</var></dt>
 
-<dd>The name of the EGL project that contains the EGL Service type.</dd>
+<dd class="dd">The name of the EGL project that contains the EGL Service type.</dd>
 
 
-<dt class="dlterm"><var class="varname">fully_qualified_service_name</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">fully_qualified_service_name</var></dt>
 
-<dd>The service name, preceded with a package name and period, if
+<dd class="dd">The service name, preceded with a package name and period, if
 the service is in a package.</dd>
 
 </dl>
-<div class="p">Here is an example of a workspace URI:<ul class="simple">
-<li><samp class="codeph">workspace://mySourceProject/servicepackage.serviceName</samp></li>
+<div class="p">Here is an example of a workspace URI:<ul class="sl simple">
+<li class="sli"><samp class="ph codeph">workspace://mySourceProject/servicepackage.serviceName</samp></li>
 
 </ul>
 </div>
 </li>
 
-<li>The test server also responds if your Rich UI application invokes
+<li class="li">The test server also responds if your Rich UI application invokes
 a <dfn class="term">dedicated service</dfn>, which is a service that will be
 deployed with the Rich UI application. To indicate that your code
 is accessing a dedicated service, you specify an annotation in the
-logic that references the service, as noted in <a href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
+logic that references the service, as noted in <a class="xref" href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
 
 </ul>
 </div>
 
-<div class="p">A test server is specific to an EGL source project:<ul>
-<li>When a workspace URI is in use, the source project is the one
+<div class="p">A test server is specific to an EGL source project:<ul class="ul">
+<li class="li">When a workspace URI is in use, the source project is the one
 in which the Service type resides. </li>
 
-<li>When a dedicated service is in use, the source project is the
+<li class="li">When a dedicated service is in use, the source project is the
 top-level project that contains the handler from which the service
 is accessed. Here is an example, which demonstrates that the service
-access can be indirect:<ul>
-<li>MyProject01 includes a Rich UI handler.</li>
+access can be indirect:<ul class="ul">
+<li class="li">MyProject01 includes a Rich UI handler.</li>
 
-<li>That handler embeds and uses a second Rich UI handler, which resides
+<li class="li">That handler embeds and uses a second Rich UI handler, which resides
 in MyProject02.</li>
 
-<li>The second handler invokes a library function that resides in
+<li class="li">The second handler invokes a library function that resides in
 MyProject03.</li>
 
-<li>The library function invokes a dedicated service that is defined
+<li class="li">The library function invokes a dedicated service that is defined
 in MyProject04.</li>
 
 </ul>
-<p>The test server in this example is specific to MyProject01.</p>
+<p class="p">The test server in this example is specific to MyProject01.</p>
 </li>
 
 </ul>
 </div>
 
-<p>The server relies on the detail in the EGL deployment descriptors
+<p class="p">The server relies on the detail in the EGL deployment descriptors
 that are used at development time.  The server also relies on the
 classpath that is specific to the project.</p>
 
-<div class="p">In the workbench (<span class="uicontrol">Window &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Preferences &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; EGL &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Test
+<div class="p">In the workbench (<span class="ph uicontrol">Window &gt; Preferences &gt; EGL &gt; Test
 Server</span>), you set preferences to indicate what to do in
-the following cases:<ul>
-<li>You change the project classpath. The changes will be in effect
+the following cases:<ul class="ul">
+<li class="li">You change the project classpath. The changes will be in effect
 only if the server process is terminated.</li>
 
-<li>You are debugging a service and do a “hot code replace,” which
-involves the following steps:<ol>
-<li>When the debugger suspends execution on a statement, you change
+<li class="li">You are debugging a service and do a “hot code replace,” which
+involves the following steps:<ol class="ol">
+<li class="li">When the debugger suspends execution on a statement, you change
 the code that runs subsequent to the statement.</li>
 
-<li>The subsequent code and the debugger behave as if the changes
+<li class="li">The subsequent code and the debugger behave as if the changes
 had been in place before the debugging session.</li>
 
 </ol>
-<p>The Eclipse debug tooling might fail or behave incorrectly
+<p class="p">The Eclipse debug tooling might fail or behave incorrectly
 in response to some kinds of hot code replace.</p>
 </li>
 
 </ul>
 </div>
 
-<p>You do not start a test server manually. However, you might need
+<p class="p">You do not start a test server manually. However, you might need
 terminate a test server; for example, if your preference settings
 allow the server to continue in the cases just described. </p>
 
-<div class="p">To terminate a test server, do as follows: <ol>
-<li>Go to the Debug view of the EGL debugger.</li>
+<div class="p">To terminate a test server, do as follows: <ol class="ol">
+<li class="li">Go to the Debug view of the EGL debugger.</li>
 
-<li>Identify the test server process, which is named for the project.</li>
+<li class="li">Identify the test server process, which is named for the project.</li>
 
-<li>Right click the entry for that process and click <span class="uicontrol">Terminate</span>.</li>
+<li class="li">Right click the entry for that process and click <span class="ph uicontrol">Terminate</span>.</li>
 
 </ol>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,160 +18,160 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Using properties files for displayable text in Rich UI</title>
 </head>
-<body id="tedt01041"><a name="tedt01041"><!-- --></a>
+<body id="tedt01041">
 
 
-<h1 class="topictitle1">Using properties files for displayable text in Rich UI</h1>
+<h1 class="title topictitle1">Using properties files for displayable text in Rich UI</h1>
 
 
-<div>
+<div class="body">
 <div class="p">Rich UI lets you define displayable text in an external file used
-at run time. Here are specific reasons for defining text in this way: <ul>
-<li>To override the runtime messages that are available, by default,
+at run time. Here are specific reasons for defining text in this way: <ul class="ul">
+<li class="li">To override the runtime messages that are available, by default,
 for failed input validations or for incorrect formatting on input
 or output.</li>
 
-<li>To assign text to widgets without hard-coding that text in the
+<li class="li">To assign text to widgets without hard-coding that text in the
 Rich UI application.</li>
 
-<li>To display text in one or another language so that your code can
+<li class="li">To display text in one or another language so that your code can
 be used more widely.</li>
 
 </ul>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Overriding validation or formatting messages</h2><div class="p">If
-you wish to override validation or formatting messages, do as follows:<ul>
-<li>Ensure that you are using the controller mechanism described in <a href="cedt01020.html">Rich UI validation and formatting</a>.</li>
+<div class="section"><h2 class="title sectiontitle">Overriding validation or formatting messages</h2><div class="p">If
+you wish to override validation or formatting messages, do as follows:<ul class="ul">
+<li class="li">Ensure that you are using the controller mechanism described in <a class="xref" href="cedt01020.html">Rich UI validation and formatting</a>.</li>
 
-<li>Create a Rich UI properties library—a library type that has the
-stereotype <strong>RUIProperties</strong>. Details are here: <a href="redt01001.html" title="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application.">RUIPropertiesLibrary stereotype</a>.<p>For an example that follows, the
-library name is <samp class="codeph">myLibrary</samp>, and the library includes
-declarations of strings named <samp class="codeph">entryForInputRequired</samp> and <samp class="codeph">entryForOthers</samp>.
+<li class="li">Create a Rich UI properties library—a library type that has the
+stereotype <strong class="ph b">RUIProperties</strong>. Details are here: <a class="xref" href="redt01001.html" title="You set up a Rich UI properties library (stereotype RUIPropertiesLibrary) if you wish to retrieve displayable text from external files rather than hard-coding the text in your Rich UI application.">RUIPropertiesLibrary stereotype</a>.<p class="p">For an example that follows, the
+library name is <samp class="ph codeph">myLibrary</samp>, and the library includes
+declarations of strings named <samp class="ph codeph">entryForInputRequired</samp> and <samp class="ph codeph">entryForOthers</samp>.
 Those variable names are case sensitive.</p>
 </li>
 
-<li>In a Rich UI handler or other code, specify the <strong>validationPropertiesLibrary</strong> field
+<li class="li">In a Rich UI handler or other code, specify the <strong class="ph b">validationPropertiesLibrary</strong> field
 in a type definition or variable declaration, along with other validation
-and formatting fields. Here is an example declaration:<pre class="codeblock">name STRING {inputRequired = yes,
+and formatting fields. Here is an example declaration:<pre class="pre codeblock">name STRING {inputRequired = yes,
              lowercase = yes,
-             inputRequiredMsgKey = """"""""entryForInputRequired"""""""",
-             typeChkMsgKey = """"""""entryForOthers"""""""",
+             inputRequiredMsgKey = <span class="q">"entryForInputRequired"</span>,
+             typeChkMsgKey = "entryForOthers",
              validationPropertiesLibrary=myLibrary };</pre>
-<p>The <strong>validationPropertiesLibrary</strong> field
+<p class="p">The <strong class="ph b">validationPropertiesLibrary</strong> field
 is used only when you are overriding validation and formatting messages.</p>
 </li>
 
-<li>Set up a properties file and include entries (name-value pairs)
-for which the names match the values of <strong>MsgKey</strong> fields. In the
-current example, the properties file includes the following entries:<pre class="codeblock">entryForInputRequired=You must specify a value
+<li class="li">Set up a properties file and include entries (name-value pairs)
+for which the names match the values of <strong class="ph b">MsgKey</strong> fields. In the
+current example, the properties file includes the following entries:<pre class="pre codeblock">entryForInputRequired=You must specify a value
 entryForOthers=Your input is incorrect
 someText=Not mentioned
 </pre>
-<p>The properties file is a text file. The entry names
+<p class="p">The properties file is a text file. The entry names
 are case sensitive and are useful only if they match a string declaration
 in the Rich UI properties library.</p>
 </li>
 
 </ul>
 </div>
-<div class="p">Here are the implications of the current example: <ul>
-<li>An input-required error at run time results in display of the
-message """"""""You must specify a value,"""""""" which is identified by the name <samp class="codeph">entryForInputRequired</samp>.</li>
+<div class="p">Here are the implications of the current example: <ul class="ul">
+<li class="li">An input-required error at run time results in display of the
+message "You must specify a value," which is identified by the name <samp class="ph codeph">entryForInputRequired</samp>.</li>
 
-<li>An input of an uppercase letter at run time also results in display
-of the message """"""""Your input is incorrect."""""""" This outcome occurs because
-the value of the <strong>typeChkMsgKey</strong> field is used in response to
+<li class="li">An input of an uppercase letter at run time also results in display
+of the message "Your input is incorrect." This outcome occurs because
+the value of the <strong class="ph b">typeChkMsgKey</strong> field is used in response to
 a variety of errors; in this case, in response to a user input (the
 uppercase letter) that is disallowed by the lowercase property.</li>
 
 </ul>
 </div>
-<div class="p">Here are the rules that explain the behavior just described:<ul>
-<li>For a given data field, you can override the default messages
-associated with each of the following fields:<ul>
-<li><strong>inputRequired</strong></li>
+<div class="p">Here are the rules that explain the behavior just described:<ul class="ul">
+<li class="li">For a given data field, you can override the default messages
+associated with each of the following fields:<ul class="ul">
+<li class="li"><strong class="ph b">inputRequired</strong></li>
 
-<li><strong>minimumInput</strong></li>
+<li class="li"><strong class="ph b">minimumInput</strong></li>
 
-<li><strong>validValues</strong></li>
+<li class="li"><strong class="ph b">validValues</strong></li>
 
 </ul>
-<p>The override relies on one of the following three """"""""MsgKey""""""""
+<p class="p">The override relies on one of the following three "MsgKey"
 fields: inputRequiredMsgKey, minimumInputMsgKey, and validValuesMsgKey.</p>
 </li>
 
-<li>Also for a given data field, you can specify a single override
-for errors related to any of the following fields:<ul>
-<li><strong>currency</strong></li>
+<li class="li">Also for a given data field, you can specify a single override
+for errors related to any of the following fields:<ul class="ul">
+<li class="li"><strong class="ph b">currency</strong></li>
 
-<li><strong>currencySymbol</strong></li>
+<li class="li"><strong class="ph b">currencySymbol</strong></li>
 
-<li><strong>dateFormat</strong></li>
+<li class="li"><strong class="ph b">dateFormat</strong></li>
 
-<li><strong>fillCharacter</strong></li>
+<li class="li"><strong class="ph b">fillCharacter</strong></li>
 
-<li><strong>isBoolean</strong></li>
+<li class="li"><strong class="ph b">isBoolean</strong></li>
 
-<li><strong>isDecimalDigit</strong></li>
+<li class="li"><strong class="ph b">isDecimalDigit</strong></li>
 
-<li><strong>isHexDigit</strong></li>
+<li class="li"><strong class="ph b">isHexDigit</strong></li>
 
-<li><strong>lowercase</strong></li>
+<li class="li"><strong class="ph b">lowercase</strong></li>
 
-<li><strong>numericSeparator</strong></li>
+<li class="li"><strong class="ph b">numericSeparator</strong></li>
 
-<li><strong>sign</strong></li>
+<li class="li"><strong class="ph b">sign</strong></li>
 
-<li><strong>timeFormat</strong></li>
+<li class="li"><strong class="ph b">timeFormat</strong></li>
 
-<li><strong>timestampFormat</strong></li>
+<li class="li"><strong class="ph b">timestampFormat</strong></li>
 
-<li><strong>uppercase</strong></li>
+<li class="li"><strong class="ph b">uppercase</strong></li>
 
-<li><strong>zeroFormat</strong></li>
+<li class="li"><strong class="ph b">zeroFormat</strong></li>
 
 </ul>
-<p>That single override also relies on the <strong>typeChkMsgKey</strong> field.</p>
+<p class="p">That single override also relies on the <strong class="ph b">typeChkMsgKey</strong> field.</p>
 </li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Assigning text to widgets</h2><div class="p">The Rich UI mechanism
+<div class="section"><h2 class="title sectiontitle">Assigning text to widgets</h2><div class="p">The Rich UI mechanism
 for displaying text from an external file always relies on using an
 Rich UI properties library, regardless of the purpose of the text.
 The following statements apply whenever you use the external file
-for reasons other than overriding a default message:<ul>
-<li>The rules for EGL library access apply. For example, assume that
-you have a Rich UI properties library named <samp class="codeph">myLibrary</samp> and
-a button named <samp class="codeph">myButton</samp>. Here is one way to assign
-text (in our example, the string """"""""Not mentioned"""""""") to the button in
-your application:<pre class="codeblock">myButton.text = myLibrary.someText;</pre>
-<p>Alternatively,
-you can reference <samp class="codeph">myLibrary</samp> in a <strong>use</strong> statement,
+for reasons other than overriding a default message:<ul class="ul">
+<li class="li">The rules for EGL library access apply. For example, assume that
+you have a Rich UI properties library named <samp class="ph codeph">myLibrary</samp> and
+a button named <samp class="ph codeph">myButton</samp>. Here is one way to assign
+text (in our example, the string "Not mentioned") to the button in
+your application:<pre class="pre codeblock">myButton.text = myLibrary.someText;</pre>
+<p class="p">Alternatively,
+you can reference <samp class="ph codeph">myLibrary</samp> in a <strong class="ph b">use</strong> statement,
 in which case you do not need to reference the library name in the
 assignment.</p>
 </li>
 
-<li>You can invoke the implicit library function <span class="synph"><span class="kwd">getMessage</span></span> to
+<li class="li">You can invoke the implicit library function <span class="ph synph"><span class="keyword kwd">getMessage</span></span> to
 provide inserts to a properties-file entry.</li>
 
 </ul>
 </div>
-<p>You can also use the library function <span class="synph"><span class="kwd">getMessage</span></span> to
+<p class="p">You can also use the library function <span class="ph synph"><span class="keyword kwd">getMessage</span></span> to
 provide inserts to a string inside your code. </p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Displaying text in one or another language</h2><p>A
+<div class="section"><h2 class="title sectiontitle">Displaying text in one or another language</h2><p class="p">A
 displayable value comes from a properties file whose name has a root
-(for example, <samp class="codeph">myLibrary</samp>) and includes a <em>locale</em>,
-which is a code that identifies a human language, For example, <em>en</em> is
-the locale that represents English, and the file name <samp class="codeph">myLibrary-en</samp> refers
+(for example, <samp class="ph codeph">myLibrary</samp>) and includes a <em class="ph i">locale</em>,
+which is a code that identifies a human language, For example, <em class="ph i">en</em> is
+the locale that represents English, and the file name <samp class="ph codeph">myLibrary-en</samp> refers
 to a properties file that provides English text.</p>
-<p>Each file name
-has a root name and the extension <samp class="codeph">.properties</samp>. The
+<p class="p">Each file name
+has a root name and the extension <samp class="ph codeph">.properties</samp>. The
 locale is indicated at the end of the root name, before the extension.
 Locales consist of one to three identifiers, the first preceded with
 a hyphen and the others (if any) preceded with an underscore. Each
@@ -179,22 +179,22 @@ additional identifier after the first enables you to indicate a more
 specific language; in particular, you can specify the dialect, variety,
 or geographic location of a language. </p>
 <div class="p">The identifiers are the
-language code, country code, and variant code:<ul>
-<li>Among the language codes are <em>en</em> for English and <em>es</em> for
+language code, country code, and variant code:<ul class="ul">
+<li class="li">Among the language codes are <em class="ph i">en</em> for English and <em class="ph i">es</em> for
 Spanish. The language code is typically from the International Organization
 for Standardization (ISO) standard ISO-639.</li>
 
-<li>The country code indicates a country where the dialect of the
+<li class="li">The country code indicates a country where the dialect of the
 language is spoken. For example, the country code US indicates the
 United States, and GB indicates Great Britain. In this way, an American
-English file might be named <samp class="codeph">myLibrary-en_US.properties</samp>,
-while a British English properties file might be named <samp class="codeph">myLibrary-en_GB.properties</samp>.
+English file might be named <samp class="ph codeph">myLibrary-en_US.properties</samp>,
+while a British English properties file might be named <samp class="ph codeph">myLibrary-en_GB.properties</samp>.
 The country code is typically from the ISO standard ISO-3166.</li>
 
-<li>The variant code defines a more specific dialect or variety of
+<li class="li">The variant code defines a more specific dialect or variety of
 the language in the properties file. For example, you could use the
 variant codes A and B to distinguish between two different varieties
-of Norwegian spoken in Norway. These two files might be named <samp class="codeph">myLibrary-no_NO_A.properties</samp> and <samp class="codeph">myLibrary-no_NO_B.properties</samp>.
+of Norwegian spoken in Norway. These two files might be named <samp class="ph codeph">myLibrary-no_NO_A.properties</samp> and <samp class="ph codeph">myLibrary-no_NO_B.properties</samp>.
 Alternatively, you could define a standard type of Norwegian as the
 locale no_NO and define a variant as no_NO_B. The variant code is
 specific to a vendor or browser.</li>
@@ -203,36 +203,36 @@ specific to a vendor or browser.</li>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Deploying HTML files and the related properties files</h2><div class="p">You
+<div class="section"><h2 class="title sectiontitle">Deploying HTML files and the related properties files</h2><div class="p">You
 can deploy several HTML files for a given Rich UI application, one
 for each language that you are supporting. The user requests the HTML
 file for a specific locale by invoking the HTML file by name, perhaps
 as a result of clicking a hypertext link that you provide. For example,
 here is the HTML that invokes the German version of MyApplication.html
-from www.example.com, if a German version was deployed there:<pre class="codeblock">   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;a href=""""""""www.example.com/MyApplication-de.html""""""""&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;German version&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;/a&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</pre>
+from www.example.com, if a German version was deployed there:<pre class="pre codeblock">   &lt;a href="www.example.com/MyApplication-de.html"&gt;German version&lt;/a&gt;</pre>
 </div>
-<p>You store properties files in the WebContent/properties
-folder of your project. The root of the property file name (for example, <samp class="codeph">myLibrary</samp>)
-must be the name specified in the<strong> propertiesFile</strong> annotation
+<p class="p">You store properties files in the WebContent/properties
+folder of your project. The root of the property file name (for example, <samp class="ph codeph">myLibrary</samp>)
+must be the name specified in the<strong class="ph b"> propertiesFile</strong> annotation
 in the Rich UI properties library.</p>
 <div class="p">The EGL deployer ensures
 that the HTML file identifies a properties file for each Rich UI properties
 library that is referenced in your application. The following rules
-indicate how the file name for a given language is determined:<ul>
-<li>If the name of an available file exactly matches a locale, the
+indicate how the file name for a given language is determined:<ul class="ul">
+<li class="li">If the name of an available file exactly matches a locale, the
 name of that file is referenced.</li>
 
-<li>Otherwise, the EGL deployer references a file that has a name
+<li class="li">Otherwise, the EGL deployer references a file that has a name
 with the closest match possible. For example, if the required locale
-is no_NO_B but the name of the only available file for Norwegian is <samp class="codeph">myLibrary-no_NO.properties</samp>,
+is no_NO_B but the name of the only available file for Norwegian is <samp class="ph codeph">myLibrary-no_NO.properties</samp>,
 the name of the available file is referenced. Moreover, if no Norwegian-language
 properties file is available, the name of the default properties file
 is referenced. The name of the default file has no locale; an example
-is <samp class="codeph">myLibrary.properties</samp>.</li>
+is <samp class="ph codeph">myLibrary.properties</samp>.</li>
 
 </ul>
 </div>
-<p>Deployment fails if no properties file is available for
+<p class="p">Deployment fails if no properties file is available for
 a given Rich UI properties library. To avoid the failure, you might
 want to include a default properties file for each library.</p>
 </div>
@@ -240,7 +240,7 @@ want to include a default properties file for each library.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

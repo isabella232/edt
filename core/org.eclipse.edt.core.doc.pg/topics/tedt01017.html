@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Declaring a variable to access a dedicated or local EGL service"></meta>
+<meta name="abstract" content="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated."></meta>
+<meta name="description" content="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated."></meta>
 <meta name="DC.subject" content="services, EGL, service-access variables"></meta>
 <meta name="keywords" content="services, EGL, service-access variables"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt01002.html"></meta>
@@ -17,61 +19,61 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Declaring a variable to access a dedicated or local EGL service</title>
 </head>
-<body id="tedt01017"><a name="tedt01017"><!-- --></a>
+<body id="tedt01017">
 
 
-<h1 class="topictitle1">Declaring a variable to access a dedicated or local EGL service</h1>
+<h1 class="title topictitle1">Declaring a variable to access a dedicated or local EGL service</h1>
 
 
 
-<div><div><span>After you code an EGL Service part, you can use
+<div class="body"><div class="abstract"><span class="shortdesc">After you code an EGL Service part, you can use
 that part as the basis of a service-access variable. However, this
-usage is <strong>deprecated</strong>.</span>
+usage is <strong class="ph b">deprecated</strong>.</span>
  </div>
 
-<p>For the details on the preferred usage, see <a href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a>.</p>
+<p class="p">For the details on the preferred usage, see <a class="xref" href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a>.</p>
 
-<p>In the deprecated process, two cases are possible:</p>
+<p class="p">In the deprecated process, two cases are possible:</p>
 
-<ul>
-<li>If you are working in Rich UI, the only accessible EGL service
+<ul class="ul">
+<li class="li">If you are working in Rich UI, the only accessible EGL service
 is a dedicated service, as explained in “Service access in Rich UI.”
 You can use an Interface type to declare the variable, but can easily
 use the Service type instead. Here is an example, which also references
-the package name in which the Service type resides: <pre class="codeblock">myService server.MyServiceType?{@dedicatedService};
+the package name in which the Service type resides: <pre class="pre codeblock">myService server.MyServiceType?{@dedicatedService};
 </pre>
-<div class="p">If you use an Interface part, set the <strong>serviceName</strong> annotation
-field to the name of the Service type:<pre class="codeblock">myService MyInterfaceType?
-   {@dedicatedService{serviceName = """"""""server.MyServiceType""""""""}};
+<div class="p">If you use an Interface part, set the <strong class="ph b">serviceName</strong> annotation
+field to the name of the Service type:<pre class="pre codeblock">myService MyInterfaceType?
+   {@dedicatedService{serviceName = "server.MyServiceType"}};
 </pre>
 </div>
-<p>After declaring the variable, use it in a <span class="synph"><span class="kwd">call</span></span> statement.
+<p class="p">After declaring the variable, use it in a <span class="ph synph"><span class="keyword kwd">call</span></span> statement.
 For details, see “Invoking a service asynchronously from a Rich UI
 application.”</p>
 </li>
 
-<li><div class="important"><span class="importanttitle">Important:</span> Access of an EGL service from outside of
+<li class="li"><div class="note important"><span class="importanttitle">Important:</span> Access of an EGL service from outside of
 Rich UI is not available in the current version of EDT.</div>
  <div class="p">If
-you are working outside of Rich UI, the typical procedure is as follows:<ol>
-<li><a href="#tedt01017__interfacepart">Defining an Interface part to access a dedicated or local EGL service</a></li>
+you are working outside of Rich UI, the typical procedure is as follows:<ol class="ol">
+<li class="li"><a class="xref" href="#tedt01017__interfacepart">Defining an Interface part to access a dedicated or local EGL service</a></li>
 
-<li><a href="#tedt01017__bindingdetail">Setting a local binding in the deployment descriptor</a></li>
+<li class="li"><a class="xref" href="#tedt01017__bindingdetail">Setting a local binding in the deployment descriptor</a></li>
 
-<li><a href="#tedt01017__assigning">Assigning the local binding to the service-access variable</a></li>
+<li class="li"><a class="xref" href="#tedt01017__assigning">Assigning the local binding to the service-access variable</a></li>
 
 </ol>
 </div>
-<p>After you declare the variable and assign a service binding
+<p class="p">After you declare the variable and assign a service binding
 to it, you use the variable in a service-access statement, as described
 in “Invoking a service synchronously from outside of Rich UI.”</p>
 </li>
 
 </ul>
 
-<div class="section" id="tedt01017__interfacepart"><a name="tedt01017__interfacepart"><!-- --></a><h2 class="sectiontitle">Defining an Interface part to access
+<div class="section" id="tedt01017__interfacepart"><h2 class="title sectiontitle">Defining an Interface part to access
 a dedicated or local EGL service</h2><div class="p">Here is an example Interface
-type that might be used to access a dedicated service: <pre class="codeblock">Interface MyInterfaceType
+type that might be used to access a dedicated service: <pre class="pre codeblock">Interface MyInterfaceType
    Function GetEmployeeDetail(employeeCode STRING IN, 
                               employeeSalary FLOAT OUT, 
                               employeeStatus STRING INOUT) 
@@ -79,35 +81,35 @@ type that might be used to access a dedicated service: <pre class="codeblock">In
 end
 </pre>
 </div>
-<p>The example includes a single function prototype,
+<p class="p">The example includes a single function prototype,
 but more are possible. Also, you can specify a variety of EGL data
 types and can use the modifiers IN, OUT, and INOUT.</p>
 <div class="p">If you have
 access to the EDT IDE, you can create the Interface part easily from
-the Service part:<ol>
-<li>In the Project Explorer, right click the EGL file that defines
+the Service part:<ol class="ol">
+<li class="li">In the Project Explorer, right click the EGL file that defines
 the service.</li>
 
-<li>Click <span class="uicontrol">EGL Services &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Extract EGL Interface</span>.</li>
+<li class="li">Click <span class="ph uicontrol">EGL Services &gt; Extract EGL Interface</span>.</li>
 
-<li>In the <span class="uicontrol">New EGL Interface part</span> window, specify
-the appropriate details and click <span class="uicontrol">Finish</span>.</li>
+<li class="li">In the <span class="ph uicontrol">New EGL Interface part</span> window, specify
+the appropriate details and click <span class="ph uicontrol">Finish</span>.</li>
 
 </ol>
 </div>
-<p>When accessing a non-SOAP service, avoid a possible runtime
+<p class="p">When accessing a non-SOAP service, avoid a possible runtime
 error: do not use an Interface part that is derived from a WSDL file.</p>
 </div>
 
-<div class="section" id="tedt01017__bindingdetail"><a name="tedt01017__bindingdetail"><!-- --></a><h2 class="sectiontitle">Setting a local binding in the
+<div class="section" id="tedt01017__bindingdetail"><h2 class="title sectiontitle">Setting a local binding in the
 deployment descriptor</h2></div>
 
-<div class="section" id="tedt01017__assigning"><a name="tedt01017__assigning"><!-- --></a><h2 class="sectiontitle">Assigning the local binding to the
+<div class="section" id="tedt01017__assigning"><h2 class="title sectiontitle">Assigning the local binding to the
 service-access variable</h2></div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

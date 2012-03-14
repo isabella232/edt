@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,34 +17,34 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL REST-RPC message structure</title>
 </head>
-<body id="cedt01010"><a name="cedt01010"><!-- --></a>
+<body id="cedt01010">
 
 
-<h1 class="topictitle1">EGL REST-RPC message structure</h1>
+<h1 class="title topictitle1">EGL REST-RPC message structure</h1>
 
 
-<div><p>This topic uses EGL constructs to indicate how to access
+<div class="body"><p class="shortdesc">This topic uses EGL constructs to indicate how to access
 an EGL REST-RPC service from a programming language other than EGL.</p>
 
-<p>EGL REST-RPC services use HTTP 1.1 and JSON-encoded data.</p>
+<p class="p">EGL REST-RPC services use HTTP 1.1 and JSON-encoded data.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>
-<div class="nested1" xml:lang="en-us" id="requestmessage"><a name="requestmessage"><!-- --></a>
-<h2 class="topictitle2">Request message</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="requestmessage">
+<h2 class="title topictitle2">Request message</h2>
 
-<div>
-<div class="p">The HTTPRequest message has the following characteristics:<ul>
-<li>The header contains <samp class="codeph">key:Content-Type</samp> with the
-following value: <samp class="codeph">application/json</samp>. The method is
+<div class="body">
+<div class="p">The HTTPRequest message has the following characteristics:<ul class="ul">
+<li class="li">The header contains <samp class="ph codeph">key:Content-Type</samp> with the
+following value: <samp class="ph codeph">application/json</samp>. The method is
 POST.</li>
 
-<li>In essence, the body of the message contains the following EGL
-Record definition in JSON format:<pre class="codeblock">Record EGL_REST_RPC_Request
+<li class="li">In essence, the body of the message contains the following EGL
+Record definition in JSON format:<pre class="pre codeblock">Record EGL_REST_RPC_Request
 
    //name of the function to be invoked
    method string;
@@ -61,16 +61,16 @@ end</pre>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="responsemessageforsuccess"><a name="responsemessageforsuccess"><!-- --></a>
-<h2 class="topictitle2">Response message after success</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="responsemessageforsuccess">
+<h2 class="title topictitle2">Response message after success</h2>
 
-<div>
+<div class="body">
 <div class="p">When the EGL service function returns successfully, the HTTPResponse
-message has the following characteristics:<ul>
-<li>The status code in the header is set to 200.</li>
+message has the following characteristics:<ul class="ul">
+<li class="li">The status code in the header is set to 200.</li>
 
-<li>In essence, the body of the message contains one of the following
-two EGL Record definitions in JSON format:<pre class="codeblock">// For a response with one value
+<li class="li">In essence, the body of the message contains one of the following
+two EGL Record definitions in JSON format:<pre class="pre codeblock">// For a response with one value
 Record EGLRESTRPCSingleReturnParamResponse
    result any?;
    error EGLRESTRPCResponseError?;
@@ -89,15 +89,15 @@ end
 
 <div class="p">Response parameters include service parameters that are modified
 by OUT or INOUT, as well as a value returned from the service function.
-Here are the variations:<ul>
-<li>In the absence of any response parameters, whether OUT, INOUT,
+Here are the variations:<ul class="ul">
+<li class="li">In the absence of any response parameters, whether OUT, INOUT,
 or return, the requester receives an empty JSON object.</li>
 
-<li>If only one response parameter is in use, the requester receives
+<li class="li">If only one response parameter is in use, the requester receives
 a JSON object of type EGLRESTRPCSingleReturnParamResponse. </li>
 
-<li>If multiple response parameters are in use, the requester receives
-a JSON object of type EGLRESTRPCMultipleReturnParamResponse. The <samp class="codeph">result</samp> array
+<li class="li">If multiple response parameters are in use, the requester receives
+a JSON object of type EGLRESTRPCMultipleReturnParamResponse. The <samp class="ph codeph">result</samp> array
 shown earlier includes the response parameters in the parameter-list
 order and then the value returned from the service function.</li>
 
@@ -108,16 +108,16 @@ order and then the value returned from the service function.</li>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="responsemessageforfailure"><a name="responsemessageforfailure"><!-- --></a>
-<h2 class="topictitle2">Response message after failure</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="responsemessageforfailure">
+<h2 class="title topictitle2">Response message after failure</h2>
 
-<div>
+<div class="body">
 <div class="p">When the EGL service function returns with an error, the HTTPResponse
-message has the following characteristics:<ul>
-<li>The status code in the header is set to 500.</li>
+message has the following characteristics:<ul class="ul">
+<li class="li">The status code in the header is set to 500.</li>
 
-<li>In essence, the body of the message contains following structure
-in JSON format:<pre class="codeblock">Record EGLRESTRPCResponseError
+<li class="li">In essence, the body of the message contains following structure
+in JSON format:<pre class="pre codeblock">Record EGLRESTRPCResponseError
    error JSONRPCError;
 end
 
@@ -146,27 +146,27 @@ end
 </ul>
 </div>
 
-<div class="p">The fields in the JSONRPCError record are as follows:<dl>
-<dt class="dlterm">name</dt>
+<div class="p">The fields in the JSONRPCError record are as follows:<dl class="dl parml">
+<dt class="dt pt dlterm">name</dt>
 
-<dd>The value """"""""JSONRPCError"""""""".</dd>
-
-
-<dt class="dlterm">code</dt>
-
-<dd>The exception message ID.</dd>
+<dd class="dd pd">The value "JSONRPCError".</dd>
 
 
-<dt class="dlterm">message</dt>
+<dt class="dt pt dlterm">code</dt>
 
-<dd>The exception message.</dd>
+<dd class="dd pd">The exception message ID.</dd>
 
 
-<dt class="dlterm">error</dt>
+<dt class="dt pt dlterm">message</dt>
 
-<dd>A set of fields represented in the EglRpcException record. First
-is the <samp class="codeph">name</samp> field, which contains the fully qualified
-name of an exception record; in most cases, """"""""egl.core.ServiceInvocationException"""""""".
+<dd class="dd pd">The exception message.</dd>
+
+
+<dt class="dt pt dlterm">error</dt>
+
+<dd class="dd pd">A set of fields represented in the EglRpcException record. First
+is the <samp class="ph codeph">name</samp> field, which contains the fully qualified
+name of an exception record; in most cases, "egl.core.ServiceInvocationException".
 The other fields are from the EGL exception, as described in “EGL
 exception records.” </dd>
 
@@ -177,11 +177,11 @@ exception records.” </dd>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="examples"><a name="examples"><!-- --></a>
-<h2 class="topictitle2">Examples</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="examples">
+<h2 class="title topictitle2">Examples</h2>
 
-<div>
-<div class="p">Consider an EGL REST-RPC service that is structured as follows:<pre class="codeblock">Service HelloWorld
+<div class="body">
+<div class="p">Consider an EGL REST-RPC service that is structured as follows:<pre class="pre codeblock">Service HelloWorld
    function emptyParams()
       ;
    end
@@ -202,34 +202,34 @@ Record Wrapper
 end</pre>
 </div>
 
-<p>Here are examples of the content passed when a request succeeds:</p>
+<p class="p">Here are examples of the content passed when a request succeeds:</p>
 
-<div class="p"><pre class="codeblock">No parameters:
-   Request body:{""""""""method"""""""" : """"""""emptyParams"""""""", """"""""params"""""""" : []}
+<div class="p"><pre class="pre codeblock">No parameters:
+   Request body:{"method" : "emptyParams", "params" : []}
    Response body:{}
 
 One return parameter:
-   Request body:{""""""""method"""""""" : """"""""singleReturnParam"""""""", """"""""params"""""""" : [""""""""Joe""""""""]}
-   Response body:{""""""""result"""""""" : """"""""Hello Joe""""""""}
+   Request body:{"method" : "singleReturnParam", "params" : ["Joe"]}
+   Response body:{"result" : "Hello Joe"}
 
 Multiple return parameters:
-   Request body:{""""""""method"""""""" : """"""""multipleReturnParams"""""""", """"""""params"""""""" : [""""""""Joe""""""""]}
-   Response body:{""""""""result"""""""" : [""""""""Hello Joe"""""""", {""""""""text"""""""" : """"""""Hello Joe"""""""", """"""""length"""""""" : 9}]}</pre>
+   Request body:{"method" : "multipleReturnParams", "params" : ["Joe"]}
+   Response body:{"result" : ["Hello Joe", {"text" : "Hello Joe", "length" : 9}]}</pre>
  </div>
 
-<p>The following example gives an abbreviated error message but otherwise
+<p class="p">The following example gives an abbreviated error message but otherwise
 shows the content passed when a service throws an exception:</p>
 
-<div class="p"><pre class="codeblock">   Request body:{""""""""method"""""""" : """"""""throwsException"""""""", """"""""params"""""""" : []}
+<div class="p"><pre class="pre codeblock">   Request body:{"method" : "throwsException", "params" : []}
    Response body:
-   {""""""""error"""""""" : 
-      { """"""""name""""""""   : """"""""JSONRPCError"""""""", """"""""code"""""""" : """"""""EGL1539E"""""""", 
-        """"""""message"""""""" : """"""""EGL1539E An exception occurred..."""""""",
-        """"""""error""""""""  : 
-           {""""""""messageID"""""""" : """"""""EGL1539E"""""""", """"""""message"""""""" : """"""""EGL1539E An exception occurred..."""""""", 
-            """"""""source"""""""" : 4, """"""""detail1"""""""" : """"""""500"""""""", """"""""detail2"""""""" : """"""""FAILED"""""""", 
-            """"""""detail3"""""""" : """"""""java.net.ConnectException:Connection refused"""""""", 
-            """"""""name"""""""" : """"""""egl.core.ServiceInvocationException""""""""
+   {"error" : 
+      { "name"   : "JSONRPCError", "code" : "EGL1539E", 
+        "message" : "EGL1539E An exception occurred...",
+        "error"  : 
+           {"messageID" : "EGL1539E", "message" : "EGL1539E An exception occurred...", 
+            "source" : 4, "detail1" : "500", "detail2" : "FAILED", 
+            "detail3" : "java.net.ConnectException:Connection refused", 
+            "name" : "egl.core.ServiceInvocationException"
            }
       }
    }</pre>

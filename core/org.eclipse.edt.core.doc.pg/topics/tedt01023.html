@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,62 +19,62 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Invoking a service asynchronously from a Rich UI application</title>
 </head>
-<body id="tedt01023"><a name="tedt01023"><!-- --></a>
+<body id="tedt01023">
 
 
-<h1 class="topictitle1">Invoking a service asynchronously from a Rich UI application</h1>
+<h1 class="title topictitle1">Invoking a service asynchronously from a Rich UI application</h1>
 
 
 
-<div><p>In Rich UI, you invoke a service asynchronously by declaring
-a binding variable and then accessing a <span class="synph"><span class="kwd">call</span></span> statement
+<div class="body"><p class="shortdesc">In Rich UI, you invoke a service asynchronously by declaring
+a binding variable and then accessing a <span class="ph synph"><span class="keyword kwd">call</span></span> statement
 version that is described in the current topic.</p>
 
-<p>For background detail, see <a href="cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application.">Resource bindings</a>.</p>
+<p class="p">For background detail, see <a class="xref" href="cedt01030.html" title="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application.">Resource bindings</a>.</p>
 
-<p>Here is the asynchronous version of the <strong>call</strong> statement:</p>
+<p class="p">Here is the asynchronous version of the <strong class="ph b">call</strong> statement:</p>
 
-<pre class="codeblock">call 	<var class="varname">InterfaceTypeName</var>.<var class="varname">operationName</var>(<var class="varname">argumentList</var>)
-   using <var class="varname">bindingVariable</var>
-   returning to <var class="varname">myCallbackFunction</var>
-   onException <var class="varname">myExceptionHandler</var>;</pre>
+<pre class="pre codeblock">call 	<var class="keyword varname">InterfaceTypeName</var>.<var class="keyword varname">operationName</var>(<var class="keyword varname">argumentList</var>)
+   using <var class="keyword varname">bindingVariable</var>
+   returning to <var class="keyword varname">myCallbackFunction</var>
+   onException <var class="keyword varname">myExceptionHandler</var>;</pre>
 
-<dl>
-<dt class="dlterm"><span class="synph"><span class="var">InterfaceTypeName</span></span> </dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">InterfaceTypeName</span></span> </dt>
 
-<dd>The name of an Interface type or, for dedicated services, of a
+<dd class="dd pd">The name of an Interface type or, for dedicated services, of a
 Service or Interface type.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">operationName</span></span> </dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">operationName</span></span> </dt>
 
-<dd>The name of the operation; either the name of a function in a
+<dd class="dd pd">The name of the operation; either the name of a function in a
 Service type or the name of a function prototype in an Interface type.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">argumentList</span></span> </dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">argumentList</span></span> </dt>
 
-<dd>A list of arguments, one separated from the next by a comma <p>For
+<dd class="dd pd">A list of arguments, one separated from the next by a comma <p class="p">For
 restrictions on arguments, see “Restrictions in the prototypes used
 for service access.”</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">bindingVariable</span></span> </dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">bindingVariable</span></span> </dt>
 
-<dd>A variable that holds the access detail:<ul>
-<li>When you access a REST or REST-RPC service, the variable type
+<dd class="dd pd">A variable that holds the access detail:<ul class="ul">
+<li class="li">When you access a REST or REST-RPC service, the variable type
 is HTTPRest. <div class="p">In this case, the primary way to declare the variable
 is to include a Resource annotation that refers to an EGL deployment
-descriptor entry:<pre class="codeblock">myBindingVar HttpRest {@Resource {uri = """"""""binding:myEntry""""""""}};</pre>
+descriptor entry:<pre class="pre codeblock">myBindingVar HttpRest {@Resource {uri = "binding:myEntry"}};</pre>
 </div>
 </li>
 
-<li>When you access a dedicated service, the variable type is HTTPProxy,
-and no deployment descriptor is involved:<pre class="codeblock">myBindingVar HttpProxy;</pre>
+<li class="li">When you access a dedicated service, the variable type is HTTPProxy,
+and no deployment descriptor is involved:<pre class="pre codeblock">myBindingVar HttpProxy;</pre>
 <div class="p">Here
-is code that declares a binding-variable value in the <strong>call</strong> statement
-itself: <pre class="codeblock">call MyInterface.myOperation() using new HttpProxy
+is code that declares a binding-variable value in the <strong class="ph b">call</strong> statement
+itself: <pre class="pre codeblock">call MyInterface.myOperation() using new HttpProxy
                                returning to myCallBackFunction
                                onException myExceptionHandler;</pre>
 </div>
@@ -84,18 +84,18 @@ itself: <pre class="codeblock">call MyInterface.myOperation() using new HttpProx
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">myCallbackFunction</span></span> </dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">myCallbackFunction</span></span> </dt>
 
-<dd>The name of a callback function or delegate that is available
+<dd class="dd pd">The name of a callback function or delegate that is available
 to the call statement. In most cases, the function or delegate is
 in the same Rich UI handler or in a library. The callback function
 is described later in this topic.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="var">myExceptionHandler</span></span> </dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">myExceptionHandler</span></span> </dt>
 
-<dd>The name of an exception handler or a delegate that is available
-to the <span class="synph"><span class="kwd">call</span></span> statement.  In most cases, the
+<dd class="dd pd">The name of an exception handler or a delegate that is available
+to the <span class="ph synph"><span class="keyword kwd">call</span></span> statement.  In most cases, the
 exception handler or delegate is in the same Rich UI handler or in
 a library. The exception handler is described later in this topic. </dd>
 
@@ -103,14 +103,14 @@ a library. The exception handler is described later in this topic. </dd>
 
 </dl>
 
-<div class="section"><h2 class="sectiontitle">Keystroke assistance for the call statement</h2><div class="p">In
-the workbench, the following kinds of keystroke assistance are available:<ul>
-<li>After you type the <span class="synph"><span class="kwd">returning to</span></span> or <span class="synph"><span class="kwd">onException</span></span> keyword
-in the <span class="synph"><span class="kwd">call</span></span> statement, you can request content
+<div class="section"><h2 class="title sectiontitle">Keystroke assistance for the call statement</h2><div class="p">In
+the workbench, the following kinds of keystroke assistance are available:<ul class="ul">
+<li class="li">After you type the <span class="ph synph"><span class="keyword kwd">returning to</span></span> or <span class="ph synph"><span class="keyword kwd">onException</span></span> keyword
+in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement, you can request content
 assist by pressing Ctrl+Space. A list of functions is displayed, and
 you can select one. </li>
 
-<li>If you type the <span class="synph"><span class="kwd">call</span></span> statement with
+<li class="li">If you type the <span class="ph synph"><span class="keyword kwd">call</span></span> statement with
 the ending semicolon and include a reference to a callback or an onException
 function that does not exist, you can request that the workbench create
 the missing logic. The keystroke is Ctrl+1.</li>
@@ -119,19 +119,19 @@ the missing logic. The keystroke is Ctrl+1.</li>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Callback function</h2><p>The <span class="synph"><span class="kwd">callback</span></span> function
+<div class="section"><h2 class="title sectiontitle">Callback function</h2><p class="p">The <span class="ph synph"><span class="keyword kwd">callback</span></span> function
 receives the values, if any, that are in the response sent by the
 service. The callback itself has no return value.</p>
-<p> If the <span class="synph"><span class="kwd">callback</span></span> function
+<p class="p"> If the <span class="ph synph"><span class="keyword kwd">callback</span></span> function
 is invoked from a third-party REST service, the function can have
 zero or one parameter. If a parameter is specified, its type must
 match the type of the return value that is specified in the Interface
 part, and the parameter modifier is IN. </p>
-<div class="p">If the <span class="synph"><span class="kwd">callback</span></span> function
+<div class="p">If the <span class="ph synph"><span class="keyword kwd">callback</span></span> function
 is invoked from a SOAP service or from an EGL REST-RPC service, the
 relationship of the function parameters and the service-invocation
-parameters is best described by an example: <ul>
-<li>Consider the following function prototype in an Interface part:<pre class="codeblock">Interface EmployeeService {}
+parameters is best described by an example: <ul class="ul">
+<li class="li">Consider the following function prototype in an Interface part:<pre class="pre codeblock">Interface EmployeeService {}
    Function GetEmployeeDetail(employeeCode STRING IN, 
                               employeeSalary FLOAT OUT, 
                               employeeStatus STRING INOUT) 
@@ -140,21 +140,21 @@ end
 </pre>
 </li>
 
-<li>This example shows a binding-variable declaration and <span class="synph"><span class="kwd">call</span></span> statement
-used to invoke the service:<pre class="codeblock">myBindingVar HttpRest{@Resource{uri=""""""""binding:myEntry""""""""}};
-call MyInterface.GetEmployeeDetail(""""""""A123"""""""", 25.8, """"""""Full-time"""""""")
+<li class="li">This example shows a binding-variable declaration and <span class="ph synph"><span class="keyword kwd">call</span></span> statement
+used to invoke the service:<pre class="pre codeblock">myBindingVar HttpRest{@Resource{uri="binding:myEntry"}};
+call MyInterface.GetEmployeeDetail("A123", 25.8, "Full-time")
    using myBindingVar
    returning to myCallback 
    onException myExceptionHandler;
 </pre>
 </li>
 
-<li>Here is the outline of a <span class="synph"><span class="kwd">callback</span></span> function: <pre class="codeblock">Function myCallBack(salary FLOAT IN, 
+<li class="li">Here is the outline of a <span class="ph synph"><span class="keyword kwd">callback</span></span> function: <pre class="pre codeblock">Function myCallBack(salary FLOAT IN, 
                     status STRING IN, 
                     myRecord myEmployeeRecordPart IN)
     // statements here
 end</pre>
-<p>The function includes one parameter for each service-operation
+<p class="p">The function includes one parameter for each service-operation
 parameter that is OUT or INOUT. The order of those parameters in the
 callback function is the same as the order in the service operation.
 The service-operation return value is represented as the last parameter
@@ -163,36 +163,36 @@ in the callback function.</p>
 
 </ul>
 </div>
-<div class="p">In general, the rules for designing the <span class="synph"><span class="kwd">callback</span></span> function
-for a web SOAP service or an EGL REST-RPC service are as follows: <ul>
-<li>The function has a series of parameters that are in the same order
+<div class="p">In general, the rules for designing the <span class="ph synph"><span class="keyword kwd">callback</span></span> function
+for a web SOAP service or an EGL REST-RPC service are as follows: <ul class="ul">
+<li class="li">The function has a series of parameters that are in the same order
 as the OUT and INOUT parameters in the service invocation.</li>
 
-<li>If the service invocation has a return value, the <span class="synph"><span class="kwd">callback</span></span> function
+<li class="li">If the service invocation has a return value, the <span class="ph synph"><span class="keyword kwd">callback</span></span> function
 includes an additional parameter to accept the return value.</li>
 
-<li>The <span class="synph"><span class="kwd">callback</span></span> function can include an
+<li class="li">The <span class="ph synph"><span class="keyword kwd">callback</span></span> function can include an
 optional final parameter that provides access to the HTTP request
-and response data. The parameter is of type <span class="synph"><span class="kwd">IHTTP</span></span>,
+and response data. The parameter is of type <span class="ph synph"><span class="keyword kwd">IHTTP</span></span>,
 as described in the language reference topic named “eglx.http package.”</li>
 
-<li>Each parameter in the function has the IN modifier.</li>
+<li class="li">Each parameter in the function has the IN modifier.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">onException function</h2><div class="p">The <span class="synph"><span class="kwd">onException</span></span> function
-has the following characteristics:<ul>
-<li>No return value</li>
+<div class="section"><h2 class="title sectiontitle">onException function</h2><div class="p">The <span class="ph synph"><span class="keyword kwd">onException</span></span> function
+has the following characteristics:<ul class="ul">
+<li class="li">No return value</li>
 
-<li>The function accepts an Exception record of type <span class="synph"><span class="kwd">AnyException</span></span>,
+<li class="li">The function accepts an Exception record of type <span class="ph synph"><span class="keyword kwd">AnyException</span></span>,
 and you can test that record to determine the specific type received</li>
 
 </ul>
 </div>
-<p>Here is the outline of an <span class="synph"><span class="kwd">onException</span></span> function:</p>
-<pre class="codeblock">Function myExceptionHandler(exp AnyException)
+<p class="p">Here is the outline of an <span class="ph synph"><span class="keyword kwd">onException</span></span> function:</p>
+<pre class="pre codeblock">Function myExceptionHandler(exp AnyException)
    case 
       when (exp isa ServiceBindingException)
          ;
@@ -202,40 +202,40 @@ and you can test that record to determine the specific type received</li>
          ; 
    end
 end</pre>
-<div class="p">Errors might occur in the following places:<ul>
-<li>In a service binding; that is, in how the service access is specified
+<div class="p">Errors might occur in the following places:<ul class="ul">
+<li class="li">In a service binding; that is, in how the service access is specified
 in your code. This error might involve a problem in the deployment
 descriptor.</li>
 
-<li>In the communication of the Rich UI application with the EGL Rich
+<li class="li">In the communication of the Rich UI application with the EGL Rich
 UI Proxy</li>
 
-<li>In the EGL Rich UI Proxy</li>
+<li class="li">In the EGL Rich UI Proxy</li>
 
-<li>In the communication of the EGL Rich UI Proxy with the service</li>
+<li class="li">In the communication of the EGL Rich UI Proxy with the service</li>
 
-<li>In the service</li>
-
-</ul>
-</div>
-<p>A problem in a service binding results in a <span class="synph"><span class="kwd">ServiceBindingException</span></span>.
-Other problems result in a <span class="synph"><span class="kwd">ServiceInvocationException</span></span> or
-a <span class="synph"><span class="kwd">RuntimeException</span></span>, which is less likely.</p>
-</div>
-
-<div class="section"><h2 class="sectiontitle">For more examples</h2><div class="p">For more examples, see
-the following topics:<ul>
-<li><a href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a></li>
-
-<li><a href="tedt01025.html" title="In EGL, you can use the following Interface part to access a third-party REST service:">Using a provided Interface part for a 3rd-party REST service</a></li>
+<li class="li">In the service</li>
 
 </ul>
 </div>
+<p class="p">A problem in a service binding results in a <span class="ph synph"><span class="keyword kwd">ServiceBindingException</span></span>.
+Other problems result in a <span class="ph synph"><span class="keyword kwd">ServiceInvocationException</span></span> or
+a <span class="ph synph"><span class="keyword kwd">RuntimeException</span></span>, which is less likely.</p>
+</div>
+
+<div class="section"><h2 class="title sectiontitle">For more examples</h2><div class="p">For more examples, see
+the following topics:<ul class="ul">
+<li class="li"><a class="xref" href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a></li>
+
+<li class="li"><a class="xref" href="tedt01025.html" title="In EGL, you can use the following Interface part to access a third-party REST service:">Using a provided Interface part for a 3rd-party REST service</a></li>
+
+</ul>
+</div>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

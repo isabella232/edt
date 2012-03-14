@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,53 +19,53 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service access in Rich UI</title>
 </head>
-<body id="cedt01004"><a name="cedt01004"><!-- --></a>
+<body id="cedt01004">
 
 
-<h1 class="topictitle1">Service access in Rich UI</h1>
+<h1 class="title topictitle1">Service access in Rich UI</h1>
 
 
 
-<div><p>Service access in an EGL Rich UI handler or library is
+<div class="body"><p class="shortdesc">Service access in an EGL Rich UI handler or library is
 always <dfn class="term"> asynchronous</dfn>: the requester continues running
 without waiting for a response from the service. The user can still
 interact with the user interface while the requester waits for the
 service to respond.</p>
 
 <div class="section"><div class="p">The following code accesses the implementation that is
-shown in “EGL support for SOA”:<pre class="codeblock">myService MyServiceType?{@Resource{bindingKey = """"""""MyBinding""""""""}};
+shown in “EGL support for SOA”:<pre class="pre codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
 
-call myService.myEcho(""""""""world"""""""")
+call myService.myEcho("world")
      returning to myCallBack
      onException serviceLib.serviceExceptionHandler;</pre>
 </div>
-<p>The
+<p class="p">The
 first statement accesses an instance of a binding that is created
 from the specified entry in an EGL deployment descriptor. The second
 statement uses that binding detail in an invocation.</p>
-<p>After the
+<p class="p">After the
 invocation, the service does a task and, in most cases, responds to
 the EGL runtime code. The EGL runtime code then invokes a callback
 function. A callback function is a Rich UI function that you code
-and that you specify in the <span class="synph"><span class="kwd">call</span></span> statement
+and that you specify in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement
 that accesses the service. The invocation by the EGL runtime code
 is described as <dfn class="term">issuing a callback</dfn>. If an error occurs
 during service access and you have specified an exception handler
-in the <span class="synph"><span class="kwd">call</span></span> statement, the EGL runtime code
+in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement, the EGL runtime code
 invokes the exception handler.</p>
-<p>In the previous example, the <samp class="codeph">myCallBack</samp> callback
+<p class="p">In the previous example, the <samp class="ph codeph">myCallBack</samp> callback
 function (not shown) receives the text that is returned from a service
 and places it on the web page at run time.</p>
 <div class="p">Typically, the process
-for accessing services from Rich UI is as follows:<ol>
-<li>Use a workbench tool to create an EGL Interface part that describes
+for accessing services from Rich UI is as follows:<ol class="ol">
+<li class="li">Use a workbench tool to create an EGL Interface part that describes
 the service operations. For a given operation, the part identifies
 the return value and argument list.</li>
 
-<li>Create an access variable that is based on the Interface part.</li>
+<li class="li">Create an access variable that is based on the Interface part.</li>
 
-<li>Use the variable in a <span class="synph"><span class="kwd">call</span></span> statement.
-The <span class="synph"><span class="kwd">call</span></span> statement includes the details
+<li class="li">Use the variable in a <span class="ph synph"><span class="keyword kwd">call</span></span> statement.
+The <span class="ph synph"><span class="keyword kwd">call</span></span> statement includes the details
 that the EGL runtime code needs in order to issue a callback and specify
 an exception handler, which is invoked at run time if the invocation
 fails. </li>
@@ -74,41 +74,41 @@ fails. </li>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Rich UI proxy</h2><p>To access a service, a Rich
+<div class="section"><h2 class="title sectiontitle">Rich UI proxy</h2><p class="p">To access a service, a Rich
 UI application uses the Rich UI proxy. The Rich UI proxy is runtime
 software that is installed with your code on an application server
-that is compliant with Java EE. </p>
+that is compliant with Java™ EE. </p>
 <div class="p">The <dfn class="term">EGL
 Rich UI proxy</dfn> is runtime software that is installed with your
 Rich UI code, which runs on an application server that is compliant
 with Java EE. The proxy handles
 the communication between the application and any services that are
-accessed by the application:<ul>
-<li>When a SOAP service is requested, the proxy receives the request
+accessed by the application:<ul class="ul">
+<li class="li">When a SOAP service is requested, the proxy receives the request
 from the application, reads a WSDL file on the server, formats a SOAP
 message for transmission to the service, and sends a service request.
 When the service sends a response, the proxy reformats that response
 for use in the callback function and sends the response to the application.</li>
 
-<li>When another kind of service is requested, the process is similar
+<li class="li">When another kind of service is requested, the process is similar
 but simpler. No WSDL file is involved.</li>
 
 </ul>
 </div>
-<p>The Rich UI application uses the EGL Rich UI proxy to
+<p class="p">The Rich UI application uses the EGL Rich UI proxy to
 access every invoked service, even services that are on the same server. </p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Services that can be accessed from Rich UI</h2><div class="p">Your
-Rich UI application can access the following kinds of services:<ul>
-<li>A web service, including an EGL REST-RPC service</li>
+<div class="section"><h2 class="title sectiontitle">Services that can be accessed from Rich UI</h2><div class="p">Your
+Rich UI application can access the following kinds of services:<ul class="ul">
+<li class="li">A web service, including an EGL REST-RPC service</li>
 
-<li>An EGL service that is deployed as a <dfn class="term">dedicated service</dfn>,
+<li class="li">An EGL service that is deployed as a <dfn class="term">dedicated service</dfn>,
 which is available to the other logic in the Rich UI application.
 That service is local to the Rich UI proxy and runs in the application
-server that transmitted the Rich UI application. <p>You can use the
+server that transmitted the Rich UI application. <p class="p">You can use the
 dedicated service to do tasks that other EGL-generated Java services can do, such as accessing a database,
-or <strong>(in a later version of EDT)</strong> a file system or a local IBM i service program. However,
+or <strong class="ph b">(in a later version of EDT)</strong> a file system or a local IBM<sup>®</sup> i service program. However,
 the dedicated service is not available to other code unless you redeploy
 it as a SOAP or EGL REST-RPC service.</p>
 </li>
@@ -119,7 +119,7 @@ it as a SOAP or EGL REST-RPC service.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

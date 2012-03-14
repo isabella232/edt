@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,46 +16,46 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Developing and running test cases with EUnit</title>
 </head>
-<body id="tedt01006"><a name="tedt01006"><!-- --></a>
+<body id="tedt01006">
 
 
-<h1 class="topictitle1">Developing and running test cases with EUnit</h1>
+<h1 class="title topictitle1">Developing and running test cases with EUnit</h1>
 
 
-<div><p>EUnit is a framework used to write and run repeatable test
+<div class="body"><p class="shortdesc">EUnit is a framework used to write and run repeatable test
 cases and to create reports about the results. The framework code
 is in the org.eclipse.edt.eunit.runtime package.</p>
 
-<p>An interactive process is available for running tests. A batch
+<p class="p">An interactive process is available for running tests. A batch
 mechanism is planned to let you run tests automatically; for example,
 to run tests overnight. However, only the interactive process is in
 place in version .7.</p>
 
 <div class="p">Here are details about the EUnit Framework, in an order that reflects
-how you can practice using it: <ol>
-<li><a href="#writing">Writing test cases</a></li>
+how you can practice using it: <ol class="ol">
+<li class="li"><a class="xref" href="#writing">Writing test cases</a></li>
 
-<li><a href="#driving">Creating a test driver to run the test cases</a></li>
+<li class="li"><a class="xref" href="#driving">Creating a test driver to run the test cases</a></li>
 
-<li><a href="#running">Running your test cases</a></li>
+<li class="li"><a class="xref" href="#running">Running your test cases</a></li>
 
-<li><a href="#reviewing">Reviewing the test reports</a></li>
+<li class="li"><a class="xref" href="#reviewing">Reviewing the test reports</a></li>
 
 </ol>
 </div>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="writing"><a name="writing"><!-- --></a>
-<h2 class="topictitle2">Writing test cases</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="writing">
+<h2 class="title topictitle2">Writing test cases</h2>
 
-<div>
-<p>To write test cases, code an EGL library and document it in a way
+<div class="body">
+<p class="p">To write test cases, code an EGL library and document it in a way
 that provides details for display in the output report. A set of library
 functions implement your test cases, one function per test case. </p>
 
 <div class="p">Here is an example library with four test cases, along with a Record
-type that the library references:<pre class="codeblock">package common;
+type that the library references:<pre class="pre codeblock">package common;
 
 import org.eclipse.edt.eunit.runtime.LogResult;
 import org.eclipse.edt.eunit.runtime.Test;
@@ -70,16 +70,16 @@ library MyTestCases
       // do processing here, as appropriate for the test case.
       a int = 100;
       b int = 50;
-      success boolean = a &gt;&gt;&gt;&gt; b;
-      LogResult.assertTrue(""""Test for one integer greater than the other. """", success);
+      success boolean = a &gt; b;
+      LogResult.assertTrue("Test for one integer greater than the other. ", success);
    end
 
     	
    function test02() {@Test {targetLang = [Java, JavaScript]}}
       // do processing here, as appropriate for the test case.
-      a string = """"first"""";
-      b string = """"last"""";
-      LogResult.assertStringEqual(""""Test for two equal strings. """", a, b);
+      a string = "first";
+      b string = "last";
+      LogResult.assertStringEqual("Test for two equal strings. ", a, b);
    end
 
    function test03() {@Test}
@@ -88,14 +88,14 @@ library MyTestCases
       myFalse boolean = true;
       // expected myFalse to be false
       if (myTrue==myFalse)
-         LogResult.failed(""""Failed to distinguish between true and false. """");
+         LogResult.failed("Failed to distinguish between true and false. ");
       else
-         LogResult.passed(""""Logic is correct."""");
+         LogResult.passed("Logic is correct.");
       end
    end
 
    function test04() {@Test}
-      LogResult.skipped(""""Waiting to resolve bug 2525"""");
+      LogResult.skipped("Waiting to resolve bug 2525");
       return;
       // remove the previous two lines when the bug is resolved.
 
@@ -107,7 +107,7 @@ library MyTestCases
       try     
 
          // do processing here, as appropriate for the test case.
-         throw new MyExceptionType{message = """"An unexpected exception""""};
+         throw new MyExceptionType{message = "An unexpected exception"};
 
          onException (except AnyException)
             LogResult.error(except.message);
@@ -117,15 +117,15 @@ library MyTestCases
 Record MyExceptionType type Exception end </pre>
 </div>
 
-<div class="p">As shown, each function has the following characteristics:<ul>
-<li>Is annotated with the <span class="synph"><span class="kwd">Test</span></span> annotation.</li>
+<div class="p">As shown, each function has the following characteristics:<ul class="ul">
+<li class="li">Is annotated with the <span class="ph synph"><span class="keyword kwd">Test</span></span> annotation.</li>
 
-<li>Takes no parameters and returns no value.</li>
+<li class="li">Takes no parameters and returns no value.</li>
 
-<li>Invokes at least one function from the EUnit <span class="synph"><span class="kwd">LogResult</span></span> library;
-typically, to compare an actual value with an expected one. <p>If
+<li class="li">Invokes at least one function from the EUnit <span class="ph synph"><span class="keyword kwd">LogResult</span></span> library;
+typically, to compare an actual value with an expected one. <p class="p">If
 you are comparing one record, handler, or external type to another,
-invoke a series of <span class="synph"><span class="kwd">LogResult</span></span> functions,
+invoke a series of <span class="ph synph"><span class="keyword kwd">LogResult</span></span> functions,
 one for each field value of interest.</p>
 </li>
 
@@ -133,69 +133,69 @@ one for each field value of interest.</p>
 </div>
 
 <div class="p">The following functions are meant for use in test cases, rather
-than being primarily for use by the EUnit test framework: <ul>
-<li><span class="synph"><span class="kwd">LogResult.assertTrue</span></span>, which is shown
-earlier in the <samp class="codeph">test01</samp> function.</li>
+than being primarily for use by the EUnit test framework: <ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.assertTrue</span></span>, which is shown
+earlier in the <samp class="ph codeph">test01</samp> function.</li>
 
-<li><span class="synph"><span class="kwd">LogResult.assert</span><span class="var">X</span><span class="kwd">equal</span></span>,
-where <em>X</em> is a type name such as String. An example is in <samp class="codeph">test02</samp>.</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.assert</span><span class="ph var">X</span><span class="keyword kwd">equal</span></span>,
+where <em class="ph i">X</em> is a type name such as String. An example is in <samp class="ph codeph">test02</samp>.</li>
 
-<li><span class="synph"><span class="kwd">LogResult.failed</span></span>, <span class="synph"><span class="kwd">LogResult.logStdOut</span></span>,
-and <span class="synph"><span class="kwd">LogResult.passed</span></span>, as shown in <samp class="codeph">test03</samp>.</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.failed</span></span>, <span class="ph synph"><span class="keyword kwd">LogResult.logStdOut</span></span>,
+and <span class="ph synph"><span class="keyword kwd">LogResult.passed</span></span>, as shown in <samp class="ph codeph">test03</samp>.</li>
 
-<li><span class="synph"><span class="kwd">LogResult.skipped</span></span>, as shown in <samp class="codeph">test04</samp>.</li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.skipped</span></span>, as shown in <samp class="ph codeph">test04</samp>.</li>
 
-<li><span class="synph"><span class="kwd">LogResult.error</span></span>, as shown in <samp class="codeph">test05</samp></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.error</span></span>, as shown in <samp class="ph codeph">test05</samp></li>
 
 </ul>
 </div>
 
-<p>For details on those functions, see the following EGL Language
-Reference entry: <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00275.html" title="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both.">LogResult external type</a>.</p>
+<p class="p">For details on those functions, see the following EGL Language
+Reference entry: <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00275.html" title="LogResult contains functions that are invoked by the EUnit test framework, by custom test cases that run in the EUnit test framework, or by both.">LogResult external type</a>.</p>
 
 </div>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="driving"><a name="driving"><!-- --></a>
-<h2 class="topictitle2">Creating a test driver to run the test cases</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="driving">
+<h2 class="title topictitle2">Creating a test driver to run the test cases</h2>
 
-<div>
-<p>A <dfn class="term">test driver</dfn> is a project from which you run the
+<div class="body">
+<p class="p">A <dfn class="term">test driver</dfn> is a project from which you run the
 test cases. A test driver is language specific, including only the
 test cases that were targeted for a given language. </p>
 
 <div class="p">To specify the target languages for a given test case, assign values
-to the <span class="synph"><span class="kwd">targetLang</span></span> field of the Test annotation,
-as shown earlier in <samp class="codeph">test02</samp> and <samp class="codeph">test05</samp>.
-Here is further detail:<ul>
-<li>The <span class="synph"><span class="kwd">targetLang</span></span> field takes a list of
-enumeration values of type <span class="synph"><span class="kwd">TargetLangKind</span></span>.
+to the <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field of the Test annotation,
+as shown earlier in <samp class="ph codeph">test02</samp> and <samp class="ph codeph">test05</samp>.
+Here is further detail:<ul class="ul">
+<li class="li">The <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field takes a list of
+enumeration values of type <span class="ph synph"><span class="keyword kwd">TargetLangKind</span></span>.
 In Eclipse IDE for EGL Developers, the valid values are Java and JavaScript. </li>
 
-<li>If you do not specify the <span class="synph"><span class="kwd">targetLang</span></span> field
+<li class="li">If you do not specify the <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field
 in a test case, the effect is the same as specifying a list that includes
-every <span class="synph"><span class="kwd">TargetLangKind</span></span> value.</li>
+every <span class="ph synph"><span class="keyword kwd">TargetLangKind</span></span> value.</li>
 
 </ul>
 </div>
 
-<div class="p">To create a test driver, do as follows:<ol>
-<li>Right click on the project that contains your test cases, or on
+<div class="p">To create a test driver, do as follows:<ol class="ol">
+<li class="li">Right click on the project that contains your test cases, or on
 one or more packages that contain test cases, or on one or more source
 files that contain test cases. In this way, you decide what subset
 of test cases will be in the test driver.</li>
 
-<li>Click <span class="uicontrol">Generate EGL Test Driver</span> and then
-click the kind of test driver that you want to create:<ul>
-<li><span class="uicontrol">Java</span>, in which case a project is created
-with a name that ends with <span class="filepath">eunit.java</span>.</li>
+<li class="li">Click <span class="ph uicontrol">Generate EGL Test Driver</span> and then
+click the kind of test driver that you want to create:<ul class="ul">
+<li class="li"><span class="ph uicontrol">Java</span>, in which case a project is created
+with a name that ends with <span class="ph filepath">eunit.java</span>.</li>
 
-<li><span class="uicontrol">JavaScript</span>, in which case a project is
-created with a name that ends with <span class="filepath">eunit.javascript</span>.</li>
+<li class="li"><span class="ph uicontrol">JavaScript</span>, in which case a project is
+created with a name that ends with <span class="ph filepath">eunit.javascript</span>.</li>
 
-<li><span class="uicontrol">JavaScript Asynchronous</span>, in which case
-a project is created with a name that ends with <span class="filepath">eunit.javascriptasynch</span>.</li>
+<li class="li"><span class="ph uicontrol">JavaScript Asynchronous</span>, in which case
+a project is created with a name that ends with <span class="ph filepath">eunit.javascriptasynch</span>.</li>
 
 </ul>
  </li>
@@ -207,34 +207,34 @@ a project is created with a name that ends with <span class="filepath">eunit.jav
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="running"><a name="running"><!-- --></a>
-<h2 class="topictitle2">Running your test cases</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="running">
+<h2 class="title topictitle2">Running your test cases</h2>
 
-<div>
-<div class="p">To run the test cases, do as follows:<ol>
-<li>In the test driver, expand the <span class="uicontrol">EGLSource</span> folder
-and then the <span class="uicontrol">eunitgen</span> package.</li>
+<div class="body">
+<div class="p">To run the test cases, do as follows:<ol class="ol">
+<li class="li">In the test driver, expand the <span class="ph uicontrol">EGLSource</span> folder
+and then the <span class="ph uicontrol">eunitgen</span> package.</li>
 
-<li>Run all tests:<ul>
-<li>If the test driver is for Java, do as follows:<ol type="a">
-<li>Right click <span class="uicontrol">RunAllTests_pgm.egl</span>.</li>
+<li class="li">Run all tests:<ul class="ul">
+<li class="li">If the test driver is for Java, do as follows:<ol class="ol" type="a">
+<li class="li">Right click <span class="ph uicontrol">RunAllTests_pgm.egl</span>.</li>
 
-<li>Click <span class="uicontrol">Run as &gt;&gt;&gt;&gt; EGL Java Main Application</span>.</li>
-
-</ol>
-</li>
-
-</ul>
-<ul>
-<li>If the test driver is for JavaScript, do as follows: <ol type="a">
-<li>Right click <span class="uicontrol">RunAllTests_rui.egl</span>.</li>
-
-<li>Click <span class="uicontrol">Run as &gt;&gt;&gt;&gt; EGL Rich UI Application</span>.</li>
+<li class="li">Click <span class="ph uicontrol">Run as &gt; EGL Java Main Application</span>.</li>
 
 </ol>
 </li>
 
 </ul>
+<ul class="ul">
+<li class="li">If the test driver is for JavaScript, do as follows: <ol class="ol" type="a">
+<li class="li">Right click <span class="ph uicontrol">RunAllTests_rui.egl</span>.</li>
+
+<li class="li">Click <span class="ph uicontrol">Run as &gt; EGL Rich UI Application</span>.</li>
+
+</ol>
+</li>
+
+</ul>
 </li>
 
 </ol>
@@ -244,35 +244,35 @@ and then the <span class="uicontrol">eunitgen</span> package.</li>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="reviewing"><a name="reviewing"><!-- --></a>
-<h2 class="topictitle2">Reviewing the test reports</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="reviewing">
+<h2 class="title topictitle2">Reviewing the test reports</h2>
 
-<div>
-<div class="p">To review the test reports, do as follows:<ol>
-<li>Click on the name of the driver and either press F5 or right click
-and then click <span class="uicontrol">Refresh</span>.</li>
+<div class="body">
+<div class="p">To review the test reports, do as follows:<ol class="ol">
+<li class="li">Click on the name of the driver and either press F5 or right click
+and then click <span class="ph uicontrol">Refresh</span>.</li>
 
-<li>Expand the <strong>ResultRoot</strong> folder, which includes one more subfolders
+<li class="li">Expand the <strong class="ph b">ResultRoot</strong> folder, which includes one more subfolders
 that are named for the time at which you ran the test case.</li>
 
-<li>Access the test report summary by double clicking on the file
-for which the file extension is <span class="uicontrol">trs</span>. The Test
+<li class="li">Access the test report summary by double clicking on the file
+for which the file extension is <span class="ph uicontrol">trs</span>. The Test
 result summary root is displayed.</li>
 
-<li>That displayed page gives you several choices: <ol type="a">
-<li>To see summary information for all the test cases you ran, click
+<li class="li">That displayed page gives you several choices: <ol class="ol" type="a">
+<li class="li">To see summary information for all the test cases you ran, click
 on the Test Result Summary.</li>
 
-<li>To see summary information for all the test cases in a particular
+<li class="li">To see summary information for all the test cases in a particular
 package, expand the Test Result Summary and click on the package name.</li>
 
-<li>To see details for all the test cases in a given library, expand
-the package name and click on the library name.<p>The library-specific
-report includes a <strong>msg:</strong> title, and after that title is the content
+<li class="li">To see details for all the test cases in a given library, expand
+the package name and click on the library name.<p class="p">The library-specific
+report includes a <strong class="ph b">msg:</strong> title, and after that title is the content
 of the logged messages for that library.</p>
 </li>
 
-<li>To return to the source code of the library, click on the hypertext
+<li class="li">To return to the source code of the library, click on the hypertext
 link in the middle of the library-specific report.</li>
 
 </ol>
@@ -282,8 +282,8 @@ link in the middle of the library-specific report.</li>
 </div>
 
 <div class="p">If you run the example code in version .7, the detailed output
-is as follows:<div class="fignone">
-<br></br><div class="imagecenter"><img class="imagecenter" src="../images/tedt_eunit_detail.jpg" alt="Example of a library-specific report"></img></div><br></br>
+is as follows:<div class="fig fignone">
+<br></br><div class="imagecenter"><img class="image imagecenter" src="../images/tedt_eunit_detail.jpg" alt="Example of a library-specific report"></img></div><br></br>
 </div>
 </div>
 

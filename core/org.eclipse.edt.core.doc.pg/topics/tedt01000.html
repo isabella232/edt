@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,27 +19,27 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Developing a service or program</title>
 </head>
-<body id="tedt01000"><a name="tedt01000"><!-- --></a>
+<body id="tedt01000">
 
 
-<h1 class="topictitle1">Developing a service or program</h1>
+<h1 class="title topictitle1">Developing a service or program</h1>
 
 
 
-<div><p>With EGL, you develop a service or program by coding a
+<div class="body"><p class="shortdesc">With EGL, you develop a service or program by coding a
 Service or Program part, respectively. The basic structure is the
 same. However, a service might provide several entry points, and programs
 provide one.</p>
 
-<p>When you create a Service part, you specify whether it will be
+<p class="p">When you create a Service part, you specify whether it will be
 deployed as a SOAP service, an EGL REST service, and EGL service,
 or a subset of the three. You can change your decision later when
 you work with the EGL deployment descriptor. Similarly, when you create
 a Program part, you specify whether it will be deployed as a standard
 Java application or as a JEE client application.</p>
 
-<div class="p">Here is a Service part:<pre class="codeblock">Service MyServicePart
-   value STRING = """"""""Hello """""""";
+<div class="p">Here is a Service part:<pre class="pre codeblock">Service MyServicePart
+   value STRING = "Hello ";
 
    function myEcho(myString STRING IN) returns (STRING)
       return (value + myString);
@@ -47,17 +47,17 @@ Java application or as a JEE client application.</p>
 end</pre>
 </div>
 
-<p>In this case, the logic accepts an input string, such as “world,”
+<p class="p">In this case, the logic accepts an input string, such as “world,”
 and returns to the requester the concatenation of “Hello” and the
 input string. </p>
 
 <div class="p">A program or service can access services, programs, files, reports,
 relational databases, and programs. In most cases, the following rules
-apply:<ul>
-<li>Resources can be local to or remote from the platform where the
+apply:<ul class="ul">
+<li class="li">Resources can be local to or remote from the platform where the
 accessing logic runs.</li>
 
-<li>You specify the details for resource access by referencing an
+<li class="li">You specify the details for resource access by referencing an
 entry in the deployment descriptor. The access detail is called a <dfn class="term">resource
 binding</dfn>.</li>
 
@@ -66,7 +66,7 @@ binding</dfn>.</li>
 
 </div>
 
-<div></div>
+<div class="related-links"></div>
 
 </body>
 </html>

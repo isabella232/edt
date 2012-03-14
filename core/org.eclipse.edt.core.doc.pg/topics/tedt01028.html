@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,25 +18,25 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Calling from generated Java code to a DLL</title>
 </head>
-<body id="tedt01028"><a name="tedt01028"><!-- --></a>
+<body id="tedt01028">
 
 
-<h1 class="topictitle1">Calling from generated Java code to a DLL</h1>
+<h1 class="title topictitle1">Calling from generated Java code to a DLL</h1>
 
 
 
-<div><p>An EGL Java program
+<div class="body"><p class="shortdesc">An EGL Java™ program
 can call functions in a single, non-EGL dynamic link library (DLL),
 which might be written in C or COBOL. The file extension for the DLL
 depends on your environment. Examples include .dll, .so, and .sl.</p>
 
-<p>You create a Library part that has the <span class="synph"><span class="kwd">nativeLibrary</span></span> stereotype.
+<p class="p">You create a Library part that has the <span class="ph synph"><span class="keyword kwd">nativeLibrary</span></span> stereotype.
 That part acts as an interface between your EGL program and the DLL.
-The Library part lists function names and parameters and can use the <span class="synph"><span class="kwd">alias</span></span> function
+The Library part lists function names and parameters and can use the <span class="ph synph"><span class="keyword kwd">alias</span></span> function
 annotation wherever function names do not match the EGL naming conventions.</p>
 
-<p>Access the functions either by using dot syntax (<span class="synph"><span class="var">library.function()</span></span>)
-or by creating a <span class="synph"><span class="kwd">use</span></span> statement that references
+<p class="p">Access the functions either by using dot syntax (<span class="ph synph"><span class="ph var">library.function()</span></span>)
+or by creating a <span class="ph synph"><span class="keyword kwd">use</span></span> statement that references
 the library.</p>
 
 </div>

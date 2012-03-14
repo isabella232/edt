@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,41 +19,41 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Form processing with Rich UI</title>
 </head>
-<body id="cedt01021"><a name="cedt01021"><!-- --></a>
+<body id="cedt01021">
 
 
-<h1 class="topictitle1">Form processing with Rich UI</h1>
+<h1 class="title topictitle1">Form processing with Rich UI</h1>
 
 
 
-<div><p>Rich UI provides a way to implement the kind of form processing
+<div class="body"><p class="shortdesc">Rich UI provides a way to implement the kind of form processing
 that is traditional in business software. The processing depends on
 the Rich UI controller, which is a definition that relates a single
 view—a widget—with a single model—a data field. For details on Rich
 UI controllers, see “Rich UI validation and formatting.”</p>
 
 <div class="p">You might use form processing in an application that fulfills the
-following steps:<ul>
-<li>The application publishes data; that is, presents data to the
+following steps:<ul class="ul">
+<li class="li">The application publishes data; that is, presents data to the
 user.</li>
 
-<li>The user updates the data and then clicks a button or presses
+<li class="li">The user updates the data and then clicks a button or presses
 a key to submit the data.</li>
 
-<li>The code validates the input, transmits all the validated data
+<li class="li">The code validates the input, transmits all the validated data
 to a service, and responds to the user.</li>
 
 </ul>
 </div>
 
 <div class="p">A <dfn class="term">form manager</dfn> is a handler declaration that gives
-you the following capabilities:<ul>
-<li>To define a set of form fields, each of which can include a field
+you the following capabilities:<ul class="ul">
+<li class="li">To define a set of form fields, each of which can include a field
 label, a controller, and an error field. The displayable components
 can be anywhere on the user interface and can be separate from one
 another.</li>
 
-<li>To process the set of form fields, including output formatting,
+<li class="li">To process the set of form fields, including output formatting,
 input validation, and input unformatting. For example, if a money
 value is being stored in a field of type NUM, the currency symbol
  is removed from the input value before the value is stored.</li>
@@ -61,112 +61,112 @@ value is being stored in a field of type NUM, the currency symbol
 </ul>
 </div>
 
-<p>You interact with a form manager by writing code or by using code
+<p class="p">You interact with a form manager by writing code or by using code
 that the Rich UI editor provides for you.</p>
 
-<div class="p">Here is a declaration of a form manager: <pre class="codeblock">employeeForm FormManager { entries = [
-   new FormField { nameLabel=""""""""Name:"""""""",   controller=nameController },
-   new FormField { nameLabel=""""""""Age:"""""""",    controller=ageController },
-   new FormField { nameLabel=""""""""Salary:"""""""", controller=salaryController }
+<div class="p">Here is a declaration of a form manager: <pre class="pre codeblock">employeeForm FormManager { entries = [
+   new FormField { nameLabel="Name:",   controller=nameController },
+   new FormField { nameLabel="Age:",    controller=ageController },
+   new FormField { nameLabel="Salary:", controller=salaryController }
 ]};</pre>
 </div>
 
-<p>You invoke functions that handle each of the form fields in turn;
+<p class="p">You invoke functions that handle each of the form fields in turn;
 for example, to validate the form as a whole. The order of the form-field
 processing is generally the order in which the form are listed in
-the <span class="synph"><span class="kwd">entries</span></span> array, in the declaration of
+the <span class="ph synph"><span class="keyword kwd">entries</span></span> array, in the declaration of
 the form manager.</p>
 
-<div class="section"><h2 class="sectiontitle">A starting point for form development</h2><div class="p">EGL
+<div class="section"><h2 class="title sectiontitle">A starting point for form development</h2><div class="p">EGL
 provides a starting point for form development. In brief, the Rich
 UI editor provides application-specific code, and you add logic to
 invoke it. To cause the initial development in the EDT IDE, do as
-follows:<ol>
-<li>Open a handler in the Rich UI editor and drag and drop a record
+follows:<ol class="ol">
+<li class="li">Open a handler in the Rich UI editor and drag and drop a record
 definition to the Design tab. </li>
 
-<li>Work with a wizard, as described in “Creating widgets by dragging
+<li class="li">Work with a wizard, as described in “Creating widgets by dragging
 data into the Rich UI editor.”</li>
 
 </ol>
 </div>
 <div class="p">In response to your keystrokes, the editor adds the following
-code to your handler: <ul>
-<li>A form manager. The form fields in the declaration are specific
+code to your handler: <ul class="ul">
+<li class="li">A form manager. The form fields in the declaration are specific
 to your need.</li>
 
-<li>Functions that access the general form-processing logic in the
+<li class="li">Functions that access the general form-processing logic in the
 form manager.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Form fields</h2><p>A form field is itself a data
+<div class="section"><h2 class="title sectiontitle">Form fields</h2><p class="p">A form field is itself a data
 collection: a record of type FormField. The record is used differently
 for a form manager and for a validating form. The use of a single
 record type for both of those mechanisms means that you can easily
 switch between the two.</p>
-<p>As suggested in the next table, you
+<p class="p">As suggested in the next table, you
 set the record fields that are appropriate for your use.</p>
 <div class="p">
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="30.69620253164557%" id="d11651e120">Field in the record of type FormField</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="30.69620253164557%" id="d14949e120">Field in the record of type FormField</th>
 
-<th class="cellrowborder" valign="bottom" width="22.151898734177212%" id="d11651e123">Field value</th>
+<th class="entry" valign="bottom" width="22.151898734177212%" id="d14949e123">Field value</th>
 
-<th class="cellrowborder" valign="bottom" width="47.151898734177216%" id="d11651e126">Details</th>
+<th class="entry" valign="bottom" width="47.151898734177216%" id="d14949e126">Details</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11651e120 ">controller</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="30.69620253164557%" headers="d14949e120 ">controller</td>
 
-<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11651e123 ">Controller</td>
+<td class="entry" valign="top" width="22.151898734177212%" headers="d14949e123 ">Controller</td>
 
-<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11651e126 ">The controller is a definition that relates
+<td class="entry" valign="top" width="47.151898734177216%" headers="d14949e126 ">The controller is a definition that relates
 a view to a model.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11651e120 ">errorLabel</td>
+<tr class="row">
+<td class="entry" valign="top" width="30.69620253164557%" headers="d14949e120 ">errorLabel</td>
 
-<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11651e123 ">TextLabel</td>
+<td class="entry" valign="top" width="22.151898734177212%" headers="d14949e123 ">TextLabel</td>
 
-<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11651e126 ">The text label named <span class="synph"><span class="kwd">errorLabel</span></span> is
+<td class="entry" valign="top" width="47.151898734177216%" headers="d14949e126 ">The text label named <span class="ph synph"><span class="keyword kwd">errorLabel</span></span> is
 the error field; it displays the error message, if any, that is output
 during validation of a form field. The appearance of the error field
-changes when an error occurs.<p>Supply the text label when you declare
+changes when an error occurs.<p class="p">Supply the text label when you declare
 the form field. </p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11651e120 ">nameLabel</td>
+<tr class="row">
+<td class="entry" valign="top" width="30.69620253164557%" headers="d14949e120 ">nameLabel</td>
 
-<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11651e123 ">TextLabel</td>
+<td class="entry" valign="top" width="22.151898734177212%" headers="d14949e123 ">TextLabel</td>
 
-<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11651e126 ">The form-field label. The setting is ignored
+<td class="entry" valign="top" width="47.151898734177216%" headers="d14949e126 ">The form-field label. The setting is ignored
 if you are using a validating form, which provides a label and assigns
-the <span class="synph"><span class="kwd">displayName</span></span> value to that label.</td>
+the <span class="ph synph"><span class="keyword kwd">displayName</span></span> value to that label.</td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="30.69620253164557%" headers="d11651e120 ">labelClass</td>
+<tr class="row">
+<td class="entry" valign="top" width="30.69620253164557%" headers="d14949e120 ">labelClass</td>
 
-<td class="cellrowborder" valign="top" width="22.151898734177212%" headers="d11651e123 ">String?</td>
+<td class="entry" valign="top" width="22.151898734177212%" headers="d14949e123 ">String?</td>
 
-<td class="cellrowborder" valign="top" width="47.151898734177216%" headers="d11651e126 ">A CSS class. Do not change this value, which
+<td class="entry" valign="top" width="47.151898734177216%" headers="d14949e126 ">A CSS class. Do not change this value, which
 is used to change the form-field label to its original appearance
-after an error is resolved.<p>The class name is EglRuiTextLabel; and
+after an error is resolved.<p class="p">The class name is EglRuiTextLabel; and
 the same class name is used when an error occurs, with the addition
 of the following, secondary class: FormErrorLabel.</p>
 </td>
@@ -178,40 +178,40 @@ of the following, secondary class: FormErrorLabel.</p>
 </table>
 </div>
 </div>
-<p>When you work with a form manager, provide the <span class="synph"><span class="kwd">controller</span></span> and <span class="synph"><span class="kwd">nameLabel</span></span> values
-and, optionally, the <span class="synph"><span class="kwd">errorLabel</span></span> value.</p>
+<p class="p">When you work with a form manager, provide the <span class="ph synph"><span class="keyword kwd">controller</span></span> and <span class="ph synph"><span class="keyword kwd">nameLabel</span></span> values
+and, optionally, the <span class="ph synph"><span class="keyword kwd">errorLabel</span></span> value.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Form-level functions</h2><p>The form-level functions
+<div class="section"><h2 class="title sectiontitle">Form-level functions</h2><p class="p">The form-level functions
 invoke controller-specific functions; and in each case, the order
 of the invocations is the order in which the form fields are listed
-in the <span class="synph"><span class="kwd">entries</span></span> array. </p>
+in the <span class="ph synph"><span class="keyword kwd">entries</span></span> array. </p>
 <div class="p">Your code is
 likely to invoke functions for validating, committing, and publishing
-data. For example, your code might expand on the following logic:<pre class="codeblock">if (employeeForm.isValid())
+data. For example, your code might expand on the following logic:<pre class="pre codeblock">if (employeeForm.isValid())
    employeeForm.commit();
 end</pre>
 </div>
-<p>The controller itself invokes a controller-specific <span class="synph"><span class="kwd">validStateSetter</span></span> function
+<p class="p">The controller itself invokes a controller-specific <span class="ph synph"><span class="keyword kwd">validStateSetter</span></span> function
 at the end of validation.</p>
-<div class="p">Note the order of events:<ol>
-<li>Your invocation of the form-level <span class="synph"><span class="kwd">isValid</span></span> function
-has the following effect for every controller in turn:<ol type="a">
-<li>Invokes the controller's <span class="synph"><span class="kwd">isValid</span></span> function,
-which in turn invokes the <span class="synph"><span class="kwd">validator</span></span> functions
+<div class="p">Note the order of events:<ol class="ol">
+<li class="li">Your invocation of the form-level <span class="ph synph"><span class="keyword kwd">isValid</span></span> function
+has the following effect for every controller in turn:<ol class="ol" type="a">
+<li class="li">Invokes the controller's <span class="ph synph"><span class="keyword kwd">isValid</span></span> function,
+which in turn invokes the <span class="ph synph"><span class="keyword kwd">validator</span></span> functions
 referenced in the controller definition. The process also involves
-elementary validations such as for the <span class="synph"><span class="kwd">isDecimalDigit</span></span> property
+elementary validations such as for the <span class="ph synph"><span class="keyword kwd">isDecimalDigit</span></span> property
 of the controller model. </li>
 
-<li>Invokes the controller's <span class="synph"><span class="kwd">validStateSetter</span></span> function.
-By default, this function is the form-level <span class="synph"><span class="kwd">validStateSetter</span></span> function.</li>
+<li class="li">Invokes the controller's <span class="ph synph"><span class="keyword kwd">validStateSetter</span></span> function.
+By default, this function is the form-level <span class="ph synph"><span class="keyword kwd">validStateSetter</span></span> function.</li>
 
 </ol>
 </li>
 
-<li>If all the controller views contain valid data, your code invokes
-the form-level <span class="synph"><span class="kwd">commit</span></span> function. That function
-invokes each controller-specific <span class="synph"><span class="kwd">commit</span></span> function
+<li class="li">If all the controller views contain valid data, your code invokes
+the form-level <span class="ph synph"><span class="keyword kwd">commit</span></span> function. That function
+invokes each controller-specific <span class="ph synph"><span class="keyword kwd">commit</span></span> function
 to unformat the data in a controller view and to write the value to
 a controller model.</li>
 
@@ -219,48 +219,48 @@ a controller model.</li>
 </div>
 <div class="p">Given the preceding order, you might want to invoke your
 own cross-field validation after the form validations succeed. Your
-code might look as follows: <pre class="codeblock">if (employeeForm.isValid())
+code might look as follows: <pre class="pre codeblock">if (employeeForm.isValid())
    if (myValidation())
       employeeForm.commit();
    end
 end</pre>
 </div>
-<p>Here are the form-level functions in alphabetical
+<p class="p">Here are the form-level functions in alphabetical
 order:</p>
-<div class="p"><dl>
-<dt class="dlterm"><span class="synph"><span class="kwd">commit()</span></span></dt>
+<div class="p"><dl class="dl">
+<dt class="dt dlterm"><span class="ph synph"><span class="keyword kwd">commit()</span></span></dt>
 
-<dd>Lets you commit all the views to the related models with one command.
-After you invoke the form-level <strong>commit</strong> function, you can transmit
-all the model data to a service.<p>The function has no parameters
+<dd class="dd">Lets you commit all the views to the related models with one command.
+After you invoke the form-level <strong class="ph b">commit</strong> function, you can transmit
+all the model data to a service.<p class="p">The function has no parameters
 or return value.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">isValid()</span></span></dt>
+<dt class="dt dlterm"><span class="ph synph"><span class="keyword kwd">isValid()</span></span></dt>
 
-<dd>Invokes the controller-specific <strong>isValid</strong> functions.</dd>
+<dd class="dd">Invokes the controller-specific <strong class="ph b">isValid</strong> functions.</dd>
 
-<dd class="ddexpand">The function has no parameters and returns a Boolean to indicate
+<dd class="dd">The function has no parameters and returns a Boolean to indicate
 whether validation succeeded for all form fields.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">publish()</span></span></dt>
+<dt class="dt dlterm"><span class="ph synph"><span class="keyword kwd">publish()</span></span></dt>
 
-<dd>Invokes each controller-specific <span class="synph"><span class="kwd">publish</span></span> function
+<dd class="dd">Invokes each controller-specific <span class="ph synph"><span class="keyword kwd">publish</span></span> function
 to format data stored in the controller model and to write the formatted
-data to a controller view. Your code might invoke the form-level <strong>publish</strong> command
+data to a controller view. Your code might invoke the form-level <strong class="ph b">publish</strong> command
 in a callback function, which is invoked after your code receives
-data that is returned from a service.<p>The function has no parameters
+data that is returned from a service.<p class="p">The function has no parameters
 or return value.</p>
 </dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">validate()</span></span></dt>
+<dt class="dt dlterm"><span class="ph synph"><span class="keyword kwd">validate()</span></span></dt>
 
-<dd>Invokes the controller-specific <strong>validate</strong> functions.<p>The
+<dd class="dd">Invokes the controller-specific <strong class="ph b">validate</strong> functions.<p class="p">The
 function has no parameters and returns a Boolean to indicate whether
-the validations succeeded; that is, whether all the controller-specific <strong>validate</strong> functions
+the validations succeeded; that is, whether all the controller-specific <strong class="ph b">validate</strong> functions
 returned a null or blank.</p>
 </dd>
 
@@ -272,7 +272,7 @@ returned a null or blank.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

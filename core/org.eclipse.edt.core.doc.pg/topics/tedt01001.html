@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -20,41 +20,41 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Developing a Rich UI application</title>
 </head>
-<body id="tedt01001"><a name="tedt01001"><!-- --></a>
+<body id="tedt01001">
 
 
-<h1 class="topictitle1">Developing a Rich UI application</h1>
+<h1 class="title topictitle1">Developing a Rich UI application</h1>
 
 
 
-<div><p></p>
+<div class="body"><p class="shortdesc"></p>
 
-<div class="p">As a Rich UI developer, you do the following tasks: <ol>
-<li>Create a Rich UI project.</li>
+<div class="p">As a Rich UI developer, you do the following tasks: <ol class="ol">
+<li class="li">Create a Rich UI project.</li>
 
-<li>Create a handler and specify the <span class="synph"><span class="kwd">RUIHandler</span></span> stereotype.
+<li class="li">Create a handler and specify the <span class="ph synph"><span class="keyword kwd">RUIHandler</span></span> stereotype.
 The logic is called a “Rich UI handler.”</li>
 
-<li>Add content to the Rich UI handler. The content includes widget
-details, as well as the following kinds of logic:<ul>
-<li>Startup logic, which runs when the browser first receives the
+<li class="li">Add content to the Rich UI handler. The content includes widget
+details, as well as the following kinds of logic:<ul class="ul">
+<li class="li">Startup logic, which runs when the browser first receives the
 application from an application server; and</li>
 
-<li>Event logic, which runs in response to user actions such as a
+<li class="li">Event logic, which runs in response to user actions such as a
 button click.</li>
 
 </ul>
-<p>Both kinds of logic can access libraries, services, and other
+<p class="p">Both kinds of logic can access libraries, services, and other
 Rich UI handlers.</p>
 </li>
 
-<li>Revise and test your source code.</li>
+<li class="li">Revise and test your source code.</li>
 
-<li>When you are ready to generate and deploy your code, use the process
+<li class="li">When you are ready to generate and deploy your code, use the process
 described in “Introduction to EGL generation and deployment” and “Overview
 of Rich UI deployment.” </li>
 
-<li>When you store your applications in a corporate repository, keep
+<li class="li">When you store your applications in a corporate repository, keep
 the specific EGL widget projects that were used during development.
 This practice ensures that you can update your applications over time
 without having to make changes to reflect changes in the system widgets.</li>
@@ -62,38 +62,38 @@ without having to make changes to reflect changes in the system widgets.</li>
 </ol>
 </div>
 
-<p>If your users are accessing a Rich UI application by way of Microsoft Internet Explorer
+<p class="p">If your users are accessing a Rich UI application by way of Microsoft™ Internet Explorer
 8 or less, be aware of the issue described in “Rich UI memory management
 for Microsoft Internet
 Explorer.”</p>
 
-<div class="section" id="tedt01001__widget_upgrade"><a name="tedt01001__widget_upgrade"><!-- --></a><h2 class="sectiontitle">Outline of widget-upgrade tasks</h2><div class="p">If
+<div class="section" id="tedt01001__widget_upgrade"><h2 class="title sectiontitle">Outline of widget-upgrade tasks</h2><div class="p">If
 you are using the EDT IDE, you can import one or both of the following
-sets of widget projects when you create a Rich UI project in a workspace: <ul>
-<li>com.ibm.egl.rui_<em>version</em>, for the native EGL widgets.</li>
+sets of widget projects when you create a Rich UI project in a workspace: <ul class="ul">
+<li class="li">com.ibm.egl.rui_<em class="ph i">version</em>, for the native EGL widgets.</li>
 
-<li>com.ibm.egl.rui.dojo.widgets_<em>version</em>, for the EGL Dojo
-widgets, and com.ibm.egl.rui.dojo.runtime.local_<em>version</em>, for
+<li class="li">com.ibm.egl.rui.dojo.widgets_<em class="ph i">version</em>, for the EGL Dojo
+widgets, and com.ibm.egl.rui.dojo.runtime.local_<em class="ph i">version</em>, for
 the Dojo Toolkit project, which is a local installation of the Dojo
 runtime code.</li>
 
 </ul>
 </div>
-<p>In each case, <em>version</em> is a revision level of the
+<p class="p">In each case, <em class="ph i">version</em> is a revision level of the
 widget project. </p>
 <div class="p">If you want to access widgets that you did
 not request when you created a Rich UI project, or if you want to
-upgrade your code to use the latest widget versions, do as follows:<ol>
-<li>Import the projects of interest. [ insert details, when available
-]<p>Alternatively, if you are not using the
+upgrade your code to use the latest widget versions, do as follows:<ol class="ol">
+<li class="li">Import the projects of interest. [ insert details, when available
+]<p class="p">Alternatively, if you are not using the
 Google or AOL provider projects, you can get all the projects you
 need by creating a new Rich UI project and then deleting that project.</p>
 </li>
 
-<li>For each of your Rich UI projects, ensure that the EGL build path
+<li class="li">For each of your Rich UI projects, ensure that the EGL build path
 points to the new EGL (non-Dojo) widgets and, if appropriate, to the
 new Dojo runtime code. For keystroke details, see “Editing the EGL
-build path.”<p>In relation to the EGL Dojo widgets, access the Toolkit
+build path.”<p class="p">In relation to the EGL Dojo widgets, access the Toolkit
 or provider project that makes available a particular version of the
 EGL Dojo widgets. Do not change the EGL build path in a Toolkit or
 provider project, and do not change the build paths in your own projects
@@ -102,14 +102,14 @@ to refer directly to the EGL Dojo widgets.</p>
 
 </ol>
 </div>
-<p>Please note that when you upgrade, you need to upgrade
+<p class="p">Please note that when you upgrade, you need to upgrade
 both the EGL widgets and the EGL Dojo projects to the most recent
 versions.</p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

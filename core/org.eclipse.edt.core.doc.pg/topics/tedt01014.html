@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -18,76 +18,76 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Accessing a BIRT report</title>
 </head>
-<body id="tedt01014"><a name="tedt01014"><!-- --></a>
+<body id="tedt01014">
 
 
-<h1 class="topictitle1">Accessing a BIRT report</h1>
+<h1 class="title topictitle1">Accessing a BIRT report</h1>
 
 
 
-<div><p>Business Intelligence and Reporting Tools (BIRT) is an
+<div class="body"><p class="shortdesc">Business Intelligence and Reporting Tools (BIRT) is an
 Eclipse-based reporting system that allows for sophisticated output
 in PDF or HTML format, including graphics, tables, graphs, and charts.
 EGL support for BIRT is will be available when you code programs generated
-for Java; but <strong>that support
+for Java™; but <strong class="ph b">that support
 is not available in version .7 of the Eclipse IDE for EGL Developers</strong>.</p>
 
-<p>You can begin designing your output by opening the Report Design
+<p class="p">You can begin designing your output by opening the Report Design
 perspective of the Workbench and creating a Report project. Alternatively,
 you can do all your work in an EGL or web project. </p>
 
-<div class="p">You create a <em>report</em>, which (in the context of your output-design
+<div class="p">You create a <em class="ph i">report</em>, which (in the context of your output-design
 work) is an XML file whose default extension is .rptdesign. The steps
-are as follows: <ol>
-<li>Click <span class="keyword">File</span> or right click on the project</li>
+are as follows: <ol class="ol">
+<li class="li">Click <span class="keyword">File</span> or right click on the project</li>
 
-<li>Select <span class="keyword">New</span> &gt;&gt;&gt;&gt; <span class="keyword">Other</span></li>
+<li class="li">Select <span class="keyword">New</span> &gt; <span class="keyword">Other</span></li>
 
-<li>At the <span class="keyword">Select a Wizard</span> dialog, choose <span class="keyword">Business
-Intelligence and Reporting Tools</span> &gt;&gt;&gt;&gt; <span class="keyword">Report</span></li>
+<li class="li">At the <span class="keyword">Select a Wizard</span> dialog, choose <span class="keyword">Business
+Intelligence and Reporting Tools</span> &gt; <span class="keyword">Report</span></li>
 
-<li>Specify a parent folder and report name, and click <span class="keyword">Next</span></li>
+<li class="li">Specify a parent folder and report name, and click <span class="keyword">Next</span></li>
 
-<li>At the <span class="keyword">New Report</span> dialog, select a template
+<li class="li">At the <span class="keyword">New Report</span> dialog, select a template
 that will be the basis of your report. Help is available if you press
 the question icon, and details on report design will be displayed
 subsequently if you check <span class="keyword">Show Report Creation Cheat Sheet</span>. </li>
 
-<li>Click <span class="keyword">Finish</span>.</li>
+<li class="li">Click <span class="keyword">Finish</span>.</li>
 
-<li>Your subsequent tasks include specifying a data source (for example,
+<li class="li">Your subsequent tasks include specifying a data source (for example,
 a JDBC connection), specifying a data set (for example, the database
 columns specified in an SQL SELECT statement), and using a palette
 to drag and drop elements such as labels and tables. You can rely
 on the cheat sheet and can get a fuller introduction to report design
-by accessing the tutorial and background detail at the following website:<p>  <a href="http://www.eclipse.org/birt">http://www.eclipse.org/birt</a></p>
+by accessing the tutorial and background detail at the following website:<p class="lines">  <a class="xref" href="http://www.eclipse.org/birt">http://www.eclipse.org/birt</a></p>
 </li>
 
 </ol>
 </div>
 
 <div class="p">Working at the EGL or web perspective, you create EGL code that
-drives output creation. The creation can have two steps:<ol>
-<li>The report (hereafter called the <em>design file</em>) is converted
-to a second file, called a <em>document file</em>, which has a default
+drives output creation. The creation can have two steps:<ol class="ol">
+<li class="li">The report (hereafter called the <em class="ph i">design file</em>) is converted
+to a second file, called a <em class="ph i">document file</em>, which has a default
 extension of .rptdocument and contains data in an intermediate format</li>
 
-<li>The document file is converted to the PDF or HTML output</li>
+<li class="li">The document file is converted to the PDF or HTML output</li>
 
 </ol>
 </div>
 
-<div class="p">Two other choices are possible, to speed processing:<ul>
-<li>You can skip the creation of a separate document file</li>
+<div class="p">Two other choices are possible, to speed processing:<ul class="ul">
+<li class="li">You can skip the creation of a separate document file</li>
 
-<li>You can start the process with an existing document file instead
+<li class="li">You can start the process with an existing document file instead
 of a design file</li>
 
 </ul>
 </div>
 
-<div class="p">The basic idea for working with BIRT in EGL is as follows: <ul>
-<li>You create an <em> EGL BIRT report</em>, which is a variable based
+<div class="p">The basic idea for working with BIRT in EGL is as follows: <ul class="ul">
+<li class="li">You create an <em class="ph i"> EGL BIRT report</em>, which is a variable based
 on BIRTReport, an external type. You can include various details (name
 of a design file, for example) when declaring that variable, or you
 can avoid specifying some or all of the details and add them later
@@ -95,56 +95,56 @@ by invoking functions or setting fields that are specific to the EGL
 BIRT report. In either case, you can specify the details at development
 time, by using literals, or at run time, by using variables.<div class="p">Here's
 an example of the syntax that first creates an EGL BIRT report and
-then specifies the fully qualified name of the design file:<pre class="codeblock">  myReport BIRTReport { };
-  myReport.designFile = """"C:/MyBIRTReport.rptdesign"""";</pre>
+then specifies the fully qualified name of the design file:<pre class="pre codeblock">  myReport BIRTReport { };
+  myReport.designFile = "C:/MyBIRTReport.rptdesign";</pre>
 </div>
 </li>
 
-<li>You invoke a function that creates the output, as in the following
-example:<pre class="codeblock">  myReport.createReportFromDesign();</pre>
+<li class="li">You invoke a function that creates the output, as in the following
+example:<pre class="pre codeblock">  myReport.createReportFromDesign();</pre>
 <div class="p">The
-following creation functions are available:<ul>
-<li>createReportFromDesign() creates output from a design file, without
+following creation functions are available:<ul class="ul">
+<li class="li">createReportFromDesign() creates output from a design file, without
 storing the report data in a document file</li>
 
-<li>createReportFromDocument() creates output from a document file</li>
+<li class="li">createReportFromDocument() creates output from a document file</li>
 
-<li>createDocument() creates a document file from a design file</li>
+<li class="li">createDocument() creates a document file from a design file</li>
 
 </ul>
 </div>
 </li>
 
-<li>You can create an EGL report handler of type BIRTHandler. This
+<li class="li">You can create an EGL report handler of type BIRTHandler. This
 optional logic part contains functions that act as event handlers,
 allowing you to customize many details that affect the report output.
 When EGL is creating a report document (as is possible with createDocument
 or createReportFromDesign), the EGL runtime code invokes the event
-handlers in response to the following events, among others: <ul>
-<li>The opening or closing of a text file or database connection</li>
+handlers in response to the following events, among others: <ul class="ul">
+<li class="li">The opening or closing of a text file or database connection</li>
 
-<li>The opening or closing of a database cursor</li>
+<li class="li">The opening or closing of a database cursor</li>
 
-<li>The retrieving of a row of database data into report fields</li>
+<li class="li">The retrieving of a row of database data into report fields</li>
 
-<li>The creation of a report element such as a label or grid</li>
+<li class="li">The creation of a report element such as a label or grid</li>
 
 </ul>
 <div class="p">An event handler might (for example) accomplish one of the
-following tasks:<ul>
-<li>Specify the value of a report parameter that guides some aspect
+following tasks:<ul class="ul">
+<li class="li">Specify the value of a report parameter that guides some aspect
 of report processing</li>
 
-<li>Specify a user ID and password for connecting to a database </li>
+<li class="li">Specify a user ID and password for connecting to a database </li>
 
-<li>Set up an SQL SELECT statement to guide data retrieval from the
+<li class="li">Set up an SQL SELECT statement to guide data retrieval from the
 database </li>
 
-<li>Act as an intermediary, receiving displayable data from your EGL
+<li class="li">Act as an intermediary, receiving displayable data from your EGL
 program and then providing that data to the report engine at the appropriate
 time </li>
 
-<li>Change report formatting and text in response to a specific value
+<li class="li">Change report formatting and text in response to a specific value
 being placed into the report</li>
 
 </ul>
@@ -154,7 +154,7 @@ being placed into the report</li>
 </ul>
 </div>
 
-<p>You can use a cascading style sheet (CSS) to control display characteristics
+<p class="p">You can use a cascading style sheet (CSS) to control display characteristics
 of the report.</p>
 
 </div>

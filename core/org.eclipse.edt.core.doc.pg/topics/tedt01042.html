@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Accessing an IBM i called or service program"></meta>
+<meta name="abstract" content="As an EGL developer, you can access IBM i called programs, as well as procedures in IBM service programs."></meta>
+<meta name="description" content="As an EGL developer, you can access IBM i called programs, as well as procedures in IBM service programs."></meta>
 <meta name="DC.subject" content="IBM i, access of called or service programs, overview"></meta>
 <meta name="keywords" content="IBM i, access of called or service programs, overview"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
@@ -16,53 +18,53 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Accessing an IBM i called or service program</title>
 </head>
-<body id="tedt01042"><a name="tedt01042"><!-- --></a>
+<body id="tedt01042">
 
 
-<h1 class="topictitle1">Accessing an IBM i called or service program</h1>
+<h1 class="title topictitle1">Accessing an IBM i called or service program</h1>
 
 
 
-<div><div><span>As an EGL developer, you can access IBM i called programs, as well as procedures
+<div class="body"><div class="abstract"><span class="shortdesc">As an EGL developer, you can access IBM<sup>®</sup> i called programs, as well as procedures
 in IBM service programs.</span>
 </div>
 
-<p>Access to any of those host programs is by way of the JTOpen toolkit,
+<p class="p">Access to any of those host programs is by way of the JTOpen toolkit,
 which determines what program types are supported. For an overview
-of the toolkit, see the following web site: <a href="http://jt400.sourceforge.net/" target="_blank">JTOpen (http://jt400.sourceforge.net/)</a>.</p>
+of the toolkit, see the following web site: <a class="xref" href="http://jt400.sourceforge.net/" target="_blank">JTOpen (http://jt400.sourceforge.net/)</a>.</p>
 
-<div class="p">Your coding task has the following aspects:<ul>
-<li>You write an <em>EGL proxy function for IBM i</em>. The proxy function
+<div class="p">Your coding task has the following aspects:<ul class="ul">
+<li class="li">You write an <em class="ph i">EGL proxy function for IBM i</em>. The proxy function
 might be in an EGL Library, Service, Handler, or Program type. The
 function has no logic, and any logic you place there will be ignored.
 Instead, you write one or more annotations there to tell the EGL Java
-generator how to structure the runtime call.<p>The main annotation
-is <strong>IBMiProgram</strong>. In most cases, that annotation references a
+generator how to structure the runtime call.<p class="p">The main annotation
+is <strong class="ph b">IBMiProgram</strong>. In most cases, that annotation references a
 resource binding in the EGL deployment descriptor. One runtime effect
 of referencing a resource binding is that you gain the performance
 benefits of using a connection from the AS400 connection pool.</p>
 </li>
 
-<li>When you write the EGL code that calls the function, you might
+<li class="li">When you write the EGL code that calls the function, you might
 access the proxy function and rely on the details provided there.
-Alternatively, you might do as follows:<ol>
-<li>Code a variable that references a different resource binding or
+Alternatively, you might do as follows:<ol class="ol">
+<li class="li">Code a variable that references a different resource binding or
 that specifies new detail.</li>
 
-<li>Refer to that variable in the <strong>using</strong> clause of the <strong>call</strong> statement. </li>
+<li class="li">Refer to that variable in the <strong class="ph b">using</strong> clause of the <strong class="ph b">call</strong> statement. </li>
 
 </ol>
-<p>When you include a <strong>using</strong> clause, the coded detail overrides
-any <strong>IBMiProgram</strong> annotation reference to the EGL deployment
-descriptor. If the <strong>using</strong> clause references a different deployment-descriptor
+<p class="p">When you include a <strong class="ph b">using</strong> clause, the coded detail overrides
+any <strong class="ph b">IBMiProgram</strong> annotation reference to the EGL deployment
+descriptor. If the <strong class="ph b">using</strong> clause references a different deployment-descriptor
 entry, you still gain the performance benefits of using a pooled connection.
-However, the <strong>using</strong> clause might represent a connection that
+However, the <strong class="ph b">using</strong> clause might represent a connection that
 you define in your code; and in that case, you typically do not use
 a pooled connection, but rely on the AS400 connection object that
 is available in the JTOpen toolkit.</p>
 </li>
 
-<li>The parameters of the EGL proxy function represent the parameters
+<li class="li">The parameters of the EGL proxy function represent the parameters
 of the host program, and your call can pass simple data, as well as
 records and handlers. If a value is returned from the proxy function,
 the type of value is an EGL Int. (On IBM i,
@@ -72,43 +74,43 @@ program.)</li>
 </ul>
 </div>
 
-<p>In general, a Rich UI application uses an asynchronous version
-of the <strong>call</strong> statement to get enterprise data from a service.
+<p class="p">In general, a Rich UI application uses an asynchronous version
+of the <strong class="ph b">call</strong> statement to get enterprise data from a service.
 In relation to an IBM i program, the application calls a public proxy
 function that is defined in an EGL Service type.</p>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="runtimeprocess"><a name="runtimeprocess"><!-- --></a>
-<h2 class="topictitle2">Runtime process</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="runtimeprocess">
+<h2 class="title topictitle2">Runtime process</h2>
 
-<div>
+<div class="body">
 <div class="p">At run time, the proxy function is an endpoint for accessing an
-IBM i program. That function acts as follows: <ol>
-<li>Retrieves a connection for the AS400 connection pool, if you are
+IBM i program. That function acts as follows: <ol class="ol">
+<li class="li">Retrieves a connection for the AS400 connection pool, if you are
 using that kind of connection.</li>
 
-<li>Converts your data from an EGL format to byte arrays. The structure
+<li class="li">Converts your data from an EGL format to byte arrays. The structure
 of those arrays is based on a set of AS400DataType classes that are
 provided by the JTOpen toolkit.</li>
 
-<li>Creates a JTOpen ProgramCall or ServiceProgramCall object, depending
+<li class="li">Creates a JTOpen ProgramCall or ServiceProgramCall object, depending
 on whether the call is to an IBM i
 called program or service program.</li>
 
-<li>Creates JTOpen ProgramParameter objects and passes the byte arrays
+<li class="li">Creates JTOpen ProgramParameter objects and passes the byte arrays
 to them.</li>
 
-<li>Calls the host program by calling the run method on the ProgramCall
+<li class="li">Calls the host program by calling the run method on the ProgramCall
 or ServiceProgramCall object.</li>
 
-<li>Reformats the returned value (if any) to EGL format.</li>
+<li class="li">Reformats the returned value (if any) to EGL format.</li>
 
-<li>Converts the returned byte arrays to EGL format. The structure
+<li class="li">Converts the returned byte arrays to EGL format. The structure
 of those arrays is based on a set of AS400DataType classes that are
 provided by the JTOpen toolkit.</li>
 
-<li>Returns the connection to the AS400 connection pool, if you are
+<li class="li">Returns the connection to the AS400 connection pool, if you are
 using that kind of connection.</li>
 
 </ol>
@@ -118,15 +120,15 @@ using that kind of connection.</li>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="developmentoverview"><a name="developmentoverview"><!-- --></a>
-<h2 class="topictitle2">Development overview</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="developmentoverview">
+<h2 class="title topictitle2">Development overview</h2>
 
-<div>
-<p>The objects expected by the host are based on fixed-size types,
+<div class="body">
+<p class="p">The objects expected by the host are based on fixed-size types,
 whereas many EGL types are variably sized. You handle the difference
 by annotating the variably sized objects. </p>
 
-<p>The annotations you specify are in the eglx.jtopen.annotations
+<p class="p">The annotations you specify are in the eglx.jtopen.annotations
 package, with annotation type names that of the form AS400xxxx. The
 annotation type names correspond to the JTOpen com.ibm.as400.access.AS400Datatype
 class names. </p>
@@ -134,19 +136,19 @@ class names. </p>
 <div class="p">To determine which annotations to specify, refer to the table shown
 later, along with the Javadoc for the com.ibm.as400.access.AS400Datatype
 classes. Also, ensure that you specify import statements of the following
-form:<pre class="codeblock">import eglx.jtopen.annotations.<em>annotationName</em>;</pre>
+form:<pre class="pre codeblock">import eglx.jtopen.annotations.<em class="ph i">annotationName</em>;</pre>
 </div>
 
-<div class="section"><h3 class="sectiontitle">EGL proxy function for IBM i</h3><div class="p">Here is an
-example of an EGL proxy function, including the annotations named <strong>ExternalName</strong> and <strong>IBMiProgram</strong>:<pre class="codeblock">function GETRECA(CUST CUST[] inout, 
+<div class="section"><h3 class="title sectiontitle">EGL proxy function for IBM i</h3><div class="p">Here is an
+example of an EGL proxy function, including the annotations named <strong class="ph b">ExternalName</strong> and <strong class="ph b">IBMiProgram</strong>:<pre class="pre codeblock">function GETRECA(CUST CUST[] inout, 
                  EOF   string inout, 
                  COUNT decimal (2,0) inout) 
    {
-      @ExternalName{value=""""MyHostProc""""}
+      @ExternalName{value="MyHostProc"}
       
       @IBMiProgram {         
-         programName = """"GETREC"""",
-         libraryName = """"/QSYS.LIB/VARLABXX.LIB/""""
+         programName = "GETREC",
+         libraryName = "/QSYS.LIB/VARLABXX.LIB/"
          isServiceProgram=true,
          parameterAnnotations = [
             @AS400Array{elementCount = 10},
@@ -154,72 +156,72 @@ example of an EGL proxy function, including the annotations named <strong>Extern
            	null 
          ],
          connectionResourceBindingURI = 
-            @Resource{uri = """"binding:file:EGLDDFile#MyConnection""""}
+            @Resource{uri = "binding:file:EGLDDFile#MyConnection"}
       }
    }
 end   </pre>
 </div>
-<p>The <strong>ExternalName</strong> annotation is optional.
+<p class="p">The <strong class="ph b">ExternalName</strong> annotation is optional.
 It holds the name of the IBM i procedure and defaults to the name
 of the EGL proxy function.</p>
-<div class="p">The <strong>IBMiProgram</strong> is the primary
+<div class="p">The <strong class="ph b">IBMiProgram</strong> is the primary
 annotation that structures the call. The annotation holds the following
-detail:<ul>
-<li>The path of the library and program on IBM i. <p>You can specify both details on the <strong>programName</strong> field;
-in the current example, the field value would be <samp class="codeph">""""/QSYS.LIB/VARLABXX.LIB/GETREC""""</samp>.
+detail:<ul class="ul">
+<li class="li">The path of the library and program on IBM i. <p class="p">You can specify both details on the <strong class="ph b">programName</strong> field;
+in the current example, the field value would be <samp class="ph codeph">"/QSYS.LIB/VARLABXX.LIB/GETREC"</samp>.
 In any case, the EGL runtime code appends a file extension to the
-value of the <strong>programName</strong> field: .SRVPGM for service programs,
+value of the <strong class="ph b">programName</strong> field: .SRVPGM for service programs,
 .PGM for called programs.</p>
 </li>
 
-<li>A flag as to whether a service program is being invoked. </li>
+<li class="li">A flag as to whether a service program is being invoked. </li>
 
-<li>Annotations for each parameter, as described later.</li>
+<li class="li">Annotations for each parameter, as described later.</li>
 
-<li>A reference to a binding that is defined in the EGL deployment
+<li class="li">A reference to a binding that is defined in the EGL deployment
 descriptor. Your call to the EGL proxy function can refer to a different
-binding in the deployment descriptor, and that reference in the <strong>call</strong> statement
-overrides any connection detail that is specified in the function.<p>The
+binding in the deployment descriptor, and that reference in the <strong class="ph b">call</strong> statement
+overrides any connection detail that is specified in the function.<p class="p">The
 EGL runtime code uses the binding details to construct a JTOpen object
 of type AS400ConnectionPool.</p>
-<p>A resource of type IBMiConnection
+<p class="p">A resource of type IBMiConnection
 contains a library field. Any value specified in that field replaces
-the library field in the <strong>IBMiProgram</strong> annotation.</p>
-<p>For
-general details on binding, see the following page on the EDT wiki: <a href="http://wiki.eclipse.org/EDT:Resource_Binding_Introduction" target="_blank">http://wiki.eclipse.org/EDT:Resource_Binding_Introduction</a>.</p>
+the library field in the <strong class="ph b">IBMiProgram</strong> annotation.</p>
+<p class="p">For
+general details on binding, see the following page on the EDT wiki: <a class="xref" href="http://wiki.eclipse.org/EDT:Resource_Binding_Introduction" target="_blank">http://wiki.eclipse.org/EDT:Resource_Binding_Introduction</a>.</p>
 </li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h3 class="sectiontitle">Annotations for data conversion</h3><p>The data-conversion
+<div class="section"><h3 class="title sectiontitle">Annotations for data conversion</h3><p class="p">The data-conversion
 annotations cause the use of converters that are found in the following
-JTOpen package: <samp class="codeph">com.ibm.as400.access</samp>. The EGL annotation
+JTOpen package: <samp class="ph codeph">com.ibm.as400.access</samp>. The EGL annotation
 name is the same as the Java class name.</p>
 <div class="p">When you set a value
-for the <strong>parameterAnnotations</strong> field, you specify an annotation
-or the <strong>null</strong> keyword for every annotation: <ul>
-<li>Values of simple reference types require an annotation. Example
+for the <strong class="ph b">parameterAnnotations</strong> field, you specify an annotation
+or the <strong class="ph b">null</strong> keyword for every annotation: <ul class="ul">
+<li class="li">Values of simple reference types require an annotation. Example
 types are String, Decimal, and Timestamp.</li>
 
-<li>Values of simple value types require an annotation only if you
+<li class="li">Values of simple value types require an annotation only if you
 do not want to accept the defaults. Example types are String(7), Decimal
-(5,2), and Timestamp(""""yyyyMMddHHmm"""").</li>
+(5,2), and Timestamp("yyyyMMddHHmm").</li>
 
-<li>Lists require a parameter annotation. </li>
+<li class="li">Lists require a parameter annotation. </li>
 
-<li><strong>null</strong> is always used for a variable that is based on a Record
+<li class="li"><strong class="ph b">null</strong> is always used for a variable that is based on a Record
 or Handler type.</li>
 
 </ul>
 </div>
-<p>If you do not set a value for the <strong>parameterAnnotations</strong> field,
+<p class="p">If you do not set a value for the <strong class="ph b">parameterAnnotations</strong> field,
 the defaults are used for every parameter.</p>
 <div class="p">Equivalent rules
 are in effect for the fields that are in a container; that is, in
 a variable that is based on a Record or Handler type. For example,
-here is a Record type with annotations:<pre class="codeblock">Record Example
+here is a Record type with annotations:<pre class="pre codeblock">Record Example
 
    //Convert using the default AS400Bin4
    f1 int;
@@ -240,26 +242,26 @@ here is a Record type with annotations:<pre class="codeblock">Record Example
    f6 decimal(10,4){@AS400ZonedDecimal{}};
 end</pre>
 </div>
-<p>If that Record type included a record, you would
+<p class="p">If that Record type included a record, you would
 not specify an annotation for the included record, but might specify
 annotations for the fields in that record.</p>
 </div>
 
-<div class="section"><h3 class="sectiontitle">Call statements</h3><p>You write a <strong>call</strong> statement
-to invoke the EGL proxy function. A <strong>using</strong> clause, if present,
-refers to a connection. If a <strong>using</strong> clause is not present in
-the <strong>call</strong> statement, the <strong>IBMiProgram</strong> annotation in the
+<div class="section"><h3 class="title sectiontitle">Call statements</h3><p class="p">You write a <strong class="ph b">call</strong> statement
+to invoke the EGL proxy function. A <strong class="ph b">using</strong> clause, if present,
+refers to a connection. If a <strong class="ph b">using</strong> clause is not present in
+the <strong class="ph b">call</strong> statement, the <strong class="ph b">IBMiProgram</strong> annotation in the
 proxy function must reference a deployment descriptor entry.</p>
 <div class="p">Consider
-the following proxy function, which resides in an EGL Program type: <pre class="codeblock">Program TestSimpleProgram
+the following proxy function, which resides in an EGL Program type: <pre class="pre codeblock">Program TestSimpleProgram
 
    //On IBM i, only service programs support a return
    function MyHostProcedure(p1 string, p2 string)RETURNS(INT)
    {
       @IBMiProgram{
-         programName = """"/QSYS.LIB/VARLABXX.LIB/GETREC"""",
+         programName = "/QSYS.LIB/VARLABXX.LIB/GETREC",
          connectionResourceBindingURI = 
-            @Resource{uri = """"binding:file:someConnection""""},
+            @Resource{uri = "binding:file:someConnection"},
          isServiceProgram= true,
          parameterAnnotations = [@AS400Text{length = 10}, @AS400Text{length = 10}]
       }
@@ -269,22 +271,22 @@ end</pre>
 </div>
 <div class="p">Here is a call from another function in the
 same program, including reference to a Customer Record type. The call
-relies on the binding detail that was just shown in the <strong>connectionResourceBindingURI</strong> field:<pre class="codeblock">cust Customer;
+relies on the binding detail that was just shown in the <strong class="ph b">connectionResourceBindingURI</strong> field:<pre class="pre codeblock">cust Customer;
 result Int;
-myString String = """"abc"""";
+myString String = "abc";
 try
    call MyHostProcedure(myString, cust) returns (result);
    onexception(exception AnyException)
 	    //handle exception
 end</pre>
 </div>
-<p>Here is an alternative call, which provides
+<p class="p">Here is an alternative call, which provides
 binding detail that overrides the binding detail, if any, that is
-specified in the <strong>IBMiProgram</strong> annotation:</p>
-<pre class="codeblock">cust Customer;
+specified in the <strong class="ph b">IBMiProgram</strong> annotation:</p>
+<pre class="pre codeblock">cust Customer;
 result int;
-myString String = """"abc"""";
-conn IBMiConnection? = SysLib.getResource(uri=""""binding:file:someOtherConnection"""");
+myString String = "abc";
+conn IBMiConnection? = SysLib.getResource(uri="binding:file:someOtherConnection");
 try
    call MyHostProcedure(myString, cust) 
       using conn
@@ -293,12 +295,12 @@ try
 	     //handle exception
 end</pre>
 <div class="p">The following code is equivalent to the previous
-logic:<pre class="codeblock">cust Customer;
+logic:<pre class="pre codeblock">cust Customer;
 result int;
-myString String = """"abc"""";
+myString String = "abc";
 try
    call MyHostProcedure(myString, cust) 
-      using SysLib.getResource(uri=""""binding:file:someOtherConnection"""") 
+      using SysLib.getResource(uri="binding:file:someOtherConnection") 
          as IBMiConnection
       returns (result);
    onexception(exception AnyException)
@@ -307,9 +309,9 @@ end</pre>
 </div>
 <div class="p">Here is yet another alternative call, which
 might provide a value of type IBMiConnection instead of referencing
-the EGL deployment descriptor:<pre class="codeblock">cust Customer;
+the EGL deployment descriptor:<pre class="pre codeblock">cust Customer;
 result int;
-myString String = """"abc"""";
+myString String = "abc";
 
 conn IBMiConnection? = getMyDefinedConnection();
 try
@@ -324,99 +326,99 @@ end
 <div class="p">If you want to access the AS400 connection pool
 from your code, you also assign connection detail to a variable of
 type IBMiConnection; but for that purpose, you invoke the static Java
-function that is referenced in the following EGL external type: <pre class="codeblock">externalType JTOpenConnections type JavaObject
+function that is referenced in the following EGL external type: <pre class="pre codeblock">externalType JTOpenConnections type JavaObject
    private constructor();
    static function getAS400ConnectionPool()returns(AS400ConnectionPool);
 end</pre>
 </div>
-<p>For details on that function, see the JTOpen
+<p class="p">For details on that function, see the JTOpen
 documentation for the AS400ConnectionPool object.</p>
 </div>
 
-<div class="section"><h3 class="sectiontitle">Fields in the EGL deployment descriptor entry</h3><p>You
+<div class="section"><h3 class="title sectiontitle">Fields in the EGL deployment descriptor entry</h3><p class="p">You
 can set a variety of fields in the EGL deployment descriptor entry.
  The type of each entry is AS400Connection, which is compatible with
 the IBMiConnection type that is used in the code examples.</p>
-<p>You
+<p class="p">You
 can use the fields in the deployment descriptor to override default
 behavior. In addition, you can set annotations on a field or parameter
 that is being passed to the proxy function, and that annotation overrides
 all other settings.</p>
 <div class="p">Here are the fields of the deployment descriptor
-entry:<dl>
-<dt class="dlterm">dateFormat</dt>
+entry:<dl class="dl parml">
+<dt class="dt pt dlterm">dateFormat</dt>
 
-<dd>The date format for AS400Date objects. <p>This value overrides
+<dd class="dd pd">The date format for AS400Date objects. <p class="p">This value overrides
 the default date format, which is com.ibm.as400.access.AS400Date.FORMAT_ISO.
 The format specifies a separator character, but that character can
-be overridden; for details, see <strong>dateSeparator</strong>.</p>
+be overridden; for details, see <strong class="ph b">dateSeparator</strong>.</p>
 </dd>
 
 
-<dt class="dlterm">dateSeparator</dt>
+<dt class="dt pt dlterm">dateSeparator</dt>
 
-<dd>The date separator for AS400Date objects. <p>This value overrides
-the date separator that is specified in the <strong>dateFormat</strong> field
+<dd class="dd pd">The date separator for AS400Date objects. <p class="p">This value overrides
+the date separator that is specified in the <strong class="ph b">dateFormat</strong> field
 value.</p>
 </dd>
 
 
-<dt class="dlterm">encoding</dt>
+<dt class="dt pt dlterm">encoding</dt>
 
-<dd>The character encoding for AS400Text objects. <p>This value overrides
+<dd class="dd pd">The character encoding for AS400Text objects. <p class="p">This value overrides
 the default encoding, which is obtained from the CCSID value of the
 AS400 connection.</p>
 </dd>
 
 
-<dt class="dlterm">library</dt>
+<dt class="dt pt dlterm">library</dt>
 
-<dd>The library where the program is located. If you specify a value
-for this field, you replace any value specified in the <strong>IBMiProgram</strong> annotation, <strong>library</strong> field.</dd>
-
-
-<dt class="dlterm">password</dt>
-
-<dd>The password for the specified user ID.</dd>
+<dd class="dd pd">The library where the program is located. If you specify a value
+for this field, you replace any value specified in the <strong class="ph b">IBMiProgram</strong> annotation, <strong class="ph b">library</strong> field.</dd>
 
 
-<dt class="dlterm">system</dt>
+<dt class="dt pt dlterm">password</dt>
 
-<dd>The IBM i system name. </dd>
+<dd class="dd pd">The password for the specified user ID.</dd>
 
 
-<dt class="dlterm">timeFormat</dt>
+<dt class="dt pt dlterm">system</dt>
 
-<dd>The time format for AS400Time objects.<p>This value overrides
+<dd class="dd pd">The IBM i system name. </dd>
+
+
+<dt class="dt pt dlterm">timeFormat</dt>
+
+<dd class="dd pd">The time format for AS400Time objects.<p class="p">This value overrides
 the default time format, which is com.ibm.as400.access.AS400Time.FORMAT_ISO.
 The format specifies a separator character, but that character can
-be overridden; for details, see <strong>timeSeparator</strong>.</p>
+be overridden; for details, see <strong class="ph b">timeSeparator</strong>.</p>
 </dd>
 
 
-<dt class="dlterm">timeSeparator</dt>
+<dt class="dt pt dlterm">timeSeparator</dt>
 
-<dd>The time separator for AS400Time objects.<p>This value overrides
-the date separator that is specified in the <strong>timeFormat</strong> field
+<dd class="dd pd">The time separator for AS400Time objects.<p class="p">This value overrides
+the date separator that is specified in the <strong class="ph b">timeFormat</strong> field
 value.</p>
 </dd>
 
 
-<dt class="dlterm">timeZone</dt>
+<dt class="dt pt dlterm">timeZone</dt>
 
-<dd>The time zone for AS400Date, AS400Time, and AS400Timestamp objects. <p>This
+<dd class="dd pd">The time zone for AS400Date, AS400Time, and AS400Timestamp objects. <p class="p">This
 value overrides the default time zone, which is obtained from the
 timezone value of the AS400 connection.</p>
 </dd>
 
 
-<dt class="dlterm">userid</dt>
+<dt class="dt pt dlterm">userid</dt>
 
-<dd>The user ID that provides access to the IBM i system.</dd>
+<dd class="dd pd">The user ID that provides access to the IBM i system.</dd>
 
 </dl>
 </div>
-<p>For more detail on what input is valid, see
+<p class="p">For more detail on what input is valid, see
 the annotation-specific entries in the next section.</p>
 </div>
 
@@ -424,90 +426,90 @@ the annotation-specific entries in the next section.</p>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="referencedetail"><a name="referencedetail"><!-- --></a>
-<h2 class="topictitle2">Reference details for the data-conversion annotations</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="referencedetail">
+<h2 class="title topictitle2">Reference details for the data-conversion annotations</h2>
 
-<div>
+<div class="body">
 <div class="p">If you download the JTOpen from the web page listed at the start
 of this topic, you can review the Javadoc for the classes that convert
 data between EGL and IBM i.
 The following web page provides similar detail, but might be out of
-date: <ul class="simple">
-<li><a href="http://javadoc.midrange.com/jtopen/com/ibm/as400/access/package-summary.html" target="_blank">http://javadoc.midrange.com/jtopen/com/ibm/as400/access/package-summary.html</a></li>
+date: <ul class="sl simple">
+<li class="sli"><a class="xref" href="http://javadoc.midrange.com/jtopen/com/ibm/as400/access/package-summary.html" target="_blank">http://javadoc.midrange.com/jtopen/com/ibm/as400/access/package-summary.html</a></li>
 
 </ul>
 </div>
 
 <div class="p">In the following table, the name of each EGL annotation is the
-same as the name of the corresponding Java class in the JTOpen <samp class="codeph">com.ibm.as400.access</samp> package. 
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="13.559322033898304%" id="d24935e514">EGL type </th>
+same as the name of the corresponding Java class in the JTOpen <samp class="ph codeph">com.ibm.as400.access</samp> package. 
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="13.559322033898304%" id="d31914e515">EGL type </th>
 
-<th class="cellrowborder" valign="bottom" width="35.59322033898305%" id="d24935e517">EGL annotation</th>
+<th class="entry" valign="bottom" width="35.59322033898305%" id="d31914e518">EGL annotation</th>
 
-<th class="cellrowborder" valign="bottom" width="50.847457627118644%" id="d24935e520">Annotation fields</th>
+<th class="entry" valign="bottom" width="50.847457627118644%" id="d31914e521">Annotation fields</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">bigint</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">bigint</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 "></td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "></td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">bytes<strong> (not yet supported)</strong></td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">bytes<strong class="ph b"> (not yet supported)</strong></td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Array</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Array</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">For a non-parameterized bytes type:<dl>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized bytes type:<dl class="dl parml">
 
-<dt class="dlterm">length</dt>
+<dt class="dt pt dlterm">length</dt>
 
-<dd>Total number of bytes.</dd>
+<dd class="dd pd">Total number of bytes.</dd>
 
 </dl>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">date</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">date</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Date</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Date</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 "><dl>
-<dt class="dlterm">ibmiFormat</dt>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<dt class="dt pt dlterm">ibmiFormat</dt>
 
-<dd>Controls the conversion to an  IBM i
-date format. You can specify a field of the following class:  com.ibm.as400.access.AS400Date. <p>An
+<dd class="dd pd">Controls the conversion to an  IBM i
+date format. You can specify a field of the following class:  com.ibm.as400.access.AS400Date. <p class="p">An
 example field is com.ibm.as400.access.AS400Date.FORMAT_USA.</p>
-<p>The
+<p class="p">The
 default format is com.ibm.as400.access.AS400Date.FORMAT_ISO.</p>
 </dd>
 
 
-<dt class="dlterm">ibmiSeparatorChar</dt>
+<dt class="dt pt dlterm">ibmiSeparatorChar</dt>
 
-<dd>One of the following values: """"&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;"""" (ampersand), """" """" (blank),
-"""","""" (comma), """"-"""" (hyphen), """"."""" (period), """"/"""" (forward slash), or null.
-The null indicates no separator.<p>For details on what characters
+<dd class="dd pd">One of the following values: "&amp;" (ampersand), " " (blank),
+"," (comma), "-" (hyphen), "." (period), "/" (forward slash), or null.
+The null indicates no separator.<p class="p">For details on what characters
 are valid for a given format, see the IBM i
 programming reference.</p>
 </dd>
 
 
-<dt class="dlterm">ibmiTimezoneID</dt>
+<dt class="dt pt dlterm">ibmiTimezoneID</dt>
 
-<dd>The timezone for the host variable. <p>For details on what characters
+<dd class="dd pd">The timezone for the host variable. <p class="p">For details on what characters
 are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </dd>
 
@@ -516,99 +518,99 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">decimal</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">decimal</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">For a non-parameterized decimal type: <dl>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized decimal type: <dl class="dl parml">
 
-<dt class="dlterm">length</dt>
+<dt class="dt pt dlterm">length</dt>
 
-<dd>Total number of digits. For the AS400DecFloat annotation, the
+<dd class="dd pd">Total number of digits. For the AS400DecFloat annotation, the
 value must be 16 or 34.</dd>
 
 
-<dt class="dlterm">decimals</dt>
+<dt class="dt pt dlterm">decimals</dt>
 
-<dd>Number of decimal places. For the AS400DecFloat annotation, this
+<dd class="dd pd">Number of decimal places. For the AS400DecFloat annotation, this
 field is not available.</dd>
 
 </dl>
-<p>See the paragraph after this table.</p>
+<p class="p">See the paragraph after this table.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">float</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">float</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Float8 (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Float8 (the default).</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">Handler types</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">Handler types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">No annotation. Conversion is controlled by the
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">int</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">int</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">List types</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">List types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Array (the default).<p>You must specify
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Array (the default).<p class="p">You must specify
 the annotation if you need to use any of the annotation fields. None
 of those fields has a default value.</p>
-<p>For examples, see a later
+<p class="p">For examples, see a later
 section.</p>
 </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 "><dl>
-<dt class="dlterm">elementCount</dt>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<dt class="dt pt dlterm">elementCount</dt>
 
-<dd><p>The number of elements in the list that is sent to the host. </p>
-<p>The <strong>elementCount</strong> field
+<dd class="dd pd"><p class="p">The number of elements in the list that is sent to the host. </p>
+<p class="p">The <strong class="ph b">elementCount</strong> field
 is necessary because host programs do not support EGL lists, which
 can change in size at run time. The host program handles only fixed-length
 arrays.</p>
-<p>In COBOL terms, the value of <strong>elementCount</strong> is
+<p class="p">In COBOL terms, the value of <strong class="ph b">elementCount</strong> is
 an occurs value.</p>
 </dd>
 
 
-<dt class="dlterm">elementTypeAS400Annotation</dt>
+<dt class="dt pt dlterm">elementTypeAS400Annotation</dt>
 
-<dd>Takes the value of another annotation, to guide the conversion
+<dd class="dd pd">Takes the value of another annotation, to guide the conversion
 of the elements. See the examples in a later section.</dd>
 
 
-<dt class="dlterm">returnCountVariable</dt>
+<dt class="dt pt dlterm">returnCountVariable</dt>
 
-<dd>Many host programs return a variable that defines how many valid
+<dd class="dd pd">Many host programs return a variable that defines how many valid
 elements are in the structured array. This field is used to by the
 runtime code to resize the returned array so that only the valid elements
-are returned to the application. <p>The field definition must be in
+are returned to the application. <p class="p">The field definition must be in
 the context of the record, handler or function where the array is
 defined. If you are annotating a parameter, the variable referenced
 by this annotation field must be a parameter. If you are annotating
 a record or handler, the referenced variable must be a field in that
 record or handler.</p>
-<p>This field is not supported for multidimensional
+<p class="p">This field is not supported for multidimensional
 lists. </p>
 </dd>
 
@@ -617,93 +619,93 @@ lists. </p>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">Record types</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">Record types</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">No annotation. Conversion is controlled by the
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">string</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">string</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Text (the default). </td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Text (the default). </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">For a non-parameterized string type: <dl>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized string type: <dl class="dl parml">
 
-<dt class="dlterm">length</dt>
+<dt class="dt pt dlterm">length</dt>
 
-<dd>Total number of bytes.</dd>
+<dd class="dd pd">Total number of bytes.</dd>
 
 </dl>
-<div class="p">For any string type:<dl>
-<dt class="dlterm">encoding</dt>
+<div class="p">For any string type:<dl class="dl parml">
+<dt class="dt pt dlterm">encoding</dt>
 
-<dd>The name of a character encoding.</dd>
+<dd class="dd pd">The name of a character encoding.</dd>
 
 
-<dt class="dlterm">preserveTrailingSpaces</dt>
+<dt class="dt pt dlterm">preserveTrailingSpaces</dt>
 
-<dd>A boolean value that indicates whether to retain whitespace at
+<dd class="dd pd">A boolean value that indicates whether to retain whitespace at
 the right side of the string. The default is false.</dd>
 
 </dl>
 </div>
-<p>See the paragraph after this table.</p>
+<p class="p">See the paragraph after this table.</p>
 </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">smallfloat</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">smallfloat</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Float4 (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Float4 (the default).</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
-
-</tr>
-
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">smallint</td>
-
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
-
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 ">&#xA0;</td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">time</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">smallint</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Time (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 "><dl>
-<dt class="dlterm">ibmiFormat</dt>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
 
-<dd>Controls the conversion to an  IBM i
-time format. You can specify a field of the following class:  com.ibm.as400.access.AS400Time. <p>An
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">time</td>
+
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Time (the default).</td>
+
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<dt class="dt pt dlterm">ibmiFormat</dt>
+
+<dd class="dd pd">Controls the conversion to an  IBM i
+time format. You can specify a field of the following class:  com.ibm.as400.access.AS400Time. <p class="p">An
 example field is com.ibm.as400.access.AS400Time.FORMAT_USA.</p>
-<p>The
+<p class="p">The
 default format is com.ibm.as400.access.AS400Time.FORMAT_ISO.</p>
 </dd>
 
 
-<dt class="dlterm">ibmiSeparatorChar</dt>
+<dt class="dt pt dlterm">ibmiSeparatorChar</dt>
 
-<dd>One of the following values: """"&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;"""" (ampersand), """" """" (blank),
-"""","""" (comma), """":"""" (colon), """"."""" (period), or null. The null indicates
-no separator.<p>For details on what characters are valid for a given
+<dd class="dd pd">One of the following values: "&amp;" (ampersand), " " (blank),
+"," (comma), ":" (colon), "." (period), or null. The null indicates
+no separator.<p class="p">For details on what characters are valid for a given
 format, see the IBM i programming
 reference.</p>
 </dd>
 
 
-<dt class="dlterm">ibmiTimezoneID</dt>
+<dt class="dt pt dlterm">ibmiTimezoneID</dt>
 
-<dd>The timezone for the host variable. <p>For details on what characters
+<dd class="dd pd">The timezone for the host variable. <p class="p">For details on what characters
 are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </dd>
 
@@ -712,25 +714,25 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="13.559322033898304%" headers="d24935e514 ">timestamp</td>
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">timestamp</td>
 
-<td class="cellrowborder" valign="top" width="35.59322033898305%" headers="d24935e517 ">AS400Timestamp (the default). The conversion
+<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Timestamp (the default). The conversion
 to an IBM i timestamp format
 is in accordance with the Java FORMAT_DEFAULT field in the following
 class: com.ibm.as400.access.AS400Timestamp. </td>
 
-<td class="cellrowborder" valign="top" width="50.847457627118644%" headers="d24935e520 "><dl>
-<dt class="dlterm">eglPattern</dt>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<dt class="dt pt dlterm">eglPattern</dt>
 
-<dd>Controls the conversion back to an EGL format. For details on
-the patterns, see the following help topic:  """"Pattern characters used
-to format non-string values to strings.""""</dd>
+<dd class="dd pd">Controls the conversion back to an EGL format. For details on
+the patterns, see the following help topic:  "Pattern characters used
+to format non-string values to strings."</dd>
 
 
-<dt class="dlterm">ibmiTimezoneID</dt>
+<dt class="dt pt dlterm">ibmiTimezoneID</dt>
 
-<dd>The timezone for the host variable. <p>For details on what characters
+<dd class="dd pd">The timezone for the host variable. <p class="p">For details on what characters
 are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </dd>
 
@@ -746,32 +748,32 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </div>
 
 <div class="p">To fulfill the need for fixed-length values on IBM i, you must
-specify the parameters such as <strong>length</strong> for types that might
+specify the parameters such as <strong class="ph b">length</strong> for types that might
 be parameterized (such as Decimal (5,2)) or non-parameterized (such
-as Decimal): <ul>
-<li>For parameterized types, rely on the type definition to set those
+as Decimal): <ul class="ul">
+<li class="li">For parameterized types, rely on the type definition to set those
 parameters. Assignment to the related annotation fields are not valid.
-However, if you use the <strong>AS400DecFloat</strong> annotation, you must
-set the <strong>length</strong> annotation field.</li>
+However, if you use the <strong class="ph b">AS400DecFloat</strong> annotation, you must
+set the <strong class="ph b">length</strong> annotation field.</li>
 
-<li>For non-parameterized types, assign values to the annotation fields.</li>
+<li class="li">For non-parameterized types, assign values to the annotation fields.</li>
 
 </ul>
 </div>
 
-<p>The following types can be parameterized:  Bytes, Decimal, String,
+<p class="p">The following types can be parameterized:  Bytes, Decimal, String,
 Timestamp.</p>
 
 </div>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="examples"><a name="examples"><!-- --></a>
-<h2 class="topictitle2">Example annotations for lists</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="examples">
+<h2 class="title topictitle2">Example annotations for lists</h2>
 
-<div>
+<div class="body">
 <div class="p">Here is an example of how you might annotate lists in a Record
-or Handler type: <pre class="codeblock">f1 String[]
+or Handler type: <pre class="pre codeblock">f1 String[]
    {@AS400Array{elementCount = 10, 
                 elementTypeAS400Annotation = @AS400Text{length= 25},
                 returnCountVariable = f3}};
@@ -779,14 +781,14 @@ f2 Int[] = new Int[5]{@AS400Array{elementCount = 5}};
 f3 Int;</pre>
 </div>
 
-<div class="p">Here is an explanation: <ul>
-<li>The AS400Array annotation guides the conversion of the <samp class="codeph">f1</samp> field.
+<div class="p">Here is an explanation: <ul class="ul">
+<li class="li">The AS400Array annotation guides the conversion of the <samp class="ph codeph">f1</samp> field.
 The list will include 10 elements at run time, and the AS400Text annotation
 guides the conversion of the elements, which are of length 25. The
 f3 field contains the number of elements to accept when f1 is assigned
 the values that are returned from IBM i.</li>
 
-<li>The AS400Array also guides the conversion of the <samp class="codeph">f2</samp> field.
+<li class="li">The AS400Array also guides the conversion of the <samp class="ph codeph">f2</samp> field.
 The list will include 5 elements at run time. By default, the AS400Bin4
 annotation guides the conversion of each element.</li>
 
@@ -794,9 +796,9 @@ annotation guides the conversion of each element.</li>
 </div>
 
 <div class="p">Here is an example of how you might annotate parameters of an EGL
-proxy function:<pre class="codeblock">function TEST(length1 String, f1 String[], f2 String[] ){
+proxy function:<pre class="pre codeblock">function TEST(length1 String, f1 String[], f2 String[] ){
    @IBMiProgram{
-      programName = """"/QSYS.LIB/VARLABXX.LIB/GETREC"""",
+      programName = "/QSYS.LIB/VARLABXX.LIB/GETREC",
       parameterAnnotations = [
          @AS400Text{length=2},
          @AS400Array{elementCount = 10, 
@@ -811,17 +813,17 @@ proxy function:<pre class="codeblock">function TEST(length1 String, f1 String[],
    }</pre>
 </div>
 
-<div class="p">Here is an explanation:<ul>
-<li>The AS400Text annotation guides the conversion of the <samp class="codeph">length1</samp> field.
+<div class="p">Here is an explanation:<ul class="ul">
+<li class="li">The AS400Text annotation guides the conversion of the <samp class="ph codeph">length1</samp> field.
 The field length is 2 characters.</li>
 
-<li>The AS400Array annotation guides the conversion of the <samp class="codeph">f1</samp> field.
+<li class="li">The AS400Array annotation guides the conversion of the <samp class="ph codeph">f1</samp> field.
 The list will include 10 elements at run time, and the AS400Text annotation
-guides the conversion of the elements, which are of length 25. The <samp class="codeph">length1</samp> field
+guides the conversion of the elements, which are of length 25. The <samp class="ph codeph">length1</samp> field
 contains the number of elements to accept when f1 is assigned the
-values that are returned from IBM i. <p>Any
+values that are returned from IBM i. <p class="p">Any
 value that is used to resize an array must be assignment compatible
-with an EGL int. An example is <samp class="codeph">length1</samp>, which is
+with an EGL int. An example is <samp class="ph codeph">length1</samp>, which is
 of type String.</p>
 </li>
 
@@ -832,16 +834,16 @@ of type String.</p>
 
 </div>
 
-<div class="nested1" xml:lang="en-us" id="currentrestrictions"><a name="currentrestrictions"><!-- --></a>
-<h2 class="topictitle2">Current restrictions</h2>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="currentrestrictions">
+<h2 class="title topictitle2">Current restrictions</h2>
 
-<div>
-<div class="p">At this writing, the following capabilities are not supported: <ul>
-<li>Values of type Bytes.</li>
+<div class="body">
+<div class="p">At this writing, the following capabilities are not supported: <ul class="ul">
+<li class="li">Values of type Bytes.</li>
 
-<li>Parameterized strings. </li>
+<li class="li">Parameterized strings. </li>
 
-<li>Multidimensional lists.</li>
+<li class="li">Multidimensional lists.</li>
 
 </ul>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,14 +17,14 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Drag and drop in EGL Rich UI applications</title>
 </head>
-<body id="cedt01026"><a name="cedt01026"><!-- --></a>
+<body id="cedt01026">
 
 
-<h1 class="topictitle1">Drag and drop in EGL Rich UI applications</h1>
+<h1 class="title topictitle1">Drag and drop in EGL Rich UI applications</h1>
 
 
-<div>
-<p>You can write code so that a user is able to drag a widget from
+<div class="body">
+<p class="p">You can write code so that a user is able to drag a widget from
 one location and drop it at another. More broadly, your code can respond
 to the following user events: a single mouse-down event when the user
 holds the position; subsequent mouse-move events; and a single mouse-up
@@ -34,32 +34,32 @@ drag and drop; Rich UI does not define the behavior.</p>
 <div class="p">You write the drag-and-drop code by specifying three properties
 in a widget declaration and by writing functions that are referenced
 in the corresponding property values. For example, here is the declaration
-of a button:<pre class="codeblock">b1 Button { 
-   text = """"""""Button 1"""""""", position=""""""""absolute"""""""",	x=10, y=10,
-   <strong>onStartDrag = start, onDrag = drag, onDropOnTarget = drop</strong>};
+of a button:<pre class="pre codeblock">b1 Button { 
+   text = "Button 1", position="absolute",	x=10, y=10,
+   <strong class="ph b">onStartDrag = start, onDrag = drag, onDropOnTarget = drop</strong>};
 </pre>
 </div>
 
-<p>Here are the three properties that make drag-and-drop possible:</p>
+<p class="p">Here are the three properties that make drag-and-drop possible:</p>
 
-<ul>
-<li> <samp class="codeph">onStartDrag</samp> references a function that the EGL
+<ul class="ul">
+<li class="li"> <samp class="ph codeph">onStartDrag</samp> references a function that the EGL
 Runtime calls once, at the start of a drag operation. The function
-has characteristics that are shown in the following Delegate part:<pre class="codeblock">Delegate StartDragFunction(widget Widget in, 
+has characteristics that are shown in the following Delegate part:<pre class="pre codeblock">Delegate StartDragFunction(widget Widget in, 
                            x int in, y int in) returns (Boolean)</pre>
-<p>The
+<p class="p">The
 function receives a reference to the widget and receives the absolute
 x and y coordinates of the mouse pointer. The function returns a Boolean
 value that indicates whether to continue the drag operation.</p>
 </li>
 
-<li><samp class="codeph">onDrag</samp> references a function that the EGL Runtime
+<li class="li"><samp class="ph codeph">onDrag</samp> references a function that the EGL Runtime
 calls repeatedly, as the drag operation proceeds; specifically, each
 time the browser records a mouse-move event. The function has characteristics
-that are shown in the following Delegate part:<pre class="codeblock">Delegate DragFunction(widget Widget in, 
+that are shown in the following Delegate part:<pre class="pre codeblock">Delegate DragFunction(widget Widget in, 
                       dropTarget Widget in, 
                       x int in, y int in) </pre>
-<p>The function
+<p class="p">The function
 receives references to the widget being dragged and to the widget
 (if any) over which the mouse pointer is passing. If the mouse pointer
 is not passing over any widget, the second argument is null. The function
@@ -69,13 +69,13 @@ of the widget (or some other image) in response to the mouse-move
 event.</p>
 </li>
 
-<li> <samp class="codeph">onDropOnTarget</samp> references a function that the
+<li class="li"> <samp class="ph codeph">onDropOnTarget</samp> references a function that the
 EGL Runtime calls once, when the user releases the mouse to end the
 drag operation. The function has characteristics that are shown in
-the following Delegate part:<pre class="codeblock">Delegate DropOnTargetFunction(widget Widget in,
+the following Delegate part:<pre class="pre codeblock">Delegate DropOnTargetFunction(widget Widget in,
                       dropTarget Widget in,
                       x int in, y int in) </pre>
-<p>The function
+<p class="p">The function
 receives references to the widget being dropped and to the widget
 (if any) under the mouse pointer. If no widget is under the mouse
 pointer, the second argument is null. The function also receives the
@@ -85,11 +85,11 @@ value.</p>
 
 </ul>
 
-<div class="p">Here is an example you can bring into your workspace:.<pre class="codeblock">import com.ibm.egl.rui.widgets.TextField;
+<div class="p">Here is an example you can bring into your workspace:.<pre class="pre codeblock">import com.ibm.egl.rui.widgets.TextField;
 
 handler MyHandler type RUIHandler{initialUI =[myTextField]}
    myTextField TextField{text = 
-                   """"""""What a drag!"""""""", position = """"""""absolute"""""""", x = 110, y = 210, width = 120, 
+                   "What a drag!", position = "absolute", x = 110, y = 210, width = 120, 
                    onStartDrag = start, onDrag = drag, onDropOnTarget = drop};
    dx, dy int;
 
@@ -109,17 +109,17 @@ handler MyHandler type RUIHandler{initialUI =[myTextField]}
 end  </pre>
 </div>
 
-<div class="p">The <samp class="codeph">start</samp> function calculates the difference between
+<div class="p">The <samp class="ph codeph">start</samp> function calculates the difference between
 the location of the mouse pointer and the top-left corner of the widget.
 The effect of using that calculation is that the mouse pointer is
 displayed at the same place on the widget throughout the operation.
-To see the effect, run the code twice, clicking the <em>bottom-right
+To see the effect, run the code twice, clicking the <em class="ph i">bottom-right
 corner</em> of the widget to start the drag-and-drop operation each
-time:<ol>
-<li>Run the code as shown</li>
+time:<ol class="ol">
+<li class="li">Run the code as shown</li>
 
-<li>Run the code only after replacing the statements in the <samp class="codeph">drag</samp> function
-with the following assignments:<pre class="codeblock">   myWidget.x = x;
+<li class="li">Run the code only after replacing the statements in the <samp class="ph codeph">drag</samp> function
+with the following assignments:<pre class="pre codeblock">   myWidget.x = x;
    myWidget.y = y;
 </pre>
 </li>
@@ -127,11 +127,11 @@ with the following assignments:<pre class="codeblock">   myWidget.x = x;
 </ol>
 </div>
 
-<p>Additional examples are in the “Shadow widget” reference topic.</p>
+<p class="p">Additional examples are in the “Shadow widget” reference topic.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,40 +19,40 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Dynamic loading in Rich UI</title>
 </head>
-<body id="cedt01018"><a name="cedt01018"><!-- --></a>
+<body id="cedt01018">
 
 
-<h1 class="topictitle1">Dynamic loading in Rich UI</h1>
+<h1 class="title topictitle1">Dynamic loading in Rich UI</h1>
 
 
 
-<div><p>Instead of deploying all the Rich UI handlers into a single
+<div class="body"><p class="shortdesc">Instead of deploying all the Rich UI handlers into a single
 HTML file, you can control the downloading of Rich UI handler code
 at run time. For large applications, you gain significant advantage
-in scalability and performance. <strong>Dynamic loading is not supported
+in scalability and performance. <strong class="ph b">Dynamic loading is not supported
 in version .7</strong>.</p>
 
-<p>Each dynamic load is asynchronous. You code listener functions
+<p class="p">Each dynamic load is asynchronous. You code listener functions
 to respond when the load completes, and until the load completes,
 the user continues to interact with the web page.</p>
 
 <div class="p">By way of background, consider that one handler can refer to another
-handler in either of two ways:<ul>
-<li>By a type reference, as in the following examples: <pre class="codeblock">// a simple declaration
+handler in either of two ways:<ul class="ul">
+<li class="li">By a type reference, as in the following examples: <pre class="pre codeblock">// a simple declaration
 mySecondary Secondary{};
 
-// the <strong>as</strong> keyword, in a usage described later in this topic
+// the <strong class="ph b">as</strong> keyword, in a usage described later in this topic
 mySecondary Secondary = theHandler as Secondary;
 </pre>
 </li>
 
-<li>By a quoted string that is resolved only at run time, as in the
-following example: <pre class="codeblock">handler MainHandler type RUIhandler {onConstructionFunction = start }
+<li class="li">By a quoted string that is resolved only at run time, as in the
+following example: <pre class="pre codeblock">handler MainHandler type RUIhandler {onConstructionFunction = start }
 
    function start() 
    
    // Load the first page    
-   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
+   DynamicLoader.loadHandler("myPkg.Secondary");
 end</pre>
 </li>
 
@@ -60,16 +60,16 @@ end</pre>
 </div>
 
 <div class="p">If you want to ensure that a handler is loaded from the application
-server only at run time, do as follows: <ul>
-<li>Invoke the <span class="synph"><span class="kwd">DynamicLoader.loadHandler</span></span> function.</li>
+server only at run time, do as follows: <ul class="ul">
+<li class="li">Invoke the <span class="ph synph"><span class="keyword kwd">DynamicLoader.loadHandler</span></span> function.</li>
 
-<li>Configure the EGL deployment descriptor. Your purpose is twofold:<ul>
-<li>To identify the handler that is named in the invocation of <span class="synph"><span class="kwd">DynamicLoader.loadHandler</span></span>.
+<li class="li">Configure the EGL deployment descriptor. Your purpose is twofold:<ul class="ul">
+<li class="li">To identify the handler that is named in the invocation of <span class="ph synph"><span class="keyword kwd">DynamicLoader.loadHandler</span></span>.
 The string used as an argument is meaningful only at run time. By
 identifying the same handler in the EGL deployment descriptor, you
 ensure that the handler is available for runtime load.</li>
 
-<li>To prevent the handler from being included in the <dfn class="term">immediately
+<li class="li">To prevent the handler from being included in the <dfn class="term">immediately
 downloaded code</dfn>, which is the logic that is downloaded at one
 time; for example, in the initially downloaded HTML file. If one handler
 dynamically loads a second handler that dynamically loads a third,
@@ -83,93 +83,93 @@ code.</li>
 </ul>
 </div>
 
-<p>If you specify a type reference and do not configure the EGL deployment
+<p class="p">If you specify a type reference and do not configure the EGL deployment
 descriptor for dynamic loading, the type reference causes the referenced
 handler to be included in the immediately downloaded code.</p>
 
-<p>As noted in a later code example, a type reference is necessary
+<p class="p">As noted in a later code example, a type reference is necessary
 if your code directly accesses fields or functions in the dynamically
 loaded handler. However, a type reference is not necessary if your
-code accesses only the widget array assigned to the <span class="synph"><span class="kwd">initialUI</span></span> field
+code accesses only the widget array assigned to the <span class="ph synph"><span class="keyword kwd">initialUI</span></span> field
 of the dynamically loaded handler.</p>
 
-<p>Dynamic loads are handled at run time by an EGL dedicated service
+<p class="p">Dynamic loads are handled at run time by an EGL dedicated service
 named ModuleLoaderService. Do not change this service, which deals
 with internal details that might change in future versions of the
 product.</p>
 
-<div class="p">Additional details are in the following sections:<ul>
-<li><a href="#cedt01018__loaderfunctions">DynamicLoader functions</a></li>
+<div class="p">Additional details are in the following sections:<ul class="ul">
+<li class="li"><a class="xref" href="#cedt01018__loaderfunctions">DynamicLoader functions</a></li>
 
-<li><a href="#cedt01018__listenerarrays">DynamicLoader listener arrays</a></li>
+<li class="li"><a class="xref" href="#cedt01018__listenerarrays">DynamicLoader listener arrays</a></li>
 
-<li><a href="#cedt01018__cssfiles">Considerations for using CSS files at run time</a></li>
+<li class="li"><a class="xref" href="#cedt01018__cssfiles">Considerations for using CSS files at run time</a></li>
 
-<li><a href="#cedt01018__editor">Considerations for using the Preview pane of the Rich UI editor</a></li>
+<li class="li"><a class="xref" href="#cedt01018__editor">Considerations for using the Preview pane of the Rich UI editor</a></li>
 
 </ul>
 </div>
 
-<p>For a sample use of the dynamic loader, see “EGL Dojo widgets”;
-and, in particular, the <span class="filepath">GalleryDynamicLoading.egl</span> file
+<p class="p">For a sample use of the dynamic loader, see “EGL Dojo widgets”;
+and, in particular, the <span class="ph filepath">GalleryDynamicLoading.egl</span> file
 there.</p>
 
-<div class="section" id="cedt01018__loaderfunctions"><a name="cedt01018__loaderfunctions"><!-- --></a><h2 class="sectiontitle">DynamicLoader functions</h2><div class="p">The <span class="synph"><span class="kwd">DynamicLoader</span></span> library
+<div class="section" id="cedt01018__loaderfunctions"><h2 class="title sectiontitle">DynamicLoader functions</h2><div class="p">The <span class="ph synph"><span class="keyword kwd">DynamicLoader</span></span> library
 has the following functions, along with listener functions (described
-later) that respond to your invocation:<ul>
-<li><span class="synph"><span class="kwd">loadHandler</span></span> (<em>handlerName</em> String
-in)<p>This function loads a handler.</p>
-<dl>
-<dt class="dlterm"><em>handlerName</em></dt>
+later) that respond to your invocation:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">loadHandler</span></span> (<em class="ph i">handlerName</em> String
+in)<p class="p">This function loads a handler.</p>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">handlerName</em></dt>
 
-<dd>Fully qualified name of the handler to load dynamically, as in
+<dd class="dd pd">Fully qualified name of the handler to load dynamically, as in
 the example shown earlier.</dd>
 
 </dl>
 </li>
 
-<li><span class="synph"><span class="kwd">loadHandlerNoInstantiation</span></span> (<em>handlerName</em> String
-in)<p>This function loads the handler type definition but not a handler
+<li class="li"><span class="ph synph"><span class="keyword kwd">loadHandlerNoInstantiation</span></span> (<em class="ph i">handlerName</em> String
+in)<p class="p">This function loads the handler type definition but not a handler
 instance. You might use this function for better runtime performance.
 For example, you might want a handler type to be available in your
 application but to create the handler itself only if the user clicks
 a menu item that requires the handler.</p>
-<dl>
-<dt class="dlterm"><em>handlerName</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">handlerName</em></dt>
 
-<dd>Fully qualified name of the handler to load dynamically.</dd>
+<dd class="dd pd">Fully qualified name of the handler to load dynamically.</dd>
 
 </dl>
 </li>
 
-<li><span class="synph"><span class="kwd">unloadHandler</span></span> (<em>handlerName</em> String
-in)<p>This function unloads a handler but does not destroy the instances
+<li class="li"><span class="ph synph"><span class="keyword kwd">unloadHandler</span></span> (<em class="ph i">handlerName</em> String
+in)<p class="p">This function unloads a handler but does not destroy the instances
 of that handler. You cannot unload EGL libraries, which are available
 until an application ends.</p>
 <div class="p">A handler instance cannot be removed
-from memory if either of the following statements is true: <ul>
-<li>The handler is referenced by type in another handler that is not
+from memory if either of the following statements is true: <ul class="ul">
+<li class="li">The handler is referenced by type in another handler that is not
 being removed from memory.</li>
 
-<li>The handler is subscribed to the Infobus, as described in “Rich
+<li class="li">The handler is subscribed to the Infobus, as described in “Rich
 UI Infobus.”</li>
 
 </ul>
 </div>
-<p>In most cases, memory is freed by the EGL runtime code.
+<p class="p">In most cases, memory is freed by the EGL runtime code.
 However, the following topic describes a case in which you are in
-greater control of memory management: “Rich UI memory management for Microsoft Internet Explorer.” </p>
-<dl>
+greater control of memory management: “Rich UI memory management for Microsoft™ Internet Explorer.” </p>
+<dl class="dl parml">
 
-<dt class="dlterm"><em>handlerName</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">handlerName</em></dt>
 
-<dd>Fully qualified name of the handler to unload.</dd>
+<dd class="dd pd">Fully qualified name of the handler to unload.</dd>
 
 </dl>
 </li>
 
 
-<li><span class="synph"><span class="kwd">showDebugView</span></span>()<p>This function ensures
+<li class="li"><span class="ph synph"><span class="keyword kwd">showDebugView</span></span>()<p class="p">This function ensures
 that details are displayed to show what is happening inside the dynamic
 loader. You might set this in the on-construction function of your
 main handler.</p>
@@ -179,14 +179,14 @@ main handler.</p>
 </div>
 </div>
 
-<div class="section" id="cedt01018__listenerarrays"><a name="cedt01018__listenerarrays"><!-- --></a><h2 class="sectiontitle">DynamicLoader listener arrays</h2><div class="p">The <span class="synph"><span class="kwd">DynamicLoader</span></span> library
+<div class="section" id="cedt01018__listenerarrays"><h2 class="title sectiontitle">DynamicLoader listener arrays</h2><div class="p">The <span class="ph synph"><span class="keyword kwd">DynamicLoader</span></span> library
 provides a mechanism by which you code listeners in accordance with
 a Delegate part and then assign those listeners to an array and in
-this way respond to events at run time. Here is an example use:<pre class="codeblock">function start()
+this way respond to events at run time. Here is an example use:<pre class="pre codeblock">function start()
    // Set handler for the event that the page has been loaded
    DynamicLoader.loadDoneListeners ::= processLoadDone;
 
-   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
+   DynamicLoader.loadHandler("myPkg.Secondary");
 end
 
 function processLoadDone (event HandlerLoadedEvent in)
@@ -207,9 +207,9 @@ function processLoadDone (event HandlerLoadedEvent in)
    end
 end</pre>
  </div>
-<div class="p">Here is the <span class="synph"><span class="kwd">HandlerLoadedEvent</span></span> Record
-part, which identifies what is available from the <samp class="codeph">event</samp> parameter
-for <span class="synph"><span class="kwd">processLoadDone</span></span>:<pre class="codeblock">record HandlerLoadedEvent
+<div class="p">Here is the <span class="ph synph"><span class="keyword kwd">HandlerLoadedEvent</span></span> Record
+part, which identifies what is available from the <samp class="ph codeph">event</samp> parameter
+for <span class="ph synph"><span class="keyword kwd">processLoadDone</span></span>:<pre class="pre codeblock">record HandlerLoadedEvent
 
    // The name of the handler
    name String;
@@ -222,45 +222,45 @@ for <span class="synph"><span class="kwd">processLoadDone</span></span>:<pre cla
 end</pre>
 </div>
 <div class="p">Here are the listeners and related Delegate
-parts that are provided by the <span class="synph"><span class="kwd">DynamicLoader</span></span> library:<ul>
-<li><span class="synph"><span class="kwd">DynamicLoader.loadDoneListeners</span></span><div class="p">This
+parts that are provided by the <span class="ph synph"><span class="keyword kwd">DynamicLoader</span></span> library:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">DynamicLoader.loadDoneListeners</span></span><div class="p">This
 array specifies a set of listeners that are invoked after the handler
-is loaded. The delegate part is here:<pre class="codeblock">delegate
+is loaded. The delegate part is here:<pre class="pre codeblock">delegate
    LoadDoneListener (event HandlerLoadedEvent in)
 end</pre>
-<dl>
-<dt class="dlterm"><em>event</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">event</em></dt>
 
-<dd>As shown earlier. However, if a listener is running in response
-to your having invoked the <span class="synph"><span class="kwd">loadHandlerNoInstantiation</span></span> function,
-the <span class="synph"><span class="kwd">initialUI</span></span> parameter receives an empty
-array, and the <span class="synph"><span class="kwd">theHandler</span></span> parameter receives
+<dd class="dd pd">As shown earlier. However, if a listener is running in response
+to your having invoked the <span class="ph synph"><span class="keyword kwd">loadHandlerNoInstantiation</span></span> function,
+the <span class="ph synph"><span class="keyword kwd">initialUI</span></span> parameter receives an empty
+array, and the <span class="ph synph"><span class="keyword kwd">theHandler</span></span> parameter receives
 a null.</dd>
 
 </dl>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">DynamicLoader.loadFailListeners</span></span><div class="p">This
+<li class="li"><span class="ph synph"><span class="keyword kwd">DynamicLoader.loadFailListeners</span></span><div class="p">This
 array specifies a set of listeners that are invoked if the load fails.
-The delegate part is here:<pre class="codeblock">delegate
+The delegate part is here:<pre class="pre codeblock">delegate
    LoadFailListener (handlerName string in, msg string in) 
 end</pre>
-<dl>
-<dt class="dlterm"><em>handlerName</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">handlerName</em></dt>
 
-<dd>The fully qualified name of the handler that failed to load.</dd>
+<dd class="dd pd">The fully qualified name of the handler that failed to load.</dd>
 
 
-<dt class="dlterm"><em>msg</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">msg</em></dt>
 
-<dd>An error message.</dd>
+<dd class="dd pd">An error message.</dd>
 
 </dl>
 </div>
-<div class="p">Here is an example:<pre class="codeblock">function start()
+<div class="p">Here is an example:<pre class="pre codeblock">function start()
    DynamicLoader.loadFailListeners ::= processLoadFail;
-   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
+   DynamicLoader.loadHandler("myPkg.Secondary");
 end    
 
 Function processLoadFail (handlerName string in, msg string in)    
@@ -269,81 +269,81 @@ end</pre>
 </div>
 </li>
 
-<li><span class="synph"><span class="kwd">DynamicLoader.loadInfoListeners</span></span><div class="p">This
+<li class="li"><span class="ph synph"><span class="keyword kwd">DynamicLoader.loadInfoListeners</span></span><div class="p">This
 array specifies a set of listeners that are invoked from the dynamic
 loader and are used for tracing download and unload behavior at run
-time. The set is invoked once for every downloaded or unloaded <em>resource</em>,
-which might be any of the following units:<ul>
-<li>Parts: <ul>
-<li>Rich UI handlers</li>
+time. The set is invoked once for every downloaded or unloaded <em class="ph i">resource</em>,
+which might be any of the following units:<ul class="ul">
+<li class="li">Parts: <ul class="ul">
+<li class="li">Rich UI handlers</li>
 
-<li>Basic handlers</li>
+<li class="li">Basic handlers</li>
 
-<li>Widgets</li>
+<li class="li">Widgets</li>
 
-<li>Libraries, including Rich UI properties libraries</li>
+<li class="li">Libraries, including Rich UI properties libraries</li>
 
-<li>Records</li>
+<li class="li">Records</li>
 
 </ul>
 </li>
 
-<li>Other resources:<ul>
-<li>JavaScript include
+<li class="li">Other resources:<ul class="ul">
+<li class="li">JavaScript™ include
 files, whether globally defined or referenced in an external type</li>
 
-<li>Properties files related to a Rich UI properties library</li>
+<li class="li">Properties files related to a Rich UI properties library</li>
 
-<li>Service-binding files related to an EGL deployment descriptor</li>
+<li class="li">Service-binding files related to an EGL deployment descriptor</li>
 
 </ul>
 </li>
 
 </ul>
 </div>
-<div class="p">The delegate part is here:<pre class="codeblock">delegate
+<div class="p">The delegate part is here:<pre class="pre codeblock">delegate
    LoadInfoListener (handlerName string, resourceName string, 
                      code string, msg string)
 end</pre>
-<dl>
-<dt class="dlterm"><em>handlerName</em></dt>
+<dl class="dl parml">
+<dt class="dt pt dlterm"><em class="ph i">handlerName</em></dt>
 
-<dd>The fully qualified name of the handler that was passed to a load
+<dd class="dd pd">The fully qualified name of the handler that was passed to a load
 or unload function.</dd>
 
 
-<dt class="dlterm"><em>resourceName</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">resourceName</em></dt>
 
-<dd>The name of a downloaded or unloaded resource.</dd>
+<dd class="dd pd">The name of a downloaded or unloaded resource.</dd>
 
 
-<dt class="dlterm"><em>code</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">code</em></dt>
 
-<dd>One of the following codes, each of which identifies a type of
-information:<ul>
-<li>DynamicLoader.INFO_LOAD indicates that the resource was loaded.</li>
+<dd class="dd pd">One of the following codes, each of which identifies a type of
+information:<ul class="ul">
+<li class="li">DynamicLoader.INFO_LOAD indicates that the resource was loaded.</li>
 
-<li>DynamicLoader.INFO_UNLOAD indicates that the resource was unloaded.</li>
+<li class="li">DynamicLoader.INFO_UNLOAD indicates that the resource was unloaded.</li>
 
-<li>DynamicLoader.INFO_UNLOAD_SKIP indicates that the resource was
+<li class="li">DynamicLoader.INFO_UNLOAD_SKIP indicates that the resource was
 not unloaded; for example, because the resource was a library.</li>
 
-<li>DynamicLoader.INFO_DEBUG is a generic message from the dynamic
+<li class="li">DynamicLoader.INFO_DEBUG is a generic message from the dynamic
 loader.</li>
 
 </ul>
 </dd>
 
 
-<dt class="dlterm"><em>msg</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">msg</em></dt>
 
-<dd>A message.</dd>
+<dd class="dd pd">A message.</dd>
 
 </dl>
 </div>
-<div class="p">Here is an example:<pre class="codeblock">function start()
+<div class="p">Here is an example:<pre class="pre codeblock">function start()
    DynamicLoader.loadInfoListeners ::= processLoadInfo;
-   DynamicLoader.loadHandler(""""""""myPkg.Secondary"""""""");
+   DynamicLoader.loadHandler("myPkg.Secondary");
 end
 
 function processLoadInfo (handlerName string, 
@@ -359,14 +359,14 @@ end</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Handler instances</h2><div class="p">You can create new instances
-of a handler after the handler is loaded, as shown here: <pre class="codeblock">function createPage1() returns (Secondary)
+<div class="section"><h2 class="title sectiontitle">Handler instances</h2><div class="p">You can create new instances
+of a handler after the handler is loaded, as shown here: <pre class="pre codeblock">function createPage1() returns (Secondary)
    anotherPage1 Secondary = new Secondary{};
    return(anotherPage1);
 end  </pre>
 </div>
 <div class="p">Do not try to create a new instance before
-the handler is loaded. Here is an example: <pre class="codeblock">handler MainHandler type RUIhandler {onConstructionFunction = start }
+the handler is loaded. Here is an example: <pre class="pre codeblock">handler MainHandler type RUIhandler {onConstructionFunction = start }
 
    // error!
    anotherPage1 Page1 = new Secondary{};   
@@ -374,51 +374,51 @@ end</pre>
 </div>
 </div>
 
-<div class="section" id="cedt01018__cssfiles"><a name="cedt01018__cssfiles"><!-- --></a><h2 class="sectiontitle">Considerations for using CSS files at
-run time</h2><p>When the EGL deployer creates the HTML file for
+<div class="section" id="cedt01018__cssfiles"><h2 class="title sectiontitle">Considerations for using CSS files at
+run time</h2><p class="p">When the EGL deployer creates the HTML file for
 a handler, the file includes a list of all the CSS files that are
 used in the Rich UI application. CSS files are not loaded dynamically.</p>
 <div class="p">The
-order of priority for the CSS definitions is as follows:<ul>
-<li>At the highest level are the definitions in the topmost handler.</li>
+order of priority for the CSS definitions is as follows:<ul class="ul">
+<li class="li">At the highest level are the definitions in the topmost handler.</li>
 
-<li>Next are the definitions in the other handlers that are in the
+<li class="li">Next are the definitions in the other handlers that are in the
 HTML file. </li>
 
-<li>At the lowest level are the definitions in the handlers that are
+<li class="li">At the lowest level are the definitions in the handlers that are
 loaded dynamically.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section" id="cedt01018__editor"><a name="cedt01018__editor"><!-- --></a><h2 class="sectiontitle">Considerations for using the Preview pane
+<div class="section" id="cedt01018__editor"><h2 class="title sectiontitle">Considerations for using the Preview pane
 of the Rich UI editor</h2><div class="p">When you run a handler in the Preview
-pane of the Rich UI editor, the following rules apply: <ul>
-<li>The workbench builds an HTML file that includes all resources
+pane of the Rich UI editor, the following rules apply: <ul class="ul">
+<li class="li">The workbench builds an HTML file that includes all resources
 that are referenced by type in the handler being edited, or are referenced
 by type in a handler that is referenced by one of those second-level
 handlers, and so forth, to any level of reference.</li>
 
-<li>The only handlers that are loaded dynamically are those that are
+<li class="li">The only handlers that are loaded dynamically are those that are
 identified by string and not by type reference.</li>
 
 </ul>
 </div>
 <div class="p">For the handlers that are loaded dynamically in the Preview
-pane, the following considerations apply:<ul>
-<li>The CSS and include files that are specified in the dynamically
+pane, the following considerations apply:<ul class="ul">
+<li class="li">The CSS and include files that are specified in the dynamically
 loaded handlers are not available to the Preview pane. You must reference
 those files from the handler being edited or from a handler that is
 directly or indirectly loaded by type reference from the handler that
 you are editing.</li>
 
-<li>You need to handle JavaScript runtime
+<li class="li">You need to handle JavaScript runtime
 files, even if you would not otherwise reference them. For example,
 if Handler A does not use EGL Dojo widgets and refers to Handler B
 only by string, and if Handler B uses EGL Dojo widgets, you must set
-the <span class="synph"><span class="kwd">includeFile</span></span> field of Handler A to reference
-the Dojo runtime code, as shown here:<pre class="codeblock">{ includeFile = """"""""config/includeDojo.html"""""""" }</pre>
+the <span class="ph synph"><span class="keyword kwd">includeFile</span></span> field of Handler A to reference
+the Dojo runtime code, as shown here:<pre class="pre codeblock">{ includeFile = "config/includeDojo.html" }</pre>
 </li>
 
 </ul>
@@ -427,7 +427,7 @@ the Dojo runtime code, as shown here:<pre class="codeblock">{ includeFile = """"
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

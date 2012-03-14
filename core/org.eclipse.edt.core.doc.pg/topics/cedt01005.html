@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,23 +19,23 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Service access outside of Rich UI</title>
 </head>
-<body id="cedt01005"><a name="cedt01005"><!-- --></a>
+<body id="cedt01005">
 
 
-<h1 class="topictitle1">Service access outside of Rich UI</h1>
+<h1 class="title topictitle1">Service access outside of Rich UI</h1>
 
 
 
-<div><p>Except in a Rich UI handler or library, service access
+<div class="body"><p class="shortdesc">Except in a Rich UI handler or library, service access
 in EGL is <dfn class="term">synchronous</dfn>: the requester waits for a response
-from the service. <strong>Synchronous service access is not yet available.</strong>.</p>
+from the service. <strong class="ph b">Synchronous service access is not yet available.</strong>.</p>
 
 <div class="p">For example, the following code accesses the implementation that
-is shown in “EGL support for SOA:”<pre class="codeblock">returnValue String{};
-myInterface MyInterfaceType?{@Resource{bindingKey = """"""""MyBinding""""""""}};
+is shown in “EGL support for SOA:”<pre class="pre codeblock">returnValue String{};
+myInterface MyInterfaceType?{@Resource{bindingKey = "MyBinding"}};
 
 try
-   returnValue = myInterface.myEcho(""""""""world"""""""");
+   returnValue = myInterface.myEcho("world");
 
    onException(except AnyException)
       // exception handling
@@ -43,16 +43,16 @@ end</pre>
 </div>
 
 <div class="p">Typically, accessing a service outside of Rich UI involves creating
-an EGL Interface part: <ol>
-<li>Use a workbench tool to create an EGL Interface part that describes
+an EGL Interface part: <ol class="ol">
+<li class="li">Use a workbench tool to create an EGL Interface part that describes
 the service operations.</li>
 
-<li>Create a service-access variable that is based on the Interface
+<li class="li">Create a service-access variable that is based on the Interface
 part. </li>
 
-<li>Use the variable in a service-access statement that places a returned
+<li class="li">Use the variable in a service-access statement that places a returned
 value into a second variable. You can embed the service-access in
-a <span class="synph"><span class="kwd">try</span></span> block that references an exception
+a <span class="ph synph"><span class="keyword kwd">try</span></span> block that references an exception
 handler. The exception handler is invoked at run time if the invocation
 fails.</li>
 
@@ -61,7 +61,7 @@ fails.</li>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

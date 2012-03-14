@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -16,15 +16,15 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>EGL support for relational databases</title>
 </head>
-<body id="cedt01029"><a name="cedt01029"><!-- --></a>
+<body id="cedt01029">
 
 
-<h1 class="topictitle1">EGL support for relational databases</h1>
+<h1 class="title topictitle1">EGL support for relational databases</h1>
 
 
-<div><p>When you work with EGL, many of the details of data access
+<div class="body"><p class="shortdesc">When you work with EGL, many of the details of data access
 are in variables that you customize and then include in statements
-such as <strong>add</strong> or <strong>delete</strong>. The customized variables include
+such as <strong class="ph b">add</strong> or <strong class="ph b">delete</strong>. The customized variables include
 details that are specific to a particular kind of data store, whether
 the kind is a relational database; a file; or, in the future, some
 other form of persistent storage. By including the kind-specific detail
@@ -33,14 +33,14 @@ allows most data-access statements to be structured in a particular
 way, regardless of which kind of data store is accessed.</p>
 
 <div class="p">Most of the customized variables that you use for relational database
-access are based on the following types:<ul>
-<li>SQLDataSource, which represents a database connection.</li>
+access are based on the following types:<ul class="ul">
+<li class="li">SQLDataSource, which represents a database connection.</li>
 
-<li>SQLResultSet, which represents a result set returned from an SQL
+<li class="li">SQLResultSet, which represents a result set returned from an SQL
 query.</li>
 
-<li>SQLStatement, which represents an SQL statement that is produced
-by issuing the EGL <strong>Prepare</strong> statement. The SQL statement is
+<li class="li">SQLStatement, which represents an SQL statement that is produced
+by issuing the EGL <strong class="ph b">Prepare</strong> statement. The SQL statement is
 known as a <dfn class="term">prepared statement</dfn>. It is structured from
 a string at run time and often has a structure that is known only
 at run time.</li>
@@ -50,31 +50,31 @@ at run time.</li>
 
 <div class="p">You can declare a variable of type SQLDataSource either to represent
 a connection that is specified directly in your logic or to reference
-a database binding in the EGL deployment descriptor:<ul>
-<li>Here is an example in which the connection is specified directly
-in the logic:<pre class="codeblock">connectURL string = """"jdbc:derby:SomeDB;create=true;"""";
-properties Dictionary{user = """"MyID"""", password = """"MyPassword""""};
+a database binding in the EGL deployment descriptor:<ul class="ul">
+<li class="li">Here is an example in which the connection is specified directly
+in the logic:<pre class="pre codeblock">connectURL string = "jdbc:derby:SomeDB;create=true;";
+properties Dictionary{user = "MyID", password = "MyPassword"};
 ds SQLDataSource? = new SQLDataSource(connectURL, properties);
 </pre>
 </li>
 
-<li>Here is an example of a reference to an EGL deployment descriptor
-entry named <samp class="codeph">MyDatabaseBinding</samp>:<pre class="codeblock">ds SQLDataSource?{@Resource{uri = """"binding:MyDatabaseBinding""""}};  </pre>
+<li class="li">Here is an example of a reference to an EGL deployment descriptor
+entry named <samp class="ph codeph">MyDatabaseBinding</samp>:<pre class="pre codeblock">ds SQLDataSource?{@Resource{uri = "binding:MyDatabaseBinding"}};  </pre>
 </li>
 
 </ul>
 </div>
 
-<div class="p">Additional information is available:<ul>
-<li>For details on the types listed earlier, <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00266.html" title="eglx.persistence.sql  ">eglx.persistence.sql package</a>.</li>
+<div class="p">Additional information is available:<ul class="ul">
+<li class="li">For details on the types listed earlier, <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00266.html" title="eglx.persistence.sql  ">eglx.persistence.sql package</a>.</li>
 
-<li>For details on the data-access statements, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00044.html" title="The next table lists the statements used to access a relational database.">Statements used for relational database access</a>.</li>
+<li class="li">For details on the data-access statements, see <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00044.html" title="The next table lists the statements used to access a relational database.">Statements used for relational database access</a>.</li>
 
-<li>For details on referencing an EGL deployment descriptor entry,
-see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00087.html" title="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor.">Resource annotation</a>.</li>
+<li class="li">For details on referencing an EGL deployment descriptor entry,
+see <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00087.html" title="Resource causes an annotated variable to reference an object that holds values from a specified entry in the EGL deployment descriptor.">Resource annotation</a>.</li>
 
-<li>For details on dynamically accessing an EGL deployment descriptor
-entry, see <a href="../../org.eclipse.edt.core.doc.lr/topics/redt00205.html" title="SysLib.getResource returns an object that is external to your code. At this writing, the object is always based on a binding entry that is defined in an EGL deployment descriptor.">SysLib.getResource function</a>.</li>
+<li class="li">For details on dynamically accessing an EGL deployment descriptor
+entry, see <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00205.html" title="SysLib.getResource returns an object that is external to your code. At this writing, the object is always based on a binding entry that is defined in an EGL deployment descriptor.">SysLib.getResource function</a>.</li>
 
 </ul>
 </div>

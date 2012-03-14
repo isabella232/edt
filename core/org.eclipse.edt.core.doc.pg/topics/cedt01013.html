@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -25,107 +25,107 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI widgets</title>
 </head>
-<body id="cedt01013"><a name="cedt01013"><!-- --></a>
+<body id="cedt01013">
 
 
-<h1 class="topictitle1">Rich UI widgets</h1>
+<h1 class="title topictitle1">Rich UI widgets</h1>
 
 
 
-<div><p>Rich UI handler parts include <em>widgets</em>. Each is a
-customized, on-screen control, but the term <em>widget</em> also refers
+<div class="body"><p class="shortdesc">Rich UI handler parts include <em class="ph i">widgets</em>. Each is a
+customized, on-screen control, but the term <em class="ph i">widget</em> also refers
 to the variable declaration that creates the control. A widget can
 contain business data and can respond to events.</p>
 
 <div class="p">For a list of widget types and details on each, see the EGL Language
-Reference entries for the following packages:<ul>
-<li>org.eclipse.edt.rui.widgets package, for widgets other EGL Dojo
+Reference entries for the following packages:<ul class="ul">
+<li class="li">org.eclipse.edt.rui.widgets package, for widgets other EGL Dojo
 widgets.</li>
 
-<li>dojo.widgets package, for EGL Dojo widgets.</li>
+<li class="li">dojo.widgets package, for EGL Dojo widgets.</li>
 
 </ul>
 </div>
 
 <div class="p">Also, you can get details on the widget-specific fields and functions
-by inspecting the project files that contain the widget code. <ul>
-<li>org.eclipse.edt.rui project, EGLSource folder, com.ibm.egl.rui.widgets
+by inspecting the project files that contain the widget code. <ul class="ul">
+<li class="li">org.eclipse.edt.rui project, EGLSource folder, com.ibm.egl.rui.widgets
 package.</li>
 
-<li>org.eclipse.edt.rui.dojo.widgets project, EGLSource folder, dojo.widgets
+<li class="li">org.eclipse.edt.rui.dojo.widgets project, EGLSource folder, dojo.widgets
 package.</li>
 
 </ul>
 </div>
 
-<div class="p">When you want to use a widget of a specific type, use content assist:<ol>
-<li>Type the widget name and a period.</li>
+<div class="p">When you want to use a widget of a specific type, use content assist:<ol class="ol">
+<li class="li">Type the widget name and a period.</li>
 
-<li>Press <strong>Ctrl-Space</strong>.</li>
+<li class="li">Press <strong class="ph b">Ctrl-Space</strong>.</li>
 
 </ol>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Widget declarations and package names</h2><p>When
+<div class="section"><h2 class="title sectiontitle">Widget declarations and package names</h2><p class="p">When
 you wish to declare a widget, EGL provides two ways to identify the
 package in which the widget resides. Although those two ways are available
 when you declare any EGL variable, special automation is available
 in relation to widgets.</p>
 <div class="p">First, you can precede the name of the
-widget type with the name of the package. Here is the format: <pre class="codeblock"><em>widgetName</em> com.ibm.egl.rui.widgets.<em>widgetTypeName</em>;</pre>
-<dl>
+widget type with the name of the package. Here is the format: <pre class="pre codeblock"><em class="ph i">widgetName</em> com.ibm.egl.rui.widgets.<em class="ph i">widgetTypeName</em>;</pre>
+<dl class="dl parml">
 
-<dt class="dlterm"><em>widgetName</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">widgetName</em></dt>
 
-<dd>Name of the widget</dd>
+<dd class="dd pd">Name of the widget</dd>
 
 
-<dt class="dlterm"><em>widgetTypeName</em></dt>
+<dt class="dt pt dlterm"><em class="ph i">widgetTypeName</em></dt>
 
-<dd>Name of the widget type</dd>
+<dd class="dd pd">Name of the widget type</dd>
 
 </dl>
 </div>
 <div class="p">The
-second way to identify the package is to include an <samp class="codeph">import</samp> statement
+second way to identify the package is to include an <samp class="ph codeph">import</samp> statement
 early in the source code. Here is the format, which requires, in place
-of <em>widgetTypeName</em>, either a wild card (*) to reference multiple
-types or the name of a specific type:<pre class="codeblock">import com.ibm.egl.rui.widgets.<em>widgetTypeName</em>;</pre>
+of <em class="ph i">widgetTypeName</em>, either a wild card (*) to reference multiple
+types or the name of a specific type:<pre class="pre codeblock">import com.ibm.egl.rui.widgets.<em class="ph i">widgetTypeName</em>;</pre>
 </div>
-<p>Use
-of a wild card in place of <em>widgetTypeName</em> adds unnecessary
-code to the generated JavaScript output
+<p class="p">Use
+of a wild card in place of <em class="ph i">widgetTypeName</em> adds unnecessary
+code to the generated JavaScript™ output
 and is not recommended.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Avoiding a null pointer exception</h2><p>A widget
+<div class="section"><h2 class="title sectiontitle">Avoiding a null pointer exception</h2><p class="p">A widget
 is an EGL reference variable. When declaring a widget statically (without
-the <span class="synph"><span class="kwd">new</span></span> operator), remember to specify a
+the <span class="ph synph"><span class="keyword kwd">new</span></span> operator), remember to specify a
 set-values block ({}), as in the following example:</p>
-<pre class="codeblock">myButton Button{};</pre>
+<pre class="pre codeblock">myButton Button{};</pre>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Creating additional widgets</h2><div class="p">You can create
-your own widgets in either of two ways:<ul>
-<li>You can code a Rich UI widget; that is, a Rich UI handler, stereotype <samp class="codeph">RUIWidget</samp>.</li>
+<div class="section"><h2 class="title sectiontitle">Creating additional widgets</h2><div class="p">You can create
+your own widgets in either of two ways:<ul class="ul">
+<li class="li">You can code a Rich UI widget; that is, a Rich UI handler, stereotype <samp class="ph codeph">RUIWidget</samp>.</li>
 
-<li>You can write an EGL external type that is based on JavaScript. The ability to use EGL external
+<li class="li">You can write an EGL external type that is based on JavaScript. The ability to use EGL external
 types is useful for accessing preexisting JavaScript libraries.</li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Using the Widget type</h2><div class="p">The EGL Widget type
+<div class="section"><h2 class="title sectiontitle">Using the Widget type</h2><div class="p">The EGL Widget type
 is used when defining a function that accepts a widget whose specific
 type is not known at development time. The following (unrealistic)
-example shows how such a function can use the EGL operators <span class="synph"><span class="kwd">isa</span></span> and <span class="synph"><span class="kwd">as</span></span> to
+example shows how such a function can use the EGL operators <span class="ph synph"><span class="keyword kwd">isa</span></span> and <span class="ph synph"><span class="keyword kwd">as</span></span> to
 make available type-specific properties and functions; for example,
-the <span class="synph"><span class="kwd">text</span></span> property of the TextField type: <pre class="codeblock">import com.ibm.egl.rui.widgets.TextField;
+the <span class="ph synph"><span class="keyword kwd">text</span></span> property of the TextField type: <pre class="pre codeblock">import com.ibm.egl.rui.widgets.TextField;
 
 handler MyHandlerPart type RUIhandler{onConstructionFunction = initialization}
 
-   myHelloField TextField{readOnly = true, text = """"""""Hello""""""""};
+   myHelloField TextField{readOnly = true, text = "Hello"};
 
    function initialization()
       	myInternalFunction(myHelloField);
@@ -136,7 +136,7 @@ handler MyHandlerPart type RUIhandler{onConstructionFunction = initialization}
       case 
          when (theWidget isa TextField)
             myTextField TextField = theWidget as TextField;
-            myString STRING = myTextField.text + """""""" World"""""""";
+            myString STRING = myTextField.text + " World";
             sysLib.writeStdOut(myString);
          when (theWidget isa Button)
             ;
@@ -146,19 +146,19 @@ handler MyHandlerPart type RUIhandler{onConstructionFunction = initialization}
    end
 end</pre>
 </div>
-<p>The handler displays <em>Hello world</em>.</p>
-<p>A
+<p class="p">The handler displays <em class="ph i">Hello world</em>.</p>
+<p class="p">A
 variable of type Widget must be declared before the widget is referenced
-in a property; in particular, before the widget is referenced in an <span class="synph"><span class="kwd">initialUI</span></span> or <span class="synph"><span class="kwd">children</span></span> property.
+in a property; in particular, before the widget is referenced in an <span class="ph synph"><span class="keyword kwd">initialUI</span></span> or <span class="ph synph"><span class="keyword kwd">children</span></span> property.
 (That rule does not apply to variables of specific widget types such
 as Button or TextField.)</p>
-<p>A variable of type Widget is compatible
+<p class="p">A variable of type Widget is compatible
 with both Rich UI widgets and external-type widgets.</p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,59 +17,59 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI Infobus</title>
 </head>
-<body id="cedt01022"><a name="cedt01022"><!-- --></a>
+<body id="cedt01022">
 
 
-<h1 class="topictitle1">Rich UI Infobus</h1>
+<h1 class="title topictitle1">Rich UI Infobus</h1>
 
 
-<div>
+<div class="body">
 <div class="p">The Rich UI Infobus is a library that makes available a publish-and-subscribe
-mechanism, which works as follows: <ul>
-<li>A handler subscribes to an event of a specified name. At the time
+mechanism, which works as follows: <ul class="ul">
+<li class="li">A handler subscribes to an event of a specified name. At the time
 of subscription, the handler also references a function that will
 receive data when the event occurs. The Infobus then registers the
 function so that it can be invoked at the appropriate time. <div class="p">For
 example, the following Rich UI handler part subscribes to an event
 named sample.test and provides a label—a presentation area—that an
-embedding handler can use: <pre class="codeblock">Handler embeddedHandler Type RUIHandler {onConstructionFunction=start}
+embedding handler can use: <pre class="pre codeblock">Handler embeddedHandler Type RUIHandler {onConstructionFunction=start}
 
    feedback TextLabel;
 
    function start()
-      InfoBus.subscribe(""""""""com.mycompany.sample.test"""""""", showPublish);
+      InfoBus.subscribe("com.mycompany.sample.test", showPublish);
    end
 
    function showPublish(eventName STRING in, data ANY in)
-      feedback.text = """"""""The """""""" + eventName + """""""" event occurred and passed """""""" + data;
+      feedback.text = "The " + eventName + " event occurred and passed " + data;
    end
 end  </pre>
 </div>
-<p>In a more realistic case, the showPublish
+<p class="p">In a more realistic case, the showPublish
 function might receive a record with several fields and then transmit
 the data to a remote service.</p>
 </li>
 
-<li>The same or a different handler in the same Rich UI application
+<li class="li">The same or a different handler in the same Rich UI application
 publishes the event, specifying the event name and some event-specific
 data. At the time of publication, the Infobus invokes the function
 that was specified at the time of subscription, passing the event-specific
-data to the function. <p>For example, the following handler embeds
+data to the function. <p class="p">For example, the following handler embeds
 the previous one, publishes the event, and causes display of the following
-statement: <em>The sample.text event occurred and passed input data
+statement: <em class="ph i">The sample.text event occurred and passed input data
 for a service</em>: </p>
-<div class="p"><pre class="codeblock">Handler InfoBusTest Type RUIHandler
+<div class="p"><pre class="pre codeblock">Handler InfoBusTest Type RUIHandler
    { initialUI = [myButton, myDiv] }
 
-   myButton Button{text = """"""""Publish the event"""""""", onClick ::= clickHandler};
+   myButton Button{text = "Publish the event", onClick ::= clickHandler};
    myDiv Div { children = [new embeddedHandler{}.feedback] };
 
    function clickHandler(e Event in)
-      InfoBus.publish(""""""""com.mycompany.sample.test"""""""", """"""""input data for a service"""""""");
+      InfoBus.publish("com.mycompany.sample.test", "input data for a service");
    end
 end	</pre>
 </div>
-<p>Note that the function <strong>InfoBus.publish</strong> does
+<p class="p">Note that the function <strong class="ph b">InfoBus.publish</strong> does
 not include the name of the showPublish function. Instead, the Infobus
 acts as a mediator, ensuring that the appropriate function is invoked.</p>
 </li>
@@ -77,100 +77,100 @@ acts as a mediator, ensuring that the appropriate function is invoked.</p>
 </ul>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Infobus functions</h2><div class="p">The following Infobus
-functions are in use:<ul>
-<li><strong>Infobus.subscribe</strong> accepts two arguments: an event name
+<div class="section"><h2 class="title sectiontitle">Infobus functions</h2><div class="p">The following Infobus
+functions are in use:<ul class="ul">
+<li class="li"><strong class="ph b">Infobus.subscribe</strong> accepts two arguments: an event name
 and a reference to the function that the Infobus invokes when the
 event is published. The event name may include wildcard characters,
 as described later.<div class="p">You must code the function to be invoked. That
 function is based on the following Delegate part, which indicates
 that the function can accept whatever type of data you provide when
-you publish the event:<pre class="codeblock">InfoBusCallback(eventName String in, data any in) </pre>
+you publish the event:<pre class="pre codeblock">InfoBusCallback(eventName String in, data any in) </pre>
 </div>
-<p><strong>Infobus.subscribe</strong> also
+<p class="p"><strong class="ph b">Infobus.subscribe</strong> also
 returns a subscription value (type ANY), which you can use to unsubscribe
 from the event.</p>
 </li>
 
-<li><strong>Infobus.unsubscribe</strong> accepts a single parameter; the value
+<li class="li"><strong class="ph b">Infobus.unsubscribe</strong> accepts a single parameter; the value
 of type ANY returned from Infobus.subscribe. This function has no
 return value.</li>
 
-<li><strong>Infobus.publish</strong> accepts two arguments: an event name and
+<li class="li"><strong class="ph b">Infobus.publish</strong> accepts two arguments: an event name and
 the data that you provide. This function has no return value.</li>
 
 </ul>
 </div>
-<p>If a Rich UI handler subscribes to the Infobus, that handler
+<p class="p">If a Rich UI handler subscribes to the Infobus, that handler
 cannot be removed from memory. For example, if the user’s button click
 creates a handler in a function, and if the handler subscribes to
 the Infobus, the handler and its widgets cannot be removed from memory
 until the handler unsubscribes from the Infobus.</p>
-<p>In most cases,
+<p class="p">In most cases,
 memory is freed by the EGL runtime code. However, the following topic
 describes a case in which you are in greater control of memory management:
-“Rich UI memory management for Microsoft Internet
+“Rich UI memory management for Microsoft™ Internet
 Explorer.” </p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Event names and wild cards</h2><p>An event name
-is composed of one or more <em>tokens</em>—character symbols such as<em> sample</em> and <em>test</em> (in
+<div class="section"><h2 class="title sectiontitle">Event names and wild cards</h2><p class="p">An event name
+is composed of one or more <em class="ph i">tokens</em>—character symbols such as<em class="ph i"> sample</em> and <em class="ph i">test</em> (in
 our example). each of which is separated from the next by a dot.</p>
 <div class="p">You
-can use <strong>Infobus.subscribe</strong> to subscribe to more than one event.
+can use <strong class="ph b">Infobus.subscribe</strong> to subscribe to more than one event.
 Two wildcard characters are available, and you can use both in the
-same Infobus.subscribe invocation:<ul>
-<li>If an asterisk (*) is used in place of a token, the function registered
+same Infobus.subscribe invocation:<ul class="ul">
+<li class="li">If an asterisk (*) is used in place of a token, the function registered
 by Infobus.subscribe is invoked when your code publishes any event
 whose name matches the event name regardless of the token that you
 specify in place of the asterisk. For example, if Infobus.subscribe
-identifies the event name as <em>com.mycompany.update.*.new.employee</em>,
-the function registered by <strong>Infobus.subscribe</strong> is invoked in
-response to any of the following invocations:<pre class="codeblock">InfoBus.publish(""""""""com.mycompany.update.sales.new.employee"""""""", """"""""some data"""""""");
+identifies the event name as <em class="ph i">com.mycompany.update.*.new.employee</em>,
+the function registered by <strong class="ph b">Infobus.subscribe</strong> is invoked in
+response to any of the following invocations:<pre class="pre codeblock">InfoBus.publish("com.mycompany.update.sales.new.employee", "some data");
 
-InfoBus.publish(""""""""com.mycompany.update.marketing.new.employee"""""""", """"""""some data"""""""");
+InfoBus.publish("com.mycompany.update.marketing.new.employee", "some data");
 
-InfoBus.publish(""""""""com.mycompany.update.outreach.new.employee"""""""", """"""""some data"""""""");</pre>
+InfoBus.publish("com.mycompany.update.outreach.new.employee", "some data");</pre>
 </li>
 
-<li>If a double asterisk (**) is used in place of the last token,
-the function registered by <strong>Infobus.subscribe</strong> is invoked when
+<li class="li">If a double asterisk (**) is used in place of the last token,
+the function registered by <strong class="ph b">Infobus.subscribe</strong> is invoked when
 your code publishes any event whose name matches the event name regardless
-of the <em>series</em> of tokens (and intervening dots) that you specify
+of the <em class="ph i">series</em> of tokens (and intervening dots) that you specify
 in place of the asterisk. For example, if Infobus.subscribe identifies
-the event name as <em>com.mycompany.update.sales.**</em>, the function
-registered by <strong>Infobus.subscribe</strong> is invoked in response to any
-of the following invocations:<pre class="codeblock">InfoBus.publish(""""""""com.mycompany.update.sales.new.employee"""""""", """"""""some data"""""""");
+the event name as <em class="ph i">com.mycompany.update.sales.**</em>, the function
+registered by <strong class="ph b">Infobus.subscribe</strong> is invoked in response to any
+of the following invocations:<pre class="pre codeblock">InfoBus.publish("com.mycompany.update.sales.new.employee", "some data");
 
-InfoBus.publish(""""""""com.mycompany.update.sales.temporary.employee"""""""", """"""""some data"""""""");
+InfoBus.publish("com.mycompany.update.sales.temporary.employee", "some data");
 
-InfoBus.publish(""""""""com.mycompany.update.sales.outreach.new.temporary.employee"""""""", """"""""some data"""""""");</pre>
+InfoBus.publish("com.mycompany.update.sales.outreach.new.temporary.employee", "some data");</pre>
 </li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">For additional details</h2><div class="p">The Infobus mechanism
+<div class="section"><h2 class="title sectiontitle">For additional details</h2><div class="p">The Infobus mechanism
 is based on an implementation of the OpenAjax alliance. You may not
-need further details on this mechanism, but can get them as follows: <ol>
-<li>Go to the OpenAjax alliance website:<p>   <a href="http://www.openajax.org/index.php" target="_blank">http://www.openajax.org/index.php</a></p>
+need further details on this mechanism, but can get them as follows: <ol class="ol">
+<li class="li">Go to the OpenAjax alliance website:<p class="lines">   <a class="xref" href="http://www.openajax.org/index.php" target="_blank">http://www.openajax.org/index.php</a></p>
 </li>
 
-<li>Click <span class="uicontrol">Wikis &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Member Wiki</span></li>
+<li class="li">Click <span class="ph uicontrol">Wikis &gt; Member Wiki</span></li>
 
-<li>Type the following string in the <span class="uicontrol">Search</span> field: <em>OpenAjax
+<li class="li">Type the following string in the <span class="ph uicontrol">Search</span> field: <em class="ph i">OpenAjax
 Hub 1.0 Specification PublishSubscribe</em></li>
 
 </ol>
 </div>
-<p>Rich UI does not support the specification phrases related
-to <em>filter</em> or <em>scope</em>.</p>
+<p class="p">Rich UI does not support the specification phrases related
+to <em class="ph i">filter</em> or <em class="ph i">scope</em>.</p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

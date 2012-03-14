@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,69 +19,69 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI widget fields</title>
 </head>
-<body id="cedt01014"><a name="cedt01014"><!-- --></a>
+<body id="cedt01014">
 
 
-<h1 class="topictitle1">Rich UI widget fields</h1>
+<h1 class="title topictitle1">Rich UI widget fields</h1>
 
 
 
-<div><p>Each type of widget includes a set of fields, which you
+<div class="body"><p class="shortdesc">Each type of widget includes a set of fields, which you
 can access in the widget declaration or in runtime logic. </p>
 
-<p>In many cases, the Rich UI widgets are EGL handler parts, stereotype <samp class="codeph">RUIWidget</samp>.
+<p class="p">In many cases, the Rich UI widgets are EGL handler parts, stereotype <samp class="ph codeph">RUIWidget</samp>.
  Exceptions include Tooltip, DataGridTooltip, and TreeTooltip, all
-of which are stereotype <samp class="codeph">RUIHandler</samp>, and the Dojo
+of which are stereotype <samp class="ph codeph">RUIHandler</samp>, and the Dojo
 widgets, each of which is based on an external type.</p>
 
-<p>Always use dot syntax to access a given field; for example, <samp class="codeph"> myWidget.myField</samp>.</p>
+<p class="p">Always use dot syntax to access a given field; for example, <samp class="ph codeph"> myWidget.myField</samp>.</p>
 
-<div class="section"><h2 class="sectiontitle">Field available for most widgets</h2><p>Style-related
-fields such as <span class="synph"><span class="kwd">class</span></span> and <span class="synph"><span class="kwd">style</span></span> are
+<div class="section"><h2 class="title sectiontitle">Field available for most widgets</h2><p class="p">Style-related
+fields such as <span class="ph synph"><span class="keyword kwd">class</span></span> and <span class="ph synph"><span class="keyword kwd">style</span></span> are
 available for all the supplied widgets. For details on styles, see
 “Widget styles.”</p>
 <div class="p">The following properties are useful for developing
-business applications:<ul>
-<li><span class="synph"><span class="kwd">children</span></span> provides access to an array
+business applications:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">children</span></span> provides access to an array
 of subordinate widgets, if any; for details, see a later section.</li>
 
-<li><span class="synph"><span class="kwd">class</span></span> identifies a cascading style sheet
+<li class="li"><span class="ph synph"><span class="keyword kwd">class</span></span> identifies a cascading style sheet
 (CSS) class used when displaying the widget.</li>
 
-<li><span class="synph"><span class="kwd">disabled</span></span> takes a Boolean that indicates
+<li class="li"><span class="ph synph"><span class="keyword kwd">disabled</span></span> takes a Boolean that indicates
 whether the widget is disabled. A disabled widget cannot respond to
 events and, on most browsers, its text appears in grey.</li>
 
-<li><span class="synph"><span class="kwd">id</span></span> takes a string used to assign or
+<li class="li"><span class="ph synph"><span class="keyword kwd">id</span></span> takes a string used to assign or
 retrieve an ID for a specific widget. You can use the ID in a cascading
 style sheet (CSS) to identify the style characteristics of that widget.
-Also, if you are integrating EGL with JavaScript libraries, this field lets
-you assign an ID for use by the JavaScript logic. <p>If
+Also, if you are integrating EGL with JavaScript™ libraries, this field lets
+you assign an ID for use by the JavaScript logic. <p class="p">If
 the widget (for example, a box) corresponds to a DOM subtree rather
 than to a specific DOM element, the ID is for the topmost DOM element
 in the subtree.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">position</span></span> specifies the meaning of the
-widget's x and y coordinates and takes one of the following values:<dl>
+<li class="li"><span class="ph synph"><span class="keyword kwd">position</span></span> specifies the meaning of the
+widget's x and y coordinates and takes one of the following values:<dl class="dl parml">
 
-<dt class="dlterm"><span class="synph"><span class="kwd">static</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">static</span></span></dt>
 
-<dd>The widget's x and y coordinates are ignored, as is the default
+<dd class="dd pd">The widget's x and y coordinates are ignored, as is the default
 behavior. The displayed position changes if you first set the x and
-y values when the <span class="synph"><span class="kwd">position</span></span> value is <span class="synph"><span class="kwd">static</span></span> and
-then change the <span class="synph"><span class="kwd">position</span></span> value.</dd>
+y values when the <span class="ph synph"><span class="keyword kwd">position</span></span> value is <span class="ph synph"><span class="keyword kwd">static</span></span> and
+then change the <span class="ph synph"><span class="keyword kwd">position</span></span> value.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">absolute</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">absolute</span></span></dt>
 
-<dd>The widget's x and y coordinates are relative to the top left
-of the browser window, and those coordinates are not affected by the <span class="synph"><span class="kwd">alignment</span></span> value.</dd>
+<dd class="dd pd">The widget's x and y coordinates are relative to the top left
+of the browser window, and those coordinates are not affected by the <span class="ph synph"><span class="keyword kwd">alignment</span></span> value.</dd>
 
 
-<dt class="dlterm"><span class="synph"><span class="kwd">relative</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">relative</span></span></dt>
 
-<dd>The widget's x and y coordinates are relative to the top left
+<dd class="dd pd">The widget's x and y coordinates are relative to the top left
 of the parent. If the widget's parent is the document element, the
 coordinates are relative to the top left of the viewable area of the
 browser.</dd>
@@ -89,101 +89,101 @@ browser.</dd>
 </dl>
 </li>
 
-<li><span class="synph"><span class="kwd">tabIndex</span></span> takes an integer that identifies
+<li class="li"><span class="ph synph"><span class="keyword kwd">tabIndex</span></span> takes an integer that identifies
 the widget's placement in a tab order. For example, a widget assigned
-a <span class="synph"><span class="kwd">tabIndex</span></span> value of 2 receives focus after
-the user tabs away from a widget that has a <span class="synph"><span class="kwd">tabIndex</span></span> value
+a <span class="ph synph"><span class="keyword kwd">tabIndex</span></span> value of 2 receives focus after
+the user tabs away from a widget that has a <span class="ph synph"><span class="keyword kwd">tabIndex</span></span> value
 of 1. You can use numbers such as 10 and 20 (rather than 1 and 2)
-to allow for the later addition of other widgets.<p>The default tab
+to allow for the later addition of other widgets.<p class="p">The default tab
 order is browser specific.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">x</span></span> and <span class="synph"><span class="kwd">y</span></span> values
+<li class="li"><span class="ph synph"><span class="keyword kwd">x</span></span> and <span class="ph synph"><span class="keyword kwd">y</span></span> values
 are integers that refer to the x-y coordinate of the widget. The meaning
-of that coordinate varies in accordance with the value of the <span class="synph"><span class="kwd">position</span></span> field.
-As suggested in the description of the <span class="synph"><span class="kwd">position</span></span> field,
-the graphical <em>origin</em> is either the top left of the browser
-window or the top left of a parent widget. The following rules apply:<ul>
-<li>The <span class="synph"><span class="kwd">x</span></span> value is positive to the right
+of that coordinate varies in accordance with the value of the <span class="ph synph"><span class="keyword kwd">position</span></span> field.
+As suggested in the description of the <span class="ph synph"><span class="keyword kwd">position</span></span> field,
+the graphical <em class="ph i">origin</em> is either the top left of the browser
+window or the top left of a parent widget. The following rules apply:<ul class="ul">
+<li class="li">The <span class="ph synph"><span class="keyword kwd">x</span></span> value is positive to the right
 of the origin, negative to the left</li>
 
-<li>The <span class="synph"><span class="kwd">y</span></span> value is positive below the origin,
+<li class="li">The <span class="ph synph"><span class="keyword kwd">y</span></span> value is positive below the origin,
 negative above</li>
 
 </ul>
-<p>You can place a widget outside of its parent and even outside
+<p class="p">You can place a widget outside of its parent and even outside
 of the viewable area.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">zIndex</span></span> takes an integer that identifies
+<li class="li"><span class="ph synph"><span class="keyword kwd">zIndex</span></span> takes an integer that identifies
 the widget's position—its nearness to the front—in relation to other
-widgets at the same x and y location. A widget with a relatively large <span class="synph"><span class="kwd">zIndex</span></span> value
+widgets at the same x and y location. A widget with a relatively large <span class="ph synph"><span class="keyword kwd">zIndex</span></span> value
 (for example, 4) is closer to the front than a widget with a relatively
-small <span class="synph"><span class="kwd">zIndex</span></span> value (for example, 2). The <span class="synph"><span class="kwd">zIndex</span></span> value
-has no effect when the value of <span class="synph"><span class="kwd">position</span></span> is
+small <span class="ph synph"><span class="keyword kwd">zIndex</span></span> value (for example, 2). The <span class="ph synph"><span class="keyword kwd">zIndex</span></span> value
+has no effect when the value of <span class="ph synph"><span class="keyword kwd">position</span></span> is
 static.</li>
 
 </ul>
 </div>
 <div class="p">The following fields are especially useful for developing
-new Widget types that are based on stereotype <samp class="codeph">RUIWidget</samp>:<ul>
-<li><span class="synph"><span class="kwd">innerHTML</span></span> is a string used to assign
+new Widget types that are based on stereotype <samp class="ph codeph">RUIWidget</samp>:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">innerHTML</span></span> is a string used to assign
 or retrieve the HTML within a container such as a div, floatLeft,
 or floatRight widget. </li>
 
-<li><span class="synph"><span class="kwd">innerText</span></span> is a string used to assign
+<li class="li"><span class="ph synph"><span class="keyword kwd">innerText</span></span> is a string used to assign
 or retrieve text within a container.</li>
 
-<li><span class="synph"><span class="kwd">logicalParent</span></span> is used for developing
+<li class="li"><span class="ph synph"><span class="keyword kwd">logicalParent</span></span> is used for developing
 Widget types that are containers. When writing the code that adds
-children to the container, you set the <span class="synph"><span class="kwd">logicalParent</span></span> field
+children to the container, you set the <span class="ph synph"><span class="keyword kwd">logicalParent</span></span> field
 so that it refers to the appropriate parent DOM element. For an introduction
-to the DOM, see “Understanding how browsers handle a Rich UI application.” <p>For
-example, in relation to the child of a box, the <span class="synph"><span class="kwd">parent</span></span> field
+to the DOM, see “Understanding how browsers handle a Rich UI application.” <p class="p">For
+example, in relation to the child of a box, the <span class="ph synph"><span class="keyword kwd">parent</span></span> field
 refers, not the box, but to a DOM TD element within a DOM Table element.
-However, the <span class="synph"><span class="kwd">logicalParent</span></span> field refers
+However, the <span class="ph synph"><span class="keyword kwd">logicalParent</span></span> field refers
 to the DOM Div element that represents the box and is the parent of
 the DOM Table element.</p>
-<span class="synph"><span class="kwd">parent</span></span> is for
+<span class="ph synph"><span class="keyword kwd">parent</span></span> is for
 Widget-type development and provides access to a parent DOM element.</li>
 
 </ul>
 </div>
 <div class="p">The following fields are for interacting with users who
-read Arabic or Hebrew:<ul>
-<li><span class="synph"><span class="kwd">numericSwap</span></span> takes a string (""""""""Yes"""""""" or
-""""""""No"""""""") that lets you use Hindi numerals in Arabic. To use Hindi numerals,
-set <span class="uicontrol">numericSwap</span> and <span class="uicontrol">reverseTextDirection</span> to
-""""""""Yes"""""""".</li>
+read Arabic or Hebrew:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">numericSwap</span></span> takes a string ("Yes" or
+"No") that lets you use Hindi numerals in Arabic. To use Hindi numerals,
+set <span class="ph uicontrol">numericSwap</span> and <span class="ph uicontrol">reverseTextDirection</span> to
+"Yes".</li>
 
-<li><span class="synph"><span class="kwd">reverseTextDirection</span></span> takes a string
-(""""""""Yes"""""""" or """"""""No"""""""") that indicates whether to reverse the text direction
+<li class="li"><span class="ph synph"><span class="keyword kwd">reverseTextDirection</span></span> takes a string
+("Yes" or "No") that indicates whether to reverse the text direction
 in the widget.</li>
 
-<li><span class="synph"><span class="kwd">symmetricSwap</span></span> takes a string (""""""""Yes""""""""
-or """"""""No"""""""") that indicates whether to replace pairs of special characters
+<li class="li"><span class="ph synph"><span class="keyword kwd">symmetricSwap</span></span> takes a string ("Yes"
+or "No") that indicates whether to replace pairs of special characters
 to preserve the logical meaning of the presented text. If the value
-is """"""""Yes"""""""", the effect is to replace paired characters such as &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;,
-&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;, [, and { with &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;, &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;, ], and }.</li>
+is "Yes", the effect is to replace paired characters such as &lt;,
+&gt;, [, and { with &gt;, &lt;, ], and }.</li>
 
-<li><span class="synph"><span class="kwd">textLayout</span></span> takes one of two strings:
-either """"""""Visual"""""""" or """"""""Logical"""""""":<ul>
-<li>If the setting is """"""""Visual"""""""" and the user types """"""""A"""""""" and then """"""""B""""""""
-(and if """"""""A"""""""" and """"""""B"""""""" are characters in a bidirectional language), the
-displayed characters are """"""""AB"""""""". The order of display is the order of
+<li class="li"><span class="ph synph"><span class="keyword kwd">textLayout</span></span> takes one of two strings:
+either "Visual" or "Logical":<ul class="ul">
+<li class="li">If the setting is "Visual" and the user types "A" and then "B"
+(and if "A" and "B" are characters in a bidirectional language), the
+displayed characters are "AB". The order of display is the order of
 input, left to right, which is also the order in which the data is
 stored in local memory. </li>
 
-<li>If the setting is """"""""Logical"""""""", the displayed characters are """"""""BA"""""""". </li>
+<li class="li">If the setting is "Logical", the displayed characters are "BA". </li>
 
 </ul>
-<p>In most cases, the setting """"""""Visual"""""""" is appropriate for Arabic
-or Hebrew content derived from a machine that runs z/OS or IBM i.</p>
+<p class="p">In most cases, the setting "Visual" is appropriate for Arabic
+or Hebrew content derived from a machine that runs z/OS<sup>®</sup> or IBM<sup>®</sup> i.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">widgetOrientation</span></span> is for Arabic and
-Hebrew text. This field takes one of two strings: either """"""""LTR"""""""" (left-to-right)
-or """"""""RTL"""""""" (right to left). When you specify """"""""LTR"""""""", the widgets acts
+<li class="li"><span class="ph synph"><span class="keyword kwd">widgetOrientation</span></span> is for Arabic and
+Hebrew text. This field takes one of two strings: either "LTR" (left-to-right)
+or "RTL" (right to left). When you specify "LTR", the widgets acts
 as a standard non-bidirectional widget. When you specify RTL, the
 widgets are mirrored; that is, scroll bars for dropdown lists appear
 on the left, the text-typing orientation for input fields is right-to-left,
@@ -191,53 +191,53 @@ and the text is right-aligned.</li>
 
 </ul>
 </div>
-<div class="p">The following fields add accessibility:<ul>
-<li><span class="synph"><span class="kwd">ariaLive</span></span> indicates the level of support
+<div class="p">The following fields add accessibility:<ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">ariaLive</span></span> indicates the level of support
 provided for assistive technology; that is, for screen readers that
 are able to notify users of updates to screen regions. The specification
-for such technology is here:<p><a href="http://www.w3.org/TR/wai-aria" target="_blank">http://www.w3.org/TR/wai-aria</a></p>
-<p>The <span class="synph"><span class="kwd">ariaLive</span></span> value
-is a quoted string (""""""""off"""""""", """"""""polite"""""""". """"""""assertive"""""""", or """"""""rude""""""""), each
-of which is described in the specification's section on <em>property:
+for such technology is here:<p class="lines"><a class="xref" href="http://www.w3.org/TR/wai-aria" target="_blank">http://www.w3.org/TR/wai-aria</a></p>
+<p class="p">The <span class="ph synph"><span class="keyword kwd">ariaLive</span></span> value
+is a quoted string ("off", "polite". "assertive", or "rude"), each
+of which is described in the specification's section on <em class="ph i">property:
 live</em>.</p>
 </li>
 
-<li><span class="synph"><span class="kwd">ariaRole</span></span> indicates the role specified
+<li class="li"><span class="ph synph"><span class="keyword kwd">ariaRole</span></span> indicates the role specified
 for the widget, as used for assistive technology. For details, see
-the specification mentioned earlier.<p>The <span class="synph"><span class="kwd">ariaRole</span></span> value
-is a quoted string such as """"""""button"""""""" or """"""""listbox"""""""", each of which is
-described in the specification's section on <em>Roles</em>.</p>
+the specification mentioned earlier.<p class="p">The <span class="ph synph"><span class="keyword kwd">ariaRole</span></span> value
+is a quoted string such as "button" or "listbox", each of which is
+described in the specification's section on <em class="ph i">Roles</em>.</p>
 </li>
 
 </ul>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Children field and related functions</h2><div class="p">A subset
+<div class="section"><h2 class="title sectiontitle">Children field and related functions</h2><div class="p">A subset
 of widgets are categorized as “container widgets.” Those widgets include
-the <span class="synph"><span class="kwd">children</span></span> field, which specifies an array
+the <span class="ph synph"><span class="keyword kwd">children</span></span> field, which specifies an array
 of subordinate widgets. Every element in the array refers to a named
-widget or to an anonymous one, as described here: <ul>
-<li>A named widget is declared outside the children array, as is the
-case for every widget in the following code: <pre class="codeblock">myInTextField TextField{};
-myButton Button{ text = """"""""Input to Output"""""""", onClick ::= click };
+widget or to an anonymous one, as described here: <ul class="ul">
+<li class="li">A named widget is declared outside the children array, as is the
+case for every widget in the following code: <pre class="pre codeblock">myInTextField TextField{};
+myButton Button{ text = "Input to Output", onClick ::= click };
 myOutTextField TextField{};
 
 myBox Box{ columns = 3, 
-             <strong>children = [ myInTextField,  myButton, myOutTextField ]</strong>};
+             <strong class="ph b">children = [ myInTextField,  myButton, myOutTextField ]</strong>};
 </pre>
-<p>If the array references a named widget multiple times,
+<p class="p">If the array references a named widget multiple times,
 only the last reference is used, and the other references are ignored.</p>
 </li>
 
-<li>An <em>anonymous declaration</em> starts with the keyword <span class="synph"><span class="kwd">new</span></span>,
+<li class="li">An <em class="ph i">anonymous declaration</em> starts with the keyword <span class="ph synph"><span class="keyword kwd">new</span></span>,
 cannot be referenced in any of your code, and lets you create a widget
-at the moment you are thinking about the widget's placement: <pre class="codeblock">myInTextField TextField{};
+at the moment you are thinking about the widget's placement: <pre class="pre codeblock">myInTextField TextField{};
 myTextOutField TextField{};
 
 myBox box{columns=3, 
           children=[myInTextField,
-                    <strong>new Button{ text = """"""""Input to Output"""""""", onClick ::= click}</strong>,
+                    <strong class="ph b">new Button{ text = "Input to Output", onClick ::= click}</strong>,
                     myOutTextField]};
 </pre>
 </li>
@@ -246,42 +246,42 @@ myBox box{columns=3,
 </div>
 <div class="p">In many cases, a parent widget is of type Box or Div,
 and the placement of the children widgets is affected by the parent
-type:<ul>
-<li>A Box widget includes the <span class="synph"><span class="kwd">columns</span></span> field,
+type:<ul class="ul">
+<li class="li">A Box widget includes the <span class="ph synph"><span class="keyword kwd">columns</span></span> field,
 and the value of that field specifies the default placement of each
-widget listed in the <span class="synph"><span class="kwd">children</span></span> array. For
-example, if <samp class="codeph">columns=1</samp>, the widgets listed in the
-array are displayed in a single vertical column. Similarly, if <samp class="codeph">columns=2</samp>,
+widget listed in the <span class="ph synph"><span class="keyword kwd">children</span></span> array. For
+example, if <samp class="ph codeph">columns=1</samp>, the widgets listed in the
+array are displayed in a single vertical column. Similarly, if <samp class="ph codeph">columns=2</samp>,
 every second widget is displayed in the second column, and the subsequent
 widget (for example, the third in the array) is displayed in the first
-column of a new row. <p>In general, if the value of <span class="synph"><span class="kwd">columns</span></span> is <em>n</em>,
-the widget at position <em>n+1</em> of the array is displayed in the
-first column of a new row. If you do not specify a <span class="synph"><span class="kwd">columns</span></span> value,
+column of a new row. <p class="p">In general, if the value of <span class="ph synph"><span class="keyword kwd">columns</span></span> is <em class="ph i">n</em>,
+the widget at position <em class="ph i">n+1</em> of the array is displayed in the
+first column of a new row. If you do not specify a <span class="ph synph"><span class="keyword kwd">columns</span></span> value,
 the children of the Box widget extend to the right.</p>
 </li>
 
-<li>The children of a Div widget extend to the right, with a horizontal
+<li class="li">The children of a Div widget extend to the right, with a horizontal
 scroll bar (if necessary) to provide access to widgets that extend
 to the right of the viewable area.</li>
 
 </ul>
 </div>
-<p>Div widgets that are children of another widget are displayed
+<p class="p">Div widgets that are children of another widget are displayed
 vertically, one underneath the previous.</p>
 <div class="p">You can reassign the
-value of <span class="synph"><span class="kwd">children</span></span> in any function and in
+value of <span class="ph synph"><span class="keyword kwd">children</span></span> in any function and in
 this way change the web page. (Similarly, you can reassign the value
-of <span class="synph"><span class="kwd">initialUI</span></span> in the on-construction function.)
+of <span class="ph synph"><span class="keyword kwd">initialUI</span></span> in the on-construction function.)
 For example, the following syntax is valid, assuming you have declared
-the widgets specified:<pre class="codeblock">   myBox.children = [myInTextField, myButton02, myOutTextField];</pre>
+the widgets specified:<pre class="pre codeblock">   myBox.children = [myInTextField, myButton02, myOutTextField];</pre>
 </div>
 <div class="p">Although
-you can reassign a <span class="synph"><span class="kwd">children</span></span> (or <span class="synph"><span class="kwd">initialUI</span></span>)
-array, do not make changes by using dynamic array functions such <span class="synph"><span class="kwd">appendElement</span></span> or
-the operator <span class="synph"><span class="kwd">::=</span></span>. Instead, use the widget-specific
-functions <span class="synph"><span class="kwd">appendChild</span></span>, <span class="synph"><span class="kwd">appendChildren</span></span>, <span class="synph"><span class="kwd">removeChild</span></span>,
-and <span class="synph"><span class="kwd">removeChildren</span></span>. Here is an example,
-assuming you have declared the widgets specified: <pre class="codeblock">Function myFirstFunction(){} 
+you can reassign a <span class="ph synph"><span class="keyword kwd">children</span></span> (or <span class="ph synph"><span class="keyword kwd">initialUI</span></span>)
+array, do not make changes by using dynamic array functions such <span class="ph synph"><span class="keyword kwd">appendElement</span></span> or
+the operator <span class="ph synph"><span class="keyword kwd">::=</span></span>. Instead, use the widget-specific
+functions <span class="ph synph"><span class="keyword kwd">appendChild</span></span>, <span class="ph synph"><span class="keyword kwd">appendChildren</span></span>, <span class="ph synph"><span class="keyword kwd">removeChild</span></span>,
+and <span class="ph synph"><span class="keyword kwd">removeChildren</span></span>. Here is an example,
+assuming you have declared the widgets specified: <pre class="pre codeblock">Function myFirstFunction(){} 
    myBox.appendChild(myOtherButton);
    myBox.appendChildren([myOtherTextField, myOtherButton02]);
    myBox.removeChild(myOtherButton);
@@ -290,67 +290,67 @@ end
 </pre>
 </div>
 <div class="p">Similarly, you can add or remove children from
-the top DOM element, as shown here:<pre class="codeblock">document.body.appendChild(myOtherButton);
+the top DOM element, as shown here:<pre class="pre codeblock">document.body.appendChild(myOtherButton);
 document.body.appendChildren([myOtherTextField, myOtherButton02]);
 document.body.removeChild(myOtherButton);
 document.body.removeChildren(); 
 </pre>
 </div>
-<p>The functions <span class="synph"><span class="kwd">appendChild</span></span> and <span class="synph"><span class="kwd">removeChild</span></span> each
-accepts a single widget; <span class="synph"><span class="kwd">appendChildren</span></span> accepts
-an array of widgets; and <span class="synph"><span class="kwd">removeChildren</span></span> takes
-no arguments. In the case of <span class="synph"><span class="kwd">appendChild</span></span> or <span class="synph"><span class="kwd">appendChildren</span></span>,
-the widget declarations can be anonymous or named. In the case of <span class="synph"><span class="kwd">removeChild</span></span>,
+<p class="p">The functions <span class="ph synph"><span class="keyword kwd">appendChild</span></span> and <span class="ph synph"><span class="keyword kwd">removeChild</span></span> each
+accepts a single widget; <span class="ph synph"><span class="keyword kwd">appendChildren</span></span> accepts
+an array of widgets; and <span class="ph synph"><span class="keyword kwd">removeChildren</span></span> takes
+no arguments. In the case of <span class="ph synph"><span class="keyword kwd">appendChild</span></span> or <span class="ph synph"><span class="keyword kwd">appendChildren</span></span>,
+the widget declarations can be anonymous or named. In the case of <span class="ph synph"><span class="keyword kwd">removeChild</span></span>,
 the widget declarations must be named.</p>
-<div class="note warning"><span class="notetitle">Note:</span> If
-your users are accessing a Rich UI application by way of Microsoft Internet Explorer 8 or less,
-the application's use of the <span class="synph"><span class="kwd">removeChild</span></span> or <span class="synph"><span class="kwd">removeChildren</span></span> function
+<div class="note note warning"><span class="notetitle">Note:</span> If
+your users are accessing a Rich UI application by way of Microsoft™ Internet Explorer 8 or less,
+the application's use of the <span class="ph synph"><span class="keyword kwd">removeChild</span></span> or <span class="ph synph"><span class="keyword kwd">removeChildren</span></span> function
 has no effect on memory allocation. For details on this potentially
 important issue, see “Rich UI memory management for Microsoft Internet Explorer.”</div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">The effect of assigning a widget to a different parent</h2><p>A
+<div class="section"><h2 class="title sectiontitle">The effect of assigning a widget to a different parent</h2><p class="p">A
 specific widget can be the child of only one other widget (or of the
 document body, as shown in a later example). If a widget has a parent,
 you can cause the widget to be the child of a different parent. We
-refer to the reassignment as <em>re-parenting</em> the child widget.</p>
+refer to the reassignment as <em class="ph i">re-parenting</em> the child widget.</p>
 <div class="p">Consider
-the following declaration of <samp class="codeph">myTopBox</samp>, which is the
-parent of two other boxes:<pre class="codeblock">   myTopBox Box{padding = 8, columns = 1, backgroundColor = """"""""Aqua"""""""",
+the following declaration of <samp class="ph codeph">myTopBox</samp>, which is the
+parent of two other boxes:<pre class="pre codeblock">   myTopBox Box{padding = 8, columns = 1, backgroundColor = "Aqua",
       children =[myBox02, myBox03 ]};
 </pre>
 </div>
 <div class="p">Assume that the preceding declaration is in a Rich
-UI handler that makes <samp class="codeph">myBox03</samp> the only element in
-the <span class="synph"><span class="kwd">initialUI</span></span> array:<pre class="codeblock">handler MyTest type RUIhandler{initialUI =[myBox03]}
+UI handler that makes <samp class="ph codeph">myBox03</samp> the only element in
+the <span class="ph synph"><span class="keyword kwd">initialUI</span></span> array:<pre class="pre codeblock">handler MyTest type RUIhandler{initialUI =[myBox03]}
 </pre>
 </div>
-<p>At run time, the assignment to <span class="synph"><span class="kwd">initialUI</span></span> is
-handled after the declaration of <samp class="codeph">myTopBox</samp>. The effect
-is that <samp class="codeph">myBox03</samp> is re-parented to the document body,
-leaving <samp class="codeph">myTopBox</samp> with only one child, <samp class="codeph">myBox02</samp>. </p>
+<p class="p">At run time, the assignment to <span class="ph synph"><span class="keyword kwd">initialUI</span></span> is
+handled after the declaration of <samp class="ph codeph">myTopBox</samp>. The effect
+is that <samp class="ph codeph">myBox03</samp> is re-parented to the document body,
+leaving <samp class="ph codeph">myTopBox</samp> with only one child, <samp class="ph codeph">myBox02</samp>. </p>
 <div class="p">Your
-code might add <samp class="codeph">myTopBox</samp> to the web page in response
+code might add <samp class="ph codeph">myTopBox</samp> to the web page in response
 to a runtime event such as a user's button click. You can see the
-effect by running the following code and clicking the button:<pre class="codeblock">import com.ibm.egl.rui.widgets.Box;
+effect by running the following code and clicking the button:<pre class="pre codeblock">import com.ibm.egl.rui.widgets.Box;
 import com.ibm.egl.rui.widgets.Button;
 import com.ibm.egl.rui.widgets.TextField;
 import egl.ui.rui.Event;
 
 handler MyTest type RUIhandler{initialUI =[myBox03]}
  
-   myTopBox Box{padding = 8, columns = 1, backgroundColor = """"""""Aqua"""""""", 
+   myTopBox Box{padding = 8, columns = 1, backgroundColor = "Aqua", 
       children =[myBox02, myBox03 ]};
  
-   myBox02 Box{padding = 8, columns = 2, backgroundColor = """"""""DarkGray"""""""", 
+   myBox02 Box{padding = 8, columns = 2, backgroundColor = "DarkGray", 
       children =[myHelloField ]};
  
-   myBox03 Box{padding = 8, columns = 3, backgroundColor = """"""""CadetBlue"""""""", 
+   myBox03 Box{padding = 8, columns = 3, backgroundColor = "CadetBlue", 
       children =[myInTextField, myButton, myOutTextField] };
  
-   myHelloField TextField{readOnly = true, text = """"""""Hello""""""""};
+   myHelloField TextField{readOnly = true, text = "Hello"};
    myInTextField TextField{};
-   myButton Button{text = """"""""Input to Output"""""""", onClick ::= click};
+   myButton Button{text = "Input to Output", onClick ::= click};
    myOutTextField TextField{};
  
    function click(e EVENT in)
@@ -360,27 +360,27 @@ end</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">The effect of removing all children from the document
-body</h2><div class="p">Consider the following statement:<pre class="codeblock">   document.body.removeChildren();</pre>
+<div class="section"><h2 class="title sectiontitle">The effect of removing all children from the document
+body</h2><div class="p">Consider the following statement:<pre class="pre codeblock">   document.body.removeChildren();</pre>
 </div>
 <div class="p">The
-effect is twofold:<ul>
-<li>Removes all children widgets from the web page.</li>
+effect is twofold:<ul class="ul">
+<li class="li">Removes all children widgets from the web page.</li>
 
-<li>Removes access to the external style sheet, if any. (Style sheets
+<li class="li">Removes access to the external style sheet, if any. (Style sheets
 are explained in “Widget styles.”</li>
 
 </ul>
 </div>
 <div class="p">If you wish to remove children from the document body
 without removing access to the external style sheet, remove specific
-children, as in the following statement:<pre class="codeblock">   document.body.removeChild(myBox);</pre>
+children, as in the following statement:<pre class="pre codeblock">   document.body.removeChild(myBox);</pre>
 </div>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

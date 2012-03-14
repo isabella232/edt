@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -28,39 +28,39 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Accessing a service</title>
 </head>
-<body id="tedt01002"><a name="tedt01002"><!-- --></a>
+<body id="tedt01002">
 
 
-<h1 class="topictitle1">Accessing a service</h1>
+<h1 class="title topictitle1">Accessing a service</h1>
 
 
 
-<div><p>In EGL, you can access several different types of services.
+<div class="body"><p class="shortdesc">In EGL, you can access several different types of services.
 To learn the access procedures, see the links in the following table. </p>
 
 
-<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" frame="border" border="1" rules="all">
-<thead align="left">
-<tr valign="bottom">
-<th class="cellrowborder" valign="bottom" width="17.587939698492463%" id="d17133e43">Goal</th>
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="17.587939698492463%" id="d21851e43">Goal</th>
 
-<th class="cellrowborder" valign="bottom" width="82.41206030150754%" id="d17133e46">Tasks</th>
+<th class="entry" valign="bottom" width="82.41206030150754%" id="d21851e46">Tasks</th>
 
 </tr>
 
 </thead>
 
-<tbody>
-<tr>
-<td class="cellrowborder" valign="top" width="17.587939698492463%" headers="d17133e43 ">Access a dedicated service</td>
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="17.587939698492463%" headers="d21851e43 ">Access a dedicated service</td>
 
-<td class="cellrowborder" valign="top" width="82.41206030150754%" headers="d17133e46 ">The process is described here:  <a href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a>.<div class="p">The following description is <strong>deprecated</strong>:<ol>
-<li><a href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
+<td class="entry" valign="top" width="82.41206030150754%" headers="d21851e46 ">The process is described here:  <a class="xref" href="tedt01010.html" title="When you write and deploy a Rich UI application, you can access an EGL service that is deployed on the application server, along with the Rich UI handlers. One benefit is that you don't need to configure the service-location detail when you write or deploy the application.">Accessing a dedicated service</a>.<div class="p">The following description is <strong class="ph b">deprecated</strong>:<ol class="ol">
+<li class="li"><a class="xref" href="tedt01017.html" title="After you code an EGL Service part, you can use that part as the basis of a service-access variable. However, this usage is deprecated.">Declaring a variable to access a dedicated or local EGL service</a>.</li>
 
-<li>Then, complete either of these tasks:<ul>
-<li><a href="tedt01023.html" title="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic.">Invoking a service asynchronously from a Rich UI application</a>.</li>
+<li class="li">Then, complete either of these tasks:<ul class="ul">
+<li class="li"><a class="xref" href="tedt01023.html" title="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic.">Invoking a service asynchronously from a Rich UI application</a>.</li>
 
-<li><a href="tedt01024.html" title="Service invocation outside of Rich UI is always synchronous, which means that the requester waits for a response from the service. At this writing, the synchronous call statement is available only for accessing an IBM i program.">Invoking a service synchronously from outside of Rich UI</a>; <strong>but this option is not
+<li class="li"><a class="xref" href="tedt01024.html" title="Service invocation outside of Rich UI is always synchronous, which means that the requester waits for a response from the service. At this writing, the synchronous call statement is available only for accessing an IBM i program.">Invoking a service synchronously from outside of Rich UI</a>; <strong class="ph b">but this option is not
 yet available</strong>.</li>
 
 </ul>
@@ -72,28 +72,28 @@ yet available</strong>.</li>
 
 </tr>
 
-<tr>
-<td class="cellrowborder" valign="top" width="17.587939698492463%" headers="d17133e43 ">Access an EGL REST-RPC service or third-party
+<tr class="row">
+<td class="entry" valign="top" width="17.587939698492463%" headers="d21851e43 ">Access an EGL REST-RPC service or third-party
 REST service</td>
 
-<td class="cellrowborder" valign="top" width="82.41206030150754%" headers="d17133e46 "><ol>
-<li><a href="tedt01020.html" title="You define an EGL Interface type in a file that is made available to the requester of that service. The Interface type can be in the same EGL package or can be imported from a separate package.">Creating an Interface type to access a REST service</a>.</li>
+<td class="entry" valign="top" width="82.41206030150754%" headers="d21851e46 "><ol class="ol">
+<li class="li"><a class="xref" href="tedt01020.html" title="You define an EGL Interface type in a file that is made available to the requester of that service. The Interface type can be in the same EGL package or can be imported from a separate package.">Creating an Interface type to access a REST service</a>.</li>
 
-<li>Add a REST binding:<ul>
-<li>If you are using the EDT IDE, follow the process described here: <a href="../../org.eclipse.edt.ide.doc/topics/tedt00539.html" title="A REST service binding gives details necessary to access a REST or EGL REST-RPC service.">Adding a REST binding to the EGL deployment descriptor</a>.</li>
+<li class="li">Add a REST binding:<ul class="ul">
+<li class="li">If you are using the EDT IDE, follow the process described here: <a class="xref" href="../../org.eclipse.edt.ide.doc/topics/tedt00539.html" title="A REST service binding gives details necessary to access a REST or EGL REST-RPC service.">Adding a REST binding to the EGL deployment descriptor</a>.</li>
 
-<li>Otherwise, add the REST binding as described here: <a href="tedt01043.html" title="You can edit the EGL deployment descriptor by hand.">Editing the EGL deployment descriptor manually</a>.</li>
+<li class="li">Otherwise, add the REST binding as described here: <a class="xref" href="tedt01043.html" title="You can edit the EGL deployment descriptor by hand.">Editing the EGL deployment descriptor manually</a>.</li>
 
 </ul>
 </li>
 
-<li>Write a binding variable and a <strong>call</strong> statement, as described
-here:  <a href="tedt01023.html" title="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic.">Invoking a service asynchronously from a Rich UI application</a></li>
+<li class="li">Write a binding variable and a <strong class="ph b">call</strong> statement, as described
+here:  <a class="xref" href="tedt01023.html" title="In Rich UI, you invoke a service asynchronously by declaring a binding variable and then accessing a call statement version that is described in the current topic.">Invoking a service asynchronously from a Rich UI application</a></li>
 
 
 </ol>
-<p>For details on accessing an EGL REST-RPC service
-from logic written outside of EGL, see <a href="cedt01010.html" title="This topic uses EGL constructs to indicate how to access an EGL REST-RPC service from a programming language other than EGL.">EGL REST-RPC message structure</a>.</p>
+<p class="p">For details on accessing an EGL REST-RPC service
+from logic written outside of EGL, see <a class="xref" href="cedt01010.html" title="This topic uses EGL constructs to indicate how to access an EGL REST-RPC service from a programming language other than EGL.">EGL REST-RPC message structure</a>.</p>
 </td>
 
 </tr>
@@ -107,7 +107,7 @@ from logic written outside of EGL, see <a href="cedt01010.html" title="This topi
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

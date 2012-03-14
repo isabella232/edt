@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -19,36 +19,36 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI widget styles</title>
 </head>
-<body id="cedt01016"><a name="cedt01016"><!-- --></a>
+<body id="cedt01016">
 
 
-<h1 class="topictitle1">Rich UI widget styles</h1>
+<h1 class="title topictitle1">Rich UI widget styles</h1>
 
 
 
-<div><p>Many display characteristics of an individual widget depend
+<div class="body"><p class="shortdesc">Many display characteristics of an individual widget depend
 on whether you include styles.</p>
 
-<div class="p">The rules are as follows: : <ul>
-<li>You can reference a style class stored in a cascading style sheet
-(CSS):<ul>
-<li>Every Rich UI application accesses the styles from the CSS file
+<div class="p">The rules are as follows: : <ul class="ul">
+<li class="li">You can reference a style class stored in a cascading style sheet
+(CSS):<ul class="ul">
+<li class="li">Every Rich UI application accesses the styles from the CSS file
 that resides in a Rich UI system project; at this writing, the project
 name is com.ibm.egl.rui. To access that CSS file, expand the WebContent
 folder and css subfolder. We advise you to leave the file untouched
 because updating it is likely to cause a maintenance problem over
 time.</li>
 
-<li>You can override and supplement the provided styles by maintaining
+<li class="li">You can override and supplement the provided styles by maintaining
 your own CSS file. You make that file available to the Rich UI handler
-part in either of two ways:<ul>
-<li>You can set the part field <span class="synph"><span class="kwd">cssFile</span></span>,
+part in either of two ways:<ul class="ul">
+<li class="li">You can set the part field <span class="ph synph"><span class="keyword kwd">cssFile</span></span>,
 which accepts a path relative to the WebContent directory. <div class="p">Here
-is an example setting:<pre class="codeblock">Handler ButtonTest Type RUIHandler 
-   { children = [ui], cssFile = """"""""buttontest/coolblue.css"""""""" }</pre>
+is an example setting:<pre class="pre codeblock">Handler ButtonTest Type RUIHandler 
+   { children = [ui], cssFile = "buttontest/coolblue.css" }</pre>
 </div>
 <div class="p">Here
-is an example CSS file:<pre class="codeblock">.EglRuiGridTable 
+is an example CSS file:<pre class="pre codeblock">.EglRuiGridTable 
 { border: 3px solid black; }  
 
 .EglRuiGridHeader 
@@ -60,19 +60,19 @@ is an example CSS file:<pre class="codeblock">.EglRuiGridTable
   background-color:aqua; } 
 </pre>
 </div>
-<p>Please note that if both the <span class="synph"><span class="kwd">cssFile</span></span> field
-and (as described next) the <span class="synph"><span class="kwd">includeFile</span></span> field
-are specified, the CSS content referenced by the <span class="synph"><span class="kwd">cssFile</span></span> field
+<p class="p">Please note that if both the <span class="ph synph"><span class="keyword kwd">cssFile</span></span> field
+and (as described next) the <span class="ph synph"><span class="keyword kwd">includeFile</span></span> field
+are specified, the CSS content referenced by the <span class="ph synph"><span class="keyword kwd">cssFile</span></span> field
 takes precedence.</p>
 </li>
 
-<li>You can set the part field <span class="synph"><span class="kwd">includeFile</span></span>,
+<li class="li">You can set the part field <span class="ph synph"><span class="keyword kwd">includeFile</span></span>,
 which also accepts a path relative to the WebContent directory.<div class="p">Here
-is an example setting:<pre class="codeblock">Handler ButtonTest Type RUIHandler 
-   { children = [ui], includeFile = """"""""buttontest/coolblue.css"""""""" }</pre>
+is an example setting:<pre class="pre codeblock">Handler ButtonTest Type RUIHandler 
+   { children = [ui], includeFile = "buttontest/coolblue.css" }</pre>
 </div>
-<p>For
-details on this option, see <em>Rich UI handler part</em>.</p>
+<p class="p">For
+details on this option, see <em class="ph i">Rich UI handler part</em>.</p>
 </li>
 
 </ul>
@@ -81,172 +81,172 @@ details on this option, see <em>Rich UI handler part</em>.</p>
 </ul>
 </li>
 
-<li>Each widget type provided in Rich UI names a style class for inclusion
-in the CSS. The class name has the following pattern, where <em>WidgetTypeName</em> is
-the widget-type name such as TextArea:<pre class="codeblock">EglRui<em>WidgetTypeName</em></pre>
-<p>The
+<li class="li">Each widget type provided in Rich UI names a style class for inclusion
+in the CSS. The class name has the following pattern, where <em class="ph i">WidgetTypeName</em> is
+the widget-type name such as TextArea:<pre class="pre codeblock">EglRui<em class="ph i">WidgetTypeName</em></pre>
+<p class="p">The
 purpose of this convention is to let a web designer establish the
 styles for each type of widget so that you can achieve consistency
 across applications.</p>
 <div class="p">Some widgets reference additional class
-names: <ul>
-<li>The grid widget includes children that reference the style classes
+names: <ul class="ul">
+<li class="li">The grid widget includes children that reference the style classes
 EglRuiGridTable, for setting the border style of the grid as a whole;
 EglRuiGridHeader, for setting characteristics of header cells; and
 EglRuiGridCell, for setting characteristics of body cells.</li>
 
-<li>If a textField widget is read only, the widget references the
+<li class="li">If a textField widget is read only, the widget references the
 style class EglRuiTextFieldReadOnly </li>
 
-<li>If a passwordTextField widget is read only, the widget references
+<li class="li">If a passwordTextField widget is read only, the widget references
 the style class EglRuiPasswordTextFieldReadOnly</li>
 
 </ul>
 </div>
-<p>You can see the additional class names in the source for
+<p class="p">You can see the additional class names in the source for
 a given widget. Also, if you use the Firefox browser, you can use
 Firebug to inspect the styling of a displayed widget.</p>
  </li>
 
-<li>You can override a style class by setting the widget field <span class="synph"><span class="kwd">class</span></span>,
-as shown here:<pre class="codeblock">loginBox	Box { numColumns=2, class=""""""""NormalBoxStyle"""""""" };</pre>
+<li class="li">You can override a style class by setting the widget field <span class="ph synph"><span class="keyword kwd">class</span></span>,
+as shown here:<pre class="pre codeblock">loginBox	Box { numColumns=2, class="NormalBoxStyle" };</pre>
 <div class="p">Here
-is an example of the related content in the CSS file: <pre class="codeblock">.NormalBoxStyle 
+is an example of the related content in the CSS file: <pre class="pre codeblock">.NormalBoxStyle 
    {  color:black; 	
       background-color:aqua; } 
 </pre>
 </div>
-<p>All styles in the specified class are in effect
+<p class="p">All styles in the specified class are in effect
 in the widget. These styles are inherited in every enclosed widget
 except when a widget overrides a style, as noted later.</p>
 </li>
 
-<li>You can specify a style (or a set of styles) in the <span class="synph"><span class="kwd">style</span></span> field.
+<li class="li">You can specify a style (or a set of styles) in the <span class="ph synph"><span class="keyword kwd">style</span></span> field.
 Here is an example, which includes (in the field value) the syntax
-used in CSS files: <pre class="codeblock">loginBox	Box 
+used in CSS files: <pre class="pre codeblock">loginBox	Box 
    { numColumns=2,
-     style=""""""""background-color:lightgreen;border-style:solid;"""""""" };      </pre>
+     style="background-color:lightgreen;border-style:solid;" };      </pre>
 <div class="p">All
-the CSS styles are available if you use the <span class="synph"><span class="kwd">style</span></span> field.
+the CSS styles are available if you use the <span class="ph synph"><span class="keyword kwd">style</span></span> field.
 However, for most purposes you can assign values to individual style-related
 properties. The following declaration is equivalent to the previous
-one and does not involve CSS syntax: <pre class="codeblock">loginBox	Box 
+one and does not involve CSS syntax: <pre class="pre codeblock">loginBox	Box 
    { columns=2,
-     backgroundColor=""""""""lightgreen"""""""",
-     borderStyle=""""""""solid"""""""" };      </pre>
+     backgroundColor="lightgreen",
+     borderStyle="solid" };      </pre>
 </div>
-<p>Here are the EGL
+<p class="p">Here are the EGL
 style-related properties:</p>
-<div class="p"><ul>
-<li><span class="synph"><span class="kwd">background</span></span></li>
+<div class="p"><ul class="ul">
+<li class="li"><span class="ph synph"><span class="keyword kwd">background</span></span></li>
 
-<li><span class="synph"><span class="kwd">backgroundColor</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">backgroundColor</span></span></li>
 
-<li><span class="synph"><span class="kwd">borderStyle</span></span> or one of the following
-subsets: <span class="synph"><span class="kwd">borderLeftStyle</span></span>, <span class="synph"><span class="kwd">borderRightStyle</span></span>, <span class="synph"><span class="kwd">borderTopStyle</span></span>, <span class="synph"><span class="kwd">borderBottomStyle</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">borderStyle</span></span> or one of the following
+subsets: <span class="ph synph"><span class="keyword kwd">borderLeftStyle</span></span>, <span class="ph synph"><span class="keyword kwd">borderRightStyle</span></span>, <span class="ph synph"><span class="keyword kwd">borderTopStyle</span></span>, <span class="ph synph"><span class="keyword kwd">borderBottomStyle</span></span></li>
 
-<li><span class="synph"><span class="kwd">borderWidth</span></span> or one of the following
-subsets: <span class="synph"><span class="kwd">borderLeftWidth</span></span>, <span class="synph"><span class="kwd">borderRightWidth</span></span>, <span class="synph"><span class="kwd">borderTopWidth</span></span>, <span class="synph"><span class="kwd">borderBottomWidth</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">borderWidth</span></span> or one of the following
+subsets: <span class="ph synph"><span class="keyword kwd">borderLeftWidth</span></span>, <span class="ph synph"><span class="keyword kwd">borderRightWidth</span></span>, <span class="ph synph"><span class="keyword kwd">borderTopWidth</span></span>, <span class="ph synph"><span class="keyword kwd">borderBottomWidth</span></span></li>
 
-<li><span class="synph"><span class="kwd">color</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">color</span></span></li>
 
-<li><span class="synph"><span class="kwd">cursor</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">cursor</span></span></li>
 
-<li><span class="synph"><span class="kwd">font</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">font</span></span></li>
 
-<li><span class="synph"><span class="kwd">fontSize</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">fontSize</span></span></li>
 
-<li><span class="synph"><span class="kwd">fontWeight</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">fontWeight</span></span></li>
 
-<li><span class="synph"><span class="kwd">height</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">height</span></span></li>
 
-<li><span class="synph"><span class="kwd">margin</span></span> or one of the following subsets: <span class="synph"><span class="kwd">marginLeft</span></span>, <span class="synph"><span class="kwd">marginRight</span></span>, <span class="synph"><span class="kwd">marginTop</span></span>, <span class="synph"><span class="kwd">marginBottom</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">margin</span></span> or one of the following subsets: <span class="ph synph"><span class="keyword kwd">marginLeft</span></span>, <span class="ph synph"><span class="keyword kwd">marginRight</span></span>, <span class="ph synph"><span class="keyword kwd">marginTop</span></span>, <span class="ph synph"><span class="keyword kwd">marginBottom</span></span></li>
 
-<li><span class="synph"><span class="kwd">opacity</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">opacity</span></span></li>
 
-<li><span class="synph"><span class="kwd">padding</span></span> or one of the following subsets: <span class="synph"><span class="kwd">paddingLeft</span></span>, <span class="synph"><span class="kwd">paddingRight</span></span>, <span class="synph"><span class="kwd">paddingTop</span></span>, <span class="synph"><span class="kwd">paddingBottom</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">padding</span></span> or one of the following subsets: <span class="ph synph"><span class="keyword kwd">paddingLeft</span></span>, <span class="ph synph"><span class="keyword kwd">paddingRight</span></span>, <span class="ph synph"><span class="keyword kwd">paddingTop</span></span>, <span class="ph synph"><span class="keyword kwd">paddingBottom</span></span></li>
 
-<li><span class="synph"><span class="kwd">pixelHeight</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">pixelHeight</span></span></li>
 
-<li><span class="synph"><span class="kwd">pixelWidth</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">pixelWidth</span></span></li>
 
-<li><span class="synph"><span class="kwd">position</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">position</span></span></li>
 
-<li><span class="synph"><span class="kwd">visibility</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">visibility</span></span></li>
 
-<li><span class="synph"><span class="kwd">width</span></span></li>
+<li class="li"><span class="ph synph"><span class="keyword kwd">width</span></span></li>
 
 </ul>
 </div>
-<p>Except for <span class="synph"><span class="kwd">background</span></span>, <span class="synph"><span class="kwd">backgroundColor</span></span>, <span class="synph"><span class="kwd">borderStyle</span></span>, <span class="synph"><span class="kwd">cursor</span></span>, <span class="synph"><span class="kwd">font</span></span>,
-and <span class="synph"><span class="kwd">visibility</span></span> (each of which takes a value
+<p class="p">Except for <span class="ph synph"><span class="keyword kwd">background</span></span>, <span class="ph synph"><span class="keyword kwd">backgroundColor</span></span>, <span class="ph synph"><span class="keyword kwd">borderStyle</span></span>, <span class="ph synph"><span class="keyword kwd">cursor</span></span>, <span class="ph synph"><span class="keyword kwd">font</span></span>,
+and <span class="ph synph"><span class="keyword kwd">visibility</span></span> (each of which takes a value
 of type STRING), each field takes a value of type INT and uses pixel
 as the unit of measure.</p>
 </li>
 
-<li>The styles in effect for a given widget are the sum of the styles
+<li class="li">The styles in effect for a given widget are the sum of the styles
 specified in class and style specifications. In most cases, a style
 applied to a widget overrides the same styles inherited from enclosing
 widgets, and the last style specified in a list of widget properties
 overrides an equivalent style, if any, that was specified earlier
 in the list.</li>
 
-<li>If, in defining a widget, you use both the <span class="synph"><span class="kwd">style</span></span> field
-or an equivalent field (to specify a given style) and the <span class="synph"><span class="kwd">class</span></span> field
+<li class="li">If, in defining a widget, you use both the <span class="ph synph"><span class="keyword kwd">style</span></span> field
+or an equivalent field (to specify a given style) and the <span class="ph synph"><span class="keyword kwd">class</span></span> field
 (to reference a class that includes the same style), the value in
-the <span class="synph"><span class="kwd">style</span></span> field takes precedence, in most
+the <span class="ph synph"><span class="keyword kwd">style</span></span> field takes precedence, in most
 cases.</li>
 
 </ul>
 </div>
 
-<p>If you do not specify styles, the default settings of the browser
+<p class="p">If you do not specify styles, the default settings of the browser
 determine characteristics such as the line widths, the spacing between
 widgets, and the text font.</p>
 
-<div class="section"><h2 class="sectiontitle">Best practice for styles</h2><p>Rich UI projects
+<div class="section"><h2 class="title sectiontitle">Best practice for styles</h2><p class="p">Rich UI projects
 are likely to be most successful if your company divides the responsibility
 for two tasks—laying out the user interface, as handled by an EGL
 developer, and creating the interface look and feel, as handled by
 a web designer. To make this division of labor possible, we recommend
 that you use external style sheets. You can rely on a default class
 name such as EglRuiTextField. Alternatively, you can assign your own
-class name by assigning a value to the <span class="synph"><span class="kwd">class</span></span> field
+class name by assigning a value to the <span class="ph synph"><span class="keyword kwd">class</span></span> field
 for a given widget.</p>
 </div>
 
-<div class="section"><h2 class="sectiontitle">The effect of removing all children from the document
-body</h2><div class="p">Consider the following statement:<pre class="codeblock">   document.body.removeChildren();</pre>
+<div class="section"><h2 class="title sectiontitle">The effect of removing all children from the document
+body</h2><div class="p">Consider the following statement:<pre class="pre codeblock">   document.body.removeChildren();</pre>
 </div>
 <div class="p">The
-effect is twofold:<ul>
-<li>Removes all children widgets from the web page</li>
+effect is twofold:<ul class="ul">
+<li class="li">Removes all children widgets from the web page</li>
 
-<li>Removes access to the external style sheet, if any</li>
+<li class="li">Removes access to the external style sheet, if any</li>
 
 </ul>
 </div>
 <div class="p">If you wish to remove children from the document body
 without removing access to the external style sheet, remove specific
-children, as in the following statement:<pre class="codeblock">   document.body.removeChild(myBox);</pre>
+children, as in the following statement:<pre class="pre codeblock">   document.body.removeChild(myBox);</pre>
 </div>
 </div>
 
-<div class="section"><h2 class="sectiontitle">Sources of additional information</h2><div class="p">For details
-on cascading style sheets, consider the following web sites: <p>   <a href="http://www.w3schools.com/css" target="_blank">http://www.w3schools.com/css</a></p>
+<div class="section"><h2 class="title sectiontitle">Sources of additional information</h2><div class="p">For details
+on cascading style sheets, consider the following web sites: <p class="lines">   <a class="xref" href="http://www.w3schools.com/css" target="_blank">http://www.w3schools.com/css</a></p>
 </div>
-<p>At
+<p class="p">At
 this writing, the left side of that web site includes several links,
-and the choices under the heading <em>CSS Basic</em> are of particular
+and the choices under the heading <em class="ph i">CSS Basic</em> are of particular
 interest for Rich UI. The site search at the right is also useful.</p>
-<p>For
-a complete description of cascading style sheets, see <em>CSS: The
+<p class="p">For
+a complete description of cascading style sheets, see <em class="ph i">CSS: The
 Definitive Guide</em> by Meyer (O'Reilly Media, Inc., November 2006). </p>
 </div>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

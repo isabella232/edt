@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -22,55 +22,55 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Creating a Rich UI application with multiple handlers</title>
 </head>
-<body id="tedt01038"><a name="tedt01038"><!-- --></a>
+<body id="tedt01038">
 
 
-<h1 class="topictitle1">Creating a Rich UI application with multiple handlers</h1>
+<h1 class="title topictitle1">Creating a Rich UI application with multiple handlers</h1>
 
 
 
-<div><p>You can use multiple Rich UI handler parts to compose a
+<div class="body"><p class="shortdesc">You can use multiple Rich UI handler parts to compose a
 single application.</p>
 
 <div class="p">We do not mean to say that you embed one handler part in another.
 Instead, the handler part declares variables that are each based on
 another handler part. A variable based on an Rich UI handler part
-is called an <em>embedded handler</em>, as in the following example: <pre class="codeblock">embeddedHandler AnotherHandlerPart{};  // declared Rich UI handler 
+is called an <em class="ph i">embedded handler</em>, as in the following example: <pre class="pre codeblock">embeddedHandler AnotherHandlerPart{};  // declared Rich UI handler 
                                           (based on part AnotherHandlerPart)</pre>
 </div>
 
-<p>The embedding Rich UI handler can access the global widgets and
+<p class="p">The embedding Rich UI handler can access the global widgets and
 public functions declared in an embedded Rich UI handler. In particular,
-the embedding handler can add widgets to its own <span class="synph"><span class="kwd">initialUI</span></span> and <span class="synph"><span class="kwd">children</span></span> arrays.
+the embedding handler can add widgets to its own <span class="ph synph"><span class="keyword kwd">initialUI</span></span> and <span class="ph synph"><span class="keyword kwd">children</span></span> arrays.
 Also, you can embed a handler that invokes services or otherwise handles
 business processing. A reasonable practice is to use one handler to
 present the UI and to use other handlers to oversee the backend, business
 processing.</p>
 
 <div class="p">You access widgets and functions with a dot syntax. In the following
-outline, the Handler part <samp class="codeph">AnotherHandlerPart</samp> is assumed
-to have declared a button named <samp class="codeph">itsButton</samp>, which
-is attached to the DOM tree only when that button is included in the <span class="synph"><span class="kwd">initialUI</span></span> array
-of the embedding handler:<pre class="codeblock">handler SimpleHandler type RUIHandler { initialUI = [ embeddedHandler.itsButton ] }
+outline, the Handler part <samp class="ph codeph">AnotherHandlerPart</samp> is assumed
+to have declared a button named <samp class="ph codeph">itsButton</samp>, which
+is attached to the DOM tree only when that button is included in the <span class="ph synph"><span class="keyword kwd">initialUI</span></span> array
+of the embedding handler:<pre class="pre codeblock">handler SimpleHandler type RUIHandler { initialUI = [ embeddedHandler.itsButton ] }
    embeddedHandler AnotherHandlerPart{};
 end</pre>
 </div>
 
-<p>Similarly, you can add an embedded widget to a <span class="synph"><span class="kwd">children</span></span> array.</p>
+<p class="p">Similarly, you can add an embedded widget to a <span class="ph synph"><span class="keyword kwd">children</span></span> array.</p>
 
 <div class="p">You can access a field or function in an embedded widget by extending
 the a dot syntax. For example, the following statement retrieves the
-displayed text of the embedded Button itsButton:<pre class="codeblock">   myString STRING = embeddedHandler.itsButton.text;</pre>
+displayed text of the embedded Button itsButton:<pre class="pre codeblock">   myString STRING = embeddedHandler.itsButton.text;</pre>
 </div>
 
-<p>The <span class="synph"><span class="kwd">initialUI</span></span> array of the embedded handler
+<p class="p">The <span class="ph synph"><span class="keyword kwd">initialUI</span></span> array of the embedded handler
 has no effect at run time. That array is used only when the embedded
 handler is the basis of a Rich UI application and is not embedded
 at all.</p>
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>

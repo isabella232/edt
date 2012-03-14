@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en-us" xml:lang="en-us">
+<html xml:lang="en-us" lang="en-us">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
@@ -17,80 +17,80 @@
 <link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
 <title>Rich UI widget functions</title>
 </head>
-<body id="cedt01015"><a name="cedt01015"><!-- --></a>
+<body id="cedt01015">
 
 
-<h1 class="topictitle1">Rich UI widget functions</h1>
+<h1 class="title topictitle1">Rich UI widget functions</h1>
 
 
-<div><p>Each type of widget includes a set of functions, in addition
+<div class="body"><p class="shortdesc">Each type of widget includes a set of functions, in addition
 to those described in “Rich UI widget fields.” </p>
 
-<div class="p">The following functions are available for widgets of type <samp class="codeph">RUIWidget</samp>:<ul>
-<li>The function <span class="synph"><span class="kwd">fadeIn</span></span> causes the widget
-to <em>fade in</em> (to be presented slowly), and the function <span class="synph"><span class="kwd">fadeOut</span></span> causes
-the widget to <em>fade out</em> (to be slowly made invisible):<pre class="codeblock">fadeIn (<em>duration</em> int in, <em>callback</em> EffectCallback)
-fadeOut (<em>duration</em> int in, <em>callback</em> EffectCallback)</pre>
+<div class="p">The following functions are available for widgets of type <samp class="ph codeph">RUIWidget</samp>:<ul class="ul">
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">fadeIn</span></span> causes the widget
+to <em class="ph i">fade in</em> (to be presented slowly), and the function <span class="ph synph"><span class="keyword kwd">fadeOut</span></span> causes
+the widget to <em class="ph i">fade out</em> (to be slowly made invisible):<pre class="pre codeblock">fadeIn (<em class="ph i">duration</em> int in, <em class="ph i">callback</em> EffectCallback)
+fadeOut (<em class="ph i">duration</em> int in, <em class="ph i">callback</em> EffectCallback)</pre>
 <div class="p">Each
-function takes two parameters:<dl>
-<dt class="dlterm"><var class="varname">duration</var></dt>
+function takes two parameters:<dl class="dl parml">
+<dt class="dt pt dlterm"><var class="keyword varname">duration</var></dt>
 
-<dd>Number of milliseconds between the start and end of the process,
+<dd class="dd pd">Number of milliseconds between the start and end of the process,
 whether the widget is fading in or fading out</dd>
 
 
-<dt class="dlterm"><var class="varname">callback</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">callback</var></dt>
 
-<dd>A reference to a function that is invoked as soon as the widget
+<dd class="dd pd">A reference to a function that is invoked as soon as the widget
 fades in or out. That function takes no parameters and has no return
 value. If you do not wish to specify a function, set this argument
-to <samp class="codeph">null</samp>.</dd>
+to <samp class="ph codeph">null</samp>.</dd>
 
 </dl>
 </div>
-<div class="p">Here is an example:<pre class="codeblock">myButton.fadeOut(1000, null);</pre>
+<div class="p">Here is an example:<pre class="pre codeblock">myButton.fadeOut(1000, null);</pre>
 </div>
 </li>
 
-<li>The function <span class="synph"><span class="kwd">focus</span></span> causes the widget
-to receive focus: <pre class="codeblock">focus()
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">focus</span></span> causes the widget
+to receive focus: <pre class="pre codeblock">focus()
 </pre>
-<p>For example, a button in focus is highlighted, and
+<p class="p">For example, a button in focus is highlighted, and
 the user's pressing the ENTER key is equivalent to the user's clicking
 the button. Similarly, a text field in focus (if not read only) includes
 a cursor so that the user enters data by typing a printable character
 without first tabbing to the field.</p>
-<p>The user can press TAB repeatedly
+<p class="p">The user can press TAB repeatedly
 to cycle through the available fields. With each keypress, the focus
 moves either to the next application field or to a field on the browser;
 for example, to the web address field.</p>
 <div class="p">Here is an example invocation
-of <span class="synph"><span class="kwd">focus</span></span>:<pre class="codeblock">myButton.focus();</pre>
+of <span class="ph synph"><span class="keyword kwd">focus</span></span>:<pre class="pre codeblock">myButton.focus();</pre>
 </div>
 </li>
 
-<li>The function <span class="synph"><span class="kwd">morph</span></span> lets you change the
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">morph</span></span> lets you change the
 display of a widget over time. The function repeatedly calls one of
 your functions; in this way, your code specifies the behavior caused
-by the runtime invocation:<pre class="codeblock">morph (<em>duration</em> int in, <em>callback</em> EffectCallback, <em>morphFunction</em> MorphFunction )
+by the runtime invocation:<pre class="pre codeblock">morph (<em class="ph i">duration</em> int in, <em class="ph i">callback</em> EffectCallback, <em class="ph i">morphFunction</em> MorphFunction )
 </pre>
-<div class="p">The function takes three parameters:<dl>
-<dt class="dlterm"><var class="varname">duration</var></dt>
+<div class="p">The function takes three parameters:<dl class="dl parml">
+<dt class="dt pt dlterm"><var class="keyword varname">duration</var></dt>
 
-<dd>Number of milliseconds between the start and end of the process.</dd>
+<dd class="dd pd">Number of milliseconds between the start and end of the process.</dd>
 
 
-<dt class="dlterm"><var class="varname">callback</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">callback</var></dt>
 
-<dd>A reference to a function that is invoked as soon as the process
+<dd class="dd pd">A reference to a function that is invoked as soon as the process
 is complete. That function takes no parameters and has no return value.
 If you do not wish to specify a function, set this second argument
-to <samp class="codeph">null</samp>.</dd>
+to <samp class="ph codeph">null</samp>.</dd>
 
 
-<dt class="dlterm"><var class="varname">customMorphFunction</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">customMorphFunction</var></dt>
 
-<dd>A reference to a <em>custom morph function</em>, which is a function
+<dd class="dd pd">A reference to a <em class="ph i">custom morph function</em>, which is a function
 invoked repeatedly during the duration mentioned earlier. . The custom
 morph function takes two parameters: the widget being changed and
 a float assigned by the EGL runtime. The float is a fraction between
@@ -103,39 +103,39 @@ morph function has no return value.</dd>
 
 </dl>
 </div>
-<div class="p">Here is an example:<pre class="codeblock">myButton.morph(1000, null, myCustomMorphFunction);</pre>
+<div class="p">Here is an example:<pre class="pre codeblock">myButton.morph(1000, null, myCustomMorphFunction);</pre>
 </div>
 </li>
 
-<li>The function <span class="synph"><span class="kwd">resize</span></span> lets you change
-the size of a widget over time:<pre class="codeblock">resize (<em>width</em> int in, <em>height</em> int in,
-       <em>duration</em> int, <em>callback</em> EffectCallback)
+<li class="li">The function <span class="ph synph"><span class="keyword kwd">resize</span></span> lets you change
+the size of a widget over time:<pre class="pre codeblock">resize (<em class="ph i">width</em> int in, <em class="ph i">height</em> int in,
+       <em class="ph i">duration</em> int, <em class="ph i">callback</em> EffectCallback)
 </pre>
-<div class="p">The function takes four parameters:<dl>
-<dt class="dlterm"><var class="varname">width</var></dt>
+<div class="p">The function takes four parameters:<dl class="dl parml">
+<dt class="dt pt dlterm"><var class="keyword varname">width</var></dt>
 
-<dd>The desired final width, in pixels.</dd>
-
-
-<dt class="dlterm"><var class="varname">height</var></dt>
-
-<dd>The desired final height, in pixels.</dd>
+<dd class="dd pd">The desired final width, in pixels.</dd>
 
 
-<dt class="dlterm"><var class="varname">duration</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">height</var></dt>
 
-<dd>Number of milliseconds between the start and end of the process.</dd>
+<dd class="dd pd">The desired final height, in pixels.</dd>
 
 
-<dt class="dlterm"><var class="varname">callback</var></dt>
+<dt class="dt pt dlterm"><var class="keyword varname">duration</var></dt>
 
-<dd>A reference to a function that is invoked as soon as the process
+<dd class="dd pd">Number of milliseconds between the start and end of the process.</dd>
+
+
+<dt class="dt pt dlterm"><var class="keyword varname">callback</var></dt>
+
+<dd class="dd pd">A reference to a function that is invoked as soon as the process
 is complete. That function takes no parameters and has no return value.
-If you do not wish to specify a function, set this argument to <samp class="codeph">null</samp>.</dd>
+If you do not wish to specify a function, set this argument to <samp class="ph codeph">null</samp>.</dd>
 
 </dl>
 </div>
-<div class="p">Here is an example:<pre class="codeblock">myButton.resize(100, 100, 1000, myFunction);</pre>
+<div class="p">Here is an example:<pre class="pre codeblock">myButton.resize(100, 100, 1000, myFunction);</pre>
 </div>
 </li>
 
@@ -144,7 +144,7 @@ If you do not wish to specify a function, set this argument to <samp class="code
 
 </div>
 
-<div>
+<div class="related-links">
 <div class="familylinks">
 </div>
 </div>
