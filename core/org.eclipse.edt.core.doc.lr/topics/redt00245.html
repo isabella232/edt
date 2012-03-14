@@ -81,11 +81,11 @@ end</pre>
    charset string?;    		// character encoding; for example, "UTF-8".
    contentType string?;		// content type; for example, "text/html".
    headers dictionary?;		// each entry identifies a header name and content.
-   body string?;							// content of transported message.
-   timeout int?;							// as described next.
-end</pre>
-<div class="p"><span class="ph synph"><span class="keyword kwd">timeout</span></span> specifies the
-maximum valid number of seconds that elapse between two events: <ul class="ul">
+   body string?;							// content of transported message.end</pre>
+<div class="p">You
+can use an EGL-specific HTTP request header to give a service timeout
+value, which specifies the maximum valid number of seconds that elapse
+between two events:<ul class="ul">
 <li class="li">In the case of a Rich UI application, the events are when the
 EGL Rich UI proxy (on the application server) invokes a web service
 and when the proxy receives a response.</li>
@@ -96,8 +96,18 @@ a response.</li>
 
 </ul>
 </div>
-<p class="p">If the response takes longer than the specified maximum,
-the EGL Runtime throws a <span class="ph synph"><span class="keyword kwd">ServiceInvocationException</span></span>.</p>
+<div class="p">The header is <strong class="ph b">edt.proxy.invocation.timeout</strong>. For
+example, the following code ends the service connection if the proxy
+does not receive a response in 6 seconds:<pre class="pre codeblock">myBindingVar HttpRest?{@Resource {uri="binding:myEntry"}};
+myBindingVar.request.headers = new dictionary;
+myBindingVar.request.headers["edt.proxy.invocation.timeout"] = 6;
+call MyInterfaceType.myOperation("My input")
+   using myBindingVar
+   returning to myResponseHandler
+   onException myExceptionHandler;</pre>
+</div>
+<p class="p">If the response
+takes longer than the specified maximum, the EGL Runtime throws a <span class="ph synph"><span class="keyword kwd">ServiceInvocationException</span></span>.</p>
 <div class="p">Setting
 a timeout is partly a matter of trial and error:<ul class="ul">
 <li class="li">Take into account a variety of factors, such as local network
@@ -162,9 +172,9 @@ end</pre>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00245__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d99059e160">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d99059e163">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d99059e163">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d99059e166">Issue</th>
 
 </tr>
 
@@ -173,17 +183,17 @@ end</pre>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00245__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d99059e160 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d99059e163 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d99059e163 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d99059e166 ">See type-specific topics.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00245__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d99059e160 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d99059e163 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d99059e163 ">See type-specific topics.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d99059e166 ">See type-specific topics.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>
