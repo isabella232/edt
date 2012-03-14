@@ -47,7 +47,8 @@ public class NewExternalTypeWizardPage extends EGLTemplateWizardPage {
 		createContainerControls(container, 5);
 		createPackageControls(container);
 		createSeparator(container, 5);
-		createEGLFileControls(container);
+		//createEGLFileControls(container);
+		createEGLFileControls(container, NewExternalTypeWizardMessages.NewTypeWizardPageTypenameLabel);
 		createTemplateArea(container,5);
 
 		initialize();
