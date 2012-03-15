@@ -76,7 +76,6 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 				if (field.getInitializerStatements() != null)
 					ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 			}
-			ctx.writeSmapLine();
 		}
 	}
 }

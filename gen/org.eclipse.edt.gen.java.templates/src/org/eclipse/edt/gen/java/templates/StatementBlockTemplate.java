@@ -45,6 +45,7 @@ public class StatementBlockTemplate extends JavaTemplate {
 	protected void processStatements(StatementBlock block, Context ctx, TabbedWriter out) {
 		ctx.setCurrentFile(IRUtils.getQualifiedFileName(block));
 		for (Statement stmt : block.getStatements()) {
+			ctx.adjustSmapStatementLevel(1);
 			ReorganizeCode reorganizeCode = new ReorganizeCode();
 			List<StatementBlock> blockArray = reorganizeCode.reorgCode(stmt, ctx);
 			if (blockArray != null && blockArray.get(0) != null)
@@ -52,6 +53,9 @@ public class StatementBlockTemplate extends JavaTemplate {
 			ctx.invoke(genStatement, stmt, ctx, out);
 			if (blockArray != null && blockArray.get(1) != null)
 				ctx.invoke(genStatementNoBraces, blockArray.get(1), ctx, out);
+			ctx.adjustSmapStatementLevel(-1);
+			if (ctx.getSmapStatementLevel() == 0)
+				ctx.writeSmapLine();
 		}
 	}
 }
