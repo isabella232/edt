@@ -196,7 +196,7 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 				viewer,
 				documentOffset,
 				prefix,
-				true).getProposals(CapabilityFilterUtility.filterPropertyRules(getPropertyRules()), Arrays.asList(new Node[] {settingsBlock}));
+				true, true).getProposals(CapabilityFilterUtility.filterPropertyRules(getPropertyRules()), Arrays.asList(new Node[] {settingsBlock}));
 		}
 
 		protected abstract Collection getPropertyRules();

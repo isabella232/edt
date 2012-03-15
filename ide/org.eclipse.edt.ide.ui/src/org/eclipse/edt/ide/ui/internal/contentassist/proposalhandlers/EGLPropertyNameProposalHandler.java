@@ -47,10 +47,12 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 	protected static final String SQL_CONDITION = "condition"; //$NON-NLS-1$
 	
 	private boolean isAnnotationSetting;
+	private boolean useAnnIcon;
 
-	public EGLPropertyNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix, boolean isAnnotationSetting) {
+	public EGLPropertyNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix, boolean isAnnotationSetting, boolean useAnnIcon) {
 		super(viewer, documentOffset, prefix, null);
 		this.isAnnotationSetting = isAnnotationSetting;
+		this.useAnnIcon = useAnnIcon;
 	}
 
 	public List getProposals(int location, List propertyBlockList) {
@@ -289,7 +291,7 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 			}
 		}
 		
-		String img_src = isAnnotationSetting ? PluginImages.IMG_OBJS_ANNOTATION : PluginImages.IMG_OBJS_ENV_VAR;
+		String img_src = useAnnIcon ? PluginImages.IMG_OBJS_ANNOTATION : PluginImages.IMG_OBJS_ENV_VAR;
 		return
 			new EGLCompletionProposal(viewer,
 				propertyRule.getName(),

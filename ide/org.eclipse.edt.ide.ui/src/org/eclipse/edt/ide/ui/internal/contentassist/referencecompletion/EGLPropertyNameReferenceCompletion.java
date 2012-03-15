@@ -111,7 +111,7 @@ public class EGLPropertyNameReferenceCompletion extends EGLAbstractPropertyRefer
 								new EGLPropertyNameProposalHandler(
 									viewer,
 									documentOffset,
-									prefix, false).getProposals(createRulesForFields((AnnotationTypeBindingImpl) newTypeBinding), settingsBlockList));
+									prefix, false, false).getProposals(createRulesForFields((AnnotationTypeBindingImpl) newTypeBinding), settingsBlockList));
 						}
 						else {
 							IDataBinding dBinding = new ClassFieldBinding(newTypeBinding.getName(), null, newTypeBinding);
@@ -135,7 +135,7 @@ public class EGLPropertyNameReferenceCompletion extends EGLAbstractPropertyRefer
 											new EGLPropertyNameProposalHandler(
 												viewer,
 												documentOffset,
-												prefix, false).getProposals(createRulesForFields((AnnotationTypeBindingImpl) subType), settingsBlockList));
+												prefix, false, false).getProposals(createRulesForFields((AnnotationTypeBindingImpl) subType), settingsBlockList));
 									}
 								}
 							}
@@ -158,7 +158,7 @@ public class EGLPropertyNameReferenceCompletion extends EGLAbstractPropertyRefer
 					new EGLPropertyNameProposalHandler(
 						viewer,
 						documentOffset,
-						prefix, true).getProposals(location, settingsBlockList));
+						prefix, false, true).getProposals(location, settingsBlockList));
 			}
 		}
 		return proposals;
