@@ -40,6 +40,7 @@ public class Context extends EglContext {
 	private int lastEglLineNumber;
 	private int firstJavaLineNumber;
 	private int lastJavaLineNumber;
+	private int smapStatementLevel;
 
 	private Function currentFunction;
 	private String currentFile;
@@ -252,6 +253,14 @@ public class Context extends EglContext {
 
 	public void setSmapLastJavaLineNumber(int number) {
 		lastJavaLineNumber = number;
+	}
+
+	public void adjustSmapStatementLevel(int number) {
+		smapStatementLevel += number;
+	}
+
+	public int getSmapStatementLevel() {
+		return smapStatementLevel;
 	}
 
 	public void writeSmapLine() {
