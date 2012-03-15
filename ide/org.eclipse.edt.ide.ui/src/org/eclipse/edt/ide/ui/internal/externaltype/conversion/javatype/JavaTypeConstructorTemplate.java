@@ -33,7 +33,11 @@ public class JavaTypeConstructorTemplate extends AbstractTemplate {
 			}
 		}
 		
-		builder.append(SQLConstants.RPAREN + SQLConstants.SEMICOLON);
+		builder.append(SQLConstants.RPAREN);
+		if(constructor.getExceptionTypes().length > 0) {
+			builder.append("{" + JavaTypeConstants.EGL_THROWS_ANNOTATION + "}");
+		}
+		builder.append(SQLConstants.SEMICOLON);
 		out.println(builder.toString());
 	}
 }

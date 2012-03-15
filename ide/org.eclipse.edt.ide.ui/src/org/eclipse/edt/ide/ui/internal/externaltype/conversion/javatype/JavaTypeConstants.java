@@ -32,7 +32,7 @@ public class JavaTypeConstants {
 	static {
 		//JavaToEglMapping.put("char", "string");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Character", "string?");//$NON-NLS-1$
-		JavaToEglMapping.put("java.lang.String", "string");//$NON-NLS-1$
+		JavaToEglMapping.put("java.lang.String", "string?");//$NON-NLS-1$
 		JavaToEglMapping.put("byte", "bytes");//$NON-NLS-1$
 		JavaToEglMapping.put("java.lang.Byte", "bytes?");//$NON-NLS-1$
 		

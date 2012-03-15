@@ -244,6 +244,10 @@ public class ReflectionUtil {
 		typeName = JavaTypeConstants.JavaToEglMapping.get(paraType.getName());
 		if(typeName == null) {
 			typeName = paraType.getSimpleName();
+			if(!paraType.isPrimitive()) {
+				typeName = typeName + SQLConstants.PARAMETER_MARKER;
+			}
+			
 			if(paraType.getEnclosingClass() != null) {
 				typeName = paraType.getEnclosingClass().getSimpleName() 
 						  + JavaTypeConstants.UNDERSTORE_PREFIX + typeName;
