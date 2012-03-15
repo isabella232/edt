@@ -144,7 +144,9 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 				}
 				buffer.insert(0, simpleName);
 			}
-		} else if(buffer.length() > 0){
+		} 
+		
+		if(buffer.length() > 0 && SQLConstants.COMMA.equals(buffer.substring(0, 1))){
 			buffer.deleteCharAt(0);
 		}
 	
