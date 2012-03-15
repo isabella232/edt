@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Creating an EGL external type"></meta>
-<meta name="abstract" content="You can use a wizard to create an EGL external type."></meta>
-<meta name="description" content="You can use a wizard to create an EGL external type."></meta>
+<meta name="abstract" content="The IDE provides a fast way for you to embed an external capability that is already available to your EGL project."></meta>
+<meta name="description" content="The IDE provides a fast way for you to embed an external capability that is already available to your EGL project."></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/tedt00500.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
@@ -23,10 +23,28 @@
 <h1 class="title topictitle1">Creating an EGL external type</h1>
 
 
-<div class="body" id="body"><p class="shortdesc">You can use a wizard to create an EGL external
-type.</p>
+<div class="body" id="body"><p class="shortdesc">The IDE provides a fast way for you to embed
+an external capability that is already available to your EGL project. </p>
 
-<div class="p">The steps are as follows:<ol class="ol">
+<div class="p">First, ensure that any Java code that you want to embed is either
+in your project or is available on the Java build path of your project.
+To access the Java build path, do as follows: <ol class="ol">
+<li class="li">Right click your project.</li>
+
+<li class="li">Click <span class="ph uicontrol">Properties</span>. </li>
+
+<li class="li">At the Java Build Path pane, click <span class="ph uicontrol">Add</span>.
+The Required Project Selection dialog is displayed.</li>
+
+<li class="li">Select the projects of interest and click <span class="ph uicontrol">OK</span>.
+The Java Build Path pane is made available again.</li>
+
+<li class="li">Click <span class="ph uicontrol">OK</span>. </li>
+
+</ol>
+</div>
+
+<div class="p">Here are the steps for creating an EGL external type:<ol class="ol">
 <li class="li">Right click a package and do the fastest process available:<ul class="ul">
 <li class="li">Click <span class="ph menucascade"><span class="ph uicontrol">New</span> &gt; <span class="ph uicontrol">External
 Type</span></span>; or</li>
@@ -39,16 +57,11 @@ Type</span></span>; or</li>
 
 <li class="li">Specify the file name.</li>
 
-<li class="li">If you are creating an external type for Java but do not have
-access to the Java class, click <strong class="ph b">Basic Java External Type</strong> and
-click <strong class="ph b">Finish</strong>. The IDE creates a stub for an external type,
-and the procedure ends.</li>
-
-<li class="li">If you have access to the Java class, click <strong class="ph b">External Type from
-Java Type</strong>. The External Type from Java Type page is displayed.</li>
+<li class="li">Click <strong class="ph b">External Type from Java Type</strong>. The External Type from
+Java Type page is displayed.</li>
 
 <li class="li">Specify a fully qualified Java type name or use the browse mechanism
-to select the Java source file, and select the check boxes that fulfill
+to select the Java source file. Select the check boxes that fulfill
 your intent.</li>
 
 <li class="li">You can click <strong class="ph b">Next</strong> to preview the output, which you can
