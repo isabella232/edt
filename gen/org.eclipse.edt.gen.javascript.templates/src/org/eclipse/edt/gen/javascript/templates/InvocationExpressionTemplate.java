@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.InvocationExpression;
@@ -51,8 +54,16 @@ public class InvocationExpressionTemplate extends JavaScriptTemplate {
 					out.print("egl.checkNull(");
 					ctx.invoke(genExpression, argExpr, ctx, out);
 					out.print(")");
-				} else
+				} else{
+					if(expr.getTarget().getParameters().get(i).isConst()){
+						ctx.putAttribute(argExpr, "function parameter is const in", Boolean.TRUE);
+					}
 					ctx.invoke(genExpression, argExpr, ctx, out);
+					if(expr.getTarget().getParameters().get(i).isConst()){
+						List<Annotation> list = (List<Annotation>)ctx.get(argExpr);
+						list.remove("function parameter is const in");
+					}
+				}
 				if (i < expr.getArguments().size() - 1)
 					out.print(", ");
 			}

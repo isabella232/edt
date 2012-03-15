@@ -214,7 +214,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
 			}
 			ctx.invoke(genExpression, objectExpr, ctx, out);
-			if(objectExpr.getType() instanceof Record){
+			if(objectExpr.getType() instanceof Record && ctx.getAttribute(arg, "function parameter is const in") == null){
 				out.print(".eze$$clone()");
 			}
 			ctx.invoke(genTypeDependentPatterns, arg.getObjectExpr().getType(), ctx, out);
