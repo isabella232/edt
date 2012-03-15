@@ -402,14 +402,8 @@ public class ExternalTypeFromJavaPage extends WizardPage
 				
 				HashSet<Field> fields = new HashSet<Field>();
 				for(Field field : clazz.getDeclaredFields()) {
-					 skipped = false;
 					 if (Modifier.isPublic(field.getModifiers())) {
-						 Class<?> componentType = ReflectionUtil.getComponentClass(field.getType());
-						 if(ReflectionUtil.isSkippedType(componentType)) {
-							 skipped = true;
-						 }
-						 
-						 if(!skipped) {
+						 if(!ReflectionUtil.isSkippedType(field.getType())) {
 							 fields.add(field); 
 						 }
 					 }
@@ -420,10 +414,8 @@ public class ExternalTypeFromJavaPage extends WizardPage
 					if(Modifier.isPublic(pubCon.getModifiers())) {
 						skipped = false;
 						Class<?>[] pTypes = pubCon.getParameterTypes();
-						Class<?> componentType;
 						for(Class<?> pType : pTypes) {
-							componentType = ReflectionUtil.getComponentClass(pType);
-							if(ReflectionUtil.isSkippedType(componentType)) {
+							if(ReflectionUtil.isSkippedType(pType)) {
 								skipped = true;
 								break;
 							}
@@ -441,17 +433,14 @@ public class ExternalTypeFromJavaPage extends WizardPage
 							 && !m.isBridge()) {
 						 skipped = false;
 						 Class<?>[] pTypes = m.getParameterTypes();
-						 Class<?> componentType;
 						 for(Class<?> pType : pTypes) {
-							 componentType = ReflectionUtil.getComponentClass(pType);
-							 if(ReflectionUtil.isSkippedType(componentType)) {
+							 if(ReflectionUtil.isSkippedType(pType)) {
 								 skipped = true;
 								 break;
 							 }
 						 }
 						 
-						 componentType = ReflectionUtil.getComponentClass(m.getReturnType());
-						 if(!skipped && ReflectionUtil.isSkippedType(componentType)) {
+						 if(!skipped && ReflectionUtil.isSkippedType(m.getReturnType())) {
 							 skipped = true;
 						 }
 						 

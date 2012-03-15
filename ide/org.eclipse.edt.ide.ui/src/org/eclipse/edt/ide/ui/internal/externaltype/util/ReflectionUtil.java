@@ -300,10 +300,16 @@ public class ReflectionUtil {
 	
 	public static boolean isSkippedType(Class<?> paraType) {
 		boolean skipped = false;
+		
+		if(paraType.isArray()) {
+			return true;
+		}
+		
 		if(Byte.TYPE.equals(paraType)
 				  || Byte.class.equals(paraType)
 				  || Character.TYPE.equals(paraType)
-				  || Character.class.equals(paraType)) {
+				  || Character.class.equals(paraType)
+				  ) {
 			skipped = true;
 		}
 		
