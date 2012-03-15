@@ -39,13 +39,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.FormText;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledFormText;
 
 public abstract class EGLTemplateWizardPage extends EGLPartWizardPage 
        implements ISelectionChangedListener, IDoubleClickListener{
 	protected TableViewer templateViewer;
-	protected Text descriptionText;
+	protected ScrolledFormText descriptionText;
 	
 	public EGLTemplateWizardPage(String pageName) {
 		super(pageName);
@@ -72,7 +74,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 		gridLayout.marginWidth = 0;
 		ownerInfo.setLayout(gridLayout);
 		
-		GridData gridData = new GridData(GridData.FILL, GridData.CENTER, true, false);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = nColumns;
 		ownerInfo.setLayoutData(gridData);
 		
@@ -101,14 +103,30 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 		templateViewer.addSelectionChangedListener(this);
 		templateViewer.setInput(templates);
 		templateViewer.addDoubleClickListener(this);
+				
+		FormToolkit toolkit = new FormToolkit(container.getDisplay());
+		descriptionText = new ScrolledFormText(ownerInfo, SWT.V_SCROLL | SWT.H_SCROLL, false);
 		
-		descriptionText = new Text(ownerInfo, SWT.BORDER | SWT.V_SCROLL | SWT.WRAP | SWT.READ_ONLY);
-		data = new GridData(GridData.FILL_BOTH);
-		descriptionText.setLayoutData(data);
+		int borderStyle = toolkit.getBorderStyle() == SWT.BORDER ? SWT.NULL : SWT.BORDER;
+		if (borderStyle == SWT.NULL) {
+			descriptionText.setData(FormToolkit.KEY_DRAW_BORDER,
+                    FormToolkit.TREE_BORDER);
+            toolkit.paintBordersFor(ownerInfo);
+        }
+		
+        FormText ftext = toolkit.createFormText(descriptionText, false);        
+        descriptionText.setFormText(ftext);
+        descriptionText.setExpandHorizontal(false);
+        descriptionText.setExpandVertical(false);
+        descriptionText.setBackground(toolkit.getColors().getBackground());
+        descriptionText.setForeground(toolkit.getColors().getForeground());
+        
+        ftext.marginWidth = 2;
+        ftext.marginHeight = 2;
+        data = new GridData(GridData.FILL_BOTH);
 		data.widthHint = 200;
 		data.horizontalSpan= descriptionCol;
-		descriptionText.setBackground(control.getBackground());
-		descriptionText.setForeground(control.getForeground());
+        descriptionText.setLayoutData(data);
 
 		if (templates != null) {
 			for (int i = 0; i < templates.length; i++) {
@@ -194,7 +212,11 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	}
 	
 	private void setTemplateDescription(String text) {
-		descriptionText.setText(text != null ? text : "");
+		try {
+			descriptionText.setText(text != null ? text : "");
+		} catch (Exception ex) {
+			descriptionText.setText("");
+		}
 	}
 	
 	@Override
