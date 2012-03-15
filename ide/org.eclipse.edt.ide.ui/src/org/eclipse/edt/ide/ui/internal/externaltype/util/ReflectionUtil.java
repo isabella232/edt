@@ -242,8 +242,14 @@ public class ReflectionUtil {
 		}
 		
 		typeName = JavaTypeConstants.JavaToEglMapping.get(paraType.getName());
-		if(typeName == null)
+		if(typeName == null) {
 			typeName = paraType.getSimpleName();
+			if(paraType.getEnclosingClass() != null) {
+				typeName = paraType.getEnclosingClass().getSimpleName() 
+						  + JavaTypeConstants.UNDERSTORE_PREFIX + typeName;
+			}
+		}
+			
 		
 		boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(typeName.toLowerCase(Locale.ENGLISH));
 		boolean isStartWithEze = typeName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);

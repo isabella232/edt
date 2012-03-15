@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.externaltype.conversion.javatype;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Locale;
 import java.util.Set;
 
@@ -36,6 +37,10 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 			String packageName = declaringClass.getPackage().getName();
 			String eglName = declaringClass.getSimpleName();
+			if(declaringClass.getEnclosingClass() != null) {
+				eglName = declaringClass.getEnclosingClass().getSimpleName() 
+						  + JavaTypeConstants.UNDERSTORE_PREFIX + eglName;
+			}
 			boolean isEGLKeyWord = EGLNameValidator.isKeyword(eglName);
 			boolean isStartWithEze = eglName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
 			
@@ -95,7 +100,8 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 				ctx.invoke(JavaTypeConstants.genField, javaField, ctx, out);	
 			}
 			
-			if(clazz.getDeclaredConstructors().length == 0) {
+			boolean isAbstractClas = Modifier.isAbstract(clazz.getModifiers());
+			if(clazz.isInterface() || isAbstractClas) {
 				out.println("  private constructor();");
 			} else {
 				for(Constructor<?> javaCon : toBeGenerated.getConstructors()) {
