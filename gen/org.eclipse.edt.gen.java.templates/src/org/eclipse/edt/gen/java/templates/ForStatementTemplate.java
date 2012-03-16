@@ -38,9 +38,6 @@ public class ForStatementTemplate extends JavaTemplate {
 		if (stmt.getDeclarationExpression() != null) {
 			out.println("{");
 			ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
-			// if we have temporary variables, the smap data will not include the for statement, so we need to manually set
-			// the smap processing flag to on
-			ctx.setSmapIsProcessing(true);
 		}
 		// do we have a simple or complex for statement
 		boolean hasSideEffects = (stmt.getCounterVariable() != null && (IRUtils.hasSideEffects(stmt.getCounterVariable()) || stmt.getCounterVariable() instanceof ArrayAccess))
@@ -243,13 +240,9 @@ public class ForStatementTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, assignmentIncr, ctx, out);
 			// finish the for statement
 			out.print(") ");
-			// we need to make sure the smap processing flag is now off, in case we set it on above
-			ctx.setSmapIsProcessing(false);
 			// now process the statement block
 			ctx.invoke(genStatement, stmt.getBody(), ctx, out);
 		}
-		// we need to make sure the smap processing flag is now off, in case we set it on above
-		ctx.setSmapIsProcessing(false);
 		// if we had a declaration, clean up
 		if (stmt.getDeclarationExpression() != null)
 			out.println("}");
