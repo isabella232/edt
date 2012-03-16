@@ -11,8 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.wizards;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -58,7 +59,7 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 		// Initialize the avaialble libraries.
 		IGenerator[] gens = EDTCoreIDEPlugin.getPlugin().getGenerators();
 		if (gens != null && gens.length != 0) {
-			List<EDTRuntimeContainer> allLibs = new ArrayList<EDTRuntimeContainer>();
+			Set<EDTRuntimeContainer> allLibs = new HashSet<EDTRuntimeContainer>();
 			for (int i = 0; i < gens.length; i++) {
 				EDTRuntimeContainer[] libs = gens[i].getRuntimeContainers();
 				if (libs != null && libs.length != 0) {
@@ -67,7 +68,9 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 					}
 				}
 			}
+			
 			availableLibraries = allLibs.toArray(new EDTRuntimeContainer[allLibs.size()]);
+			Arrays.sort(availableLibraries);
 		}
 		else {
 			availableLibraries = new EDTRuntimeContainer[0];
@@ -80,7 +83,7 @@ public class EDTRuntimeContainerWizardPage extends NewElementWizardPage implemen
 		composite.setFont(parent.getFont());
 		composite.setLayout(new GridLayout(2, false));
 		
-		if (availableLibraries.length == 0 ) {
+		if (availableLibraries.length == 0) {
 			new Label(composite, SWT.NONE).setText(NewWizardMessages.EDTRuntimeContainerPage_NoRuntimes);
 			updateStatus(new StatusInfo(IStatus.ERROR, "")); //$NON-NLS-1$
 		}
