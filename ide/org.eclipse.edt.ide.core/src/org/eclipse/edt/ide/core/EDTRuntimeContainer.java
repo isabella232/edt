@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.Path;
 /**
  * A runtime container contains zero or more classpath entries (though an empty container is useless).
  */
-public class EDTRuntimeContainer {
+public class EDTRuntimeContainer implements Comparable<Object> {
 	
 	/**
 	 * A unique ID (will be appended to {@link EDTCoreIDEPlugin#EDT_CONTAINER_ID}).
@@ -70,5 +70,13 @@ public class EDTRuntimeContainer {
 	
 	public IPath getPath() {
 		return path;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (o instanceof EDTRuntimeContainer) {
+			return this.name.compareTo(((EDTRuntimeContainer)o).name);
+		}
+		return 0;
 	}
 }
