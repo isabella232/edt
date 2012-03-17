@@ -3,7 +3,7 @@ package eglx.jtopen;
 import com.ibm.as400.access.AS400ConnectionPool;
 import com.ibm.as400.access.as400;
 
-externalType JTOpenConnections type JavaObject 
+externalType JTOpenConnections type NativeType 
  	private constructor();
  	static function getAS400ConnectionPool()returns(AS400ConnectionPool);
  	static function returnConnectionToPool(conn IBMiConnection in); 
