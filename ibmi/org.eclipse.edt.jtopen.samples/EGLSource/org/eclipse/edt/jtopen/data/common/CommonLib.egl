@@ -1,0 +1,86 @@
+package org.eclipse.edt.jtopen.data.common;
+
+import com.ibm.as400.access.AS400ConnectionPool;
+import com.ibm.as400.access.BaseDataQueue;
+import com.ibm.as400.access.as400;
+import eglx.jtopen.JTOpenConnections;
+
+// basic library
+library CommonLib
+ 	const NO_WAIT int = 0;
+ 	const WAIT_FOREVER int = -1;
+	const DATA_AREA_TYPE_CHAR int = 1;
+	const DATA_AREA_TYPE_DEC int = 2;
+	const DATA_AREA_TYPE_LOG int = 3;
+	const KEYED_QUEUE_SEARCH_TYPE_EQ /*char(2)*/string = "EQ"; 
+	const KEYED_QUEUE_SEARCH_TYPE_NE /*char(2)*/string = "NE"; 
+	const KEYED_QUEUE_SEARCH_TYPE_LT /*char(2)*/string = "LT"; 
+	const KEYED_QUEUE_SEARCH_TYPE_LE /*char(2)*/string = "LE"; 
+	const KEYED_QUEUE_SEARCH_TYPE_GT /*char(2)*/string = "GT"; 
+	const KEYED_QUEUE_SEARCH_TYPE_GE /*char(2)*/string = "GE"; 
+
+	const DATA_QUEUE_EXCEPTION_KEYED_NOT_KEYED string = "The queue was opened as keyed but accessed as not keyed.";
+	const DATA_QUEUE_EXCEPTION_NOT_KEYED_KEYED string = "The queue was opened as not keyed but accessed as keyed.";
+	const DATA_QUEUE_EXCEPTION_NOT_OPEN string = "The dataqueue was not opened or there was an error opening the queue.";
+	const DATA_AREA_EXCEPTION_NOT_OPEN string = "The dataarea was not opened or there was an error opening the queue.";
+	const DATA_AREA_EXCEPTION_INVALID_AREA_TYPE string = "The dataarea type is invalid.";
+	
+	const DATA_QUEUE_KEYED string = "KeyedDataQueue";
+	const DATA_QUEUE_NOT_KEYED string = "DataQueue";
+ 	/*
+ 	Common function to return a connection to the pool
+ 	*/
+	function returnAS400ToPool(system AS400 in)
+		if(system != null)
+			JTOpenConnections.getAS400ConnectionPool().returnConnectionToPool(system);
+		end
+	end
+	
+ 	/*
+ 	Common function to get a connection from the pool
+ 	*/
+ 	function getAS400FromPool(systemDef SystemDefinition) returns(AS400)
+ 		system AS400;
+ 		try
+			if( systemDef.password.clip().length() != 0 )
+	  			system = JTOpenConnections.getAS400ConnectionPool().getConnection(systemDef.systemName, systemDef.userId, systemDef.password );
+	  		else
+	  			system = JTOpenConnections.getAS400ConnectionPool().getConnection(systemDef.systemName, systemDef.userId );
+			end 
+		onException(exception AnyException)
+			throw exception;
+		end
+		return(system); 			
+	end
+	/*
+	Converts a HEX(2)[] to a byte[]
+	*/
+/*	private function getByteArray( data2Convert Hex(2)[] ) returns(ByteArray)
+		ary Object = null;
+		if( data2Convert != null )
+			size int = data2Convert.getSize();
+			ary = Array.newInstance(Byte.class, size);
+			for( idx int from 1 to size)
+				Array.setByte(ary, idx - 1, data2Convert[idx] );
+			end
+		end
+		return (ary as ByteArray);
+	end
+/**/	
+	/*
+	Converts byte[] to HEX(2)[]
+	*/
+/*	private function getHex2Array( data2Convert ByteArray in ) returns(Hex(2)[])
+		ary Hex(2)[] = null;
+		if( data2Convert != null )
+			size int = Array.getLength(data2Convert);
+			ary = new Hex(2)[0];
+			ary.resize(size);
+			for( idx int from 1 to size)
+				ary[idx] = Array.getByte(data2Convert, idx - 1);
+			end
+		end
+		return (ary);
+	end
+	/**/
+end

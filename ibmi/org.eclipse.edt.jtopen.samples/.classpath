@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="generatedJava"/>
+	<classpathentry kind="con" path="org.eclipse.edt.ide.core.EDT_CONTAINER/javagen"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="/home/jvincens/Downloads/jtopen/jtopen_7.5.1/lib/jt400.jar"/>
+	<classpathentry kind="con" path="org.eclipse.edt.ide.core.EDT_CONTAINER/org.eclipse.edt.ide.jtopen.ibmiContainer"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

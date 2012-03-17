@@ -1,0 +1,16 @@
+package org.eclipse.edt.jtopen.data.area;
+
+import org.eclipse.edt.jtopen.data.common.SystemDefinition;
+import eglx.jtopen.annotations.AS400Text;
+
+record DataAreaDefinition 
+
+    areaname string{@AS400Text{length=10}};//char(10);
+    libname string{@AS400Text{length=10}};//char(10);
+    noBytes int;
+    noDecimals int;
+    areaType int;
+    initializedByEGL boolean = false;  // Do not update - Reserved by EGL 
+    systemDef SystemDefinition;
+    path string?;
+end

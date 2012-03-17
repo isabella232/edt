@@ -1,0 +1,20 @@
+SMAP
+DataAreaDefinition.java
+egl
+*S egl
+*F
++ 1 DataAreaDefinition.egl
+org/eclipse/edt/jtopen/data/area/DataAreaDefinition.egl
+*L
+6#1:73
+13#1:80
+*E
+8#1;areaname;areaname;eglx.lang.EString
+9#1;libname;libname;eglx.lang.EString
+10#1;noBytes;noBytes;eglx.lang.EInt
+11#1;noDecimals;noDecimals;eglx.lang.EInt
+12#1;areaType;areaType;eglx.lang.EInt
+13#1;initializedByEGL;initializedByEGL;eglx.lang.EBoolean
+14#1;systemDef;systemDef;org.eclipse.edt.jtopen.data.common.SystemDefinition
+15#1;path;path;eglx.lang.EString
+*X

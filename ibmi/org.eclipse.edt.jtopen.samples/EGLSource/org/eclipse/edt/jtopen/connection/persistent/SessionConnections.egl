@@ -1,0 +1,22 @@
+package org.eclipse.edt.jtopen.connection.persistent;
+
+import com.ibm.as400.access.as400;
+import eglx.http.ServletContext;
+import eglx.jtopen.IBMiConnection;
+
+// basic handler
+
+handler SessionConnections
+	
+	sessionConnections dictionary;
+	
+
+	function getConnections(sessionID string in)returns(IBMiConnection[])
+		connections dictionary = sessionConnections[sessionId] as dictionary;
+		sessionConnections.removeElement(sessionId);
+		sessionConnections IBMiConnection[] = connections.getValues() as IBMiConnection[];
+		return(sessionConnections);		
+ 	end
+ 	
+
+end

@@ -1,0 +1,5 @@
+#Fri Mar 16 07:34:27 EDT 2012
+DefaultDeploymentDescriptorPath/<project>=/org.eclipse.edt.jtopen.samples/EGLSource/org_eclipse_edt_jtopen_libraries.egldd
+compilerId/<project>=org.eclipse.edt.ide.compiler.edtCompiler
+eclipse.preferences.version=1
+generatorIds/<project>=org.eclipse.edt.ide.gen.JavaGenProvider

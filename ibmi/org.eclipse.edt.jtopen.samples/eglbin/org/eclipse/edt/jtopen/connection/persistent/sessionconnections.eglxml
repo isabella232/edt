@@ -1,0 +1,115 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<Handler ID="1" eClass="org.eclipse.edt.mof.egl.Handler" name="SessionConnections" fileName="org/eclipse/edt/jtopen/connection/persistent/SessionConnections.egl" hasCompileErrors="false" packageName="org.eclipse.edt.jtopen.connection.persistent" isAbstract="false" >
+	<annotations ID="2" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:384" off="i:177" line="i:9" />
+	<superTypes href="egl:eglx.lang.eany"/>
+	<functions ID="3" eClass="org.eclipse.edt.mof.egl.Function" name="getConnections" type="egl:eglx.lang.elist&lt;eglx.jtopen.ibmiconnection&gt;" isNullable="false" isStatic="false" isAbstract="false" >
+		<annotations ID="4" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:311" off="i:242" line="i:14" />
+		<container IDREF="1"/>
+		<parameters ID="5" eClass="org.eclipse.edt.mof.egl.FunctionParameter" name="sessionID" type="egl:eglx.lang.estring" isNullable="false" isStatic="false" isAbstract="false" accessKind="ACC_PRIVATE" parameterKind="PARM_IN" isDefinedSqlNullable="false" isField="false" isConst="false" >
+			<annotations ID="6" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:19" off="i:266" line="i:14" />
+			<container IDREF="3"/>
+		</parameters>
+		<statementBlock ID="7" eClass="org.eclipse.edt.mof.egl.StatementBlock" >
+			<container IDREF="3"/>
+			<statements ID="8" eClass="org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement" >
+				<annotations ID="9" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:69" off="i:314" line="i:15" />
+				<container IDREF="3"/>
+				<expr ID="10" eClass="org.eclipse.edt.mof.egl.DeclarationExpression" >
+					<annotations ID="11" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:69" off="i:314" line="i:15" />
+					<fields ID="12" eClass="org.eclipse.edt.mof.egl.Field" name="connections" type="egl:eglx.lang.edictionary" isNullable="false" isStatic="false" isAbstract="false" hasSetValuesBlock="true" isImplicit="false" isSystemField="false" >
+						<annotations ID="13" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:11" off="i:314" line="i:15" />
+						<container IDREF="3"/>
+						<initializerStatements ID="14" eClass="org.eclipse.edt.mof.egl.StatementBlock" >
+							<annotations ID="15" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:339" line="i:15" />
+							<container IDREF="1"/>
+							<statements ID="16" eClass="org.eclipse.edt.mof.egl.AssignmentStatement" >
+								<annotations ID="17" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:339" line="i:15" />
+								<container IDREF="1"/>
+								<expr ID="18" eClass="org.eclipse.edt.mof.egl.Assignment" >
+									<LHS ID="19" eClass="org.eclipse.edt.mof.egl.MemberName" id="connections" >
+										<member IDREF="12"/>
+									</LHS>
+									<RHS ID="20" eClass="org.eclipse.edt.mof.egl.AsExpression" eType="egl:eglx.lang.edictionary" >
+										<annotations ID="21" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:339" line="i:15" />
+										<objectExpr ID="22" eClass="org.eclipse.edt.mof.egl.DynamicAccess" >
+											<annotations ID="23" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:29" off="i:339" line="i:15" />
+											<access ID="24" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionID" >
+												<annotations ID="25" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:9" off="i:358" line="i:15" />
+												<member IDREF="5"/>
+											</access>
+											<expression ID="26" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionConnections" >
+												<annotations ID="27" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:18" off="i:339" line="i:15" />
+												<member IDREF="28"/>
+											</expression>
+										</objectExpr>
+									</RHS>
+								</expr>
+							</statements>
+						</initializerStatements>
+					</fields>
+				</expr>
+			</statements>
+			<statements ID="29" eClass="org.eclipse.edt.mof.egl.FunctionStatement" >
+				<annotations ID="30" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:44" off="i:386" line="i:16" />
+				<container IDREF="3"/>
+				<expr ID="31" eClass="org.eclipse.edt.mof.egl.QualifiedFunctionInvocation" id="removeElement" >
+					<annotations ID="32" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:386" line="i:16" />
+					<arguments ID="33" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionID" >
+						<annotations ID="34" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:9" off="i:419" line="i:16" />
+						<member IDREF="5"/>
+					</arguments>
+					<qualifier ID="35" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionConnections" >
+						<annotations ID="36" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:18" off="i:386" line="i:16" />
+						<member IDREF="28"/>
+					</qualifier>
+				</expr>
+			</statements>
+			<statements ID="37" eClass="org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement" >
+				<annotations ID="38" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:82" off="i:433" line="i:17" />
+				<container IDREF="3"/>
+				<expr ID="39" eClass="org.eclipse.edt.mof.egl.DeclarationExpression" >
+					<annotations ID="40" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:82" off="i:433" line="i:17" />
+					<fields ID="41" eClass="org.eclipse.edt.mof.egl.Field" name="sessionConnections" type="egl:eglx.lang.elist&lt;eglx.jtopen.ibmiconnection&gt;" isNullable="false" isStatic="false" isAbstract="false" hasSetValuesBlock="true" isImplicit="false" isSystemField="false" >
+						<annotations ID="42" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:18" off="i:433" line="i:17" />
+						<container IDREF="3"/>
+						<initializerStatements ID="43" eClass="org.eclipse.edt.mof.egl.StatementBlock" >
+							<annotations ID="44" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:471" line="i:17" />
+							<container IDREF="1"/>
+							<statements ID="45" eClass="org.eclipse.edt.mof.egl.AssignmentStatement" >
+								<annotations ID="46" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:471" line="i:17" />
+								<container IDREF="1"/>
+								<expr ID="47" eClass="org.eclipse.edt.mof.egl.Assignment" >
+									<LHS ID="48" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionConnections" >
+										<member IDREF="41"/>
+									</LHS>
+									<RHS ID="49" eClass="org.eclipse.edt.mof.egl.AsExpression" eType="egl:eglx.lang.elist&lt;eglx.jtopen.ibmiconnection&gt;" >
+										<annotations ID="50" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:43" off="i:471" line="i:17" />
+										<objectExpr ID="51" eClass="org.eclipse.edt.mof.egl.QualifiedFunctionInvocation" id="getValues" >
+											<annotations ID="52" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:23" off="i:471" line="i:17" />
+											<qualifier ID="53" eClass="org.eclipse.edt.mof.egl.MemberName" id="connections" >
+												<annotations ID="54" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:11" off="i:471" line="i:17" />
+												<member IDREF="12"/>
+											</qualifier>
+										</objectExpr>
+									</RHS>
+								</expr>
+							</statements>
+						</initializerStatements>
+					</fields>
+				</expr>
+			</statements>
+			<statements ID="55" eClass="org.eclipse.edt.mof.egl.ReturnStatement" >
+				<annotations ID="56" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:27" off="i:518" line="i:18" />
+				<container IDREF="3"/>
+				<expression ID="57" eClass="org.eclipse.edt.mof.egl.MemberName" id="sessionConnections" >
+					<annotations ID="58" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:18" off="i:525" line="i:18" />
+					<member IDREF="41"/>
+				</expression>
+			</statements>
+		</statementBlock>
+	</functions>
+	<fields ID="28" eClass="org.eclipse.edt.mof.egl.Field" name="sessionConnections" type="egl:eglx.lang.edictionary" isNullable="false" isStatic="false" isAbstract="false" hasSetValuesBlock="false" isImplicit="false" isSystemField="false" >
+		<annotations ID="59" eClass="dynMof:org.eclipse.edt.mof.egl.Annotation:EGL_Location" len="i:30" off="i:207" line="i:11" />
+		<container IDREF="1"/>
+	</fields>
+</Handler>

@@ -1,0 +1,20 @@
+SMAP
+DataQueueDefinition.java
+egl
+*S egl
+*F
++ 1 DataQueueDefinition.egl
+org/eclipse/edt/jtopen/data/queue/DataQueueDefinition.egl
+*L
+6#1:73
+12#1:80
+*E
+7#1;qname;qname;eglx.lang.EString
+8#1;libname;libname;eglx.lang.EString
+9#1;keyed;keyed;eglx.lang.EBoolean
+10#1;keyLen;keyLen;eglx.lang.EInt
+11#1;msgLen;msgLen;eglx.lang.EInt
+12#1;initializedByEGL;initializedByEGL;eglx.lang.EBoolean
+13#1;systemDef;systemDef;org.eclipse.edt.jtopen.data.common.SystemDefinition
+15#1;path;path;eglx.lang.EString
+*X

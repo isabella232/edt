@@ -1,0 +1,138 @@
+package org.eclipse.edt.jtopen.data.area;
+
+import org.eclipse.edt.jtopen.data.common.CommonLib;
+import org.eclipse.edt.jtopen.data.common.iDataAccessException;
+import com.ibm.as400.access.CharacterDataArea;
+import com.ibm.as400.access.DataArea;
+import com.ibm.as400.access.DecimalDataArea;
+import com.ibm.as400.access.LogicalDataArea;
+import com.ibm.as400.access.QSYSObjectPathName;
+import com.ibm.as400.access.as400;
+import java.math.BigDecimal;
+
+// basic library
+library DataAreaLib
+ 	/*
+ 	Gets a value from the dataarea
+ 	Get the data based on type in DataAreaDefinition
+		DATA_AREA_TYPE_CHAR: text type
+		DATA_AREA_TYPE_DEC: Numeric decimal type;
+		DATA_AREA_TYPE_LOG: logical type (boolean);
+ 	*/
+  	function getDataArea(dataAreaDef DataAreaDefinition) returns (any)
+  		dataArea DataArea = openDataArea(dataAreaDef);
+  		retVal any?;
+  		check4NullArea(dataArea, dataAreaDef.path, "getDataArea");
+  		try
+	  		if( dataarea isa CharacterDataArea )
+				retVal = (dataArea as CharacterDataArea).read();
+	  		else
+	  			if( dataArea isa DecimalDataArea )	
+	  				retVal = (dataArea as DecimalDataArea).read();
+				else  
+					//has to be a logical queue
+  					retVal = (dataArea as LogicalDataArea).read();
+	  			end
+	  		end
+	  		returnAS400ToPool(dataArea);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataArea);
+			throwDataAreaException(exception, dataAreaDef, "getDataArea");
+		end
+  		return(retVal);
+ 	end
+
+ 	/*
+ 	updates a dataare with elementData
+ 	Update based on the data based on type in DataAreaDefinition
+		DATA_AREA_TYPE_CHAR: text type 
+		DATA_AREA_TYPE_DEC: Numeric decimal type;
+		DATA_AREA_TYPE_LOG: logical type (boolean);
+ 	*/
+  	function updateDataArea(dataAreaDef DataAreaDefinition,  elementData any in)
+  		dataArea DataArea = openDataArea(dataAreaDef);
+  		check4NullArea(dataArea, dataAreaDef.path,"updateDataArea");
+  		try
+	  		if( dataArea isa CharacterDataArea )
+				(dataArea as CharacterDataArea).write(elementData);
+	  		else
+	  			if( dataArea isa DecimalDataArea )	
+	  				
+	  				(dataArea as DecimalDataArea).write( elementData as decimal );
+				else  
+					//has to be a logical queue
+	  				(dataArea as LogicalDataArea).write(elementData);
+	  			end
+	  		end
+	  		returnAS400ToPool(dataArea);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataArea);
+			throwDataAreaException(exception, dataAreaDef, "updateDataArea");
+		end
+   	end
+ 
+ 	/*
+ 	If the dataArea is null throw an exception
+ 	*/
+	private function check4NullArea(dataarea DataArea in, path string?, functioName string in)
+		if( dataarea == null )
+			newException iDataAccessException = new iDataAccessException;
+			nullException NullValueException = new NullValueException;
+			newException.functionName = functioName;
+			newException.message = newException.message + CommonLib.DATA_QUEUE_EXCEPTION_NOT_OPEN;
+			newException.exception = nullException;
+			if( path != null )
+				newException.path = path;
+			end
+			throw newException;
+		end
+	end
+ 
+ 	/*
+ 	Create a DataAreaException from an AnyException
+ 	*/
+	private function throwDataAreaException(exception AnyException in, dataAreaDef DataAreaDefinition in, functioName string in)
+		newException iDataAccessException = new iDataAccessException;
+		newException.functionName = functioName;
+		newException.message = newException.message + exception.message;
+		newException.exception = exception;
+		newException.path = dataAreaDef.path;
+		throw newException;
+	end
+	
+	/*
+	Creates a DataArea to be used by the DataArea operations.
+	It uses a pooled connection for the new queue. 
+	*/
+ 	private function openDataArea (dataAreaDef DataAreaDefinition)  returns (DataArea)
+	 	dataArea DataArea?;
+		path QSYSObjectPathName = new QSYSObjectPathName(dataAreaDef.libname.clip(), dataAreaDef.areaname.clip(), "DTAARA");
+		dataAreaDef.path = path.getPath();
+		system AS400 = CommonLib.getAS400FromPool(dataAreaDef.systemDef);
+		case( dataAreaDef.areaType )
+  			when( CommonLib.DATA_AREA_TYPE_CHAR )
+  				dataArea = new CharacterDataArea(system, dataAreaDef.path);
+  			when( CommonLib.DATA_AREA_TYPE_DEC )
+  				dataArea = new DecimalDataArea(system, dataAreaDef.path);
+  			when( CommonLib.DATA_AREA_TYPE_LOG )
+  				dataArea = new LogicalDataArea(system, dataAreaDef.path);
+  			otherwise
+  				CommonLib.returnAS400ToPool(system);
+				newException iDataAccessException = new iDataAccessException;
+				newException.functionName = "openDataArea";
+				newException.message = newException.message + CommonLib.DATA_AREA_EXCEPTION_INVALID_AREA_TYPE;
+				newException.path = dataAreaDef.path;
+				throw newException;
+  		end
+  		return(dataArea);
+ 	end
+
+	/*
+	At the end of each dataarea operation the connection must be reurned to the pool
+	*/
+	private function returnAS400ToPool(dataArea DataArea in)
+		if(dataArea != null)
+			CommonLib.returnAS400ToPool(dataArea.getSystem());
+		end
+	end
+end

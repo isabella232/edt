@@ -1,0 +1,297 @@
+package org.eclipse.edt.jtopen.data.queue;
+
+import org.eclipse.edt.jtopen.data.common.CommonLib;
+import org.eclipse.edt.jtopen.data.common.iDataAccessException;
+import com.ibm.as400.access.BaseDataQueue;
+import com.ibm.as400.access.DataQueue;
+import com.ibm.as400.access.DataQueueEntry;
+import com.ibm.as400.access.KeyedDataQueue;
+import com.ibm.as400.access.KeyedDataQueueEntry;
+import com.ibm.as400.access.QSYSObjectPathName;
+import com.ibm.as400.access.as400;
+
+// basic library
+library DataQueueLib
+	
+ 	/*
+ 	Adds elementData to the queue defined by dataQueueDef
+ 	If the elementData is HEX(2)[] the data is written as bytes
+ 		otherwise it's written as a string
+ 	*/
+	function addElement( dataQueueDef DataQueueDefinition,  elementData any ) 
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( false, dataQueue, "addElement" );
+		try
+//FIXME			if( elementData isa hex(2)[] )
+//FIXME				(dataQueue as DataQueue).write(getByteArray(elementData));
+//FIXME			else
+				(dataQueue as DataQueue).write(elementData as string);
+//FIXME			end
+	  		returnAS400ToPool(dataQueue);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "addElement");
+		end
+	end
+
+ 	/*
+ 	Adds elementData using the keyData to the queue defined by dataQueueDef 
+ 	If the elementData is HEX(2)[] the data is written as bytes
+ 		otherwise it's written as a string
+ 	*/
+	function addElement(dataQueueDef DataQueueDefinition, elementData any in, keyData any in )
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( true, dataQueue, "addElement" );
+		try
+//FIXME			if( elementData isa hex(2)[] )
+//FIXME				(dataQueue as KeyedDataQueue).write(getByteArray(keyData), getByteArray(elementData));
+//FIXME			else
+				(dataQueue as KeyedDataQueue).write(keyData as string, elementData as string);
+//FIXME			end
+	  		returnAS400ToPool(dataQueue);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "addElement");
+		end
+	end
+
+ 	/*
+ 	Gets elementData from the queue defined by dataQueueDef
+ 	It removes the data from the queue
+ 	If the elementData is HEX(2)[] the data is read as bytes
+ 		otherwise it's read as a string
+ 	wait is the amount of second the operation will wait before return no data
+ 		-1 is for ever
+ 		0 is return immediately
+ 	*/
+	function getNextElement(dataQueueDef DataQueueDefinition,  
+							elementData any, wait int) returns(boolean)
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( false, dataQueue, "getNextElement" );
+		dataQueueEntry DataQueueEntry? = null;
+		try
+			dataQueueEntry = (dataQueue as DataQueue).read(wait);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "getNextElement");
+		end
+		if( dataQueueEntry != null )
+			try
+//FIXME				if( elementData isa hex(2)[] )
+//FIXME					elementData = getHex2Array(dataQueueEntry.getData());
+//FIXME				else
+					elementData = dataQueueEntry.getString();
+//FIXME				end
+		  		returnAS400ToPool(dataQueue);
+			onException(exception AnyException)
+		  		returnAS400ToPool(dataQueue);
+				throwDataQueueException(exception, dataQueueDef, "getNextElement");
+			end
+		end
+		return(dataQueueEntry != null);
+	end
+
+ 	/*
+ 	Gets elementData using the keyData from the queue defined by dataQueueDef 
+ 	It removes the data from the queue
+ 	If the elementData is HEX(2)[] the data is read as bytes
+ 		otherwise it's read as a string
+ 	wait is the amount of second the operation will wait before return no data
+ 		-1 is for ever
+ 		0 is return immediately
+ 	*/
+	function getNextElement(dataQueueDef DataQueueDefinition, elementData any, 
+								wait int, keyData any in, searchType string/*char(2)*/ ) returns(boolean)
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( true, dataQueue, "getNextElement" );
+		dataQueueEntry KeyedDataQueueEntry? = null;
+		try											
+//FIXME			if( elementData isa hex(2)[] )
+//FIXME				dataQueueEntry = (dataQueue as KeyedDataQueue).read( getByteArray( keyData ), wait, clip( searchType) );
+//FIXME			else
+				dataQueueEntry = (dataQueue as KeyedDataQueue).read( (keyData as string).clip(), wait, searchType.clip() );
+//FIXME			end
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "getNextElement");
+		end
+		if(dataQueueEntry != null)
+			try
+//FIXME				if( elementData isa hex(2)[] )
+//FIXME					elementData = getHex2Array(dataQueueEntry.getData());
+//FIXME				else
+					elementData = dataQueueEntry.getString();
+//FIXME				end
+	  		returnAS400ToPool(dataQueue);
+			onException(exception AnyException)
+		  		returnAS400ToPool(dataQueue);
+				throwDataQueueException(exception, dataQueueDef, "getNextElement");
+			end
+		end
+		return(dataQueueEntry != null);
+	end
+
+ 	/*
+ 	Gets elementData from the queue defined by dataQueueDef
+ 	It doesn't remove the data from the queue
+ 	If the elementData is HEX(2)[] the data is read as bytes
+ 		otherwise it's read as a string
+ 	wait is the amount of second the operation will wait before return no data
+ 		-1 is for ever
+ 		0 is return immediately
+ 	*/
+	function browseNextElement(dataQueueDef DataQueueDefinition,  
+							elementData any, wait int) returns(boolean)
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( false, dataQueue, "browseNextElement" );
+		dataQueueEntry DataQueueEntry? = null;
+		try
+			dataQueueEntry = (dataQueue as DataQueue).peek(wait);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "browseNextElement");
+		end
+		if(dataQueueEntry != null)
+			try
+//FIXME				if( elementData isa hex(2)[] )
+//FIXME					elementData = getHex2Array(dataQueueEntry.getData());
+//FIXME				else
+					elementData = dataQueueEntry.getString();
+//FIXME				end
+		  		returnAS400ToPool(dataQueue);
+			onException(exception AnyException)
+		  		returnAS400ToPool(dataQueue);
+				throwDataQueueException(exception, dataQueueDef, "browseNextElement");
+			end
+		end
+		return(dataQueueEntry != null);
+	end
+
+ 	/*
+ 	Gets elementData using the keyData from the queue defined by dataQueueDef 
+ 	It doesn't remove the data from the queue
+ 	If the elementData is HEX(2)[] the data is read as bytes
+ 		otherwise it's read as a string
+ 	wait is the amount of second the operation will wait before return no data
+ 		-1 is for ever
+ 		0 is return immediately
+ 	*/
+	function browseNextElement(dataQueueDef DataQueueDefinition, elementData any, wait int,  
+									keyData any in, searchType /*char(2)*/string ) returns(boolean)
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4TypeCast( true, dataQueue, "browseNextElement" );
+		dataQueueEntry KeyedDataQueueEntry?;
+		try
+//FIXME			if( elementData isa hex(2)[] )
+//FIXME				dataQueueEntry = (dataQueue as KeyedDataQueue).peek( getByteArray( keyData ), wait, clip( searchType) );
+//FIXME			else
+				dataQueueEntry = (dataQueue as KeyedDataQueue).peek( (keyData as string).clip(), wait, searchType.clip() );
+//FIXME			end
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "browseNextElement");
+		end
+		if(dataQueueEntry != null)
+			try
+//FIXME				if( elementData isa hex(2)[] )
+//FIXME					elementData = getHex2Array(dataQueueEntry.getData());
+//FIXME				else
+					elementData = dataQueueEntry.getString();
+//FIXME				end
+		  		returnAS400ToPool(dataQueue);
+			onException(exception AnyException)
+		  		returnAS400ToPool(dataQueue);
+				throwDataQueueException(exception, dataQueueDef, "browseNextElement");
+			end
+		end
+		return(dataQueueEntry != null);
+	end
+	
+	/*
+	Removes all data from the queue
+	*/
+	function clearQueue (dataQueueDef DataQueueDefinition)
+		dataQueue BaseDataQueue = openDataQueue( dataQueueDef );
+		check4NullQueue(dataQueue, "clearQueue");
+		try
+			dataQueue.clear();
+	  		returnAS400ToPool(dataQueue);
+		onException(exception AnyException)
+	  		returnAS400ToPool(dataQueue);
+			throwDataQueueException(exception, dataQueueDef, "clearQueue");
+		end
+	end
+	
+	/*
+	Creates a DataQueue to be used by the queue operations.
+	It uses a pooled connection for the new queue. 
+	*/
+	private function openDataQueue (dataQueueDef DataQueueDefinition) returns(BaseDataQueue)
+		dataQueue BaseDataQueue?;
+		path QSYSObjectPathName = new QSYSObjectPathName(dataQueueDef.libname.clip(), dataQueueDef.qname.clip(), "DTAQ");
+		dataQueueDef.path = path.getPath();
+		system AS400 = CommonLib.getAS400FromPool(dataQueueDef.systemDef);
+		if( dataQueueDef.keyed )
+			dataQueue = new KeyedDataQueue(system,dataQueueDef.path);
+		else
+			dataQueue = new DataQueue(system,dataQueueDef.path);
+		end	
+		return(dataQueue);
+	end
+	
+	/*
+	At the end of each queue operation the connection must be reurned to the pool
+	*/
+	private function returnAS400ToPool(dataQueue BaseDataQueue in)
+		if(dataQueue != null)
+			CommonLib.returnAS400ToPool(dataQueue.getSystem());
+		end
+	end
+	private function throwDataQueueException(exception AnyException in, dataQueueDef DataQueueDefinition in, functioName string in)
+		newException iDataAccessException = new iDataAccessException;
+		newException.functionName = functioName;
+		newException.message = newException.message + exception.message;
+		newException.path = dataQueueDef.path;
+		newException.exception = exception;
+		throw newException;
+	end
+	
+	/*
+	Checks for a null queue and throws an exception
+	*/
+	private function check4NullQueue(queue BaseDataQueue in, functioName string in)
+		if( queue == null )
+			newException iDataAccessException = new iDataAccessException;
+			nullException NullValueException = new NullValueException;
+			newException.functionName = functioName;
+			newException.message = newException.message + CommonLib.DATA_QUEUE_EXCEPTION_NOT_OPEN;
+			newException.exception = nullException;
+			throw newException;
+		end
+	end
+	
+	/*
+	Checks for a type cast and throws an exception
+	*/
+	private function check4TypeCast(shouldBeKeyed boolean in, queue BaseDataQueue in, functioName string in)
+		check4NullQueue(queue, functioName);
+		if( (shouldBeKeyed && !(queue isa KeyedDataQueue) )
+			|| (!shouldBeKeyed && !(queue isa DataQueue) ) )
+			newException iDataAccessException = new iDataAccessException;
+			typeCastException TypeCastException = new TypeCastException;
+			newException.functionName = functioName;
+			if( queue isa KeyedDataQueue )
+				newException.message = newException.message + CommonLib.DATA_QUEUE_EXCEPTION_KEYED_NOT_KEYED;
+				typeCastException.actualTypeName = CommonLib.DATA_QUEUE_NOT_KEYED;
+				typeCastException.castToName = CommonLib.DATA_QUEUE_KEYED;
+			else
+				newException.message = newException.message + CommonLib.DATA_QUEUE_EXCEPTION_NOT_KEYED_KEYED;
+				typeCastException.actualTypeName = CommonLib.DATA_QUEUE_KEYED;
+				typeCastException.castToName = CommonLib.DATA_QUEUE_NOT_KEYED;
+			end
+			newException.exception = typeCastException;
+			newException.path = queue.getPath();
+			throw newException;
+		end
+	end
+end

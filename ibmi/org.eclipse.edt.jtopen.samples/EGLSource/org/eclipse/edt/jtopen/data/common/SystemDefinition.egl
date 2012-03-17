@@ -1,0 +1,7 @@
+package org.eclipse.edt.jtopen.data.common;
+
+record SystemDefinition
+    systemName string;
+    userId string;
+    password string;
+end

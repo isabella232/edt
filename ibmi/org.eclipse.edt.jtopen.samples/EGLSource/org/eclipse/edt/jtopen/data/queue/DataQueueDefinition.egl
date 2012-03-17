@@ -1,0 +1,16 @@
+package org.eclipse.edt.jtopen.data.queue;
+
+import org.eclipse.edt.jtopen.data.common.SystemDefinition;
+import eglx.jtopen.annotations.AS400Text;
+
+record DataQueueDefinition
+    qname string{@AS400Text{length=10}};//char(10);
+    libname string {@AS400Text{length=10}};//char(10);
+    keyed boolean;
+    keyLen int;
+    msgLen int;
+    initializedByEGL boolean = false;  
+    systemDef SystemDefinition;
+
+    path string?;
+end
