@@ -1618,7 +1618,7 @@ Templates
             description="%ExternalTypeFromJavaTypeDescription"
             icon="icons/ctool16/record_template.gif"
             id="org.eclipse.edt.ide.ui.externaltypes.javatype"
-            name="%ExternalTypeFromJavaTypes"
+            name="%ExternalTypeFromJavaType"
             wizardClass="org.eclipse.edt.ide.ui.internal.externaltype.wizards.javatype.ExternalTypeFromJavaWizard">
       </template>
       
