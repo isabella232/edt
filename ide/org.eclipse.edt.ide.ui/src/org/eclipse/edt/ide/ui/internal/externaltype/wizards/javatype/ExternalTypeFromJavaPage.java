@@ -127,20 +127,23 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	private ClassLoader getURLClassLoader() {
 		if(urlClassLoader == null) {
 			List<URL> classPathURLs = new ArrayList<URL>();
-			IPath  proRoot = javaProject.getProject().getLocation();
 			
 			try{//Add Java class path.
-				IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
-				IPath outputRelPath =  javaProject.getOutputLocation().removeFirstSegments(1);
+				IPackageFragmentRoot[] roots = javaProject.getAllPackageFragmentRoots();
 				
 				for(IPackageFragmentRoot pRoot : roots) {
+					IJavaProject refProject = pRoot.getParent().getJavaProject();
+					IPath  proRoot = refProject.getProject().getLocation();
+					
 					if(pRoot.isArchive() && pRoot.isExternal()) {
 						classPathURLs.add(pRoot.getResolvedClasspathEntry().getPath().toFile().toURI().toURL());
 					} else if(pRoot.isArchive() && pRoot.getResource() != null){
 						classPathURLs.add(proRoot.append(pRoot.getResource().getProjectRelativePath()).toFile().toURI().toURL());
+					} else { //source folder
+						IPath outputRelPath =  refProject.getOutputLocation().removeFirstSegments(1);
+						classPathURLs.add(proRoot.append(outputRelPath).toFile().toURI().toURL());
 					}
 				}
-				classPathURLs.add(proRoot.append(outputRelPath).toFile().toURI().toURL());
 			} catch(Throwable ee) {
 				ee.printStackTrace();
 			}
