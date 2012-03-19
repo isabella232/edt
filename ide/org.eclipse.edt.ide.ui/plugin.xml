@@ -267,7 +267,10 @@
       	<command
             name="%Command.folding.toggle.name"
             description="%Command.folding.toggle.description"
-            id="org.eclipse.edt.ide.ui.ruler.folding.toggle"/>
+            id="org.eclipse.edt.ide.ui.ruler.folding.toggle">
+            <state id="org.eclipse.ui.commands.toggleState"
+            	class="org.eclipse.ui.handlers.RegistryToggleState:false"/>
+            </command>
 	</extension>   
 	
 	<extension 
