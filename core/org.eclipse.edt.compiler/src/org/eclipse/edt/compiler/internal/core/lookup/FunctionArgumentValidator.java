@@ -1169,7 +1169,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     
     private boolean isRefCompatForOutParm(ITypeBinding argType, ITypeBinding parmType) {
     	if (Binding.isValidBinding(argType) && Binding.isValidBinding(parmType)) {
-    		return argType.isReference() == parmType.isReference();
+    		return TypeCompatibilityUtil.isReference(argType) == TypeCompatibilityUtil.isReference(parmType);
     	}
     	return true;
     }

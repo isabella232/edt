@@ -54,6 +54,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.type.PrimitiveTypeValidator.DateTimePattern;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -556,21 +557,53 @@ public class TypeCompatibilityUtil {
 		if (sourceType instanceof PartBinding) {
 			PartBinding partBinding = (PartBinding) sourceType;
 			IPartBinding superType = partBinding.getDefaultSuperType();
-			if (superType != null) {
+			if (Binding.isValidBinding(superType)) {
 				if (typeBindingsAreEqual(superType, targetType)) {
 					return true;
 				}
+				
+				if(ITypeBinding.EXTERNALTYPE_BINDING == targetType.getKind()) {
+					if(ITypeBinding.EXTERNALTYPE_BINDING == superType.getKind()) {
+						if(((ExternalTypeBinding) superType).getExtendedTypes().contains(targetType) ||
+						   ((ExternalTypeBinding) targetType).getExtendedTypes().contains(superType)) {
+							return true;
+						}
+					}
+				}
+
+			}
+			if (isAnyRecord(targetType) && sourceType.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+				return true;
 			}
 		}
 
 		if (targetType instanceof PartBinding) {
 			PartBinding partBinding = (PartBinding) targetType;
 			IPartBinding superType = partBinding.getDefaultSuperType();
-			if (superType != null) {
+			if (Binding.isValidBinding(superType)) {
 				if (typeBindingsAreEqual(superType, sourceType)) {
 					return true;
 				}
+				
+				if(ITypeBinding.EXTERNALTYPE_BINDING == superType.getKind()) {
+					if(ITypeBinding.EXTERNALTYPE_BINDING == sourceType.getKind()) {
+						if(((ExternalTypeBinding) sourceType).getExtendedTypes().contains(superType) ||
+						   ((ExternalTypeBinding) superType).getExtendedTypes().contains(sourceType)) {
+							return true;
+						}
+					}
+				}
 			}
+			if (isAnyRecord(sourceType) && targetType.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isAnyRecord(ITypeBinding type) {
+		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
+			return (type.getPackageName() == InternUtil.intern(new String[] {"eglx", "lang"}) && type.getName() == InternUtil.intern("AnyRecord"));
 		}
 		return false;
 	}
@@ -786,6 +819,10 @@ public class TypeCompatibilityUtil {
 		return dateTimePrimitives.contains(prim);
 	}
 	
+	public static boolean isReference(ITypeBinding type) {
+		return type.isReference() && !isAnyRecord(type);
+	}
+	
 	public static boolean isReferenceCompatible(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
 
 		if(getEquivalentType(sourceType, compilerOptions) == getEquivalentType(targetType, compilerOptions)) {
@@ -793,7 +830,7 @@ public class TypeCompatibilityUtil {
 		}
 		
 		//value types are not reference compatible with reference types and vice versa
-		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && sourceType.isReference() != targetType.isReference()) {
+		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && isReference(sourceType) != isReference(targetType)) {
 			return false;
 		}
 		
@@ -1309,7 +1346,22 @@ public class TypeCompatibilityUtil {
 				1 : -1;
 		}
 	}
-	
+
+	private static class AnyRecordTargetTypeWidener implements IWidener {
+		static AnyRecordTargetTypeWidener INSTANCE = new AnyRecordTargetTypeWidener();
+		
+		private AnyRecordTargetTypeWidener() {
+		}
+		
+		public int getDistance(ITypeBinding targetType) {
+			if (targetType.getKind() == ITypeBinding.EXTERNALTYPE_BINDING &&
+				isAnyRecord(targetType)) {
+				return 1;
+			}
+			return -1;
+		}
+	}
+
 	private static class ReferenceTypeTargetTypeWidener implements IWidener {
 		static ReferenceTypeTargetTypeWidener INSTANCE = new ReferenceTypeTargetTypeWidener();
 		
@@ -1743,7 +1795,9 @@ public class TypeCompatibilityUtil {
 	private static List getReferenceWideners(ITypeBinding sourceType, ICompilerOptions compilerOptions) {
 		List result = new ArrayList();
 		
-		result.add(AnyTargetTypeWidener.INSTANCE);
+		if (sourceType.isReference()) {
+			result.add(AnyTargetTypeWidener.INSTANCE);
+		} 
 		
 		if(NilBinding.INSTANCE == sourceType) {
 			result.add(ReferenceTypeTargetTypeWidener.INSTANCE);
@@ -1765,6 +1819,10 @@ public class TypeCompatibilityUtil {
 
 			case ITypeBinding.HANDLER_BINDING:
 				result.add(new SuperHandlerInterfaceTypeTargetWidener((HandlerBinding) sourceType));
+				break;
+				
+			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
+				result.add(AnyRecordTargetTypeWidener.INSTANCE);
 				break;
 				
 			case ITypeBinding.ARRAY_TYPE_BINDING:
