@@ -2,5 +2,6 @@
 <eglpath>
 	<eglpathentry kind="src" path="EGLSource"/>
 	<eglpathentry kind="src" path="/org.eclipse.edt.mof.egl"/>
+	<eglpathentry kind="src" path="/org.eclipse.edt.compiler"/>
 	<eglpathentry path="eglbin" kind="output"/>
 </eglpath>

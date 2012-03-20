@@ -3,6 +3,8 @@
 	<name>org.eclipse.edt.mof.eglx.jtopen</name>
 	<comment></comment>
 	<projects>
+		<project>org.eclipse.edt.compiler</project>
+		<project>org.eclipse.edt.mof.egl</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

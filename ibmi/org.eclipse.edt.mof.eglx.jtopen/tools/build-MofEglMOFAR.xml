@@ -1,18 +1,41 @@
-<project name="BuildPlugin" default="JarEglar" basedir="./../../">
+<project name="BuildPlugin" default="JTOpenExternalTypes" basedir="./../../">
 
 	<property name="pluginName" value="org.eclipse.edt.mof.eglx.jtopen"/>
+	
+<!--
+	org.eclipse.edt.mof.jtopen can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.jtopen
+	org.eclipse.edt.mof.java can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.java
+	org.eclipse.edt.mof.jee can be found @kan-cvs-save.ottawa.ibm.com/cvsroot/rbd/org.eclipse.edt.ibmi.externaltypes/org.eclipse.edt.mof.jee
+-->
+	<property name="jtopenpluginName" value="org.eclipse.edt.mof.jtopen"/>
+	<property name="javapluginName" value="org.eclipse.edt.mof.java"/>
+	<property name="jeepluginName" value="org.eclipse.edt.mof.jee"/>
 
 <target name="init">    
     <echo message="processing ${basedir}." />
     <echo message="processing ${pluginName}." />
+    <echo message="processing ${jtopenpluginName}." />
+    <echo message="processing ${javapluginName}." />
+    <echo message="processing ${jeepluginName}." />
 	<property name="eglBin" value="eglbin"/>
 </target>
 	
 <target name="JarMofar" depends="init">	
+    <echo message="processing ${pluginName}/egllib/jtopen.mofar." />
 	<jar basedir="${pluginName}/${eglBin}" includes= "**/*.mofxml" destfile="${pluginName}/egllib/jtopen.mofar"/>
 </target>
 <target name="JarEglar" depends="JarMofar">	
+    <echo message="processing ${pluginName}/egllib/jtopen.eglar" />
 	<jar basedir="${pluginName}/${eglBin}" includes= "**/*.eglxml" destfile="${pluginName}/egllib/jtopen.eglar"/>
 </target>
+
 	
+	<target name="JTOpenExternalTypes" depends="JarEglar">	
+	    <echo message="processing ${jtopenpluginName}." />
+		<jar basedir="${jtopenpluginName}/${eglBin}" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+	    <echo message="processing ${javapluginName}." />
+		<jar basedir="${javapluginName}/${eglBin}" update="true" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+		<echo message="processing ${jeepluginName}." />
+		<jar basedir="${jeepluginName}/${eglBin}" update="true" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+	</target>	
 </project>
