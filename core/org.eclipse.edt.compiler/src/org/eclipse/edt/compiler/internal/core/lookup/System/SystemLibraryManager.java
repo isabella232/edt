@@ -16,7 +16,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.AmbiguousSystemLibraryFieldDataBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DataBindingWithImplicitQualifier;
+import org.eclipse.edt.compiler.binding.FunctionBinding;
 import org.eclipse.edt.compiler.binding.FunctionBindingWithImplicitQualifier;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
@@ -81,31 +83,34 @@ public class SystemLibraryManager {
         Iterator i = library.getClassFields().iterator();
         while (i.hasNext()) {
             VariableBinding var = (VariableBinding) i.next();
-            putLibraryData( var.getName(), new DataBindingWithImplicitQualifier(var, library.getStaticLibraryDataBinding()));
+            if (!var.isPrivate()) {
+            	putLibraryData( var.getName(), new DataBindingWithImplicitQualifier(var, library.getStaticLibraryDataBinding()));
+            }
         }
         
         i = library.getDeclaredFunctions().iterator();
         while (i.hasNext()) {
         	IDataBinding newFunction = (NestedFunctionBinding) i.next();
-        	
-        	IDataBinding existingFunction = (IDataBinding) libraryData.get(newFunction.getName());
-        	if(existingFunction == null) {
-        		putLibraryData(newFunction.getName(),  new DataBindingWithImplicitQualifier(newFunction, library.getStaticLibraryDataBinding()));
-        	}
-        	else {
-        		OverloadedFunctionSet functionSet;
-        		existingFunction = ((DataBindingWithImplicitQualifier) existingFunction).getWrappedDataBinding();
-        		if(existingFunction instanceof OverloadedFunctionSet) {
-        			functionSet = (OverloadedFunctionSet) existingFunction;
-        		}
-        		else {
-        			functionSet = new OverloadedFunctionSet();
-        			functionSet.setName(newFunction.getCaseSensitiveName());
-        			functionSet.addNestedFunctionBinding(existingFunction);
-        		}
-        		functionSet.addNestedFunctionBinding(newFunction);
-        		
-        		putLibraryData(newFunction.getName(), new DataBindingWithImplicitQualifier(functionSet, library.getStaticLibraryDataBinding()));
+        	if (Binding.isValidBinding(newFunction.getType()) && !((IFunctionBinding)newFunction.getType()).isPrivate()) {        	
+	        	IDataBinding existingFunction = (IDataBinding) libraryData.get(newFunction.getName());
+	        	if(existingFunction == null) {
+	        		putLibraryData(newFunction.getName(),  new DataBindingWithImplicitQualifier(newFunction, library.getStaticLibraryDataBinding()));
+	        	}
+	        	else {
+	        		OverloadedFunctionSet functionSet;
+	        		existingFunction = ((DataBindingWithImplicitQualifier) existingFunction).getWrappedDataBinding();
+	        		if(existingFunction instanceof OverloadedFunctionSet) {
+	        			functionSet = (OverloadedFunctionSet) existingFunction;
+	        		}
+	        		else {
+	        			functionSet = new OverloadedFunctionSet();
+	        			functionSet.setName(newFunction.getCaseSensitiveName());
+	        			functionSet.addNestedFunctionBinding(existingFunction);
+	        		}
+	        		functionSet.addNestedFunctionBinding(newFunction);
+	        		
+	        		putLibraryData(newFunction.getName(), new DataBindingWithImplicitQualifier(functionSet, library.getStaticLibraryDataBinding()));
+	        	}
         	}
         }
     }
@@ -134,7 +139,9 @@ public class SystemLibraryManager {
         Iterator i = library.getDeclaredFunctions().iterator();
         while (i.hasNext()) {
         	IFunctionBinding function = (IFunctionBinding)((NestedFunctionBinding) i.next()).getType();
-            libraryFunctions.put(function.getName(), new FunctionBindingWithImplicitQualifier(function, library.getStaticLibraryDataBinding()));
+        	if (!function.isPrivate()) {
+        		libraryFunctions.put(function.getName(), new FunctionBindingWithImplicitQualifier(function, library.getStaticLibraryDataBinding()));
+        	}
         }
     }
 }
