@@ -173,6 +173,7 @@ public class FunctionValidator extends AbstractASTVisitor {
 		
 		checkNumberOfParms(constructor.getParameters(), constructor, functionName);
 		checkForConstructorCalls(constructor);
+		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(constructor);
 		
 		return true;
 	}
