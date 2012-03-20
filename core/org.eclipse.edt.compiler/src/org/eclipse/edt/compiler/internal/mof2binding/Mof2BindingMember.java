@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.internal.mof2binding;
 
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.ClassConstantBinding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstantFormFieldBinding;
 import org.eclipse.edt.compiler.binding.ConstructorBinding;
@@ -44,6 +45,7 @@ import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -65,6 +67,27 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 
 	public Mof2BindingMember(IBindingEnvironment env) {
 		super(env);
+	}
+	
+	public boolean visit(ConstantField field) {
+		IBinding binding = getBinding(field);
+		if (binding == null) {
+			String name = InternUtil.intern(field.getName());
+			ITypeBinding type = bindingForType(field);
+			field.getContainer().accept(this);
+			IPartBinding declarer = (IPartBinding)stack.pop();
+			Object value = null;
+			if (field.getValue() != null) {
+				value = field.getValue().getObjectValue();
+			}
+			binding = new ClassConstantBinding(name, declarer, type, value);
+			((ClassConstantBinding)binding).setIsStatic(field.isStatic());
+			((ClassConstantBinding)binding).setIsPrivate(field.getAccessKind() == AccessKind.ACC_PRIVATE);
+			handleAnnotations(field, binding);
+			putBinding(field, binding);
+		}
+		stack.push(binding);
+		return false;
 	}
 
 	public boolean visit(Field field) {
