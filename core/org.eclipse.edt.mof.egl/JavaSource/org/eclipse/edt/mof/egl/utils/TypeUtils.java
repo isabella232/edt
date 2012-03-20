@@ -815,7 +815,7 @@ public class TypeUtils implements MofConversion {
 		if (srcType instanceof StructPart) {
 			for (Classifier type : types) {
 				if (type instanceof StructPart) {
-					if (isReferenceType((StructPart)srcType) && ((StructPart)srcType).isSubtypeOf((StructPart)type)) {
+					if (((StructPart)srcType).isSubtypeOf((StructPart)type)) {
 						candidates.add((StructPart)type);
 					}
 					else{
