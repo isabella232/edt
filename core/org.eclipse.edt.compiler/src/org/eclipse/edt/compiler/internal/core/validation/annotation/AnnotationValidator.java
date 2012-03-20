@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.binding.AnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.AnnotationValidationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.ConstructorBinding;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DataItemPropertiesProblemsProblemRequestor;
 import org.eclipse.edt.compiler.binding.FieldContentValidationAnnotationTypeBinding;
@@ -55,6 +56,7 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.ConstantFormField;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
@@ -279,6 +281,14 @@ public class AnnotationValidator {
 				IDataBinding db = function.getName().resolveDataBinding();
 				if (Binding.isValidBinding(db)) {
 					processAnnotations(function, db.getType(), db);
+				}
+				return false;
+			}
+			
+			public boolean visit(Constructor constructor) {
+				ConstructorBinding cb = constructor.getBinding();
+				if (Binding.isValidBinding(cb)) {
+					processAnnotations(constructor, cb.getType(), cb);
 				}
 				return false;
 			}
