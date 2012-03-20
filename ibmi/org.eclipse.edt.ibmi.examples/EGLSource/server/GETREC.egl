@@ -1,0 +1,74 @@
+package server;
+
+import org.eclipse.edt.jtopen.connection.persistent.SessionConnectionsLib;
+import common.CUST;
+import common.Constants;
+
+// service
+service GETREC
+
+	function killSession()
+		session HttpSession? = SessionConnectionsLib.getSession();
+		SysLib.writestdout("connections before invalidate");
+		connectionsInThePool();
+		if(session != null)
+			session.invalidate();
+		end
+		SysLib.writestdout("connections after invalidate");
+		connectionsInThePool();
+	end
+
+	function connectionsInThePool()returns(int)
+		count int;
+		sessionsDict dictionary = SessionConnectionsLib.getConnections();
+		pairs String;
+		if(sessionsDict != null)
+			sessions string[] = sessionsDict.getKeys();
+			for(idx1 int from 1 to sessions.getSize())
+				connectionsDict dictionary = sessionsDict.getValues()[idx1];
+				if(connectionsDict != null)
+					connections string[] = connectionsDict.getKeys();
+					for(idx2 int from 1 to connections.getSize())
+						count += 1;
+						pairs += "Session - " + sessions[idx1] + ":" + connections[idx2] + "\n";
+					end
+				end
+			end
+		end
+		SysLib.writeStdout("connections in the pool:" + count);
+		SysLib.writeStdout(pairs);
+		return(count);
+	end
+
+	function getCustomers()returns(CUST[])
+		conn IBMiConnection?;
+		custs CUST[];
+		try
+			conn = SessionConnectionsLib.getSessionConnection(Constants.as400System, Constants.userid, Constants.password);
+			eof string;
+			count decimal( 2, 0 );
+			call this.GETREC(custs, eof, count) using conn ;
+			SessionConnectionsLib.returnConnectionToPool(conn);
+		onException(exception AnyException)
+			if(conn != null)
+				SessionConnectionsLib.returnConnectionToPool(conn);
+				throw exception;
+			end
+		end
+		SysLib.wait(2);
+		return(custs);
+	end
+
+	private function GETREC(CUST CUST[] inout, eof string inout, count decimal( 2, 0 ) inout){
+		@IBMiProgram {
+			programName = "GETREC",
+			libraryName = "/QSYS.LIB/VARLABXX.LIB",
+			parameterAnnotations = [
+				@AS400Array {elementCount = 10,returnCountVariable = count},
+				@AS400Text {length = 1},
+				null
+			]		
+		}
+	}
+	end
+end

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eglpath>
+	<eglpathentry kind="src" path="EGLSource"/>
+	<eglpathentry kind="src" path="/org.eclipse.edt.rui.widgets_0.8.0"/>
+	<eglpathentry kind="src" path="/org.eclipse.edt.jtopen.samples"/>
+	<eglpathentry path="EGLBin" kind="output"/>
+</eglpath>

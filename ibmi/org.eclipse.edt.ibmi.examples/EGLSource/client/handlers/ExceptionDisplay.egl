@@ -1,0 +1,51 @@
+package client.handlers;
+
+// RUI Widget
+
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridUtil;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.TextLabel;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.TextField;
+import org.eclipse.edt.rui.widgets.TextArea;
+import org.eclipse.edt.rui.widgets.GridLayoutLib;
+
+//
+//
+
+handler ExceptionDisplay type RUIWidget{targetWidget = ui, onConstructionFunction = start, cssFile = "css/org.eclipse.edt.ibmi.examples.css", @VEWidget{category = "Custom"}}
+    ui GridLayout{columns = 2, rows = 6, cellPadding = 4, children = [ RawResponseField, RawRequestField, RawRequestLabel, RawResponseLabel, Detail1Field, Detail2Field, Detail3Field, ExceptionField, Detail2Label, Detail3Label, Detail1Label, ExceptionLabel ],
+    	width = "800",
+    	backgroundColor = "RGB(255,0,0)" };
+
+    private ExceptionLabel TextLabel{ layoutData = new GridLayoutData{ row = 1, column = 1 }, text = "Exception:", width="100" };
+    private Detail1Label TextLabel{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Detail1:", width="100" };
+    private Detail3Label TextLabel{ layoutData = new GridLayoutData{ row = 4, column = 1 }, text = "Detail3:", width="100" };
+    private Detail2Label TextLabel{ layoutData = new GridLayoutData{ row = 3, column = 1 }, text = "Detail2:", width="100" };
+    private RawRequestLabel TextLabel{ layoutData = new GridLayoutData{ row = 5, column = 1 }, text = "Raw Request:", width="100" };
+    private RawResponseLabel TextLabel{ layoutData = new GridLayoutData{ row = 6, column = 1 }, text = "Raw Response:", width="100" };
+    ExceptionField TextField{ layoutData = new GridLayoutData{ row = 1, column = 2,
+    	horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+    	horizontalSpan = 1 },
+    	width = "100%"};
+    Detail1Field TextField{ layoutData = new GridLayoutData{ row = 2, column = 2,
+    	horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+    	horizontalSpan = 1 },
+    	width = "100%"};
+    Detail2Field TextField{ layoutData = new GridLayoutData{ row = 3, column = 2,
+    	horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+    	horizontalSpan = 1 },
+    	width = "100%"};
+    Detail3Field TextField{ layoutData = new GridLayoutData{ row = 4, column = 2,
+    	horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+    	horizontalSpan = 1 },
+    	width = "100%"};
+    RawRequestField TextArea{ layoutData = new GridLayoutData{ row = 5, column = 2 }, width = "100%", height = "100" };
+    RawResponseField TextArea{ layoutData = new GridLayoutData{ row = 6, column = 2,
+    	horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+    	horizontalSpan = 1 }, width = "100%", height = "100" };
+
+    function start()
+    end
+end

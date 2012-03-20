@@ -1,0 +1,18 @@
+package common;
+
+// basic library
+library Constants
+	
+	const as400System string = "AS4069.rtp.raleigh.ibm.com";
+	const userid string = "JVINCENS";
+	const password string = "LUSR2SLS";
+	
+	
+	const KEY_JSESSIONID string = "JSESSIONID";
+	const KEY_SET_COOKIE string = "set-cookie";
+	const KEY_COOKIE string = "Cookie";
+	
+	const INFOBUS_EVENT_SERVERINFO string = "ibmi.handle.data.change.serverinfo";
+	const INFOBUS_EVENT_CUSTS string = "ibmi.handle.data.change.custs";
+	const INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION string = "ibmi.handle.data.change.serviceInvocationException";
+end

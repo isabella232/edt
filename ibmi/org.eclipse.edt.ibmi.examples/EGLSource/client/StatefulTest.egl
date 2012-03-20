@@ -1,0 +1,89 @@
+package client;
+
+// RUI Handler
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.widgets.Button;
+import org.eclipse.edt.rui.widgets.DataGrid;
+import org.eclipse.edt.rui.widgets.DataGridColumn;
+import org.eclipse.edt.rui.widgets.GridLayout;
+import org.eclipse.edt.rui.widgets.GridLayoutData;
+import org.eclipse.edt.rui.widgets.GridLayoutLib;
+import client.handlers.GETRECHandler;
+import client.handlers.ServerInfoHandler;
+import common.Constants;
+import eglx.ui.rui.Event;
+import org.eclipse.edt.rui.widgets.Box;
+
+//
+//
+
+handler StatefulTest type RUIhandler{initialUI =[ui
+            ], onConstructionFunction = start, cssFile = "css/thirdparty.stateful.css", title = "StatefulTest"}
+	
+    ui GridLayout{columns = 2, rows = 4, cellPadding = 4, children = [ SIEBox, NextBtn, killSessionBtn, custs_ui ]};
+	
+	custs_ui DataGrid { layoutData = new GridLayoutData{ row = 1, column = 1,
+		horizontalAlignment = GridLayoutLib.ALIGN_CENTER,
+		horizontalSpan = 2 },
+		columns = [
+			new DataGridColumn {name = "CUSTNO", displayName = "CUSTNO", width = 120},
+			new DataGridColumn {name = "CUSTNA", displayName = "CUSTNA", width = 120},
+			new DataGridColumn {name = "REPNO", displayName = "REPNO", width = 120},
+			new DataGridColumn {name = "CONTAC", displayName = "CONTAC", width = 120},
+			new DataGridColumn {name = "CPHONE", displayName = "CPHONE", width = 120},
+			new DataGridColumn {name = "CFAX", displayName = "CFAX", width = 120},
+			new DataGridColumn {name = "CADDR", displayName = "CADDR", width = 120},
+			new DataGridColumn {name = "CCITY", displayName = "CCITY", width = 120},
+			new DataGridColumn {name = "CCOUNT", displayName = "CCOUNT", width = 120},
+			new DataGridColumn {name = "CZIP", displayName = "CZIP", width = 120},
+			new DataGridColumn {name = "CZIPLO", displayName = "CZIPLO", width = 120}
+		],
+		data = new any[0]
+	};
+	NextBtn Button{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Next", disabled = enableNextBtn, onclick ::= getCusts, onclick ::= disableSIEBox };
+	killSessionBtn Button{ layoutData = new GridLayoutData{ row = 3, column = 1 }, text = "Kill Session", onclick ::= killSession, onclick ::= disableSIEBox };
+	enableNextBtn boolean = false;
+	
+	serverInfoHandler ServerInfoHandler;
+	getRecHandler GETRECHandler;
+	SIEBox Box{ layoutData = new GridLayoutData{ row = 4, column = 1,
+		horizontalAlignment = GridLayoutLib.ALIGN_LEFT,
+		horizontalSpan = 2 }, padding=8, width="100%",
+		visible = false };
+
+	
+    function start()
+    	serverInfoHandler.getServerInfo();
+    	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVERINFO, enableNext);
+    	InfoBus.subscribe(Constants.INFOBUS_EVENT_CUSTS, populateCUSTs);
+    	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION, handleSIE);
+    end
+    
+    function enableNext(eventName string in, dataObject any in)
+    	enableNextBtn = dataObject != null && (dataObject as string).length() > 0;
+    end 
+    
+    function getCusts(e Event in) 
+    	getRecHandler.getCusts();
+    end
+    
+    function killSession(e Event in) 
+    	getRecHandler.killSession();
+    end
+    
+    function populateCUSTs(eventName string in, dataObject any in)
+    	custs_ui.data = dataObject as any[];
+    end
+    
+    function disableSIEBox(e Event in) 
+    	SIEBox.children = [];
+    	SIEBox.visible = false;
+    end
+    
+    function handleSIE(eventName string in, dataObject any in) 
+    	SIEBox.children = [dataObject];
+    	SIEBox.visible = true;
+    end
+    
+end

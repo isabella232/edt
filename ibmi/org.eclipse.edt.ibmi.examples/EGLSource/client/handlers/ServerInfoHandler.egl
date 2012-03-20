@@ -1,0 +1,34 @@
+package client.handlers;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+
+import common.Constants;
+import server.ServerInfo;
+
+// basic library
+handler ServerInfoHandler
+
+
+	function getServerInfo()
+		call ServerInfo.getServerAddress() using new HttpProxy returning to handleGetServerInfoResponse onException handleException;
+	end
+	
+	function handleGetServerInfoResponse(retResult string in)
+		InfoBus.publish(Constants.INFOBUS_EVENT_SERVERINFO, retResult);
+	end
+	
+	function handleException(exp AnyException in, http IHTTP)
+		exceptionDisplay ExceptionDisplay{
+			ExceptionField.text = exp.message,
+			RawRequestField.text = http.getRequest().body,
+			RawResponseField.text = http.getResponse().body
+		};
+		if(exp isa ServiceInvocationException)
+			exceptionDisplay.Detail1Field.text = (exp as ServiceInvocationException).detail1;
+			exceptionDisplay.Detail2Field.text = (exp as ServiceInvocationException).detail2;
+			exceptionDisplay.Detail3Field.text = (exp as ServiceInvocationException).detail3;
+		end
+    	InfoBus.publish(Constants.INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION, exceptionDisplay);
+    end
+	
+end

@@ -1,0 +1,123 @@
+package client.handlers;
+
+import org.eclipse.edt.rui.infobus.InfoBus;
+
+import common.CUST;
+import common.Constants;
+import eglx.lang.dictionary;
+import server.GETREC;
+
+// basic library
+handler GETRECHandler type RUIHandler{onConstructionFunction = start}
+	
+	private http IHttp?;
+	
+	function start()
+    	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVERINFO, initHttp);
+	end
+	
+    function initHttp(eventName string in, dataObject any in)
+		http = SysLib.getResource("binding:GETRECService");
+		if(dataObject == null)
+			http = new HttpProxy;
+		else
+			if((dataObject as string).length() > 0)
+				http.getRequest().uri = dataObject + http.getRequest().uri;
+			end
+		end
+	end
+	
+    function getCusts() 
+    	call GETREC.getCustomers() using http returning to handleCustomersResponse onException handleException;
+    end
+    
+    function handleCustomersResponse(retResult CUST[] in, http IHttp)
+    	//process the response headers to handle the Session ID
+    	processResponseHeaders(http.getResponse());
+    	//call back to the handller to handle the new data
+    	InfoBus.publish(Constants.INFOBUS_EVENT_CUSTS, retResult);
+    end
+    
+    function processResponseHeaders(http Response in)
+    	//This function finds a response containing "set-cookie"
+    	//If it finds the key it extracts the key from the response 
+    	//    and puts the key's value in the http.request
+    	//by putting the key in the http.request each service invocation using that request will use the same session
+    	//IMPORTANT NOTE:
+    	//be very careful with http variables and multiple service invocations
+    	//service can only use the same request if the services are deployed to the same server cluster 
+    	if(http.headers != null && http.headers.containsKey(Constants.KEY_SET_COOKIE))
+    		value string = http.headers[Constants.KEY_SET_COOKIE];
+    		startIdx int = value.indexOf(Constants.KEY_JSESSIONID);
+    		if(startIdx > 0)
+    			endIdx int = StrLib.indexOf(value, ";", startIdx);
+    			jsessionId string;
+    			if(endIdx > 0)
+    				jsessionId = value[startIdx:(endIdx - 1)];//this is the sessionid
+    			else
+    				jsessionId = value[startIdx:value.length()];//this is the sessionid
+    			end
+    			setRequestSessionId(jsessionId);
+    		end
+    	end
+    end
+	
+	function setRequestSessionId(jsessionId string in)
+		//This function puts the jsessionid in the request header
+		//If a Cookie is already there and has no JSESSIONID it adds to the Cookie
+		//If a Cookie is there and there is a JSESSIONID it removes the old JSESSION and adds the new JSESSIONID
+		//If there is no Cookie, Cookie is added with the JSESSIONID as the value. 
+		if(http != null)
+			if(http.getRequest().headers == null)
+				http.getRequest().headers = new dictionary(true, true);
+			end
+			cookieString string;
+			if(http.getRequest().headers.containsKey(Constants.KEY_COOKIE))
+	    		cookieString = http.getRequest().headers[Constants.KEY_COOKIE];
+				startIdx int = cookieString.indexOf(Constants.KEY_JSESSIONID);
+	    		if(startIdx > 0)
+	    			endIdx int = StrLib.indexOf(cookieString, ";", startIdx);
+	    			oldSessionId string;
+	    			if(endIdx > 0)
+	    				oldSessionId = cookieString[startIdx:(endIdx)];
+	    			else
+	    				oldSessionId = cookieString[startIdx:cookieString.length()];
+	    			end
+	    			cookieString = cookieString.replaceStr(oldSessionId, jsessionId);
+	    		else
+	    			//just add the jsession id to the end
+	    			cookieString += ";";
+	    			cookieString += jsessionId;
+	    		end
+	    	else
+	    		//there's no existing value just add the jsessionid;
+	    		cookieString = jsessionId;
+			end
+			http.getRequest().headers[Constants.KEY_COOKIE] = cookieString;
+		end
+	end
+
+    function killSession() 
+    	call GETREC.killSession() using http returning to handleKillSessionResponse onException handleException;
+    end
+    
+    function handleKillSessionResponse()
+    end
+    
+	function handleException(exp AnyException in, http IHTTP)
+		exceptionDisplay ExceptionDisplay{
+			ExceptionField.text = exp.message,
+			RawRequestField.text = http.getRequest().body,
+			RawResponseField.text = http.getResponse().body
+		};
+		if(exp isa ServiceInvocationException)
+			exceptionDisplay.Detail1Field.text = (exp as ServiceInvocationException).detail1;
+			exceptionDisplay.Detail2Field.text = (exp as ServiceInvocationException).detail2;
+			exceptionDisplay.Detail3Field.text = (exp as ServiceInvocationException).detail3;
+		end
+    	InfoBus.publish(Constants.INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION, exceptionDisplay);
+    end
+	
+end
+
+

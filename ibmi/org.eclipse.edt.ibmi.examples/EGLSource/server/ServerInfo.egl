@@ -1,0 +1,24 @@
+package server;
+
+// service
+service ServerInfo
+	
+	function getServerAddress()returns(string)
+		host String?;
+		value string? = SysLib.getProperty("useREST");
+		if(value != null && value.toLowerCase() == "true")
+			request  javax.servlet.http.HttpServletRequest? = eglx.http.ServletContext.getHttpServletRequest();
+			if(request != null)
+				Syslib.writestdout("request.getRequestURL():" + request.getRequestURL().toString());
+				Syslib.writestdout("request.getServletPath():" + request.getServletPath());
+				Syslib.writestdout("request.getRequestURI():" + request.getRequestURI());
+				host = request.getRequestURL().toString();
+				host = host.replaceStr(request.getServletPath(), "");
+				//if you just want the request up to the context remove the Request URI from the Request URL 
+//				host = host.replaceStr(request.getRequestURI(), "");
+				Syslib.writestdout("host:" + host);
+			end
+		end
+		return(host);
+	end
+end
