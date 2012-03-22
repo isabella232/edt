@@ -25,7 +25,8 @@ public class TryStatementTemplate extends JavaTemplate {
 	public void genStatementBody(TryStatement stmt, Context ctx, TabbedWriter out) {
 		out.print("try ");
 		ctx.invoke(genStatement, stmt.getTryBlock(), ctx, out);
-		
+		// write out smap info, otherwise the onexception block gets included with the last line of the try block
+		ctx.writeSmapLine();
 		List<ExceptionBlock> blocks = stmt.getExceptionBlocks();
 		if ( blocks.isEmpty() )
 		{
