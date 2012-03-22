@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.GenerationException;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
@@ -222,9 +223,14 @@ public class TypeTemplate extends JavaTemplate {
 					ctx.invoke(genRuntimeTypeName, arg2.getType(), ctx, out, TypeNameKind.JavaObject);
 					out.print(") ");
 				}
-				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
-				ctx.invoke(genExpression, arg2, ctx, out);
-				out.print(")");
+				// we don't want to do a checkNullable on the temporary variables that are logically not nullable
+				if (arg2 instanceof MemberName && ((MemberName) arg2).getId().startsWith(Constants.temporaryVariableLogicallyNotNullablePrefix))
+					ctx.invoke(genExpression, arg2, ctx, out);
+				else {
+					out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+					ctx.invoke(genExpression, arg2, ctx, out);
+					out.print(")");
+				}
 				// check to see if we are unboxing RHS temporary variables (inout and out types only)
 				if (CommonUtilities.isBoxedOutputTemp(arg2, ctx))
 					out.print(".ezeUnbox()");
