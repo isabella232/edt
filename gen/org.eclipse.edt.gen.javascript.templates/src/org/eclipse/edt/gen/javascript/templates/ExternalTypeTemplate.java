@@ -18,12 +18,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
@@ -87,6 +87,7 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 				if(packageName != null && !(packageName.isEmpty())){
 					packageName = packageName.replace('/', '.');
 					packageName = packageName.replace('\\', '.');
+					packageName = CommonUtilities.stripDots(packageName);
 					packageName += ".";
 				}else{
 					packageName = "";
@@ -99,6 +100,8 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 			}
 		}
 	}
+	
+	
 
 	public void genQualifier(ExternalType part, Context ctx, TabbedWriter out, NamedElement arg) {
 		// out.print("this.");
