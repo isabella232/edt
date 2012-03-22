@@ -24,7 +24,8 @@ public class CommonUtilities {
 	}
 	
 	public static boolean shouldDebug(Member member) {
-		if (member instanceof ConstantField || member.getId().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix) || member.getId().startsWith("eze")) {
+		if (member instanceof ConstantField || member.getId().startsWith(org.eclipse.edt.gen.Constants.temporaryVariablePrefix) 
+			|| member.getId().startsWith(org.eclipse.edt.gen.Constants.temporaryVariableLogicallyNotNullablePrefix) || member.getId().startsWith("eze")) {
 			return false;
 		}
 		
