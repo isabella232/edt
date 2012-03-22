@@ -4,7 +4,6 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.NewExpression;
 
 public class SQLDataSourceTemplate extends JavaTemplate {
@@ -13,11 +12,8 @@ public class SQLDataSourceTemplate extends JavaTemplate {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
 		out.print("(");
-		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
-			for (Expression argument : expr.getArguments()) {
-				ctx.invoke(genExpression, argument, ctx, out);
-			}
-		}
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
 		out.print(")");
 	}
 }
