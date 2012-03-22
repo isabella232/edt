@@ -40,6 +40,14 @@ public class WidgetDescriptorGroup {
 	 * 
 	 */
 	public void addWidgetDescriptor( WidgetDescriptor descriptor ) {
+		for(int i=0; i<_listWidgetDescriptors.size(); i++){
+			WidgetDescriptor widgetDescriptor = (WidgetDescriptor)_listWidgetDescriptors.get(i);
+			if((widgetDescriptor.getProvider() != null && descriptor.getProvider() != null) 
+					&& widgetDescriptor.getProvider().equalsIgnoreCase(descriptor.getProvider()) 
+					&& widgetDescriptor.getLabel().equalsIgnoreCase(descriptor.getLabel())){
+				return;
+			}
+		}
 		_listWidgetDescriptors.add( descriptor );
 	}
 	
