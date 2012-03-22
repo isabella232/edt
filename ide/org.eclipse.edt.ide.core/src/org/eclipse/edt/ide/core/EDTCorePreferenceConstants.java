@@ -111,6 +111,7 @@ public class EDTCorePreferenceConstants {
 	 * @return Returns the current value for the string.
 	 * @since 3.1
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getPreference(String key, IJavaProject project) {
 		String val;
 		if (project != null) {
