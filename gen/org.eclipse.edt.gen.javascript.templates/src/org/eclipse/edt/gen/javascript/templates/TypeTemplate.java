@@ -208,7 +208,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 			out.print("egl.eglx.lang.convert(");			
 			out.print(ctx.getNativeImplementationMapping((Classifier) op.getContainer()) + '.');
 			out.print(CommonUtilities.getOpName(ctx, op));
-			out.print(",");
+			out.print(", [");
 			Expression objectExpr = arg.getObjectExpr();
 			if (objectExpr instanceof BoxingExpression){
 				objectExpr = ((BoxingExpression)objectExpr).getExpr();
@@ -227,7 +227,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 				out.print("\"");
 			}
 			ctx.invoke(genTypeDependentOptions, arg.getEType(), ctx, out, arg);
-			out.print(")");
+			out.print("])");
 		} else if (ctx.mapsToPrimitiveType(arg.getEType())) {
 			ctx.invoke(genRuntimeTypeName, arg.getEType(), ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".ezeCast(");
