@@ -47,7 +47,6 @@ import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationCo
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugMessages;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugTarget;
 import org.eclipse.edt.debug.ui.launching.EGLLaunchingMessages;
-import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -399,7 +398,7 @@ public class RUIDebugUtil
 				IPackageDeclaration[] pkgs = eglFile.getPackageDeclarations();
 				if ( pkgs != null && pkgs.length != 0 )
 				{
-					file = JavaScriptAliaser.packageNameAlias( pkgs[ 0 ].getElementName() ).replaceAll( "\\.", "/" ) + '/' + eglFile.getElementName(); //$NON-NLS-1$ //$NON-NLS-2$
+					file = pkgs[ 0 ].getElementName().replaceAll( "\\.", "/" ) + '/' + eglFile.getElementName(); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				else
 				{
@@ -428,23 +427,12 @@ public class RUIDebugUtil
 			int lastSlash = file.lastIndexOf( '/' );
 			if ( lastSlash != -1 )
 			{
-				file = JavaScriptAliaser.packageNameAlias( file.substring( 0, lastSlash ).split( "/" ), '/' ) + '/' + file.substring( lastSlash ); //$NON-NLS-1$
+				file = file.substring( 0, lastSlash ) + '/' + file.substring( lastSlash ); //$NON-NLS-1$
 			}
 		}
 		
 		// Remove .egl
 		file = file.substring( 0, file.length() - 4 );
-		
-		// Alias the name.
-		int lastSlash = file.lastIndexOf( '/' );
-		if ( lastSlash != -1 )
-		{
-			file = file.substring( 0, lastSlash + 1 ) + JavaScriptAliaser.getJavascriptSafeAlias( file.substring( lastSlash + 1 ) );
-		}
-		else
-		{
-			file = JavaScriptAliaser.getJavascriptSafeAlias( file );
-		}
 		
 		StringBuffer strb = new StringBuffer();
 		strb.append( "http://localhost:" ); //$NON-NLS-1$
