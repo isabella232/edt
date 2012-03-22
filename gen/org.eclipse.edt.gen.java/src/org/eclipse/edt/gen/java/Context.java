@@ -45,6 +45,10 @@ public class Context extends EglContext {
 	private Function currentFunction;
 	private String currentFile;
 
+	private String smapPreviousLine = "";
+	private int smapPreviousEglLineNumber;
+	private int smapPreviousJavaLineNumber;
+	
 	private StringBuffer smapData = new StringBuffer();
 	private StringBuffer smapExtension = new StringBuffer();
 	private List<String> smapFiles = new ArrayList<String>();
@@ -265,17 +269,28 @@ public class Context extends EglContext {
 
 	public void writeSmapLine() {
 		if (smapHasOutstandingLine) {
-			smapData.append("" + firstEglLineNumber);
+			// is there really a continuation of a previous line
+			if (smapPreviousEglLineNumber == firstEglLineNumber) {
+				// we need to rewrite the previous line with the new boundaries
+				smapData.delete(smapData.length() - smapPreviousLine.length(), smapData.length() + 1);
+				// now set up the correct range
+				firstJavaLineNumber = smapPreviousJavaLineNumber;
+			}
+			smapPreviousLine = "" + firstEglLineNumber;
 			if (currentFile != null) {
 				if (smapFiles.indexOf(currentFile) < 0)
 					smapFiles.add(currentFile);
-				smapData.append("#" + (smapFiles.indexOf(currentFile) + 1));
+				smapPreviousLine += "#" + (smapFiles.indexOf(currentFile) + 1);
 			} else
-				smapData.append("#1");
-			smapData.append(":" + firstJavaLineNumber);
+				smapPreviousLine += "#1";
+			smapPreviousLine += ":" + firstJavaLineNumber;
 			if (firstJavaLineNumber != lastJavaLineNumber)
-				smapData.append("," + (lastJavaLineNumber - firstJavaLineNumber + 1));
-			smapData.append("\n");
+				smapPreviousLine += "," + (lastJavaLineNumber - firstJavaLineNumber + 1);
+			smapPreviousLine += "\n";
+			smapData.append(smapPreviousLine);
+			// remember the details
+			smapPreviousEglLineNumber = firstEglLineNumber;
+			smapPreviousJavaLineNumber = firstJavaLineNumber;
 			// we need to reset the last java line number
 			lastJavaLineNumber = 0;
 		}
