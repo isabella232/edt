@@ -28,6 +28,6 @@
 		}		
 	};
 	dojoConfig = {
-		asyn: true
+		async: true
 	};
 })();

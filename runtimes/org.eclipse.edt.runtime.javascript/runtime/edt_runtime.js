@@ -38,11 +38,14 @@ egl.defineClass( "eglx.lang", "AnyValue"
 	// TODO sbg In java RT, this is an interface;  do we need any methods on it here?
 }
 );
-egl.eglx.lang.convert = function(convertFunc, value){
-	if(value == null){
-		return value;
+/*
+ * param: args is an array. The argument for the convertFunc
+ */
+egl.eglx.lang.convert = function(convertFunc, args){
+	if(args[0] == null){
+		return null;
 	}
-    return convertFunc.apply(null, Array.prototype.slice.call(arguments, 1));
+    return convertFunc.apply(null, args);
 };
 egl.eglx.lang.AnyValue.ezeCopyTo = function(source, target){
 	if (source == null) {
