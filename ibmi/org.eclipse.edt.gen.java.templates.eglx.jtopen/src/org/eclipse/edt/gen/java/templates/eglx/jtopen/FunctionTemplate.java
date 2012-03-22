@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.eglx.jtopen;
 
+import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -180,6 +181,8 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 
 	private Function createFunction(Function function, Context ctx) {
 		Function newFunction = factory.createFunction();
+		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			newFunction.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
 		newFunction.setName(function.getName());
 		for(FunctionParameter parameter : function.getParameters()){
 			FunctionParameter newParameter = (FunctionParameter)parameter.clone();
@@ -188,6 +191,8 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		}
 		newFunction.setType(function.getType());
 		Statement stmt = createFunctionInvocationBody(newFunction);
+		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			stmt.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
 		newFunction.setStatementBlock(factory.createStatementBlock());
 		newFunction.getStatementBlock().setContainer(newFunction);
 		newFunction.addStatement(stmt);
@@ -197,6 +202,8 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 	private Statement createFunctionInvocationBody(Function function)  {
 		//create a function invocation to access the proxy
 		FunctionInvocation invoc = factory.createFunctionInvocation();
+		if (function.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+			invoc.addAnnotation(function.getAnnotation(IEGLConstants.EGL_LOCATION));
 		Function proxy = CommonUtilities.createProxyFunction(function);
 		proxy.setContainer(function.getContainer());
 		invoc.setTarget(proxy);
