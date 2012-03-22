@@ -22,15 +22,23 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 public class DateTimeLib extends ExecutableBase {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 
+	public static final long DEC_31_1969_LOCAL_TIME_ZONE;
+	static
+	{
+		int offset = DateTimeUtil.DEFAULT_TIME_ZONE.getOffset( 0 );
+		DEC_31_1969_LOCAL_TIME_ZONE = 0 - offset;
+	}
+
 	public DateTimeLib() throws AnyException {
 	}
 
 	/**
 	 * Returns a Calendar that reflects an int.
 	 */
-	public static Calendar dateFromInt(int dateint) {
+	public static Calendar dateFromInt(int dateInt) {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.setTimeInMillis((long) dateint * 1000 * DateTimeUtil.SECONDS_PER_DAY);
+		long dateLong = ((long) dateInt * 1000 * DateTimeUtil.SECONDS_PER_DAY) + DEC_31_1969_LOCAL_TIME_ZONE;
+		cal.setTimeInMillis(dateLong);
 		return cal;
 	}
 
