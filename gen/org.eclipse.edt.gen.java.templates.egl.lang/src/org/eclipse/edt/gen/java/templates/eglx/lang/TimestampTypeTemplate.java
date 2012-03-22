@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BoxingExpression;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
@@ -39,11 +38,9 @@ public class TimestampTypeTemplate extends JavaTemplate {
 	public void genContainerBasedNewExpression(Type type, Context ctx, TabbedWriter out, NewExpression arg) throws GenerationException {
 		ctx.invoke(genRuntimeTypeName, arg.getType(), ctx, out, TypeNameKind.EGLImplementation);
 		out.print(".defaultValue(");
-		if (arg.getArguments() != null && arg.getArguments().size() > 0) {
-			for (Expression argument : arg.getArguments()) {
-				ctx.invoke(genExpression, argument, ctx, out);
-			}
-		} else
+		if (arg.getArguments() != null && arg.getArguments().size() > 0)
+			ctx.foreach(arg.getArguments(), ',', genExpression, ctx, out);
+		else
 			ctx.invoke(genConstructorOptions, arg.getType(), ctx, out);
 		out.print(")");
 	}
