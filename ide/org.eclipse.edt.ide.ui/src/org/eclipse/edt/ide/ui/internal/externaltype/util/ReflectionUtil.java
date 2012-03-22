@@ -255,7 +255,7 @@ public class ReflectionUtil {
 		}
 			
 		
-		boolean isEGLPart =JavaTypeConstants.EglPartNames.contains(typeName.toLowerCase(Locale.ENGLISH));
+		boolean isEGLPart = JavaTypeConstants.EglPartNames.contains(paraType.getSimpleName().toLowerCase(Locale.ENGLISH));
 		boolean isStartWithEze = typeName.toLowerCase().startsWith(JavaTypeConstants.EZE_PREFIX);
 		if(isEGLPart || isStartWithEze) {
 			typeName = JavaTypeConstants.UNDERSTORE_PREFIX + typeName;

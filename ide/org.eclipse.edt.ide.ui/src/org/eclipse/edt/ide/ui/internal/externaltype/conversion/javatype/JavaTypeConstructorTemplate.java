@@ -22,7 +22,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 public class JavaTypeConstructorTemplate extends AbstractTemplate {
 	public void genConstructor(Constructor<?> constructor, EglSourceContext ctx, TabbedWriter out){
 		StringBuilder builder = new StringBuilder(80);
-		builder.append("  constructor" + SQLConstants.LPAREN);
+		builder.append("   constructor" + SQLConstants.LPAREN);
 		
 		Class<?>[] parameterTypes = constructor.getParameterTypes();
 		for(int i=0; i < parameterTypes.length; i++) {
