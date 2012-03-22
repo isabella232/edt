@@ -749,4 +749,19 @@ public class CommonUtilities {
 	public static boolean isNativeType(Part part){
 		return !(part instanceof Annotation) && !part.getPackageName().startsWith("eglx.lang");
 	}
+	
+	/**
+	 * Remove the leading and trailing dots of a String
+	 * @param String
+	 * @return String
+	 */
+	public static String stripDots(String str){
+		if (str.startsWith(".")){
+			str = str.replaceFirst("^\\.+", "");
+		}
+		if (str.endsWith(".")){
+			str = str.replaceFirst("\\.+$", "");
+		}
+		return str;
+	}
 }
