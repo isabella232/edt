@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -27,20 +26,9 @@ public class NewExpressionTemplate extends JavaTemplate {
 		out.print("new ");
 		ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaImplementation);
 		out.print("(");
-		if (expr.getArguments() != null && expr.getArguments().size() > 0) {
-			boolean notFirst = false;
-			for (Expression argument : expr.getArguments()) {
-				if ( notFirst )
-				{
-					out.print(", ");
-				}
-				else
-				{
-					notFirst = true;
-				}
-				ctx.invoke(genExpression, argument, ctx, out);
-			}
-		} else
+		if (expr.getArguments() != null && expr.getArguments().size() > 0)
+			ctx.foreach(expr.getArguments(), ',', genExpression, ctx, out);
+		else
 			ctx.invoke(genConstructorOptions, expr.getType(), ctx, out);
 		out.print(")");
 	}
