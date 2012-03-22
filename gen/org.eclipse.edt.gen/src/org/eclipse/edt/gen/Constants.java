@@ -28,6 +28,7 @@ public class Constants {
 
 	// temporary variable prefix
 	public static final String temporaryVariablePrefix = "eze$Temp";
+	public static final String temporaryVariableLogicallyNotNullablePrefix = "eze$LNNTemp";
 
 	// these are sub key values used as context hashmap keys
 	public static final String SubKey_functionArgumentTemporaryVariable = "functionArgumentTemporaryVariable";

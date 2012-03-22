@@ -884,7 +884,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if there are no side effects, we don't need a temporary variable
 		if (hasSideEffects) {
 			// we need to create a local variable
-			String temporary = ctx.nextTempName();
+			String temporary = ctx.nextLogicallyNotNullableTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
 			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));

@@ -173,6 +173,14 @@ public abstract class EglContext extends TemplateContext {
 		return Constants.temporaryVariablePrefix + nextTempIndex();
 	}
 
+	/**
+	 * Returns a String that can be used as the name of a temporary variable. It will be "eze$LNNTemp" plus a number. The number
+	 * is 1 the first time this method is called, then 2, then 3, and so on.
+	 */
+	public String nextLogicallyNotNullableTempName() {
+		return Constants.temporaryVariableLogicallyNotNullablePrefix + nextTempIndex();
+	}
+
 	public IGenerationMessageRequestor getMessageRequestor() {
 		return messageRequestor;
 	}
