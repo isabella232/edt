@@ -691,10 +691,9 @@ public class ExternalTypeFromJavaPage extends WizardPage
 			
 			if ( (selectedMethods == null || selectedMethods.isEmpty())
 				  && (selectedFields == null || selectedFields.isEmpty())	
-				  && (selectedCons == null || selectedCons.isEmpty())) {
-				if(!isMakerInterface(configuration.getSelectedClazz())) {
-					memberStatus.setError(NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_Validation_NoMember);
-				}
+				  && (selectedCons == null || selectedCons.isEmpty())
+				  && (!isMakerInterface(configuration.getSelectedClazz())) ) {
+				memberStatus.setError(NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_Validation_NoMember);
 			}
 		}
 		
