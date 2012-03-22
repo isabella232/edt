@@ -59,6 +59,10 @@ public class IBMiCallStatementTemplate extends JavaTemplate implements Constants
 		ctx.invoke(genStatementBodyNoBraces, sb, ctx, out);
 	}
 
+	public void genStatementEnd(CallStatement stmt, Context ctx, TabbedWriter out) {
+		// we don't want a semi-colon
+	}
+
 	public QualifiedFunctionInvocation createFunctionInvocationBody(CallStatement callStatement, Context ctx)  {
 		//create a function invocation to access the proxy
 		MemberAccess ma = (MemberAccess)ctx.invoke(getFunctionAccess, callStatement, callStatement.getInvocationTarget(), ctx);
