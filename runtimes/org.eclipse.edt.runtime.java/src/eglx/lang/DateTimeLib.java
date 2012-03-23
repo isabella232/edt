@@ -37,7 +37,7 @@ public class DateTimeLib extends ExecutableBase {
 	 */
 	public static Calendar dateFromInt(int dateInt) {
 		Calendar cal = DateTimeUtil.getBaseCalendar();
-		long dateLong = ((long) dateInt * 1000 * DateTimeUtil.SECONDS_PER_DAY) + DEC_31_1969_LOCAL_TIME_ZONE;
+		long dateLong = ((long) (dateInt - 1) * 1000 * DateTimeUtil.SECONDS_PER_DAY) + DEC_31_1969_LOCAL_TIME_ZONE;
 		cal.setTimeInMillis(dateLong);
 		return cal;
 	}
