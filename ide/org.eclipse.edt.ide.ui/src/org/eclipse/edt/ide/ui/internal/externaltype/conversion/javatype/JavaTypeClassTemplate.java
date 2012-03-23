@@ -47,7 +47,13 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			if(isEGLKeyWord || isStartWithEze) {//Alias EGL keywords
 				eglName = JavaTypeConstants.UNDERSTORE_PREFIX + eglName;
 			}
-			out.print("externalType " + eglName);
+			
+			if(Modifier.isPublic(clazz.getModifiers())) {
+				out.print("externalType " + eglName);
+			} else {
+				out.print("private externalType " + eglName);
+			}
+			
 			
 			Set<Class<?>> allClassMeta = (Set<Class<?>>)ctx.get(JavaTypeConstants.ALL_CLASS_META);
 			String superTypes = getDirectSuperTypes(clazz,toBeGenerated.getSource(),allClassMeta);

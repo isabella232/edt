@@ -40,15 +40,19 @@ import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.IStringButtonAdapter
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.LayoutUtil;
 import org.eclipse.edt.ide.ui.internal.wizards.dialogfields.StringButtonDialogField;
 import org.eclipse.edt.ide.ui.templates.wizards.TemplateWizard;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.internal.ui.JavaUIMessages;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
+import org.eclipse.jdt.ui.dialogs.TypeSelectionExtension;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -72,6 +76,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
 public class ExternalTypeFromJavaPage extends WizardPage 
                implements ICheckStateListener {
@@ -90,6 +95,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	
 	private IJavaProject javaProject;
 	private URLClassLoader urlClassLoader;
+	private ExternalTypeCustomValidator fValidator = new ExternalTypeCustomValidator();
 	
 	public ExternalTypeFromJavaPage(ExternalTypeFromJavaWizardConfiguration config) {
 		super(WIZPAGENAME_ExternalTypeWizardPage);
@@ -219,6 +225,10 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		return NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_SelectedClass_label;
 	}
 	
+	public ExternalTypeCustomValidator getValidator() {
+		return fValidator;
+	}
+	
 	private class TypeFieldsAdapter implements IStringButtonAdapter, IDialogFieldListener {
 		// -------- IStringButtonAdapter
 		public void changeControlPressed(DialogField field) {
@@ -256,7 +266,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	}
 	
 	private void typePageDialogFieldChanged(DialogField field) {
-		String fieldName= null;
+		//String fieldName= null;
 	}
 	
 	protected IType chooseSelectedClass() {
@@ -266,9 +276,15 @@ public class ExternalTypeFromJavaPage extends WizardPage
 
 		IJavaElement[] elements= new IJavaElement[] { javaProject };
 		IJavaSearchScope scope= SearchEngine.createJavaSearchScope(elements);
+		final TypeSelectionExtension fExtension= new TypeSelectionExtension() {
+			@Override
+			public ISelectionStatusValidator getSelectionValidator() {
+				return getValidator();
+			}
+		};
 
 		FilteredTypesSelectionDialog dialog= new FilteredTypesSelectionDialog(getShell(), false,
-			getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE);
+			getWizard().getContainer(), scope, IJavaSearchConstants.CLASS_AND_INTERFACE,fExtension);
 		
 		dialog.setTitle(NewExternalTypeWizardMessages.NewExternalTypeWizardPage_SelectedClassDialog_title);
 		dialog.setMessage(NewExternalTypeWizardMessages.NewExternalTypeWizardPage_SelectedClassDialog_message);
@@ -614,6 +630,33 @@ public class ExternalTypeFromJavaPage extends WizardPage
 			}
 		}
 	}//ExternalTypeLabelProvider
+	
+	
+	class ExternalTypeCustomValidator implements ISelectionStatusValidator {
+		//private final IJavaProject fJavaProject;
+		
+		public ExternalTypeCustomValidator() {
+			//fJavaProject= javaProject;
+		}
+		
+		public IStatus validate(Object[] selection) {
+			return validateBuilderType(((IType)selection[0]));
+		}
+		
+		public IStatus validateBuilderType(IType type) {
+			try{
+				if(type != null && Flags.isPublic(type.getFlags())) {
+					return new StatusInfo();
+				} else {
+					return new StatusInfo(IStatus.ERROR, NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_notPublicType);
+				}
+			}catch (JavaModelException e1) {
+				return new StatusInfo(IStatus.WARNING, NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_typeValidationError);
+			}
+		}
+		
+	} //ExternalTypeCustomValidator
+	
 	
 	@Override
 	public void checkStateChanged(CheckStateChangedEvent event) {//ICheckStateListener

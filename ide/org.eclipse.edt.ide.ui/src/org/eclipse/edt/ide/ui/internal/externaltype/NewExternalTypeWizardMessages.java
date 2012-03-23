@@ -50,4 +50,7 @@ public class NewExternalTypeWizardMessages extends NLS {
 	
 	public static String ExternalTypeFromJavaPage_Validation_NoMember;
 	public static String ExternalTypeFromJavaPage_Validation_EGLBuiltinType;
+	
+	public static String ExternalTypeFromJavaPage_notPublicType;
+	public static String ExternalTypeFromJavaPage_typeValidationError;
 }
