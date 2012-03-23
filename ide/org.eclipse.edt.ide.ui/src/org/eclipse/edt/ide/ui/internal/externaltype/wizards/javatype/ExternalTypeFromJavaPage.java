@@ -692,7 +692,7 @@ public class ExternalTypeFromJavaPage extends WizardPage
 			if ( (selectedMethods == null || selectedMethods.isEmpty())
 				  && (selectedFields == null || selectedFields.isEmpty())	
 				  && (selectedCons == null || selectedCons.isEmpty())
-				  && (!isMakerInterface(configuration.getSelectedClazz())) ) {
+				  && (!isTypeWithoutPublicMember(configuration.getSelectedClazz())) ) {
 				memberStatus.setError(NewExternalTypeWizardMessages.ExternalTypeFromJavaPage_Validation_NoMember);
 			}
 		}
@@ -700,13 +700,27 @@ public class ExternalTypeFromJavaPage extends WizardPage
 		updateStatus(memberStatus);
 	}
 	
-	private boolean isMakerInterface(Class<?> clazz) {
-		boolean isMark = false;
-		if(clazz.isInterface()) {
-			if((clazz.getDeclaredFields() != null && clazz.getDeclaredFields().length == 0)
-				&& (clazz.getDeclaredConstructors() != null && clazz.getDeclaredConstructors().length == 0)
-				&& (clazz.getDeclaredMethods() != null && clazz.getDeclaredMethods().length == 0)) {
-				isMark = true;
+	private boolean isTypeWithoutPublicMember(Class<?> clazz) {
+		boolean isMark = true;
+		
+		if(clazz.getDeclaredFields() != null) {
+			for(Field field : clazz.getDeclaredFields()) {
+				if(Modifier.isPublic(field.getModifiers())) 
+						return false;
+			}
+		}
+		
+		if(clazz.getDeclaredConstructors() != null) {
+			for(Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+				if(Modifier.isPublic(constructor.getModifiers()))
+					  return false;
+			}
+		}
+		
+		if(clazz.getDeclaredMethods() != null) {
+			for(Method method : clazz.getDeclaredMethods()) {
+				if(Modifier.isPublic(method.getModifiers()))
+					  return false;
 			}
 		}
 		
