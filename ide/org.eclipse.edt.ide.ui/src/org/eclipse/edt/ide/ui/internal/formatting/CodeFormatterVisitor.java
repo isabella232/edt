@@ -1641,9 +1641,10 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		final CodeFormatterVisitor thisVisitor = this;		
 		final Expression expr = callStatement.getInvocationTarget();
 		final Expression usingExpr = callStatement.getUsing();
-		final CallbackTarget callbackTgt = callStatement.getCallSynchronizationValues().getReturnTo();
+		final CallSynchronizationValues callSynValues = callStatement.getCallSynchronizationValues();
+		final CallbackTarget callbackTgt = (callSynValues != null) ? callSynValues.getReturnTo() : null;
 		final Expression callbackExpr = (callbackTgt != null) ? callbackTgt.getExpression() : null;
-		final CallbackTarget errCallbackTgt = callStatement.getCallSynchronizationValues().getOnException();
+		final CallbackTarget errCallbackTgt = (callSynValues != null) ?callSynValues.getOnException() : null;
 		final Expression errCallbackExpr = (errCallbackTgt != null ) ? errCallbackTgt.getExpression() : null;
 		final SettingsBlock settingsBlock = callStatement.getSettingsBlock();
 		final List callParams = callStatement.getArguments();
