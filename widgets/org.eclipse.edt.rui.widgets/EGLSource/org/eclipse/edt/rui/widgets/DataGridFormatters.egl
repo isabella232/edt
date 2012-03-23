@@ -69,7 +69,7 @@ library DataGridFormatters
 		value = preDecimal + "." + postDecimal;
     end
 
-    function percentage(class string, value string, rowData any in)
+    function percentage(class string inout, value string inout, rowData any in)
         value += "%";
     end
 
