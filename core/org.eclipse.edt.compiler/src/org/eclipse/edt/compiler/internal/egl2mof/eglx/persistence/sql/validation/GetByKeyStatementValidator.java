@@ -101,7 +101,7 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 					new String[] {});
 			return;
 		}
-		else if (!isDataExpr && withExpression == null && withInline == null && !mapsToSingleTable(targets)) {
+		else if (!isDataExpr && withExpression == null && withInline == null && !(mapsToSingleTable(targets) || isFromResultSet()) ) {
 			// WITH required when the columns do not map to a single table.
 			int[] offsets = getOffsets(targets);
 			problemRequestor.acceptProblem(offsets[0], offsets[1],
@@ -169,6 +169,15 @@ public class GetByKeyStatementValidator extends AbstractSqlStatementValidator {
 		}
 		
 		return type;
+	}
+	
+	private boolean isFromResultSet() {
+		if (from != null) {
+			// When WITH is specified, FROM must be SQLDataSource.
+			ITypeBinding type = from.getExpression().resolveTypeBinding();
+			return Binding.isValidBinding(type) && isResultSet(type);
+		}
+		return false;
 	}
 	
 	private void validateFrom() {
