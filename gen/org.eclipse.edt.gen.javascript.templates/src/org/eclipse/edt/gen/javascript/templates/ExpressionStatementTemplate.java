@@ -14,7 +14,6 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ExpressionStatement;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class ExpressionStatementTemplate extends JavaScriptTemplate {
 	private boolean processEnd = true;
@@ -23,7 +22,7 @@ public class ExpressionStatementTemplate extends JavaScriptTemplate {
 		// an expression statement with an expression that simply points at a member name is not valid and needs to be
 		// ignored. normally, this won't happen in the IRs, but can occur when our statementblock processing logic alters the
 		// set values expression statements, when resetting the slot for the temporary variable
-		if (IRUtils.hasSideEffects(stmt.getExpr()))
+		if (org.eclipse.edt.gen.CommonUtilities.isExpressionStatementNeedingGeneration(stmt.getExpr(), ctx))
 			ctx.invoke(genExpression, stmt.getExpr(), ctx, out);
 		else
 			processEnd = false;
