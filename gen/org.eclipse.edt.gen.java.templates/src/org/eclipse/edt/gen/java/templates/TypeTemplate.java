@@ -34,7 +34,6 @@ import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.UnaryExpression;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class TypeTemplate extends JavaTemplate {
@@ -236,7 +235,7 @@ public class TypeTemplate extends JavaTemplate {
 					out.print(".ezeUnbox()");
 			} else {
 				// if this is a well-behaved assignment, we can avoid the temporary
-				if (IRUtils.hasSideEffects(arg2)) {
+				if (org.eclipse.edt.gen.CommonUtilities.hasSideEffects(arg2, ctx)) {
 					String temporary = ctx.nextTempName();
 					ctx.invoke(genRuntimeTypeName, arg1.getType(), ctx, out, TypeNameKind.JavaObject);
 					out.print(" " + temporary + " = ");

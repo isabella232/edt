@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayAccessTemplate extends JavaTemplate {
@@ -28,7 +27,7 @@ public class ArrayAccessTemplate extends JavaTemplate {
 		// are we dealing with a nullable array
 		if (expr.isNullable()) {
 			// if this is a well-behaved assignment, we can avoid the temporary
-			if (IRUtils.hasSideEffects(expr)) {
+			if (org.eclipse.edt.gen.CommonUtilities.hasSideEffects(expr, ctx)) {
 				String temporary = ctx.nextTempName();
 				ctx.invoke(genRuntimeTypeName, expr.getType(), ctx, out, TypeNameKind.JavaObject);
 				out.print(" " + temporary + " = ");

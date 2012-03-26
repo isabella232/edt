@@ -29,7 +29,6 @@ import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ForStatementTemplate extends JavaTemplate {
@@ -40,10 +39,11 @@ public class ForStatementTemplate extends JavaTemplate {
 			ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
 		}
 		// do we have a simple or complex for statement
-		boolean hasSideEffects = (stmt.getCounterVariable() != null && (IRUtils.hasSideEffects(stmt.getCounterVariable()) || stmt.getCounterVariable() instanceof ArrayAccess))
-			|| (stmt.getFromExpression() != null && IRUtils.hasSideEffects(stmt.getFromExpression()))
-			|| (stmt.getToExpression() != null && IRUtils.hasSideEffects(stmt.getToExpression()))
-			|| (stmt.getDeltaExpression() != null && IRUtils.hasSideEffects(stmt.getDeltaExpression()));
+		boolean hasSideEffects = (stmt.getCounterVariable() != null && (org.eclipse.edt.gen.CommonUtilities.hasSideEffects(stmt.getCounterVariable(), ctx) || stmt
+			.getCounterVariable() instanceof ArrayAccess))
+			|| (stmt.getFromExpression() != null && org.eclipse.edt.gen.CommonUtilities.hasSideEffects(stmt.getFromExpression(), ctx))
+			|| (stmt.getToExpression() != null && org.eclipse.edt.gen.CommonUtilities.hasSideEffects(stmt.getToExpression(), ctx))
+			|| (stmt.getDeltaExpression() != null && org.eclipse.edt.gen.CommonUtilities.hasSideEffects(stmt.getDeltaExpression(), ctx));
 		if (hasSideEffects) {
 			// we need to process this as a complex for statement
 			// create the initial statement block
