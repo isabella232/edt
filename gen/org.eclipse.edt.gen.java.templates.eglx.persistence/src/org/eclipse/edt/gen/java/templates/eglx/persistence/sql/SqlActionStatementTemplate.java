@@ -141,6 +141,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		MemberAccess expr = ctx.getFactory().createMemberAccess();
 		expr.setQualifier(target);
 		expr.setId(newOut.getCurrentLine());
+		expr.setMember(field);
 		genSetTargetFromResultSet(expr, var_resultSet, columnIndex, ctx, out);
 	}
 	
