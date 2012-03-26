@@ -51,7 +51,6 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.WhileStatement;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.impl.EObjectImpl;
@@ -269,7 +268,7 @@ public class ReorganizeCode extends AbstractVisitor {
 			// if the return statement invokes a function that has inout or out parms, then we need to create a local
 			// variable for the return of the function invocation. This is because we need to unbox the inout/out args after
 			// the function is invoked and before the return statement
-			if (object.getExpression().getType() != null && IRUtils.hasSideEffects(object.getExpression())) {
+			if (object.getExpression().getType() != null && CommonUtilities.hasSideEffects(object.getExpression(), ctx)) {
 				// handle the preprocessing
 				String temporary = ctx.nextTempName();
 				LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
@@ -379,7 +378,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// if the condition has side effects, then we need to extract the condition and place it as an if statement and then
 		// insert that if with an exit while statement inside the while statement. Finally, we replace the while condition
 		// with the boolean true
-		if (IRUtils.hasSideEffects(object.getCondition())) {
+		if (CommonUtilities.hasSideEffects(object.getCondition(), ctx)) {
 			// create a unary condition
 			UnaryExpression unaryExpression = factory.createUnaryExpression();
 			unaryExpression.setOperator("!");
@@ -423,7 +422,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	public boolean visit(IfStatement object) {
 		// if the condition has side effects, then we need to extract the condition and place it as an assignment to a
 		// boolean temporary variable and then replace the condition with the boolean
-		if (IRUtils.hasSideEffects(object.getCondition())) {
+		if (CommonUtilities.hasSideEffects(object.getCondition(), ctx)) {
 			// we need to create a local variable
 			String temporary = ctx.nextTempName();
 			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
@@ -880,7 +879,7 @@ public class ReorganizeCode extends AbstractVisitor {
 
 	@SuppressWarnings("unchecked")
 	public boolean visit(SetValuesExpression object) {
-		boolean hasSideEffects = IRUtils.hasSideEffects(object.getTarget());
+		boolean hasSideEffects = CommonUtilities.hasSideEffects(object.getTarget(), ctx);
 		// if there are no side effects, we don't need a temporary variable
 		if (hasSideEffects) {
 			// we need to create a local variable
