@@ -28,13 +28,11 @@ import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReference;
-import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FixedPrecisionType;
 import org.eclipse.edt.mof.egl.Function;
-import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
@@ -56,7 +54,6 @@ import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
 import org.eclipse.edt.mof.egl.PatternType;
-import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.SequenceType;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StructPart;
@@ -952,52 +949,6 @@ public class IRUtils {
 
 	public static Set<Part> getReferencedPartsFor(Part part) {
 		return (new PartsReferencedResolver()).getReferencedPartsFor(part);
-	}
-	
-	public static boolean hasSideEffects(Expression expr) {
-		return (new CheckSideEffects()).checkSideEffect(expr);
-	}
-
-	public static class CheckSideEffects extends AbstractVisitor {
-		boolean has = false;
-		public boolean checkSideEffect(Expression expr) {
-			disallowRevisit();
-			setReturnData(false);
-			expr.accept(this);
-			return (Boolean)getReturnData();
-		}
-		public boolean visit(EObject obj) {
-			return false;
-		}
-		public boolean visit(Expression expr) {
-			if (has) return false;
-			return true;
-		}
-		public boolean visit(NewExpression expr) {
-			has = true;
-			setReturnData(has);
-			return true;
-		}
-		public boolean visit(Assignment expr) {
-			has = true;
-			setReturnData(has);
-			return true;
-		}
-		public boolean visit(FunctionInvocation expr) {
-			has = true;
-			setReturnData(has);
-			return false;
-		}
-		public boolean visit(DelegateInvocation expr) {
-			has = true;
-			setReturnData(has);
-			return false;
-		}
-		public boolean visit(QualifiedFunctionInvocation expr) {
-			has = true;
-			setReturnData(has);
-			return false;
-		}
 	}
 	
 	public static Constructor resolveConstructorReference(EGLClass clazz, List<Expression> arguments) {
