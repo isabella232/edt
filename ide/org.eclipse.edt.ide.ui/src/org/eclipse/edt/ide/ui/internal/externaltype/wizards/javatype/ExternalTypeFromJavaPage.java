@@ -216,8 +216,9 @@ public class ExternalTypeFromJavaPage extends WizardPage
 	
 	protected void createSelectedClassControls(Composite composite, int nColumns) {
 		fSelectedClassDialogField.doFillIntoGrid(composite, nColumns);
-		fSelectedClassDialogField.getTextControl(composite).setEditable(false);
+		//fSelectedClassDialogField.getTextControl(composite).setEditable(false);
 		Text text= fSelectedClassDialogField.getTextControl(null);
+		text.setEnabled(false);
 		LayoutUtil.setWidthHint(text, getMaxFieldWidth());
 	}
 	
