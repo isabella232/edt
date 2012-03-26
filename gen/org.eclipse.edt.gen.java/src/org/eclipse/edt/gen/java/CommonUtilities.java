@@ -283,6 +283,16 @@ public class CommonUtilities {
 		return "";
 	}
 
+	@SuppressWarnings("static-access")
+	public static String getNativeNullTypeJavaOperation(BinaryExpression expr, Context ctx) {
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_EQ))
+			return " == ";
+		if (op.equals(expr.Op_NE))
+			return " != ";
+		return "";
+	}
+
 	public static String getNativeJavaAssignment(String op) {
 		if (op.equals("xor="))
 			return "^=";
