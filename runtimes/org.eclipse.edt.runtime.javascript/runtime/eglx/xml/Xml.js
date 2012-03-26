@@ -685,9 +685,10 @@ egl.eglx.xml.XmlLib["determineType"] = function(/*string*/text) {
 	return type;
 };
 egl.eglx.xml.XmlLib["defaultNamespace"] = function() {
-	if (egl.IE) {
-		return "";
-	} else {
+	if (!egl.IE || egl.IEVersion >= 9) {
 		return null;
+	}
+	else{
+		return "";
 	}
 };
