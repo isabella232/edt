@@ -33,9 +33,11 @@ public class ExternalTypeTemplate extends JavaScriptTemplate {
 	public void preGenClassBody(ExternalType part, Context ctx) {}
 
 	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAMDHeader, part, ctx, out);
-		getExternalJSCotent(part, ctx, out);
-		out.println("});");
+		if (part.getAnnotation( Constants.JACASCRIPT_OBJECT ) != null) {
+			ctx.invoke(genAMDHeader, part, ctx, out);
+			getExternalJSCotent(part, ctx, out);
+			out.println("});");
+		}
 	}
 	
 	private void getExternalJSCotent(ExternalType part, Context ctx, TabbedWriter out){
