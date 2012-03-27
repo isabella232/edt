@@ -578,18 +578,27 @@ public class EGLFileWizardPage extends EGLPackageWizardPage {
 		//Validate the package
 		if(super.validatePage())
 		{
-			fEGLFileStatus.setOK();
-			
-			String projectName = getFileConfiguration().getProjectName();
-			String containerName = getFileConfiguration().getContainerName();
-			String packageName = getFileConfiguration().getFPackage();
-			String fileName= getFileConfiguration().getFileName();
-			String fileExtensionName = getFileConfiguration().getFileExtension();
-		
-			ret = EGLWizardUtilities.validateFile(projectName, containerName, packageName, fileName, fileExtensionName, fEGLFileStatus, this, checkFileExistance);
+			ret = isValidPage(checkFileExistance);
 			updateStatus(new IStatus[] { fContainerStatus, fPackageStatus, fEGLFileStatus });
 		}
 		
+		return ret;
+	}
+	
+	protected boolean isValidPage(){
+		return isValidPage(!getFileConfiguration().isOverwrite());
+	}
+	protected boolean isValidPage(boolean checkFileExistance){
+		boolean ret = false;
+		fEGLFileStatus.setOK();
+		
+		String projectName = getFileConfiguration().getProjectName();
+		String containerName = getFileConfiguration().getContainerName();
+		String packageName = getFileConfiguration().getFPackage();
+		String fileName= getFileConfiguration().getFileName();
+		String fileExtensionName = getFileConfiguration().getFileExtension();
+	
+		ret = EGLWizardUtilities.validateFile(projectName, containerName, packageName, fileName, fileExtensionName, fEGLFileStatus, this, checkFileExistance);
 		return ret;
 	}
 	

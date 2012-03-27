@@ -412,6 +412,16 @@ public class DTOConfigPage extends WizardPage implements SelectionListener, IChe
 		if (selectedTables == null || selectedTables.isEmpty()) {
 			status.setError(NewWizardMessages.FromSqlDatabasePage_Validation_NoTable);
 		}
+		
+		for(int i = 0; i < selectedTables.size(); i++){
+			Table table1 = (Table)selectedTables.get(i);
+			for(int j = i + 1; j < selectedTables.size(); j ++){
+				Table table2 = (Table)selectedTables.get(j);
+				if(table1.getName().equalsIgnoreCase(table2.getName())){
+					status.setError(NewWizardMessages.bind(NewWizardMessages.FromSqlDatabasePage_Validation_DuplicateTable, table1.getName()));
+				}
+			}
+		}
 	}
 
 	/**

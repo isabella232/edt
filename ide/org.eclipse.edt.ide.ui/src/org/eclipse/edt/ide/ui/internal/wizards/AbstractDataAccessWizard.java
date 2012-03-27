@@ -375,7 +375,7 @@ public abstract class AbstractDataAccessWizard extends TemplateWizard implements
 		
 
 		if(needConfigGenerator){
-			String dbName = config.getDatabaseName();
+			String dbName = config.getDatabaseName().toLowerCase();
 			String dbPkg = dbName;
 			if(EGLKeywordHandler.getKeywordHashSet().contains(dbName.toLowerCase(Locale.ENGLISH))) {
 				dbPkg = JavaTypeConstants.UNDERSTORE_PREFIX + dbName;

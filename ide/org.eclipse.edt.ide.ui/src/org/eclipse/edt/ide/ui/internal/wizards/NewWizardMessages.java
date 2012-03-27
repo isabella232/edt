@@ -962,6 +962,7 @@ public class NewWizardMessages extends NLS {
 	public static String FromSqlDatabasePage_CreateDBLink;
 	public static String FromSqlDatabasePage_Validation_UnableToConnect;
 	public static String FromSqlDatabasePage_Validation_NoTable;
+	public static String FromSqlDatabasePage_Validation_DuplicateTable;
 	public static String FromSqlDatabasePage_Validation_NoConnection;
 	public static String FromSqlDatabasePage_TablesLabel;
 	public static String FromSqlDatabasePage_TablesSelected;

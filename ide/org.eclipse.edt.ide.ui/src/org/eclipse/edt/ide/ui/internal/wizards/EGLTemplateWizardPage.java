@@ -180,7 +180,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	}
 	
 	public boolean isPageComplete(){
-		return super.isPageComplete() && validateEGLPartName() && isValidTemplateToCompletePage();
+		return super.isPageComplete() && validateEGLPartName() && isValidTemplateToCompletePage() && isValidPage();
 	}
 	
 	/**
@@ -221,7 +221,7 @@ public abstract class EGLTemplateWizardPage extends EGLPartWizardPage
 	
 	@Override
 	public boolean canFlipToNextPage() {
-		return super.canFlipToNextPage() && validateEGLPartName();
+		return super.canFlipToNextPage() && validateEGLPartName() && isValidPage();
 	}
 	
 	private boolean validateEGLPartName() {

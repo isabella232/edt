@@ -136,7 +136,9 @@ public class NewEGLProjectWizard extends Wizard
 			
 			// Remember base package name
 			IPreferenceStore store = EDTUIPlugin.getDefault().getPreferenceStore();
-			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());
+			if(!(template.getId().equals("org.eclipse.edt.ide.ui.projects.rui.helloworld"))){
+				store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_BASEPACKAGE, model.getBasePackageName());				
+			}
 			store.putValue(EDTUIPreferenceConstants.NEWPROJECTWIZARD_SELECTEDTEMPLATE, template.getId());
 		}
 		catch (InterruptedException e) {
