@@ -364,8 +364,9 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			IAnnotationBinding iAnnotationBinding = (IAnnotationBinding) iterator.next();
 			if ((iAnnotationBinding.getName().equalsIgnoreCase("Property") || 
 					iAnnotationBinding.getName().equalsIgnoreCase("EGLProperty"))) {
-				AnnotationFieldBinding field = (AnnotationFieldBinding) iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD);
-				if(null != field.getValue() && field.getValue().equals("")){
+				IDataBinding aDataBinding = iAnnotationBinding.findData(org.eclipse.edt.compiler.core.IEGLConstants.PROPERTY_SETMETHOD);
+				AnnotationFieldBinding field = aDataBinding instanceof AnnotationFieldBinding ? (AnnotationFieldBinding)aDataBinding : null;
+				if(null != field && null != field.getValue() && field.getValue().equals("")){
 					return true;
 				}
 			}
