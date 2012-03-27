@@ -203,7 +203,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 						egl.atLine(this.eze$$fileName,93,1903,92, this);
 						if (throwsFailException) {
 							try{egl.enterBlock();
-								var eze$Temp4 = null;
+								var eze$LNNTemp4 = null;
 								{
 									var eze$SettingTarget1;
 									egl.atLine(this.eze$$fileName,94,1938,48, this);
@@ -211,10 +211,10 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 									egl.atLine(this.eze$$fileName,94,1967,18, this);
 									egl.checkNull(eze$SettingTarget1).message = this.s.reason;
 									egl.atLine(this.eze$$fileName,94,1938,48, this);
-									eze$Temp4 = eze$SettingTarget1;
+									eze$LNNTemp4 = eze$SettingTarget1;
 								}
 								egl.atLine(this.eze$$fileName,94,1932,55, this);
-								throw eze$Temp4;
+								throw eze$LNNTemp4;
 							}finally{egl.exitBlock();}
 						}
 					}finally{egl.exitBlock();}
@@ -265,7 +265,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = (egl.eglx.lang.EInt64.equals(expected,actual));
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,126,3145,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"B;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"B;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"B;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"B;"]), isEqual);
 				egl.atLine(this.eze$$fileName,124,3015,189, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -299,7 +299,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = ((expected) == actual);
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,135,3463,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"S;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"S;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"S;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"S;"]), isEqual);
 				egl.atLine(this.eze$$fileName,133,3333,189, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -325,8 +325,8 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		"assertStringArrayEqual": function(message, expected, actual) {
 			try { egl.enter("assertStringArrayEqual",this,arguments);
 				egl.addLocalFunctionVariable("message", message, "eglx.lang.EString", "message");
-				egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EList<eglx.lang.EString>", "!expected");
-				egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EList<eglx.lang.EString>", "!actual");
+				egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EList<eglx.lang.EString>", "expected");
+				egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EList<eglx.lang.EString>", "actual");
 				var isArrayEqual;
 				egl.addLocalFunctionVariable("isArrayEqual", isArrayEqual, "eglx.lang.EBoolean", "isArrayEqual");
 				egl.atLine(this.eze$$fileName,143,3770,4, this);
@@ -385,7 +385,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 												isArrayEqual = false;
 												egl.setLocalFunctionVariable("isArrayEqual", isArrayEqual, "eglx.lang.EBoolean");
 												egl.atLine(this.eze$$fileName,158,4237,28, this);
-												failedHeader = ((failedHeader) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32,i));
+												failedHeader = ((failedHeader) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32, [i]));
 												egl.setLocalFunctionVariable("failedHeader", failedHeader, "eglx.lang.EString");
 											}finally{egl.exitBlock();}
 										}
@@ -432,7 +432,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 						isArrayEqual = false;
 						egl.setLocalFunctionVariable("isArrayEqual", isArrayEqual, "eglx.lang.EBoolean");
 						egl.atLine(this.eze$$fileName,174,4656,120, this);
-						failedReason = (((((((((((((((("Failed: ") + this.EXPECTEDSIZEHEADER)) + "'")) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32,expectedSize))) + "' ")) + this.ACTUALSIZEHEADER)) + "'")) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32,actualSize))) + "' ");
+						failedReason = (((((((((((((((("Failed: ") + this.EXPECTEDSIZEHEADER)) + "'")) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32, [expectedSize]))) + "' ")) + this.ACTUALSIZEHEADER)) + "'")) + egl.eglx.lang.convert(egl.eglx.lang.EString.fromEInt32, [actualSize]))) + "' ");
 						egl.setLocalFunctionVariable("failedReason", failedReason, "eglx.lang.EString");
 					}finally{egl.exitBlock();}
 				}
@@ -458,8 +458,8 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 		,
 		"assertStringArrayEqual1": function(expected, actual) {
 			try { egl.enter("assertStringArrayEqual1",this,arguments);
-				egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EList<eglx.lang.EString>", "!expected");
-				egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EList<eglx.lang.EString>", "!actual");
+				egl.addLocalFunctionVariable("expected", expected, "eglx.lang.EList<eglx.lang.EString>", "expected");
+				egl.addLocalFunctionVariable("actual", actual, "eglx.lang.EList<eglx.lang.EString>", "actual");
 				egl.atLine(this.eze$$fileName,183,5024,45, this);
 				this.assertStringArrayEqual("", expected, actual);
 				egl.atLine(this.eze$$fileName,182,4946,129, this);
@@ -481,7 +481,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = (egl.eglx.lang.EDate.equals(expected, actual));
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,188,5206,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"K;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"K;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"K;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"K;"]), isEqual);
 				egl.atLine(this.eze$$fileName,186,5082,183, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -515,7 +515,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = (egl.eglx.lang.ETimestamp.equals(expected, actual));
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,197,5524,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"yyyyMMddhhmmss","J;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"yyyyMMddhhmmss","J;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"yyyyMMddhhmmss","J;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"yyyyMMddhhmmss","J;"]), isEqual);
 				egl.atLine(this.eze$$fileName,195,5385,200, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -549,7 +549,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = (egl.eglx.lang.EDecimal.equals(expected,actual));
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,206,5859,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"d;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"d;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"d;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"d;"]), isEqual);
 				egl.atLine(this.eze$$fileName,204,5726,196, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -583,7 +583,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = this.isFloatEqual(expected, actual);
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,215,6191,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"F;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"F;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"F;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"F;"]), isEqual);
 				egl.atLine(this.eze$$fileName,213,6054,196, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -694,7 +694,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				isEqual = this.isSmallFloatEqual(expected, actual);
 				egl.setLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean");
 				egl.atLine(this.eze$$fileName,241,7178,53, this);
-				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,expected,"f;"), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny,actual,"f;"), isEqual);
+				this.expectAssertTrue(message, egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [expected,"f;"]), egl.eglx.lang.convert(egl.eglx.lang.EAny.fromEAny, [actual,"f;"]), isEqual);
 				egl.atLine(this.eze$$fileName,239,7021,216, this);
 				if (!egl.debugg) egl.leave();
 			} finally {
@@ -777,8 +777,11 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				egl.atLine(this.eze$$fileName,256,7817,38, this);
 				delta = ((normalExpected - normalActual));
 				egl.setLocalFunctionVariable("delta", delta, "eglx.lang.ESmallfloat");
+				var eze$Temp27;
+				egl.atLine(this.eze$$fileName,257,7867,18, this);
+				eze$Temp27 = delta;
 				egl.atLine(this.eze$$fileName,257,7859,27, this);
-				delta = egl.eglx.lang.MathLib.abs(delta);
+				delta = egl.eglx.lang.convert(egl.eglx.lang.EFloat32.fromEFloat64, [egl.eglx.lang.MathLib.abs(eze$Temp27)]);
 				egl.setLocalFunctionVariable("delta", delta, "eglx.lang.ESmallfloat");
 				var isEqual;
 				egl.addLocalFunctionVariable("isEqual", isEqual, "eglx.lang.EBoolean", "isEqual");
@@ -849,7 +852,7 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'LogResult',
 				var standardMsg;
 				egl.addLocalFunctionVariable("standardMsg", standardMsg, "eglx.lang.EString", "standardMsg");
 				egl.atLine(this.eze$$fileName,279,8679,88, this);
-				standardMsg = (((((((((((((((("Failed: ") + this.EXPECTEDHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(expected, false))) + "' ")) + this.ACTUALHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast(actual, false))) + "' ");
+				standardMsg = (((((((((((((((("Failed: ") + this.EXPECTEDHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast({eze$$value : expected, eze$$signature : egl.inferSignature(expected)}, false))) + "' ")) + this.ACTUALHEADER)) + "'")) + egl.eglx.lang.EString.ezeCast({eze$$value : actual, eze$$signature : egl.inferSignature(actual)}, false))) + "' ");
 				egl.setLocalFunctionVariable("standardMsg", standardMsg, "eglx.lang.EString");
 				egl.atLine(this.eze$$fileName,280,8778,21, this);
 				if (!egl.debugg) egl.leave();
