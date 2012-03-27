@@ -25,8 +25,8 @@ public class NullTypeTemplate extends JavaTemplate {
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if the lhs argument is not the nulltype, and if it is not a value type, pass to super. same goes for rhs
-		if ((!(arg.getLHS() instanceof NullLiteral) && !TypeUtils.isReferenceType(arg.getLHS().getType()))
-			|| (!(arg.getRHS() instanceof NullLiteral) && !TypeUtils.isReferenceType(arg.getRHS().getType())))
+		if ((!(arg.getLHS() instanceof NullLiteral) && !TypeUtils.isReferenceType(arg.getLHS().getType()) && !arg.getLHS().isNullable())
+			|| (!(arg.getRHS() instanceof NullLiteral) && !TypeUtils.isReferenceType(arg.getRHS().getType()) && !arg.getRHS().isNullable()))
 			ctx.invokeSuper(this, genBinaryExpression, type, ctx, out, arg);
 		else {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
