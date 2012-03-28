@@ -45,9 +45,9 @@ public class DeploymentDescGenerator{
 	private void genBindJSFile( DeploymentDesc deploymentDesc ) 
 	{
 		String eglddName = deploymentDesc.getName().toLowerCase();
-		writer.print("egl.eze$$BindFile_");
-		writer.print(JavaScriptAliaser.getJavascriptSafeAlias(eglddName));
-		writer.println(" = function() {");
+		writer.print("egl[\"eze$$BindFile_");
+		writer.print(eglddName);
+		writer.println("\"] = function() {");
 		writer.print("var bindFile = new egl.eglx.services.BindFile(\"");
 		writer.print(eglddName);
 		writer.println("\");");
