@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen.EGLMessages;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -36,7 +37,7 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 
 	private String builtMessage;
 
-	private static Map<String, String> messageBundle;
+	private Map<String, String> messageBundle;
 	private String partName;
 
 	private static final MessageFormat formatter = new MessageFormat("");
@@ -130,7 +131,7 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 		setEndOffset(anEndOffset);
 	}
 
-	public static String buildMessageText(String key, Object[] inserts) {
+	public String buildMessageText(String key, Object[] inserts) {
 		String message = messageBundle.get(key);
 		if (message != null) {
 			if (inserts == null || inserts.length == 0)
@@ -346,5 +347,34 @@ public class EGLMessage extends Object implements IGenerationResultsMessage {
 		if (getMessageContributor() instanceof IEGLMessageContributor)
 			return ((IEGLMessageContributor) getMessageContributor()).getResourceName();
 		return null;
+	}
+	
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+		
+		if (o instanceof EGLMessage) {
+			EGLMessage msg = (EGLMessage)o;
+			return msg.endColumnNumber == endColumnNumber && msg.endLineNumber == endLineNumber && msg.endOffset == endOffset &&
+					msg.severity == severity && msg.startColumnNumber == startColumnNumber && msg.startLineNumber == startLineNumber &&
+					msg.startOffset == startOffset && equals(msg.id, id) && equals(msg.partName, partName) && equals(msg.builtMessage, builtMessage) &&
+					equals(msg.params, params) && equals(msg.messageBundle, messageBundle);
+		}
+		return false;
+	}
+	
+	private boolean equals(Object o1, Object o2) {
+		if (o1 == null) {
+			return o2 == null;
+		}
+		return o1.equals(o2);
+	}
+	
+	private boolean equals(Object[] o1, Object[] o2) {
+		if (o1 == null) {
+			return o2 == null;
+		}
+		return Arrays.equals(o1, o2);
 	}
 }
