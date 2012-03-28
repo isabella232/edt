@@ -237,7 +237,9 @@ final class EGLCompletionProposalComputerDescriptor {
 					fLastError= computer.getErrorMessage();
 					return proposals;
 				}
-			} finally {
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally {
 				fIsReportingDelay= true;
 			}
 		} catch (InvalidRegistryObjectException x) {

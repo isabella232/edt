@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.ConstantFormField;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -49,6 +50,7 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 	 */
 	protected void precompileContexts() {
 		addContext("package a; program a {@"); //$NON-NLS-1$
+		addContext("package a; program a function a(){"); //$NON-NLS-1$
 	}
 	
 	protected List returnCompletionProposals(
@@ -59,6 +61,8 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 		this.viewer = viewer;
 		this.documentOffset = documentOffset;
 		final List proposals = new ArrayList();
+
+		final boolean invokeAfterAnnoIcon = isState(parseStack, ((Integer) validStates.get(0)).intValue());
 		
 		getBoundASTNode(viewer, documentOffset, new String[] {"", "a{}", "a", "}};", "a};"}, new CompletedNodeVerifier() { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			public boolean nodeIsValid(Node astNode) {
@@ -66,11 +70,17 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 			}
 		}, new IBoundNodeProcessor() {
 			public void processBoundNode(Node boundNode) {
-				if (isState(parseStack, ((Integer) validStates.get(0)).intValue())) {
+				if (isState(parseStack, ((Integer) validStates.get(0)).intValue()) ||
+						isState(parseStack, ((Integer) validStates.get(1)).intValue())
+						) {
 					Node settingsBlock = getSettingsBlock(boundNode);
 					Node container = settingsBlock.getParent();
 					AnnotationGatherer aGatherer = getAnnotationGatherer(container, settingsBlock);
-					proposals.addAll(aGatherer.getProposals(viewer, documentOffset, prefix));
+					if(invokeAfterAnnoIcon){
+						proposals.addAll(aGatherer.getProposals(viewer, documentOffset, prefix, true));
+					}else if(container instanceof Constructor || container instanceof NestedFunction){
+						proposals.addAll(aGatherer.getProposals(viewer, documentOffset, prefix));
+					}
 				}				
 			}
 		});
@@ -196,7 +206,15 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 				viewer,
 				documentOffset,
 				prefix,
-				true, true).getProposals(CapabilityFilterUtility.filterPropertyRules(getPropertyRules()), Arrays.asList(new Node[] {settingsBlock}));
+				true, false).getProposals(CapabilityFilterUtility.filterPropertyRules(getPropertyRules()), Arrays.asList(new Node[] {settingsBlock}));
+		}
+		
+		public Collection getProposals(ITextViewer viewer, int documentOffset, String prefix, boolean invokeFromAtIcon) {
+			return new EGLPropertyNameProposalHandler(
+				viewer,
+				documentOffset,
+				prefix,
+				true, invokeFromAtIcon).getProposals(CapabilityFilterUtility.filterPropertyRules(getPropertyRules()), Arrays.asList(new Node[] {settingsBlock}));
 		}
 
 		protected abstract Collection getPropertyRules();

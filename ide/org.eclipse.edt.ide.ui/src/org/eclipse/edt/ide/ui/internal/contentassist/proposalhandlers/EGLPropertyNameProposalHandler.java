@@ -47,12 +47,12 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 	protected static final String SQL_CONDITION = "condition"; //$NON-NLS-1$
 	
 	private boolean isAnnotationSetting;
-	private boolean useAnnIcon;
+	private boolean startFromAnnoHead;
 
-	public EGLPropertyNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix, boolean isAnnotationSetting, boolean useAnnIcon) {
+	public EGLPropertyNameProposalHandler(ITextViewer viewer, int documentOffset, String prefix, boolean isAnnotationSetting, boolean startFromAnnoIcon) {
 		super(viewer, documentOffset, prefix, null);
 		this.isAnnotationSetting = isAnnotationSetting;
-		this.useAnnIcon = useAnnIcon;
+		this.startFromAnnoHead = startFromAnnoIcon;
 	}
 
 	public List getProposals(int location, List propertyBlockList) {
@@ -88,16 +88,13 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 		int selectionLength = 0;
 		
 		StringBuffer buffer = new StringBuffer();
-		if ( (propertyRule.isValueless()&&!isAnnotationSetting)|| 
-			(propertyRule.isComplex()
-			&& !isAnnotationSetting
-			&& !propertyRule.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_PRINTFLOATINGAREA)
-			&& !propertyRule.getName().equalsIgnoreCase(IEGLConstants.PROPERTY_SCREENFLOATINGAREA))) {
+		if ( (propertyRule.isValueless() && isAnnotationSetting && !this.startFromAnnoHead)|| 
+			(propertyRule.isComplex() && isAnnotationSetting && !this.startFromAnnoHead)){
 			buffer.append("@"); //$NON-NLS-1$
 		}
 			
 		buffer.append(propertyRule.getName());		
-		if (propertyRule.isComplex() || propertyRule.hasType(EGLNewPropertiesHandler.nestedValue) || isAnnotationSetting) {
+		if (propertyRule.isComplex() || propertyRule.hasType(EGLNewPropertiesHandler.nestedValue)) {
 			if(!propertyRule.isValueless()){
 				buffer.append(" {"); //$NON-NLS-1$
 				cursorPosition = buffer.length();
@@ -291,7 +288,7 @@ public class EGLPropertyNameProposalHandler extends EGLAbstractProposalHandler {
 			}
 		}
 		
-		String img_src = useAnnIcon ? PluginImages.IMG_OBJS_ANNOTATION : PluginImages.IMG_OBJS_ENV_VAR;
+		String img_src = isAnnotationSetting ? PluginImages.IMG_OBJS_ANNOTATION : PluginImages.IMG_OBJS_ENV_VAR;
 		return
 			new EGLCompletionProposal(viewer,
 				propertyRule.getName(),
