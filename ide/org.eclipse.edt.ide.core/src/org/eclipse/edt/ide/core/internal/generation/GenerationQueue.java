@@ -260,8 +260,9 @@ public class GenerationQueue {
 	 */
 	private void invokeGenerators(IFile file, Part part, IGenerationMessageRequestor messageRequestor, IGenerator[] generators, IEnvironment env) throws Exception {
 		for (int i = 0; i < generators.length; i++) {
+			IGenerationMessageRequestor requestor = createMessageRequestor();
 			try {
-				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, messageRequestor);
+				generators[i].generate(file.getFullPath().toString(), (Part)part.clone(), env, requestor);
 			}
 			catch (RuntimeException e) {
 				handleRuntimeException(e, messageRequestor, part.getId(), new HashSet());
@@ -269,6 +270,7 @@ public class GenerationQueue {
 			catch (final Exception e) {
 				handleUnknownException(e, messageRequestor);
 			}
+			messageRequestor.addMessages(requestor.getMessages());
 		}
 	}
 	
@@ -355,9 +357,11 @@ public class GenerationQueue {
 			
 			@Override
 			public void addMessage(IGenerationResultsMessage message) {
-				list.add(message);
-				if (message.isError()) {
-					error = true;
+				if (!list.contains(message)) {
+					list.add(message);
+					if (message.isError()) {
+						error = true;
+					}
 				}
 			}
 			
