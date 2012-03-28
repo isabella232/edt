@@ -131,7 +131,9 @@ public class EGLPropertyRule implements Comparable{
 			}
 			else {
 				this.types = new int[] {EGLNewPropertiesHandler.nestedValue};
-				this.isComplex = true;
+				if(typeBindingImpl.isComplex()){
+					this.isComplex = true;
+				}
 	    	    List elementRules = new ArrayList();
 				for(Iterator iter = typeBindingImpl.getFieldNames().iterator(); iter.hasNext();) {
 				    elementRules.add(new EGLPropertyRule((IAnnotationTypeBinding) typeBindingImpl.findData((String) iter.next()).getType()));
