@@ -127,14 +127,20 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate {
 		out.popIndent();
 	}
 	
-	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Service service) {
+	//FIXME Bug 358568 public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Service service) {
+	private void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Service service) {
 		out.print("\"");
 		out.print(stmt.getInvocationTarget().getQualifier().getType().getTypeSignature());
 		out.print("\"");
 	}
 	
 	public void genServiceName(CallStatement stmt, Context ctx, TabbedWriter out, Type type) {
-		out.print("null");
+		if(type instanceof Service){//FIXME Bug 358568
+			genServiceName(stmt, ctx, out, (Service)type);
+		}
+		else{
+			out.print("null");
+		}
 	}
 	
 	private void genTrueRestInvocation(CallStatement stmt, Function serviceInterfaceFunction,
