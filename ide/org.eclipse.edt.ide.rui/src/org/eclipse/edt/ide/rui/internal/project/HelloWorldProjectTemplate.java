@@ -71,4 +71,7 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 		return super.getOperations(eglProjConfiguration, eglFeatureMask, rule);
 	}
 
+	public boolean needPreserveBasePackage(){
+		return false;
+	}
 }
