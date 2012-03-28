@@ -43,6 +43,7 @@ import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.ui.internal.wizards.NewWizardMessages;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jst.j2ee.project.JavaEEProjectUtilities;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
@@ -153,12 +154,45 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 				postRemovingEglarLibraries(removedEntries.toArray(new IEGLPathEntry[removedEntries.size()]), fCurrEProject);
 				//handle added eglars
 				postAddingEglarLibraries(addedEntries.toArray(new IEGLPathEntry[addedEntries.size()]), fCurrEProject);
+				//add java build path for current project if the project contains javaNature
+				postAddingJavaBuildPathEntry(classpath, project, monitor);
+				
 			} finally {
 				monitor.done();
 			}	
 		} finally {
 			monitor.done();
 		}	
+	}
+	
+	private void postAddingJavaBuildPathEntry(IEGLPathEntry[] selectedEntries,IProject curProject, IProgressMonitor monitor) {
+		try {
+			if (curProject.hasNature(JavaCore.NATURE_ID)) {
+				IJavaProject javaProject = JavaCore.create(curProject);
+				IClasspathEntry[] javaClassPathEntries = javaProject.getRawClasspath();
+				List<IClasspathEntry> afterChangeEntries = new ArrayList<IClasspathEntry>();
+
+				Set ipathSet = new HashSet<IPath>();
+				for (IClasspathEntry icpEntry : javaClassPathEntries) {
+					ipathSet.add(icpEntry.getPath());
+					afterChangeEntries.add(icpEntry);
+				}
+
+				for (IEGLPathEntry iEGLpathEntry : selectedEntries) {
+					IPath eglProjectPath = iEGLpathEntry.getPath();
+					if (ResourcesPlugin.getWorkspace().getRoot().findMember(eglProjectPath).getProject().hasNature(JavaCore.NATURE_ID)) {
+						if (!ipathSet.contains(eglProjectPath)) {
+							ipathSet.add(eglProjectPath);
+							afterChangeEntries.add(JavaCore.newProjectEntry(eglProjectPath));
+						}
+					}
+				}
+
+				javaProject.setRawClasspath(afterChangeEntries.toArray(new IClasspathEntry[0]), monitor);
+			}
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void postAddingEglarLibraries(IEGLPathEntry[] addedEntries, IEGLProject eglProject){
