@@ -175,5 +175,6 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "vargraphic", //$NON-NLS-1$
 		   "binary", //$NON-NLS-1$
 		   "hex", //$NON-NLS-1$
+		   "varchar for bit data", //$NON-NLS-1$
 		};
 }
