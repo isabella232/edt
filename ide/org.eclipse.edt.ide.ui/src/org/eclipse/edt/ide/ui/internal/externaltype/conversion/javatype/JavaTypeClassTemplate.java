@@ -107,7 +107,7 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 			}
 			
 			boolean isAbstractClas = Modifier.isAbstract(clazz.getModifiers());
-			if(clazz.isInterface() || isAbstractClas) {
+			if(clazz.isInterface() || isAbstractClas || hasNoPublicConstructors(clazz)) {
 				out.println("  private constructor();");
 			} else {
 				for(Constructor<?> javaCon : toBeGenerated.getConstructors()) {
@@ -163,5 +163,18 @@ public class JavaTypeClassTemplate extends AbstractTemplate {
 		}
 	
 		return buffer.toString();
+	}
+	
+	private boolean hasNoPublicConstructors(java.lang.Class<?> clazz) {
+		boolean noPublicConstructors = true;
+		Constructor<?>[] javaCons = clazz.getDeclaredConstructors();
+		for(int i=0; i < javaCons.length; i++) {
+			if(Modifier.isPublic(javaCons[i].getModifiers()) ) {
+				noPublicConstructors = false;
+				break;
+			}
+		}
+		
+		return noPublicConstructors;
 	}
 }
