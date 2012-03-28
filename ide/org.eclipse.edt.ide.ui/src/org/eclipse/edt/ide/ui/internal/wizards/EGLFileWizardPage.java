@@ -589,7 +589,8 @@ public class EGLFileWizardPage extends EGLPackageWizardPage {
 		return isValidPage(!getFileConfiguration().isOverwrite());
 	}
 	protected boolean isValidPage(boolean checkFileExistance){
-		boolean ret = false;
+		fContainerStatus.setOK();
+		fPackageStatus.setOK();
 		fEGLFileStatus.setOK();
 		
 		String projectName = getFileConfiguration().getProjectName();
@@ -597,9 +598,15 @@ public class EGLFileWizardPage extends EGLPackageWizardPage {
 		String packageName = getFileConfiguration().getFPackage();
 		String fileName= getFileConfiguration().getFileName();
 		String fileExtensionName = getFileConfiguration().getFileExtension();
+		String sourceFolderName = getFileConfiguration().getSourceFolderName();
 	
-		ret = EGLWizardUtilities.validateFile(projectName, containerName, packageName, fileName, fileExtensionName, fEGLFileStatus, this, checkFileExistance);
-		return ret;
+		boolean isValidPackage = EGLWizardUtilities.validatePackage(projectName, containerName, sourceFolderName, packageName, fContainerStatus, fPackageStatus, this);
+		if(!isValidPackage){
+			//If the package is invalid, do not valid the file. Avoid the validation exception
+			return false;
+		}
+		boolean isValidFile = EGLWizardUtilities.validateFile(projectName, containerName, packageName, fileName, fileExtensionName, fEGLFileStatus, this, checkFileExistance);
+		return (isValidPackage && isValidFile);
 	}
 	
 }

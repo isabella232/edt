@@ -24,4 +24,5 @@ public interface IProjectTemplateClass  {
 	public List<WorkspaceModifyOperation> getImportProjectOperations(ProjectConfiguration eglProjConfiguration, int eglFeatureMask, ISchedulingRule rule);
 	public void applyTemplate(IProject project);
 	public boolean canFinish();
+	public boolean needPreserveBasePackage();
 }

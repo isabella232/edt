@@ -100,6 +100,10 @@ public abstract class AbstractProjectTemplateClass implements
 		return false;
 	}
 	
+	public boolean needPreserveBasePackage(){
+		return true;
+	}
+	
 	public void setDefaultPackages(String[] defaultPackages) {
 		this.defaultPackages = defaultPackages;
 	}
