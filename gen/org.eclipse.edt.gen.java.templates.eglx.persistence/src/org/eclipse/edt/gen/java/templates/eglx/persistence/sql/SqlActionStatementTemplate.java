@@ -357,13 +357,21 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			out.print("(" + columnIndex + ")");
 		}
 	}
-	public boolean isNullable(SqlActionStatement stmt, Context ctx, MemberAccess expr) {
+	//FIXME Bug 358568 public boolean isNullable(SqlActionStatement stmt, Context ctx, MemberAccess expr) {
+	private boolean isNullable(SqlActionStatement stmt, Context ctx, MemberAccess expr) {
 		return expr.getMember().isNullable();
 	}
-	public Boolean isNullable(SqlActionStatement stmt, Context ctx, MemberName expr) {
+	//FIXME Bug 358568 public Boolean isNullable(SqlActionStatement stmt, Context ctx, MemberName expr) {
+	private Boolean isNullable(SqlActionStatement stmt, Context ctx, MemberName expr) {
 		return expr.getMember().isNullable();
 	}
 	public Boolean isNullable(SqlActionStatement stmt, Context ctx, Expression expr) {
+		if(expr instanceof MemberAccess){//FIXME Bug 358568
+			return isNullable(stmt, ctx, (MemberAccess)expr);
+		}
+		if(expr instanceof MemberName){//FIXME Bug 358568
+			return isNullable(stmt, ctx, (MemberName)expr);
+		}
 		return Boolean.FALSE;
 	}
 	protected void genSetColumnValue(SqlActionStatement stmt, Expression expr, String stmt_or_resultSet_var, int columnIndex, Context ctx, TabbedWriter out) {
