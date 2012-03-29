@@ -609,7 +609,7 @@ public class EGLSQLRetrieveUtility {
 				newItem.setSqlDataCode( isNullable ? "392" : "393" );
 			}
 		} else {
-			newItem.setPrimitiveType( IEGLConstants.KEYWORD_TIMESTAMP );
+			newItem.setPrimitiveType( IEGLConstants.KEYWORD_TIMESTAMP_WITH_PATTERN );
 		}
 	}
 
