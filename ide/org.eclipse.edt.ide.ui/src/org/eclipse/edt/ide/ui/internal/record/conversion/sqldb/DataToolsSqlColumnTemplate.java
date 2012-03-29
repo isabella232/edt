@@ -174,7 +174,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "time", //$NON-NLS-1$
 		   "vargraphic", //$NON-NLS-1$
 		   "binary", //$NON-NLS-1$
-		   "hex", //$NON-NLS-1$
+		   "char for bit data", //$NON-NLS-1$
 		   "varchar for bit data", //$NON-NLS-1$
 		};
 }
