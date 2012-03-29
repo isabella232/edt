@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSessionListener;
 
 import eglx.jtopen.IBMiConnection;
 
-public class CallerHttpSessionListener implements HttpSessionListener
+public class IBMiConnectionHttpSessionListener implements HttpSessionListener
 {
 
 	public void sessionCreated( HttpSessionEvent arg0 )
