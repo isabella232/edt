@@ -13,11 +13,11 @@ package org.eclipse.edt.rui.widgets;
 
 library DataGridFormatters
 
-    function dollarSigns(class string, value string, rowData any in)
+    function dollarSigns(class string inout, value string inout, rowData any in)
         value = "$" + value;
     end
 
-    function coloredNumbers(class string, value string, rowData any in)
+    function coloredNumbers(class string inout, value string inout, rowData any in)
         if(value < 0)
             class += " EglRuiDataGridCellNegative";
         else
@@ -29,7 +29,7 @@ library DataGridFormatters
         end
     end
 
-    function addCommas(class string, value string, rowData any in)
+    function addCommas(class string inout, value string inout, rowData any in)
     	if (value == "")
 			return;
 		end
@@ -73,23 +73,23 @@ library DataGridFormatters
         value += "%";
     end
 
-    function fontWeightItalic(class string, value string, rowData any in)
+    function fontWeightItalic(class string inout, value string inout, rowData any in)
         value = "<i>" + value + "</i>";
     end
 
-    function fontWeightBold(class string, value string, rowData any in)
+    function fontWeightBold(class string inout, value string inout, rowData any in)
         value = "<b>" + value + "</b>";
     end
 
-    function fontWeightUnderlined(class string, value string, rowData any in)
+    function fontWeightUnderlined(class string inout, value string inout, rowData any in)
         value = "<u>" + value + "</u>";
     end
 
-    function fontWeightBoldItalic(class string, value string, rowData any in)
+    function fontWeightBoldItalic(class string inout, value string inout, rowData any in)
         value = "<i><b>" + value + "</b></i>";
     end
 
-    function makeLink(class string, value string, rowData any in)
+    function makeLink(class string inout, value string inout, rowData any in)
         class += " EglRuiDataGridCellLink";
         value = "<span onClick='" +
                 "egl.org.eclipse.edt.rui.infobus.InfoBus.$inst.publish(\"grid.link\",egl.createWidget(this.parentNode.parentNode))'>" +
