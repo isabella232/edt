@@ -70,7 +70,7 @@ library SessionConnectionsLib
 		end
 		return(sessionid);
 	end
-	function getSession()returns(HttpSession)
+	function getSession()returns(HttpSession?)
 		session HttpSession?;
 		request  javax.servlet.http.HttpServletRequest? = ServletContext.getHttpServletRequest();
 		if(request != null)
