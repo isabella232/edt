@@ -30,24 +30,69 @@ in IBM service programs.</span>
 </div>
 
 <p class="p">Access to any of those host programs is by way of the JTOpen toolkit,
-which determines what program types are supported. For an overview
-of the toolkit, see the following web site: <a class="xref" href="http://jt400.sourceforge.net/" target="_blank">JTOpen (http://jt400.sourceforge.net/)</a>.</p>
+which determines what program types are supported. The toolkit is
+not embedded in the software provided for EGL Development Tools. </p>
+
+<div class="p">Here is the prerequisite task:<ol class="ol">
+<li class="li">Review the description at the following site and download the
+toolkit:<ul class="sl simple">
+<li class="sli"><a class="xref" href="http://jt400.sourceforge.net/" target="_blank">JTOpen
+(http://jt400.sourceforge.net/)</a></li>
+
+</ul>
+</li>
+
+<li class="li">Extract the <span class="ph filepath">jt400.jar</span> file.</li>
+
+<li class="li">Reference that file in the Java class path:<ol class="ol" type="a">
+<li class="li">Right click the project that will access IBM i.</li>
+
+<li class="li">Click <strong class="ph b">Properties</strong>. A properties dialog is displayed.</li>
+
+<li class="li">Click <strong class="ph b">Java Build Path</strong>.</li>
+
+<li class="li">In the pane at the right, click the Libraries tab.</li>
+
+<li class="li">Click <strong class="ph b">Add External JARs</strong> and use the browse mechanism to
+find the <span class="ph filepath">jt400.jar</span> file. </li>
+
+<li class="li">Double click the file name and, at the properties dialog, click <strong class="ph b">OK</strong>.</li>
+
+</ol>
+</li>
+
+</ol>
+</div>
+
+<p class="p">Later, you will add the jar file to the classpath of the server
+that will receive your deployed application. For example, during EGL
+deployment, you might add the file to the <span class="ph filepath">lib</span> folder
+of the target project or as a library in the target EAR project. Outside
+of EGL deployment, you might add the file as a resource in the server
+classpath.</p>
 
 <div class="p">Your coding task has the following aspects:<ul class="ul">
 <li class="li">You write an <em class="ph i">EGL proxy function for IBM i</em>. The proxy function
-might be in an EGL Library, Service, Handler, or Program type. The
-function has no logic, and any logic you place there will be ignored.
-Instead, you write one or more annotations there to tell the EGL Java
-generator how to structure the runtime call.<p class="p">The main annotation
-is <strong class="ph b">IBMiProgram</strong>. In most cases, that annotation references a
-resource binding in the EGL deployment descriptor. One runtime effect
-of referencing a resource binding is that you gain the performance
-benefits of using a connection from the AS400 connection pool.</p>
+might be in any of the following types that is generated to Java code:
+an EGL Library, Service, Program, or Handler. The function has no
+logic, and any logic you place there will be ignored. Instead, you
+write one or more annotations there to tell the EGL Java generator
+how to structure the runtime call.<p class="p">The main annotation is <strong class="ph b">IBMiProgram</strong>.
+In most cases, that annotation references a resource binding in the
+EGL deployment descriptor. One runtime effect of referencing a resource
+binding is that you gain the performance benefits of using a connection
+from the AS400 connection pool.</p>
 </li>
 
 <li class="li">When you write the EGL code that calls the function, you might
 access the proxy function and rely on the details provided there.
-Alternatively, you might do as follows:<ol class="ol">
+Two variations apply:<ul class="ul">
+<li class="li">If you access the function remotely, you cannot override that
+annotation. At this time, remote access is possible only from a Rich
+UI application.</li>
+
+<li class="li">If access the function locally in generated Java code, you might
+do as follows:<ol class="ol">
 <li class="li">Code a variable that references a different resource binding or
 that specifies new detail.</li>
 
@@ -62,6 +107,9 @@ However, the <strong class="ph b">using</strong> clause might represent a connec
 you define in your code; and in that case, you typically do not use
 a pooled connection, but rely on the AS400 connection object that
 is available in the JTOpen toolkit.</p>
+</li>
+
+</ul>
 </li>
 
 <li class="li">The parameters of the EGL proxy function represent the parameters
@@ -445,11 +493,11 @@ same as the name of the corresponding Java class in the JTOpen <samp class="ph c
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="13.559322033898304%" id="d31914e515">EGL type </th>
+<th class="entry" valign="bottom" width="13.559322033898304%" id="d32051e585">EGL type </th>
 
-<th class="entry" valign="bottom" width="35.59322033898305%" id="d31914e518">EGL annotation</th>
+<th class="entry" valign="bottom" width="35.59322033898305%" id="d32051e588">EGL annotation</th>
 
-<th class="entry" valign="bottom" width="50.847457627118644%" id="d31914e521">Annotation fields</th>
+<th class="entry" valign="bottom" width="50.847457627118644%" id="d32051e591">Annotation fields</th>
 
 </tr>
 
@@ -457,20 +505,20 @@ same as the name of the corresponding Java class in the JTOpen <samp class="ph c
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">bigint</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">bigint</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Bin8 (the default) or AS400UnsignedBin4.</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "></td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "></td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">bytes<strong class="ph b"> (not yet supported)</strong></td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">bytes<strong class="ph b"> (not yet supported)</strong></td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Array</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Array</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized bytes type:<dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 ">For a non-parameterized bytes type:<dl class="dl parml">
 
 <dt class="dt pt dlterm">length</dt>
 
@@ -482,11 +530,11 @@ same as the name of the corresponding Java class in the JTOpen <samp class="ph c
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">date</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">date</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Date</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Date</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "><dl class="dl parml">
 <dt class="dt pt dlterm">ibmiFormat</dt>
 
 <dd class="dd pd">Controls the conversion to an  IBM i
@@ -519,11 +567,11 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">decimal</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">decimal</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400PackedDecimal; AS400ZonedDecimal; or AS400DecFloat. </td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized decimal type: <dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 ">For a non-parameterized decimal type: <dl class="dl parml">
 
 <dt class="dt pt dlterm">length</dt>
 
@@ -543,44 +591,44 @@ field is not available.</dd>
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">float</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">float</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Float8 (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Float8 (the default).</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">Handler types</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">Handler types</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">No annotation. Conversion is controlled by the
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">int</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">int</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Bin4 (the default) or AS400UnsignedBin2.</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">List types</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">List types</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Array (the default).<p class="p">You must specify
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Array (the default).<p class="p">You must specify
 the annotation if you need to use any of the annotation fields. None
 of those fields has a default value.</p>
 <p class="p">For examples, see a later
 section.</p>
 </td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "><dl class="dl parml">
 <dt class="dt pt dlterm">elementCount</dt>
 
 <dd class="dd pd"><p class="p">The number of elements in the list that is sent to the host. </p>
@@ -620,21 +668,21 @@ lists. </p>
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">Record types</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">Record types</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">No annotation. Conversion is controlled by the
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">No annotation. Conversion is controlled by the
 AS400Structure Java class.</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">string</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">string</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Text (the default). </td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Text (the default). </td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 ">For a non-parameterized string type: <dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 ">For a non-parameterized string type: <dl class="dl parml">
 
 <dt class="dt pt dlterm">length</dt>
 
@@ -660,29 +708,29 @@ the right side of the string. The default is false.</dd>
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">smallfloat</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">smallfloat</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Float4 (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Float4 (the default).</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">smallint</td>
-
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
-
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "> </td>
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">time</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">smallint</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Time (the default).</td>
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Bin2 (the default), AS400Bin1, or AS400UnsignedBin1.</td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "> </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">time</td>
+
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Time (the default).</td>
+
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "><dl class="dl parml">
 <dt class="dt pt dlterm">ibmiFormat</dt>
 
 <dd class="dd pd">Controls the conversion to an  IBM i
@@ -715,14 +763,14 @@ are valid, see the Java documentation for the java.util.TimeZone class.</p>
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="13.559322033898304%" headers="d31914e515 ">timestamp</td>
+<td class="entry" valign="top" width="13.559322033898304%" headers="d32051e585 ">timestamp</td>
 
-<td class="entry" valign="top" width="35.59322033898305%" headers="d31914e518 ">AS400Timestamp (the default). The conversion
+<td class="entry" valign="top" width="35.59322033898305%" headers="d32051e588 ">AS400Timestamp (the default). The conversion
 to an IBM i timestamp format
 is in accordance with the Java FORMAT_DEFAULT field in the following
 class: com.ibm.as400.access.AS400Timestamp. </td>
 
-<td class="entry" valign="top" width="50.847457627118644%" headers="d31914e521 "><dl class="dl parml">
+<td class="entry" valign="top" width="50.847457627118644%" headers="d32051e591 "><dl class="dl parml">
 <dt class="dt pt dlterm">eglPattern</dt>
 
 <dd class="dd pd">Controls the conversion back to an EGL format. For details on

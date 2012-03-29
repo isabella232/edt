@@ -73,18 +73,19 @@ an example use of the equivalent <strong class="ph b">Resource</strong> annotati
 you can specify anywhere that you can declare a variable:<pre class="pre codeblock">myBindingVar HttpRest?{@Resource{uri="binding:myEntry"}};
 </pre>
 </div>
-<p class="p">The reference to a <strong class="ph b">uri</strong> annotation field
-is optional and refers by default to a resource binding that has the
-same name as the binding variable. For example, the missing value
-for the <strong class="ph b">uri</strong> field in the preceding annotation is <samp class="ph codeph">"binding:myBindingVar"</samp>. </p>
+<div class="p">The <strong class="ph b">uri</strong> annotation field is optional and
+refers by default to a resource binding that has the same name as
+the binding variable. For example, the missing value for the <strong class="ph b">uri</strong> field
+in the following annotation is <samp class="ph codeph">"binding:myBindingVar"</samp>:<pre class="pre codeblock">myBindingVar HttpRest{@Resource};</pre>
+</div>
 <div class="p">Whether
 you specify the <strong class="ph b">SysLib.getResource</strong> function or <strong class="ph b">Resource</strong> annotation,
-you can use an extended format ("binding:file:#<em class="ph i">entry</em>") to identify
-the EGL deployment descriptor that contains the entry. Here is an
-example:<pre class="pre codeblock">myBindingVar HttpRest? = SysLib.getResource("binding:file:myDDFile#myEntry"); 
+you can use an extended format ("binding:file:<em class="ph i">fileName</em>#<em class="ph i">entry</em>")
+to identify the EGL deployment descriptor that contains the entry.
+Here is an example:<pre class="pre codeblock">myBindingVar HttpRest? = SysLib.getResource("binding:file:myDDFile#myEntry"); 
 
 // equivalent annotation
-myBindingVar HttpRest?(@Resource{uri = "binding:file:myDDFile#myEntry"}};</pre>
+myBindingVar HttpRest?{@Resource{uri = "binding:file:myDDFile#myEntry"}};</pre>
 </div>
 <div class="p">If
 you do not use the extended format, the referenced EGL deployment

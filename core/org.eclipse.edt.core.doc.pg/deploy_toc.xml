@@ -1,25 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
-<toc label="Deploying EGL-generated applications" topic="topics/tedt01802.html">
-   <topic label="Deploying generated Java code to Java EE">
-      <topic label="Setting up the JEE environment for generated code"
-             href="topics/tedt01802.html"/>
-      <topic label="Eliminating duplicate jar files" href="topics/tedt01803.html"/>
-      <topic label="Providing access to jar files other than from EGL"
-             href="topics/tedt01804.html"/>
-      <topic label="Setting up the JEE server for CICSJ2C calls"
-             href="topics/tedt01805.html"/>
-      <topic label="Setting up the JEE server for IMSJ2C calls" href="topics/tedt01806.html"/>
-      <topic label="Setting up a JEE JDBC connection" href="topics/tedt01807.html"/>
-      <topic label="Setting up a TCP/IP listener for JEE called applications"
-             href="topics/tedt01808.html"/>
-   </topic>
-   <topic label="Deploying EGL-generated Java code outside of Java EE"
-          href="topics/tedt01801.html">
-      <topic label="Installing the EGL runtime code for Java" href="topics/tedt01809.html"/>
-      <topic label="Setting up the UNIX curses library for the EGL runtime code"
-             href="topics/tedt01810.html"/>
-      <topic label="Setting up a TCP/IP listener for a called non-JEE applicaiton"
-             href="topics/tedt01811.html"/>
-   </topic>
-</toc>
+<toc label="Deploying EGL-generated applications" topic="topics/tedt01802.html"><topic label="Deploying generated Java code to Java EE"><topic label="Setting up the JEE environment for generated code" href="topics/tedt01802.html"/><topic label="Eliminating duplicate jar files" href="topics/tedt01803.html"/><topic label="Providing access to jar files other than from EGL" href="topics/tedt01804.html"/><topic label="Setting up the JEE server for CICSJ2C calls" href="topics/tedt01805.html"/><topic label="Setting up the JEE server for IMSJ2C calls" href="topics/tedt01806.html"/><topic label="Setting up a JEE JDBC connection" href="topics/tedt01807.html"/><topic label="Setting up a TCP/IP listener for JEE called applications" href="topics/tedt01808.html"/></topic><topic label="Deploying EGL-generated Java code outside of Java EE" href="topics/tedt01801.html"><topic label="Installing the EGL runtime code for Java" href="topics/tedt01809.html"/><topic label="Setting up the UNIX curses library for the EGL runtime code" href="topics/tedt01810.html"/><topic label="Setting up a TCP/IP listener for a called non-JEE applicaiton" href="topics/tedt01811.html"/></topic></toc>

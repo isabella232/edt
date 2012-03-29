@@ -31,8 +31,20 @@ source code.</p>
 <br></br><div class="imagecenter"><img class="image imagecenter" src="../images/egl_core_overview.gif" alt="EGL compilation"></img></div><br></br>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">The developer’s task</h2><p class="p">The developer's task
-is threefold: first, to write and test source code, which includes
+<div class="p">Details are in the following sections:<ul class="ul">
+<li class="li"><a class="xref" href="#cedt01001__devtask">The developer’s task</a></li>
+
+<li class="li"><a class="xref" href="#cedt01001__deploydesc">Uses of the EGL deployment descriptor</a></li>
+
+<li class="li"><a class="xref" href="#cedt01001__stages">The stages of development</a></li>
+
+<li class="li"><a class="xref" href="#cedt01001__deployjar">Deploying third-party jar files</a></li>
+
+</ul>
+</div>
+
+<div class="section" id="cedt01001__devtask"><h2 class="title sectiontitle">The developer’s task</h2><p class="p">The developer's
+task is threefold: first, to write and test source code, which includes
 the build step illustrated in the figure, although that step is typically
 automatic; second, to generate and prepare the code for external deployment;
 and third, to install the code on one or another platform.</p>
@@ -72,7 +84,6 @@ the pre-generation.</li>
 
 </ol>
 <p class="p">The generated output is JavaScript or  Java™ (tm) source code. </p>
-<p class="p"></p>
 </li>
 
 <li class="li">If generation succeeds, the generated output can become an input
@@ -86,13 +97,16 @@ which are the services and databases that your logic requires. The
 EGL deployment descriptor has the extension <samp class="ph codeph">.egldd</samp> and
 is different from the Java Platform,
 Enterprise Edition (JEE) deployment descriptors. </p>
+<p class="p">As noted later, you might
+need to add third-party jar files to the classpath of the server that
+will receive your deployed application.</p>
 </li>
 
 </ol>
 </div>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">Uses of the EGL deployment descriptor</h2><div class="p">The
+<div class="section" id="cedt01001__deploydesc"><h2 class="title sectiontitle">Uses of the EGL deployment descriptor</h2><div class="p">The
 EGL deployment descriptor has two uses:<ul class="ul">
 <li class="li">To ready the generated output for deployment, as noted earlier. </li>
 
@@ -147,8 +161,8 @@ between the development deployment descriptor and others.</p>
 further details on working with the EGL deployment descriptor, see <a class="xref" href="../../org.eclipse.edt.ide.doc/topics/tedt00535.html" title="You can specify a target in the EGL deployment descriptor.">Editing an EGL deployment descriptor in the EDT IDE</a>.</p>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">The stages of development</h2><div class="p">EGL development
-involves several stages:<ul class="ul">
+<div class="section" id="cedt01001__stages"><h2 class="title sectiontitle">The stages of development</h2><div class="p">EGL
+development involves several stages:<ul class="ul">
 <li class="li">You write the EGL source code at <dfn class="term">development time</dfn>.</li>
 
 <li class="li">The EGL compiler creates the output written to IR files at <dfn class="term">compilation
@@ -168,6 +182,18 @@ time</dfn>.</li>
 
 </ul>
 </div>
+</div>
+
+<div class="section" id="cedt01001__deployjar"><h2 class="title sectiontitle">Deploying third-party jar files</h2><p class="p">You
+might need to add third-party jar files to the classpath of the server
+that will receive your deployed application. Such files might include
+JDBC driver jar files and, if you are accessing IBM i, the <span class="ph filepath">jt400.jar</span> file. </p>
+<p class="p">You
+can add a jar file in any of several ways. For example, during EGL
+deployment, you might add the file to the <span class="ph filepath">lib</span> folder
+of the target project or as a library in the target EAR project. Outside
+of EGL deployment, you might add the file as a resource in the server
+classpath.</p>
 </div>
 
 </div>
