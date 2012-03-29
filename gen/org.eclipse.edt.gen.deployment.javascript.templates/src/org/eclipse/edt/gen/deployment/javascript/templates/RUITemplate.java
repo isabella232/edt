@@ -225,7 +225,7 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("function(){");
 		out.println("if(egl." + getFullPartName(part) + "){");
 		if(isDevelopment){
-			generateDevelopmentRootHandler(part,out);
+			generateDevelopmentRootHandler(part, out, isDebug);
 		}else{
 			generateRootHandler(part,out);
 		}
@@ -321,7 +321,10 @@ public class RUITemplate extends JavaScriptTemplate {
 		out.println("</html>");
 	}		
 	
-	private void generateDevelopmentRootHandler( Handler part, TabbedWriter out ) {
+	private void generateDevelopmentRootHandler( Handler part, TabbedWriter out, boolean isDebug) {
+		if (isDebug) {
+			out.println("			egl.startHandleIDEEvent();");
+		}
 		out.println("			egl.rootHandler = new egl." + getFullPartName(part) + "();");
 		out.println("			if ( egl.rootHandler.targetWidget || !egl.rootHandler.egl$isWidget ) {");
 		out.println("				egl.rootHandler.setParent(egl.Document);");
