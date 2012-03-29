@@ -318,6 +318,11 @@ as is the field name in the external type. </p>
 
 </dl>
 </div>
+<div class="note note"><span class="notetitle">Note:</span> After you make any change to the JavaScript
+file, you must re-save the corresponding EGL external type and then
+refresh the Rich UI handler that uses the external type. The requirement
+is a consequence of the generator's use of Asynchronous Module Definition
+(AMD) technology, which improves runtime performance.</div>
 </div>
 
 <div class="section"><h2 class="title sectiontitle">Relationship of EGL and JavaScript data types</h2><div class="p">
@@ -325,9 +330,9 @@ as is the field name in the external type. </p>
 types</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" align="left" valign="bottom" id="d116509e543">EGL type</th>
+<th class="entry" align="left" valign="bottom" id="d116604e545">EGL type</th>
 
-<th class="entry" align="left" valign="bottom" id="d116509e546">JavaScript type
+<th class="entry" align="left" valign="bottom" id="d116604e548">JavaScript type
 (case-sensitive)</th>
 
 </tr>
@@ -336,38 +341,38 @@ types</span></caption>
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" headers="d116509e543 ">STRING</td>
+<td class="entry" valign="top" headers="d116604e545 ">STRING</td>
 
-<td class="entry" valign="top" headers="d116509e546 ">String</td>
-
-</tr>
-
-<tr class="row">
-<td class="entry" valign="top" headers="d116509e543 ">BOOLEAN</td>
-
-<td class="entry" valign="top" headers="d116509e546 ">Boolean</td>
+<td class="entry" valign="top" headers="d116604e548 ">String</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" headers="d116509e543 ">SMALLINT, INT, FLOAT, SMALLFLOAT</td>
+<td class="entry" valign="top" headers="d116604e545 ">BOOLEAN</td>
 
-<td class="entry" valign="top" headers="d116509e546 ">Number</td>
+<td class="entry" valign="top" headers="d116604e548 ">Boolean</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" headers="d116509e543 ">BIGINT, DECIMAL, MONEY, NUM</td>
+<td class="entry" valign="top" headers="d116604e545 ">SMALLINT, INT, FLOAT, SMALLFLOAT</td>
 
-<td class="entry" valign="top" headers="d116509e546 ">egl.javascript.BigDecimal (as described in a
+<td class="entry" valign="top" headers="d116604e548 ">Number</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" headers="d116604e545 ">BIGINT, DECIMAL, MONEY, NUM</td>
+
+<td class="entry" valign="top" headers="d116604e548 ">egl.javascript.BigDecimal (as described in a
 later section)</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" headers="d116509e543 ">DATE, TIME, TIMESTAMP</td>
+<td class="entry" valign="top" headers="d116604e545 ">DATE, TIME, TIMESTAMP</td>
 
-<td class="entry" valign="top" headers="d116509e546 ">Date</td>
+<td class="entry" valign="top" headers="d116604e548 ">Date</td>
 
 </tr>
 

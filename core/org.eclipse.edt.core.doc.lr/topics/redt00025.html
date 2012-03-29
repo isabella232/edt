@@ -57,8 +57,8 @@ from a SQL data source, the basic idea is as follows: <ul class="ul">
 with values that are neither generated nor transient.</li>
 
 <li class="li">The available entity fields are split into two categories. The
-non-key fields are used in the SET clause. The key fields are candidates
-to be used in the WHERE clause.</li>
+non-key fields are used in the SET clause. The key fields are not
+used in the SET clause, but might be used in the WHERE clause.</li>
 
 <li class="li">If the <strong class="ph b">using</strong> clause is present, the values in that clause
 are used in the WHERE clause. The <strong class="ph b">using</strong> clause is an override.</li>
@@ -104,16 +104,43 @@ of <em class="ph i">entity</em>.<p class="p">You can use a prepared statement in
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00023__sql_example"><pre class="pre codeblock"></pre>
+<div class="example" id="redt00023__sql_example"><div class="p">If you need to update an ID column, your <strong class="ph b">replace</strong> statement
+must use an explicit SQL statement with a <strong class="ph b">using</strong> clause that
+includes simple values. For example, consider the following Record
+type:<pre class="pre codeblock">Record TwoKeys {@Table {name="MYTABLE"}}
+   id01 int {@Id};
+   id02 int {@Id};
+   aString string;
+end</pre>
+</div>
+<div class="p">Here is an example use, when you want to change
+the value of an ID column:<pre class="pre codeblock">ds SQLDataSource?{@Resource{uri="binding:myEntry"}};
+row TwoKeys;
+
+replace row to ds with
+			#sql{
+					 update MYTABLE
+					    set aString = ?, 	id02 = ?
+        where
+           id01 = ? and id02 = ?
+      } 
+      using
+         row.aString,
+         10,
+         row.id01,
+         row.id02;</pre>
+</div>
+<p class="p"></p>
+<p class="p"></p>
 <anchor id="sql_example_more"></anchor></div>
 
 <div class="section" id="redt00023__compat"><h2 class="title sectiontitle">Compatibility </h2>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00023__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d17721e215">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d17721e236">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d17721e218">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d17721e239">Issue</th>
 
 </tr>
 
@@ -122,17 +149,17 @@ of <em class="ph i">entity</em>.<p class="p">You can use a prepared statement in
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00023__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d17721e215 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d17721e236 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d17721e218 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d17721e239 ">No issues<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00023__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d17721e215 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d17721e236 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d17721e218 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d17721e239 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

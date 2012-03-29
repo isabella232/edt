@@ -70,7 +70,7 @@ a shut down.</p>
 </dd>
 
 
-<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">annotation</span></span></dt>
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">@annotation</span></span></dt>
 
 <dd class="dd pd"><div class="p">The following type-level annotations are available:<dl class="dl">
 <dt class="dt dlterm">packageName</dt>
@@ -129,6 +129,15 @@ or <span class="ph synph"><span class="keyword kwd">inout</span> modifier.</span
 </ul>
 <p class="p">The function can return a primitive-type value, an array,
 or no value at all. The function cannot return a record.</p>
+</dd>
+
+
+<dt class="dt pt dlterm"><span class="keyword">@Throws{}</span></dt>
+
+<dd class="dd pd">The Throws annotation is available on a constructor or function
+prototype. The setting allows the EGL compiler to catch an error (a
+lack of response to a thrown exception) that would otherwise be caught
+only by the Java compiler.<p class="p">The annotation has no fields.</p>
 </dd>
 
 
