@@ -172,6 +172,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_THROW = "throw";  //$NON-NLS-1$
 	public static final String KEYWORD_TIME = "time";  //$NON-NLS-1$
 	public static final String KEYWORD_TIMESTAMP = "timeStamp";  //$NON-NLS-1$
+	public static final String KEYWORD_TIMESTAMP_WITH_PATTERN = "timeStamp(\"yyyyMMddHHmmssffffff\")";  //$NON-NLS-1$
 	public static final String KEYWORD_TO = "to";  //$NON-NLS-1$
 	public static final String KEYWORD_TRANSACTION = "transaction";  //$NON-NLS-1$
 	public static final String KEYWORD_TRANSFER = "transfer";  //$NON-NLS-1$
