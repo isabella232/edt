@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.compiler.internal.eglar.EglarFile;
 import org.eclipse.edt.compiler.internal.eglar.EglarManifest;
@@ -179,16 +178,17 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 				}
 
 				for (IEGLPathEntry iEGLpathEntry : selectedEntries) {
-					IPath eglProjectPath = iEGLpathEntry.getPath();
-					if (ResourcesPlugin.getWorkspace().getRoot().findMember(eglProjectPath).getProject().hasNature(JavaCore.NATURE_ID)) {
-						if (!ipathSet.contains(eglProjectPath)) {
+					if (iEGLpathEntry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
+						IPath eglProjectPath = iEGLpathEntry.getPath();
+						if (ResourcesPlugin.getWorkspace().getRoot().findMember(eglProjectPath).getProject().hasNature(JavaCore.NATURE_ID)
+								&& !ipathSet.contains(eglProjectPath)) {
 							ipathSet.add(eglProjectPath);
 							afterChangeEntries.add(JavaCore.newProjectEntry(eglProjectPath));
 						}
 					}
 				}
 
-				javaProject.setRawClasspath(afterChangeEntries.toArray(new IClasspathEntry[0]), monitor);
+				javaProject.setRawClasspath(afterChangeEntries.toArray(new IClasspathEntry[afterChangeEntries.size()]), monitor);
 			}
 		} catch (CoreException e) {
 			e.printStackTrace();
@@ -261,7 +261,6 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 		try {
 			EGLProjectUtility.addClasspathEntriesIfNecessary(project, allAddedLibEntries.toArray(new IClasspathEntry[allAddedLibEntries.size()]));
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -333,7 +332,6 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 		try {
 			EGLProjectUtility.removeClasspathLibraryEntriesIfNecessary(project, allRemovedLibEntries.toArray(new IPath[allRemovedLibEntries.size()]));
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
