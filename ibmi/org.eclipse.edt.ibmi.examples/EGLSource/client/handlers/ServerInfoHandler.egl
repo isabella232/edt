@@ -10,7 +10,7 @@ handler ServerInfoHandler
 
 
 	function getServerInfo()
-		call ServerInfo.getServerAddress() using new HttpProxy returning to handleGetServerInfoResponse onException handleException;
+		call ServerInfo.getServerAddress() using new HttpProxy("server.ServerInfo") returning to handleGetServerInfoResponse onException handleException;
 	end
 	
 	function handleGetServerInfoResponse(retResult string in)

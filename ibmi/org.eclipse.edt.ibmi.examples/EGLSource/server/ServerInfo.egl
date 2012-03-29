@@ -4,7 +4,7 @@ package server;
 service ServerInfo
 	
 	function getServerAddress()returns(string)
-		host String?;
+		host String;
 		value string? = SysLib.getProperty("useREST");
 		if(value != null && value.toLowerCase() == "true")
 			request  javax.servlet.http.HttpServletRequest? = eglx.http.ServletContext.getHttpServletRequest();

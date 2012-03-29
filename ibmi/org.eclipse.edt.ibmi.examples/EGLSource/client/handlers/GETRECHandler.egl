@@ -8,22 +8,22 @@ import eglx.lang.dictionary;
 import server.GETREC;
 
 // basic library
-handler GETRECHandler type RUIHandler{onConstructionFunction = start}
+handler GETRECHandler 
 	
 	private httpSession1 IHttp?;
 	
-	function start()
+	function init()
     	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVERINFO, initHttp);
 	end
 	
     function initHttp(eventName string in, dataObject any in)
-		httpSession1 = SysLib.getResource("binding:GETRECService");
-		if(dataObject == null)
-			httpSession1 = new HttpProxy;
-		else
+		if(dataObject isa string && (dataObject as string).length() > 0)
+			httpSession1 = SysLib.getResource("binding:GETRECService");
 			if((dataObject as string).length() > 0)
 				httpSession1.getRequest().uri = dataObject + httpSession1.getRequest().uri;
 			end
+		else
+			httpSession1 = new HttpProxy("server.GETREC");
 		end
 	end
 	

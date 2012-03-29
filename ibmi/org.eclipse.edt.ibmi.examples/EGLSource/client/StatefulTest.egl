@@ -58,10 +58,11 @@ handler StatefulTest type RUIhandler{initialUI =[ui
     	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVERINFO, enableNext);
     	InfoBus.subscribe(Constants.INFOBUS_EVENT_CUSTS, populateCUSTs);
     	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION, handleSIE);
+    	getRecHandler.init();
     end
     
     function enableNext(eventName string in, dataObject any in)
-    	enableNextBtn = dataObject != null && (dataObject as string).length() > 0;
+    	enableNextBtn = dataObject != null;
     end 
     
     function getCusts(e Event in) 
