@@ -10,42 +10,49 @@ import server.GETREC;
 // basic library
 handler GETRECHandler type RUIHandler{onConstructionFunction = start}
 	
-	private http IHttp?;
+	private httpSession1 IHttp?;
 	
 	function start()
     	InfoBus.subscribe(Constants.INFOBUS_EVENT_SERVERINFO, initHttp);
 	end
 	
     function initHttp(eventName string in, dataObject any in)
-		http = SysLib.getResource("binding:GETRECService");
+		httpSession1 = SysLib.getResource("binding:GETRECService");
 		if(dataObject == null)
-			http = new HttpProxy;
+			httpSession1 = new HttpProxy;
 		else
 			if((dataObject as string).length() > 0)
-				http.getRequest().uri = dataObject + http.getRequest().uri;
+				httpSession1.getRequest().uri = dataObject + httpSession1.getRequest().uri;
 			end
 		end
 	end
 	
     function getCusts() 
-    	call GETREC.getCustomers() using http returning to handleCustomersResponse onException handleException;
+    	call GETREC.getCustomers() using httpSession1 returning to handleCustomersResponse onException handleException;
     end
     
     function handleCustomersResponse(retResult CUST[] in, http IHttp)
     	//process the response headers to handle the Session ID
-    	processResponseHeaders(http.getResponse());
+    	processResponseHeadersSession1(http.getResponse());
     	//call back to the handller to handle the new data
     	InfoBus.publish(Constants.INFOBUS_EVENT_CUSTS, retResult);
     end
     
-    function processResponseHeaders(http Response in)
-    	//This function finds a response containing "set-cookie"
-    	//If it finds the key it extracts the key from the response 
-    	//    and puts the key's value in the http.request
+    function processResponseHeadersSession1(http Response in)
+    	// This function gets the jsessionid and puts the key's value in the http.request
     	//by putting the key in the http.request each service invocation using that request will use the same session
     	//IMPORTANT NOTE:
     	//be very careful with http variables and multiple service invocations
     	//service can only use the same request if the services are deployed to the same server cluster 
+    	jsessionId string? = extractJSessionId(http);
+    	if(jsessionId != null)
+   			setRequestSessionId(jsessionId);
+    	end
+    end
+	
+	private function extractJSessionId(http Response in)returns(string?)
+    	//This function finds a response containing "set-cookie"
+    	//If it finds the key it extracts the key from the response and returns it
     	if(http.headers != null && http.headers.containsKey(Constants.KEY_SET_COOKIE))
     		value string = http.headers[Constants.KEY_SET_COOKIE];
     		startIdx int = value.indexOf(Constants.KEY_JSESSIONID);
@@ -57,23 +64,22 @@ handler GETRECHandler type RUIHandler{onConstructionFunction = start}
     			else
     				jsessionId = value[startIdx:value.length()];//this is the sessionid
     			end
-    			setRequestSessionId(jsessionId);
+    			return(jsessionId);
     		end
     	end
-    end
-	
+	end
 	function setRequestSessionId(jsessionId string in)
 		//This function puts the jsessionid in the request header
 		//If a Cookie is already there and has no JSESSIONID it adds to the Cookie
 		//If a Cookie is there and there is a JSESSIONID it removes the old JSESSION and adds the new JSESSIONID
 		//If there is no Cookie, Cookie is added with the JSESSIONID as the value. 
-		if(http != null)
-			if(http.getRequest().headers == null)
-				http.getRequest().headers = new dictionary(true, true);
+		if(httpSession1 != null)
+			if(httpSession1.getRequest().headers == null)
+				httpSession1.getRequest().headers = new dictionary(true, true);
 			end
 			cookieString string;
-			if(http.getRequest().headers.containsKey(Constants.KEY_COOKIE))
-	    		cookieString = http.getRequest().headers[Constants.KEY_COOKIE];
+			if(httpSession1.getRequest().headers.containsKey(Constants.KEY_COOKIE))
+	    		cookieString = httpSession1.getRequest().headers[Constants.KEY_COOKIE];
 				startIdx int = cookieString.indexOf(Constants.KEY_JSESSIONID);
 	    		if(startIdx > 0)
 	    			endIdx int = StrLib.indexOf(cookieString, ";", startIdx);
@@ -93,12 +99,12 @@ handler GETRECHandler type RUIHandler{onConstructionFunction = start}
 	    		//there's no existing value just add the jsessionid;
 	    		cookieString = jsessionId;
 			end
-			http.getRequest().headers[Constants.KEY_COOKIE] = cookieString;
+			httpSession1.getRequest().headers[Constants.KEY_COOKIE] = cookieString;
 		end
 	end
 
     function killSession() 
-    	call GETREC.killSession() using http returning to handleKillSessionResponse onException handleException;
+    	call GETREC.killSession() using httpSession1 returning to handleKillSessionResponse onException handleException;
     end
     
     function handleKillSessionResponse()
