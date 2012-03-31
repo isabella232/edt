@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,6 +21,7 @@ egl.defineWidget(
 		this.height = 450;
 		dojo.require("dijit.layout.StackContainer");
 		dojo.require("dijit.layout.ContentPane");
+		dojo.require("dijit.layout.StackController");
 		this.selectedChild = -1;
 	},
 	"createDojoWidget" : function(parent) {
