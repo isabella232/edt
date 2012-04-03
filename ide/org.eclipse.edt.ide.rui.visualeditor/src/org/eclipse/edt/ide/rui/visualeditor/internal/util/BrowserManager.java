@@ -40,6 +40,8 @@ public class BrowserManager {
 	public final static int SWT_WEBKIT = 0x10000; // SWT.WEBKIT
 	
 	public boolean ECLIPSE_37 = false;
+	
+	private static final boolean LINUX = Platform.OS_LINUX.equals(Platform.getOS());
 
 	private byte BRWOSERS = 0X0;
 	
@@ -86,18 +88,24 @@ public class BrowserManager {
 		int _iRenderEngine = EvPreferences.getInt( EvConstants.PREFERENCE_RENDERENGINE );
 		Browser browser = null;
 		if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_DEFAULT ) {
+			// For Linux there are known issues with older versions of webkit that come with some distros, so default to XULRunner. Otherwise default to webkit.
+			if ( LINUX && (BRWOSERS & XULRUNNER) != 0 ) {
+				return createXULRunner( compositeParent );
+			}
+			
 			if ( (BRWOSERS & WEBKIT) != 0 &&  ECLIPSE_37 ) {
 				return createWebKit( compositeParent );
 			}
 			
-			if ( (BRWOSERS & XULRUNNER) != 0 ) {
+			if ( !LINUX && (BRWOSERS & XULRUNNER) != 0 ) {
 				return createXULRunner( compositeParent );
 			}
 			
 			return createNONE( compositeParent );
 		} else if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT ) {
 			return createWebKit( compositeParent );
-		} else if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER && Platform.getOS().equals(Platform.OS_WIN32) ) {
+		//TODO the following should not be checking the OS at all. too close to a release to remove it, so for now it has been widened to add linux.
+		} else if ( _iRenderEngine == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER && (Platform.getOS().equals(Platform.OS_WIN32) || LINUX) ) {
 			return createXULRunner( compositeParent );
 		} else {
 			return createNONE( compositeParent );
