@@ -7,7 +7,7 @@
     		class="org.eclipse.edt.ide.compiler.IDEEDTCompiler"
     		name="%edtCompilerName"
     		preferencePageId="org.eclipse.edt.ide.compiler.edtCompilerPreferences"
-    		version="0.7.0"/>
+    		version="0.8.0"/>
    	</extension>
     
     <extension point="org.eclipse.edt.ide.core.generators">
@@ -16,7 +16,7 @@
 			class="org.eclipse.edt.ide.compiler.gen.JavaGenerator"
 			name="%JavaGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.7.0"
+			version="0.8.0"
 			provider="Eclipse.org"
 			description="%JavaGeneratorDescription"
 			language="Java"
@@ -26,7 +26,7 @@
 			class="org.eclipse.edt.ide.compiler.gen.JavaScriptGenerator"
 			name="%JavaScriptGeneratorName"
 			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.7.0"
+			version="0.8.0"
 			provider="Eclipse.org"
 			description="%JavaScriptGeneratorDescription"
 			language="JavaScript"
