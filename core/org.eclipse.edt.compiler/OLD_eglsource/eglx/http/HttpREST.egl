@@ -1,9 +1,0 @@
-package eglx.http; 
-
-import eglx._service.Encoding;
-
-record HttpREST
-	request HttpRequest{method=HttpMethod.POST, encoding=Encoding.XML, charset = "UTF-8"};
-	response HttpResponse{encoding=Encoding.USE_CONTENTTYPE};
-	isEglRpc boolean = false;
-end

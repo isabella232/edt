@@ -1,7 +1,0 @@
-package eglx.xml._bind.annotation;
-
-Record XMLSchemaType type Annotation
-{ targets = [ ElementKind.fieldMbr ]}
-  name string;
-  namespace string?= "http://www.w3.org/2001/XMLSchema";
-end
