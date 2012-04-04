@@ -1,11 +1,14 @@
-/*
- * Licensed Materials - Property of IBM
+/*******************************************************************************
+ * Copyright © 2010, 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corporation 2010. All Rights Reserved.
+ * Contributors:
+ * IBM Corporation - initial API and implementation
  *
- * U.S. Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
- */
+ *******************************************************************************/
 package  org.eclipse.edt.mof.egl.utils;
 
 import org.eclipse.edt.mof.egl.BinaryExpression;
