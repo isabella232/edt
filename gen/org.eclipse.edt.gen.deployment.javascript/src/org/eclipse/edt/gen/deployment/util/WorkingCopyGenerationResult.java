@@ -1,13 +1,5 @@
-/*
- * Licensed Materials - Property of IBM
- *
- * Copyright IBM Corporation 2008, 2010. All Rights Reserved.
- *
- * U.S. Government Users Restricted Rights - Use, duplication or
- * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
- */
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2008, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
