@@ -77,7 +77,7 @@ public class ReorganizeCode extends AbstractVisitor {
 
 	@SuppressWarnings("unchecked")
 	public List<StatementBlock> reorgCode(Statement statement, EglContext ctx) {
-		Annotation annot = statement.getAnnotation("EGL_Location");
+		Annotation annot = statement.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (annot != null)
 			ctx.setLastStatementLocation(annot);
 		this.ctx = ctx;
