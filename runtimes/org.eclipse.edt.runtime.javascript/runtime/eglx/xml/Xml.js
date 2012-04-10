@@ -99,7 +99,7 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 			break;
 	}
 	if (value instanceof egl.javascript.BigDecimal) {
-		fieldValue = field.toString();
+		fieldValue = value.toString();
 	}
 	fieldValue = (typeof (fieldValue) != "string") ? fieldValue : fieldValue.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 	if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
@@ -116,15 +116,20 @@ egl.eglx.xml.XmlLib["dictionaryToXML"] = function( /*value*/value, /*map*/namesp
 	var xmlStyle = fieldInfo.annotations["XMLStyle"];
 	var xmlName = xmlStyle.name;
 	var s = [ "<" + xmlName + ">" ];
-	for (f in value) {
-		if (!f.match(/^eze\$\$/) && (typeof this[f] != "function")) {
+	for (var f in value) {
+		var xx4 = f;
+		if (!f.match(/^eze\$\$/) && (typeof value[f] != "function")) {
 			//create an fieldInfo for each field
 			var annotations = {};
 			annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement(f, null, true, true);
+			var signature = "";
+			if(value[f] !== null && typeof value[f] === "object" && "eze$$signature" in value[f]){
+				signature = value[f]["eze$$signature"];
+			}
 			var fieldInfo = new egl.eglx.xml.binding.annotation.FieldInfo(
-					null, null, fieldInfo.eglSignature,
+					null, null, signature,
 					fieldInfo.eglType, annotations);
-			this.toXML(f, namespaces, fieldInfo);
+			s.push(this.toXML(value[f], namespaces, fieldInfo));
 		}
 	}
 	s.push("</" + xmlName + ">");
@@ -268,12 +273,17 @@ egl.eglx.xml.XmlLib["addNamespace"] = function(namespaces, namespace) {
 	namespaces.xmlns_map[namespace] = prefix;
 	return prefix + ":";
 };
+egl.eglx.xml.XmlLib["elementIsNil"] = function(element) {
+	var value = this.getAttributeNS(element, "nil", egl.xmllib_xsi_url);
+	var s = new String();
+	return value != null && "true" === value.toLowerCase();
+};
 egl.eglx.xml.XmlLib["addXSINamespace"] = function(namespaces) {
 	namespaces.xmlns_map[egl.xmllib_xsi_url] = "xsi";
 };
 egl.eglx.xml.XmlLib["addNamespacesToXML"] = function(namespaces, xml) {
 	var s = [];
-	for (f in namespaces.xmlns_map) {
+	for (var f in namespaces.xmlns_map) {
 		s.push(" xmlns:" + namespaces.xmlns_map[f] + "=\"" + f + "\"");
 	}
 
@@ -338,7 +348,17 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldI
 	}
 	//first check for array
 	if (eglObj !== null && typeof eglObj === "object" && this.isEglArray(fieldInfo)) {
+		if(egl.eglx.xml.XmlLib.elementIsNil(elements)){
+			return null;
+		}
 		return this.arrayFromXML(elements, eglObj, fieldInfo);
+	} else if (fieldInfo === null && this.isElementArray(elements) !== null) {
+		if(egl.eglx.xml.XmlLib.elementIsNil(elements)){
+			return null;
+		}
+		return this.arrayFromXML(elements, eglObj, fieldInfo);
+	} else if (egl.eglx.xml.XmlLib.elementIsNil(elements[0])) {
+		return null;
 	} else if (eglObj !== null && typeof eglObj === "object" && "eze$$getFieldInfos" in eglObj) {
 		return this.eglClassFromXML(elements[0], eglObj, fieldInfo);
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.EDictionary) {
@@ -346,20 +366,42 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldI
 	} else if (eglObj !== null && typeof eglObj === "object" && eglObj instanceof egl.eglx.lang.Enumeration) {
 		return this.enumerationFromXML(elements[0], eglObj, fieldInfo);
 	} else if ((eglObj == undefined || eglObj == null)
-			&& (elements[0].children != null && elements[0].children.length > 1)) {
+			&& (elements[0].children != null && elements[0].children.length > 1)) {//we already checked for an element array
 		return this.dictionaryFromXML(elements[0], new egl.eglx.lang.EDictionary(), fieldInfo);
 	} else {
 		return this.primitiveFromXML(elements[0], fieldInfo);
 	}
 };
+egl.eglx.xml.XmlLib["isElementArray"] = function(element) {
+	var elementName = null;
+	var elements = null;
+	if(element instanceof Element){
+		elements = this.getChildElements(element);
+	}
+	else if(element instanceof Array){
+		elements = element;
+	}
+	if(elements != null && elements.length > 1){
+		for (var idx = 0; idx < elements.length; idx++) {
+			var pairsArray = elements[idx].tagName.split(':'); // IE doesn't support localName
+			var localName = pairsArray[pairsArray.length - 1];
+			if(elementName === null){
+				elementName = localName;
+			}
+			else if(elementName != localName){
+				return null;
+			}
+		}
+		return elementName;
+	}
+	return null;
+};
+
+
 egl.eglx.xml.XmlLib["isEglArray"] = function(fieldInfo) {
-	return typeof fieldInfo === "object" && fieldInfo.eglSignature.charAt(0) === "[";
+	return fieldInfo !== null && typeof fieldInfo === "object" && fieldInfo.eglSignature.charAt(0) === "[";
 };
-egl.eglx.xml.XmlLib["isArray"] = function(/*nodes*/children) {
-	return children != undefined && children instanceof Array
-			&& children.length > 1 && children[0].localName
-			&& children[1].localName;
-};
+
 egl.eglx.xml.XmlLib["primitiveFromXML"] = function( /*node*/element, /*FieldInfo*/fieldInfo) {
 	if(element === undefined || element === null){
 		return null;
@@ -430,20 +472,20 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 
 		case 'N':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+			value = egl.eglx.lang.EDecimal.fromEString(value.toString(), 
 						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
 						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			break;
 
 		case 'd':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+			value = egl.eglx.lang.EDecimal.fromEString(value.toString(), 
 					egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
 					egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			break;
 		case '9':
 			var colon = fieldInfo.eglSignature.indexOf(':');
-			value = egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+			value = egl.eglx.lang.EDecimal.fromEString(value.toString(), 
 					egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
 					egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 			break;
@@ -456,13 +498,12 @@ egl.eglx.xml.XmlLib["enumerationFromXML"] = function( /*node*/element, /*egl rt 
 };
 egl.eglx.xml.XmlLib["dictionaryFromXML"] = function( /*node*/parentElement, /*egl rt object*/eglObj, /*FieldInfo*/fieldInfo) {
 	if (eglObj == null) {
-		eglObj = new egl.eglx.lang.EDictionary(true, true);
+		eglObj = egl.createDictionary(true, true);
 	}
-	var element = this.getChildElements(parentElement);
-	for (elementField in element) {
-		//TODO
-		//create an fieldInfo for each field, the name is the element name
-		this.fromXML([elementField], null);
+	var fields = this.getNamedChildElements(parentElement);
+	for (var field in fields) {
+		var val = this.fromXML(fields[field], null);
+		egl.eglx.lang.EDictionary.set(eglObj, field, egl.boxAny(val, egl.inferSignature(val)));
 	}
 	return eglObj;
 };
@@ -472,8 +513,7 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	if (eglObj == null && fieldInfo != null) {
 		//TODO create a new array;
 	}
-	var xmlArray = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLArray"]
-			: null;
+	var xmlArray = fieldInfo != undefined && fieldInfo != null ? fieldInfo.annotations["XMLArray"] : null;
 	var xmlName;
 	var wrapped = false;
 	var names = null;
@@ -497,9 +537,11 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	if (wrapped) {//FIXME I don't care what the child element names are
 		arrayElements = this.getChildElementNS(parentElement[0], names[0], xmlStyle.namespace);
 	}
-	fieldInfo = egl.clone(fieldInfo);
-	fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
-	fieldInfo.annotations["XMLStyle"].name = wrapped ? names[0] : xmlStyle.name;
+	if(fieldInfo != null){
+		fieldInfo = egl.clone(fieldInfo);
+		fieldInfo.eglSignature = fieldInfo.eglSignature.slice(1);
+		fieldInfo.annotations["XMLStyle"].name = wrapped ? names[0] : xmlStyle.name;
+	}
 	var array = new Array();
 	for (var idx = 0; idx < arrayElements.length; idx++) {
 		if (this.isEglArray(fieldInfo)) {
@@ -556,7 +598,7 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 	}
 	return eglObj;
 };
-egl.eglx.xml.XmlLib["getChildElements"] = function(/*DOM Element*/element) {
+egl.eglx.xml.XmlLib["getNamedChildElements"] = function(/*DOM Element*/element) {
 	var children = element.childNodes;
 	var elements = {};
 	// loop through the immediate child elements looking for matches (2+ matches is an array)
@@ -568,12 +610,16 @@ egl.eglx.xml.XmlLib["getChildElements"] = function(/*DOM Element*/element) {
 			if (!elements[localName]) {
 				elements[localName] = [];
 			}
-			elements[localName][elements[localName].length] = children[n];
+			elements[localName].push(children[n]);
 		}
 	}
+	return elements;
+};
+egl.eglx.xml.XmlLib["getChildElements"] = function(/*DOM Element*/element) {
+	var elements = this.getNamedChildElements(element);
 	var nodelists = [];
 	var i = 0;
-	for (f in elements) {
+	for (var f in elements) {
 		nodelists[i] = elements[f];
 		i++;
 	}
