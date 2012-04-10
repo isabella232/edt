@@ -84,6 +84,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genMemberName = "genMemberName";
 	public static final String genName = "genName";
 	public static final String genNewExpression = "genNewExpression";
+	public static final String genObjectExpressionEntries = "genObjectExpressionEntries";
 	public static final String genPackageStatement = "genPackageStatement";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";

@@ -48,7 +48,7 @@ public class Context extends EglContext {
 	private String smapPreviousLine = "";
 	private int smapPreviousEglLineNumber;
 	private int smapPreviousJavaLineNumber;
-	
+
 	private StringBuffer smapData = new StringBuffer();
 	private StringBuffer smapExtension = new StringBuffer();
 	private List<String> smapFiles = new ArrayList<String>();
@@ -197,6 +197,14 @@ public class Context extends EglContext {
 		if (!smapIsProcessing && annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
 			smapIsProcessing = true;
 			int thisEglLineNumber = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+			// check to see if this is logically part of an existing statement and if so, then use that number instead
+			if (object.getAnnotation(IEGLConstants.EGL_STATEMENTLOCATION) != null) {
+				Annotation relatedAnnotation = object.getAnnotation(IEGLConstants.EGL_STATEMENTLOCATION);
+				if (relatedAnnotation.getValue() != null && relatedAnnotation.getValue() instanceof Annotation) {
+					if (((Annotation) relatedAnnotation.getValue()).getValue(IEGLConstants.EGL_PARTLINE) != null)
+						thisEglLineNumber = ((Integer) ((Annotation) relatedAnnotation.getValue()).getValue(IEGLConstants.EGL_PARTLINE)).intValue();
+				}
+			}
 			// if we are continuing the same egl line, then skip writing out debug data
 			if (thisEglLineNumber != lastEglLineNumber) {
 				// if there is an outstanding line, write it
