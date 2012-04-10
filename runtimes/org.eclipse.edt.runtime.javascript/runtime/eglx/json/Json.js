@@ -204,7 +204,7 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fie
 			var s = [];
 			s.push("{");
 			var needComma = false;
-			for (f in object) {
+			for (var f in object) {
 				if (!f.match(/^eze\$\$/) && (typeof object[f] != "function")) {
 					if (needComma) s.push(",");
 					s.push('"');
@@ -214,7 +214,7 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fie
 					}
 					s.push(key);
 					s.push('":');
-					s.push(egl.eglx.json.toJSONString(egl.unboxAny( object[f] ), depth+1, maxDepth));
+					s.push(egl.eglx.json.toJSONString(object[f], depth+1, maxDepth));
 					needComma = true;
 				}
 			}
@@ -241,14 +241,21 @@ egl.eglx.json.convertStringToJson = function(value) {
 	str = str.replace(/\n/g, "\\n");	  // escape all <newline>
 	return str;	
 };
-egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl object */eglObject, /* boolean */cleanDictionary) {
+egl.eglx.json.JsonLib["useEval"] = false;
+egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl object */eglObject, /* boolean */cleanDictionary ) {
 	this.validateJSONObject(eglObject);
 	if (!/^(\[|{)/.test(str)) {
 		str = str.replace( /^(\s)*/, "" );
 	}
 	if (/^(\[|{)/.test(str)) {
 		try {
-			var jsonObject = egl.eglx.json.$JSONParser.parse(str);
+			var jsonObject;
+			if(egl.eglx.json.JsonLib.useEval){
+				jsonObject = egl.eglx.json.$JSONParser.parse(str);
+			}
+			else{
+				jsonObject = egl.eglx.json.$JSONParser.json_parse_state(str);
+			}
 			if (eglObject !== null && typeof eglObject === "object" && typeof jsonObject === "object") {
 				this.populateObjectFromJsonObject(jsonObject, eglObject, undefined, cleanDictionary);
 			} else {
@@ -362,6 +369,9 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EString){
 			return jsonObject.toString();
 		}
+		if(jsonObject !== null && typeof jsonObject === "object" && jsonObject instanceof egl.javascript.BigDecimal){
+			return jsonObject;
+		}
 		if (typeof(jsonObject) == "string") {
 			return jsonObject;
 		}
@@ -431,7 +441,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		return eglObject;
 	}
 	if(typeof jsonObject === "object"){
-		for (f in jsonObject) {
+		for (var f in jsonObject) {
 			if(typeof jsonObject[f] !== "function"){
 				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
 			}
