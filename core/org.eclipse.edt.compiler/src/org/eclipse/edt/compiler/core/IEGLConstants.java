@@ -51,6 +51,7 @@ public interface IEGLConstants {
 	public static final String EGL_PARTOFFSET  			="off";
 	public static final String EGL_PARTLINE 			= "line";
 	public static final String EGL_PARTABSOLUTEPATH 	= "abs";
+	public static final String EGL_STATEMENTLOCATION	= "EGL_Stmt_Loc";
 //	public static final String EGL_PARTLENGTH  			="EGL Part Length";
 //	public static final String EGL_PARTOFFSET  			="EGL Part Offset";
 //	public static final String EGL_PARTABSOLUTEPATH 	= "EGL ABS Path";
