@@ -17,6 +17,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.compiler.internal.util.ExpressionParenter;
 import org.eclipse.edt.ide.compiler.EDTCompilerIDEPlugin;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
@@ -50,6 +51,9 @@ public class JavaGenerator extends AbstractGenerator {
 	private void preprocess(Part part) {
 		//expand complex conditional expressions that contain function invocations
 		new CompoundConditionExpander(part);
+		
+		//add statament information to expressions
+		new ExpressionParenter(part);
 	}
 	
 	@Override
