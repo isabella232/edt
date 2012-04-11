@@ -312,7 +312,7 @@ public class CommonUtilities {
 		// check see to see it is safe to allow java to handle this conversion
 		int srcIndex = getJavaAllowedType(srcString);
 		int tgtIndex = getJavaAllowedType(tgtString);
-		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex == tgtIndex)
+		if (srcIndex >= 0 && tgtIndex >= 0 && isAcceptibleImplicitCast(srcIndex, tgtIndex))
 			return true;
 		else
 			return false;
@@ -331,6 +331,17 @@ public class CommonUtilities {
 		int tgtIndex = getJavaAllowedType(tgtString);
 		if (srcIndex >= 0 && tgtIndex >= 0 && srcIndex != tgtIndex)
 			return !isBoxedOutputTemp(src, ctx);
+		else
+			return false;
+	}
+
+	private static boolean isAcceptibleImplicitCast(int src, int tgt) {
+		if (src == tgt)
+			return true;
+		else if (src == 1 && (tgt == 2 || tgt == 3))
+			return true;
+		else if (src == 2 && tgt == 3)
+			return true;
 		else
 			return false;
 	}
