@@ -98,8 +98,10 @@ public class FunctionTemplate extends JavaTemplate {
 			out.print(", ");
 			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
 				out.print("AnyBoxedObject.class");
-			else
+			else if (decl.isNullable())
 				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);
+			else
+				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
 		}
 		out.print(")");
 	}
@@ -117,8 +119,10 @@ public class FunctionTemplate extends JavaTemplate {
 			out.print(", ");
 			if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst())
 				out.print("AnyBoxedObject.class");
-			else
+			else if (decl.isNullable())
 				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaObject);
+			else
+				ctx.invoke(genRuntimeClassTypeName, decl, ctx, out, TypeNameKind.JavaPrimitive);
 		}
 		out.print(")");
 	}

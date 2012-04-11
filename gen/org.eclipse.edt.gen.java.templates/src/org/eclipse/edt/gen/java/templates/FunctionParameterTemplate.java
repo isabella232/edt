@@ -29,8 +29,10 @@ public class FunctionParameterTemplate extends JavaTemplate {
 			out.print("AnyBoxedObject<");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
 			out.print(">");
-		} else
+		} else if (decl.isNullable())
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
+		else
+			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, decl, ctx, out);
 	}

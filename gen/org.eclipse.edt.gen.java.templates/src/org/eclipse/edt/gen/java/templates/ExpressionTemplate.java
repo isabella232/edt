@@ -18,8 +18,13 @@ import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Type;
 
 public class ExpressionTemplate extends JavaTemplate {
+
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out, Type asType) {
+		ctx.invoke(genExpression, expr, ctx, out);
+	}
 
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
 		String[] details = new String[] { expr.getEClass().getETypeSignature() };
