@@ -1160,7 +1160,8 @@ public class ReorganizeCode extends AbstractVisitor {
 						declarationExpressionWork.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					Field fieldWork = factory.createField();
 					fieldWork.setName(temporaryWork);
-					fieldWork.setType(object.getArguments().get(i).getType());
+					// we need to use the function parameter type, but the argument's nullability
+					fieldWork.setType(parameter.getType());
 					fieldWork.setIsNullable(object.getArguments().get(i).isNullable());
 					// we need to create the member access
 					MemberName nameExpressionWork = factory.createMemberName();
