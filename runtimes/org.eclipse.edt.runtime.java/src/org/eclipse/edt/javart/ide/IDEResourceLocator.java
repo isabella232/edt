@@ -125,7 +125,13 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 			name = name.substring(0, name.length() - 6); // ".egldd".length()
 		}
 		
-		return name.toLowerCase();
+		name = name.toLowerCase();
+		try {
+			return URLDecoder.decode(name, "UTF-8");
+		}
+		catch (UnsupportedEncodingException e) {
+			return name;
+		}
 	}
 	
 	public List<String[]> parseDDArgument(String ddFiles, boolean added) {
