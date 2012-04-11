@@ -241,7 +241,10 @@ egl.eglx.json.convertStringToJson = function(value) {
 	str = str.replace(/\n/g, "\\n");	  // escape all <newline>
 	return str;	
 };
-egl.eglx.json.JsonLib["useEval"] = false;
+egl.eglx.json.JsonLib["JSON_JS_json_parse"] = "json_parse";
+egl.eglx.json.JsonLib["JSON_JS_json_parse_state"] = "json_parse_state";
+egl.eglx.json.JsonLib["JSON_JS_json2"] = "json2";
+egl.eglx.json.JsonLib["parserType"] = egl.eglx.json.JsonLib["JSON_JS_json_parse_state"];
 egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl object */eglObject, /* boolean */cleanDictionary ) {
 	this.validateJSONObject(eglObject);
 	if (!/^(\[|{)/.test(str)) {
@@ -250,11 +253,9 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 	if (/^(\[|{)/.test(str)) {
 		try {
 			var jsonObject;
-			if(egl.eglx.json.JsonLib.useEval){
-				jsonObject = egl.eglx.json.$JSONParser.parse(str);
-			}
-			else{
-				jsonObject = egl.eglx.json.$JSONParser.json_parse_state(str);
+			if( egl.eglx.json.$JSONParser[egl.eglx.json.JsonLib.parserType] !== undefined && 
+					typeof  egl.eglx.json.$JSONParser[egl.eglx.json.JsonLib.parserType] === 'function'){
+				jsonObject = egl.eglx.json.$JSONParser[egl.eglx.json.JsonLib.parserType](str);
 			}
 			if (eglObject !== null && typeof eglObject === "object" && typeof jsonObject === "object") {
 				this.populateObjectFromJsonObject(jsonObject, eglObject, undefined, cleanDictionary);
