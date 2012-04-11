@@ -33,7 +33,6 @@ public class BooleanTypeTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 		} else if (CommonUtilities.isHandledByJavaWithCast(arg.getObjectExpr(), arg, ctx)) {
 			out.print("(" + ctx.getPrimitiveMapping(arg.getType()) + ")");
-			out.print("(" + ctx.getPrimitiveMapping(arg.getObjectExpr().getType()) + ")");
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(")");

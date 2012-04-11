@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 public class BigintTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
-		out.print("(long) 0");
+		out.print("0");
 	}
 	
 	public void genConstructorOptions(EGLClass type, Context ctx, TabbedWriter out) {
@@ -30,10 +30,9 @@ public class BigintTypeTemplate extends JavaTemplate {
 
 	public void genConversionOperation(EGLClass type, Context ctx, TabbedWriter out, AsExpression arg) {
 		if (CommonUtilities.isHandledByJavaWithoutCast(arg.getObjectExpr(), arg, ctx)) {
-			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
+			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out, arg.getType());
 		} else if (CommonUtilities.isHandledByJavaWithCast(arg.getObjectExpr(), arg, ctx)) {
 			out.print("(" + ctx.getPrimitiveMapping(arg.getType()) + ")");
-			out.print("(" + ctx.getPrimitiveMapping(arg.getObjectExpr().getType()) + ")");
 			out.print("(");
 			ctx.invoke(genExpression, arg.getObjectExpr(), ctx, out);
 			out.print(")");
