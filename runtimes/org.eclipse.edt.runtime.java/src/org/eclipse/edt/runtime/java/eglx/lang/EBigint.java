@@ -314,6 +314,30 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		return op1.compareTo(op2);
 	}
 
+	public static int compareTo(Integer op1, Long op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return ((Long) op1.longValue()).compareTo(op2);
+	}
+
+	public static int compareTo(Long op1, Integer op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2.longValue());
+	}
+
+	public static int compareTo(Short op1, Long op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return ((Long) op1.longValue()).compareTo(op2);
+	}
+
+	public static int compareTo(Long op1, Short op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2.longValue());
+	}
+
 	public static boolean equals(Long op1, Long op2) {
 		if (op1 == null && op2 == null)
 			return true;
@@ -322,7 +346,55 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		return op1.compareTo(op2) == 0;
 	}
 
+	public static boolean equals(Integer op1, Long op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return ((Long) op1.longValue()).compareTo(op2) == 0;
+	}
+
+	public static boolean equals(Long op1, Integer op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.compareTo(op2.longValue()) == 0;
+	}
+
+	public static boolean equals(Short op1, Long op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return ((Long) op1.longValue()).compareTo(op2) == 0;
+	}
+
+	public static boolean equals(Long op1, Short op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.compareTo(op2.longValue()) == 0;
+	}
+
 	public static boolean notEquals(Long op1, Long op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Integer op1, Long op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Long op1, Integer op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Short op1, Long op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Long op1, Short op2) {
 		return !equals(op1, op2);
 	}
 

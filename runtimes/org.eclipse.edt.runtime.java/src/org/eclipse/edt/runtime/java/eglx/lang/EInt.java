@@ -349,6 +349,18 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		return op1.compareTo(op2);
 	}
 
+	public static int compareTo(Short op1, Integer op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return ((Integer) op1.intValue()).compareTo(op2);
+	}
+
+	public static int compareTo(Integer op1, Short op2) throws AnyException {
+		if (op1 == null && op2 == null)
+			return 0;
+		return op1.compareTo(op2.intValue());
+	}
+
 	public static boolean equals(Integer op1, Integer op2) {
 		if (op1 == null && op2 == null)
 			return true;
@@ -357,7 +369,31 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		return op1.compareTo(op2) == 0;
 	}
 
+	public static boolean equals(Short op1, Integer op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return ((Integer) op1.intValue()).compareTo(op2) == 0;
+	}
+
+	public static boolean equals(Integer op1, Short op2) {
+		if (op1 == null && op2 == null)
+			return true;
+		if (op1 == null || op2 == null)
+			return false;
+		return op1.compareTo(op2.intValue()) == 0;
+	}
+
 	public static boolean notEquals(Integer op1, Integer op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Short op1, Integer op2) {
+		return !equals(op1, op2);
+	}
+
+	public static boolean notEquals(Integer op1, Short op2) {
 		return !equals(op1, op2);
 	}
 }
