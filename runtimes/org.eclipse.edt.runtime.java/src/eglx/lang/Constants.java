@@ -44,42 +44,42 @@ public class Constants extends ExecutableBase {
 	}
 	@org.eclipse.edt.javart.json.Json(name="isoDateFormat", clazz=EString.class, asOptions={})
 	public String getIsoDateFormat() {
-		return (isoDateFormat);
+		return isoDateFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="usaDateFormat", clazz=EString.class, asOptions={})
 	public String getUsaDateFormat() {
-		return (usaDateFormat);
+		return usaDateFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="eurDateFormat", clazz=EString.class, asOptions={})
 	public String getEurDateFormat() {
-		return (eurDateFormat);
+		return eurDateFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="jisDateFormat", clazz=EString.class, asOptions={})
 	public String getJisDateFormat() {
-		return (jisDateFormat);
+		return jisDateFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="isoTimeFormat", clazz=EString.class, asOptions={})
 	public String getIsoTimeFormat() {
-		return (isoTimeFormat);
+		return isoTimeFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="usaTimeFormat", clazz=EString.class, asOptions={})
 	public String getUsaTimeFormat() {
-		return (usaTimeFormat);
+		return usaTimeFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="eurTimeFormat", clazz=EString.class, asOptions={})
 	public String getEurTimeFormat() {
-		return (eurTimeFormat);
+		return eurTimeFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="jisTimeFormat", clazz=EString.class, asOptions={})
 	public String getJisTimeFormat() {
-		return (jisTimeFormat);
+		return jisTimeFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="db2TimeStampFormat", clazz=EString.class, asOptions={})
 	public String getDb2TimeStampFormat() {
-		return (db2TimeStampFormat);
+		return db2TimeStampFormat;
 	}
 	@org.eclipse.edt.javart.json.Json(name="odbcTimeStampFormat", clazz=EString.class, asOptions={})
 	public String getOdbcTimeStampFormat() {
-		return (odbcTimeStampFormat);
+		return odbcTimeStampFormat;
 	}
 }

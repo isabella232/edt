@@ -12,27 +12,28 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import java.math.BigDecimal;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
+import java.lang.Short;
 import eglx.lang.StringLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EDate;
 import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
 import java.lang.Double;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
-import java.lang.Short;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import java.lang.Object;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import java.lang.Float;
 import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
 import java.lang.Long;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
@@ -43,7 +44,7 @@ public class StrLib extends ExecutableBase {
 	}
 	public void ezeInitialize() {
 	}
-	public String booleanAsString(Boolean value) {
+	public String booleanAsString(boolean value) {
 		if (value) {
 			return "true";
 		}
@@ -52,42 +53,32 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public int characterLen(String text) {
-		int eze$Temp2;
-		eze$Temp2 = EString.length(EString.clip(text));
-		return eze$Temp2;
+		return EString.length(EString.clip(text));
 	}
 	public String clip(String source) {
-		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(source, null))) {
+		if ((source == null)) {
 			return null;
 		}
 		else {
-			String eze$Temp4;
-			eze$Temp4 = EString.clip(source);
-			return eze$Temp4;
+			return EString.clip(source);
 		}
 	}
 	public String clip(String source, Integer clipType) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(source, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(clipType, null)))) {
+		if (((source == null) || (clipType == null))) {
 			return null;
 		}
 		else {
 			{
-				EzeLabel_eze_caselabel_0: if ((EInt.equals(clipType, (int)(short)((short) 0)))) {
-					String eze$Temp7;
-					eze$Temp7 = EString.trim(source);
-					return eze$Temp7;
+				EzeLabel_eze_caselabel_0: if ((EInt.equals(clipType, 0))) {
+					return EString.trim(source);
 				}
 				else {
-					if ((EInt.equals(clipType, (int)(short)((short) 1)))) {
-						String eze$Temp9;
-						eze$Temp9 = EString.clipLeading(source);
-						return eze$Temp9;
+					if ((EInt.equals(clipType, 1))) {
+						return EString.clipLeading(source);
 					}
 					else {
-						if ((EInt.equals(clipType, (int)(short)((short) 2)))) {
-							String eze$Temp11;
-							eze$Temp11 = EString.clip(source);
-							return eze$Temp11;
+						if ((EInt.equals(clipType, 2))) {
+							return EString.clip(source);
 						}
 						else {
 							return source;
@@ -98,175 +89,145 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatDate(Calendar dateValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(dateValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((dateValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			Calendar eze$Temp14;
-			eze$Temp14 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
-			String eze$Temp15;
-			eze$Temp15 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp13;
-			eze$Temp13 = StringLib.format(eze$Temp14, eze$Temp15);
-			return eze$Temp13;
+			Calendar eze$Temp9;
+			eze$Temp9 =  (Calendar) org.eclipse.edt.javart.util.JavartUtil.checkNullable(dateValue);
+			String eze$Temp8;
+			eze$Temp8 = StringLib.format(eze$Temp9, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp8;
 		}
 	}
 	public String formatNumber(Short intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(intValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((intValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			short eze$Temp18;
-			eze$Temp18 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp19;
-			eze$Temp19 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp17;
-			eze$Temp17 = StringLib.format(eze$Temp18, eze$Temp19);
-			return eze$Temp17;
+			short eze$Temp12;
+			eze$Temp12 =  (Short) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp11;
+			eze$Temp11 = StringLib.format(eze$Temp12, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp11;
 		}
 	}
 	public String formatNumber(Integer intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(intValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((intValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			int eze$Temp22;
-			eze$Temp22 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp23;
-			eze$Temp23 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp21;
-			eze$Temp21 = StringLib.format(eze$Temp22, eze$Temp23);
-			return eze$Temp21;
+			int eze$Temp15;
+			eze$Temp15 =  (Integer) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp14;
+			eze$Temp14 = StringLib.format(eze$Temp15, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp14;
 		}
 	}
 	public String formatNumber(Long intValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(intValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((intValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			long eze$Temp26;
-			eze$Temp26 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
-			String eze$Temp27;
-			eze$Temp27 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp25;
-			eze$Temp25 = StringLib.format(eze$Temp26, eze$Temp27);
-			return eze$Temp25;
+			long eze$Temp18;
+			eze$Temp18 =  (Long) org.eclipse.edt.javart.util.JavartUtil.checkNullable(intValue);
+			String eze$Temp17;
+			eze$Temp17 = StringLib.format(eze$Temp18, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp17;
 		}
 	}
 	public String formatNumber(BigDecimal decValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(decValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((decValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			String eze$Temp30;
-			eze$Temp30 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp29;
-			eze$Temp29 = StringLib.format(decValue, eze$Temp30);
-			return eze$Temp29;
+			return StringLib.format(org.eclipse.edt.javart.util.JavartUtil.checkNullable(decValue), org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
 		}
 	}
 	public String formatNumber(Float floatValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(floatValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((floatValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			float eze$Temp33;
-			eze$Temp33 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp34;
-			eze$Temp34 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp32;
-			eze$Temp32 = StringLib.format(eze$Temp33, eze$Temp34);
-			return eze$Temp32;
+			float eze$Temp22;
+			eze$Temp22 =  (Float) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp21;
+			eze$Temp21 = StringLib.format(eze$Temp22, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp21;
 		}
 	}
 	public String formatNumber(Double floatValue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(floatValue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((floatValue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			double eze$Temp37;
-			eze$Temp37 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
-			String eze$Temp38;
-			eze$Temp38 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp36;
-			eze$Temp36 = StringLib.format(eze$Temp37, eze$Temp38);
-			return eze$Temp36;
+			double eze$Temp25;
+			eze$Temp25 =  (Double) org.eclipse.edt.javart.util.JavartUtil.checkNullable(floatValue);
+			String eze$Temp24;
+			eze$Temp24 = StringLib.format(eze$Temp25, org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
+			return eze$Temp24;
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue, String format) {
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(timestampvalue, null)) || (org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(format, null)))) {
+		if (((timestampvalue == null) || (format == null))) {
 			return null;
 		}
 		else {
-			String eze$Temp41;
-			eze$Temp41 =  (String) org.eclipse.edt.javart.util.JavartUtil.checkNullable(format);
-			String eze$Temp40;
-			eze$Temp40 = StringLib.format(timestampvalue, eze$Temp41);
-			return eze$Temp40;
+			return StringLib.format(org.eclipse.edt.javart.util.JavartUtil.checkNullable(timestampvalue), org.eclipse.edt.javart.util.JavartUtil.checkNullable(format));
 		}
 	}
 	public String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) {
 		int charIndex;
-		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), (int)(short)((short) 2))), EDecimal.asDecimal((short) 1))));
-		AnyBoxedObject<Integer> eze$Temp42;
-		eze$Temp42 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(charIndex);
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), 2)), EDecimal.asDecimal((short) 1))));
+		AnyBoxedObject<Integer> eze$Temp27;
+		eze$Temp27 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(charIndex);
 		String token;
-		token = StringLib.getNextToken(source, eze$Temp42, delimiters);
-		charIndex = org.eclipse.edt.javart.util.JavartUtil.checkNullable(eze$Temp42.ezeUnbox());
-		index.ezeCopy((((charIndex - (int)(short)((short) 1)) * (int)(short)((short) 2)) + (int)(short)((short) 1)));
+		token = StringLib.getNextToken(source, eze$Temp27, delimiters);
+		charIndex = org.eclipse.edt.javart.util.JavartUtil.checkNullable(eze$Temp27.ezeUnbox());
+		index.ezeCopy((((charIndex - 1) * 2) + 1));
 		return token;
 	}
 	public int getTokenCount(String source, String delimiters) {
-		int eze$Temp43;
-		eze$Temp43 = StringLib.getTokenCount(source, delimiters);
-		return eze$Temp43;
+		return StringLib.getTokenCount(source, delimiters);
 	}
 	public int indexOf(String source, String pattern) {
-		int eze$Temp44;
-		eze$Temp44 = EString.indexOf(source, pattern);
-		return eze$Temp44;
+		return EString.indexOf(source, pattern);
 	}
-	public int indexOf(String source, String pattern, Integer startIndex) {
-		int eze$Temp45;
-		eze$Temp45 = EString.indexOf(source, pattern, startIndex);
-		return eze$Temp45;
+	public int indexOf(String source, String pattern, int startIndex) {
+		return EString.indexOf(source, pattern, startIndex);
 	}
 	public String lowerCase(String characterItem) {
-		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(characterItem, null))) {
+		if ((characterItem == null)) {
 			return null;
 		}
 		else {
-			String eze$Temp47;
-			eze$Temp47 = EString.toLowerCase(characterItem);
-			return eze$Temp47;
+			return EString.toLowerCase(characterItem);
 		}
 	}
 	public String spaces(Integer characterCount) {
-		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(characterCount, null))) {
+		if ((characterCount == null)) {
 			return null;
 		}
 		else {
 			String result = "";
 			String fiftyBlanks;
 			fiftyBlanks = "                                                  ";
-			while ((EInt.compareTo(characterCount, (int)(short)((short) 50)) >= 0)) {
+			while ((EInt.compareTo(characterCount, 50) >= 0)) {
 				result = ((result) + fiftyBlanks);
-				characterCount -= (int)(short)((short) 50);
+				characterCount -= 50;
 			}
-			if ((EInt.compareTo(characterCount, (int)(short)((short) 0)) > 0)) {
-				result = ((result) + EString.substring(fiftyBlanks, (int)(short)((short) 1), characterCount));
+			if ((EInt.compareTo(characterCount, 0) > 0)) {
+				result = ((result) + EString.substring(fiftyBlanks, 1, characterCount));
 			}
 			return result;
 		}
 	}
 	public String upperCase(String characterItem) {
-		if ((org.eclipse.edt.runtime.java.eglx.lang.NullType.equals(characterItem, null))) {
+		if ((characterItem == null)) {
 			return null;
 		}
 		else {
-			String eze$Temp52;
-			eze$Temp52 = EString.toUpperCase(characterItem);
-			return eze$Temp52;
+			return EString.toUpperCase(characterItem);
 		}
 	}
 }

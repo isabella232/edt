@@ -12,19 +12,21 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.lang.SysLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import eglx.services.ServiceInvocationException;
+import eglx.http.IHttp;
 import org.eclipse.edt.eunit.runtime.MultiStatus;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import eglx.lang.SysLib;
 import eglx.lang.AnyException;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
 import org.eclipse.edt.eunit.runtime.LogResult;
 import org.eclipse.edt.eunit.runtime.ServiceBindingType;
+import eglx.services.ServiceInvocationException;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
 @SuppressWarnings("unused")
@@ -47,8 +49,8 @@ public class TestListMgr extends ExecutableBase {
 	public List<org.eclipse.edt.javart.Delegate> LibraryStartTests;
 	@javax.xml.bind.annotation.XmlTransient
 	private int libIndex;
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public TestListMgr() {
 		super();
 		ezeInitialize();
@@ -60,8 +62,8 @@ public class TestListMgr extends ExecutableBase {
 		testLibName = "";
 		LibraryStartTests = EList.ezeNew(org.eclipse.edt.javart.Delegate.class);
 		bindingType = ServiceBindingType.DEDICATED;
-		testIndex = (int)(short)((short) 1);
-		libIndex = (int)(short)((short) 1);
+		testIndex = 1;
+		libIndex = 1;
 	}
 	@org.eclipse.edt.javart.json.Json(name="bindingType", clazz=ServiceBindingType.class, asOptions={})
 	public ServiceBindingType getBindingType() {
@@ -81,7 +83,7 @@ public class TestListMgr extends ExecutableBase {
 	public int getTestIndex() {
 		return testIndex;
 	}
-	public void setTestIndex(Integer ezeValue) {
+	public void setTestIndex(int ezeValue) {
 		testIndex = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="testMethodNames", clazz=EString.class, asOptions={})
@@ -116,14 +118,8 @@ public class TestListMgr extends ExecutableBase {
 	public int getLibIndex() {
 		return libIndex;
 	}
-	public void setLibIndex(Integer ezeValue) {
+	public void setLibIndex(int ezeValue) {
 		libIndex = ezeValue;
-	}
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
-		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
-			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
-		}
-		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	}
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
@@ -131,15 +127,19 @@ public class TestListMgr extends ExecutableBase {
 		}
 		return eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	}
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
+		}
+		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	}
 	public void nextTest() {
 		String testId;
 		testId = getTestIdString();
 		SysLib.writeStdout((("Running test: ") + testId));
 		ms.addStatus(testId);
-		boolean eze$Temp1;
-		eze$Temp1 = (testIndex < EList.getSize(runTestMtds));
-		if (eze$Temp1) {
-			testIndex += (int)(short)((short) 1);
+		if ((testIndex < EList.getSize(runTestMtds))) {
+			testIndex += 1;
 			runTestMtds.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, runTestMtds)).invoke();
 		}
 	}
@@ -152,7 +152,7 @@ public class TestListMgr extends ExecutableBase {
 			testId += testMethodNames.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(testIndex - 1, testMethodNames));
 		}
 		else {
-			if ((EInt.equals(testIndex, (testMethodNamesSize + (int)(short)((short) 1))))) {
+			if ((EInt.equals(testIndex, (testMethodNamesSize + 1)))) {
 				testId += "endTest";
 			}
 			else {
@@ -162,14 +162,12 @@ public class TestListMgr extends ExecutableBase {
 		return testId;
 	}
 	public void nextTestLibrary() {
-		boolean eze$Temp5;
-		eze$Temp5 = (libIndex < EList.getSize(LibraryStartTests));
-		if (eze$Temp5) {
-			libIndex += (int)(short)((short) 1);
+		if ((libIndex < EList.getSize(LibraryStartTests))) {
+			libIndex += 1;
 			LibraryStartTests.get(org.eclipse.edt.javart.util.JavartUtil.checkIndex(libIndex - 1, LibraryStartTests)).invoke();
 		}
 	}
-	public void handleCallBackException(AnyException exp, eglx.http.IHttp http) {
+	public void handleCallBackException(AnyException exp, IHttp http) {
 		String str;
 		str = (((((("Caught service exception: ") + exp.getMessageID())) + ": ")) + exp.getMessage());
 		if (org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeIsa(exp, ServiceInvocationException.class)) {
@@ -204,7 +202,7 @@ public class TestListMgr extends ExecutableBase {
 	}
 	public String getBindingTypeString(ServiceBindingType bType) {
 		{
-			EzeLabel_eze_CaseLabel_0: if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, java.lang.Enum.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, java.lang.Enum.class))) {
+			EzeLabel_eze_caselabel_0: if ((org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(bType, java.lang.Enum.class) == org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeCast(ServiceBindingType.DEDICATED, java.lang.Enum.class))) {
 				return "DEDICATED_BINDING";
 			}
 			else {

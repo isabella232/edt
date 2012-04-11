@@ -14,15 +14,16 @@ import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
 import java.lang.Boolean;
-import eglx.rbd.StrLib;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
+import eglx.rbd.StrLib;
+import org.eclipse.edt.eunit.runtime.LogResult;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="MultiStatus")
 public class MultiStatus extends ExecutableBase {
@@ -43,8 +44,8 @@ public class MultiStatus extends ExecutableBase {
 	public int notRunCnt;
 	@org.eclipse.edt.javart.json.Json(name="firstFailedTestName", clazz=EString.class, asOptions={})
 	public String firstFailedTestName;
-	public StrLib eze_Lib_eglx_rbd_StrLib;
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	public StrLib eze_Lib_eglx_rbd_StrLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	
 	public MultiStatus() {
@@ -61,17 +62,17 @@ public class MultiStatus extends ExecutableBase {
 		notRunCnt = 0;
 		firstFailedTestName = "";
 	}
-	public StrLib eze_Lib_eglx_rbd_StrLib() {
-		if (eze_Lib_eglx_rbd_StrLib == null) {
-			eze_Lib_eglx_rbd_StrLib = (StrLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("eglx.rbd.StrLib");
-		}
-		return eze_Lib_eglx_rbd_StrLib;
-	}
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
 			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
 		}
 		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
+	}
+	public StrLib eze_Lib_eglx_rbd_StrLib() {
+		if (eze_Lib_eglx_rbd_StrLib == null) {
+			eze_Lib_eglx_rbd_StrLib = (StrLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("eglx.rbd.StrLib");
+		}
+		return eze_Lib_eglx_rbd_StrLib;
 	}
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {
@@ -85,25 +86,25 @@ public class MultiStatus extends ExecutableBase {
 		String msg;
 		msg = ((((testId) + ": ")) + s.reason);
 		eze_Lib_org_eclipse_edt_eunit_runtime_LogResult().logStdOut(msg);
-		testCnt += (int)(short)((short) 1);
+		testCnt += 1;
 		{
-			EzeLabel_eze_CaseLabel_0: if ((EInt.equals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED))) {
-				passedCnt += (int)(short)((short) 1);
+			EzeLabel_eze_caselabel_0: if ((EInt.equals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED))) {
+				passedCnt += 1;
 			}
 			else {
 				if ((EInt.equals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SFAILED))) {
-					failedCnt += (int)(short)((short) 1);
+					failedCnt += 1;
 				}
 				else {
 					if ((EInt.equals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SERROR))) {
-						errCnt += (int)(short)((short) 1);
+						errCnt += 1;
 					}
 					else {
 						if ((EInt.equals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SNOT_RUN))) {
-							notRunCnt += (int)(short)((short) 1);
+							notRunCnt += 1;
 						}
 						else {
-							badCnt += (int)(short)((short) 1);
+							badCnt += 1;
 						}
 					}
 				}
@@ -112,7 +113,7 @@ public class MultiStatus extends ExecutableBase {
 		boolean eze_compound_1;
 		eze_compound_1 = (EInt.notEquals(s.code, eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib().SPASSED));
 		if (eze_compound_1) {
-			eze_compound_1 = (EInt.equals(eze_Lib_eglx_rbd_StrLib().characterLen(firstFailedTestName), (int)(short)((short) 0)));
+			eze_compound_1 = (EInt.equals(eze_Lib_eglx_rbd_StrLib().characterLen(firstFailedTestName), 0));
 		}
 		if (eze_compound_1) {
 			firstFailedTestName = testId;
