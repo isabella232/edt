@@ -26,7 +26,6 @@ import org.eclipse.jetty.plus.webapp.EnvConfiguration;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import eglx.lang.AnyException;
 import eglx.lang.SysLib;
 
 
@@ -107,17 +106,6 @@ public class ServicesConfigurator extends AbstractConfigurator {
 		bindingProcessor = new IDEBindingResourceProcessor(server.getIDEPort(), new IDEResourceLocator());
 		SysLib.setBindingResourceProcessor(bindingProcessor);
 		
-		// Set default DD
-		if (initialDefaultDD != null) {
-			try {
-				bindingProcessor.setDefaultDD(initialDefaultDD);
-			}
-			catch (AnyException e) {
-				// Not fatal. Log it and continue.
-				server.log(e);
-			}
-		}
-		
 		// Use the full DD parser which supports more than just bindings.
 		try {
 			bindingProcessor.getResourceLocator().setDDParser(DeploymentDesc.class.getMethod("createDeploymentDescriptor", new Class[]{String.class, InputStream.class})); //$NON-NLS-1$
@@ -135,6 +123,9 @@ public class ServicesConfigurator extends AbstractConfigurator {
 		}
 		if (initialOrderedDDNames != null && initialOrderedDDNames.length() > 0) {
 			configServlet.parseOrderedDDs(initialOrderedDDNames);
+		}
+		if (initialDefaultDD != null) {
+			configServlet.setDefaultDD(initialDefaultDD);
 		}
 	}
 	

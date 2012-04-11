@@ -46,8 +46,6 @@ import org.eclipse.jetty.plus.jndi.NamingEntry;
 import org.eclipse.jetty.plus.webapp.PlusDescriptorProcessor;
 import org.eclipse.jetty.xml.XmlConfiguration;
 
-import eglx.lang.AnyException;
-
 
 /**
  * Servlet that handles configuration of the test server, providing support for JNDI, service mappings,
@@ -187,13 +185,7 @@ public class ConfigServlet extends HttpServlet {
 		}
 		if (defaultDD != null) {
 			server.log("Default DD changed: " + defaultDD, LogLevel.INFO); //$NON-NLS-1$
-			try {
-				bindingProcessor.setDefaultDD(defaultDD);
-			}
-			catch (AnyException e) {
-				// Not fatal - log error and continue with other changes.
-				server.log(e);
-			}
+			setDefaultDD(defaultDD);
 		}
 		if (orderedDDs != null) {
 			reconfigure = parseOrderedDDs(orderedDDs) || reconfigure;
@@ -227,6 +219,17 @@ public class ConfigServlet extends HttpServlet {
 			else {
 				server.log("DD file removed: " + next[0] + ", " + next[1], LogLevel.INFO); //$NON-NLS-1$ //$NON-NLS-2$
 			}
+		}
+	}
+	
+	public void setDefaultDD(String defaultDD) {
+		initRunUnit();
+		try {
+			bindingProcessor.setDefaultDD(defaultDD);
+		}
+		catch (Exception e) {
+			// Not fatal. Log it and continue.
+			server.log(e);
 		}
 	}
 	
