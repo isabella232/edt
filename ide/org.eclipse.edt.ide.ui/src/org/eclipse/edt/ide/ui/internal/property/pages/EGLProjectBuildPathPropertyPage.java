@@ -87,7 +87,7 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 	private CheckedListDialogField 	fClassPathList;
 	private StringButtonDialogField fBuildPathDialogField;
 	private ProjectsWorkbookPage 	fProjectsPage;	
-	//private EGLLibrariesWorkbookPage fLibrariesPage;
+	private EGLLibrariesWorkbookPage fLibrariesPage;
 	private EGLPathOrderingWorkbookPage fOrderPage;
 
 	/**
@@ -296,16 +296,16 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		item.setData(fOrderPage);
 		item.setControl(fOrderPage.getControl(folder));	
 		
-		/*Image libImage= PluginImages.DESC_OBJS_EGLBUILDPATH_ORDER.createImage();
+		Image libImage= PluginImages.DESC_OBJS_EGLBUILDPATH_ORDER.createImage();
 		fLibrariesPage = new EGLLibrariesWorkbookPage(fClassPathList);
 		item= new TabItem(folder, SWT.NONE);
 		item.setText(NewWizardMessages.BuildPathsBlockTabLibraries);
 		item.setImage(libImage);
 		item.setData(fLibrariesPage);
-		item.setControl(fLibrariesPage.getControl(folder));	*/
+		item.setControl(fLibrariesPage.getControl(folder));	
 			
 		if (fCurrProject != null) {
-			//fLibrariesPage.init(EGLCore.create(fCurrProject));
+			fLibrariesPage.init(EGLCore.create(fCurrProject));
 			fProjectsPage.init(EGLCore.create(fCurrProject));
 			fOrderPage.init(EGLCore.create(fCurrProject));
 		}
@@ -380,9 +380,9 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 			fProjectsPage.init(fCurrEProject);
 		}
 			
-		/*if (fLibrariesPage != null) {
+		if (fLibrariesPage != null) {
 			fLibrariesPage.init(fCurrEProject);
-		}*/
+		}
 		if (fOrderPage != null) {
 			fOrderPage.init(fCurrEProject);
 		}
