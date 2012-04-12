@@ -98,8 +98,13 @@ egl.defineWidget(
   	"setText" : function(date){
   		if(date == "")
   			this.setValue(null);
-  		else
-  			this.setValue(egl.eglx.lang.EDate.fromEString(date));
+  		else{
+  			try{
+  				this.setValue(egl.eglx.lang.EDate.fromEString(date));
+  			}catch(e){
+  				throw egl.createInvalidPatternException('CRRUI2713E', []);
+  			}
+  		}
   	},
   	"getValueAsText" : function(){
   		return this.getText();
