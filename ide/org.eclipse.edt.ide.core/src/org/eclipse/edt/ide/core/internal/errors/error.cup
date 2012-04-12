@@ -28,7 +28,7 @@ terminal ERROR_INLINE_DLI;
 
 // Named, single token terminals
 terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE;
-terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
+terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONBRACKET;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
 terminal COLON, COMMA;
@@ -143,6 +143,8 @@ nonterminal Expression lvalue;
 nonterminal MoveModifier moveModifierOpt;
 nonterminal Name name;
 nonterminal Type namedType;
+nonterminal Type notNullableNamedType;
+nonterminal Type nullableNamedType;
 nonterminal Boolean sqlNullableOpt;
 nonterminal Boolean parmConstOpt;
 nonterminal String[] numericPrimitiveSpecOpt;
@@ -178,7 +180,11 @@ nonterminal Node structureContent;
 nonterminal String timestampIntervalPrimitiveSpecOpt;
 nonterminal TransferStatement.TransferTarget transferTargetOpt;
 nonterminal Type type;
+nonterminal Type nullableType;
+nonterminal Type notNullableType;
 nonterminal Type typeNoName;
+nonterminal Type notNullableTypeNoName;
+nonterminal Type nullableTypeNoName;
 nonterminal FunctionParameter.UseType useTypeOpt;
 nonterminal WhenClause whenClause;
 nonterminal Name withNameOpt;
@@ -219,6 +225,7 @@ nonterminal List structureContent_star, structureContent_plus;
 nonterminal List whenClause_star, whenClause_plus;
 
 // Precedences
+precedence left QUESTION;
 precedence left OR;
 precedence left AND;
 precedence left IS, NOT, IN, LIKE, MATCHES;
@@ -1226,10 +1233,10 @@ expr
 	|	expr:expr1 GE expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.GREATER_EQUALS, expr1, expr2, expr1left, expr2right); :}
 
-	|	expr:expr1 ISA type:type1
+	|	expr:expr1 ISA notNullableType:type1
 	{: RESULT = new IsAExpression(expr1, type1, expr1left, type1right); :}
 	
-	|	expr:expr1 AS type:type1
+	|	expr:expr1 AS notNullableType:type1
 	{: RESULT = new AsExpression(expr1, type1, expr1left, type1right); :}
 	
 	|	expr:expr1 AS STRING:stringLiteral
@@ -1254,10 +1261,10 @@ expr
 	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
 	
 	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
 	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
 	|	name:name1
 	{: RESULT = name1; :}
@@ -1303,6 +1310,9 @@ expr
 
 	|	LCURLY:lcurly1 objExprEntry_plus:objExprEntries1 RCURLY:rcurly1
 	{: RESULT = new ObjectExpression(objExprEntries1, lcurly1left, rcurly1right); :}
+
+	|	expr:expr1 QUESTION expr:expr2 COLON expr:expr3
+	{: RESULT = new TernaryExpression(expr1, expr2, expr3, expr1left, expr3right); :}
 	;
 		
 	
@@ -1535,17 +1545,46 @@ name
 	;
 	
 type
-	::=	typeNoName:typeNoName1
-	{: RESULT = typeNoName1; :}
+	::=	nullableType:nullableType1
+	{: RESULT = nullableType1; :}
 
-	|	namedType:namedType1
-	{: RESULT = namedType1; :}
+	|	notNullableType:notNullableType1
+	{: RESULT = notNullableType1; :}
+	;
+
+nullableType
+	::=	nullableTypeNoName:nullableTypeNoName1
+	{: RESULT = nullableTypeNoName1; :}
+
+	|	nullableNamedType:nullableNamedType1
+	{: RESULT = nullableNamedType1; :}
+	;
+
+notNullableType
+	::=	notNullableTypeNoName:notNullableTypeNoName1
+	{: RESULT = notNullableTypeNoName1; :}
+
+	|	notNullableNamedType:notNullableNamedType1
+	{: RESULT = notNullableNamedType1; :}
+	;
+
+typeNoName
+	::= nullableTypeNoName:nullableTypeNoName1
+	{: RESULT = nullableTypeNoName1; :}
+
+	|	notNullableTypeNoName:notNullableTypeNoName1
+	{: RESULT = notNullableTypeNoName1; :}
 	;
 	
-typeNoName
-	::=	PRIMITIVE:prim1
+nullableTypeNoName
+	::=	notNullableTypeNoName:typeNoName1 QUESTION:question1
+	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+	;
+	
+notNullableTypeNoName
+	::= PRIMITIVE:prim1
 	{: RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); :}
-
+	
 	|	NUMERICPRIMITIVE:numericprimitive1 numericPrimitiveSpecOpt:numericPrimitiveSpec1
 	{: RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); :}
 
@@ -1554,15 +1593,18 @@ typeNoName
 
 	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 timestampIntervalPrimitiveSpecOpt:timestampIntervalPrimitiveSpec1
 	{: RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); :}
-
-	|	typeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
+	
+	|	notNullableTypeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, null, typeNoName1left, rbracket1right); :}
 
-	|	typeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	|	notNullableTypeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, expr1, typeNoName1left, rbracket1right); :}
-	
-	|	typeNoName:typeNoName1 QUESTION:question1
-	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+
+	|	notNullableTypeNoName:typeNoName1 QUESTIONBRACKET:qbracket1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, qbracket1left+1), null, typeNoName1left, rbracket1right); :}
+
+	|	notNullableTypeNoName:typeNoName1 QUESTIONBRACKET:qbracket1 expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, qbracket1left+1), expr1, typeNoName1left, rbracket1right); :}
 	;
 	
 charPrimitiveSpecOpt
@@ -1585,18 +1627,34 @@ timestampIntervalPrimitiveSpecOpt
 	|	LPAREN:lparen1 STRING:pattern RPAREN:rparen1
 	{: RESULT = pattern.getCanonicalString(); :}
 	;
-	
+
 namedType
+	::=	notNullableNamedType:notNullableNamedType1
+	{: RESULT = notNullableNamedType1; :}
+	
+	|	nullableNamedType:nullableNamedType1
+	{: RESULT = nullableNamedType1; :}
+	;
+	
+notNullableNamedType
 	::=	name:name1
 	{: RESULT = new NameType(name1, name1left, name1right); :}
 
-	|	namedType:name1 LBRACKET RBRACKET:rbracket1
+	|	notNullableNamedType:name1 LBRACKET RBRACKET:rbracket1
 	{: RESULT = new ArrayType(name1, null, name1left, rbracket1right); :}
 
-	|	namedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	|	notNullableNamedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(name1, expr1, name1left, rbracket1right); :}
+
+	|	notNullableNamedType:name1 QUESTIONBRACKET:qbracket1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, qbracket1left+1), null, name1left, rbracket1right); :}
+
+	|	notNullableNamedType:name1 QUESTIONBRACKET:qbracket1 expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, qbracket1left+1), expr1, name1left, rbracket1right); :}
+	;
 	
-	|	namedType:name1 QUESTION:question1
+nullableNamedType
+	::= notNullableNamedType:name1 QUESTION:question1
 	{: RESULT = new NullableType(name1, name1left, question1right); :}
 	;
 	
