@@ -122,6 +122,15 @@ public class AbstractVisitor implements EVisitor {
 		invokeEndVisit(clazz, obj);
 	}
 
+	public boolean willVisit(Object obj) {
+		if (!allowRevisit) {
+			if (alreadyVisited(obj)) { 
+				return false;
+			}
+		}
+		return true;
+			
+	}
 	public boolean primVisit(Object obj) {
 		if (!allowRevisit) {
 			if (alreadyVisited(obj)) return false;

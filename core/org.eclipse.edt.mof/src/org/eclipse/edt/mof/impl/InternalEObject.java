@@ -201,11 +201,14 @@ public class InternalEObject implements Cloneable {
 	}
 	
 	public void accept(EVisitor visitor) {
-		boolean visitChildren = ((AbstractVisitor)visitor).primVisit(this);
-		if (visitChildren) {
-			visitChildren(visitor);
+		if (((AbstractVisitor)visitor).willVisit(this)) {
+		
+			boolean visitChildren = ((AbstractVisitor)visitor).primVisit(this);
+			if (visitChildren) {
+				visitChildren(visitor);
+			}
+			((AbstractVisitor)visitor).primEndVisit(this);
 		}
-		((AbstractVisitor)visitor).primEndVisit(this);
 	}
 	
 	public void visitChildren(EVisitor visitor) {
