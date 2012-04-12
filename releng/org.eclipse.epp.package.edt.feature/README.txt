@@ -30,6 +30,11 @@ Notes:
 No matter what, the eclipse.ini file will have "-showsplash org.eclipse.platform". This must be manually
 changed to "-showsplash org.eclipse.epp.package.edt" for each exported platform.
 
+Also you probably need to edit configuration/config.ini for the following two properties:
+	eclipse.product=org.eclipse.epp.package.edt.product
+	osgi.splashPath=platform\:/base/plugins/org.eclipse.epp.package.edt
+
+
 The wizard has a bug (at least on some Linux machines) where a JRE is included regardless of your settings.
 It should manually be removed before zipping up the eclipse folder. To remove the JRE from the eclipse folder
 and drastically reduce file size:
