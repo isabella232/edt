@@ -239,6 +239,25 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 //		IRUtils.makeCompatible(expr);
 		return false;
 	}
+	
+	@Override
+	public boolean visit(org.eclipse.edt.compiler.core.ast.TernaryExpression ternaryExpr) {
+		TernaryExpression expr = factory.createTernaryExpression();
+		setElementInformation(ternaryExpr, expr);
+		stack.push(expr);
+		ternaryExpr.getFirstExpr().accept(this);
+		Expression arg1 = (Expression)eStackPop();
+		ternaryExpr.getSecondExpr().accept(this);
+		Expression arg2 = (Expression)eStackPop();
+		ternaryExpr.getThirdExpr().accept(this);
+		Expression arg3 = (Expression)eStackPop();
+		
+		expr.setFirst(arg1);
+		expr.setSecond(arg2);
+		expr.setThird(arg3);
+		expr.setOperator("?");
+		return false;
+	}
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.BooleanLiteral literal) {

@@ -135,6 +135,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.TypeLiteralExpression;
@@ -2140,6 +2141,30 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 			}
 		}
+	}
+	
+	public void endVisit(TernaryExpression ternaryExpression) {
+		Expression firstExpr = ternaryExpression.getFirstExpr();
+		ITypeBinding type1 = firstExpr.resolveTypeBinding();
+		
+		if (type1 != null && type1.isValid()) {
+			boolean validCondition =
+					PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN) == type1 ||
+					PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN).getNullableInstance() == type1;
+			if (!validCondition) {
+				problemRequestor.acceptProblem(
+					firstExpr,
+					IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH,
+					new String[] {
+						StatementValidator.getShortTypeString(type1),
+						IEGLConstants.KEYWORD_BOOLEAN,
+						firstExpr.getCanonicalString()
+					});
+			}
+		}
+		
+		// Set the type of the expression to ANY. We might want to make sure the types are compatible in the future.
+		ternaryExpression.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.ANY));
 	}
 	
 	private boolean isUnparameterizedPrimitive(ITypeBinding type) {

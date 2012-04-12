@@ -343,6 +343,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"}"					{ return symbol(NodeTypes.RCURLY); }
 	"@"					{ return symbol(NodeTypes.AT); }
 	"?"					{ return symbol(NodeTypes.QUESTION); }
+	"?["				{ return symbol(NodeTypes.QUESTIONBRACKET); }
 	
 
 	// Primitive Types

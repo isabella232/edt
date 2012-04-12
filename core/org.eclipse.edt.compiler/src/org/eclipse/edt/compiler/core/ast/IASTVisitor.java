@@ -358,6 +358,9 @@ public interface IASTVisitor {
 	boolean visit(SubstringAccess substringAccess);
 	void endVisit(SubstringAccess substringAccess);
 	
+	boolean visit(TernaryExpression ternaryExpression);
+	void endVisit(TernaryExpression ternaryExpression);
+	
 	boolean visit(ThisExpression thisExpression);
 	void endVisit(ThisExpression thisExpression);
 	

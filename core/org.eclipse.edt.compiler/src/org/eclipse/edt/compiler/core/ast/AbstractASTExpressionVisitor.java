@@ -158,6 +158,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
         return visitExpression(substringAccess);
     }
     
+    public boolean visit(TernaryExpression ternaryExpression) {
+        return visitExpression(ternaryExpression);
+    }
+    
     public boolean visit(ThisExpression thisExpression) {
         return visitExpression(thisExpression);
     }
@@ -284,6 +288,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public void endVisit(SubstringAccess substringAccess) {
         endVisitExpression(substringAccess);
+    }
+    
+    public void endVisit(TernaryExpression ternaryExpression) {
+        endVisitExpression(ternaryExpression);
     }
     
     public void endVisit(ThisExpression thisExpression) {
