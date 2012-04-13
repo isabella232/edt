@@ -221,7 +221,7 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			return(getSystemWordProposals(PrimitiveTypeBinding.getDateFunctions(), UINlsStrings.CAProposal_DateLibrary));
 		}
 		
-		return null;
+		return Collections.EMPTY_LIST;
 	}
 
 	private List filterStaticDataBindings(List dataBindings) {
