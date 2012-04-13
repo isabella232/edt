@@ -1,4 +1,4 @@
-package com.ibm.etools.egl.internal.pgm.errors;
+package org.eclipse.edt.ide.core.internal.errors;
 import java.io.IOException;
 
 %%
@@ -284,6 +284,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 		"bigint"			{ return ErrorNodeTypes.PRIMITIVE; }
 //		"bin"			 	{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
 		"boolean"			{ return ErrorNodeTypes.PRIMITIVE; }
+		"bytes"				{ return ErrorNodeTypes.CHARPRIMITIVE; }
 //		"char"				{ return ErrorNodeTypes.CHARPRIMITIVE; }
 //		"dbchar"			{ return ErrorNodeTypes.CHARPRIMITIVE; }
 		"decimal"			{ return ErrorNodeTypes.NUMERICPRIMITIVE; }
