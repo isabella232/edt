@@ -552,6 +552,9 @@ stmt
 	|	RETURN:return1 SEMI:semi1
 	{: RESULT = new ReturnStatement(null, return1left, semi1right); :}
 	
+	|	RETURN:return1 expr:expr1 SEMI:semi1
+	{: RESULT = new ReturnStatement(new ParenthesizedExpression(expr1, expr1left, expr1right), return1left, semi1right); :}
+	
 	|	RETURN:return1 LPAREN:lparen expr:expr1 RPAREN:rparen SEMI:semi1
 	{: RESULT = new ReturnStatement(new ParenthesizedExpression(expr1, lparenleft, rparenright), return1left, semi1right); :}
 
