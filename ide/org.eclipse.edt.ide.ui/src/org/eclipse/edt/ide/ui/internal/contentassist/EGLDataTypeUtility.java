@@ -153,6 +153,7 @@ public interface EGLDataTypeUtility {
   		IEGLConstants.KEYWORD_BIGINT,
 //		IEGLConstants.KEYWORD_BIN,
 		IEGLConstants.KEYWORD_BOOLEAN,
+		IEGLConstants.KEYWORD_BYTES,
 //		IEGLConstants.KEYWORD_CHAR,
 		IEGLConstants.KEYWORD_DATE,
 //		IEGLConstants.KEYWORD_DBCHAR,
@@ -170,7 +171,7 @@ public interface EGLDataTypeUtility {
 		IEGLConstants.KEYWORD_SMALLFLOAT,
 		IEGLConstants.KEYWORD_SMALLINT,
 		IEGLConstants.KEYWORD_STRING,
-//		IEGLConstants.KEYWORD_TIME,
+		IEGLConstants.KEYWORD_TIME,
 		IEGLConstants.KEYWORD_TIMESTAMP,
 //		IEGLConstants.KEYWORD_UNICODE,
 	};
@@ -195,7 +196,7 @@ public interface EGLDataTypeUtility {
 //		IEGLConstants.KEYWORD_PACF,
 		IEGLConstants.KEYWORD_SMALLFLOAT,
 		IEGLConstants.KEYWORD_SMALLINT,
-//		IEGLConstants.KEYWORD_TIME,
+		IEGLConstants.KEYWORD_TIME,
 		IEGLConstants.KEYWORD_TIMESTAMP,
 //		IEGLConstants.KEYWORD_UNICODE,
 	};
@@ -225,7 +226,7 @@ public interface EGLDataTypeUtility {
 		IEGLConstants.KEYWORD_SMALLFLOAT,
 		IEGLConstants.KEYWORD_SMALLINT,
 		IEGLConstants.KEYWORD_STRING,
-//		IEGLConstants.KEYWORD_TIME,
+		IEGLConstants.KEYWORD_TIME,
 		IEGLConstants.KEYWORD_TIMESTAMP,
 //		IEGLConstants.KEYWORD_UNICODE,
 	};
@@ -245,7 +246,7 @@ public interface EGLDataTypeUtility {
 //		IEGLConstants.KEYWORD_MONEY,
 		IEGLConstants.KEYWORD_SMALLFLOAT,
 		IEGLConstants.KEYWORD_SMALLINT,
-//		IEGLConstants.KEYWORD_TIME,
+		IEGLConstants.KEYWORD_TIME,
 		IEGLConstants.KEYWORD_TIMESTAMP,
 //		IEGLConstants.KEYWORD_UNICODE,
 	};
@@ -268,7 +269,7 @@ public interface EGLDataTypeUtility {
 //		IEGLConstants.KEYWORD_PACF,
 		IEGLConstants.KEYWORD_SMALLFLOAT,
 		IEGLConstants.KEYWORD_SMALLINT,
-//		IEGLConstants.KEYWORD_TIME,
+		IEGLConstants.KEYWORD_TIME,
 		IEGLConstants.KEYWORD_TIMESTAMP,
 	};
 }

@@ -1023,6 +1023,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_TableType;
 	public static String CAProposal_TextFieldState;
 	public static String CAProposal_TextFormState;
+	public static String CAProposal_TimeLibrary;
 	public static String CAProposal_TimeStampLibrary;
 	public static String CAProposal_TypeSpecification;
 	public static String CAProposal_UseDeclarationIn;

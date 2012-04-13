@@ -138,6 +138,8 @@ public class EGLPrimitiveProposalHandler extends EGLAbstractProposalHandler {
 			return false;
 		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_BOOLEAN))
 			return false;
+		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_BYTES))
+			return false;
 		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_SMALLINT))
 			return false;
 		if (primitiveString.equalsIgnoreCase(IEGLConstants.KEYWORD_FLOAT))
