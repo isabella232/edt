@@ -1,6 +1,6 @@
-feature@org.eclipse.edt.sdk.feature=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.sdk.feature
+feature@org.eclipse.edt.sdk.feature=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.sdk.feature
 
-feature@org.eclipse.edt.feature=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature
+feature@org.eclipse.edt.feature=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature
 plugin@org.eclipse.edt.compiler=v201204121424,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
 plugin@org.eclipse.edt.core.doc.cr=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.cr
 plugin@org.eclipse.edt.core.doc.lr=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.lr
@@ -9,7 +9,7 @@ plugin@org.eclipse.edt.core.doc.top=v201204101438,:pserver:anonymous@dev.eclipse
 plugin@org.eclipse.edt.debug.core=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.core
 plugin@org.eclipse.edt.debug.javascript=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.javascript
 plugin@org.eclipse.edt.debug.ui=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/debug/org.eclipse.edt.debug.ui
-plugin@org.eclipse.edt.feature.branding=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature.branding
+plugin@org.eclipse.edt.feature.branding=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature.branding
 plugin@org.eclipse.edt.gen=v201204111129,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen
 plugin@org.eclipse.edt.gen.deployment.javascript=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript
 plugin@org.eclipse.edt.gen.deployment.javascript.templates=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/gen/org.eclipse.edt.gen.deployment.javascript.templates
@@ -53,10 +53,10 @@ plugin@org.eclipse.edt.mof.eglx.services=v201204101438,:pserver:anonymous@dev.ec
 plugin@org.eclipse.edt.runtime.java=v201204111445,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.java
 plugin@org.eclipse.edt.runtime.javascript=v201204111644,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/runtimes/org.eclipse.edt.runtime.javascript
 
-feature@org.eclipse.edt.tests.feature=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
+feature@org.eclipse.edt.tests.feature=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.tests.feature
 plugin@org.eclipse.edt.compiler.tests=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/tests/org.eclipse.edt.compiler.tests
 
-feature@org.eclipse.edt.jtopen.feature=v201204101438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.jtopen.feature
+feature@org.eclipse.edt.jtopen.feature=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.jtopen.feature
 plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.gen.java.templates.eglx.jtopen
 plugin@org.eclipse.edt.runtime.java.jtopen=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
 plugin@org.eclipse.edt.ide.jtopen=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.ide.jtopen
