@@ -3,7 +3,7 @@
 		<!-- Set this to the location of JavaCup on your machine. -->
 		<property name="JavaCup" value="/tmp/"/>
 		
-		<java classpath="${JavaCup}" classname="java_cup.Main" fork="true" error="egl.cup.dump">
+		<java classpath="${JavaCup}" classname="java_cup.Main" fork="true" error="egl.cup.dump" failonerror="true">
 			<jvmarg value="-Xmx64m"/>
 			<arg value="-nonterms"/>
 			<arg value="-parser"/>
@@ -17,11 +17,11 @@
 			<arg value="error.cup"/>
 		</java>
 		
-		<java classpath="../../../../../../../../../org.eclipse.edt.compiler/bin2" fork="true" classname="org.eclipse.edt.compiler.core.ast.ActionMethodSplitter" output="temp.file">
+		<java classpath="../../../../../../../../../org.eclipse.edt.compiler/bin2" fork="true" classname="org.eclipse.edt.compiler.core.ast.ActionMethodSplitter" output="temp.file" failonerror="true">
 			<arg value="ErrorBaseParser"/>
 		</java>
 		
-		<move file="temp.file" tofile="ErrorBaseParser.java" verbose="true"/>
+		<move file="temp.file" tofile="ErrorBaseParser.java" verbose="true" failonerror="true"/>
 		
 		<eclipse.refreshLocal resource="org.eclipse.edt.ide.core"/>
 	</target>
