@@ -351,6 +351,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"bigint"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BIGINT); }
 //	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
 	"boolean"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BOOLEAN); }
+	"bytes"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.BYTES); }
 //	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
 //	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
 	"decimal"			{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.DECIMAL); }
@@ -375,7 +376,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	// Date/Time Type Keywords
 	"date"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.DATE); }
 //	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
-//	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
+	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
 	"timestamp"			{ return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, Primitive.TIMESTAMP); }
 
 	// Keywords reserved for future

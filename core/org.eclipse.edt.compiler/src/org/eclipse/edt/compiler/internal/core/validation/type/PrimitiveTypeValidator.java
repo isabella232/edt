@@ -88,7 +88,6 @@ public class PrimitiveTypeValidator {
                primitiveInt == Primitive.NUMBER_PRIMITIVE ||
 			   primitiveInt == Primitive.DATE_PRIMITIVE ||
 			   primitiveInt == Primitive.TIME_PRIMITIVE ||			   
-			   primitiveInt == Primitive.STRING_PRIMITIVE ||			   
                primitiveInt == Primitive.ANY_PRIMITIVE)
 			 && passedPrimitiveType.hasPrimLength() ) {
 			problemRequestor.acceptProblem(passedPrimitiveType,

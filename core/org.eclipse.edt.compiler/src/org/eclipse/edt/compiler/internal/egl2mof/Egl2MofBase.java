@@ -969,6 +969,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 					PrimitiveTypeBinding prim = ((PrimitiveTypeBinding)type);
 					eType = createPrimitiveType(key, prim);
 					switch (prim.getPrimitive().getType()) {
+						case Primitive.BYTES_PRIMITIVE:
 						case Primitive.CHAR_PRIMITIVE:
 						case Primitive.MBCHAR_PRIMITIVE:
 						case Primitive.DBCHAR_PRIMITIVE:
@@ -1129,6 +1130,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			case Primitive.BIGINT_PRIMITIVE: typeSignature = Type_EGLBigint;break; 
 			case Primitive.BIN_PRIMITIVE: typeSignature = Type_EGLBin;break; 
 			case Primitive.BLOB_PRIMITIVE: typeSignature = Type_EGLBlob;break; 
+			case Primitive.BYTES_PRIMITIVE: typeSignature = Type_EGLBytes;break;
 			case Primitive.CHAR_PRIMITIVE: typeSignature = inMofContext ? Type_EString : Type_EGLChar;break; 
 			case Primitive.CLOB_PRIMITIVE: typeSignature = Type_EGLClob;break; 
 			case Primitive.DATE_PRIMITIVE: typeSignature = Type_EGLDate;break; 
@@ -1162,6 +1164,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (inMofContext) return typeSignature;
 		
 		switch (type.getPrimitive().getType()) {
+		case Primitive.BYTES_PRIMITIVE:
 		case Primitive.CHAR_PRIMITIVE:
 		case Primitive.MBCHAR_PRIMITIVE:
 		case Primitive.DBCHAR_PRIMITIVE:
@@ -1204,6 +1207,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (inMofContext) return typeSignature;
 		
 		switch (type.getPrimitive().getType()) {
+			case Primitive.BYTES_PRIMITIVE:
 			case Primitive.CHAR_PRIMITIVE:
 			case Primitive.MBCHAR_PRIMITIVE:
 			case Primitive.DBCHAR_PRIMITIVE:
@@ -1244,6 +1248,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				is = type.getPattern() != null;
 				break;
 			}
+			case Primitive.BYTES_PRIMITIVE:
 			case Primitive.CHAR_PRIMITIVE:
 			case Primitive.MBCHAR_PRIMITIVE:
 			case Primitive.DBCHAR_PRIMITIVE:

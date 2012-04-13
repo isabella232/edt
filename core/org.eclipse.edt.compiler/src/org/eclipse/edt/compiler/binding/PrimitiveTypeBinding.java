@@ -323,9 +323,18 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		DATE_FUNCTIONS.put(ADDDAYS.getName(), new NestedFunctionBinding(ADDDAYS.getName(), null, ADDDAYS));
 		DATE_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
 	}
+	
+	protected static final Map<String, IDataBinding> TIME_FUNCTIONS = new HashMap();
+	static {		
+		TIME_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
+	}
 
 	public static Map getDateFunctions(){
 		return(DATE_FUNCTIONS);
+	}
+	
+	public static Map getTimeFunctions(){
+		return(TIME_FUNCTIONS);
 	}
 	
 	public static final SystemFunctionBinding DAYOF = SystemLibrary.createSystemFunction(
@@ -426,16 +435,18 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		return 
 				REFERENCE_PRIMITIVES.contains(getPrimitive()) 
 				|| (getPrimitive() == Primitive.DECIMAL && getLength() == 0)
+				|| (getPrimitive() == Primitive.BYTES && getLength() == 0)
 				|| (getPrimitive() == Primitive.TIMESTAMP && getPattern() == null);
 	}
 	
 	public boolean isUnparemeterizedReference() {
-		return isReference() && (getPrimitive() == Primitive.DECIMAL ||getPrimitive() == Primitive.NUMBER || getPrimitive() == Primitive.TIMESTAMP || getPrimitive() == Primitive.STRING);
+		return isReference() && (getPrimitive() == Primitive.DECIMAL ||getPrimitive() == Primitive.NUMBER || getPrimitive() == Primitive.TIMESTAMP
+				|| getPrimitive() == Primitive.STRING || getPrimitive() == Primitive.BYTES);
 	}
 	
 	@Override
 	public boolean isInstantiable() {
-		if (getPrimitive() == Primitive.STRING || getPrimitive() == Primitive.DECIMAL || getPrimitive() == Primitive.NUMBER) {
+		if (getPrimitive() == Primitive.STRING || getPrimitive() == Primitive.DECIMAL || getPrimitive() == Primitive.NUMBER || getPrimitive() == Primitive.BYTES) {
 			return true;
 		}
 		return false;
@@ -447,14 +458,18 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 			IDataBinding result = (IDataBinding) STRING_FUNCTIONS.get(simpleName);
 			if(result != null) return result;
 			return IBinding.NOT_FOUND_BINDING;
-			
 		}
 
 		if (getPrimitive() == Primitive.DATE) {
 			IDataBinding result = (IDataBinding) DATE_FUNCTIONS.get(simpleName);
 			if(result != null) return result;
 			return IBinding.NOT_FOUND_BINDING;
-			
+		}
+		
+		if (getPrimitive() == Primitive.TIME) {
+			IDataBinding result = (IDataBinding) TIME_FUNCTIONS.get(simpleName);
+			if(result != null) return result;
+			return IBinding.NOT_FOUND_BINDING;
 		}
 
 		if (getPrimitive() == Primitive.TIMESTAMP) {

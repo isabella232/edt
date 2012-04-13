@@ -111,6 +111,9 @@ public class Primitive implements Serializable {
 	public static final int TIMESTAMP_PRIMITIVE = 28;
 	public static final Primitive TIMESTAMP = new Primitive(28, IEGLConstants.KEYWORD_TIMESTAMP, 14);
 	
+	public static final int BYTES_PRIMITIVE = 29;
+	public static final Primitive BYTES = new Primitive(29, IEGLConstants.KEYWORD_BYTES);
+	
 	private static Primitive[] types;
 	
 	static {
@@ -120,6 +123,7 @@ public class Primitive implements Serializable {
 		primitiveList.add(BIGINT);
 		primitiveList.add(BIN);
 		primitiveList.add(BOOLEAN);
+		primitiveList.add(BYTES);
 		primitiveList.add(CHAR);
 		primitiveList.add(DBCHAR);
 		primitiveList.add(DBCHARLIT);
@@ -270,6 +274,7 @@ public class Primitive implements Serializable {
         if ((prim == Primitive.CHAR ||
         	 prim == Primitive.DBCHAR ||
         	 prim == Primitive.HEX ||
+        	 prim == Primitive.BYTES ||
 			 prim == Primitive.DECIMAL ||
 			 prim == Primitive.UNICODE ||
 			 prim == Primitive.MBCHAR )

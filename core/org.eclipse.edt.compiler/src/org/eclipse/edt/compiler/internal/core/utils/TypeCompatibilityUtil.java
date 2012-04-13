@@ -715,6 +715,7 @@ public class TypeCompatibilityUtil {
 		time			T, timestamp, time
 		interval		interval, T, int, smallint, bigint, bin/decimal/num/pacf/numc/money with no decimals
 		timestamp		T, timestamp, time, date
+		bytes			hex
 		*/
 		boolean targetIsNumeric = isNumeric(targetPrim);
 		boolean sourceIsNumeric = isNumeric(sourcePrim);
@@ -785,6 +786,9 @@ public class TypeCompatibilityUtil {
 		}
 		if(Primitive.BOOLEAN == targetPrim) {
 			return sourceIsNumeric || Primitive.BOOLEAN == sourcePrim;
+		}
+		if(Primitive.BYTES == targetPrim) {
+			return Primitive.HEX == sourcePrim;
 		}
 		
 		return false;
@@ -1634,6 +1638,7 @@ public class TypeCompatibilityUtil {
 			PrimitiveTypeBinding primSourceType = (PrimitiveTypeBinding) sourceType;
 			Primitive prim = primSourceType.getPrimitive();			
 			switch(prim.getType()) {
+				//TODO BYTES
 				case Primitive.HEX_PRIMITIVE:
 					result.add(AnyFixedRecordTargetTypeWidener.INSTANCE);
 					result.add(new TargetInPrimitiveTypeSetTypeWidener(textPrimitives, 2));

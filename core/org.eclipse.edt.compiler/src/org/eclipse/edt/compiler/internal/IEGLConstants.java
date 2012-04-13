@@ -53,6 +53,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_BY = "by";  //$NON-NLS-1$
 	public static final String KEYWORD_BYNAME = "byName";  //$NON-NLS-1$
 	public static final String KEYWORD_BYPOSITION = "byPosition";  //$NON-NLS-1$
+	public static final String KEYWORD_BYTES = "bytes";  //$NON-NLS-1$
 	public static final String KEYWORD_CALL = "call";  //$NON-NLS-1$
 	public static final String KEYWORD_CASE = "case";  //$NON-NLS-1$
 	public static final String KEYWORD_CHAR = "char";  //$NON-NLS-1$
