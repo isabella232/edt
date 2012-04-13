@@ -1,8 +1,8 @@
 package client.handlers;
 
-import org.eclipse.edt.rui.infobus.InfoBus;
-
-import common.Constants;
+import org.eclipse.edt.rui.infobus.infobus;
+import common.ServiceInfoRecord;
+import common.constants;
 import server.ServerInfo;
 
 // basic library
@@ -13,7 +13,7 @@ handler ServerInfoHandler
 		call ServerInfo.getServerAddress() using new HttpProxy("server.ServerInfo") returning to handleGetServerInfoResponse onException handleException;
 	end
 	
-	function handleGetServerInfoResponse(retResult string in)
+	function handleGetServerInfoResponse(retResult ServiceInfoRecord in)
 		InfoBus.publish(Constants.INFOBUS_EVENT_SERVERINFO, retResult);
 	end
 	

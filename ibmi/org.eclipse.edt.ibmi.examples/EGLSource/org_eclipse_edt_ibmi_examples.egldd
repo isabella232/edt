@@ -6,6 +6,11 @@
         <parameter name="enableGeneration" value="true"/>
       </parameters>
     </binding>
+    <binding name="GETRECServiceWorkspace" type=" edt.binding.rest" uri="workspace://org.eclipse.edt.ibmi.examples/server.GETREC" useURI="true">
+      <parameters>
+        <parameter name="enableGeneration" value="true"/>
+      </parameters>
+    </binding>
   </bindings>
   <services>
     <service implementation="server.GETREC" type="edt.service.rest">

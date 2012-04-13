@@ -15,4 +15,9 @@ library Constants
 	const INFOBUS_EVENT_SERVERINFO string = "ibmi.handle.data.change.serverinfo";
 	const INFOBUS_EVENT_CUSTS string = "ibmi.handle.data.change.custs";
 	const INFOBUS_EVENT_SERVICEINVOCATIONEXCEPTION string = "ibmi.handle.data.change.serviceInvocationException";
+	
+	const ServiceTypePropertyKey string = "serviceType";
+	const ServiceTypeRESTValue string = "REST";
+	const ServiceTypeJettyRESTValue string = "Jetty";
+	const ServiceTypeDedicatedValue string = "dedicated";
 end

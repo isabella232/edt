@@ -1,24 +1,36 @@
 package server;
 
+import common.ServiceInfoRecord;
+import common.ServiceLocation;
+import common.constants;
+
 // service
 service ServerInfo
 	
-	function getServerAddress()returns(string)
-		host String;
-		value string? = SysLib.getProperty("useREST");
-		if(value != null && value.toLowerCase() == "true")
-			request  javax.servlet.http.HttpServletRequest? = eglx.http.ServletContext.getHttpServletRequest();
-			if(request != null)
-				Syslib.writestdout("request.getRequestURL():" + request.getRequestURL().toString());
-				Syslib.writestdout("request.getServletPath():" + request.getServletPath());
-				Syslib.writestdout("request.getRequestURI():" + request.getRequestURI());
-				host = request.getRequestURL().toString();
-				host = host.replaceStr(request.getServletPath(), "");
-				//if you just want the request up to the context remove the Request URI from the Request URL 
+	function getServerAddress()returns(ServiceInfoRecord)
+		info ServiceInfoRecord;
+		request  javax.servlet.http.HttpServletRequest? = eglx.http.ServletContext.getHttpServletRequest();
+		if(request != null)
+			Syslib.writestdout("request.getRequestURL():" + request.getRequestURL().toString());
+			Syslib.writestdout("request.getServletPath():" + request.getServletPath());
+			Syslib.writestdout("request.getRequestURI():" + request.getRequestURI());
+			host string = request.getRequestURL().toString();
+			host = host.replaceStr(request.getServletPath(), "");
+			//if you just want the request up to the context remove the Request URI from the Request URL 
 //				host = host.replaceStr(request.getRequestURI(), "");
-				Syslib.writestdout("host:" + host);
-			end
+			Syslib.writestdout("host:" + host);
+			info.serverAddress = host;
 		end
-		return(host);
+		value string? = SysLib.getProperty(Constants.ServiceTypePropertyKey);
+		case(value.toLowerCase())
+			when(Constants.ServiceTypeRESTValue.toLowerCase())
+				info.serviceType = ServiceLocation.rest;
+			when(Constants.ServiceTypeJettyRESTValue.toLowerCase())
+				info.serviceType = ServiceLocation.jetty;
+			otherwise
+				info.serviceType = ServiceLocation.dedicated;
+		end
+		return(info);
 	end
 end
+

@@ -2,7 +2,8 @@ package client;
 
 // RUI Handler
 
-import org.eclipse.edt.rui.infobus.InfoBus;
+import org.eclipse.edt.rui.infobus.infobus;
+import org.eclipse.edt.rui.widgets.Box;
 import org.eclipse.edt.rui.widgets.Button;
 import org.eclipse.edt.rui.widgets.DataGrid;
 import org.eclipse.edt.rui.widgets.DataGridColumn;
@@ -11,9 +12,10 @@ import org.eclipse.edt.rui.widgets.GridLayoutData;
 import org.eclipse.edt.rui.widgets.GridLayoutLib;
 import client.handlers.GETRECHandler;
 import client.handlers.ServerInfoHandler;
-import common.Constants;
-import eglx.ui.rui.Event;
-import org.eclipse.edt.rui.widgets.Box;
+import common.ServiceInfoRecord;
+import common.ServiceLocation;
+import common.constants;
+import eglx.ui.rui.event;
 
 //
 //

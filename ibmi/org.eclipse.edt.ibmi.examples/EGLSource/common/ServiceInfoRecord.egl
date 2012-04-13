@@ -1,0 +1,10 @@
+package common;
+
+Record ServiceInfoRecord
+	serviceType ServiceLocation?;
+	serverAddress string;
+end
+
+Enumeration ServiceLocation
+	dedicated = 1, jetty = 2, rest = 3
+end

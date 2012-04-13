@@ -1,9 +1,10 @@
 package client.handlers;
 
-import org.eclipse.edt.rui.infobus.InfoBus;
-
+import org.eclipse.edt.rui.infobus.infobus;
 import common.CUST;
-import common.Constants;
+import common.ServiceInfoRecord;
+import common.ServiceLocation;
+import common.constants;
 import eglx.lang.dictionary;
 import server.GETREC;
 
@@ -17,13 +18,20 @@ handler GETRECHandler
 	end
 	
     function initHttp(eventName string in, dataObject any in)
-		if(dataObject isa string && (dataObject as string).length() > 0)
-			httpSession1 = SysLib.getResource("binding:GETRECService");
-			if((dataObject as string).length() > 0)
-				httpSession1.getRequest().uri = dataObject + httpSession1.getRequest().uri;
-			end
+		if(dataObject isa ServiceInfoRecord)
+			case((dataObject as ServiceInfoRecord).serviceType)
+				when(ServiceLocation.jetty)
+					httpSession1 = SysLib.getResource("binding:GETRECServiceWorkspace");
+				when(ServiceLocation.rest)
+					httpSession1 = SysLib.getResource("binding:GETRECService");
+					if((dataObject as ServiceInfoRecord).serverAddress.length() > 0)
+						httpSession1.getRequest().uri = (dataObject as ServiceInfoRecord).serverAddress + httpSession1.getRequest().uri;
+					end
+				otherwise
+					httpSession1 = new HttpProxy();
+			end	
 		else
-			httpSession1 = new HttpProxy("server.GETREC");
+			httpSession1 = new HttpProxy();
 		end
 	end
 	
