@@ -52,6 +52,7 @@ public interface MofConversion {
 	String Type_Int = EGLX_lang_package+".EInt";
 	String Type_Smallint = EGLX_lang_package+".ESmallint";
 	String Type_Bigint = EGLX_lang_package+".EBigint";
+	String Type_Bytes = EGLX_lang_package+".AnyBytes";
 	String Type_Float = EGLX_lang_package+".EFloat";
 	String Type_Smallfloat = EGLX_lang_package+".ESmallfloat";
 	String Type_Decimal = EGLX_lang_package+".EDecimal";
@@ -106,6 +107,7 @@ public interface MofConversion {
 	String Type_EGLString = EGL_KeyScheme+Type_String;
 	String Type_EGLUnicode = EGL_KeyScheme+Type_Unicode;
 	String Type_EGLBlob = EGL_KeyScheme+Type_Blob;
+	String Type_EGLBytes = EGL_KeyScheme+Type_Bytes;
 	String Type_EGLClob = EGL_KeyScheme+Type_Clob;
 	String Type_EGLDate = EGL_KeyScheme+Type_Date;
 	String Type_EGLTime = EGL_KeyScheme+Type_Time;
