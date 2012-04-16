@@ -2570,11 +2570,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 	 * @precondition operand.resolveTypeBinding() != null
 	 */
 	public static ITypeBinding inferTypeForBitwiseOperand(Expression operand, IProblemRequestor problemRequestor) {
-		
-		int i = 0, j = 0;
-		short k = 0;
-		i = j | k;
-		
 		ITypeBinding operandType = operand.resolveTypeBinding();
 		if(operandType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
 			PrimitiveTypeBinding operandPrimType = (PrimitiveTypeBinding) operandType;
