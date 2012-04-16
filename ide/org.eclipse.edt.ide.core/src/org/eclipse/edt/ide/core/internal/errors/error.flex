@@ -252,9 +252,15 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"xor="				{ return ErrorNodeTypes.XOREQ; }
 	"!="				{ return ErrorNodeTypes.NE; }
 	"<"					{ return ErrorNodeTypes.LT; }
+	"<<"				{ return ErrorNodeTypes.LEFTSHIFT; }
 	">"					{ return ErrorNodeTypes.GT; }
+	">>"				{ return ErrorNodeTypes.RIGHTSHIFTARITHMETIC; }
+	">>>"				{ return ErrorNodeTypes.RIGHTSHIFTLOGICAL; }
 	"<="				{ return ErrorNodeTypes.LE; }
+	"<<="				{ return ErrorNodeTypes.LEFTSHIFTEQ; }
 	">="				{ return ErrorNodeTypes.GE; }
+	">>="				{ return ErrorNodeTypes.RIGHTSHIFTARITHMETICEQ; }
+	">>>="				{ return ErrorNodeTypes.RIGHTSHIFTLOGICALEQ; }
 	"+"					{ return ErrorNodeTypes.PLUS; }
 	"+="				{ return ErrorNodeTypes.PLUSEQ; }
 	"-"					{ return ErrorNodeTypes.MINUS; }

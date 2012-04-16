@@ -28,6 +28,7 @@ terminal ERROR_INLINE_DLI;
 
 // Named, single token terminals
 terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE, NEGATE;
+terminal LEFTSHIFT, LEFTSHIFTEQ, RIGHTSHIFTLOGICAL, RIGHTSHIFTLOGICALEQ, RIGHTSHIFTARITHMETIC, RIGHTSHIFTARITHMETICEQ;
 terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONBRACKET;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
@@ -229,7 +230,7 @@ precedence left QUESTION;
 precedence left OR;
 precedence left AND;
 precedence left IS, NOT, IN, LIKE, MATCHES;
-precedence left BITOR, BITAND, XOR;
+precedence left BITOR, BITAND, XOR, LEFTSHIFT, RIGHTSHIFTLOGICAL, RIGHTSHIFTARITHMETIC;
 precedence left EQ, NE, LT, GT, LE, GE, ISA;
 precedence left CONCAT, NULLCONCAT;
 precedence left PLUS, MINUS;
@@ -1221,7 +1222,16 @@ expr
 	
 	|	expr:expr1 XOR expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.XOR, expr1, expr2, expr1left, expr2right); :}
-
+	
+	|	expr:expr1 LEFTSHIFT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.LEFT_SHIFT, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 RIGHTSHIFTARITHMETIC expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 RIGHTSHIFTLOGICAL expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL, expr1, expr2, expr1left, expr2right); :}
+	
 	|	expr:expr1 EQ expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.EQUALS, expr1, expr2, expr1left, expr2right); :}
 
@@ -1261,17 +1271,17 @@ expr
 	|	expr:expr1 NOT expr:expr2
 	{: RESULT = new IsNotExpression(IsNotExpression.Operator.NOT, expr1, expr2, expr1left, expr2right); :}
 
-	|	expr:expr1 LIKE expr:expr2
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
+//	|	expr:expr1 LIKE expr:expr2
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
 
-	|	expr:expr1 MATCHES expr:expr2
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
+//	|	expr:expr1 MATCHES expr:expr2
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
 	
-	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
+//	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
-	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
+//	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
 	|	name:name1
 	{: RESULT = name1; :}
@@ -1515,6 +1525,15 @@ assignment
 	
 	|	lvalue:lvalue1 NULLCONCATEQ expr:expr1
 	{: RESULT = new Assignment(Assignment.Operator.NULLCONCAT, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 LEFTSHIFTEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.LEFT_SHIFT, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 RIGHTSHIFTARITHMETICEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.RIGHT_SHIFT_ARITHMETIC, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 RIGHTSHIFTLOGICALEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.RIGHT_SHIFT_LOGICAL, lvalue1, expr1, lvalue1left, expr1right); :}
 	;
 
 
