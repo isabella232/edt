@@ -1901,6 +1901,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 				//Numeric unary expression
 				unaryExpression.setTypeBinding(inferTypeForNumericOperand(operand, problemRequestor));
 			}
+			else if(operator == UnaryExpression.Operator.NEGATE) {
+				//Bitwise unary expression
+				unaryExpression.setTypeBinding(inferTypeForBitwiseOperand(operand, problemRequestor));
+			}
 			else {
 				//Boolean unary expression (operator is Operator.BANG)
 				unaryExpression.setTypeBinding(inferTypeForBooleanOperand(operand, problemRequestor));
@@ -2566,19 +2570,19 @@ public abstract class DefaultBinder extends AbstractBinder {
 	 * @precondition operand.resolveTypeBinding() != null
 	 */
 	public static ITypeBinding inferTypeForBitwiseOperand(Expression operand, IProblemRequestor problemRequestor) {
+		
+		int i = 0, j = 0;
+		short k = 0;
+		i = j | k;
+		
 		ITypeBinding operandType = operand.resolveTypeBinding();
 		if(operandType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
 			PrimitiveTypeBinding operandPrimType = (PrimitiveTypeBinding) operandType;
-			if(Primitive.INT == operandPrimType.getPrimitive() ||
-			   Primitive.SMALLINT == operandPrimType.getPrimitive()) {
-				return operandType;	
+			if(Primitive.INT == operandPrimType.getPrimitive()
+					|| Primitive.SMALLINT == operandPrimType.getPrimitive()) {
+				return PrimitiveTypeBinding.getInstance(Primitive.INT);	
 			}
 			else {
-				if(Primitive.HEX == operandPrimType.getPrimitive()) {
-					if (operandPrimType.getLength() == 2 || operandPrimType.getLength() == 4 || operandPrimType.getLength() == 8) {
-						return  PrimitiveTypeBinding.getInstance(Primitive.INT);
-					}
-				}
 				problemRequestor.acceptProblem(
 					operand,
 					IProblemRequestor.TYPE_NOT_VALID_IN_BITWISE_EXPRESSION,
