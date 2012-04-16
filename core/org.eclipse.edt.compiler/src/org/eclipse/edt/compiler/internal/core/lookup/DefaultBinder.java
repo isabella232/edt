@@ -2008,7 +2008,10 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			else if(operator == BinaryExpression.Operator.BITAND ||
 					operator == BinaryExpression.Operator.BITOR ||
-					operator == BinaryExpression.Operator.XOR) {
+					operator == BinaryExpression.Operator.XOR ||
+					operator == BinaryExpression.Operator.LEFT_SHIFT ||
+					operator == BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC ||
+					operator == BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL) {
 				type1 = inferTypeForBitwiseOperand(operand1, problemRequestor);
 				type2 = type2 == null ? null : inferTypeForBitwiseOperand(operand2, problemRequestor);
 				binaryExpression.setTypeBinding(type2 == null ? type1 : getWiderType(type1, type2));
@@ -2282,7 +2285,11 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			else if(Assignment.Operator.OR == operator ||
 					Assignment.Operator.AND == operator ||
-					Assignment.Operator.XOR == operator) {
+					Assignment.Operator.XOR == operator ||
+					Assignment.Operator.LEFT_SHIFT == operator ||
+					Assignment.Operator.RIGHT_SHIFT_ARITHMETIC == operator ||
+					Assignment.Operator.RIGHT_SHIFT_LOGICAL == operator) {
+				inferTypeForBitwiseOperand(leftHandSide, problemRequestor);
 				inferTypeForBitwiseOperand(rightHandSide, problemRequestor);
 			}
 			else if (Assignment.Operator.CONCAT == operator) {
@@ -2396,6 +2403,18 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 		if (operator == Assignment.Operator.XOR) {
 			return BinaryExpression.Operator.XOR;
+		}
+		
+		if (operator == Assignment.Operator.LEFT_SHIFT) {
+			return BinaryExpression.Operator.LEFT_SHIFT;
+		}
+		
+		if (operator == Assignment.Operator.RIGHT_SHIFT_ARITHMETIC) {
+			return BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC;
+		}
+		
+		if (operator == Assignment.Operator.RIGHT_SHIFT_LOGICAL) {
+			return BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL;
 		}
 		
 		return null;

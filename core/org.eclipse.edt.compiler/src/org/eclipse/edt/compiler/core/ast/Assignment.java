@@ -43,6 +43,9 @@ public static class Operator {
 		public static final Operator XOR = new Operator("xor=");//$NON-NLS-1$
 		public static final Operator CONCAT = new Operator("::=");//$NON-NLS-1$
 		public static final Operator NULLCONCAT = new Operator("?:=");//$NON-NLS-1$
+		public static final Operator LEFT_SHIFT = new Operator("<<=");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_ARITHMETIC = new Operator(">>=");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_LOGICAL = new Operator(">>>=");//$NON-NLS-1$
 		
 		private static final Map CODES;
 		static {
@@ -59,7 +62,10 @@ public static class Operator {
 					AND,
 					XOR,
 					CONCAT,
-					NULLCONCAT
+					NULLCONCAT,
+					LEFT_SHIFT,
+					RIGHT_SHIFT_ARITHMETIC,
+					RIGHT_SHIFT_LOGICAL
 				};
 			for (int i = 0; i < ops.length; i++) {
 				CODES.put(ops[i].toString(), ops[i]);

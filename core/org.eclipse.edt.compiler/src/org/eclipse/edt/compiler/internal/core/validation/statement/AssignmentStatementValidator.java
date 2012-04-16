@@ -108,7 +108,10 @@ public class AssignmentStatementValidator extends DefaultASTVisitor {
 
 		if(Assignment.Operator.XOR == assignmentOperator ||
 				Assignment.Operator.OR == assignmentOperator ||
-				Assignment.Operator.AND == assignmentOperator) {
+				Assignment.Operator.AND == assignmentOperator ||
+				Assignment.Operator.LEFT_SHIFT == assignmentOperator ||
+				Assignment.Operator.RIGHT_SHIFT_ARITHMETIC == assignmentOperator ||
+				Assignment.Operator.RIGHT_SHIFT_LOGICAL == assignmentOperator) {
 					rhsBinding = PrimitiveTypeBinding.getInstance(Primitive.INT);
 			}
 
