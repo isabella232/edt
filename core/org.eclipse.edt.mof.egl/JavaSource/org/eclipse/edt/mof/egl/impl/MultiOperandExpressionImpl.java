@@ -53,6 +53,11 @@ public abstract class MultiOperandExpressionImpl extends ExpressionImpl implemen
 	}
 	
 	@Override
+	public boolean isNullable() {
+		return getOperation().isNullable();
+	}
+	
+	@Override
 	public void setOperation(Operation value) {
 		slotSet(Slot_operation, value);
 	}

@@ -135,4 +135,10 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 		if (result.size() > 1) throw new AmbiguousFunctionReferenceError();
 		return result.get(0);
 	}
+	
+	@Override
+	public boolean isNullable() {
+		return getTarget().isNullable();
+	}
+
 }

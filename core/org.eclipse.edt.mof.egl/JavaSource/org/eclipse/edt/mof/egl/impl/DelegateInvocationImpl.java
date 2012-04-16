@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocableElement;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.TypedElement;
 
 public class DelegateInvocationImpl extends InvocationExpressionImpl implements DelegateInvocation {
 	private static int Slot_expression=0;
@@ -53,6 +55,14 @@ public class DelegateInvocationImpl extends InvocationExpressionImpl implements 
 	public QualifiedFunctionInvocation addQualifier(Expression expr) {
 		// TODO not sure what to put here
 		return null;
+	}
+	
+	@Override
+	public boolean isNullable() {
+		if (getTarget() instanceof Delegate) {
+			return ((Delegate)getTarget()).isNullable();
+		}
+		return super.isNullable();
 	}
 	
 }
