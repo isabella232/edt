@@ -21,6 +21,7 @@ import org.eclipse.edt.tests.validation.junit.annotations.JavaobjectTest;
 import org.eclipse.edt.tests.validation.junit.annotations.Javascriptobject2Test;
 import org.eclipse.edt.tests.validation.junit.annotations.JavascriptobjectTest;
 import org.eclipse.edt.tests.validation.junit.annotations.PropertyTest;
+import org.eclipse.edt.tests.validation.junit.bugs.Bug376417Test;
 import org.eclipse.edt.tests.validation.junit.callStatement.LocalFunctionCallTestsTest;
 import org.eclipse.edt.tests.validation.junit.callStatement.RemoteFunctionCallTestsTest;
 import org.eclipse.edt.tests.validation.junit.expressions.Comparison1Test;
@@ -47,6 +48,7 @@ public class AllValidationTests {
 		suite.addTestSuite(JavascriptobjectTest.class);
 		suite.addTestSuite(Javaobject2Test.class);
 		suite.addTestSuite(Javascriptobject2Test.class);
+		suite.addTestSuite(Bug376417Test.class);
 ///		suite.addTestSuite(SqlTest1Test.class);
 
 		//$JUnit-END$
