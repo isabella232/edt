@@ -278,6 +278,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"@"					{ return ErrorNodeTypes.AT; }
 	"?"					{ return ErrorNodeTypes.QUESTION; }
 	"?["				{ return ErrorNodeTypes.QUESTIONBRACKET; }
+	"~"					{ return ErrorNodeTypes.NEGATE; }
 
         // Primitive Types
 		"any"			 	{ return ErrorNodeTypes.PRIMITIVE; }

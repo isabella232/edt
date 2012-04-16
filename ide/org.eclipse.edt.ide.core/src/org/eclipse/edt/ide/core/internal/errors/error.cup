@@ -27,7 +27,7 @@ terminal ERRORSQLSTMTLIT;
 terminal ERROR_INLINE_DLI;
 
 // Named, single token terminals
-terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE;
+terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE, NEGATE;
 terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONBRACKET;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
@@ -238,6 +238,7 @@ precedence left TIMES, DIV;
 precedence left TIMESTIMES;
 precedence left AS;
 precedence left BANG;
+precedence left NEGATE;
 precedence left UMINUS, UPLUS;
 precedence left ESCAPE, FROM;
 
@@ -1175,6 +1176,9 @@ expr
 
 	|	MINUS:minus1 expr:expr1
 	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, expr1, minus1left, expr1right); :} %prec UMINUS
+	
+	|	NEGATE:negate1 expr:expr1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, expr1, negate1left, expr1right); :}
 
 	|	expr:expr1 PLUS expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.PLUS, expr1, expr2, expr1left, expr2right); :}
