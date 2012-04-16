@@ -242,6 +242,9 @@ public abstract class Mof2BindingBase extends AbstractVisitor implements MofConv
 		else if (str.equalsIgnoreCase(Type_EGLString)) {
 			return Primitive.STRING;
 		}
+		else if (str.equalsIgnoreCase(Type_EGLBytes)) {
+			return Primitive.BYTES;
+		}
 		return null;
 	}
 	
