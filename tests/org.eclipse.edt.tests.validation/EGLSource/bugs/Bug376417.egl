@@ -1,0 +1,63 @@
+externaltype et type javaobject
+end
+
+library lib1
+	i int;
+	inull int?;
+	
+	l int[];
+	lnull int?;
+	
+	et et;
+	etNull et?;
+	
+	t timestamp;
+	tNull timestamp?;
+	
+	s string;
+	snull string?;
+	
+	a any = 3;
+	aNull  any?;
+	
+	function f1()
+		fi(iNull);			//1 not reference compatible
+		fiNull(i);			//1 not reference compatible
+		fl(lNull);			//1 not reference compatible
+		flNull(l);			//1 not reference compatible
+		fet(etNull);		//1 not reference compatible
+		fetNull(et);		//1 not reference compatible
+		ft(tNull);			//1 not reference compatible
+		ftNull(t);			//1 not reference compatible
+		fs(sNull);			//1 not reference compatible
+		fsNull(s);			//1 not reference compatible
+		fa(aNull);			//1 not reference compatible
+		faNull(a);			//1 not reference compatible
+	end
+	
+	function fi(p1 int inout)
+	end
+	function fiNull(p1 int? inout)
+	end
+	function fl(p1 int[] inout)
+	end
+	function flNull(p1 int[]? inout)
+	end
+	function fet(p1 et inout)
+	end
+	function fetNull(p1 et? inout)
+	end
+	function ft(p1 timestamp inout)
+	end
+	function ftNull(p1 timestamp? inout)
+	end
+	function fs(p1 string inout)
+	end
+	function fsNull(p1 string? inout)
+	end
+	function fa(p1 any inout)
+	end
+	function faNull(p1 any? inout)
+	end
+end
+	
