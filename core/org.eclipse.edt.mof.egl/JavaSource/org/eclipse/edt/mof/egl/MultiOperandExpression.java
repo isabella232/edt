@@ -26,6 +26,9 @@ public interface MultiOperandExpression extends Expression {
 	String Op_XOR = "xor";
 	String Op_BITAND = "&";
 	String Op_BITOR = "|";
+	String Op_LEFTSHIFT = "<<";
+	String Op_RIGHTSHIFTARITHMETIC = ">>";
+	String Op_RIGHTSHIFTLOGICAL = ">>>";
 	String Op_EQ = "==";
 	String Op_NE = "!=";
 	String Op_GT = ">";

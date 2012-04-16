@@ -24,6 +24,9 @@ public interface Operation extends Function {
 	String XOR = "XOR";
 	String BITAND = "&";
 	String BITOR = "|";
+	String LEFT_SHIFT = "<<";
+	String RIGHT_SHIFT_ARITHMETIC = ">>";
+	String RIGHT_SHIFT_LOGICAL = ">>>";
 	String CONCAT = "::";
 	String NULL_CONCAT = "?:";
 	String GREATER = ">";
