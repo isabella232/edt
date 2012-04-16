@@ -1270,6 +1270,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     	boolean argCompatible = TypeCompatibilityUtil.isReferenceCompatible(argType, parmType, compilerOptions) ||
     		                TypeCompatibilityUtil.areCompatibleExceptions(parmType, argType, compilerOptions);
     	
+    	if (argCompatible) {
+    		argCompatible = argType.isNullable() == parmType.isNullable();
+    	}
+    	
     	if(!argCompatible) {
     		if(argType == SystemFunctionParameterSpecialTypeBinding.ANYEGLORASJAVA) {
     			problemRequestor.acceptProblem(
