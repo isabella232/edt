@@ -52,7 +52,7 @@ public interface MofConversion {
 	String Type_Int = EGLX_lang_package+".EInt";
 	String Type_Smallint = EGLX_lang_package+".ESmallint";
 	String Type_Bigint = EGLX_lang_package+".EBigint";
-	String Type_Bytes = EGLX_lang_package+".AnyBytes";
+	String Type_Bytes = EGLX_lang_package+".EBytes";
 	String Type_Float = EGLX_lang_package+".EFloat";
 	String Type_Smallfloat = EGLX_lang_package+".ESmallfloat";
 	String Type_Decimal = EGLX_lang_package+".EDecimal";
