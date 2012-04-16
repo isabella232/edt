@@ -16,7 +16,7 @@ import egl.lang.reflect.mof.Operation;
 
 import org.eclipse.edt.mof.egl.SequenceType;
 
-externalType EBytes extends AnyText type ParameterizableType {
+externalType EBytes extends AnyValue type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
