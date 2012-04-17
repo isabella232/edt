@@ -37,6 +37,9 @@ public class Constants {
 	public static final String genGetVariablesEntry = "genGetVariablesEntry";
 	public static final String genSetLocalFunctionVariable = "genSetLocalFunctionVariable";
 	public static final String genSetWidgetLocation = "genSetWidgetLocation";
+	public static final String genLabel = "genLabel";
 	
 	public static final String REFERENCES_WIDGETS = "REFERENCES_WIDGETS";
+	
+	public static final String SubKey_labelsForNextStatement = "labelsForNextStatement";
 }

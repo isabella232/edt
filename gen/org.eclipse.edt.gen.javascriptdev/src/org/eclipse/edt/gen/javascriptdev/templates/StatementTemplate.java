@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascriptdev.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.LabelStatement;
 import org.eclipse.edt.mof.egl.Statement;
 
 public class StatementTemplate extends org.eclipse.edt.gen.javascript.templates.StatementTemplate {
@@ -23,6 +26,18 @@ public class StatementTemplate extends org.eclipse.edt.gen.javascript.templates.
 	@Override
 	public void genStatement(Statement stmt, Context ctx, TabbedWriter out) {
 		ctx.invoke(Constants.genAtLine, stmt, ctx, out);
+		
+		// Generate any labels we came across since the previous statement.
+		if (!(stmt instanceof LabelStatement)) {
+			List<LabelStatement> labels = (List<LabelStatement>)ctx.getAttribute(ctx.getClass(), Constants.SubKey_labelsForNextStatement);
+			if (labels.size() > 0) {
+				for (LabelStatement label : labels) {
+					ctx.invoke(Constants.genLabel, label, ctx, out);
+				}
+				labels.clear();
+			}
+		}
+		
 		super.genStatement(stmt, ctx, out);
 	}
 	
