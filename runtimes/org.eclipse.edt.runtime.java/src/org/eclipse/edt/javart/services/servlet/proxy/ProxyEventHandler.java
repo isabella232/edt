@@ -39,7 +39,7 @@ public class ProxyEventHandler extends TracerBase
     				.append(" method:")
     				.append(HttpUtilities.httpMethodToString(ruiRequest.method))
     				.append(" header:")
-    				.append(ProxyUtilities.convert( ruiRequest.headers ))
+    				.append(ProxyUtilities.convert( ruiRequest.headers, " " ))
     				.append(" content:")
     				.append(ruiRequest.body == null ? "null" :ruiRequest.body).toString());
 		}
@@ -93,7 +93,7 @@ public class ProxyEventHandler extends TracerBase
 						.append(" status msg:")
 						.append(outerResponse.statusMessage)
 						.append(" header:")
-						.append(ProxyUtilities.convert(outerResponse.headers))
+						.append(ProxyUtilities.convert(outerResponse.getHeaders(), " "))
 						.append(" body:")
 						.append(outerResponse.body).toString() );
 		}

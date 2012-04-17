@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Executable;
@@ -71,7 +72,7 @@ public class JsonLib {
 
 	public static String convertToJSON(Response response){
 		EDictionary httpResponse = new EDictionary();
-		httpResponse.put("headers", response.headers);
+		httpResponse.put("headers", response.getHeaders());
 		httpResponse.put("body", response.body);
 		httpResponse.put("status", response.status);
 		httpResponse.put("statusMessage", response.statusMessage);
@@ -127,6 +128,8 @@ public class JsonLib {
 	    	return process((EDictionary)object);
 	    if(object instanceof AnyValue)
 	    	return processObject(object);
+	    if(object instanceof Map)
+	    	return process((Map<Object, Object>)object);
 	    if(object instanceof ExecutableBase)
 	    	return processObject(object);
 	    if(object instanceof AnyException)
@@ -173,6 +176,18 @@ public class JsonLib {
 	
 	    return objectNode;
 	}
+	private static ValueNode process(Map<Object, Object> map)throws AnyException
+	{
+		ObjectNode objectNode = new ObjectNode();
+	    for(Map.Entry<Object, Object> entry : map.entrySet()){
+	    	objectNode.addPair(new NameValuePairNode(
+	    			new StringNode(((entry.getKey() == null || entry.getKey().toString() == null) ? "" : entry.getKey().toString()), false), 
+	    					process(entry.getValue())));
+	    }
+	
+	    return objectNode;
+	}
+	
 	private static ValueNode processObject(Object object)throws AnyException
 	{
 		//get fields

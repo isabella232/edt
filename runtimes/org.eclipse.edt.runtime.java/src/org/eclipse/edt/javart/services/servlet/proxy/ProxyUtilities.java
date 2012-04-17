@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import eglx.http.Request;
@@ -23,6 +23,7 @@ public class ProxyUtilities
 	private static final String EGL_DEDICATED_CALL = "EGLDEDICATED";
 	public static final String EGL_SOAP_CALL = "EGLSOAP";
 	public static final String EGL_REST_CALL = "EGLREST";
+	public static final String HTTP10STATUS = "HTTP/1.0";
 
 	
 	private ProxyUtilities() 
@@ -34,31 +35,54 @@ public class ProxyUtilities
 		return innerRequest.headers != null && innerRequest.headers.containsKey( EGL_DEDICATED_CALL );
 	}
 	
-    static String convert( Map<?, ?> map )
+    public static String convert( Map<?, ?> map, String EOL )
     {
     	StringBuilder buffer = new StringBuilder();
     	if(map != null){
-	    	Map.Entry<?, ?> entry;
-	    	for( Iterator<?> itr = map.entrySet().iterator(); itr.hasNext(); buffer.append( ' ' ) )
+	    	for( Map.Entry<?, ?> entry : map.entrySet())
 	    	{
-	    		entry = (Map.Entry<?, ?>)itr.next();
-	    		if( entry.getKey() != null )
+	    		boolean nullKey = entry.getKey() == null || entry.getKey().toString() == null;
+	    		boolean addEOL = true;
+	    		if(!nullKey)
 	    		{
-	    			buffer.append( entry.getKey().toString() );
+	    			buffer.append(entry.getKey().toString());
 	    			buffer.append( ':' );
 	    		}
 	    		if( entry.getValue() instanceof Map<?, ?> )
 	    		{
 	    			buffer.append( '(' );
-	    			buffer.append( convert( (Map<?, ?>)entry.getValue() ) );
+	    			buffer.append( convert((Map<?, ?>)entry.getValue(), EOL));
 	    			buffer.append( ')' );
 	    		}
-	    		else if(  entry.getValue() != null )
+	    		else if(entry.getValue() instanceof List<?>)
 	    		{
-	       			buffer.append( entry.getValue().toString() );
+	    			boolean addComma = false;
+	    			for(Object value : (List<?>)entry.getValue()){
+	    				if(addComma){
+	    					buffer.append(',');	
+	    				}
+	    				addComma = true;
+	    				//the status must appear first, so insert it at the beginning
+	    				if(value!= null && value.toString().indexOf(HTTP10STATUS) > -1){
+	    					buffer.insert(0, EOL);
+	    					buffer.insert(0, value.toString());
+	    					addEOL = false;
+	    				}
+	    				else{
+	    					buffer.append(value.toString());
+	    				}
+	    			}
+	    		}
+	    		else if(entry.getValue() != null )
+	    		{
+	       			buffer.append(entry.getValue().toString());
+	    		}
+	    		if(addEOL){
+	    			buffer.append(EOL);
 	    		}
 	    	}
     	}
+		buffer.append(EOL);
     	return buffer.toString();
     }
 	    

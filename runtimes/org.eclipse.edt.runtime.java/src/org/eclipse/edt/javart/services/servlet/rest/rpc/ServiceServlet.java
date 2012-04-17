@@ -24,12 +24,11 @@ import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.JsonRpcInvoker;
 import org.eclipse.edt.javart.services.servlet.Servlet;
-import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
 import eglx.http.HttpMethod;
+import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
-import eglx.http.HttpUtilities;
 import eglx.json.JsonLib;
 import eglx.json.JsonUtilities;
 import eglx.services.Encoding;
@@ -166,10 +165,7 @@ import eglx.services.ServiceKind;
 		}
 		finally
 		{
-			if(response.headers == null){
-				response.headers = new EDictionary();
-			}
-			HttpUtilities.addContentType(response.headers, Encoding.JSON, (String)null);
+			HttpUtilities.addContentType(response, Encoding.JSON, (String)null);
 		}
 		return response;
 	}

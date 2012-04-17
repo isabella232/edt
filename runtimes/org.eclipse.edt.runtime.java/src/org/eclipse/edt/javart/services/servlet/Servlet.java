@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.JEERunUnit;
 import org.eclipse.edt.javart.RunUnit;
@@ -33,13 +33,12 @@ import org.eclipse.edt.javart.resources.StartupInfo;
 import org.eclipse.edt.javart.resources.Trace;
 import org.eclipse.edt.javart.services.ServiceUtilities;
 
+import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
-import eglx.http.HttpUtilities;
 import eglx.http.ServletContext;
 import eglx.json.JsonUtilities;
 import eglx.lang.AnyException;
-import eglx.lang.EDictionary;
 import eglx.services.ServiceKind;
 
 
@@ -161,7 +160,7 @@ import eglx.services.ServiceKind;
 		}
 		String content = response.body;
 		log(content, response);
-		write( httpServletRes, content, response.headers, response.status );
+		write( httpServletRes, content, response, response.status );
 	}   	
 	
 	protected abstract Response processRequest(String url, Request request, HttpServletRequest httpServletReq) throws Exception;
@@ -209,50 +208,53 @@ import eglx.services.ServiceKind;
 		System.out.println( str + "\n      " + content );
 		*/
 	}
-	private void write( HttpServletResponse httpServletRes, String content, EDictionary headers, int status )
+	private void write( HttpServletResponse httpServletRes, String content, Response response, int status )
 	{
 		try
 		{
 			boolean addContentType = true;
-			if(headers != null){
-				for ( Iterator<Map.Entry<String, Object>> iter = headers.entrySet().iterator(); iter.hasNext(); )
+			if(response.getHeaders() != null){
+				for ( Iterator<Map.Entry<Object, List<String>>> iter = response.getHeaders().entrySet().iterator(); iter.hasNext(); )
 				{
-					Map.Entry<String, Object> entry = iter.next();
-					Object entryValue = entry.getValue();
-					if(entryValue instanceof AnyBoxedObject<?>){
-						entryValue = ((AnyBoxedObject<?>)entryValue).ezeUnbox();
-					}
-					if(entry.getKey().equalsIgnoreCase(HttpUtilities.CONTENT_TYPE_KEY)){
+					Map.Entry<Object, List<String>> entry = iter.next();
+					String key = entry.getKey() == null ? null : entry.getKey().toString();
+					if(key != null && key.equalsIgnoreCase(HttpUtilities.CONTENT_TYPE_KEY)){
 						addContentType = false;
 					}
-					if(entryValue != null){
-						httpServletRes.setHeader( entry.getKey(), entryValue.toString() );
+					
+					for(String value : entry.getValue()){
+						httpServletRes.setHeader(key, value);
 					}
 				}
 			}
 			if(addContentType){
 				httpServletRes.setContentType( HttpUtilities.getContentType(HttpUtilities.CONTENT_TEXT_KEY) );
 			}
-			if( status == HttpUtilities.HTTP_STATUS_OK )
-			{
-				PrintWriter pw = httpServletRes.getWriter();
-				pw.write( content );
-				pw.flush();
-				httpServletRes.setStatus( status );
-				httpServletRes.flushBuffer();
-			}
-			else
-			{
-				try
-				{
-					httpServletRes.setHeader( JsonUtilities.JSON_RPC_ERROR_NAME_VALUE, URLEncoder.encode( content, ServiceUtilities.UTF8 ) );
-				}
-				catch( Exception e ){}
-				httpServletRes.sendError( status );
-			}
+			sendResponse(httpServletRes, status, content);
 		}
 		catch( Throwable t2 ){t2.printStackTrace();}
 
+	}
+
+	protected void sendResponse(HttpServletResponse httpServletRes, int status,
+			String content) throws IOException {
+		if( status == HttpUtilities.HTTP_STATUS_OK )
+		{
+			PrintWriter pw = httpServletRes.getWriter();
+			pw.write( content );
+			pw.flush();
+			httpServletRes.setStatus( status );
+			httpServletRes.flushBuffer();
+		}
+		else
+		{
+			try
+			{
+				httpServletRes.setHeader( JsonUtilities.JSON_RPC_ERROR_NAME_VALUE, URLEncoder.encode( content, ServiceUtilities.UTF8 ) );
+			}
+			catch( Exception e ){}
+			httpServletRes.sendError( status );
+		}
 	}
 
 }

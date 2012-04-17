@@ -26,7 +26,6 @@ import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.ServiceInvoker;
 
 import eglx.lang.AnyException;
-import eglx.lang.EDictionary;
 import eglx.lang.InvalidArgumentException;
 import eglx.services.Encoding;
 
@@ -56,7 +55,7 @@ public class HttpUtilities {
 	private HttpUtilities() {
 	}
 	
-	public static void addContentType(EDictionary headers, Encoding encoding, String charset){
+	public static void addContentType(Response response, Encoding encoding, String charset){
 		StringBuilder contentType = new StringBuilder();
 		if(Encoding._FORM == encoding){
 			contentType.append(CONTENT_TYPE_VALUE_APPLICATION_FORMDATA);
@@ -75,7 +74,7 @@ public class HttpUtilities {
     		charset = "UTF-8";
     	}
    		contentType.append(charset);
-   		headers.put(CONTENT_TYPE_KEY, contentType.toString());
+   		response.addHeader(CONTENT_TYPE_KEY, contentType.toString());
 	}
 	
 	static Map<String, String> contentTypes = new HashMap<String, String>();
