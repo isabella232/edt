@@ -11,14 +11,22 @@
  *******************************************************************************/
 package org.eclipse.edt.javart.services.servlet.proxy;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.services.ServiceUtilities;
 import org.eclipse.edt.javart.services.servlet.Servlet;
 import org.eclipse.edt.javart.services.servlet.ServletUtilities;
 
+import eglx.http.HttpUtilities;
 import eglx.http.Request;
 import eglx.http.Response;
+import eglx.json.JsonUtilities;
 
 
 
@@ -47,5 +55,19 @@ import eglx.http.Response;
 	protected Response processRequest(String url, Request ruiRequest, HttpServletRequest httpServletReq) throws Exception {
 		ProxyEventHandler proxy = new ProxyEventHandler();
 		return proxy.runProxy(url, ruiRequest, ServletUtilities.createHttpRequest(ruiRequest.body));
+	}
+	protected void sendResponse(HttpServletResponse httpServletRes, int status, String content) throws IOException {
+		if( status != HttpUtilities.HTTP_STATUS_OK ){
+			try
+			{
+				httpServletRes.setHeader( JsonUtilities.JSON_RPC_ERROR_NAME_VALUE, URLEncoder.encode( content, ServiceUtilities.UTF8 ) );
+			}
+			catch( Exception e ){}
+		}
+		PrintWriter pw = httpServletRes.getWriter();
+		pw.write( content );
+		pw.flush();
+		httpServletRes.setStatus( status );
+		httpServletRes.flushBuffer();
 	}
 }
