@@ -205,6 +205,9 @@ public class ListTypeTemplate extends JavaTemplate
 					case TypeUtils.TypeKind_DATE:
 						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.DateFactory" );
 						break;
+					case TypeUtils.TypeKind_TIME:
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.TimeFactory" );
+						break;
 					case TypeUtils.TypeKind_TIMESTAMP:
 						TimestampType tsType = (TimestampType)elementType;
 						String pattern = "yyyyMMddhhmmss";
