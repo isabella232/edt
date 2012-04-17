@@ -36,6 +36,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -330,7 +332,10 @@ public class EvServer implements IClientProxy {
 				Response response = super.runProxy( urlString, request, innerRequest );
 				if( response != null )
 				{
-					ps.print( getResponseHeader( urlString, getContentType( urlString ), !urlString.endsWith(".egl"), response.status, response.statusMessage  ) );
+					ps.print( isDedicated ?
+							ProxyUtilities.convert( response.getHeaders(), EOL ) :
+								getResponseHeader( urlString, getContentType(urlString), !urlString.endsWith(".egl"), response.status, response.statusMessage )
+					);
 					String content = response.body;
 					ps.write( content.getBytes("utf-8") );
 				}
@@ -359,12 +364,44 @@ public class EvServer implements IClientProxy {
 		protected void setBody(Response outerResponse, Response innerResponse) {
 			if (isDedicated) {
 				outerResponse.body =innerResponse.body;
+				outerResponse.initHeader();
+				outerResponse.getHeaders().putAll(innerResponse.getHeaders());
+				updateHeaders(outerResponse);
+				outerResponse.addHeader("Server", "EGL Rich UI Server");
+				outerResponse.addHeader("Pragma", "no-cache");
+				outerResponse.addHeader("CacheControl", "no-cache");
+				outerResponse.addHeader("Expires", "-1");
+				if(!outerResponse.getHeaders().containsKey("Content-Type")){
+					outerResponse.addHeader("Content-Type", "text/html;charset=utf-8");
+				}
 			}
 			else {
 				super.setBody(outerResponse, innerResponse);
 			}
 		}
 	
+		private void updateHeaders(Response response){
+			Pattern p = Pattern.compile("(?i)http/[0-9].[0-9]");
+	    	if(response.getHeaders() != null){
+		    	for( Map.Entry<?, ?> entry : response.getHeaders().entrySet())
+		    	{
+		    		if(entry.getKey() == null || entry.getKey().toString() == null)
+		    		{
+		    			if(entry.getValue() instanceof List<?>){
+			    			for(int idx = 0; idx < ((List<?>)entry.getValue()).size(); idx++){
+			    				//the status must appear first, so insert it at the beginning
+			    				Matcher m =  p.matcher(((List<String>)entry.getValue()).get(idx));
+			    				if(m.find()){
+			    					//we support HTTP/1.0
+			    					 ((List<String>)entry.getValue()).set(idx, m.replaceFirst(ProxyUtilities.HTTP10STATUS));
+			    					return;
+			    				}
+			    			}
+			    		}
+		    		}
+		    	}
+	    	}
+		}
 		private String getProjectName(String url) {
 			int indx = url.indexOf("___proxy");
 			if (indx > 0) {
