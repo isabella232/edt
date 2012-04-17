@@ -162,6 +162,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox());
 	}
 
+	public static Calendar asTimestamp(ETime timestamp) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox());
+	}
+
 	public static Calendar asTimestamp(ETimestamp timestamp) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -181,6 +187,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static Calendar asTimestamp(EDate timestamp, String timespanMask) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
+	}
+
+	public static Calendar asTimestamp(ETime timestamp, String timespanMask) throws AnyException {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
@@ -256,6 +268,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox(), args);
 	}
 
+	public static Calendar asTimestamp(ETime timestamp, Integer... args) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), args);
+	}
+
 	public static Calendar asTimestamp(ETimestamp timestamp, Integer... args) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -278,6 +296,12 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static Calendar asTimestamp(EDate timestamp, int startCode, int endCode) throws AnyException {
+		if (timestamp == null)
+			return null;
+		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);
+	}
+
+	public static Calendar asTimestamp(ETime timestamp, int startCode, int endCode) throws AnyException {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);

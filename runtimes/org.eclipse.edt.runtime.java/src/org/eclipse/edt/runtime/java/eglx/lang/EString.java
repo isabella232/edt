@@ -218,11 +218,11 @@ public class EString extends AnyBoxedObject<String> {
 		}
 	}
 
-//	public static String asString(ETime value, Integer... length) {
-//		if (value == null)
-//			return null;
-//		return asString(asStringTime(value.ezeUnbox()), length);
-//	}
+	public static String asString(ETime value, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(asStringTime(value.ezeUnbox()), length);
+	}
 
 	protected static String asStringTime(Calendar original) {
 		if (original == null)
