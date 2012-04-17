@@ -361,6 +361,13 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			genSqlGetValueMethodName(typeClassifier, ctx, out);
 			out.print("(" + columnIndex + ")))");
 		}
+		else if(typeClassifier.equals(TypeUtils.Type_TIME)){
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.ETime.asTime(org.eclipse.edt.javart.util.DateTimeUtil.getNewCalendar(");
+			out.print(resultSetName);
+			out.print('.');
+			genSqlGetValueMethodName(typeClassifier, ctx, out);
+			out.print("(" + columnIndex + ")))");
+		}
 		else {
 			out.print(resultSetName);
 			out.print('.');
