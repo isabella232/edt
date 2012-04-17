@@ -123,7 +123,7 @@ public class BindingResourceProcessor {
 		if (dd == null) {
 			dd = SysLib.getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY);
 		}
-		if (dd == null) {
+		if (dd == null || dd.isEmpty()) {
 			AnyException ae = new AnyException();
 			throw ae.fillInMessage( Message.MISSING_DEFAULT_DD );
 		}
