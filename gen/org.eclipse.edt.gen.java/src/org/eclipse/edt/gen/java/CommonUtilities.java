@@ -196,6 +196,12 @@ public class CommonUtilities {
 			return "bitand";
 		if (op.equals(expr.Op_BITOR))
 			return "bitor";
+		if (op.equals(expr.Op_LEFTSHIFT))
+			return "leftShift";
+		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			return "rightShiftArithmetic";
+		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			return "rightShiftLogical";
 		if (op.equals(expr.Op_POWER))
 			return "power";
 		if (op.equals(expr.Op_IN))
@@ -248,6 +254,12 @@ public class CommonUtilities {
 				return " & ";
 			if (op.equals(expr.Op_BITOR))
 				return " | ";
+			if (op.equals(expr.Op_LEFTSHIFT))
+				return " << ";
+			if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+				return " >> ";
+			if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+				return " >>> ";
 			return "";
 		}
 		// these are the defaults for all other types
@@ -280,6 +292,12 @@ public class CommonUtilities {
 			return " & ";
 		if (op.equals(expr.Op_BITOR))
 			return " | ";
+		if (op.equals(expr.Op_LEFTSHIFT))
+			return " << ";
+		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			return " >> ";
+		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			return " >>> ";
 		return "";
 	}
 
