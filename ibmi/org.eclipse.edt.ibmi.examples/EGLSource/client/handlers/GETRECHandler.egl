@@ -42,93 +42,11 @@ handler GETRECHandler
     
     function handleCustomersResponse(retResult CUST[] in, http IHttp)
     	//process the response headers to handle the Session ID
-    	processResponseHeadersSession1(http.getResponse());
+    	CookieSession.processResponseHeadersSession(http.getResponse(), httpSession1);
     	//call back to the handller to handle the new data
     	InfoBus.publish(Constants.INFOBUS_EVENT_CUSTS, retResult);
     end
     
-    function processResponseHeadersSession1(http Response in)
-    	// This function gets the jsessionid and puts the key's value in the http.request
-    	//by putting the key in the http.request each service invocation using that request will use the same session
-    	//IMPORTANT NOTE:
-    	//be very careful with http variables and multiple service invocations
-    	//service can only use the same request if the services are deployed to the same server cluster 
-    	jsessionId string? = extractJSessionId(http);
-    	if(jsessionId != null)
-   			setRequestSessionId(jsessionId);
-    	end
-    end
-	
-	private function extractJSessionId(http Response in)returns(string?)
-    	//This function finds a response containing "set-cookie"
-    	//If it finds the key it extracts the key from the response and returns it
-    	if(http.headers != null && http.headers.containsKey(Constants.KEY_SET_COOKIE))
-    		value any = http.headers[Constants.KEY_SET_COOKIE];
-    		jsessionId string?;
-    		if(value isa string)
-    			if(getJsessionId(value as string, jsessionid))
-    				return(jsessionid);
-    			end
-    		else
-    			if(value != null)
-    				for(idx int from 1 to (value as string[]).getSize())
-		    			if(getJsessionId((value as string[])[idx], jsessionid))
-		    				return(jsessionid);
-		    			end
-    				end
-    			end
-    		end
-    		
-    	end
-	end
-	private function getJsessionId(value string const in, jsessionid string? out)returns(boolean)
-		startIdx int = value.indexOf(Constants.KEY_JSESSIONID);
-		if(startIdx > 0)
-			endIdx int = StrLib.indexOf(value, ";", startIdx);
-			if(endIdx > 0)
-				jsessionId = value[startIdx:(endIdx - 1)];//this is the sessionid
-			else
-				jsessionId = value[startIdx:value.length()];//this is the sessionid
-			end
-			return(true);
-		end
-		return false;
-	end
-	function setRequestSessionId(jsessionId string in)
-		//This function puts the jsessionid in the request header
-		//If a Cookie is already there and has no JSESSIONID it adds to the Cookie
-		//If a Cookie is there and there is a JSESSIONID it removes the old JSESSION and adds the new JSESSIONID
-		//If there is no Cookie, Cookie is added with the JSESSIONID as the value. 
-		if(httpSession1 != null)
-			if(httpSession1.getRequest().headers == null)
-				httpSession1.getRequest().headers = new dictionary(true, true);
-			end
-			cookieString string;
-			if(httpSession1.getRequest().headers.containsKey(Constants.KEY_COOKIE))
-	    		cookieString = httpSession1.getRequest().headers[Constants.KEY_COOKIE];
-				startIdx int = cookieString.indexOf(Constants.KEY_JSESSIONID);
-	    		if(startIdx > 0)
-	    			endIdx int = StrLib.indexOf(cookieString, ";", startIdx);
-	    			oldSessionId string;
-	    			if(endIdx > 0)
-	    				oldSessionId = cookieString[startIdx:(endIdx)];
-	    			else
-	    				oldSessionId = cookieString[startIdx:cookieString.length()];
-	    			end
-	    			cookieString = cookieString.replaceStr(oldSessionId, jsessionId);
-	    		else
-	    			//just add the jsession id to the end
-	    			cookieString += ";";
-	    			cookieString += jsessionId;
-	    		end
-	    	else
-	    		//there's no existing value just add the jsessionid;
-	    		cookieString = jsessionId;
-			end
-			httpSession1.getRequest().headers[Constants.KEY_COOKIE] = cookieString;
-		end
-	end
-
     function killSession() 
     	call GETREC.killSession() using httpSession1 returning to handleKillSessionResponse onException handleException;
     end
