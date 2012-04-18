@@ -71,6 +71,11 @@ externalType EInt extends ENumber type ClassType
 	static function $BitXor(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"xor"}};
 	
 	/**
+	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 */
+	static function $BitNegate(value EInt in) returns (EInt) {@Operation{"~"}};
+	
+	/**
 	 * {@Operation <<} Computes the bitwise left shift of two numbers.
 	 */
 	static function $LeftShift(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"<<"}};

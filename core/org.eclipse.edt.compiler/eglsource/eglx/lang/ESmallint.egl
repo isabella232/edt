@@ -71,6 +71,11 @@ externalType ESmallint extends ENumber type ClassType
 	static function $BitXor(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"xor"}};
 	
 	/**
+	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 */
+	static function $BitNegate(value ESmallint in) returns (EInt) {@Operation{"~"}};
+	
+	/**
 	 * {@Operation <<} Computes the bitwise left shift of two numbers.
 	 */
 	static function $LeftShift(lvalue ESmallint in, rvalue ESmallint in) returns (EInt) {@Operation{"<<"}};
