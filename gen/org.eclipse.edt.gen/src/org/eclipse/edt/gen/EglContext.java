@@ -415,7 +415,7 @@ public abstract class EglContext extends TemplateContext {
 
 	}
 
-	private TemplateMethod getTemplateMethod(String methodName, Type type, Object... args) throws TemplateException {
+	public TemplateMethod getTemplateMethod(String methodName, Type type, Object... args) throws TemplateException {
 		TemplateMethod tm = null;
 		Method method = null;
 		Template template = null;
