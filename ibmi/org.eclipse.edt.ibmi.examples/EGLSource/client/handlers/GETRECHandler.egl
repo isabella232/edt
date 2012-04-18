@@ -33,6 +33,7 @@ handler GETRECHandler
 		else
 			httpSession1 = new HttpProxy();
 		end
+		SysLib.writeStdout("Service URL:" + httpSession1.getRequest().uri);
 	end
 	
     function getCusts() 
@@ -62,19 +63,36 @@ handler GETRECHandler
     	//This function finds a response containing "set-cookie"
     	//If it finds the key it extracts the key from the response and returns it
     	if(http.headers != null && http.headers.containsKey(Constants.KEY_SET_COOKIE))
-    		value string = http.headers[Constants.KEY_SET_COOKIE];
-    		startIdx int = value.indexOf(Constants.KEY_JSESSIONID);
-    		if(startIdx > 0)
-    			endIdx int = StrLib.indexOf(value, ";", startIdx);
-    			jsessionId string;
-    			if(endIdx > 0)
-    				jsessionId = value[startIdx:(endIdx - 1)];//this is the sessionid
-    			else
-    				jsessionId = value[startIdx:value.length()];//this is the sessionid
+    		value any = http.headers[Constants.KEY_SET_COOKIE];
+    		jsessionId string?;
+    		if(value isa string)
+    			if(getJsessionId(value as string, jsessionid))
+    				return(jsessionid);
     			end
-    			return(jsessionId);
+    		else
+    			if(value != null)
+    				for(idx int from 1 to (value as string[]).getSize())
+		    			if(getJsessionId((value as string[])[idx], jsessionid))
+		    				return(jsessionid);
+		    			end
+    				end
+    			end
     		end
+    		
     	end
+	end
+	private function getJsessionId(value string const in, jsessionid string? out)returns(boolean)
+		startIdx int = value.indexOf(Constants.KEY_JSESSIONID);
+		if(startIdx > 0)
+			endIdx int = StrLib.indexOf(value, ";", startIdx);
+			if(endIdx > 0)
+				jsessionId = value[startIdx:(endIdx - 1)];//this is the sessionid
+			else
+				jsessionId = value[startIdx:value.length()];//this is the sessionid
+			end
+			return(true);
+		end
+		return false;
 	end
 	function setRequestSessionId(jsessionId string in)
 		//This function puts the jsessionid in the request header
@@ -116,6 +134,8 @@ handler GETRECHandler
     end
     
     function handleKillSessionResponse()
+    	custs CUST[];
+    	InfoBus.publish(Constants.INFOBUS_EVENT_CUSTS, custs);
     end
     
 	function handleException(exp AnyException in, http IHTTP)

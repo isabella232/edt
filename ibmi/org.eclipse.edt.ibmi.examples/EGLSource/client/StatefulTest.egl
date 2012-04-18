@@ -43,9 +43,8 @@ handler StatefulTest type RUIhandler{initialUI =[ui
 		],
 		data = new any[0]
 	};
-	NextBtn Button{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Next", disabled = enableNextBtn, onclick ::= getCusts, onclick ::= disableSIEBox };
+	NextBtn Button{ layoutData = new GridLayoutData{ row = 2, column = 1 }, text = "Next", color = "red", onclick ::= getCusts, onclick ::= disableSIEBox };
 	killSessionBtn Button{ layoutData = new GridLayoutData{ row = 3, column = 1 }, text = "Kill Session", onclick ::= killSession, onclick ::= disableSIEBox };
-	enableNextBtn boolean = false;
 	
 	serverInfoHandler ServerInfoHandler;
 	getRecHandler GETRECHandler;
@@ -64,7 +63,7 @@ handler StatefulTest type RUIhandler{initialUI =[ui
     end
     
     function enableNext(eventName string in, dataObject any in)
-    	enableNextBtn = dataObject != null;
+    	NextBtn.color = "black";
     end 
     
     function getCusts(e Event in) 

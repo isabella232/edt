@@ -22,6 +22,7 @@ service ServerInfo
 			info.serverAddress = host;
 		end
 		value string? = SysLib.getProperty(Constants.ServiceTypePropertyKey);
+		Syslib.writestdout(Constants.ServiceTypePropertyKey + ":" + value);
 		case(value.toLowerCase())
 			when(Constants.ServiceTypeRESTValue.toLowerCase())
 				info.serviceType = ServiceLocation.rest;
