@@ -48,8 +48,8 @@ public class NumberTypeTemplate extends JavaTemplate {
 	public void genInstantiation(EGLClass type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber"))
 			out.print("null");
-	else
-		ctx.invokeSuper(this, genInstantiation, type, ctx, out);
+		else
+			ctx.invokeSuper(this, genInstantiation, type, ctx, out);
 	}
 
 	public void genBinaryExpression(EGLClass type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
@@ -73,6 +73,14 @@ public class NumberTypeTemplate extends JavaTemplate {
 			out.print(".negate(");
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(")");
+			// we only need to check for bitwise negate sign and if found, we need to change it to .negate() - 1
+		} else if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals("~")) {
+			out.print("(");
+			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
+			out.print(".negate(");
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			out.print(")");
+			out.print(" - 1)");
 		} else
 			ctx.invokeSuper(this, genUnaryExpression, type, ctx, out, arg);
 	}
