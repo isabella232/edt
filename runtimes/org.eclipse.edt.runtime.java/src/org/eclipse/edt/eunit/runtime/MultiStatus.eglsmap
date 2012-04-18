@@ -12,10 +12,13 @@ org/eclipse/edt/eunit/runtime/MultiStatus.egl
 37#1:78
 39#1:80
 41#1:81,3
+39#1:84
 42#1:84
 43#1:85,3
+39#1:88
 44#1:88
 45#1:89,3
+39#1:92
 46#1:92
 47#1:93,3
 49#1:96,6
@@ -23,8 +26,8 @@ org/eclipse/edt/eunit/runtime/MultiStatus.egl
 53#1:108,2
 31#1:110
 *E
-*L;org.eclipse.edt.eunit.runtime.ConstantsLib;eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib
 *L;eglx.rbd.StrLib;eze_Lib_eglx_rbd_StrLib
+*L;org.eclipse.edt.eunit.runtime.ConstantsLib;eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib
 *L;org.eclipse.edt.eunit.runtime.LogResult;eze_Lib_org_eclipse_edt_eunit_runtime_LogResult
 19#1;testCnt;testCnt;eglx.lang.EInt
 20#1;expectedCnt;expectedCnt;eglx.lang.EInt

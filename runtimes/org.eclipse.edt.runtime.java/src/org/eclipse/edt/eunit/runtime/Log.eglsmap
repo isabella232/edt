@@ -7,5 +7,5 @@ egl
 org/eclipse/edt/eunit/runtime/LogResult.egl
 *L
 *E
-4#1;msg;msg;eglx.lang.EString
+15#1;msg;msg;eglx.lang.EString
 *X

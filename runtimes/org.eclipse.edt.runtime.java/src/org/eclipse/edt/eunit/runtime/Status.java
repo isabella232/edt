@@ -1,22 +1,21 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright (c) 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- *
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.AnyValue;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="Status")
 public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
@@ -61,7 +60,7 @@ public class Status extends org.eclipse.edt.runtime.java.eglx.lang.AnyValue {
 	public int getCode() {
 		return code;
 	}
-	public void setCode(Integer ezeValue) {
+	public void setCode(int ezeValue) {
 		code = ezeValue;
 	}
 	@org.eclipse.edt.javart.json.Json(name="reason", clazz=EString.class, asOptions={})

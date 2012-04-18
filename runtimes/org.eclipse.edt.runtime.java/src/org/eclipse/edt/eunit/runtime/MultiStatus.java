@@ -1,29 +1,28 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright (c) 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- *
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
 import org.eclipse.edt.eunit.runtime.Status;
+import eglx.rbd.StrLib;
 import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
+import org.eclipse.edt.eunit.runtime.LogResult;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import java.lang.Object;
-import eglx.rbd.StrLib;
-import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="MultiStatus")
 public class MultiStatus extends ExecutableBase {
@@ -44,8 +43,8 @@ public class MultiStatus extends ExecutableBase {
 	public int notRunCnt;
 	@org.eclipse.edt.javart.json.Json(name="firstFailedTestName", clazz=EString.class, asOptions={})
 	public String firstFailedTestName;
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public StrLib eze_Lib_eglx_rbd_StrLib;
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	
 	public MultiStatus() {
@@ -62,17 +61,17 @@ public class MultiStatus extends ExecutableBase {
 		notRunCnt = 0;
 		firstFailedTestName = "";
 	}
-	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
-		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
-			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
-		}
-		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
-	}
 	public StrLib eze_Lib_eglx_rbd_StrLib() {
 		if (eze_Lib_eglx_rbd_StrLib == null) {
 			eze_Lib_eglx_rbd_StrLib = (StrLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("eglx.rbd.StrLib");
 		}
 		return eze_Lib_eglx_rbd_StrLib;
+	}
+	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib() {
+		if (eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib == null) {
+			eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib = (ConstantsLib)org.eclipse.edt.javart.Runtime.getRunUnit().loadLibrary("org.eclipse.edt.eunit.runtime.ConstantsLib");
+		}
+		return eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	}
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult() {
 		if (eze_Lib_org_eclipse_edt_eunit_runtime_LogResult == null) {

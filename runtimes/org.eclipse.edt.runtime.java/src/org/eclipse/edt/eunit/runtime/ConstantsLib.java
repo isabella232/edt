@@ -1,13 +1,12 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright (c) 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- *
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
@@ -15,6 +14,7 @@ import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
 @SuppressWarnings("unused")
@@ -25,15 +25,15 @@ public class ConstantsLib extends ExecutableBase {
 	public final String NEWLINE = ezeConst_NEWLINE;
 	private static final String ezeConst_EXIT_PREFIX = "STATUS: ";
 	public final String EXIT_PREFIX = ezeConst_EXIT_PREFIX;
-	private static final int ezeConst_SPASSED = (int)(short)((short) 0);
+	private static final int ezeConst_SPASSED = 0;
 	public final int SPASSED = ezeConst_SPASSED;
-	private static final int ezeConst_SFAILED = (int)(short)((short) 1);
+	private static final int ezeConst_SFAILED = 1;
 	public final int SFAILED = ezeConst_SFAILED;
-	private static final int ezeConst_SERROR = (int)(short)((short) 2);
+	private static final int ezeConst_SERROR = 2;
 	public final int SERROR = ezeConst_SERROR;
-	private static final int ezeConst_SNOT_RUN = (int)(short)((short) 3);
+	private static final int ezeConst_SNOT_RUN = 3;
 	public final int SNOT_RUN = ezeConst_SNOT_RUN;
-	private static final int ezeConst_SBAD = (int)(short)((short) 4);
+	private static final int ezeConst_SBAD = 4;
 	public final int SBAD = ezeConst_SBAD;
 	public ConstantsLib() {
 		super();
