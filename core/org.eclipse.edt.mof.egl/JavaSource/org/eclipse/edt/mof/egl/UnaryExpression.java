@@ -21,4 +21,8 @@ public interface UnaryExpression extends Expression {
 	
 	void setOperator(String value);
 	
+	Operation getOperation();
+	
+	void setOperation(Operation operation);
+	
 }

@@ -12,13 +12,17 @@
 package org.eclipse.edt.mof.egl.impl;
 
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.NoSuchFunctionError;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class UnaryExpressionImpl extends ExpressionImpl implements UnaryExpression {
 	private static int Slot_expression=0;
 	private static int Slot_operator=1;
-	private static int totalSlots = 2;
+	private static int Slot_operation=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -28,6 +32,7 @@ public class UnaryExpressionImpl extends ExpressionImpl implements UnaryExpressi
 		int offset = ExpressionImpl.totalSlots();
 		Slot_expression += offset;
 		Slot_operator += offset;
+		Slot_operation += offset;
 	}
 	@Override
 	public Expression getExpression() {
@@ -50,8 +55,30 @@ public class UnaryExpressionImpl extends ExpressionImpl implements UnaryExpressi
 	}
 	
 	@Override
-	public Type getType() {
-		return getExpression().getType();
+	public Operation getOperation() {
+		if (slotGet(Slot_operation) == null) {
+			try {
+				setOperation(resolveOperation());
+			} catch (NoSuchFunctionError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return (Operation)slotGet(Slot_operation);
 	}
-
+	
+	@Override
+	public void setOperation(Operation value) {
+		slotSet(Slot_operation, value);
+	}
+	
+	protected Operation resolveOperation() {
+		Operation op = IRUtils.getUnaryOperation(getExpression().getType().getClassifier(), getOperator());
+		if (op == null) throw new NoSuchFunctionError();
+		return op;
+	}
+	
+	@Override
+	public Type getType() {
+		return getOperation().getType();
+	}
 }
