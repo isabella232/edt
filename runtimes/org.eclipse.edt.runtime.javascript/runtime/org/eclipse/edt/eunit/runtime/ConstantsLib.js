@@ -1,13 +1,12 @@
 /*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
+ * Copyright (c) 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
- *
+ *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 if (egl.eze$$userLibs) egl.eze$$userLibs.push('org.eclipse.edt.eunit.runtime.ConstantsLib');
 else egl.eze$$userLibs = ['org.eclipse.edt.eunit.runtime.ConstantsLib'];
@@ -19,25 +18,25 @@ egl.defineRUILibrary('org.eclipse.edt.eunit.runtime', 'ConstantsLib',
 			if(egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']) return egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst'];
 			egl.org.eclipse.edt.eunit.runtime.ConstantsLib['$inst']=this;
 			this.NEWLINE = "";
-			egl.atLine(this.eze$$fileName,7,138,6, this);
+			egl.atLine(this.eze$$fileName,18,664,6, this);
 			this.NEWLINE = "\r\n";
 			this.EXIT_PREFIX = "";
-			egl.atLine(this.eze$$fileName,8,175,10, this);
+			egl.atLine(this.eze$$fileName,19,700,10, this);
 			this.EXIT_PREFIX = "STATUS: ";
 			this.SPASSED = 0;
-			egl.atLine(this.eze$$fileName,10,212,1, this);
+			egl.atLine(this.eze$$fileName,21,735,1, this);
 			this.SPASSED = 0;
 			this.SFAILED = 0;
-			egl.atLine(this.eze$$fileName,11,237,1, this);
+			egl.atLine(this.eze$$fileName,22,759,1, this);
 			this.SFAILED = 1;
 			this.SERROR = 0;
-			egl.atLine(this.eze$$fileName,12,261,1, this);
+			egl.atLine(this.eze$$fileName,23,782,1, this);
 			this.SERROR = 2;
 			this.SNOT_RUN = 0;
-			egl.atLine(this.eze$$fileName,13,287,1, this);
+			egl.atLine(this.eze$$fileName,24,807,1, this);
 			this.SNOT_RUN = 3;
 			this.SBAD = 0;
-			egl.atLine(this.eze$$fileName,14,309,1, this);
+			egl.atLine(this.eze$$fileName,25,828,1, this);
 			this.SBAD = 4;
 			this.eze$$setInitial();
 		}
