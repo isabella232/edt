@@ -81,4 +81,10 @@ public class UnaryExpressionImpl extends ExpressionImpl implements UnaryExpressi
 	public Type getType() {
 		return getOperation().getType();
 	}
+	
+	@Override
+	public boolean isNullable() {
+		return getOperation().isNullable();
+	}
+
 }
