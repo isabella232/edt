@@ -28,11 +28,15 @@ public class FunctionParameterTemplate extends JavaTemplate {
 		if (org.eclipse.edt.gen.CommonUtilities.isBoxedParameterType(decl, ctx) && !decl.isConst()) {
 			out.print("AnyBoxedObject<");
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
+			ctx.invoke(genRuntimeTypeExtension, decl.getType(), ctx, out);
 			out.print(">");
-		} else if (decl.isNullable())
+		} else if (decl.isNullable()) {
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaObject);
-		else
+			ctx.invoke(genRuntimeTypeExtension, decl.getType(), ctx, out);
+		} else {
 			ctx.invoke(genRuntimeTypeName, decl.getType(), ctx, out, TypeNameKind.JavaPrimitive);
+			ctx.invoke(genRuntimeTypeExtension, decl.getType(), ctx, out);
+		}
 		out.print(" ");
 		ctx.invoke(genName, decl, ctx, out);
 	}

@@ -34,14 +34,20 @@ public class MemberTemplate extends JavaTemplate {
 		else if (CommonUtilities.isBoxedOutputTemp(mbr, ctx)) {
 			out.print("AnyBoxedObject<");
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
+			ctx.invoke(genRuntimeTypeExtension, mbr.getType(), ctx, out);
 			out.print(">");
-		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType()))
+		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()) && !mbr.isNullable() && TypeUtils.isValueType(mbr.getType())) {
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaPrimitive);
-		else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier()))
+			ctx.invoke(genRuntimeTypeExtension, mbr.getType(), ctx, out);
+		} else if (ctx.mapsToPrimitiveType(mbr.getType().getClassifier())) {
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
-		else if (ctx.mapsToNativeType(mbr.getType().getClassifier()))
+			ctx.invoke(genRuntimeTypeExtension, mbr.getType(), ctx, out);
+		} else if (ctx.mapsToNativeType(mbr.getType().getClassifier())) {
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.EGLInterface);
-		else
+			ctx.invoke(genRuntimeTypeExtension, mbr.getType(), ctx, out);
+		} else {
 			ctx.invoke(genRuntimeTypeName, mbr.getType(), ctx, out, TypeNameKind.JavaObject);
+			ctx.invoke(genRuntimeTypeExtension, mbr.getType(), ctx, out);
+		}
 	}
 }

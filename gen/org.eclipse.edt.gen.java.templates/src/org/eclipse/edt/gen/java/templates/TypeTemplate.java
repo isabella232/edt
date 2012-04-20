@@ -144,6 +144,10 @@ public class TypeTemplate extends JavaTemplate {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
 	}
 
+	public void genRuntimeTypeExtension(Type type, Context ctx, TabbedWriter out) {
+		// no default
+	}
+
 	public void genRuntimeClassTypeName(Type type, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, arg);
 		out.print(".class");
