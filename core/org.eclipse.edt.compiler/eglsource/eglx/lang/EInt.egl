@@ -175,6 +175,13 @@ externalType EInt extends ENumber type ClassType
 	static function asInt(value ENumber in) returns(EInt) {@Operation{"narrow"}};
 	
 	/**
+	 * {@Operation narrow} Converts bytes to an int.
+	 *
+	 * @throws TypeCastException if the bytes are not valid format for an int.
+	 */
+	static function asInt(value EBytes in) returns(EInt) {@Operation{"narrow"}};
+	
+	/**
 	 * {@Operation widen} Converts an int to a number.
 	 */
 	static function asNumber(value EInt in) returns(ENumber) {@Operation{"widen"}};

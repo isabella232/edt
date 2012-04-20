@@ -180,4 +180,11 @@ externalType ESmallint extends ENumber type ClassType
 	 * @throws TypeCastException if the number is out of range for a smallint.
 	 */
 	static function asSmallint(value ENumber in) returns(ESmallint) {@Operation{"narrow"}};
+	
+	/**
+	 * {@Operation narrow} Converts bytes to a smallint.
+	 *
+	 * @throws TypeCastException if the bytes are not valid format for a smallint.
+	 */
+	static function asSmallint(value EBytes in) returns(ESmallint) {@Operation{"narrow"}};
 end

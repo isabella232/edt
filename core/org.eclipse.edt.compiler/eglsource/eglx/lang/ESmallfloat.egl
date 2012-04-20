@@ -106,4 +106,11 @@ externalType ESmallfloat extends ENumber type ClassType
 	static function asSmallfloat(value EFloat in) returns(ESmallfloat) {@Operation{"narrow"}};
 	static function asSmallfloat(value EBigint in) returns(ESmallfloat) {@Operation{"narrow"}};
 	static function asSmallfloat(value ENumber in) returns(ESmallfloat) {@Operation{"narrow"}};
+	
+	/**
+	 * {@Operation narrow} Converts bytes to a smallfloat.
+	 *
+	 * @throws TypeCastException if the bytes are not valid format for a smallfloat.
+	 */
+	static function asSmallfloat(value EBytes in) returns(ESmallfloat) {@Operation{"narrow"}};
 end
