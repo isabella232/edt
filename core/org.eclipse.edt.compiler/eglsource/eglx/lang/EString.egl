@@ -142,6 +142,13 @@ externalType EString extends AnyText type ParameterizableType {
 	static function asString(value ETimestamp in) returns (EString) {@Operation{"widen"}};
 	
 	/**
+	 * {@Operation widen} Converts a time to a string.  The result will be in the
+	 * 24-hour format "HH:mm:ss".  Leading zeros are included in each field of the string
+	 * when necessary, e.g. 5 o'clock is represented as "05:00:00".
+	 */
+	static function asString(value ETime in) returns (EString) {@Operation{"widen"}};
+	
+	/**
 	 * A pattern-matching function which compares this string to a pattern using
 	 * the rules of SQL's LIKE operator. 
 	 *
