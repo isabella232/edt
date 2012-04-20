@@ -343,7 +343,7 @@ public class EString extends AnyBoxedObject<String> {
 			return new String(value);
 		else {
 			try {
-				new String(value, encoding);
+				return new String(value, encoding);
 			}
 			catch (UnsupportedEncodingException e) {
 				InvalidArgumentException ex = new InvalidArgumentException();
@@ -351,8 +351,6 @@ public class EString extends AnyBoxedObject<String> {
 				throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
 			}
 		}
-		// should never get here
-		return null;
 	}
 
 	/**
