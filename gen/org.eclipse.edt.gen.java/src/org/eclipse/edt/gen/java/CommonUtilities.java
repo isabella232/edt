@@ -525,6 +525,8 @@ public class CommonUtilities {
 				if (inParm) {
 					if (value.equals("boolean"))
 						signature += "Ljava/lang/Boolean;";
+					else if (value.equals("bytes"))
+						signature += "Ljava/lang/Byte;";
 					else if (value.equals("double"))
 						signature += "Ljava/lang/Double;";
 					else if (value.equals("float"))
@@ -540,10 +542,8 @@ public class CommonUtilities {
 				} else {
 					if (value.equals("boolean"))
 						signature += "Z";
-					else if (value.equals("byte"))
+					else if (value.equals("bytes"))
 						signature += "B";
-					else if (value.equals("char"))
-						signature += "C";
 					else if (value.equals("double"))
 						signature += "D";
 					else if (value.equals("float"))
