@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.runtime.java.eglx.lang;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Calendar;
@@ -23,6 +24,7 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 
 import eglx.lang.AnyException;
+import eglx.lang.InvalidArgumentException;
 import eglx.lang.InvalidIndexException;
 import eglx.lang.InvalidPatternException;
 import eglx.lang.TypeCastException;
@@ -328,6 +330,29 @@ public class EString extends AnyBoxedObject<String> {
 				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
 			}
 		}
+	}
+
+	public static String asString(EBytes value, String encoding, Integer... length) {
+		if (value == null)
+			return null;
+		return asString(value.ezeUnbox(), encoding, length);
+	}
+
+	protected static String asString(byte[] value, String encoding, Integer... length) {
+		if (encoding == null)
+			return new String(value);
+		else {
+			try {
+				new String(value, encoding);
+			}
+			catch (UnsupportedEncodingException e) {
+				InvalidArgumentException ex = new InvalidArgumentException();
+				ex.initCause( e );
+				throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
+			}
+		}
+		// should never get here
+		return null;
 	}
 
 	/**
