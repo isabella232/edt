@@ -705,17 +705,17 @@ public class TypeCompatibilityUtil {
 		D = Datetime types: date, time, timestamp, interval
 
 		Target Type		Source Type
-		N				N, T, date
+		N				N, T, bytes (except for number)
 		char			N, T, D, hex
 		dbchar			dbchar, unicode, string
 		mbchar			N, T, D
-		unicode, string	N, T, D, hex, dbchar (this is everything!)
+		unicode, string	N, T, D, hex, dbchar (this is everything except bytes)
 		hex				char, hex, unicode, string
-		date			N, T, date, timestamp
+		date			T, date, timestamp
 		time			T, timestamp, time
 		interval		interval, T, int, smallint, bigint, bin/decimal/num/pacf/numc/money with no decimals
 		timestamp		T, timestamp, time, date
-		bytes			hex
+		bytes			N, T
 		*/
 		boolean targetIsNumeric = isNumeric(targetPrim);
 		boolean sourceIsNumeric = isNumeric(sourcePrim);
@@ -744,6 +744,26 @@ public class TypeCompatibilityUtil {
 			return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim;
 		}
 		if(targetIsNumeric) {
+			if (sourcePrim == Primitive.BYTES) {
+				// Cannot convert bytes to number.
+				if (targetPrim == Primitive.NUMBER) {
+					return false;
+				}
+				
+				// Can convert bytes to decimal, only if the decimal has a length.
+				if (targetPrim == Primitive.DECIMAL && target.getLength() == 0) {
+					return false;
+				}
+				
+				// If the bytes has no length, it's allowed and can fail at runtime.
+				if (source.getLength() == 0) {
+					return true;
+				}
+				
+				// Byte lengths must match.
+				return source.getLength() == target.getBytes();
+			}
+			
 			if(target.getDecimals() == 0) {
 				return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim || sourceIsInterval;
 			}
@@ -788,7 +808,12 @@ public class TypeCompatibilityUtil {
 			return sourceIsNumeric || Primitive.BOOLEAN == sourcePrim;
 		}
 		if(Primitive.BYTES == targetPrim) {
-			return Primitive.HEX == sourcePrim;
+			if (sourceIsNumeric) {
+				// If bytes has a length, it must match the number's length in bytes. If the source length is unknown this can fail at runtime.
+				return target.getLength() == 0 || source.getLength() == 0 || target.getLength() == source.getBytes();
+			}
+			
+			return sourceIsText;
 		}
 		
 		return false;
@@ -875,26 +900,23 @@ public class TypeCompatibilityUtil {
 			Primitive srcPrim = ((PrimitiveTypeBinding)sourceType).getPrimitive();
 			Primitive tgtPrim = ((PrimitiveTypeBinding)targetType).getPrimitive();
 			
-			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.NUMBER) {
+			if (srcPrim == Primitive.DECIMAL && (tgtPrim == Primitive.NUMBER || tgtPrim == Primitive.BYTES)) {
 				return true;
 			}
-			if (srcPrim == Primitive.NUMBER && tgtPrim == Primitive.DECIMAL) {
+			
+			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.DECIMAL && (sourceType.isReference() || targetType.isReference())) {
+				return true;
+			}
+			
+			if (srcPrim == Primitive.NUMBER && (Primitive.isNumericType(tgtPrim) || tgtPrim == Primitive.BYTES)) {
 				return true;
 			}
 			
 			if (srcPrim == Primitive.TIMESTAMP && tgtPrim == Primitive.TIMESTAMP && (sourceType.isReference() || targetType.isReference())) {
 				return true;
 			}
-
-			if (srcPrim == Primitive.DECIMAL && tgtPrim == Primitive.DECIMAL && (sourceType.isReference() || targetType.isReference())) {
-				return true;
-			}
 			
-			if (srcPrim == Primitive.NUMBER && Primitive.isNumericType(tgtPrim)) {
-				return true;
-			}
-			
-			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim))) {
+			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim) || tgtPrim == Primitive.BYTES)) {
 				return true;
 			}
 			
@@ -1638,7 +1660,6 @@ public class TypeCompatibilityUtil {
 			PrimitiveTypeBinding primSourceType = (PrimitiveTypeBinding) sourceType;
 			Primitive prim = primSourceType.getPrimitive();			
 			switch(prim.getType()) {
-				//TODO BYTES
 				case Primitive.HEX_PRIMITIVE:
 					result.add(AnyFixedRecordTargetTypeWidener.INSTANCE);
 					result.add(new TargetInPrimitiveTypeSetTypeWidener(textPrimitives, 2));
@@ -1692,27 +1713,28 @@ public class TypeCompatibilityUtil {
 					
 				case Primitive.STRING_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
+						new Primitive[] {Primitive.BYTES},
 						new Set[] {numericPrimitives, dateTimePrimitives}
 					));
 					break;
 					
 				case Primitive.SMALLINT_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.INT, Primitive.BIGINT, Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER},
+						new Primitive[] {Primitive.INT, Primitive.BIGINT, Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
 					
 				case Primitive.INT_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.BIGINT, Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER},
+						new Primitive[] {Primitive.BIGINT, Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
 					
 				case Primitive.BIGINT_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER},
+						new Primitive[] {Primitive.BIN, Primitive.NUMC, Primitive.NUM, Primitive.PACF, Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
@@ -1747,21 +1769,21 @@ public class TypeCompatibilityUtil {
 				
 				case Primitive.DECIMAL_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER},
+						new Primitive[] {Primitive.DECIMAL, Primitive.SMALLFLOAT, Primitive.FLOAT, Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
 					
 				case Primitive.SMALLFLOAT_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.FLOAT, Primitive.NUMBER},
+						new Primitive[] {Primitive.FLOAT, Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
 					
 				case Primitive.FLOAT_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.NUMBER},
+						new Primitive[] {Primitive.NUMBER, Primitive.BYTES},
 						new Set[] {dateTimePrimitives}
 					));
 					break;
@@ -1776,6 +1798,12 @@ public class TypeCompatibilityUtil {
 				case Primitive.TIME_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
 						Primitive.TIMESTAMP
+					));
+					break;
+					
+				case Primitive.BYTES_PRIMITIVE:
+					result.add(new TargetInPrimitiveListOrSetTypeWidener(
+						new Primitive[]{Primitive.BIGINT, Primitive.INT, Primitive.SMALLINT, Primitive.FLOAT, Primitive.SMALLFLOAT, Primitive.DECIMAL}
 					));
 					break;
 			}
