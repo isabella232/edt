@@ -199,6 +199,11 @@ public class FileSystemObjectStore extends AbstractObjectStore implements Object
 		}
 		return fileExtension;
 	}
-
+	
+	@Override
+	public String toString() {
+		// For easier debugging.
+		return "FileSystemObjectStore root=" + root;
+	}
 }
 

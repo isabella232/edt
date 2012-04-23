@@ -164,5 +164,10 @@ public class ZipFileObjectStore extends AbstractObjectStore implements CachingOb
 	public List<String> getAllKeysFromPkg(String pkg, boolean includeSubPkgs) {
 		return entryManager.getAllKeysFromPkg(pkg, includeSubPkgs);
 	}
-
+	
+	@Override
+	public String toString() {
+		// For easier debugging.
+		return "ZipFileObjectStore file=" + zipFile;
+	}
 }
