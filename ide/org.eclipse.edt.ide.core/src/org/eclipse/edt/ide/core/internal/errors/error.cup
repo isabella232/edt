@@ -61,6 +61,7 @@ terminal HexLiteral HEXLIT;
 terminal CharLiteral CHARLIT;
 terminal DBCharLiteral DBCHARLIT;
 terminal MBCharLiteral MBCHARLIT;
+terminal BytesLiteral BYTESLIT;
 terminal NULL;
 terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
 terminal InlineDLIStatement INLINE_DLI;
@@ -1470,6 +1471,9 @@ literal
 	
 	|	BOOLEANLIT:value
 	{: RESULT = new BooleanLiteral(value, valueleft, valueright); :}
+	
+	|	BYTESLIT:value
+	{: RESULT = value; :}
 
 	|	NULL:null1
 	{: RESULT = new NullLiteral(null1left, null1right); :}
