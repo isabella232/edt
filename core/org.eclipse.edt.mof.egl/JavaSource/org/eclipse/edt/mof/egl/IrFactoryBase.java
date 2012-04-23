@@ -31,6 +31,7 @@ public interface IrFactoryBase extends EFactory  {
 	String AssignmentStatement = packageName+".AssignmentStatement";
 	String BinaryExpression = packageName+".BinaryExpression";
 	String BooleanLiteral = packageName+".BooleanLiteral";
+	String BytesLiteral = packageName+".BytesLiteral";
 	String BoxingExpression = packageName+".BoxingExpression";
 	String BuiltInOperation = packageName+".BuiltInOperation";
 	String BuiltInOperationExpression = packageName+".BuiltInOperationExpression";
@@ -204,6 +205,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getBoxingExpressionEClass();
 	EClass getBuiltInOperationEClass();
 	EClass getBuiltInOperationExpressionEClass();
+	EClass getBytesLiteralEClass();
 	EClass getCallStatementEClass();
 	EClass getCaseStatementEClass();
 	EClass getCharLiteralEClass();
@@ -370,6 +372,7 @@ public interface IrFactoryBase extends EFactory  {
 	public BinaryExpression createBinaryExpression();
 	public BooleanLiteral createBooleanLiteral();
 	public BoxingExpression createBoxingExpression();
+	public BytesLiteral createBytesLiteral();
 	public BuiltInOperation createBuiltInOperation();
 	public BuiltInOperationExpression createBuiltInOperationExpression();
 	public CallStatement createCallStatement();

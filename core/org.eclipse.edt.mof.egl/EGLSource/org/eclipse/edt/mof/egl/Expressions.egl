@@ -34,6 +34,9 @@ end
 externalType BooleanLiteral extends PrimitiveTypeLiteral type MofClass
 end
 
+externalType BytesLiteral extends PrimitiveTypeLiteral type MofClass
+end
+
 externalType NumericLiteral extends PrimitiveTypeLiteral type MofClass {isAbstract=yes}
 	isNegated boolean;
 end

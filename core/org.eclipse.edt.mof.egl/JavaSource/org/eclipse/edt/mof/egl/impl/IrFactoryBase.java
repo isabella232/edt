@@ -88,6 +88,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getBytesLiteralEClass() {
+		return (EClass)getTypeNamed(BytesLiteral);
+	}
+	
+	@Override
 	public EClass getBuiltInOperationEClass() {
 		return (EClass)getTypeNamed(BuiltInOperation);
 	}
@@ -920,6 +925,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public BooleanLiteral createBooleanLiteral() {
 		return (BooleanLiteral)getBooleanLiteralEClass().newInstance();
+	}
+	
+	@Override
+	public BytesLiteral createBytesLiteral() {
+		return (BytesLiteral)getBytesLiteralEClass().newInstance();
 	}
 	
 	@Override
