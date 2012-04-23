@@ -57,6 +57,11 @@ import java_cup.runtime.Symbol;
 		return symbol(NodeTypes.INLINE_DLI, new InlineDLIStatement(rawString.toString(), openingBraceOffset, startOffset, startOffset+rawString.length()), startOffset, rawString.length());
 	}
 	
+	private Symbol byteslit() {
+		String text = yytext();
+		return symbol(NodeTypes.BYTESLIT, new BytesLiteral(text, text.substring(2), yychar, yychar + yylength()), yychar, yylength());
+	}
+	
 	private static final int LITERALTYPE_STRING		= 0;
 	private static final int LITERALTYPE_HEX		= 1;
 	private static final int LITERALTYPE_CHAR		= 2;
@@ -106,6 +111,7 @@ DecimalLit     = ({DLit1}|{DLit2})
 DLit1	  = [0-9]+ \. [0-9]*	// Has integer part and the dot
 DLit2	  = \. [0-9]+			// Has decimal part and the dot
 FloatLit       = ({DecimalLit}|{Integer})[eE][+-]?{Integer}
+BytesLit	= 0[xX][012334567890aAbBcCdDeEfF]+
 SQLIdentifier  = [:jletter:][:jletterdigit:]*
 DLIIdentifier  = [:jletter:][:jletterdigit:]*
 
@@ -153,7 +159,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 
 	// String
 	\"				   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_STRING; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
-	[xX]\"			   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_HEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
+//	[xX]\"			   		{ yybegin(HEXSTRING); stringLiteralType = LITERALTYPE_HEX; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
 	[cC]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_CHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
 	[dD]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_DBCHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
 	[mM]\"			   		{ yybegin(STRING); stringLiteralType = LITERALTYPE_MBCHAR; rawString.setLength(0); rawString.append('\"'); stringValue.setLength(0); startOffset = yychar; }
@@ -407,6 +413,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	{Integer}			{ return symbol(NodeTypes.INTEGER, yytext()); }
 	{DecimalLit}		{ return symbol(NodeTypes.DECIMALLIT, yytext()); }
 	{FloatLit}			{ return symbol(NodeTypes.FLOATLIT, yytext()); }
+	{BytesLit}			{ return byteslit(); }
 }
 
 <BLOCK_COMMENT> {
