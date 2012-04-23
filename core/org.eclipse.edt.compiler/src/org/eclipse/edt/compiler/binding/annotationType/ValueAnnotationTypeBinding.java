@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
@@ -77,6 +78,11 @@ class ValueAnnotationTypeBinding extends AnnotationTypeBinding {
         }
         
         public boolean visit(MBCharLiteral lit) {
+            valid = true;
+            return false;
+        }
+        
+        public boolean visit(BytesLiteral lit) {
             valid = true;
             return false;
         }

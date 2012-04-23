@@ -24,6 +24,7 @@ import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -143,6 +144,11 @@ import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidat
 				    }
 				    
 				    public boolean visit(ArrayLiteral arrayLiteral) {
+				    	valid[0] = false;
+				    	return false;
+				    }
+				    
+				    public boolean visit(BytesLiteral bytesLiteral) {
 				    	valid[0] = false;
 				    	return false;
 				    }

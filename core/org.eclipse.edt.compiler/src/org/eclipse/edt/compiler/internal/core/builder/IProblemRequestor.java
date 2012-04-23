@@ -347,6 +347,7 @@ public interface IProblemRequestor {
 	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
 	public static final int NULLABLE_INVALID_IN_ISA_AS_OR_NEW = 3275;
 	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
+	public static final int BYTES_LITERAL_LENGTH_MUST_BE_EVEN = 3277;
 	
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	

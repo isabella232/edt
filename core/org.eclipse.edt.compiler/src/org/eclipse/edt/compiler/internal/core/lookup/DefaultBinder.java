@@ -82,6 +82,7 @@ import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.Assignment.Operator;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.CloseStatement;
@@ -3279,6 +3280,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 				if(mbcharLiteral.getValue().length() % 2 != 0) {
 					problemRequestor.acceptProblem(mbcharLiteral, IProblemRequestor.HEX_LITERAL_LENGTH_MUST_BE_EVEN, new String[] {mbcharLiteral.getValue()});
 				}
+			}
+		}
+	}
+	
+	public void endVisit(BytesLiteral bytesLiteral) {
+		if(bytesLiteral.resolveTypeBinding() == null) {
+			bytesLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BYTES, bytesLiteral.getValue().length()));
+			
+			if(bytesLiteral.getValue().length() % 2 != 0) {
+				problemRequestor.acceptProblem(bytesLiteral, IProblemRequestor.BYTES_LITERAL_LENGTH_MUST_BE_EVEN, new String[] {bytesLiteral.getCanonicalString()});
 			}
 		}
 	}

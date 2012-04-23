@@ -43,6 +43,7 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayAccess;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
@@ -1353,6 +1354,10 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 				return false;
 			}
 			public boolean visit(HexLiteral stringLiteral) {
+				result[0] = true;
+				return false;
+			}
+			public boolean visit(BytesLiteral bytesLiteral) {
 				result[0] = true;
 				return false;
 			}

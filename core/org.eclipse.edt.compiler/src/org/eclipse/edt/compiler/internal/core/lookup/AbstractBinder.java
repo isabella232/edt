@@ -987,6 +987,11 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return false;
 		}
 		
+		public boolean visit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
+			constantValue = bytesLiteral.getValue();
+			return false;
+		};
+		
 		private Expression getBaseExpression(Expression expr) {
 			final Expression[] baseExpr = new Expression[] {expr};
 			expr.accept(new DefaultASTVisitor(){
@@ -1050,6 +1055,9 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 						break;
 					case LiteralExpression.BOOLEAN_LITERAL:
 						constantValue = constantObjects.toArray(new Boolean[0]);
+						break;
+					case LiteralExpression.BYTES_LITERAL:
+						constantValue = constantObjects.toArray(new String[constantObjects.size()]);
 						break;
 					case LiteralExpression.ARRAY_LITERAL:
 						int numElements = constantObjects.size(); 

@@ -59,6 +59,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
@@ -703,6 +704,9 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 		else if (expr instanceof BooleanLiteral) {
 			value = ((BooleanLiteral)expr).booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES ? Boolean.TRUE : Boolean.FALSE;
+		}
+		else if (expr instanceof BytesLiteral) {
+			value = ((BytesLiteral)expr).getValue();
 		}
 		else if (expr instanceof IntegerLiteral) {
 			try {

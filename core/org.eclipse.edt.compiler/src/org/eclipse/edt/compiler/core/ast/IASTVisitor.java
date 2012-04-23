@@ -49,6 +49,9 @@ public interface IASTVisitor {
 	boolean visit(BooleanLiteral booleanLiteral);
 	void endVisit(BooleanLiteral booleanLiteral);
 	
+	boolean visit(BytesLiteral bytesLiteral);
+	void endVisit(BytesLiteral bytesLiteral);
+	
 	boolean visit(CallStatement callStatement);
 	void endVisit(CallStatement callStatement);
 	

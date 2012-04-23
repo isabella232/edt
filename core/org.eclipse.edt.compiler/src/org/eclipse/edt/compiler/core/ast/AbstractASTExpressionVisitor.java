@@ -142,6 +142,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
 		return visitLiteral(booleanLiteral);
 	}
     
+    public boolean visit(BytesLiteral bytesLiteral) {
+		return visitLiteral(bytesLiteral);
+	}
+    
     public boolean visit(NewExpression newExpression) {
         return visitExpression(newExpression);
     }
@@ -272,6 +276,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public void endVisit(BooleanLiteral booleanLiteral) {
 		endVisitLiteral(booleanLiteral);
+	}
+    
+    public void endVisit(BytesLiteral bytesLiteral) {
+		endVisitLiteral(bytesLiteral);
 	}
     
     public void endVisit(NewExpression newExpression) {

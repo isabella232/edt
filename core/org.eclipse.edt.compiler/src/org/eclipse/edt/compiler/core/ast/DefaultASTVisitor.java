@@ -61,6 +61,10 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(BytesLiteral bytesLiteral) {
+		return false;
+	}
+	
 	public boolean visit(CallStatement callStatement) {
 		return false;
 	}
@@ -576,6 +580,8 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(BinaryExpression binaryExpression) {}
 	
 	public void endVisit(BooleanLiteral booleanLiteral) {}
+	
+	public void endVisit(BytesLiteral bytesLiteral) {}
 	
 	public void endVisit(CallStatement callStatement) {}
 	

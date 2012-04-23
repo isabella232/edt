@@ -29,6 +29,7 @@ public abstract class LiteralExpression extends Expression {
 	public static final int CHAR_LITERAL = 9;
 	public static final int DBCHAR_LITERAL = 10;
 	public static final int MBCHAR_LITERAL = 11;
+	public static final int BYTES_LITERAL = 12;
 
 	public LiteralExpression(int startOffset, int endOffset) {
 		super(startOffset, endOffset);

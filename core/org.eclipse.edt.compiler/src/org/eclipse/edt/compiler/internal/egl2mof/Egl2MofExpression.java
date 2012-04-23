@@ -60,6 +60,7 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
+import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.CharLiteral;
 import org.eclipse.edt.mof.egl.DBCharLiteral;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
@@ -262,6 +263,15 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.BooleanLiteral literal) {
 		BooleanLiteral lit = factory.createBooleanLiteral();
+		lit.setValue(literal.getValue());
+		setElementInformation(literal, lit);
+		stack.push(lit);
+		return false;
+	}
+	
+	@Override
+	public boolean visit(org.eclipse.edt.compiler.core.ast.BytesLiteral literal) {
+		BytesLiteral lit = factory.createBytesLiteral();
 		lit.setValue(literal.getValue());
 		setElementInformation(literal, lit);
 		stack.push(lit);

@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
 import org.eclipse.edt.compiler.core.ast.DBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.DecimalLiteral;
@@ -618,6 +619,11 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		public boolean visit(BooleanLiteral booleanLiteral) {
 			value = booleanLiteral.booleanValue();
+			return false;
+		}
+		
+		public boolean visit(BytesLiteral bytesLiteral) {
+			value = bytesLiteral.getValue();
 			return false;
 		}
 

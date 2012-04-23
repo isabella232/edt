@@ -65,6 +65,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( booleanLiteral );
 	}
 	
+	public boolean visit(BytesLiteral bytesLiteral) {
+		return visitNode( bytesLiteral );
+	}
+	
 	public boolean visit(CallStatement callStatement) {
 		return visitNode( callStatement );
 	}
@@ -599,6 +603,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(BooleanLiteral booleanLiteral) {
 		 endVisitNode( booleanLiteral );
+	}
+	
+	public void endVisit(BytesLiteral bytesLiteral) {
+		 endVisitNode( bytesLiteral );
 	}
 	
 	public void endVisit(CallStatement callStatement) {
