@@ -4108,6 +4108,12 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 			printStuffBeforeToken(NodeTypes.LE, numOfBlankLines, addSpace);
 		else if(binaryOp == BinaryExpression.Operator.GREATER_EQUALS)
 			printStuffBeforeToken(NodeTypes.GE, numOfBlankLines, addSpace);
+		else if(binaryOp == BinaryExpression.Operator.LEFT_SHIFT)
+			printStuffBeforeToken(NodeTypes.LEFTSHIFT, numOfBlankLines, addSpace);
+		else if(binaryOp == BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC)
+			printStuffBeforeToken(NodeTypes.RIGHTSHIFTARITHMETIC, numOfBlankLines, addSpace);
+		else if(binaryOp == BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL)
+			printStuffBeforeToken(NodeTypes.RIGHTSHIFTLOGICAL, numOfBlankLines, addSpace);
 				
 		Expression secondExpr = binaryExpression.getSecondExpression();
 		format2ndExpressionInBinaryExpression(secondExpr) ;
