@@ -3818,6 +3818,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 	public boolean visit(BooleanLiteral booleanLiteral) {return visitTerminalExpression(booleanLiteral);}
 	public boolean visit(NullLiteral nullLiteral) {return visitTerminalExpression(nullLiteral);}
 	public boolean visit(SQLLiteral sQLLiteral) {return visitTerminalExpression(sQLLiteral);}
+	public boolean visit(BytesLiteral bytesLiteral) {return visitTerminalExpression(bytesLiteral);}
 	
 	private boolean visitTerminalExpression(Expression literalExpression){
 //		if(!fGlobalAddSpace)
