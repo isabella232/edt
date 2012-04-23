@@ -1472,7 +1472,7 @@ literal
 	{: RESULT = new BooleanLiteral(value, valueleft, valueright); :}
 	
 	|	BYTESLIT:value
-	{: RESULT = new BytesLiteral(value, valueleft, valueright); :}
+	{: RESULT = value; :}
 
 	|	NULL:null1
 	{: RESULT = new NullLiteral(null1left, null1right); :}
