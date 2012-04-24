@@ -58,6 +58,7 @@ public class ListTypeTemplate extends JavaTemplate
 			ctx.invoke( genRuntimeTypeName, type.getClassifier(), ctx, out, TypeNameKind.EGLImplementation );
 			out.print( ".ezeNew(" );
 			ctx.invoke( genRuntimeTypeName, elementType.getClassifier(), ctx, out, TypeNameKind.JavaObject );
+			ctx.invoke(genRuntimeTypeExtension, elementType.getClassifier(), ctx, out);
 			out.print( ".class)" );
 		}
 	}
@@ -158,6 +159,7 @@ public class ListTypeTemplate extends JavaTemplate
 				ArrayType elementArrayType = (ArrayType)elementType;
 				out.print( "new org.eclipse.edt.runtime.java.eglx.lang.EList.ListFactory<" );
 				ctx.invoke( genRuntimeTypeName, elementArrayType.getElementType(), ctx, out, TypeNameKind.JavaObject );
+				ctx.invoke(genRuntimeTypeExtension, elementArrayType.getElementType(), ctx, out);
 				out.print( ">(" );
 				if ( dimensionSizes == null )
 				{
@@ -177,6 +179,9 @@ public class ListTypeTemplate extends JavaTemplate
 				{
 					case TypeUtils.TypeKind_ANY:
 						out.print( "null" );
+						break;
+					case TypeUtils.TypeKind_BYTES:
+						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.BytesFactory" );
 						break;
 					case TypeUtils.TypeKind_INT:
 						out.print( "org.eclipse.edt.runtime.java.eglx.lang.EList.IntFactory" );
