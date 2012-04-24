@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
@@ -103,7 +102,17 @@ public class EDTCompiler extends BaseCompiler {
 		// Lookup statement validator based on DataSource operand in FROM/TO clause
 		// TODO this is not properly generalized yet
 		final StatementValidator[] validator = new StatementValidator[1];
-		stmt.accept(new AbstractASTExpressionVisitor() {	
+		stmt.accept(new AbstractASTExpressionVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
+				if (validator[0] == null) {
+					if (forEachStatement.getVariableDeclarationName() != null) {
+						validator[0] = StatementValidator.Registry.get(MofConversion.EGL_lang_package);
+						return false;
+					}
+					return true;
+				}
+				return false;
+			};
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
 				if (validator[0] == null && clause.getExpression() != null) {
 					ITypeBinding type = clause.getExpression().resolveTypeBinding();
