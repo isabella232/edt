@@ -27,6 +27,7 @@ import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTStatementVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
+import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -132,6 +133,26 @@ public class LocalVariableAndIOObjectBinder extends AbstractASTStatementVisitor 
     	}
     	
     	for(Iterator stmtIter = forStatement.getStmts().iterator(); stmtIter.hasNext();) {
+			((Node) stmtIter.next()).accept(this);
+		}
+		
+    	functionScope = functionScope.getParentScope();
+    	return false;
+	}
+	
+	public boolean visit(ForEachStatement forEachStatement) {
+		functionScope = new StatementBlockScope(functionScope);
+		
+		if(forEachStatement.hasVariableDeclaration()) {
+    		processDataDeclaration(
+    			Arrays.asList(new Name[] {forEachStatement.getVariableDeclarationName()}),
+    			forEachStatement.getVariableDeclarationType(),
+    			null,
+    			false,
+    			null);
+    	}
+    	
+    	for(Iterator stmtIter = forEachStatement.getStmts().iterator(); stmtIter.hasNext();) {
 			((Node) stmtIter.next()).accept(this);
 		}
 		

@@ -55,7 +55,6 @@ import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.GetByKeyStatement;
 import org.eclipse.edt.compiler.core.ast.GetByPositionStatement;
-import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IDliIOStatement;
 import org.eclipse.edt.compiler.core.ast.IfStatement;
 import org.eclipse.edt.compiler.core.ast.InlineDLIStatement;
@@ -1576,36 +1575,26 @@ public class FunctionBinder extends DefaultBinder {
     }
     
     public boolean visit(ForEachStatement forEachStatement) {
-    	for (Node n : (List<Node>)forEachStatement.getTargets()) {
-    		n.accept(this);
+    	currentScope = new StatementBlockScope(currentScope);
+    	
+    	if(forEachStatement.hasVariableDeclaration()) {
+    		processDataDeclaration(
+    			Arrays.asList(new Name[] {forEachStatement.getVariableDeclarationName()}),
+    			null);
+    	}
+    	else {
+	    	for (Node n : (List<Node>)forEachStatement.getTargets()) {
+	    		n.accept(this);
+	    	}
     	}
     	
     	forEachStatement.getResultSet().getExpression().accept(this);
     	
-    	final IASTVisitor binder = this;
+    	for(Iterator iter = forEachStatement.getStmts().iterator(); iter.hasNext();) {
+    		((Node) iter.next()).accept(this);
+    	}
     	
-    	forEachStatement.accept(new AbstractASTVisitor() {
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.UsingClause usingClause) {
-        		for(Iterator iter = usingClause.getExpressions().iterator(); iter.hasNext();) {
-        			((Node) iter.next()).accept(binder);
-        		}
-        		return false;
-    		};
-    		
-    		public boolean visit(IntoClause intoClause) {
-        		for(Iterator iter = intoClause.getExpressions().iterator(); iter.hasNext();) {
-        			((Node) iter.next()).accept(binder);
-        		}
-        		return false;
-    		}
-    		
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.WithExpressionClause withExpressionClause) {
-    			withExpressionClause.accept(binder);
-    			return false;
-    		}
-		});
-    	
-    	visitStatementBlocks(forEachStatement);
+    	currentScope = currentScope.getParentScope();
     	
     	return false;
     }
