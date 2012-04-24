@@ -917,6 +917,8 @@ public interface IProblemRequestor {
 	//5035-5050: Used for For statement messages
 	public static final int FOR_STATEMENT_COUNTER_MUST_BE_INT = 5035;
 	public static final int FOR_STATEMENT_EXPR_MUST_BE_INT = 5036;
+	public static final int FOREACH_ARRAY_MUST_DECLARE_VARIABLE = 5037;
+	public static final int FOREACH_SOURCE_MUST_BE_ARRAY = 5038;
 
 	public static final int COND_INVALID_ESCAPE_CHARACTER = 5040;
 	public static final int COND_OPERAND_MUST_BE_STRING = 5041;
