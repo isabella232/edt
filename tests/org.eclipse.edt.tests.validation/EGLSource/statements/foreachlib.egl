@@ -1,0 +1,62 @@
+package statements;
+
+library foreachlib 
+
+    function functionName()
+        exists int;
+
+        array1 int[];
+        array2 bytes[];
+        array3 myrec[];
+        array4 int[][];
+
+        forEach(exists int from array1) //1
+            exists int; //1
+        end
+
+        forEach(newitem int from array1) //0
+            newitem int; //1
+        end
+
+        forEach(newitem int from array3) //1
+        end
+
+        forEach(newitem int from array2) //0
+        end
+
+        forEach(newitem myrec from array3) //0
+        end
+
+        forEach(newitem myrec from array2) //1
+        end
+
+        forEach(newitem int[] from array4) //0
+        end
+
+        forEach(newitem smallInt[] from array4) //1
+        end
+        
+        forEach(newitem int from array4[1]) //0
+        end
+
+        forEach(newitem any[] from array4 as any[][]) //0
+        end
+		
+        forEach(newitem string from getArray()) //0
+        end
+		
+        forEach(newitem int from exists) //1
+        end
+		
+        // no variable declaration means SQLForeach
+        forEach(exists from array1) //1
+        end
+    end
+
+    function getArray() returns(string[])
+    end
+end
+
+record myrec
+    i int;
+end
