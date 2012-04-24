@@ -1,0 +1,221 @@
+/*
+ * 
+ * regular expression for json number is: [-]?([0]|([1-9][0-9]*))([.][0-9]+)?([eE][-+]?[0-9]+)?
+ * regular expression for json string is: "([^"\\\t\n\r\f]|(\\\\)|(\\")|(\\t)|(\\/)|(\\b)|(\\f)|(\\n)|(\\r)|(\\t)|(\\u[(0-9),(a-f),(A-F)][(0-9),(a-f),(A-F)][(0-9),(a-f),(A-F)][(0-9),(a-f),(A-F)]))*"
+ *
+*/
+
+options {
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+
+PARSER_BEGIN(JsonParser)
+
+package com.ibm.javart.json;
+
+public class JsonParser {
+
+  public static void main(String args[]) throws ParseException {
+    JsonParser parser = new JsonParser(System.in);
+    parser.ObjectParse();
+  }
+
+  public static ObjectNode parse(String parseString) throws ParseException {
+	java.io.StringReader reader = new java.io.StringReader(parseString);
+	JsonParser parser = new JsonParser(reader);
+	return parser.ObjectParse();
+  }
+
+  public static ObjectNode parse(java.io.InputStream stream) throws ParseException {
+	JsonParser parser = new JsonParser(stream);
+	return parser.ObjectParse();
+  }
+
+}
+
+PARSER_END(JsonParser)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  < NUMBER: ( ["-"])? (["0"]|( ["1"-"9"] (["0"-"9"])* )) ( ["."] (["0"-"9"])+ )? ( ["e", "E"] (["-", "+"])? (["0"-"9"])+ )? >
+| 
+  < STRING: ["\""] (~["\"", "\\", "\t", "\n", "\r", "\f" ] | ("\\\\") | ("\\\"") | ("\\t") | ("\\/") | ("\\b") | ("\\f") | ("\\n") | ("\\r") | ("\\t") | ("\\u" ["0"-"9", "a"-"f", "A"-"F"] ["0"-"9", "a"-"f", "A"-"F"]["0"-"9", "a"-"f", "A"-"F"]["0"-"9", "a"-"f", "A"-"F"]))* ["\""] >
+|
+  < TRUE: "true" >
+|
+  < FALSE: "false">
+|
+  < NULL: "null">
+}
+
+ObjectNode ObjectParse() :
+{
+	ObjectNode node;
+}
+{
+  node = Object()
+	{
+	  return node;
+	}
+}
+
+ObjectNode Object() :
+{
+	ObjectNode obj = new ObjectNode();
+	NameValuePairNode pair;
+	
+}
+{
+  "{"
+
+  (
+   pair=Pair()
+	{
+	  obj.addPair(pair);
+	}
+   (
+    ","
+    pair=Pair()
+      {
+        obj.addPair(pair);
+      }
+   )*
+  )?
+
+  "}" 
+ 
+    {
+      return obj;
+    }
+}
+
+NameValuePairNode Pair() :
+{
+	StringNode string;
+	ValueNode value;
+}
+{
+  string=String()
+  ":"
+  value=Value()
+    {
+      return new NameValuePairNode(string, value);
+    }
+}
+
+StringNode String() :
+{
+	Token t;
+}
+{
+  t=<STRING>
+	{
+	  String str = t.image;
+	  return new StringNode(str.substring(1, str.length() - 1), true);
+	}
+}
+
+ValueNode Value() :
+{
+	Token t;
+	ValueNode value;
+}
+{
+  value=String()
+	{
+	  return value;
+	}
+|
+  t=<NUMBER>
+	{
+	  String str = t.image;
+	  if (str.indexOf("e") > 0 || str.indexOf("E") > 0) {
+	  	return new FloatingPointNode(str);
+	  }
+	  if (str.indexOf(".") > 0) {
+	  	return new DecimalNode(str);
+	  }
+	  return new IntegerNode(str);
+	}
+|
+  value=Object()
+	{
+	  return value;
+	}
+|
+  ("["
+   value=Array()
+   "]"
+   )
+	{
+	  return value;
+	}
+|
+  t=<TRUE>
+	{
+	  return BooleanNode.TRUE;
+	}
+|
+  t=<FALSE>
+	{
+	  return BooleanNode.FALSE;
+	}
+|
+  t=<NULL>
+	{
+	  return NullNode.NULL;
+	}
+}
+
+ArrayNode Array() :
+{
+	ArrayNode array = new ArrayNode();
+	ValueNode value;
+}
+{
+
+  (
+   value=Value()
+	{
+	  array.addValue(value);
+	}
+   (
+    ","
+    value=Value()
+      {
+        array.addValue(value);
+      }
+   )*
+  )?
+
+ 
+    {
+      return array;
+    }
+}
+

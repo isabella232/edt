@@ -1,0 +1,19 @@
+SMAP
+HttpRest.java
+egl
+*S egl
+*F
++ 1 HttpRest.egl
+eglx/http/HttpRest.egl
+*L
+14#1:28
+13#1:29
+17#1:31
+16#1:32
+*E
+9#1;request;request;eglx.http.Request
+10#1;response;response;eglx.http.Response
+11#1;restType;restType;eglx.rest.ServiceType
+13#1;F:getRequest;getRequest;()Leglx/http/Request;
+16#1;F:getResponse;getResponse;()Leglx/http/Response;
+*X
