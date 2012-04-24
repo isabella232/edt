@@ -11,12 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import org.eclipse.edt.mof.egl.DeclarationExpression;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.Statement;
 
 public class ForEachStatementImpl extends StatementImpl implements ForEachStatement {
-	private static int Slot_body=0;
-	private static int totalSlots = 1;
+	private static int Slot_declarationExpression=0;
+	private static int Slot_dataSource=1;
+	private static int Slot_body=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + StatementImpl.totalSlots();
@@ -24,8 +28,11 @@ public class ForEachStatementImpl extends StatementImpl implements ForEachStatem
 	
 	static {
 		int offset = StatementImpl.totalSlots();
+		Slot_declarationExpression += offset;
+		Slot_dataSource += offset;
 		Slot_body += offset;
 	}
+	
 	@Override
 	public Statement getBody() {
 		return (Statement)slotGet(Slot_body);
@@ -36,4 +43,23 @@ public class ForEachStatementImpl extends StatementImpl implements ForEachStatem
 		slotSet(Slot_body, value);
 	}
 	
+	@Override
+	public DeclarationExpression getDeclarationExpression() {
+		return (DeclarationExpression)slotGet(Slot_declarationExpression);
+	}
+	
+	@Override
+	public void setDeclarationExpression(DeclarationExpression value) {
+		slotSet(Slot_declarationExpression, value);
+	}
+	
+	@Override
+	public Expression getDataSource() {
+		return (Expression)slotGet(Slot_dataSource);
+	}
+	
+	@Override
+	public void setDataSource(Expression value) {
+		slotSet(Slot_dataSource, value);
+	}
 }

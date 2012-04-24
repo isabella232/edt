@@ -13,8 +13,16 @@ package org.eclipse.edt.mof.egl;
 
 
 public interface ForEachStatement extends Statement {
+	
 	Statement getBody();
 	
 	void setBody(Statement value);
 	
+	DeclarationExpression getDeclarationExpression();
+	
+	void setDeclarationExpression(DeclarationExpression value);
+	
+	Expression getDataSource();
+	
+	void setDataSource(Expression value);
 }

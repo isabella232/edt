@@ -13,17 +13,7 @@ package org.eclipse.edt.mof.egl.sql;
 
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.ForEachStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
 public interface SqlForEachStatement extends SqlIOStatement, ForEachStatement {
-	String getLabel();
-	
-	void setLabel(String value);
-	
-	Statement getBody();
-	
-	void setBody(Statement value);
-	
-	
 	public Expression getSqlRecord();
 }

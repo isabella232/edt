@@ -157,6 +157,8 @@ externalType ForStatement extends LoopStatement type MofClass
 end
 
 externalType ForEachStatement extends Statement type MofClass
+	declarationExpression DeclarationExpression {containment=true};
+	dataSource Expression {containment=true};
 	body Statement {containment=true};
 end
 

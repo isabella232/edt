@@ -97,8 +97,6 @@ externalType SqlExecuteStatement extends SqlIOStatement, ExecuteStatement type M
 end
 
 externalType SqlForEachStatement extends SqlIOStatement, ForEachStatement type MofClass
-	_label string {mofName="label"};
-	
 	function getSqlRecord() returns(Expression);
 end
 
