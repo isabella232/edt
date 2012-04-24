@@ -23,13 +23,4 @@ public class FixedPrecisionTypeTemplate extends JavaTemplate {
 		out.print(", ");
 		out.print(type.getDecimals());
 	}
-	
-	public void genJsonTypeDependentOptions(FixedPrecisionType type, Context ctx, TabbedWriter out) {
-		out.print("\"");
-		out.print(type.getLength());
-		out.print("\", \"");
-		out.print(type.getDecimals());
-		out.print("\"");
-	}
-	
 }

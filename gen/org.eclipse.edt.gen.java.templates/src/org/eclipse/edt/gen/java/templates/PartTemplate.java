@@ -36,7 +36,15 @@ public class PartTemplate extends JavaTemplate {
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partLibrariesUsed, new ArrayList<Library>());
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed, new ArrayList<Record>());
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partTypesImported, new ArrayList<String>());
+		ctx.invoke(preGenPartImport, part, ctx);
 		ctx.invoke(preGenClassBody, part, ctx);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void preGenPartImport(Part part, Context ctx) {
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
+		typesImported.add("org.eclipse.edt.javart.resources.*");
+		typesImported.add("org.eclipse.edt.javart.*");
 	}
 
 	public void genPart(Part part, Context ctx, TabbedWriter out) {
@@ -58,8 +66,6 @@ public class PartTemplate extends JavaTemplate {
 
 	@SuppressWarnings("unchecked")
 	public void genImports(Part part, Context ctx, TabbedWriter out) {
-		out.println("import org.eclipse.edt.javart.resources.*;");
-		out.println("import org.eclipse.edt.javart.*;");
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), Constants.SubKey_partTypesImported);
 		for (String imported : typesImported) {
 			// we don't want to use ctx.gen here, because we want the type template logic to handle this to avoid any array <

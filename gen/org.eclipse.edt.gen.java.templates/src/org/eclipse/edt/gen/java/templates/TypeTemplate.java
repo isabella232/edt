@@ -206,10 +206,6 @@ public class TypeTemplate extends JavaTemplate {
 		// no default
 	}
 
-	public void genJsonTypeDependentOptions(Type type, Context ctx, TabbedWriter out) {
-		// no default
-	}
-
 	public Integer genFieldTypeClassName(Type type, Context ctx, TabbedWriter out, Integer arrayDimensions) {
 		ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 		return arrayDimensions;

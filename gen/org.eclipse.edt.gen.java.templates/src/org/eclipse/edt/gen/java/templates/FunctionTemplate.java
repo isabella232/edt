@@ -30,6 +30,7 @@ public class FunctionTemplate extends JavaTemplate {
 	public void preGen(Function function, Context ctx) {
 		ctx.invoke(preGen, function.getStatementBlock(), ctx);
 	}
+
 	public void genFunctionHeader(Function function, Context ctx, TabbedWriter out) {
 		// process the function
 		ctx.invokeSuper(this, genDeclaration, function, ctx, out);
@@ -42,6 +43,7 @@ public class FunctionTemplate extends JavaTemplate {
 		ctx.foreach(function.getParameters(), ',', genDeclaration, ctx, out);
 		out.println(") {");
 	}
+
 	public void genFunctionBody(Function function, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStatementNoBraces, function.getStatementBlock(), ctx, out);
 		// we need to create a local variable for the return, if the user didn't specify one
@@ -72,6 +74,7 @@ public class FunctionTemplate extends JavaTemplate {
 			ctx.invoke(genStatement, returnStatement, ctx, out);
 		}
 	}
+
 	public void genDeclaration(Function function, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(function, ctx);
@@ -87,8 +90,7 @@ public class FunctionTemplate extends JavaTemplate {
 		out.print("new org.eclipse.edt.javart.Delegate(\"");
 		ctx.invoke(genName, function, ctx, out);
 		out.print("\", ");
-		if ( Boolean.TRUE.equals( ctx.get( ExternalTypeTemplate.DELEGATE_IN_INNER_CLASS ) ) )
-		{
+		if (Boolean.TRUE.equals(ctx.get(ExternalTypeTemplate.DELEGATE_IN_INNER_CLASS))) {
 			ctx.invoke(genRuntimeTypeName, ctx.getAttribute(ctx.getClass(), Constants.SubKey_partBeingGenerated), ctx, out);
 			out.print(".");
 		}
@@ -126,20 +128,4 @@ public class FunctionTemplate extends JavaTemplate {
 		}
 		out.print(")");
 	}
-	public void genFunctionParametersSignature(Function function, Context ctx, TabbedWriter out) {
-		out.print("@FunctionSignature(name=\"");
-		ctx.invoke(genName, function, ctx, out);
-		out.print("\", parameters={");
-		ctx.foreach(function.getParameters(), ',', genFunctionParametersSignature, ctx, out);
-		if(function.getReturnType() != null){
-			if(function.getParameters() != null && function.getParameters().size() > 0){
-				out.print(", ");
-			}
-			FunctionParameter ret = ctx.getFactory().createFunctionParameter();
-			ret.setType(function.getReturnType());
-			ret.setName("return");
-			ctx.invoke(genFunctionParametersSignature, ret, ctx, out);
-		}
-		out.println("})");
-	}	
 }

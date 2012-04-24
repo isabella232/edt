@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
-import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.ExternalType;
@@ -26,46 +24,23 @@ import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FieldTemplate extends JavaTemplate {
 
 	public void preGen(Field field, Context ctx) {
 		ctx.invoke(preGen, field.getType(), ctx);
-		if (field.getContainer() instanceof Type) {
-			if (field.getAnnotation(Constants.AnnotationJsonName) == null) {
-				// add an xmlElement
-				try {
-					Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
-					annotation.setValue(field.getId());
-					field.addAnnotation(annotation);
-				}
-				catch (Exception e) {}
-			}
-		}
 	}
 
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 		// write out the debug extension data
 		CommonUtilities.generateSmapExtension(field, ctx);
-		// process the field
-		if (field.getContainer() != null) {
-			ctx.invoke(genXmlTransient, field.getContainer(), out);
-			ctx.invoke(genAnnotations, field.getContainer(), ctx, out, field);
-		}
 		ctx.invokeSuper(this, genDeclaration, field, ctx, out);
 		transientOption(field, out);
 		ctx.invoke(genRuntimeTypeName, field, ctx, out, TypeNameKind.JavaPrimitive);
 		out.print(" ");
 		ctx.invoke(genName, field, ctx, out);
 		out.println(";");
-	}
-
-	public void genAnnotations(Field field, Context ctx, TabbedWriter out) {
-		for (Annotation annot : field.getAnnotations()) {
-			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
-		}
 	}
 
 	public void genInstantiation(Field field, Context ctx, TabbedWriter out) {
@@ -128,7 +103,6 @@ public class FieldTemplate extends JavaTemplate {
 	}
 
 	public void genGetter(Field field, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAnnotations, field, ctx, out);
 		Function function = factory.createFunction();
 		StatementBlock statementBlock = factory.createStatementBlock();
 		MemberName nameExpression = factory.createMemberName();
