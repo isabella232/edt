@@ -14,12 +14,9 @@ import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
 import java.lang.String;
-@javax.xml.bind.annotation.XmlRootElement(name="TypeCastException")
 public class TypeCastException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
 	public String castToName;
-	@javax.xml.bind.annotation.XmlTransient
 	public String actualTypeName;
 	public TypeCastException() {
 		super();
@@ -53,14 +50,12 @@ public class TypeCastException extends eglx.lang.AnyException {
 		castToName = "";
 		actualTypeName = "";
 	}
-	@org.eclipse.edt.javart.json.Json(name="castToName", clazz=EString.class, asOptions={})
 	public String getCastToName() {
 		return (castToName);
 	}
 	public void setCastToName( String ezeValue ) {
 		this.castToName = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="actualTypeName", clazz=EString.class, asOptions={})
 	public String getActualTypeName() {
 		return (actualTypeName);
 	}

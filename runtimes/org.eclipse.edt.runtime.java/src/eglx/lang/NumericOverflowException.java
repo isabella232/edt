@@ -11,7 +11,6 @@
  *******************************************************************************/
 package eglx.lang;
 import org.eclipse.edt.javart.*;
-@javax.xml.bind.annotation.XmlRootElement(name="NumericOverflowException")
 public class NumericOverflowException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	public NumericOverflowException() {

@@ -14,10 +14,8 @@ import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
 import java.lang.String;
-@javax.xml.bind.annotation.XmlRootElement(name="JavaObjectException")
 public class JavaObjectException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
 	public String exceptionType;
 	public JavaObjectException() {
 		super();
@@ -48,7 +46,6 @@ public class JavaObjectException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		exceptionType = "";
 	}
-	@org.eclipse.edt.javart.json.Json(name="exceptionType", clazz=EString.class, asOptions={})
 	public String getExceptionType() {
 		return (exceptionType);
 	}
