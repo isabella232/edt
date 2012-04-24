@@ -1,0 +1,11 @@
+SMAP
+SQLWarning.java
+egl
+*S egl
+*F
++ 1 SQLWarning.egl
+eglx/persistence/sql/SQLWarning.egl
+*L
+*E
+4#1;nextWarning;nextWarning;eglx.persistence.sql.SQLWarning
+*X

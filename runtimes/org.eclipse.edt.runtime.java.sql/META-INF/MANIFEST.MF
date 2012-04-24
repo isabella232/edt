@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sql
+Bundle-SymbolicName: org.eclipse.edt.runtime.java.sql
+Bundle-Version: 0.8.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.edt.runtime.java;bundle-version="0.8.0"
+Export-Package: eglx.persistence.sql

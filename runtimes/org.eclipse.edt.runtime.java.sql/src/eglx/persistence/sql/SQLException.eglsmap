@@ -1,0 +1,13 @@
+SMAP
+SQLException.java
+egl
+*S egl
+*F
++ 1 SQLException.egl
+eglx/persistence/sql/SQLException.egl
+*L
+*E
+4#1;SQLState;SQLState;eglx.lang.EString
+5#1;ErrorCode;ErrorCode;eglx.lang.EInt
+6#1;nextException;nextException;eglx.persistence.sql.SQLException
+*X

@@ -1,0 +1,10 @@
+SMAP
+SQLResultSet.java
+egl
+*S egl
+*F
++ 1 SQLResultSet.egl
+eglx/persistence/sql/SQLResultSet.egl
+*L
+*E
+*X
