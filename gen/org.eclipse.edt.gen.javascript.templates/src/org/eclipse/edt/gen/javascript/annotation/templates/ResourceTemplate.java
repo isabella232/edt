@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
-
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.javascript.Context;
