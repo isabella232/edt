@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql.impl;
 
+import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlForEachStatement;
 
 
 public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlForEachStatement {
-	private static int Slot_label=0;
-	private static int Slot_body=1;
-	private static int totalSlots = 2;
+	private static int Slot_declarationExpression=0;
+//	private static int Slot_dataSource=1; // unused - this field is defined in two parents. We need to reserve an extra slot for it though.
+	private static int Slot_body=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + SqlIOStatementImpl.totalSlots();
@@ -26,17 +28,9 @@ public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlFo
 	
 	static {
 		int offset = SqlIOStatementImpl.totalSlots();
-		Slot_label += offset;
+		Slot_declarationExpression += offset;
+//		Slot_dataSource += offset;
 		Slot_body += offset;
-	}
-	@Override
-	public String getLabel() {
-		return (String)slotGet(Slot_label);
-	}
-	
-	@Override
-	public void setLabel(String value) {
-		slotSet(Slot_label, value);
 	}
 	
 	@Override
@@ -47,6 +41,16 @@ public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlFo
 	@Override
 	public void setBody(Statement value) {
 		slotSet(Slot_body, value);
+	}
+
+	@Override
+	public DeclarationExpression getDeclarationExpression() {
+		return (DeclarationExpression)slotGet(Slot_declarationExpression);
+	}
+
+	@Override
+	public void setDeclarationExpression(DeclarationExpression value) {
+		slotSet(Slot_declarationExpression, value);
 	}
 	
 }

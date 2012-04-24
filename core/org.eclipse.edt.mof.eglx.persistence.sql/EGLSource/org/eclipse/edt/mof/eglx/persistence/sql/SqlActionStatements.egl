@@ -11,7 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
+import org.eclipse.edt.mof.egl.AddStatement;
+import org.eclipse.edt.mof.egl.CloseStatement;
+import org.eclipse.edt.mof.egl.DeleteStatement;
+import org.eclipse.edt.mof.egl.ExecuteStatement;
+import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.ForEachStatement;
+import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.IOStatement;
+import org.eclipse.edt.mof.egl.OpenStatement;
+import org.eclipse.edt.mof.egl.PrepareStatement;
+import org.eclipse.edt.mof.egl.ReplaceStatement;
+import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.MofClass;
+import egl.lang.reflect.mof.MofName;
 
 externalType SqlActionStatement extends IOStatement type MofClass {isAbstract=yes}
 	preparedStatement Expression {containment=true};
@@ -33,8 +46,6 @@ externalType SqlExecuteStatement extends SqlActionStatement, ExecuteStatement ty
 end
 
 externalType SqlForEachStatement extends SqlActionStatement, ForEachStatement type MofClass
-	_label string {mofName="label"};
-	
 end
 
 externalType SqlGetByKeyStatement extends SqlActionStatement, GetByKeyStatement type MofClass

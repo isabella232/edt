@@ -12,15 +12,6 @@
 package org.eclipse.edt.mof.eglx.persistence.sql;
 
 import org.eclipse.edt.mof.egl.ForEachStatement;
-import org.eclipse.edt.mof.egl.Statement;
 
 public interface SqlForEachStatement extends SqlActionStatement, ForEachStatement {
-	String getLabel();
-	
-	void setLabel(String value);
-	
-	Statement getBody();
-	
-	void setBody(Statement value);
-	
 }
