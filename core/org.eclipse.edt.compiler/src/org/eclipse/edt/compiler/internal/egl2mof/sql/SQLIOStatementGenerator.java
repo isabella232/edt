@@ -386,7 +386,6 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 //			stmt.setForUpdateClause(clause);	
 		}
 		
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -410,7 +409,6 @@ public class SQLIOStatementGenerator extends DefaultIOStatementGenerator {
 			}
 		});
 		
-		setElementInformation(node, stmt);
 		return false;
 	}
 
