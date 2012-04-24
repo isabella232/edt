@@ -14,15 +14,18 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.AddStatement;
 import org.eclipse.edt.mof.egl.CloseStatement;
 import org.eclipse.edt.mof.egl.ConverseStatement;
+import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.DeleteStatement;
 import org.eclipse.edt.mof.egl.DisplayStatement;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 import org.eclipse.edt.mof.egl.GetByKeyStatement;
 import org.eclipse.edt.mof.egl.GetByPositionStatement;
@@ -31,6 +34,7 @@ import org.eclipse.edt.mof.egl.ReplaceStatement;
 import org.eclipse.edt.mof.egl.ShowStatement;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -55,7 +59,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			stmt.getTargets().add((Expression)stack.pop());
 		}
 		stack.push(stmt);
-		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -66,7 +69,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getExpr().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -78,7 +80,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getTarget().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -89,7 +90,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		node.getExpr().accept(this);
 		stmt.getTargets().add((Expression)stack.pop());
 		stack.push(stmt);
-		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -112,22 +112,38 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			}
 
 		});
-		setElementInformation(node, stmt);
 		return false;
 	}
 	
 	@Override
-	// TODO: Not modeled properly for non-SQL usage which should be set up
-	// even if its not allowed today
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement node) {
 		final ForEachStatement stmt = (ForEachStatement)getStatementEClass(node).newInstance();
 		stack.push(stmt);
+		
+		if (node.hasVariableDeclaration()) {
+			DeclarationExpression decl = factory.createDeclarationExpression();
+			Field field = factory.createField();
+			field.setName(node.getVariableDeclarationName().getCanonicalName());
+			ITypeBinding type = node.getVariableDeclarationType().resolveTypeBinding();
+			field.setType((Type)mofTypeFor(type));
+			decl.getFields().add(field);
+			eObjects.put(node.getVariableDeclarationName().resolveDataBinding(), field);
+			stmt.setDeclarationExpression(decl);
+			
+			setElementInformation(node.getVariableDeclarationName(), field);
+			setElementInformation(node.getVariableDeclarationName(), decl);
+		}
+		
+		node.getResultSet().accept(this);
+		stmt.setDataSource((Expression)stack.pop());
+		
 		StatementBlock block = irFactory.createStatementBlock();
+		stmt.setBody(block);
 		for(Node nodeStmt : (List<Node>)node.getStmts()) {
 			nodeStmt.accept(this);
 			block.getStatements().add((Statement)stack.pop());
 		}
-		setElementInformation(node, stmt);
+		
 		return false;
 	}
 
@@ -164,7 +180,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			};
 		});
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -187,7 +202,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 				stmt.getTargets().add((Expression)stack.pop());
 			}
 		}
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -224,7 +238,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			}
 		});
 		
-		setElementInformation(node, stmt);
 		return false;
 	}
 
@@ -247,7 +260,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			}
 		});
 		
-		setElementInformation(node, stmt);
 		return false;
 	}
 	
@@ -275,7 +287,6 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 		});
 
 		stack.push(stmt);
-		setElementInformation(node, stmt);
 		return false;
 	}
 
