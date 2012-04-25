@@ -89,7 +89,7 @@ public class EDTCorePreferenceConstants {
 		
 		// CompilerPreferencePage
 		store.setDefault( COMPILER_ID, "org.eclipse.edt.ide.compiler.edtCompiler" ); 
-		store.setDefault( GENERATOR_IDS, "org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider" );
+		store.setDefault( GENERATOR_IDS, "org.eclipse.edt.ide.gen.JavaGenProvider,org.eclipse.edt.ide.gen.JavaEEGenProvider,org.eclipse.edt.ide.gen.JavaScriptGenProvider,org.eclipse.edt.ide.gen.JavaScriptDevGenProvider" );
 	}
 
 	/**
