@@ -43,8 +43,10 @@ public class PartTemplate extends JavaTemplate {
 	@SuppressWarnings("unchecked")
 	public void preGenPartImport(Part part, Context ctx) {
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
-		typesImported.add("org.eclipse.edt.javart.resources.*");
-		typesImported.add("org.eclipse.edt.javart.*");
+		if (!typesImported.contains("org.eclipse.edt.javart.resources.*"))
+			typesImported.add("org.eclipse.edt.javart.resources.*");
+		if (!typesImported.contains("org.eclipse.edt.javart.*"))
+			typesImported.add("org.eclipse.edt.javart.*");
 	}
 
 	public void genPart(Part part, Context ctx, TabbedWriter out) {

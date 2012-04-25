@@ -28,8 +28,10 @@ public class ServiceTemplate extends JavaTemplate {
 	public void preGenPartImport(Service service, Context ctx) {
 		ctx.invokeSuper(this, preGenPartImport, service, ctx);
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
-		typesImported.add("org.eclipse.edt.javart.services.*");
-		typesImported.add("org.eclipse.edt.javart.Runtime");
+		if (!typesImported.contains("org.eclipse.edt.javart.services.*"))
+			typesImported.add("org.eclipse.edt.javart.services.*");
+		if (!typesImported.contains("org.eclipse.edt.javart.Runtime"))
+			typesImported.add("org.eclipse.edt.javart.Runtime");
 	}
 
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out) {
