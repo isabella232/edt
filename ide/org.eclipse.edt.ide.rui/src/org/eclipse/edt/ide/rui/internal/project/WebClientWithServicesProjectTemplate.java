@@ -27,7 +27,7 @@ public class WebClientWithServicesProjectTemplate extends
 			ISchedulingRule rule, List listOps) {
 		super.addGeneratorOperation(eglProjConfiguration, rule, listOps);
 		ProjectGeneratorOperation op = new ProjectGeneratorOperation(eglProjConfiguration, 
-				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVA_GENERATOR_ID}, rule);
+				getDefaultFolderName(eglProjConfiguration, SERVER), new String[]{ProjectConfiguration.JAVAEE_GENERATOR_ID}, rule);
 		listOps.add(op);
 		op = new ProjectGeneratorOperation(eglProjConfiguration, getDefaultFolderName(eglProjConfiguration, CLIENT), 
 			new String[]{ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID}, rule);
@@ -47,7 +47,7 @@ public class WebClientWithServicesProjectTemplate extends
 	protected void setProjectCompilerAndGenerator(
 			ProjectConfiguration eglProjConfiguration) {
 		eglProjConfiguration.setSelectedCompiler(ProjectConfiguration.EDT_COMPILER_ID);
-		String[] generatorIds = new String[]{ProjectConfiguration.JAVA_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
+		String[] generatorIds = new String[]{ProjectConfiguration.JAVAEE_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_GENERATOR_ID, ProjectConfiguration.JAVASCRIPT_DEV_GENERATOR_ID};
 		eglProjConfiguration.setSelectedGenerators(generatorIds);		
 	}
 	
