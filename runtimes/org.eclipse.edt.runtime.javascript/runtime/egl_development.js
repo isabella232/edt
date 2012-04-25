@@ -27,7 +27,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 		var childVars = [];
 		for (var n=0; n<this.length; n++) {
 			var type = egl.getDebugType ? egl.getDebugType(this[n]) : "";
-			childVars[n] = {name : "[" + n + "]", value : this[n], type : type};
+			childVars[n] = {name : "[" + (n + 1) + "]", value : this[n], type : type};
 		}
 		return childVars;
 	};
@@ -948,7 +948,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 				if (value instanceof egl.eglx.lang.AnyException) {
 					varValue = value.eze$$DebugValue();
 				}
-				else if (value.eze$$getName) {
+				else if (value.eze$$getName || value instanceof egl.eglx.lang.EDictionary) {
 					varValue = "";
 				}
 				else if (value instanceof Date) {
@@ -1964,5 +1964,15 @@ define(["runtime/edt_runtime_all.js"], function(){
 		catch (e) {
 			return '"Cannot toJSONString '+object+' due to '+e+'"';
 		}
+	};
+	
+	egl.eglx.lang.EDictionary.prototype.eze$$getChildVariables = function() {
+		var childVars = [];
+		for (f in this) {
+			if (typeof this[f] == "function") continue;
+			if (f.toString().indexOf("eze$$") == 0) continue;
+			childVars.push({name : f.toString(), value : this[f], type : "eglx.lang.EAny"}); // dictionary fields are always "Any"
+		}
+		return childVars; 
 	};
 });
