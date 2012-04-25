@@ -16,10 +16,13 @@
 <target name="init">    
     <echo message="processing ${pluginName}." />
 	<property name="eglBin" value="EGLBin"/>
+	<property name="eglSrc" value="EGLSource"/>
 </target>
 	
 <target name="Jarem" depends="init">	
-	<jar basedir="./${eglBin}" destfile="./egllib/sql.mofar"></jar>
+	<jar destfile="./egllib/sql.mofar">
+		<fileset dir="./${eglBin}"/>
+		<fileset dir="./${eglSrc}"/>
+	</jar>
 </target>
-	
 </project>
