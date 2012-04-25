@@ -25,7 +25,8 @@ public class ServiceTemplate extends org.eclipse.edt.gen.java.templates.ServiceT
 	public void preGenPartImport(Service service, Context ctx) {
 		super.preGenPartImport(service, ctx);
 		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
-		typesImported.add("org.eclipse.edt.javart.json.Json");
+		if (!typesImported.contains("org.eclipse.edt.javart.json.Json"))
+			typesImported.add("org.eclipse.edt.javart.json.Json");
 	}
 
 	public void genFunction(Service service, Context ctx, TabbedWriter out, Function arg) {

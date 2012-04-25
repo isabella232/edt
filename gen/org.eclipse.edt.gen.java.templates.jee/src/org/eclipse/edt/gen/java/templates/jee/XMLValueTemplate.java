@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.java.templates.jee;
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -22,7 +23,7 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
-public class XMLValueTemplate extends org.eclipse.edt.gen.java.templates.JavaTemplate implements Constants {
+public class XMLValueTemplate extends JavaTemplate implements Constants {
 
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, EGLClass part) {
 		// add an xmlValue to the field

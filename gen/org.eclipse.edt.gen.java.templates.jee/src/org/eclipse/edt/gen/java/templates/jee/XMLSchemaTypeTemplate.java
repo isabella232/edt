@@ -13,13 +13,14 @@ package org.eclipse.edt.gen.java.templates.jee;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
-public class XMLSchemaTypeTemplate extends org.eclipse.edt.gen.java.templates.JavaTemplate implements Constants {
+public class XMLSchemaTypeTemplate extends JavaTemplate implements Constants {
 
 	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Member member) {
 		ctx.invoke(genJavaAnnotation, (Type) aType, ctx, out, annot, member);

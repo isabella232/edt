@@ -13,6 +13,7 @@ package org.eclipse.edt.gen.java.templates.jee;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
+import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
@@ -20,7 +21,7 @@ import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
-public class AnnotationTypeTemplate extends org.eclipse.edt.gen.java.templates.JavaTemplate implements Constants {
+public class AnnotationTypeTemplate extends JavaTemplate implements Constants {
 
 	public void preGen(AnnotationType aType, Context ctx, Annotation annot, EGLClass part) {}
 
