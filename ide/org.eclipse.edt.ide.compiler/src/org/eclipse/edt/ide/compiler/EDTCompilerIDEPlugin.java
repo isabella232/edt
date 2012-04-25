@@ -29,6 +29,7 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	 * Preference key for the default Java generation directory.
 	 */
 	public static final String PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaGenDirectory"; //$NON-NLS-1$
+	public static final String PREFERENCE_DEFAULT_JAVAEEGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaEEGenDirectory"; //$NON-NLS-1$
 	public static final String PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY = PLUGIN_ID + ".defaultJavaScriptGenDirectory"; //$NON-NLS-1$
 	
 	/**
@@ -36,6 +37,8 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	 */
 	public static final String PROPERTY_JAVAGEN_DIR = "javaGenDirectory"; //$NON-NLS-1$
 	public static final String PROPERTY_JAVAGEN_ARGUMENTS = "javaGenArguments"; //$NON-NLS-1$
+	public static final String PROPERTY_JAVAEEGEN_DIR = "javaEEGenDirectory"; //$NON-NLS-1$
+	public static final String PROPERTY_JAVAEEGEN_ARGUMENTS = "javaEEGenArguments"; //$NON-NLS-1$
 	public static final String PROPERTY_JAVASCRIPTGEN_DIR = "jsGenDirectory"; //$NON-NLS-1$
 	public static final String PROPERTY_JAVASCRIPTGEN_ARGUMENTS = "jsGenArguments"; //$NON-NLS-1$
 
@@ -83,6 +86,7 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 	
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
 		store.setDefault(PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, "generatedJava"); //$NON-NLS-1$
+		store.setDefault(PREFERENCE_DEFAULT_JAVAEEGEN_DIRECTORY, "generatedJava"); //$NON-NLS-1$
 		store.setDefault(PREFERENCE_DEFAULT_JAVASCRIPTGEN_DIRECTORY, "generatedJavaScript"); //$NON-NLS-1$
 	}
 }
