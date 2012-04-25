@@ -41,6 +41,7 @@ library sql
 	a string;
 	b int;
 	ds SqlDataSource?;
+	jndi SqlJndiDataSource?;
 	stmt SqlStatement?;
 	rs SqlResultSet?;  
 	myEntity myEntity; 
@@ -199,6 +200,7 @@ library sql
 		execute from ds using b; //0
 		execute using b; //0
 		execute with #sql{}; //0
+		execute with #sql{} from jndi; //0
 	end
 	 
 	function validateDelete()
