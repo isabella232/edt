@@ -393,7 +393,7 @@ public class AnnotationValidator {
 						if (Binding.isValidBinding(newExpression.resolveConstructorBinding())) {
 							validateInvocation(newExpression, newExpression.resolveConstructorBinding(), partBinding);
 						}
-						if (newExpression.getType().resolveTypeBinding().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+						if (Binding.isValidBinding(newExpression.getType().resolveTypeBinding()) && newExpression.getType().resolveTypeBinding().getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
 							ArrayType arrType = (ArrayType)newExpression.getType();
 							if (arrType.hasInitialSize() && !DefaultBinder.isZeroLiteral(arrType.getInitialSize()) && Binding.isValidBinding(newExpression.resolveTypeBinding().getBaseType()) && !newExpression.resolveTypeBinding().getBaseType().isNullable()) {
 								validateInvocation(newExpression, DefaultBinder.getDefaultConstructor(newExpression.resolveTypeBinding().getBaseType()), partBinding);
