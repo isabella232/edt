@@ -31,6 +31,7 @@ public class ProjectConfiguration {
 
 	public static final String EDT_COMPILER_ID = "org.eclipse.edt.ide.compiler.edtCompiler";
 	public static final String JAVA_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaGenProvider";
+	public static final String JAVAEE_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaEEGenProvider";
 	public static final String JAVASCRIPT_DEV_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
 	public static final String JAVASCRIPT_GENERATOR_ID = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
 	
