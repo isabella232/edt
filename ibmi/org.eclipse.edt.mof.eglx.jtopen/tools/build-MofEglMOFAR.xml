@@ -29,24 +29,40 @@
     <echo message="processing ${javapluginName}." />
     <echo message="processing ${jeepluginName}." />
 	<property name="eglBin" value="eglbin"/>
+	<property name="eglSrc" value="EGLSource"/>
 </target>
 	
 <target name="JarMofar" depends="init">	
     <echo message="processing ${pluginName}/egllib/jtopen.mofar." />
-	<jar basedir="${pluginName}/${eglBin}" includes= "**/*.mofxml" destfile="${pluginName}/egllib/jtopen.mofar"/>
+	<jar destfile="${pluginName}/egllib/jtopen.mofar">
+		<fileset dir="${pluginName}/${eglBin}" includes="**/*.mofxml"/>
+		<fileset dir="${pluginName}/${eglSrc}" includes="org/**/*.egl"/>
+	</jar>
 </target>
 <target name="JarEglar" depends="JarMofar">	
     <echo message="processing ${pluginName}/egllib/jtopen.eglar" />
-	<jar basedir="${pluginName}/${eglBin}" includes= "**/*.eglxml" destfile="${pluginName}/egllib/jtopen.eglar"/>
+	<jar destfile="${pluginName}/egllib/jtopen.eglar">
+		<fileset dir="${pluginName}/${eglBin}" includes="**/*.eglxml"/>
+		<fileset dir="${pluginName}/${eglSrc}" includes="eglx/**/*.egl"/>
+	</jar>
 </target>
 
 	
 	<target name="JTOpenExternalTypes" depends="JarEglar">	
 	    <echo message="processing ${jtopenpluginName}." />
-		<jar basedir="${jtopenpluginName}/${eglBin}" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+		<jar destfile="${pluginName}/egllib/externalTypes.eglar">
+			<fileset dir="${jtopenpluginName}/${eglBin}" includes="**/*.eglxml"/>
+			<fileset dir="${jtopenpluginName}/${eglSrc}" includes="**/*.egl"/>
+		</jar>
 	    <echo message="processing ${javapluginName}." />
-		<jar basedir="${javapluginName}/${eglBin}" update="true" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+		<jar update="true" destfile="${pluginName}/egllib/externalTypes.eglar">
+			<fileset dir="${javapluginName}/${eglBin}" includes="**/*.eglxml"/>
+			<fileset dir="${javapluginName}/${eglSrc}" includes="**/*.egl"/>
+		</jar>
 		<echo message="processing ${jeepluginName}." />
-		<jar basedir="${jeepluginName}/${eglBin}" update="true" includes= "**/*.eglxml" destfile="${pluginName}/egllib/externalTypes.eglar"/>
+		<jar update="true" destfile="${pluginName}/egllib/externalTypes.eglar">
+			<fileset dir="${jeepluginName}/${eglBin}" includes="**/*.eglxml"/>
+			<fileset dir="${jeepluginName}/${eglSrc}" includes="**/*.egl"/>
+		</jar>
 	</target>	
 </project>
