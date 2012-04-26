@@ -28,7 +28,7 @@ terminal ERROR_INLINE_DLI;
 // Named, single token terminals
 terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE, NEGATE;
 terminal LEFTSHIFT, LEFTSHIFTEQ, RIGHTSHIFTLOGICAL, RIGHTSHIFTLOGICALEQ, RIGHTSHIFTARITHMETIC, RIGHTSHIFTARITHMETICEQ;
-terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION, QUESTIONBRACKET;
+terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
 terminal COLON, COMMA;
@@ -1615,11 +1615,11 @@ notNullableTypeNoName
 	|	notNullableTypeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, expr1, typeNoName1left, rbracket1right); :}
 
-	|	notNullableTypeNoName:typeNoName1 QUESTIONBRACKET:qbracket1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, qbracket1left+1), null, typeNoName1left, rbracket1right); :}
+	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), null, typeNoName1left, rbracket1right); :}
 
-	|	notNullableTypeNoName:typeNoName1 QUESTIONBRACKET:qbracket1 expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, qbracket1left+1), expr1, typeNoName1left, rbracket1right); :}
+	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), expr1, typeNoName1left, rbracket1right); :}
 	;
 	
 charPrimitiveSpecOpt
@@ -1661,11 +1661,11 @@ notNullableNamedType
 	|	notNullableNamedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(name1, expr1, name1left, rbracket1right); :}
 
-	|	notNullableNamedType:name1 QUESTIONBRACKET:qbracket1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(name1, name1left, qbracket1left+1), null, name1left, rbracket1right); :}
+	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), null, name1left, rbracket1right); :}
 
-	|	notNullableNamedType:name1 QUESTIONBRACKET:qbracket1 expr:expr1 RBRACKET:rbracket1
-	{: RESULT = new ArrayType(new NullableType(name1, name1left, qbracket1left+1), expr1, name1left, rbracket1right); :}
+	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), expr1, name1left, rbracket1right); :}
 	;
 	
 nullableNamedType
