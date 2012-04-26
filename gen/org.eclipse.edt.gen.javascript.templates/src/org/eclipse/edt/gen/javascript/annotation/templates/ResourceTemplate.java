@@ -12,7 +12,7 @@
 package org.eclipse.edt.gen.javascript.annotation.templates;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.gen.Constants;
+import org.eclipse.edt.gen.javascript.Constants;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate;
 import org.eclipse.edt.mof.egl.Annotation;
