@@ -15,7 +15,7 @@ import org.eclipse.edt.gen.CommandOption;
 import org.eclipse.edt.gen.GenerationContributor;
 import org.eclipse.edt.gen.GenerationRegistry;
 
-public class JavaEEGenerationContributor implements GenerationContributor {
+public class JavaGenerationContributor implements GenerationContributor {
 	static final CommandOption[] commandOptions;
 	static final String[] templatePath;
 	static final String[] nativeTypePath;
