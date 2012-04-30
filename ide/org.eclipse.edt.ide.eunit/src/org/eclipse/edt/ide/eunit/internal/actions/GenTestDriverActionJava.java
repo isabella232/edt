@@ -47,7 +47,7 @@ public class GenTestDriverActionJava extends GenTestDriverAction {
 		ops.add(op1);
 
 		// configure the generator id
-		WorkspaceModifyOperation op2 = getSetGeneratorIDOperation(driverProj, new String[]{GENERATORID_JAVAEE});
+		WorkspaceModifyOperation op2 = getSetGeneratorIDOperation(driverProj, new String[]{GENERATORID_JAVA});
 		ops.add(op2);
 
 		// set EGL build path
