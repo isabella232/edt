@@ -449,18 +449,16 @@ public class MVCTemplate extends JavaScriptTemplate {
 			}
 			out.print( " : " );
 		}		
-		/* TODO sbg !070
 		else if (TypeUtils.Type_TIME.equals(classifier)) {
 			out.print( "s == \"\" ? " );
-			String[] toTime = JavaScriptTypeUtility.convertToTime( context.getFactory().createNullLiteral(), model.getType().isNullable() );
-			if (toTime[0].length() == 0) { // NO_COERCE
+			if (model.isNullable()) {
 				out.print( "null" );
 			}
 			else {
-				out.print( toTime[0] + toTime[1] );
+				out.print("new Time()");
 			}
 			out.print( " : " ); 
-		}*/
+		}
 		else if (TypeUtils.Type_TIMESTAMP.equals(classifier)) {
 			out.print( "s == \"\" ? " );
 			if (model.isNullable()) {
@@ -816,11 +814,9 @@ public class MVCTemplate extends JavaScriptTemplate {
 			else if ((TypeUtils.Type_DATE.equals(type))) {
 				return setDateFormatterProperties(ctx, member, properties, fastCheck );
 			}
-/* TODO sbg !070
 			else if ((TypeUtils.Type_TIME.equals(type))) {
-				return setTimeFormatterProperties( member, properties, fastCheck );
+				return setTimeFormatterProperties(ctx, member, properties, fastCheck );
 			}
-*/
 			else if ((TypeUtils.Type_TIMESTAMP.equals(type.getClassifier()))) {
 				return setTimestampFormatterProperties(ctx, member, properties, fastCheck );
 			}
@@ -943,25 +939,24 @@ public class MVCTemplate extends JavaScriptTemplate {
 	}
 
 
-// TODO sbg !070
-//	/**
-//	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
-//	 *                   Should not be set to true when generating the field's declaration. Prevents
-//	 *                   slowing down the generator or duplicating code.
-//	 */
-//	private String setTimeFormatterProperties(Context ctx, Member member, List<String> properties, boolean fastCheck) {
-//		if (!fastCheck) {
-//			Annotation annot;
-//			if ((annot = getAnnotation(member, PROPERTY_TIMEFORMAT)) != null) {
-//				properties.add(getDatetimeFormat(ctx, annot.getValue()));
-//			}
-//			else {
-//				properties.add("\"\"");
-//			}
-//		}
-//		
-//		return MVC_PACKAGE + "InternalTimeFormatter";
-//	}
+	/**
+	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
+	 *                   Should not be set to true when generating the field's declaration. Prevents
+	 *                   slowing down the generator or duplicating code.
+	 */
+	private static String setTimeFormatterProperties(Context ctx, Member member, List<String> properties, boolean fastCheck) {
+		if (!fastCheck) {
+			Annotation annot;
+			if ((annot = getAnnotation(member, PROPERTY_TIMEFORMAT)) != null) {
+				properties.add(getDatetimeFormat(ctx, annot.getValue()));
+			}
+			else {
+				properties.add("\"\"");
+			}
+		}
+		
+		return MVC_PACKAGE + "InternalTimeFormatter";
+	}
 	
 	/**
 	 * @param fastCheck  Flag to indicate we just want to know the formatting library, if any.
