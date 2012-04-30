@@ -58,7 +58,6 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		out.print(")");
 	}
 
-	
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
 		String signature = "K;";
 		out.print(signature);
@@ -74,7 +73,8 @@ public class DateTypeTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
-	public void genServiceInvocationInParam(EGLClass type, Context ctx, TabbedWriter out, Expression arg){
+
+	public void genServiceInvocationInParam(EGLClass type, Context ctx, TabbedWriter out, Expression arg) {
 		out.print("egl.eglx.lang.EAny.fromEAny(");
 		ctx.invoke(genExpression, arg, ctx, out);
 		out.print(", \"");
