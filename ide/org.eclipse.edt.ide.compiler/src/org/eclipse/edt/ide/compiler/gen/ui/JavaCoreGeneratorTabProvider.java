@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Control;
 /**
  * This is a sample generator tab provider class.
  */
-public class JavaEEGeneratorTabProvider extends AbstractGeneratorTabProvider
+public class JavaCoreGeneratorTabProvider extends AbstractGeneratorTabProvider
 {
 	private GenerationSettingsComposite genSettings;
 	private IEclipsePreferences projectPreferenceStore;
@@ -54,7 +54,7 @@ public class JavaEEGeneratorTabProvider extends AbstractGeneratorTabProvider
 			genSettings = new GenerationSettingsComposite(getComposite(), SWT.NULL, 
 					getResource(), EDTCompilerIDEPlugin.getDefault().getPreferenceStore(),
 					this.projectPreferenceStore,
-					EDTCompilerIDEPlugin.PROPERTY_JAVAEEGEN_DIR, EDTCompilerIDEPlugin.PROPERTY_JAVAEEGEN_ARGUMENTS,EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAEEGEN_DIRECTORY, getStatusChangeListener(), getGeneratorId());
+					EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR, EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_ARGUMENTS,EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY, getStatusChangeListener(), getGeneratorId());
 			genSettings.setLayoutData(new GridData(GridData.FILL_BOTH));		
 
 		}

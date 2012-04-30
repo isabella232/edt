@@ -30,22 +30,22 @@ import org.eclipse.jface.preference.IPreferenceStore;
 /**
  * Provides know-how for hooking the Java Generator into the IDE.
  */
-public class JavaEEGenerator extends AbstractGenerator {
+public class JavaCoreGenerator extends AbstractGenerator {
 	
-	public JavaEEGenerator() {
+	public JavaCoreGenerator() {
 		super();
 	}
 	
 	public EDTRuntimeContainer[] resolveBaseRuntimeContainers() {
-		return new EDTRuntimeContainer[] {EDTCompilerIDEPlugin.JAVA_RUNTIME_CONTAINER};
+		return new EDTRuntimeContainer[] {EDTCompilerIDEPlugin.JAVACORE_RUNTIME_CONTAINER};
 	}
 	
 	@Override
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 		preprocess(part);
-		EclipseEGL2JavaEE cmd = new EclipseEGL2JavaEE(file, part, this);
-		cmd.generate(buildArgs(file, part), new EclipseJavaEEGenerator(cmd, msgRequestor), env, null);
+		EclipseEGL2JavaCore cmd = new EclipseEGL2JavaCore(file, part, this);
+		cmd.generate(buildArgs(file, part), new EclipseJavaCoreGenerator(cmd, msgRequestor), env, null);
 	}
 	
 	private void preprocess(Part part) {
@@ -68,7 +68,7 @@ public class JavaEEGenerator extends AbstractGenerator {
 	
 	@Override
 	protected String getGenerationDirectoryPropertyKey() {
-		return EDTCompilerIDEPlugin.PROPERTY_JAVAEEGEN_DIR;
+		return EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_DIR;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class JavaEEGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getGenerationDirectoryPreferenceKey() {
-		return EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAEEGEN_DIRECTORY;
+		return EDTCompilerIDEPlugin.PREFERENCE_DEFAULT_JAVAGEN_DIRECTORY;
 	}
 
 	@Override
@@ -88,11 +88,11 @@ public class JavaEEGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getRelativeFilePath(IFile eglFile, Part part) {
-		return new EclipseJavaEEGenerator(new EclipseEGL2JavaEE(eglFile, part, this), null).getRelativeFileName(part);
+		return new EclipseJavaCoreGenerator(new EclipseEGL2JavaCore(eglFile, part, this), null).getRelativeFileName(part);
 	}
 
 	@Override
 	protected String getGenerationArgumentsPropertyKey() {
-		return EDTCompilerIDEPlugin.PROPERTY_JAVAEEGEN_ARGUMENTS;
+		return EDTCompilerIDEPlugin.PROPERTY_JAVAGEN_ARGUMENTS;
 	}
 }
