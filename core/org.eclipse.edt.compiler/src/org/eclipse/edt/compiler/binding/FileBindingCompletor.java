@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -42,7 +42,7 @@ public class FileBindingCompletor extends AbstractBinder {
 	private List partImportDeclarations = new ArrayList();
 	
 	public FileBindingCompletor(Scope currentScope, FileBinding fileBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-		super(currentScope, fileBinding, dependencyRequestor, compilerOptions);
+		super(currentScope, fileBinding.getPackageName(), dependencyRequestor, compilerOptions);
 		this.fileBinding = fileBinding;
 		this.problemRequestor = problemRequestor;
 	}

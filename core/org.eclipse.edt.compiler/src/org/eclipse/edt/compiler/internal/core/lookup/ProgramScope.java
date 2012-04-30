@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.ProgramBinding;
+import org.eclipse.edt.mof.egl.Program;
 
 /**
  * @author winghong
  */
 public class ProgramScope extends FunctionContainerScope {
     
-    public ProgramScope(Scope parentScope, ProgramBinding programBinding) {
+    public ProgramScope(Scope parentScope, Program programBinding) {
         super(parentScope, programBinding);
     }
     
@@ -26,7 +26,7 @@ public class ProgramScope extends FunctionContainerScope {
         return true;
     }
     
-    public ProgramBinding getProgramBinding() {
-        return (ProgramBinding)functionContainerBinding;
+    public Program getProgramBinding() {
+        return (Program)functionContainerBinding;
     }
 }

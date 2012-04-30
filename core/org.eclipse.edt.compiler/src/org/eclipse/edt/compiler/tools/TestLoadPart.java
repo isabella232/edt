@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,27 +12,13 @@
 package org.eclipse.edt.compiler.tools;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.EDTCompiler;
-import org.eclipse.edt.compiler.SystemEnvironment;
-import org.eclipse.edt.compiler.SystemEnvironmentUtil;
-import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
-import org.eclipse.edt.compiler.Util;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.MofFactory;
-import org.eclipse.edt.mof.egl.BinaryExpression;
-import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.FunctionMember;
-import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
-import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;

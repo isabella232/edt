@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -73,7 +73,7 @@ public class BindingCompletor {
 				astNode.accept(new FileBindingCompletor(parentScope, (FileBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.PROGRAM_BINDING:
-				astNode.accept(new ProgramBindingCompletor(parentScope, (ProgramBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				astNode.accept(new ProgramBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.FUNCTION_BINDING:
 				astNode.accept(new FunctionBindingCompletor((TopLevelFunctionBinding)binding, parentScope, (TopLevelFunctionBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));

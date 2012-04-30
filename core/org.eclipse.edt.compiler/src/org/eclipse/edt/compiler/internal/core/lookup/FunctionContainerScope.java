@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -41,6 +41,8 @@ import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -75,7 +77,7 @@ public class FunctionContainerScope extends Scope {
 	
 	private boolean hasDLIAnnotation;
     
-    public FunctionContainerScope(Scope parentScope, FunctionContainerBinding functionContainerBinding) {
+    public FunctionContainerScope(Scope parentScope, Part functionContainerBinding) {
         super(parentScope);
         this.functionContainerBinding = functionContainerBinding;
         
@@ -298,37 +300,6 @@ public class FunctionContainerScope extends Scope {
     	return result;
     }
 
-    public IFunctionBinding findFunction(String simpleName) {
-    	IFunctionBinding result = null;
-    	
-    	if(returnFunctionContainerFunctions) {
-	    	result = functionContainerBinding.findFunction(simpleName);
-	    	if(result != IBinding.NOT_FOUND_BINDING) return result;
-    	}
-    	
-        result = parentScope.findFunction(simpleName);
-        IFunctionBinding usedLibraryFunction = returnFunctionContainerFunctions ?
-        	(IFunctionBinding) getUsedLibraryFunctionBindings().get(simpleName) :
-        	null;
-        
-        if(usedLibraryFunction == null) {
-        	if(result != IBinding.NOT_FOUND_BINDING) return result;
-        }
-        else {
-        	if(result != IBinding.NOT_FOUND_BINDING && result.isSystemFunction()) {
-        		return usedLibraryFunction;
-        	}
-        	else if(result != IBinding.NOT_FOUND_BINDING) {
-        		return result;
-        	}
-        	else {
-        		return usedLibraryFunction;
-        	}
-        }
-        
-        return result;
-    }
-
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
@@ -345,7 +316,7 @@ public class FunctionContainerScope extends Scope {
         return result;
     }
     
-    public void addUsedLibrary(ITypeBinding usedLibraryBinding) {
+    public void addUsedLibrary(Library usedLibraryBinding) {
     	if(usedLibraries == Collections.EMPTY_LIST) {
     		usedLibraries = new ArrayList();    		
     	}

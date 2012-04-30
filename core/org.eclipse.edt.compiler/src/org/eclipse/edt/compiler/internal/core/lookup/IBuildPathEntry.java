@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,14 +18,13 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 
 public interface IBuildPathEntry {
 
-	IPartBinding getPartBinding(String[] packageName,String partName);
-	boolean hasPackage(String[] packageName);
-	int hasPart(String[] packageName,String partName);
+	IPartBinding getPartBinding(String packageName,String partName);
+	boolean hasPackage(String packageName);
+	int hasPart(String packageName,String partName);
 	IEnvironment getRealizingEnvironment();
-	IPartBinding getCachedPartBinding(String[] packageName, String partName);
-	public void addPartBindingToCache(IPartBinding partBinding);
+	IPartBinding getCachedPartBinding(String packageName, String partName);
 	public ObjectStore[] getObjectStores();
-	public Part findPart(String[] packageName, String name) throws PartNotFoundException;
+	public Part findPart(String packageName, String name) throws PartNotFoundException;
 
 	
 	boolean isZipFile();

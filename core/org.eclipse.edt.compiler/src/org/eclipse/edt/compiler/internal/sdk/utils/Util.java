@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,11 +13,6 @@ package org.eclipse.edt.compiler.internal.sdk.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +34,7 @@ import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -51,11 +46,11 @@ public class Util {
 	public final static char[] SUFFIX_EGL = ".EGL".toCharArray(); //$NON-NLS-1$
 	
 	public static String getFilePartName(File file){
-		return InternUtil.intern(file.getAbsolutePath().toString());
+		return NameUtile.getAsName(file.getAbsolutePath().toString());
 	}
 	
 	public static String getCaseSensitiveFilePartName(File file){
-		return InternUtil.internCaseSensitive(file.getAbsolutePath().toString());
+		return file.getAbsolutePath().toString();
 	}
 	
 	/**

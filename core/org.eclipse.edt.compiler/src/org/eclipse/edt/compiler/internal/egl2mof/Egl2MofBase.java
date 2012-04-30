@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,7 +64,6 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
-import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
@@ -549,7 +548,8 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	private ICompilerOptions getCompilerOptions() {
-		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
+		ICompilerOptions compilerOptions = new ICompilerOptions() {
+		};
 		return compilerOptions;
 	}
 
@@ -906,7 +906,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	
 	protected EObject mofTypeFor(ITypeBinding type) {
-		if (!Binding.isValidBinding(type)) return null;
+		if (type == null) return null;
 		EObject eType;
 		switch (type.getKind()) {
 		case ITypeBinding.MULTIPLY_OCCURING_ITEM:

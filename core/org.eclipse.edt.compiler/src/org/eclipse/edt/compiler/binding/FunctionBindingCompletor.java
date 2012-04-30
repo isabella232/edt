@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,10 +26,11 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Part;
 
 
 /**
@@ -37,31 +38,45 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
  */
 public class FunctionBindingCompletor extends AbstractBinder {
 
-    private FunctionBinding functionBinding;
+    private Function functionBinding;
 
-    private IPartBinding partBinding;
+    private Part partBinding;
 
     private IProblemRequestor problemRequestor;
 
-    private Set definedParameters = new HashSet();
+    private Set<String> definedParameters = new HashSet<String>();
     
     private String canonicalFunctionName;
 
-    public FunctionBindingCompletor(IPartBinding partBinding, Scope currentScope, FunctionBinding functionBinding,
+    public FunctionBindingCompletor(Part partBinding, Scope currentScope, Function function,
             IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(currentScope, partBinding, dependencyRequestor, compilerOptions);
         this.partBinding = partBinding;
-        this.functionBinding = functionBinding;
+        this.functionBinding = function;
         this.problemRequestor = problemRequestor;
     }
 
     public boolean visit(NestedFunction function) {
-        function.getName().setBinding(functionBinding);
+        function.getName().setMember(functionBinding);
         canonicalFunctionName = function.getName().getCanonicalName();
 
         functionBinding.setStatic(function.isStatic());
         functionBinding.setAbstract(function.isAbstract());
         functionBinding.setPrivate(function.isPrivate());
+
+        function.accept(new DefaultASTVisitor() {
+            public boolean visit(NestedFunction function) {
+                return true;
+            }
+
+            public boolean visit(SettingsBlock settingsBlock) {
+                AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, functionBinding, null, functionBinding, -1, functionBinding.getDeclarer());
+                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, functionBinding.getDeclarer(), scope,
+                        dependencyRequestor, problemRequestor, compilerOptions);
+                settingsBlock.accept(blockCompletor);
+                return false;
+            }
+        });
 
         if (function.hasReturnType()) {
             ITypeBinding typeBinding = null;
@@ -81,30 +96,27 @@ public class FunctionBindingCompletor extends AbstractBinder {
 
         return true;
     }
-    
-    public void endVisit(NestedFunction function) {
-        function.accept(new DefaultASTVisitor() {
-            public boolean visit(NestedFunction function) {
-                return true;
-            }
-
-            public boolean visit(SettingsBlock settingsBlock) {
-                FunctionScope functionScope = new FunctionScope(currentScope, functionBinding);
-                AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, functionBinding, null, functionBinding, -1, functionBinding.getDeclarer());
-                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionBinding.getDeclarer(), scope,
-                        dependencyRequestor, problemRequestor, compilerOptions);
-                settingsBlock.accept(blockCompletor);
-                return false;
-            }
-        });
-    	
-    }
-
 
     public boolean visit(TopLevelFunction function) {
         function.getName().setBinding(functionBinding);
         canonicalFunctionName = function.getName().getCanonicalName();
         
+        function.accept(new DefaultASTVisitor() {
+
+            public boolean visit(TopLevelFunction function) {
+                return true;
+            }
+
+            public boolean visit(SettingsBlock settingsBlock) {
+                AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, functionBinding, null, functionBinding, -1, functionBinding.getDeclarer());
+                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, functionBinding.getDeclarer(), scope, 
+                        dependencyRequestor, problemRequestor, compilerOptions);
+                settingsBlock.accept(blockCompletor);
+                return false;
+            }
+        });
+
+
         if (function.hasReturnType()) {
             ITypeBinding typeBinding = null;
             try {
@@ -126,23 +138,6 @@ public class FunctionBindingCompletor extends AbstractBinder {
     }
     
     public void endVisit(TopLevelFunction function){
-    	
-        function.accept(new DefaultASTVisitor() {
-
-            public boolean visit(TopLevelFunction function) {
-                return true;
-            }
-
-            public boolean visit(SettingsBlock settingsBlock) {
-              FunctionScope functionScope = new FunctionScope(currentScope, functionBinding);
-              AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, functionBinding, null, functionBinding, -1, functionBinding.getDeclarer());
-                SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionBinding.getDeclarer(), scope, 
-                        dependencyRequestor, problemRequestor, compilerOptions);
-                settingsBlock.accept(blockCompletor);
-                return false;
-            }
-        });
-    	
         ((IPartBinding)functionBinding).setValid(true);
     }
     

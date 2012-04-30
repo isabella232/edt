@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,12 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import org.eclipse.edt.compiler.binding.annotationType.FieldDeclarationAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.annotationType.FunctionDeclarationAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.ElementKind;
-import org.eclipse.edt.compiler.internal.core.lookup.Enumerations.TypeKind;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -33,7 +30,7 @@ public class AnnotationAnnotationTypeBinding extends PartSubTypeAnnotationTypeBi
     public AnnotationAnnotationTypeBinding() {
         super(caseSensitiveName, new Object[] {
         	IEGLConstants.PROPERTY_TARGETS, 		ArrayTypeBinding.getInstance(ElementKind.TYPE),
-        	IEGLConstants.PROPERTY_TARGETTYPES, 	ArrayTypeBinding.getInstance(TypeKind.TYPE),
+//        	IEGLConstants.PROPERTY_TARGETTYPES, 	ArrayTypeBinding.getInstance(TypeKind.TYPE),
         	IEGLConstants.PROPERTY_VALIDATIONCLASS,	PrimitiveTypeBinding.getInstance(Primitive.STRING),
         	
         	"ValidationProxy",						PrimitiveTypeBinding.getInstance(Primitive.STRING),

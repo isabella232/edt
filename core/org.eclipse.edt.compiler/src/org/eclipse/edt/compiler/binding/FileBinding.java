@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,8 +23,8 @@ public class FileBinding extends PartBinding {
     private List packageBindings;
     private List partBindings;
     
-    public FileBinding(String[] packageName, String caseSensitiveInternedName) {
-        super(packageName, caseSensitiveInternedName);
+    public FileBinding(String caseSensitivePackageName, String caseSensitiveInternedName) {
+        super(caseSensitivePackageName, caseSensitiveInternedName);
     }
     
     public IPackageBinding getDeclaringPackage() {
@@ -53,18 +53,10 @@ public class FileBinding extends PartBinding {
      * @see org.eclipse.edt.compiler.binding.IPartBinding#clear()
      */
     public void clear() {
-    	super.clear();
         packageBindings = null;
         partBindings = null;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.binding.IPartBinding#isStructurallyEqual(org.eclipse.edt.compiler.binding.IPartBinding)
-     */
-    public boolean isStructurallyEqual(IPartBinding anotherPartBinding) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.binding.ITypeBinding#getKind()
@@ -73,12 +65,4 @@ public class FileBinding extends PartBinding {
         return ITypeBinding.FILE_BINDING;
     }
     
-    public boolean isDeclarablePart() {
-		return false;
-	}
-
-	@Override
-	public ITypeBinding primGetNullableInstance() {
-		return this;
-	}
 }

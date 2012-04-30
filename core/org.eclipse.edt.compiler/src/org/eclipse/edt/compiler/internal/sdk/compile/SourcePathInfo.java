@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,10 +19,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.internal.sdk.utils.Util;
+import org.eclipse.edt.compiler.internal.util.NameUtil;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.sdk.compile.BuildPathException;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -170,10 +171,11 @@ public class SourcePathInfo {
 		rootResourceInfo = new ResourceInfo();
 	}
 	
-    public void addPart(String[] packageName, String partName, int partType, File declaringFile, String caseSensitivePartName) {
+    public void addPart(String packageName, String partName, int partType, File declaringFile, String caseSensitivePartName) {
         ResourceInfo root = rootResourceInfo;
-        for (int i = 0; i < packageName.length; i++) {
-            root = root.addPackage(InternUtil.intern(packageName[i]));
+        String[] pkgArr = NameUtil.toStringArray(packageName);
+        for (int i = 0; i < pkgArr.length; i++) {
+            root = root.addPackage(NameUtile.getAsName(pkgArr[i]));
         }
           
         root.addPart(partName, partType, declaringFile, caseSensitivePartName);
@@ -191,7 +193,7 @@ public class SourcePathInfo {
 			
 			if(resources[i].isDirectory()){
 				
-				ResourceInfo info = parentMap.addPackage(InternUtil.intern(resources[i].getName()));
+				ResourceInfo info = parentMap.addPackage(NameUtile.getAsName(resources[i].getName()));
 				initializeEGLPackageHelper(resources[i], info);
 			
 			}else{
@@ -217,18 +219,11 @@ public class SourcePathInfo {
 		parentResourceInfo.addPart(Util.getFilePartName(file), Util.getPartType(parsedFile), file, Util.getCaseSensitiveFilePartName(file));
 	}
     
-    public boolean hasPackage(String[] packageName) {
-    	ResourceInfo info = rootResourceInfo;
-    	for (int i = 0; i < packageName.length; i++) {
-			info = info.getPackage(packageName[i]);
-			if(info == null){
-				break;
-			}
-		}
-    	return info != null;
+    public boolean hasPackage(String packageName) {
+    	return getPackageInfo(packageName) != null;
     }
     
-    public int hasPart(String[] packageName, String partName) {
+    public int hasPart(String packageName, String partName) {
     	ResourceInfo info = getPackageInfo(packageName);
     	if(info != null){
     		return info.getPartType(partName);
@@ -236,10 +231,11 @@ public class SourcePathInfo {
     	return ITypeBinding.NOT_FOUND_BINDING;
     }
     
-    private ResourceInfo getPackageInfo(String[] packageName) {
+    private ResourceInfo getPackageInfo(String packageName) {
 		ResourceInfo info = rootResourceInfo;
-    	for (int i = 0; i < packageName.length; i++) {
-			info = info.getPackage(packageName[i]);
+		String[] pkgArr = NameUtil.toStringArray(packageName);
+    	for (int i = 0; i < pkgArr.length; i++) {
+			info = info.getPackage(NameUtile.getAsName(pkgArr[i]));
 			if(info == null){
 				break;
 			}
@@ -247,7 +243,7 @@ public class SourcePathInfo {
 		return info;
 	}
 
-	public File getDeclaringFile(String[] packageName, String partName) {
+	public File getDeclaringFile(String packageName, String partName) {
     	ResourceInfo info = getPackageInfo(packageName);
     	if(info != null){
     		return info.getFile(partName);
@@ -268,7 +264,7 @@ public class SourcePathInfo {
         }        
     }   
     
-    public String getCaseSensitivePartName(String[] packageName, String partName){
+    public String getCaseSensitivePartName(String packageName, String partName){
     	ResourceInfo info = getPackageInfo(packageName);
     	if(info != null){
     		return info.getCaseSensitivePartName(partName);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -76,8 +76,8 @@ public class ArrayAccess extends Expression {
 		return new ArrayAccess((Expression)array.clone(), cloneList(subscripts), getOffset(), getOffset() + getLength());
 	}
 	
-	public IDataBinding resolveDataBinding() {
-		return getArray().resolveDataBinding();
+	public Member resolveMember() {
+		return getArray().resolveMember();
 	}
 	
 	public String toString() {

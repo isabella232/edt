@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -35,14 +34,10 @@ public class EnvironmentScope extends Scope {
 	}
 
 	public ITypeBinding findType(String simpleName) {
-		return IBinding.NOT_FOUND_BINDING; // Can't import parts in the default package
+		return null; // Can't import parts in the default package
 	}
 
-	public IFunctionBinding findFunction(String simpleName) {
-		return null;
-	}
-
-	public IDataBinding findData(String simpleName) {
+	public Member findMember(String simpleName) {
 		return null;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,31 +15,25 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DictionaryBinding;
-import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.PackageBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
 import org.eclipse.edt.compiler.internal.EGLBaseNlsStrings;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
-import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypePartManager;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibraryManager;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.util.NameUtil;
+import org.eclipse.edt.mof.egl.Enumeration;
+import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.osgi.util.NLS;
@@ -49,26 +43,22 @@ public class SystemEnvironment implements ISystemEnvironment {
 
 	protected org.eclipse.edt.mof.serialization.IEnvironment irEnv;
 
-	private PackageBinding rootPackageBinding = new PackageBinding(new String[0], null, this);
+	private PackageBinding rootPackageBinding = new PackageBinding("", null, this);
    
-    private Map systemPackages = Collections.EMPTY_MAP;
-    private Map unqualifiedSystemParts = Collections.EMPTY_MAP;
+    private Map<String, Map<String, IRPartBinding>> systemPackages = new HashMap<String, Map<String,IRPartBinding>>();
+    private Map<String, IRPartBinding> unqualifiedSystemParts = new HashMap<String, IRPartBinding>();
+    
     private EnumerationManager enumerationManager;
     private SystemLibraryManager sysLibManager;
-    private ExternalTypePartManager externalTypePartsManager;
-    private AnnotationTypeManager annTypeManger;
     private ICompiler compiler;
 
-    private List<ISystemPackageBuildPathEntry> sysPackages = new ArrayList();
+    private List<ISystemPackageBuildPathEntry> sysPackages = new ArrayList<ISystemPackageBuildPathEntry>();
     
     private ISystemEnvironment parentSystemEnvironment;
         
-    private Collection<String> implicitlyUsedEnumerationNames = Collections.EMPTY_SET;
+    private Collection<String> implicitlyUsedEnumerationNames = new ArrayList<String>();
    
-    private Map getSystemPackages() {
-        if (systemPackages == Collections.EMPTY_MAP) {
-            initializeMaps();
-        }
+    private Map<String, Map<String, IRPartBinding>> getSystemPackages() {
         return systemPackages;
     }
     
@@ -76,27 +66,15 @@ public class SystemEnvironment implements ISystemEnvironment {
         return implicitlyUsedEnumerationNames;
     }
 
-    private Map getUnqualifiedSystemParts() {
-        if (unqualifiedSystemParts == Collections.EMPTY_MAP) {
-            initializeMaps();
-        }
+    private Map<String, IRPartBinding> getUnqualifiedSystemParts() {
         return unqualifiedSystemParts;
     }
-
-    private void initializeMaps() {
-        systemPackages = new HashMap();
-        unqualifiedSystemParts = new HashMap();
-
-        addSystemTypes(EnumerationManager.getEnumTypes().values());
-        addSystemTypes(SystemPartManager.getSystemParts().values());              
-    }
     
-    private void addSystemTypes(Collection libraries) {
-        Iterator i = libraries.iterator();
-        while (i.hasNext()) {
-            IPartBinding part = (IPartBinding)i.next();
+    private void addSystemTypes(Collection<IRPartBinding> bindings) {
+    	
+    	for (IRPartBinding part : bindings) {
             addSystemEntry(part);
-        }
+    	}
     }
     
     private boolean systemPackagesInitialized = false;
@@ -117,7 +95,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 					if (libfolder.exists() && libfolder.isDirectory()){
 						File[] files = libfolder.listFiles();
 						sysPackages.addAll(factory.createEntries(this, irEnv, files, new ISystemPartBindingLoadedRequestor(){
-							public void partBindingLoaded(IPartBinding part){
+							public void partBindingLoaded(IRPartBinding part){
 								addSystemEntry(part);
 							}
 						}));
@@ -147,7 +125,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 					}
 				}
 				
-				addSystemTypes(EnumerationManager.getEnumTypes().values());
+				addSystemTypes(EnumerationManager.getEnumTypeBindings());
 				if (notifier != null) {
 					notifier.checkCancel();
 					notifier.updateProgressDelta(0.02f);
@@ -163,9 +141,6 @@ public class SystemEnvironment implements ISystemEnvironment {
 			} finally {
 				Environment.popEnv();
 				
-				//The following is needed until we get rid of the binding hierarchy and replace it with IRs
-				DictionaryBinding.setDictionaryEnvironment(this);
-				
 				if (notifier != null) {
 					notifier.done();
 				}
@@ -174,56 +149,43 @@ public class SystemEnvironment implements ISystemEnvironment {
     	}    	
     }
     
-    private boolean shouldAddToUnqualified(IPartBinding part) {
-    	if (Binding.isValidBinding(part)) {
-    		String name = part.getPackageQualifiedName().toUpperCase().toLowerCase();
-    		if (name.startsWith("org.eclipse.edt.mof.")) {
-    			return false;
-    		}
-    	}
-    	
-    	return true;
+    private boolean shouldAddToUnqualified(Part part) {
+    	String name = part.getFullyQualifiedName();
+		return !(name.startsWith("org.eclipse.edt.mof."));
     }
     
-    private void addSystemEntry(IPartBinding part) {
+    
+    
+    private void addSystemEntry(IRPartBinding partBinding) {
+    	
+    	Part part = partBinding.getIrPart();
+    	String partName = InternUtil.intern(part.getName());
     	
     	if (shouldAddToUnqualified(part)) {
-    		this.getUnqualifiedSystemParts().put(part.getName(), part);
+    		this.getUnqualifiedSystemParts().put(partName, partBinding);
     	}
         
-        Map map = getPackageParts(part.getPackageName());
-        map.put(part.getName(), part);
+        Map<String, IRPartBinding> map = getPackageParts(part.getPackageName());
+        map.put(partName, partBinding);
         
-        if (part.getKind() == ITypeBinding.LIBRARY_BINDING){
-        	getSystemLibraryManager().addSystemLibrary((LibraryBinding)part);
+        if (part instanceof Library){
+        	getSystemLibraryManager().addSystemLibrary((Library)part);
 		} 
-        else if (part.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-        	if(ExternalTypePartManager.isLibraryType((ExternalTypeBinding)part)){
-        		getExternalTypePartsManager().addExternalTypeLibrary((ExternalTypeBinding)part);
-        	}else if(ExternalTypePartManager.isExceptionType((ExternalTypeBinding)part)){
-        		getExternalTypePartsManager().addExternalTypeException((ExternalTypeBinding)part);
+        else if (part instanceof Enumeration) {
+        	if(enumerationIsImplicitlyUsed(partName)) {
+        		getEnumerationManager().addResolvableDataBindings((Enumeration) part);
         	}
-        }
-        else if (part.getKind() == ITypeBinding.ENUMERATION_BINDING) {
-        	getEnumerationManager().addSystemEnumType((EnumerationTypeBinding)part);  
-        	
-        	if(enumerationIsImplicitlyUsed(part)) {
-        		getEnumerationManager().addResolvableDataBindings((EnumerationTypeBinding) part);
-        	}
-        }
-        else if(part.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-        	getAnnotationTypeManager().addSystemPackageRecord((FlexibleRecordBinding) part);
         }
     }
     
-    private boolean enumerationIsImplicitlyUsed(IPartBinding part) {
-		return getImplicitlyUsedEnumerationNames().contains(part.getName());
+    private boolean enumerationIsImplicitlyUsed(String partName) {
+		return getImplicitlyUsedEnumerationNames().contains(partName);
 	}
 
-	private Map getPackageParts(String[] packageName) {
-        Map map = (Map)getSystemPackages().get(packageName);
+	private Map<String, IRPartBinding> getPackageParts(String packageName) {
+        Map<String, IRPartBinding> map = getSystemPackages().get(packageName);
         if (map == null) {
-            map = new HashMap();
+            map = new HashMap<String, IRPartBinding>();
             getSystemPackages().put(packageName, map);
         }
         return map;
@@ -241,33 +203,29 @@ public class SystemEnvironment implements ISystemEnvironment {
         if (parentEnv != null) {
         	enumerationManager = new EnumerationManager(parentEnv.getEnumerationManager());
         	sysLibManager = new SystemLibraryManager(parentEnv.getSystemLibraryManager());
-        	annTypeManger = new AnnotationTypeManager(parentEnv.getAnnotationTypeManager());
-        	externalTypePartsManager = new ExternalTypePartManager(parentEnv.getExternalTypePartsManager());
         }
         else {
         	enumerationManager = new EnumerationManager(null);
         	sysLibManager = new SystemLibraryManager(null);
-        	annTypeManger = new AnnotationTypeManager(null);
-        	externalTypePartsManager = new ExternalTypePartManager(null);
         }
     }
 
     /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.IEnvironment#getPartBinding(java.lang.String[], java.lang.String)
+     * @see org.eclipse.edt.compiler.internal.core.lookup.IEnvironment#getPartBinding(java.lang.String, java.lang.String)
      */
-    public IPartBinding getPartBinding(String[] packageName, String partName) {
+    public IPartBinding getPartBinding(String packageName, String partName) {
     	IPartBinding result = null;
     	
     	if (packageName == null) {
-            result = (IPartBinding)getUnqualifiedSystemParts().get(partName);
+            result = getUnqualifiedSystemParts().get(partName);
             if (result != null) {
             	return result;
             }
         }
 
-        Map map = (Map)getSystemPackages().get(packageName);
+        Map<String, IRPartBinding> map = getSystemPackages().get(packageName);
         if (map != null) {
-            result = (IPartBinding) map.get(partName);
+            result = map.get(partName);
             if (result != null) {
             	return result;
             }
@@ -283,13 +241,13 @@ public class SystemEnvironment implements ISystemEnvironment {
         if (result == null && parentSystemEnvironment != null) {
         	return parentSystemEnvironment.getPartBinding(packageName, partName);
         }
-        return result == null ? IBinding.NOT_FOUND_BINDING : result;
+        return result;
     }
     
-    public IPartBinding getCachedPartBinding(String[] packageName, String partName) {
+    public IPartBinding getCachedPartBinding(String packageName, String partName) {
     	IPartBinding result = null;
     	      
-        Map map = (Map)getSystemPackages().get(packageName);
+        Map<String, IRPartBinding> map = getSystemPackages().get(packageName);
         if (map != null) {
             result = (IPartBinding) map.get(partName);
         }
@@ -298,18 +256,18 @@ public class SystemEnvironment implements ISystemEnvironment {
         	return parentSystemEnvironment.getCachedPartBinding(packageName, partName);
         }
 
-        return result == null ? IBinding.NOT_FOUND_BINDING : result;
+        return result;
     }
 
 
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.internal.core.lookup.IEnvironment#getNewPartBinding(java.lang.String[], java.lang.String, int)
      */
-    public IPartBinding getNewPartBinding(String[] packageName, String partName, int kind) {
+    public IPartBinding getNewPartBinding(String packageName, String partName, int kind) {
         return null;
     }
 
-    public boolean hasPackage(String[] packageName) {
+    public boolean hasPackage(String packageName) {
 		for (ISystemPackageBuildPathEntry entry : sysPackages) {
     		if (entry.hasPackage(packageName)){
     			return true;
@@ -327,18 +285,7 @@ public class SystemEnvironment implements ISystemEnvironment {
     public IPackageBinding getRootPackage() {
          return rootPackageBinding;
     }
-
-    public void clearParts(){
-		for (ISystemPackageBuildPathEntry entry : sysPackages) {
-    		entry.clearParts();
-   		}
-       	
-       	if (parentSystemEnvironment != null) {
-       		parentSystemEnvironment.clearParts();
-       	}
-    }
     
-
 	public InputStream getResourceAsStream(String relativePath){
 		throw new UnsupportedOperationException();
 	}
@@ -349,11 +296,6 @@ public class SystemEnvironment implements ISystemEnvironment {
 
 	public List<ISystemPackageBuildPathEntry> getSysPackages() {
 		return sysPackages;
-	}
-
-	public void addPartBindingToCache(IPartBinding partBinding) {
-		
-		addSystemEntry(partBinding);		
 	}
 
 	public ISystemEnvironment getSystemEnvironment() {
@@ -402,16 +344,6 @@ public class SystemEnvironment implements ISystemEnvironment {
 	@Override
 	public SystemLibraryManager getSystemLibraryManager() {
 		return sysLibManager;
-	}
-
-	@Override
-	public AnnotationTypeManager getAnnotationTypeManager() {
-		return annTypeManger;
-	}
-
-	@Override
-	public ExternalTypePartManager getExternalTypePartsManager() {
-		return externalTypePartsManager;
 	}
 
 }

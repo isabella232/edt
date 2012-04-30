@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -46,8 +44,8 @@ public class SimpleName extends Name {
 		return new StringBuffer(identifier);
 	}
 
-	public String[] getNameComponents() {
-		return InternUtil.intern(new String[] { identifier });
+	public String getNameComponents() {
+		return getIdentifier();
 	}
 
 	protected List getNameComponentsList() {
@@ -58,10 +56,5 @@ public class SimpleName extends Name {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		return new SimpleName(identifier, getOffset(), getOffset() + getLength());
-	}
-	
-	public void copyBindingsTo(Name anotherName) {
-		anotherName.setBinding(binding);
-		anotherName.setTypeBinding(resolveTypeBinding());
 	}
 }

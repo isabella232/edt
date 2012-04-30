@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.UsedTypeBinding;
-
 
 /**
  * UseStatement AST node type.
@@ -26,7 +24,6 @@ public class UseStatement extends Node {
 
 	private List name_plus;	// List of Names
 	private SettingsBlock settingsBlockOpt;
-	private UsedTypeBinding usedTypeBinding;
 
 	public UseStatement(List name_plus, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -58,12 +55,6 @@ public class UseStatement extends Node {
 		}
 		visitor.endVisit(this);
 	}
-    public UsedTypeBinding getUsedTypeBinding() {
-        return usedTypeBinding;
-    }
-    public void setUsedTypeBinding(UsedTypeBinding usedTypeBinding) {
-        this.usedTypeBinding = usedTypeBinding;
-    }
     
    protected Object clone() throws CloneNotSupportedException {
    		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;

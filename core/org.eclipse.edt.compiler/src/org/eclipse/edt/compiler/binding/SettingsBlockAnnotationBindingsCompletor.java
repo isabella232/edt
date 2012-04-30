@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -72,6 +72,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.core.utils.TypeParser;
+import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -208,7 +209,6 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							if(parentScope instanceof AnnotationLeftHandScope &&
 							   annotationTypeBindingImpl.isApplicableFor(((AnnotationLeftHandScope) parentScope).getBindingBeingAnnotated())) {
 								qualifiedName.setBinding(annotationBinding);
-								qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 							}
 							else {
 								getAnnotationLeftHandScope().setNotApplicableBinding(annotationBinding);
@@ -218,7 +218,6 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							}
 						} else {
 							qualifiedName.setBinding(annotationBinding);
-							qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 						}
 					}
 				} catch (ResolutionException e) {
@@ -1051,7 +1050,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		return getSystemScope(scope.getParentScope());
 	}
 
-	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, IPartBinding partBinding,
+	public SettingsBlockAnnotationBindingsCompletor(Scope currentScope, Part partBinding,
 			AnnotationLeftHandScope annotationLeftHandScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor,
 			ICompilerOptions compilerOptions) {
 		super(currentScope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);

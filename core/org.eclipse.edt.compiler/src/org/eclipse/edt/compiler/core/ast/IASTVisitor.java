@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -54,13 +54,7 @@ public interface IASTVisitor {
 	
 	boolean visit(CallbackTarget callbackTarget);
 	void endVisit(CallbackTarget callbackTarget);
-
-	boolean visit(CallReturns callReturns);
-	void endVisit(CallReturns callReturns);
-
-	boolean visit(CallSynchronizationValues callSync);
-	void endVisit(CallSynchronizationValues callsync);
-
+	
 	boolean visit(CaseStatement caseStatement);
 	void endVisit(CaseStatement caseStatement);
 	
@@ -249,9 +243,6 @@ public interface IASTVisitor {
 	
 	boolean visit(NullLiteral nullLiteral);
 	void endVisit(NullLiteral nullLiteral);
-	
-	boolean visit(NullableType nullableType);
-	void endVisit(NullableType nullableType);
 	
 	boolean visit(NoCursorClause noCursorClause);
 	void endVisit(NoCursorClause noCursorClause);

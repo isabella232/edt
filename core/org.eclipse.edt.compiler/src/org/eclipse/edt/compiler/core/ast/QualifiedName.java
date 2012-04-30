@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,7 +13,7 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.List;
 
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -60,13 +60,12 @@ public class QualifiedName extends Name {
         return buffer;
     }
 
-    public String[] getNameComponents() {
-        List nameComponentsList = getNameComponentsList();
-        return InternUtil.intern((String[]) nameComponentsList.toArray(new String[nameComponentsList.size()]));
+    public String getNameComponents() {
+    	return NameUtile.getAsName(getCanonicalName());
     }
 
-    protected List getNameComponentsList() {
-        List nameComponentsList = qualifier.getNameComponentsList();
+    protected List<String> getNameComponentsList() {
+        List<String> nameComponentsList = qualifier.getNameComponentsList();
         nameComponentsList.add(identifier);
         return nameComponentsList;
     }
@@ -75,9 +74,4 @@ public class QualifiedName extends Name {
 		return new QualifiedName((Name)qualifier.clone(), identifier, getOffset(), getOffset() + getLength());
 	}
     
-    public void copyBindingsTo(Name anotherName) {
-    	anotherName.setBinding(binding);
-    	anotherName.setTypeBinding(resolveTypeBinding());
-    	qualifier.copyBindingsTo(((QualifiedName) anotherName).getQualifier());
-    }
 }

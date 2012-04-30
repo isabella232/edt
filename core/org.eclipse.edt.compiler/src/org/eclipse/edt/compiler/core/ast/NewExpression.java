@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,8 +14,8 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.mof.egl.Constructor;
 
 
 /**
@@ -31,8 +31,7 @@ public class NewExpression extends Expression {
 	private List funcArgs;	// List of FunctionArguments
 	private SettingsBlock settingsBlockOpt;
 	
-	private IDataBinding dataBindingForAnnotations;
-	private IDataBinding constructorBinding;
+	private org.eclipse.edt.mof.egl.Constructor constructor;
 
 	public NewExpression(Type type, List funcArgs, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -77,12 +76,12 @@ public class NewExpression extends Expression {
 		return settingsBlockOpt;
 	}
 	
-	public IDataBinding resolveConstructorBinding() {
-		return constructorBinding;
+	public org.eclipse.edt.mof.egl.Constructor resolveConstructor() {
+		return constructor;
 	}
 	
-	public void setConstructorBinding(IDataBinding constructorBinding) {
-		this.constructorBinding = constructorBinding;
+	public void setConstructor(Constructor constructor) {
+		this.constructor = constructor;
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -101,10 +100,4 @@ public class NewExpression extends Expression {
 		
 		return new NewExpression((Type)type.clone(), newArgs, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
-    public IDataBinding getDataBindingForAnnotations() {
-        return dataBindingForAnnotations;
-    }
-    public void setDataBindingForAnnotations(IDataBinding dataBindingForAnnotations) {
-        this.dataBindingForAnnotations = dataBindingForAnnotations;
-    }
 }

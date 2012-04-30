@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,9 +13,6 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
@@ -41,10 +38,8 @@ public abstract class Scope {
     }
     
     public abstract ITypeBinding findType(String simpleName);
-    
-    public abstract IFunctionBinding findFunction(String simpleName);
-    
-    public abstract IDataBinding findData(String simpleName);
+        
+ //   public abstract IDataBinding findData(String simpleName);
     
     public abstract IPackageBinding findPackage(String simpleName);
     
@@ -93,9 +88,9 @@ public abstract class Scope {
     	return false;
     }
     
-    public IDataBinding findIOTargetData(String simpleName) {
-    	return IBinding.NOT_FOUND_BINDING;
-    }
+//    public IDataBinding findIOTargetData(String simpleName) {
+//    	return null;
+//    }
     
     public IPartBinding getPartBinding() {
     	return null;

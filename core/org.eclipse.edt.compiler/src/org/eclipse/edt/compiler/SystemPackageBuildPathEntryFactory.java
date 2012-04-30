@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -28,16 +27,14 @@ public class SystemPackageBuildPathEntryFactory implements
 
 	IEnvironment irEnv;
 	ISystemEnvironment sysEnv;
-	Mof2Binding converter;
 	
-	public SystemPackageBuildPathEntryFactory(Mof2Binding converter) {
+	public SystemPackageBuildPathEntryFactory() {
 		super();
-		this.converter = converter;
 	}
 
 
 	private SystemPackageBuildPathEntry createEGLEntry(String path, ISystemPartBindingLoadedRequestor req) {
-		SystemPackageBuildPathEntry entry = new SystemPackageBuildPathEntry(sysEnv, path, req, EGL2IR.EGLXML, converter);
+		SystemPackageBuildPathEntry entry = new SystemPackageBuildPathEntry(sysEnv, path, req, EGL2IR.EGLXML);
 		
 		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, EGL2IR.EGLXML, Type.EGL_KeyScheme, entry);
 		entry.setStore(store);
@@ -46,7 +43,7 @@ public class SystemPackageBuildPathEntryFactory implements
 	}
 
 	private SystemPackageMOFPathEntry createMOFEntry(String path, ISystemPartBindingLoadedRequestor req) {
-		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(sysEnv, path, req, ZipFileObjectStore.MOFXML, converter);
+		SystemPackageMOFPathEntry entry = new SystemPackageMOFPathEntry(sysEnv, path, req, ZipFileObjectStore.MOFXML);
 		
 		ObjectStore store = new ZipFileObjectStore(new File(path), irEnv, ObjectStore.XML, ZipFileObjectStore.MOFXML, entry);
 		entry.setStore(store);
@@ -61,7 +58,7 @@ public class SystemPackageBuildPathEntryFactory implements
 		this.irEnv = irEnv;
 		this.sysEnv = sysEnv;
 		
-		List<ISystemPackageBuildPathEntry> list = new ArrayList();
+		List<ISystemPackageBuildPathEntry> list = new ArrayList<ISystemPackageBuildPathEntry>();
 
 	  	for (int i = 0; i < files.length; i++){
 	  		File file = files[i];

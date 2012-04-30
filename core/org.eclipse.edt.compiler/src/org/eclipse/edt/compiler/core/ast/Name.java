@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,8 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -25,11 +26,10 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 public abstract class Name extends Expression {
     
     protected String identifier;
-    protected IBinding binding;
+    protected Element element;
     
     public static int IMPLICIT_QUALIFIER_DATA_BINDING = 0;
-    public static int INAPPLICABLE_ANNOTATION_TYPE_BINDING = 1;
-    public static int OVERLOADED_FUNCTION_SET = 2;
+    public static int OVERLOADED_FUNCTION_SET = 1;
     
     public Name(String identifier, int startOffset, int endOffset) {
         super(startOffset, endOffset);
@@ -37,26 +37,20 @@ public abstract class Name extends Expression {
     }
     
     public String getIdentifier() {
-        return InternUtil.intern(identifier);
+        return NameUtile.getAsName(identifier);
     }
     
     public String getCaseSensitiveIdentifier(){
-    	return InternUtil.internCaseSensitive(identifier);
+    	return identifier;
+    }
+    	    
+    public void setElement(Element elem) {
+        this.element = elem;
+        super.setElement(elem);
     }
     
-	public IDataBinding resolveDataBinding() {
-	    if (binding == IBinding.NOT_FOUND_BINDING) {
-	        return IBinding.NOT_FOUND_BINDING;
-	    }
-		return (binding != null && binding.isDataBinding()) ? (IDataBinding) binding : null;
-	}
-	
-    public IBinding resolveBinding() {
-        return binding;
-    }
-    
-    public void setBinding(IBinding binding) {
-        this.binding = binding;
+    public Element resolveElement() {
+    	return element;
     }
     
     public boolean isSimpleName() {
@@ -79,9 +73,9 @@ public abstract class Name extends Expression {
     
     protected abstract StringBuffer getCanonicalNameBuffer();
     
-    public abstract String[] getNameComponents();
+    public abstract String getNameComponents();
     
-    protected abstract List getNameComponentsList();
+    protected abstract List<String> getNameComponentsList();
     
     public void setAttributeOnName(int attr, Object value) {
     	setAttribute(attr, value);
@@ -111,6 +105,4 @@ public abstract class Name extends Expression {
 	}
 	
 	protected abstract Object clone() throws CloneNotSupportedException;
-
-	public abstract void copyBindingsTo(Name anotherName);
 }

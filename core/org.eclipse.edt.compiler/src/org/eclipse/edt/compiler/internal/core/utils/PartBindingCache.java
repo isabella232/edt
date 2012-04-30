@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class PartBindingCache {
@@ -33,10 +34,10 @@ public class PartBindingCache {
     }
 
     private static class PartKey {
-        String[] packageName;
+        String packageName;
         String partName;
         
-        PartKey(String[] packageName, String partName) {
+        PartKey(String packageName, String partName) {
             this.packageName = packageName;
             this.partName = partName;
         }
@@ -47,7 +48,7 @@ public class PartBindingCache {
         
         public boolean equals(Object obj) {
             PartKey anotherPartKey = (PartKey) obj;
-            return (anotherPartKey.packageName == this.packageName) && (anotherPartKey.partName == this.partName);
+            return (NameUtile.equals(anotherPartKey.packageName, this.packageName)) && (NameUtile.equals(anotherPartKey.partName, this.partName));
         }
     }
 
@@ -72,10 +73,10 @@ public class PartBindingCache {
     }
 
     /**
-     * @param packageName -- INTERNED string array
-     * @param partName -- INTERNED string
+     * @param packageName 
+     * @param partName
      */
-    public void put(String[] packageName, String partName, IPartBinding partBinding) {
+    public void put(String packageName, String partName, IPartBinding partBinding) {
         if(DEBUG) System.out.println("Put: " + partName); //$NON-NLS-1$
 
         removeClearedReferences();
@@ -86,10 +87,10 @@ public class PartBindingCache {
     }
     
     /**
-     * @param packageName -- INTERNED string array
-     * @param partName -- INTERNED string
+     * @param packageName 
+     * @param partName 
      */
-    public IPartBinding get(String[] packageName, String partName) {
+    public IPartBinding get(String packageName, String partName) {
         removeClearedReferences();
 
         SoftReferenceWithKey ref = (SoftReferenceWithKey) softReferences.get(new PartKey(packageName, partName));
@@ -106,10 +107,10 @@ public class PartBindingCache {
     }
     
     /**
-     * @param packageName -- INTERNED string array
-     * @param partName -- INTERNED string
+     * @param packageName 
+     * @param partName 
      */
-    public void remove(String[] packageName, String partName) {
+    public void remove(String packageName, String partName) {
         softReferences.remove(new PartKey(packageName, partName));
     }
 

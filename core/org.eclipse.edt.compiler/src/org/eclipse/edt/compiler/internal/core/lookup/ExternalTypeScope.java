@@ -1,14 +1,11 @@
-/*******************************************************************************
- * Copyright © 2005, 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/*
+ * Licensed Materials - Property of IBM
  *
- * Contributors:
- * IBM Corporation - initial API and implementation
+ * Copyright IBM Corporation 2005, 2010. All Rights Reserved.
  *
- *******************************************************************************/
+ * U.S. Government Users Restricted Rights - Use, duplication or
+ * disclosure restricted by GSA DP Schedule Contract with IBM Corp.
+ */
 package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
@@ -33,12 +30,6 @@ public class ExternalTypeScope extends Scope {
         if(result != IBinding.NOT_FOUND_BINDING) return result;
         
         return parentScope.findData(simpleName);
-    }
-
-    public IFunctionBinding findFunction(String simpleName) {
-    	IFunctionBinding result = etBinding.findFunction(simpleName);
-        if(result != IBinding.NOT_FOUND_BINDING) return result;
-        return parentScope.findFunction(simpleName);
     }
 
     public IPackageBinding findPackage(String simpleName) {

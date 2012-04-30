@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,11 +17,10 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -33,11 +32,11 @@ public abstract class AbstractProcessingQueue {
 	private static final int LEVEL_TWO = 2;
 	private static final int LEVEL_ONE = 1;
 	
-	protected LinkedHashMap pendingUnits = new LinkedHashMap();
-    private Stack processingStack = new Stack();
-    private HashMap unitsBeingProcessedToCompileLevel = new HashMap();
+	protected LinkedHashMap<ProcessingUnitKey, ProcessingUnit> pendingUnits = new LinkedHashMap<ProcessingUnitKey, ProcessingUnit>();
+    private Stack<ProcessingUnitKey> processingStack = new Stack<ProcessingUnitKey>();
+    private HashMap<ProcessingUnitKey, Integer> unitsBeingProcessedToCompileLevel = new HashMap<ProcessingUnitKey, Integer>();
     
-    private HashSet processedUnits = new HashSet();
+    private HashSet<ProcessingUnitKey> processedUnits = new HashSet<ProcessingUnitKey>();
     
     protected ICompilerOptions compilerOptions;
     
@@ -61,23 +60,23 @@ public abstract class AbstractProcessingQueue {
     public static final boolean DEBUG = false;
     
     public class ProcessingUnit  {
-        public String[] packageName;
-        public String caseSensitiveInternedPartName;
+        public String packageName;
+        public String caseSensitivePartName;
        
-        ProcessingUnit(String[] packageName, String caseSensitiveInternedPartName) {
+        ProcessingUnit(String packageName, String caseSensitivePartName) {
             super();
             this.packageName = packageName;
-            this.caseSensitiveInternedPartName = caseSensitiveInternedPartName; 
+            this.caseSensitivePartName = caseSensitivePartName; 
         }
     }
     
     public class ProcessingUnitKey{
-    	private String[] packageName;
-    	private String caseInsensitiveInternedPartName;
+    	private String packageName;
+    	private String caseInsensitivePartName;
     	
-    	public ProcessingUnitKey(String[] packageName, String caseInsensitiveInternedPartName){
+    	public ProcessingUnitKey(String packageName, String caseInsensitivePartName){
     		this.packageName = packageName;
-    		this.caseInsensitiveInternedPartName = caseInsensitiveInternedPartName;
+    		this.caseInsensitivePartName = caseInsensitivePartName;
     	}
     	public boolean equals(Object otherObject){
     		if(this == otherObject){
@@ -85,13 +84,13 @@ public abstract class AbstractProcessingQueue {
     		}
     		if(otherObject instanceof ProcessingUnitKey){
     			ProcessingUnitKey otherPUKey = (ProcessingUnitKey)otherObject;
-    			return otherPUKey.packageName == packageName && otherPUKey.caseInsensitiveInternedPartName == caseInsensitiveInternedPartName;
+    			return NameUtile.equals(otherPUKey.packageName, packageName) && NameUtile.equals(otherPUKey.caseInsensitivePartName, caseInsensitivePartName);
     		}
     		return false;
     	}
     	
     	public int hashCode(){
-    		return caseInsensitiveInternedPartName.hashCode();
+    		return caseInsensitivePartName.hashCode();
     	}
     }
     
@@ -101,12 +100,12 @@ public abstract class AbstractProcessingQueue {
         this.compilerOptions = compilerOptions;
     }
     
-    public void addPart(String[] packageName, String caseSensitiveInternedPartName) {
-    	pendingUnits.put(new ProcessingUnitKey(packageName, InternUtil.intern(caseSensitiveInternedPartName)), new ProcessingUnit(packageName, caseSensitiveInternedPartName));
+    public void addPart(String packageName, String caseSensitivePartName) {
+    	pendingUnits.put(new ProcessingUnitKey(packageName, NameUtile.getAsName(caseSensitivePartName)), new ProcessingUnit(packageName, caseSensitivePartName));
     }
     
-   public boolean isPending(String[] packageName, String caseInsensitiveInternedPartName) {
-        return pendingUnits.containsKey(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+   public boolean isPending(String packageName, String caseInsensitivePartName) {
+        return pendingUnits.containsKey(new ProcessingUnitKey(packageName, caseInsensitivePartName));
     }
     
    private void initProgress(){
@@ -147,8 +146,8 @@ public abstract class AbstractProcessingQueue {
    	    		return;
    	    	}
    			
-   			Iterator iterator = pendingUnits.values().iterator();
-            ProcessingUnit processingUnit = (ProcessingUnit) iterator.next();
+   			Iterator<ProcessingUnit> iterator = pendingUnits.values().iterator();
+            ProcessingUnit processingUnit = iterator.next();
             process(processingUnit, LEVEL_THREE);
         }
 		
@@ -159,22 +158,23 @@ public abstract class AbstractProcessingQueue {
     
     private IPartBinding process(ProcessingUnit processingUnit, int compileLevel) {
     	IPartBinding result = null;
-        processingStack.add(new ProcessingUnitKey(processingUnit.packageName, InternUtil.intern(processingUnit.caseSensitiveInternedPartName)));
-        unitsBeingProcessedToCompileLevel.put(new ProcessingUnitKey(processingUnit.packageName, InternUtil.intern(processingUnit.caseSensitiveInternedPartName)), new Integer(compileLevel));
+    	String name = NameUtile.getAsName(processingUnit.caseSensitivePartName);
+        processingStack.add(new ProcessingUnitKey(processingUnit.packageName, name));
+        unitsBeingProcessedToCompileLevel.put(new ProcessingUnitKey(processingUnit.packageName, name), new Integer(compileLevel));
         
         try{
             switch(compileLevel){
             	case LEVEL_THREE: 
-            	    		pendingUnits.remove(new ProcessingUnitKey(processingUnit.packageName, InternUtil.intern(processingUnit.caseSensitiveInternedPartName)));
-                       		result = level03Compile(processingUnit.packageName, processingUnit.caseSensitiveInternedPartName);
+            	    		pendingUnits.remove(new ProcessingUnitKey(processingUnit.packageName, name));
+                       		result = level03Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
                        		updateProgress();
-                       		processedUnits.add(new ProcessingUnitKey(processingUnit.packageName, InternUtil.intern(processingUnit.caseSensitiveInternedPartName)));
+                       		processedUnits.add(new ProcessingUnitKey(processingUnit.packageName, name));
                             break;
             	case LEVEL_TWO:
-            	    		result = level02Compile(processingUnit.packageName, processingUnit.caseSensitiveInternedPartName);
+            	    		result = level02Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
             	    		break;
             	case LEVEL_ONE:
-            	    		result = level01Compile(processingUnit.packageName, processingUnit.caseSensitiveInternedPartName);
+            	    		result = level01Compile(processingUnit.packageName, processingUnit.caseSensitivePartName);
             	    		break;
             }
         }catch(CircularBuildRequestException e){
@@ -187,34 +187,33 @@ public abstract class AbstractProcessingQueue {
             throw new BuildException(e);            
         }
         
-        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(processingUnit.packageName, InternUtil.intern(processingUnit.caseSensitiveInternedPartName)));
+        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(processingUnit.packageName, name));
         processingStack.remove(processingStack.size() - 1);
         return result;
     }
     
-    protected abstract IPartBinding level03Compile(String[] packageName, String caseSensitiveInternedPartName);
+    protected abstract IPartBinding level03Compile(String packageName, String caseSensitivePartName);
 	
-    protected abstract IPartBinding level02Compile(String[] packageName, String caseSensitiveInternedPartName);
+    protected abstract IPartBinding level02Compile(String packageName, String caseSensitivePartName);
     
-    protected abstract IPartBinding level01Compile(String[] packageName, String caseSensitiveInternedPartName);
+    protected abstract IPartBinding level01Compile(String packageName, String caseSensitivePartName);
     
-    protected abstract IPartBinding getPartBindingFromCache(String[] packageName, String partName);
+    protected abstract IPartBinding getPartBindingFromCache(String packageName, String partName);
     
-	public IPartBinding requestCompilationFor(String[] packageName, String caseInsensitiveInternedPartName, boolean force) {
-        if(isBeingProcessed(packageName, caseInsensitiveInternedPartName)) {
-            if(isBeingCompiled(packageName, caseInsensitiveInternedPartName)){
-                return getPartBindingFromCache(packageName, caseInsensitiveInternedPartName);
+	public IPartBinding requestCompilationFor(String packageName, String caseInsensitivePartName, boolean force) {
+        if(isBeingProcessed(packageName, caseInsensitivePartName)) {
+            if(isBeingCompiled(packageName, caseInsensitivePartName)){
+                return getPartBindingFromCache(packageName, caseInsensitivePartName);
             }else{
                 if(getCurrentCompileLevel() == LEVEL_TWO){
-                    return getPartBindingFromCache(packageName, caseInsensitiveInternedPartName);
+                    return getPartBindingFromCache(packageName, caseInsensitivePartName);
                 }
                 else{
 	                if(DEBUG){
-	                    System.out.println("Request denied because " + caseInsensitiveInternedPartName + " is already being processed"); //$NON-NLS-1$ //$NON-NLS-2$
+	                    System.out.println("Request denied because " + caseInsensitivePartName + " is already being processed"); //$NON-NLS-1$ //$NON-NLS-2$
 	                    System.out.print("\t");
-	                    for (Iterator iter = processingStack.iterator(); iter.hasNext();) {
-	                        ProcessingUnitKey unit = (ProcessingUnitKey) iter.next();
-	                        System.out.print(unit.caseInsensitiveInternedPartName + ", ");
+	                    for (ProcessingUnitKey unit : processingStack) {
+	                        System.out.print(unit.caseInsensitivePartName + ", ");
 	                    }
 	                    System.out.print("\n");
 	                    numCompilesAborted++;
@@ -224,13 +223,13 @@ public abstract class AbstractProcessingQueue {
             }               
         }
         else{
-            if(isPending(packageName, caseInsensitiveInternedPartName)){
+            if(isPending(packageName, caseInsensitivePartName)){
 	            if(processingStack.size() >= 10) {
 		            if(DEBUG){
 		                System.out.println("Requested denied because the processing stack is too deep"); //$NON-NLS-1$
 		                numRequestsDenied++;
 		            }
-		            ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+		            ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitivePartName));
 		            if(force){
 		                return process(processingUnit, LEVEL_TWO);
 		            }
@@ -240,18 +239,18 @@ public abstract class AbstractProcessingQueue {
 		        else {
 		        	try{
 		        		// Try to get the part from the cache, in case it has been compiled at a level 2 already
-		        		IPartBinding partBindingFromCache = getPartBindingFromCache(packageName, caseInsensitiveInternedPartName);
-		        		if(Binding.isValidBinding(partBindingFromCache) && partBindingFromCache.isValid()){
-			        		//System.out.println("Found part from cache: " + caseInsensitiveInternedPartName);
+		        		IPartBinding partBindingFromCache = getPartBindingFromCache(packageName, caseInsensitivePartName);
+		        		if(partBindingFromCache != null && partBindingFromCache.isValid()){
+			        		//System.out.println("Found part from cache: " + caseInsensitivePartName);
 			        		return partBindingFromCache;
 			        	}else{
-				            ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+				            ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitivePartName));
 				            return process(processingUnit, LEVEL_THREE);
 			        	}
 		            }catch(CircularBuildRequestException e){
-		                reschedulePart(packageName, caseInsensitiveInternedPartName);
+		                reschedulePart(packageName, caseInsensitivePartName);
 		                
-		                ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+		                ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitivePartName));
 			            return process(processingUnit, LEVEL_TWO);
 		            }
 		        }
@@ -260,25 +259,25 @@ public abstract class AbstractProcessingQueue {
         return null;
 	}
 	
-	private boolean isBeingProcessed(String[] packageName, String caseInsensitiveInternedPartName) {
-       return processingStack.contains(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+	private boolean isBeingProcessed(String packageName, String caseInsensitivePartName) {
+       return processingStack.contains(new ProcessingUnitKey(packageName, caseInsensitivePartName));
     }
 
-    private void reschedulePart(String[] packageName, String caseInsensitiveInternedPartName) {
-        processingStack.remove(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
-        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
+    private void reschedulePart(String packageName, String caseInsensitivePartName) {
+        processingStack.remove(new ProcessingUnitKey(packageName, caseInsensitivePartName));
+        unitsBeingProcessedToCompileLevel.remove(new ProcessingUnitKey(packageName, caseInsensitivePartName));
         
-        doAddPart(packageName, caseInsensitiveInternedPartName);
+        doAddPart(packageName, caseInsensitivePartName);
     }
     
-    protected abstract void doAddPart(String[] packageName, String caseInsensitiveInternedPartName);
+    protected abstract void doAddPart(String packageName, String caseInsensitivePartName);
     
     private int getCurrentCompileLevel(){
         return ((Integer)unitsBeingProcessedToCompileLevel.get(processingStack.get(processingStack.size() - 1))).intValue();
     }
 
-	private boolean isBeingCompiled(String[] packageName, String caseInsensitiveInternedPartName) {
-	    return processingStack.indexOf(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName)) == (processingStack.size() - 1);
+	private boolean isBeingCompiled(String packageName, String caseInsensitivePartName) {
+	    return processingStack.indexOf(new ProcessingUnitKey(packageName, caseInsensitivePartName)) == (processingStack.size() - 1);
 	}
 	
 	protected boolean canSave(String partName) {

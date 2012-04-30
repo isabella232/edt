@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,11 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.DataTableBinding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
@@ -23,12 +18,9 @@ import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FormGroupBinding;
 import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
-import org.eclipse.edt.compiler.binding.ServiceBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -67,6 +59,7 @@ import org.eclipse.edt.compiler.internal.core.validation.part.InterfaceValidator
 import org.eclipse.edt.compiler.internal.core.validation.part.LibraryValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ProgramValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ServiceValidator;
+import org.eclipse.edt.mof.egl.Program;
 
 
 /**
@@ -96,15 +89,16 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.PROGRAM_BINDING:
 				try{
-				    astNode.accept(new ProgramBinder((ProgramBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    astNode.accept(new ProgramBinder((Program)((IRPartBinding)partBinding).getIrPart(), parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
-				    try{
-					    astNode.accept(new ProgramValidator(problemRequestor, (ProgramBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
+				    //TODO get validator from compiler. also, add code to handle circular buildexception
+//				    try{
+//					    astNode.accept(new ProgramValidator(problemRequestor, (ProgramBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -115,300 +109,300 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 				}
 				break;
-			case ITypeBinding.DELEGATE_BINDING:
-				try{
-				    astNode.accept(new DelegateBinder((DelegateBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new DelegateValidator(problemRequestor, (DelegateBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.EXTERNALTYPE_BINDING:
-				try{
-				    astNode.accept(new ExternalTypeBinder((ExternalTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new ExternalTypeValidator(problemRequestor, (ExternalTypeBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.ENUMERATION_BINDING:
-				try{
-				    astNode.accept(new EnumerationBinder((EnumerationTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				    
-				    try{
-					    astNode.accept(new EnumerationValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FUNCTION_BINDING:
-				try{
-				    astNode.accept(new FunctionBinder((TopLevelFunctionBinding)partBinding, (TopLevelFunctionBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FunctionValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.DATAITEM_BINDING:
-				try{
-				    astNode.accept(new DataItemBinder((DataItemBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-					
-					try{
-					    astNode.accept(new DataItemValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.DATATABLE_BINDING:
-				try{
-				    astNode.accept(new DataTableBinder((DataTableBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-					
-					try{
-					    astNode.accept(new DataTableValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FORMGROUP_BINDING:
-				try{
-				    astNode.accept(new FormGroupBinder((FormGroupBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FormGroupValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.HANDLER_BINDING:
-				try{
-				    astNode.accept(new HandlerBinder((HandlerBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.INTERFACE_BINDING:
-				try{
-				    astNode.accept(new InterfaceBinder((InterfaceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new InterfaceValidator(problemRequestor, (InterfaceBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.LIBRARY_BINDING:
-				try{
-				    astNode.accept(new LibraryBinder((LibraryBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new LibraryValidator(problemRequestor, (LibraryBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-				try{
-				    astNode.accept(new FlexibleRecordBinder((FlexibleRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new FlexibleRecordValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FIXED_RECORD_BINDING:
-				try{
-				    astNode.accept(new FixedRecordBinder((FixedRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-								
-					try{
-					    astNode.accept(new FixedRecordValidator(problemRequestor, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.SERVICE_BINDING:
-				try{
-				    astNode.accept(new ServiceBinder((ServiceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new ServiceValidator(problemRequestor, (ServiceBinding)partBinding, compilerOptions));
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
-			case ITypeBinding.FORM_BINDING:
-				try{
-				    astNode.accept(new FormBinder((FormBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-				
-					try{
-					    astNode.accept(new FormValidator(problemRequestor, compilerOptions));			
-					}catch(CancelledException e){
-					    throw e;
-					}catch(RuntimeException e){
-					    handleValidationException((Part)astNode, problemRequestor, e);
-					}
-				}catch(CancelledException  e){
-				    throw e;
-				}catch(CircularBuildRequestException e){
-				    throw e;
-				}catch(BuildException e){
-				    throw e;
-				}catch(RuntimeException e){
-				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-				}
-				break;
+//			case ITypeBinding.DELEGATE_BINDING:
+//				try{
+//				    astNode.accept(new DelegateBinder((DelegateBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    
+//				    try{
+//					    astNode.accept(new DelegateValidator(problemRequestor, (DelegateBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.EXTERNALTYPE_BINDING:
+//				try{
+//				    astNode.accept(new ExternalTypeBinder((ExternalTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    
+//				    try{
+//					    astNode.accept(new ExternalTypeValidator(problemRequestor, (ExternalTypeBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.ENUMERATION_BINDING:
+//				try{
+//				    astNode.accept(new EnumerationBinder((EnumerationTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				    
+//				    try{
+//					    astNode.accept(new EnumerationValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.FUNCTION_BINDING:
+//				try{
+//				    astNode.accept(new FunctionBinder((TopLevelFunctionBinding)partBinding, (TopLevelFunctionBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				
+//					try{
+//					    astNode.accept(new FunctionValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.DATAITEM_BINDING:
+//				try{
+//				    astNode.accept(new DataItemBinder((DataItemBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//					
+//					try{
+//					    astNode.accept(new DataItemValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.DATATABLE_BINDING:
+//				try{
+//				    astNode.accept(new DataTableBinder((DataTableBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//					
+//					try{
+//					    astNode.accept(new DataTableValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.FORMGROUP_BINDING:
+//				try{
+//				    astNode.accept(new FormGroupBinder((FormGroupBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				
+//					try{
+//					    astNode.accept(new FormGroupValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.HANDLER_BINDING:
+//				try{
+//				    astNode.accept(new HandlerBinder((HandlerBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//								
+//					try{
+//					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.INTERFACE_BINDING:
+//				try{
+//				    astNode.accept(new InterfaceBinder((InterfaceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//								
+//					try{
+//					    astNode.accept(new InterfaceValidator(problemRequestor, (InterfaceBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.LIBRARY_BINDING:
+//				try{
+//				    astNode.accept(new LibraryBinder((LibraryBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//								
+//					try{
+//					    astNode.accept(new LibraryValidator(problemRequestor, (LibraryBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
+//				try{
+//				    astNode.accept(new FlexibleRecordBinder((FlexibleRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//								
+//					try{
+//					    astNode.accept(new FlexibleRecordValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.FIXED_RECORD_BINDING:
+//				try{
+//				    astNode.accept(new FixedRecordBinder((FixedRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//								
+//					try{
+//					    astNode.accept(new FixedRecordValidator(problemRequestor, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.SERVICE_BINDING:
+//				try{
+//				    astNode.accept(new ServiceBinder((ServiceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				
+//					try{
+//					    astNode.accept(new ServiceValidator(problemRequestor, (ServiceBinding)partBinding, compilerOptions));
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
+//			case ITypeBinding.FORM_BINDING:
+//				try{
+//				    astNode.accept(new FormBinder((FormBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+//				
+//					try{
+//					    astNode.accept(new FormValidator(problemRequestor, compilerOptions));			
+//					}catch(CancelledException e){
+//					    throw e;
+//					}catch(RuntimeException e){
+//					    handleValidationException((Part)astNode, problemRequestor, e);
+//					}
+//				}catch(CancelledException  e){
+//				    throw e;
+//				}catch(CircularBuildRequestException e){
+//				    throw e;
+//				}catch(BuildException e){
+//				    throw e;
+//				}catch(RuntimeException e){
+//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+//				}
+//				break;
 		}
 	}
 	
@@ -417,25 +411,25 @@ public abstract class Compiler extends DefaultASTVisitor{
 	protected abstract void logValidationException(RuntimeException e);
 
     public void compileTopLevelFunction(TopLevelFunction functionAST, IPartBinding functionBinding, Scope scope, IPartBinding parentBinding, IDependencyRequestor dependencyInfo, IProblemRequestor requestor, ICompilerOptions compilerOptions) {
-       try{
-           functionAST.accept(new FunctionBinder((TopLevelFunctionBinding)functionBinding, (TopLevelFunctionBinding)functionBinding, scope, dependencyInfo, requestor, compilerOptions));
-           
-			try{
-			    functionAST.accept(new FunctionValidator(requestor, parentBinding, compilerOptions));
-			}catch(CancelledException e){
-			    throw e;
-       		}catch(RuntimeException e){
-			    requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-			    logValidationException(e);
-			}
-		}catch(CancelledException e){
-		    throw e;
-		}catch(CircularBuildRequestException e){
-		    throw e; 
-		}catch(RuntimeException e){
-		   requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
-		   logPartBinderException(e);
-		}
+//       try{
+//           functionAST.accept(new FunctionBinder((TopLevelFunctionBinding)functionBinding, (TopLevelFunctionBinding)functionBinding, scope, dependencyInfo, requestor, compilerOptions));
+//           
+//			try{
+//			    functionAST.accept(new FunctionValidator(requestor, parentBinding, compilerOptions));
+//			}catch(CancelledException e){
+//			    throw e;
+//       		}catch(RuntimeException e){
+//			    requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
+//			    logValidationException(e);
+//			}
+//		}catch(CancelledException e){
+//		    throw e;
+//		}catch(CircularBuildRequestException e){
+//		    throw e; 
+//		}catch(RuntimeException e){
+//		   requestor.acceptProblem(functionAST.getName(), IProblemRequestor.CONTEXT_SPECIFIC_COMPILATION_EXCEPTION, new String[]{functionAST.getName().getCanonicalName()});
+//		   logPartBinderException(e);
+//		}
 	}
     
     private void handleValidationException(Part astNode, IProblemRequestor problemRequestor, RuntimeException e) {

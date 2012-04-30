@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,21 +15,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
-import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen.IBMiProgramCallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementValidator;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
@@ -40,8 +35,7 @@ public class EDTCompiler extends BaseCompiler {
 		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
 		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
 		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
-		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
-		StatementValidator.Registry.put("eglx.jtopen", new IBMiProgramCallStatementValidator());
+//		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
 	}
 
 	@Override
@@ -54,8 +48,6 @@ public class EDTCompiler extends BaseCompiler {
 			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib");
-			path += File.pathSeparator;
-			path += SystemEnvironmentUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib");
 			path += File.pathSeparator;
 			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
 		}
@@ -120,18 +112,7 @@ public class EDTCompiler extends BaseCompiler {
 			return StatementValidator.Registry.get("eglx.persistence.sql");
 		}
 		else if (validator[0] == null && stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
-			CallStatement call = (CallStatement) stmt;
-			if (CallStatementValidator.isFunctionCallStatement(call)) {
-				if (CallStatementValidator.isLocalFunctionCallStatement(call)) {
-					return StatementValidator.Registry.get("eglx.jtopen");
-				}
-				else {
-					return StatementValidator.Registry.get("eglx.services");
-				}
-			}
-			else {
-				return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
-			}
+			return StatementValidator.Registry.get("eglx.services");
 		}
 		else {
 			return validator[0];

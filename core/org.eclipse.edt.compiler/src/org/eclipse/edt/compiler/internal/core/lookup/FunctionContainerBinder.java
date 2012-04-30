@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,17 +19,12 @@ import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FormBinding;
 import org.eclipse.edt.compiler.binding.FormFieldBinding;
 import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.FunctionContainerBinding;
 import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.UsedTypeBinding;
 import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
@@ -53,9 +48,9 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 public abstract class FunctionContainerBinder extends DefaultBinder {
 
-    private FunctionContainerBinding functionContainerBinding;
+    private org.eclipse.edt.mof.egl.Part functionContainerBinding;
 
-    public FunctionContainerBinder(FunctionContainerBinding functionContainerBinding, Scope scope,
+    public FunctionContainerBinder(org.eclipse.edt.mof.egl.Part functionContainerBinding, Scope scope,
             IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(scope, functionContainerBinding, dependencyRequestor, problemRequestor, compilerOptions);
         this.functionContainerBinding = functionContainerBinding;

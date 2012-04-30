@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,35 +19,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.AmbiguousDataBinding;
-import org.eclipse.edt.compiler.binding.AmbiguousSystemLibraryFieldDataBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ClassFieldBinding;
-import org.eclipse.edt.compiler.binding.DataItemBinding;
-import org.eclipse.edt.compiler.binding.DataTableBinding;
-import org.eclipse.edt.compiler.binding.DynamicDataBinding;
-import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedStructureBinding;
 import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
-import org.eclipse.edt.compiler.binding.PartFoundButNotAnnotationRecordAnnotationBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
-import org.eclipse.edt.compiler.binding.StructureItemBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionDataBinding;
-import org.eclipse.edt.compiler.binding.VariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
@@ -67,7 +47,6 @@ import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.NullableType;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.PrimitiveType;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
@@ -78,7 +57,12 @@ import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
+import org.eclipse.edt.mof.egl.BooleanLiteral;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 import com.ibm.icu.util.StringTokenizer;
 
@@ -89,18 +73,27 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     
     protected Scope currentScope;
     protected IDependencyRequestor dependencyRequestor;
-    protected IPartBinding currentBinding;
+    protected Part currentBinding;
+    protected String packageName;
     protected ICompilerOptions compilerOptions;
-    protected boolean bindingCallTarget;
         
-    public AbstractBinder(Scope currentScope, IPartBinding currentBinding, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
+    public AbstractBinder(Scope currentScope, String packageName, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
         this.currentScope = currentScope;
+        this.packageName = packageName;
+        this.currentBinding = null;
+        this.dependencyRequestor = dependencyRequestor;
+        this.compilerOptions = compilerOptions;
+    }
+
+    public AbstractBinder(Scope currentScope, Part currentBinding, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
+        this.currentScope = currentScope;
+        this.packageName = currentBinding.getPackageName();
         this.currentBinding = currentBinding;
         this.dependencyRequestor = dependencyRequestor;
         this.compilerOptions = compilerOptions;
     }
 
-    public ITypeBinding bindType(Type type) throws ResolutionException {
+    public org.eclipse.edt.mof.egl.Type bindType(Type type) throws ResolutionException {
         switch(type.getKind()) {
             case Type.PRIMITIVETYPE:
                 PrimitiveType primitiveType = (PrimitiveType) type;
@@ -126,11 +119,11 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         }
     }
     
-    public ITypeBinding bindTypeName(Name name) throws ResolutionException {
+    public org.eclipse.edt.mof.egl.Type bindTypeName(Name name) throws ResolutionException {
     	return bindTypeName(name, false);
     }
 
-    public ITypeBinding bindTypeName(Name name, boolean mayHaveFormgroupQualifier) throws ResolutionException {
+    public org.eclipse.edt.mof.egl.Type bindTypeName(Name name, boolean mayHaveFormgroupQualifier) throws ResolutionException {
         ITypeBinding result = null;
         if(name.isSimpleName()) {
             result = currentScope.findType(name.getIdentifier());
@@ -159,7 +152,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 	            result = packageBinding.resolveType(qualifiedName.getIdentifier());
 	            
 	            if(result != IBinding.NOT_FOUND_BINDING){
-	                if(((IPartBinding)result).isPrivate() && result.getPackageName() != currentBinding.getPackageName()){
+	                if(((IPartBinding)result).isPrivate() && !NameUtile.equals(result.getPackageName(), packageName)){
 	                    result = IBinding.NOT_FOUND_BINDING;
 	                }
 	            }
@@ -282,7 +275,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                 
                 ITypeBinding resolvedType = packageBinding.resolveType(identifier);
                 if(resolvedType != IBinding.NOT_FOUND_BINDING) {
-                	if(resolvedType.getPackageName() != currentBinding.getPackageName() && ((IPartBinding)resolvedType).isPrivate()){
+                	if(!NameUtile.equals(resolvedType.getPackageName(), packageName) && ((IPartBinding)resolvedType).isPrivate()){
                 		dependencyRequestor.recordName(new QualifiedName((Name)qualifier, name.getIdentifier(), qualifier.getOffset(), name.getOffset() + name.getLength()));
                         result = IBinding.NOT_FOUND_BINDING;
                 	}
@@ -398,10 +391,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         		result = typeBinding.findPublicData(identifier);
         	}
         }
-    	else if (bindingCallTarget && typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING || typeBinding.getKind() == ITypeBinding.SERVICE_BINDING) {
-    		//Call target can reference non-static functions in a static way
-    		result = typeBinding.findData(identifier);;
-    	}
         else if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING ||
         		typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
         	result = typeBinding.findData(identifier);
@@ -668,7 +657,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
                 result = packageBinding.resolveType(identifier);
                 
                 if(result != IBinding.NOT_FOUND_BINDING){
-	                if(((IPartBinding)result).isPrivate() && ((IPartBinding)result).getPackageName() != currentBinding.getPackageName()){
+	                if(((IPartBinding)result).isPrivate() && (!NameUtile.equals(((IPartBinding)result).getPackageName(), packageName))){
 	                    result = IBinding.NOT_FOUND_BINDING;
 	                }
 	                else {
@@ -856,217 +845,113 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     	return result;
     }
 	
-	protected static Object getConstantValue(Expression expr, IProblemRequestor problemRequestor, boolean returnStringTypes) {
-		return getConstantValue(expr, null, null, problemRequestor, returnStringTypes);
-	}
-      
-    protected static Object getConstantValue(Expression expr, ITypeBinding constantType, String constantName, IProblemRequestor problemRequestor) {
-    	return getConstantValue(expr, constantType, constantName, problemRequestor, false);
-    }
-    
-    protected static Object getConstantValue(Expression expr, ITypeBinding constantType, String constantName, IProblemRequestor problemRequestor, boolean returnStringTypes) {
-    	ConstantValueCreator constValueCreator = new ConstantValueCreator(constantType, constantName, problemRequestor, returnStringTypes);
+    protected static PrimitiveTypeLiteral getConstantValue(Expression expr) {
+    	ConstantValueCreator constValueCreator = new ConstantValueCreator();
 		expr.accept(constValueCreator);
-		if(constValueCreator.constantValue == null) {
-			//TODO: have problemRequestor accept real error - non-literal expression in array literal
-			problemRequestor.acceptProblem(expr, IProblemRequestor.CONSTANT_VALUE_MUST_BE_LITERAL);			
-		}
 		return constValueCreator.constantValue;
     }
     
     private static class ConstantValueCreator extends DefaultASTVisitor {
-    	Object constantValue;
-    	IProblemRequestor problemRequestor;
+    	PrimitiveTypeLiteral constantValue;
     	boolean isNegative = false;
-		private String constantName;
-		private ITypeBinding constantType;
-		private boolean returnStringTypes;
     	
-		public ConstantValueCreator(ITypeBinding constantType, String constantName, IProblemRequestor problemRequestor, boolean returnStringTypes) {
-			this.constantType = constantType;
-			this.constantName = constantName;
-			this.problemRequestor = problemRequestor;
-			this.returnStringTypes = returnStringTypes;
+		public ConstantValueCreator() {
 		}
     	
     	public boolean visit(IntegerLiteral integerLiteral) {
     		String str = integerLiteral.getValue();
-    		if(isNegative) {
-    			str = "-" + str;
-    		}
-    		try {
-				if (integerLiteral.getValue().length() > 18) {
-					constantValue = new BigInteger(str);
-				} else {
-					if (integerLiteral.getValue().length() > 9) {
-						constantValue = new Long(str);
-					} else {
-						constantValue = new Integer(str);
-					}
-				}
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				constantValue = null;
-			}
-    		checkLengthAndDecimals(integerLiteral, integerLiteral.getValue());
+    		
+    		org.eclipse.edt.mof.egl.IntegerLiteral lit = IrFactory.INSTANCE.createIntegerLiteral();
+    		lit.setIsNegated(isNegative);
+    		lit.setValue(str);
+    		constantValue = lit;
+    		
 			return false;
 		}
     	
 		public boolean visit(FloatLiteral floatLiteral) {
-			String str = floatLiteral.getValue();
-    		if(isNegative) {
-    			str = "-" + str;
-    		}
-			constantValue = new Double(str);
+    		String str = floatLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.FloatingPointLiteral lit = IrFactory.INSTANCE.createFloatingPointLiteral();
+    		lit.setIsNegated(isNegative);
+    		lit.setValue(str);
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(DecimalLiteral decimalLiteral) {
-			String str = decimalLiteral.getValue();
-    		if(isNegative) {
-    			str = "-" + str;
-    		}
-			constantValue = new BigDecimal(str);
-			checkLengthAndDecimals(decimalLiteral, decimalLiteral.getValue());
+    		String str = decimalLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.DecimalLiteral lit = IrFactory.INSTANCE.createDecimalLiteral();
+    		lit.setIsNegated(isNegative);
+    		lit.setValue(str);
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(StringLiteral stringLiteral) {
-			if (returnStringTypes) {
-				constantValue = new SpecificTypedLiteral(SpecificTypedLiteral.StringLiteral, stringLiteral.getValue(), stringLiteral.isHex());
-			}
-			else {
-				constantValue = stringLiteral.getValue();
-			}
+    		String str = stringLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.StringLiteral lit = IrFactory.INSTANCE.createStringLiteral();
+    		lit.setValue(str);
+    		lit.setIsHex(stringLiteral.isHex());
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(HexLiteral stringLiteral) {
-			if (returnStringTypes) {
-				constantValue = new SpecificTypedLiteral(SpecificTypedLiteral.HexLiteral, stringLiteral.getValue(), true);
-			}
-			else {
-				constantValue = stringLiteral.getValue();
-			}
-			
+    		String str = stringLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.HexLiteral lit = IrFactory.INSTANCE.createHexLiteral();
+    		lit.setValue(str);
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(CharLiteral stringLiteral) {
-			if (returnStringTypes) {
-				constantValue = new SpecificTypedLiteral(SpecificTypedLiteral.CharLiteral, stringLiteral.getValue(), stringLiteral.isHex());
-			}
-			else {
-				constantValue = stringLiteral.getValue();
-			}
+    		String str = stringLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.CharLiteral lit = IrFactory.INSTANCE.createCharLiteral();
+    		lit.setValue(str);
+    		lit.setIsHex(stringLiteral.isHex());
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(DBCharLiteral stringLiteral) {
-			if (returnStringTypes) {
-				constantValue = new SpecificTypedLiteral(SpecificTypedLiteral.DBCharLiteral, stringLiteral.getValue(), stringLiteral.isHex());
-			}
-			else {
-				constantValue = stringLiteral.getValue();
-			}
+    		String str = stringLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.DBCharLiteral lit = IrFactory.INSTANCE.createDBCharLiteral();
+    		lit.setValue(str);
+    		lit.setIsHex(stringLiteral.isHex());
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(MBCharLiteral stringLiteral) {
-			if (returnStringTypes) {
-				constantValue = new SpecificTypedLiteral(SpecificTypedLiteral.MBCharLiteral, stringLiteral.getValue(), stringLiteral.isHex());
-			}
-			else {
-				constantValue = stringLiteral.getValue();
-			}
+    		String str = stringLiteral.getValue();
+    		
+    		org.eclipse.edt.mof.egl.MBCharLiteral lit = IrFactory.INSTANCE.createMBCharLiteral();
+    		lit.setValue(str);
+    		lit.setIsHex(stringLiteral.isHex());
+    		constantValue = lit;
+    		
 			return false;
 		}
 		
 		public boolean visit(org.eclipse.edt.compiler.core.ast.BooleanLiteral booleanLiteral) {
-			constantValue = new Boolean(booleanLiteral.booleanValue().booleanValue());
+			BooleanLiteral lit = IrFactory.INSTANCE.createBooleanLiteral();
+			lit.setBooleanValue(booleanLiteral.booleanValue().booleanValue());
+			constantValue = lit;
 			return false;
 		}
 		
-		private Expression getBaseExpression(Expression expr) {
-			final Expression[] baseExpr = new Expression[] {expr};
-			expr.accept(new DefaultASTVisitor(){
-				public boolean visit(UnaryExpression unaryExpression) {
-					baseExpr[0] = unaryExpression.getExpression();
-					return true;
-				}
-			});
-			return baseExpr[0];
-		}
-
-		
-		public boolean visit(ArrayLiteral arrayLiteral) {
-			List constantObjects = new ArrayList();
-			Expression previousExpr = null;
-			for(Iterator iter = arrayLiteral.getExpressions().iterator(); iter.hasNext();) {
-				Expression nextExpr = (Expression) iter.next();
-				if(previousExpr != null && !getBaseExpression(nextExpr).getClass().getName().equals(getBaseExpression(previousExpr).getClass().getName())) {
-					problemRequestor.acceptProblem(nextExpr, IProblemRequestor.CONSTANT_VALUE_MIXED_TYPE_ARRAY);	
-					constantValue = new Object[0];
-					return false;
-				}
-				else {
-					ConstantValueCreator constValueCreator = new ConstantValueCreator(constantType, constantName, problemRequestor, returnStringTypes);
-					nextExpr.accept(constValueCreator);
-					if(constValueCreator.constantValue == null) {
-						problemRequestor.acceptProblem(nextExpr, IProblemRequestor.CONSTANT_VALUE_MUST_BE_LITERAL);			
-						constantValue = new Object[0];
-						return false;
-					}
-					else {
-						constantObjects.add(constValueCreator.constantValue);
-					}
-				}
-				previousExpr = nextExpr;
-			}
-			if(previousExpr == null) {
-				constantValue = new Object[0];
-			}
-			else {
-				//If here, previousExpr must be a literal expression
-				LiteralExpression litExpr = (LiteralExpression) getBaseExpression(previousExpr);
-				
-				switch(litExpr.getLiteralKind()) {
-					case LiteralExpression.INTEGER_LITERAL:
-						constantValue = constantObjects.toArray(new Number[0]);
-						break;
-					case LiteralExpression.FLOAT_LITERAL:
-						constantValue = constantObjects.toArray(new Float[0]);
-						break;
-					case LiteralExpression.DECIMAL_LITERAL:
-						constantValue = constantObjects.toArray(new Number[0]);
-						break;
-					case LiteralExpression.STRING_LITERAL:
-						if (returnStringTypes) {
-							constantValue = constantObjects.toArray(new SpecificTypedLiteral[0]);							
-						}
-						else {
-							constantValue = constantObjects.toArray(new String[0]);
-						}
-						break;
-					case LiteralExpression.BOOLEAN_LITERAL:
-						constantValue = constantObjects.toArray(new Boolean[0]);
-						break;
-					case LiteralExpression.ARRAY_LITERAL:
-						int numElements = constantObjects.size(); 
-						constantValue = Array.newInstance(constantObjects.get(0).getClass(), numElements);
-						Object[] arrayForm = (Object[]) constantValue;
-						for(int i = 0; i < numElements; i++) {
-							arrayForm[i] = constantObjects.get(i);
-						}
-						break;
-					default:
-						constantValue = new Object[0];
-				}
-			}
-			
-			return false;
-		}		
-
 		public boolean visit(UnaryExpression unaryExpression) {
 			if(unaryExpression.getOperator() == UnaryExpression.Operator.MINUS) {
 				isNegative = !isNegative;
@@ -1074,51 +959,6 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return true;
 		}
 		
-		private void checkLengthAndDecimals(Node nodeForErrors, String value) {
-			if(constantType != null && IBinding.NOT_FOUND_BINDING != constantType) {
-				if(ITypeBinding.PRIMITIVE_TYPE_BINDING == constantType.getKind()) {
-					PrimitiveTypeBinding primTypeBinding = (PrimitiveTypeBinding) constantType;
-					int length = primTypeBinding.getLength();
-					int decimals = primTypeBinding.getDecimals();
-					switch(primTypeBinding.getPrimitive().getType()) {
-						case Primitive.DECIMAL_PRIMITIVE:
-						case Primitive.BIN_PRIMITIVE:
-						case Primitive.MONEY_PRIMITIVE:
-						case Primitive.NUM_PRIMITIVE:
-						case Primitive.NUMC_PRIMITIVE:
-						case Primitive.PACF_PRIMITIVE:
-							int nonDecimalLength = length-decimals;
-							if(nonDecimalLength >= 0) {
-								StringTokenizer st = new StringTokenizer(value, ".");
-								int valueNonDecimalLength = st.nextToken().length();
-								int valueDecimals = st.hasMoreTokens() ? st.nextToken().length() : 0;
-								if(valueNonDecimalLength > nonDecimalLength && !primTypeBinding.isReference()) {
-									problemRequestor.acceptProblem(
-										nodeForErrors,
-										IProblemRequestor.LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG,
-										new String[] {
-											value,
-											Integer.toString(valueNonDecimalLength),
-											Integer.toString(nonDecimalLength),
-											constantName
-										});
-								}
-								if(valueDecimals > decimals && !primTypeBinding.isReference()) {
-									problemRequestor.acceptProblem(
-										nodeForErrors,
-										IProblemRequestor.DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG,
-										new String[] {
-											value,
-											Integer.toString(valueDecimals),
-											Integer.toString(decimals),
-											constantName
-										});
-								}
-							}
-					}
-				}
-			}
-		}
     }
     
     /**
@@ -1221,7 +1061,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			   functionBinding.getName() == InternUtil.intern(dataBindingName);
 	}
     
-    protected void processSettingsBlock(ClassDataDeclaration classDataDeclaration, IPartBinding functionContainerBinding, Scope functionContainerScope, IProblemRequestor problemRequestor) {
+    protected void processSettingsBlock(ClassDataDeclaration classDataDeclaration, Part functionContainerBinding, Scope functionContainerScope, IProblemRequestor problemRequestor) {
         
         Iterator i = classDataDeclaration.getNames().iterator();
         boolean annotationFoundUsingScope = false;

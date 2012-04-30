@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,9 @@
 package org.eclipse.edt.compiler.binding;
 
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -24,24 +26,32 @@ public class PackageBinding extends Binding implements IPackageBinding {
     private IEnvironment environment;
     private PackageBinding[] subPackages;
     
-    private String[] packageName;
+    private String packageName;
+    private String caseSensitivePackageName;
     
-    public PackageBinding(String[] packageName, PackageBinding parent, IEnvironment environment) {
-        super(packageName.length == 0 ? "" : packageName[packageName.length - 1]);
-        this.packageName = packageName;
+    public PackageBinding(String caseSensitivePackageName, PackageBinding parent, IEnvironment environment) {
+        super(BindingUtil.getLastSegment(caseSensitivePackageName));
+        this.caseSensitivePackageName = caseSensitivePackageName;
         this.parent = parent;
         this.environment = environment;
     }
     
-    public String[] getPackageName() {
+    public String getPackageName() {
+    	if (packageName == null) {
+    		packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+    	}
         return packageName;
     }
+    
+    public String getCaseSensitivePackageName() {
+		return caseSensitivePackageName;
+	}
     
     public PackageBinding getParent() {
         return parent;
     }
     
-    private PackageBinding addPackage(String[] packageName) {
+    private PackageBinding addPackage(String packageName) {
         PackageBinding packageBinding = new PackageBinding(packageName, this, environment);
         if(subPackages == null) {
             subPackages = new PackageBinding[] { packageBinding };
@@ -59,26 +69,29 @@ public class PackageBinding extends Binding implements IPackageBinding {
         // Return existing package binding if there is one
         if(subPackages != null) {
             for(int i = 0; i < subPackages.length; i++) {
-                if(subPackages[i].getName() == simpleName) {
+                if(NameUtile.equals(subPackages[i].getName(), simpleName)) {
                     return subPackages[i];
                 }
             }
         }
         
-        // Ask project scope if the sub package actually exists, if it does, create a new PackageBinding for it
-        String[] subPackageName = new String[packageName.length + 1];
-        System.arraycopy(packageName, 0, subPackageName, 0, packageName.length);
-        subPackageName[packageName.length] = simpleName;
-        subPackageName = InternUtil.intern(subPackageName);
-        if(environment.hasPackage(subPackageName)) {
+        // Ask environment if the sub package actually exists, if it does, create a new PackageBinding for it
+        String subPackageName;
+        if (packageName.length() > 0) {
+        	subPackageName = packageName + "." + simpleName;
+        }
+        else {
+        	subPackageName = simpleName;
+        }
+        if(environment.hasPackage(NameUtile.getAsName(subPackageName))) {
             return addPackage(subPackageName);
         }
  
         // No such sub package exists
-        return IBinding.NOT_FOUND_BINDING;
+        return null;
     }
 
-    public ITypeBinding resolveType(String simpleName) {
+    public IPartBinding resolveType(String simpleName) {
         return environment.getPartBinding(packageName, simpleName);
     }
 

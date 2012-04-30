@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,7 +23,7 @@ public class ClassDataDeclaration extends Node {
 
 	private boolean isPrivate;
 	private boolean isStatic;
-	private List ID_plus;	// List of SimpleNames
+	private List<Name> ID_plus;	// List of SimpleNames
 	private Type type;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
@@ -48,7 +48,7 @@ public class ClassDataDeclaration extends Node {
 		this.isConstant = isConstant;
 	}
 	
-	public List getNames() {
+	public List<Name> getNames() {
 		return ID_plus;
 	}
 	

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,7 +20,6 @@ import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
-import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -43,10 +42,10 @@ import org.eclipse.edt.compiler.internal.sdk.compile.ISDKProblemRequestorFactory
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathEntry;
 import org.eclipse.edt.compiler.internal.sdk.compile.SourcePathInfo;
 import org.eclipse.edt.compiler.internal.sdk.compile.TopLevelFunctionProcessor;
+import org.eclipse.edt.compiler.internal.util.NameUtil;
 import org.eclipse.edt.compiler.internal.util.TopLevelFunctionInfo;
 import org.eclipse.edt.mof.MofSerializable;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.serialization.SerializationException;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -58,9 +57,8 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private EGL2IREnvironment environment;
     private ISDKProblemRequestorFactory problemRequestorFactory;
     private ISystemEnvironment sysEnv;
-    private ICompiler compiler;
 
-    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv, ICompiler compiler) {
+    public Processor(IBuildNotifier notifier, ICompilerOptions compilerOptions, ISDKProblemRequestorFactory problemRequestorFactory, ISystemEnvironment sysEnv) {
         super(notifier, compilerOptions);
         this.problemRequestorFactory = problemRequestorFactory;
         if (problemRequestorFactory == null){
@@ -68,7 +66,6 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
         }
         this.sysEnv = sysEnv;
-        this.compiler = compiler;
     }
     
     public void setEnvironment(EGL2IREnvironment environment){
@@ -79,19 +76,19 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         return false;
     }
 
-    public IPartBinding level03Compile(String[] packageName, String caseSensitiveInternedPartName) {
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
-        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, caseInsensitiveInternedPartName);
-        Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
+    public IPartBinding level03Compile(String packageName, String caseSensitivePartName) {
+    	String caseInsensitivePartName = NameUtile.getAsName(caseSensitivePartName);
+        File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, caseInsensitivePartName);
+        Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitivePartName);
         if (partAST instanceof org.eclipse.edt.compiler.core.ast.File){
         	org.eclipse.edt.compiler.core.ast.File errorFile =ASTManager.getInstance().getFileAST(declaringFile); 
         	errorFile.accept(problemRequestorFactory.getSyntaxErrorRequestor(declaringFile));//$NON-NLS-1$
         }
         
-        IPartBinding binding = new BindingCreator(environment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+        IPartBinding binding = environment.getNewPartBinding(packageName, caseSensitivePartName, Util.getPartType(partAST));
         if(binding.getKind() != ITypeBinding.FILE_BINDING && binding.getKind() != ITypeBinding.FUNCTION_BINDING){
         	System.out.println();
-            System.out.println("Processing Part: " + caseInsensitiveInternedPartName);	
+            System.out.println("Processing Part: " + caseInsensitivePartName);	
         }
         
         binding.setEnvironment(environment);
@@ -102,14 +99,6 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         IProblemRequestor problemRequestor = createProblemRequestor(declaringFile,partAST, binding);
 
 		Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
-//		try {
-//			Compiler.getInstance().compilePart(partAST, binding, scope, dependencyInfo, problemRequestor, compilerOptions);
-//		} catch (CircularBuildRequestException e) {
-//            reschedulePart(packageName, caseInsensitiveInternedPartName);           
-//            ProcessingUnit processingUnit = (ProcessingUnit) pendingUnits.get(new ProcessingUnitKey(packageName, caseInsensitiveInternedPartName));
-//            binding = process(processingUnit, LEVEL_TWO);
-//            environment.addPartBindingToCache(binding);
-//		}
         
         TopLevelFunctionInfo[] functions = null;
         if(dependencyInfo.getFunctionContainerScope() != null){
@@ -121,39 +110,20 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
             org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
             
 //	        Part part = createIRFromBoundAST(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
-	        try {
-				MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
-				
-				if(part == null) {
-					System.out.println("Part is null!");
-					return binding;
-				}
-					        
-				environment.save(part, true);
-			} catch (RuntimeException e) {
-				problemRequestor.acceptProblem(((Part)partAST).getName(), IProblemRequestor.COMPILATION_EXCEPTION, new String[]{((Part)partAST).getName().getCanonicalName()});
-			}
+	        MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
+	        
+	        if(part == null) {
+	        	System.out.println("Part is null!");
+	        	return binding;
+	        }
+	        	        
+            environment.save(part, true);
         }
         
          return binding;
     }
-        
-    private File getPackage(File path,String[] packageName){
-    	
-    	File root = path;
-    	for (int i = 0; i < packageName.length; i++) {
-    		File subFolder = new File(root, IRFileNameUtility.toIRFileName(packageName[i]));
-    		
-			if(!subFolder.exists()){
-				subFolder.mkdir();
-			}
-				root = subFolder;
-		}
-    	
-    	return root;
-    }
-    
-    private Scope createPartScope(String[] packageName, File declaringFile, IPartBinding binding, IDependencyRequestor dependencyRequestor) {
+            
+    private Scope createPartScope(String packageName, File declaringFile, IPartBinding binding, IDependencyRequestor dependencyRequestor) {
         Scope scope;
 		if(binding.getKind() == ITypeBinding.FILE_BINDING){
 			scope = new EnvironmentScope(environment, dependencyRequestor);
@@ -169,7 +139,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
     private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
     	
         Egl2Mof generator = new Egl2Mof(environment);
-        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile, compiler), problemRequestor);
+        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile), problemRequestor);
     }
     
     private IProblemRequestor createProblemRequestor(File file,Node partAST, IPartBinding binding) {
@@ -180,15 +150,15 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 		return newRequestor;
 	}
 
-    public IPartBinding level02Compile(String[] packageName, String caseSensitiveInternedPartName) {
-        return SourcePathEntry.getInstance().compileLevel2Binding(packageName, caseSensitiveInternedPartName);
+    public IPartBinding level02Compile(String packageName, String caseSensitivePartName) {
+        return SourcePathEntry.getInstance().compileLevel2Binding(packageName, caseSensitivePartName);
     }
 
-    public IPartBinding level01Compile(String[] packageName, String caseSensitiveInternedPartName) {
-        return environment.level01Compile(packageName, caseSensitiveInternedPartName);
+    public IPartBinding level01Compile(String packageName, String caseSensitivePartName) {
+        return environment.level01Compile(packageName, caseSensitivePartName);
     }
 
-    public IPartBinding getPartBindingFromCache(String[] packageName, String partName) {
+    public IPartBinding getPartBindingFromCache(String packageName, String partName) {
         return SourcePathEntry.getInstance().getPartBindingFromCache(packageName, partName);
     }
 
@@ -202,7 +172,7 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 		return queue.process();        
     }
     
-    public void doAddPart(String[] packageName, String caseInsensitiveInternedPartName) {
-		addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, caseInsensitiveInternedPartName));		
+    public void doAddPart(String packageName, String caseInsensitivePartName) {
+		addPart(packageName, SourcePathInfo.getInstance().getCaseSensitivePartName(packageName, caseInsensitivePartName));		
 	}	
 }

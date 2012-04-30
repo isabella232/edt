@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,5 +25,9 @@ public  class SystemEnvironmentPackageNames {
     public static final String[] EGLX_DLI = InternUtil.intern(new String[] {"eglx", "dli"});
     public static final String[] EGL_CORE_REFLECT = InternUtil.intern(new String[] {"egl", "core", "reflect"});
     public static final String[] EGL_REPORT_BIRT = InternUtil.intern(new String[] {"egl", "report", "birt"});
+
+    
+    public static final String EGL_CORE_STRING = InternUtil.intern("egl.core");
+    public static final String EGL_CORE_REFLECT_STRING = InternUtil.intern("egl.core.reflect");
 
 }

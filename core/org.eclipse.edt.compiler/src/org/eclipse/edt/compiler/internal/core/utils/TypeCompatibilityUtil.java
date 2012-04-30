@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,29 +21,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.ArrayDictionaryBinding;
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.DictionaryBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FixedStructureBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.IPartSubTypeAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.ServiceBinding;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.ast.ArrayLiteral;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -54,7 +37,11 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.validation.type.PrimitiveTypeValidator.DateTimePattern;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -454,8 +441,10 @@ public class TypeCompatibilityUtil {
 			typesMatch = ITypeBinding.DELEGATE_BINDING == sourceType.getKind() ||
             			 ITypeBinding.FUNCTION_BINDING == sourceType.getKind();
 		}
-		else if( extendsInterfaces(sourceType) &&
-				 extendsInterfaces(targetType)) {
+		else if( (ITypeBinding.SERVICE_BINDING == sourceType.getKind() ||
+				  ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) &&
+				 (ITypeBinding.INTERFACE_BINDING == targetType.getKind() ||
+				  ITypeBinding.SERVICE_BINDING == targetType.getKind())) {
 			List implementedInterfaces = getExtendedInterfaces(sourceType);
 			
 			for( Iterator iter = implementedInterfaces.iterator(); iter.hasNext() && !typesMatch;) {
@@ -557,53 +546,21 @@ public class TypeCompatibilityUtil {
 		if (sourceType instanceof PartBinding) {
 			PartBinding partBinding = (PartBinding) sourceType;
 			IPartBinding superType = partBinding.getDefaultSuperType();
-			if (Binding.isValidBinding(superType)) {
+			if (superType != null) {
 				if (typeBindingsAreEqual(superType, targetType)) {
 					return true;
 				}
-				
-				if(ITypeBinding.EXTERNALTYPE_BINDING == targetType.getKind()) {
-					if(ITypeBinding.EXTERNALTYPE_BINDING == superType.getKind()) {
-						if(((ExternalTypeBinding) superType).getExtendedTypes().contains(targetType) ||
-						   ((ExternalTypeBinding) targetType).getExtendedTypes().contains(superType)) {
-							return true;
-						}
-					}
-				}
-
-			}
-			if (isAnyRecord(targetType) && sourceType.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-				return true;
 			}
 		}
 
 		if (targetType instanceof PartBinding) {
 			PartBinding partBinding = (PartBinding) targetType;
 			IPartBinding superType = partBinding.getDefaultSuperType();
-			if (Binding.isValidBinding(superType)) {
+			if (superType != null) {
 				if (typeBindingsAreEqual(superType, sourceType)) {
 					return true;
 				}
-				
-				if(ITypeBinding.EXTERNALTYPE_BINDING == superType.getKind()) {
-					if(ITypeBinding.EXTERNALTYPE_BINDING == sourceType.getKind()) {
-						if(((ExternalTypeBinding) sourceType).getExtendedTypes().contains(superType) ||
-						   ((ExternalTypeBinding) superType).getExtendedTypes().contains(sourceType)) {
-							return true;
-						}
-					}
-				}
 			}
-			if (isAnyRecord(sourceType) && targetType.getKind() == ITypeBinding.FLEXIBLE_RECORD_BINDING) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static boolean isAnyRecord(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
-			return (type.getPackageName() == InternUtil.intern(new String[] {"eglx", "lang"}) && type.getName() == InternUtil.intern("AnyRecord"));
 		}
 		return false;
 	}
@@ -635,28 +592,6 @@ public class TypeCompatibilityUtil {
 	        	 null,
 	        	 compilerOptions);
 	}
-	
-	private static boolean extendsInterfaces(ITypeBinding tBinding) {
-		
-		if (!Binding.isValidBinding(tBinding)) {
-			return false;
-		}
-		
-		if(ITypeBinding.SERVICE_BINDING == tBinding.getKind()) {
-			return true;
-		}
-
-		if(ITypeBinding.HANDLER_BINDING == tBinding.getKind()) {
-			return true;
-		}
-
-		if(ITypeBinding.INTERFACE_BINDING == tBinding.getKind()) {
-			return true;
-		}
-
-		return false;
-	}
-
 	
 	private static List getExtendedInterfaces(ITypeBinding tBinding) {
 		if(ITypeBinding.SERVICE_BINDING == tBinding.getKind()) {
@@ -819,10 +754,6 @@ public class TypeCompatibilityUtil {
 		return dateTimePrimitives.contains(prim);
 	}
 	
-	public static boolean isReference(ITypeBinding type) {
-		return type.isReference() && !isAnyRecord(type);
-	}
-	
 	public static boolean isReferenceCompatible(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
 
 		if(getEquivalentType(sourceType, compilerOptions) == getEquivalentType(targetType, compilerOptions)) {
@@ -830,7 +761,7 @@ public class TypeCompatibilityUtil {
 		}
 		
 		//value types are not reference compatible with reference types and vice versa
-		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && isReference(sourceType) != isReference(targetType)) {
+		if (Binding.isValidBinding(sourceType) && Binding.isValidBinding(targetType) && sourceType.isReference() != targetType.isReference()) {
 			return false;
 		}
 		
@@ -889,14 +820,6 @@ public class TypeCompatibilityUtil {
 			if (srcPrim == Primitive.NUMBER && Primitive.isNumericType(tgtPrim)) {
 				return true;
 			}
-			
-			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim))) {
-				return true;
-			}
-			
-			if (tgtPrim == Primitive.STRING && (Primitive.isStringType(srcPrim) || Primitive.isNumericType(srcPrim) || Primitive.isDateTimeType(srcPrim))) {
-				return true;
-			}
 		}
 		
 		if (ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind() ) {
@@ -916,6 +839,22 @@ public class TypeCompatibilityUtil {
 		}
 
 		
+		if(compilerOptions.isVAGCompatible()) {
+			//even-length decimal source items can match decimal target items
+			//whose length is one greater
+			if(ITypeBinding.PRIMITIVE_TYPE_BINDING == sourceType.getKind()) {
+				PrimitiveTypeBinding primSourceType = (PrimitiveTypeBinding) sourceType;
+				int sourceLength = primSourceType.getLength();
+				int sourceDecimals = primSourceType.getDecimals();
+				if(primSourceType.getPrimitive() == Primitive.DECIMAL &&
+				   sourceLength % 2 == 0) {
+					if(PrimitiveTypeBinding.getInstance(Primitive.DECIMAL, sourceLength+1, sourceDecimals) == targetType) {
+						return true;
+					}
+				}
+			}
+		}
+		
 		if(ITypeBinding.INTERFACE_BINDING == targetType.getKind()) {
 			if(ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) {
 				if(((InterfaceBinding) sourceType).getExtendedTypes().contains(targetType) ||
@@ -925,8 +864,10 @@ public class TypeCompatibilityUtil {
 			}
 		}
 
-		if( extendsInterfaces(sourceType) &&
-			extendsInterfaces(targetType)) {
+		if( (ITypeBinding.SERVICE_BINDING == sourceType.getKind() ||
+		     ITypeBinding.INTERFACE_BINDING == sourceType.getKind()) &&
+			 (ITypeBinding.INTERFACE_BINDING == targetType.getKind() ||
+			  ITypeBinding.SERVICE_BINDING == targetType.getKind())) {
 			List implementedInterfaces = getExtendedInterfaces(sourceType);
 			boolean typesMatch = false;
 			
@@ -978,46 +919,7 @@ public class TypeCompatibilityUtil {
 			}
 		}
 		
-		if (compatibilityAnnotationMatches(sourceType, targetType)) {
-			return true;
-		}
-		
-		if (ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() && ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
-			return ArrayElementTypesAreReferenceCompatible(((ArrayTypeBinding)targetType).getElementType(), ((ArrayTypeBinding)sourceType).getElementType(), compilerOptions);
-		}
-		
 		return false;
-	}
-	
-	private static boolean ArrayElementTypesAreReferenceCompatible(ITypeBinding targetType, ITypeBinding sourceType, ICompilerOptions compilerOptions) {
-		
-		//if either is invalid, pretend they are compatible to avoid excess error messages
-		if (!Binding.isValidBinding(targetType) || !Binding.isValidBinding(sourceType)) {
-			return true;
-		}
-		
-		if (ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind() && ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
-			return ArrayElementTypesAreReferenceCompatible(((ArrayTypeBinding)targetType).getElementType(), ((ArrayTypeBinding)sourceType).getElementType(), compilerOptions);
-		}
-		
-		// both must be reference types or value types
-		if (targetType.isReference() != sourceType.isReference()) {
-			return false;
-		}
-		
-		//both element types must be nullable or not nullable
-		if (targetType.isNullable() != sourceType.isNullable()) {
-			return false;
-		}
-		
-		if (targetType.isReference()) {		
-			return isReferenceCompatible(sourceType, targetType, compilerOptions);
-		}
-		
-		else {
-			//value types require conversion, so they are not compatible
-			return false;
-		}
 	}
 	
 	public static boolean areCompatibleExceptions(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
@@ -1068,90 +970,21 @@ public class TypeCompatibilityUtil {
 			if(Primitive.SECONDSPAN_INTERVAL == primTypeBinding.getPrimitive()) {
 				return PrimitiveTypeBinding.getInstance(Primitive.SECONDSPAN_INTERVAL, primTypeBinding.getTimeStampOrIntervalPattern().toUpperCase().toLowerCase());
 			}
+
+			if(compilerOptions.isVAGCompatible()) {
+				//even-length decimal source items can match decimal target items
+				//whose length is one greater
+				int sourceLength = primTypeBinding.getLength(); 
+				if(primTypeBinding.getPrimitive() == Primitive.DECIMAL &&
+				   sourceLength % 2 == 1) {
+					return PrimitiveTypeBinding.getInstance(Primitive.DECIMAL, sourceLength-1, primTypeBinding.getDecimals());
+				}
+			}
 		}		
 		
 		return tBinding;
 	}
 	
-	public static boolean functionSignituresAreIdentical(IFunctionBinding fBinding1, IFunctionBinding fBinding2, ICompilerOptions compilerOptions) {
-		return functionSignituresAreIdentical(fBinding1, fBinding2, compilerOptions, true, true);
-	}
-	
-	public static boolean functionSignituresAreIdentical(IFunctionBinding fBinding1, IFunctionBinding fBinding2, ICompilerOptions compilerOptions, boolean includeReturnTypeInSignature, boolean includeParameterModifiersInSignature) {
-		if(fBinding1.getName() != fBinding2.getName()) {
-			return false;
-		}
-		return functionSignituresAreIdentical(new FunctionSignature(fBinding1), new FunctionSignature(fBinding2), compilerOptions, includeReturnTypeInSignature, includeParameterModifiersInSignature);
-	}
-	
-	public static boolean functionSignituresAreIdentical(IFunctionSignature fSignature1, IFunctionSignature fSignature2, ICompilerOptions compilerOptions) {
-		return functionSignituresAreIdentical(fSignature1, fSignature2, compilerOptions, true, true);
-	}
-	
-	public static boolean functionSignituresAreIdentical(IFunctionSignature fSignature1, IFunctionSignature fSignature2, ICompilerOptions compilerOptions, boolean includeReturnTypeInSignature, boolean includeParameterModifiersInSignature) {
-		List parameters1 = fSignature1.getParameters();
-		List parameters2 = fSignature2.getParameters();
-		
-		if(parameters1.size() != parameters2.size()) {
-			return false;
-		}
-		
-		for(int i = 0; i < parameters1.size(); i++) {
-			FunctionParameterBinding parm1 = (FunctionParameterBinding) parameters1.get(i);
-			FunctionParameterBinding parm2 = (FunctionParameterBinding) parameters2.get(i);
-			
-			if(includeParameterModifiersInSignature) {
-				if(parm1.isInput() && !parm2.isInput()) {
-					return false;
-				}
-				
-				if(parm1.isOutput() && !parm2.isOutput()) {
-					return false;
-				}
-				
-				if(parm1.isInputOutput() && !parm2.isInputOutput()) {
-					return false;
-				}
-				
-				if (parm1.isConst() != parm2.isConst()) {
-					return false;
-				}
-
-				if (parm1.isField() != parm2.isField()) {
-					return false;
-				}
-
-				
-			}
-			
-			if(!typesAreIdentical(parm1.getType(), parm2.getType(), compilerOptions)) {
-				return false;
-			}
-		}
-		
-		if(includeReturnTypeInSignature) {
-			ITypeBinding returnType1 = fSignature1.getReturnType();
-			ITypeBinding returnType2 = fSignature2.getReturnType();
-			if(returnType1 == null) {
-				if(returnType2 != null) {
-					return false;
-				}
-			}
-			else {
-				if(returnType2 == null) {
-					return false;
-				}
-				else {
-					if(!typesAreIdentical(returnType1, returnType2, compilerOptions)) {
-						return false;
-					}
-				}
-			}
-		}
-		
-		
-		return true;
-	}
 	
 	private static boolean areDifferentExternalTypes(ITypeBinding type1, ITypeBinding type2) {
 		if(type1 != type2 &&
@@ -1164,46 +997,7 @@ public class TypeCompatibilityUtil {
 		return false;
 	}
 
-	public static interface IFunctionSignature {
-		ITypeBinding getReturnType();
-		List getParameters();		
-	}
 	
-	public static class DelegateSignature implements IFunctionSignature {
-		private DelegateBinding delegateBinding;
-
-		public DelegateSignature(DelegateBinding delegateBinding) {
-			this.delegateBinding = delegateBinding;
-		}
-
-		public ITypeBinding getReturnType() {
-			return delegateBinding.getReturnType();
-		}
-
-		public List getParameters() {
-			return delegateBinding.getParemeters();
-		}
-	}
-	
-	public static class FunctionSignature implements IFunctionSignature {
-		private IFunctionBinding functionBinding;
-
-		public FunctionSignature(IFunctionBinding functionBinding) {
-			this.functionBinding = functionBinding;
-		}
-		
-		public ITypeBinding getReturnType() {
-			return functionBinding.getReturnType();
-		}
-
-		public List getParameters() {
-			return functionBinding.getParameters();
-		}
-	}
-	
-	public static boolean typesAreIdentical(ITypeBinding type1, ITypeBinding type2, ICompilerOptions compilerOptions) {
-		return getEquivalentType(type1, compilerOptions) == getEquivalentType(type2, compilerOptions);
-	}
 	
 	public static int wideningDistance(ITypeBinding sourceType, ITypeBinding targetType, ICompilerOptions compilerOptions) {
 		int result = valueWideningDistance(sourceType, targetType, compilerOptions);
@@ -1346,22 +1140,7 @@ public class TypeCompatibilityUtil {
 				1 : -1;
 		}
 	}
-
-	private static class AnyRecordTargetTypeWidener implements IWidener {
-		static AnyRecordTargetTypeWidener INSTANCE = new AnyRecordTargetTypeWidener();
-		
-		private AnyRecordTargetTypeWidener() {
-		}
-		
-		public int getDistance(ITypeBinding targetType) {
-			if (targetType.getKind() == ITypeBinding.EXTERNALTYPE_BINDING &&
-				isAnyRecord(targetType)) {
-				return 1;
-			}
-			return -1;
-		}
-	}
-
+	
 	private static class ReferenceTypeTargetTypeWidener implements IWidener {
 		static ReferenceTypeTargetTypeWidener INSTANCE = new ReferenceTypeTargetTypeWidener();
 		
@@ -1795,9 +1574,7 @@ public class TypeCompatibilityUtil {
 	private static List getReferenceWideners(ITypeBinding sourceType, ICompilerOptions compilerOptions) {
 		List result = new ArrayList();
 		
-		if (sourceType.isReference()) {
-			result.add(AnyTargetTypeWidener.INSTANCE);
-		} 
+		result.add(AnyTargetTypeWidener.INSTANCE);
 		
 		if(NilBinding.INSTANCE == sourceType) {
 			result.add(ReferenceTypeTargetTypeWidener.INSTANCE);
@@ -1819,10 +1596,6 @@ public class TypeCompatibilityUtil {
 
 			case ITypeBinding.HANDLER_BINDING:
 				result.add(new SuperHandlerInterfaceTypeTargetWidener((HandlerBinding) sourceType));
-				break;
-				
-			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
-				result.add(AnyRecordTargetTypeWidener.INSTANCE);
 				break;
 				
 			case ITypeBinding.ARRAY_TYPE_BINDING:

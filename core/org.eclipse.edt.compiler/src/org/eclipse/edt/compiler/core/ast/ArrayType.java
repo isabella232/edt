@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 
 /**
@@ -24,7 +23,7 @@ public class ArrayType extends Type {
 
 	private Type elementType;
 	private Expression initialSize;
-	private ArrayTypeBinding arrayTypeBinding;
+	private org.eclipse.edt.mof.egl.ArrayType arrayType;
 
 	public ArrayType(Type elementType, Expression initialSize, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -58,12 +57,12 @@ public class ArrayType extends Type {
 		return true;
 	}
 
-    public ITypeBinding resolveTypeBinding() {
-        return arrayTypeBinding;
+    public org.eclipse.edt.mof.egl.Type resolveType() {
+        return arrayType;
     }
     
-    public void setTypeBinding(ArrayTypeBinding arrayTypeBinding) {
-        this.arrayTypeBinding = arrayTypeBinding;
+    public void setType(org.eclipse.edt.mof.egl.ArrayType arrayType) {
+        this.arrayType = arrayType;
     }
 	
 	public void accept(IASTVisitor visitor) {

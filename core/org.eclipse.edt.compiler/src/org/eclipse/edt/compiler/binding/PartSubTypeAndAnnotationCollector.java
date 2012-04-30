@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeManager;
-import org.eclipse.edt.compiler.binding.annotationType.EGLNotInCurrentReleaseAnnotationTypeBinding;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
@@ -38,31 +35,33 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.Type;
 
 
 public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
 
     private IProblemRequestor problemRequestor;
 
-    private List settingsBlocks = new ArrayList();
+    private List<SettingsBlock> settingsBlocks = new ArrayList<SettingsBlock>();
 
-    private AnnotationBinding subTypeAnnotationBinding;
+    private Stereotype stereotype;
     
-    private IPartBinding partBinding;
+    private Part partBinding;
 
     private boolean foundSubTypeInSettingsBlock = false;
 
-	private Scope currentScope;
-
 	private AbstractBinder abstractBinder;
 
-    public PartSubTypeAndAnnotationCollector(IPartBinding partBinding, AbstractBinder binder, Scope currentScope, IProblemRequestor problemRequestor) {
+    public PartSubTypeAndAnnotationCollector(Part partBinding, AbstractBinder binder, IProblemRequestor problemRequestor) {
         super();
         this.partBinding = partBinding;
         this.abstractBinder = binder;
         this.problemRequestor = problemRequestor;
-        this.currentScope = currentScope;
     }
 
     public boolean visit(SettingsBlock settingsBlock) {
@@ -73,51 +72,45 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
                 return true;
             }
             public boolean visit(AnnotationExpression annotationExpression) {
-            	
-            	IAnnotationTypeBinding typeBinding = null;
-            	
-                ITypeBinding resolvedType = null;
+            	            	
+                Type resolvedType = null;
                 try {
                 	resolvedType = abstractBinder.bindTypeName(annotationExpression.getName());
                 }
                 catch(ResolutionException e) {
-                	resolvedType = IBinding.NOT_FOUND_BINDING;        	
+                	resolvedType = null;        	
                 }
                 
-            	annotationExpression.getName().setBinding(null); //reset the type so that resolution will work later
+            	annotationExpression.getName().setElement(null); //reset the binding info so that resolution will work later
+            	annotationExpression.getName().setType(null); 
+            	annotationExpression.getName().setBindAttempted(false);
 
-            	if(IBinding.NOT_FOUND_BINDING != resolvedType) {
-                	if(resolvedType.isPartBinding() && !resolvedType.isValid() && resolvedType != partBinding) {
-                		resolvedType = ((IPartBinding) resolvedType).realize();
-                	}
-                	if(hasAnnotation(resolvedType, AnnotationAnnotationTypeBinding.getInstance())) {
-                		IAnnotationTypeBinding aTypeBinding = new AnnotationTypeBindingImpl((FlexibleRecordBinding) resolvedType, partBinding);
-                		if(aTypeBinding.isPartSubType()) {        			
-                			typeBinding = aTypeBinding;       			
-                		}
+            	StereotypeType stereotypeType = null;
+                if(resolvedType != null) {
+                	AnnotationType annType = BindingUtil.getAnnotationType(resolvedType);
+                	if (annType instanceof StereotypeType) {
+                		stereotypeType = (StereotypeType)annType;
                 	}
                 }
-
-            	if (typeBinding == null) {
-                    typeBinding = AnnotationTypeManager.getAnnotationType(
-                            InternUtil.intern(annotationExpression.getName().getCanonicalName()));
-            	}          	
             	
-                if (typeBinding != null && typeBinding.isPartSubType()) {
-                    if (typeBinding.isApplicableFor(partBinding)) {
+                if (stereotypeType != null) {
+                    if (BindingUtil.isApplicableFor(stereotypeType, partBinding)) {
 
-                        if (subTypeAnnotationBinding == null) {
-                            subTypeAnnotationBinding = new AnnotationBinding(typeBinding.getCaseSensitiveName(), partBinding, typeBinding);
+                        if (stereotype == null) {
+                            stereotype = (Stereotype)stereotypeType.newInstance();
                             foundSubTypeInSettingsBlock = true;
-                            annotationExpression.getName().setBinding(subTypeAnnotationBinding);
-                            annotationExpression.getName().setTypeBinding(typeBinding);
-                            annotationExpression.setTypeBinding(typeBinding);
+                            annotationExpression.getName().setElement(stereotype);
+                            annotationExpression.getName().setType(stereotypeType);
+                            annotationExpression.setType(stereotypeType);
                         } else {
                             problemRequestor.acceptProblem(annotationExpression.getName(), IProblemRequestor.DUPLICATE_PART_SUBTYPE);
                         }
                     }
                     else {
-                        problemRequestor.acceptProblem(annotationExpression.getName(), IProblemRequestor.INVALID_PART_SUBTYPE);
+                        problemRequestor.acceptProblem(
+                        		annotationExpression.getName(),
+            	            	IProblemRequestor.INVALID_PART_SUBTYPE,
+            	            	new String[] {annotationExpression.getName().getCanonicalName(), partBinding.getCaseSensitiveName()});
                     }
                 }
 
@@ -207,47 +200,31 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
 	
 	private void checkSubType(Name name) {
 
-        IPartSubTypeAnnotationTypeBinding subTypeAnnotationTypeBinding = null;        
-        IAnnotationTypeBinding typeBinding = null;
-        
-        ITypeBinding resolvedType = null;
+        StereotypeType stereotypeType = null;        
+
+        Type resolvedType = null;
         boolean typeResolved = false;
         try {
         	resolvedType = abstractBinder.bindTypeName(name);
         	typeResolved = true;
         }
         catch(ResolutionException e) {
-        	resolvedType = IBinding.NOT_FOUND_BINDING;        	
+        	resolvedType = null;        	
         }
         
-        if(IBinding.NOT_FOUND_BINDING != resolvedType) {
-        	if(resolvedType.isPartBinding() && !resolvedType.isValid() && resolvedType != partBinding) {
-        		resolvedType = ((IPartBinding) resolvedType).realize();
-        	}
-        	if(hasAnnotation(resolvedType, AnnotationAnnotationTypeBinding.getInstance())) {
-        		IAnnotationTypeBinding aTypeBinding = new AnnotationTypeBindingImpl((FlexibleRecordBinding) resolvedType, partBinding);
-        		if(aTypeBinding.isPartSubType()) {        			
-        			typeBinding = aTypeBinding;       			
-        		}
+        if(resolvedType != null) {
+        	AnnotationType annType = BindingUtil.getAnnotationType(resolvedType);
+        	if (annType instanceof StereotypeType) {
+        		stereotypeType = (StereotypeType)annType;
         	}
         }
-        	
-        if(typeBinding == null) {
-        	typeBinding = AnnotationTypeManager.getAnnotationType(name);
-        }
-        
-        if (typeBinding != null && typeBinding.isPartSubType()) {
-            subTypeAnnotationTypeBinding = (IPartSubTypeAnnotationTypeBinding) typeBinding;
-            resolvedType = subTypeAnnotationTypeBinding;
-            typeResolved = true;
-        }
-        
-        if (subTypeAnnotationTypeBinding == null || !subTypeAnnotationTypeBinding.isApplicableFor(partBinding)) {
+        	                
+        if (stereotypeType == null || !BindingUtil.isApplicableFor(stereotypeType, partBinding)) {
         	if(typeResolved) {
 	            problemRequestor.acceptProblem(
 	            	name,
 	            	IProblemRequestor.INVALID_PART_SUBTYPE,
-	            	new String[] {resolvedType.getPackageQualifiedName(), partBinding.getCaseSensitiveName()});
+	            	new String[] {name.getCanonicalName(), partBinding.getCaseSensitiveName()});
         	}
         	else {
         		problemRequestor.acceptProblem(
@@ -255,27 +232,19 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
 	            	IProblemRequestor.TYPE_CANNOT_BE_RESOLVED,
 	            	new String[] {name.getCanonicalName()});
         	}
-            name.setBinding(IBinding.NOT_FOUND_BINDING);
+            name.setBindAttempted(true);
         }
         else {
-            subTypeAnnotationBinding = new AnnotationBinding(subTypeAnnotationTypeBinding.getCaseSensitiveName(), partBinding, subTypeAnnotationTypeBinding);
-            partBinding.addAnnotation(subTypeAnnotationBinding);
-            name.setBinding(subTypeAnnotationBinding);
+        	stereotype = (Stereotype)stereotypeType.newInstance();
+            partBinding.addAnnotation(stereotype);
+            name.setType(stereotypeType);
+            name.setElement(stereotype);
         }
 
     }
 
-    private boolean hasAnnotation(ITypeBinding resolvedType, IAnnotationTypeBinding annotationType) {
-		for(Iterator iter = resolvedType.getAnnotations().iterator(); iter.hasNext();) {
-			if(((IAnnotationBinding) iter.next()).getType() == annotationType) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public AnnotationBinding getSubTypeAnnotationBinding() {
-        return subTypeAnnotationBinding;
+	public Stereotype getStereotype() {
+        return stereotype;
     }
 
     /**
@@ -288,7 +257,7 @@ public class PartSubTypeAndAnnotationCollector extends DefaultASTVisitor {
     /**
      * @return Returns the settingsBlocks.
      */
-    public List getSettingsBlocks() {
+    public List<SettingsBlock> getSettingsBlocks() {
         return settingsBlocks;
     }
 }
