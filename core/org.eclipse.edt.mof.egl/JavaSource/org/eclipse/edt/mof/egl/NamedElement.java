@@ -14,6 +14,7 @@ package org.eclipse.edt.mof.egl;
 
 public interface NamedElement extends Element {
 	String getName();
+	String getCaseSensitiveName();
 	
 	void setName(String value);
 	

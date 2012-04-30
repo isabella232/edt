@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.EnumerationEntry;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.EEnumLiteralImpl;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class EnumerationEntryImpl extends EEnumLiteralImpl implements EnumerationEntry {
@@ -32,6 +33,8 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	private static int Slot_AccessKind=6;
 	private static int Slot_Container=7;
 	private static int totalSlots = 8;
+	
+	private String name;
 	
 	public static int totalSlots() {
 		return totalSlots + EEnumLiteralImpl.totalSlots();
@@ -56,6 +59,14 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	

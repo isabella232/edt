@@ -63,6 +63,13 @@ public interface Classifier extends NamedElement, Type {
 	String getPackageName();
 	
 	/**
+	 * 
+	 * @return declared case sensitive package name of the receiver
+	 */
+	String getCaseSensitivePackageName();
+
+	
+	/**
 	 * Set package name of the receiver
 	 * @param value
 	 */

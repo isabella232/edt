@@ -43,6 +43,7 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.impl.EClassImpl;
 import org.eclipse.edt.mof.impl.EObjectImpl;
 import org.eclipse.edt.mof.utils.EList;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
@@ -56,6 +57,9 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	private static int Slot_typeParameters=7;
 	private static int Slot_accessKind=8;
 	private static int totalSlots = 9;
+	
+	private String packageName;
+	private String name;
 	
 	public static int totalSlots() {
 		return totalSlots + EClassImpl.totalSlots();
@@ -120,6 +124,14 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	
 	@Override
 	public String getName() {
+		if (name == null) {
+			name = NameUtile.getAsName(getCaseSensitiveName());
+		}
+		return name;
+	}
+	
+	@Override
+	public String getCaseSensitiveName() {
 		return (String)slotGet(Slot_name);
 	}
 	
@@ -154,8 +166,17 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 		slotSet(Slot_hasCompileErrors, value);
 	}
 	
+
 	@Override
 	public String getPackageName() {
+		if (packageName == null) {
+			packageName = NameUtile.getAsName(getCaseSensitivePackageName());
+		}
+		return packageName;
+	}
+
+	@Override
+	public String getCaseSensitivePackageName() {
 		return (String)slotGet(Slot_packageName);
 	}
 	
