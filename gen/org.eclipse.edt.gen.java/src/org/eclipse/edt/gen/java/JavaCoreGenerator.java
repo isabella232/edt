@@ -32,17 +32,17 @@ import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Part;
 
-public class JavaGenerator extends Generator {
+public class JavaCoreGenerator extends Generator {
 
 	protected Context context;
 	protected TabbedWriter out;
 	protected AbstractGeneratorCommand generator;
 
-	public JavaGenerator(AbstractGeneratorCommand processor) {
+	public JavaCoreGenerator(AbstractGeneratorCommand processor) {
 		this(processor, null);
 	}
 
-	public JavaGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
+	public JavaCoreGenerator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		super(processor, requestor);
 		generator = processor;
 	}
