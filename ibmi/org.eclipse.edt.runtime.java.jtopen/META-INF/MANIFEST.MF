@@ -6,7 +6,7 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.edt.runtime.java;bundle-version="0.8.0"
+Require-Bundle: org.eclipse.edt.runtime.java.jee;bundle-version="0.8.0"
 Export-Package: eglx.jtopen,
  org.eclipse.edt.java.jtopen,
  org.eclipse.edt.java.jtopen.access,
