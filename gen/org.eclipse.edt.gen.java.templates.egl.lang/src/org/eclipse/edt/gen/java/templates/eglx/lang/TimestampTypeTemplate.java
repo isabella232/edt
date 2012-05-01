@@ -119,17 +119,6 @@ public class TimestampTypeTemplate extends JavaTemplate {
 		generateOptions(type, ctx, out);
 	}
 
-	public void genJsonTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
-		String pattern = "yyyyMMddhhmmss";
-		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
-			pattern = type.getPattern();
-		out.print("\"");
-		out.print(getStartPattern(pattern));
-		out.print("\", \"");
-		out.print(getEndPattern(pattern));
-		out.print("\"");
-	}
-
 	public void generateOptions(TimestampType type, Context ctx, TabbedWriter out) {
 		String pattern = "yyyyMMddhhmmss";
 		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
