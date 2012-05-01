@@ -7,7 +7,7 @@
             class="org.eclipse.edt.gen.generator.example.ExampleGenerationContributor"
             provider="org.eclipse.edt.gen.generator.example.ide.ExampleGeneratorProvider"
             id="ExampleGenerationContributor"
-            requires="JavaGenerationContributor">
+            requires="JavaCoreGenerationContributor">
       </GenerationContributor>
    </extension>
 <!--

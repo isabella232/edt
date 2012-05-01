@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.generator.example.ide.Activator;
 import org.eclipse.edt.gen.generator.example.ide.EclipseExampleGenerator;
-import org.eclipse.edt.ide.compiler.gen.EclipseJavaGenerator;
+import org.eclipse.edt.ide.compiler.gen.EclipseJavaCoreGenerator;
 import org.eclipse.edt.ide.core.AbstractGenerator;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.serialization.IEnvironment;
@@ -35,7 +35,7 @@ public class ExampleGenerator extends AbstractGenerator {
 	public void generate(String filePath, Part part, IEnvironment env, IGenerationMessageRequestor msgRequestor) throws Exception {
 		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filePath));
 		EclipseExampleGenerator cmd = new EclipseExampleGenerator(file, part, this);
-		cmd.generate(buildArgs(file, part), new EclipseJavaGenerator(cmd, msgRequestor), env, null);
+		cmd.generate(buildArgs(file, part), new EclipseJavaCoreGenerator(cmd, msgRequestor), env, null);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ExampleGenerator extends AbstractGenerator {
 
 	@Override
 	protected String getRelativeFilePath(IFile eglFile, Part part) {
-		return new EclipseJavaGenerator(new EclipseExampleGenerator(eglFile, part, this), null).getRelativeFileName(part);
+		return new EclipseJavaCoreGenerator(new EclipseExampleGenerator(eglFile, part, this), null).getRelativeFileName(part);
 	}
 
 	@Override

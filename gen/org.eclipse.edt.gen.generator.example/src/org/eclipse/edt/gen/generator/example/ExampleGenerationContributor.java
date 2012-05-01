@@ -36,7 +36,7 @@ import org.eclipse.edt.gen.GenerationContributor;
 //
 // we need to first create the ExampleGenerationContributor (of course it can be called anything you desire) contribution. This is
 // the example of that. It will be loaded (and any others) by the -c command line option on the EGLGen command. For example:
-// EGLGen -c org.eclipse.edt.gen.generator.example.ExampleGenerationContributor org.eclipse.edt.gen.java.JavaGenerationContributor
+// EGLGen -c org.eclipse.edt.gen.generator.example.ExampleGenerationContributor org.eclipse.edt.gen.java.JavaCoreGenerationContributor
 //
 // it is not necessary to extend another contribution. it will be included vie the -c option
 //
