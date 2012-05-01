@@ -11,19 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DanglingReferenceException;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.GenericType;
-import org.eclipse.edt.mof.egl.InvalidName;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
-import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchMemberError;
 import org.eclipse.edt.mof.egl.ThisExpression;
