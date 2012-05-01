@@ -28,13 +28,20 @@ public class Constants {
 	public static final String SubKey_isaSignature = "isaSignature";
 	public static final String SubKey_recordToAnyAssignment = "recordToAnyAssignment";
 	public static final String SubKey_isInList = "isInList";
+
+	// these are sub key values used on annotations 
+	public static final String SubKey_uri = "uri";
+
+	// part names
+	public static final String AnnotationXmlAttribute = "eglx.xml.binding.annotation.xmlAttribute";
+	public static final String AnnotationXMLRootElement = "eglx.xml.binding.annotation.XMLRootElement";
+	public static final String AnnotationXmlElement = "eglx.xml.binding.annotation.xmlElement";
+	public static final String AnnotationJsonName = "eglx.json.JsonName";
+	public static final String LibrarySys = "eglx.lang.SysLib";
 	
 	public static final String EXPR_LHS = "EXPR_LHS";
-	
 	public static final String DONT_UNBOX = "DONT_UNBOX";
-	
 	public static final String QUALIFIER_ALIAS = "QUALIFIER_ALIAS";
-
 
 	// command parameter internal names
 	public static final String SERIAL_VERSION_UID = "10";
