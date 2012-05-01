@@ -12,7 +12,7 @@
 package org.eclipse.edt.gen.generator.java;
 
 import org.eclipse.edt.gen.AbstractGeneratorCommand;
-import org.eclipse.edt.gen.java.JavaGenerator;
+import org.eclipse.edt.gen.java.JavaCoreGenerator;
 
 public class EGL2Java extends AbstractGeneratorCommand {
 
@@ -23,6 +23,6 @@ public class EGL2Java extends AbstractGeneratorCommand {
 	public static void main(String[] args) {
 		// set up the command processor and pass the overriding command line options
 		EGL2Java genPart = new EGL2Java();
-		genPart.generate(args, new JavaGenerator(genPart), null, null);
+		genPart.generate(args, new JavaCoreGenerator(genPart), null, null);
 	}
 }
