@@ -79,6 +79,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 	protected static final String RESULTROOT_DIR_APPEND = "ResultRoot";
 	
 	protected static final String GENERATORID_JAVA = "org.eclipse.edt.ide.gen.JavaGenProvider";
+	protected static final String GENERATORID_JAVACORE = "org.eclipse.edt.ide.gen.JavaCoreGenProvider";
 	protected static final String GENERATORID_JAVASCRIPT = "org.eclipse.edt.ide.gen.JavaScriptGenProvider";
 	protected static final String GENERATORID_JAVASCRIPT_DEV = "org.eclipse.edt.ide.gen.JavaScriptDevGenProvider";
 	
