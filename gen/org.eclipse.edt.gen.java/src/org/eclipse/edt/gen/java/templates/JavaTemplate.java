@@ -30,8 +30,6 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	// Constants that represent all the method names invoked using the dynamic Template.invoke() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
 	public static final String genAccessor = "genAccessor";
-	public static final String genAnnotations = "genAnnotations";
-	public static final String genAnnotation = "genAnnotation";
 	public static final String genAdditionalConstructorParams = "genAdditionalConstructorParams";
 	public static final String genAdditionalSuperConstructorArgs = "genAdditionalSuperConstructorArgs";
 	public static final String genArrayAccess = "genArrayAccess";
@@ -47,6 +45,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genConversionOperation = "genConversionOperation";
 	public static final String genDeclaration = "genDeclaration";
 	public static final String genDeclarationExpression = "genDeclarationExpression";
+	public static final String genDeclarationExpressionField = "genDeclarationExpressionField";
 	public static final String genDefaultValue = "genDefaultValue";
 	public static final String genExpression = "genExpression";
 	public static final String genField = "genField";
@@ -56,12 +55,9 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genFunctionBody = "genFunctionBody";
 	public static final String genFunctionHeader = "genFunctionHeader";
 	public static final String genFunctions = "genFunctions";
-	public static final String genFunctionParametersSignature = "genFunctionParametersSignature";
 	public static final String genGetter = "genGetter";
 	public static final String genGetterSetter = "genGetterSetter";
 	public static final String genGetterSetters = "genGetterSetters";
-	public static final String genJavaAnnotation = "genJavaAnnotation";
-	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
 	public static final String genImplements = "genImplements";
 	public static final String genImports = "genImports";
 	public static final String genInitialization = "genInitialization";
@@ -85,6 +81,9 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genName = "genName";
 	public static final String genNewExpression = "genNewExpression";
 	public static final String genObjectExpressionEntries = "genObjectExpressionEntries";
+	public static final String genOnException = "genOnException";
+	public static final String genSpecialOnExceptions = "genSpecialOnExceptions";
+	public static final String genOneSpecialOnException = "genOneSpecialOnException";
 	public static final String genPackageStatement = "genPackageStatement";
 	public static final String genPart = "genPart";
 	public static final String genPartName = "genPartName";
@@ -104,10 +103,11 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genSuperClass = "genSuperClass";
 	public static final String genTypeDependentOptions = "genTypeDependentOptions";
 	public static final String genUnaryExpression = "genUnaryExpression";
-	public static final String genXmlTransient = "genXmlTransient";
+	
 	// constants that allow type based processing. each of these will attempt to find the user provided type based
 	// method, and if not found, will then end up back in type template and invoked the method name without "typebased"
 	public static final String genTypeBasedAssignment = "genTypeBasedAssignment";
+	
 	// constants that allow container based processing. each of these will attempt to find the user provided container based
 	// method, and if not found, will then end up back in type template and invoked the method name without "containerbased"
 	public static final String genContainerBasedArrayAccess = "genContainerBasedArrayAccess";
@@ -117,12 +117,13 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genContainerBasedNewExpression = "genContainerBasedNewExpression";
 	public static final String genContainerBasedInvocation = "genContainerBasedInvocation";
 	public static final String genContainerBasedInvocationBoxing = "genContainerBasedInvocationBoxing";
+	
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGen = "preGen";
 	public static final String preGenClassBody = "preGenClassBody";
-	public static final String preGenAnnotations = "preGenAnnotations";
 	public static final String preGenPart = "preGenPart";
+	public static final String preGenPartImport = "preGenPartImport";
 	public static final String preGenField = "preGenField";
 	public static final String preGenFields = "preGenFields";
 	public static final String preGenFunction = "preGenFunction";
