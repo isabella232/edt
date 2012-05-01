@@ -40,7 +40,9 @@ public interface EClass extends EClassifier, EMemberContainer {
 	
 	EObject newInstance();
 	EObject newInstance(boolean init);
+	EObject newInstance(boolean init, boolean useInitialValues);
 	void initialize(EObject object);
+	void initialize(EObject object, boolean useInitialValues);
 	
 	boolean isAbstract();
 	void setIsAbstract(boolean value);

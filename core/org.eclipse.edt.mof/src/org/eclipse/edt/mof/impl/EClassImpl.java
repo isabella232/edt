@@ -213,11 +213,16 @@ public class EClassImpl extends EClassifierImpl implements EClass {
 	
 	@Override
 	public EObject newInstance() {
-		return newInstance(true);
+		return newInstance(true, true);
 	}
 	
 	@Override
 	public EObject newInstance(boolean init) {
+		return newInstance(init, true);
+	}
+
+	@Override
+	public EObject newInstance(boolean init, boolean useInitialValues) {
 		EObject obj = null;
 		if (getClazz() == null) { 
 			obj = newEObject();
@@ -229,7 +234,7 @@ public class EClassImpl extends EClassifierImpl implements EClass {
 			}
 		}
 		if (init) {
-			initialize(obj);
+			initialize(obj, useInitialValues);
 		}
 		return obj;
 	}
@@ -273,7 +278,12 @@ public class EClassImpl extends EClassifierImpl implements EClass {
 	
 	@Override
 	public void initialize(EObject object) {
-		((EObjectImpl)object).init(this);
+		initialize(object, true);
+	}
+	
+	@Override
+	public void initialize(EObject object, boolean useInitialValues) {
+		((EObjectImpl)object).init(this, useInitialValues);
 	}
 
 	@Override

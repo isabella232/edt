@@ -125,14 +125,14 @@ public class InternalEObject implements Cloneable {
 		return (EClass)slots[0].value;
 	}
 	
-	void init(EClassImpl eClass) {
+	void init(EClassImpl eClass, boolean useInitialValues) {
 		if (getSlots() == null) {
 			setSlots(new Slot[eClass.getTotalSlots()]);
 		}
 		for (EField field : eClass.getEFields()) {
 			if (field.getEType() != null) {
 				EClassifier type = field.getEType().getEClassifier();
-				if (field.getInitialValue() != null) {
+				if (field.getInitialValue() != null && useInitialValues) {
 					slotSet(field, field.getInitialValue());
 				}
 				else if (type instanceof EDataType && !field.isNullable()) {
@@ -142,7 +142,7 @@ public class InternalEObject implements Cloneable {
 			}
 		}
 		if (!eClass.getSuperTypes().isEmpty()) {
-			init((EClassImpl)eClass.getSuperTypes().get(0));
+			init((EClassImpl)eClass.getSuperTypes().get(0), useInitialValues);
 		}
 		slotSet(0, eClass);
 	}

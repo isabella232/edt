@@ -182,7 +182,7 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 			}
 		} else {
 			EClass eClass = (EClass)resolveTypeReference(typeSignature, false);
-			result = eClass.newInstance();
+			result = eClass.newInstance(true, false);
 			for (int i=0; i<attrs.getLength(); i++) {
 				String attr = attrs.getLocalName(i);
 				if (attr == null || attr.length() == 0) {

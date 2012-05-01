@@ -140,6 +140,11 @@ public class ProxyEClass extends ProxyEObject implements EClass {
 	}
 
 	@Override
+	public void initialize(EObject object, boolean useInitialValues) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public EMetadataObject getMetadata(EClass annType) {
 		throw new UnsupportedOperationException();
 	}
@@ -163,6 +168,12 @@ public class ProxyEClass extends ProxyEObject implements EClass {
 
 	@Override
 	public EObject newInstance(boolean init) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public EObject newInstance(boolean init, boolean useInitialValues) {
 		// TODO Auto-generated method stub
 		return null;
 	}
