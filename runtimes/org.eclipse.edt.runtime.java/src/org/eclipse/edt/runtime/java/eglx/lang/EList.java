@@ -415,6 +415,18 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 	/**
 	 * A factory for making elements of int Lists.
 	 */
+	public static final ListElementFactory<byte[]> BytesFactory = 
+			new ListElementFactory<byte[]>() 
+			{
+				public byte[] newElement()
+				{
+					return new byte[0];
+				}
+			};
+			
+	/**
+	 * A factory for making elements of int Lists.
+	 */
 	public static final ListElementFactory<Integer> IntFactory = 
 			new ListElementFactory<Integer>() 
 			{

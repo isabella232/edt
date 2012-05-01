@@ -13,7 +13,6 @@ package eglx.lang;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-@javax.xml.bind.annotation.XmlRootElement(name="Constants")
 public class Constants extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	private static final String ezeConst_isoDateFormat = "yyyy-MM-dd";
@@ -42,43 +41,33 @@ public class Constants extends ExecutableBase {
 	}
 	public void ezeInitialize() {
 	}
-	@org.eclipse.edt.javart.json.Json(name="isoDateFormat", clazz=EString.class, asOptions={})
 	public String getIsoDateFormat() {
 		return isoDateFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="usaDateFormat", clazz=EString.class, asOptions={})
 	public String getUsaDateFormat() {
 		return usaDateFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="eurDateFormat", clazz=EString.class, asOptions={})
 	public String getEurDateFormat() {
 		return eurDateFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="jisDateFormat", clazz=EString.class, asOptions={})
 	public String getJisDateFormat() {
 		return jisDateFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="isoTimeFormat", clazz=EString.class, asOptions={})
 	public String getIsoTimeFormat() {
 		return isoTimeFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="usaTimeFormat", clazz=EString.class, asOptions={})
 	public String getUsaTimeFormat() {
 		return usaTimeFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="eurTimeFormat", clazz=EString.class, asOptions={})
 	public String getEurTimeFormat() {
 		return eurTimeFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="jisTimeFormat", clazz=EString.class, asOptions={})
 	public String getJisTimeFormat() {
 		return jisTimeFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="db2TimeStampFormat", clazz=EString.class, asOptions={})
 	public String getDb2TimeStampFormat() {
 		return db2TimeStampFormat;
 	}
-	@org.eclipse.edt.javart.json.Json(name="odbcTimeStampFormat", clazz=EString.class, asOptions={})
 	public String getOdbcTimeStampFormat() {
 		return odbcTimeStampFormat;
 	}

@@ -14,10 +14,8 @@ import org.eclipse.edt.javart.*;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 
 import java.lang.String;
-@javax.xml.bind.annotation.XmlRootElement(name="InvalidPatternException")
 public class InvalidPatternException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
 	public String pattern;
 	public InvalidPatternException() {
 		super();
@@ -48,7 +46,6 @@ public class InvalidPatternException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		pattern = "";
 	}
-	@org.eclipse.edt.javart.json.Json(name="pattern", clazz=EString.class, asOptions={})
 	public String getPattern() {
 		return (pattern);
 	}

@@ -30,8 +30,6 @@ import eglx.java.JavaObjectException;
 import eglx.lang.AnyException;
 import eglx.lang.InvalidIndexException;
 import eglx.lang.NullValueException;
-import eglx.persistence.sql.SQLException;
-import eglx.persistence.sql.SQLWarning;
 
 
 /**
@@ -293,28 +291,6 @@ public class JavartUtil
 			NullValueException nvx = new NullValueException();
 			nvx.initCause( ex );
 			return nvx.fillInMessage( Message.NULL_NOT_ALLOWED, msg );
-		}
-		else if ( ex instanceof java.sql.SQLException )
-		{
-			boolean isWarning = ex instanceof java.sql.SQLWarning;
-			SQLException sqlx = isWarning ? new SQLWarning() : new SQLException();
-			java.sql.SQLException caught = (java.sql.SQLException)ex;
-			String state = caught.getSQLState();
-			int code = caught.getErrorCode();
-			sqlx.setSQLState( state );
-			sqlx.setErrorCode( code );
-			sqlx.initCause( ex );
-			java.sql.SQLException nextEx = caught.getNextException();
-			if (nextEx != null) {
-				sqlx.setNextException((SQLException)makeEglException(nextEx));
-			}
-			if (isWarning) {
-				java.sql.SQLWarning nextWarn = ((java.sql.SQLWarning)caught).getNextWarning();
-				if (nextWarn != null) {
-					((SQLWarning)sqlx).setNextWarning((SQLWarning)makeEglException(nextWarn));
-				}
-			}
-			return sqlx.fillInMessage( Message.SQL_EXCEPTION_CAUGHT, msg, state, code );
 		}
 		else
 		{

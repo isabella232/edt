@@ -4,35 +4,15 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.runtime.java
 Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: javax.servlet;bundle-version="2.5.0";resolution:=optional,
- com.ibm.icu;bundle-version="4.2.0"
-Export-Package: eglx.http,
- eglx.java,
- eglx.javascript,
- eglx.json,
+Require-Bundle: com.ibm.icu;bundle-version="4.2.0";visibility:=reexport
+Export-Package: eglx.java,
  eglx.lang,
  eglx.persistence,
- eglx.persistence.sql,
- eglx.rbd,
- eglx.rest,
- eglx.services,
- eglx.ui,
- eglx.xml,
- eglx.xml.binding.annotation,
- org.eclipse.edt.eunit.runtime,
  org.eclipse.edt.javart,
- org.eclipse.edt.javart.ide,
- org.eclipse.edt.javart.json,
  org.eclipse.edt.javart.messages,
  org.eclipse.edt.javart.resources,
- org.eclipse.edt.javart.resources.egldd,
  org.eclipse.edt.javart.services,
- org.eclipse.edt.javart.services.servlet,
- org.eclipse.edt.javart.services.servlet.proxy,
- org.eclipse.edt.javart.services.servlet.rest.rpc,
  org.eclipse.edt.javart.util,
- org.eclipse.edt.runtime.java.eglx.lang,
- resources,
- resources.edt.binding
+ org.eclipse.edt.runtime.java.eglx.lang
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin

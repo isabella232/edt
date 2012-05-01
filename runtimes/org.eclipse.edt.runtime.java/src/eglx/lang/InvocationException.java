@@ -15,12 +15,9 @@ import java.lang.String;
 
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
-@javax.xml.bind.annotation.XmlRootElement(name="InvocationException")
 public class InvocationException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
 	public String name;
-	@javax.xml.bind.annotation.XmlTransient
 	public int returnValue;
 	public InvocationException() {
 		super();
@@ -54,14 +51,12 @@ public class InvocationException extends eglx.lang.AnyException {
 		name = "";
 		returnValue = 0;
 	}
-	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})
 	public String getName() {
 		return (name);
 	}
 	public void setName( String ezeValue ) {
 		this.name = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="returnValue", clazz=EInt.class, asOptions={})
 	public int getReturnValue() {
 		return (returnValue);
 	}
