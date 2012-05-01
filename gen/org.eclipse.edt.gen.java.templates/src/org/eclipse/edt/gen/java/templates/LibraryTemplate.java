@@ -17,7 +17,6 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Library;
@@ -97,19 +96,7 @@ public class LibraryTemplate extends JavaTemplate {
 			ctx.invoke(genSetter, arg, ctx, out);
 	}
 
-	public void genXmlTransient(Library part, TabbedWriter out) {
-		out.println("@javax.xml.bind.annotation.XmlTransient");
-	}
-
 	public void genRuntimeTypeName(Library library, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, library, ctx, out);
-	}
-
-	public void genAnnotations(Library library, Context ctx, TabbedWriter out, Field field) {
-		for(Annotation annot : field.getAnnotations()){
-			if(annot.getEClass().getETypeSignature().equals("eglx.lang.Resource")){
-				ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
-			}
-		}
 	}
 }

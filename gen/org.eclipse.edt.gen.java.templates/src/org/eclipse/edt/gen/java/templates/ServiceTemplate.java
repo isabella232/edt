@@ -15,20 +15,25 @@ import java.util.List;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.egl.StructPart;
 
 public class ServiceTemplate extends JavaTemplate {
 
-	@SuppressWarnings("unchecked")
-	public void preGenPart(StructPart part, Context ctx) {
-		ctx.invokeSuper(this, preGenPart, part, ctx);
-		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
-		typesImported.add("org.eclipse.edt.javart.services.*");
-		typesImported.add("org.eclipse.edt.javart.json.Json");
-		typesImported.add("org.eclipse.edt.javart.Runtime");
+	public void preGenPart(Service service, Context ctx) {
+		ctx.invokeSuper(this, preGenPart, service, ctx);
+		ctx.invoke(preGenPartImport, service, ctx);
 	}
+
+	@SuppressWarnings("unchecked")
+	public void preGenPartImport(Service service, Context ctx) {
+		ctx.invokeSuper(this, preGenPartImport, service, ctx);
+		List<String> typesImported = (List<String>) ctx.getAttribute(ctx.getClass(), org.eclipse.edt.gen.java.Constants.SubKey_partTypesImported);
+		if (!typesImported.contains("org.eclipse.edt.javart.services.*"))
+			typesImported.add("org.eclipse.edt.javart.services.*");
+		if (!typesImported.contains("org.eclipse.edt.javart.Runtime"))
+			typesImported.add("org.eclipse.edt.javart.Runtime");
+	}
+
 	public void genSuperClass(Service service, Context ctx, TabbedWriter out) {
 		out.print("ServiceBase");
 	}
@@ -53,11 +58,6 @@ public class ServiceTemplate extends JavaTemplate {
 
 	public void genRuntimeTypeName(Service service, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genPartName, service, ctx, out);
-	}
-	
-	public void genFunction(Service service, Context ctx, TabbedWriter out, Function arg) {
-		ctx.invoke(genFunctionParametersSignature, arg, ctx, out);
-		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 
 	public void genImplements(Service part, Context ctx, TabbedWriter out) {

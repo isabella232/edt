@@ -235,10 +235,4 @@ public class RecordTemplate extends JavaTemplate {
 		ctx.invoke(genGetter, arg, ctx, out);
 		ctx.invoke(genSetter, arg, ctx, out);
 	}
-
-	public void genXmlTransient(Record part, TabbedWriter out) {
-		out.println("@javax.xml.bind.annotation.XmlTransient");
-	}
-
-	public void genAnnotations(Record part, Context ctx, TabbedWriter out, Field field) {}
 }

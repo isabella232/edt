@@ -80,6 +80,7 @@ public class ArrayTypeTemplate extends JavaTemplate {
 			out.print("<");
 			for (int i = 0; i < generic.getTypeArguments().size(); i++) {
 				ctx.invoke(genRuntimeTypeName, generic.getTypeArguments().get(i), ctx, out, TypeNameKind.JavaObject);
+				ctx.invoke(genRuntimeTypeExtension, generic.getTypeArguments().get(i), ctx, out);
 			}
 			out.print(">");
 		}
@@ -88,10 +89,6 @@ public class ArrayTypeTemplate extends JavaTemplate {
 	public void genRuntimeClassTypeName(ArrayType generic, Context ctx, TabbedWriter out, TypeNameKind arg) {
 		ctx.invoke(genRuntimeTypeName, generic.getClassifier(), ctx, out, arg);
 		out.print(".class");
-	}
-
-	public void genJsonTypeDependentOptions(ArrayType type, Context ctx, TabbedWriter out) {
-		ctx.invoke(genJsonTypeDependentOptions, type.getElementType(), ctx, out);
 	}
 
 	public Integer genFieldTypeClassName(ArrayType type, Context ctx, TabbedWriter out, Integer arrayDimension) {
