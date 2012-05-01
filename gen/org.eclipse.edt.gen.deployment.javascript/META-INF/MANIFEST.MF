@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.edt.gen;bundle-version="0.8.0",
  org.eclipse.edt.compiler;bundle-version="0.8.0",
  org.eclipse.edt.ide.deployment.core;bundle-version="0.8.0",
  org.eclipse.edt.gen.javascript;bundle-version="0.8.0",
- org.eclipse.edt.runtime.java;bundle-version="0.8.0"
+ org.eclipse.edt.runtime.java.jee;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.eclipse.edt.gen.deployment.javascript,
  org.eclipse.edt.gen.deployment.javascript.templates,
