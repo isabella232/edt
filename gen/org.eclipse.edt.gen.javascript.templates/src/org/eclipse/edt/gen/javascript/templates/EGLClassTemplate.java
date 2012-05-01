@@ -21,19 +21,15 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateException;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ConstantField;
-import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Handler;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -47,10 +43,10 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
-		if (part.getAnnotation(org.eclipse.edt.gen.Constants.AnnotationXMLRootElement) == null) {
+		if (part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
 			// add an xmlRootElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + org.eclipse.edt.gen.Constants.AnnotationXMLRootElement);
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
 				annotation.setValue("name", part.getId());
 				part.addAnnotation(annotation);
 			}
