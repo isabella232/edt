@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
-import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
@@ -23,8 +22,6 @@ import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
