@@ -43,6 +43,7 @@ import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	public static final String sqlStmtKey = "org.eclipse.edt.gen.java.sql.stmtkey";
 	public static final String genClause = "genClause";
+	public static final String genSQLAnnotation = "genSQLAnnotation";
 	private static final String genStatementOptions = "genStatementOptions";
 	private static final String AnnotationSQLResultSetControl = "eglx.persistence.sql.SQLResultSetControl";
 	public static final String AnnotationSQLGeneratedValue = "eglx.persistence.sql.GeneratedValue";
@@ -288,7 +289,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 	}
 	private void genStatementOptions(Annotation annot, Context ctx, TabbedWriter out) {
 		if(annot != null){
-			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
+			ctx.invoke(genSQLAnnotation, annot.getEClass(), ctx, out, annot);
 		}
 	}
 

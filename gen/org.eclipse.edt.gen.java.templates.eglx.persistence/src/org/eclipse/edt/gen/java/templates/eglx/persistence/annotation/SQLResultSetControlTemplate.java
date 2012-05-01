@@ -19,7 +19,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 
 public class SQLResultSetControlTemplate extends JavaTemplate {
-	public void genAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
+	public void genSQLAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot) {
 		Object scrollablity = annot.getValue("scrollablity"); 
 		Object concurrency = annot.getValue("concurrency"); 
 		Object holdability = annot.getValue("holdability"); 
