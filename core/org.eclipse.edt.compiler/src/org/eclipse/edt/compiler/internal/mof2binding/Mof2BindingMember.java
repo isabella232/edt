@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.mof2binding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.ClassConstantBinding;
 import org.eclipse.edt.compiler.binding.ClassFieldBinding;
@@ -26,12 +29,12 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.ProgramParameterBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.SystemFunctionParameterSpecialTypeBinding;
 import org.eclipse.edt.compiler.binding.VariableFormFieldBinding;
 import org.eclipse.edt.compiler.binding.annotationType.EGLSystemParameterTypesAnnotationTypeBinding;
+import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
@@ -40,27 +43,38 @@ import org.eclipse.edt.mof.EDataType;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EFunction;
 import org.eclipse.edt.mof.EGenericType;
+import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.EParameter;
 import org.eclipse.edt.mof.EType;
 import org.eclipse.edt.mof.ETypedElement;
 import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.ArrayLiteral;
+import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.FloatingPointLiteral;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.StructuredField;
+import org.eclipse.edt.mof.egl.TextTypeLiteral;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.VariableFormField;
 import org.eclipse.edt.mof.egl.lookup.ProxyPart;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.EList;
 
 
 public abstract class Mof2BindingMember extends Mof2BindingPart {
@@ -295,6 +309,18 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 			ITypeBinding type = bindingForType(field, declarer);
 			if (declarer instanceof FlexibleRecordBinding) {
 				binding = new FlexibleRecordFieldBinding(name, declarer, type);
+				
+				Object initialValue = field.getInitialValue();
+				if (initialValue instanceof Literal) {
+					initialValue = getLiteralValue((Literal) initialValue);
+				}
+				else {
+					if (initialValue instanceof EObject) {
+						((EObject)field.getInitialValue()).accept(this);
+						initialValue = stack.pop();
+					}
+				}
+				((FlexibleRecordFieldBinding)binding).setInitialValue(initialValue);
 			}
 			else if (declarer instanceof EClassBinding) {
 				binding = new EFieldBinding(name, declarer, type);
@@ -452,4 +478,46 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 		}
 		return binding;
 	}
+	
+	private Object getLiteralValue(Literal lit) {
+		if (lit instanceof BooleanLiteral) {
+			return Boolean.toBoolean(((BooleanLiteral)lit).booleanValue().booleanValue());
+		}
+		
+		if (lit instanceof NullLiteral) {
+			return null;
+		}
+		
+		if (lit instanceof TextTypeLiteral) {
+			return ((TextTypeLiteral)lit).getValue();
+		}
+		
+		if (lit instanceof IntegerLiteral) {
+			return new Integer(((IntegerLiteral)lit).getValue());
+		}
+		
+		if (lit instanceof FloatingPointLiteral) {
+			return new Float(((FloatingPointLiteral)lit).getValue());
+		}
+		
+		if (lit instanceof PrimitiveTypeLiteral) {
+			return ((PrimitiveTypeLiteral)lit).getObjectValue();
+		}
+		
+		if (lit instanceof ArrayLiteral) {
+			List<Object> list = new ArrayList<Object>();
+			for (Expression exp : ((ArrayLiteral)lit).getEntries()) {
+				if (exp instanceof Literal) {
+					list.add(getLiteralValue((Literal)exp));
+				}
+				else {
+					list.add(exp);
+				}
+			}
+			return list.toArray(new Object[list.size()]);
+		}
+		return null;
+		
+	}
+
 }
