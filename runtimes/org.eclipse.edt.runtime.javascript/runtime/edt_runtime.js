@@ -557,6 +557,9 @@ egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern) {
 egl.eglx.lang.EString.fromEDate = function (d) {
 	return d == null ? d : egl.dateToString(d, "MM/dd/yyyy"); 
 };
+egl.eglx.lang.EString.fromETime = function (d) {
+	return d == null ? d : egl.timeToString(d, "hh:mm:ss"); 
+};
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
 };
@@ -771,10 +774,36 @@ egl.defineClass( "eglx.lang", "ETime"
 	}
 }
 );
-//unsupported 0.7
-//egl.eglx.lang.ETime.fromEString = function (x) {   
-//	return egl.stringToTime( x, egl.eglx.rbd.StrLib[$inst].defaultTimeFormat ); // TODO need timeformat as arg?
-//};
+
+egl.eglx.lang.ETime.fromETime = function (x) {
+	return x;  // TODO sbg bug in generator -- delete this fn when fixed
+};
+egl.eglx.lang.ETime.fromETimestamp = function (x, pattern) {
+	try{
+		return egl.eglx.lang.ETimestamp.timeOf(x, pattern);
+	}catch(ex){
+		throw egl.createTypeCastException( "CRRUI2017E", [ x, 'timestamp', 'time' ], 'time', 'timestamp' );
+	}
+};
+egl.eglx.lang.ETime.fromEString = function (x) {   
+    return egl.stringToTime( x, "hh:mm:ss" ); 
+};
+egl.eglx.lang.ETime.equals = function (x, y) {   
+	return egl.timeEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+egl.eglx.lang.ETime.notEquals = function (x, y) {   
+	return !egl.timeEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
+};
+
+egl.eglx.lang.ETime.extend = function(/*extension*/ time, /*optional mask*/pattern ) {
+	if (time === null)
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	else
+		return egl.dateTime.extend( "time", time, pattern );
+};
+egl.eglx.lang.ETime.ezeCast = function (any, nullable) {   
+	return egl.convertAnyToTime(any, nullable);
+};
 
 
 /****************************************************************************
@@ -950,6 +979,10 @@ egl.eglx.lang.ETimestamp.fromEString = function (timestamp, pattern) {
 
 egl.eglx.lang.ETimestamp.fromEDate = function (date, pattern){
 	return egl.eglx.lang.ETimestamp.extend( date, pattern);
+};
+
+egl.eglx.lang.ETimestamp.fromETime = function (time, pattern){
+	return egl.eglx.lang.ETimestamp.extend( time, pattern);
 };
 
 egl.eglx.lang.ETimestamp.checkArgument = function(functionName, pattern){
