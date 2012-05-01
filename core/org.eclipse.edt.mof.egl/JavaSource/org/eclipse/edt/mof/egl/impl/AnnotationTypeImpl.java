@@ -263,8 +263,12 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	}
 	
 	@Override
-	public void initialize(EObject object) {
-		super.initialize(object);
+	public void initialize(EObject object, boolean useInitialValues) {
+		super.initialize(object, useInitialValues);
+		
+		if (!useInitialValues) {
+			return;
+		}
 		
 		if (!(object instanceof EObjectImpl)) {
 			return;
