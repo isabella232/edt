@@ -119,6 +119,10 @@ externalType ThisExpression extends Expression type MofClass
 	thisObject Element;
 end
 
+externalType SuperExpression extends Expression type MofClass
+	superObject Element;
+end
+
 externalType SetValuesExpression extends Expression type MofClass
 	target Expression {containment=true};
 	settings StatementBlock {containment=true};
@@ -194,6 +198,11 @@ externalType FunctionInvocation extends InvocationExpression type MofClass
 	target FunctionMember;
 
 	function getFunction() returns(FunctionMember);
+end
+
+externalType ConstructorInvocation extends InvocationExpression type MofClass
+	target EGLConstructor {transient=true};
+	expression Expression {containment=true};
 end
 
 externalType DelegateInvocation extends InvocationExpression type MofClass

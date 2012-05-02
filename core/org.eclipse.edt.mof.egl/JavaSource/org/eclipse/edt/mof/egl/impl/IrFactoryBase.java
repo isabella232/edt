@@ -148,6 +148,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getConstructorInvocationEClass() {
+		return (EClass)getTypeNamed(ConstructorInvocation);
+	}
+	
+	@Override
 	public EClass getContainerEClass() {
 		return (EClass)getTypeNamed(Container);
 	}
@@ -783,6 +788,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getSuperExpressionEClass() {
+		return (EClass)getTypeNamed(SuperExpression);
+	}
+	
+	@Override
 	public EClass getSystemFunctionArgumentMnemonicNameEClass() {
 		return (EClass)getTypeNamed(SystemFunctionArgumentMnemonicName);
 	}
@@ -980,6 +990,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public Constructor createConstructor() {
 		return (Constructor)getConstructorEClass().newInstance();
+	}
+	
+	@Override
+	public ConstructorInvocation createConstructorInvocation() {
+		return (ConstructorInvocation)getConstructorInvocationEClass().newInstance();
 	}
 	
 	@Override
@@ -1492,6 +1507,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public SubstringAccess createSubstringAccess() {
 		return (SubstringAccess)getSubstringAccessEClass().newInstance();
+	}
+	
+	@Override
+	public SuperExpression createSuperExpression() {
+		return (SuperExpression)getSuperExpressionEClass().newInstance();
 	}
 	
 	@Override

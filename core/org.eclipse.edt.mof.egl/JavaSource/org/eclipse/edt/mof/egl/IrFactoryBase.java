@@ -44,6 +44,7 @@ public interface IrFactoryBase extends EFactory  {
 	String ConstantField = packageName+".ConstantField";
 	String ConstantFormField = packageName+".ConstantFormField";
 	String Constructor = packageName+".Constructor";
+	String ConstructorInvocation = packageName+".ConstructorInvocation";
 	String Container = packageName+".Container";
 	String ContinueStatement = packageName+".ContinueStatement";
 	String ConverseStatement = packageName+".ConverseStatement";
@@ -170,6 +171,7 @@ public interface IrFactoryBase extends EFactory  {
 	String StructuredField = packageName+".StructuredField";
 	String StructuredRecord = packageName+".StructuredRecord";
 	String SubstringAccess = packageName+".SubstringAccess";
+	String SuperExpression = packageName+".SuperExpression";
 	String SystemFunctionArgumentMnemonicName = packageName+".SystemFunctionArgumentMnemonicName";
 	String TernaryExpression = packageName+".TernaryExpression";
 	String TextTypeLiteral = packageName+".TextTypeLiteral";
@@ -215,6 +217,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getConstantFieldEClass();
 	EClass getConstantFormFieldEClass();
 	EClass getConstructorEClass();
+	EClass getConstructorInvocationEClass();
 	EClass getContainerEClass();
 	EClass getContinueStatementEClass();
 	EClass getConverseStatementEClass();
@@ -341,6 +344,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getStructuredFieldEClass();
 	EClass getStructuredRecordEClass();
 	EClass getSubstringAccessEClass();
+	EClass getSuperExpressionEClass();
 	EClass getSystemFunctionArgumentMnemonicNameEClass();
 	EClass getTernaryExpressionEClass();
 	EClass getTextTypeLiteralEClass();
@@ -382,6 +386,7 @@ public interface IrFactoryBase extends EFactory  {
 	public ConstantField createConstantField();
 	public ConstantFormField createConstantFormField();
 	public Constructor createConstructor();
+	public ConstructorInvocation createConstructorInvocation();
 	public ContinueStatement createContinueStatement();
 	public ConverseStatement createConverseStatement();
 	public ConversionOperation createConversionOperation();
@@ -484,6 +489,7 @@ public interface IrFactoryBase extends EFactory  {
 	public StructuredField createStructuredField();
 	public StructuredRecord createStructuredRecord();
 	public SubstringAccess createSubstringAccess();
+	public SuperExpression createSuperExpression();
 	public SystemFunctionArgumentMnemonicName createSystemFunctionArgumentMnemonicName();
 	public TernaryExpression createTernaryExpression();
 	public TextTypeLiteral createTextTypeLiteral();
