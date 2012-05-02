@@ -22,16 +22,24 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.namespace.QName;
 
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.egldd.Binding;
+import org.eclipse.edt.javart.resources.egldd.RuntimeDeploymentDesc;
 import org.eclipse.edt.javart.resources.egldd.SQLDatabaseBinding;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 
 import resources.edt.binding.BindingResourceProcessor;
-
 import eglx.java.JavaObjectException;
 import eglx.lang.AnyException;
+import eglx.lang.Resources.ResourceLocator;
 import eglx.persistence.sql.SQLDataSource;
 import eglx.persistence.sql.SQLJNDIDataSource;
 
@@ -50,6 +58,89 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 	public IDEBindingResourceProcessor(int idePort, IDEResourceLocator resourceLocator) {
 		this.resourceLocator = resourceLocator;
 		this.ideURL = "http://localhost:" + idePort + "/__testServer"; //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	@Override
+	protected Binding getBinding(String bindingURI, URI propertyFileURI, ResourceLocator resourceLocator) {
+		// This is a little different than super's implementation. Each binding is cached based on the DD that
+		// it resides within, instead of the DD being requested. Otherwise the cache is not properly cleared
+		// when modifying an imported binding.
+		QName resourceId = new QName(propertyFileURI.toASCIIString(), bindingURI);
+		Binding binding = bindings.get(resourceId);
+		if (binding == null) {
+			RuntimeDeploymentDesc dd = getDeploymentDesc(propertyFileURI, resourceLocator);
+			binding = getBinding(bindingURI, dd);
+			if (binding != null) {
+				bindings.put(resourceId, binding);
+			}
+			else {
+				String normalizedName;
+				if (resourceLocator instanceof IDEResourceLocator) {
+					normalizedName = ((IDEResourceLocator)resourceLocator).normalizePropertyFileName(propertyFileURI.toString());
+				}
+				else {
+					normalizedName = dd.getName();
+				}
+				
+				Set<String> seenDDs = new HashSet<String>();
+				seenDDs.add(normalizedName);
+				binding = getBinding(bindingURI, dd.getIncludedDescs(), resourceLocator, seenDDs);
+			}
+		}
+		return binding;
+	}
+	
+	@Override
+	protected Binding getBinding(String name, List<String> includes, ResourceLocator resourceLocator, Set<String> seenDDs) throws AnyException {
+		// This is a little different than super's implementation. Each binding is cached based on the DD that
+		// it resides within, instead of the DD being requested. Otherwise the cache is not properly cleared
+		// when modifying an imported binding.
+		List<RuntimeDeploymentDesc> includedDDs = new ArrayList<RuntimeDeploymentDesc>();
+		for (String ddName : includes) {
+			try {
+				URI uri = createFileURI(ddName);
+				String normalizedName;
+				if (resourceLocator instanceof IDEResourceLocator) {
+					normalizedName = ((IDEResourceLocator)resourceLocator).normalizePropertyFileName(uri.toString());
+				}
+				else {
+					normalizedName = ddName;
+				}
+				
+				if (seenDDs.contains(normalizedName)) {
+					continue;
+				}
+				seenDDs.add(normalizedName);
+				
+				QName resourceId = new QName(uri.toASCIIString(), name);
+				Binding binding = bindings.get(resourceId);
+				if (binding != null) {
+					return binding;
+				}
+				
+				RuntimeDeploymentDesc includedDD = getDeploymentDesc(uri, resourceLocator);
+				binding = getBinding(name, includedDD);
+				if (binding != null) {
+					bindings.put(resourceId, binding);
+					return binding;
+				}
+				else {
+					includedDDs.add(includedDD);
+				}
+			} catch (URISyntaxException e) {
+				JavaObjectException jox = new JavaObjectException();
+				jox.exceptionType = URI.class.getName();
+				jox.initCause( e );
+				throw jox.fillInMessage( Message.RESOURCE_URI_EXCEPTION, ddName );
+			}
+		}
+		for (RuntimeDeploymentDesc includedDD : includedDDs){
+			Binding binding = getBinding(name, includedDD.getIncludedDescs(), resourceLocator, seenDDs);
+			if (binding != null) {
+				return binding;
+			}
+		}
+		return null;
 	}
 	
 	@Override
@@ -151,6 +242,12 @@ public class IDEBindingResourceProcessor extends BindingResourceProcessor {
 		}
 		else {
 			try {
+				try {
+					dd = URLEncoder.encode(dd, "UTF-8");
+				}
+				catch (UnsupportedEncodingException e) {
+				}
+				
 				this.defaultDD = createFileURI(dd);
 			} catch (URISyntaxException e) {
 				JavaObjectException jox = new JavaObjectException();

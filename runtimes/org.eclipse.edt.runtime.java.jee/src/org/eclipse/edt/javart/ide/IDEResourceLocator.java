@@ -104,7 +104,7 @@ public class IDEResourceLocator extends RuntimeResourceLocator {
 		return dd;
 	}
 	
-	private String normalizePropertyFileName(String name) {
+	public String normalizePropertyFileName(String name) {
 		if (name == null || name.length() == 0) {
 			return name;
 		}
