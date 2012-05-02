@@ -49,7 +49,7 @@ terminal IMPLEMENTS, EXTENDS;
 terminal TYPE;
 terminal EMBED, USE, RETURNS;
 terminal SQLNULLABLE, FIELD, INOUT, OUT;
-terminal THIS, NEW;
+terminal THIS, NEW, SUPER;
 terminal PRIVATE, STATIC;
 terminal CONSTRUCTOR;
 
@@ -1356,6 +1356,9 @@ primaryNoNew
 
 	|	THIS:this1
 	{: RESULT = new ThisExpression(this1left, this1right); :}
+	
+	|	SUPER:super1
+	{: RESULT = new SuperExpression(super1left, super1right); :}
 
 	|	literal:literal1
 	{: RESULT = literal1; :}
