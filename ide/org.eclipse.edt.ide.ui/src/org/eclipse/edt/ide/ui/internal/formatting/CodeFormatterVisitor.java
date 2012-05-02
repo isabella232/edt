@@ -3804,6 +3804,7 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 		return false;
 	}
 	
+	public boolean visit(SuperExpression superExpression) {return visitTerminalExpression(superExpression);}
 	public boolean visit(ThisExpression thisExpression) {return visitTerminalExpression(thisExpression);}
 	
 	//literal 
