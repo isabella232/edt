@@ -15,8 +15,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.namespace.QName;
 
@@ -137,14 +139,16 @@ public class BindingResourceProcessor {
 	protected URI createFileURI(String fileName) throws URISyntaxException{
 		return new URI("file:" + fileName);
 	}
-	private Binding getBinding(String bindingURI, URI propertyFileURI, ResourceLocator resourceLocator) {
+	protected Binding getBinding(String bindingURI, URI propertyFileURI, ResourceLocator resourceLocator) {
 		QName resourceId = new QName(propertyFileURI.toASCIIString(), bindingURI);
 		Binding binding = bindings.get(resourceId);
 		if(binding == null){
 			RuntimeDeploymentDesc dd = getDeploymentDesc(propertyFileURI, resourceLocator);
 			binding = getBinding(bindingURI, dd);
 			if(binding == null){
-				binding = getBinding(bindingURI, dd.getIncludedDescs(), resourceLocator);
+				Set<String> seenDDs = new HashSet<String>();
+				seenDDs.add(dd.getName());
+				binding = getBinding(bindingURI, dd.getIncludedDescs(), resourceLocator, seenDDs);
 			}
 			if(binding != null){
 				bindings.put(resourceId, binding);
@@ -153,14 +157,19 @@ public class BindingResourceProcessor {
 		return binding;
 	}
 	
-	private RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileURI, ResourceLocator resourceLocator){
+	protected RuntimeDeploymentDesc getDeploymentDesc(URI propertyFileURI, ResourceLocator resourceLocator){
 		return resourceLocator.getDeploymentDesc(propertyFileURI);
 	}
 
-	private Binding getBinding(String name, List<String> includes, ResourceLocator resourceLocator)throws AnyException{
+	protected Binding getBinding(String name, List<String> includes, ResourceLocator resourceLocator, Set<String> seenDDs)throws AnyException{
 		List<RuntimeDeploymentDesc> includedDDs = new ArrayList<RuntimeDeploymentDesc>();
 		Binding binding = null;
 		for(String ddName : includes){
+			if (seenDDs.contains(ddName)) {
+				continue;
+			}
+			seenDDs.add(ddName);
+			
 			RuntimeDeploymentDesc includedDD;
 			try {
 				includedDD = getDeploymentDesc(createFileURI(ddName), resourceLocator);
@@ -178,15 +187,17 @@ public class BindingResourceProcessor {
 				throw jox.fillInMessage( Message.RESOURCE_URI_EXCEPTION, ddName );
 			}
 		}
-		for(RuntimeDeploymentDesc includedDD : includedDDs){
-			binding = getBinding(name, includedDD.getIncludedDescs(), resourceLocator);
-			if(binding != null){
-				break;
+		if (binding == null) {
+			for(RuntimeDeploymentDesc includedDD : includedDDs){
+				binding = getBinding(name, includedDD.getIncludedDescs(), resourceLocator, seenDDs);
+				if(binding != null){
+					break;
+				}
 			}
 		}
 		return binding;
 	}
-	private Binding getBinding(String name, RuntimeDeploymentDesc dd){
+	protected Binding getBinding(String name, RuntimeDeploymentDesc dd){
 		for(Binding binding : dd.getBindings()){
 			if(name.equalsIgnoreCase(binding.getName())){
 				return binding;
