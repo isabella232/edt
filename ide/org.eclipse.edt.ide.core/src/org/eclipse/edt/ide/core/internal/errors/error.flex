@@ -196,6 +196,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"sqlnullable"		{ return ErrorNodeTypes.SQLNULLABLE; }
 	"stack"			 	{ return ErrorNodeTypes.STACK; }
 	"static"			{ return ErrorNodeTypes.STATIC; }
+	"super"				{ return ErrorNodeTypes.SUPER; }
 	"this"				{ return ErrorNodeTypes.THIS; }
 	"throw"				{ return ErrorNodeTypes.THROW; }
 	"to"				{ return ErrorNodeTypes.TO; }
