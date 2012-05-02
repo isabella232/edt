@@ -1,0 +1,67 @@
+package expressions;
+
+record myrec
+	a any?;
+end
+
+handler h2 type ruihandler
+	i int;
+	rec myrec;
+end
+
+handler superExpr type RUIHandler 
+	{initialUI = [], onConstructionFunction = start,
+	super{x=5},	//1
+	super{document = new document} //0
+	}
+	
+	rec myrec; 
+	x int;
+	
+	ha h2{super{i = 3}}; //1
+	hb h2{super{document = new document}}; //0
+	
+	hc superExpr{super{x = 3}};	//1
+	hd superExpr{super{document = new document}};	//0
+
+	document boolean;
+	a any?;
+	
+	constructor()  
+		super(); //0  
+		super(10); //2   
+		this(); //1
+		this(10); //1
+		super.getProperty(""); //0
+		this.getProperty(""); //0
+		a = super.document; //0
+		a = this.document; //0
+		
+	end
+	
+	function getProperty(s string in) returns(string)
+		thisIsOverloaded boolean;
+	end
+	
+	constructor(i int in)
+		super(10); //1 
+		super(); //1
+	end
+	 
+    function start()
+    	hy h2{super{i = 3}}; //1
+    	hz h2{super{document = new document}}; //0
+    	
+    	super();	//1
+    	super(x);	//2
+    	super.getProperty("");	//0
+		m myrec{a = super.getProperty("")};	//0
+		super{x = 10};	//1
+    end
+//    
+    function go() returns(int) 
+    	super(); //1 
+    	super(10); //2
+    	super.go(); //1
+    end
+end
