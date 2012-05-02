@@ -558,7 +558,7 @@ egl.eglx.lang.EString.fromEDate = function (d) {
 	return d == null ? d : egl.dateToString(d, "MM/dd/yyyy"); 
 };
 egl.eglx.lang.EString.fromETime = function (d) {
-	return d == null ? d : egl.timeToString(d, "hh:mm:ss"); 
+	return d == null ? d : egl.timeToString(d, "HH:mm:ss"); 
 };
 egl.eglx.lang.EString.fromAnyObject = function (x) {
 	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
@@ -786,7 +786,7 @@ egl.eglx.lang.ETime.fromETimestamp = function (x, pattern) {
 	}
 };
 egl.eglx.lang.ETime.fromEString = function (x) {   
-    return egl.stringToTime( x, "hh:mm:ss" ); 
+    return egl.stringToTime( x, "HH:mm:ss" ); 
 };
 egl.eglx.lang.ETime.equals = function (x, y) {   
 	return egl.timeEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
