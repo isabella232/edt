@@ -60,6 +60,7 @@ import org.eclipse.edt.compiler.binding.MultiplyOccuringItemTypeBinding;
 import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.NilBinding;
 import org.eclipse.edt.compiler.binding.OverloadedFunctionSet;
+import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
 import org.eclipse.edt.compiler.binding.ProgramBinding;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
@@ -136,6 +137,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.TernaryExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
@@ -286,13 +288,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 				IFunctionBinding fBinding = (IFunctionBinding) tBinding;
 			}
 			else if(ITypeBinding.DELEGATE_BINDING != tBinding.getKind()){
-				if (functionInvocation.getTarget() instanceof ThisExpression) {
+				if (functionInvocation.getTarget() instanceof ThisExpression || functionInvocation.getTarget() instanceof SuperExpression) {
 					OverloadedFunctionSet funcSet = getConstructors(tBinding);
 					if (funcSet == null || funcSet.getNestedFunctionBindings().isEmpty()) {
-						problemRequestor.acceptProblem(
-								functionInvocation.getTarget(),
-								IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
-								new String[]{tBinding.getName()});
+						// Super types always have a default constructor.
+						if (!(functionInvocation.getTarget() instanceof SuperExpression) || functionInvocation.getArguments().size() != 0) {
+							problemRequestor.acceptProblem(
+									functionInvocation.getTarget(),
+									IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,
+									new String[]{tBinding.getName()});
+						}
 					}
 					else {
 						functionInvocation.getTarget().setDataBinding(funcSet);
@@ -310,6 +315,25 @@ public abstract class DefaultBinder extends AbstractBinder {
         }
 		
         return false;
+	}
+	
+	public boolean visit(SuperExpression superExpression) {
+		if (superExpression.resolveTypeBinding() != null) {
+	        return false;
+	    }
+		Scope scopeForThis = currentScope.getScopeForKeywordThis();
+		if(scopeForThis instanceof FunctionContainerScope) {
+			IPartBinding binding = ((FunctionContainerScope) scopeForThis).getPartBinding();
+			if (binding instanceof PartBinding) {
+				IPartBinding superType = ((PartBinding)binding).getDefaultSuperType();
+				superExpression.setTypeBinding(superType);
+				return false;
+			}
+		}
+		
+		superExpression.setTypeBinding(IBinding.NOT_FOUND_BINDING);
+		problemRequestor.acceptProblem(superExpression, IProblemRequestor.VARIABLE_NOT_FOUND, new String[] {superExpression.getCanonicalString()});
+		return false;
 	}
 	
 	public boolean visit(ThisExpression thisExpression) {
@@ -636,6 +660,11 @@ public abstract class DefaultBinder extends AbstractBinder {
 			return true;
 		}
 		
+		public boolean visit(SuperExpression superExpression) {
+			processBinding(superExpression.resolveTypeBinding());
+			return false;
+		}
+		
 		public boolean visit(ThisExpression thisExpression) {
 			processBinding(thisExpression.resolveTypeBinding());
 			return false;
@@ -868,7 +897,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	        			dataBinding = new DynamicDataBinding(fieldAccess.getCaseSensitiveID(), null);
 	        		}
 	        		else {
-	        			if(fieldAccess.getPrimary() instanceof ThisExpression) {
+	        			if(fieldAccess.getPrimary() instanceof ThisExpression || fieldAccess.getPrimary() instanceof SuperExpression) {
 	        				//To get priveate as well as public fields
 	        				dataBinding = expressionType.findData(fieldAccess.getID());
 	        			}
@@ -3494,6 +3523,11 @@ public abstract class DefaultBinder extends AbstractBinder {
             }
             return false;
         }
+        
+        public boolean visit(SuperExpression superExpression) {
+            superExpression.setTypeBinding(leftHandScope.getTypeBinding());
+            return false;
+        }
 
         public boolean visit(ThisExpression thisExpression) {
             thisExpression.setTypeBinding(leftHandScope.getTypeBinding());
@@ -3541,7 +3575,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 
 			FunctionResolver resolver = new FunctionResolver(compilerOptions);			
 			OverloadedFunctionSet overloadedFunctionSet = (OverloadedFunctionSet) fInvocationDBinding;
-			boolean isConstructor = functionInvocation.getTarget() instanceof ThisExpression;
+			boolean isConstructor = functionInvocation.getTarget() instanceof ThisExpression || functionInvocation.getTarget() instanceof SuperExpression;
 			IDataBinding matchingFunction = resolver.findMatchingFunction(overloadedFunctionSet, getArgumentTypes(functionInvocation.getArguments()), getArgumentIsLiteralArray(functionInvocation.getArguments()), !isConstructor);
 			
 			if (isConstructor) {

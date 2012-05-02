@@ -1125,6 +1125,9 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     		validateNotPCB(argDBinding, argExpr);
     	}
+    	
+    	validateNotSuper(argExpr);
+    	
     	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
     }
     
@@ -1150,6 +1153,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
     		}
     	}
     	validateNotThis(argExpr);
+    	validateNotSuper(argExpr);
     	
     	//Cannot pass a value type to an reference type OUT parm
    		if (!isRefCompatForOutParm(argType, parmType)) {
@@ -1165,6 +1169,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 	    			});
     		return false;
    		}
+   		
     	return checkArgForInOrOutParameter(argExpr, argType, funcParmBinding, parmType, argNum);
     }
     
@@ -1298,6 +1303,7 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
    		}
     	
     	validateNotThis(argExpr);
+    	validateNotSuper(argExpr);
     	
     	return true;
     }
@@ -1308,6 +1314,19 @@ public class FunctionArgumentValidator extends DefaultASTVisitor {
 		    		problemRequestor.acceptProblem(
 			    			thisExpression,
 			    			IProblemRequestor.FUNCTION_ARG_CANNOT_BE_THIS,
+							new String[] {});
+		    		return false;	
+	    		}
+    	};
+    	expr.accept(visitor);
+    }
+    
+    private void validateNotSuper(Expression expr) {
+    	DefaultASTVisitor visitor = new DefaultASTVisitor() {
+    		public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
+		    		problemRequestor.acceptProblem(
+			    			superExpression,
+			    			IProblemRequestor.FUNCTION_ARG_CANNOT_BE_SUPER,
 							new String[] {});
 		    		return false;	
 	    		}

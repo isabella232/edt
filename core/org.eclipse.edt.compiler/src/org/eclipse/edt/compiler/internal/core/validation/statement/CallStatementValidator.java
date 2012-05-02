@@ -39,6 +39,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -326,7 +327,7 @@ import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidat
 						return false;
 					}
 					public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
-						isLocal[0] = fieldAccess.getPrimary() instanceof ThisExpression;
+						isLocal[0] = fieldAccess.getPrimary() instanceof ThisExpression || fieldAccess.getPrimary() instanceof SuperExpression;
 						return false;
 					}
 				};

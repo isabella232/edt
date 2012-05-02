@@ -62,6 +62,7 @@ import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.CharLiteral;
+import org.eclipse.edt.mof.egl.ConstructorInvocation;
 import org.eclipse.edt.mof.egl.DBCharLiteral;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
@@ -103,6 +104,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StringLiteral;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.SubstringAccess;
+import org.eclipse.edt.mof.egl.SuperExpression;
 import org.eclipse.edt.mof.egl.TernaryExpression;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
@@ -388,14 +390,40 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else {
 				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
-				if ((node.getTarget() instanceof SimpleName || node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) && !isStatic) {
+				if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
+						|| node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+					// Constructor invocation.
+					fi = factory.createConstructorInvocation();
+					fi.setId("constructor");
+					
+					Expression expr;
+					
+					// super() will be resolved at runtime.
+					if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
+						expr = factory.createThisExpression();
+						((ThisExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
+					}
+					else {
+						node.getTarget().accept(this);
+						expr = (Expression)stack.pop();
+					}
+					
+					((ConstructorInvocation)fi).setExpression(expr);
+				}
+				else if (node.getTarget() instanceof SimpleName && !isStatic) {
 					if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 						// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 						fi = factory.createQualifiedFunctionInvocation();
 						fi.setId(node.getTarget().getCanonicalString());
-						ThisExpression thisExpr = factory.createThisExpression();
-						thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
-						((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+						if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+							node.getTarget().accept(this);
+							((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+						}
+						else {
+							ThisExpression thisExpr = factory.createThisExpression();
+							thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+							((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+						}
 					}
 					else {
 						
@@ -448,15 +476,22 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					else {
 						if (node.getTarget() instanceof FieldAccess) {
 							FieldAccess fa = (FieldAccess) node.getTarget();
-							if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
+							if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
+									|| fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
 								
 								if (functionBinding == null || isSuperTypeMember(functionBinding)) {
 									// Qualify with this to get QualifiedFunctionInvocation which will do dynamic lookup
 									fi = factory.createQualifiedFunctionInvocation();
 									fi.setId(fa.getCaseSensitiveID());
-									ThisExpression thisExpr = factory.createThisExpression();
-									thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
-									((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+									if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
+										fa.getPrimary().accept(this);
+										((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+									}
+									else {
+										ThisExpression thisExpr = factory.createThisExpression();
+										thisExpr.setThisObject(getCurrentFunctionMember().getContainer());
+										((QualifiedFunctionInvocation)fi).setQualifier(thisExpr);
+									}
 								}
 								else {		
 									
@@ -1014,6 +1049,17 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		access.setEnd((Expression)stack.pop());
 		substringAccess.getPrimary().accept(this);	
 		access.setStringExpression((Expression)stack.pop());
+		return false;
+	}
+	
+	@Override
+	public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
+		SuperExpression expr = factory.createSuperExpression();
+		ITypeBinding binding = superExpression.resolveTypeBinding();
+		EObject obj = mofTypeFor(binding);
+		expr.setSuperObject((Element)obj);
+		setElementInformation(superExpression, expr);
+		stack.push(expr);
 		return false;
 	}
 

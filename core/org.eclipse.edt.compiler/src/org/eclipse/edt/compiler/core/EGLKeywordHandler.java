@@ -155,6 +155,7 @@ public class EGLKeywordHandler {
 			"stack", //$NON-NLS-1$
 			"static", //$NON-NLS-1$
 			"string", //$NON-NLS-1$
+			"super", //$NON-NLS-1$
 			"this", //$NON-NLS-1$
 			"throw", //$NON-NLS-1$
 			"time", //$NON-NLS-1$

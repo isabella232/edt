@@ -50,6 +50,7 @@ import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.TypeLiteralExpression;
@@ -249,6 +250,37 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		public void setAnnotation(IAnnotationBinding annotation) {
 			this.annotation = annotation;
+		}
+		
+		public boolean visit(SuperExpression superExpression) {
+			AnnotationLeftHandScope myScope = getAnnotationLeftHandScope().getTopLevelAnnotationLeftHandScope();
+			if (myScope.getBindingBeingAnnotated().isDataBinding()) {
+				ITypeBinding typeBinding = myScope.getTypeOfBindingBeingAnnotated();
+				
+				if (typeBinding instanceof PartBinding) {
+					typeBinding = ((PartBinding)typeBinding).getDefaultSuperType();
+					if (Binding.isValidBinding(typeBinding)) {
+						superExpression.setTypeBinding(typeBinding);
+						return false;
+					}
+				}
+			}
+
+			if (myScope.getBindingBeingAnnotated().isTypeBinding()) {
+				ITypeBinding typeBinding = (ITypeBinding) myScope.getBindingBeingAnnotated();
+				if (typeBinding instanceof PartBinding) {
+					typeBinding = ((PartBinding)typeBinding).getDefaultSuperType();
+					if (Binding.isValidBinding(typeBinding)) {
+						superExpression.setTypeBinding(typeBinding);
+						return false;
+					}
+				}
+			}
+
+			superExpression.setDataBinding(IBinding.NOT_FOUND_BINDING);
+			superExpression.setTypeBinding(IBinding.NOT_FOUND_BINDING);
+			
+			return false;
 		}
 
 		public boolean visit(ThisExpression thisExpression) {

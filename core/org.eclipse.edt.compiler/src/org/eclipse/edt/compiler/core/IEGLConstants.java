@@ -202,6 +202,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_STACK = "stack";  //$NON-NLS-1$
 	public static final String KEYWORD_STATIC = "static";  //$NON-NLS-1$
 	public static final String KEYWORD_STRING = "string";  //$NON-NLS-1$
+	public static final String KEYWORD_SUPER = "super";  //$NON-NLS-1$
 	public static final String KEYWORD_THIS = "this";  //$NON-NLS-1$
 	public static final String KEYWORD_THROW = "throw";  //$NON-NLS-1$
 	public static final String KEYWORD_TIME = "time";  //$NON-NLS-1$
