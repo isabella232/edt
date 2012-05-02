@@ -481,6 +481,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( substringAccess );
 	}
 	
+	public boolean visit(SuperExpression superExpression) {
+		return visitNode( superExpression );
+	}
+	
 	public boolean visit(TernaryExpression ternaryExpression) {
 		return visitNode( ternaryExpression );
 	}
@@ -1019,6 +1023,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(SubstringAccess substringAccess) {
 		 endVisitNode( substringAccess );
+	}
+	
+	public void endVisit(SuperExpression superExpression) {
+		 endVisitNode( superExpression );
 	}
 	
 	public void endVisit(TernaryExpression ternaryExpression) {

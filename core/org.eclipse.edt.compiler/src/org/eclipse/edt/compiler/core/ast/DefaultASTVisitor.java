@@ -477,6 +477,10 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(SuperExpression superExpression) {
+		return false;
+	}
+	
 	public boolean visit(TernaryExpression ternaryExpression) {
 		return false;
 	}
@@ -788,6 +792,8 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(SQLLiteral sQLLiteral) {}
 	
 	public void endVisit(SubstringAccess substringAccess) {}
+	
+	public void endVisit(SuperExpression superExpression) {}
 	
 	public void endVisit(TernaryExpression ternaryExpression) {}
 	
