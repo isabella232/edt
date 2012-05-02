@@ -13,10 +13,8 @@ package org.eclipse.edt.javart.ide;
 
 import java.lang.reflect.Method;
 
-
 import eglx.lang.AnyException;
 import eglx.lang.Resources;
-import eglx.lang.SysLib;
 
 public class MainProgramLauncher {
 	
