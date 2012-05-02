@@ -61,6 +61,9 @@ plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201204041627,:pserver:ano
 plugin@org.eclipse.edt.runtime.java.jtopen=v201205011509,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
 plugin@org.eclipse.edt.ide.jtopen=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.ide.jtopen
 plugin@org.eclipse.edt.mof.eglx.jtopen=v201204251453,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.mof.eglx.jtopen
+plugin@org.eclipse.edt.gen.java.templates.jee=v201204041627,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.gen.java.templates.jee
+plugin@org.eclipse.edt.runtime.java.jee=v201205011509,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jee
+plugin@org.eclipse.edt.runtime.java.sql=v201205011509,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.sql
 
 plugin@org.eclipse.test=v20080313,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
 fragment@org.eclipse.ant.optional.junit=v20070202,:pserver:anonymous@dev.eclipse.org:/cvsroot/eclipse,
