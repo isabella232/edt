@@ -284,6 +284,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"sqlnullable"	    { return symbol(NodeTypes.SQLNULLABLE); }
 	"stack"			 	{ return symbol(NodeTypes.STACK); }
 	"static"			{ return symbol(NodeTypes.STATIC); }
+	"super"				{ return symbol(NodeTypes.SUPER); }
 	"this"				{ return symbol(NodeTypes.THIS); }
 	"throw"				{ return symbol(NodeTypes.THROW); }
 	"to"				{ return symbol(NodeTypes.TO); }
