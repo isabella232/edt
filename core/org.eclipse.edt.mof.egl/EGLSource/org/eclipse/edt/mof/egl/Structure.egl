@@ -92,7 +92,9 @@ enumeration ElementKind {@MofEnum}
 	FormGroupUse,
 	DataTableUse,
 	AnnotationValue,
-	AnnotationType
+	AnnotationType,
+	EnumerationPart,
+	EnumerationEntry
 end
 
 enumeration AccessKind {@MofEnum}

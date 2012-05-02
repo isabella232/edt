@@ -42,5 +42,7 @@ public enum ElementKind {
 	FormgroupUse,
 	DataTableUse,
 	AnnotationValue,
-	AnnotationType
+	AnnotationType,
+	EnumerationPart,
+	EnumerationEntry
 }

@@ -137,8 +137,7 @@ public class EnumerationEntryImpl extends EEnumLiteralImpl implements Enumeratio
 
 	@Override
 	public void addAnnotation(Annotation ann) {
-		// TODO Auto-generated method stub
-		
+		getAnnotations().add(ann);
 	}
 
 	@Override
