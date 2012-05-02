@@ -74,6 +74,9 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 					if (unaryExpression.getOperator() == Operator.MINUS) {
 						constantValueAry[0] = constantValueAry[0] * -1;
 					}
+					else if (unaryExpression.getOperator() == Operator.NEGATE) {
+						constantValueAry[0] = ~constantValueAry[0];
+					}
 				}
 				public void endVisitExpression(Expression expression) {
 				}
@@ -85,6 +88,13 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		}
 		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
 		enumerationField.getName().setBinding(enumDataBinding);
+		
+		if (enumerationField.hasSettingsBlock()) {
+			SettingsBlock settingsBlock = enumerationField.getSettingsBlock();
+	        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumDataBinding, null, enumDataBinding, -1, enumerationBinding);
+	        SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
+	        settingsBlock.accept(blockCompletor);
+	    }
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
     		problemRequestor.acceptProblem(

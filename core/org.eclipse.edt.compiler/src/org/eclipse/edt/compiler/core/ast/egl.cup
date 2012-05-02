@@ -109,6 +109,7 @@ nonterminal deleteOption;
 nonterminal GetByPositionStatement.Direction direction;
 nonterminal ElseBlock elseOpt;
 nonterminal EnumerationField enumerationField;
+nonterminal Expression enumerationValue;
 nonterminal OnEventBlock eventBlock;
 nonterminal executeOption;
 nonterminal ExitStatement.ExitModifier exitModifierOpt;
@@ -502,12 +503,29 @@ interfaceContent
 	{: RESULT = settingsBlock1; :}
 	;
 
-enumerationField
-	::=	ID:id1
-	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, id1left, id1right); :}
+enumerationValue
+	::=	literal:literal1
+	{: RESULT = literal1; :}
 	
-	|	ID:id1 ASSIGN expr:expr1
-	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), expr1, id1left, expr1right); :}
+	|	LPAREN enumerationValue:value1 RPAREN
+	{: RESULT = value1; :}
+	
+	|	PLUS:plus1 enumerationValue:value1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, value1, plus1left, value1right); :} %prec UPLUS
+
+	|	MINUS:minus1 enumerationValue:value1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, value1, minus1left, value1right); :} %prec UMINUS
+	
+	|	NEGATE:negate1 enumerationValue:value1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, value1, negate1left, value1right); :}
+	;
+
+enumerationField
+	::=	ID:id1 settingsBlockOpt:settingsBlock1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, settingsBlock1, id1left, settingsBlock1right); :}
+	
+	|	ID:id1 ASSIGN enumerationValue:value1 settingsBlockOpt:settingsBlock1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), value1, settingsBlock1, id1left, settingsBlock1right); :}
 	;
 
 //==============================

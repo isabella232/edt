@@ -447,6 +447,7 @@ class Egl2MofMember extends Egl2MofPart {
 				EEnumLiteral literal = (EEnumLiteral)mof.getEEnumLiteralClass().newInstance();
 				literal.setName(binding.getCaseSensitiveName());
 				literal.setValue(value);
+				createAnnotations(binding, literal);
 				stack.push(literal);
 			}
 			else {
@@ -454,6 +455,7 @@ class Egl2MofMember extends Egl2MofPart {
 				entry.setName(binding.getCaseSensitiveName());
 				entry.setValue(value);
 				eObjects.put(binding, entry);
+				createAnnotations(binding, (Element)entry);
 				setElementInformation(enumField, entry);
 				stack.push(entry);
 			}

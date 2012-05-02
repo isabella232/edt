@@ -21,8 +21,9 @@ public class EnumerationField extends Node {
 	
 	SimpleName name;
 	Expression constantValue;
+	private SettingsBlock settingsBlockOpt;
 
-	public EnumerationField(SimpleName name, Expression constantValueOpt, int startOffset, int endOffset) {
+	public EnumerationField(SimpleName name, Expression constantValueOpt, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name = name;
@@ -31,6 +32,11 @@ public class EnumerationField extends Node {
 		if(constantValueOpt != null) {
 			this.constantValue = constantValueOpt;
 			constantValue.setParent(this);
+		}
+		
+		if (settingsBlockOpt != null) {
+			this.settingsBlockOpt = settingsBlockOpt;
+			this.settingsBlockOpt.setParent(this);
 		}
 	}
 	
@@ -46,6 +52,14 @@ public class EnumerationField extends Node {
 		return constantValue;
 	}
 	
+	public boolean hasSettingsBlock() {
+		return settingsBlockOpt != null;
+	}
+	
+	public SettingsBlock getSettingsBlock() {
+		return settingsBlockOpt;
+	}
+	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
@@ -53,11 +67,16 @@ public class EnumerationField extends Node {
 			if(constantValue != null) {
 				constantValue.accept(visitor);
 			}
+			if(settingsBlockOpt != null) {
+				settingsBlockOpt.accept(visitor);
+			}
 		}
 		visitor.endVisit(this);
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new EnumerationField((SimpleName)name.clone(), constantValue == null ? null : (Expression) constantValue.clone(), getOffset(), getOffset() + getLength());
+		SettingsBlock newSettingsBlock = settingsBlockOpt == null ? null : (SettingsBlock) settingsBlockOpt.clone();
+		return new EnumerationField((SimpleName)name.clone(), constantValue == null ? null : (Expression) constantValue.clone(),
+				newSettingsBlock, getOffset(), getOffset() + getLength());
 	}
 }

@@ -53,6 +53,8 @@ public class ElementKind extends Enumeration{
 	public final static int STRUCTUREDRECORDPART_CONSTANT = 29;
 	public final static int VGUIRECORDPART_CONSTANT = 30;
 	public final static int EXITSTATEMENT_CONSTANT = 31;
+	public final static int ENUMERATIONPART_CONSTANT = 32;
+	public final static int ENUMERATIONENTRY_CONSTANT = 33;
 
 	public final static EnumerationTypeBinding TYPE = new SystemEnumerationTypeBinding(SystemEnvironmentPackageNames.EGL_CORE, InternUtil.internCaseSensitive("ElementKind"), ELEMENTKIND);
 	public final static SystemEnumerationDataBinding DATATABLEPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("DataTablePart"), null, TYPE, DATATABLEPART_CONSTANT);
@@ -86,6 +88,8 @@ public class ElementKind extends Enumeration{
 	public final static SystemEnumerationDataBinding STRUCTUREDRECORDPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("StructuredRecordPart"), null, TYPE, STRUCTUREDRECORDPART_CONSTANT);
 	public final static SystemEnumerationDataBinding VGUIRECORDPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("VGUIRecordPart"), null, TYPE, VGUIRECORDPART_CONSTANT);
 	public final static SystemEnumerationDataBinding EXITSTATEMENT = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("ExitStatement"), null, TYPE, EXITSTATEMENT_CONSTANT);
+	public final static SystemEnumerationDataBinding ENUMERATIONPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("EnumerationPart"), null, TYPE, ENUMERATIONPART_CONSTANT);
+	public final static SystemEnumerationDataBinding ENUMERATIONENTRY = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("EnumerationEntry"), null, TYPE, ENUMERATIONENTRY_CONSTANT);
 	
 	static {
 		TYPE.setValid(true);
@@ -120,6 +124,8 @@ public class ElementKind extends Enumeration{
 		TYPE.addEnumeration(STRUCTUREDRECORDPART);
 		TYPE.addEnumeration(VGUIRECORDPART);
 		TYPE.addEnumeration(EXITSTATEMENT);
+		TYPE.addEnumeration(ENUMERATIONPART);
+		TYPE.addEnumeration(ENUMERATIONENTRY);
 	};
 	
     public EnumerationTypeBinding getType() {

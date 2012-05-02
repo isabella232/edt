@@ -238,6 +238,16 @@ public class AnnotationTypeBindingImpl extends AnnotationTypeBinding implements 
 						return true;
 					}
 					break;
+				case ElementKind.ENUMERATIONPART_CONSTANT:
+					if (targetBinding instanceof EnumerationTypeBinding) {
+						return true;
+					}
+					break;
+				case ElementKind.ENUMERATIONENTRY_CONSTANT:
+					if (targetBinding instanceof EnumerationDataBinding) {
+						return true;
+					}
+					break;
 			}
 		}
 		return false;

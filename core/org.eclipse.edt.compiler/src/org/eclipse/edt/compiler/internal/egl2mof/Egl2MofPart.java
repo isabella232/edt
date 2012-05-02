@@ -108,7 +108,12 @@ abstract class Egl2MofPart extends Egl2MofBase {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Enumeration node) {
 		MofSerializable part = defaultHandleVisitPart(node);
-		setElementInformation(node, part);
+		
+		// Parts already have element information.
+		if (!(part instanceof Part)) {
+			setElementInformation(node, part);
+		}
+		
 		stack.push(part);
 		return false;
 	}

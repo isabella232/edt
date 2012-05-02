@@ -654,8 +654,8 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			String name = InternUtil.internCaseSensitive(ir.getName());
 			binding = new EnumerationTypeBinding(packageName, name);
 			binding.setValid(true);
-			putBinding(ir,  binding);
 			partStack.push(binding);
+			handleVisitPart(ir, binding);
 			for (EEnumLiteral field : ir.getEntries()) {
 				field.accept(this);
 				((EnumerationTypeBinding)binding).addEnumeration((EnumerationDataBinding)stack.pop());
@@ -673,6 +673,7 @@ public class Mof2BindingPart extends Mof2BindingBase {
 			IPartBinding type = (IPartBinding)getBinding(ir.getContainer());
 			binding = new EnumerationDataBinding(name, type, type, ir.getValue());
 			putBinding(ir, binding);
+			handleAnnotations(ir, binding);
 		}
 		stack.push(binding);
 		return false;
