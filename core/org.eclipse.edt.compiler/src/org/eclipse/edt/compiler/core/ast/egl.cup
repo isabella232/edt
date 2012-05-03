@@ -109,7 +109,7 @@ nonterminal deleteOption;
 nonterminal GetByPositionStatement.Direction direction;
 nonterminal ElseBlock elseOpt;
 nonterminal EnumerationField enumerationField;
-nonterminal Expression enumerationValue;
+nonterminal Expression integerLiteralEnumValue;
 nonterminal OnEventBlock eventBlock;
 nonterminal executeOption;
 nonterminal ExitStatement.ExitModifier exitModifierOpt;
@@ -503,29 +503,26 @@ interfaceContent
 	{: RESULT = settingsBlock1; :}
 	;
 
-enumerationValue
-	::=	literal:literal1
-	{: RESULT = literal1; :}
+integerLiteralEnumValue
+	::=	INTEGER:value
+	{: RESULT = new IntegerLiteral(value, valueleft, valueright); :}
 	
-	|	LPAREN enumerationValue:value1 RPAREN
-	{: RESULT = value1; :}
-	
-	|	PLUS:plus1 enumerationValue:value1
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, value1, plus1left, value1right); :} %prec UPLUS
+	|	PLUS:plus1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, new IntegerLiteral(value, valueleft, valueright), plus1left, valueright); :} %prec UPLUS
 
-	|	MINUS:minus1 enumerationValue:value1
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, value1, minus1left, value1right); :} %prec UMINUS
+	|	MINUS:minus1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, new IntegerLiteral(value, valueleft, valueright), minus1left, valueright); :} %prec UMINUS
 	
-	|	NEGATE:negate1 enumerationValue:value1
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, value1, negate1left, value1right); :}
+	|	NEGATE:negate1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, new IntegerLiteral(value, valueleft, valueright), negate1left, valueright); :}
 	;
 
 enumerationField
 	::=	ID:id1 settingsBlockOpt:settingsBlock1
 	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, settingsBlock1, id1left, settingsBlock1right); :}
 	
-	|	ID:id1 ASSIGN enumerationValue:value1 settingsBlockOpt:settingsBlock1
-	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), value1, settingsBlock1, id1left, settingsBlock1right); :}
+	|	ID:id1 settingsBlockOpt:settingsBlock1 ASSIGN integerLiteralEnumValue:value1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), value1, settingsBlock1, id1left, value1right); :}
 	;
 
 //==============================
