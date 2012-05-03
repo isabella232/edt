@@ -199,6 +199,12 @@ public class CommonUtilities {
 				return " & ";
 			if (op.equals(expr.Op_BITOR))
 				return " | ";
+			if (op.equals(expr.Op_LEFTSHIFT))
+				return " << ";
+			if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+				return " >> ";
+			if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+				return " >>> ";
 			return "";
 		}
 		// these are the defaults for all other types
@@ -235,6 +241,12 @@ public class CommonUtilities {
 			return " & ";
 		if (op.equals(expr.Op_BITOR))
 			return " | ";
+		if (op.equals(expr.Op_LEFTSHIFT))
+			return " << ";
+		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			return " >> ";
+		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			return " >>> ";
 		return "";
 	}
 
