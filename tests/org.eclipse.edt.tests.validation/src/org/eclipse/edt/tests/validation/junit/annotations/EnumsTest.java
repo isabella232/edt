@@ -50,7 +50,7 @@ public class EnumsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * B = 16{@annot2{}},
+	 * B{@annot2{}} = 16,
 	 * 0 validation messages are expected.
 	 */
 	public void testLine16() {
@@ -86,12 +86,12 @@ public class EnumsTest extends ValidationTestCase {
 	}
 
 	/*
-	 * F = (-(+10)),
-	 * 0 validation messages are expected.
+	 * F = 10 + 2,
+	 * 1 validation message is expected.
 	 */
 	public void testLine20() {
 		List messages = getMessagesAtLine( 20 );
-		assertEquals( 0, messages.size() );
+		assertEquals( 1, messages.size() );
 	}
 
 	/*
