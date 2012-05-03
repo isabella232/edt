@@ -47,9 +47,16 @@ public class ParameterizedTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genUnaryExpression(ParameterizedType type, Context ctx, TabbedWriter out, UnaryExpression arg) {
-		ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 		// we only need to check for minus sign and if found, we need to change it to .negate()
-		if (arg.getOperator().equals("-"))
+		if (arg.getOperator().equals("-")) {
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(".negate()");
+		} else if (arg.getOperator().equals("~")) {
+			out.print("(");
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			out.print(".negate()");
+			out.print(" - 1)");
+		} else
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 	}
 }
