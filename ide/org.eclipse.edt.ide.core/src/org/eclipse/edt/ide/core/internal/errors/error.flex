@@ -38,10 +38,15 @@ LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 Identifier     = ([:jletter:]|_)[:jletterdigit:]*
 Integer        = [0-9]+
+BigintLit = {Integer}[I]
+SmallintLit = {Integer}[i]
 DecimalLit     = ({DLit1}|{DLit2})
 DLit1          = [0-9]+ \. [0-9]*	// Has integer part and the dot
 DLit2          = \. [0-9]+			// Has decimal part and the dot
-FloatLit       = ({DecimalLit}|{Integer})[eE][+-]?{Integer}
+FLit1	  = ({DecimalLit}|{Integer})[eE][+-]?{Integer}
+FLit2	  = ({DecimalLit}|{Integer})[F]
+FloatLit       = ({FLit1}|{FLit2})
+SmallfloatLit  = ({DecimalLit}|{Integer})[f]
 BytesLit       = 0[xX][012334567890aAbBcCdDeEfF]+
 SQLIdentifier  = [:jletter:][:jletterdigit:]*
 DLIIdentifier  = [:jletter:][:jletterdigit:]*
@@ -317,8 +322,11 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
         // Macros
         {Identifier}                    { return ErrorNodeTypes.ID; }
         {Integer}                       { return ErrorNodeTypes.INTEGER; }
+        {BigintLit}						{ return ErrorNodeTypes.BIGINTLIT; }
+		{SmallintLit}					{ return ErrorNodeTypes.SMALLINTLIT; }
         {DecimalLit}                    { return ErrorNodeTypes.DECIMALLIT; }
         {FloatLit}                      { return ErrorNodeTypes.FLOATLIT; }
+        {SmallfloatLit}                 { return ErrorNodeTypes.SMALLFLOATLIT; }
         {BytesLit}						{ return ErrorNodeTypes.BYTESLIT; }
         {WhiteSpace}*                   { return ErrorNodeTypes.WS; }
         {Comment}                       { return ErrorNodeTypes.WS; }
@@ -335,6 +343,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
         
         [^\\\"\r\n]+					{ string.append(yytext()); }
         \\\"							{ string.append("\\\""); }
+        \\\'							{ string.append("\\\'"); }
         \\\\							{ string.append("\\\\"); }
         \\[b]							{ string.append("\\b"); }
         \\[f]							{ string.append("\\f"); }
