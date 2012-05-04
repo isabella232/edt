@@ -103,12 +103,12 @@ public class ActionMethodSplitter {
 					line = reader.readLine();
 					
 					
-					// First 'chunk' - 5000 lines
+					// First 'chunk' - 10000 lines
 					boolean done = false;
 					int count = 0;
 					activeBuffer.append( "  private static class ActionTableHelper1 {" + NL );
 					activeBuffer.append( "    private static String[] strings = new String[] {" + NL );
-					while (!done && count < 5000) {
+					while (!done && count < 10000) {
 						line = reader.readLine();
 						if (line.endsWith("});")) {
 							// last line.
