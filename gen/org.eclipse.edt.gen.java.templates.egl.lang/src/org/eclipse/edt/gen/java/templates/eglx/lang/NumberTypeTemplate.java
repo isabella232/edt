@@ -21,14 +21,17 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BinaryExpression;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class NumberTypeTemplate extends JavaTemplate {
 
 	public void genDefaultValue(EGLClass type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
 			IntegerLiteral element = factory.createIntegerLiteral();
+			element.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 			element.setValue("0");
 			AsExpression asExpression = factory.createAsExpression();
 			asExpression.setEType(type);
