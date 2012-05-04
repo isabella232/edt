@@ -26,6 +26,7 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLModel;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.ui.internal.eglarpackager.NewEglarFileExportOperation;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
@@ -43,7 +44,7 @@ public class NavigatorContentProvider extends EGLElementContentProvider
 			if (obj instanceof IResource){
 				if(EGLCore.create((IResource)obj) != null ||
 						((IResource)obj).getName().equalsIgnoreCase("EGLGen") || //$NON-NLS-1$
-						((IResource)obj).getName().equalsIgnoreCase("EGLbin")) //$NON-NLS-1$
+						((IResource)obj).getName().equalsIgnoreCase(NewEglarFileExportOperation.EGL_BIN_FOLDER)) //$NON-NLS-1$
 					iter.remove(); 
 			}
 		}

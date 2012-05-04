@@ -315,7 +315,7 @@ public class EglarFileExportOperation extends WorkspaceModifyOperation implement
 		//For 69080: Export binary projects failed with console UI project
 		//If the project is from RBD801 or older, the ouptut directory is EGLBin, regardless of what is found in the .eglpath file
 		if(outputLocation != null && "bin".equalsIgnoreCase(outputLocation.lastSegment())) {
-			outputLocation = eglProject.getPath().append("EGLbin");
+			outputLocation = eglProject.getPath().append(NewEglarFileExportOperation.EGL_BIN_FOLDER);
 		}
 		IFolder outputFolder= createFolderHandle(outputLocation);
 		if(outputFolder != null) {
@@ -615,7 +615,7 @@ public class EglarFileExportOperation extends WorkspaceModifyOperation implement
 			IPath output = eglProject.getOutputLocation();
 			//For 69080: Export binary projects failed with console UI project
 			if(output != null && "bin".equalsIgnoreCase(output.lastSegment())) {
-				output = eglProject.getPath().append("EGLbin");
+				output = eglProject.getPath().append(NewEglarFileExportOperation.EGL_BIN_FOLDER);
 			}
 			return output.isPrefixOf(folderPath);
 		} catch (EGLModelException e) {

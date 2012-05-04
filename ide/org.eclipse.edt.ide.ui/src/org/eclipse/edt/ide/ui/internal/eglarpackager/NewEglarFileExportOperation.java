@@ -47,7 +47,7 @@ public class NewEglarFileExportOperation extends EglarFileExportOperation {
 	public static final String EGL_EXTENSION = "egl";
 
 	public static final String EGL_GEN_FOLDER = "EGLGen";
-	public static final String EGL_BIN_FOLDER = "EGLbin";
+	public static final String EGL_BIN_FOLDER = "EGLBin";
 	public static final String EGL_WEB_CONTENT = "WebContent";
 	public static final String EGL_ICONS = "icons";
 	public static final String JAR_FILE_EXTENSION = ".jar";
@@ -248,7 +248,7 @@ public class NewEglarFileExportOperation extends EglarFileExportOperation {
 			output = eglProject.getOutputLocation();
 			//For 69080: Export binary projects failed with console UI project
 			if(output != null && "bin".equalsIgnoreCase(output.lastSegment())) {
-				output = eglProject.getPath().append("EGLbin");
+				output = eglProject.getPath().append(EGL_BIN_FOLDER);
 			}
 			return eglProject.getProject().getFolder(output.removeFirstSegments(1));
 		} catch (EGLModelException e) {
