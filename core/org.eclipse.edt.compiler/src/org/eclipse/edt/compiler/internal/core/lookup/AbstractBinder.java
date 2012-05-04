@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -894,20 +893,32 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     		if(isNegative) {
     			str = "-" + str;
     		}
-    		try {
-				if (integerLiteral.getValue().length() > 18) {
-					constantValue = new BigInteger(str);
-				} else {
-					if (integerLiteral.getValue().length() > 9) {
-						constantValue = new Long(str);
-					} else {
-						constantValue = new Integer(str);
-					}
+    		
+   			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+   				try {
+   					constantValue = new Long(str);
+	   			} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					constantValue = null;
 				}
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				constantValue = null;
-			}
+   			}
+   			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+   				try {
+   					constantValue = new Short(str);
+	   			} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					constantValue = null;
+				}
+   			}
+   			else {
+   				try {
+   					constantValue = new Integer(str);
+	   			} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+					constantValue = null;
+				}
+   			}
+			
     		checkLengthAndDecimals(integerLiteral, integerLiteral.getValue());
 			return false;
 		}
@@ -917,7 +928,13 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     		if(isNegative) {
     			str = "-" + str;
     		}
-			constantValue = new Double(str);
+    		
+    		if (floatLiteral.getLiteralKind() == LiteralExpression.SMALLFLOAT_LITERAL) {
+    			constantValue = new Float(str);
+    		}
+    		else {
+    			constantValue = new Double(str);
+    		}
 			return false;
 		}
 		

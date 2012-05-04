@@ -348,6 +348,9 @@ public interface IProblemRequestor {
 	public static final int NULLABLE_INVALID_IN_ISA_AS_OR_NEW = 3275;
 	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
 	public static final int BYTES_LITERAL_LENGTH_MUST_BE_EVEN = 3277;
+	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
+	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
+	public static final int SMALLFLOAT_LITERAL_OUT_OF_RANGE = 3280;
 	
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	

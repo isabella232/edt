@@ -13,7 +13,6 @@ package org.eclipse.edt.compiler.binding;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,6 +37,7 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -499,12 +499,32 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			if (isNegative) {
 				str = "-" + str;
 			}
-			try {
-				value = new Integer(str);
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
+			
+			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+				try {
+					value = new Long(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
 			}
+			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+				try {
+					value = new Short(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			else {
+				try {
+					value = new Integer(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			
 			return false;
 		}
 
@@ -1035,20 +1055,32 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			if (isNegative) {
 				str = "-" + str;
 			}
-			try {
-				if (integerLiteral.getValue().length() > 18) {
-					value = new BigInteger(str);
-				} else {
-					if (integerLiteral.getValue().length() > 9) {
-						value = new Long(str);
-					} else {
-						value = new Integer(str);
-					}
+			
+			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+				try {
+					value = new Long(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
 				}
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
 			}
+			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+				try {
+					value = new Short(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			else {
+				try {
+					value = new Integer(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			
 			return false;
 		}
 

@@ -3169,14 +3169,42 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(IntegerLiteral integerLiteral) {
 		if(integerLiteral.resolveTypeBinding() == null){
-			integerLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.INT));
-			
 			String strVal = integerLiteral.getValue();
-			if(strVal.length() > 32) {
-				problemRequestor.acceptProblem(
-					integerLiteral,
-					IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE,
-					new String[] {strVal});
+			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+				integerLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BIGINT));
+				try {
+					Long.parseLong(strVal, 10);
+				}
+				catch (NumberFormatException nfe) {
+					problemRequestor.acceptProblem(
+						integerLiteral,
+						IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE,
+						new String[] {strVal});
+				}
+			}
+			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+				integerLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.SMALLINT));
+				try {
+					Short.parseShort(strVal, 10);
+				}
+				catch (NumberFormatException nfe) {
+					problemRequestor.acceptProblem(
+						integerLiteral,
+						IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE,
+						new String[] {strVal});
+				}
+			}
+			else {
+				integerLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.INT));
+				try {
+					Integer.parseInt(strVal, 10);
+				}
+				catch (NumberFormatException nfe) {
+					problemRequestor.acceptProblem(
+						integerLiteral,
+						IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE,
+						new String[] {strVal});
+				}
 			}
 		}
 	}
@@ -3202,16 +3230,31 @@ public abstract class DefaultBinder extends AbstractBinder {
 	public void endVisit(FloatLiteral floatLiteral) {
 		if(floatLiteral.resolveTypeBinding() == null){
 			try {
-				floatLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(
-						Primitive.FLOAT));
-				
-				String strVal = floatLiteral.getValue();
-				
-				if(Double.isInfinite(Double.parseDouble(strVal))) {
-					problemRequestor.acceptProblem(
-						floatLiteral,
-						IProblemRequestor.FLOATING_POINT_LITERAL_OUT_OF_RANGE,
-						new String[] { strVal });
+				if (floatLiteral.getLiteralKind() == LiteralExpression.SMALLFLOAT_LITERAL) {
+					floatLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(
+							Primitive.SMALLFLOAT));
+					
+					String strVal = floatLiteral.getValue();
+					
+					if(Float.isInfinite(Float.parseFloat(strVal))) {
+						problemRequestor.acceptProblem(
+							floatLiteral,
+							IProblemRequestor.SMALLFLOAT_LITERAL_OUT_OF_RANGE,
+							new String[] { strVal });
+					}
+				}
+				else {
+					floatLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(
+							Primitive.FLOAT));
+					
+					String strVal = floatLiteral.getValue();
+					
+					if(Double.isInfinite(Double.parseDouble(strVal))) {
+						problemRequestor.acceptProblem(
+							floatLiteral,
+							IProblemRequestor.FLOATING_POINT_LITERAL_OUT_OF_RANGE,
+							new String[] { strVal });
+					}
 				}
 			}
 			catch( NumberFormatException e ) {

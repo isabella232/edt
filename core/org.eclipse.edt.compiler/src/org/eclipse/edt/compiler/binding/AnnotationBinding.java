@@ -256,6 +256,11 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
 		case ITypeBinding.PRIMITIVE_TYPE_BINDING:
 			switch(((PrimitiveTypeBinding) singleValueType).getPrimitive().getType()) {
 			case Primitive.INT_PRIMITIVE:
+			case Primitive.BIGINT_PRIMITIVE:
+			case Primitive.SMALLINT_PRIMITIVE:
+			case Primitive.SMALLFLOAT_PRIMITIVE:
+			case Primitive.FLOAT_PRIMITIVE:
+			case Primitive.DECIMAL_PRIMITIVE:
 				return value instanceof Number;
 			case Primitive.STRING_PRIMITIVE:
 			case Primitive.CHAR_PRIMITIVE:
@@ -345,6 +350,11 @@ public class AnnotationBinding extends DataBinding implements IAnnotationBinding
 	    		case ITypeBinding.PRIMITIVE_TYPE_BINDING:
 	    			switch(((PrimitiveTypeBinding) annotationValueType).getPrimitive().getType()) {
 		    			case Primitive.INT_PRIMITIVE:
+		    			case Primitive.BIGINT_PRIMITIVE:
+		    			case Primitive.SMALLINT_PRIMITIVE:
+		    			case Primitive.SMALLFLOAT_PRIMITIVE:
+		    			case Primitive.FLOAT_PRIMITIVE:
+		    			case Primitive.DECIMAL_PRIMITIVE:
 		    				problemRequestor.acceptProblem(expression, IProblemRequestor.PROPERTY_REQUIRES_NUMERIC_VALUE, new String[] {getCaseSensitiveName()});
 		    				break;
 		    			case Primitive.STRING_PRIMITIVE:

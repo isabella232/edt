@@ -45,6 +45,7 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
 import org.eclipse.edt.compiler.core.ast.Primitive;
@@ -313,6 +314,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FloatLiteral literal) {
 		FloatingPointLiteral lit = factory.createFloatingPointLiteral();
+		if (literal.getLiteralKind() == LiteralExpression.SMALLFLOAT_LITERAL) {
+			lit.setType(IRUtils.getEGLPrimitiveType(Type_Smallfloat));
+		}
+		else {
+			lit.setType(IRUtils.getEGLPrimitiveType(Type_Float));
+		}
 		lit.setValue(literal.getValue());
 		setElementInformation(literal, lit);
 		stack.push(lit);
@@ -602,12 +609,24 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.IntegerLiteral literal) {
 		IntegerLiteral lit = factory.createIntegerLiteral();
+		switch (literal.getLiteralKind()) {
+			case LiteralExpression.BIGINT_LITERAL:
+				lit.setType(IRUtils.getEGLPrimitiveType(Type_Bigint));
+				break;
+			case LiteralExpression.SMALLINT_LITERAL:
+				lit.setType(IRUtils.getEGLPrimitiveType(Type_Smallint));
+				break;
+			case LiteralExpression.INTEGER_LITERAL:
+			default:
+				lit.setType(IRUtils.getEGLPrimitiveType(Type_Int));
+				break;
+		}
 		lit.setValue(literal.getValue());
 		setElementInformation(literal, lit);
 		stack.push(lit);
 		return false;
 	}
-
+	
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.IsAExpression expr) {
 		IsAExpression isaExpr = factory.createIsAExpression();
@@ -895,6 +914,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			}
 			else {
 				IntegerLiteral lit = factory.createIntegerLiteral();
+				lit.setType(IRUtils.getEGLPrimitiveType(Type_Int));
 				lit.setValue("0");
 				setElementInformation(type, lit);
 				expr.getArguments().add(lit);

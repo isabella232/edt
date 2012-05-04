@@ -53,7 +53,7 @@ terminal PRIVATE, STATIC;
 terminal CONSTRUCTOR;
 
 terminal String ID;
-terminal String INTEGER, DECIMALLIT, FLOATLIT;
+terminal String INTEGER, DECIMALLIT;
 terminal org.eclipse.edt.compiler.core.Boolean BOOLEANLIT;
 terminal StringLiteral STRING;
 terminal HexLiteral HEXLIT;
@@ -61,6 +61,8 @@ terminal CharLiteral CHARLIT;
 terminal DBCharLiteral DBCHARLIT;
 terminal MBCharLiteral MBCHARLIT;
 terminal BytesLiteral BYTESLIT;
+terminal FloatLiteral FLOATLIT, SMALLFLOATLIT;
+terminal IntegerLiteral BIGINTLIT, SMALLINTLIT;
 terminal NULL;
 terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
 terminal InlineDLIStatement INLINE_DLI;
@@ -505,16 +507,16 @@ interfaceContent
 
 integerLiteralEnumValue
 	::=	INTEGER:value
-	{: RESULT = new IntegerLiteral(value, valueleft, valueright); :}
+	{: RESULT = new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright); :}
 	
 	|	PLUS:plus1 INTEGER:value
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, new IntegerLiteral(value, valueleft, valueright), plus1left, valueright); :} %prec UPLUS
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), plus1left, valueright); :} %prec UPLUS
 
 	|	MINUS:minus1 INTEGER:value
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, new IntegerLiteral(value, valueleft, valueright), minus1left, valueright); :} %prec UMINUS
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), minus1left, valueright); :} %prec UMINUS
 	
 	|	NEGATE:negate1 INTEGER:value
-	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, new IntegerLiteral(value, valueleft, valueright), negate1left, valueright); :}
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), negate1left, valueright); :}
 	;
 
 enumerationField
@@ -1449,13 +1451,22 @@ objExprEntry
 
 literal
 	::=	INTEGER:value
-	{: RESULT = new IntegerLiteral(value, valueleft, valueright); :}
+	{: RESULT = new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright); :}
+	
+	|	BIGINTLIT:value
+	{: RESULT = value; :}
+	
+	|	SMALLINTLIT:value
+	{: RESULT = value; :}
 
 	|	DECIMALLIT:value
 	{: RESULT = new DecimalLiteral(value, valueleft, valueright); :}
 
 	|	FLOATLIT:value
-	{: RESULT = new FloatLiteral(value, valueleft, valueright); :}
+	{: RESULT = value; :}
+	
+	|	SMALLFLOATLIT:value
+	{: RESULT = value; :}
 
 	|	STRING:value
 	{: RESULT = value; :}

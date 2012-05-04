@@ -90,6 +90,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.VariableFormField;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
@@ -668,6 +669,7 @@ class Egl2MofMember extends Egl2MofPart {
 							qualifier = (Expression)context;
 						}
 						org.eclipse.edt.mof.egl.IntegerLiteral indexExpr = factory.createIntegerLiteral();
+						indexExpr.setType(IRUtils.getEGLPrimitiveType(Type_Int));
 						indexExpr.setValue(String.valueOf(arrayIndex));
 						QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
 						setElementInformation(expr, func);
@@ -712,7 +714,18 @@ class Egl2MofMember extends Egl2MofPart {
 		}
 		else if (expr instanceof IntegerLiteral) {
 			try {
-				value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+				switch (((IntegerLiteral)expr).getLiteralKind()) {
+					case LiteralExpression.BIGINT_LITERAL:
+						value = Long.parseLong(((IntegerLiteral)expr).getValue());
+						break;
+					case LiteralExpression.SMALLINT_LITERAL:
+						value = Short.parseShort(((IntegerLiteral)expr).getValue());
+						break;
+					case LiteralExpression.INTEGER_LITERAL:
+					default:
+						value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+						break;
+				}
 			} catch (NumberFormatException e) {
 			}
 		}
@@ -720,10 +733,7 @@ class Egl2MofMember extends Egl2MofPart {
 			value = ((StringLiteral)expr).getValue();
 		}
 		else if (expr instanceof FloatLiteral) {
-			try {
-				value = Float.parseFloat(((FloatLiteral)expr).getValue());
-			} catch (NumberFormatException e) {
-			}
+			value = Float.parseFloat(((FloatLiteral)expr).getValue());
 		}
 		else if (expr instanceof AnnotationExpression) {
 			ITypeBinding typeBinding = ((AnnotationExpression)expr).resolveTypeBinding();
