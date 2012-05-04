@@ -75,9 +75,9 @@
             id="JavaCoreGenerationContributor">
       </GenerationContributor>
       <GenerationContributor
-            class="org.eclipse.edt.gen.java.jee.JavaGenerationContributor"
+            class="org.eclipse.edt.gen.java.jee.JEEGenerationContributor"
             provider="org.eclipse.edt.ide.gen.JavaGenProvider"
-            id="JavaGenerationContributor"
+            id="JEEGenerationContributor"
             requires="JavaCoreGenerationContributor">
       </GenerationContributor>
       <GenerationContributor
