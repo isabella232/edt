@@ -26,9 +26,13 @@ import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Program;
+import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Deserializer;
@@ -167,11 +171,81 @@ public class BinaryElementParser {
 			return true;
 		}
 		
+		//TODO
+		public boolean visit(Program program) {
+			this.partType = IRPartType.PART_PROGRAM;
+			
+			List<Part> usedParts = program.getUsedParts();
+			if(usedParts != null && usedParts.size() > 0) {
+				char[][] usagePartTypes = new char[usedParts.size()][];
+				char[][] usagePartPackages = new char[usedParts.size()][];
+				
+				int i = 0;
+				for(Part usedPart : usedParts) {
+					usagePartTypes[i] = usedPart.getName().toCharArray();
+					usagePartPackages[i] = usedPart.getPackageName().toCharArray();
+					i++;
+				}
+				
+				partInfo.usagePartTypes = usagePartTypes;
+				partInfo.usagePartPackages = usagePartPackages;
+			}
+			
+			if(program.isCallable()){
+				int paramLength = program.getParameters().size();
+				if(paramLength > 0){
+					char[][] paramNames = new char[paramLength][];
+					char[][] paramTypes = new char[paramLength][];
+					List<ProgramParameter> params = program.getParameters();
+					for(int i = 0; i < paramLength; i++ ) {
+						paramNames[i] = params.get(i).getId().toCharArray();
+						paramTypes[i] = params.get(i).getType().toString().toCharArray();
+					}
+					partInfo.parameterNames = paramNames;
+					partInfo.parameterTypes = paramTypes;
+				}
+			}
+			
+			visitPart(partType , partInfo, program);
+			return true;
+		}
+		
 		public boolean visit(Record partElement) {
 			this.partType = IRPartType.PART_RECORD;
 			visitPart(partType , partInfo, partElement);
 			return true;
 		}
+		
+		public boolean visit(Service service) {
+			this.partType = IRPartType.PART_SERVICE;
+			
+			List<Part> usedParts = service.getUsedParts();
+			if(usedParts != null && usedParts.size() > 0) {
+				char[][] usagePartTypes = new char[usedParts.size()][];
+				char[][] usagePartPackages = new char[usedParts.size()][];
+				
+				for(int i = 0; i < usedParts.size(); i++ ) {
+					usagePartTypes[i] = usedParts.get(i).getName().toCharArray();
+					usagePartPackages[i] = usedParts.get(i).getPackageName().toCharArray();
+				}
+				
+				partInfo.usagePartTypes = usagePartTypes;
+				partInfo.usagePartPackages = usagePartPackages;
+			}
+			
+			List<Interface> implementedInterfaceNames = service.getInterfaces();
+			int implementedInterfacesLength = implementedInterfaceNames.size();
+			if (implementedInterfacesLength > 0) {
+				partInfo.interfaceNames = new char[implementedInterfacesLength][];
+				for (int i = 0; i < implementedInterfacesLength; i++) {
+					partInfo.interfaceNames[i] = implementedInterfaceNames.get(i).getFullyQualifiedName().toCharArray();
+				}
+			}
+			
+			visitPart(partType, partInfo, service);
+			return true;
+		}
+		
 	}
 	
 	private class PartInfoHelper {
