@@ -28,7 +28,9 @@ import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.StatementBlock;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ForStatementTemplate extends JavaScriptTemplate {
@@ -64,6 +66,7 @@ public class ForStatementTemplate extends JavaScriptTemplate {
 				assignmentInit.setRHS(stmt.getFromExpression());
 			else {
 				IntegerLiteral integerLiteralInit = factory.createIntegerLiteral();
+				integerLiteralInit.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					integerLiteralInit.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 				integerLiteralInit.setValue("1");

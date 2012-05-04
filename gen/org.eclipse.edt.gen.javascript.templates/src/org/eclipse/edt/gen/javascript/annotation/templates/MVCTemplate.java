@@ -39,6 +39,7 @@ import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
@@ -781,11 +782,13 @@ public class MVCTemplate extends JavaScriptTemplate {
 		}
 		if (value.isInt()) {
 			IntegerLiteral literal = IrFactory.INSTANCE.createIntegerLiteral();
+			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 			literal.setValue(String.valueOf(value.getLongValue()));
 			result = literal;
 		}
 		if (value.isFloat()) {
 			FloatingPointLiteral literal = IrFactory.INSTANCE.createFloatingPointLiteral();
+			literal.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Float));
 			literal.setValue(String.valueOf(value.getFloatValue()));
 			result = literal;
 		}
