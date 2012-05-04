@@ -48,6 +48,7 @@ import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
+import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
@@ -62,6 +63,7 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.WhileStatement;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.impl.EObjectImpl;
@@ -168,6 +170,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				if (entries != null && entries.size() == 0) {
 					// as there are no entries, the type needs to be changed to the same type as the lhs
 					IntegerLiteral integerLiteral = factory.createIntegerLiteral();
+					integerLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 					if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 						integerLiteral.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
 					integerLiteral.setValue("0");
