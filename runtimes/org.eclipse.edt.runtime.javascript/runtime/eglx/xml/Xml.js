@@ -307,8 +307,30 @@ egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
 				dom.loadXML(xml);
 			}
 		}
+		if("parseError" in dom && "errorCode" in dom.parseError && 
+				dom.parseError.errorCode != 0){
+			var info = "";
+			if("line" in dom.parseError){
+				info = ", Line/position:" + dom.parseError.line; 	
+			}
+			if("linepos" in dom.parseError){
+				info += "/" + dom.parseError.linepos; 	
+			}
+			if("srcText" in dom.parseError){
+				info += ", SOURCE:" + dom.parseError.srcText; 	
+			}
+			if("reason" in dom.parseError){
+				throw new Error("parseError:" + dom.parseError.errorCode + ", " + dom.parseError.reason + info);
+			}
+		}
+		else if("getElementsByTagName" in dom){
+			var nodes = dom.getElementsByTagName("parsererror");
+			if(nodes !== undefined && nodes !== null && nodes.length > 0){
+				throw new Error(new XMLSerializer().serializeToString(dom));
+			}
+		}
 	} catch (e) {
-		throw egl.createRuntimeException("CRRUI2031E", e);
+		throw egl.createRuntimeException("CRRUI2031E", ["message" in e ? e.message : e.toString()]);
 	}
 	eglObj = this.eglFromXML(dom.documentElement, eglObj);
 	return eglObj;
