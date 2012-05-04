@@ -16,4 +16,6 @@ public interface FloatingPointLiteral extends NumericLiteral {
 	Double getFloatValue();
 	
 	void setFloatValue(Double value);
+	
+	void setType(Type type);
 }

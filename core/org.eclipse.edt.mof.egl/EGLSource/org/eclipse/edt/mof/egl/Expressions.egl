@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.EType;
 import egl.lang.reflect.mof.MofClass;
 import egl.lang.reflect.mof.MofName;
 import egl.lang.reflect.mof.Transient;
@@ -42,9 +43,11 @@ externalType NumericLiteral extends PrimitiveTypeLiteral type MofClass {isAbstra
 end
 
 externalType IntegerLiteral extends NumericLiteral type MofClass
+	eType EGLType{MofName = "type"};
 end
 
 externalType FloatingPointLiteral extends NumericLiteral type MofClass
+	eType EGLType{MofName = "type"};
 end
 
 externalType DecimalLiteral extends NumericLiteral type MofClass

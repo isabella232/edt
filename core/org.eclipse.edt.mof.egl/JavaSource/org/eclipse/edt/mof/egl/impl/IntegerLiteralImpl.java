@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
-import java.math.BigInteger;
-
 import org.eclipse.edt.mof.egl.IntegerLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -21,35 +19,31 @@ import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLiteral {
 	
-	private Type type = null;
-		
+	private static int Slot_type=0;
+	private static int totalSlots = 1;
+	
+	public static int totalSlots() {
+		return totalSlots + NumericLiteralImpl.totalSlots();
+	}
+	
+	static {
+		int offset = NumericLiteralImpl.totalSlots();
+		Slot_type += offset;
+	}
+	
 	@Override
 	public Type getType() {
-		if (type == null) {
-			String value = getUnsignedValue();
-			BigInteger bigInt = new BigInteger(value);
-			
-			if (bigInt.bitLength() < 16) {
-				type = IRUtils.getEGLPrimitiveType(Type_Smallint);
-				return type;
-			}
-
-			if (bigInt.bitLength() < 32) {
-				type = IRUtils.getEGLPrimitiveType(Type_Int);
-				return type;
-			}
-
-			if (bigInt.bitLength() < 64) {
-				type = IRUtils.getEGLPrimitiveType(Type_Bigint);
-				return type;
-			}
-			
-			type = IRUtils.getEGLPrimitiveType(Type_Decimal, value.length(), 0);
-			return type;
+		if (slotGet(Slot_type) == null) {
+			slotSet(Slot_type, IRUtils.getEGLPrimitiveType(Type_Int));
 		}
-		return type;
+		return (Type)slotGet(Slot_type);
 	}
-
+	
+	@Override
+	public void setType(Type value) {
+		slotSet(Slot_type, value);
+	}
+	
 	@Override
 	public Object getObjectValue() {
 		Type type = getType();
@@ -57,10 +51,8 @@ public class IntegerLiteralImpl extends NumericLiteralImpl implements IntegerLit
 			return new Short( getValue() );
 		} else if (type.equals(TypeUtils.Type_INT)) {
 			return new Integer( getValue() );
-		} else if (type.equals(TypeUtils.Type_BIGINT)) {
-			return new Long( getValue() );
 		} else {
-			return new BigInteger( getValue() );
+			return new Long( getValue() );
 		}
 	}
 }
