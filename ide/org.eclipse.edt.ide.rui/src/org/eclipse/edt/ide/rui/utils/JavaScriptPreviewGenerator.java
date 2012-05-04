@@ -17,22 +17,15 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-
-import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
-import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
-import org.eclipse.edt.ide.core.utils.EGLProjectInfoUtility;
-import org.eclipse.edt.compiler.internal.IEGLPartWrapper;
-import org.eclipse.edt.ide.rui.internal.Activator;
-import org.eclipse.edt.ide.ui.internal.EGLUI;
+import org.eclipse.edt.ide.core.internal.model.EGLProject;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.internal.model.EGLProject;
+import org.eclipse.edt.ide.core.utils.EGLProjectFileUtility;
+import org.eclipse.edt.ide.rui.internal.Activator;
+import org.eclipse.edt.ide.ui.internal.EGLUI;
 
 public class JavaScriptPreviewGenerator {
 
@@ -81,7 +74,7 @@ public class JavaScriptPreviewGenerator {
 				
 				//for binary projects, do not include the EGLBin directory, because it wont have one!
 				if(!isBinaryProject) {
-					String outputLocation = "EGLbin";
+					String outputLocation = "EGLBin";
 					try {
 						outputLocation = eglProject.getOutputLocation().lastSegment();
 					} catch (EGLModelException e) {
