@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.internal.core.builder.BuildException;
 import org.eclipse.edt.compiler.internal.core.lookup.IBindingEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
@@ -111,6 +112,11 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
     	for (IBuildPathEntry entry : buildPathEntries) {
     		if (entry instanceof ProjectBuildPathEntry) {
     			((ProjectBuildPathEntry)entry).getDeclaringEnvironment().initIREnvironments();
+    		} else if (entry instanceof EglarBuildPathEntry) {
+    			IEnvironment eglarEnvironment = ((EglarBuildPathEntry)entry).getEnvironment();
+    			if(eglarEnvironment instanceof ProjectEnvironment) {
+    				((ProjectEnvironment)eglarEnvironment).initIREnvironments();
+    			}
     		}
     	}
     }

@@ -195,7 +195,7 @@ class EGLProjectElementInfo extends OpenableElementInfo {
 	}
 	
 	private boolean isEGLbinOutputLocation(IPath path){
-		return path.lastSegment().equalsIgnoreCase("EGLbin");
+		return path.lastSegment().equalsIgnoreCase("EGLBin");
 	}
 	protected void setNameLookup(NameLookup newNameLookup) {
 

@@ -24,6 +24,7 @@ import java.util.zip.CRC32;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -279,7 +280,7 @@ public void indexLibrary(IPath path, IProject requestingProject) {
 	if (target instanceof IFile) {
 		request = new AddEglarFileToIndex((IFile)target, this);
 	} else if (target instanceof java.io.File) {
-		request = new AddEglarFileToIndex(path, this);
+		request = new AddEglarFileToIndex(path, this,requestingProject);
 	} else if (target instanceof IFolder) {
 //		request = new IndexBinaryFolder((IFolder)target, this);
 	} else {
@@ -372,7 +373,8 @@ private void rebuildIndex(String indexName, IPath path) {
 	} else if (target instanceof IFile) {
 		request = new AddEglarFileToIndex((IFile) target, this);
 	} else if (target instanceof java.io.File) {
-		request = new AddEglarFileToIndex(path, this);
+		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
+		request = new AddEglarFileToIndex(path, this,resource.getProject());
 	}
 	if (request != null)
 		request(request);

@@ -46,9 +46,10 @@ public class AddEglarFileToIndex extends IndexRequest {
 		this.project = resource.getProject();
 	}
 
-	public AddEglarFileToIndex(IPath jarPath, IndexManager manager) {
+	public AddEglarFileToIndex(IPath jarPath, IndexManager manager,IProject requestingProject) {
 		// external EGLAR scenario - no resource
 		super(jarPath, manager);
+		this.project = requestingProject;
 	}
 	
 	public boolean execute(IProgressMonitor progressMonitor) {

@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -50,6 +51,7 @@ import org.eclipse.edt.ide.core.model.ISourceRange;
 public class ClassFile extends Openable implements IClassFile, IDocument {
 	protected BinaryPart binaryPart = null;
 	protected String name;
+	protected IProject project;
 	
 	public static boolean SHARED_WC_VERBOSE = false;
 	
@@ -103,7 +105,7 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 
 		// generate structure
 		IRFileStructureRequestor requestor = new IRFileStructureRequestor(this, unitInfo, newElements);
-		BinaryElementParser parser = new BinaryElementParser(requestor,underlyingResource.getProject());
+		BinaryElementParser parser = new BinaryElementParser(requestor,project);
 		parser.parseDocument(this, true);
 //		if (isWorkingCopy()) {
 //			EGLFile original = (EGLFile) getOriginalElement();
@@ -132,6 +134,7 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 	public IResource getResource() {
 		PackageFragmentRoot root = this.getPackageFragmentRoot();
 		if (root.isArchive()) {
+			project = root.getParent().getEGLProject().getProject();
 			return root.getResource();
 		} else {
 			return ((IContainer)this.getParent().getResource()).getFile(new Path(this.getElementName()));
