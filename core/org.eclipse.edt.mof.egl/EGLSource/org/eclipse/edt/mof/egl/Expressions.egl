@@ -123,7 +123,7 @@ externalType ThisExpression extends Expression type MofClass
 end
 
 externalType SuperExpression extends Expression type MofClass
-	superObject Element;
+	thisObject Element;
 end
 
 externalType SetValuesExpression extends Expression type MofClass

@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.impl;
 
+import java.util.List;
+
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.SuperExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypedElement;
@@ -20,6 +23,8 @@ import org.eclipse.edt.mof.egl.TypedElement;
 public class SuperExpressionImpl extends ExpressionImpl implements SuperExpression {
 	private static int Slot_superObject=0;
 	private static int totalSlots = 1;
+	
+	private Type parentType;
 	
 	public static int totalSlots() {
 		return totalSlots + ExpressionImpl.totalSlots();
@@ -30,23 +35,42 @@ public class SuperExpressionImpl extends ExpressionImpl implements SuperExpressi
 		Slot_superObject += offset;
 	}
 	@Override
-	public Element getSuperObject() {
+	public Element getThisObject() {
 		return (Element)slotGet(Slot_superObject);
 	}
 	
 	@Override
-	public void setSuperObject(Element value) {
+	public void setThisObject(Element value) {
 		slotSet(Slot_superObject, value);
 	}
 
 	@Override
 	public Type getType() {
-		if (getSuperObject() instanceof Classifier) {
-			return (Classifier)getSuperObject();
+		if (parentType == null) {
+			// SuperExpression is just like ThisExpression, except we return the parent.
+			Type thisType;
+			if (getThisObject() instanceof Classifier) {
+				thisType = (Classifier)getThisObject();
+			}
+			else {
+				thisType = ((TypedElement)getThisObject()).getType();
+			}
+			
+			if (thisType instanceof StructPart) {
+				// When we add inheritance we'll need to modify this to create some intermediary type on the fly that
+				// has the multiple super types as its parents, to support multiple inheritance.
+				List<StructPart> supers = ((StructPart)thisType).getSuperTypes();
+				if (supers != null && supers.size() > 0) {
+					parentType = supers.get(0);
+				}
+			}
+			
+			if (parentType == null) {
+				// Shouldn't get here. Would have had a validation error if trying to use super with no super type.
+				parentType = thisType;
+			}
 		}
-		else {
-			return ((TypedElement)getSuperObject()).getType();
-		}
+		return parentType;
 	}
 	
 }

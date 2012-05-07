@@ -13,8 +13,8 @@ package org.eclipse.edt.mof.egl;
 
 
 public interface SuperExpression extends Expression {
-	Element getSuperObject();
+	Element getThisObject();
 	
-	void setSuperObject(Element value);
+	void setThisObject(Element value);
 	
 }
