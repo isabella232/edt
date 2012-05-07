@@ -405,14 +405,13 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					
 					Expression expr;
 					
-					// super() will be resolved at runtime.
 					if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression) {
 						expr = factory.createThisExpression();
 						((ThisExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
 					}
 					else {
-						node.getTarget().accept(this);
-						expr = (Expression)stack.pop();
+						expr = factory.createSuperExpression();
+						((SuperExpression)expr).setThisObject(getCurrentFunctionMember().getContainer());
 					}
 					
 					((ConstructorInvocation)fi).setExpression(expr);
@@ -491,8 +490,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 									fi = factory.createQualifiedFunctionInvocation();
 									fi.setId(fa.getCaseSensitiveID());
 									if (fa.getPrimary() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
-										fa.getPrimary().accept(this);
-										((QualifiedFunctionInvocation)fi).setQualifier((Expression)stack.pop());
+										SuperExpression superExpr = factory.createSuperExpression();
+										superExpr.setThisObject(getCurrentFunctionMember().getContainer());
+										((QualifiedFunctionInvocation)fi).setQualifier(superExpr);
 									}
 									else {
 										ThisExpression thisExpr = factory.createThisExpression();
@@ -1075,9 +1075,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SuperExpression superExpression) {
 		SuperExpression expr = factory.createSuperExpression();
-		ITypeBinding binding = superExpression.resolveTypeBinding();
-		EObject obj = mofTypeFor(binding);
-		expr.setSuperObject((Element)obj);
+		expr.setThisObject(getCurrentFunctionMember().getContainer());
 		setElementInformation(superExpression, expr);
 		stack.push(expr);
 		return false;
