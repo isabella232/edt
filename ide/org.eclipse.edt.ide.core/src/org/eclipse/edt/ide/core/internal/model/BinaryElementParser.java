@@ -17,15 +17,14 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
-import org.eclipse.edt.ide.core.internal.lookup.ProjectIREnvironment;
 import org.eclipse.edt.ide.core.internal.model.index.IDocument;
 import org.eclipse.edt.ide.core.model.Flags;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.DataItem;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Part;
@@ -36,6 +35,7 @@ import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Deserializer;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.SerializationFactory;
 import org.eclipse.edt.mof.serialization.xml.XMLSerializationFactory;
 
@@ -68,27 +68,34 @@ public class BinaryElementParser {
 	private void index(byte[] IRContents) {
 		SerializationFactory factory = new XMLSerializationFactory();
 		ByteArrayInputStream input = new ByteArrayInputStream(IRContents);
-		ProjectEnvironmentManager.getInstance().beginEGLarSearch(project);
-		ProjectIREnvironment irEnv = ProjectEnvironmentManager.getInstance().getIREnvironment(project);
 		
-		Deserializer deserializer = factory.createDeserializer(input, irEnv);
-		EObject obj;
-		Part part;
-		
+		ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(project);
 		try {
-			obj = deserializer.deserialize();
-			packageName = obj.getEClass().getPackageName().toCharArray();
-			requestor.enterEGLFile();
-			if(packageName != null) {
-				requestor.acceptPackage(0, 0, packageName);
-			}
+			Environment.pushEnv(env.getIREnvironment());
+			env.initIREnvironments();
 			
-			if (obj instanceof Part) {
-				part = (Part)obj;
-				handleEnterPart(part);
+			Deserializer deserializer = factory.createDeserializer(input, env.getIREnvironment());
+			EObject obj;
+			Part part;
+			
+			try {
+				obj = deserializer.deserialize();
+				packageName = obj.getEClass().getPackageName().toCharArray();
+				requestor.enterEGLFile();
+				if(packageName != null) {
+					requestor.acceptPackage(0, 0, packageName);
+				}
+				
+				if (obj instanceof Part) {
+					part = (Part)obj;
+					handleEnterPart(part);
+				}
+			}catch(DeserializationException ex) {
+				ex.printStackTrace();
 			}
-		}catch(DeserializationException ex) {
-			ex.printStackTrace();
+		}
+		finally {
+			Environment.popEnv();
 		}
 	}
 	

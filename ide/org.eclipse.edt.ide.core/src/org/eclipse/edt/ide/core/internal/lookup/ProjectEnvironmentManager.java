@@ -82,7 +82,14 @@ public class ProjectEnvironmentManager {
         return result;
     }
     
-    public ProjectIREnvironment getIREnvironment(IProject project) {
+    /**
+     * Returns the IR environment, which might be completely uninitialized. Most clients will want to instead get the IR
+     * environment from the project environment. See {@link #getProjectEnvironment(IProject)}.
+     * 
+     * @param project  The project.
+     * @return the IR environment.
+     */
+    protected ProjectIREnvironment getIREnvironment(IProject project) {
     	ProjectIREnvironment env = irEnvironments.get(project);
     	if (env == null) {
     		env = new ProjectIREnvironment();
@@ -115,11 +122,6 @@ public class ProjectEnvironmentManager {
         environmentPushed = true;
     }
     
-    public void beginEGLarSearch(IProject project) {
-        ProjectEnvironment env = getProjectEnvironment(project);
-   		env.initIREnvironments();
-    }
-
     public void endBuilding(AbstractBuilder builder) {
         IProject project = builder.getBuilder().getProject();
         ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry(project);
