@@ -491,7 +491,7 @@ abstract class Egl2MofPart extends Egl2MofBase {
 
 		if (mofPart instanceof EClass) {
 			createAnnotations(partBinding, (EClass)mofPart);
-//			setPartInformation(astPart, (EClass)mofPart);
+			setElementInformation(astPart,  (EClass)mofPart);
 		}
 		else if (mofPart instanceof Part) {
 			createAnnotations(partBinding, (Part)mofPart);
