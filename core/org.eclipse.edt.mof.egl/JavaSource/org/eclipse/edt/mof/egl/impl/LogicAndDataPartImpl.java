@@ -14,9 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.mof.EObject;
-import org.eclipse.edt.mof.EVisitor;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
@@ -94,21 +91,5 @@ public abstract class LogicAndDataPartImpl extends StructPartImpl implements Log
 	public boolean isNativeType() {
 		return false;
 	}
-	
-	@Override
-	public void visitChildren(EVisitor visitor) {
-		List<Annotation> annotations = getAnnotations();
-		for (Annotation anno : annotations) {
-			if(anno instanceof EObject && anno != this) {
-				((EObject)anno).accept(visitor);
-			}
-		}
-		
-		List<Member> members = getMembers();
-		for (Member member : members) {
-			if (member != null && member instanceof EObject && member != this) {
-				((EObject)member).accept(visitor);
-			}
-		}
-	}
+
 }
