@@ -24,9 +24,14 @@ import org.eclipse.edt.ide.core.model.Flags;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
+import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.ProgramParameter;
@@ -149,11 +154,127 @@ public class BinaryElementParser {
 			part.accept(this);
 		}
 		
-		/*public boolean visit(Function function) {
+		public boolean visit(Function function) {
 			this.partType = IRPartType.PART_FUNCTION;
 			
-			function.getParameters();
-		}*/
+			//if it is a referenced function in a program, do not count it
+			/*if(function.isTopLevelFunction() && function.getContainer() != null){
+				return false;
+			}*/
+			
+			if(function instanceof org.eclipse.edt.mof.egl.Operation) {
+				return false;
+			}
+			
+			String functionName = function.getName();
+			//no implicit functon in EDT
+			if( functionName.equalsIgnoreCase("<init>") ) {
+				return false;
+			}
+			int declStart = 0;
+			int declEnd = declStart; 
+			Annotation annotation = function.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null) {
+				int startOffset = 0;
+				int length = 0;
+				
+				if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+					startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+				if (annotation.getValue(IEGLConstants.EGL_PARTLENGTH) != null)
+					length = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
+				
+				declStart = startOffset;
+				declEnd = startOffset + length;
+			}
+			
+			AccessKind accessKind = function.getAccessKind();
+			boolean isPublic = true;
+			if(accessKind != null && accessKind == AccessKind.ACC_PRIVATE) {
+				isPublic = false;
+			}
+			int modifier = isPublic ? Flags.AccPublic : Flags.AccPrivate;
+			int nameStart = 0;
+			int nameEnd = nameStart;
+			
+			List<FunctionParameter> funPara = function.getParameters();
+			int funcParaLen = funPara.size();
+			char[][] parmNames = new char[funcParaLen][];
+			char[][] typeNames = new char[funcParaLen][];
+			int[] typeIdentifiers = new int[funcParaLen];
+			char[][] useTypes = new char[funcParaLen][];
+			char[][] parmPackages = new char[funcParaLen][];
+			boolean[] areNullable = new boolean[funcParaLen];
+			
+			FunctionParameter parameter;
+			
+			for(int i = 0; i < funcParaLen; i++ ) {
+				parameter = funPara.get(i);
+				//requestor.acceptPartReference(Util.toCompoundChars(parameter.getType().toString()), paraStart, paraEnd);
+				
+				parmNames[i] = parameter.getName().toString().toCharArray();
+				typeNames[i] = parameter.getType().getTypeSignature().toCharArray();	//if the parameter is an array, typeNames[i] ends with '[]'
+				areNullable[i] = parameter.isNullable();
+				
+				String useType = "";
+				ParameterKind paraKind = parameter.getParameterKind();
+				if(paraKind == ParameterKind.PARM_IN) {
+					useType = "in";
+				} else if(paraKind == ParameterKind.PARM_INOUT) {
+					useType = "inout";
+				} else {
+					useType = "out";
+				}
+				useTypes[i] = useType.toCharArray();
+				
+				String packageName = parameter.getType().getClassifier().getPackageName();
+				if(packageName != null) {
+					parmPackages[i] = packageName.toCharArray();
+				} else {
+					parmPackages[i] = null;
+				}
+				typeIdentifiers[i] = ISourceElementRequestor.UNKNOWN_TYPE;
+			}//for loop
+			
+			Field retField = function.getReturnField();
+			char[] fieldName = "".toCharArray();
+			char[] retFieldPkg = null;
+			if(retField != null) {
+				//requestor.acceptPartReference(Util.toCompoundChars(retField.getFullyQualifiedName()), 0, 0);
+				String packageName = retField.getType().getClassifier().getPackageName();
+				if(packageName != null) {
+					retFieldPkg = packageName.toCharArray();
+				} else {
+					retFieldPkg = null;
+				}
+				
+				fieldName = retField.getName().toCharArray();
+			}
+			
+			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, function.getId().toCharArray(),
+					nameStart, nameEnd, typeNames, parmNames, useTypes, areNullable, parmPackages);
+			return true;
+		}
+		
+		public void endVisit(Function function) {
+			/*if(function.isTopLevelFunction() && function.getContainer() != null){
+				return;
+			}*/
+			if(function instanceof org.eclipse.edt.mof.egl.Operation) {
+				return;
+			}
+			
+			String functionName = function.getName();
+			if(functionName.toString().equalsIgnoreCase("<init>") ) {
+				return;
+			}
+			requestor.exitFunction(0);
+		}
+		
+		public boolean visit(Interface itf) {
+			this.partType = IRPartType.PART_INTERFACE;
+			visitPart(partType , partInfo, itf);
+			return true;
+		}
 		
 		public boolean visit(Library library) {
 			this.partType = IRPartType.PART_LIBRARY;
@@ -178,7 +299,6 @@ public class BinaryElementParser {
 			return true;
 		}
 		
-		//TODO
 		public boolean visit(Program program) {
 			this.partType = IRPartType.PART_PROGRAM;
 			

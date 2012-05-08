@@ -252,9 +252,10 @@ public class IRFileStructureRequestor extends AbstractSourceElementRequestor imp
 		String[] parameterTypeSigs = convertTypeNamesToSigs(parameterTypes);
 		if (parentHandle.getElementType() == IEGLElement.PART) {
 			handle = new BinaryFunction((IPart) parentHandle, new String(name), parameterTypeSigs);
-		}
-		else {
-			Assert.isTrue(false); // Should not happen
+		}  else {
+			//TODO: 378621
+			//Assert.isTrue(false); // Should not happen
+			return;
 		}
 		resolveDuplicates(handle);
 		
