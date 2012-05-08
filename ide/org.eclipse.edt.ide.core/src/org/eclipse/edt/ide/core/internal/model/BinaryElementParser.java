@@ -24,11 +24,13 @@ import org.eclipse.edt.ide.core.model.Flags;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
-import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.DataItem;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.ParameterKind;
@@ -154,6 +156,27 @@ public class BinaryElementParser {
 			part.accept(this);
 		}
 		
+		public boolean visit(Annotation annotation){
+			//String name = annotation.getAnnotation(type)
+			return false;
+		}
+		
+		public void endVisit(Annotation annotation){
+			//requestor.exitPropertyBlock(0);
+		}
+		
+		public boolean visit(AnnotationType annoType) {
+			//String name = annoType.getName();
+			this.partType = IRPartType.PART_RECORD;
+			visitPart(partType , partInfo, annoType);
+			return true;
+		}
+		
+		public boolean visit(ExternalType externalType) {
+			visitPart(partType, partInfo, externalType);
+			return true;
+		}
+		
 		public boolean visit(Function function) {
 			this.partType = IRPartType.PART_FUNCTION;
 			
@@ -226,7 +249,10 @@ public class BinaryElementParser {
 				}
 				useTypes[i] = useType.toCharArray();
 				
-				String packageName = parameter.getType().getClassifier().getPackageName();
+				String packageName = null;
+				if(parameter.getType() != null && parameter.getType().getClassifier() != null)
+					packageName = parameter.getType().getClassifier().getPackageName();
+				
 				if(packageName != null) {
 					parmPackages[i] = packageName.toCharArray();
 				} else {
@@ -268,6 +294,32 @@ public class BinaryElementParser {
 				return;
 			}
 			requestor.exitFunction(0);
+		}
+		
+		public boolean visit(FunctionParameter parameter) {
+			int declStart = 0;
+			int declEnd = declStart; 
+			Annotation annotation = parameter.getAnnotation(IEGLConstants.EGL_LOCATION);
+			if (annotation != null) {
+				int startOffset = 0;
+				int length = 0;
+				
+				if (annotation.getValue(IEGLConstants.EGL_PARTOFFSET) != null)
+					startOffset = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTOFFSET)).intValue();
+				if (annotation.getValue(IEGLConstants.EGL_PARTLENGTH) != null)
+					length = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
+				
+				declStart = startOffset;
+				declEnd = startOffset + length;
+			}
+			String fullyQualifiedName = parameter.getName() + " " + parameter.getType().getClassifier().getId();
+			requestor.acceptPartReference(Util.toCompoundChars(fullyQualifiedName), declStart, declEnd);
+			return true;
+		}
+		
+		public boolean visit(FunctionPart functionPart) {
+			visitPart(partType, partInfo, functionPart);
+			return true;
 		}
 		
 		public boolean visit(Interface itf) {
