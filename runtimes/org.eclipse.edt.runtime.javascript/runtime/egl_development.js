@@ -1419,6 +1419,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 		egl.instrumentFunctions("JsonLib", egl.eglx.json.JsonLib.prototype);
 		egl.instrumentFunctions("ServiceLib", egl.eglx.services.ServiceLib.prototype);
 		egl.instrumentFunctions("SysLib", egl.eglx.lang.SysLib.prototype);
+		egl.instrumentFunctions("Resources", egl.eglx.lang.Resources.prototype);
 		egl.instrumentFunctions("ValidatorWrapper", egl.org.eclipse.edt.rui.mvc.internal.ValidatorWrapper.prototype);
 		egl.instrumentFunctions("StringLib", egl.eglx.lang.StringLib.prototype);
 		egl.instrumentFunctions("DateTimeLib", egl.eglx.lang.DateTimeLib.prototype);
