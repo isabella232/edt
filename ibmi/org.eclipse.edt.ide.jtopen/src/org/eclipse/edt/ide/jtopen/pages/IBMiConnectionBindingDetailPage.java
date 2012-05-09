@@ -87,6 +87,7 @@ public class IBMiConnectionBindingDetailPage extends WebBindingDetailPage {
 	private void createPasswordControl(FormToolkit toolkit, Composite parent) {
 		toolkit.createLabel(parent, Messages.LabelPassword);
 		fPasswordField = createTextControl(toolkit, parent);
+		fPasswordField.setEchoChar('*'); //$NON-NLS-1$
 		fPasswordField.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e) {
 				EGLDDRootHelper.addOrUpdateParameter(EGLDDRootHelper.getParameters(fIBMiBinding), "password", fPasswordField.getText());		
