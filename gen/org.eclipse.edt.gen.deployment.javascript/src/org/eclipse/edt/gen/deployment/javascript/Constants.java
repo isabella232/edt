@@ -80,6 +80,7 @@ public class Constants {
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/DateTimeLib.js"); 
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/MathLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/SysLib.js");
+		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/Resources.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/lang/OrderingKind.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rbd/StrLib.js");
 		RUI_RUNTIME_JAVASCRIPT_FILES.add("eglx/rest/RestRuntime.js"); //$NON-NLS-1$
