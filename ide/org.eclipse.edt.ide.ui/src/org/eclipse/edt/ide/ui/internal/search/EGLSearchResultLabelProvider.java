@@ -80,7 +80,7 @@ public class EGLSearchResultLabelProvider extends LabelProvider
 			if (matchCount <= 1)
 				return ((IEGLElement) element).getElementName();
 			String format= EGLSearchMessages.EGLSearchResultLabelProviderCountFormat;
-			return MessageFormat.format(format, new Object[] { ((IPart) element).getElementName(), new Integer(matchCount) });
+			return MessageFormat.format(format, new Object[] { ((IEGLElement) element).getElementName(), new Integer(matchCount) });
 			
 		} else if(element instanceof IEGLElement) {
 			if(element instanceof EglarPackageFragment){
