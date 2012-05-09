@@ -12,32 +12,33 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
+import java.util.Calendar;
 import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
 import java.lang.Boolean;
-import eglx.lang.MathLib;
-import org.eclipse.edt.eunit.runtime.Log;
-import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
-import java.lang.Double;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import java.math.BigDecimal;
-import org.eclipse.edt.eunit.runtime.AssertionFailedException;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import java.lang.Long;
-import org.eclipse.edt.eunit.runtime.Status;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import java.lang.Object;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
+import java.lang.Double;
 import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import java.util.List;
+import org.eclipse.edt.eunit.runtime.Log;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
+import eglx.lang.MathLib;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import java.lang.Float;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EDate;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="LogResult")
 public class LogResult extends ExecutableBase {
@@ -239,6 +240,14 @@ public class LogResult extends ExecutableBase {
 	public void assertDateEqual1(Calendar expected, Calendar actual) {
 		assertDateEqual("", expected, actual);
 	}
+	public void assertTimeEqual(String message, Calendar expected, Calendar actual) {
+		boolean isEqual;
+		isEqual = (ETime.equals(expected, actual));
+		expectAssertTrue(message, EAny.asAny(ETime.ezeBox(expected)), EAny.asAny(ETime.ezeBox(actual)), isEqual);
+	}
+	public void assertTimeEqual1(Calendar expected, Calendar actual) {
+		assertTimeEqual("", expected, actual);
+	}
 	public void assertTimestampEqual(String message, Calendar expected, Calendar actual) {
 		boolean isEqual;
 		isEqual = (ETimestamp.equals(expected, actual));
@@ -334,7 +343,9 @@ public class LogResult extends ExecutableBase {
 		mantissaActual = org.eclipse.edt.javart.util.JavartUtil.checkNullable(eze$Temp28.ezeUnbox());
 		signActual = org.eclipse.edt.javart.util.JavartUtil.checkNullable(eze$Temp30.ezeUnbox());
 		delta = (normalExpected - normalActual);
-		delta = MathLib.abs(delta);
+		double eze$Temp31;
+		eze$Temp31 = (double)(delta);
+		delta = (float)(MathLib.abs(eze$Temp31));
 		boolean isEqual;
 		isEqual = ((((signExpected).equals(signActual)) && (EInt.equals(mantissaExpected, mantissaActual))) && ((double)(delta) < deltaLimit));
 		return isEqual;
@@ -359,20 +370,20 @@ public class LogResult extends ExecutableBase {
 	}
 	private double normalFloat(double afloat, AnyBoxedObject<Integer> mantissa, AnyBoxedObject<String> sign) {
 		mantissa.ezeCopy(0);
-		if ((afloat >= (double)((short) 0))) {
+		if ((afloat >= (double)(0))) {
 			sign.ezeCopy("+");
 		}
 		else {
 			sign.ezeCopy("-");
-			afloat = (afloat * (double)((short) -1));
+			afloat = (afloat * (double)(-1));
 		}
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(afloat, null)) && (EFloat.notEquals(afloat, (double)((short) 0))))) {
-			while ((afloat < (double)((short) 1))) {
-				afloat = (afloat * (double)((short) 10));
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(afloat, null)) && (EFloat.notEquals(afloat, (double)(0))))) {
+			while ((afloat < (double)(1))) {
+				afloat = (afloat * (double)(10));
 				mantissa.ezeCopy((mantissa.ezeUnbox() - 1));
 			}
-			while ((afloat >= (double)((short) 10))) {
-				afloat = (EFloat.divide(afloat, (double)((short) 10)));
+			while ((afloat >= (double)(10))) {
+				afloat = (EFloat.divide(afloat, (double)(10)));
 				mantissa.ezeCopy((mantissa.ezeUnbox() + 1));
 			}
 		}
@@ -380,20 +391,20 @@ public class LogResult extends ExecutableBase {
 	}
 	private float normalSmallFloat(float afloat, AnyBoxedObject<Integer> mantissa, AnyBoxedObject<String> sign) {
 		mantissa.ezeCopy(0);
-		if ((afloat >= (float)((short) 0))) {
+		if (((int)(afloat) >= 0)) {
 			sign.ezeCopy("+");
 		}
 		else {
 			sign.ezeCopy("-");
-			afloat = (afloat * (float)((short) -1));
+			afloat = (float)(((int)(afloat) * -1));
 		}
-		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(afloat, null)) && (ESmallfloat.notEquals(afloat, (float)((short) 0))))) {
-			while ((afloat < (float)((short) 1))) {
-				afloat = (afloat * (float)((short) 10));
+		if (((org.eclipse.edt.runtime.java.eglx.lang.NullType.notEquals(afloat, null)) && (EInt.notEquals((int)(afloat), 0)))) {
+			while (((int)(afloat) < 1)) {
+				afloat = (float)(((int)(afloat) * 10));
 				mantissa.ezeCopy((mantissa.ezeUnbox() - 1));
 			}
-			while ((afloat >= (float)((short) 10))) {
-				afloat = (ESmallfloat.divide(afloat, (float)((short) 10)));
+			while (((int)(afloat) >= 10)) {
+				afloat = ESmallfloat.asSmallfloat((EInt.divide((int)(afloat), 10)));
 				mantissa.ezeCopy((mantissa.ezeUnbox() + 1));
 			}
 		}
