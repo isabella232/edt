@@ -51,7 +51,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 
 		String resourceBinding = (String)ibmiProgram.getValue(subKey_connectionResource);
 		if(resourceBinding != null){
-			out.print("(eglx.jtopen.IBMiConnection)eglx.lang.SysLib.getResource(\"");
+			out.print("(eglx.jtopen.IBMiConnection)eglx.lang.Resources.getResource(\"");
 			out.print(resourceBinding);
 			out.print("\")");
 		}
