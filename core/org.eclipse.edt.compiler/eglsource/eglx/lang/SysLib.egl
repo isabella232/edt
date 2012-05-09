@@ -34,7 +34,5 @@ externalType SysLib type NativeType
 	static function writeStderr(text string in);
 	static function writeStdout(text string in);
 	
-	static function getResource(uri string const in)returns(any);
-	
 end
 
