@@ -31,6 +31,13 @@ public class BinaryFileDocumentProvider extends DocumentProvider {
 				source= ""; //$NON-NLS-1$
 			document.set(source);
 			return true;
+		}else if (editorInput instanceof EGLReadOnlyEditorInput) {
+			EGLReadOnlyEditorInput eglfile= ((EGLReadOnlyEditorInput) editorInput);
+			String source = eglfile.getSource();
+			if (source == null)
+				source= ""; //$NON-NLS-1$
+			document.set(source);
+			return true;
 		}
 		return super.setDocumentContent(document, editorInput, encoding);
 	}

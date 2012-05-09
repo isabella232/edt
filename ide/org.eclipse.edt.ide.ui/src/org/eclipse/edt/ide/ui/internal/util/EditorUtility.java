@@ -16,7 +16,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
@@ -32,7 +34,14 @@ import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
+import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorDescriptor;
@@ -388,11 +397,36 @@ public class EditorUtility {
 		return input;
 	}
 	
+	private static EGLReadOnlyEditorInput getClassfileSourceEditor(IProject proj, String eglarFilePath, String irFullQualifiedFile, String editorId) {
+		EGLReadOnlyFile storage = getEglReadonlyFile(proj, eglarFilePath, irFullQualifiedFile);
+		
+		EGLReadOnlyEditorInput input = new EGLReadOnlyEditorInput(storage);
+		if (input != null) {
+			IWorkbenchPage p= EDTUIPlugin.getActivePage();
+			if (p != null) {
+				IEditorPart editorPart = p.findEditor(input);
+				if(editorPart != null) {
+					p.bringToTop(editorPart);
+					return null;
+				}
+			}
+		}
+		return input;
+	}
+	
 	public static BinaryReadOnlyFile getBinaryReadonlyFile(IProject proj, String eglarFilePath, String irFullQualifiedFile) {
 		if(proj.getWorkspace().getRoot().findMember(new Path(eglarFilePath)) == null){	//external eglar file
 			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), true);
 		} else{	
 			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), false);
+		}
+	}
+	
+	public static EGLReadOnlyFile getEglReadonlyFile(IProject proj, String eglarFilePath, String irFullQualifiedFile) {
+		if(proj.getWorkspace().getRoot().findMember(new Path(eglarFilePath)) == null){	//external eglar file
+			return new EGLReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), true);
+		} else{	
+			return new EGLReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), false);
 		}
 	}
 	
@@ -428,6 +462,31 @@ public class EditorUtility {
 		return null;
 	}
 	
+	private static String getClassFileSource(final ClassFile classFile, IProject proj){
+		String sourceName = null;
+		ISystemEnvironment sysEnv = SystemEnvironmentManager.findSystemEnvironment(proj, null);
+		IEnvironment sysIREnv = sysEnv.getIREnvironment();
+		String mofSignature = IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName();
+		String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
+		EObject irPart = null;
+		try {
+			irPart = sysIREnv.find(eglSignature);
+			sourceName = irPart.eGet("filename").toString();
+		} catch (MofObjectNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (DeserializationException e1) {
+			e1.printStackTrace();
+		}
+		
+		return sourceName;
+	}
+	
+	private static String getClassFilePartSignature(final ClassFile classFile, IProject proj){
+		ISystemEnvironment sysEnv = SystemEnvironmentManager.findSystemEnvironment(proj, null);
+		IEnvironment sysIREnv = sysEnv.getIREnvironment();
+		return(IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName());
+	}
+	
 	public static IEditorPart openClassFile(final ClassFile classFile, final String editorId){
 		if(classFile != null){
 			IProject proj = classFile.getEGLProject().getProject();
@@ -450,9 +509,15 @@ public class EditorUtility {
 			//or
 			//2. ir doesn't have corresponding source file
 			String eglarPath = classFile.getPath().toString();
-			String fullyqualifiedPartName = classFile.getPart().getFullyQualifiedName();
-			return EditorUtility.openClassFileInBinaryEditor(classFile, proj, eglarPath, fullyqualifiedPartName, editorId);
+			String sourceFileName = getClassFileSource(classFile, proj);
+			if(null != sourceFileName && "" != sourceFileName){
+				openSourceFromEglarInBinaryEditor(classFile, proj, eglarPath, sourceFileName, editorId);
+			}else{
+				String fullyqualifiedPartName = getClassFilePartSignature(classFile,proj);
+				return EditorUtility.openClassFileInBinaryEditor(classFile, proj, eglarPath, fullyqualifiedPartName, editorId);
+			}
 		}
+		
 		return null;
 	}
 	
@@ -464,6 +529,22 @@ public class EditorUtility {
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
 		BinaryEditorInput input = getClassfileEditor(proj, eglarFilePath, irFullQualifiedFile, editorId);
 		input.setClassFile(classFile);
+		
+		if(input == null) {
+			return null;
+		}
+		try {
+			return ww.getActivePage().openEditor(
+			input, editorId, true);
+		} catch (PartInitException e) {
+			EDTUIPlugin.log( e );
+		}
+		return null;
+	}
+	
+	public static IEditorPart openSourceFromEglarInBinaryEditor(final ClassFile classFile, final IProject proj, final String eglarFilePath, final String irFullQualifiedFile, final String editorId){
+		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
+		EGLReadOnlyEditorInput input = getClassfileSourceEditor(proj, eglarFilePath, irFullQualifiedFile, editorId);
 		
 		if(input == null) {
 			return null;

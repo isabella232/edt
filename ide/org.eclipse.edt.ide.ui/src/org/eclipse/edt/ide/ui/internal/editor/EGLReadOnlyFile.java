@@ -13,28 +13,32 @@ package org.eclipse.edt.ide.ui.internal.editor;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.ide.core.internal.model.util.Util;
 
-public class BinaryReadOnlyFile implements IStorage {
+public class EGLReadOnlyFile implements IStorage {
 	  private String pathString;	//full path for eglar file
 	  private String fileString;	//full qualified ir file name (with no extension)
 	  private boolean isExternal;
 	  private String project;
-	  public static final String IR_EXTENSION = ".eglxml";
 	  public static final String EGLAR_IR_SEPARATOR = "|";
 	  
-	  public BinaryReadOnlyFile(String path, String file) {
+	  public EGLReadOnlyFile(String path, String file) {
 	    this.pathString = path;
 	    this.fileString = resolveFileString(file);
 	    this.isExternal = false;
 	  }
 	  
-	  public BinaryReadOnlyFile(String path, String file, String project, boolean isExternal) {
+	  public EGLReadOnlyFile(String path, String file, String project, boolean isExternal) {
 		  this.pathString = path;
 		  this.fileString = resolveFileString(file);
 		  this.project = project;
@@ -67,64 +71,27 @@ public class BinaryReadOnlyFile implements IStorage {
 	  public IPath getFullPath() {
 		  String path = pathString;
 		  path += EGLAR_IR_SEPARATOR;
-		  String pkg = getPackage();
-		  if(pkg != null && pkg.trim().length() > 0){
-			  pkg = pkg.replace(".", "/");
-			  path += pkg + "/";
-		  }
-		  path += getName();
+		  path += fileString;
 		  return new Path(path);
+	  }
+	  
+	  public String getName() {
+			  String irFileName = "";
+			  int index = fileString.lastIndexOf("/");
+			  if(index > -1){	//has package
+				  irFileName = fileString.substring(index + 1);
+			  }
+			  else{	//no package
+				  irFileName = fileString;
+			  }
+			  return irFileName;
 	  }
 	  
 	  public IPath getEGLARPath() {
 		  return new Path(pathString);
 	  }
 	  
-	  /*
-	 * get the package name
-	 */
-	public String getPackage(){
-		  int index = fileString.lastIndexOf(".");
-		  if(index > -1){	//has pacakge
-			  return fileString.substring(0, index);
-		  }
-		  return "";	//no package
-	  }
 	  
-//	 /*
-//	 * get the ir file name (without package, with extension)
-//	 * e.g.
-//	 * demointerface.ir
-//	 */
-//	  public String getIRFileName(){
-////		  int index = fileString.lastIndexOf(":");
-//		  int index = fileString.lastIndexOf(".");
-//		  if(index > -1){	//has package
-//			  return fileString.substring(index + 1);
-//		  }
-//		  else{		//no package
-//			  return fileString;
-//		  }
-//	  }
-	  
-	  /*
-	 * get the ir file name (without package, with extension)
-	 * e.g.
-	 * demointerface.ir
-	 */
-	  public String getName() {
-//	    return getFullPath().lastSegment();
-		  String irFileName = "";
-		  int index = fileString.lastIndexOf(".");
-		  if(index > -1){	//has package
-			  irFileName = fileString.substring(index + 1) + IR_EXTENSION;
-		  }
-		  else{	//no package
-			  irFileName = fileString + IR_EXTENSION;
-		  }
-		  return irFileName;
-	  }
-	 
 	  public boolean isReadOnly() {
 		  return true;
 	  }
@@ -136,7 +103,25 @@ public class BinaryReadOnlyFile implements IStorage {
 	  public String getProject() {
 		  return project;
 	  }
-	
+	  
+	  public String getSource() {
+		  ZipFile zip = null;
+		  String out = "";
+		  try {
+			  zip = new ZipFile(this.getEGLARPath().toFile());
+			  ZipEntry ze = new ZipEntry(fileString);
+			  out = new String(Util.getZipEntryByteContent(ze, zip));
+		  } catch (ZipException e) {
+			// TODO Auto-generated catch block
+			  e.printStackTrace();
+		  } catch (IOException e) {
+			// TODO Auto-generated catch block
+			  e.printStackTrace();
+		  }
+		  
+		  return out;
+	  }
+
 	  //for Forms in FormGroup, to eliminate the Form section, only keep the FormGroup section, which exactly is the ClassFile name
 	  private static String resolveFileString(String file){
 		  String fileString = file;

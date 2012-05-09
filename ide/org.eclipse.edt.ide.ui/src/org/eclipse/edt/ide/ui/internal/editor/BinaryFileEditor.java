@@ -24,7 +24,7 @@ import org.eclipse.ui.texteditor.DefaultRangeIndicator;
 
 public class BinaryFileEditor extends EGLEditor {
 	
-	public static final String BINARY_FILE_EDITOR_ID = "org.eclipse.edt.BinaryFileEditor";
+	public static final String BINARY_FILE_EDITOR_ID = "org.eclipse.edt.ide.ui.BinaryFileEditor";
 	
 	private OutlineAdapterFactory factory;
 	
