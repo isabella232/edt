@@ -202,6 +202,15 @@ Library LogResult
 	function assertDateEqual1(expected Date in, actual Date in)
 		assertDateEqual("", expected, actual);
 	end
+	
+	function assertTimeEqual(message String in, expected Time in, actual Time in)
+		isEqual boolean = (expected == actual);
+		expectAssertTrue(message, expected, actual, isEqual);
+	end
+	  
+	function assertTimeEqual1(expected Time in, actual Time in)
+		assertTimeEqual("", expected, actual);
+	end
 		
 	function assertTimestampEqual(message String in, expected Timestamp in, actual Timestamp in)
 		isEqual boolean = (expected == actual);
