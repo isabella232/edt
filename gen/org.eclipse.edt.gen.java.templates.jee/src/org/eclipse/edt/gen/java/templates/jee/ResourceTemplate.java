@@ -64,7 +64,7 @@ public class ResourceTemplate extends JavaTemplate implements Constants {
 	}
 
 	private QualifiedFunctionInvocation getLibraryInvocation(Annotation annot, Field field) {
-		ExternalType serviceLib = (ExternalType) TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.LibrarySys).clone();
+		ExternalType serviceLib = (ExternalType) TypeUtils.getType(TypeUtils.EGL_KeyScheme + Constants.Resources).clone();
 		QualifiedFunctionInvocation invocation = factory.createQualifiedFunctionInvocation();
 		PartName partName = factory.createPartName();
 		partName.setType(serviceLib);
