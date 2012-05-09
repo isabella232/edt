@@ -38,6 +38,7 @@ public class Constants {
 	public static final String AnnotationXmlElement = "eglx.xml.binding.annotation.xmlElement";
 	public static final String AnnotationJsonName = "eglx.json.JsonName";
 	public static final String LibrarySys = "eglx.lang.SysLib";
+	public static final String Resources = "eglx.lang.Resources";
 	
 	public static final String EXPR_LHS = "EXPR_LHS";
 	public static final String DONT_UNBOX = "DONT_UNBOX";
