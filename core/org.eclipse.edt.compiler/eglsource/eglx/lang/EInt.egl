@@ -71,22 +71,27 @@ externalType EInt extends ENumber type ClassType
 	static function $BitXor(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"xor"}};
 	
 	/**
-	 * {@Operation xor} Computes the bitwise exclusive OR of two numbers.
+	 * {@Operation ~} Computes the bitwise compliment of a number.
 	 */
 	static function $BitNegate(value EInt in) returns (EInt) {@Operation{"~"}};
 	
 	/**
-	 * {@Operation <<} Computes the bitwise left shift of two numbers.
+	 * {@Operation <<} Shifts a number to the left by the specified number of binary digits.  Only
+	 * the lower 5 bits of the right operand are used, so the shift amount will be between 0 and 31.
 	 */
 	static function $LeftShift(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{"<<"}};
 	
 	/**
-	 * {@Operation <<} Computes the bitwise arithmentic right shift of two numbers.
+	 * {@Operation >>} Shifts a number to the right by the specified number of binary digits,
+	 * preserving the number's sign (arithmentic right shift).  Only the lower 5 bits of the
+	 * right operand are used, so the shift amount will be between 0 and 31.
 	 */
 	static function $RightShiftArithmetic(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{">>"}};
 	
 	/**
-	 * {@Operation <<} Computes the bitwise logical right shift of two numbers.
+	 * {@Operation >>>} Shifts a number to the right by the specified number of binary digits,
+	 * padding the left side with zeros (logical right shift).  Only the lower 5 bits of the
+	 * right operand are used, so the shift amount will be between 0 and 31.
 	 */
 	static function $RightShiftLogical(lvalue EInt in, rvalue EInt in) returns (EInt) {@Operation{">>>"}};
 
