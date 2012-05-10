@@ -21,7 +21,7 @@ egl.defineWidget(
 		setTimeout(function() {
 			eglWidget.renderWhenDojoIsDoneLoading();
 		},1);		
-		dojo.require("dijit.form.Button");	
+		dojo.require("dijit.form.ToggleButton");	
 	},
 	"createDojoWidget" : function(parent) {
 		this.runEventHandlers = function() { }; // turn off EGL basic event handlers
@@ -39,7 +39,9 @@ egl.defineWidget(
 			}
 		});
 		this._args._onClick = function(e){
+			this._set('checked', !this.checked); 
 			eglWidget.handleEvent(eglWidget.getOnClick(), "onClick", e);
+			this.onChange(this.checked);
 			if(this.valueNode){
 				egl.stopEventPropagation(e);
 			}
