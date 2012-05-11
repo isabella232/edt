@@ -24,7 +24,6 @@ import java.util.Properties;
 
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.resources.RecoverableResource;
-import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.lang.AnyException;
 import eglx.lang.EDictionary;
@@ -69,7 +68,7 @@ public class SQLDataSource implements RecoverableResource {
 				conn.close();
 				conn = null;
 			} catch (java.sql.SQLException e) {
-				throw JavartUtil.makeEglException(e);
+				throw SQLUtilities.makeEglException(e);
 			}
 		}
 	}
@@ -79,7 +78,7 @@ public class SQLDataSource implements RecoverableResource {
 			try {
 				conn = DriverManager.getConnection(connectionUrl, properties);
 			} catch (java.sql.SQLException e) {
-				throw JavartUtil.makeEglException(e);
+				throw SQLUtilities.makeEglException(e);
 			}
 		}
 		return conn;
@@ -92,7 +91,7 @@ public class SQLDataSource implements RecoverableResource {
 				conn.commit();
 			}
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 		
 	}
@@ -104,7 +103,7 @@ public class SQLDataSource implements RecoverableResource {
 				conn.rollback();
 			}
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 		
 	}
@@ -123,7 +122,7 @@ public class SQLDataSource implements RecoverableResource {
 			statements.clear();
 			ru.getResourceManager().getResourceList().remove(this);
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 		
 	}
@@ -144,7 +143,7 @@ public class SQLDataSource implements RecoverableResource {
 				statements.clear();
 				ru.getResourceManager().getResourceList().remove(this);
 			} catch (java.sql.SQLException e) {
-				throw JavartUtil.makeEglException(e);
+				throw SQLUtilities.makeEglException(e);
 			}
 		}
 		
@@ -181,7 +180,7 @@ public class SQLDataSource implements RecoverableResource {
 			SetSchema.setString(1, schema);
 			SetSchema.executeUpdate();
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -189,7 +188,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			return getConnection().getAutoCommit();
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -197,7 +196,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			getConnection().setAutoCommit( autoCommit );
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -205,7 +204,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			return getConnection().getTransactionIsolation();
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -213,7 +212,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			getConnection().setTransactionIsolation(level);
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -221,7 +220,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			return getConnection().getMetaData().supportsTransactionIsolationLevel(level);
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -234,7 +233,7 @@ public class SQLDataSource implements RecoverableResource {
 				return true;
 			}
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -242,7 +241,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			return getConnection().isReadOnly();
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -250,7 +249,7 @@ public class SQLDataSource implements RecoverableResource {
 		try {
 			return getConnection().isValid(timeout);
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 	
@@ -263,9 +262,9 @@ public class SQLDataSource implements RecoverableResource {
 			if (warning == null) {
 				return null;
 			}
-			return (SQLWarning)JavartUtil.makeEglException(warning);
+			return (SQLWarning)SQLUtilities.makeEglException(warning);
 		} catch (java.sql.SQLException e) {
-			throw JavartUtil.makeEglException(e);
+			throw SQLUtilities.makeEglException(e);
 		}
 	}
 }

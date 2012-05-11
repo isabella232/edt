@@ -22,7 +22,6 @@ import javax.sql.XADataSource;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Runtime;
 import org.eclipse.edt.javart.messages.Message;
-import org.eclipse.edt.javart.util.JavartUtil;
 
 import eglx.lang.EDictionary;
 
@@ -100,7 +99,7 @@ public class SQLJNDIDataSource extends SQLDataSource {
 					}
 				}
 			} catch (java.sql.SQLException e) {
-				throw JavartUtil.makeEglException(e);
+				throw SQLUtilities.makeEglException(e);
 			}
 		}
 		return conn;
