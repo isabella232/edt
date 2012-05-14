@@ -3169,7 +3169,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(IntegerLiteral integerLiteral) {
 		if(integerLiteral.resolveTypeBinding() == null){
-			String strVal = integerLiteral.getValue();
+			String strVal = getSign(integerLiteral.getParent(), false) + integerLiteral.getValue();
 			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
 				integerLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BIGINT));
 				try {
@@ -5203,5 +5203,28 @@ public abstract class DefaultBinder extends AbstractBinder {
     	if (errorNode[0] != null) {
     		problemRequestor.acceptProblem(errorNode[0], errorNo, IMarker.SEVERITY_ERROR, new String[] {fieldName});
     	}
+    }
+    
+    private String getSign(Node node, boolean hasNegativeSign) {
+    	
+    	if (node instanceof ParenthesizedExpression) {
+    		return getSign(((ParenthesizedExpression)node).getExpression(), hasNegativeSign);
+    	}
+    	if (node instanceof UnaryExpression) {
+    		UnaryExpression unary = (UnaryExpression) node;
+    		if (unary.getOperator() == UnaryExpression.Operator.MINUS) {
+    			return getSign(unary.getParent(), !hasNegativeSign);
+    		}
+    		else {
+        		if (unary.getOperator() == UnaryExpression.Operator.PLUS) {
+        			return getSign(unary.getParent(), hasNegativeSign);
+        		}
+    		}
+    	}
+    	
+    	if (hasNegativeSign) {
+    		return "-";
+    	}
+    	return "";
     }
  }
