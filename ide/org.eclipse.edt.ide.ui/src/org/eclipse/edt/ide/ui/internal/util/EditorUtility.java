@@ -475,7 +475,7 @@ public class EditorUtility {
 		if(input == null) {
 			return null;
 		}
-		//if(org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj)){
+		// if(org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj)){
 			IClassFile classFile = input.getClassFile();
 			if(classFile instanceof ClassFile){
 				return openClassFile((ClassFile)classFile, editorId);
