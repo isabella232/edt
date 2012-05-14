@@ -65,7 +65,7 @@ public class BinaryElementParser {
 	public void parseDocument(IDocument file, boolean reportReferencesInStatements) {
 		this.reportReferencesInStatements = reportReferencesInStatements;
 		byte[] contents;
-		try {
+		try { 
 			contents = file.getByteContent();
 			index(contents);
 		} catch (IOException e) {
