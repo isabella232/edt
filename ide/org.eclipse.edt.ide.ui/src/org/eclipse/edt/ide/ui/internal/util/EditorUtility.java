@@ -22,6 +22,8 @@ import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
+import org.eclipse.edt.ide.core.internal.utils.Util;
+import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
@@ -32,6 +34,7 @@ import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
+import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
@@ -118,24 +121,31 @@ public class EditorUtility {
 		if (inputElement instanceof IFile)
 			return openInEditor((IFile) inputElement, activate);
 		
-		if(inputElement instanceof BinaryPart){
+		IEditorInput input= getEditorInput(inputElement);
+		
+		/*if(inputElement instanceof BinaryPart){
 			BinaryPart part = (BinaryPart) inputElement;
 			String fullyqualifiedPartName = part.getFullyQualifiedName();
 			IProject project = part.getEGLProject().getProject();
-//TODO EDT Fix for BinaryPart when Util is available			
-//			IFile file = Util.findPartFile(fullyqualifiedPartName, EGLCore.create(project));
-//			if(file != null){
-//				EditorUtility.openClassFile(project, file.getFullPath().toString(), fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-//			} else{
-//				String filePath = Util.findPartFilePath(fullyqualifiedPartName, EGLCore.create(project));
-//				openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-//			}
-		}
+            		
+			IFile file = Util.findPartFile(fullyqualifiedPartName, EGLCore.create(project));
+			if(file != null){
+				EditorUtility.openClassFile(project, file.getFullPath().toString(), fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+			} else{
+				String filePath = Util.findPartFilePath(fullyqualifiedPartName, EGLCore.create(project));
+				openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+			}
+		}*/
 		
-		IEditorInput input= getEditorInput(inputElement);
 		if (input instanceof IFileEditorInput) {
 			IFileEditorInput fileInput= (IFileEditorInput) input;
 			return openInEditor(fileInput.getFile(), activate);
+		} else if(input instanceof BinaryEditorInput) {
+			BinaryEditorInput fileInput = (BinaryEditorInput) input;
+			IClassFile classFile = fileInput.getClassFile();
+			if(classFile instanceof ClassFile){
+				return openClassFile((ClassFile)classFile, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+			}
 		}
 		
 		if (input != null)
@@ -214,8 +224,8 @@ public class EditorUtility {
 		return null;
 	}
 
-	//TODO handle cases when element is an IClassFile
 	private static IEditorInput getEditorInput(IEGLElement element) throws EGLModelException {
+		IEGLElement root = element;
 		while (element != null) {
 			if (element instanceof IWorkingCopy && ((IWorkingCopy) element).isWorkingCopy()) 
 				element= ((IWorkingCopy) element).getOriginalElement();
@@ -225,6 +235,18 @@ public class EditorUtility {
 					IResource resource= unit.getResource();
 					if (resource instanceof IFile)
 						return new FileEditorInput((IFile) resource);
+			} else if (element instanceof IClassFile) {
+				if(root instanceof BinaryPart){
+					BinaryPart part = (BinaryPart) root;
+					String irFullQualifiedFile = part.getFullyQualifiedName();
+					IProject project = part.getEGLProject().getProject();
+					String eglarFilePath = Util.findPartFilePath(irFullQualifiedFile, EGLCore.create(project));
+					
+					BinaryReadOnlyFile storage = getBinaryReadonlyFile(project, eglarFilePath, irFullQualifiedFile);
+					BinaryEditorInput input = new BinaryEditorInput(storage);
+					input.setClassFile((IClassFile)element);
+					return input;
+				}
 			}
 			
 			element= element.getParent();
@@ -453,12 +475,12 @@ public class EditorUtility {
 		if(input == null) {
 			return null;
 		}
-		if(org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj)){
+		//if(org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj)){
 			IClassFile classFile = input.getClassFile();
 			if(classFile instanceof ClassFile){
 				return openClassFile((ClassFile)classFile, editorId);
 			}
-		}
+		//}
 		return null;
 	}
 	
@@ -520,10 +542,6 @@ public class EditorUtility {
 		
 		return null;
 	}
-	
-//	public static IEditorPart openClassFileInBinaryEditor(final ClassFile classFile, final IProject proj, final String eglarFilePath, final String irFullQualifiedFile){
-//		return openClassFileInBinaryEditor(classFile, proj, eglarFilePath, irFullQualifiedFile, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-//	}
 	
 	public static IEditorPart openClassFileInBinaryEditor(final ClassFile classFile, final IProject proj, final String eglarFilePath, final String irFullQualifiedFile, final String editorId){
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
