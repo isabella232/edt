@@ -92,14 +92,18 @@ public class BinaryElementParser {
 			
 			try {
 				obj = deserializer.deserialize();
-				packageName = obj.getEClass().getPackageName().toCharArray();
-				requestor.enterEGLFile();
-				if(packageName != null) {
-					requestor.acceptPackage(0, 0, packageName);
-				}
 				
 				if (obj instanceof Part) {
 					part = (Part)obj;
+					String fullyQualifiedName = part.getFullyQualifiedName();
+					if (fullyQualifiedName.indexOf('.') >= 0)
+						fullyQualifiedName = fullyQualifiedName.substring(0,fullyQualifiedName.lastIndexOf('.'));
+					packageName = fullyQualifiedName.toCharArray();
+					requestor.enterEGLFile();
+					if(packageName != null) {
+						requestor.acceptPackage(0, 0, packageName);
+					}
+					
 					handleEnterPart(part);
 				}
 			}catch(DeserializationException ex) {
