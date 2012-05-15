@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xml:lang="en-us" lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Creating an EGL external type"></meta>
+<meta name="abstract" content="The IDE provides a fast way for you to embed an external capability that is already available to your EGL project."></meta>
+<meta name="description" content="The IDE provides a fast way for you to embed an external capability that is already available to your EGL project."></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt00500.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="tedt00586"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../PRODUCT_PLUGIN/style/commonltr.css"></link>
+<title>Creating an EGL external type</title>
+</head>
+<body id="tedt00586">
+
+
+<h1 class="title topictitle1">Creating an EGL external type</h1>
+
+
+<div class="body" id="body"><p class="shortdesc">The IDE provides a fast way for you to embed
+an external capability that is already available to your EGL project. </p>
+
+<div class="p">First, ensure that any Java code that you want to embed is either
+in your project or is available on the Java build path of your project.
+To access the Java build path, do as follows: <ol class="ol">
+<li class="li">Right click your project.</li>
+
+<li class="li">Click <span class="ph uicontrol">Properties</span>. </li>
+
+<li class="li">At the Java Build Path pane, click <span class="ph uicontrol">Add</span>.
+The Required Project Selection dialog is displayed.</li>
+
+<li class="li">Select the projects of interest and click <span class="ph uicontrol">OK</span>.
+The Java Build Path pane is made available again.</li>
+
+<li class="li">Click <span class="ph uicontrol">OK</span>. </li>
+
+</ol>
+</div>
+
+<div class="p">Here are the steps for creating an EGL external type:<ol class="ol">
+<li class="li">Right click a package and do the fastest process available:<ul class="ul">
+<li class="li">Click <span class="ph menucascade"><span class="ph uicontrol">New</span> &gt; <span class="ph uicontrol">External
+Type</span></span>; or</li>
+
+<li class="li">Click <span class="ph menucascade"><span class="ph uicontrol">New</span> &gt; <span class="ph uicontrol">Other</span></span>, expand <strong class="ph b">EGL</strong>, and click <strong class="ph b">ExternalType</strong>.</li>
+
+</ul>
+<p class="p">The New External Type wizard is displayed.</p>
+</li>
+
+<li class="li">Specify the file name.</li>
+
+<li class="li">Click <strong class="ph b">External Type from Java Type</strong>. The External Type from
+Java Type page is displayed.</li>
+
+<li class="li">Click <strong class="ph b">Browse</strong> to display the Choose a Java Type dialog.
+Type the initial characters of the Java class or interface name and
+double click a listed name. </li>
+
+<li class="li">Back at the External Type from Java Type page, select the type.
+Alternatively, you can expand the type and select the public fields,
+methods, and constructors to include in your external type.</li>
+
+<li class="li">You can click <strong class="ph b">Next</strong> to preview the output, which you can
+change only by returning to a previous page or by updating the file
+when the file is created.</li>
+
+<li class="li">Click <strong class="ph b">Finish</strong>. The IDE creates an external type for you
+to customize, and the procedure ends.</li>
+
+</ol>
+</div>
+
+<div class="p">For details on the external type for Java, see the following topic:<ul class="ul">
+<li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00278.html" title="An ExternalType part with the JavaObject stereotype defines how you can access an external Java class or interface from your EGL code. The part typically identifies all the public fields, methods, and constructors of the class or interface, but might identify a subset of interest.">ExternalType stereotype JavaObject</a></li>
+
+</ul>
+</div>
+
+<div class="p">You can create an external type for JavaScript, although the wizard
+is not yet available. For details, see the following topic:<ul class="ul">
+<li class="li"><a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics/redt00279.html" title="With EGL, your Rich UI application can access non-generated JavaScript. You might be making general logic available—for example, to provide a random number generator—or you might be referencing a non-EGL widget—for example, to allow use of a Dojo widget inside your code.">ExternalType stereotype JavaScriptObject</a></li>
+
+</ul>
+</div>
+
+</div>
+
+<div class="related-links">
+<div class="familylinks">
+</div>
+</div>
+
+</body>
+</html>
