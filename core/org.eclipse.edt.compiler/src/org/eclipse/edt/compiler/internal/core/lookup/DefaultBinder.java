@@ -5208,7 +5208,7 @@ public abstract class DefaultBinder extends AbstractBinder {
     private String getSign(Node node, boolean hasNegativeSign) {
     	
     	if (node instanceof ParenthesizedExpression) {
-    		return getSign(((ParenthesizedExpression)node).getExpression(), hasNegativeSign);
+    		return getSign(node.getParent(), hasNegativeSign);
     	}
     	if (node instanceof UnaryExpression) {
     		UnaryExpression unary = (UnaryExpression) node;
