@@ -794,6 +794,9 @@ egl.eglx.lang.ETime.equals = function (x, y) {
 egl.eglx.lang.ETime.notEquals = function (x, y) {   
 	return !egl.timeEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
 };
+egl.eglx.lang.ETime.compareTo = function (x, y) {   
+	return egl.eglx.lang.ETimestamp.compareTo(x, y);
+};
 
 egl.eglx.lang.ETime.extend = function(/*extension*/ time, /*optional mask*/pattern ) {
 	if (time === null)
