@@ -647,7 +647,7 @@
 			default="true"
 			name="%BinaryEditorName"
 			icon="icons/obj16/eglfile_obj.gif"
-			extensions="ir"
+			extensions="eglxml"
 			class="org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor" />   
 		<editor
 	        id = "org.eclipse.edt.ide.ui.EGLDeploymentDescriptorEditor"

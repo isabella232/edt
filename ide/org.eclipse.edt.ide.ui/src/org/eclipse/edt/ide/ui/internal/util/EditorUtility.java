@@ -123,20 +123,6 @@ public class EditorUtility {
 		
 		IEditorInput input= getEditorInput(inputElement);
 		
-		/*if(inputElement instanceof BinaryPart){
-			BinaryPart part = (BinaryPart) inputElement;
-			String fullyqualifiedPartName = part.getFullyQualifiedName();
-			IProject project = part.getEGLProject().getProject();
-            		
-			IFile file = Util.findPartFile(fullyqualifiedPartName, EGLCore.create(project));
-			if(file != null){
-				EditorUtility.openClassFile(project, file.getFullPath().toString(), fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-			} else{
-				String filePath = Util.findPartFilePath(fullyqualifiedPartName, EGLCore.create(project));
-				openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-			}
-		}*/
-		
 		if (input instanceof IFileEditorInput) {
 			IFileEditorInput fileInput= (IFileEditorInput) input;
 			return openInEditor(fileInput.getFile(), activate);
@@ -533,7 +519,7 @@ public class EditorUtility {
 			String eglarPath = classFile.getPath().toString();
 			String sourceFileName = getClassFileSource(classFile, proj);
 			if(null != sourceFileName && "" != sourceFileName){
-				openSourceFromEglarInBinaryEditor(classFile, proj, eglarPath, sourceFileName, editorId);
+				return openSourceFromEglarInBinaryEditor(classFile, proj, eglarPath, sourceFileName, editorId);
 			}else{
 				String fullyqualifiedPartName = getClassFilePartSignature(classFile,proj);
 				return EditorUtility.openClassFileInBinaryEditor(classFile, proj, eglarPath, fullyqualifiedPartName, editorId);

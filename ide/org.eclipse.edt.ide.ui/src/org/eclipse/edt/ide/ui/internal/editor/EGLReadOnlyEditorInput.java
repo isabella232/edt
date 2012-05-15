@@ -20,14 +20,22 @@ import org.eclipse.ui.IStorageEditorInput;
 public class EGLReadOnlyEditorInput implements IStorageEditorInput {
     private EGLReadOnlyFile eglReadOnlyFile;
     
-    public EGLReadOnlyEditorInput(EGLReadOnlyFile binaryReadOnlyFile) {this.eglReadOnlyFile = binaryReadOnlyFile;}
-    public boolean exists() {return true;}
-    public ImageDescriptor getImageDescriptor() {return null;}
+    public EGLReadOnlyEditorInput(EGLReadOnlyFile binaryReadOnlyFile) {
+    	this.eglReadOnlyFile = binaryReadOnlyFile;
+    }
+    
+    public boolean exists() {
+    	return true;
+    }
+    
+    public ImageDescriptor getImageDescriptor() {
+    	return null;
+    }
     
     /*
-	 * get the ir file name (without package, with extension)
+	 * get the IR file name (without package, with extension)
 	 * e.g.
-	 * demointerface.ir
+	 * demointerface.eglxml
 	 */
     public String getName() {
        return eglReadOnlyFile.getName();
@@ -48,11 +56,11 @@ public class EGLReadOnlyEditorInput implements IStorageEditorInput {
     }
     
     /*
-	 * get the full path for the ir file
+	 * get the full path for the IR file
 	 * e.g.
-	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * TestProj1/Test.eglar|demointerface.ir
+	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+	 * TestProj1/Test.eglar|demointerface.eglxml
 	 * 
 	 */
     public String getFullPath() {

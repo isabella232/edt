@@ -61,11 +61,11 @@ public class EGLReadOnlyFile implements IStorage {
 	  }
 	  
 	  /*
-	 * get the full path for the ir file
+	 * get the full path for the IR file
 	 * e.g.
-	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * TestProj1/Test.eglar|demointerface.ir
+	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+	 * TestProj1/Test.eglar|demointerface.eglxml
 	 * 
 	 */
 	  public IPath getFullPath() {
@@ -112,10 +112,8 @@ public class EGLReadOnlyFile implements IStorage {
 			  ZipEntry ze = new ZipEntry(fileString);
 			  out = new String(Util.getZipEntryByteContent(ze, zip));
 		  } catch (ZipException e) {
-			// TODO Auto-generated catch block
 			  e.printStackTrace();
 		  } catch (IOException e) {
-			// TODO Auto-generated catch block
 			  e.printStackTrace();
 		  }
 		  
