@@ -8,8 +8,8 @@
 <meta name="DC.Title" content="Developing and running test cases with EUnit"></meta>
 <meta name="abstract" content="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package."></meta>
 <meta name="description" content="EUnit is a framework used to write and run repeatable test cases and to create reports about the results. The framework code is in the org.eclipse.edt.eunit.runtime package."></meta>
-<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="tedt01006"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -22,14 +22,14 @@
 <h1 class="title topictitle1">Developing and running test cases with EUnit</h1>
 
 
-<div class="body"><p class="shortdesc">EUnit is a framework used to write and run repeatable test
-cases and to create reports about the results. The framework code
-is in the org.eclipse.edt.eunit.runtime package.</p>
+<div class="body"><p class="shortdesc">EUnit is a framework used to write and run repeatable
+test cases and to create reports about the results. The framework
+code is in the org.eclipse.edt.eunit.runtime package.</p>
 
 <p class="p">An interactive process is available for running tests. A batch
 mechanism is planned to let you run tests automatically; for example,
 to run tests overnight. However, only the interactive process is in
-place in version .7.</p>
+place at this time.</p>
 
 <div class="p">Here are details about the EUnit Framework, in an order that reflects
 how you can practice using it: <ol class="ol">
@@ -40,6 +40,8 @@ how you can practice using it: <ol class="ol">
 <li class="li"><a class="xref" href="#running">Running your test cases</a></li>
 
 <li class="li"><a class="xref" href="#reviewing">Reviewing the test reports</a></li>
+
+<li class="li"><a class="xref" href="#asynch">Working with JavaScript asynchronous</a></li>
 
 </ol>
 </div>
@@ -132,8 +134,8 @@ one for each field value of interest.</p>
 </ul>
 </div>
 
-<div class="p">The following functions are meant for use in test cases, rather
-than being primarily for use by the EUnit test framework: <ul class="ul">
+<div class="p">The following LogResult functions are meant for use in test cases,
+rather than being primarily for use by the EUnit test framework: <ul class="ul">
 <li class="li"><span class="ph synph"><span class="keyword kwd">LogResult.assertTrue</span></span>, which is shown
 earlier in the <samp class="ph codeph">test01</samp> function.</li>
 
@@ -163,7 +165,7 @@ Reference entry: <a class="xref" href="../../org.eclipse.edt.core.doc.lr/topics
 <div class="body">
 <p class="p">A <dfn class="term">test driver</dfn> is a project from which you run the
 test cases. A test driver is language specific, including only the
-test cases that were targeted for a given language. </p>
+test cases that were targeted for a given language.</p>
 
 <div class="p">To specify the target languages for a given test case, assign values
 to the <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field of the Test annotation,
@@ -171,7 +173,8 @@ as shown earlier in <samp class="ph codeph">test02</samp> and <samp class="ph co
 Here is further detail:<ul class="ul">
 <li class="li">The <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field takes a list of
 enumeration values of type <span class="ph synph"><span class="keyword kwd">TargetLangKind</span></span>.
-In Eclipse IDE for EGL Developers, the valid values are Java and JavaScript. </li>
+In Eclipse IDE for EGL Web Developers, the valid values are Java and
+JavaScript. </li>
 
 <li class="li">If you do not specify the <span class="ph synph"><span class="keyword kwd">targetLang</span></span> field
 in a test case, the effect is the same as specifying a list that includes
@@ -226,7 +229,8 @@ and then the <span class="ph uicontrol">eunitgen</span> package.</li>
 
 </ul>
 <ul class="ul">
-<li class="li">If the test driver is for JavaScript, do as follows: <ol class="ol" type="a">
+<li class="li">If the test driver is for either JavaScript or JavaScript asynchronous,
+do as follows: <ol class="ol" type="a">
 <li class="li">Right click <span class="ph uicontrol">RunAllTests_rui.egl</span>.</li>
 
 <li class="li">Click <span class="ph uicontrol">Run as &gt; EGL Rich UI Application</span>.</li>
@@ -281,10 +285,128 @@ link in the middle of the library-specific report.</li>
 </ol>
 </div>
 
-<div class="p">If you run the example code in version .7, the detailed output
-is as follows:<div class="fig fignone">
+<div class="p">The detailed output is as follows:<div class="fig fignone">
 <br></br><div class="imagecenter"><img class="image imagecenter" src="../images/tedt_eunit_detail.jpg" alt="Example of a library-specific report"></img></div><br></br>
 </div>
+</div>
+
+</div>
+
+</div>
+
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="asynch">
+<h2 class="title topictitle2">Working with JavaScript asynchronous</h2>
+
+<div class="body">
+<div class="p">When you work with the JavaScript asynchronous option, you verify
+results in a callback function, one per test. The callback function
+has the following characteristics:<ul class="ul">
+<li class="li">Wraps the assertion statements in a <strong class="ph b">try</strong> block.</li>
+
+<li class="li">Calls TestListMgr.NextTest, which ensures that the EUnit framework
+runs the sequentially next test.</li>
+
+<li class="li">Handles exceptions by using the following helper methods from
+the TestListMgr library:<ul class="ul">
+<li class="li">TestListMgr.caughtAnyException</li>
+
+<li class="li">TestListMgr.caughtFailedAssertion</li>
+
+<li class="li">TestListMgr.handleCallBackException</li>
+
+</ul>
+</li>
+
+</ul>
+</div>
+
+<p class="p">The next example demonstrates how to use the TestListMgr library,
+which includes additional functions that you can ignore because their
+purpose is to support the EUnit framework.</p>
+
+<div class="p">Consider the following Service type, which receives a list of integers
+and returns the average:<pre class="pre codeblock">package server;
+ 
+Service MyServiceType
+ 
+   function calculate(myScores Int[] in) returns (Decimal(4,2))
+      numberOfScores, i, mySum Int;
+      numberOfScores = myScores.getSize();
+
+      for (i from 1 to numberOfScores by 1)
+         mySum = myScores[i] + mySum;
+      end
+
+      return(mySum/numberOfScores);
+   end
+end</pre>
+</div>
+
+<div class="p">The following test cases ensure that the service returns the expected
+values:<pre class="pre codeblock">package client;
+
+import org.eclipse.edt.eunit.runtime.AssertionFailedException;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Test;
+import org.eclipse.edt.eunit.runtime.TestListMgr;
+import eglx.lang.AnyException;
+import server.MyServiceType;
+
+library MyLibrary
+
+   function test01(){@Test}
+      myBindingVar httpProxy;
+      myList int[] =[2, 3];
+
+      call MyServiceType.calculate(myList) 
+         using myBindingVar
+         returning to theCallBack01 
+         onException theExceptionHandler;
+      end
+
+   function test02(){@Test}
+      myBindingVar httpProxy;
+      myList int[] =[2, 3, 4];
+
+      call MyServiceType.calculate(myList) 
+         using myBindingVar 
+         returning to theCallBack02
+         onException theExceptionHandler;
+   end
+
+   function theCallBack01(retResult decimal(4, 2) in, http IHttp)
+      index int;
+
+      try
+         LogResult.assertDecimalEqual("Problem with Test01", 2.5, retResult);
+
+         onException(e1 AssertionFailedException)
+            TestListMgr.caughtFailedAssertion(e1);
+
+         onException(e AnyException)
+            TestListMgr.caughtAnyException(e);
+      end
+      TestListMgr.nextTest();
+   end
+
+   function theCallBack02(retResult decimal(4, 2) in, http IHttp)
+      index int;
+
+      try
+         LogResult.assertDecimalEqual("Problem with Test02", 3.0, retResult);
+
+         onException(e1 AssertionFailedException)
+            TestListMgr.caughtFailedAssertion(e1);
+         onException(e AnyException)
+            TestListMgr.caughtAnyException(e);
+      end
+      TestListMgr.nextTest();
+   end
+
+   function theExceptionHandler(exp AnyException in, http IHttp in)
+      TestListMgr.handleCallBackException(exp, http);
+   end
+end</pre>
 </div>
 
 </div>

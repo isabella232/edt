@@ -13,8 +13,8 @@
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01032.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01033.html"></meta>
-<meta name="copyright" content="(C) Copyright 2011" type="primary"></meta>
-<meta name="DC.Rights.Owner" content="(C) Copyright 2011" type="primary"></meta>
+<meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="cedt01030"></meta>
 <meta name="DC.Language" content="en-us"></meta>
@@ -46,7 +46,7 @@ is as follows: <ol class="ol">
 
 <li class="li">Relate a variable to the stored resource binding in either of
 two ways: <ul class="ul">
-<li class="li">By invoking the<strong class="ph b"> SysLib.getResource</strong> function; or</li>
+<li class="li">By invoking the<strong class="ph b">Resources.getResource</strong> function; or</li>
 
 <li class="li">By writing a <strong class="ph b">Resource</strong> annotation.</li>
 
@@ -62,8 +62,8 @@ example, the <strong class="ph b">add</strong> or <strong class="ph b">get</stro
 
 </ol>
 </div>
-<div class="p">Here is an example use of the <strong class="ph b">SysLib.getResource</strong> function,
-which can be invoked only inside an EGL function: <pre class="pre codeblock">myBindingVar HttpRest? = SysLib.getResource("binding:myEntry");
+<div class="p">Here is an example use of the <strong class="ph b">Resources.getResource</strong> function,
+which can be invoked only inside an EGL function: <pre class="pre codeblock">myBindingVar HttpRest? = Resources.getResource("binding:myEntry");
 </pre>
 </div>
 <p class="p">The function call requires a single argument, which
@@ -79,10 +79,10 @@ the binding variable. For example, the missing value for the <strong class="ph b
 in the following annotation is <samp class="ph codeph">"binding:myBindingVar"</samp>:<pre class="pre codeblock">myBindingVar HttpRest{@Resource};</pre>
 </div>
 <div class="p">Whether
-you specify the <strong class="ph b">SysLib.getResource</strong> function or <strong class="ph b">Resource</strong> annotation,
+you specify the <strong class="ph b">Resources.getResource</strong> function or <strong class="ph b">Resource</strong> annotation,
 you can use an extended format ("binding:file:<em class="ph i">fileName</em>#<em class="ph i">entry</em>")
 to identify the EGL deployment descriptor that contains the entry.
-Here is an example:<pre class="pre codeblock">myBindingVar HttpRest? = SysLib.getResource("binding:file:myDDFile#myEntry"); 
+Here is an example:<pre class="pre codeblock">myBindingVar HttpRest? = Resources.getResource("binding:file:myDDFile#myEntry"); 
 
 // equivalent annotation
 myBindingVar HttpRest?{@Resource{uri = "binding:file:myDDFile#myEntry"}};</pre>
