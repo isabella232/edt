@@ -32,20 +32,128 @@ public class Bug379176Test extends ValidationTestCase {
 	}
 
 	/*
-	 * y1 int = 2147483648;
-	 * 1 validation message is expected.
-	 */
-	public void testLine5() {
-		List messages = getMessagesAtLine( 5 );
-		assertEquals( 1, messages.size() );
-	}
-
-	/*
-	 * y1 int = 2147483647;
+	 * x3 int = -(2147483648);
 	 * 0 validation messages are expected.
 	 */
 	public void testLine6() {
 		List messages = getMessagesAtLine( 6 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * x4 int = -(2147483649);
+	 * 1 validation message is expected.
+	 */
+	public void testLine7() {
+		List messages = getMessagesAtLine( 7 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * x5 int = (-2147483648);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine9() {
+		List messages = getMessagesAtLine( 9 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * x6 int = (-2147483649);
+	 * 1 validation message is expected.
+	 */
+	public void testLine10() {
+		List messages = getMessagesAtLine( 10 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * x7 int = -(-2147483647);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine12() {
+		List messages = getMessagesAtLine( 12 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * x8 int = -(-2147483648);
+	 * 1 validation message is expected.
+	 */
+	public void testLine13() {
+		List messages = getMessagesAtLine( 13 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * y1 int = 2147483648;
+	 * 1 validation message is expected.
+	 */
+	public void testLine16() {
+		List messages = getMessagesAtLine( 16 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * y2 int = 2147483647;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine17() {
+		List messages = getMessagesAtLine( 17 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * y3 int = +2147483648;
+	 * 1 validation message is expected.
+	 */
+	public void testLine19() {
+		List messages = getMessagesAtLine( 19 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * y4 int = +2147483647;
+	 * 0 validation messages are expected.
+	 */
+	public void testLine20() {
+		List messages = getMessagesAtLine( 20 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * y5 int = +(2147483648);
+	 * 1 validation message is expected.
+	 */
+	public void testLine22() {
+		List messages = getMessagesAtLine( 22 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * y6 int = +(2147483647);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine23() {
+		List messages = getMessagesAtLine( 23 );
+		assertEquals( 0, messages.size() );
+	}
+
+	/*
+	 * y7 int = (+2147483648);
+	 * 1 validation message is expected.
+	 */
+	public void testLine25() {
+		List messages = getMessagesAtLine( 25 );
+		assertEquals( 1, messages.size() );
+	}
+
+	/*
+	 * y8 int = (+2147483647);
+	 * 0 validation messages are expected.
+	 */
+	public void testLine26() {
+		List messages = getMessagesAtLine( 26 );
 		assertEquals( 0, messages.size() );
 	}
 }
