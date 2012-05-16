@@ -118,7 +118,7 @@ public class BindingResourceProcessor {
 	
 	protected URI getDefaultDDURI() throws AnyException {
 		Executable app = Runtime.getRunUnit().getActiveExecutable();
-		String dd = "";
+		String dd = null;
 		if (app != null) {
 			dd = SysLib.getProperty(Constants.APPLICATION_PROPERTY_FILE_NAME_KEY + "." + app.getClass().getCanonicalName());
 		}
