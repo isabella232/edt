@@ -45,6 +45,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
 
 public abstract class EGLHandler extends AbstractHandler implements IHandler {
 
@@ -73,7 +74,9 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 					IEGLElement element = EGLCore.create(resource);
 					fSite = editor.getSite();
 					fSelection = new StructuredSelection( element );
-				}			
+				} else if (editorInput instanceof EGLReadOnlyEditorInput){
+					fSelection = new StructuredSelection( ((EGLReadOnlyEditorInput)editorInput).getClassFile() );
+				}
 		    }			
 		}
 		

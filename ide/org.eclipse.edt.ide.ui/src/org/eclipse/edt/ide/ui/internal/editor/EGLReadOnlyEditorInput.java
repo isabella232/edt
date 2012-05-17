@@ -12,6 +12,7 @@
 package org.eclipse.edt.ide.ui.internal.editor;
 
 import org.eclipse.core.resources.IStorage;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
@@ -19,6 +20,7 @@ import org.eclipse.ui.IStorageEditorInput;
 
 public class EGLReadOnlyEditorInput implements IStorageEditorInput {
     private EGLReadOnlyFile eglReadOnlyFile;
+    private IClassFile classFile;
     
     public EGLReadOnlyEditorInput(EGLReadOnlyFile binaryReadOnlyFile) {
     	this.eglReadOnlyFile = binaryReadOnlyFile;
@@ -69,6 +71,14 @@ public class EGLReadOnlyEditorInput implements IStorageEditorInput {
     
     public String getProject(){
     	return eglReadOnlyFile.getProject();
+    }
+    
+    public IClassFile getClassFile() {
+		return classFile;
+	}
+    
+    public void setClassFile(IClassFile classFile) {
+    	this.classFile = classFile;
     }
     
     public boolean equals(Object o) {

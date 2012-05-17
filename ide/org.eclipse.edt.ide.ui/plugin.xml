@@ -305,7 +305,10 @@
 			<command commandId="org.eclipse.edt.ide.ui.navigate.openOnSelection">
        	 		<visibleWhen>
        				<with variable="activePartId">
+       				  <or>
        					<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+       					<equals value="org.eclipse.edt.ide.ui.BinaryFileEditor"/>
+       				  </or>
        				</with>
      			</visibleWhen>
      		</command>

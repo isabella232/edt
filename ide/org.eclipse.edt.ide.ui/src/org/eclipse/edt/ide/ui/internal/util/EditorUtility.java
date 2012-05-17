@@ -552,8 +552,10 @@ public class EditorUtility {
 		
 		if(input == null) {
 			return null;
-		}
+		} 
+		
 		try {
+			input.setClassFile(classFile);
 			return ww.getActivePage().openEditor(
 			input, editorId, true);
 		} catch (PartInitException e) {
