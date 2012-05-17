@@ -16,7 +16,9 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.AsExpression;
+import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Type;
 
 public class SmallintTypeTemplate extends JavaTemplate {
 
@@ -39,4 +41,10 @@ public class SmallintTypeTemplate extends JavaTemplate {
 		} else
 			ctx.invokeSuper(this, genConversionOperation, type, ctx, out, arg);
 	}
+	
+	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
+		//if the left side is a Short the statement must be broken into LHS = LSH op RHS
+		return expr.getLHS().isNullable();
+	}
+
 }
