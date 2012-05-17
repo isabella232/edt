@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -66,14 +66,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	}
 	
 	public boolean visit(CallbackTarget callbackTarget) {
-		return true;
-	}
-	
-	public boolean visit(CallReturns callReturns) {
-		return true;
-	}
-	
-	public boolean visit(CallSynchronizationValues callSynch) {
 		return true;
 	}
 	
@@ -329,10 +321,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(NullableType nullableType) {
-		return true;
-	}
-	
 	public boolean visit(NoCursorClause noCursorClause) {
 		return true;
 	}
@@ -380,11 +368,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public boolean visit(PrepareStatement prepareStatement) {
 		return true;
 	}
-	
-	public boolean visit(PrimitiveType primitiveType) {
-		return true;
-	}
-	
+		
 	public boolean visit(PrintStatement printStatement) {
 		return true;
 	}
@@ -576,10 +560,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(CallStatement callStatement) {}
 	
 	public void endVisit(CallbackTarget callbackTarget) {}
-
-	public void endVisit(CallSynchronizationValues callSynch) {}
-	
-	public void endVisit(CallReturns callReturns) {}
 	
 	public void endVisit(CaseStatement caseStatement) {}
 	
@@ -706,9 +686,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(NewExpression newExpression) {}
 	
 	public void endVisit(NullLiteral nullLiteral) {}
-	
-	public void endVisit(NullableType nullableType) {}
-	
+		
 	public void endVisit(NoCursorClause noCursorClause) {}
 	
 	public void endVisit(ObjectExpression objExpr) {}
@@ -732,9 +710,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(PassingClause passingClause) {}
 	
 	public void endVisit(PrepareStatement prepareStatement) {}
-	
-	public void endVisit(PrimitiveType primitiveType) {}
-	
+		
 	public void endVisit(PrintStatement printStatement) {}
 	
 	public void endVisit(Program program) {}

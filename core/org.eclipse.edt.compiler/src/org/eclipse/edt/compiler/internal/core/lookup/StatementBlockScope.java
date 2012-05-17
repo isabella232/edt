@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IDataBinding;
 
 
 /**
@@ -30,8 +29,4 @@ public class StatementBlockScope extends FunctionScope {
 		return declaredDataNames.contains(name) || parentLocalVariableScope.hasDeclaredDataName(name);
 	}
 	
-	public void addIOObject(IDataBinding ioObjectDataBinding) {
-		super.addIOObject(ioObjectDataBinding);
-		parentLocalVariableScope.addIOObject(ioObjectDataBinding);
-	}
 }

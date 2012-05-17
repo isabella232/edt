@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,18 +14,17 @@ package org.eclipse.edt.compiler.internal.sdk.compile;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Type;
 
 
 public class DependencyInfo implements IDependencyRequestor {
 
-    private Set topLevelFunctions = new HashSet();
+    private Set<FunctionPart> topLevelFunctions = new HashSet<FunctionPart>();
     private FunctionContainerScope functionContainerScope;
     private boolean recordTopLevelFunctions = true;
     
@@ -37,7 +36,7 @@ public class DependencyInfo implements IDependencyRequestor {
         return null;
     }
 
-    public Set getTopLevelFunctions() {
+    public Set<FunctionPart> getTopLevelFunctions() {
         return topLevelFunctions;
     }
 
@@ -49,15 +48,13 @@ public class DependencyInfo implements IDependencyRequestor {
 
     public void recordName(Name name) {}
 
-    public void recordBinding(IBinding binding) {}
-
     public void recordPackageBinding(IPackageBinding binding) {}
 
-    public void recordTypeBinding(ITypeBinding binding) {}
+    public void recordType(Type binding) {}
 
-    public void recordTopLevelFunctionBinding(IFunctionBinding binding) {
+    public void recordTopLevelFunction(FunctionPart function) {
         if(recordTopLevelFunctions){
-            topLevelFunctions.add(binding);            
+            topLevelFunctions.add(function);            
         }
     }
 
@@ -65,11 +62,11 @@ public class DependencyInfo implements IDependencyRequestor {
         this.functionContainerScope = scope;
     }
 
-    public void stopRecordingTopLevelFunctionBindings() {
+    public void stopRecordingTopLevelFunctions() {
         recordTopLevelFunctions = false;            
     }
 
-    public void startRecordingTopLevelFunctionBindings() {
+    public void startRecordingTopLevelFunctions() {
        recordTopLevelFunctions = true;            
     }        
 }

@@ -36,7 +36,7 @@ public class SystemLibraryManager {
         }
     }
        
-    public List<Member> findData(String simpleName) {
+    public List<Member> findMember(String simpleName) {
         return getLibraryData().get(simpleName);
     }
     

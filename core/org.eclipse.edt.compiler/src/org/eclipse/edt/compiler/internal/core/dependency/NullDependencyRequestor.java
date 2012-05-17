@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,11 +12,11 @@
 package org.eclipse.edt.compiler.internal.core.dependency;
 
 import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
+import org.eclipse.edt.mof.egl.FunctionPart;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -42,7 +42,7 @@ public class NullDependencyRequestor implements IDependencyRequestor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#recordPartBinding(org.eclipse.edt.compiler.binding.IPartBinding)
 	 */
-	public void recordTypeBinding(ITypeBinding typeBinding) {}
+	public void recordType(Type typeBinding) {}
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#recordFileDependency(java.lang.String[], java.lang.String)
@@ -67,7 +67,7 @@ public class NullDependencyRequestor implements IDependencyRequestor {
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#recordFunctionBinding(org.eclipse.edt.compiler.binding.IFunctionBinding)
 	 */
-	public void recordTopLevelFunctionBinding(IFunctionBinding binding) {}
+	public void recordTopLevelFunction(FunctionPart function) {}
 	
 	/* (non-Javadoc)
 	 * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#recordFunctionContainerScope(org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope)
@@ -77,14 +77,14 @@ public class NullDependencyRequestor implements IDependencyRequestor {
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#stopRecordingTopLevelFunctionBindings()
      */
-    public void stopRecordingTopLevelFunctionBindings() {
+    public void stopRecordingTopLevelFunctions() {
         // TODO Auto-generated method stub
         
     }
     /* (non-Javadoc)
      * @see org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor#startRecordingTopLevelFunctionBindings()
      */
-    public void startRecordingTopLevelFunctionBindings() {
+    public void startRecordingTopLevelFunctions() {
         // TODO Auto-generated method stub
         
     }

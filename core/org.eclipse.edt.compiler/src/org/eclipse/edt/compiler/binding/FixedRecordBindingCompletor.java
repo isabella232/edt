@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,7 +32,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.FixedStructureScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
+import org.eclipse.edt.compiler.internal.core.lookup.TypeScope;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -254,7 +254,7 @@ public class FixedRecordBindingCompletor extends FixedStructureBindingCompletor 
 		if (annotationIs(annotationType, new String[] { "egl", "core" }, "redefines")) {
 			if (dataBinding.getKind() == IDataBinding.STRUCTURE_ITEM_BINDING) {
 				Scope saveScope = currentScope;
-				currentScope = new TypeBindingScope(NullScope.INSTANCE, ((StructureItemBinding)dataBinding).getEnclosingStructureBinding(), null);
+				currentScope = new TypeScope(NullScope.INSTANCE, ((StructureItemBinding)dataBinding).getEnclosingStructureBinding(), null);
 				annotation.setValue(resolveRedefines(expr, value, dataBinding, null), null, null, compilerOptions, false);
 				currentScope = saveScope;
 				return;

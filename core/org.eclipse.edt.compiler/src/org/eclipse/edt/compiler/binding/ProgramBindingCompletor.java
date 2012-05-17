@@ -89,6 +89,7 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
 	        parameterBinding.setType(typeBinding);
 	        parameterBinding.setName(parameterNameNode.getCaseSensitiveIdentifier());
 	        parameterBinding.setIsNullable(parameterType.isNullableType());
+	        parameterBinding.setAccessKind(AccessKind.ACC_PRIVATE);
 	        
 	        if(definedDataNames.contains(parameterName)) {
 	        	problemRequestor.acceptProblem(
@@ -115,6 +116,11 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
     	catch(ClassCastException e) {
     		return null;
     	}
+    }
+    
+    @Override
+    protected boolean membersPrivateByDefault() {
+    	return true;
     }
     
 }

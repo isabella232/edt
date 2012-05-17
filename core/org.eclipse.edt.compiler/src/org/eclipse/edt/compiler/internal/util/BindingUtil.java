@@ -1,17 +1,25 @@
 package org.eclipse.edt.compiler.internal.util;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
+import org.eclipse.edt.mof.egl.ArrayType;
+import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
+import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -30,19 +38,19 @@ import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Library;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.ShowStatement;
-import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
-import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BindingUtil {
@@ -50,6 +58,27 @@ public class BindingUtil {
 	private static final String INVALID_ANNOTATION = "edt invalid";
 	
 	private static Annotation ValidAnn;
+	
+	private static Map<Type, WeakReference<ArrayType>> typeBindingsToArrayTypes = new WeakHashMap<Type, WeakReference<ArrayType>>();
+	private static Map<Type, WeakReference<ArrayType>> typeBindingsToArrayTypesNullable = new WeakHashMap<Type, WeakReference<ArrayType>>();
+	
+	private static Map<String, PackageAndPartName> aliasedTypesNames = new HashMap<String, PackageAndPartName>();
+	static {
+		aliasedTypesNames.put(NameUtile.getAsName("any"), new PackageAndPartName("eglx.lang", "EAny"));
+		aliasedTypesNames.put(NameUtile.getAsName("bigint"), new PackageAndPartName("eglx.lang", "EBigint"));
+		aliasedTypesNames.put(NameUtile.getAsName("boolean"), new PackageAndPartName("eglx.lang", "EBoolean"));
+		aliasedTypesNames.put(NameUtile.getAsName("date"), new PackageAndPartName("eglx.lang", "EDate"));
+		aliasedTypesNames.put(NameUtile.getAsName("decimal"), new PackageAndPartName("eglx.lang", "EDecimal"));
+		aliasedTypesNames.put(NameUtile.getAsName("dictionary"), new PackageAndPartName("eglx.lang", "EDictionary"));
+		aliasedTypesNames.put(NameUtile.getAsName("float"), new PackageAndPartName("eglx.lang", "EFloat"));
+		aliasedTypesNames.put(NameUtile.getAsName("int"), new PackageAndPartName("eglx.lang", "EInt"));
+		aliasedTypesNames.put(NameUtile.getAsName("number"), new PackageAndPartName("eglx.lang", "ENumber"));
+		aliasedTypesNames.put(NameUtile.getAsName("smallfloat"), new PackageAndPartName("eglx.lang", "ESmallfloat"));
+		aliasedTypesNames.put(NameUtile.getAsName("smallint"), new PackageAndPartName("eglx.lang", "ESmallint"));
+		aliasedTypesNames.put(NameUtile.getAsName("string"), new PackageAndPartName("eglx.lang", "EString"));
+		aliasedTypesNames.put(NameUtile.getAsName("timestamp"), new PackageAndPartName("eglx.lang", "ETimestamp"));
+	};
+
 
 	public static boolean isValid(Part part) {
 		return part != null && part.getAnnotation(INVALID_ANNOTATION) == null;
@@ -339,9 +368,14 @@ public class BindingUtil {
 	
 	public static Part findPart(String pkgName, String name) {
 		IPartBinding partBinding = PartEnvironmentStack.getCurrentEnv().getPartBinding(pkgName, name);
+		return getPart(partBinding);
+	}
+	
+	public static Part getPart(IPartBinding partBinding) {
 		if (partBinding == null) {
 			return null;
 		}
+
 		if (!(partBinding instanceof IRPartBinding)) {
 			return null;
 		}
@@ -622,6 +656,142 @@ public class BindingUtil {
 		
 		return null;
 	}
+	
+	public static Type getBaseType(Type type) {
+		if (type instanceof ArrayType) {
+			return getBaseType(((ArrayType)type).getElementType());
+		}
+		return type;
+	}
+	
+	public static List<Member> findPublicMembers(Type type, String id) {
+		if (type instanceof Container) {
+			
+			List<Member> list = new ArrayList<Member>();
+			for (Member mbr : ((Container)type).getAllMembers()) {
+				if (NameUtile.equals(id, mbr.getId())) {
+					if (!isPrivate(mbr)) {
+						list.add(mbr);
+					}
+				}
+			}
+			if (list.isEmpty()) {
+				return null;
+			}
+			return list;
+		}
+		return null;
+	}
 
+	public static List<Member> findMembers(Type type, String id) {
+		if (type instanceof Container) {
+			
+			List<Member> list = new ArrayList<Member>();
+			for (Member mbr : ((Container)type).getAllMembers()) {
+				if (NameUtile.equals(id, mbr.getId())) {
+					list.add(mbr);
+				}
+			}
+			if (list.isEmpty()) {
+				return null;
+			}
+			return list;
+		}
+		return null;
+	}
+
+	public static ArrayType getArrayType(Type elemType, boolean nullable)  {
+		Map<Type, WeakReference<ArrayType>> map;
+		
+		if (nullable) {
+			map = typeBindingsToArrayTypesNullable;
+		}
+		else {
+	    	map = typeBindingsToArrayTypes;
+		}
+		WeakReference<ArrayType> result = map.get(elemType);
+		
+    	if(result == null || result.get() == null) {
+    		
+    		ArrayType newArray = IrFactory.INSTANCE.createArrayType();
+    		newArray.setElementType(elemType);
+    		newArray.setElementsNullable(nullable);
+    		result = new WeakReference<ArrayType>(newArray);
+    		
+    		map.put(elemType, result);
+    	}
+    	return result.get();
+	}
+	
+	public static Type findAliasedType(String name) {
+		PackageAndPartName ppn = aliasedTypesNames.get(name);
+		if (ppn == null) {
+			return null;
+		}
+		
+		return findPart(ppn.getPackageName(), ppn.getPartName());
+	}
+	
+	public static Type getType(Member mbr) {
+		if (mbr instanceof Function) {
+			return null;
+		}
+		return mbr.getType();
+		
+	}
+	
+	public static Type getType(Object obj) {
+		if (obj instanceof Member) {
+			return getType((Member)obj);
+		}
+		if (obj instanceof Type) {
+			return (Type)obj;
+		}
+		return null;
+	}
+	
+	
+	public static boolean isDynamicallyAccessible(Type type) {
+		if (type == null) {
+			return false;
+		}
+		Classifier cls = type.getClassifier();
+		return cls.getAnnotation("egl.lang.reflect.Dynamic") != null;
+	}
+	
+	public static Member createDynamicAccessMember(Type type, String caseSensitiveName) {
+		if (isDynamicallyAccessible(type)) {
+			Field field = IrFactory.INSTANCE.createField();
+			field.setName(caseSensitiveName);			
+			field.setType(getEAny());
+			return field;
+		}
+		return null;
+	}
+	
+	public static Part getEAny() {
+		return findPart(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("eany"));
+	}
+	
+	public static boolean isPrivate(Part part) {
+		if (part == null) {
+			return false;
+		}
+		return part.getAccessKind() == AccessKind.ACC_PRIVATE;
+	}
+
+	public static boolean isPrivate(Member mbr) {
+		if (mbr == null) {
+			return false;
+		}
+		return mbr.getAccessKind() == AccessKind.ACC_PRIVATE;
+	}
+	
+	public static String getName(Element elem) {
+		if (elem instanceof NamedElement) {
+			return ((NamedElement)elem).getName();
+		}
+		return "";
+	}
 
 }

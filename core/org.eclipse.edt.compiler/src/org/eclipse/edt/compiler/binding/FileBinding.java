@@ -14,14 +14,16 @@ package org.eclipse.edt.compiler.binding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.mof.egl.Part;
+
 /**
  * @author winghong
  */
 public class FileBinding extends PartBinding {
 
     private IPackageBinding declaringPackage;
-    private List packageBindings;
-    private List partBindings;
+    private List<IPackageBinding> packageBindings;
+    private List<Part> partBindings;
     
     public FileBinding(String caseSensitivePackageName, String caseSensitiveInternedName) {
         super(caseSensitivePackageName, caseSensitiveInternedName);
@@ -35,16 +37,16 @@ public class FileBinding extends PartBinding {
         this.declaringPackage = declaringPackage;
     }
 
-    public List getPackageBindings() {
+    public List<IPackageBinding> getPackageBindings() {
         if(packageBindings == null) {
-            packageBindings = new ArrayList();
+            packageBindings = new ArrayList<IPackageBinding>();
         }
         return packageBindings;
     }
 
-    public List getPartBindings() {
+    public List<Part> getPartBindings() {
         if(partBindings == null) {
-            partBindings = new ArrayList();
+            partBindings = new ArrayList<Part>();
         }
         return partBindings;
     }

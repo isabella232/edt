@@ -92,10 +92,7 @@ public class IRPartBinding implements IPartBinding {
 	
 	@Override
 	public boolean isPrivate() {
-		if (irPart.getAccessKind() != null) {
-			return irPart.getAccessKind() == AccessKind.ACC_PRIVATE;
-		}
-		return false;
+		return BindingUtil.isPrivate(irPart);
 	}
 
 }

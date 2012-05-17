@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.ServiceBinding;
+import org.eclipse.edt.mof.egl.Service;
 
 /**
  * @author winghong
  */
 public class ServiceScope extends FunctionContainerScope {
     
-    public ServiceScope(Scope parentScope, ServiceBinding serviceBinding) {
+    public ServiceScope(Scope parentScope, Service serviceBinding) {
         super(parentScope, serviceBinding);
     }
 }

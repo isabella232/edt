@@ -1,24 +1,14 @@
-/*******************************************************************************
- * Copyright © 2012 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- * IBM Corporation - initial API and implementation
- *
- *******************************************************************************/
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
+import egl.lang.reflect.Dynamic;
 import egl.lang.reflect.mof.Operation;
 
 /**
  * EAny represents EGL's "any" type.  It is the supertype of all other types,
  * and as the name implies it can hold any kind of value.
  */
-externalType EAny type ClassType
+externalType EAny type ClassType {@Dynamic}
 	/**
 	 * {@Operation ==} Compares two EAnys.
 	 */

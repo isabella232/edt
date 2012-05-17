@@ -11,9 +11,15 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IBinding;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -31,40 +37,19 @@ public class SystemScope extends Scope {
         sysEnvironment = env;
     }
 
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findType(java.lang.String)
-     */
-    public ITypeBinding findType(String simpleName) {
-        ITypeBinding result = parentScope.findType(simpleName);
+    public List<Type> findType(String simpleName) {
+        List<Type> result = parentScope.findType(simpleName);
         if(result != null) return result;
         
-        result = sysEnvironment.getPartBinding(null,simpleName);
-        
-       return result;
-        
+        Part part = BindingUtil.getPart(sysEnvironment.getPartBinding(null,simpleName));
+        if (part == null) {
+        	return null;
+        }
+        List<Type> list = new ArrayList<Type>();
+        list.add(part);
+        return list;
     }
-
-     
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findData(java.lang.String)
-     */
-//    public IDataBinding findData(String simpleName) {
-//    	
-//        IDataBinding result = sysEnvironment.getSystemEnvironment().getSystemLibraryManager().findData(simpleName);
-//        if (result != null) {
-//            return result;
-//        }
-//        
-//        result = sysEnvironment.getSystemEnvironment().getEnumerationManager().findData(simpleName);
-//        if (result != null) {
-//            return result;
-//        }
-//        return parentScope.findData(simpleName);
-//    }
-
-    /* (non-Javadoc)
-     * @see org.eclipse.edt.compiler.internal.core.lookup.Scope#findPackage(java.lang.String)
-     */
+    
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
@@ -72,5 +57,23 @@ public class SystemScope extends Scope {
     public boolean isSystemScope() {
     	return true;
     }
+
+	@Override
+	public List<Member> findMember(String simpleName) {
+
+		List<Member> result = sysEnvironment.getSystemEnvironment().getSystemLibraryManager().findMember(simpleName);
+		if (result != null) {
+			return result;
+		}
+		
+		EnumerationEntry entry = sysEnvironment.getSystemEnvironment().getEnumerationManager().findData(simpleName);
+		if (entry != null) {
+			List<Member> list = new ArrayList<Member>();
+			list.add(entry);
+			return list;
+		}
+		
+		return parentScope.findMember(simpleName);
+	}
 
 }

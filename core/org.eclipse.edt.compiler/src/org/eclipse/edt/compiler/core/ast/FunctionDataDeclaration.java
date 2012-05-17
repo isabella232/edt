@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,13 +21,13 @@ import java.util.List;
  */
 public class FunctionDataDeclaration extends Statement {
 
-	private List ID_plus;	// List of SimpleNames
+	private List<Name> ID_plus;	// List of SimpleNames
 	private Type type;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	private boolean isConstant;
 
-	public FunctionDataDeclaration(List ID_plus, Type type, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
+	public FunctionDataDeclaration(List<Name> ID_plus, Type type, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.ID_plus = setParent( ID_plus );
@@ -44,7 +44,7 @@ public class FunctionDataDeclaration extends Statement {
 		this.isConstant = isConstant;
 	}
 	
-	public List getNames() {
+	public List<Name> getNames() {
 		return ID_plus;
 	}
 	

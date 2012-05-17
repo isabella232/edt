@@ -11,37 +11,36 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Type;
 
+
 /**
- * @author Harmon
+ * @author winghong
  */
-public class AnnotationRightHandScope extends Scope{
-    private IAnnotationTypeBinding binding;
-
-    public AnnotationRightHandScope(Scope parentScope, IAnnotationTypeBinding binding) {
+public class TypeScope extends Scope {
+    
+    private Type type;
+    
+    public TypeScope(Scope parentScope, Type type) {
         super(parentScope);
-        this.binding = binding;
+        this.type = type;
     }
 
-    public IDataBinding findData(String simpleName) {
-        if (binding.getEnumerationType() != null) {
-            IDataBinding result = binding.getEnumerationType().findData(simpleName);
-            if (result != IBinding.NOT_FOUND_BINDING) {
-                return result;
-            }
+    public List<Member> findMember(String simpleName) {
+        List<Member> result = find(simpleName);
+        
+        if (result != null) {
+        	return result;
         }
-        return parentScope.findData(simpleName);
+        return parentScope.findMember(simpleName);
     }
-
+    
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
@@ -49,4 +48,25 @@ public class AnnotationRightHandScope extends Scope{
     public List<Type> findType(String simpleName) {
         return parentScope.findType(simpleName);
     }
+
+    public Type getType() {
+        return type;
+    }
+    
+	private List<Member> find(String simpleName) {
+		Type myType = type;
+		if (myType == null) {
+			return null;
+		}
+		Member mbr = BindingUtil.createDynamicAccessMember(myType, simpleName);
+		if (mbr != null) {
+			List<Member> list = new ArrayList<Member>();
+			list.add(mbr);
+			return list;
+		}
+		
+		myType = BindingUtil.getBaseType(myType);
+		return BindingUtil.findMembers(myType, simpleName);		
+	}
+
 }

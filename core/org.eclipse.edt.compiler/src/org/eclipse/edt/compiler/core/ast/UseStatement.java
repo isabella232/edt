@@ -22,10 +22,10 @@ import java.util.List;
  */
 public class UseStatement extends Node {
 
-	private List name_plus;	// List of Names
+	private List<Name> name_plus;	// List of Names
 	private SettingsBlock settingsBlockOpt;
 
-	public UseStatement(List name_plus, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
+	public UseStatement(List<Name> name_plus, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name_plus = setParent(name_plus);
@@ -35,7 +35,7 @@ public class UseStatement extends Node {
 		}
 	}
 	
-	public List getNames() {
+	public List<Name> getNames() {
 		return name_plus;
 	}
 	

@@ -11,38 +11,44 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.DataTableBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Record;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * @author winghong
  */
-public class DataTableScope extends Scope {
+public class RecordScope extends Scope {
     
-    private DataTableBinding tableBinding;
+    private Record record;
     
-    public DataTableScope(Scope parentScope, DataTableBinding tableBinding) {
+    public RecordScope(Scope parentScope, Record record) {
         super(parentScope);
-        this.tableBinding = tableBinding;
+        this.record = record;
     }
 
-    public IDataBinding findData(String simpleName) {
-        IDataBinding result = tableBinding.findData(simpleName);
-        if(result != IBinding.NOT_FOUND_BINDING) return result;
+    public List<Member> findMember(String simpleName) {
+    	List<Member> result = BindingUtil.findMembers(record, simpleName);
+        if(result != null) return result;
         
-        return parentScope.findData(simpleName);
+        return parentScope.findMember(simpleName);
     }
 
     public IPackageBinding findPackage(String simpleName) {
         return parentScope.findPackage(simpleName);
     }
 
-    public ITypeBinding findType(String simpleName) {
+    public List<Type> findType(String simpleName) {
         return parentScope.findType(simpleName);
+    }
+    
+    public Part getPart() {
+    	return record;
     }
 
 }

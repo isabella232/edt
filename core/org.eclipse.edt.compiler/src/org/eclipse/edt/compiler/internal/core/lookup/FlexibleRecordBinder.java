@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -40,7 +40,7 @@ public class FlexibleRecordBinder extends DefaultBinder {
         record.accept(new FlexibleRecordBindingCompletor(scope, recordBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
         // The current scope only changes once the initial record binding is complete
-        currentScope = new FlexibleRecordScope(currentScope, recordBinding);
+        currentScope = new RecordScope(currentScope, recordBinding);
 
         // We will bind the rest of the record now
         return true;
@@ -56,7 +56,7 @@ public class FlexibleRecordBinder extends DefaultBinder {
     
 	public boolean visit(Assignment assignment) {
 		Scope currentScopeParent = currentScope.getParentScope();		
-		currentScope.setParentScope(new DefaultScope());
+		currentScope.setParentScope(NullScope.INSTANCE);
 		assignment.getLeftHandSide().accept(this);
 		currentScope.setParentScope(currentScopeParent);
 		assignment.getRightHandSide().accept(this);

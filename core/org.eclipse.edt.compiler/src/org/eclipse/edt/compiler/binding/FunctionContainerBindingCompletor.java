@@ -17,14 +17,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.core.Boolean;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Part;
-import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -36,25 +33,19 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Container;
-import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
-import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 /**
@@ -107,7 +98,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             problemRequestor
                     .acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
             if(classDataDeclaration.hasSettingsBlock()) {
-            	bindNamesToNotFound(classDataDeclaration.getSettingsBlockOpt());
+            	setBindAttemptedForNames(classDataDeclaration.getSettingsBlockOpt());
             }
             for (Name name : classDataDeclaration.getNames()) {
             	name.setBindAttempted(true);
@@ -145,7 +136,10 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             field.setType(type);
             field.setIsNullable(classDataDeclaration.getType().isNullableType());
             field.setName(name.getCaseSensitiveIdentifier());
-            field.setIsStatic(classDataDeclaration.isStatic());
+            field.setIsStatic(classDataDeclaration.isStatic() || membersStaticByDefault());
+            if (!BindingUtil.isPrivate(field) && membersPrivateByDefault()) {
+            	field.setAccessKind(AccessKind.ACC_PRIVATE);
+            }
             
             if (definedDataNames.contains(dataName) || definedFunctionNames.contains(dataName)) {
                 problemRequestor.acceptProblem(name, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { name.getCanonicalName(),
@@ -156,7 +150,6 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             }
             name.setMember(field);
             name.setType(type);
-            name.setBindAttempted(true);
         }
 
         return false;
@@ -181,6 +174,10 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
         nestedFunction.accept(functionBindingCompletor);
         
         nestedFunction.getName().setMember(function);
+        function.setIsStatic(function.isStatic() || membersStaticByDefault());
+        if (!BindingUtil.isPrivate(function) && membersPrivateByDefault()) {
+        	function.setAccessKind(AccessKind.ACC_PRIVATE);
+        }
                 
         if (definedDataNames.contains(name)) {
         	problemRequestor.acceptProblem(nestedFunction.getName(), IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { nestedFunction.getName().getCanonicalName(), functionContainerBinding.getCaseSensitiveName() });
@@ -256,12 +253,12 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
 
             Type typeBinding = null;
             try {
-                typeBinding = bindTypeName(nextName, true); 
+                typeBinding = bindTypeName(nextName); 
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e
                         .getInserts());
                 if (useStatement.hasSettingsBlock()) {
-                	bindNamesToNotFound(useStatement.getSettingsBlock());
+                	setBindAttemptedForNames(useStatement.getSettingsBlock());
                 }
                 continue;
             }
@@ -274,8 +271,8 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
                 usedTypes.add(typeBinding);
             }
             
-            if(typeBinding instanceof Library) {
-            	getFunctionContainerScope().addUsedLibrary((Library)typeBinding);
+            if(typeBinding instanceof org.eclipse.edt.mof.egl.Part) {
+            	getFunctionContainerScope().addUsedPart((org.eclipse.edt.mof.egl.Part)typeBinding);
             }
         }
         return false;
@@ -288,5 +285,12 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	return functionContainerScope;
     }
     
+    protected boolean membersStaticByDefault() {
+    	return false;
+    }
+
+    protected boolean membersPrivateByDefault() {
+    	return false;
+    }
     
 }

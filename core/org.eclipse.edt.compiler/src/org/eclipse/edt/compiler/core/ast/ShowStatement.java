@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -13,8 +13,6 @@ package org.eclipse.edt.compiler.core.ast;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.eclipse.edt.compiler.binding.ShowStatementBinding;
 
 
 /**
@@ -36,8 +34,6 @@ public class ShowStatement extends Statement {
 	private List showOptions;	// List of Nodes
 	private SettingsBlock settingsBlockOpt;
 	
-	private ShowStatementBinding statementBinding;
-
 	public ShowStatement(Expression expr, List showOptions, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
@@ -54,7 +50,7 @@ public class ShowStatement extends Statement {
 		return expr;
 	}
 	
-	public List getShowOptions() {
+	public List<Node> getShowOptions() {
 		return showOptions;
 	}
 	
@@ -87,11 +83,4 @@ public class ShowStatement extends Statement {
 		return new ShowStatement((Expression)expr.clone(), cloneList(showOptions), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 	
-	public ShowStatementBinding getStatementBinding() {
-        return statementBinding;
-    }
-	
-    public void setStatementBinding(ShowStatementBinding statementBinding) {
-        this.statementBinding = statementBinding;
-    }
 }

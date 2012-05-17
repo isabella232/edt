@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@ package org.eclipse.edt.compiler.core.ast;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
+import org.eclipse.edt.mof.egl.Annotation;
 
 
 /**
@@ -74,7 +74,7 @@ public static class Operator {
 	private Operator operator;
 	private Expression lhs;
 	private Expression rhs;
-	private IAnnotationBinding annotationBinding;
+	private Annotation annotationBinding;
 
 	public Assignment(Operator operator, Expression lhs, Expression rhs, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -86,11 +86,11 @@ public static class Operator {
 		rhs.setParent(this);
 	}
 	
-    public IAnnotationBinding resolveBinding() {
+    public Annotation resolveBinding() {
         return annotationBinding;
     }
     
-    public void setBinding(IAnnotationBinding binding) {
+    public void setBinding(Annotation binding) {
         this.annotationBinding = binding;
     }
 

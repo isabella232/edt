@@ -26,7 +26,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public abstract class Name extends Expression {
     
     protected String identifier;
-    protected Element element;
+    protected Object element;
     
     public static int IMPLICIT_QUALIFIER_DATA_BINDING = 0;
     public static int OVERLOADED_FUNCTION_SET = 1;
@@ -44,12 +44,12 @@ public abstract class Name extends Expression {
     	return identifier;
     }
     	    
-    public void setElement(Element elem) {
+    public void setElement(Object elem) {
         this.element = elem;
         super.setElement(elem);
     }
     
-    public Element resolveElement() {
+    public Object resolveElement() {
     	return element;
     }
     

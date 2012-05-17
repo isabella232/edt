@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -85,6 +85,7 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		}
 		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
 		enumerationField.getName().setBinding(enumDataBinding);
+		enumDataBinding.setStatic(true);  //PRH!!! make sure to do this!!
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
     		problemRequestor.acceptProblem(

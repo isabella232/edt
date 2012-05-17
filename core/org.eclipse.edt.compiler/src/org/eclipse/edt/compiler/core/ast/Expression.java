@@ -34,7 +34,7 @@ public abstract class Expression extends Node {
         return type;
     }
     
-    public Element resolveElement() {
+    public Object resolveElement() {
     	return null;
     }
     
@@ -45,7 +45,7 @@ public abstract class Expression extends Node {
     	return null;
     }
     
-    public void setElement(Element elem) {
+    public void setElement(Object elem) {
         setBindAttempted(true);
     }
 

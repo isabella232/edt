@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -218,7 +218,7 @@ public abstract class Part extends Node {
 
     protected boolean isPrivate;
 	protected SimpleName name;
-    protected List contents;
+    protected List<Node> contents;
     private String identifier;
 
     public Part(Boolean isPrivate, SimpleName name, List contents, int startOffset, int endOffset) {
@@ -235,7 +235,7 @@ public abstract class Part extends Node {
         return name;
     }
 
-    public List getContents() {
+    public List<Node> getContents() {
         return contents;
     }
     

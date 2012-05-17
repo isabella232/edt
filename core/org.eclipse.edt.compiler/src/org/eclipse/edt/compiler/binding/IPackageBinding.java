@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
+
 /**
  * @author winghong
  */

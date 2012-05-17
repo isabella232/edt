@@ -59,7 +59,7 @@ public class EnumerationManager {
 	public final static String VGUIRECORDPART = NameUtile.getAsName("VGUIRecordPart");
 	public final static String EXITSTATEMENT = NameUtile.getAsName("ExitStatement");	
 
-	private Map<String, EnumerationEntry> resolvableEnumDataBindings = Collections.EMPTY_MAP;
+	private Map<String, EnumerationEntry> resolvableEnumDataBindings = Collections.emptyMap();
     private static Enumeration ElementKind = null;
     private static IRPartBinding ElementKindBinding = null;
    
@@ -120,7 +120,7 @@ public class EnumerationManager {
 		super();
 		if (parentManager != null) {
 			resolvableEnumDataBindings = new HashMap<String, EnumerationEntry>();
-			resolvableEnumDataBindings.putAll(parentManager.resolvableEnumDataBindings);
+			resolvableEnumDataBindings.putAll(parentManager.getResolvableEnumDataBindings());
 		}
 	}
 

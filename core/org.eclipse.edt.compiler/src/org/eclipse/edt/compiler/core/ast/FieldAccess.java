@@ -27,7 +27,7 @@ public class FieldAccess extends Expression {
 	private Expression primary;
 	private String ID;
 	
-	private Element element;
+	private Object element;
 
 	public FieldAccess(Expression primary, String ID, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
@@ -57,12 +57,12 @@ public class FieldAccess extends Expression {
 		visitor.endVisit(this);
 	}
 		
-	public void setElement(Element elem) {
+	public void setElement(Object elem) {
 		this.element = elem;
 		super.setElement(elem);
 	}
 	
-	public Element resolveElement() {
+	public Object resolveElement() {
 		return element;
 	}
 	

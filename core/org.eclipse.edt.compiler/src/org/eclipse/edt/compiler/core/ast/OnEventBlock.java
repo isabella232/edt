@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -43,7 +43,7 @@ public class OnEventBlock extends Node {
 	 * Returns a List of Expression objects representing the list of things
 	 * that can optionally follow an event kind and a colon.
 	 */
-	public List getStringList() {
+	public List<Node> getStringList() {
 		return fieldsOpt;
 	}
 	
@@ -51,7 +51,7 @@ public class OnEventBlock extends Node {
 		return !stmts.isEmpty();
 	}
 	
-	public List getStatements() {
+	public List<Node> getStatements() {
 		return stmts;
 	}
 	

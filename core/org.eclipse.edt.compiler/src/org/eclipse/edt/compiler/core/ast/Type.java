@@ -19,9 +19,8 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 public abstract class Type extends Node {
     
     public static final int NAMETYPE = 0;
-    public static final int PRIMITIVETYPE = 1;
-    public static final int ARRAYTYPE = 2;
-    public static final int NULLABLETYPE = 3;
+    public static final int ARRAYTYPE = 1;
+    public static final int NULLABLETYPE = 2;
     
     public Type(int startOffset, int endOffset) {
         super(startOffset, endOffset);

@@ -68,7 +68,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
-import org.eclipse.edt.compiler.internal.core.lookup.TypeBindingScope;
+import org.eclipse.edt.compiler.internal.core.lookup.TypeScope;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.core.utils.TypeParser;
@@ -1767,7 +1767,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else if(binding.isDataBinding()) {
 			targetDataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, targetDataBinding, true);
@@ -1775,7 +1775,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		} else {
 			UsedTypeBinding usedBinding = (UsedTypeBinding) binding;
 			typeBinding = usedBinding.getType();
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null, true);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null, true);
 		}
 		
 		final ITypeBinding fTypeBinding = typeBinding;
@@ -1960,7 +1960,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		Name name = (Name) expr;
 		Scope saveScope = currentScope;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, (ITypeBinding) binding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, (ITypeBinding) binding, null);
 
 		Object result = itemName;
 		try {
@@ -1986,7 +1986,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		Object result = keyName;
 		try {
 			bindExpressionName(name);
@@ -2027,7 +2027,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		Object result = keyName;
 		try {
 			bindExpressionName(name);
@@ -2052,7 +2052,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else {
 			IDataBinding dataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, dataBinding, true);
@@ -2112,7 +2112,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Name name = (Name) expr;
 
 		Scope saveScope = currentScope;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 
 		Object result = numElementsName;
 		try {
@@ -2290,7 +2290,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		ITypeBinding typeBinding;
 		Scope saveScope = currentScope;
 		typeBinding = (ITypeBinding) binding;
-		currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+		currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 
 		Name name = (Name) expr;
 
@@ -2445,7 +2445,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 		Scope saveScope = currentScope;
 		if (binding.isTypeBinding()) {
 			typeBinding = (ITypeBinding) binding;
-			currentScope = new TypeBindingScope(NullScope.INSTANCE, typeBinding, null);
+			currentScope = new TypeScope(NullScope.INSTANCE, typeBinding, null);
 		} else {
 			IDataBinding dataBinding = (IDataBinding) binding;
 			currentScope = new DataBindingScope(NullScope.INSTANCE, dataBinding, true);

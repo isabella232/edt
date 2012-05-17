@@ -280,9 +280,6 @@ public interface IASTVisitor {
 	boolean visit(PrepareStatement prepareStatement);
 	void endVisit(PrepareStatement prepareStatement);
 	
-	boolean visit(PrimitiveType primitiveType);
-	void endVisit(PrimitiveType primitiveType);
-	
 	boolean visit(PrintStatement printStatement);
 	void endVisit(PrintStatement printStatement);
 	

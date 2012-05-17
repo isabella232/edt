@@ -13,9 +13,14 @@ package org.eclipse.edt.compiler.internal.core.lookup;
 
 
 
+import java.util.List;
+
 import org.eclipse.edt.compiler.binding.IPackageBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 
 /**
  * @author winghong
@@ -37,45 +42,16 @@ public abstract class Scope {
     	parentScope = newParent;
     }
     
-    public abstract ITypeBinding findType(String simpleName);
+    public abstract List<Type> findType(String simpleName);
         
- //   public abstract IDataBinding findData(String simpleName);
+    public abstract List<Member> findMember(String simpleName);
     
     public abstract IPackageBinding findPackage(String simpleName);
     
     public Scope getScopeForKeywordThis() {
     	return null;
     }
-    
-    public boolean unqualifiedItemReferencesAreAllowed() {
-    	return false;
-    }
-    
-    public boolean I4GLItemsNullableIsEnabled() {
-    	return false;
-    }
-    
-    public void stopReturningTopLevelFunctions() {
-    	if(parentScope != null) parentScope.stopReturningTopLevelFunctions();
-    }
-    
-    public void startReturningTopLevelFunctions() {
-    	if(parentScope != null) parentScope.startReturningTopLevelFunctions();
-    }
-    
-    public boolean isReturningTopLevelFunctions() {
-    	if(parentScope != null) return parentScope.isReturningTopLevelFunctions(); 
-    	return true;
-    }
-    
-    public void stopReturningFunctionContainerFunctions() {
-    	if(parentScope != null) parentScope.stopReturningFunctionContainerFunctions();
-    }
-    
-    public void startReturningFunctionContainerFunctions() {
-    	if(parentScope != null) parentScope.startReturningFunctionContainerFunctions();
-    }
-    
+                
     public boolean isAnnotationLeftHandScope() {
         return false;
     }
@@ -88,11 +64,7 @@ public abstract class Scope {
     	return false;
     }
     
-//    public IDataBinding findIOTargetData(String simpleName) {
-//    	return null;
-//    }
-    
-    public IPartBinding getPartBinding() {
+    public Part getPart() {
     	return null;
     }
 
