@@ -34,14 +34,15 @@ public interface Constants {
 
 	// Constants that represent all the method names invoked using the dynamic Template.invoke() methods
 	// This allows one to find all references to invocations of the methods being invoked dynamically
-	public static final String genAnnotations = "genAnnotations";
 	public static final String genAnnotation = "genAnnotation";
+	public static final String genFieldAnnotations = "genFieldAnnotations";
+	public static final String genGetterAnnotations = "genGetterAnnotations";
+	public static final String genPartAnnotations = "genPartAnnotations";
 	public static final String genFunctionSignatures = "genFunctionSignatures";
 	public static final String genFunctionParameterSignature = "genFunctionParameterSignature";
 	public static final String genJavaAnnotation = "genJavaAnnotation";
 	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
 	public static final String genResourceAnnotation = "genResourceAnnotation";
-	public static final String genXmlTransient = "genXmlTransient";
 	
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic

@@ -21,17 +21,13 @@ import org.eclipse.edt.mof.egl.ParameterKind;
 public class FunctionParameterTemplate extends org.eclipse.edt.gen.java.templates.FunctionParameterTemplate implements Constants {
 
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAnnotations, decl, ctx, out);
-		// process the rest
-		super.genDeclaration(decl, ctx, out);
-	}
-
-	public void genAnnotations(FunctionParameter decl, Context ctx, TabbedWriter out) {
 		ctx.put(Constants.SubKey_keepAnnotationsOnTheSameLine, Boolean.TRUE);
 		for (Annotation annot : decl.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, decl);
 		}
 		ctx.remove(Constants.SubKey_keepAnnotationsOnTheSameLine);
+		// process the rest
+		super.genDeclaration(decl, ctx, out);
 	}
 
 	public void genFunctionParameterSignature(FunctionParameter parameter, Context ctx, TabbedWriter out) {

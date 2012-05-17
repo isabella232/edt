@@ -15,11 +15,16 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Container;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Member;
 
 public class ContainerTemplate extends org.eclipse.edt.gen.java.templates.ContainerTemplate implements Constants {
 
-	public void genAnnotations(Container object, Context ctx, TabbedWriter out, Member member) {}
+	public void preGenAnnotations(Container object, Context ctx, Field field) {}
+	
+	public void genFieldAnnotations(Container object, Context ctx, TabbedWriter out, Member member) {}
+
+	public void genGetterAnnotations(Container object, Context ctx, TabbedWriter out, Member member) {}
 
 	public void genXmlTransient(Container object, Context ctx, TabbedWriter out) {}
 }

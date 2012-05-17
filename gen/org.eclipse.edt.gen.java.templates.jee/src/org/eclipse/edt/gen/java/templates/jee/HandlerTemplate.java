@@ -12,17 +12,31 @@
 package org.eclipse.edt.gen.java.templates.jee;
 
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.jee.CommonUtilities;
 import org.eclipse.edt.gen.java.jee.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.Handler;
+import org.eclipse.edt.mof.egl.Type;
 
-public class StructPartTemplate extends org.eclipse.edt.gen.java.templates.StructPartTemplate implements Constants {
-
-	public void genAnnotations(StructPart part, Context ctx, TabbedWriter out, Field field) {
+public class HandlerTemplate extends org.eclipse.edt.gen.java.templates.HandlerTemplate  implements Constants{
+	public void preGenAnnotations(Handler type, Context ctx, Field field) {
+		// process our extension
+		if (field.getAnnotation(Constants.AnnotationJsonName) == null) {
+			// add an xmlElement
+			try {
+				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
+				annotation.setValue(field.getId());
+				field.addAnnotation(annotation);
+			}
+			catch (Exception e) {}
+		}
+	}
+	public void genFieldAnnotations(Handler type, Context ctx, TabbedWriter out, Field field) {
 		for (Annotation annot : field.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}
+
 }

@@ -47,12 +47,12 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClas
 	}
 
 	public void genClassHeader(EGLClass part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genAnnotations, part, ctx, out);
+		ctx.invoke(genPartAnnotations, part, ctx, out);
 		// process the rest
 		super.genClassHeader(part, ctx, out);
 	}
 
-	public void genAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
+	public void genPartAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
 		for (Annotation annot : part.getAnnotations()) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
 		}
