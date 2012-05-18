@@ -160,6 +160,7 @@ handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclip
 		initTable();
 		oDisplayStyle string = table.displayStyle;
 		table.displayStyle = "none";
+		table.children[1].style = "table-layout: fixed;";
 		innerTable = table.children[1];
 		if(!loaded)
 			document.body.appendChild(innerTable);
@@ -254,6 +255,12 @@ handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclip
 			td.removeChildren();					
 			td.setAttribute( "rowSpan", gridData.verticalSpan );
 			td.setAttribute( "colSpan", gridData.horizontalSpan );
+			if(gridData.widthHint != null)
+				td.setAttribute("width", gridData.widthHint);
+			end
+			if(gridData.heightHint != null)
+				td.setAttribute("height", gridData.heightHint);
+			end
 			td.appendChild(newChild);
 			td.setAttribute( "occupied", "true" );	
 			if ( gridData.cellPadding > 0 )
@@ -354,6 +361,8 @@ end
 record GridLayoutData
 	row int{@VEProperty{}};
 	column int{@VEProperty{}};
+	widthHint String{@VEProperty{}};
+	heightHint string{@VEProperty{}};
 	horizontalSpan int{@VEProperty{}} = 1;
 	verticalSpan int{@VEProperty{}} = 1;
 	cellPadding int{@VEProperty{}};
