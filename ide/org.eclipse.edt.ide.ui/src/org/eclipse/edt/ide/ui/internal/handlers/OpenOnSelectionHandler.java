@@ -44,11 +44,13 @@ import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
+import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
@@ -267,6 +269,19 @@ public class OpenOnSelectionHandler extends EGLHandler {
 					boundNode.accept(nodeFinder);
 				}
 			}
+		} else {
+			final EGLReadOnlyEditorInput editorInput = (EGLReadOnlyEditorInput)fEditor.getEditorInput();
+			IClassFile classFile  = editorInput.getClassFile();
+			try{
+				//classFile.getSourceRange();
+			} catch(Exception ee) {
+				ee.printStackTrace();
+			}
+			
+			int currentPosition = ((ITextSelection) selection).getOffset();
+			final IEGLDocument document = (IEGLDocument) fEditor.getDocumentProvider().getDocument(fEditor.getEditorInput());
+			//IPart part = editorInput.g.getPart();
+			//System.out.println("F3 Navigation");
 		}
 		//selectedText = null;
 		if (beep)
