@@ -378,4 +378,15 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		return op1 ^ op2;
 	}
 
+	public static Short leftShift(Short op1, Short op2) {
+		return (short)(op1 << op2);
+	}
+
+	public static Short rightShiftArithmetic(Short op1, Short op2) {
+		return (short)(op1 >> op2);
+	}
+
+	public static Short rightShiftLogical(Short op1, Short op2) {
+		return (short)(op1 >>> op2);
+	}
 }

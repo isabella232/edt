@@ -396,4 +396,15 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	public static boolean notEquals(Integer op1, Short op2) {
 		return !equals(op1, op2);
 	}
+	public static Integer leftShift(Integer op1, Integer op2) {
+		return op1 << op2;
+	}
+
+	public static Integer rightShiftArithmetic(Integer op1, Integer op2) {
+		return op1 >> op2;
+	}
+
+	public static Integer rightShiftLogical(Integer op1, Integer op2) {
+		return op1 >>> op2;
+	}
 }
