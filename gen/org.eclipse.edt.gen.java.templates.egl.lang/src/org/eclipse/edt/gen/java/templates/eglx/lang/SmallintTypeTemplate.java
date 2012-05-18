@@ -44,7 +44,7 @@ public class SmallintTypeTemplate extends JavaTemplate {
 	
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
 		//if the left side is a Short the statement must be broken into LHS = LSH op RHS
-		return expr.getLHS().isNullable();
+		return expr.getLHS().isNullable() || (Boolean)ctx.invokeSuper(this, "isAssignmentBreakupWanted", type, ctx, expr);
 	}
 
 }
