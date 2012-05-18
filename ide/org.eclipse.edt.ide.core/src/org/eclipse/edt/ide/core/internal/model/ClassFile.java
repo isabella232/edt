@@ -380,8 +380,7 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 	}
 
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "eglxml";
 	}
 
 	public IPart getPart() {
