@@ -51,7 +51,7 @@ public class ProjectSettingsUtility {
 	/**
 	 * Constant for empty generator ID array.
 	 */
-	private static final String[] EMPTY_GENERATOR_IDS = {};
+	private static final String[] EMPTY_STRING_ARRAY = {};
 	
 	/**
 	 * Constant for the project-level property indicating the generator to use for the project.
@@ -62,6 +62,11 @@ public class ProjectSettingsUtility {
 	 * Constant for the project-level property indicating the generator to use for the project.
 	 */
 	public static final String PROPERTY_GENERATOR_IDS = "generatorIds"; //$NON-NLS-1$
+	
+	/**
+	 * Constant for project-level property indicating the projects which contain the source for the generated code.
+	 */
+	public static final String PROPERTY_SOURCE_PROJECTS = "sourceProjects"; //$NON-NLS-1$
 	
 	/**
 	 * Constant for the key used on project-level settings.
@@ -244,7 +249,7 @@ public class ProjectSettingsUtility {
 			return genIDs.split(","); //$NON-NLS-1$
 		}
 		else {
-			return EMPTY_GENERATOR_IDS;
+			return EMPTY_STRING_ARRAY;
 		}
 	}
 	
@@ -277,7 +282,7 @@ public class ProjectSettingsUtility {
 				
 				return ids;
 			}
-			return EMPTY_GENERATOR_IDS;
+			return EMPTY_STRING_ARRAY;
 		}
 		
 		return null;
@@ -521,6 +526,82 @@ public class ProjectSettingsUtility {
 		synchronized (lock) {
 			propertyPrefs.flush();
 		}
+	}
+	
+	/**
+	 * Updates the setting in the target project indicating which projects contain the corresponding source. Nothing is
+	 * changed if the source and target projects are the same.
+	 * 
+	 * @param targetProject The project containing the generated artifacts.
+	 * @param sourceProject The project containing the source code.
+	 */
+	public static void addSourceProject(IProject targetProject, IProject sourceProject) throws BackingStoreException {
+		if (!targetProject.equals(sourceProject)) {
+			Preferences prefs;
+			synchronized (lock) {
+				prefs = new ProjectScope(targetProject).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_SOURCE_PROJECTS);
+			}
+			
+			String[] projects = getSourceProjects(targetProject);
+			if (projects.length == 0) {
+				// First entry - just add it.
+				prefs.put(keyFor(targetProject.getFullPath()), sourceProject.getName());
+			}
+			else {
+				// Only add if not already present.
+				boolean add = true;
+				for (String project : projects) {
+					if (project.equals(sourceProject.getName())) {
+						add = false;
+						break;
+					}
+				}
+				
+				if (add) {
+					StringBuilder buf = new StringBuilder(100);
+					for (int i = 0; i < projects.length; i++) {
+						if (i != 0) {
+							buf.append(',');
+						}
+						buf.append(projects[i]);
+					}
+					buf.append(',');
+					buf.append(sourceProject.getName());
+					prefs.put(keyFor(targetProject.getFullPath()), buf.toString());
+				}
+			}
+			
+			synchronized (lock) {
+				prefs.flush();
+			}
+		}
+	}
+	
+	/**
+	 * @return the names of the projects containing the source code for the given project, never null.
+	 */
+	public static String[] getSourceProjects(IProject targetProject) {
+		Preferences prefs;
+		synchronized (lock) {
+			prefs = new ProjectScope(targetProject).getNode(EDTCoreIDEPlugin.PLUGIN_ID).node(PROPERTY_SOURCE_PROJECTS);
+		}
+		
+		String setting = ProjectSettingsUtility.findSetting(targetProject.getFullPath(), prefs, false);
+		if (setting != null) {
+			setting = setting.trim();
+			if (setting.length() != 0) {
+				String[] projects = setting.split(","); //$NON-NLS-1$
+				
+				// trim each value
+				for (int i = 0; i < projects.length; i++) {
+					projects[i] = projects[i].trim();
+				}
+				
+				return projects;
+			}
+		}
+		
+		return EMPTY_STRING_ARRAY;
 	}
 	
 	/**
