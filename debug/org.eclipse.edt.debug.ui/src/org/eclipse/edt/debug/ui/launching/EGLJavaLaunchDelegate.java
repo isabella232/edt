@@ -158,6 +158,7 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 				copy.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, javaFile.getProject().getName() );
 				
 				// Add the JDBC jars to the classpath.
+				@SuppressWarnings("unchecked")
 				List<String> classpath = copy.getAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, new ArrayList<String>() );
 				
 				// The main project.
