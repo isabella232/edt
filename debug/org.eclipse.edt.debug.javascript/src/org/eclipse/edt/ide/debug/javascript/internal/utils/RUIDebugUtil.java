@@ -18,7 +18,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -83,7 +82,7 @@ public class RUIDebugUtil
 	/**
 	 * A table of all the <code>ImageDescriptor</code>s
 	 */
-	private static HashMap imageDescriptors;
+//	private static HashMap imageDescriptors;
 	
 	private static URL ICON_BASE_URL = null;
 	static
@@ -160,7 +159,7 @@ public class RUIDebugUtil
 		}
 		String fileName = getQualifiedFilename( eglFile );
 		ILaunchConfiguration[] configs = launchManager.getLaunchConfigurations( configType );
-		List candidateConfigs = new ArrayList( configs.length );
+		List<ILaunchConfiguration> candidateConfigs = new ArrayList<ILaunchConfiguration>( configs.length );
 		for ( int i = 0; i < configs.length; i++ )
 		{
 			ILaunchConfiguration config = configs[ i ];
@@ -476,7 +475,6 @@ public class RUIDebugUtil
 			if ( !imageRegistryInitialized )
 			{
 				imageRegistry = new ImageRegistry( getStandardDisplay() );
-				imageDescriptors = new HashMap( 30 );
 				declareImages();
 				imageRegistryInitialized = true;
 			}
@@ -495,7 +493,6 @@ public class RUIDebugUtil
 		{
 		}
 		imageRegistry.put( key, desc );
-		imageDescriptors.put( key, desc );
 	}
 	
 	private static URL makeIconFileURL( String iconPath ) throws MalformedURLException
