@@ -3,7 +3,7 @@
 <schema targetNamespace="org.eclipse.edt.debug.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.edt.debug.core" id="javaVariableAdapters" name="%variableAdaptersName"/>
+         <meta.schema plugin="org.eclipse.edt.debug.core" id="javaVariableAdapters" name="Java Variable Adapters"/>
       </appinfo>
       <documentation>
          This extension point provides a mechanism for adapting Java variables to be displayed in an EGL-specific way.

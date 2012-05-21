@@ -3,7 +3,7 @@
 <schema targetNamespace="org.eclipse.edt.debug.core" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.eclipse.edt.debug.core" id="javaTypeFilters" name="%typeFiltersName"/>
+         <meta.schema plugin="org.eclipse.edt.debug.core" id="javaTypeFilters" name="Java Type Filters"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
