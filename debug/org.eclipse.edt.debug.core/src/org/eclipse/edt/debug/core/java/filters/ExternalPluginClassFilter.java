@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.pde.core.plugin.IPluginModelBase;
 import org.eclipse.pde.core.plugin.PluginRegistry;
@@ -27,37 +26,28 @@ import org.eclipse.pde.internal.core.PDEClasspathContainer;
 @SuppressWarnings("restriction")
 public abstract class ExternalPluginClassFilter extends ClasspathEntryFilter
 {
-	/**
-	 * The cached classpath entries.
-	 */
-	private IClasspathEntry[] entries;
-	
 	@Override
-	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target )
+	protected IClasspathEntry[] getCommonClasspathEntries()
 	{
-		if ( entries == null )
+		String[] pluginIds = getPluginIds();
+		if ( pluginIds != null && pluginIds.length > 0 )
 		{
-			String[] pluginIds = getPluginIds();
-			if ( pluginIds != null && pluginIds.length > 0 )
+			List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+			for ( String pluginId : pluginIds )
 			{
-				List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
-				for ( String pluginId : pluginIds )
+				IPluginModelBase model = PluginRegistry.findModel( pluginId );
+				if ( model != null )
 				{
-					IPluginModelBase model = PluginRegistry.findModel( pluginId );
-					if ( model != null )
-					{
-						list.addAll( Arrays.asList( PDEClasspathContainer.getExternalEntries( model ) ) );
-					}
+					list.addAll( Arrays.asList( PDEClasspathContainer.getExternalEntries( model ) ) );
 				}
-				entries = list.toArray( new IClasspathEntry[ list.size() ] );
 			}
-			else
-			{
-				entries = new IClasspathEntry[ 0 ];
-			}
+			return list.toArray( new IClasspathEntry[ list.size() ] );
 		}
-		return entries;
+		return null;
 	}
 	
+	/**
+	 * @return the IDs of the target platform plug-ins whose classes should be filtered.
+	 */
 	public abstract String[] getPluginIds();
 }

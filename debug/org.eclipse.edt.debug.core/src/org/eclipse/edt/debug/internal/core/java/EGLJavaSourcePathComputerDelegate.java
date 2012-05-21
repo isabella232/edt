@@ -22,8 +22,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.edt.debug.core.EGLSourcePathComputerDelegate;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 
 public class EGLJavaSourcePathComputerDelegate extends EGLSourcePathComputerDelegate
@@ -38,12 +36,9 @@ public class EGLJavaSourcePathComputerDelegate extends EGLSourcePathComputerDele
 		if ( projectName.length() != 0 )
 		{
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
-			if ( project != null && project.exists() )
+			if ( project != null && project.isAccessible() )
 			{
-				if ( project.hasNature( EGLCore.NATURE_ID ) )
-				{
-					buildContainers( (IEGLProject)EGLCore.create( project ), containers, new HashSet<IEGLProject>() );
-				}
+				buildContainers( project, containers, new HashSet<IProject>() );
 			}
 		}
 		

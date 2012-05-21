@@ -20,6 +20,8 @@ import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.edt.debug.core.DebugUtil;
+import org.eclipse.edt.debug.core.EDTDebugCoreMessages;
 import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
@@ -27,10 +29,12 @@ import org.eclipse.edt.debug.core.java.IEGLJavaThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPFunctionInfo;
+import org.eclipse.edt.debug.core.java.SMAPLineInfo;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * Wraps an IJavaStackFrame.
@@ -117,6 +121,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 		currentEGLVariables = new Hashtable<String, IEGLJavaVariable>( hashSize );
 		
 		this.variables = null;
+		this.smap = null;
 	}
 	
 	@Override
@@ -259,7 +264,20 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	@Override
 	public int getLineNumber() throws DebugException
 	{
-		return javaFrame.getLineNumber();
+		int line = javaFrame.getLineNumber();
+		if ( !getEGLJavaDebugTarget().supportsSourceDebugExtension() && isEGLStratum() )
+		{
+			SMAPLineInfo lineInfo = SMAPUtil.getSMAPLineInfo( getSMAP(), getEGLJavaDebugTarget().getSMAPLineCache() );
+			if ( lineInfo != null )
+			{
+				line = lineInfo.getEGLLine( line );
+			}
+			else
+			{
+				line = -1;
+			}
+		}
+		return line;
 	}
 	
 	@Override
@@ -272,6 +290,43 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	public int getCharEnd() throws DebugException
 	{
 		return -1;
+	}
+	
+	public String getLabel() throws DebugException
+	{
+		String sourceName = null;
+		for ( IVariable v : getVariables() )
+		{
+			if ( v instanceof EGLJavaFunctionContainerVariable )
+			{
+				sourceName = v.getName();
+				break;
+			}
+		}
+		
+		if ( sourceName == null || sourceName.trim().length() == 0 )
+		{
+			sourceName = SMAPUtil.getFileName( getSMAP() );
+			
+			if ( sourceName != null && DebugUtil.isEGLFileName( sourceName ) )
+			{
+				// Strip off '.egl'
+				sourceName = sourceName.substring( 0, sourceName.length() - 4 );
+			}
+		}
+		
+		String lineStr;
+		int lineNumber = getLineNumber();
+		if ( lineNumber >= 0 )
+		{
+			lineStr = String.valueOf( lineNumber );
+		}
+		else
+		{
+			lineStr = String.valueOf( EDTDebugCoreMessages.StackFrameLineUnknown );
+		}
+		
+		return NLS.bind( EDTDebugCoreMessages.StackFrameLabelBasic, new Object[] { javaFrame.getName(), lineStr, sourceName } );
 	}
 	
 	@Override
@@ -352,7 +407,7 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	{
 		if ( smap == null )
 		{
-			smap = SMAPUtil.getSMAP( javaFrame.getReferenceType(), getEGLJavaDebugTarget().getSMAPFileCache() );
+			smap = SMAPUtil.getSMAP( getEGLJavaDebugTarget(), javaFrame.getReferenceType() );
 		}
 		return smap;
 	}
@@ -429,6 +484,14 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	@Override
 	public String getSourcePath() throws DebugException
 	{
+		if ( !getEGLJavaDebugTarget().supportsSourceDebugExtension() && isEGLStratum() )
+		{
+			String path = SMAPUtil.getFilePath( getSMAP() );
+			if ( path != null )
+			{
+				return path;
+			}
+		}
 		return javaFrame.getSourcePath();
 	}
 	
@@ -437,11 +500,17 @@ public class EGLJavaStackFrame extends EGLJavaDebugElement implements IEGLJavaSt
 	{
 		try
 		{
-			return !SMAPUtil.isEGLStratum( getSMAP() );
+			return !isEGLStratum();
 		}
 		catch ( DebugException e )
 		{
 			return true;
 		}
+	}
+	
+	@Override
+	public boolean isEGLStratum() throws DebugException
+	{
+		return SMAPUtil.isEGLStratum( getSMAP() );
 	}
 }

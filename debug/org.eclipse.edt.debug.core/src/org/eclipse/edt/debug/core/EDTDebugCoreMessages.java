@@ -30,4 +30,6 @@ public class EDTDebugCoreMessages extends NLS
 	public static String TypeFilterProviderMissingCategory;
 	public static String NoDescription;
 	public static String TypeFilterClasspathEntryNotSupported;
+	public static String StackFrameLabelBasic;
+	public static String StackFrameLineUnknown;
 }

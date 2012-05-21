@@ -14,7 +14,6 @@ package org.eclipse.edt.debug.internal.core.java.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.filters.ClasspathEntryFilter;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.EDTRuntimeContainer;
@@ -27,41 +26,32 @@ import org.eclipse.jdt.core.IClasspathEntry;
  */
 public class JavaRuntimeContainerFilter extends ClasspathEntryFilter
 {
-	/**
-	 * The cached classpath entries.
-	 */
-	private IClasspathEntry[] entries;
-	
 	@Override
-	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target )
+	protected IClasspathEntry[] getCommonClasspathEntries()
 	{
-		if ( entries == null )
+		List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
+		for ( IGenerator gen : EDTCoreIDEPlugin.getPlugin().getGenerators() )
 		{
-			List<IClasspathEntry> list = new ArrayList<IClasspathEntry>();
-			for ( IGenerator gen : EDTCoreIDEPlugin.getPlugin().getGenerators() )
+			EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
+			if ( containers != null )
 			{
-				EDTRuntimeContainer[] containers = gen.getRuntimeContainers();
-				if ( containers != null )
+				for ( EDTRuntimeContainer container : containers )
 				{
-					for ( EDTRuntimeContainer container : containers )
+					EDTRuntimeContainerEntry[] containerEntries = container.getEntries();
+					if ( containerEntries != null )
 					{
-						EDTRuntimeContainerEntry[] containerEntries = container.getEntries();
-						if ( containerEntries != null )
+						for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
 						{
-							for ( EDTRuntimeContainerEntry nextEntry : containerEntries )
+							IClasspathEntry cpEntry = nextEntry.getClasspathEntry();
+							if ( cpEntry != null )
 							{
-								IClasspathEntry cpEntry = nextEntry.getClasspathEntry();
-								if ( cpEntry != null )
-								{
-									list.add( cpEntry );
-								}
+								list.add( cpEntry );
 							}
 						}
 					}
 				}
 			}
-			entries = list.toArray( new IClasspathEntry[ list.size() ] );
 		}
-		return entries;
+		return list.toArray( new IClasspathEntry[ list.size() ] );
 	}
 }

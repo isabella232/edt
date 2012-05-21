@@ -22,20 +22,22 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.debug.core.sourcelookup.ISourcePathComputerDelegate;
 import org.eclipse.debug.core.sourcelookup.containers.AbstractSourceContainer;
 import org.eclipse.debug.core.sourcelookup.containers.ArchiveSourceContainer;
 import org.eclipse.debug.core.sourcelookup.containers.ExternalArchiveSourceContainer;
 import org.eclipse.debug.core.sourcelookup.containers.FolderSourceContainer;
+import org.eclipse.debug.core.sourcelookup.containers.ProjectSourceContainer;
 import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 
 public abstract class EGLSourcePathComputerDelegate implements ISourcePathComputerDelegate
 {
-	protected void buildContainers( IEGLProject project, List allEntries, Set<IEGLProject> seen )
+	protected void buildContainers( IProject project, List<ISourceContainer> allEntries, Set<IProject> seen )
 	{
 		if ( seen.contains( project ) )
 		{
@@ -43,69 +45,34 @@ public abstract class EGLSourcePathComputerDelegate implements ISourcePathComput
 		}
 		seen.add( project );
 		
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		try
 		{
-			// Add all referenced EGL projects, EGLARS, and source folders.
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IEGLPathEntry[] entries = project.getResolvedEGLPath( true );
-			for ( int i = 0; i < entries.length; i++ )
+			if ( project.hasNature( EGLCore.NATURE_ID ) )
 			{
-				switch ( entries[ i ].getEntryKind() )
+				// Add all referenced EGL projects, EGLARS, and source folders.
+				IEGLProject eglProject = (IEGLProject)EGLCore.create( project );
+				IEGLPathEntry[] entries = eglProject.getResolvedEGLPath( true );
+				for ( int i = 0; i < entries.length; i++ )
 				{
-					case IEGLPathEntry.CPE_PROJECT:
+					switch ( entries[ i ].getEntryKind() )
 					{
-						IResource member = root.findMember( entries[ i ].getPath() );
-						if ( member != null && member.getType() == IResource.PROJECT )
-						{
-							IProject p = (IProject)member;
-							try
-							{
-								if ( p.hasNature( EGLCore.NATURE_ID ) )
-								{
-									buildContainers( (IEGLProject)EGLCore.create( p ), allEntries, seen );
-								}
-							}
-							catch ( CoreException e )
-							{
-							}
-						}
-						break;
-					}
-					
-					case IEGLPathEntry.CPE_SOURCE:
-					{
-						IPackageFragmentRoot pkgRoot = project.getPackageFragmentRoot( entries[ i ].getPath() );
-						if ( pkgRoot != null )
-						{
-							EGLPackageFragmentRootSourceContainer container = new EGLPackageFragmentRootSourceContainer( pkgRoot );
-							if ( !allEntries.contains( container ) )
-							{
-								allEntries.add( container );
-							}
-						}
-						else
+						case IEGLPathEntry.CPE_PROJECT:
 						{
 							IResource member = root.findMember( entries[ i ].getPath() );
-							if ( member != null && member.getType() == IResource.FOLDER )
+							if ( member != null && member.getType() == IResource.PROJECT )
 							{
-								FolderSourceContainer container = new FolderSourceContainer( (IFolder)member, true );
-								if ( !allEntries.contains( container ) )
+								if ( member.isAccessible() )
 								{
-									allEntries.add( container );
+									buildContainers( (IProject)member, allEntries, seen );
 								}
 							}
+							break;
 						}
-						break;
-					}
-					
-					case IEGLPathEntry.CPE_LIBRARY:
-					{
-						// Only add if there was source attachment. The debug 'no source found' editor is better than the egl version - it lets you
-						// edit source lookup.
-						IPath sourcePath = entries[ i ].getSourceAttachmentPath();
-						if ( sourcePath != null && !sourcePath.isEmpty() )
+						
+						case IEGLPathEntry.CPE_SOURCE:
 						{
-							IPackageFragmentRoot pkgRoot = project.getPackageFragmentRoot( entries[ i ].getPath() );
+							IPackageFragmentRoot pkgRoot = eglProject.getPackageFragmentRoot( entries[ i ].getPath() );
 							if ( pkgRoot != null )
 							{
 								EGLPackageFragmentRootSourceContainer container = new EGLPackageFragmentRootSourceContainer( pkgRoot );
@@ -116,29 +83,77 @@ public abstract class EGLSourcePathComputerDelegate implements ISourcePathComput
 							}
 							else
 							{
-								IResource file = root.findMember( sourcePath );
-								AbstractSourceContainer container;
-								if ( file != null && file.getType() == IResource.FILE )
+								IResource member = root.findMember( entries[ i ].getPath() );
+								if ( member != null && member.getType() == IResource.FOLDER )
 								{
-									container = new ArchiveSourceContainer( (IFile)file, true );
+									FolderSourceContainer container = new FolderSourceContainer( (IFolder)member, true );
+									if ( !allEntries.contains( container ) )
+									{
+										allEntries.add( container );
+									}
+								}
+							}
+							break;
+						}
+						
+						case IEGLPathEntry.CPE_LIBRARY:
+						{
+							// Only add if there was source attachment. The debug 'no source found' editor is better than the egl version - it lets
+							// you
+							// edit source lookup.
+							IPath sourcePath = entries[ i ].getSourceAttachmentPath();
+							if ( sourcePath != null && !sourcePath.isEmpty() )
+							{
+								IPackageFragmentRoot pkgRoot = eglProject.getPackageFragmentRoot( entries[ i ].getPath() );
+								if ( pkgRoot != null )
+								{
+									EGLPackageFragmentRootSourceContainer container = new EGLPackageFragmentRootSourceContainer( pkgRoot );
+									if ( !allEntries.contains( container ) )
+									{
+										allEntries.add( container );
+									}
 								}
 								else
 								{
-									container = new ExternalArchiveSourceContainer( sourcePath.toOSString(), true );
-								}
-								
-								if ( !allEntries.contains( container ) )
-								{
-									allEntries.add( container );
+									IResource file = root.findMember( sourcePath );
+									AbstractSourceContainer container;
+									if ( file != null && file.getType() == IResource.FILE )
+									{
+										container = new ArchiveSourceContainer( (IFile)file, true );
+									}
+									else
+									{
+										container = new ExternalArchiveSourceContainer( sourcePath.toOSString(), true );
+									}
+									
+									if ( !allEntries.contains( container ) )
+									{
+										allEntries.add( container );
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+			else
+			{
+				allEntries.add( new ProjectSourceContainer( project, true ) );
+			}
 		}
-		catch ( EGLModelException e )
+		catch ( CoreException e )
 		{
+		}
+		
+		// Also add additional source projects from the project-level settings. This is to support when the source is in a different project
+		// than the generated code. The generators should be setting the source project on the target when it differs.
+		for ( String name : ProjectSettingsUtility.getSourceProjects( project.getProject() ) )
+		{
+			IProject p = root.getProject( name );
+			if ( p != null && p.isAccessible() )
+			{
+				buildContainers( p, allEntries, seen );
+			}
 		}
 	}
 }

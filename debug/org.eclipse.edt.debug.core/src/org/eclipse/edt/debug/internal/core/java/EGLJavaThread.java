@@ -26,6 +26,7 @@ import org.eclipse.edt.debug.core.IEGLStackFrame;
 import org.eclipse.edt.debug.core.IEGLThread;
 import org.eclipse.edt.debug.core.java.IEGLJavaStackFrame;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.debug.core.java.SMAPLineInfo;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.filters.FilterStepType;
 import org.eclipse.edt.debug.core.java.filters.ITypeFilter;
@@ -38,6 +39,11 @@ import org.eclipse.jdt.debug.core.IJavaThread;
  */
 public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 {
+	/**
+	 * Set this to true to enable debug output when steps are forced due to filtering.
+	 */
+	private static final boolean TRACE_FILTERS = false;
+	
 	private static final EGLJavaStackFrame[] EMPTY_FRAMES = {};
 	
 	/**
@@ -251,7 +257,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 				int indexOfTopEGLFrame = -1;
 				for ( int i = 0; i < javaFrames.length; i++ )
 				{
-					if ( SMAPUtil.isEGLStratum( (IJavaStackFrame)javaFrames[ i ] ) )
+					if ( SMAPUtil.isEGLStratum( (IJavaStackFrame)javaFrames[ i ], getEGLJavaDebugTarget() ) )
 					{
 						indexOfTopEGLFrame = i;
 						break;
@@ -300,7 +306,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 			}
 			else
 			{
-				currentStackFrames = Collections.EMPTY_MAP;
+				currentStackFrames = Collections.emptyMap();
 				eglFrames = EMPTY_FRAMES;
 			}
 			previousJavaFrames = javaFrames;
@@ -430,10 +436,10 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 										// that sits around forever; the infinite stepping causes flickering and poor performance.
 										
 										FilterStepType filterType = FilterStepType.NO_STEP;
-										if ( SMAPUtil.isEGLStratum( topJavaFrame ) )
+										if ( SMAPUtil.isEGLStratum( topJavaFrame, getEGLJavaDebugTarget() ) )
 										{
 											// Can be some internal method like ezeSetEmpty.
-											if ( topJavaFrame.getLineNumber() == -1 )
+											if ( getLineNumber( topJavaFrame ) == -1 )
 											{
 												filterType = FilterStepType.STEP_INTO;
 											}
@@ -451,7 +457,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 											{
 												// If we find the starting step frame OR we have a valid EGL stratum, perform a step.
 												if ( frames[ j ] == stepStartFrame
-														|| (SMAPUtil.isEGLStratum( (IJavaStackFrame)frames[ j ] ) && frames[ j ].getLineNumber() != -1) )
+														|| (SMAPUtil.isEGLStratum( (IJavaStackFrame)frames[ j ], getEGLJavaDebugTarget() ) && getLineNumber( (IJavaStackFrame)frames[ j ] ) != -1) )
 												{
 													forceResume = false;
 													break;
@@ -460,19 +466,39 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 											
 											if ( forceResume )
 											{
+												if ( TRACE_FILTERS )
+												{
+													System.out.println( "EDT DEBUG: Forcing resume for frame " + topJavaFrame.getReceivingTypeName() //$NON-NLS-1$
+															+ "." + topJavaFrame.getName() ); //$NON-NLS-1$
+												}
 												topJavaFrame.resume();
 											}
 											else if ( filterType == FilterStepType.STEP_INTO )
 											{
+												if ( TRACE_FILTERS )
+												{
+													System.out.println( "EDT DEBUG: Forcing stepInto for frame " //$NON-NLS-1$
+															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+												}
 												topJavaFrame.stepInto();
 											}
 											else if ( topJavaFrame.canStepReturn() )
 											{
+												if ( TRACE_FILTERS )
+												{
+													System.out.println( "EDT DEBUG: Forcing stepReturn for frame " //$NON-NLS-1$
+															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+												}
 												topJavaFrame.stepReturn();
 											}
 											else
 											{
 												// Resume when we can't step return (e.g. bottom frame, or above obsolete frame)
+												if ( TRACE_FILTERS )
+												{
+													System.out.println( "EDT DEBUG: Forcing resume (stepReturn not supported) for frame " //$NON-NLS-1$
+															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+												}
 												topJavaFrame.resume();
 											}
 											break;
@@ -486,6 +512,12 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 													&& topEGLFrame.getLineBeforeStepInto() != -1
 													&& topEGLFrame.getLineBeforeStepInto() == topEGLFrame.getLineNumber() )
 											{
+												if ( TRACE_FILTERS )
+												{
+													System.out.println( "EDT DEBUG: Forcing stepInto for EGL frame " //$NON-NLS-1$
+															+ topEGLFrame.getJavaStackFrame().getReceivingTypeName() + "." //$NON-NLS-1$
+															+ topEGLFrame.getJavaStackFrame().getName() );
+												}
 												stepInto();
 												break;
 											}
@@ -516,12 +548,30 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 	
 	private boolean filterFromStack( IJavaStackFrame frame ) throws DebugException
 	{
-		if ( SMAPUtil.isEGLStratum( frame ) )
+		if ( SMAPUtil.isEGLStratum( frame, getEGLJavaDebugTarget() ) )
 		{
-			return frame.getLineNumber() == -1;
+			return getLineNumber( frame ) == -1;
 		}
 		
 		return filter( frame ) != FilterStepType.NO_STEP;
+	}
+	
+	private int getLineNumber( IJavaStackFrame frame ) throws DebugException
+	{
+		if ( !getEGLJavaDebugTarget().supportsSourceDebugExtension() )
+		{
+			// Try our own JSR-45 support.
+			String smap = SMAPUtil.getSMAP( getEGLJavaDebugTarget(), frame.getReferenceType().getName() );
+			if ( SMAPUtil.isEGLStratum( smap ) )
+			{
+				SMAPLineInfo lineInfo = SMAPUtil.getSMAPLineInfo( smap, getEGLJavaDebugTarget().getSMAPLineCache() );
+				if ( lineInfo != null )
+				{
+					return lineInfo.getEGLLine( frame.getLineNumber() );
+				}
+			}
+		}
+		return frame.getLineNumber();
 	}
 	
 	private FilterStepType filter( IJavaStackFrame frame ) throws DebugException

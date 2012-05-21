@@ -24,4 +24,14 @@ public interface IEGLJavaDebugTarget extends IEGLDebugTarget, IEGLJavaDebugEleme
 	 * @return the underlying debug target.
 	 */
 	public IJavaDebugTarget getJavaDebugTarget();
+	
+	/**
+	 * @return true if the target VM supports JSR-45.
+	 */
+	public boolean supportsSourceDebugExtension();
+	
+	/**
+	 * @return the cache to use for SMAPs read off disk, or null if SMAPs should not be read off disk.
+	 */
+	public SMAPFileCache getSMAPFileCache();
 }

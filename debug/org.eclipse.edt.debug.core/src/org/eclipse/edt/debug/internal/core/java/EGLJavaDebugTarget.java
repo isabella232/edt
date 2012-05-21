@@ -18,11 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.debug.core.DebugEvent;
@@ -37,8 +44,10 @@ import org.eclipse.debug.core.model.IDebugElement;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
@@ -46,6 +55,9 @@ import org.eclipse.edt.debug.core.PreferenceUtil;
 import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.IEGLJavaThread;
+import org.eclipse.edt.debug.core.java.SMAPFileCache;
+import org.eclipse.edt.debug.core.java.SMAPLineInfo;
+import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.filters.ITypeFilter;
 import org.eclipse.edt.debug.core.java.filters.TypeFilterUtil;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -53,11 +65,19 @@ import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.javart.util.JavaAliaser;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.debug.core.IJavaBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaDebugTarget;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.debug.core.IJavaThread;
 import org.eclipse.jdt.debug.core.JDIDebugModel;
+import org.eclipse.jdt.internal.debug.core.breakpoints.ValidBreakpointLocationLocator;
+import org.eclipse.jdt.internal.debug.core.model.JDIDebugTarget;
 import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
 
 /**
@@ -65,7 +85,7 @@ import org.eclipse.jdt.internal.debug.ui.BreakpointUtils;
  */
 @SuppressWarnings("restriction")
 public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaDebugTarget, IDebugEventFilter, IBreakpointManagerListener,
-		IPreferenceChangeListener
+		IPreferenceChangeListener, IResourceChangeListener
 {
 	/**
 	 * The underlying Java debug target.
@@ -93,10 +113,25 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	private boolean filterRuntimes;
 	
 	/**
-	 * Cache of class names to contents of *.eglsmap files. Used when the class itself didn't contain SMAP data.
+	 * A flag indicating if JSR-45 is supported in the target VM. When it's not supported we try and work around that limitation.
 	 */
-	private Map<String, String> smapFileCache;
+	private final boolean supportsSourceDebugExtension;
 	
+	/**
+	 * Cache of SMAPs read off the disk.
+	 */
+	private final SMAPFileCache smapFileCache;
+	
+	/**
+	 * Cache of EGL-Java line mappings, whose key is the SMAP string. Used when JSR-45 is not supported in the target VM.
+	 */
+	private Map<String, SMAPLineInfo> smapLineCache;
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param target The underlying Java debug target.
+	 */
 	public EGLJavaDebugTarget( IJavaDebugTarget target )
 	{
 		super( null );
@@ -104,8 +139,16 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		threads = new HashMap<IJavaThread, EGLJavaThread>();
 		eglThreads = new ArrayList<IEGLJavaThread>();
 		breakpoints = new HashMap<EGLLineBreakpoint, IJavaBreakpoint>();
-		smapFileCache = new HashMap<String, String>(); // enable reading *.eglsmap off the disk for the Java runtime.
+		smapFileCache = new SMAPFileCache();
 		initFilters();
+		
+		supportsSourceDebugExtension = target instanceof JDIDebugTarget
+				? ((JDIDebugTarget)target).getVM().canGetSourceDebugExtension()
+				: true;
+		if ( !supportsSourceDebugExtension )
+		{
+			smapLineCache = new HashMap<String, SMAPLineInfo>();
+		}
 		
 		// Add the initial threads, which are created before the target.
 		try
@@ -126,6 +169,8 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		
 		PreferenceUtil.addPreferenceChangeListener( this );
 		DebugPlugin.getDefault().addDebugEventFilter( this );
+		ResourcesPlugin.getWorkspace().addResourceChangeListener( this, IResourceChangeEvent.POST_CHANGE );
+		
 		initializeBreakpoints();
 	}
 	
@@ -172,9 +217,15 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		return super.getAdapter( adapter );
 	}
 	
-	public Map<String, String> getSMAPFileCache()
+	@Override
+	public SMAPFileCache getSMAPFileCache()
 	{
 		return smapFileCache;
+	}
+	
+	public Map<String, SMAPLineInfo> getSMAPLineCache()
+	{
+		return smapLineCache;
 	}
 	
 	public boolean filterRuntimes()
@@ -420,6 +471,18 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		}
 	}
 	
+	public EGLLineBreakpoint findCorrespondingBreakpoint( IJavaLineBreakpoint breakpoint )
+	{
+		for ( Map.Entry<EGLLineBreakpoint, IJavaBreakpoint> entry : breakpoints.entrySet() )
+		{
+			if ( entry.getValue() == breakpoint )
+			{
+				return entry.getKey();
+			}
+		}
+		return null;
+	}
+	
 	private boolean lineNumberChanged( IMarker marker, IMarkerDelta delta )
 	{
 		if ( delta != null )
@@ -480,11 +543,123 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 					BreakpointUtils.addRunToLineAttributes( attributes );
 				}
 				
-				return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM,
-						resource.getName(), null, qualifiedName, bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
+				if ( supportsSourceDebugExtension )
+				{
+					return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM,
+							resource.getName(), null, qualifiedName, bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false,
+							attributes );
+				}
+				else
+				{
+					SMAPLineInfo lineInfo = SMAPUtil.getSMAPLineInfo( SMAPUtil.getSMAP( this, qualifiedName ), smapLineCache );
+					if ( lineInfo != null )
+					{
+						List<Integer> javaLines = lineInfo.getJavaLines( bp.getLineNumber() );
+						if ( javaLines != null && javaLines.size() > 0 )
+						{
+							IFile javaFile = javaLines.size() == 1
+									? null
+									: findJavaFile( qualifiedName );
+							if ( javaFile == null )
+							{
+								// No resource means we can't validate the breakpoint's line (or there was just 1 line). Just go with the first.
+								return JDIDebugModel.createLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), qualifiedName,
+										javaLines.get( 0 ), -1, -1, hitcount, false, null );
+							}
+							else
+							{
+								for ( int javaLine : javaLines )
+								{
+									IJavaLineBreakpoint javaBP = JDIDebugModel.createLineBreakpoint( javaFile, qualifiedName, javaLine, -1, -1,
+											hitcount, false, null );
+									
+									// First validate the breakpoint. This will return false for invalid locations, or sometimes can update the line
+									// to something valid.
+									if ( verifyLineBreakpoint( javaFile, javaBP ) )
+									{
+										// Create a new BP for the workspace root so that the breakpoint icon isn't displayed in the Java editor.
+										int line = javaBP.getLineNumber();
+										javaBP.delete();
+										return JDIDebugModel.createLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), qualifiedName, line, -1,
+												-1, hitcount, false, null );
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 		return null;
+	}
+	
+	protected IFile findJavaFile( String className )
+	{
+		ISourceLocator locator = getLaunch().getSourceLocator();
+		if ( locator instanceof ISourceLookupDirector )
+		{
+			IResource resource = null;
+			int inner = className.indexOf( '$' );
+			if ( inner != -1 )
+			{
+				className = className.substring( 0, inner );
+			}
+			
+			Object src = ((ISourceLookupDirector)locator).getSourceElement( className.replace( '.', '/' ) + ".java" ); //$NON-NLS-1$
+			if ( src instanceof IJavaElement )
+			{
+				resource = ((IJavaElement)src).getResource();
+			}
+			else if ( src instanceof IStorage )
+			{
+				resource = ResourcesPlugin.getWorkspace().getRoot().findMember( ((IStorage)src).getFullPath() );
+			}
+			
+			if ( resource != null && resource.getType() == IResource.FILE && resource.exists() )
+			{
+				return (IFile)resource;
+			}
+		}
+		
+		return null;
+	}
+	
+	protected boolean verifyLineBreakpoint( IFile file, IJavaLineBreakpoint bp )
+	{
+		ICompilationUnit cunit = JavaCore.createCompilationUnitFrom( file );
+		if ( cunit != null )
+		{
+			ASTParser parser = ASTParser.newParser( AST.JLS4 );
+			parser.setSource( cunit );
+			parser.setResolveBindings( true );
+			CompilationUnit unit = (CompilationUnit)parser.createAST( new NullProgressMonitor() );
+			if ( unit != null )
+			{
+				try
+				{
+					int line = bp.getLineNumber();
+					ValidBreakpointLocationLocator locator = new ValidBreakpointLocationLocator( unit, line, true, true );
+					unit.accept( locator );
+					if ( locator.getLocationType() == ValidBreakpointLocationLocator.LOCATION_LINE )
+					{
+						// If the line has changed, update it.
+						if ( locator.getLineLocation() != line )
+						{
+							bp.getMarker().setAttribute( IMarker.LINE_NUMBER, locator.getLineLocation() );
+						}
+						return true;
+					}
+					return false;
+				}
+				catch ( CoreException ce )
+				{
+					// When something goes wrong, we must assume it's valid.
+				}
+			}
+		}
+		
+		// When we can't calculate it, we must assume it's valid.
+		return true;
 	}
 	
 	/**
@@ -708,6 +883,7 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	
 	private void cleanup()
 	{
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener( this );
 		DebugPlugin plugin = DebugPlugin.getDefault();
 		plugin.getBreakpointManager().removeBreakpointListener( this );
 		plugin.getBreakpointManager().removeBreakpointManagerListener( this );
@@ -749,9 +925,10 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 			filter.dispose( this );
 		}
 		
-		if ( smapFileCache != null )
+		smapFileCache.clear();
+		if ( smapLineCache != null )
 		{
-			smapFileCache.clear();
+			smapLineCache = null;
 		}
 		
 		synchronized ( threads )
@@ -842,5 +1019,49 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	public void setStepFiltersEnabled( boolean enabled )
 	{
 		javaTarget.setStepFiltersEnabled( enabled );
+	}
+	
+	@Override
+	public boolean supportsSourceDebugExtension()
+	{
+		return supportsSourceDebugExtension;
+	}
+	
+	@Override
+	public void resourceChanged( IResourceChangeEvent event )
+	{
+		// When a *.eglsmap changes, we need to dump its caches.
+		if ( event.getDelta() != null )
+		{
+			try
+			{
+				event.getDelta().accept( new IResourceDeltaVisitor() {
+					@Override
+					public boolean visit( IResourceDelta delta ) throws CoreException
+					{
+						if ( delta == null )
+						{
+							return false;
+						}
+						if ( delta.getKind() == IResourceDelta.REMOVED
+								|| (delta.getKind() == IResourceDelta.CHANGED && ((delta.getFlags() & IResourceDelta.CONTENT) != 0 || (delta
+										.getFlags() & IResourceDelta.ENCODING) != 0))
+								&& IEGLDebugCoreConstants.SMAP_EXTENSION.equals( delta.getFullPath().getFileExtension() ) )
+						{
+							String removed = smapFileCache.removeEntry( delta.getFullPath().toString(), null );
+							if ( removed != null && smapLineCache != null )
+							{
+								smapLineCache.remove( removed );
+							}
+						}
+						return true;
+					}
+				} );
+			}
+			catch ( CoreException ce )
+			{
+				EDTDebugCorePlugin.log( ce );
+			}
+		}
 	}
 }

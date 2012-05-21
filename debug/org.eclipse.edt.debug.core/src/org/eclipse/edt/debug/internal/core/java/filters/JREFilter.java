@@ -11,13 +11,12 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java.filters;
 
-import java.util.Map;
+import java.util.HashMap;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.filters.ClasspathEntryFilter;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
@@ -28,37 +27,53 @@ import org.eclipse.jdt.launching.LibraryLocation;
 public class JREFilter extends ClasspathEntryFilter
 {
 	@Override
-	protected void processClasspath( IClasspathEntry entry, IEGLJavaDebugTarget target, Map<String, Object> classMap ) throws CoreException
+	public synchronized void initialize( IEGLJavaDebugTarget target )
 	{
-		IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
-		if ( vm != null )
+		Object targetKey = getTargetClassmapKey( target );
+		if ( targetKey == null || targetClassMap.containsKey( targetKey ) )
 		{
-			LibraryLocation[] libraries = JavaRuntime.getLibraryLocations( vm );
-			for ( LibraryLocation library : libraries )
+			return;
+		}
+		
+		try
+		{
+			targetClassMap.put( targetKey, null );
+			IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+			if ( vm != null )
 			{
-				processJar( library.getSystemLibraryPath().toFile(), library.getPackageRootPath().toString(), classMap );
+				LibraryLocation[] libraries = JavaRuntime.getLibraryLocations( vm );
+				if ( libraries.length > 0 )
+				{
+					HashMap<String, Object> targetClasses = new HashMap<String, Object>( 100 );
+					targetClassMap.put( target, targetClasses );
+					for ( LibraryLocation library : libraries )
+					{
+						processJar( library.getSystemLibraryPath().toFile(), library.getPackageRootPath().toString(), targetClasses );
+					}
+				}
 			}
 		}
-	}
-	
-	@Override
-	protected IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target ) throws CoreException
-	{
-		IRuntimeClasspathEntry entry = JavaRuntime.computeJREEntry( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
-		if ( entry != null )
+		catch ( Exception e )
 		{
-			return new IClasspathEntry[] { entry.getClasspathEntry() };
+			EDTDebugCorePlugin.log( e );
 		}
-		return null;
 	}
 	
 	@Override
-	protected Object getContainerClassMapKey( IEGLJavaDebugTarget target ) throws CoreException
+	protected Object getTargetClassmapKey( IEGLJavaDebugTarget target )
 	{
-		IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
-		if ( vm != null )
+		// Cache based on VM instead of target.
+		try
 		{
-			return vm.getId();
+			IVMInstall vm = JavaRuntime.computeVMInstall( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+			if ( vm != null )
+			{
+				return vm.getId();
+			}
+		}
+		catch ( CoreException ce )
+		{
+			EDTDebugCorePlugin.log( ce );
 		}
 		return null;
 	}

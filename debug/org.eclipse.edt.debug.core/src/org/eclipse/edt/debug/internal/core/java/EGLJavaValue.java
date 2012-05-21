@@ -155,7 +155,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 	{
 		if ( smap == null )
 		{
-			smap = SMAPUtil.getSMAP( javaValue.getJavaType(), getEGLJavaDebugTarget().getSMAPFileCache() );
+			smap = SMAPUtil.getSMAP( getEGLJavaDebugTarget(), javaValue.getJavaType() );
 		}
 		return smap;
 	}
@@ -181,7 +181,7 @@ public class EGLJavaValue extends EGLJavaDebugElement implements IEGLJavaValue
 				IJavaClassType superType = ((IJavaClassType)type).getSuperclass();
 				if ( superType != null )
 				{
-					String superSMAP = SMAPUtil.getSMAP( superType, getEGLJavaDebugTarget().getSMAPFileCache() );
+					String superSMAP = SMAPUtil.getSMAP( getEGLJavaDebugTarget(), superType );
 					if ( superSMAP.length() != 0 )
 					{
 						SMAPVariableInfo[] superInfos = SMAPUtil.parseVariables( superSMAP, null );

@@ -31,6 +31,11 @@ public interface IEGLJavaStackFrame extends IEGLStackFrame, IEGLJavaDebugElement
 	public IJavaStackFrame getJavaStackFrame();
 	
 	/**
+	 * @return true if this frame is an EGL stratum.
+	 */
+	public boolean isEGLStratum() throws DebugException;
+	
+	/**
 	 * Returns the variable information from the frame's SMAP. It should never be null. If there is no SMAP information, or the Java type was not a
 	 * type that we recognize, then this will return an empty array.
 	 * 

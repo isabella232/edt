@@ -22,6 +22,7 @@ import org.eclipse.debug.core.model.IWatchExpressionDelegate;
 import org.eclipse.debug.core.model.IWatchExpressionListener;
 import org.eclipse.debug.core.model.IWatchExpressionResult;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
+import org.eclipse.edt.debug.core.java.IEGLJavaDebugTarget;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
@@ -41,7 +42,7 @@ public class EGLWatchExpressionDelegate implements IWatchExpressionDelegate
 				if ( frame != null )
 				{
 					// If it's an EGL stratum, do not run the Java delegate.
-					skipJavaDelegate = SMAPUtil.isEGLStratum( frame );
+					skipJavaDelegate = SMAPUtil.isEGLStratum( frame, (IEGLJavaDebugTarget)((IEGLJavaDebugElement)context).getDebugTarget() );
 				}
 				
 				if ( !skipJavaDelegate )

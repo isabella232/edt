@@ -50,7 +50,7 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 			return EMPTY;
 		}
 		
-		String type = IRFileNameUtility.toIRFileName( name );
+		String type = name;
 		
 		// Remove a file extension if it exists, convert separators to dots, then split out the package.
 		int lastDot = type.lastIndexOf( '.' );
@@ -93,7 +93,7 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 			{
 				case IPackageFragmentRoot.K_BINARY:
 				{
-					IClassFile file = fragment.getClassFile( type + ".ir" ); //$NON-NLS-1$
+					IClassFile file = findIR( fragment, type );
 					if ( file.exists() )
 					{
 						IProject proj = file.getEGLProject().getProject();
@@ -157,6 +157,25 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 		}
 		
 		return EMPTY;
+	}
+	
+	private IClassFile findIR( IPackageFragment fragment, String name )
+	{
+		name = IRFileNameUtility.toIRFileName( name );
+		IClassFile file = fragment.getClassFile( name + ".eglxml" ); //$NON-NLS-1$
+		if ( !file.exists() )
+		{
+			file = fragment.getClassFile( name + ".eglbin" ); //$NON-NLS-1$
+		}
+		if ( !file.exists() )
+		{
+			file = fragment.getClassFile( name + ".mofxml" ); //$NON-NLS-1$
+		}
+		if ( !file.exists() )
+		{
+			file = fragment.getClassFile( name + ".mofbin" ); //$NON-NLS-1$
+		}
+		return file;
 	}
 	
 	public String getName()

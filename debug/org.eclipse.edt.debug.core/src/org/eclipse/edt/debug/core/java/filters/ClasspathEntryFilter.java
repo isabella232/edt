@@ -19,7 +19,11 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
@@ -33,40 +37,32 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * Filter that uses classpath entries to build the list of classes to be filtered. Only {@link IClasspathEntry#CPE_LIBRARY} and
- * {@link IClasspathEntry#CPE_CONTAINER} types are supported at this time.
+ * Filter that uses classpath entries to build the list of classes to be filtered. The classpath entries must be fully resolved, meaning variable
+ * entries will be ignored.
  */
 public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 {
 	/**
-	 * Placeholder for when processing a container entry failed.
+	 * Flag indicating if the common classes were already processed for this filter.
 	 */
-	protected static final Object COULD_NOT_PARSE_CONTAINER = new Object();
+	private boolean commonClassesProcessed;
 	
 	/**
-	 * Class map for libraries which are the same among all debug targets.
+	 * Class map for entries which are always the same among all debug targets.
 	 */
-	protected Map<String, Object> libraryClassesToFilter;
+	protected Map<String, Object> commonClassesToFilter;
 	
 	/**
-	 * Map of debug targets to cached objects, the type of which depend on subclasses.
-	 * 
-	 * @see #getContainerClassMapKey(IClasspathEntry, IEGLJavaDebugTarget)
+	 * Class map for entries which can differ among debug targets.
 	 */
-	private Map<IEGLJavaDebugTarget, Object> targetContainerMap;
-	
-	/**
-	 * Class map for container entries.
-	 * 
-	 * @see #targetContainerMap
-	 */
-	private Map<Object, Map<String, Object>> containerClassMap;
+	protected Map<Object, Map<String, Object>> targetClassMap = new HashMap<Object, Map<String, Object>>();
 	
 	@Override
 	public boolean filter( IJavaStackFrame frame, IEGLJavaDebugTarget target )
@@ -75,22 +71,17 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 		{
 			String typeName = frame.getReferenceType().getName(); // This way avoids '<>' from generics.
 			
-			// Try the libraries.
-			if ( libraryClassesToFilter != null && libraryClassesToFilter.containsKey( typeName ) )
+			// Try the common classes.
+			if ( commonClassesToFilter != null && commonClassesToFilter.containsKey( typeName ) )
 			{
 				return true;
 			}
 			
-			// Try the containers.
-			if ( targetContainerMap != null && containerClassMap != null )
+			// Try the target-specific classes.
+			Object targetKey = getTargetClassmapKey( target );
+			if ( targetKey != null )
 			{
-				Object key = targetContainerMap.get( target );
-				if ( key == null || key == COULD_NOT_PARSE_CONTAINER )
-				{
-					return false;
-				}
-				
-				Map<String, Object> classMap = containerClassMap.get( key );
+				Map<String, Object> classMap = targetClassMap.get( targetKey );
 				if ( classMap != null )
 				{
 					return classMap.containsKey( typeName );
@@ -106,91 +97,149 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 	@Override
 	public void dispose()
 	{
-		this.libraryClassesToFilter = null;
-		this.targetContainerMap = null;
-		this.containerClassMap = null;
+		this.commonClassesToFilter = null;
+		this.targetClassMap = null;
 	}
 	
 	@Override
 	public void dispose( IEGLJavaDebugTarget target )
 	{
 		super.dispose( target );
-		if ( targetContainerMap != null )
+		if ( targetClassMap != null )
 		{
-			Object removedKey = targetContainerMap.remove( target );
-			if ( containerClassMap != null && removedKey == Integer.valueOf( target.hashCode() ) )
-			{
-				// The class map is specific to this target (default implementation), remove it too.
-				containerClassMap.remove( removedKey );
-			}
+			targetClassMap.remove( target );
 		}
 	}
 	
 	@Override
 	public synchronized void initialize( IEGLJavaDebugTarget target )
 	{
-		// For library entries they only get initialized the once, but for containers entries they are calculated
-		// based on the root Java project and can vary from project to project.
-		boolean needToInitLibraries = false;
-		if ( libraryClassesToFilter == null )
+		IJavaProject jp = null;
+		if ( !commonClassesProcessed )
 		{
-			needToInitLibraries = true;
-		}
-		
-		try
-		{
-			IClasspathEntry[] entries = getClasspathEntries( target );
-			if ( entries == null )
+			commonClassesProcessed = true;
+			try
 			{
-				entries = new IClasspathEntry[ 0 ];
-			}
-			
-			if ( entries.length == 0 )
-			{
-				return;
-			}
-			
-			for ( IClasspathEntry entry : entries )
-			{
-				switch ( entry.getEntryKind() )
+				IClasspathEntry[] entries = getCommonClasspathEntries();
+				if ( entries != null && entries.length > 0 )
 				{
-					case IClasspathEntry.CPE_LIBRARY:
-						if ( needToInitLibraries )
-						{
-							if ( libraryClassesToFilter == null )
-							{
-								libraryClassesToFilter = new HashMap<String, Object>( 100 );
-							}
-							processLibraryEntry( entry, target );
-						}
-						break;
-					
-					case IClasspathEntry.CPE_CONTAINER:
-						if ( targetContainerMap == null )
-						{
-							targetContainerMap = new HashMap<IEGLJavaDebugTarget, Object>();
-						}
-						if ( containerClassMap == null )
-						{
-							containerClassMap = new HashMap<Object, Map<String, Object>>( 100 );
-						}
-						processContainerEntry( entry, target );
-						break;
-					
-					default:
-						EDTDebugCorePlugin.log( new Status( IStatus.WARNING, EDTDebugCorePlugin.PLUGIN_ID, NLS.bind(
-								EDTDebugCoreMessages.TypeFilterClasspathEntryNotSupported, new Object[] { entry.getEntryKind(), getId() } ) ) );
-						break;
+					jp = JavaRuntime.getJavaProject( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+					commonClassesToFilter = new HashMap<String, Object>( 100 );
+					processEntries( entries, jp, commonClassesToFilter );
 				}
 			}
+			catch ( Exception e )
+			{
+				EDTDebugCorePlugin.log( e );
+			}
 		}
-		catch ( CoreException ce )
+		
+		Object targetKey = getTargetClassmapKey( target );
+		if ( targetKey == null || targetClassMap.containsKey( targetKey ) )
 		{
-			EDTDebugCorePlugin.log( ce );
+			return;
+		}
+		
+		targetClassMap.put( targetKey, null );
+		try
+		{
+			IClasspathEntry[] entries = getTargetClasspathEntries( target );
+			if ( entries != null && entries.length > 0 )
+			{
+				if ( jp == null )
+				{
+					jp = JavaRuntime.getJavaProject( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
+				}
+				HashMap<String, Object> targetClasses = new HashMap<String, Object>( 100 );
+				targetClassMap.put( target, targetClasses );
+				processEntries( entries, jp, targetClasses );
+			}
+		}
+		catch ( Exception e )
+		{
+			EDTDebugCorePlugin.log( e );
 		}
 	}
 	
-	protected void processLibraryEntry( IClasspathEntry entry, IEGLJavaDebugTarget target )
+	protected void processEntries( IClasspathEntry[] entries, IJavaProject project, Map<String, Object> classMap ) throws CoreException
+	{
+		for ( IClasspathEntry entry : entries )
+		{
+			switch ( entry.getEntryKind() )
+			{
+				case IClasspathEntry.CPE_LIBRARY:
+					processLibraryEntry( entry, classMap );
+					break;
+				
+				case IClasspathEntry.CPE_CONTAINER:
+					processContainerEntry( entry, project, classMap );
+					break;
+				
+				case IClasspathEntry.CPE_SOURCE:
+					processSourceEntry( entry, classMap );
+					break;
+				
+				case IClasspathEntry.CPE_PROJECT:
+					IProject depProject = ResourcesPlugin.getWorkspace().getRoot().getProject( entry.getPath().lastSegment() );
+					if ( depProject.isAccessible() && depProject.hasNature( JavaCore.NATURE_ID ) )
+					{
+						IJavaProject jp = JavaCore.create( depProject );
+						processEntries( jp.getResolvedClasspath( true ), jp, classMap );
+					}
+					break;
+				
+				default:
+					EDTDebugCorePlugin.log( new Status( IStatus.WARNING, EDTDebugCorePlugin.PLUGIN_ID, NLS.bind(
+							EDTDebugCoreMessages.TypeFilterClasspathEntryNotSupported, new Object[] { entry.getEntryKind(), getId() } ) ) );
+					break;
+			}
+		}
+	}
+	
+	protected void processSourceEntry( IClasspathEntry entry, Map<String, Object> classMap )
+	{
+		IPath output = entry.getOutputLocation();
+		if ( output == null )
+		{
+			// Check Java project's default.
+			try
+			{
+				IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( entry.getPath().segment( 0 ) );
+				if ( project.isAccessible() && project.hasNature( JavaCore.NATURE_ID ) )
+				{
+					output = JavaCore.create( project ).getOutputLocation();
+				}
+			}
+			catch ( CoreException ce )
+			{
+				EDTDebugCorePlugin.log( ce );
+			}
+		}
+		
+		if ( output != null )
+		{
+			IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember( output );
+			if ( resource != null )
+			{
+				IPath abs = resource.getLocation();
+				if ( abs != null )
+				{
+					File file = abs.toFile();
+					if ( file.isDirectory() )
+					{
+						String rootPath = file.getPath();
+						if ( !rootPath.endsWith( File.separator ) )
+						{
+							rootPath = rootPath + File.separator;
+						}
+						processDirectory( file, rootPath, classMap );
+					}
+				}
+			}
+		}
+	}
+	
+	protected void processLibraryEntry( IClasspathEntry entry, Map<String, Object> classMap )
 	{
 		File file = entry.getPath().toFile();
 		if ( file.exists() )
@@ -202,11 +251,11 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 				{
 					rootPath = rootPath + File.separator;
 				}
-				processLibraryDirectory( file, rootPath );
+				processDirectory( file, rootPath, classMap );
 			}
 			else if ( file.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
 			{
-				processJar( file, null, libraryClassesToFilter );
+				processJar( file, null, classMap );
 			}
 		}
 	}
@@ -241,7 +290,7 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 		}
 	}
 	
-	protected void processLibraryDirectory( File dir, String pathRoot )
+	protected void processDirectory( File dir, String pathRoot, Map<String, Object> classMap )
 	{
 		for ( File file : dir.listFiles() )
 		{
@@ -251,12 +300,12 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 				if ( path.endsWith( ".class" ) ) //$NON-NLS-1$
 				{
 					String className = path.substring( pathRoot.length(), path.length() - 6 ).replace( File.separatorChar, '.' );
-					libraryClassesToFilter.put( className, null );
+					classMap.put( className, null );
 				}
 			}
 			else
 			{
-				processLibraryDirectory( file, pathRoot );
+				processDirectory( file, pathRoot, classMap );
 			}
 		}
 	}
@@ -264,53 +313,11 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 	/**
 	 * Subclasses are free to override this to provide more specific caching.
 	 */
-	protected void processContainerEntry( IClasspathEntry entry, IEGLJavaDebugTarget target )
+	protected void processContainerEntry( IClasspathEntry entry, IJavaProject project, Map<String, Object> classMap )
 	{
-		Object classMapKey = targetContainerMap.get( target );
-		if ( classMapKey == null )
-		{
-			try
-			{
-				classMapKey = getContainerClassMapKey( target );
-			}
-			catch ( CoreException ce )
-			{
-				EDTDebugCorePlugin.log( ce );
-			}
-			
-			if ( classMapKey == null )
-			{
-				classMapKey = COULD_NOT_PARSE_CONTAINER;
-			}
-			
-			targetContainerMap.put( target, classMapKey );
-		}
-		
-		if ( classMapKey != COULD_NOT_PARSE_CONTAINER )
-		{
-			Map<String, Object> classMap = containerClassMap.get( classMapKey );
-			if ( classMap == null )
-			{
-				classMap = new HashMap<String, Object>( 200 );
-				containerClassMap.put( classMapKey, classMap );
-				
-				try
-				{
-					processClasspath( entry, target, classMap );
-				}
-				catch ( CoreException ce )
-				{
-					EDTDebugCorePlugin.log( ce );
-				}
-			}
-		}
-	}
-	
-	protected void processClasspath( IClasspathEntry entry, IEGLJavaDebugTarget target, Map<String, Object> classMap ) throws CoreException
-	{
-		IJavaProject project = JavaRuntime.getJavaProject( target.getJavaDebugTarget().getLaunch().getLaunchConfiguration() );
 		if ( project == null )
 		{
+			// Can't calulate the entry without an IJavaProject.
 			return;
 		}
 		
@@ -369,25 +376,37 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 	}
 	
 	/**
-	 * Subclasses should override this if they wish to use an alternate key for the class map. By default this will return the hash code of the
-	 * target. A reason you want to override is if the class map is based on an attribute of the target, such as its active JRE, which can be the same
-	 * for multiple targets (and you'd want it to stay cached after the target ends).
+	 * Returns the array of common classpath entries to be processed. This will only be called once.
 	 * 
-	 * @param target The EGL debug target.
-	 * @return the key used for storing the debug target's class map.
+	 * @return the common classpath entries, possibly null.
 	 * @throws CoreException
 	 */
-	protected Object getContainerClassMapKey( IEGLJavaDebugTarget target ) throws CoreException
+	protected IClasspathEntry[] getCommonClasspathEntries() throws CoreException
 	{
-		return target.hashCode();
+		return null;
 	}
 	
 	/**
-	 * Returns the array of classpath entries that are to be processed. This will only be called once and the result will be cached.
+	 * Returns the array of classpath entries that are specific to the debug target. This will be called only once per target.
 	 * 
 	 * @param target The EGL debug target.
-	 * @return the classpath entries to be processed.
+	 * @return the target-specific classpath entries, possibly null.
 	 * @throws CoreException
 	 */
-	protected abstract IClasspathEntry[] getClasspathEntries( IEGLJavaDebugTarget target ) throws CoreException;
+	protected IClasspathEntry[] getTargetClasspathEntries( IEGLJavaDebugTarget target ) throws CoreException
+	{
+		return null;
+	}
+	
+	/**
+	 * Returns the key for the target map. By default the target will be the key, but subclasses can use some other caching mechanism (for example if
+	 * multiple targets have the same entries, like if they're using the same JRE).
+	 * 
+	 * @param target The EGL debug target.
+	 * @return the key for the target map, or null if no target processing should be performed.
+	 */
+	protected Object getTargetClassmapKey( IEGLJavaDebugTarget target )
+	{
+		return target;
+	}
 }
