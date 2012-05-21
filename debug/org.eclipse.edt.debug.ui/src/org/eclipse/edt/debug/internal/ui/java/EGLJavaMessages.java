@@ -25,6 +25,7 @@ public class EGLJavaMessages extends NLS
 	
 	public static String LineBreakpointUnkown;
 	public static String LineBreakpointLabel;
+	public static String ThreadLabelSuspendedAtBreakpoint;
 	public static String PreferencePageMessage;
 	public static String JavaPreferencePageLink;
 	public static String JavaFilterPreferencePageLink;

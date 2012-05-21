@@ -27,8 +27,12 @@ import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.core.java.IEGLJavaDebugElement;
 import org.eclipse.edt.debug.core.java.IEGLJavaValue;
 import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaDebugTarget;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaFunctionVariable;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaStackFrame;
+import org.eclipse.edt.debug.internal.core.java.EGLJavaThread;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
+import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.internal.debug.ui.JDIModelPresentation;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.ISharedImages;
@@ -79,6 +83,51 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 			}
 			catch ( DebugException e )
 			{
+			}
+		}
+		
+		if ( element instanceof EGLJavaStackFrame )
+		{
+			try
+			{
+				EGLJavaStackFrame frame = (EGLJavaStackFrame)element;
+				if ( frame.isEGLStratum() )
+				{
+					return frame.getLabel();
+				}
+			}
+			catch ( DebugException de )
+			{
+			}
+		}
+		else if ( element instanceof EGLJavaThread )
+		{
+			EGLJavaDebugTarget target = ((EGLJavaThread)element).getEGLJavaDebugTarget();
+			if ( !target.supportsSourceDebugExtension() )
+			{
+				// When a bp is hit, the Java breakpoint info is displayed. Use our own label to show the EGL breakpoint info.
+				IBreakpoint[] bps = ((EGLJavaThread)element).getJavaThread().getBreakpoints();
+				if ( bps != null && bps.length > 0 && bps[ 0 ] instanceof IJavaLineBreakpoint )
+				{
+					EGLLineBreakpoint bp = ((EGLJavaDebugTarget)target).findCorrespondingBreakpoint( (IJavaLineBreakpoint)bps[ 0 ] );
+					if ( bp != null )
+					{
+						IMarker marker = bp.getMarker();
+						if ( marker != null && marker.exists() )
+						{
+							try
+							{
+								return NLS.bind( EGLJavaMessages.ThreadLabelSuspendedAtBreakpoint, new Object[] {
+										((EGLJavaThread)element).getJavaThread().getName(), String.valueOf( bp.getLineNumber() ),
+										marker.getResource().getName() } );
+							}
+							catch ( CoreException ce )
+							{
+								EDTDebugUIPlugin.log( ce );
+							}
+						}
+					}
+				}
 			}
 		}
 		
