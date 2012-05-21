@@ -69,6 +69,7 @@ public abstract class AbstractEGLApplicationTab extends AbstractLaunchConfigurat
 		
 		PartSelectionDialog dialog = new PartSelectionDialog( getShell(), getLaunchConfigurationDialog(), partTypes, null,
 				SearchEngine.createEGLSearchScope( elements, false ) ) {
+			@SuppressWarnings("unchecked")
 			@Override
 			protected int addParts( ArrayList partsList, IEGLSearchScope scope, int elementKinds, String subType )
 			{
