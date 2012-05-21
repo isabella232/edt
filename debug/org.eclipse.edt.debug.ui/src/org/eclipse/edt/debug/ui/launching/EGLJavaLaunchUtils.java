@@ -13,7 +13,6 @@ package org.eclipse.edt.debug.ui.launching;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -41,12 +40,8 @@ public class EGLJavaLaunchUtils
 	 * The image registry which holds <code>Image</code>s
 	 */
 	private static ImageRegistry imageRegistry;
-	/**
-	 * A table of all the <code>ImageDescriptor</code>s
-	 */
-	private static HashMap imageDescriptors;
 	
-	private static URL ICON_BASE_URL = null;
+	private static URL ICON_BASE_URL;
 	static
 	{
 		ICON_BASE_URL = EDTDebugUIPlugin.getDefault().getBundle().getEntry( "icons/full/" ); //$NON-NLS-1$
@@ -68,7 +63,6 @@ public class EGLJavaLaunchUtils
 			if ( !imageRegistryInitialized )
 			{
 				imageRegistry = new ImageRegistry( getStandardDisplay() );
-				imageDescriptors = new HashMap( 30 );
 				declareImages();
 				imageRegistryInitialized = true;
 			}
@@ -87,7 +81,6 @@ public class EGLJavaLaunchUtils
 		{
 		}
 		imageRegistry.put( key, desc );
-		imageDescriptors.put( key, desc );
 	}
 	
 	private static URL makeIconFileURL( String iconPath ) throws MalformedURLException
