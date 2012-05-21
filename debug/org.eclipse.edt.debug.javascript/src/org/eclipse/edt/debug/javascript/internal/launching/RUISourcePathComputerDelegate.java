@@ -21,11 +21,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
-import org.eclipse.debug.core.sourcelookup.containers.ProjectSourceContainer;
 import org.eclipse.edt.debug.core.EGLSourcePathComputerDelegate;
 import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationConstants;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.IEGLProject;
 
 public class RUISourcePathComputerDelegate extends EGLSourcePathComputerDelegate
 {
@@ -41,14 +38,7 @@ public class RUISourcePathComputerDelegate extends EGLSourcePathComputerDelegate
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 			if ( project != null && project.exists() )
 			{
-				if ( project.hasNature( EGLCore.NATURE_ID ) )
-				{
-					buildContainers( (IEGLProject)EGLCore.create( project ), containers, new HashSet<IEGLProject>() );
-				}
-				else
-				{
-					containers.add( new ProjectSourceContainer( project, true ) );
-				}
+				buildContainers( project, containers, new HashSet<IProject>() );
 			}
 		}
 		
