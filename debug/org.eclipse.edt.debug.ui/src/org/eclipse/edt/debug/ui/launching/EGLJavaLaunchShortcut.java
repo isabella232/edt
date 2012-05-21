@@ -65,7 +65,7 @@ public class EGLJavaLaunchShortcut extends AbstractEGLLaunchShortcut
 		}
 		String fileName = getQualifiedFilename( eglFile );
 		ILaunchConfiguration[] configs = launchManager.getLaunchConfigurations( configType );
-		List candidateConfigs = new ArrayList( configs.length );
+		List<ILaunchConfiguration> candidateConfigs = new ArrayList<ILaunchConfiguration>( configs.length );
 		for ( int i = 0; i < configs.length; i++ )
 		{
 			ILaunchConfiguration config = configs[ i ];
