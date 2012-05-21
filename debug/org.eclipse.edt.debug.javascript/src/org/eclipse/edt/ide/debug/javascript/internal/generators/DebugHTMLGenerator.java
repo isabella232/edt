@@ -19,8 +19,7 @@ import org.eclipse.edt.gen.deployment.javascript.ContextAwareHTMLGenerator;
 
 public class DebugHTMLGenerator extends ContextAwareHTMLGenerator
 {
-	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, HashMap eglParameters, String userMsgLocale,
-			String runtimeMsgLocale )
+	public DebugHTMLGenerator( AbstractGeneratorCommand processor, List egldds, HashMap eglParameters, String userMsgLocale, String runtimeMsgLocale )
 	{
 		super( processor, egldds, eglParameters, userMsgLocale, runtimeMsgLocale );
 	}
