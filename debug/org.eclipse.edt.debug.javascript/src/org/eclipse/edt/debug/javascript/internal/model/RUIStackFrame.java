@@ -50,13 +50,13 @@ public class RUIStackFrame extends RUIDebugElement implements IEGLStackFrame
 	 * The variables processed from the client. These are used to look up and reinitialize existing variables for the frame, otherwise they are used
 	 * when no old variable is found.
 	 */
-	private List fCurrentVariables;
+	private List<IVariable> fCurrentVariables;
 	
 	/**
 	 * Table containing all the variables in this frame, including child variables. The key is the variable's fully qualified name (e.g.
 	 * "myFunc.myRec.myField").
 	 */
-	private Hashtable fVariablesHash;
+	private Hashtable<String, IVariable> fVariablesHash;
 	
 	/**
 	 * Values that were stored in fVariablesHash are moved to fVariablesHashOld every time the thread is run (including stepping). Used to find old
@@ -130,7 +130,7 @@ public class RUIStackFrame extends RUIDebugElement implements IEGLStackFrame
 			}
 		}
 		
-		fVariablesHash = new Hashtable( hashSize );
+		fVariablesHash = new Hashtable<String, IVariable>( hashSize );
 		fVariables = null;
 	}
 	
@@ -438,7 +438,7 @@ public class RUIStackFrame extends RUIDebugElement implements IEGLStackFrame
 	{
 		if ( fCurrentVariables == null )
 		{
-			fCurrentVariables = new ArrayList();
+			fCurrentVariables = new ArrayList<IVariable>();
 		}
 		fCurrentVariables.add( var );
 	}

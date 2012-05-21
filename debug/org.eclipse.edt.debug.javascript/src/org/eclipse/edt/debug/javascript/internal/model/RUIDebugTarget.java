@@ -60,8 +60,8 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	private boolean fTerminating;
 	private boolean fSuspended;
 	private boolean fSuspending;
-	private List fStackFrames;
-	private List fOldStackFrames;
+	private List<RUIStackFrame> fStackFrames;
+	private List<RUIStackFrame> fOldStackFrames;
 	private String debugCmd;
 	private boolean steppingIn;
 	private LocaleInfo localeInfo;
@@ -741,7 +741,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	
 	public void parseStack( String stackStr )
 	{
-		fStackFrames = new ArrayList();
+		fStackFrames = new ArrayList<RUIStackFrame>();
 		StringTokenizer stackStrings = new StringTokenizer( stackStr, "|" ); //$NON-NLS-1$
 		while ( stackStrings.hasMoreTokens() )
 		{
@@ -785,7 +785,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 		{
 			for ( int i = 0, size = fStackFrames.size(); i < size; i++ )
 			{
-				RUIStackFrame newFrame = (RUIStackFrame)fStackFrames.get( i );
+				RUIStackFrame newFrame = fStackFrames.get( i );
 				RUIStackFrame oldFrame = findMatchingOldStackFrame( newFrame, size - i - 1 );
 				if ( oldFrame != null )
 				{
@@ -955,7 +955,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	{
 		if ( completion != null )
 		{
-			List list = new ArrayList();
+			List<IEGLVariable> list = new ArrayList<IEGLVariable>();
 			
 			if ( value != null )
 			{

@@ -90,7 +90,7 @@ public class RUIWorkspaceSourceContainer extends CompositeSourceContainer
 	@Override
 	public Object[] findSourceElements( String name ) throws CoreException
 	{
-		ArrayList sources = new ArrayList();
+		ArrayList<IFile> sources = new ArrayList<IFile>();
 		
 		if ( ResourcesPlugin.getWorkspace().validatePath( name, IResource.FILE ).isOK() )
 		{

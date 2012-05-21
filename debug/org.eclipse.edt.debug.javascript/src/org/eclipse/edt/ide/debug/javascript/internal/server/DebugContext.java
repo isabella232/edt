@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Display;
 public class DebugContext extends AbstractContext implements IContext2
 {
 	private RUIDebugTarget debugTarget;
-	private List eventQueue;
+	private List<String> eventQueue;
 	private final String launchConfigName;
 	
 	/**
@@ -53,7 +53,7 @@ public class DebugContext extends AbstractContext implements IContext2
 	{
 		super( url, key, new DebugContentProvider() );
 		this.debugTarget = debugTarget;
-		this.eventQueue = new ArrayList();
+		this.eventQueue = new ArrayList<String>();
 		this.launchConfigName = launchConfigName;
 	}
 	

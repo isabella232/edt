@@ -312,7 +312,7 @@ public class ListSelectionDialog extends Dialog
 		}
 		else
 		{
-			Vector vector = new Vector();
+			Vector<ListElement> vector = new Vector<ListSelectionDialog.ListElement>();
 			for ( int i = 0; i < fListElements.length; i++ )
 			{
 				ListElement element = fListElements[ i ];
@@ -440,18 +440,14 @@ public class ListSelectionDialog extends Dialog
 	/**
 	 * Class for comparing list elements. Used to sort the element list.
 	 */
-	protected class ListElementComparator implements Comparator
+	protected class ListElementComparator implements Comparator<ListElement>
 	{
-		
 		/**
 		 * @see Comparator#compare(Object, Object)
 		 */
 		@Override
-		public int compare( Object o1, Object o2 )
+		public int compare( ListElement element1, ListElement element2 )
 		{
-			ListElement element1 = (ListElement)o1;
-			ListElement element2 = (ListElement)o2;
-			
 			return element1.getText().compareToIgnoreCase( element2.getText() );
 		}
 	}
