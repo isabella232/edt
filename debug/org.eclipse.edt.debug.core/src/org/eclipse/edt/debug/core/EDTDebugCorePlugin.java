@@ -82,6 +82,7 @@ public class EDTDebugCorePlugin extends Plugin implements BundleActivator
 		return plugin;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public String getTransformerPath()
 	{
 		if ( transformerPath == null )
