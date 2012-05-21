@@ -118,7 +118,6 @@ public class EGL2IREnvironment implements IBindingEnvironment, IEnvironment {
 					return partBinding;
 				}
 				else {
-					throw new RuntimeException("Part not found: " + mofSignature);
 				}
 			} catch (DeserializationException ex2) {
 				throw new RuntimeException(ex2);

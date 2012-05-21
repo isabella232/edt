@@ -12,53 +12,18 @@
 package org.eclipse.edt.compiler.internal.core.builder;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
-import org.eclipse.edt.compiler.binding.FixedRecordBinding;
-import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.HandlerBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.DataItemBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.DataTableBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FixedRecordBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FlexibleRecordBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FormBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FormGroupBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.FunctionBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.HandlerBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
-import org.eclipse.edt.compiler.internal.core.lookup.InterfaceBinder;
-import org.eclipse.edt.compiler.internal.core.lookup.LibraryBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ProgramBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.core.lookup.ServiceBinder;
-import org.eclipse.edt.compiler.internal.core.validation.part.DataItemValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.DataTableValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.EnumerationValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FixedRecordValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FlexibleRecordValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FormGroupValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FormValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.FunctionValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.HandlerValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.InterfaceValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.LibraryValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ProgramValidator;
-import org.eclipse.edt.compiler.internal.core.validation.part.ServiceValidator;
 import org.eclipse.edt.mof.egl.Program;
 
 
@@ -89,7 +54,7 @@ public abstract class Compiler extends DefaultASTVisitor{
 				break;
 			case ITypeBinding.PROGRAM_BINDING:
 				try{
-				    astNode.accept(new ProgramBinder((Program)((IRPartBinding)partBinding).getIrPart(), parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    astNode.accept(new ProgramBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
 				    //TODO get validator from compiler. also, add code to handle circular buildexception
 //				    try{

@@ -51,6 +51,7 @@ import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.impl.CallStatementImpl;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 public class BindingUtil {
@@ -113,7 +114,7 @@ public class BindingUtil {
 			
 		}
 		else {
-			if (ann != null) {
+			if (ann == null) {
 				part.addAnnotation(getInvalidAnn());
 			}
 		}
@@ -147,6 +148,7 @@ public class BindingUtil {
 	
 	public static IRPartBinding createPartBinding(EObject obj) {
 		if (obj instanceof Part) {
+			setValid((Part) obj, false);
 			return new IRPartBinding((Part)obj);
 		}
 		
@@ -716,6 +718,7 @@ public class BindingUtil {
     		ArrayType newArray = IrFactory.INSTANCE.createArrayType();
     		newArray.setElementType(elemType);
     		newArray.setElementsNullable(nullable);
+    		newArray.setClassifier((Classifier)TypeUtils.Type_LIST);
     		result = new WeakReference<ArrayType>(newArray);
     		
     		map.put(elemType, result);

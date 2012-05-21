@@ -190,6 +190,13 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
 	static function asDecimal(value ENumber in) returns(EDecimal) {@Operation{"narrow"}};
+	
+	/**
+	 * {@Operation narrow} Converts bytes to a decimal.
+	 *
+	 * @throws TypeCastException if the bytes are not valid format for a decimal.
+	 */
+	static function asDecimal(value EBytes in) returns(EDecimal) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts a decimal to a number.

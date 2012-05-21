@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -93,7 +93,7 @@ public class ForwardStatement extends Statement {
 		this.forwardOptions = setParent(forwardOptions);
 	}
 	
-	public List getArguments() {
+	public List<Node> getArguments() {
 		return args;
 	}
 	
@@ -113,7 +113,7 @@ public class ForwardStatement extends Statement {
 		return forwardTargetOpt.getExpression();
 	}
 	
-	public List getForwardOptions() {
+	public List<Node> getForwardOptions() {
 		return forwardOptions;
 	}
 	

@@ -431,7 +431,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     	if (type != null) {
             dependencyRequestor.recordType(type);
     	}
-        return result;
+        return value;
     }
     
     public void bindInvocationTarget(Expression invocationTarget, final boolean allowFuncs) {

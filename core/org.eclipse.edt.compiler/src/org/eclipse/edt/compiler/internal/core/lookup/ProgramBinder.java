@@ -58,7 +58,6 @@ public class ProgramBinder extends FunctionContainerBinder {
         if (programParameter.getName().resolveType() == null) {
             return false;
         }
-        processResolvableProperties(programParameter.getName());
         return false;
     }
 

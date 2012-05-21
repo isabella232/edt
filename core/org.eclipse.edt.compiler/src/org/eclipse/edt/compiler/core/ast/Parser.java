@@ -8646,7 +8646,6 @@ class CUP$Parser$actions {
 		int timestampIntervalPrimitiveSpec1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int timestampIntervalPrimitiveSpec1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		String timestampIntervalPrimitiveSpec1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); 
               CUP$Parser$result = new java_cup.runtime.Symbol(92/*typeNoName*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -8661,7 +8660,6 @@ class CUP$Parser$actions {
 		int charPrimitiveSpec1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int charPrimitiveSpec1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		String charPrimitiveSpec1 = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new CharacterSpecPrimitiveType(charprimitive1, charPrimitiveSpec1, charprimitive1left, charPrimitiveSpec1right); 
               CUP$Parser$result = new java_cup.runtime.Symbol(92/*typeNoName*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -8676,7 +8674,6 @@ class CUP$Parser$actions {
 		int numericPrimitiveSpec1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int numericPrimitiveSpec1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		String[] numericPrimitiveSpec1 = (String[])((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); 
               CUP$Parser$result = new java_cup.runtime.Symbol(92/*typeNoName*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -8688,7 +8685,6 @@ class CUP$Parser$actions {
 		int prim1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int prim1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Primitive prim1 = (Primitive)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); 
               CUP$Parser$result = new java_cup.runtime.Symbol(92/*typeNoName*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9678,7 +9674,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new ArrayType(new TimestampIntervalSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9696,7 +9691,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new ArrayType(new CharacterSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9714,7 +9708,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new ArrayType(new NumericSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9732,7 +9725,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new ArrayType(new NoSpecPrimitiveType(prim1, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-4)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9747,7 +9739,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, null, timestampintervalprimitive1left, timestampintervalprimitive1right), timestampintervalprimitive1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9762,8 +9753,7 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new CharacterSpecPrimitiveType(charprimitive1, null, charprimitive1left, charprimitive1right), charprimitive1left, typeKeywordright); 
-              CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
+             CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
 
@@ -9777,7 +9767,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new NumericSpecPrimitiveType(numericprimitive1, null, numericprimitive1left, numericprimitive1right), numericprimitive1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;
@@ -9792,7 +9781,6 @@ class CUP$Parser$actions {
 		int typeKeywordleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).left;
 		int typeKeywordright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right;
 		Object typeKeyword = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-0)).value;
-		 RESULT = new TypeLiteralExpression(new NoSpecPrimitiveType(prim1, prim1left, prim1right), prim1left, typeKeywordright); 
               CUP$Parser$result = new java_cup.runtime.Symbol(25/*expr*/, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-0)).right, RESULT);
             }
           return CUP$Parser$result;

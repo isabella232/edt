@@ -33,6 +33,7 @@ public class ActionMethodSplitter {
 	
 	public static final String DO_ACTION_SIG_BEGIN1 = "  public final java_cup.runtime.Symbol CUP$";
 	public static final String DO_ACTION_SIG_BEGIN2 = "$do_action(";
+	public static final String ACTION_TABLE_BEGIN = "  protected static final short[][] _action_table = ";
 	
 	public static void main( String[] args ) {
 		BufferedReader reader = null;
@@ -83,6 +84,59 @@ public class ActionMethodSplitter {
 					System.out.println( doActionSig );	
 					numCases = -1;
 					activeBuffer = new StringBuffer();					
+				}
+				
+				// The _action_table field is ridiculously large so it needs to be split up too.
+				if (line.equals(ACTION_TABLE_BEGIN)) {
+					System.out.println( activeBuffer );
+					
+					activeBuffer = new StringBuffer();
+					activeBuffer.append( line + " unpackFromStrings(join(ActionTableHelper1.strings, ActionTableHelper2.strings));" + NL + NL );
+					activeBuffer.append( "  static String[] join(String[] s1, String[] s2) {" + NL );
+					activeBuffer.append( "    String[] temp = new String[s1.length + s2.length];" + NL );
+					activeBuffer.append( "    System.arraycopy(s1, 0, temp, 0, s1.length);" + NL );
+					activeBuffer.append( "    System.arraycopy(s2, 0, temp, s1.length, s2.length);" + NL );
+					activeBuffer.append( "    return temp;" + NL );
+					activeBuffer.append( "  }" + NL + NL );
+					
+					// Next line is 'unpackFromStrings(new String[] {' which we don't need.
+					line = reader.readLine();
+					
+					
+					// First 'chunk' - 10000 lines
+					boolean done = false;
+					int count = 0;
+					activeBuffer.append( "  private static class ActionTableHelper1 {" + NL );
+					activeBuffer.append( "    private static String[] strings = new String[] {" + NL );
+					while (!done && count < 10000) {
+						line = reader.readLine();
+						if (line.endsWith("});")) {
+							// last line.
+							line = line.substring(0, line.indexOf("});"));
+							done = true;
+						}
+						activeBuffer.append(line + NL);
+						count++;
+					}
+					activeBuffer.append("    };" + NL);
+					activeBuffer.append( "  }" + NL + NL );
+					
+					// Second chunk. If this parser ever shrinks to fit all in the first part, this is an empty array.
+					activeBuffer.append( "  private static class ActionTableHelper2 {" + NL );
+					activeBuffer.append( "    static String[] strings = new String[] {" + NL );
+					while (!done) {
+						line = reader.readLine();
+						if (line.endsWith("});")) {
+							// last line.
+							line = line.substring(0, line.indexOf("});"));
+							done = true;
+						}
+						activeBuffer.append(line + NL);
+					}
+					activeBuffer.append("    };" + NL);
+					activeBuffer.append( "  }" + NL + NL );
+					
+					line = reader.readLine();
 				}
 				
 				activeBuffer.append( line + NL );				

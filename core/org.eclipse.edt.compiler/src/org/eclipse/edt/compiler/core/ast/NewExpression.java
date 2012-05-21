@@ -56,7 +56,7 @@ public class NewExpression extends Expression {
 		return type;
 	}
 	
-	public List getArguments() {
+	public List<Expression> getArguments() {
 		return funcArgs;
 	}
 	

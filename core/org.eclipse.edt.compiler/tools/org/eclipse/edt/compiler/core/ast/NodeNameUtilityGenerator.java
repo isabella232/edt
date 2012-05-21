@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -704,16 +705,22 @@ class NodeNameUtilityGenerator {
     }
     else {
       for (int i = 0; i < argv.length; i++) {
+    	// Linux wants /, not \
+    	String file = argv[i];
+    	if (File.separatorChar == '/') {
+    		file = file.replace('\\', '/');
+    	}
+    	
         NodeNameUtilityGenerator scanner = null;
         try {
-          scanner = new NodeNameUtilityGenerator( new java.io.FileReader(argv[i]) );
+          scanner = new NodeNameUtilityGenerator( new java.io.FileReader(file) );
           while ( !scanner.yy_atEOF ) scanner.yylex();
         }
         catch (java.io.FileNotFoundException e) {
-          System.out.println("File not found : \""+argv[i]+"\"");
+          System.out.println("File not found : \""+file+"\"");
         }
         catch (java.io.IOException e) {
-          System.out.println("IO error scanning file \""+argv[i]+"\"");
+          System.out.println("IO error scanning file \""+file+"\"");
           System.out.println(e);
         }
         catch (Exception e) {

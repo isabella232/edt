@@ -1,0 +1,78 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package eglx.lang;
+
+import egl.lang.reflect.ClassType;
+import egl.lang.reflect.mof.Operation;
+
+/**
+ * A date stores an hour, minute, and second.
+ */
+externalType ETime extends AnyValue type ClassType
+	/**
+	 * {@Operation <} Compares two times.
+	 */
+	static function $LT(lvalue ETime in, rvalue ETime in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two times.
+	 */
+	static function $GT(lvalue ETime in, rvalue ETime in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two times.
+	 */
+	static function $LTE(lvalue ETime in, rvalue ETime in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two times.
+	 */
+	static function $GTE(lvalue ETime in, rvalue ETime in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two times.
+	 */
+	static function $EQ(lvalue ETime in, rvalue ETime in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two times.
+	 */
+	static function $NEQ(lvalue ETime in, rvalue ETime in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation narrow} Converts a string to a time. The string is parsed
+	 * by searching for the hour, then the minute, then the second.  Two digits
+	 * must be specified for each segment.  One separator character is required between
+	 * the hour and minute, and another between the minute and second.  The separator 
+	 * character must be a ":".
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a time.
+	 */
+	static function asTime(value EString in) returns (ETime) {@Operation{"narrow"}};
+
+	/**
+	 * {@Operation narrow} Converts a timestamp to a time.  The timestamp is
+	 * first converted to a string (as defined in EString.asString(ETimeStamp)).
+	 * This string value is then converted to a time (as defined in ETime.asTime(EString))
+	 *
+	 * @throws TypeCastException if the timeStamp can't be parsed into a time.
+	 */
+	static function asTime(value ETimeStamp in) returns (ETime) {@Operation{"narrow"}};
+	
+	/**
+	 * Creates a timestamp from a time.
+	 *
+	 * @param timeSpanMask  the desired mask for the timestamp.
+	 * @return a new timestamp.
+	 */
+	function extend(timeSpanMask EString in) returns(ETimestamp);
+end

@@ -78,8 +78,8 @@ public class PackageBinding extends Binding implements IPackageBinding {
         
         // Ask environment if the sub package actually exists, if it does, create a new PackageBinding for it
         String subPackageName;
-        if (packageName.length() > 0) {
-        	subPackageName = packageName + "." + simpleName;
+        if (getPackageName().length() > 0) {
+        	subPackageName = getCaseSensitivePackageName() + "." + simpleName;
         }
         else {
         	subPackageName = simpleName;
@@ -93,7 +93,7 @@ public class PackageBinding extends Binding implements IPackageBinding {
     }
 
     public IPartBinding resolveType(String simpleName) {
-        return environment.getPartBinding(packageName, simpleName);
+        return environment.getPartBinding(getPackageName(), simpleName);
     }
 
     public boolean isPackageBinding() {

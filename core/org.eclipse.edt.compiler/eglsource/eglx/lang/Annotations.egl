@@ -81,6 +81,4 @@ Record Throws type Annotation
 	targets = [ElementKind.FunctionMbr, ElementKind.ConstructorMbr],
 	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.ThrowsAnnotationTypeBinding"
 } 
-	getMethod FunctionMemberRef;
-	setMethod FunctionMemberRef;
 end

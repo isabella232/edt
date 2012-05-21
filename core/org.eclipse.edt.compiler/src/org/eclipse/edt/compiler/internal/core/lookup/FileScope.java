@@ -123,7 +123,7 @@ public class FileScope extends Scope {
         for(IPackageBinding pkgBinding : importedPackages) {
             Part temp = BindingUtil.getPart(pkgBinding.resolveType(simpleName));
             if(temp != null) {
-                if((declaringPackage != null && NameUtile.equals(((IPartBinding)temp).getPackageName(), declaringPackage.getPackageName())) || !BindingUtil.isPrivate(temp)){
+                if((declaringPackage != null && NameUtile.equals(temp.getPackageName(), declaringPackage.getPackageName())) || !BindingUtil.isPrivate(temp)){
                 	result.add(temp);
                 }  
              }

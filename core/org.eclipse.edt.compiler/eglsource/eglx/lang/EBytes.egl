@@ -1,0 +1,136 @@
+/*******************************************************************************
+ * Copyright © 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * IBM Corporation - initial API and implementation
+ *
+ *******************************************************************************/
+package eglx.lang;
+
+import egl.lang.reflect.ParameterizableType;
+import egl.lang.reflect.mof.Operation;
+
+import org.eclipse.edt.mof.egl.SequenceType;
+
+externalType EBytes extends AnyValue type ParameterizableType {
+	parameterizedType = SequenceType
+}
+	/**
+	 * {@Operation +} Concatenates two bytes.
+	 */
+	static function $Plus(lvalue EBytes? in, rvalue EBytes? in) returns(EBytes) {@Operation{"+"}};
+
+	/**
+	 * {@Operation ::} Concatenates two bytes.
+	 */
+	static function $Concat(value EBytes? in, rvalue EBytes? in) returns (EBytes) {@Operation{"::"}};
+
+	/**
+	 * {@Operation ?:} Concatenates two bytes.  If either is null then null is returned.
+	 */
+	static function $ConcatNull(value EBytes? in, rvalue EBytes? in) returns(EBytes?) {@Operation{"?:"}};
+
+	/**
+	 * {@Operation <} Compares two bytes.
+	 */
+	static function $LT(lvalue EBytes in, rvalue EBytes in) returns (EBoolean) {@Operation{"<"}};
+
+	/**
+	 * {@Operation >} Compares two bytes.
+	 */
+	static function $GT(lvalue EBytes in, rvalue EBytes in) returns (EBoolean) {@Operation{">"}};
+
+	/**
+	 * {@Operation <=} Compares two bytes.
+	 */
+	static function $LTE(lvalue EBytes in, rvalue EBytes in) returns (EBoolean) {@Operation{"<="}};
+
+	/**
+	 * {@Operation >=} Compares two bytes.
+	 */
+	static function $GTE(lvalue EBytes in, rvalue EBytes in) returns (EBoolean) {@Operation{">="}};
+
+	/**
+	 * {@Operation ==} Compares two bytes.
+	 */
+	static function $EQ(lvalue EBytes in, rvalue EBytes in) returns(EBoolean) {@Operation{"=="}};
+
+	/**
+	 * {@Operation !=} Compares two bytes.
+	 */
+	static function $NEQ(lvalue EBytes in, rvalue EBytes in) returns(EBoolean) {@Operation{"!="}};
+
+	/**
+	 * {@Operation [:} Returns the substring starting at fromIndex and ending at toIndex.
+	 * @throws InvalidIndexException  if either index is out of range, or fromIndex is > toIndex.
+	 */
+	static function $Substr(value EBytes in, fromIndex EInt in, toIndex EInt in) returns(EBytes) {@Operation{"[:"}};
+	
+	/**
+	 * {@Operation widen} Converts a bigint to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the bigint is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value EBigint in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts an int to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the int is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value EInt in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a smallint to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the smallint is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value ESmallint in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a float to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the float is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value EFloat in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a smallfloat to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the smallfloat is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value ESmallfloat in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a decimal to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the decimal is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value EDecimal in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a number to bytes using the numeric type's bit pattern.
+	 * 
+	 * @throws TypeCastException if the number is not the correct length in bytes for the target.
+	 */
+	static function asBytes(value ENumber in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * {@Operation widen} Converts a string to bytes using the bit pattern of the
+	 * Unicode characters in the string.
+	 */
+	static function asBytes(value EString in) returns(EBytes) {@Operation{"widen"}};
+	
+	/**
+	 * Returns this bytes as a string, using the specified encoding for the conversion.
+	 * 
+	 * @param encoding  the encoding to be used when converting the bytes.
+	 * @return the string value of the bytes.
+	 * @throws TypeCastException if the encoding is invalid for the bytes.
+	 */
+	function toString(encoding EString in) returns(EString);
+end

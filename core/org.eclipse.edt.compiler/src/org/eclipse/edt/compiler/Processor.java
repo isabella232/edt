@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
@@ -109,15 +110,14 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
         	
             org.eclipse.edt.compiler.core.ast.File fileAST = ASTManager.getInstance().getFileAST(declaringFile);
             
-//	        Part part = createIRFromBoundAST(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
 	        MofSerializable part = createIRFromBoundAST2(partAST, declaringFile,functions, fileAST.getImportDeclarations(), problemRequestor);
-	        
+	        part = ((IRPartBinding)binding).getIrPart();
 	        if(part == null) {
 	        	System.out.println("Part is null!");
 	        	return binding;
 	        }
 	        	        
-            environment.save(part, true);
+	        environment.save(part, true);
         }
         
          return binding;
@@ -138,8 +138,9 @@ public class Processor extends AbstractProcessingQueue implements IProcessor {
 
     private MofSerializable createIRFromBoundAST2(Node partAST, File declaringFile,TopLevelFunctionInfo[] functions, List imports, IProblemRequestor problemRequestor) {
     	
-        Egl2Mof generator = new Egl2Mof(environment);
-        return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile), problemRequestor);
+  //      Egl2Mof generator = new Egl2Mof(environment);
+  //      return (MofSerializable)generator.convert((org.eclipse.edt.compiler.core.ast.Part)partAST, new SDKContext(declaringFile), problemRequestor);
+    	return null;
     }
     
     private IProblemRequestor createProblemRequestor(File file,Node partAST, IPartBinding binding) {
