@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * Abstract base implementation of all eglpath container initializer.
  * EGLPath variable containers are used in conjunction with the
- * "com.ibm.etools.egl.internal.model.core.eglpathContainerInitializer" extension point.
+ * "org.eclipse.jdt.core.classpathContainerInitializer" extension point.
  * <p>
  * Clients should subclass this class to implement a specific eglpath
  * container initializer. The subclass must have a public 0-argument

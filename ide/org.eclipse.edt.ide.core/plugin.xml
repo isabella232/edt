@@ -4,6 +4,7 @@
 	<extension-point id="compilers" name="Compilers" schema="schema/compilers.exsd"/>
 	<extension-point id="generators" name="Generators" schema="schema/generators.exsd"/>
 	<extension-point id="GenerationContributors" name="GenerationContributors" schema="schema/GenerationContributors.exsd"/>
+ 	<extension-point id="eglpathContainerInitializer" name="eglpathContainerInitializer" schema="schema/eglpathContainerInitializer.exsd"/>
 	
 	<extension
          id="eglnature"
@@ -114,4 +115,11 @@
 		point="org.eclipse.core.runtime.preferences">
         <initializer class="org.eclipse.edt.ide.core.internal.EDTCorePreferenceInitializer"/>
     </extension>
+   	<extension
+         point="org.eclipse.edt.ide.core.eglpathContainerInitializer">
+      <eglpathContainerInitializer
+            class=" org.eclipse.edt.ide.core.model.EGLSystemPathContaierInitializer"
+            id="org.eclipse.edt.compiler.EDT_RUNTIME">
+      </eglpathContainerInitializer>
+   	</extension>
 </plugin>

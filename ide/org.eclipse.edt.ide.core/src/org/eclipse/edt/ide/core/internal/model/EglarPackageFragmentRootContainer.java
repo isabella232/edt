@@ -77,4 +77,8 @@ public class EglarPackageFragmentRootContainer extends EglarPackageFragmentRoot 
 	public IPath getPath() {
 		return Path.EMPTY;
 	}
+
+	public String getLabel(){
+		return EGLModelResources.eglarSystemLibraries;
+	}
 }

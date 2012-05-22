@@ -149,6 +149,8 @@ public class EDTCoreIDEPlugin extends AbstractUIPlugin implements ISaveParticipa
 	 */
 	public static final String EDT_CONTAINER_ID = "org.eclipse.edt.ide.core.EDT_CONTAINER";
 	
+	public static final String EDT_SYSTEM_RUNTIME_CONTAINER_ID = "org.eclipse.edt.compiler.EDT_RUNTIME";
+	
 	/**
 	 * The various compilers available.
 	 */

@@ -194,5 +194,7 @@ public class EGLModelResources extends NLS {
 	public static String evalNeedBuiltState;
 	
 	public static String eglarNoSourceAttachmentContent;
+	public static String eglarSystemLibraries;
+	public static String eglarLibraryLabel;
 
 }
