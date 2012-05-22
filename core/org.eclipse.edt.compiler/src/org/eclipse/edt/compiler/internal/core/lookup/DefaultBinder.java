@@ -3358,7 +3358,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(BytesLiteral bytesLiteral) {
 		if(bytesLiteral.resolveTypeBinding() == null) {
-			bytesLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BYTES, bytesLiteral.getValue().length()));
+			bytesLiteral.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BYTES, bytesLiteral.getValue().length() / 2));
 			
 			if(bytesLiteral.getValue().length() % 2 != 0) {
 				problemRequestor.acceptProblem(bytesLiteral, IProblemRequestor.BYTES_LITERAL_LENGTH_MUST_BE_EVEN, new String[] {bytesLiteral.getCanonicalString()});
