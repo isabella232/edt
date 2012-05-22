@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -284,8 +284,12 @@ public class AnnotationTypeImpl extends EClassImpl implements AnnotationType {
 	}
 	
 	@Override
-	public void initialize(EObject object) {
-		super.initialize(object);
+	public void initialize(EObject object, boolean useInitialValues) {
+		super.initialize(object, useInitialValues);
+		
+		if (!useInitialValues) {
+			return;
+		}
 		
 		if (!(object instanceof EObjectImpl)) {
 			return;

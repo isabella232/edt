@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,6 @@ package org.eclipse.edt.mof.egl.impl;
 import java.util.List;
 
 import org.eclipse.edt.mof.egl.AmbiguousFunctionReferenceError;
-import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
@@ -23,8 +22,6 @@ import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LHSExpr;
-import org.eclipse.edt.mof.egl.MemberAccess;
-import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.NoSuchFunctionError;
@@ -135,4 +132,10 @@ public class QualifiedFunctionInvocationImpl extends InvocationExpressionImpl im
 		if (result.size() > 1) throw new AmbiguousFunctionReferenceError();
 		return result.get(0);
 	}
+	
+	@Override
+	public boolean isNullable() {
+		return getTarget().isNullable();
+	}
+
 }

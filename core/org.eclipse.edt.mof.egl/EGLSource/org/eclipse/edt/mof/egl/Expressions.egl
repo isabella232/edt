@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.egl;
 
 import egl.lang.reflect.mof.Containment;
+import egl.lang.reflect.mof.EType;
 import egl.lang.reflect.mof.MofClass;
 import egl.lang.reflect.mof.MofName;
 import egl.lang.reflect.mof.Transient;
@@ -34,14 +35,19 @@ end
 externalType BooleanLiteral extends PrimitiveTypeLiteral type MofClass
 end
 
+externalType BytesLiteral extends PrimitiveTypeLiteral type MofClass
+end
+
 externalType NumericLiteral extends PrimitiveTypeLiteral type MofClass {isAbstract=yes}
 	isNegated boolean;
 end
 
 externalType IntegerLiteral extends NumericLiteral type MofClass
+	eType EGLType{MofName = "type"};
 end
 
 externalType FloatingPointLiteral extends NumericLiteral type MofClass
+	eType EGLType{MofName = "type"};
 end
 
 externalType DecimalLiteral extends NumericLiteral type MofClass
@@ -113,6 +119,10 @@ externalType TopLevelFunctionName extends PartName type MofClass
 end
 
 externalType ThisExpression extends Expression type MofClass
+	thisObject Element;
+end
+
+externalType SuperExpression extends Expression type MofClass
 	thisObject Element;
 end
 
@@ -191,6 +201,11 @@ externalType FunctionInvocation extends InvocationExpression type MofClass
 	target FunctionMember;
 
 	function getFunction() returns(FunctionMember);
+end
+
+externalType ConstructorInvocation extends InvocationExpression type MofClass
+	target EGLConstructor {transient=true};
+	expression Expression {containment=true};
 end
 
 externalType DelegateInvocation extends InvocationExpression type MofClass

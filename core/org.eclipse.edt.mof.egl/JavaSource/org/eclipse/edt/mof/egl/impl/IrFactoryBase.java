@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -88,6 +88,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getBytesLiteralEClass() {
+		return (EClass)getTypeNamed(BytesLiteral);
+	}
+	
+	@Override
 	public EClass getBuiltInOperationEClass() {
 		return (EClass)getTypeNamed(BuiltInOperation);
 	}
@@ -140,6 +145,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public EClass getConstructorEClass() {
 		return (EClass)getTypeNamed(Constructor);
+	}
+	
+	@Override
+	public EClass getConstructorInvocationEClass() {
+		return (EClass)getTypeNamed(ConstructorInvocation);
 	}
 	
 	@Override
@@ -778,6 +788,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public EClass getSuperExpressionEClass() {
+		return (EClass)getTypeNamed(SuperExpression);
+	}
+	
+	@Override
 	public EClass getSystemFunctionArgumentMnemonicNameEClass() {
 		return (EClass)getTypeNamed(SystemFunctionArgumentMnemonicName);
 	}
@@ -923,6 +938,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	}
 	
 	@Override
+	public BytesLiteral createBytesLiteral() {
+		return (BytesLiteral)getBytesLiteralEClass().newInstance();
+	}
+	
+	@Override
 	public BoxingExpression createBoxingExpression() {
 		return (BoxingExpression)getBoxingExpressionEClass().newInstance();
 	}
@@ -970,6 +990,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public Constructor createConstructor() {
 		return (Constructor)getConstructorEClass().newInstance();
+	}
+	
+	@Override
+	public ConstructorInvocation createConstructorInvocation() {
+		return (ConstructorInvocation)getConstructorInvocationEClass().newInstance();
 	}
 	
 	@Override
@@ -1482,6 +1507,11 @@ public abstract class IrFactoryBase extends EFactoryImpl implements IrFactory {
 	@Override
 	public SubstringAccess createSubstringAccess() {
 		return (SubstringAccess)getSubstringAccessEClass().newInstance();
+	}
+	
+	@Override
+	public SuperExpression createSuperExpression() {
+		return (SuperExpression)getSuperExpressionEClass().newInstance();
 	}
 	
 	@Override

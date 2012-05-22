@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -26,6 +26,9 @@ public interface MultiOperandExpression extends Expression {
 	String Op_XOR = "xor";
 	String Op_BITAND = "&";
 	String Op_BITOR = "|";
+	String Op_LEFTSHIFT = "<<";
+	String Op_RIGHTSHIFTARITHMETIC = ">>";
+	String Op_RIGHTSHIFTLOGICAL = ">>>";
 	String Op_EQ = "==";
 	String Op_NE = "!=";
 	String Op_GT = ">";

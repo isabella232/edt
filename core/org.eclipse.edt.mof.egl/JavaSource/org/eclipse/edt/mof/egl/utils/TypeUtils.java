@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -85,6 +85,7 @@ public class TypeUtils implements MofConversion {
 	public static final Type Type_CLOB = getType(Type_EGLClob);
 	public static final Type Type_BLOB = getType(Type_EGLBlob);
 	public static final Type Type_BOOLEAN = getType(Type_EGLBoolean);
+	public static final Type Type_BYTES = getType(Type_EGLBytes);
 
 	public static final int TypeKind_UNDEFINED = -1;
 	public static final int TypeKind_VOID = 0;
@@ -124,6 +125,7 @@ public class TypeUtils implements MofConversion {
 	public static final int TypeKind_UBIN = 34;
 	public static final int TypeKind_UNICODENUM = 35;
 	public static final int TypeKind_NULLTYPE = 36;
+	public static final int TypeKind_BYTES = 37;
 
 
 	public static Type getType(String signature) {
@@ -185,6 +187,7 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_ARRAYDICTIONARY) return TypeKind_ARRAYDICTIONARY;
 		else if (classifier == Type_CLOB) return TypeKind_CLOB;
 		else if (classifier == Type_BLOB) return TypeKind_BLOB;
+		else if (classifier == Type_BYTES) return TypeKind_BYTES;
 		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
 		return TypeKind_UNDEFINED;
 	}
@@ -215,6 +218,10 @@ public class TypeUtils implements MofConversion {
 			}
 			
 			if (key.equalsIgnoreCase(Type_EGLString) && type instanceof ParameterizableType) {
+				return false;
+			}
+			
+			if (key.equalsIgnoreCase(Type_EGLBytes) && type instanceof ParameterizableType) {
 				return false;
 			}
 			

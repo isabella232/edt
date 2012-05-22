@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,6 +31,7 @@ public interface IrFactoryBase extends EFactory  {
 	String AssignmentStatement = packageName+".AssignmentStatement";
 	String BinaryExpression = packageName+".BinaryExpression";
 	String BooleanLiteral = packageName+".BooleanLiteral";
+	String BytesLiteral = packageName+".BytesLiteral";
 	String BoxingExpression = packageName+".BoxingExpression";
 	String BuiltInOperation = packageName+".BuiltInOperation";
 	String BuiltInOperationExpression = packageName+".BuiltInOperationExpression";
@@ -43,6 +44,7 @@ public interface IrFactoryBase extends EFactory  {
 	String ConstantField = packageName+".ConstantField";
 	String ConstantFormField = packageName+".ConstantFormField";
 	String Constructor = packageName+".Constructor";
+	String ConstructorInvocation = packageName+".ConstructorInvocation";
 	String Container = packageName+".Container";
 	String ContinueStatement = packageName+".ContinueStatement";
 	String ConverseStatement = packageName+".ConverseStatement";
@@ -169,6 +171,7 @@ public interface IrFactoryBase extends EFactory  {
 	String StructuredField = packageName+".StructuredField";
 	String StructuredRecord = packageName+".StructuredRecord";
 	String SubstringAccess = packageName+".SubstringAccess";
+	String SuperExpression = packageName+".SuperExpression";
 	String SystemFunctionArgumentMnemonicName = packageName+".SystemFunctionArgumentMnemonicName";
 	String TernaryExpression = packageName+".TernaryExpression";
 	String TextTypeLiteral = packageName+".TextTypeLiteral";
@@ -204,6 +207,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getBoxingExpressionEClass();
 	EClass getBuiltInOperationEClass();
 	EClass getBuiltInOperationExpressionEClass();
+	EClass getBytesLiteralEClass();
 	EClass getCallStatementEClass();
 	EClass getCaseStatementEClass();
 	EClass getCharLiteralEClass();
@@ -213,6 +217,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getConstantFieldEClass();
 	EClass getConstantFormFieldEClass();
 	EClass getConstructorEClass();
+	EClass getConstructorInvocationEClass();
 	EClass getContainerEClass();
 	EClass getContinueStatementEClass();
 	EClass getConverseStatementEClass();
@@ -339,6 +344,7 @@ public interface IrFactoryBase extends EFactory  {
 	EClass getStructuredFieldEClass();
 	EClass getStructuredRecordEClass();
 	EClass getSubstringAccessEClass();
+	EClass getSuperExpressionEClass();
 	EClass getSystemFunctionArgumentMnemonicNameEClass();
 	EClass getTernaryExpressionEClass();
 	EClass getTextTypeLiteralEClass();
@@ -370,6 +376,7 @@ public interface IrFactoryBase extends EFactory  {
 	public BinaryExpression createBinaryExpression();
 	public BooleanLiteral createBooleanLiteral();
 	public BoxingExpression createBoxingExpression();
+	public BytesLiteral createBytesLiteral();
 	public BuiltInOperation createBuiltInOperation();
 	public BuiltInOperationExpression createBuiltInOperationExpression();
 	public CallStatement createCallStatement();
@@ -379,6 +386,7 @@ public interface IrFactoryBase extends EFactory  {
 	public ConstantField createConstantField();
 	public ConstantFormField createConstantFormField();
 	public Constructor createConstructor();
+	public ConstructorInvocation createConstructorInvocation();
 	public ContinueStatement createContinueStatement();
 	public ConverseStatement createConverseStatement();
 	public ConversionOperation createConversionOperation();
@@ -481,6 +489,7 @@ public interface IrFactoryBase extends EFactory  {
 	public StructuredField createStructuredField();
 	public StructuredRecord createStructuredRecord();
 	public SubstringAccess createSubstringAccess();
+	public SuperExpression createSuperExpression();
 	public SystemFunctionArgumentMnemonicName createSystemFunctionArgumentMnemonicName();
 	public TernaryExpression createTernaryExpression();
 	public TextTypeLiteral createTextTypeLiteral();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,6 +24,9 @@ public interface Operation extends Function {
 	String XOR = "XOR";
 	String BITAND = "&";
 	String BITOR = "|";
+	String LEFT_SHIFT = "<<";
+	String RIGHT_SHIFT_ARITHMETIC = ">>";
+	String RIGHT_SHIFT_LOGICAL = ">>>";
 	String CONCAT = "::";
 	String NULL_CONCAT = "?:";
 	String GREATER = ">";

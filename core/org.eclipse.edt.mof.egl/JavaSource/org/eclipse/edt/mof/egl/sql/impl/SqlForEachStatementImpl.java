@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,16 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.mof.egl.sql.impl;
 
+import org.eclipse.edt.mof.egl.DeclarationExpression;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Statement;
-import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.sql.SqlForEachStatement;
 
 
 public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlForEachStatement {
-	private static int Slot_label=0;
-	private static int Slot_body=1;
-	private static int totalSlots = 2;
+	private static int Slot_declarationExpression=0;
+//	private static int Slot_dataSource=1; // unused - this field is defined in two parents. We need to reserve an extra slot for it though.
+	private static int Slot_body=2;
+	private static int totalSlots = 3;
 	
 	public static int totalSlots() {
 		return totalSlots + SqlIOStatementImpl.totalSlots();
@@ -28,17 +29,9 @@ public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlFo
 	
 	static {
 		int offset = SqlIOStatementImpl.totalSlots();
-		Slot_label += offset;
+		Slot_declarationExpression += offset;
+//		Slot_dataSource += offset;
 		Slot_body += offset;
-	}
-	@Override
-	public String getLabel() {
-		return (String)slotGet(Slot_label);
-	}
-	
-	@Override
-	public void setLabel(String value) {
-		slotSet(Slot_label, value);
 	}
 	
 	@Override
@@ -52,8 +45,17 @@ public class SqlForEachStatementImpl extends SqlIOStatementImpl implements SqlFo
 	}
 	
 	@Override
+	public DeclarationExpression getDeclarationExpression() {
+		return (DeclarationExpression)slotGet(Slot_declarationExpression);
+	}
+
+	@Override
+	public void setDeclarationExpression(DeclarationExpression value) {
+		slotSet(Slot_declarationExpression, value);
+	}
+	
+	@Override
 	public Expression getSqlRecord() {
 		return getTargets().isEmpty() ? null : getTargets().get(0);
 	}
-	
 }
