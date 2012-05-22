@@ -306,7 +306,7 @@ egl.stringToTime = function(s, format)
 
 egl.stringToTimeInternal = function(s, format, strict)
 {
-	var result = new Date;
+	var result = new Date(0);
 	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	result.setSeconds(0);
@@ -922,14 +922,7 @@ egl.stringToTimeStamp = function(s, format)
 
 egl.stringToTimeStampInternal = function( s, format, strict )
 {
-	var result = new Date;
-	result.setFullYear(0);
-	result.setMonth(0);
-	result.setDate(1);
-	result.setHours(0);
-	result.setMinutes(0);
-	result.setSeconds(0);
-	result.setMilliseconds(0);
+	var result = new Date(0);
 
 	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|fff|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
@@ -2525,8 +2518,8 @@ egl.convertAnyToString = function( any, nullable )
 			case 'K':
 				return egl.eglx.lang.StringLib.format(any.eze$$value,"MM/dd/yyyy");
 			
-//unsupported 0.7			case 'L':
-//				return egl.egl.core.$StrLib.formatTime(any.eze$$value,egl.eglx.rbd.StrLib[$inst].defaultTimeFormat);
+			case 'L':
+				return egl.timeToString(any.eze$$value, "HH:mm:ss");
 			
 			case 'J':
 				var pattern;
@@ -4028,6 +4021,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		date.setFullYear( 2000 );
 		date.setMonth( now.getMonth() );
 		date.setDate( now.getDate() );
+		date.setMilliseconds( 0 );
 		if (!pattern || pattern == "" )
 			pattern = "yyyyMMddHHmmss";
 	}
@@ -4044,7 +4038,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		  [ "y", function(d){ d.setFullYear( 2000 ); }, function(d){ d.setFullYear( 0 ); } ],
 	      [ "M", function(d){ d.setMonth( now.getMonth() ); }, function(d){ d.setMonth( 0 ); } ], 
 	      [ "d", function(d){ d.setDate( now.getDate() ); }, function(d){ d.setDate( 1 ); } ],
-	      [ "H", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
+	      [ "h", function(d){ d.setHours( now.getHours() ); }, function(d){ d.setHours( 0 ); } ],
 	      [ "m", function(d){ d.setMinutes( now.getMinutes() ); }, function(d){ d.setMinutes( 0 ); } ],
 	      [ "s", function(d){ d.setSeconds( now.getSeconds() ); }, function(d){ d.setSeconds( 0 ); } ], 
 	      [ "f", function(d){ d.setMilliseconds( now.getMilliseconds() ); }, function(d){ d.setMilliseconds( 0 ); } ]
@@ -4055,13 +4049,14 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	var leadChar = pattern.charAt( 0 );
 	var i = 0;
 	var indexes = [];
-	while ( i < chars.length && leadChar != chars[ i ][ 0 ] ) {
+	//bug 379285: only 'm' is case sensitive
+	while ( i < chars.length && leadChar != chars[ i ][ 0 ] && (leadChar.toLowerCase() == "m" || leadChar.toLowerCase() != chars[ i ][ 0 ]) ) {
 		indexes.appendElement(i);
 		i++;
 	}
 	//if the pattern has bad characters, just return the original date
 	if ( i >= chars.length ) {
-		return date;
+		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
 	}
 	for(var j = indexes.length - 1; j >= 0; j--){
 		(chars[ indexes[j] ][ 1 ])( dateCopy );
@@ -4070,13 +4065,13 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	//find the last character and set everything after it to zeros
 	var lastChar = pattern.charAt( pattern.length - 1 );
 	i = chars.length - 1;
-	while ( i >= 0 && lastChar != chars[ i ][ 0 ] ) {
+	while ( i >= 0 && lastChar != chars[ i ][ 0 ] && (lastChar.toLowerCase() == "m" || lastChar.toLowerCase() != chars[ i ][ 0 ]) ) {
 		(chars[ i ][ 2 ])( dateCopy );
 		i--;
 	}
 	//if the pattern has bad characters, just return the date
 	if ( i < 0 ) {
-		return date;
+		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
 	}
 	return dateCopy;
 };
