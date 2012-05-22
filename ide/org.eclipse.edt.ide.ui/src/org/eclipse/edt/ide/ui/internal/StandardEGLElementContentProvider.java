@@ -306,7 +306,9 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 				Object[] children= root.getChildren();
 				for (int k= 0; k < children.length; k++) 
 					list.add(children[k]);
-			} 
+			}else {
+				list.add(root);	
+			}
 		}
 		
 
