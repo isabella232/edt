@@ -128,6 +128,11 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	private Map<String, SMAPLineInfo> smapLineCache;
 	
 	/**
+	 * Value of the JLS level to use when verifying a breakpoint. This is only used when JSR-45 is not supported in the target VM.
+	 */
+	private static Integer JLS_VERSION;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param target The underlying Java debug target.
@@ -629,7 +634,20 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		ICompilationUnit cunit = JavaCore.createCompilationUnitFrom( file );
 		if ( cunit != null )
 		{
-			ASTParser parser = ASTParser.newParser( AST.JLS4 );
+			// JLS4 support was added to Eclipse 3.7.1, must use reflection to check if it's available.
+			if ( JLS_VERSION == null )
+			{
+				try
+				{
+					JLS_VERSION = (Integer)AST.class.getField( "JLS4" ).get( null ); //$NON-NLS-1$
+				}
+				catch ( Exception e )
+				{
+					JLS_VERSION = AST.JLS3;
+				}
+			}
+			
+			ASTParser parser = ASTParser.newParser( JLS_VERSION );
 			parser.setSource( cunit );
 			parser.setResolveBindings( true );
 			CompilationUnit unit = (CompilationUnit)parser.createAST( new NullProgressMonitor() );
