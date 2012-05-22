@@ -29,6 +29,7 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLElementDelta;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLModel;
+import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
@@ -295,28 +296,39 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 		IPackageFragmentRoot[] roots= project.getPackageFragmentRoots();
 		List list= new ArrayList();
 		EglarPackageFragmentRootContainer container = null;
-		boolean foundJarPkgRoot = false;
 		// filter out package fragments that correspond to projects and
 		// replace them with the package fragments directly
 		for (int i= 0; i < roots.length; i++) {
 			IPackageFragmentRoot root= (IPackageFragmentRoot)roots[i];
-			if (isProjectPackageFragmentRoot(root)) {
+			if(root.getRawEGLPathEntry().getEntryKind() == IEGLPathEntry.CPE_CONTAINER){
+				continue;
+			}else if (isProjectPackageFragmentRoot(root)) {
 				Object[] children= root.getChildren();
 				for (int k= 0; k < children.length; k++) 
 					list.add(children[k]);
 			} 
-			else if (hasChildren(root)) {
-				if(root instanceof EglarPackageFragmentRoot && ((EglarPackageFragmentRoot)root).isBinaryProject()) {
-					if(!foundJarPkgRoot) {
-						container = new EglarPackageFragmentRootContainer(project);
-						foundJarPkgRoot = true;
-						list.add(container);
-					}
-					container.addJarPackageFragmentRoot((EglarPackageFragmentRoot) root);
-				} else {
-					list.add(root);	
+		}
+		
+
+		IEGLPathEntry[] eglpaths = project.getRawEGLPath();
+		for (int i = 0; i < eglpaths.length; i++) {
+			if(eglpaths[i].getEntryKind() == IEGLPathEntry.CPE_CONTAINER){
+				boolean foundJarPkgRoot = false;
+				IPackageFragmentRoot[] cRoots= project.findPackageFragmentRoots(eglpaths[i]);
+				container = new EglarPackageFragmentRootContainer(project);
+				for (int j= 0; j < cRoots.length; j++) {
+					IPackageFragmentRoot root= (IPackageFragmentRoot)cRoots[j];
+					if (hasChildren(root)) {
+						if(root instanceof EglarPackageFragmentRoot && ((EglarPackageFragmentRoot)root).isArchive()) {
+							foundJarPkgRoot = true;
+							container.addJarPackageFragmentRoot((EglarPackageFragmentRoot) root);
+						}
+					} 
 				}
-			} 
+				if(foundJarPkgRoot) {
+					list.add(container);
+				}
+			}
 		}
 		return list.toArray();
 	}

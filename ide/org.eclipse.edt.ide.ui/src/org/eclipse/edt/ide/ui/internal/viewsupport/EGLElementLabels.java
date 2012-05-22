@@ -443,7 +443,7 @@ public class EGLElementLabels {
 				buf.append(resource.getProjectRelativePath().toString());
 			else
 				if(root instanceof EglarPackageFragmentRootContainer) {
-					buf.append(NewWizardMessages.EGLElementLabels_jar_package_fragment_root_container);
+					buf.append(((EglarPackageFragmentRootContainer)root).getLabel());				
 				} else if(root instanceof EglarPackageFragmentRoot) {
 					buf.append(root.getElementName());
 					buf.append(CONCAT_STRING);
