@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -182,7 +182,7 @@ public class XMLDeserializer extends DefaultHandler implements Deserializer {
 			}
 		} else {
 			EClass eClass = (EClass)resolveTypeReference(typeSignature, false);
-			result = eClass.newInstance();
+			result = eClass.newInstance(true, false);
 			for (int i=0; i<attrs.getLength(); i++) {
 				String attr = attrs.getLocalName(i);
 				if (attr == null || attr.length() == 0) {

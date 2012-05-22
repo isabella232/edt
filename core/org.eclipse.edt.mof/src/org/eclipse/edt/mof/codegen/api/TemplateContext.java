@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -320,35 +320,50 @@ public class TemplateContext extends HashMap<Object, Object> {
 	}
 
 	public Method primGetMethod(String methodName, Class<?> templateClass, Class<?> objectClass, Object... args) {
+		
 		Method method = null;
+		Class<?>[] argTypes = null;
 	    do {
 	        for (Method m : templateClass.getDeclaredMethods()) {
 	            if (Modifier.isPublic(m.getModifiers())) {
-					boolean matches = true;
 					if (m.getName().equals(methodName)) {
 						if (m.getParameterTypes().length == args.length + 1) {
-							Class<?>[] pTypes = m.getParameterTypes();
-							if (pTypes[0].isAssignableFrom(objectClass)) {
+							if(argTypes == null){
+								argTypes = new Class<?>[args.length + 1];
+								argTypes[0] = objectClass;
 								for (int i = 0; i < args.length; i++) {
-									if (args[i] != null && !pTypes[i + 1].isAssignableFrom(args[i].getClass())) {
-										matches = false;
-										break;
-									}
+									argTypes[i + 1] = args[i] == null ? null : args[i].getClass();
 								}
-							} else
-								matches = false;
-						} else
-							matches = false;
-					} else
-						matches = false;
-					if (matches) {
-						method = m;
-						break;
+							}
+							//are the args assignable to the parameter types
+							if (isAssignableFrom(m.getParameterTypes(), argTypes)) {
+								//by getting here the method is parameter assignable to the arguments
+								if(method == null){
+									method = m;
+								}
+								else if(isAssignableFrom(method.getParameterTypes(), m.getParameterTypes())){
+									//if the new method is assignable from the last found method 
+									//        then it's parameters are either the same or subtypes so the new method is the same or more specific than the old so use it instead
+									//        Iterate over all the methods to determine the most specific
+									//the java rule is if more than 1 method is most specific an arbitrary method is chosen we choose the first that we find
+									method = m;
+								}
+							}
+						}
 					}
 				}
 	        }
         } while (method == null && (templateClass = templateClass.getSuperclass()) != null);
 		return method;
+	}
+
+	private boolean isAssignableFrom(Class<?>[] canidate0, Class<?>[] canidate1) {
+		for ( int i = 0; i < canidate0.length; i++ ){
+			if(canidate1[i] != null && !canidate0[i].isAssignableFrom(canidate1[i])){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public Object doInvoke(Method method, Template template, Object object, Object[] args) {
@@ -424,4 +439,5 @@ public class TemplateContext extends HashMap<Object, Object> {
 		}
 
 	}
+
 }

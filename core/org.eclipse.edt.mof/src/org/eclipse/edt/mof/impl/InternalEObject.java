@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -125,14 +125,14 @@ public class InternalEObject implements Cloneable {
 		return (EClass)slots[0].value;
 	}
 	
-	void init(EClassImpl eClass) {
+	void init(EClassImpl eClass, boolean useInitialValues) {
 		if (getSlots() == null) {
 			setSlots(new Slot[eClass.getTotalSlots()]);
 		}
 		for (EField field : eClass.getEFields()) {
 			if (field.getEType() != null) {
 				EClassifier type = field.getEType().getEClassifier();
-				if (field.getInitialValue() != null) {
+				if (field.getInitialValue() != null && useInitialValues) {
 					slotSet(field, field.getInitialValue());
 				}
 				else if (type instanceof EDataType && !field.isNullable()) {
@@ -142,7 +142,7 @@ public class InternalEObject implements Cloneable {
 			}
 		}
 		if (!eClass.getSuperTypes().isEmpty()) {
-			init((EClassImpl)eClass.getSuperTypes().get(0));
+			init((EClassImpl)eClass.getSuperTypes().get(0), useInitialValues);
 		}
 		slotSet(0, eClass);
 	}
@@ -201,11 +201,14 @@ public class InternalEObject implements Cloneable {
 	}
 	
 	public void accept(EVisitor visitor) {
-		boolean visitChildren = ((AbstractVisitor)visitor).primVisit(this);
-		if (visitChildren) {
-			visitChildren(visitor);
+		if (((AbstractVisitor)visitor).willVisit(this)) {
+		
+			boolean visitChildren = ((AbstractVisitor)visitor).primVisit(this);
+			if (visitChildren) {
+				visitChildren(visitor);
+			}
+			((AbstractVisitor)visitor).primEndVisit(this);
 		}
-		((AbstractVisitor)visitor).primEndVisit(this);
 	}
 	
 	public void visitChildren(EVisitor visitor) {
