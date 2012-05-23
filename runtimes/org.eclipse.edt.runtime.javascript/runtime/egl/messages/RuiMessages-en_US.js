@@ -164,7 +164,7 @@ egl.eze$$rscBundles["RuiMessages"] =
 		'CRRUI2705E' : 'Input minimum length error - enter again.',
 		'CRRUI2707E' : 'Modulus check error on input - enter again.',
 		'CRRUI2708E' : 'The input is not valid for defined date or time format {0}.',
-		'CRRUI2710E' : 'Input not valid for boolean field.',
+		'CRRUI2710E' : 'Input {0} not valid for boolean field.',
 		'CRRUI2712E' : 'Hexadecimal data is not valid.',
 		'CRRUI2713E' : 'Value entered is invalid as it does not match the pattern that is set.',		
 		'CRRUI2716E' : 'The input is not in the defined list of valid values - enter again.',

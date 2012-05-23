@@ -89,10 +89,8 @@ egl.eglx.xml.XmlLib["primitiveToXML"] = function( /*value*/value, /*map*/namespa
 		case 'K':
 			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "yyyy-MM-dd");
 			break;
-	//unsupported 0.7	case 'L':
-	//		fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "HH:mm:ss");//FIXME function doesn't exist
-			break;
 		case 'L':
+			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "HH:mm:ss");
 			break;
 		case 'J':
 			fieldValue = egl.eglx.lang.StringLib.format(fieldValue, "yyyy-MM-dd HH:mm:ss");
@@ -436,24 +434,25 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 	if (value == null) {
 		return null;
 	} else {
-		var nullable;
 		var kind;
 
 		var firstCharIdx = 0;
 		var firstChar = fieldInfo == null ? 'S' : fieldInfo.eglSignature.charAt(0);
 		if (firstChar !== '?') {
-			nullable = '';
 			kind = firstChar;
 		} else {
-			nullable = '?';
 			kind = fieldInfo == null ? 'S' : fieldInfo.eglSignature.charAt(1);
 			firstCharIdx = 1;
 		}
 
-		var value;
 		switch (kind) {
 		case 'S':
 		case 's':
+			var semiColon = fieldInfo == null ? -1 : fieldInfo.eglSignature.indexOf(';');
+			if(semiColon > (++firstCharIdx)){
+				var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
+				value = value.substring(0,len);
+			}
 			break;
 
 		case 'K':
@@ -477,7 +476,7 @@ egl.eglx.xml.XmlLib["newPrimitiveFromXml"] = function( /*node*/value, /*FieldInf
 			break;
 
 		case '0':
-			value = egl.eglx.lang.EBoolean.fromEString(value);
+			value = egl.eglx.xml.XmlLib.toBoolean(value);
 			break;
 
 		case 'F':
@@ -620,6 +619,16 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 	}
 	return eglObj;
 };
+egl.eglx.xml.XmlLib["toBoolean"] = function(/*string*/value) {
+	value = value === undefined || value === null ? null : value.toLowerCase();
+	if("true".eq(value) || "1".eq(value)){
+		return new Boolean(true);
+	}
+	else if("false".eq(value) || "0".eq(value)){
+		return new Boolean(false);
+	}
+	throw egl.createRuntimeException("CRRUI2710E", [ value ]);
+};
 egl.eglx.xml.XmlLib["getNamedChildElements"] = function(/*DOM Element*/element) {
 	var children = element.childNodes;
 	var elements = {};
@@ -695,63 +704,6 @@ egl.eglx.xml.XmlLib["getElementText"] = function(element) {
 		}
 	}
 	return texts.join('');
-};
-//FIXME who uses this???
-egl.eglx.xml.XmlLib["getElementTyped"] = function(element) {
-	var text = this.getElementText(element);
-	var value = text;
-	var ltext = text.toLowerCase();
-	if ("true" == ltext || "false" == ltext) {
-		value = Boolean("true" == ltext);
-	} else {
-		var type = this.determineType(text);
-		var any = egl.boxAny(text, "S;");
-		value = egl.convertAnyToType(any, type);
-	}
-	return value;
-};
-egl.eglx.xml.XmlLib["determineType"] = function(/*string*/text) {
-	text = text.trim();
-	var isNumeric = true;
-	var isFloat = false;
-	var isDecimal = false;
-	for ( var i = 0; i < text.length; i++) {
-		var c = text.charAt(i);
-		if (c == '.') {
-			if (isDecimal) // more than one
-			{
-				isNumeric = false;
-				break;
-			}
-			isDecimal = true;
-		} else if (c == '+' || c == '-') {
-
-		} else if (c == 'e' || c == 'E') {
-			if (isFloat) // more than one
-			{
-				isNumeric = false;
-				break;
-			}
-			isFloat = true;
-		} else if (c < '0' || c > '9') // not numeric
-		{
-			isNumeric = false;
-			break;
-		}
-	}
-	var type = "S;";
-	if (isNumeric) {
-		if (isFloat) {
-			type = "F;";
-		} else if (isDecimal) {
-			var bd = new egl.javascript.BigDecimal(text);
-			var decimals = bd.scale() < 0 ? 0 : bd.scale();
-			type = "d32:" + decimals + ";";
-		} else {
-			type = "I;";
-		}
-	}
-	return type;
 };
 egl.eglx.xml.XmlLib["defaultNamespace"] = function() {
 	if (!egl.IE || egl.IEVersion >= 9) {
