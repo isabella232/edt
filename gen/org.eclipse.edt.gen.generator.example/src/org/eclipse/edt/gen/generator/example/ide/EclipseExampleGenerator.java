@@ -23,6 +23,7 @@ import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.example.EGL2Example;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
@@ -64,6 +65,9 @@ public class EclipseExampleGenerator extends EGL2Example {
 			
 			// Add required runtimes.
 			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider, generator.getContext());
+			
+			// Set the source project information.
+			ProjectSettingsUtility.addSourceProject(targetProject, eglFile.getProject());
 			
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
