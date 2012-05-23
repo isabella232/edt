@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
+import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FixedStructureBinding;
@@ -46,15 +48,20 @@ import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
-import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
+import org.eclipse.edt.ide.core.internal.lookup.EglarBuildPathEntry;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
-import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
-import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class BoundNodeLocationUtility {
 	
@@ -449,6 +456,48 @@ public class BoundNodeLocationUtility {
 			} else{
 				result = origin.getEGLFile();
 			}
+		} else if ( ienv instanceof SystemEnvironment ) {
+			List<ISystemPackageBuildPathEntry> list = ((SystemEnvironment)ienv).getSysPackages();
+			for ( ISystemPackageBuildPathEntry entry : list ) {
+				if ( entry.getPartBinding( partBinding.getPackageName(), partBinding.getName() ) != null ) {
+					String mofSignature = IRUtils.concatWithSeparator(partBinding.getPackageName(), ".") + "." + partBinding.getName();
+					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
+					EObject irPart = null;
+					
+					String sourceName = null;
+					try {
+						irPart = ((SystemEnvironment)ienv).getIREnvironment().find(eglSignature);
+						sourceName = irPart.eGet("filename").toString();
+					} catch (MofObjectNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (DeserializationException e1) {
+						e1.printStackTrace();
+					}
+
+					result = new BinaryReadOnlyFile( entry.getID(), sourceName);
+					break;
+				}
+			}
+		}  if ( ienv instanceof ProjectEnvironment ) {
+			IBuildPathEntry[] list = ((ProjectEnvironment)ienv).getBuildPathEntries();
+			for ( IBuildPathEntry entry : list ) {
+				if (entry instanceof EglarBuildPathEntry && entry.getPartBinding( partBinding.getPackageName(), partBinding.getName() ) != null ) {
+					String mofSignature = IRUtils.concatWithSeparator(partBinding.getPackageName(), ".") + "." + partBinding.getName();
+					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
+					EObject irPart = null;
+					
+					String sourceName = null;
+					try {
+						irPart = entry.findPart( partBinding.getPackageName(), partBinding.getName() );
+						sourceName = irPart.eGet("filename").toString();
+					} catch (PartNotFoundException e) {
+						e.printStackTrace();
+					}
+
+					result = new BinaryReadOnlyFile( entry.getID(), sourceName);
+					break;
+				}
+			}
 		}
 		
 		return result;
@@ -467,12 +516,13 @@ public class BoundNodeLocationUtility {
 		final Node[] astNode = new Node[]{null};
 		
 		// Invoke the WCC on the file and part in the address
-		WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
-		compiler.compilePart(address.getDeclaringFile().getProject(), ((EGLFile)EGLCore.create(address.getDeclaringFile())).getPackageName(), address.getDeclaringFile(), workingCopies, address.getPartName(), new IWorkingCopyCompileRequestor(){
-
-			public void acceptResult(WorkingCopyCompilationResult result) {
+//		WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
+//		compiler.compilePart(address.getDeclaringFile().getProject(), ((EGLFile)EGLCore.create(address.getDeclaringFile())).getPackageName(), address.getDeclaringFile(), workingCopies, address.getPartName(), new IWorkingCopyCompileRequestor(){
+//
+//			public void acceptResult(WorkingCopyCompilationResult result) {
 				
-				Node boundPart = result.getBoundPart();
+		Node partAST = WorkingCopyASTManager.getInstance().getAST(address.getDeclaringFile(), address.getPartName());
+				Node boundPart = partAST;
 				
 				if(boundPart instanceof Part){
 					Part part = (Part)boundPart;
@@ -509,12 +559,12 @@ public class BoundNodeLocationUtility {
 					}
 				}else{
 					// it's a file part
-					if(result.getDeclaringFile().equals(address.getDeclaringFile())){
-						// TODO locate a node within the file part 
-					}
+//					if(result.getDeclaringFile().equals(address.getDeclaringFile())){
+//						// TODO locate a node within the file part 
+//					}
 				}						
-			}
-		});
+//			}
+//		});
 		
 		return astNode[0];
 	}

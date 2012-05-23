@@ -400,8 +400,11 @@ public class BinaryElementParser {
 			int declStart = location.elementOffSet;
 			int declEnd = location.elementLen; 
 			
-			String fullyQualifiedName = parameter.getName() + " " + parameter.getType().getClassifier().getId();
-			requestor.acceptPartReference(Util.toCompoundChars(fullyQualifiedName), declStart, declEnd);
+			if(parameter.getType().getClassifier() != null) {
+				String fullyQualifiedName = parameter.getName() + " " + parameter.getType().getClassifier().getId();
+				requestor.acceptPartReference(Util.toCompoundChars(fullyQualifiedName), declStart, declEnd);
+			}
+			
 			return true;
 		}
 		

@@ -64,7 +64,9 @@ public class ProjectEnvironment extends AbstractProjectEnvironment implements IB
         this.project = project;
         this.converter = new Mof2Binding(this);
     }
-    
+    public IBuildPathEntry[] getBuildPathEntries() {
+    	return buildPathEntries;
+    }
     protected Mof2Binding getConverter() {
     	return this.converter;
     }

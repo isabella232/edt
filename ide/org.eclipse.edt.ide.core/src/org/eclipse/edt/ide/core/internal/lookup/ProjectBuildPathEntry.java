@@ -27,11 +27,20 @@ import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestExcept
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.*;
+import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FileASTScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
+import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
 import org.eclipse.edt.ide.core.internal.binding.PartRestoreFailedException;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
+import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyASTManager;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.EObject;
@@ -41,6 +50,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 
 /**
@@ -252,6 +262,41 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
         
         return partBinding;
+    }
+    
+    public Node compileLevel2Binding(String[] packageName, String caseSensitiveInternedPartName, IFile declaringFile) {
+    	ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(declaringFile.getProject());
+    	Node partAST;
+    	
+    	try {
+    		Environment.pushEnv(env.getIREnvironment());
+			env.initIREnvironments();
+			
+			String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
+	        partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
+	        IPartBinding partBinding = new BindingCreator(declaringEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
+	 
+	        partBinding.setEnvironment(declaringEnvironment);
+
+	        
+	        Scope scope;
+	        File fileAST = null;
+	        if(partBinding.getKind() == ITypeBinding.FILE_BINDING){
+	            scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
+	        }else{
+	        	fileAST = WorkingCopyASTManager.getInstance().getFileAST(declaringFile);
+	        	
+				IPartBinding fileBinding = getFileBinding( packageName, declaringFile.getName().substring( 0, declaringFile.getName().length()), fileAST);
+				scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
+	        }
+	        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
+	               
+	        bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
+    	} finally {
+			Environment.popEnv();
+		}
+    	
+        return partAST;
     }
     
     /**
