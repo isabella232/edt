@@ -1,0 +1,27 @@
+package dojo.mobile.widgets;
+    
+// basic handler   
+ExternalType DojoMobileIconItem extends DojoMobileContainer type JavaScriptObject 
+// Use Declarations   
+{           
+	relativePath = "dojo/mobile/widgets",
+	ExternalName = "DojoMobileIconItem",
+	@VEWidget{      
+		category = "Mobile",
+		template = "${typeName}{\n" +
+					"\ticon=\"dojo/mobile/images/icon-1.png\",\n" +
+					"\tlabelString=\"icon\"\n"+
+					"\n\t}",
+		displayName = "IconItem", 
+		smallIcon   = "icons/ctool16/dojomobilelist_16.gif",
+		largeIcon   = "icons/ctool24/dojomobilelist_24.gif",
+		propertyFilterType = FilterKind.EXCLUDEALLEXCEPT, 
+		container   = @VEContainer{} 
+	} 
+} 
+	icon string{ @Property{}, @VEProperty { displayName="Icon"} };
+	targetView DojoMobileView{ @Property{} };
+	urlString string{ @Property{}, @VEProperty{ displayName="URL"} };
+	lazy boolean{ @Property{}, @VEProperty { displayName="Lazy Load"} };
+	labelString string{ @Property{}, @VEProperty { displayName = "Label" } };
+end

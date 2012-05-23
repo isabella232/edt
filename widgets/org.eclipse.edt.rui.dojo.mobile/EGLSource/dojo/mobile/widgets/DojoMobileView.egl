@@ -1,0 +1,75 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+//////////////////////////////////////////////////////////////////////////////// 
+package dojo.mobile.widgets;          
+         
+ExternalType DojoMobileView extends DojoMobileContainer type JavaScriptObject { 
+		relativePath = "dojo/mobile/widgets", 
+		ExternalName = "DojoMobileView",       
+		@VEWidget{            
+			category = "Mobile",   
+			template = "${typeName}{\n" +  
+						"\t\tselected = true, headerTitle = \"My View\",\n" + 
+						"\t\t/*backText = \"Back\", backView = */\n" + 
+						"\t\tchildren = [\n" + 
+						"\t\t]\n\t}",  
+			displayName = "View",     
+			smallIcon = "icons/ctool16/dojomobileview_16.gif",
+			largeIcon = "icons/ctool24/dojomobileview_24.gif",
+			container = @VEContainer{},
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT
+		}        
+	}   
+	     
+	toolBar DojoMobileToolBarButton[]? {};
+	
+	className string{   
+		@Property{},  
+		@VEProperty {
+			displayName = "Class"
+		} 
+	};   
+	    
+	headerTitle String { @Property{}, 
+	@VEProperty{   
+		displayName = "Head Title"	
+	}}; 
+	
+	backText String { @Property{}, @VEProperty{
+		displayName = "Back Text" 
+	}};
+	
+	backView DojoMobileView { @Property{} };	
+	
+	selected Boolean {@Property{}, 
+		@VEProperty{
+			displayName = "Selected"
+		}   
+	};
+	
+	scrollVertically Boolean{   
+		@Property {},  
+		@VEProperty { displayName = "Scroll Vertically" }
+	}; 
+	 
+	scrollHorizontally Boolean{
+		@Property {},   
+		@VEProperty { displayName = "Scroll Horizontally" }
+	};
+	
+	swappable Boolean{
+		@Property {},  
+		@VEProperty { displayName = "Swappable" }  
+	};
+end

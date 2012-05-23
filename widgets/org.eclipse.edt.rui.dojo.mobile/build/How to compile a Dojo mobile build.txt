@@ -1,0 +1,6 @@
+1. Add required dojo widget in 'eglmobile.profile' under 'file' folder, cope it to 'util\buildscripts\profiles' folder of dojo source;
+2. Use '.\build.bat profile=eglmobile' to compiled a new compressed dojo build;
+3. Open dojo.js.uncompressed.js, delete all the code before first 'require({cache:{';   
+4. Delete 'var require = this.require;' in the last function;
+5. Shrinksafe the dojo.js.uncompressed.js to dojo.js by the command 'java -jar shrinksafe.jar dojo.js.uncompressed.js > dojo.js'
+6. Replace the old dojo.js and dojo.js.uncompressed.js

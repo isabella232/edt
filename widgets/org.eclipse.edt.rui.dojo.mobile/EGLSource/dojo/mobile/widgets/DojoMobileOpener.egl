@@ -1,0 +1,24 @@
+package dojo.mobile.widgets;
+
+// basic handler
+   
+ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject 
+{        
+	relativePath = "dojo/mobile/widgets",
+	ExternalName = "DojoMobileOpener",
+	@VEWidget{         
+		category = "Mobile",
+		template = "${typeName}{\t}",
+		displayName = "Opener",
+		smallIcon   = "icons/ctool16/dojomobilelist_16.gif",
+		largeIcon   = "icons/ctool24/dojomobilelist_24.gif",
+		propertyFilterType = FilterKind.EXCLUDEALLEXCEPT, 
+		container   = @VEContainer{} 
+	}     
+}         
+ 
+modal boolean{ @Property{}, @VEProperty{ displayName="Modal"} };
+   
+function pop( widget DojoMobileBase? );  
+function hide();
+end

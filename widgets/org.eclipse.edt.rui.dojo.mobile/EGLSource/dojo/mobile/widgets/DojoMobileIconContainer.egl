@@ -1,0 +1,24 @@
+package dojo.mobile.widgets;
+   
+// basic handler  
+ExternalType DojoMobileIconContainer extends DojoMobileContainer type JavaScriptObject 
+// Use Declarations  
+{                         
+	relativePath = "dojo/mobile/widgets",
+	ExternalName = "DojoMobileIconContainer",
+	@VEWidget{ 
+		category = "Mobile", 
+		template = "${typeName}{\n" +
+					"\t\tchildren = [\n"+    
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileIconItem} { \ticon=\"dojo/mobile/images/icon-1.png\",\n\t\t\t\tlabelString=\"icon 1\"\n \t\t\t},\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileIconItem} { \ticon=\"dojo/mobile/images/icon-1.png\",\n\t\t\t\tlabelString=\"icon 2\"\n \t\t\t},\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileIconItem} { \ticon=\"dojo/mobile/images/icon-1.png\",\n\t\t\t\tlabelString=\"icon 3\"\n \t\t\t}\n"+
+					"\t\t]\n\t}",
+		displayName = "IconContainer", 
+		smallIcon = "icons/ctool16/dojomobilelist_16.gif",
+		largeIcon = "icons/ctool24/dojomobilelist_24.gif",
+		propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+		container = @VEContainer{}
+	} 
+}
+end

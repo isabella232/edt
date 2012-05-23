@@ -1,0 +1,36 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+package dojo.mobile.widgets;
+
+library DojoMobileLib {} 
+
+	/*
+	 * Dojo Mobile List Style
+	 */
+	const LIST_STYLE_EDGE_TO_EDGE String = "Edge to Edge";
+	const LIST_STYLE_ROUNDED_RECTANGLE String = "Rounded Rectangle";
+	
+	const TRANSITION_SLIDE String = "slide";
+	const TRANSITION_FLIP String = "flip";
+	const TRANSITION_FADE String = "fade";
+	
+	/*
+	 * Dojo Mobile Slider orientation
+	 */	
+	const SLIDER_HORIZONTAL String = "H";
+	const SLIDER_VERTICAL String = "V";
+	const SLIDER_AUTO String = "auto";
+	
+end
