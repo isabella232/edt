@@ -12,7 +12,6 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.Dynamic;
 import egl.lang.reflect.mof.Operation;
 
 /**
@@ -30,7 +29,7 @@ import egl.lang.reflect.mof.Operation;
  * may be in any order whatsoever.
  *
  */
-externalType EDictionary extends EAny type ClassType {@Dynamic}
+externalType EDictionary extends EAny type ClassType
 
 	/**
 	 * {@Operation ['} Returns the value with the given key.
