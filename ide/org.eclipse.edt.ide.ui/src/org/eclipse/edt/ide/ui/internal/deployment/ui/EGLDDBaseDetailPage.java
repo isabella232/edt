@@ -26,11 +26,11 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLUIStatus;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
-import org.eclipse.edt.ide.ui.internal.editor.BinaryReadOnlyFile;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
@@ -163,7 +163,7 @@ public abstract class EGLDDBaseDetailPage implements IDetailsPage {
 					if(proj == null){
 						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile);
 					} else{
-						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), true);
+						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj, true);
 					}
 					BinaryEditorInput input = new BinaryEditorInput(storage);
 					ww.getActivePage().openEditor(

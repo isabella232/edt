@@ -19,26 +19,22 @@ import org.eclipse.ui.IEditorInput;
 
 public class BinaryFileDocumentProvider extends DocumentProvider {
 	
-//	protected void setDocumentContent(IDocument document, InputStream contentStream, String encoding) throws CoreException {
-//		
-//	}
-	
 	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding) throws CoreException {
 		if (editorInput instanceof BinaryEditorInput) {
-			IClassFile classFile= ((BinaryEditorInput) editorInput).getClassFile();
+			/*IClassFile classFile= ((BinaryEditorInput) editorInput).getClassFile();
 			String source= classFile.getSource();
 			if (source == null)
 				source= ""; //$NON-NLS-1$
 			document.set(source);
-			return true;
-		}else if (editorInput instanceof EGLReadOnlyEditorInput) {
-			EGLReadOnlyEditorInput eglfile= ((EGLReadOnlyEditorInput) editorInput);
+			return true;*/
+			BinaryEditorInput eglfile= ((BinaryEditorInput) editorInput);
 			String source = eglfile.getSource();
 			if (source == null)
 				source= ""; //$NON-NLS-1$
 			document.set(source);
 			return true;
 		}
+		
 		return super.setDocumentContent(document, editorInput, encoding);
 	}
 }

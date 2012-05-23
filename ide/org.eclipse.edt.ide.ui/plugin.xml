@@ -648,6 +648,7 @@
    		<editor
 			id="org.eclipse.edt.ide.ui.BinaryFileEditor"
 			default="true"
+        contributorClass="org.eclipse.edt.ide.ui.internal.editor.EGLEditorActionContributor"
 			name="%BinaryEditorName"
 			icon="icons/obj16/eglfile_obj.gif"
 			extensions="eglxml"

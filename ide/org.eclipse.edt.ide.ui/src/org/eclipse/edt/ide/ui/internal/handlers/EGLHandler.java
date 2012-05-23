@@ -24,12 +24,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
+import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEGLEditorWrapper;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
@@ -45,7 +47,6 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
 
 public abstract class EGLHandler extends AbstractHandler implements IHandler {
 
@@ -74,8 +75,11 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 					IEGLElement element = EGLCore.create(resource);
 					fSite = editor.getSite();
 					fSelection = new StructuredSelection( element );
-				} else if (editorInput instanceof EGLReadOnlyEditorInput){
-					fSelection = new StructuredSelection( ((EGLReadOnlyEditorInput)editorInput).getClassFile() );
+				} else if (editorInput instanceof BinaryEditorInput){
+					IClassFile classFile = ((BinaryEditorInput)editorInput).getClassFile();
+					if(classFile != null) {
+						fSelection = new StructuredSelection(classFile);
+					}
 				}
 		    }			
 		}

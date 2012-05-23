@@ -15,14 +15,13 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
@@ -32,19 +31,35 @@ public class BinaryEditorInput implements IStorageEditorInput {
     private BinaryReadOnlyFile binaryReadOnlyFile;
     private IClassFile classFile;
     
-    public BinaryEditorInput(BinaryReadOnlyFile binaryReadOnlyFile) {this.binaryReadOnlyFile = binaryReadOnlyFile;}
-    public boolean exists() {return true;}
-    public ImageDescriptor getImageDescriptor() {return null;}
+    public BinaryEditorInput(BinaryReadOnlyFile binaryReadOnlyFile) {
+    	this.binaryReadOnlyFile = binaryReadOnlyFile;
+    }
+    
+    public BinaryEditorInput(BinaryReadOnlyFile binaryReadOnlyFile,IClassFile classFile) {
+    	this.binaryReadOnlyFile = binaryReadOnlyFile;
+    	this.classFile = classFile;
+    }
+    
+    public boolean exists() {
+    	return true;
+    }
+    
+    public ImageDescriptor getImageDescriptor() {
+    	return null;
+    }
     
     /*
-	 * get the ir file name (without package, with extension)
-	 * e.g.
-	 * demointerface.ir
-	 */
+   	 * get the IR file name (without package, with extension)
+   	 * e.g.
+   	 * demointerface.eglxml
+   	 */
     public String getName() {
        return binaryReadOnlyFile.getName();
     }
-    public IPersistableElement getPersistable() {return null;}
+    public IPersistableElement getPersistable() {
+    	return null;
+    }
+    
     public IStorage getStorage() {
        return binaryReadOnlyFile;
     }
@@ -53,6 +68,10 @@ public class BinaryEditorInput implements IStorageEditorInput {
     }
     public Object getAdapter(Class adapter) {
       return null;
+    }
+    
+    public String getSource(){
+    	return(binaryReadOnlyFile.getSource());
     }
     
     public void setClassFile(IClassFile classFile){
@@ -64,7 +83,7 @@ public class BinaryEditorInput implements IStorageEditorInput {
     		return classFile;
 		IProject proj = null;
 		//get the IProject element of current project (i.e. under which project the class file is to be open)
-		proj = (IProject)ResourcesPlugin.getWorkspace().getRoot().findMember(binaryReadOnlyFile.getProject());
+		proj = binaryReadOnlyFile.getProject();
 		if(proj == null){
     		return null;
     	}
@@ -87,25 +106,25 @@ public class BinaryEditorInput implements IStorageEditorInput {
 					classFile = packageFragment.getClassFile(binaryReadOnlyFile.getName().toLowerCase());
 				}
 			}
-		} catch (EGLModelException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return classFile;
     }
     
     /*
-	 * get the full path for the ir file
-	 * e.g.
-	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.ir
-	 * TestProj1/Test.eglar|demointerface.ir
-	 * 
-	 */
+   	 * get the full path for the IR file
+   	 * e.g.
+   	 * TestProj1/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+   	 * C:/Temp/Test.eglar|com/ibm/egl/test/interfaces/demointerface.eglxml
+   	 * TestProj1/Test.eglar|demointerface.eglxml
+   	 * 
+   	 */
     public String getFullPath() {
     	return binaryReadOnlyFile.getFullPath().toString();
     }
     
-    public String getProject(){
+    public IProject getProject(){
     	return binaryReadOnlyFile.getProject();
     }
     

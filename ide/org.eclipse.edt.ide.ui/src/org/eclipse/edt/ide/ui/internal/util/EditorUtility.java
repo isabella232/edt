@@ -31,14 +31,12 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.ISourceRange;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.EDTUIPlugin;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
-import org.eclipse.edt.ide.ui.internal.editor.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
-import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyEditorInput;
-import org.eclipse.edt.ide.ui.internal.editor.EGLReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -405,10 +403,11 @@ public class EditorUtility {
 		return input;
 	}
 	
-	private static EGLReadOnlyEditorInput getClassfileSourceEditor(IProject proj, String eglarFilePath, String irFullQualifiedFile, String editorId) {
-		EGLReadOnlyFile storage = getEglReadonlyFile(proj, eglarFilePath, irFullQualifiedFile);
+	private static BinaryEditorInput getClassfileSourceEditor(IProject proj, String eglarFilePath, String irFullQualifiedFile, String editorId,ClassFile classFile) {
+		BinaryReadOnlyFile storage = getBinaryReadonlyFile(proj, eglarFilePath, irFullQualifiedFile);
 		
-		EGLReadOnlyEditorInput input = new EGLReadOnlyEditorInput(storage);
+		
+		BinaryEditorInput input = new BinaryEditorInput(storage,classFile);
 		if (input != null) {
 			IWorkbenchPage p= EDTUIPlugin.getActivePage();
 			if (p != null) {
@@ -424,17 +423,9 @@ public class EditorUtility {
 	
 	public static BinaryReadOnlyFile getBinaryReadonlyFile(IProject proj, String eglarFilePath, String irFullQualifiedFile) {
 		if(proj.getWorkspace().getRoot().findMember(new Path(eglarFilePath)) == null){	//external eglar file
-			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), true);
+			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj, true);
 		} else{	
-			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), false);
-		}
-	}
-	
-	public static EGLReadOnlyFile getEglReadonlyFile(IProject proj, String eglarFilePath, String irFullQualifiedFile) {
-		if(proj.getWorkspace().getRoot().findMember(new Path(eglarFilePath)) == null){	//external eglar file
-			return new EGLReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), true);
-		} else{	
-			return new EGLReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj.getName(), false);
+			return new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj, false);
 		}
 	}
 	
@@ -461,12 +452,11 @@ public class EditorUtility {
 		if(input == null) {
 			return null;
 		}
-		// if(org.eclipse.edt.ide.core.internal.model.util.Util.isBinaryProject(proj)){
-			IClassFile classFile = input.getClassFile();
-			if(classFile instanceof ClassFile){
-				return openClassFile((ClassFile)classFile, editorId);
-			}
-		//}
+		
+		IClassFile classFile = input.getClassFile();
+		if(classFile instanceof ClassFile){
+			return openClassFile((ClassFile)classFile, editorId);
+		}
 		return null;
 	}
 	
@@ -548,14 +538,13 @@ public class EditorUtility {
 	
 	public static IEditorPart openSourceFromEglarInBinaryEditor(final ClassFile classFile, final IProject proj, final String eglarFilePath, final String irFullQualifiedFile, final String editorId){
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
-		EGLReadOnlyEditorInput input = getClassfileSourceEditor(proj, eglarFilePath, irFullQualifiedFile, editorId);
+		BinaryEditorInput input = getClassfileSourceEditor(proj, eglarFilePath, irFullQualifiedFile, editorId,classFile);
 		
 		if(input == null) {
 			return null;
 		} 
 		
 		try {
-			input.setClassFile(classFile);
 			return ww.getActivePage().openEditor(
 			input, editorId, true);
 		} catch (PartInitException e) {
