@@ -54,22 +54,23 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fie
 		}
 		if((typeof(object) == "object" && object.eze$$signature) ||
 				(fieldInfo != undefined && fieldInfo != null)){
-			var kind = "";
-			if (fieldInfo != undefined && fieldInfo != null) {
-				var firstCharIdx = 0;
-				var firstChar = fieldInfo.eglSignature.charAt(0);
-				if (firstChar !== '?') {
-					kind = firstChar;
-				} else {
-					kind = fieldInfo.eglSignature.charAt(1);
-					firstCharIdx = 1;
-				}
+			var signature;
+			if(object.eze$$signature && object.eze$$value){
+				signature = object.eze$$signature;
+			}
+			else if (fieldInfo != undefined && fieldInfo != null) {
+				signature = fieldInfo.eglSignature;
 			}
 			else{
-			   var sig = object.eze$$signature;
-			   if (sig != null) {
-			       var kind = sig.charAt(0) === '?' ? sig.charAt(1) : sig.charAt(0);
-			   }
+				signature = object.eze$$signature;
+			}
+			var kind = "";
+			var firstChar = signature.charAt(0);
+			if (firstChar !== '?') {
+				kind = firstChar;
+			} else {
+				kind = signature.charAt(1);
+				firstCharIdx = 1;
 			}
 			switch (kind) {
 				case 'S':
@@ -286,6 +287,11 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		switch (kind) {
 			case 'S':
 			case 's':
+				var semiColon = fieldInfo.eglSignature.indexOf(';');
+				if(semiColon > (++firstCharIdx)){
+					var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
+					jsonObject = jsonObject.substring(0,len);
+				}
 				return jsonObject;
 			
 			case 'K':
