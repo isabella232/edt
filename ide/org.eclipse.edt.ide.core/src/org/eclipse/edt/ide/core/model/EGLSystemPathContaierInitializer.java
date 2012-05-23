@@ -47,7 +47,7 @@ public class EGLSystemPathContaierInitializer extends
 			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, "EGLSystemRuntimePathContainer", entries);
 
 			EGLCore.setEGLPathContainer(containerPath, new IEGLProject[]{project}, new EGLSystemRuntimePathContainer[]{container}, new NullProgressMonitor());
-			project.getRawEGLPath();
+			//project.getRawEGLPath();
 		}
 	}
 	
