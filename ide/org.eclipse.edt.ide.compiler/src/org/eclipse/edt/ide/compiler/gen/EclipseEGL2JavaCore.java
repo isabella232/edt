@@ -14,16 +14,12 @@ package org.eclipse.edt.ide.compiler.gen;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ICompiler;
-import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
 import org.eclipse.edt.gen.generator.java.EGL2Java;
 import org.eclipse.edt.ide.core.IGenerator;
 import org.eclipse.edt.ide.core.utils.EclipseUtilities;
-import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
 
@@ -43,48 +39,33 @@ public class EclipseEGL2JavaCore extends EGL2Java {
 		this.generatorProvider = generator;
 	}
 
+	@Override
 	protected List<Part> loadEGLParts(ICompiler compiler) throws LoadPartException {
 		List<Part> parts = new ArrayList<Part>();
 		parts.add(part);
 		return parts;
 	}
 
+	@Override
 	protected void writeFile(Part part, Generator generator) throws Exception {
-		String outputFolder = (String) getParameterMapping().get(Constants.parameter_output).getValue();
+		String outputFolder = (String) getParameterMapping().get(org.eclipse.edt.gen.Constants.parameter_output).getValue();
 		
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
-			
-			// The classpath needs to be refreshed if the output folder is already on the classpath but doesn't exist.
-			// This check needs to run before writeFileInEclipse, because that method will create the output folder.
-			boolean forceClasspathRefresh = false;
-			IContainer outputContainer = EclipseUtilities.getOutputContainer(outputFolder, eglFile, "");
-			if(!outputContainer.exists()){
-				forceClasspathRefresh = true;
-			}
-			
-			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
-
-			// write out generation report if there is one
-			GenerationReport.writeFile(part, eglFile, generator);
-			IProject targetProject = outputFile.getProject();
-			
-			// make sure it's a source folder
-			EclipseUtilities.addToJavaBuildPathIfNecessary(targetProject, outputFolder, forceClasspathRefresh);
-			
-			// Add required runtimes. This will be the core runtime plus anything registered by contributed templates.
-			EclipseUtilities.addRuntimesToProject(targetProject, generatorProvider, generator.getContext());
-			
-			// Add the SMAP builder
-			EclipseUtilities.addSMAPBuilder(targetProject);
-			
-			// Set the source project information.
-			ProjectSettingsUtility.addSourceProject(targetProject, eglFile.getProject());
-			
-			// call back to the generator, to see if it wants to do any supplementary tasks
-			generator.processFile(outputFile.getFullPath().toString());
+			EclipseGeneratorUtility.writeAndProcessJavaFile(outputFolder, part, generator, generatorProvider, eglFile);
 		} else {
 			// super's method handles writing to an absolute file system path.
 			super.writeFile(part, generator);
+		}
+	}
+	
+	@Override
+	protected void writeSMAPFile(byte[] data, Part part, Generator generator) throws Exception {
+		String outputFolder = (String) getParameterMapping().get(org.eclipse.edt.gen.Constants.parameter_output).getValue();
+		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
+			EclipseGeneratorUtility.writeSMAPFile(data, outputFolder, part, generator, eglFile);
+		}
+		else {
+			super.writeSMAPFile(data, part, generator);
 		}
 	}
 }
