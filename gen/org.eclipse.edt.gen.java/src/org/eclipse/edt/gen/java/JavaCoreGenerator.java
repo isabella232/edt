@@ -11,10 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
@@ -150,41 +147,32 @@ public class JavaCoreGenerator extends Generator {
 	public void processFile(String fileName) {
 		// do any post processing once the file has been written
 		writeReport(context, fileName, getReport(), Constants.EGLMESSAGE_ENCODING_ERROR, Constants.EGLMESSAGE_GENERATION_REPORT_FAILED);
-		// if no error was created, update the class file with the accumulated debug info
-		if (!context.getMessageRequestor().isError()) {
-			File outSmapFile = new File(fileName.substring(0, fileName.length() - getFileExtension().length()) + Constants.smap_fileExtension);
-			try {
-				FileOutputStream outStream = new FileOutputStream(outSmapFile);
-				byte[] outSmapBytes = context.getSmapData().toString().getBytes(Constants.smap_encoding);
-				outStream.write(outSmapBytes, 0, outSmapBytes.length);
-				outStream.close();
-			}
-			catch (UnsupportedEncodingException e) {
-				String[] details = new String[] { "UTF-8" };
-				EGLMessage message = EGLMessage
-					.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE, Constants.EGLMESSAGE_SMAPFILE_ENCODING_FAILED, null, details,
-						CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
-				context.getMessageRequestor().addMessage(message);
-			}
-			catch (IOException e) {
-				String[] details = new String[] { outSmapFile.getName() };
-				EGLMessage message = EGLMessage.createEGLMessage(context.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
-					Constants.EGLMESSAGE_SMAPFILE_WRITE_FAILED, null, details, CommonUtilities.includeEndOffset(context.getLastStatementLocation(), context));
-				context.getMessageRequestor().addMessage(message);
-				return;
-			}
-		}
 	}
 
 	@Override
 	public String getRelativeFileName(Part part) {
 		StringBuilder buf = new StringBuilder(50);
-		String pkg = part.getPackageName();
-		if (pkg.length() > 0) {
-			buf.append(JavaAliaser.packageNameAlias(pkg.split("[.]"), '/'));
-			buf.append('/');
+		if (getContext().mapsToNativeType(part)) {
+			String name = context.getRawNativeImplementationMapping(part);
+			
+			int lastDot = name.lastIndexOf('.');
+			if (lastDot != -1) {
+				buf.append(JavaAliaser.packageNameAlias(name.substring(0, lastDot).split("[.]"), '/'));
+				buf.append('/');
+				buf.append(JavaAliaser.getAlias(name.substring(lastDot + 1)));
+			}
+			else {
+				buf.append(JavaAliaser.getAlias(name));
+			}
 		}
-		buf.append(JavaAliaser.getAlias(part.getId()));
+		else {
+			String pkg = part.getPackageName();
+			if (pkg.length() > 0) {
+				buf.append(JavaAliaser.packageNameAlias(pkg.split("[.]"), '/'));
+				buf.append('/');
+			}
+			buf.append(JavaAliaser.getAlias(part.getId()));
+		}
 		buf.append(getFileExtension());
 		return buf.toString();
 	}
