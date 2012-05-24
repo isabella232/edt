@@ -151,6 +151,9 @@ public class DeploymentDescriptorFinder {
 			
 			// Next check the DDs inside its package fragment roots.
 			for (IPackageFragmentRoot root : eglProject.getPackageFragmentRoots()) {
+				if (root.getResource() == null) {
+					continue;
+				}
 				root.getResource().accept(new IResourceProxyVisitor() {
 					@Override
 					public boolean visit(IResourceProxy proxy) throws CoreException {
