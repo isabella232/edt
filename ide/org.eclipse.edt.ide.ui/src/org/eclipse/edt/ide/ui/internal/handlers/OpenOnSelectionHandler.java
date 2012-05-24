@@ -278,7 +278,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							}else{
 								if(file instanceof BinaryReadOnlyFile) {
 									IFile eglfile = address[0].getDeclaringFile();
-									IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, ((FileEditorInput)fEditor.getEditorInput()).getFile().getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+									IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, eglfile.getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
 									int start = name.getOffset();
 									int length = name.getLength();
 									if(part instanceof EGLEditor){
@@ -317,14 +317,14 @@ public class OpenOnSelectionHandler extends EGLHandler {
 					 break;
 				 }
 			}
-
-			ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry( currentFile.getProject() );
-			Node boundPart = entry.compileLevel2Binding(  ((BinaryReadOnlyFile)currentFile).getPackageSegments(), part.getName().getCanonicalName(), currentFile);
 			
 			ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(currentFile.getProject());
 			try {
 				Environment.pushEnv(env.getIREnvironment());
 				env.initIREnvironments();
+				ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry( currentFile.getProject() );
+				Node boundPart = entry.compileLevel2Binding(  ((BinaryReadOnlyFile)currentFile).getPackageSegments(), part.getName().getCanonicalName(), currentFile);
+				
 			IBoundNodeRequestor requestor = new IBoundNodeRequestor(){
 
 				public void acceptNode(final Node boundPart, final Node selectedNode) {
@@ -411,9 +411,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			if(localVariableDefinition[0] != null) {
 				fEditor.selectAndReveal(localVariableDefinition[0][0], localVariableDefinition[0][1]);
 				beep = false;
-			}
-//			else if(address[0] != null && !(address[0].getDeclaringFile() instanceof EglarIFile)){
-			else if(address[0] != null && address[0].getDeclaringFile() != null){
+			} else if(address[0] != null && address[0].getDeclaringFile() != null){
 				if (address[0].getDeclaringFile().getProject() == null ) {
 					((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
 				}
@@ -477,7 +475,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 								EditorUtility.revealInEditor(fEditor, name);
 							}else{	
 								IFile eglfile = address[0].getDeclaringFile();
-								IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, ((BinaryEditorInput)fEditor.getEditorInput()).getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+								IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, eglfile.getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
 								int start = name.getOffset();
 								int length = name.getLength();
 								if(part instanceof EGLEditor){
