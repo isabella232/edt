@@ -12,6 +12,9 @@
 package org.eclipse.edt.debug.core.java;
 
 import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.ISourceLocator;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
+import org.eclipse.debug.core.sourcelookup.containers.LocalFileStorage;
 import org.eclipse.debug.core.sourcelookup.containers.ZipEntryStorage;
 import org.eclipse.edt.debug.core.EDTDebugCorePlugin;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
@@ -363,6 +367,29 @@ public class SMAPUtil
 							{
 								EDTDebugCorePlugin.log( ioe );
 							}
+						}
+					}
+				}
+				else if ( src instanceof LocalFileStorage )
+				{
+					// Filesystem-absolute path.
+					IPath smapPath = ((IStorage)src).getFullPath().removeFileExtension().addFileExtension( IEGLDebugCoreConstants.SMAP_EXTENSION );
+					File smapFile = smapPath.toFile();
+					if ( smapFile.exists() )
+					{
+						try
+						{
+							is = new FileInputStream( smapFile );
+							IPath workspaceRoot = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+							if ( workspaceRoot.isPrefixOf( smapPath ) )
+							{
+								workspacePath = "/" + smapPath.removeFirstSegments( workspaceRoot.segmentCount() ).toString();
+							}
+							
+						}
+						catch ( FileNotFoundException fnfe )
+						{
+							EDTDebugCorePlugin.log( fnfe );
 						}
 					}
 				}
