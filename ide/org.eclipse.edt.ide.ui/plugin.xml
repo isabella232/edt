@@ -1808,7 +1808,7 @@ Templates
    
 <!-- =========================================================================== -->
 <!-- EGLAR Packager                                                              -->
-<!-- =========================================================================== -->
+<!-- =========================================================================== 
  <extension
          point="org.eclipse.ui.exportWizards">
       <wizard
@@ -1824,7 +1824,7 @@ Templates
                class="org.eclipse.core.resources.IProject">
          </selection>
       </wizard>
-   </extension> 
+   </extension> -->
  <extension
        point="org.eclipse.core.contenttype.contentTypes">
     <content-type
