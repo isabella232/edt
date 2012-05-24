@@ -35,7 +35,7 @@ public class GenerationReport {
 				if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
 					String fn = generator.getRelativeFileName(part) + ((suffix == null) ? "" : suffix) + Constants.report_fileExtension;
 					String rpt = report.rpt.getWriter().toString();
-					EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, rpt, fn);
+					EclipseUtilities.writeFileInEclipse(outputFolder, eglFile, rpt, fn);
 				}
 			}
 		}
