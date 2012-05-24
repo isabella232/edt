@@ -47,6 +47,8 @@ public class Constants {
 	public static final String SubKey_partLibrariesUsed = "partLibrariesUsed";
 	public static final String SubKey_partRecordsUsed = "partRecordsUsed";
 	public static final String SubKey_partTypesImported = "partTypesImported";
+	public static final String SubKey_forceWriteSMAP = "forceWriteSMAP";
+	
 
 	// Library generation constants
 	public static final String LIBRARY_PREFIX = "eze_Lib_";
