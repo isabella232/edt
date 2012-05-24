@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
@@ -23,6 +24,9 @@ import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 
 public class ExternalTypeTemplate extends JavaTemplate {
@@ -68,7 +72,32 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {}
+	public void genPart(ExternalType part, Context ctx, TabbedWriter out) {
+		if (part.getAnnotation("eglx.lang.NativeType") != null) {
+			// While there's no part to generate, we still want the SMAP.
+			ctx.putAttribute(ctx.getClass(), Constants.SubKey_forceWriteSMAP, Boolean.TRUE);
+			
+			// Save functions for last so all globals come first. vars after functions are local.
+			List<Function> functions = new ArrayList<Function>();
+			for (Member m : part.getAllMembers()) {
+				if (m instanceof Field) {
+					CommonUtilities.generateSmapExtension( m, ctx );
+				}
+				else if (m instanceof Function) {
+					functions.add((Function)m);
+				}
+			}
+			for (Function f : functions) {
+				List<FunctionParameter> parms = f.getParameters();
+				if (parms.size() > 0) {
+					CommonUtilities.generateSmapExtension( f, ctx );
+					for (FunctionParameter parm : parms) {
+						CommonUtilities.generateSmapExtension(parm, ctx);
+					}
+				}
+			}
+		}
+	}
 
 	public void genClassBody(ExternalType part, Context ctx, TabbedWriter out) {}
 
