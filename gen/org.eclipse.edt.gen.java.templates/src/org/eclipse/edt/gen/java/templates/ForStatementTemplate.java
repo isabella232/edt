@@ -168,6 +168,7 @@ public class ForStatementTemplate extends JavaTemplate {
 				assignmentIncr.setRHS(stmt.getDeltaExpression());
 			else {
 				IntegerLiteral integerLiteralIncr = factory.createIntegerLiteral();
+				integerLiteralIncr.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					integerLiteralIncr.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 				integerLiteralIncr.setValue("1");
@@ -198,6 +199,7 @@ public class ForStatementTemplate extends JavaTemplate {
 				assignmentInit.setRHS(stmt.getFromExpression());
 			else {
 				IntegerLiteral integerLiteralInit = factory.createIntegerLiteral();
+				integerLiteralInit.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					integerLiteralInit.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 				integerLiteralInit.setValue("1");
@@ -226,6 +228,7 @@ public class ForStatementTemplate extends JavaTemplate {
 				binaryExpressionIncr.setRHS(stmt.getDeltaExpression());
 			else {
 				IntegerLiteral integerLiteralIncr = factory.createIntegerLiteral();
+				integerLiteralIncr.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Int));
 				if (stmt.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
 					integerLiteralIncr.addAnnotation(stmt.getAnnotation(IEGLConstants.EGL_LOCATION));
 				integerLiteralIncr.setValue("1");
