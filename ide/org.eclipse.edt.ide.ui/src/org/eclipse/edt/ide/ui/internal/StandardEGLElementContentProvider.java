@@ -19,6 +19,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.edt.ide.core.internal.lookup.ZipFileBuildPathEntryManager;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.internal.model.util.EGLModelUtil;
@@ -321,7 +322,7 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 				for (int j= 0; j < cRoots.length; j++) {
 					IPackageFragmentRoot root= (IPackageFragmentRoot)cRoots[j];
 					if (hasChildren(root)) {
-						if(root instanceof EglarPackageFragmentRoot && ((EglarPackageFragmentRoot)root).isArchive()) {
+						if(root instanceof EglarPackageFragmentRoot && ((EglarPackageFragmentRoot)root).isArchive() && (!root.getPath().getFileExtension().equalsIgnoreCase(ZipFileBuildPathEntryManager.MOFAR_EXTENSION))) {
 							foundJarPkgRoot = true;
 							container.addJarPackageFragmentRoot((EglarPackageFragmentRoot) root);
 						}
