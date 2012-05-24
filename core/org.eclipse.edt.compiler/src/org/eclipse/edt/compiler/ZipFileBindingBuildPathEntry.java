@@ -67,6 +67,11 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 		if (partBinding == null){
 			partBinding = getPartBinding(getEntry(packageName,partName));
 		}
+		
+		if (partBinding == null && partName != null && packageName != null){
+			 partBinding = getPartBinding(getEntry(InternUtil.intern(packageName),InternUtil.intern(partName)));
+		}
+		
 
 		return partBinding;
 	}
@@ -77,6 +82,9 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 			partBinding = (IPartBinding)partBindingsWithoutPackage.get(partName);
 		}else{
 			Map partpackage = (Map)partBindingsByPackage.get(packageName);
+			if(partpackage == null) {
+				partpackage = (Map)partBindingsByPackage.get(InternUtil.intern(packageName));
+			}
 			if (partpackage != null){
 				partBinding = (IPartBinding)partpackage.get(partName);
 			}
