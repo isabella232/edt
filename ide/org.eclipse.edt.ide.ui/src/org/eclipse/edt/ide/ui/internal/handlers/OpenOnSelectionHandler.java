@@ -48,6 +48,8 @@ import org.eclipse.edt.ide.core.ast.GetNodeAtOffsetVisitor;
 import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathEntryManager;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -62,6 +64,7 @@ import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorPart;
@@ -318,6 +321,10 @@ public class OpenOnSelectionHandler extends EGLHandler {
 			ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry( currentFile.getProject() );
 			Node boundPart = entry.compileLevel2Binding(  ((BinaryReadOnlyFile)currentFile).getPackageSegments(), part.getName().getCanonicalName(), currentFile);
 			
+			ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(currentFile.getProject());
+			try {
+				Environment.pushEnv(env.getIREnvironment());
+				env.initIREnvironments();
 			IBoundNodeRequestor requestor = new IBoundNodeRequestor(){
 
 				public void acceptNode(final Node boundPart, final Node selectedNode) {
@@ -487,7 +494,10 @@ public class OpenOnSelectionHandler extends EGLHandler {
 					boundNode.accept(nodeFinder);
 				}
 			}
+		} finally {
+			Environment.popEnv();
 		}
+	 }
 		if (beep)
 			fEditor.getSite().getShell().getDisplay().beep();
 	}
