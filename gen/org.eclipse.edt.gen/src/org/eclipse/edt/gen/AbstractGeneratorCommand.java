@@ -94,6 +94,9 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 							// only write the data, if there was some
 							if (generator.getResult() instanceof String && ((String) generator.getResult()).length() > 0)
 								writeFile(part, generator);
+							
+							// Always let the generator perform auxiliary tasks
+							writeAuxiliaryFiles(part, generator);
 						}
 						catch (Throwable e) {
 							e.printStackTrace();
@@ -218,6 +221,10 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 		writer.close();
 		// call back to the generator, to see if it wants to do any supplementary tasks
 		generator.processFile(fileName);
+	}
+	
+	protected void writeAuxiliaryFiles(Part part, Generator generator) throws Exception {
+		// Subclasses should override to perform any additional tasks.
 	}
 
 	public void registerCommandOptions(CommandOption[] options) {
