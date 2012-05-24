@@ -136,7 +136,7 @@ public abstract class AbstractGenerator extends org.eclipse.edt.compiler.Abstrac
 		String outputDirectory = getOutputDirectory(eglFile);
 
 		IContainer container = EclipseUtilities.getOutputContainer(outputDirectory, eglFile, relativeFilePath);
-		IPath filePath = EclipseUtilities.getOutputFilePath(outputDirectory, eglFile, relativeFilePath);
+		IPath filePath = EclipseUtilities.getOutputFilePath(relativeFilePath);
 		return new IFile[] { container.getFile(filePath) };
 	}
 
