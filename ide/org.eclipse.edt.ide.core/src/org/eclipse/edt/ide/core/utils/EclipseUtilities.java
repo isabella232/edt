@@ -122,12 +122,10 @@ public class EclipseUtilities {
 	/**
 	 * Returns the path that should be used for the output file.
 	 * 
-	 * @param outputFolder         The folder in which to generate, in the internal folder format (see {@link #convertGenerationDirectoryToPath(String)})
-	 * @param eglFile              The source file being generated.
 	 * @param relativeFilePath     The path of the file to be written inside outputFolder. e.g. my/pkg/Foo.java
 	 * @return the path that should be used for the output file.
 	 */
-	public static IPath getOutputFilePath(String outputFolder, IFile eglFile, String relativeFilePath) {
+	public static IPath getOutputFilePath(String relativeFilePath) {
 		int lastSlash = relativeFilePath.lastIndexOf('/');
 		String fileName = lastSlash == -1 ? relativeFilePath : relativeFilePath.substring(lastSlash + 1);
 		return new Path(fileName);
@@ -136,7 +134,6 @@ public class EclipseUtilities {
 	/**
 	 * Writes a file using Eclipse API, so that the Eclipse filesystem is kept in sync.
 	 * 
-	 * @param part                 The IR being generated.
 	 * @param outputFolder         The folder in which to generate, in the internal folder format (see {@link #convertGenerationDirectoryToPath(String)})
 	 * @param eglFile              The source file being generated.
 	 * @param contentsToWrite      The content of the file to write.
@@ -144,10 +141,25 @@ public class EclipseUtilities {
 	 * @return the file that was written
 	 * @throws CoreException
 	 */
-	public static IFile writeFileInEclipse(Part part, String outputFolder, IFile eglFile, String contentsToWrite, String relativeFilePath) throws CoreException {
-		IPath filePath = getOutputFilePath(outputFolder, eglFile, relativeFilePath);
+	public static IFile writeFileInEclipse(String outputFolder, IFile eglFile, String contentsToWrite, String relativeFilePath) throws CoreException {
+		IPath filePath = getOutputFilePath(relativeFilePath);
 		IContainer container = getOutputContainer(outputFolder, eglFile, relativeFilePath);
 		writeFileInEclipse(container, filePath, EclipseUtilities.getInputStream(eglFile, contentsToWrite), true);
+		return container.getFile(filePath);
+	}
+	
+	/**
+	 * Returns a handle to the generated output file for the given path.
+	 * 
+	 * @param outputFolder         The folder in which to generate, in the internal folder format (see {@link #convertGenerationDirectoryToPath(String)})
+	 * @param eglFile              The source file being generated.
+	 * @param relativeFilePath     The path of the file to be written inside outputFolder. e.g. my/pkg/Foo.java
+	 * @return a handle to the generated output file for the given path.
+	 * @throws CoreException
+	 */
+	public static IFile getOutputFile(String outputFolder, IFile eglFile, String relativeFilePath) throws CoreException {
+		IPath filePath = getOutputFilePath(relativeFilePath);
+		IContainer container = getOutputContainer(outputFolder, eglFile, relativeFilePath);
 		return container.getFile(filePath);
 	}
 	
