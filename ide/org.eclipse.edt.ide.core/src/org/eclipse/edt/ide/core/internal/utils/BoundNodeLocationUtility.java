@@ -60,6 +60,7 @@ import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
@@ -489,6 +490,9 @@ public class BoundNodeLocationUtility {
 					String sourceName = null;
 					try {
 						irPart = entry.findPart( partBinding.getPackageName(), partBinding.getName() );
+						if(irPart == null) {
+							irPart = entry.findPart( InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getName()) );
+						}
 						sourceName = irPart.eGet("filename").toString();
 					} catch (PartNotFoundException e) {
 						e.printStackTrace();
