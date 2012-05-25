@@ -185,7 +185,7 @@ public class BinaryReadOnlyFile implements IFile {
 	  //for Forms in FormGroup, to eliminate the Form section, only keep the FormGroup section, which exactly is the ClassFile name
 	  private static String resolveFileString(String file){
 		  String fileString = file;
-		  int index = fileString.indexOf(":");
+		  int index = fileString != null ? fileString.indexOf(":") : -1;
 		  if(index != -1){
 			  fileString = fileString.substring(0, index);
 		  }

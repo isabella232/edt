@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.SystemEnvironment;
+import org.eclipse.edt.compiler.SystemPackageMOFPathEntry;
 import org.eclipse.edt.compiler.binding.AnnotationFieldBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FixedStructureBinding;
@@ -466,7 +467,7 @@ public class BoundNodeLocationUtility {
 		} else if ( ienv instanceof SystemEnvironment ) {
 			List<ISystemPackageBuildPathEntry> list = ((SystemEnvironment)ienv).getSysPackages();
 			for ( ISystemPackageBuildPathEntry entry : list ) {
-				if ( entry.getPartBinding( packageName, partName ) != null ) {
+				if (!(entry instanceof SystemPackageMOFPathEntry) && entry.getPartBinding( packageName, partName ) != null ) {
 					String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
 					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 					EObject irPart = null;
@@ -489,8 +490,6 @@ public class BoundNodeLocationUtility {
 			IBuildPathEntry[] list = ((ProjectEnvironment)ienv).getBuildPathEntries();
 			for ( IBuildPathEntry entry : list ) {
 				if (entry instanceof EglarBuildPathEntry && entry.getPartBinding( packageName, partName ) != null ) {
-					String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
-					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 					EObject irPart = null;
 					
 					String sourceName = null;
