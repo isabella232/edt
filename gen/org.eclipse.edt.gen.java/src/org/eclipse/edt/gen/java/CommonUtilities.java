@@ -496,9 +496,9 @@ public class CommonUtilities {
 					ctx.getSmapExtension().append("Lorg/eclipse/edt/javart/Delegate;");
 				else
 					ctx.getSmapExtension().append(generateJavaTypeSignature(function.getParameters().get(i).getType(), ctx,
-						(decl.getParameterKind() == ParameterKind.PARM_IN)));
+						function.getParameters().get(i).isNullable()));
 			}
-			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx, false) + "\n");
+			ctx.getSmapExtension().append(")" + generateJavaTypeSignature(function.getReturnType(), ctx, function.isNullable()) + "\n");
 		}
 	}
 
@@ -531,11 +531,13 @@ public class CommonUtilities {
 		ctx.getSmapExtension().append(programParameter.getType().getTypeSignature() + "\n");
 	}
 
-	private static String generateJavaTypeSignature(Type type, Context ctx, boolean inParm) {
+	private static String generateJavaTypeSignature(Type type, Context ctx, boolean isNullable) {
 		String signature = "";
 		// if this is an array, we need to handle it specially
 		if (type instanceof ArrayType)
 			signature += "Ljava/util/List;";
+		else if (type instanceof ExternalType && ctx.mapsToNativeType(type.getClassifier()))
+			signature += "L" + ctx.getRawNativeImplementationMapping(type.getClassifier()) + ";";
 		else {
 			// get the java primitive, if it exists
 			if (type == null)
@@ -544,11 +546,11 @@ public class CommonUtilities {
 				// do we want the java primitive or the object
 				// now try to match up against the known primitives
 				String value = ctx.getRawPrimitiveMapping(type.getClassifier());
-				// if this is an in parm, we need the object versions of the primitives
-				if (inParm) {
+				// if this is a nullable parm, we need the object versions of the primitives
+				if (isNullable) {
 					if (value.equals("boolean"))
 						signature += "Ljava/lang/Boolean;";
-					else if (value.equals("bytes"))
+					else if (value.equals("byte"))
 						signature += "Ljava/lang/Byte;";
 					else if (value.equals("double"))
 						signature += "Ljava/lang/Double;";
@@ -565,7 +567,7 @@ public class CommonUtilities {
 				} else {
 					if (value.equals("boolean"))
 						signature += "Z";
-					else if (value.equals("bytes"))
+					else if (value.equals("byte"))
 						signature += "B";
 					else if (value.equals("double"))
 						signature += "D";
