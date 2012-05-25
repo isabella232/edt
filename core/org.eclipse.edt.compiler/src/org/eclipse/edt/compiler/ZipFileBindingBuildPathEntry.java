@@ -24,7 +24,6 @@ import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
-import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.CachingObjectStore;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -68,11 +67,6 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 			partBinding = getPartBinding(getEntry(packageName,partName));
 		}
 		
-		if (partBinding == null && partName != null && packageName != null){
-			 partBinding = getPartBinding(getEntry(InternUtil.intern(packageName),InternUtil.intern(partName)));
-		}
-		
-
 		return partBinding;
 	}
 	
@@ -82,9 +76,7 @@ public abstract class ZipFileBindingBuildPathEntry extends ZipFileBuildPathEntry
 			partBinding = (IPartBinding)partBindingsWithoutPackage.get(partName);
 		}else{
 			Map partpackage = (Map)partBindingsByPackage.get(packageName);
-			if(partpackage == null) {
-				partpackage = (Map)partBindingsByPackage.get(InternUtil.intern(packageName));
-			}
+			
 			if (partpackage != null){
 				partBinding = (IPartBinding)partpackage.get(partName);
 			}
