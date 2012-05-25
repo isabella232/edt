@@ -447,11 +447,17 @@ public class BoundNodeLocationUtility {
 	
 	private IFile getFileForNode(IPartBinding partBinding){
 		IFile result = null;
+		String[] packageName = partBinding.getPackageName();
+		String partName = partBinding.getName();
+		if(packageName != null)
+			packageName = InternUtil.intern(packageName);
+		if(partName != null)
+			partName = InternUtil.intern(partName);
 	
 		IEnvironment ienv = partBinding.getEnvironment();
 		if (ienv instanceof WorkingCopyProjectEnvironment) {
 			WorkingCopyProjectEnvironment environment = (WorkingCopyProjectEnvironment) ienv;
-			IPartOrigin origin = environment.getPartOrigin(partBinding.getPackageName(), partBinding.getName());
+			IPartOrigin origin = environment.getPartOrigin(packageName, partName);
 			if(origin == null){	
 				return null;
 			} else{
@@ -460,8 +466,8 @@ public class BoundNodeLocationUtility {
 		} else if ( ienv instanceof SystemEnvironment ) {
 			List<ISystemPackageBuildPathEntry> list = ((SystemEnvironment)ienv).getSysPackages();
 			for ( ISystemPackageBuildPathEntry entry : list ) {
-				if ( entry.getPartBinding( partBinding.getPackageName(), partBinding.getName() ) != null ) {
-					String mofSignature = IRUtils.concatWithSeparator(partBinding.getPackageName(), ".") + "." + partBinding.getName();
+				if ( entry.getPartBinding( packageName, partName ) != null ) {
+					String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
 					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 					EObject irPart = null;
 					
@@ -482,26 +488,25 @@ public class BoundNodeLocationUtility {
 		}  if ( ienv instanceof ProjectEnvironment ) {
 			IBuildPathEntry[] list = ((ProjectEnvironment)ienv).getBuildPathEntries();
 			for ( IBuildPathEntry entry : list ) {
-				if (entry instanceof EglarBuildPathEntry && entry.getPartBinding( partBinding.getPackageName(), partBinding.getName() ) != null ) {
-					String mofSignature = IRUtils.concatWithSeparator(partBinding.getPackageName(), ".") + "." + partBinding.getName();
+				if (entry instanceof EglarBuildPathEntry && entry.getPartBinding( packageName, partName ) != null ) {
+					String mofSignature = IRUtils.concatWithSeparator(packageName, ".") + "." + partName;
 					String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
 					EObject irPart = null;
 					
 					String sourceName = null;
 					try {
-						irPart = entry.findPart( partBinding.getPackageName(), partBinding.getName() );
-						if(irPart == null) {
-							irPart = entry.findPart( InternUtil.intern(partBinding.getPackageName()), InternUtil.intern(partBinding.getName()) );
+						irPart = entry.findPart( packageName, partName );
+						if(irPart != null) {
+							sourceName = irPart.eGet("filename").toString();
+							result = new BinaryReadOnlyFile( entry.getID(), sourceName);
+							break;
 						}
-						sourceName = irPart.eGet("filename").toString();
+						   
 					} catch (PartNotFoundException e) {
 						e.printStackTrace();
 					}
-
-					result = new BinaryReadOnlyFile( entry.getID(), sourceName);
-					break;
 				}
-			}
+			} //for
 		}
 		
 		return result;
