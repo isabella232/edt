@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.compiler.internal.PartWrapper;
 import org.eclipse.edt.gen.eunit.CommonUtilities;
 import org.eclipse.edt.gen.eunit.EGL2Base;
 import org.eclipse.edt.gen.eunit.GenPartsXMLFile;
@@ -51,6 +52,7 @@ import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.core.model.PPListElement;
+import org.eclipse.edt.ide.core.utils.DefaultDeploymentDescriptorUtility;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.ide.eunit.Activator;
 import org.eclipse.edt.ide.ui.wizards.EGLProjectUtility;
@@ -423,7 +425,7 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 		return op;
 	}
 
-	protected WorkspaceModifyOperation getCreateEGLProjectOperation(final IWorkspaceRoot wsRoot, final String newProjName, String baseProj){
+	protected WorkspaceModifyOperation getCreateEGLProjectOperation(final IWorkspaceRoot wsRoot, final String newProjName, final String baseProj){
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			@Override
 			protected void execute(IProgressMonitor monitor)
@@ -431,14 +433,26 @@ public abstract class GenTestDriverAction implements	IObjectActionDelegate{
 					InterruptedException {
 				monitor.subTask("Creating driver project " + newProjName);
 				IProject newProj = wsRoot.getProject(newProjName);
-				if(!newProj.exists())			
+				if(!newProj.exists()) {
 					EGLWizardUtilities.createProject(newProjName, 0);
+					
+					// Also set the Default DD of the new project to that of the original project.
+					// Don't do this as a separate operation because we only want to do this when creating a new project.
+					// The user should be allowed to modify this setting and then re-run EUnit generation without losing their change.
+					IProject origProj = wsRoot.getProject(baseProj);
+					if (origProj.exists()) {
+						PartWrapper pw = DefaultDeploymentDescriptorUtility.getDefaultDeploymentDescriptor(origProj);
+						if (pw != null && pw.getPartPath() != null && pw.getPartPath().length() > 0) {
+							DefaultDeploymentDescriptorUtility.setDefaultDeploymentDescriptor(newProj, pw);
+						}
+					}
+				}
 				monitor.worked(1);
 			}
 		};
 		return op;
 	}
-
+	
 	protected WorkspaceModifyOperation getSetGeneratorIDOperation(final IProject driverProject, final String[] generatorIDs) {
 		WorkspaceModifyOperation op = new WorkspaceModifyOperation() {
 			@Override
