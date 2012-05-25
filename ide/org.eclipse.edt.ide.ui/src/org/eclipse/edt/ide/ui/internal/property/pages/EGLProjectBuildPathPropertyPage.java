@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.EGLSystemPathContaierInitializer;
 import org.eclipse.edt.ide.core.model.IEGLModelStatus;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -365,6 +366,10 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		List exportedEntries = new ArrayList();
 		for (int i= 0; i < newEGLPath.size(); i++) {
 			PPListElement currEGL= (PPListElement) newEGLPath.get(i);
+			if(EGLSystemPathContaierInitializer.isValidEGLSystemPathContainerPath(currEGL.getEGLPathEntry().getPath())){
+				newEGLPath.remove(currEGL);
+				continue;
+			}
 			if (currEGL.isExported() || currEGL.getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
 				exportedEntries.add(currEGL);
 			}
