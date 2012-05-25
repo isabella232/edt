@@ -193,6 +193,9 @@ public class EGLPathEntry implements IEGLPathEntry {
 		String kindString = "";
 		if(!this.isBinaryProject()) {
 			kindString = EGLPathEntry.kindToString(this.entryKind);
+			if(this.contentKind == K_OUTPUT){
+				kindString = "output";
+			}
 		} else {
 			kindString = EGLPathEntry.kindToString(IEGLPathEntry.CPE_PROJECT);
 		}

@@ -22,7 +22,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.edt.compiler.internal.util.EglarUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
+import org.eclipse.edt.ide.core.IIDECompiler;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.osgi.framework.Bundle;
 
 public class EGLSystemPathContaierInitializer extends
@@ -33,26 +36,13 @@ public class EGLSystemPathContaierInitializer extends
 			throws CoreException {
 		if(isValidEGLSystemPathContainerPath(containerPath)){
 			List<IEGLPathEntry> pathEntries = new ArrayList<IEGLPathEntry>();
-			IPath path = new Path(getPathToPluginDirectory("org.eclipse.edt.compiler", "lib", "edtCompiler.eglar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
 			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.egl", "lib", "egl.mofar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.eglx.persistence.sql", "egllib", "sql.mofar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.eglx.services", "egllib", "services.mofar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.eglx.jtopen", "egllib", "jtopen.eglar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.eglx.jtopen", "egllib", "externalTypes.eglar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-			
-			path = new Path(getPathToPluginDirectory("org.eclipse.edt.mof.eglx.jtopen", "egllib", "jtopen.mofar"));
-			pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
+			IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project.getProject());
+			List<File> files = EglarUtil.getAllSystemEglars(compiler);
+			for(File file : files){
+				IPath path = new Path(file.getAbsolutePath());
+				pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
+			}
 			
 			IEGLPathEntry[] entries = (IEGLPathEntry[])pathEntries.toArray(new IEGLPathEntry[pathEntries.size()]);
 			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, "EGLSystemRuntimePathContainer", entries);
@@ -77,7 +67,7 @@ public class EGLSystemPathContaierInitializer extends
 		return null;
 	}
 
-	private boolean isValidEGLSystemPathContainerPath(IPath path) {
+	public static boolean isValidEGLSystemPathContainerPath(IPath path) {
 		return path != null && path.segmentCount() == 1 && EDTCoreIDEPlugin.EDT_SYSTEM_RUNTIME_CONTAINER_ID.equals(path.segment(0));
 	}
 	
