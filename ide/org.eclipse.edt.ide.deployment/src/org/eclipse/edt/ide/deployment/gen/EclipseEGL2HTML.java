@@ -29,7 +29,7 @@ public class EclipseEGL2HTML extends EGL2HTML {
 	protected void writeFile(Part part, Generator generator) throws Exception {
 		String outputFolder = "WebContent";		
 		if (EclipseUtilities.shouldWriteFileInEclipse(outputFolder)) {
-			IFile outputFile = EclipseUtilities.writeFileInEclipse(part, outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
+			IFile outputFile = EclipseUtilities.writeFileInEclipse(outputFolder, eglFile, generator.getResult().toString(), generator.getRelativeFileName(part));
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 		} else {
