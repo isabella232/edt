@@ -401,6 +401,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	public static Calendar convert(String timestamp, int startCode, int endCode) {
 		// Try to parse the string by hand, looking for each field (years, months,
 		// etc.) that this ETimestamp stores.
+		boolean invalidSeparator = false;
 		int years = -1;
 		int months = -1;
 		int days = -1;
@@ -416,8 +417,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			int i = 0;
 			// Locate the first digit.
 			do {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
 			}
 			while (i < length && !('0' <= ch && ch <= '9'));
 			// Read in the number of years.
@@ -426,8 +426,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				for (int j = 0; '0' <= ch && ch <= '9' && j < 4; j++) {
 					years = years * 10 + ch - '0';
 					if (i < length) {
-						ch = timestamp.charAt(i);
-						i++;
+						ch = timestamp.charAt(i++);
 					} else {
 						// make sure there were 4 digits (when we get here it points exactly)
 						if (i != 4)
@@ -438,23 +437,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				// make sure there were 4 digits (when we get here it points past)
 				if (i != 5)
 					years = -1;
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of months.
 			if (i <= length && startCode <= MONTH_CODE && endCode >= MONTH_CODE) {
 				months = ch - '0';
 				if (i < length) {
-					ch = timestamp.charAt(i);
-					i++;
+					ch = timestamp.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						months = months * 10 + ch - '0';
 						if (i < length) {
-							ch = timestamp.charAt(i);
-							i++;
+							ch = timestamp.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -462,23 +463,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of days.
 			if (i <= length && startCode <= DAY_CODE && endCode >= DAY_CODE) {
 				days = ch - '0';
 				if (i < length) {
-					ch = timestamp.charAt(i);
-					i++;
+					ch = timestamp.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						days = days * 10 + ch - '0';
 						if (i < length) {
-							ch = timestamp.charAt(i);
-							i++;
+							ch = timestamp.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -486,23 +489,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of hours.
 			if (i <= length && startCode <= HOUR_CODE && endCode >= HOUR_CODE) {
 				hours = ch - '0';
 				if (i < length) {
-					ch = timestamp.charAt(i);
-					i++;
+					ch = timestamp.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						hours = hours * 10 + ch - '0';
 						if (i < length) {
-							ch = timestamp.charAt(i);
-							i++;
+							ch = timestamp.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -510,23 +515,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of minutes.
 			if (i <= length && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) {
 				minutes = ch - '0';
 				if (i < length) {
-					ch = timestamp.charAt(i);
-					i++;
+					ch = timestamp.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						minutes = minutes * 10 + ch - '0';
 						if (i < length) {
-							ch = timestamp.charAt(i);
-							i++;
+							ch = timestamp.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -534,23 +541,25 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of seconds.
 			if (i <= length && startCode <= SECOND_CODE && endCode >= SECOND_CODE) {
 				seconds = ch - '0';
 				if (i < length) {
-					ch = timestamp.charAt(i);
-					i++;
+					ch = timestamp.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						seconds = seconds * 10 + ch - '0';
 						if (i < length) {
-							ch = timestamp.charAt(i);
-							i++;
+							ch = timestamp.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -558,11 +567,15 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ('0' <= ch && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i);
-				i++;
+				ch = timestamp.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of microseconds.
 			if (i <= length && endCode >= FRACTION1_CODE) {
@@ -574,8 +587,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 					microseconds += ch - '0';
 					microsecondsFound++;
 					if (i < length) {
-						ch = timestamp.charAt(i);
-						i++;
+						ch = timestamp.charAt(i++);
 					} else {
 						break;
 					}
@@ -588,10 +600,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 						microseconds *= 10;
 					}
 				}
+				// ensure valid separator if more digits present
+				if (i < length)
+					invalidSeparator = true;
 			}
 		}
 		// Make sure all required fields were found.
-		if ((years == -1 && startCode == YEAR_CODE) || (months == -1 && startCode <= MONTH_CODE && endCode >= MONTH_CODE)
+		if (invalidSeparator || (years == -1 && startCode == YEAR_CODE) || (months == -1 && startCode <= MONTH_CODE && endCode >= MONTH_CODE)
 			|| (days == -1 && startCode <= DAY_CODE && endCode >= DAY_CODE) || (hours == -1 && startCode <= HOUR_CODE && endCode >= HOUR_CODE)
 			|| (minutes == -1 && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) || (seconds == -1 && startCode <= SECOND_CODE && endCode >= SECOND_CODE)
 			|| (microseconds == -1 && endCode >= FRACTION1_CODE))

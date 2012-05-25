@@ -145,33 +145,39 @@ public class ETime extends AnyBoxedObject<Calendar> {
 	public static Calendar convert(String time) {
 		if (time == null)
 			return null;
+		// Quick check for strings that are too long or too short.
+		int length = time.length();
+		if (length < 5 || length > 8) {
+			// Minimum is 5 characters: 1:1:1
+			// Maximum is 10 characters: 11:11:11
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "time";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
+		}
 
+		boolean invalidSeparator = false;
 		int hours = -1;
 		int minutes = -1;
 		int seconds = -1;
-		int length = time.length();
 		PARSE: if (length > 0) {
 			// ch is the character we're currently looking at. i is the index of
 			// the next character after ch.
 			char ch;
 			int i = 0;
-			// Locate the first digit.
-			do {
-				ch = time.charAt(i);
-				i++;
+			ch = time.charAt(i++);
+			if (ch < '0' || ch > '9') {
+				break PARSE;
 			}
-			while (i < length && !('0' <= ch && ch <= '9'));
 			// Read in the number of hours.
 			if (i <= length) {
 				hours = ch - '0';
 				if (i < length) {
-					ch = time.charAt(i);
-					i++;
+					ch = time.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						hours = hours * 10 + ch - '0';
 						if (i < length) {
-							ch = time.charAt(i);
-							i++;
+							ch = time.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -179,23 +185,25 @@ public class ETime extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ch != ':')
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = time.charAt(i);
-				i++;
+				ch = time.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of minutes.
 			if (i <= length) {
 				minutes = ch - '0';
 				if (i < length) {
-					ch = time.charAt(i);
-					i++;
+					ch = time.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						minutes = minutes * 10 + ch - '0';
 						if (i < length) {
-							ch = time.charAt(i);
-							i++;
+							ch = time.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -203,23 +211,25 @@ public class ETime extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i >= length || ch != ':')
+					invalidSeparator = true;
 			}
 			// Skip ahead to the next digit.
 			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = time.charAt(i);
-				i++;
+				ch = time.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
 			// Read in the number of seconds.
 			if (i <= length) {
 				seconds = ch - '0';
 				if (i < length) {
-					ch = time.charAt(i);
-					i++;
+					ch = time.charAt(i++);
 					if ('0' <= ch && ch <= '9') {
 						seconds = seconds * 10 + ch - '0';
 						if (i < length) {
-							ch = time.charAt(i);
-							i++;
+							ch = time.charAt(i++);
 						} else {
 							break PARSE;
 						}
@@ -227,11 +237,14 @@ public class ETime extends AnyBoxedObject<Calendar> {
 				} else {
 					break PARSE;
 				}
+				// ensure valid separator if more digits present
+				if (i < length)
+					invalidSeparator = true;
 			}
 		}
 
 		// Make sure all required fields were found.
-		if (hours == -1 || minutes == -1 || seconds == -1) {
+		if (invalidSeparator || hours == -1 || minutes == -1 || seconds == -1) {
 			TypeCastException tcx = new TypeCastException();
 			tcx.actualTypeName = "string";
 			tcx.castToName = "time";

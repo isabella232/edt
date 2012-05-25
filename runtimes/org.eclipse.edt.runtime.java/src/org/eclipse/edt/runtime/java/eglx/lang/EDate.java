@@ -156,65 +156,111 @@ public class EDate extends AnyBoxedObject<Calendar> {
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
 		}
 
+		boolean invalidSeparator = false;
 		int months = -1;
 		int days = -1;
 		int years = -1;
-
-		PARSE: {
-			char ch = date.charAt(0);
+		PARSE: if (length > 0) {
+			// ch is the character we're currently looking at. i is the index of
+			// the next character after ch.
+			char ch;
+			int i = 0;
+			ch = date.charAt(i++);
 			if (ch < '0' || ch > '9') {
 				break PARSE;
 			}
-			months = ch - '0';
-			ch = date.charAt(1);
-			int i;
-			if (ch < '0' || ch > '9') {
-				// There's one digit for the month.
-				i = 2;
-			} else {
-				// Two digits for the month.
-				months = months * 10 + ch - '0';
-				i = 3;
-			}
-
-			ch = date.charAt(i);
-			if (ch < '0' || ch > '9') {
-				break PARSE;
-			}
-			days = ch - '0';
-			i++;
-			ch = date.charAt(i);
-			if (ch < '0' || ch > '9') {
-				// There's one digit for the day.
-				i++;
-			} else {
-				// Two digits for the day.
-				days = days * 10 + ch - '0';
-				i += 2;
-			}
-
-			ch = date.charAt(i);
-			if (ch < '0' || ch > '9') {
-				break PARSE;
-			}
-			years = ch - '0';
-			i++;
-			for (int digits = 0; i < length && digits < 5; digits++, i++) {
-				ch = date.charAt(i);
-				if (ch < '0' || ch > '9') {
+			// Read in the number of months.
+			if (i <= length) {
+				months = ch - '0';
+				if (i < length) {
+					ch = date.charAt(i++);
+					if ('0' <= ch && ch <= '9') {
+						months = months * 10 + ch - '0';
+						if (i < length) {
+							ch = date.charAt(i++);
+						} else {
+							break PARSE;
+						}
+					}
+				} else {
 					break PARSE;
 				}
-				years = years * 10 + ch - '0';
+				// ensure valid separator if more digits present
+				if (i >= length || (ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
 			}
-
-			// Make sure we didn't get too many digits for the year.
-			if (i < length) {
-				years = -1;
+			// Skip ahead to the next digit.
+			while (i < length && !('0' <= ch && ch <= '9')) {
+				ch = date.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
+			}
+			// Read in the number of days.
+			if (i <= length) {
+				days = ch - '0';
+				if (i < length) {
+					ch = date.charAt(i++);
+					if ('0' <= ch && ch <= '9') {
+						days = days * 10 + ch - '0';
+						if (i < length) {
+							ch = date.charAt(i++);
+						} else {
+							break PARSE;
+						}
+					}
+				} else {
+					break PARSE;
+				}
+				// ensure valid separator if more digits present
+				if (i >= length || (ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
+			}
+			// Skip ahead to the next digit.
+			while (i < length && !('0' <= ch && ch <= '9')) {
+				ch = date.charAt(i++);
+				if (!(ch >= '0' && ch <= '9'))
+					invalidSeparator = true;
+			}
+			// Read in the number of years.
+			if (i <= length) {
+				years = ch - '0';
+				if (i < length) {
+					ch = date.charAt(i++);
+					if ('0' <= ch && ch <= '9') {
+						years = years * 10 + ch - '0';
+						if (i < length) {
+							ch = date.charAt(i++);
+							if ('0' <= ch && ch <= '9') {
+								years = years * 10 + ch - '0';
+								if (i < length) {
+									ch = date.charAt(i++);
+									if ('0' <= ch && ch <= '9') {
+										years = years * 10 + ch - '0';
+										if (i < length) {
+											ch = date.charAt(i++);
+										} else {
+											break PARSE;
+										}
+									}
+								} else {
+									break PARSE;
+								}
+							}
+						} else {
+							break PARSE;
+						}
+					}
+				} else {
+					break PARSE;
+				}
+				// ensure valid separator if more digits present
+				if (i < length)
+					invalidSeparator = true;
 			}
 		}
 
 		// Make sure all required fields were found.
-		if (months == -1 || days == -1 || years == -1) {
+		if (invalidSeparator || months == -1 || days == -1 || years == -1) {
 			TypeCastException tcx = new TypeCastException();
 			tcx.actualTypeName = "string";
 			tcx.castToName = "date";

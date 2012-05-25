@@ -16,7 +16,10 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+
+import eglx.lang.TypeCastException;
 
 /**
  * Helper class used to calculate arguments to be passed when instantiating
@@ -55,7 +58,10 @@ public class TimestampIntervalMask implements Serializable
 					case 'F':
 						break;
 					default:
-						return;
+						TypeCastException tcx = new TypeCastException();
+						tcx.actualTypeName = "string";
+						tcx.castToName = "timestamp";
+						throw tcx.fillInMessage( Message.CONVERSION_ERROR, pattern, tcx.actualTypeName, tcx.castToName );
 				}
 			}
 			this.pattern = pattern;
