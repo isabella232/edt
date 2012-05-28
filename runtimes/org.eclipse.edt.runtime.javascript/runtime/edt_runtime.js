@@ -493,8 +493,9 @@ egl.eglx.lang.EString.textLen = function (s) {
 	if ( s === null ) throw egl.createNullValueException( "CRRUI2005E", [] );
 	return s.length;
 };
-egl.eglx.lang.EString.ezeCast = function (x, nullable) {
-	return egl.convertAnyToString(x, nullable);  
+egl.eglx.lang.EString.ezeCast = function (x, nullable, length) {
+	result = egl.convertAnyToString(x, nullable);
+	return egl.convertTextToStringN( result, length);
 };
 
 egl.eglx.lang.EString.ezeBox = function(str){
@@ -525,43 +526,47 @@ egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
 egl.eglx.lang.EString.substringAssign = function(tgt, src, start, end){
 	return tgt.splice(start, end, src);
 };
-egl.eglx.lang.EString.fromEInt16 = function (x) {
-	return ''+x;
+egl.eglx.lang.EString.fromEInt16 = function (x, len) {
+	return egl.eglx.lang.EString.asString(''+x, len );
 };
-egl.eglx.lang.EString.fromEInt32 = function (x) {
-	return ''+x;
+egl.eglx.lang.EString.fromEInt32 = function (x, len) {
+	return egl.eglx.lang.EString.asString(''+x, len );
 };
-egl.eglx.lang.EString.fromEInt64 = function (x) {
-	return (x).toString();
+egl.eglx.lang.EString.fromEInt64 = function (x, len) {
+	return egl.eglx.lang.EString.asString((x).toString(), len );
 };
-egl.eglx.lang.EString.fromEFloat32 = function (x) {
-	return ''+x;
+egl.eglx.lang.EString.fromEFloat32 = function (x, len) {
+	return egl.eglx.lang.EString.asString(''+x, len );
 };
-egl.eglx.lang.EString.fromEFloat64 = function (x) {
-	return (x).toString();
+egl.eglx.lang.EString.fromEFloat64 = function (x, len) {
+	return egl.eglx.lang.EString.asString((x).toString(), len );
 };
-egl.eglx.lang.EString.fromEDecimal = function (x) {
-	return (x).toString();
+egl.eglx.lang.EString.fromEDecimal = function (x, len) {
+	return egl.eglx.lang.EString.asString((x).toString(), len );
 };
-egl.eglx.lang.EString.fromEBoolean = function (x) {
-	return (x).toString();
+egl.eglx.lang.EString.fromEBoolean = function (x, len) {
+	return egl.eglx.lang.EString.asString((x).toString(), len );
 };
-egl.eglx.lang.EString.fromENumber = function (x) {
-	return egl.unboxAny(x).toString();
+egl.eglx.lang.EString.fromENumber = function (x, len) {
+	return egl.eglx.lang.EString.asString(egl.unboxAny(x).toString(), len );
 };
-egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern) {
+egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern, len) {
 	if(pattern == null) pattern = "yyyyMMddhhmmss";
 	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);	
-	return egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	var result =  egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
+	return egl.eglx.lang.EString.asString(result, len );
 };
-egl.eglx.lang.EString.fromEDate = function (d) {
-	return d == null ? d : egl.dateToString(d, "MM/dd/yyyy"); 
+egl.eglx.lang.EString.fromEDate = function (d, len) {
+	var result = ( d == null ? d : egl.dateToString(d, "MM/dd/yyyy") ); 
+	return egl.eglx.lang.EString.asString(result, len );
 };
-egl.eglx.lang.EString.fromETime = function (d) {
-	return d == null ? d : egl.timeToString(d, "HH:mm:ss"); 
+egl.eglx.lang.EString.fromETime = function (d, len) {
+	var result = ( d == null ? d : egl.timeToString(d, "HH:mm:ss") ); 
+	return egl.eglx.lang.EString.asString(result, len );
 };
-egl.eglx.lang.EString.fromAnyObject = function (x) {
-	return egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
+egl.eglx.lang.EString.fromAnyObject = function (x, len) {
+	var result = egl.convertAnyToString(x, false);  //TODO sbg avoid hardcoding the boolean flag
+	return egl.eglx.lang.EString.asString(result, len );
 };
 egl.eglx.lang.EString.matchesPattern = function (str1, str2, esc) {
 	if ((str1 == null) || (str2 == null)) {
@@ -655,6 +660,14 @@ egl.eglx.lang.EString.startsWith = function(s, substr) {
 egl.eglx.lang.EString.asNumber = function (x) {
 	return egl.convertAnyToNumber(egl.boxAny(x, "S;"), false);  //TODO sbg avoid hardcoding the boolean flag
 };
+//Below are private methods, just for internal use in EString
+egl.eglx.lang.EString.asString = function (x, len) {
+	if ( typeof(len) == "undefined" ) {
+        return x;		
+	} else {
+		return egl.convertTextToStringN( x, len );
+	} 
+};
 
 
 //Returns the number of bytes in a text expression, excluding any trailing spaces or null values.
@@ -701,6 +714,128 @@ String.prototype.replaceStr = function(target, replacement) {
 String.prototype.charCodeAt = function(index) { 
 };
 */
+
+/****************************************************************************
+ * EBytes
+ ****************************************************************************/
+egl.defineClass( "eglx.lang", "EBytes"
+		,"eglx.lang", "AnyBoxedObject",
+{
+	"constructor" : function(bytes) {
+		egl.eglx.lang.AnyBoxedObject.call(this, bytes);
+		
+		this.maxLength = -1;
+	},
+ 	"constructor" : function(bytes, length) {
+		egl.eglx.lang.AnyBoxedObject.call(this, bytes);
+	
+		this.maxLength = length;
+	}
+}
+);
+egl.eglx.lang.EBytes.getLength = function (b) {
+	return b.maxLength;
+};
+egl.eglx.lang.EBytes.ezeCast = function (x, nullable, length) {
+	result = egl.convertAnyToString(x, nullable);
+	return egl.eglx.lang.EBytes.asBytes( result, length );
+};
+egl.eglx.lang.EBytes.ezeBox = function(b){
+	return new egl.eglx.lang.EBytes(b);
+};
+egl.eglx.lang.EBytes.ezeBox = function(b, len){
+	return new egl.eglx.lang.EBytes(b, len);
+};
+egl.eglx.lang.EBytes.equals = function(b1, b2) {
+	return egl.eglx.lang.EBytes.equalsInternal( b1, b2 );
+};
+egl.eglx.lang.EBytes.notEquals = function(b1, b2) {
+	return !egl.eglx.lang.EBytes.equalsInternal( b1, b2 );
+};
+egl.eglx.lang.EBytes.plus = function (op1, op2) {
+    re = [];
+    re = re.concat( op1 );
+    re = re.concat( op2 );
+    return re;
+};
+egl.eglx.lang.EBytes.concat = function (op1, op2) {
+	re = [];
+    re = re.concat( op1 );
+    re = re.concat( op2 );
+	return re;
+};
+egl.eglx.lang.EBytes.nullconcat = function (op1, op2) {
+	return egl.nullableconcat(op1, op2);
+};
+egl.eglx.lang.EBytes.Substr = function(bytes, startIndex, endIndex) {
+	if (bytes == null || startIndex == null || endIndex == null)
+		return null;
+	start = startIndex;
+	end = endIndex;
+	max = bytes.length;
+	if (start < 1 || start > max) {
+		throw egl.createInvalidIndexException( 'CRRUI2019E', [ bytes, max ], start );
+	} else if (end < start || end < 1 || end > max) {
+		throw egl.createInvalidIndexException( 'CRRUI2019E', [ bytes, max ], end );
+	}
+	return bytes.slice(start-1, end);
+};
+egl.eglx.lang.EBytes.fromEInt16 = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( ''+x, len );
+};
+egl.eglx.lang.EBytes.fromEInt32 = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( ''+x, len );;
+};
+egl.eglx.lang.EBytes.fromEInt64 = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+};
+egl.eglx.lang.EBytes.fromEFloat32 = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( ''+x, len );
+};
+egl.eglx.lang.EBytes.fromEFloat64 = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+};
+egl.eglx.lang.EBytes.fromEDecimal = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( (x).toString(), len ); 
+};
+egl.eglx.lang.EBytes.fromENumber = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( egl.unboxAny(x).toString(), len ); 
+};
+egl.eglx.lang.EBytes.fromEString = function (x, len) {
+	return egl.eglx.lang.EBytes.asBytes( egl.unboxAny(x).toString(), len );
+};
+egl.eglx.lang.EBytes.toString = function (x) {
+    if ( x == null )
+        return null;
+	return String.fromCharCode.apply(String, x);
+};
+//Below are private methods, just for internal use in EBytes
+egl.eglx.lang.EBytes.asBytes = function (x, len) {
+	var re = egl.convertStringToBytes( x );
+	if ( typeof(len) == "undefined" ) {
+        return re;
+	} else {
+		return re.slice(0, len - 1);
+	} 
+};
+egl.eglx.lang.EBytes.equalsInternal = function (x1, x2) {
+	if ( x1 == null || x2 == null ) {
+	   if ( x1 == null && x2 == null ) {
+	       return true;
+	   }
+	   return false;
+	}
+	if ( x1.length != x2.length ) {
+	    return false;
+	}
+	for ( var i = 0; i < x1.length; i ++ ) {
+	    if ( x1[i] != x2[i] ) {
+	        return false;
+	    }
+	}
+	return true;
+};
+
 /****************************************************************************
  * EDate
  ****************************************************************************/

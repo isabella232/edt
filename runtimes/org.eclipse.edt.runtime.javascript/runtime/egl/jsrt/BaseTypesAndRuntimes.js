@@ -19,6 +19,15 @@ egl.convertTextToStringN = function( str, n )
 	return str;
 };
 
+egl.convertStringToBytes = function( str )
+{
+	var re = [];
+    for (var i = 0; i < str.length; i++) {
+        re.push(str.charCodeAt(i));
+    }
+    return re;
+};
+
 egl.convertTextToFixedText = function( str, len )
 {
 	if ( str == null || str.length == len )
@@ -2032,6 +2041,14 @@ egl.typeName = function( signature )
 
 		case 'a':
 			return 'arraydictionary';
+
+		case 'G':
+			return 'bytes' + nullable;
+
+		case 'g':
+			return 'bytes(' + signature.substring(firstCharIdx+1, signature.indexOf(';')) + ')' + nullable;
+
+
 	}
 		
 	return 'unknown';
@@ -2543,6 +2560,9 @@ egl.convertAnyToString = function( any, nullable )
 
 			case 'O':
 				return egl.convertAnyToString(any.eze$$value,nullable);
+			case 'G':
+			case 'g':
+				return egl.eglx.lang.EBytes.toString(any.eze$$value,nullable);
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'string' + (nullable ? '?' : '') ], 'string' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
