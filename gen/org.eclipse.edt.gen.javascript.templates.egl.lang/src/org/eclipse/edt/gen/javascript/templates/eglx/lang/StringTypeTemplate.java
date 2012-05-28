@@ -41,7 +41,7 @@ public class StringTypeTemplate extends JavaScriptTemplate {
 
 	// this method gets invoked when there is a limited string needed
 	public void genSignature(SequenceType type, Context ctx, TabbedWriter out) {
-		StringBuilder signature = new StringBuilder("S");
+		StringBuilder signature = new StringBuilder("s");
 		if(type.getLength() != null && type.getLength() > 0){
 			signature.append(type.getLength());
 		}
