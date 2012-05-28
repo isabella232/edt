@@ -37,7 +37,7 @@ public class ParameterizableTypeTemplate extends JavaScriptTemplate {
 		// for decimal type, always use the runtime
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
-		out.print("(ezeProgram, ");
+		out.print("("); // TODO sbg Not needed for JavaScript? ezeProgram, ");
 		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
 		out.print(", ");
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
