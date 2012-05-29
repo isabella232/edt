@@ -116,7 +116,7 @@ public class SystemEnvironment implements ISystemEnvironment {
 					File libfolder = new File(paths[i]);
 					if (libfolder.exists() && libfolder.isDirectory()){
 						File[] files = libfolder.listFiles();
-						sysPackages.addAll(factory.createEntries(this, irEnv, files, new ISystemPartBindingLoadedRequestor(){
+						addSystemPackages(factory.createEntries(this, irEnv, files, new ISystemPartBindingLoadedRequestor(){
 							public void partBindingLoaded(IPartBinding part){
 								addSystemEntry(part);
 							}
@@ -173,6 +173,11 @@ public class SystemEnvironment implements ISystemEnvironment {
 					
     	}    	
     }
+    
+    protected void addSystemPackages(List<ISystemPackageBuildPathEntry> entries) {
+    	sysPackages.addAll(entries);
+    }
+    
     
     private boolean shouldAddToUnqualified(IPartBinding part) {
     	if (Binding.isValidBinding(part)) {
