@@ -78,12 +78,12 @@ externalType ENumber extends AnyValue type ClassType
 	/**
 	 * {@Operation ==} Compares two numbers.
 	 */
-	static function $EQ(lvalue ENumber in, rvalue ENumber in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue ENumber? in, rvalue ENumber? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two numbers.
 	 */
-	static function $NEQ(lvalue ENumber in, rvalue ENumber in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue ENumber? in, rvalue ENumber? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation{"widen"} Converts a bigint to a number.

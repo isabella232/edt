@@ -78,12 +78,12 @@ externalType EFloat extends ENumber type ClassType
 	/**
 	 * {@Operation ==} Compares two numbers.
 	 */
-	static function $EQ(lvalue EFloat in, rvalue EFloat in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EFloat? in, rvalue EFloat? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two numbers.
 	 */
-	static function $NEQ(lvalue EFloat in, rvalue EFloat in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EFloat? in, rvalue EFloat? in) returns(EBoolean) {@Operation{"!="}};
 	
 	/**
 	 * {@Operation narrow} Converts a string to a float.  The string is parsed

@@ -86,12 +86,12 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	/**
 	 * {@Operation ==} Compares two numbers.
 	 */
-	static function $EQ(lvalue EDecimal in, rvalue EDecimal in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EDecimal? in, rvalue EDecimal? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two numbers.
 	 */
-	static function $NEQ(lvalue EDecimal in, rvalue EDecimal in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EDecimal? in, rvalue EDecimal? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation widen} Converts a bigint to a decimal of arbitrary precision.

@@ -22,12 +22,12 @@ externalType EAny type ClassType
 	/**
 	 * {@Operation ==} Compares two EAnys.
 	 */
-	static function $EQ(lvalue EAny in, rvalue EAny in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EAny? in, rvalue EAny? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two EAnys.
 	 */
-	static function $NEQ(lvalue EAny in, rvalue EAny in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EAny? in, rvalue EAny? in) returns(EBoolean) {@Operation{"!="}};
 
 	// This is necessary because it results in boxing.
 	/**

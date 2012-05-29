@@ -122,12 +122,12 @@ externalType ESmallint extends ENumber type ClassType
 	/**
 	 * {@Operation ==} Compares two numbers.
 	 */
-	static function $EQ(lvalue ESmallint in, rvalue ESmallint in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue ESmallint? in, rvalue ESmallint? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two numbers.
 	 */
-	static function $NEQ(lvalue ESmallint in, rvalue ESmallint in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue ESmallint? in, rvalue ESmallint? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation widen} Converts a smallint to a number.

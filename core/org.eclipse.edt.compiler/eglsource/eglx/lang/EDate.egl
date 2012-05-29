@@ -41,12 +41,12 @@ externalType EDate extends AnyValue type ClassType
 	/**
 	 * {@Operation ==} Compares two dates.
 	 */
-	static function $EQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EDate? in, rvalue EDate? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two dates.
 	 */
-	static function $NEQ(lvalue EDate in, rvalue EDate in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EDate? in, rvalue EDate? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a date.  The string is parsed

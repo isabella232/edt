@@ -42,12 +42,12 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	/**
 	 * {@Operation ==} Compares two timestamps.
 	 */
-	static function $EQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue ETimestamp? in, rvalue ETimestamp? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two timestamps.
 	 */
-	static function $NEQ(lvalue ETimestamp in, rvalue ETimestamp in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue ETimestamp? in, rvalue ETimestamp? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a timestamp.  The string is parsed
