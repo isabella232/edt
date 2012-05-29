@@ -15,8 +15,7 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		dojo.require("dijit.form.Button");	
-		this.setData("Button");
+		this.setData("Button", ["dijit/form/Button"]);
 	},
 	"createDojoWidget" : function(parent) {
 		this.runEventHandlers = function() { }; // turn off EGL basic event handlers
@@ -68,8 +67,8 @@ egl.defineWidget(
 			return this.text.substring(1);
 		return this.text;
 	},
-	"setData" : function ( data ){
-		egl.dojo.widgets.DojoBase.prototype.setData.call(this, data);
+	"setData" : function ( data, requireWidgetList ){
+		egl.dojo.widgets.DojoBase.prototype.setData.call(this, data, requireWidgetList);
 		this.setBiDiMarkers();
 	},
 	"setWidth" : function(width){

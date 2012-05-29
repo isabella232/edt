@@ -18,9 +18,7 @@ egl.defineWidget(
 		this.setChildType("dojo.widgets.DojoContentPane");
 		this.width = 800;
 		this.height = 450;
-		dojo.require("dijit.layout.StackContainer");
-		dojo.require("dijit.layout.TabContainer");
-		dojo.require("dijit.layout.ContentPane");
+		this.setRequireWidgetList(["dijit/layout/StackContainer", "dijit/layout/TabContainer" ,"dijit/layout/ContentPane"]);
 		this.selectedChild = -1;
 	},
 	"createDojoWidget" : function(parent) {
@@ -58,19 +56,24 @@ egl.defineWidget(
 	},
 	"addEventHandlers" : function() {
 		var eglWidget = this;
-		dojo.subscribe(this.dojoID+"-selectChild", function(child) {
-			if (eglWidget.eze$$ready) {
-				eglWidget.selection = eglWidget.getChildIndex(child) + 1;
-				eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabSelected(), "onTabSelected");
-			}
+		require(["dojo/_base/connect"], function(connect){
+			connect.subscribe(eglWidget.dojoID+"-selectChild", function(child) {
+					if (eglWidget.eze$$ready) {
+						eglWidget.selection = eglWidget.getChildIndex(child) + 1;
+						eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabSelected(), "onTabSelected");
+					}
+			});
 		});
-		dojo.subscribe(this.dojoID+"-removeChild", function(child) {
-			if (eglWidget.eze$$ready) {
-				var index = eglWidget.getChildIndex(child);
-				eglWidget.selection = index + 1;
-				eglWidget.children.splice(index,1);
-				eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabRemoved(), "onTabRemoved");
-			}
+		
+		require(["dojo/_base/connect"], function(connect){
+			connect.subscribe(eglWidget.dojoID+"-removeChild", function(child) {
+				if (eglWidget.eze$$ready) {
+					var index = eglWidget.getChildIndex(child);
+					eglWidget.selection = index + 1;
+					eglWidget.children.splice(index,1);
+					eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabRemoved(), "onTabRemoved");
+				}
+			});
 		});
 	},
 	"notifyListeners" : function(widget, handlers, eventName) {

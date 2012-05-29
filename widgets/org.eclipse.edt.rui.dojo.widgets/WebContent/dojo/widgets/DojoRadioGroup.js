@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,7 +16,6 @@ egl.defineWidget(
 {
 	"constructor" : function() {
 		this.runEventHandlers = function() { }; // turn off EGL basic event handlers
-		dojo.require("dijit.form.RadioButton");
 	},
 	"setOptions" : function(options, placeholder) {
 		this.groupName = "egl.dojoRG_" + (++egl._dojoSerial);
@@ -48,7 +47,7 @@ egl.defineWidget(
 				egl.createChild(this.container, "br");
 		}
 		this.container.style.display = "none";
-		this.renderWhenDojoIsDoneLoading();
+		this.renderWhenDojoIsDoneLoading(["dijit/form/RadioButton"]);
 	},
 	"_setEvent" : function( htmlEventName, eglEventName, dojoEventName){
 		var eglWidget = this;
@@ -74,16 +73,21 @@ egl.defineWidget(
 				eglWidget.handleEvent(eglWidget["getOn" + eglEventName](), "on" + eglEventName, e);
 	        };
 		}
-        if(htmlEventName == "focus" || htmlEventName == "blur" || htmlEventName == "onkeydown" || htmlEventName == "onkeypress" || htmlEventName == "onkeyup"){
+		var self = this;
+		if(htmlEventName == "focus" || htmlEventName == "blur" || htmlEventName == "onkeydown" || htmlEventName == "onkeypress" || htmlEventName == "onkeyup"){
         	if(this.radios){
         		for (var n=this.radios.length-1; n>=0; n--) {
-    				dojo.connect(this.radios[n].domNode, "on" + htmlEventName, func);
+        			require(["dojo/_base/connect"], function(connect){
+        				connect.connect(self.radios[n].domNode, "on" + htmlEventName, func);
+        			});
     			}
         	}else{
         		obj["on" + dojoEventName] = func;
         	}
 		}else{
-			dojo.connect(this.container, "on" + htmlEventName, func);
+			require(["dojo/_base/connect"], function(connect){
+				connect.connect(self.container, "on" + htmlEventName, func);
+			});
 		}		
 	},
 	"getOptions" : function() {

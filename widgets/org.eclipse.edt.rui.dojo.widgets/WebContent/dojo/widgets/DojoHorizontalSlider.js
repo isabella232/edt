@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,7 +18,6 @@ egl.defineWidget(
 		this.minimum = 0;
 		this.maximum = 100;
 		this.step = 0;
-		dojo.require("dijit.form.Slider");
 	},
 	"createDojoWidget" : function(parent){
 		var eglWidget = this;
@@ -66,7 +65,7 @@ egl.defineWidget(
 		if (this.dojoWidget) 
 			this.dojoWidget.setValue(value);
 		else {
-			this.setData(value);
+			this.setData(value, ["dijit/form/Slider"]);
 		}
   	},
    	"getValue" : function() {

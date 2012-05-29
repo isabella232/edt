@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,12 +17,18 @@ egl.defineWidget(
 	"setChildren" : function(children) {
 		this.removeChildren();
 		this.children = children;
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);
+		var self = this;
+		setTimeout(function(){
+			self.renderWhenDojoIsDoneLoading(self.requireWidgetList);
+		}, 1);
+		
 		this.setBiDiMarkers();
 	},
+	
+	"setRequireWidgetList" :function(requireWidgetList){
+		this.requireWidgetList = requireWidgetList;
+	},
+	
 	"destroyAtRender" : function() {
 		if ( this.dojoWidget ) {
 			dojo.forEach(this.dojoWidget.getChildren(),

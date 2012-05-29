@@ -51,7 +51,7 @@ egl.defineWidget(
 			}
 		}
 		else {
-			this.renderWhenDojoIsDoneLoading();
+			this.renderWhenDojoIsDoneLoading(["dijit/layout/ContentPane"]);
 		}
 	},
 	"appendChild" : function(child) {

@@ -18,8 +18,6 @@ egl.defineWidget(
 		this.headerBehaviors = [];
 		this.behaviors = [];
 		this.data = [];
-		dojo.require("dojox.grid.DataGrid");
-		dojo.require("dojo.data.ItemFileWriteStore");
 	},
 	"createDojoWidget" : function(parent) {
 		this.setInnerHTML("");
@@ -48,7 +46,7 @@ egl.defineWidget(
     "setData" : function (data) {
     	if (!data)
     		data = [];
-    	egl.dojo.widgets.DojoBase.prototype.setData.call(this, data);
+    	egl.dojo.widgets.DojoBase.prototype.setData.call(this, data, ["dojox/grid/DataGrid", "dojo/data/ItemFileWriteStore"]);
     },
     "getData" : function(){
     	var index = this.dojoWidget.getSortIndex();

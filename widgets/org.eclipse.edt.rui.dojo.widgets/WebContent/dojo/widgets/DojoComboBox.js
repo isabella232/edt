@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,6 @@ egl.defineWidget(
 	'select',
 {
 	"constructor" : function() {
-		dojo.require('dijit.form.ComboBox');
 		this.pageSize = -1;
 		this.holder = null;
 		this.eze$$DOMElement.style.display = "none";
@@ -83,7 +82,6 @@ egl.defineWidget(
 				this._args.dir="rtl";
 			else
 				this._args.dir="ltr";
-			dojo.require("bidi.DojoComboBoxBidi"); 
 			this.dojoWidget = new bidi.DojoComboBoxBidi(this._args, parent);
 		}
 		this.eze$$DOMElement.style.display = "inline-block";
@@ -152,7 +150,7 @@ egl.defineWidget(
 			}
 		}else{
 			this.values = values;			
-			this.setData(this.values);
+			this.setData(this.values, ["dijit/form/ComboBox", "bidi.DojoComboBoxBidi"]);
 		}
 	},
 	"getValues" : function() {

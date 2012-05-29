@@ -16,10 +16,10 @@ egl.defineWidget(
 {
 	"constructor" : function() {
 		this.setChildType("dojo.widgets.DojoTreeNode");
-		dojo.require("dijit.Tree"); 
-		dojo.require("dojo.data.ItemFileWriteStore"); 
 		this.eglNodes = {};
 		this.showRoot = true;
+		this.requireList = ["dijit/Tree", "dojo/data/ItemFileWriteStore"];
+		this.renderWhenDojoIsDoneLoading(this.requireList);
 	},
 	"createDojoWidget" : function(parent){
 		if(!this.model)
@@ -97,10 +97,7 @@ egl.defineWidget(
 		this.children = children;
 		if(dojo && dojo.data)
 			this.setModel();
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);
+		this.renderWhenDojoIsDoneLoading(this.requireList);
 	},
 	"removeChildren" : function() {
 		this.setChildren([]);

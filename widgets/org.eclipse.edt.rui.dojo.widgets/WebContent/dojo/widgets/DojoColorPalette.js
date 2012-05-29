@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,12 +14,8 @@ egl.defineWidget(
 	'dojo.widgets', 'DojoBase',
 	'div',
 {
-	"constructor" : function() {		
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);
-		dojo.require("dijit.ColorPalette");	
+	"constructor" : function() {
+		this.renderWhenDojoIsDoneLoading(["dijit/ColorPalette"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;

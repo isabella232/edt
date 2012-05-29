@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,9 +11,6 @@
  *******************************************************************************/
 if(!dojo._hasResource["bidi.DojoTextBoxBidi"]){
 dojo._hasResource["bidi.DojoTextBoxBidi"]=true;
-dojo.provide("bidi.DojoTextBoxBidi");
-
-dojo.require("dijit.form.TextBox");
 
 var LRO = String.fromCharCode(8237);
 var RLO = String.fromCharCode(8238);
@@ -61,10 +58,8 @@ var isLinux = (navigator.platform.indexOf("Linux") != -1) ? true : false;
 var isOverwriteMozilla = false;
 var jr = null;
 
-dojo.declare(
-	"bidi.DojoTextBoxBidi",
-	dijit.form.TextBox,
-	{
+//in "bidi/DojoTextBoxBidi"
+define(["dijit/form/TextBox"], function(){
         isVisualMode: false,
         dir: 'ltr',
         autoPush: true, //shensis

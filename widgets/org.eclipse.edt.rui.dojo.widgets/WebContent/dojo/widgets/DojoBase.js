@@ -26,11 +26,12 @@ egl.startup = function(){
 	// DEBUG: enable the next line to see all the modules being loaded by Dojo
 	//
 	// dojo.connect(dojo, "eval", function(s) { s = s.replace(/&/g, "&amp;"); s = s.replace(/</g, "&lt;"); kkks(s);	});
+	require(["dojo/_base/connect", "dojo/dom-attr"]);
 }
 
 egl._dojoEventNames = {
 	"click" : ["click", "Click", "Click"],
-	"focus" : ["focus", "FocusGained", "Focus"],
+	"focus" : ["focus", "FocusGained", "Focus"],	
 	"blur" : ["blur", "FocusLost", "Blur"],
 	"keydown" : ["keydown", "KeyDown", "KeyDown"],
 	"keypress" : ["keypress", "KeyPress", "KeyPress"],
@@ -70,7 +71,7 @@ egl.defineClass(
 		this.printStartupMessage();
 		egl.startVEWidgetTimer();
 		var eglWidget = this;
-		dojo.addOnLoad(eglWidget.dojoWidget, function() {
+		require(["dojo/domReady!"], function(){
 			eglWidget.handleEvent(eglWidget.getOnWidgetLoad(),"onWidgetLoad",null);
 		});
 	},
@@ -114,35 +115,31 @@ egl.defineClass(
 			   egl.println("<font color=red><b>You are using IE6. For performance and security reasons, upgrade your browser from Internet Explorer 6 to a newer version.");
 		}
 	},
-	"renderWhenDojoIsDoneLoading" : function() {
+	"renderWhenDojoIsDoneLoading" : function(requireWidgetList) {
 		var eglWidget = this;
 		require(["dojo/main"], function(){			
 			eglWidget.renderingStep = 0;
 			if (egl.IE)
 				setTimeout(function() {	
-					eglWidget.renderWhenDojoIsDoneLoadingSafely();
+					eglWidget.renderWhenDojoIsDoneLoadingSafely(requireWidgetList);
 				},1);
 			else
-				eglWidget.renderWhenDojoIsDoneLoadingSafely();
+				eglWidget.renderWhenDojoIsDoneLoadingSafely(requireWidgetList);
 		});		
 	},
-	"renderWhenDojoIsDoneLoadingSafely" : function() {
+	"renderWhenDojoIsDoneLoadingSafely" : function(requireWidgetList) {
 		var eglWidget = this;
-		dojo.addOnLoad(function(){
-			try {
-				eglWidget.render();
-			}
-			catch (e) {
-				dojo.addOnLoad(function(){	
-					try {
-						eglWidget.render();
-					}
-					catch (e) {
-						eglWidget.reportError(e.message);
-					}
-				});
-			}
-		});
+		if(requireWidgetList != null && requireWidgetList.length > 0){
+			require(requireWidgetList, function(){
+				try {
+					eglWidget.render();
+				}
+				catch (e) {
+					eglWidget.reportError(e.message);
+				}
+			});
+		}
+
 		this.removeLoader();
 	},
 	"getAncestry" : function() {
@@ -228,7 +225,13 @@ egl.defineClass(
 		}
 	},
 	"destroy" : function(){
-		dojo.removeAttr(this.eze$$DOMElement,"id");
+		var eglWidget = this;
+		require(["dojo/dom-attr"], function(domAttr){
+			  result = domAttr.has(eglWidget.eze$$DOMElement, "id");
+			  if(result){
+				  domAttr.remove(eglWidget.eze$$DOMElement, "id");
+			  }
+		});
 		try { this.dojoWidget.destroy(); } catch(e) { }
 		try { this.dojoWidget.destroyRecursive(); } catch (e) { }
 		this.dojoWidget = null;
@@ -240,11 +243,11 @@ egl.defineClass(
 		if (!test)
 			throw message + ". Race condition may have occurred.";
 	},	
-	"setData" : function ( data ){
+	"setData" : function ( data, requireList ){
 		this.data = data;
 		var eglWidget = this;
 		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
+			eglWidget.renderWhenDojoIsDoneLoading(requireList);
 		}, 1);
 	},
 	"getData" : function(){
@@ -393,7 +396,9 @@ egl.defineClass(
 	        };
 		}			
 		if(this.dojoWidget){
-			dojo.connect(this.dojoWidget.domNode, "on" + htmlEventName, func);
+			require(["dojo/_base/connect"], function(connect){
+				  connect.connect(eglWidget.dojoWidget.domNode, "on" + htmlEventName, func);
+			});
 		}else{
 			obj["on" + dojoEventName] = func;
 		}

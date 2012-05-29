@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,8 +12,7 @@
 egl.defineClass('dojo.widgets', 'DojoValidatorLib',
 {
 	"constructor" : function(){
-		dojo.require("dojox.validate");
-		dojo.require("dojox.validate.web");
+		require(["dojox/validate", "dojox/validate/web"]);
 	},
 	"getFlag" : function(constraints){
 		var flag = {};

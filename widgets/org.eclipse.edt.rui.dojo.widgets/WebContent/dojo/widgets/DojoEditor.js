@@ -21,19 +21,13 @@ egl.defineWidget(
 		this.height = 300;
 		this.width = 300;
 		this.value = "";
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);	
-		dojo.require("dijit.Editor");		
-		dojo.require("dijit.layout._LayoutWidget");
+		this.renderWhenDojoIsDoneLoading(["dijit/Editor", "dijit/layout/_LayoutWidget", "bidi.DojoEditorBidi"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;
 		var isVisualMode = (this.textLayoutThis == "Visual");		
 		if(isVisualMode || (this.widgetOrientationThis != "")) {
 //			dojo.registerModulePath("bidi", "dojo/widgets/bidi");
-			dojo.require("bidi.DojoEditorBidi"); 
 			this._mergeArgs({
 				isVisualMode: (this.textLayoutThis == "Visual"), 
 				dir: this.widgetOrientationThis,isTextReversed: (this.reverseTextDirectionThis == "Yes"),
@@ -54,9 +48,11 @@ egl.defineWidget(
 		}
 		
 		this.dojoWidget.startup();
-		dojo.addOnLoad(eglWidget.dojoWidget, function() {
-			eglWidget.dojoWidget.resize({w: eglWidget.width, h: eglWidget.height });	
-		});	
+		require(["dojo/ready"], function(ready){
+			 ready(eglWidget.dojoWidget, function(){
+				 eglWidget.dojoWidget.resize({w: eglWidget.width, h: eglWidget.height });	
+			 });
+		});
 	},
 	"setHeight" : function(height) {
 		this.height = height;

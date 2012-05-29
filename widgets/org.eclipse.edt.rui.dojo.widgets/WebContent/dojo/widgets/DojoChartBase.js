@@ -15,19 +15,7 @@ egl.chartsToRedraw = [];egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		dojo.require("dojox.fx");
-		dojo.require("dojox.gfx");
-		dojo.require("dojox.charting.Chart2D");
-		dojo.require("dojox.charting.themes.PlotKit.blue");
-		dojo.require("dojox.charting.themes.PlotKit.red");
-		dojo.require("dojox.charting.themes.PlotKit.green");
-		dojo.require("dojox.charting.themes.PlotKit.orange");
-		dojo.require("dojox.charting.themes.PlotKit.cyan");
-		dojo.require("dojox.charting.themes.PlotKit.purple");
-		dojo.require("dojox.charting.action2d.Tooltip");
-		dojo.require("dojox.charting.action2d.Highlight");
-		dojo.require("dojox.charting.action2d.Magnify");
-		dojo.require("dojox.charting.themes.MiamiNice");
+		
 	},
 	"createChart" : function(parent, width, height, plot) {
 		this.setWidth(this.width || width);
@@ -53,6 +41,12 @@ egl.chartsToRedraw = [];egl.defineWidget(
 			}
 		}
 	},
+	"setData" : function ( data ){
+		egl.dojo.widgets.DojoBase.prototype.setData.call(this, data, ["dojox/fx", "dojox/gfx", "dojox/charting/Chart2D", "dojox/charting/themes/PlotKit/blue", "dojox/charting/themes/PlotKit/red",
+		             			              		 		         "dojox/charting/themes/PlotKit/green", "dojox/charting/themes/PlotKit/orange", "dojox/charting/themes/PlotKit/cyan",
+		             			            				         "dojox/charting/themes/PlotKit/purple", "dojox/charting/action2d/Tooltip", "dojox/charting/action2d/Highlight",
+		             			            				         "dojox/charting/action2d/Magnify", "dojox/charting/themes/MiamiNice"]);
+	}, 
 	"setWidth" : function(width){
 		this.width = width;
 		if(this.dojoWidget){

@@ -17,11 +17,7 @@ egl.defineWidget(
 	"constructor" : function() {
 		this.text = "";
 		this.checkedText = "";
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);		
-		dojo.require("dijit.form.ToggleButton");	
+		this.renderWhenDojoIsDoneLoading(["dijit/form/ToggleButton"]);
 	},
 	"createDojoWidget" : function(parent) {
 		this.runEventHandlers = function() { }; // turn off EGL basic event handlers

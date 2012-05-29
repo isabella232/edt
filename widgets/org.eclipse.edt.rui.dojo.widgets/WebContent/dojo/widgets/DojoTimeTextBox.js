@@ -15,12 +15,8 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		dojo.require("dijit.form.TimeTextBox");
-		var eglWidget = this;
 		this.timePattern = "hh:mm a";
-		setTimeout(function(){
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1)
+		this.renderWhenDojoIsDoneLoading(["dijit/form/TimeTextBox"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;

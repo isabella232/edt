@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,7 +15,6 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		dojo.require("dijit.ProgressBar");
 	},
 	"createDojoWidget" : function(parent){
 		var eglWidget = this;
@@ -50,7 +49,7 @@ egl.defineWidget(
 		if(this.dojoWidget)
 			this.dojoWidget.update({ progress:this.progress});
 		else
-			this.setData(progress);
+			this.setData(progress, ["dijit/ProgressBar"]);
 	},
 	"getProgress" : function(){
 		return this.progress;

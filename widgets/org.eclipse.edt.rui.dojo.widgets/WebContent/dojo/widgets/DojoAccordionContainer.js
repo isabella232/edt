@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,14 +15,12 @@ egl.defineWidget(
 	'div',
 	{
 	"constructor" : function() {
+		this.setRequireWidgetList(["dijit/layout/StackContainer", "dijit/layout/AccordionContainer", "dijit/layout/ContentPane"]);
 		this.setChildType("dojo.widgets.DojoContentPane");
 		this.selection = 1;
 		this.duration = 250;
 		this.width = 800;
 		this.height = 450;
-		dojo.require("dijit.layout.StackContainer");
-		dojo.require("dijit.layout.AccordionContainer");
-		dojo.require("dijit.layout.ContentPane");
 		this.selection = -1;
 	},
 	"createDojoWidget" : function(parent) {
@@ -70,11 +68,13 @@ egl.defineWidget(
 	},
 	"addEventHandlers" : function() {
 		var eglWidget = this;
-		dojo.subscribe(this.getID()+"-selectChild", function(child) {
-			if (eglWidget.eze$$ready) {
-				eglWidget.selection = eglWidget.getChildIndex(child) + 1;
-				eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabSelected(), "onTabSelected");
-			}
+		require(["dojo/_base/connect"], function(connect){
+			connect.subscribe(eglWidget.getID()+"-selectChild", function(child) {
+				if (eglWidget.eze$$ready) {
+					eglWidget.selection = eglWidget.getChildIndex(child) + 1;
+					eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnTabSelected(), "onTabSelected");
+				}
+			});
 		});
 	},
 	"notifyListeners" : function(widget, handlers, eventName) {

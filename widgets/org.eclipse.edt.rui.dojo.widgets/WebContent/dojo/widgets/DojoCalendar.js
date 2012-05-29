@@ -15,11 +15,7 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		},1);		
-		dojo.require("dijit._Calendar"); 	
+		this.renderWhenDojoIsDoneLoading(["dijit/_Calendar"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;

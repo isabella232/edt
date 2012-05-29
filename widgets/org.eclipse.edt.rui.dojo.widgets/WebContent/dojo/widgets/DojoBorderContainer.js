@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,10 @@ egl.defineWidget(
 	'div',
 	{
 	"constructor" : function() {
+		this.setRequireWidgetList(["dijit/layout/BorderContainer", "dijit/layout/ContentPane"]);
 		this.setChildType("dojo.widgets.DojoContentPane");
 		this.width = 800;
 		this.height = 450;
-		dojo.require("dijit.layout.BorderContainer");
-		dojo.require("dijit.layout.ContentPane");
 	},
 	"createDojoWidget" : function(parent) {
 		this.dojoID = "egl.DojoBorderContainer"  + (++egl._dojoSerial);

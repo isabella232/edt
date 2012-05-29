@@ -16,9 +16,7 @@ egl.defineWidget(
 {
 	"constructor" : function() {
 		this.setChildType("dojo.widgets.DojoMenu");
-		dojo.require("dijit.PopupMenuItem");
-		dojo.require("dijit.MenuItem");
-		dojo.require("dijit.MenuSeparator");
+		require(["dijit/PopupMenuItem", "dijit/MenuItem", "dijit/MenuSeparator"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;

@@ -16,12 +16,7 @@ egl.defineWidget(
 {
 	"constructor" : function() {
 		this.setChildType("dojo.widgets.DojoMenuItem");
-		dojo.require("dijit.Menu");
-		dojo.require("dijit.form.DropDownButton");
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		}, 1);
+		this.renderWhenDojoIsDoneLoading(["dijit/Menu", "dijit/form/DropDownButton"]);
 	},
 	"createDojoWidget" : function(parent){
 		this.dojoMenu = new dijit.Menu();
@@ -49,7 +44,10 @@ egl.defineWidget(
 			this.setHeight(this.height);
 		}
 		if(this._args.onMouseDown){
-			dojo.connect(this.dojoWidget._buttonNode, "onmousedown", this._args.onMouseDown);
+			var self = this;
+			require(["dojo/_base/connect"], function(connect){
+				  connect.connect(self.dojoWidget._buttonNode, "onmousedown", self._args.onMouseDown);
+			});
 		}
 		this.dojoWidget.startup();
 	},
@@ -74,7 +72,10 @@ egl.defineWidget(
 	        };
 	        if(this.dojoWidget){
 	        	if(htmlEventName == "mousedown"){
-	        		dojo.connect(this.dojoWidget._buttonNode, "on" + htmlEventName, func);
+	        		var self = this;
+	    			require(["dojo/_base/connect"], function(connect){
+	    				  connect.connect(self.dojoWidget._buttonNode, "on" + htmlEventName, func);
+	    			});
 	        	}else{
 	        		this.dojoWidget.set("on" + dojoEventName, func);
 	        	}				

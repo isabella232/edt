@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,12 +11,9 @@
  *******************************************************************************/
 if(!dojo._hasResource["bidi.DojoEditorBidi"]){
 dojo._hasResource["bidi.DojoEditorBidi"]=true;
-dojo.provide("bidi.DojoEditorBidi");
-dojo.require("dijit._editor.RichText");
-dojo.require("dijit.Editor");
 
-dojo.declare("bidi.DojoEditorBidi",dijit.Editor,
-{	
+//in "bidi/DojoEditorBidi"
+define(["dijit/_editor/RichText", "dijit/Editor"], function(){
 isVisualMode:false,
 isTextReversed:false,
 dir:"ltr",
@@ -25,8 +22,12 @@ postCreate:function(){
 	this._savedPushBoundaries = null;
 	this._selectionLength = 0;
 	if(this.isTextReversed) {
-		this.contentDomPreFilters.push(dojo.hitch(this, "_reverseNodes"));
-		this.contentDomPostFilters.push(dojo.hitch(this, "_reverseNodes"));		
+		var self = this;
+		require(["dojo/_base/xhr", "dojo/_base/lang"], function(xhr, lang){
+			  var hitchNode = lang.hitch(self, "_reverseNodes");
+			  self.contentDomPreFilters.push(hitchNode);
+			  self.contentDomPostFilters.push(hitchNode);		
+		});
 	}
 },
 _adjustCursorOnPushTyping: function(offset) {

@@ -19,9 +19,8 @@ egl.defineWidget(
 		this.contrBox = null;
 		this.width = 800;
 		this.height = 450;
-		dojo.require("dijit.layout.StackContainer");
-		dojo.require("dijit.layout.ContentPane");
-		dojo.require("dijit.layout.StackController");
+		var requireList = ["dijit/layout/StackContainer", "dijit/layout/ContentPane", "dijit/layout/StackController"];
+		this.setRequireWidgetList(requireList);
 		this.selectedChild = -1;
 	},
 	"createDojoWidget" : function(parent) {
@@ -55,19 +54,24 @@ egl.defineWidget(
 	},
 	"addEventHandlers" : function() {
 		var eglWidget = this;
-		dojo.subscribe(this.dojoID+"-selectChild", function(child) {
-			if (eglWidget.eze$$ready) {
-				eglWidget.selection = eglWidget.getChildIndex(child) + 1;
-				eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnStackSelected(), "onStackSelected");
-			}
+		require(["dojo/_base/connect"], function(connect){
+			connect.subscribe(eglWidget.dojoID+"-selectChild", function(child) {
+				if (eglWidget.eze$$ready) {
+					eglWidget.selection = eglWidget.getChildIndex(child) + 1;
+					eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnStackSelected(), "onStackSelected");
+				}
+			});
 		});
-		dojo.subscribe(this.dojoID+"-removeChild", function(child) {
-			if (eglWidget.eze$$ready) {
-				var index = eglWidget.getChildIndex(child);
-				eglWidget.selection = index + 1;
-				eglWidget.children.splice(index,1);
-				eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnStackRemoved(), "onStackRemoved");
-			}
+		
+		require(["dojo/_base/connect"], function(connect){
+			connect.subscribe(eglWidget.dojoID+"-removeChild", function(child) {
+				if (eglWidget.eze$$ready) {
+					var index = eglWidget.getChildIndex(child);
+					eglWidget.selection = index + 1;
+					eglWidget.children.splice(index,1);
+					eglWidget.notifyListeners(child.eglWidget, eglWidget.getOnStackRemoved(), "onStackRemoved");
+				}
+			});
 		});
 	},
 	"notifyListeners" : function(widget, handlers, eventName) {

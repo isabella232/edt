@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,11 +15,7 @@ egl.defineWidget(
 	'textarea',
 {
 	"constructor" : function() {
-		dojo.require("dijit.form.SimpleTextarea");
-		var eglWidget = this;
-		setTimeout(function() {
-			eglWidget.renderWhenDojoIsDoneLoading();
-		}, 1);
+		this.renderWhenDojoIsDoneLoading(["dijit/form/SimpleTextarea"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;		

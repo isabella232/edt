@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,12 +15,14 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
+		this.requireList = ["dijit/Dialog"];
+		this.setRequireWidgetList(this.requireList);
 		this.content = egl.createElement("div");
 		this.content.height = "auto";
 		this.draggable = true;
 		this.isOpen = false;
-		dojo.require("dijit.Dialog");
 	},
+	
 	"createDojoWidget" : function(parent) {
 		this.dojoID = "egl.DojoDialog_" + (++egl._dojoSerial);
 		for (var n=0; n<this.children.length; n++) {
@@ -71,14 +73,14 @@ egl.defineWidget(
 			this.dojoWidget.show();
 		}
 		else
-			this.renderWhenDojoIsDoneLoading();
+			this.renderWhenDojoIsDoneLoading(this.requireList);
 	},
 	"hideDialog" : function() {
 		this.isOpen = false;
 		if (this.dojoWidget)
 			this.dojoWidget.hide();
 		else
-			this.renderWhenDojoIsDoneLoading();
+			this.renderWhenDojoIsDoneLoading(this.requireList);
 	},
 	"setVisible" : function(visible) {
 		egl.dojo.widgets.DojoContainer.prototype.setVisible.call(this, visible);
