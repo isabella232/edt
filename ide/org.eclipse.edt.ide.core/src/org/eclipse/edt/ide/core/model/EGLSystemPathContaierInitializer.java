@@ -35,21 +35,18 @@ public class EGLSystemPathContaierInitializer extends
 	public void initialize(IPath containerPath, IEGLProject project)
 			throws CoreException {
 		if(isValidEGLSystemPathContainerPath(containerPath)){
-			List<IEGLPathEntry> pathEntries = new ArrayList<IEGLPathEntry>();
+			List<IEGLPathEntry> pathEntries = new ArrayList<IEGLPathEntry>();			
+			IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project.getProject());
+			List<File> files = EglarUtil.getAllSystemEglars(compiler);
+			for(File file : files){
+				IPath path = new Path(file.getAbsolutePath());
+				pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
+			}
+			
+			IEGLPathEntry[] entries = (IEGLPathEntry[])pathEntries.toArray(new IEGLPathEntry[pathEntries.size()]);
+			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, "EGLSystemRuntimePathContainer", entries);
 
-			//TODO SF uncomment
-//			
-//			IIDECompiler compiler = ProjectSettingsUtility.getCompiler(project.getProject());
-//			List<File> files = EglarUtil.getAllSystemEglars(compiler);
-//			for(File file : files){
-//				IPath path = new Path(file.getAbsolutePath());
-//				pathEntries.add(EGLCore.newLibraryEntry(path, path, null));
-//			}
-//			
-//			IEGLPathEntry[] entries = (IEGLPathEntry[])pathEntries.toArray(new IEGLPathEntry[pathEntries.size()]);
-//			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, "EGLSystemRuntimePathContainer", entries);
-//
-//			EGLCore.setEGLPathContainer(containerPath, new IEGLProject[]{project}, new EGLSystemRuntimePathContainer[]{container}, new NullProgressMonitor());
+			EGLCore.setEGLPathContainer(containerPath, new IEGLProject[]{project}, new EGLSystemRuntimePathContainer[]{container}, new NullProgressMonitor());
 		}
 	}
 	

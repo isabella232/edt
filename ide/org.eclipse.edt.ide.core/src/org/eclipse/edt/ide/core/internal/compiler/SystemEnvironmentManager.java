@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.SystemPackageBuildPathEntryFactory;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.compiler.internal.mof2binding.Mof2Binding;
 import org.eclipse.edt.ide.core.IIDECompiler;
+import org.eclipse.edt.ide.core.internal.lookup.IDESystemEnvironment;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 
 /**
@@ -39,7 +40,7 @@ public class SystemEnvironmentManager {
 			return systemMap.get(path);
 		}
 				
-		SystemEnvironment sysEnv = new SystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums, compiler);
+		IDESystemEnvironment sysEnv = new IDESystemEnvironment(new SystemIREnvironment(), parentEnv, implicitEnums, compiler);
 		sysEnv.initializeSystemPackages(path,  new SystemPackageBuildPathEntryFactory(new Mof2Binding(sysEnv)), notifier);
 		
 		systemMap.put(path, sysEnv);

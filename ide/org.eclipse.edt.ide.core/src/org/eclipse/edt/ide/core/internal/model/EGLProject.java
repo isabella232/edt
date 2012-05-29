@@ -60,7 +60,6 @@ import org.eclipse.edt.ide.core.internal.model.util.ObjectVector;
 import org.eclipse.edt.ide.core.model.EGLConventions;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.EGLSystemPathContaierInitializer;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLModelMarker;
 import org.eclipse.edt.ide.core.model.IEGLModelStatus;
@@ -1851,30 +1850,7 @@ public class EGLProject extends Openable implements IEGLProject, IProjectNature 
 			String xmlPath = getSharedProperty(EGLPATH_FILENAME);
 			if (xmlPath == null)
 				return null;
-			IEGLPathEntry[] entries = decodeEGLPath(xmlPath, createMarker, logProblems);
-			return entries;
-
-			//TODO SF uncomment
-//			for(int i = 0; i < entries.length; i++){
-//				if(EGLSystemPathContaierInitializer.isValidEGLSystemPathContainerPath(entries[i].getPath())){
-//					return entries;
-//				}
-//			}
-//			IEGLPathEntry[] newEntries = new IEGLPathEntry[entries.length + 1];
-//			System.arraycopy(entries, 0, newEntries, 0, entries.length);
-//			newEntries[entries.length] = new EGLPathEntry(
-//					IPackageFragmentRoot.K_SOURCE,
-//					IEGLPathEntry.CPE_CONTAINER,
-//					new Path(EDTCoreIDEPlugin.EDT_SYSTEM_RUNTIME_CONTAINER_ID),
-//					EGLPathEntry.EXCLUDE_NONE);
-//			try {
-//				setSharedProperty(EGLPATH_FILENAME, encodeEGLPath(newEntries, null, true));
-//			} catch (CoreException e) {
-//				if (getProject().isAccessible()) {
-//					Util.log(e, "Could not save eglpath for "+ getPath()); //$NON-NLS-1$
-//				}
-//			}
-//			return newEntries;
+			return decodeEGLPath(xmlPath, createMarker, logProblems);
 		} catch (CoreException e) {
 			// file does not exist (or not accessible)
 			if (createMarker && this.getProject().isAccessible()) {

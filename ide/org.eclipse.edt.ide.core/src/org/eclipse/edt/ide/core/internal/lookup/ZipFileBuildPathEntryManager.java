@@ -18,12 +18,18 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.edt.compiler.ICompiler;
+import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
+import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
+import org.eclipse.edt.compiler.internal.core.lookup.IZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.tools.EGL2IR;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyEglarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyMofarBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.AbsolutePathUtility;
+import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.ZipFileObjectStore;
@@ -43,7 +49,8 @@ public class ZipFileBuildPathEntryManager {
 	
 	private boolean isWCC;
 
-	private Map<Object, Map<IPath, EglarBuildPathEntry>> zipfileProjectEntries;
+	private Map<Object, Map<IPath, IZipFileBindingBuildPathEntry>> zipfileProjectEntries;
+	private static Map<ICompiler, Map<IPath, ISystemPackageBuildPathEntry>> systemEntries = new HashMap<ICompiler, Map<IPath,ISystemPackageBuildPathEntry>>();
 	
 	private ZipFileBuildPathEntryManager(boolean isWCC){
 		 super();
@@ -52,7 +59,7 @@ public class ZipFileBuildPathEntryManager {
 	}
 	
 	private void init() {
-		zipfileProjectEntries = new HashMap<Object, Map<IPath,EglarBuildPathEntry>>();
+		zipfileProjectEntries = new HashMap<Object, Map<IPath,IZipFileBindingBuildPathEntry>>();
 	}
 
 	public static ZipFileBuildPathEntryManager getInstance(){
@@ -63,26 +70,28 @@ public class ZipFileBuildPathEntryManager {
 		return WCC_INSTANCE;
 	}
 	
-	protected Map getProjectEntry(Object project){
-		Map<IPath, EglarBuildPathEntry> retVal = zipfileProjectEntries.get(project);
+	protected Map<IPath, IZipFileBindingBuildPathEntry> getProjectEntry(Object project){
+		Map<IPath, IZipFileBindingBuildPathEntry> retVal = zipfileProjectEntries.get(project);
 		if (retVal == null){
-			retVal = new HashMap<IPath, EglarBuildPathEntry>();
+			retVal = new HashMap<IPath, IZipFileBindingBuildPathEntry>();
 			zipfileProjectEntries.put(project,retVal);
 		}
 		
 		return retVal;
 	}
 
-	public EglarBuildPathEntry getZipFileBuildPathEntry(Object project,IPath zipfilepath){
-		Map<IPath, EglarBuildPathEntry> projectMap = getProjectEntry(project);
-		EglarBuildPathEntry result = projectMap.get(zipfilepath);
-		
+	public IZipFileBindingBuildPathEntry getZipFileBuildPathEntry(Object project,IPath zipfilepath){
+		Map<IPath, IZipFileBindingBuildPathEntry> projectMap = getProjectEntry(project);
+		IZipFileBindingBuildPathEntry result = projectMap.get(zipfilepath);		
 		if(result == null){
-			if (isWCC) {
-				result = createEntry(WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
-			}
-			else {
-				result = createEntry(ProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+			result = createSystemEntry(project, zipfilepath);
+			if (result == null) {
+				if (isWCC) {
+					result = createEntry(WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+				}
+				else {
+					result = createEntry(ProjectEnvironmentManager.getInstance().getProjectEnvironment((IProject)project), zipfilepath);
+				}
 			}
 			projectMap.put(zipfilepath, result);
 		}
@@ -90,7 +99,19 @@ public class ZipFileBuildPathEntryManager {
 		return result;
 	}
 	
-	private EglarBuildPathEntry createEntry(ProjectEnvironment env, IPath path) {
+	private IZipFileBindingBuildPathEntry createSystemEntry(Object project,IPath zipfilepath) {
+		if (!(project instanceof IProject)) {return null;};
+		ICompiler compiler = ProjectSettingsUtility.getCompiler((IProject)project);
+		if (compiler == null) {return null;};
+		compiler.getSystemEnvironment(null);  //ensure that the system eglars are read in
+		Map <IPath, ISystemPackageBuildPathEntry> map = systemEntries.get(compiler);
+		if (map == null) {return null;};
+		ISystemPackageBuildPathEntry entry = map.get(zipfilepath);
+		if (entry == null || !(entry instanceof ZipFileBindingBuildPathEntry)) {return null;};
+		return new WrapperedZipFileBuildPathEntry((ZipFileBindingBuildPathEntry)entry, (IProject)project);
+	}
+	
+	private IZipFileBindingBuildPathEntry createEntry(ProjectEnvironment env, IPath path) {
 		String extension = path.getFileExtension();
 		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
 			MofarBuildPathEntry entry = new MofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
@@ -107,7 +128,7 @@ public class ZipFileBuildPathEntryManager {
 		return null;
 	}
 	
-	private EglarBuildPathEntry createEntry(WorkingCopyProjectEnvironment env, IPath path) {
+	private IZipFileBindingBuildPathEntry createEntry(WorkingCopyProjectEnvironment env, IPath path) {
 		String extension = path.getFileExtension();
 		if (extension.equalsIgnoreCase(MOFAR_EXTENSION)) {
 			MofarBuildPathEntry entry = new WorkingCopyMofarBuildPathEntry(env, path, ZipFileObjectStore.MOFXML, env.getConverter());
@@ -129,11 +150,11 @@ public class ZipFileBuildPathEntryManager {
 	}
 	
 	public void clear(IProject project) {
-		Map<IPath, EglarBuildPathEntry> projectMap = zipfileProjectEntries.get(project);
+		Map<IPath, IZipFileBindingBuildPathEntry> projectMap = zipfileProjectEntries.get(project);
 		if (projectMap != null){
-			Iterator<EglarBuildPathEntry> iter = projectMap.values().iterator();
+			Iterator<IZipFileBindingBuildPathEntry> iter = projectMap.values().iterator();
 			while(iter.hasNext()){
-				EglarBuildPathEntry result  = iter.next();
+				IZipFileBindingBuildPathEntry result  = iter.next();
 				if(result != null){
 					result.clear();
 				}
@@ -147,6 +168,15 @@ public class ZipFileBuildPathEntryManager {
 	   // Debug
     public int getCount(){
     	return zipfileProjectEntries.size();
+    }
+    
+    public static void addSystemPathEntry(ICompiler compiler, ISystemPackageBuildPathEntry entry) {
+    	Map<IPath, ISystemPackageBuildPathEntry> map = systemEntries.get(compiler);
+    	if (map == null) {
+    		map = new HashMap<IPath, ISystemPackageBuildPathEntry>();
+    		systemEntries.put(compiler, map);
+    	}
+    	map.put(new Path(entry.getID()), entry); 
     }
     
 }
