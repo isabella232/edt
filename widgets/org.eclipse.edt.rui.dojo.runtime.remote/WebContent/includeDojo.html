@@ -18,23 +18,6 @@
 	});
 	egl.urlPrefix = "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/";	
 	egl.dojoProvider = "Remote Workspace, 1.7.1, project: org.eclipse.edt.rui.dojo.remote_0.8.0";
-	//Require dojo synchrously to use legacy dojo.require. 
-	//Should remove in later release after dojo widgets are migrated to AMD 
-	(function(){
-		if(typeof dojo == "undefined"){
-			var oldInit = egl.init;
-			var oldInitFunc = null;
-			egl.init = function(initFunc){
-				oldInitFunc = initFunc;	
-			}
-			require(["dojo"], function(){
-				egl.init = oldInit;
-				if(oldInitFunc){
-					egl.init(oldInitFunc);
-				}
-			});		
-		}
-	})();
 </script>
 <style type="text/css">
 	@import "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/resources/dojo.css";	    
