@@ -400,8 +400,7 @@ public final class EGLProjectUtility {
 
 		list.add(new PPListElement(eproj, IEGLPathEntry.CPE_SOURCE, srcFolder
 				.getFullPath(), srcFolder));
-		//TODO SF uncomment
-//		list.add(new PPListElement(eproj, IEGLPathEntry.CPE_CONTAINER, new Path(EDTCoreIDEPlugin.EDT_SYSTEM_RUNTIME_CONTAINER_ID), null));
+		list.add(new PPListElement(eproj, IEGLPathEntry.CPE_CONTAINER, new Path(EDTCoreIDEPlugin.EDT_SYSTEM_RUNTIME_CONTAINER_ID), null));
 		return list;
 	}
 

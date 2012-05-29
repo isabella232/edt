@@ -366,10 +366,6 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		List exportedEntries = new ArrayList();
 		for (int i= 0; i < newEGLPath.size(); i++) {
 			PPListElement currEGL= (PPListElement) newEGLPath.get(i);
-			if(EGLSystemPathContaierInitializer.isValidEGLSystemPathContainerPath(currEGL.getEGLPathEntry().getPath())){
-				newEGLPath.remove(currEGL);
-				continue;
-			}
 			if (currEGL.isExported() || currEGL.getEntryKind() == IEGLPathEntry.CPE_SOURCE) {
 				exportedEntries.add(currEGL);
 			}
