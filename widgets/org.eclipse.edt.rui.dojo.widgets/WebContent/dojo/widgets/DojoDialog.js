@@ -44,11 +44,26 @@ egl.defineWidget(
 			id: this.id || this.dojoID,
 			content: c
 		});
+		
+		var eglWidget = this;
+		this._args.onCancel = function(){
+			eglWidget.handleEvent(eglWidget.getOnCancel(),"onCancel",null);
+		}
+		
 		this.dojoWidget = new dijit.Dialog(this._args, parent);
 		this.dojoWidget.startup();
 		if (this.isOpen)
 			this.showDialog();
 	},
+	
+	"getOnCancel" : function(){
+		if (this.onCancel) {
+			return this.onCancel;
+		} else {
+			return (this.onCancel = []);
+		}
+	},
+	
 	"getButtons" : function() {
 		return this.buttons;		
 	},
