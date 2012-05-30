@@ -155,6 +155,7 @@ public class TypeUtils implements MofConversion {
 		Classifier classifier = type.getClassifier();
 		type = type.getClassifier();
 		if (type == null) return TypeKind_VOID;
+		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
 		else if (classifier == Type_NULLTYPE) return TypeKind_NULLTYPE;
 		else if (classifier == Type_ANY) return TypeKind_ANY;
 		else if (classifier == Type_BOOLEAN) return TypeKind_BOOLEAN;
@@ -188,7 +189,6 @@ public class TypeUtils implements MofConversion {
 		else if (classifier == Type_CLOB) return TypeKind_CLOB;
 		else if (classifier == Type_BLOB) return TypeKind_BLOB;
 		else if (classifier == Type_BYTES) return TypeKind_BYTES;
-		else if (type instanceof SequenceType && classifier == Type_STRING) return TypeKind_LIMITEDSTRING;
 		return TypeKind_UNDEFINED;
 	}
 	
