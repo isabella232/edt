@@ -19,26 +19,26 @@ import org.eclipse.edt.mof.egl.ForEachStatement;
 public class ForEachStatementTemplate extends JavaScriptTemplate {
 
 	public void genStatementBody(ForEachStatement stmt, Context ctx, TabbedWriter out) {
-		// start the foreach statement
-		out.println("{");
-		ctx.invoke(genDeclarationExpression, stmt.getDeclarationExpression(), ctx, out);
 		// we need to process this as a simple for statement
 		Label label = new Label(ctx, Label.LABEL_TYPE_FOR);
 		ctx.pushLabelStack(label);
 		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel) != null
 			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel)).booleanValue())
 			out.print(label.getName() + ": ");
-		out.print("while (");
+		
+		if(stmt.getDataSource().isNullable()){
+			out.print( "egl.checkNull(" );
+		}
+		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
+		if(stmt.getDataSource().isNullable()){
+			out.print( ")" );
+		}
+		out.print(".forEach(function( ");
 		ctx.invoke(genName, stmt.getDeclarationExpression().getFields().get(0), ctx, out);
-		out.print("++ < ");
-		ctx.invoke(genMemberName, stmt.getDataSource(), ctx, out);
-		out.println(".length) {");
+		out.println(" )");
 		// now process the statement block
 		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
-		// finish the foreach while loop
-		out.println("}");
-		// finish the foreach statement
-		out.println("}");
+		out.println(", this );");
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
