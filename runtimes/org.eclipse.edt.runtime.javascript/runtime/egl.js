@@ -118,14 +118,6 @@ egl.tzOffsetMS = function(d) {
 	return egl.tzOffsetSec(d) * 1000;
 };
 
-if (!Array.prototype.forEach) {
-	Array.prototype.forEach = function(f) {
-		for (var n=0; n<this.length; n++) {
-			f(this[n]);
-		}
-	};
-}
-
 egl.print = function(s) {
 	if(egl.canPrintToConsole){
 		if (egl.console === null) {

@@ -2973,6 +2973,12 @@ Array.prototype.ezekw$$sort = function Array_sort(func) {
 	}
 };
 
+Array.prototype.forEach = function(f, thisp) {
+	for (var n=0, len=this.length; n<len; n++) {
+		f.call(thisp, this[n]);
+	}
+};
+
 egl.initialValueForType = function ( elementType ) 
 {
 	var kind = elementType.charAt(0);
