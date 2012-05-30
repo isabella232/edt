@@ -294,15 +294,6 @@ egl.timeToString = function( t, format )
 egl.stringToTime = function(s, format)
 {
 	var result = egl.stringToTimeInternal(s, format, true);
-	if( result == null )
-	{
-		result = egl.stringToTimeInternal(s, format, false);
-	}
-	if( result == null && s.length < format.length )
-	{
-		result = egl.stringToTimeInternal("0" + s, format, false);
-	}
-	
 	if( result != null )
 	{
 		return result;
@@ -332,6 +323,13 @@ egl.stringToTimeInternal = function(s, format, strict)
 		{
 			return null;
 		}
+		//Separator is needed for each token and must be ':'
+		if(i < numTokens - 1){
+			if( s.charAt(0) == ':')
+				s = s.substr(1);
+			else
+				return null;
+		}	
 	}
 	
 	if("PM" == result["eze$$AMPM"] && result.getHours() < 12)
@@ -349,14 +347,6 @@ egl.stringToTimeInternal = function(s, format, strict)
 egl.stringToDate = function(s, format)
 {
 	var result = egl.stringToDateInternal(s, format, true);
-	if( result == null )
-	{
-		result = egl.stringToDateInternal(s, format, false);
-	}
-//	if( result == null && s.length < format.length )
-//	{
-//		result = egl.stringToDateInternal("0" + s, format, false);
-//	}
 	
 	if( result != null )
 	{
@@ -398,6 +388,13 @@ egl.stringToDateInternal = function(s, format, strict)
 			result.setFullYear( yearResult.getFullYear() );
 			break;
 		}
+		//Separator is needed for each token
+		if(i < numTokens - 1){
+			if(tempS.length >= 1)
+				tempS = tempS.substr(1);
+			else
+				return null;
+		}
 	}
 
 	for(var i = 0; i < numTokens; i++ )
@@ -406,6 +403,13 @@ egl.stringToDateInternal = function(s, format, strict)
 		if(s == null)
 		{
 			return null;
+		}
+		//Separator is needed for each token
+		if(i < numTokens - 1){
+			if(s.length >= 1)
+				s = s.substr(1);
+			else
+				return null;
 		}
 	}
 	
@@ -721,32 +725,7 @@ egl.processToken = function(token, s, result, strict)
 	}
 	else if( strict )
 	{
-		if(token == "''")
-		{
-			if(s.charAt(0) != "'")
-			{
-				return null;				
-			}
-			s = s.substr(1);
-		}
-		else if(token.charAt(0) == "'")
-		{
-			var lit = token.substr(1,token.length-2);
-			lit = lit.replace(/''/, "'");
-			if(s.substr(0, lit.length) != lit)
-			{
-				return null;
-			}
-			s = s.substr(lit.length);
-		}
-		else
-		{
-			if(s.substr(0, token.length) != token)
-			{
-				return null;
-			}
-			s = s.substr(token.length);
-		}
+		return null;
 	}
 	
 	return s;
@@ -910,14 +889,6 @@ egl.timeStampToString = function( ts, format )
 egl.stringToTimeStamp = function(s, format)
 {
 	var result = egl.stringToTimeStampInternal(s, format, true);
-	if( result == null )
-	{
-		result = egl.stringToTimeStampInternal(s, format, false);
-	}
-	if( result == null && s.length < format.length )
-	{
-		result = egl.stringToTimeStampInternal("0" + s, format, false);
-	}
 	
 	if( result != null )
 	{		
@@ -959,6 +930,13 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 			result.setFullYear( yearResult.getFullYear() );
 			break;
 		}
+		//Separator is needed for each token
+		if(i < numTokens - 1){
+			if(tempS.length >= 1)
+				tempS = tempS.substr(1);
+			else
+				return null;
+		}	
 	}
 	if( yearResult.getFullYear() == result.getFullYear() ){
 		//If year is not set, set it to a leap year to accept dates "0229"
@@ -972,6 +950,13 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 		{
 			return null;
 		}
+		//Separator is needed for each token
+		if(i < numTokens - 1){
+			if(s.length >= 1)
+				s = s.substr(1);
+			else
+				return null;
+		}	
 	}
 	
 	if(result["eze$$adjustdate"])
@@ -4074,7 +4059,6 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		indexes.appendElement(i);
 		i++;
 	}
-	//if the pattern has bad characters, just return the original date
 	if ( i >= chars.length ) {
 		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
 	}
@@ -4089,7 +4073,6 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		(chars[ i ][ 2 ])( dateCopy );
 		i--;
 	}
-	//if the pattern has bad characters, just return the date
 	if ( i < 0 ) {
 		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
 	}
