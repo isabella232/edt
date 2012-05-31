@@ -91,10 +91,17 @@ egl.eglx.lang.EAny.fromEAny = function(obj){
 	return egl.boxAny(obj instanceof egl.eglx.lang.AnyBoxedObject?obj.eze$$value:obj,sig);
 };
 egl.eglx.lang.EAny.equals = function(obj1, obj2){
+	if( obj1 == null && obj2 == null)
+		return true;
+	if( obj1 == null || obj2 == null)
+		return false;
 	if ( obj1.eze$$value != null && obj1.eze$$value.equals ) {
 		return obj1.eze$$value.equals( obj2.eze$$value );
 	}
 	return (obj1.eze$$value == obj2.eze$$value);
+};
+egl.eglx.lang.EAny.notEquals = function(obj1, obj2){
+	return !egl.eglx.lang.EAny.equals(obj1, obj2);
 };
 
 /****************************************************************************
