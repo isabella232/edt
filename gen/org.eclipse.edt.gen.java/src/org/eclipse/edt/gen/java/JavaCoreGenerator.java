@@ -151,8 +151,13 @@ public class JavaCoreGenerator extends Generator {
 
 	@Override
 	public String getRelativeFileName(Part part) {
+		// This can be called outside of a generation - make sure we have a context.
+		if (context == null) {
+			makeContext(generator);
+		}
+		
 		StringBuilder buf = new StringBuilder(50);
-		if (getContext().mapsToNativeType(part)) {
+		if (context.mapsToNativeType(part)) {
 			String name = context.getRawNativeImplementationMapping(part);
 			
 			int lastDot = name.lastIndexOf('.');
