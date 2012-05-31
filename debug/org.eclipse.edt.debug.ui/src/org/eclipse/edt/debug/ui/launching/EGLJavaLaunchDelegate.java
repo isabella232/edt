@@ -83,7 +83,7 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 		IFile javaFile = null;
 		if ( files.size() > 1 )
 		{
-			ListDialog dialog = new ListDialog( DebugUtil.getShell() );
+			final ListDialog dialog = new ListDialog( DebugUtil.getShell() );
 			dialog.setTitle( EGLLaunchingMessages.java_launch_file_selection_title );
 			dialog.setMessage( EGLLaunchingMessages.java_launch_file_selection_msg );
 			dialog.setContentProvider( new IStructuredContentProvider() {
@@ -115,14 +115,21 @@ public class EGLJavaLaunchDelegate extends JavaLaunchDelegate
 			} );
 			dialog.setInput( files );
 			
-			if ( dialog.open() == Window.OK )
-			{
-				Object[] result = dialog.getResult();
-				if ( result != null && result.length > 0 && result[ 0 ] instanceof IFile )
+			final IFile[] selectedFile = new IFile[ 1 ];
+			EGLJavaLaunchUtils.getStandardDisplay().syncExec( new Runnable() {
+				public void run()
 				{
-					javaFile = (IFile)result[ 0 ];
+					if ( dialog.open() == Window.OK )
+					{
+						Object[] result = dialog.getResult();
+						if ( result != null && result.length > 0 && result[ 0 ] instanceof IFile )
+						{
+							selectedFile[ 0 ] = (IFile)result[ 0 ];
+						}
+					}
 				}
-			}
+			} );
+			javaFile = selectedFile[ 0 ];
 		}
 		else
 		{
