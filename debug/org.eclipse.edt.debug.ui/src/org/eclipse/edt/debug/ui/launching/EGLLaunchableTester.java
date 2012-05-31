@@ -37,6 +37,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartNotFoundException;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.launching.JavaLaunchableTester;
 
 @SuppressWarnings("restriction")
@@ -233,7 +234,10 @@ public class EGLLaunchableTester extends PropertyTester
 											{
 												for ( IFile file : ((org.eclipse.edt.ide.core.IGenerator)gen).getOutputFiles( eglFile, part ) )
 												{
-													files.add( file );
+													if ( JavaCore.isJavaLikeFileName( file.getName() ) && !files.contains( file ) )
+													{
+														files.add( file );
+													}
 												}
 											}
 											catch ( CoreException ce )
