@@ -2179,7 +2179,32 @@ public abstract class DefaultBinder extends AbstractBinder {
 									new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
 								return;
 							}
-							else {}
+							else if (isBytesType(type1) && isBytesType(type2)) {
+								// When comparing two bytes, each operand must have a length and it must be equal.
+								int type1len = ((PrimitiveTypeBinding)type1).getLength();
+								int type2len = ((PrimitiveTypeBinding)type2).getLength();
+								if (type1len == 0 && type2len != 0) {
+									problemRequestor.acceptProblem(
+											operand1,
+											IProblemRequestor.TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON,
+											new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
+									return;
+								}
+								if (type2len == 0) {
+									problemRequestor.acceptProblem(
+											operand2,
+											IProblemRequestor.TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON,
+											new String[] {operand2.getCanonicalString(), operand1.getCanonicalString()});
+									return;
+								}
+								if (type1len != type2len) {
+									problemRequestor.acceptProblem(
+											operand1,
+											IProblemRequestor.TYPE_INCOMPATIBLE_ARITHMETIC_COMPARISON,
+											new String[] {operand1.getCanonicalString(), operand2.getCanonicalString()});
+									return;
+								}
+							}
 						}												
 					}					
 				}
