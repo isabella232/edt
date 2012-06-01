@@ -256,14 +256,51 @@ egl.defineWidget(
 		return this.backView;
 	},
 	"setSelected" : function(s) {
-		this.selected = s;
-		if(this.dojoWidget){			
-			if(s){
-				this.dojoWidget.show();
-			}else{
-				this.dojoWidget.domNode.style.display = "none";
-			}			
+		var _this = this;
+		
+		_this.selected = s;
+		
+		function setSelected(){
+			if( _this.dojoWidget ){			
+				if( s ){
+					if( _this.dojoWidget.domNode.parentNode )
+						_this.dojoWidget.show();
+					else
+						_this.dojoWidget.domNode.style.display = "";
+					
+					// avoids flick
+					if( _this.dojoWidget.domNode.style.visibility != "visible" )
+						_this.dojoWidget.domNode.style.visibility = "visible";
+					
+					// work around layout problem when we are switching view
+					if( document.createEvent ){
+						event = document.createEvent("HTMLEvents"); 
+						event.initEvent("resize", false, true); 
+						window.dispatchEvent(event); 
+					}else{
+						window.fireEvent && window.fireEvent("resize");
+					}
+				}else{
+					_this.dojoWidget.domNode.style.display = "none";
+				}			
+			}
 		}
+		
+		// work around view display competing problem due to different 
+		// EGL declaration sequence
+		require(
+			[ 
+			  "dojo/mobile/utility/Synchronor"
+			],
+			function( synchronor ){
+				synchronor.wait( 
+					[_this], "SYN_READY",
+					function(){
+						setSelected();
+					}
+				);
+			}
+		);
 	},
 	"getSelected" : function(){
 		return this.selected;

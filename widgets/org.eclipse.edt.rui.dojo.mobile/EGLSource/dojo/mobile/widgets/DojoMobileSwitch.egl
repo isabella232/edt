@@ -23,11 +23,24 @@ ExternalType DojoMobileSwitch extends DojoMobileBase type JavaScriptObject {
 			displayName = "Switch",
 			smallIcon = "icons/ctool16/dojomobileswitch_16.gif",
 			largeIcon = "icons/ctool24/dojomobileswitch_24.gif",
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+       		eventFilter  = ["onChange"]
 		}   
 	}
+	
+	/*
+	* The initial state of the switch. “on” or “off”. The default value is “on”.
+	*/
 	value Boolean { @Property{}, @VEProperty{} };
+	/*
+	* The left-side label of the switch.
+	*/
 	onText String { @Property{}, @VEProperty{} };
+	/*
+	* The right-side label of the switch.
+	*/
 	offText String { @Property{}, @VEProperty{} };
 	
 end

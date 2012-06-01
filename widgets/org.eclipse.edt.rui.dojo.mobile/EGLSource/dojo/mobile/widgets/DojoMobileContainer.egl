@@ -12,11 +12,10 @@
 // IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
-package dojo.mobile.widgets;
-
+package dojo.mobile.widgets;    
+ 
 ExternalType DojoMobileContainer extends DojoMobileBase type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",
-		ExternalName = "DojoMobileContainer"}
-	
+		ExternalName = "DojoMobileContainer"} 
 end
  

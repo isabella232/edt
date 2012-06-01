@@ -85,7 +85,6 @@ egl.defineWidget(
 	"_appendChild" : function(child) {	
 		egl.dojo.mobile.widgets.DojoMobileContainer.prototype._appendChild.call(this, child);	
 		child.setLogicalParent(this);
-		
 	},	
 	"setID" : function(id) {
 		if(id && id!="undefined"){

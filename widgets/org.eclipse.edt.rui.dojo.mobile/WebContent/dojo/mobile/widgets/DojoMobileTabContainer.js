@@ -120,6 +120,15 @@ egl.defineWidget(
 		
 		this.children.splice(tabindex, 0, tab);
 		this.setChildren(this.children);
+		
+		// work around layout problem when we are adding tabs
+		if( document.createEvent ){
+			event = document.createEvent("HTMLEvents"); 
+			event.initEvent("resize", false, true); 
+			window.dispatchEvent(event); 
+		}else{
+			window.fireEvent && window.fireEvent("resize");
+		}
 		return;
 	},
 	"removeTab" : function(tabindex) {
@@ -128,6 +137,15 @@ egl.defineWidget(
 
 		this.children.splice( tabindex-1, 1 );
 		this.setChildren	( this.children );
+		
+		// work around layout problem when we are removing tabs
+		if( document.createEvent ){
+			event = document.createEvent("HTMLEvents"); 
+			event.initEvent("resize", false, true); 
+			window.dispatchEvent(event); 
+		}else{
+			window.fireEvent && window.fireEvent("resize");
+		}
 		return;
 	},
 	"appendChild" : function(child) {
@@ -279,6 +297,12 @@ egl.defineWidget(
 	},	
 	// 1 based index selection
 	"setSelection": function(selection){
+		if ( selection < 0 )
+			selection = 1;
+		
+		if( this.tabBarWidget && this.children && selection > this.children.length )
+			selection = this.children.length;
+
 		this.selection = selection;
 		selection = selection - 1;
 		if( this.tabBarWidget && this.children && this.children.length > 0 ){

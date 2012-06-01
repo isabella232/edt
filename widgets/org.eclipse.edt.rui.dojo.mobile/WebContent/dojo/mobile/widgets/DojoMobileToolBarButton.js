@@ -47,7 +47,7 @@ egl.defineWidget(
 					
 					_this.dojoWidget = new dojox.mobile.ToolBarButton(
 						_this.options,
-						parent
+						parent 
 					);
 					_this.containerWidget = _this.dojoWidget;
 					
@@ -60,24 +60,7 @@ egl.defineWidget(
 					
 					_this.synchronor.trigger( _this, "SYN_READY" );
 					
-					_this.dojoWidget.startup();
-					
-					if( _this.className && _this.className.length > 1 )
-						require( 
-							["dojo/_base/sniff"], 
-							function( has ){
-								setTimeout(
-									function() {
-										_this.containerWidget.domNode.className = 
-											_this.containerWidget.domNode.className
-											+ ' ' + _this.className;
-									}, 
-									has("ie") ? 100 : 0
-								);
-							}
-						);
-					
-					
+					_this.dojoWidget.startup();					
 				}
 			);
 	
@@ -119,9 +102,9 @@ egl.defineWidget(
 			this.options.selected  = v;
 		},
 		"getClassName" : function(){
-			return this.className;
+			return this.options.classValue;
 		},
 		"setClassName" : function(v){
-			this.className = v;
+			this.options.classValue = v;
 		}
 	});

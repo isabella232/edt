@@ -24,9 +24,14 @@ ExternalType DojoMobileCheckBox extends DojoMobileBase type JavaScriptObject {
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			propertyFilter = [ "width", "margin", "padding" ]
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+       		eventFilter  = ["onChange"]
 		}       
 	}	
-	    
+	/*
+	* Read-only boolean that returns the current state of the INPUT checkbox.
+	*/
 	checked Boolean { @Property{}, @VEProperty{displayName = "Checked"} };	
+	
 end

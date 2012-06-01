@@ -21,7 +21,7 @@ egl.defineWidget(
 	"constructor" : function(){
 		var _this = this;
 		require( 
-			"dojo/mobile/utility/Synchronor",
+			["dojo/mobile/utility/Synchronor"],
 			function( synchronor ){
 				_this.synchronor = synchronor;
 				_this.renderWhenDojoIsDoneLoading();
@@ -55,5 +55,12 @@ egl.defineWidget(
 		if(this.dojoWidget){
 			this.dojoWidget.stop();
 		}		
+	},
+	
+	"setImage": function(file){
+		//TODO match a pattern
+		//Sets an indicator icon image file (typically animated GIF).
+		if(this.dojoWidget && file)
+			this.dojoWidget.setImage(file);
 	}
 });

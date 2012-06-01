@@ -33,30 +33,32 @@ egl.defineWidget(
 		},
 		"createDojoWidget" : function(parent){
 			var _this = this;
-			_this.dojoWidget = new dojox.mobile.CheckBox({
-					checked : _this.checked ? _this.checked : false
-				}, 
-				parent 
-			);
+			_this.dojoWidget = new dojox.mobile.CheckBox(
+					{
+						checked : (_this.checked ? _this.checked : false),
+						onChange: function(){
+							_this.handleEvent(_this.getOnChange(), "onChange"); 
+						}
+					},
+					parent);
 			_this.synchronor.trigger( _this, "SYN_READY" );
-			
-			_this.dojoWidget.onChange = function( value ) {
-				_this.handleEvent(_this.getOnChange(), "onChange"); 
-			};
 		},
+		
 		"setChecked" : function( status ){
 			this.checked = status;
 			if( this.dojoWidget ){
-				this.dojoWidget.set(
-					'checked', status
-				);
+				this.dojoWidget.set('checked', status);
+			}
+			if(this.eze$$DOMElement){
+				this.eze$$DOMElement.checked = status;
 			}
 		},
+		
 		"getChecked" : function(){
-			return this.checked || false; 
-		},
-		"isChecked" : function(){
-			return this.checked || false; 
+			if(this.dojoWidget)
+				return this.dojoWidget.get('checked');
+			else
+				return this.checked || false; 
 		}
 	}	
 );

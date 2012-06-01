@@ -26,7 +26,10 @@ ExternalType DojoMobileSlider extends DojoMobileBase type JavaScriptObject{
 			displayName = "Slider",
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilterType  = FilterKind.excludeAllExcept,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+			eventFilter  = ["onChange"],
        		container = @VEContainer{}
 		}   
 	}

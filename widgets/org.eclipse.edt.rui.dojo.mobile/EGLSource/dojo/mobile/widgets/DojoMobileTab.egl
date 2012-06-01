@@ -24,12 +24,21 @@ ExternalType DojoMobileTab extends DojoMobileContainer type JavaScriptObject {
 			displayName = "Tab",
 			smallIcon = "icons/ctool16/dojomobiletabpane_16.gif",
 			largeIcon = "icons/ctool24/dojomobiletabpane_24.gif",
-			container = @VEContainer{},
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+       		eventFilter  = ["onClick"],
+			container = @VEContainer{}
 		}		     
 	}   
 	
 	title String { @Property{}, @VEProperty{displayName="Title"} };	
+	/*
+	* A path for the unselected (typically dark) icon. If icon is not specified, the iconBase parameter of the parent widget is used.
+	*/
 	icon1 String { @Property{}, @VEProperty{displayName="Icon1"} };	
+	/*
+	* A path for the selected (typically highlight) icon. If icon is not specified, the iconBase parameter of the parent widget or icon1 is used.
+	*/
 	icon2 String { @Property{}, @VEProperty{displayName="Icon2"} };	
 end

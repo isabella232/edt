@@ -46,6 +46,13 @@ egl.defineWidget(
 			dojo.addClass(_this.dojoWidget.domNode,"mblVariableHeight");
 			_this._setIconStyle(true);
 		}
+		var defaultCallBack = _this.dojoWidget.onClick ;
+		_this.dojoWidget.onClick = function( value ) {
+			if( typeof  defaultCallBack === "function" )
+				defaultCallBack.apply( _this.dojoWidget, arguments );
+			_this.handleEvent( _this.getOnClick(), "onClick" ); 
+		};
+		
 		_this.dojoWidget.startup();
 		_this.textBox = _this._getTextBox();
 		
@@ -162,9 +169,6 @@ egl.defineWidget(
 				iconDom.src = this.icon;
 				this.dojoWidget.domNode.insertBefore(iconDom, this.dojoWidget.domNode.firstChild);
 				dojo.removeClass(this.dojoWidget.domNode.getElementsByTagName("a")[0],"mblListItemAnchorNoIcon");
-//				if(this.children.length > 0){				
-//					this._setChildStyle(true);
-//				}
 			}
 		}
 	},
@@ -178,7 +182,7 @@ egl.defineWidget(
 			var divs = this.dojoWidget.domNode.getElementsByTagName("div");
 			var rightTextNode;
 			for(var n=0;n<divs.length;n++){
-				if(divs[n].className == "mblRightText"){
+				if(divs[n].className == "mblListItemRightText"){
 					rightTextNode = divs[n];
 					break;
 				}
@@ -212,7 +216,7 @@ egl.defineWidget(
 		var divs = this.dojoWidget.domNode.getElementsByTagName("div");
 		var iconNode;
 		for(var n=0;n<divs.length;n++){
-			if(divs[n].className == "mblArrow"){
+			if(divs[n].className == "mblListItemRightIcon"){
 				iconNode = divs[n];
 				break;
 			}
@@ -236,10 +240,20 @@ egl.defineWidget(
 			if( _this.actionView ){
 				var iconNode = _this._getIconNode();
 				if(!iconNode){
+					var rightIconNode = dojo.create("div");
 					var arrow = dojo.create("div");
-					arrow.className = "mblArrow";
+					rightIconNode.className = "mblListItemRightIcon";
+					arrow.className = "mblDomButtonArrow mblDomButton";
 					var a = _this.dojoWidget.domNode.getElementsByTagName("a")[0];
-					a.appendChild(arrow);
+					
+					if( a.childNodes.length > 1 )
+						a.insertBefore( rightIconNode, a.childNodes[0] );
+					else
+						a.appendChild( rightIconNode );
+					
+					rightIconNode.appendChild(arrow);
+					arrow.appendChild( dojo.create("div") );
+					
 					var eglWidget = _this;
 					if(eglWidget.onClick){
 						_this.dojoWidget.connect(a, "onclick", eglWidget.onClick);

@@ -24,8 +24,13 @@ ExternalType DojoMobileButton extends DojoMobileBase type JavaScriptObject {
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			propertyFilter = [ "width", "margin", "padding" ]
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+       		eventFilter  = ["onClick", "onDoubleClick"]
 		}   
 	}
+	/*
+	* The label of the button. If the label is not specified, innerHTML is used as a label.
+	*/
 	text String { @Property{}, @VEProperty{displayName = "Text"} };			
 end

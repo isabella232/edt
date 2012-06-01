@@ -23,15 +23,21 @@ ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
 			displayName = "Progress",
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			propertyFilter = [ "width", "margin", "padding" ]
+			propertyFilterType  = FilterKind.excludeAll,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll
 		}   
 	}
 	/* 
 	 * The time interval in milliseconds for updating the spinning indicator.
 	 */
 	intervalTime int { @Property {}, @VEProperty {displayName = "Interval Time"}};
+	/*
+	 *	Sets an indicator icon image file (typically animated GIF). If null is specified, restores the default spinner.
+	*/		
+	imgPath string {@Property {}, @VEProperty {displayName = "Upload Progress Image"}};
 	
+	function setImage(imgPath string in);
 	function showProgress(intervalTime int in);
 	function hideProgress();
 end

@@ -35,8 +35,9 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",
 	 		propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			container = @VEContainer{},      
-			propertyFilter = [ "width", "margin", "padding" ]
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll,
+			container = @VEContainer{} 
 		}      
 	}   
 
@@ -51,10 +52,14 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 		], 
 		default = "Top"
 	}};
+	/*
+	* This type of bar is typically used at the top of the screen to control visibility of multiple views.
+	*/
+	segmentedControl Boolean{ @Property{}, @VEProperty{ displayName = "Segmented Control"} };  
+	// Which one is selection 
+	selection int   { @Property{}, @VEProperty{ displayName = "Selection"} };
 	 
-	segmentedControl Boolean{ @Property{}, @VEProperty{ displayName = "Segmented Control"} };   
-	selection int   { @Property{}, @VEProperty{ displayName = "Selection"} }; 
-	className string{ @Property{}, @VEProperty{ displayName = "Class"} };
+	className string{ @Property{}};
 	function addTab( tab DojoMobileTab, index int in );
 	function removeTab( index int in ); 
 end  

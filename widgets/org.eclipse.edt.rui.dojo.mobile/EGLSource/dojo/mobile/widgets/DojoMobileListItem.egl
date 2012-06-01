@@ -12,7 +12,7 @@
 // IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
-package dojo.mobile.widgets;              
+package dojo.mobile.widgets;                       
 
 ExternalType DojoMobileListItem extends DojoMobileContainer type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",
@@ -27,14 +27,25 @@ ExternalType DojoMobileListItem extends DojoMobileContainer type JavaScriptObjec
 			smallIcon = "icons/ctool16/dojomobilelistitem_16.gif",
 			largeIcon = "icons/ctool24/dojomobilelistitem_24.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+			eventFilter  = ["onClick"],
 			container = @VEContainer{}
 		}   
 	}
-	
+	//A label of the item
 	text String { @Property{}, @VEProperty{displayName = "Text"} };
+	
+	//An icon to display at the right hand side of the item. The value can be either a path for an image file or a class name of a DOM button.
 	icon String { @Property{}, @VEProperty{displayName = "Icon"} };
+	
+	//A right-aligned text to display on the item.
 	actionText String { @Property{}, @VEProperty{displayName = "Action Text"} };
+	
+	//corresponding action view object
 	actionView DojoMobileView { @Property{} };
+	
+	//transition type
 	actionTransition String { @Property{}, @VEProperty{
 		propertyType = "choice",
 		displayName = "Action Transition",

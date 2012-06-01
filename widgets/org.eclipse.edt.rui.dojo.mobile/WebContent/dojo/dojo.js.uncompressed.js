@@ -10,7 +10,6 @@
 
 		http://dojotoolkit.org
 */
-
 require({cache:{
 'dojo/dom-geometry':function(){
 define(["./_base/sniff", "./_base/window","./dom", "./dom-style"],
@@ -13777,6 +13776,197 @@ return dojo.declare("dojo.Stateful", null, {
 });
 
 },
+'dojox/mobile/deviceTheme':function(){
+define("dojox/mobile/deviceTheme", [
+	"dojo/_base/array",
+	"dojo/_base/config",
+	"dojo/_base/lang",
+	"dojo/_base/window",
+	"dojo/dom-class",
+	"dojo/dom-construct",
+	"require"
+], function(array, config, lang, win, domClass, domConstruct, require){
+
+	var dm = lang.getObject("dojox.mobile", true);
+/*=====
+	var dm = dojox.mobile
+=====*/
+
+	// module:
+	//		dojox/mobile/deviceTheme
+	// summary:
+	//		Automatic Theme Loader
+	// description:
+	//		Detects the User Agent of the browser and loads appropriate theme files.
+	//		Simply dojo.require this module to enable the automatic theme loading.
+	//		For simulations, the user agent may be overridden by setting djConfig.mblUserAgent.
+	//
+	//		By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
+	//		loaded. The all-in-one theme files contain style sheets for all the
+	//		dojox.mobile widgets regardless of whether they are used in your
+	//		application or not.
+	//		If you want to choose what theme files to load, you can specify them
+	//		via djConfig as shown in the following example:
+	//
+	//	|	djConfig="parseOnLoad:true, mblThemeFiles:['base','Button']"
+	//
+	//		Or you may want to use dojox.mobile.themeFiles as follows to get the
+	//		same result. Note that the assignment has to be done before loading
+	//		deviceTheme.js.
+	//
+	//	|	dojo.require("dojox.mobile");
+	//	|	dojox.mobile.themeFiles = ['base','Button'];
+	//	|	dojo.require("dojox.mobile.deviceTheme");
+	//
+	//		In the case of this example, if iphone is detected, for example, the
+	//		following files will be loaded:
+	//
+	//	|	dojox/mobile/themes/iphone/base.css
+	//	|	dojox/mobile/themes/iphone/Button.css
+	//
+	//		If you want to load style sheets for your own custom widgets, you can
+	//		specify a package name along with a theme file name in an array.
+	//
+	//	|	['base',['com.acme','MyWidget']]
+	//
+	//		In this case, the following files will be loaded.
+	//
+	//	|	dojox/mobile/themes/iphone/base.css
+	//	|	com/acme/themes/iphone/MyWidget.css
+	//
+	//		If you specify '@theme' as a theme file name, it will be replaced with
+	//		the theme folder name (e.g. 'iphone'). For example,
+	//
+	//	|	['@theme',['com.acme','MyWidget']]
+	//
+	//		will load the following files.
+	//
+	//	|	dojox/mobile/themes/iphone/iphone.css
+	//	|	com/acme/themes/iphone/MyWidget.css
+	//
+	//		Note that the load of the theme files is performed asynchronously by
+	//		the browser, and thus you cannot assume the load has been completed
+	//		when your appliation is initialized. For example, if some widget in
+	//		your application uses node dimensions that cannot be determined
+	//		without CSS styles being applied to them to calculate its layout at
+	//		initialization, the layout calculation may fail.
+	//		Possible workaround for this problem is to use dojo.require to load
+	//		deviceTheme.js and place it in a separate <script> block immediately
+	//		below a script tag that loads dojo.js as below. This may (or may
+	//		not) solve the problem.
+	//
+	//	|	<script src="dojo.js"></script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile.deviceTheme");
+	//	|	</script>
+	//	|	<script>
+	//	|		dojo.require("dojox.mobile");
+	//	|		....
+	//
+	//		A better solution would be to not use deviceTheme and use <link>
+	//		or @import instead to load the theme files.
+
+
+	dm.loadCssFile = function(/*String*/file){
+		// summary:
+		//		Loads the given CSS file programmatically.
+		dm.loadedCssFiles.push(domConstruct.create("LINK", {
+			href: file,
+			type: "text/css",
+			rel: "stylesheet"
+		}, win.doc.getElementsByTagName('head')[0]));
+	};
+
+	dm.themeMap = dm.themeMap || [
+		// summary:
+		//		A map of user-agents to theme files.
+		// description:
+		//		The first array element is a regexp pattern that matches the
+		//		userAgent string.
+		//
+		//		The second array element is a theme folder name.
+		//
+		//		The third array element is an array of css file paths to load.
+		//
+		//		The matching is performed in the array order, and stops after the
+		//		first match.
+		[
+			"Android",
+			"android",
+			[]
+		],
+		[
+			"BlackBerry",
+			"blackberry",
+			[]
+		],
+		[
+			"iPad",
+			"iphone",
+			[require.toUrl("dojox/mobile/themes/iphone/ipad.css")]
+		],
+		[
+			"Custom",
+			"custom",
+			[]
+		],
+		[
+			".*",
+			"iphone",
+			[]
+		]
+	];
+
+	dm.loadDeviceTheme = function(/*String?*/userAgent){
+		// summary:
+		//		Loads a device-specific theme according to the user-agent
+		//		string.
+		// description:
+		//		This function is automatically called when this module is
+		//		evaluated.
+		var t = config["mblThemeFiles"] || dm.themeFiles || ["@theme"];
+		if(!lang.isArray(t)){ console.log("loadDeviceTheme: array is expected but found: "+t); }
+		var i, j;
+		var m = dm.themeMap;
+		var ua = userAgent || config["mblUserAgent"] || (location.search.match(/theme=(\w+)/) ? RegExp.$1 : navigator.userAgent);
+		for(i = 0; i < m.length; i++){
+			if(ua.match(new RegExp(m[i][0]))){
+				var theme = m[i][1];
+				domClass.replace(win.doc.documentElement, theme + "_theme", dm.currentTheme ? dm.currentTheme + "_theme" : "");
+				dm.currentTheme = theme;
+				var files = [].concat(m[i][2]);
+				for(j = t.length - 1; j >= 0; j--){
+					var pkg = lang.isArray(t[j]) ? (t[j][0]||"").replace(/\./g, '/') : "dojox/mobile";
+					var name = lang.isArray(t[j]) ? t[j][1] : t[j];
+					var f = "themes/" + theme + "/" +
+						(name === "@theme" ? theme : name) + ".css";
+					files.unshift(require.toUrl(pkg+"/"+f));
+				}
+				//remove old css files
+				array.forEach(dm.loadedCssFiles, function(n){
+					n.parentNode.removeChild(n);
+				});
+				dm.loadedCssFiles = [];
+				for(j = 0; j < files.length; j++){
+					dm.loadCssFile(files[j].toString());
+				}
+				if(userAgent && dm.loadCompatCssFiles){ // we will assume compat is loaded and ready..
+					dm.loadCompatCssFiles();
+				}
+				break;
+			}
+		}
+	};
+	
+	if(dm.configDeviceTheme){
+		dm.configDeviceTheme();
+	}
+	dm.loadDeviceTheme();
+
+	return dm;
+});
+
+},
 'dojox/mobile/app/List':function(){
 // wrapped by build app
 define(["dijit","dojo","dojox","dojo/require!dojo/string,dijit/_WidgetBase"], function(dijit,dojo,dojox){
@@ -16404,6 +16594,48 @@ define(["./kernel", "../has", "./sniff"], function(dojo, has){
 
 
 },
+'dojox/mobile/TextArea':function(){
+define("dojox/mobile/TextArea", [
+	"dojo/_base/declare",
+	"dojo/dom-construct",
+	"./TextBox"
+], function(declare, domConstruct, TextBox){
+
+	/*=====
+		TextBox = dojox.mobile.TextBox;
+	=====*/
+	return declare("dojox.mobile.TextArea",TextBox, {
+		// summary:
+		//		Non-templated TEXTAREA widget.
+		//
+		// description:
+		//		A textarea widget that wraps an HTML TEXTAREA element.
+		//		Takes all the parameters (name, value, etc.) that a vanilla textarea takes.
+		//
+		// example:
+		// |	<textarea dojoType="dojox.mobile.TextArea">...</textarea>
+
+		baseClass: "mblTextArea",
+
+		postMixInProperties: function(){
+			 // Copy value from srcNodeRef, unless user specified a value explicitly (or there is no srcNodeRef)
+			// TODO: parser will handle this in 2.0
+			if(!this.value && this.srcNodeRef){
+				this.value = this.srcNodeRef.value;
+			}
+			this.inherited(arguments);
+		},
+
+		buildRendering: function(){
+			if(!this.srcNodeRef){
+				this.srcNodeRef = domConstruct.create("textarea", {});
+			}
+			this.inherited(arguments);
+		}
+	});
+});
+
+},
 'dijit/registry':function(){
 define("dijit/registry", [
 	"dojo/_base/array", // array.forEach array.map
@@ -17310,6 +17542,130 @@ define("dojox/mobile/View", [
 			}
 			this.domNode.style.display = ""; // to-style
 			dm.currentView = this;
+		}
+	});
+});
+
+},
+'dijit/form/_ExpandingTextAreaMixin':function(){
+define("dijit/form/_ExpandingTextAreaMixin", [
+	"dojo/_base/declare", // declare
+	"dojo/dom-construct", // domConstruct.create
+	"dojo/_base/lang", // lang.hitch
+	"dojo/_base/window" // win.body
+], function(declare, domConstruct, lang, win){
+
+	// module:
+	//		dijit/form/_ExpandingTextAreaMixin
+	// summary:
+	//		Mixin for textarea widgets to add auto-expanding capability
+
+	// feature detection
+	var needsHelpShrinking;
+
+	return declare("dijit.form._ExpandingTextAreaMixin", null, {
+		// summary:
+		//		Mixin for textarea widgets to add auto-expanding capability
+
+		_setValueAttr: function(){
+			this.inherited(arguments);
+			this.resize();
+		},
+
+		postCreate: function(){
+			this.inherited(arguments);
+			var textarea = this.textbox;
+
+			if(needsHelpShrinking == undefined){
+				var te = domConstruct.create('textarea', {rows:"5", cols:"20", value: ' ', style: {zoom:1, overflow:'hidden', visibility:'hidden', position:'absolute', border:"0px solid black", padding:"0px"}}, win.body(), "last");
+				needsHelpShrinking = te.scrollHeight >= te.clientHeight;
+				win.body().removeChild(te);
+			}
+			this.connect(textarea, "onscroll", "_resizeLater");
+			this.connect(textarea, "onresize", "_resizeLater");
+			this.connect(textarea, "onfocus", "_resizeLater");
+			textarea.style.overflowY = "hidden";
+			this._estimateHeight();
+			this._resizeLater();
+		},
+
+		_onInput: function(e){
+			this.inherited(arguments);
+			this.resize();
+		},
+
+		_estimateHeight: function(){
+			// summary:
+			// 		Approximate the height when the textarea is invisible with the number of lines in the text.
+			// 		Fails when someone calls setValue with a long wrapping line, but the layout fixes itself when the user clicks inside so . . .
+			// 		In IE, the resize event is supposed to fire when the textarea becomes visible again and that will correct the size automatically.
+			//
+			var textarea = this.textbox;
+			textarea.style.height = "auto";
+			// #rows = #newlines+1
+			// Note: on Moz, the following #rows appears to be 1 too many.
+			// Actually, Moz is reserving room for the scrollbar.
+			// If you increase the font size, this behavior becomes readily apparent as the last line gets cut off without the +1.
+			textarea.rows = (textarea.value.match(/\n/g) || []).length + 2;
+		},
+
+		_resizeLater: function(){
+			setTimeout(lang.hitch(this, "resize"), 0);
+		},
+
+		resize: function(){
+			// summary:
+			//		Resizes the textarea vertically (should be called after a style/value change)
+			function textareaScrollHeight(){
+				var empty = false;
+				if(textarea.value === ''){
+					textarea.value = ' ';
+					empty = true;
+				}
+				var sh = textarea.scrollHeight;
+				if(empty){ textarea.value = ''; }
+				return sh;
+			}
+
+			var textarea = this.textbox;
+			if(textarea.style.overflowY == "hidden"){ textarea.scrollTop = 0; }
+			if(this.resizeTimer){ clearTimeout(this.resizeTimer); }
+			this.resizeTimer = null;
+			if(this.busyResizing){ return; }
+			this.busyResizing = true;
+			if(textareaScrollHeight() || textarea.offsetHeight){
+				var currentHeight = textarea.style.height;
+				if(!(/px/.test(currentHeight))){
+					currentHeight = textareaScrollHeight();
+					textarea.rows = 1;
+					textarea.style.height = currentHeight + "px";
+				}
+				var newH = Math.max(parseInt(currentHeight) - textarea.clientHeight, 0) + textareaScrollHeight();
+				var newHpx = newH + "px";
+				if(newHpx != textarea.style.height){
+					textarea.rows = 1;
+					textarea.style.height = newHpx;
+				}
+				if(needsHelpShrinking){
+					var scrollHeight = textareaScrollHeight();
+					textarea.style.height = "auto";
+					if(textareaScrollHeight() < scrollHeight){ // scrollHeight can shrink so now try a larger value
+						newHpx = newH - scrollHeight + textareaScrollHeight() + "px";
+					}
+					textarea.style.height = newHpx;
+				}
+				textarea.style.overflowY = textareaScrollHeight() > textarea.clientHeight ? "auto" : "hidden";
+			}else{
+				// hidden content of unknown size
+				this._estimateHeight();
+			}
+			this.busyResizing = false;
+		},
+
+		destroy: function(){
+			if(this.resizeTimer){ clearTimeout(this.resizeTimer); }
+			if(this.shrinkTimer){ clearTimeout(this.shrinkTimer); }
+			this.inherited(arguments);
 		}
 	});
 });
@@ -22125,6 +22481,36 @@ dojo.date.difference = function(/*Date*/date1, /*Date?*/date2, /*String?*/interv
 };
 
 return dojo.date;
+});
+
+},
+'dojox/mobile/ExpandingTextArea':function(){
+define("dojox/mobile/ExpandingTextArea", [
+	"dojo/_base/declare",
+	"dijit/form/_ExpandingTextAreaMixin",
+	"./TextArea"
+], function(declare, ExpandingTextAreaMixin, TextArea){
+
+	/*=====
+		TextArea = dojox.mobile.TextArea;
+		ExpandingTextAreaMixin = dijit.form._ExpandingTextAreaMixin;
+	=====*/
+	return declare("dojox.mobile.ExpandingTextArea", [TextArea, ExpandingTextAreaMixin], {
+		// summary:
+		//		Non-templated TEXTAREA widget with the capability to adjust it's height according to the amount of data.
+		//
+		// description:
+		//		A textarea that dynamically expands/contracts (changing it's height) as
+		//		the user types, to display all the text without requiring a vertical scroll bar.
+		//
+		//		Takes all the parameters (name, value, etc.) that a vanilla textarea takes.
+		//		Rows is not supported since this widget adjusts the height.
+		//
+		// example:
+		// |	<textarea dojoType="dojox.mobile.ExpandingTextArea">...</textarea>
+
+		baseClass: "mblTextArea mblExpandingTextArea"
+	});
 });
 
 },

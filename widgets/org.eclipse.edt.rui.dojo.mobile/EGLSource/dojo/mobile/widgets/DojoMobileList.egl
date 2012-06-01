@@ -13,7 +13,7 @@
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
 
-package dojo.mobile.widgets;           
+package dojo.mobile.widgets;            
 
 ExternalType DojoMobileList extends DojoMobileContainer type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",
@@ -35,9 +35,11 @@ ExternalType DojoMobileList extends DojoMobileContainer type JavaScriptObject {
 			smallIcon = "icons/ctool16/dojomobilelist_16.gif",
 			largeIcon = "icons/ctool24/dojomobilelist_24.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll,
 			container = @VEContainer{}
-		}   
-	}
+		}      
+	} 
 	style String { @Property{}, @VEProperty{
 		propertyType = "choice",
 		displayName = "Style",

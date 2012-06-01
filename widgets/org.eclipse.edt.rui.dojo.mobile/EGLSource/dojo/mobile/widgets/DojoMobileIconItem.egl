@@ -16,12 +16,32 @@ ExternalType DojoMobileIconItem extends DojoMobileContainer type JavaScriptObjec
 		smallIcon   = "icons/ctool16/dojomobilelist_16.gif",
 		largeIcon   = "icons/ctool24/dojomobilelist_24.gif",
 		propertyFilterType = FilterKind.EXCLUDEALLEXCEPT, 
+		propertyFilter = [],
+		eventFilterType  = filterKind.excludeAll,
 		container   = @VEContainer{} 
 	} 
 } 
+	/*
+	* An icon image to display. The value can be either a path for an image file or a class name of a DOM button. 
+	*If icon is not specified, the iconBase parameter of the parent widget is used.
+	*/
 	icon string{ @Property{}, @VEProperty { displayName="Icon"} };
+	/*
+	* Which view will be turned to when click
+	*/
 	targetView DojoMobileView{ @Property{} };
+	/*
+	* A URL of an html fragment page or JSON data that represents a new view content (See examples below). The view content is loaded with XHR and inserted in the current page. 
+	* Then a view transition occurs to the newly created view. The view is cached so that subsequent requests would not load the content again.
+	*/
 	urlString string{ @Property{}, @VEProperty{ displayName="URL"} };
+	/*
+	* If true, the content of the item, which includes dojo markup, is instantiated lazily. That is, only when the icon is opened by the user, 
+	* the required modules are loaded and dojo widgets are instantiated. This option works only in the sync loader mode.
+	*/
 	lazy boolean{ @Property{}, @VEProperty { displayName="Lazy Load"} };
+	/*
+	* A label of the item. If the label is not specified, innerHTML is used as a label.
+	*/
 	labelString string{ @Property{}, @VEProperty { displayName = "Label" } };
 end

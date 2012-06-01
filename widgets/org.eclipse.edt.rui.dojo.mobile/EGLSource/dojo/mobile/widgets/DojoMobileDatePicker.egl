@@ -24,7 +24,8 @@ ExternalType DojoMobileDatePicker extends DojoMobileBase type JavaScriptObject {
 			smallIcon = "icons/ctool16/dojomobilebutton_16.gif",
 			largeIcon = "icons/ctool24/dojomobilebutton_24.gif",   
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			propertyFilter = [ "width", "margin", "padding" ]
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll
 		}	        
 	}	  
 	day   int{@Property {}, @VEProperty {displayName="Day"}  };

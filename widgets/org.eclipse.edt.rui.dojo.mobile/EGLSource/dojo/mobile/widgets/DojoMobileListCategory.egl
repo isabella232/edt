@@ -23,8 +23,11 @@ ExternalType DojoMobileListCategory extends DojoMobileBase type JavaScriptObject
 			displayName = "ListCategory",
 			smallIcon = "icons/ctool16/dojomobilelistitem_16.gif",
 			largeIcon = "icons/ctool24/dojomobilelistitem_24.gif",			
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll
 		}   
 	}
+	//A label of the category. If the label is not specified, innerHTML is used as a label.
 	title String { @Property{}, @VEProperty{displayName = "Title"} };
 end

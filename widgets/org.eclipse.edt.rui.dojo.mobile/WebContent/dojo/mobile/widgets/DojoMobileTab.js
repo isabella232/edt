@@ -84,6 +84,13 @@ egl.defineWidget(
 			tabBtnNode
 		);
 		
+		var defaultCallBack = _this.tabBtnWidget.onClick ;
+		_this.tabBtnWidget.onClick = function( value ) {
+			if( typeof  defaultCallBack === "function" )
+				defaultCallBack.apply( _this.tabBtnWidget, arguments );
+			_this.handleEvent( _this.getOnClick(), "onClick" ); 
+		};
+		
 		if( _this.parent && _this.parent.tabBarWidget.getIndexOfChild( _this.children[i].tabBtnWidget ) == -1 ){
 			_this.parent.tabBarWidget.addChild( this.tabBtnWidget );
 			_this.parent.ContainerNode.appendChild( this.tabViewWidget.domNode );

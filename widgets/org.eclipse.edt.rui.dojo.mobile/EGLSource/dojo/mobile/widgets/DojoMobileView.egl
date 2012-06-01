@@ -27,19 +27,18 @@ ExternalType DojoMobileView extends DojoMobileContainer type JavaScriptObject {
 			displayName = "View",     
 			smallIcon = "icons/ctool16/dojomobileview_16.gif",
 			largeIcon = "icons/ctool24/dojomobileview_24.gif",
-			container = @VEContainer{},
-			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT
-		}        
-	}   
-	     
-	toolBar DojoMobileToolBarButton[]? {};
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll,
+			container = @VEContainer{}
+		}          
+	}      
+	      
+	toolBar DojoMobileToolBarButton[]? {};  
 	
 	className string{   
-		@Property{},  
-		@VEProperty {
-			displayName = "Class"
-		} 
-	};   
+		@Property{}//,  @VEProperty {displayName = "Class"}
+		};   
 	    
 	headerTitle String { @Property{}, 
 	@VEProperty{   
@@ -52,12 +51,14 @@ ExternalType DojoMobileView extends DojoMobileContainer type JavaScriptObject {
 	
 	backView DojoMobileView { @Property{} };	
 	
-	selected Boolean {@Property{}, 
+	//If true, the view is displayed at startup time.
+	selected Boolean {@Property{},   
 		@VEProperty{
-			displayName = "Selected"
+			displayName = "Selected" 
 		}   
 	};
 	
+	//Specify a scrolling direction.
 	scrollVertically Boolean{   
 		@Property {},  
 		@VEProperty { displayName = "Scroll Vertically" }

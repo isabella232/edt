@@ -35,16 +35,17 @@ egl.defineWidget(
 			var eglWidget = this;
 			this._mergeArgs({
 				type: "range",
-				value: this.value,
-				max: this.maximum,
-				min: this.minimum,
-				step: this.step,
-				orientation: this.orientation
+				value: this.value ? this.value : 0,
+				max: this.maximum ? this.maximum : 100,
+				min: this.minimum ? this.minimum : 0,
+				step: this.step ? this.step : 1,
+				orientation: this.orientation ? this.orientation : "auto"
 			});
 			this.dojoWidget = new dojox.mobile.Slider(this._args, parent);
 			this.dojoWidget.onChange = function(){
 				eglWidget.handleEvent(eglWidget.getOnChange(), "onChange"); 
 			};
+			eglWidget.synchronor.trigger( eglWidget, "SYN_READY" );
 		},
 		
 		"getValue": function(){

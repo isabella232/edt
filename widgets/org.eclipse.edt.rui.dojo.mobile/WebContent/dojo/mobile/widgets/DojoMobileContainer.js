@@ -41,7 +41,7 @@ egl.defineWidget(
 		catch (e) {
 			throw egl.createRuntimeException( "Append child error.", [child.getTagName(), egl.inferSignature(this), this]);
 		}
-		thisNode.appendChild( childNode, dojoWidget );			
+		thisNode.appendChild( childNode );			
 		this.childrenChanged();
 	},
 	"_checkChildType" : function(child) {
@@ -69,11 +69,9 @@ egl.defineWidget(
 				this._appendChild( children[n], dojoWidget );
 			} 
 		}		
-		
 	},
 	"setChildren" : function( children, containerWidget ) {
 		var dojoWidget = this._getContainerWidget(containerWidget);
-			
 		if ( dojoWidget ) {
 			this.removeChildren( dojoWidget );
 			if(children){
