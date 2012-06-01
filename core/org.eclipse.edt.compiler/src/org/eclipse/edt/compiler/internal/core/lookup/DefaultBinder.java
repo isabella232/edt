@@ -1968,6 +1968,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 				//this is string concatenation , so this is allowed
 				binaryExpression.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.STRING));
 			}
+			else if (isBytesType(type1) && isBytesType(type2) &&
+					(operator == BinaryExpression.Operator.PLUS || 
+					   operator == BinaryExpression.Operator.CONCAT ||
+					   operator == BinaryExpression.Operator.NULLCONCAT	)) {
+				//this is bytes concatenation , so this is allowed
+				binaryExpression.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BYTES));
+			}
 			else if(operator == BinaryExpression.Operator.PLUS && (isStringType(type1)) ||
 			   operator == BinaryExpression.Operator.CONCAT ||
 			   operator == BinaryExpression.Operator.NULLCONCAT) {
@@ -3156,6 +3163,14 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
 		       Primitive.isStringType(((PrimitiveTypeBinding) type).getPrimitive());
+	}
+	
+	private static boolean isBytesType(ITypeBinding type) {
+		if (!Binding.isValidBinding(type)) {
+			return false;
+		}
+		return type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING &&
+				((PrimitiveTypeBinding) type).getPrimitive() == Primitive.BYTES;
 	}
 
 	private static boolean isArrayType(ITypeBinding type) {
