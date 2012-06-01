@@ -45,7 +45,7 @@ public class JREFilter extends ClasspathEntryFilter
 				if ( libraries.length > 0 )
 				{
 					HashMap<String, Object> targetClasses = new HashMap<String, Object>( 100 );
-					targetClassMap.put( target, targetClasses );
+					targetClassMap.put( targetKey, targetClasses );
 					for ( LibraryLocation library : libraries )
 					{
 						processJar( library.getSystemLibraryPath().toFile(), library.getPackageRootPath().toString(), targetClasses );
