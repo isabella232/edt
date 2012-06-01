@@ -221,6 +221,8 @@ public class EGLVariableDotProposalHandler extends EGLAbstractProposalHandler {
 			return(getSystemWordProposals(PrimitiveTypeBinding.getDateFunctions(), UINlsStrings.CAProposal_DateLibrary));
 		}else if(primType.equalsIgnoreCase(IEGLConstants.TIME_STRING)){
 			return(getSystemWordProposals(PrimitiveTypeBinding.getTimeFunctions(), UINlsStrings.CAProposal_TimeLibrary));
+		}else if(primType.equalsIgnoreCase(IEGLConstants.BYTES_STRING)){
+			return(getSystemWordProposals(PrimitiveTypeBinding.getBytesFunctions(), UINlsStrings.CAProposal_BytesLibrary));
 		}
 		
 		return Collections.EMPTY_LIST;

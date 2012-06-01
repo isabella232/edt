@@ -938,6 +938,7 @@ public class UINlsStrings extends NLS {
 	public static String CAProposal_ArrayFunctionSystemWord;
 	public static String CAProposal_ArrayVariableSystemWord;
 	public static String CAProposal_BooleanOperator;
+	public static String CAProposal_BytesLibrary;
 	public static String CAProposal_ColorState;
 	public static String CAProposal_ConditionalOperator;
 	public static String CAProposal_ConsoleField;
