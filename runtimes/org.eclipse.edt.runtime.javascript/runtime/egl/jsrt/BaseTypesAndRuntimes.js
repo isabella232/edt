@@ -2801,7 +2801,7 @@ egl.convertAnyToDate = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.egl.core.$DateTimeLib.dateValue(any.eze$$value);//FIXME this function doesn't exist
+				return egl.stringToDate( any.eze$$value, "MMddyyyy" );
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'date' + (nullable ? '?' : '') ], 'date' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
@@ -2828,7 +2828,7 @@ egl.convertAnyToTime = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.egl.core.$DateTimeLib.timeValue(any.eze$$value);//FIXME function doesn't exist
+				return egl.stringToTime( any.eze$$value, "HHmmss" ); 
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'time' + (nullable ? '?' : '') ], 'time' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
@@ -3007,10 +3007,17 @@ egl.initialValueForType = function ( elementType )
 		case 'B':
 			return egl.javascript.BigDecimal.prototype.ZERO;
 		case 'K':
-			return egl.egl.core.$DateTimeLib.currentDate();//FIXME function doesn't exist
+			var date = new Date();
+			date.setHours( 0 );
+			date.setMinutes( 0 );
+			date.setSeconds( 0 );
+			date.setMilliseconds( 0 );
+			return date;
 		case 'L':
 		case 'J':
-			return egl.egl.core.$DateTimeLib.currentTime();//FIXME function doesn't exist
+			var time = new Date();
+			time.setMilliseconds( 0 );
+			return time;
 		default:
 			throw egl.createRuntimeException( "CRRUI2034E", [ elementType ] );
 	}
