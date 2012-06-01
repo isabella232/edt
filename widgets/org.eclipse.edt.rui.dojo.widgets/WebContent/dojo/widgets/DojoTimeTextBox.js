@@ -63,8 +63,8 @@ egl.defineWidget(
             	return null;
             var time = this.time;            
             try {
-                var s = "" + this.twoDigits(time.getHours()) + 
-                    this.twoDigits(time.getMinutes()) +
+                var s = "" + this.twoDigits(time.getHours()) + ":" +
+                    this.twoDigits(time.getMinutes()) + ":" +
                     this.twoDigits(time.getSeconds());
                	return egl.stringToTime( s, "HHmmss" );
             }
