@@ -150,7 +150,7 @@ egl.defineWidget(
 			}
 		}else{
 			this.values = values;			
-			this.setData(this.values, ["dijit/form/ComboBox", "bidi.DojoComboBoxBidi"]);
+			this.setData(this.values, ["dijit/form/ComboBox", "bidi/DojoComboBoxBidi"]);
 		}
 	},
 	"getValues" : function() {

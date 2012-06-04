@@ -58,8 +58,9 @@ var isLinux = (navigator.platform.indexOf("Linux") != -1) ? true : false;
 var isOverwriteMozilla = false;
 var jr = null;
 
-//in "bidi/DojoTextBoxBidi"
-define(["dijit/form/TextBox"], function(){
+//in "bidi/DojoTextBoxBidi.js"
+require(["dojo/_base/declare", "dijit/form/TextBox", "dijit/_WidgetBase"], function(declare, _WidgetBase){
+	declare("bidi/DojoTextBoxBidi", [_WidgetBase], {
         isVisualMode: false,
         dir: 'ltr',
         autoPush: true, //shensis
@@ -1201,5 +1202,6 @@ define(["dijit/form/TextBox"], function(){
 		}			
 		this.attr('displayedValue', value);
 	}
+	});
 });
 }

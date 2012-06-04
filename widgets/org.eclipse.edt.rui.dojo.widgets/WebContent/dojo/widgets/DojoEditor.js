@@ -21,7 +21,7 @@ egl.defineWidget(
 		this.height = 300;
 		this.width = 300;
 		this.value = "";
-		this.renderWhenDojoIsDoneLoading(["dijit/Editor", "dijit/layout/_LayoutWidget", "bidi.DojoEditorBidi"]);
+		this.renderWhenDojoIsDoneLoading(["dijit/Editor", "dijit/layout/_LayoutWidget", "bidi/DojoEditorBidi"]);
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;
