@@ -1,6 +1,5 @@
 <script type="text/javascript">
 	require({
-    	paths: {"bidi": "dojo/widgets/bidi"},
     	packages : [ {
 			name : 'dojo',
 			location : '../dojo'
@@ -10,7 +9,10 @@
 		}, {
 			name : 'dojox',
 			location : '../dojox'
-		} ],
+		} ,{
+			name : 'bidi',
+			location : '../dojo/widgets/bidi'
+		}],
 		locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
   	});
  	egl.urlPrefix = "";
