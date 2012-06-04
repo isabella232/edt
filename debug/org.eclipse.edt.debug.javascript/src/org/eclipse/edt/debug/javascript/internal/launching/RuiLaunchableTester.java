@@ -43,7 +43,7 @@ public class RuiLaunchableTester extends EGLLaunchableTester
 		{
 			return Util.isVESupportType( (IEGLFile)element, null );
 		}
-		else if ( element instanceof IFile )
+		else if ( element instanceof IFile && "egl".equalsIgnoreCase( ((IFile)element).getFileExtension() ) )// TODO remove second part when bug 377007 is fixed
 		{
 			return Util.isVESupportType( (IFile)element );
 		}
