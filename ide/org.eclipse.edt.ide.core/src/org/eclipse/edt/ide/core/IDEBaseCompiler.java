@@ -82,7 +82,7 @@ public class IDEBaseCompiler implements IIDECompiler {
 			return getSystemEnvironmentPathEntry();
 		}
 		else {
-			return getSystemEnvironmentPathEntry() + ";" + parentCompiler.getSystemEnvironmentPath();
+			return getSystemEnvironmentPathEntry() + File.pathSeparator + parentCompiler.getSystemEnvironmentPath();
 		}
 	}
 
