@@ -374,7 +374,9 @@ private void rebuildIndex(String indexName, IPath path) {
 		request = new AddEglarFileToIndex((IFile) target, this);
 	} else if (target instanceof java.io.File) {
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
-		request = new AddEglarFileToIndex(path, this,resource.getProject());
+		if( resource != null ) {
+		    request = new AddEglarFileToIndex(path, this,resource.getProject());
+		}
 	}
 	if (request != null)
 		request(request);
