@@ -865,7 +865,7 @@ egl.eglx.lang.EDate.fromETimestamp = function (x, pattern) {
 	}
 };
 egl.eglx.lang.EDate.fromEString = function (x) {   
-    return egl.stringToDate( x, "MMddyyyy" ); 
+    return egl.stringToDateWithDefaultSeparator( x, "MMddyyyy" ); 
 };
 egl.eglx.lang.EDate.equals = function (x, y) {   
 	return egl.dateEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
@@ -928,7 +928,7 @@ egl.eglx.lang.ETime.fromETimestamp = function (x, pattern) {
 	}
 };
 egl.eglx.lang.ETime.fromEString = function (x) {   
-    return egl.stringToTime( x, "HHmmss" ); 
+    return egl.stringToTimeWithDefaultSeparator( x, "HHmmss" ); 
 };
 egl.eglx.lang.ETime.equals = function (x, y) {   
 	return egl.timeEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable
@@ -1119,7 +1119,7 @@ egl.eglx.lang.ETimestamp.fromEString = function (timestamp, pattern) {
 	}else{
 		format = pattern;
 	}
-	return egl.eglx.lang.ETimestamp.extend( egl.stringToTimeStamp(timestamp, format), pattern);
+	return egl.eglx.lang.ETimestamp.extend( egl.stringToTimeStampWithDefaultSeparator(timestamp, format), pattern);
 };
 
 egl.eglx.lang.ETimestamp.fromEDate = function (date, pattern){

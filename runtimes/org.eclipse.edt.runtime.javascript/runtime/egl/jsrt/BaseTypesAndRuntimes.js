@@ -291,9 +291,9 @@ egl.timeToString = function( t, format )
 	return result;
 };
 
-egl.stringToTime = function(s, format)
+egl.stringToTimeWithDefaultSeparator = function(s, format)
 {
-	var result = egl.stringToTimeInternal(s, format, true);
+	var result = egl.stringToTimeInternal(s, format, true, true);
 	if( result != null )
 	{
 		return result;
@@ -304,7 +304,29 @@ egl.stringToTime = function(s, format)
 	}
 };
 
-egl.stringToTimeInternal = function(s, format, strict)
+egl.stringToTime = function(s, format)
+{
+	var result = egl.stringToTimeInternal(s, format, true);
+	if( result == null )
+	{
+		result = egl.stringToTimeInternal(s, format, false);
+	}
+	if( result == null && s.length < format.length )
+	{
+		result = egl.stringToTimeInternal("0" + s, format, false);
+	}
+	
+	if( result != null )
+	{
+		return result;
+	}
+	else
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ s, "string", "time" ], "time", "string" );
+	}
+};
+
+egl.stringToTimeInternal = function(s, format, strict, defaultSeparator)
 {
 	var result = new Date(0);
 	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
@@ -324,12 +346,14 @@ egl.stringToTimeInternal = function(s, format, strict)
 			return null;
 		}
 		//Separator is needed for each token and must be ':'
-		if(i < numTokens - 1){
-			if( s.charAt(0) == ':')
-				s = s.substr(1);
-			else
-				return null;
-		}	
+		if(defaultSeparator){
+			if(i < numTokens - 1){
+				if( s.charAt(0) == ':')
+					s = s.substr(1);
+				else
+					return null;
+			}
+		}
 	}
 	
 	if("PM" == result["eze$$AMPM"] && result.getHours() < 12)
@@ -344,9 +368,34 @@ egl.stringToTimeInternal = function(s, format, strict)
 	return result;
 };
 
+egl.stringToDateWithDefaultSeparator = function(s, format)
+{
+	var result = egl.stringToDateInternal(s, format, true, true);
+	if( result != null )
+	{
+		result.setHours(0);
+		result.setMinutes(0);
+		result.setSeconds(0);
+		result.setMilliseconds(0);
+		return result;
+	}
+	else
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ s, "string", "date" ], "date", "string" );
+	}
+}
+
 egl.stringToDate = function(s, format)
 {
 	var result = egl.stringToDateInternal(s, format, true);
+	if( result == null )
+	{
+		result = egl.stringToDateInternal(s, format, false);
+	}
+	if( result == null && s.length < format.length )
+	{
+		result = egl.stringToDateInternal("0" + s, format, false);
+	}
 	
 	if( result != null )
 	{
@@ -362,7 +411,7 @@ egl.stringToDate = function(s, format)
 	}
 };
 
-egl.stringToDateInternal = function(s, format, strict)
+egl.stringToDateInternal = function(s, format, strict, defaultSeparator)
 {
 	var result = new Date(1970, 0, 1);
 	var tokens = format.match(/yyyy|yy|MM|dd|''|'([^']|'')*'|[^A-Za-z]/g);
@@ -389,11 +438,13 @@ egl.stringToDateInternal = function(s, format, strict)
 			break;
 		}
 		//Separator is needed for each token
-		if(i < numTokens - 1){
-			if(tempS.length >= 1)
-				tempS = tempS.substr(1);
-			else
-				return null;
+		if(defaultSeparator){
+			if(i < numTokens - 1){
+				if(tempS.length >= 1)
+					tempS = tempS.substr(1);
+				else
+					return null;
+			}
 		}
 	}
 
@@ -405,11 +456,13 @@ egl.stringToDateInternal = function(s, format, strict)
 			return null;
 		}
 		//Separator is needed for each token
-		if(i < numTokens - 1){
-			if(s.length >= 1)
-				s = s.substr(1);
-			else
-				return null;
+		if(defaultSeparator){
+			if(i < numTokens - 1){
+				if(s.length >= 1)
+					s = s.substr(1);
+				else
+					return null;
+			}
 		}
 	}
 	
@@ -725,7 +778,32 @@ egl.processToken = function(token, s, result, strict)
 	}
 	else if( strict )
 	{
-		return null;
+		if(token == "''")
+		{
+			if(s.charAt(0) != "'")
+			{
+				return null;				
+			}
+			s = s.substr(1);
+		}
+		else if(token.charAt(0) == "'")
+		{
+			var lit = token.substr(1,token.length-2);
+			lit = lit.replace(/''/, "'");
+			if(s.substr(0, lit.length) != lit)
+			{
+				return null;
+			}
+			s = s.substr(lit.length);
+		}
+		else
+		{
+			if(s.substr(0, token.length) != token)
+			{
+				return null;
+			}
+			s = s.substr(token.length);
+		}
 	}
 	
 	return s;
@@ -886,9 +964,29 @@ egl.timeStampToString = function( ts, format )
 	return result;
 };
 
+egl.stringToTimeStampWithDefaultSeparator = function(s, format){
+	var result = egl.stringToTimeStampInternal(s, format, true, true);
+	if( result != null )
+	{		
+		return result;
+	}
+	else
+	{
+		throw egl.createTypeCastException( "CRRUI2017E", [ s, "string", "timestamp" ], "time", "timestamp" );
+	}
+};
+
 egl.stringToTimeStamp = function(s, format)
 {
 	var result = egl.stringToTimeStampInternal(s, format, true);
+	if( result == null )
+	{
+		result = egl.stringToTimeStampInternal(s, format, false);
+	}
+	if( result == null && s.length < format.length )
+	{
+		result = egl.stringToTimeStampInternal("0" + s, format, false);
+	}
 	
 	if( result != null )
 	{		
@@ -900,7 +998,7 @@ egl.stringToTimeStamp = function(s, format)
 	}
 };
 
-egl.stringToTimeStampInternal = function( s, format, strict )
+egl.stringToTimeStampInternal = function( s, format, strict, defaultSeparator )
 {
 	var result = new Date(0);
 
@@ -931,12 +1029,15 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 			break;
 		}
 		//Separator is needed for each token
-		if(i < numTokens - 1){
-			if(tempS.length >= 1)
-				tempS = tempS.substr(1);
-			else
-				return null;
-		}	
+		if(defaultSeparator){
+			if(i < numTokens - 1){
+				if(tempS.length >= 1)
+					tempS = tempS.substr(1);
+				else
+					return null;
+			}	
+		}
+		
 	}
 	if( yearResult.getFullYear() == result.getFullYear() ){
 		//If year is not set, set it to a leap year to accept dates "0229"
@@ -951,12 +1052,14 @@ egl.stringToTimeStampInternal = function( s, format, strict )
 			return null;
 		}
 		//Separator is needed for each token
-		if(i < numTokens - 1){
-			if(s.length >= 1)
-				s = s.substr(1);
-			else
-				return null;
-		}	
+		if(defaultSeparator){
+			if(i < numTokens - 1){
+				if(s.length >= 1)
+					s = s.substr(1);
+				else
+					return null;
+			}
+		}
 	}
 	
 	if(result["eze$$adjustdate"])
@@ -2801,7 +2904,7 @@ egl.convertAnyToDate = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.stringToDate( any.eze$$value, "MMddyyyy" );
+				return egl.stringToDateWithDefaultSeparator( any.eze$$value, "MMddyyyy" );
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'date' + (nullable ? '?' : '') ], 'date' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
@@ -2828,7 +2931,7 @@ egl.convertAnyToTime = function( any, nullable )
 			case 'D':
 			case 'M':
 			case 'U':
-				return egl.stringToTime( any.eze$$value, "HHmmss" ); 
+				return egl.stringToTimeWithDefaultSeparator( any.eze$$value, "HHmmss" ); 
 		}
 	}
 	throw egl.createTypeCastException( "CRRUI2017E", [ egl.valueString( any ), egl.typeName( any.eze$$signature ), 'time' + (nullable ? '?' : '') ], 'time' + (nullable ? '?' : ''), egl.typeName( any.eze$$signature ) );
@@ -4095,7 +4198,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 
 egl.dateTime.timeStampValueWithPattern = function(/*string*/source, /*optional mask*/timeSpanPattern) {
 	//Returns a TIMESTAMP value that reflects a string and is built based on a timestamp mask that you specify
-	return ( ( source != null ) ? egl.stringToTimeStamp( source, egl.getProperTimeStampPattern( timeSpanPattern ) ) : null );
+	return ( ( source != null ) ? egl.stringToTimeStampWithDefaultSeparator( source, egl.getProperTimeStampPattern( timeSpanPattern ) ) : null );
 };
 
 
