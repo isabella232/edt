@@ -54,6 +54,7 @@ import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 import org.eclipse.edt.runtime.java.eglx.lang.NullType;
 
@@ -94,6 +95,8 @@ public class JsonLib {
 	    //EDate and ETimestamp must be done before AnyBoxedObject because they are an AnyBoxedObject
 	    if(object instanceof EDate)
 		    return new StringNode(StringLib.format(((EDate)object).ezeUnbox(), "yyyy-MM-dd"), false);
+	    if(object instanceof ETime)
+		    return new StringNode(StringLib.format(((ETime)object).ezeUnbox(), "HH:mm:ss"), false);
 	    if(object instanceof ETimestamp)
 		    return new StringNode(StringLib.format(((ETimestamp)object).ezeUnbox(), "yyyy-MM-dd HH:mm:ss"), false);
 	    if(object instanceof AnyBoxedObject<?>)
@@ -313,9 +316,12 @@ public class JsonLib {
 	        }
 	        if(fieldType.equals(EDecimal.class)){
 	        	///get options for the as statement
-	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 1){
+	        	if(fieldTypeOptions != null && fieldTypeOptions.length > 0){
 		        	int length = Integer.parseInt(fieldTypeOptions[0]);
-		        	int decimal = Integer.parseInt(fieldTypeOptions[1]);
+		        	int decimal = 0;
+		        	if(fieldTypeOptions.length > 1){
+		        		decimal = Integer.parseInt(fieldTypeOptions[1]);
+		        	}
 		        	return EDecimal.asDecimal(jsonValue.toJava(), length, decimal);
 	        	}
 	        	else{
@@ -335,7 +341,18 @@ public class JsonLib {
 	        	return ESmallint.asSmallint(jsonValue.toJava());
 	        }
 	        if(fieldType.equals(EString.class)){
+	        	if(fieldTypeOptions != null && fieldTypeOptions.length == 1){
+		        	int length = Integer.parseInt(fieldTypeOptions[0]);
+		        	return EString.asString(jsonValue.toJava(), length);
+	        	}
 	        	return jsonValue.toJava();
+	        }
+	        if(fieldType.equals(ETime.class)){
+	        	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	    		Calendar cal = DateTimeUtil.getBaseCalendar();
+	    		cal.setTimeInMillis(sdf.parse(jsonValue.toJava()).getTime());
+	    		cal.get(Calendar.YEAR);
+	       		return ETime.asTime(cal);
 	        }
 	        if(fieldType.equals(ETimestamp.class)){
 	        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

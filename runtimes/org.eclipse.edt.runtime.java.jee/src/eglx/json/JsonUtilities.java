@@ -41,6 +41,7 @@ import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
 import eglx.lang.AnyException;
@@ -195,6 +196,11 @@ public class JsonUtilities {
 			        else if(fieldType.equals(EString.class)){
 			        	newValue = "";
 			        }
+					else if(fieldType.equals(ETime.class)){
+			    		Calendar cal = DateTimeUtil.getBaseCalendar();
+			    		cal.get(Calendar.YEAR);
+			    		newValue = ETime.asTime(cal);
+			        }
 			        else if(fieldType.equals(ETimestamp.class)){
 		        		int start = ETimestamp.YEAR_CODE;
 		        		int end = ETimestamp.SECOND_CODE;
@@ -293,6 +299,9 @@ public class JsonUtilities {
 		}
 		else if(type != null && type.equals(EDate.class)){
 			return new EDate((Calendar)field);
+		}
+		else if(type != null && type.equals(ETime.class)){
+			return new ETime((Calendar)field);
 		}
 		else if(type != null && type.equals(ETimestamp.class)){
     		int start = ETimestamp.YEAR_CODE;
