@@ -16,6 +16,8 @@ import java.util.List;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Service;
 
@@ -32,5 +34,11 @@ public class ServiceTemplate extends org.eclipse.edt.gen.java.templates.ServiceT
 	public void genFunction(Service service, Context ctx, TabbedWriter out, Function arg) {
 		ctx.invoke(genFunctionSignatures, arg, ctx, out);
 		ctx.invoke(genDeclaration, arg, ctx, out);
+	}
+	
+	public void genFieldAnnotations(Service service, Context ctx, TabbedWriter out, Field field) {
+		for (Annotation annot : field.getAnnotations()) {
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
+		}
 	}
 }
