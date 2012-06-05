@@ -69,10 +69,10 @@
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="provider" type="string" use="required">
+         <attribute name="provider" type="string">
             <annotation>
                <documentation>
-                  The provider id this contribution is used with
+                  The provider id this contribution is used with. When left blank or unspecified, the contribution can be &quot;required&quot; by other contributions, but won&apos;t have a direct association with a specific generator.
                </documentation>
             </annotation>
          </attribute>

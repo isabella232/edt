@@ -43,7 +43,8 @@ public class GenerationContributorEntry {
 	}
 
 	public void setProvider(String provider) {
-		this.provider = provider;
+		// can be null if not specified in plugin.xml - set to blank when this is the case.
+		this.provider = provider == null ? "" : provider; //$NON-NLS-1$
 	}
 
 	public String getIdentifier() {
