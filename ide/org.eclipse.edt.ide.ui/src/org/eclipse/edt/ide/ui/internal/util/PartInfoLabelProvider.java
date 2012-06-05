@@ -42,6 +42,7 @@ public class PartInfoLabelProvider extends LabelProvider {
 	private static final Image SERVICE_ICON = PluginImages.get(PluginImages.IMG_OBJS_SERVICE);
 	private static final Image INTERFACE_ICON = PluginImages.get(PluginImages.IMG_OBJS_INTERFACE);
 	private static final Image HANDLER_ICON = PluginImages.get(PluginImages.IMG_OBJS_HANDLER);
+	private static final Image ENUM_ICON = PluginImages.get(PluginImages.IMG_OBJS_ENUMERATION);
 	private static final Image EXTERNAL_TYPE_ICON = PluginImages.get(PluginImages.IMG_OBJS_EXTERNALTYPE);
 	private static final Image DELEGATE_ICON = PluginImages.get(PluginImages.IMG_OBJS_DELEGATE);
 	
@@ -144,6 +145,7 @@ public class PartInfoLabelProvider extends LabelProvider {
 					case IEGLSearchConstants.INTERFACE: return INTERFACE_ICON;
 					case IEGLSearchConstants.EXTERNALTYPE: return EXTERNAL_TYPE_ICON;
 					case IEGLSearchConstants.HANDLER: return HANDLER_ICON;
+					case IEGLSearchConstants.ENUMERATION: return ENUM_ICON;
 					case IEGLSearchConstants.DELEGATE: return DELEGATE_ICON;
 					default: return null;
 				}

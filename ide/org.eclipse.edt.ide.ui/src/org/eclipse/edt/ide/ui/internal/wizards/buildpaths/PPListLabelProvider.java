@@ -16,6 +16,8 @@ import java.net.URL;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IEGLPathContainer;
 import org.eclipse.edt.ide.core.model.IEGLPathEntry;
 import org.eclipse.edt.ide.core.model.PPListElement;
 import org.eclipse.edt.ide.core.model.PPListElementAttribute;
@@ -134,10 +136,9 @@ public class PPListLabelProvider extends LabelProvider {
 			}
 			case IEGLPathEntry.CPE_PROJECT:
 				return path.lastSegment();
-			/*
 			case IEGLPathEntry.CPE_CONTAINER:
 				try {
-					IEGLPathContainer container= EGLCore.getEGLPathContainer(cpentry.getPath(), cpentry.getJavaProject());
+					IEGLPathContainer container= EGLCore.getEGLPathContainer(cpentry.getPath(), cpentry.getEGLProject());
 					if (container != null) {
 						return container.getDescription();
 					}
@@ -145,7 +146,6 @@ public class PPListLabelProvider extends LabelProvider {
 	
 				}
 				return path.toString();
-			*/
 			case IEGLPathEntry.CPE_SOURCE: {
 				StringBuffer buf= new StringBuffer(path.makeRelative().toString());
 				IResource resource= cpentry.getResource();
@@ -188,6 +188,8 @@ public class PPListLabelProvider extends LabelProvider {
 				} else {
 					return fFolderImage;
 				}
+			case IEGLPathEntry.CPE_CONTAINER:
+					return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR_CONTAINER;
 			case IEGLPathEntry.CPE_LIBRARY:
 				return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
 			case IEGLPathEntry.CPE_PROJECT:

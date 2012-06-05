@@ -376,7 +376,14 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 		fBuildPathDialogField.enableButton(projectExists);
 		fClassPathList.setElements(newEGLPath);
 		fClassPathList.setCheckedElements(exportedEntries);
-	
+		for (int i= 0; i < newEGLPath.size(); i++) {
+			PPListElement currEGL= (PPListElement) newEGLPath.get(i);
+			if(EGLSystemPathContaierInitializer.isValidEGLSystemPathContainerPath(currEGL.getEGLPathEntry().getPath())){
+				fClassPathList.setGrayedWithoutUpdate(currEGL, true);
+				break;
+			}
+		}
+		
 		if (fProjectsPage != null) {
 			fProjectsPage.init(fCurrEProject);
 		}
@@ -408,7 +415,11 @@ public class EGLProjectBuildPathPropertyPage extends PropertyPage {
 				if (!isChecked) {
 					fClassPathList.setCheckedWithoutUpdate(currElement, true);
 				}
-			} else {
+			}else if(EGLSystemPathContaierInitializer.isValidEGLSystemPathContainerPath(currElement.getEGLPathEntry().getPath())){
+				if (isChecked) {
+					fClassPathList.setCheckedWithoutUpdate(currElement, false);
+				}
+			}else {
 				currElement.setExported(isChecked);
 			}
 

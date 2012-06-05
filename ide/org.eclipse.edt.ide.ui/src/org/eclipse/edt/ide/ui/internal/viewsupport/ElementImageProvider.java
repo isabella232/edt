@@ -14,6 +14,8 @@ package org.eclipse.edt.ide.ui.internal.viewsupport;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLProject;
@@ -219,7 +221,14 @@ public class ElementImageProvider {
 				case IEGLElement.PACKAGE_FRAGMENT_ROOT :
 					{
 						IPackageFragmentRoot root = (IPackageFragmentRoot) element;
-						if (root.isArchive()) {
+						if(root instanceof EglarPackageFragmentRootContainer){
+							return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR_CONTAINER;
+						}else if(root instanceof EglarPackageFragmentRoot){
+							return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
+						}else {
+							return PluginImages.DESC_OBJS_PACKFRAG_ROOT;
+						}
+//						if (root.isArchive()) {
 //							IPath attach= root.getSourceAttachmentPath();
 //							IPath attach = null;
 //							if (root.isExternal()) {
@@ -235,11 +244,9 @@ public class ElementImageProvider {
 //									return PluginImages.DESC_OBJS_JAR_WSRC;
 //								}
 //							}			
-							//TODO Rocky
-							return PluginImages.DESC_OBJS_PACKFRAG_ROOT;
-						} else {
-							return PluginImages.DESC_OBJS_PACKFRAG_ROOT;
-						}
+//							//TODO Rocky
+//							return PluginImages.DESC_OBJS_PACKFRAG_ROOT_EGLAR;
+//						} 
 					}
 
 				case IEGLElement.PACKAGE_FRAGMENT :

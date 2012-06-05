@@ -55,6 +55,7 @@ public class PluginImages {
 	public static final String IMG_OBJS_PACKAGE= NAME_PREFIX + "eglpkg_obj.gif"; 		//$NON-NLS-1$
 	public static final String IMG_OBJS_EMPTY_PACKAGE= NAME_PREFIX + "emppkg_obj.gif"; //$NON-NLS-1$
 	public static final String IMG_OBJS_PACKFRAG_ROOT_EGLAR= NAME_PREFIX + "eglar_obj.gif"; //$NON-NLS-1$
+	public static final String IMG_OBJS_PACKFRAG_ROOT_EGLAR_CONTAINER = NAME_PREFIX + "libry_obj.gif"; //$NON-NLS-1$
 	
 	public static final String IMG_OBJS_EGLFILE= NAME_PREFIX + "eglfile_obj.gif"; 			//$NON-NLS-1$
 	
@@ -176,6 +177,7 @@ public class PluginImages {
 	
 	public static final ImageDescriptor DESC_OBJS_PACKFRAG_ROOT= createManaged(T_OBJ, IMG_OBJS_PACKFRAG_ROOT);
 	public static final ImageDescriptor DESC_OBJS_PACKFRAG_ROOT_EGLAR= createManaged(T_OBJ, IMG_OBJS_PACKFRAG_ROOT_EGLAR);
+	public static final ImageDescriptor DESC_OBJS_PACKFRAG_ROOT_EGLAR_CONTAINER= createManaged(T_OBJ, IMG_OBJS_PACKFRAG_ROOT_EGLAR_CONTAINER);
 	public static final ImageDescriptor DESC_OBJS_PACKAGE= createManaged(T_OBJ, IMG_OBJS_PACKAGE);
 	public static final ImageDescriptor DESC_OBJS_EMPTY_PACKAGE= createManaged(T_OBJ, IMG_OBJS_EMPTY_PACKAGE);		
 	
