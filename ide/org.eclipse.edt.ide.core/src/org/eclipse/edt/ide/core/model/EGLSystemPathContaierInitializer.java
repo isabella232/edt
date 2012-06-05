@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.internal.util.EglarUtil;
 import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.IIDECompiler;
+import org.eclipse.edt.ide.core.internal.model.EGLModelResources;
 import org.eclipse.edt.ide.core.utils.ProjectSettingsUtility;
 import org.osgi.framework.Bundle;
 
@@ -44,7 +45,7 @@ public class EGLSystemPathContaierInitializer extends
 			}
 			
 			IEGLPathEntry[] entries = (IEGLPathEntry[])pathEntries.toArray(new IEGLPathEntry[pathEntries.size()]);
-			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, "EGLSystemRuntimePathContainer", entries);
+			EGLSystemRuntimePathContainer container = new EGLSystemRuntimePathContainer(containerPath, entries);
 
 			EGLCore.setEGLPathContainer(containerPath, new IEGLProject[]{project}, new EGLSystemRuntimePathContainer[]{container}, new NullProgressMonitor());
 		}
@@ -79,11 +80,11 @@ public class EGLSystemPathContaierInitializer extends
 		
 		
 		
-		public EGLSystemRuntimePathContainer(IPath path, String description,
+		public EGLSystemRuntimePathContainer(IPath path, 
 				IEGLPathEntry[] entries) {
 			super();
 			this.path = path;
-			this.description = description;
+			this.description = EGLModelResources.eglarSystemLibraries;
 			this.entries = entries;
 		}
 
