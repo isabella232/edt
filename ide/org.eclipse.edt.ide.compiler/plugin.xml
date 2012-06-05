@@ -12,16 +12,6 @@
     
     <extension point="org.eclipse.edt.ide.core.generators">
 		<provider
-			id="org.eclipse.edt.ide.gen.JavaCoreGenProvider"
-			class="org.eclipse.edt.ide.compiler.gen.JavaCoreGenerator"
-			name="%JavaCoreGeneratorName"
-			compiler="org.eclipse.edt.ide.compiler.edtCompiler"
-			version="0.8.0"
-			provider="Eclipse.org"
-			description="%JavaCoreGeneratorDescription"
-			language="Java"
-		/>
-		<provider
 			id="org.eclipse.edt.ide.gen.JavaGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.JavaGenerator"
 			name="%JavaGeneratorName"
@@ -54,10 +44,6 @@
 	
 	<extension point="org.eclipse.edt.ide.ui.edtGeneratorTabs">  
 		<generatorTab 
-			generatorId="org.eclipse.edt.ide.gen.JavaCoreGenProvider"
-			class="org.eclipse.edt.ide.compiler.gen.ui.JavaCoreGeneratorTabProvider">
-		</generatorTab>
-		<generatorTab 
 			generatorId="org.eclipse.edt.ide.gen.JavaGenProvider"
 			class="org.eclipse.edt.ide.compiler.gen.ui.JavaGeneratorTabProvider">
 		</generatorTab>
@@ -71,7 +57,6 @@
          point="org.eclipse.edt.ide.core.GenerationContributors">
       <GenerationContributor
             class="org.eclipse.edt.gen.java.JavaCoreGenerationContributor"
-            provider="org.eclipse.edt.ide.gen.JavaCoreGenProvider"
             id="JavaCoreGenerationContributor">
       </GenerationContributor>
       <GenerationContributor

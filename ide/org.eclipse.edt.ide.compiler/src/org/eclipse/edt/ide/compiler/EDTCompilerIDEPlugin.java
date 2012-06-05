@@ -50,12 +50,6 @@ public class EDTCompilerIDEPlugin extends AbstractUIPlugin {
 					new EDTRuntimeContainerEntry("com.ibm.icu", "bin", null, "com.ibm.icu.source", "src", null)
 			});
 	
-	public static final EDTRuntimeContainer JAVACORE_RUNTIME_CONTAINER = new EDTRuntimeContainer("javagenCore", EDTCompilerStrings.javaRuntimeName, //$NON-NLS-1$
-		EDTCompilerStrings.javaRuntimeDescription, new EDTRuntimeContainerEntry[] {
-				new EDTRuntimeContainerEntry("org.eclipse.edt.runtime.java", "bin", null, "org.eclipse.edt.runtime.java.source", "src", null), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				new EDTRuntimeContainerEntry("com.ibm.icu", "bin", null, "com.ibm.icu.source", "src", null)
-		});
-
 	/**
 	 * The constructor
 	 */
