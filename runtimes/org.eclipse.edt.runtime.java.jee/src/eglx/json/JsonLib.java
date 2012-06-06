@@ -51,6 +51,7 @@ import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 import org.eclipse.edt.runtime.java.eglx.lang.EDictionary;
 import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
@@ -443,6 +444,7 @@ public class JsonLib {
         	for(Object node : ((ArrayNode)jsonValue).getValues()){
         		((List<Object>)retVal).add(convertJsonNode((ValueNode)node));
         	}
+        	retVal = EList.ezeBox((List<Object>)retVal, "eglx.lang.EList<eglx.lang.EAny>");
         }
     	else if(jsonValue instanceof BooleanNode){
     		retVal = convertToEgl(EBoolean.class, null, null, jsonValue);
