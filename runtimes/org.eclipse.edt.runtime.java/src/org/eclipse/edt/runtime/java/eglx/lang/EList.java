@@ -12,7 +12,11 @@
 package org.eclipse.edt.runtime.java.eglx.lang;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -20,7 +24,11 @@ import org.eclipse.edt.javart.Delegate;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.java.JavaObjectException;
-import eglx.lang.*;
+import eglx.lang.AnyException;
+import eglx.lang.InvalidArgumentException;
+import eglx.lang.InvalidIndexException;
+import eglx.lang.InvocationException;
+import eglx.lang.TypeCastException;
 
 public class EList<E> extends AnyBoxedObject<List<E>>
 {
@@ -532,6 +540,17 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 				}
 			};
 			
+	/**
+	 * A factory for making elements of date Lists.
+	 */
+	public static final ListElementFactory<Calendar> TimeFactory = 
+			new ListElementFactory<Calendar>() 
+			{
+				public Calendar newElement()
+				{
+					return ETime.defaultValue();
+				}
+			};
 	/**
 	 * A type of factory for making elements of timestamp Lists.
 	 */
