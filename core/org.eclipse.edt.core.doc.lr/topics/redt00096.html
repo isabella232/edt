@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xml:lang="en-us" lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Literals"></meta>
+<meta name="abstract" content="EGL supports the following kinds of literals: character, numeric, and list."></meta>
+<meta name="description" content="EGL supports the following kinds of literals: character, numeric, and list."></meta>
+<meta name="DC.subject" content="literals, overview"></meta>
+<meta name="keywords" content="literals, overview"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/cedt00018.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00096"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Literals</title>
+</head>
+<body id="redt00096">
+
+
+<h1 class="title topictitle1">Literals</h1>
+
+
+
+<div class="body"><p class="shortdesc">EGL supports the following kinds of literals:  character,
+numeric, and list.</p>
+
+<div class="p"><ul class="ul">
+<li class="li"><a class="xref" href="#characterliterals">Character literals</a></li>
+
+<li class="li"><a class="xref" href="#numericliterals">Numeric literals</a></li>
+
+<li class="li"><a class="xref" href="#listliterals">List literals</a></li>
+
+</ul>
+</div>
+
+</div>
+
+<div class="related-links">
+<div class="familylinks">
+</div>
+</div>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="characterliterals">
+<h2 class="title topictitle2">Character literals</h2>
+
+<div class="body">
+<div class="p">At this writing, all character literals are of type string or string(<em class="ph i">n</em>),
+as in the following examples:<ul class="ul">
+<li class="li"><pre class="pre codeblock">myString string = "EGL is said to be \"elegant\" because it is.";</pre>
+<p class="p">As
+shown, you can use an escape character to include double quotes in
+the string.</p>
+</li>
+
+<li class="li"><pre class="pre codeblock">myString string(3) = "EGL";</pre>
+</li>
+
+</ul>
+</div>
+
+
+</div>
+
+</div>
+
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="numericliterals">
+<h2 class="title topictitle2">Numeric literals</h2>
+
+<div class="body">
+<p class="p">Numeric variables consist of digits and can include a decimal point,
+a plus or minus sign, and the letter "E" or "e" for scientific notation. </p>
+
+<div class="p">Unless you specify otherwise, the following rules apply:<ul class="ul">
+<li class="li">A literal with a decimal point and without scientific notation
+is of type decimal.</li>
+
+<li class="li">A literal with scientific notation is of type float. Here is an
+example:<pre class="pre codeblock">myFloat FLOAT = 2.539e7;</pre>
+</li>
+
+<li class="li">A literal without a decimal point is of type int. </li>
+
+</ul>
+</div>
+
+<p class="p">You can specify the type of a numeric literal by adding a character,
+as shown next.</p>
+
+<div class="p">
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Numeric literals</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="15.625%" id="d44785e137">Literal type</th>
+
+<th class="entry" valign="bottom" width="19.791666666666664%" id="d44785e140">Character to append</th>
+
+<th class="entry" valign="bottom" width="64.58333333333334%" id="d44785e143">Example</th>
+
+</tr>
+
+</thead>
+
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="15.625%" headers="d44785e137 ">smallint</td>
+
+<td class="entry" valign="top" width="19.791666666666664%" headers="d44785e140 ">i</td>
+
+<td class="entry" valign="top" width="64.58333333333334%" headers="d44785e143 "><pre class="pre codeblock">mySmallInt smallInt = 123i;</pre>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="15.625%" headers="d44785e137 ">bigint</td>
+
+<td class="entry" valign="top" width="19.791666666666664%" headers="d44785e140 ">I</td>
+
+<td class="entry" valign="top" width="64.58333333333334%" headers="d44785e143 "><pre class="pre codeblock">myBigInt bigInt = 123I;</pre>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="15.625%" headers="d44785e137 ">smallfloat</td>
+
+<td class="entry" valign="top" width="19.791666666666664%" headers="d44785e140 ">f</td>
+
+<td class="entry" valign="top" width="64.58333333333334%" headers="d44785e143 "><pre class="pre codeblock">mySmallFloat smallFloat = 12.34f;</pre>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="15.625%" headers="d44785e137 ">float</td>
+
+<td class="entry" valign="top" width="19.791666666666664%" headers="d44785e140 ">F</td>
+
+<td class="entry" valign="top" width="64.58333333333334%" headers="d44785e143 "><pre class="pre codeblock">myFloat float = 12.34F;</pre>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+ </div>
+
+</div>
+
+</div>
+
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="listliterals">
+<h2 class="title topictitle2">List literals</h2>
+
+<div class="body">
+<p class="p">A list literal consists of a pair of brackets that contains a comma-separated
+list of literals (including other list literals) or expressions (including
+lists). Each list literal has a type, and can be used anywhere an
+array of the given type is allowed, for instance, as an initializer
+for an list. The next table gives examples.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 2. Array literals</span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="62.121212121212125%" id="d44785e230">Array literal</th>
+
+<th class="entry" valign="bottom" width="37.878787878787875%" id="d44785e233">Type</th>
+
+</tr>
+
+</thead>
+
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 ">[ 1i, 2i, 3i ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">smallInt[]</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 ">[ "hi", "Mom" ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">string[]</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 ">[ new myRecord, new myRecord ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">myRecord[]</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 ">[ (myPay &lt; 0), (myPay &gt; 0) ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">boolean[]</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 "> [ [ 1, 2 ], [ 3, 4 ] ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">int[][]</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="62.121212121212125%" headers="d44785e230 "> [ 3, "cow", [ 4.5, 6.7 ] ]</td>
+
+<td class="entry" valign="top" width="37.878787878787875%" headers="d44785e233 ">any[]</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+<p class="p">If the types of the elements in the list literal differ, the element
+type is ANY. The elements in the array do <em class="ph i">not</em> need to be assignment
+compatible with one another.</p>
+
+</div>
+
+</div>
+
+
+</body>
+</html>

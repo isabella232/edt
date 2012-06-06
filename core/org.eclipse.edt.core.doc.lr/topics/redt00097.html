@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xml:lang="en-us" lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="Precedence of symbols in the EGL grammar"></meta>
+<meta name="abstract" content=""></meta>
+<meta name="description" content=""></meta>
+<meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00097"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>Precedence of symbols in the EGL grammar</title>
+</head>
+<body id="redt00097">
+
+
+<h1 class="title topictitle1">Precedence of symbols in the EGL grammar</h1>
+
+
+<div class="body"><p class="shortdesc"></p>
+
+<p class="p">The next table lists symbols in the EGL grammar, in order of decreasing
+precedence.</p>
+
+<p class="p">You may override the usual precedence by using parentheses to separate
+one expression from another. Operations that have the same precedence
+in an expression are evaluated in left-to-right order.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all">
+
+<thead class="thead" align="left">
+<tr class="row">
+<th class="entry" align="center" valign="top" width="38.72549019607843%" id="d45795e36">Symbols</th>
+
+<th class="entry" align="center" valign="top" width="61.274509803921575%" id="d45795e39">Meaning</th>
+
+</tr>
+
+</thead>
+
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">{</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Curly brackets define a set-values block.<p class="p">The
+high precedence of the left curly bracket ensures that the clause <samp class="ph codeph">new
+Record {}</samp> means <samp class="ph codeph">(new Record) {}</samp> rather than <samp class="ph codeph">(new
+Record {})</samp>.</p>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">[</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Hard brackets define a list. They also separate
+an index value from a list name, or a substring value from a character
+variable name. <samp class="ph codeph">a[x]</samp> is a list subscript and <samp class="ph codeph">b[x:y]</samp> is
+a substring.<p class="p">The high precedence of the left hard bracket ensures
+that the clause <samp class="ph codeph">new Record []</samp> means <samp class="ph codeph">(new
+Record)[]</samp> rather than <samp class="ph codeph">(new Record)[]</samp></p>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">.</strong> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">The member access operator (a dot) provides
+access to members of an entity; for example, fields in records, or
+functions in libraries. Multiple levels of qualification are permitted.
+Members become more specific as you move from left to right.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Unary plus (+) or minus (-) is a sign that
+precedes an operand or parenthesized expression. These are not the
+binary plus and minus operators.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">~</samp></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">~ is the bitwise negation operator. It changes
+1s to 0s, 0s to 1s. The operator is unary; it affects a single operand,
+which might be of type smallint, int, or bigint.<div class="p">You typically assign
+the result, as in the following code: <pre class="pre codeblock">   myvar int = ~10;     // bit pattern (4 bytes)
+                        // 0000 ... 00001010 --&gt; 
+                        // 1111 ... 11110101
+   Syslib.writeStdOut(myVar);</pre>
+</div>
+<p class="p">The code displays
+the number -11.</p>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">!</samp> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">! is the <em class="ph i">not</em> operator, which EGL
+evaluates to a Boolean value (true or false) opposite to the value
+of a logical expression that immediately follows. That subsequent
+expression must be in parentheses.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">as</samp></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">The casting operator specifies a type (second
+operand) for the first operand.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">**</strong> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">** is the exponent operator, which can be
+read as "to the power of."  For example c = a**b means that c is assigned
+the value of a to the power of b. The first operand (a in the example
+above) is a FLOAT that cannot have a negative value. The second operand
+(b in the example above) is a FLOAT literal or variable, positive,
+negative or 0.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">*</strong>, <strong class="ph b">/</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">The operators for multiplication and integer
+division are of equal precedence. Division of integers can result
+in a fractional value; for example, 7/5 yields 1.4. </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">%</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">% is the remainder operator. It resolves
+to the modulus when the first of two operands or numeric expressions
+is divided by the second. For example, 7%5 yields 2.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Addition (+) and subtraction (-) are binary
+operations of equal precedence. The plus sign is used to sum numbers
+and to concatenate strings.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">::</strong>, <strong class="ph b">?:</strong> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">EGL uses two operators exclusively for concatenation
+(:: and ?:). </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">==</strong>, <strong class="ph b">!=</strong>, <strong class="ph b">&lt;</strong>,<strong class="ph b"> &gt;</strong>, <strong class="ph b">&lt;=</strong>, <strong class="ph b">&gt;=</strong>, <strong class="ph b">isa</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Logical operators for Boolean comparison
+are of equal precedence; each expression that contains one of these
+operators evaluates to either true or false.</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">&amp;</strong>, <strong class="ph b">|</strong>, <strong class="ph b">xor</strong>, <strong class="ph b">&lt;&lt;<em class="ph i">n</em></strong>, <strong class="ph b">&gt;&gt;<em class="ph i">n</em></strong>,<strong class="ph b">&gt;&gt;&gt;<em class="ph i">n</em></strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">Each of these bitwise operators reads an
+operand to its left and right and returns a value of type int. Either
+operand may be of type int or smallint. The operation begins by converting
+any smallint operand to type int.<div class="p">You typically assign the result, as
+in the following code: <pre class="pre codeblock">   myvar = 10 &lt;&lt; 2;     // bit pattern (4 bytes)
+                        // 0000 ... 00001010 --&gt; 
+                        // 0000 ... 00101000
+   Syslib.writeStdOut(myVar);</pre>
+</div>
+<p class="p">The code displays
+the number 40.</p>
+<div class="p">The meaning of these bitwise operators is as
+follows:<ul class="ul">
+<li class="li"><strong class="ph b">&amp;</strong> is an intersection operator. If the bits at a given
+position in both operands are 1, the result for that position is 1;
+otherwise, the result is 0.</li>
+
+<li class="li"><strong class="ph b">|</strong> is a union operator. If the bit at a given position in
+either operand is 1, the result for that position is 1; if the bits
+are both 0, the result is 0.</li>
+
+<li class="li"><strong class="ph b">xor</strong> is an exclusive or. If the bit at a given position
+in 1 for one operand and 0 for the other, the result for that position
+is 1; otherwise, the result is 0.</li>
+
+<li class="li"><strong class="ph b">&lt;&lt;</strong> shifts left by <em class="ph i">n</em>, which is the specified
+number of positions. The operator retains the sign bit and fills in
+the right with zeros, as shown in the previous example. </li>
+
+<li class="li"><strong class="ph b">&gt;&gt;</strong> shifts right by n. The effect in an arithmetic shift.
+The operator retains the leftmost bit and fills in the left with the
+value of that bit, for the specified number of positions. </li>
+
+<li class="li"><strong class="ph b">&gt;&gt;&gt;</strong> shifts right by <em class="ph i">n</em>.  The effect is a logical
+shift. The operator fills in the left with zeros.  <p class="p">For a positive
+number, &gt;&gt;&gt; has the same effect as &gt;&gt;. For a negative number, &gt;&gt;&gt;
+results in a positive number.</p>
+</li>
+
+</ul>
+</div>
+</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">is</samp>, <samp class="ph codeph">not</samp>, <samp class="ph codeph">in</samp></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">These logical operators used for comparison
+are of equal precedence; each expression that contains one of these
+operators is evaluated as true or false. See "in operator." </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">&amp;&amp;</samp>, <samp class="ph codeph">and</samp> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">The <strong class="ph b">&amp;&amp;</strong> or <span class="ph synph"><span class="keyword kwd">and</span></span> operator
+combines two logical expressions. The resulting expression resolves
+to true only if both of the component expressions are true; otherwise,
+the resulting expression resolves to false. </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><samp class="ph codeph">||</samp>, <samp class="ph codeph">or</samp> </td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 ">The <strong class="ph b">||</strong> or <span class="ph synph"><span class="keyword kwd">or</span></span> operator
+combines two logical expressions. The resulting expression resolves
+to true if one or both of the component expressions are true; otherwise,
+the resulting expression resolves to false. </td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45795e36 "><strong class="ph b">=</strong></td>
+
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45795e39 "><samp class="ph codeph">=</samp> is the <em class="ph i">assignment</em> operator,
+which copies a value from an expression or operand into an operand.
+For details on complex assignment operators such as +=, see "Assignment
+statement."</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+
+</body>
+</html>

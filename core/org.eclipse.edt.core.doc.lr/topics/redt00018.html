@@ -5,46 +5,51 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="ForEach statement for a relational database"></meta>
-<meta name="abstract" content="The forEach statement defines a loop that retrieves each row in an SQL result set and operates on the most recently retrieved row by running a block of embedded EGL statements. After processing all rows, the forEach statement closes the result set. If an exception occurs, the result set stays open."></meta>
-<meta name="description" content="The forEach statement defines a loop that retrieves each row in an SQL result set and operates on the most recently retrieved row by running a block of embedded EGL statements. After processing all rows, the forEach statement closes the result set. If an exception occurs, the result set stays open."></meta>
-<meta name="DC.subject" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
-<meta name="keywords" content="EGL statements, forEach, forEach EGL statement, relational database"></meta>
-<meta name="DC.Relation" scheme="URI" content="../topics/redt00044.html"></meta>
+<meta name="DC.Title" content="ForEach statement"></meta>
+<meta name="abstract" content="The forEach statement defines a loop that runs once for each element in an array or result set."></meta>
+<meta name="description" content="The forEach statement defines a loop that runs once for each element in an array or result set."></meta>
+<meta name="DC.subject" content="EGL statements, forEach, forEach EGL statement"></meta>
+<meta name="keywords" content="EGL statements, forEach, forEach EGL statement"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
 <meta name="DC.Identifier" content="redt00018"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>ForEach statement for a relational database</title>
+<title>ForEach statement</title>
 </head>
 <body id="redt00018">
 
 
-<h1 class="title topictitle1">ForEach statement for a relational database</h1>
+<h1 class="title topictitle1">ForEach statement</h1>
 
 
 
 <div class="body" id="body"><div class="abstract"><span class="shortdesc">The <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement
-defines a loop that retrieves each row in an SQL result set and operates
-on the most recently retrieved row by running a block of embedded
-EGL statements. After processing all rows, the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement
-closes the result set. If an exception occurs, the result set stays
-open.</span>
+defines a loop that runs once for each element in an array or result
+set.</span>
  </div>
+
+<p class="p">In the general use of the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement,
+a loop iteration retrieves the next element in an array and operates
+on that element.</p>
+
+<p class="p">In the usage that is specific to SQL, an iteration retrieves the
+next row in an SQL result set and operates on that row. After processing
+all rows, the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement closes the
+result set. If an exception occurs, the result set stays open.</p>
 
 <anchor id="sql_intro_more"></anchor>
 
 <div class="section" id="redt00018__sql_syntax"><h2 class="title sectiontitle">Syntax</h2><div class="fig fignone" id="redt00018__sql_syntax_figure">
 <br></br><img class="image" src="../images/redt_data_sql_for_each.gif" alt="Syntax diagram for the forEach statement with SQL"></img><br></br>
 </div>
-<p class="p"></p>
 <dl class="dl">
 <dt class="dt dlterm"><var class="keyword varname">entity</var></dt>
 
-<dd class="dd">Name of the entity, which is a variable based on an External type,
-Handler type, or Record type. </dd>
+<dd class="dd">Name of the SQL entity, which is a variable based on an External
+type, Handler type, or Record type. </dd>
 
 
 <dt class="dt dlterm"><var class="keyword varname">simpleVar</var></dt>
@@ -58,6 +63,17 @@ column in the result set.</dd>
 <dd class="dd">An SQL result set that was established by an <strong class="ph b">open</strong> statement.</dd>
 
 
+<dt class="dt dlterm"><var class="keyword varname">varDeclaration</var></dt>
+
+<dd class="dd">A variable declaration, including the name and type. The type
+must be compatible with the type of each array element.</dd>
+
+
+<dt class="dt dlterm"><var class="keyword varname">array</var></dt>
+
+<dd class="dd">An array.</dd>
+
+
 <dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
 
 <dd class="dd">An EGL statement.</dd>
@@ -65,16 +81,59 @@ column in the result set.</dd>
 </dl>
 <anchor id="sql_syntax_more"></anchor></div>
 
-<div class="example" id="redt00018__sql_example"><pre class="pre codeblock"></pre>
+<div class="example" id="redt00018__sql_example"><div class="p">Assume that the following Record type
+is available:<pre class="pre codeblock">Record myRecordType 
+  myString String;
+  myInt Int;
+end</pre>
+</div>
+<p class="p">The following code illustrates the general use
+of the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement:</p>
+<pre class="pre codeblock">myArray string[];
+myArray.appendElement("one");
+myArray.appendElement("two");
+myArray.appendElement("three");
+
+myArray02 int[];
+myArray02.appendElement(1);
+myArray02.appendElement(2);
+myArray02.appendElement(3);
+
+myArray03 MyRecordType[];
+myArray03.appendElement(new MyRecordType{myString = "01", myInt = 1});
+myArray03.appendElement(new MyRecordType{myString = "02", myInt = 2});
+myArray03.appendElement(new MyRecordType{myString = "03", myInt = 3});        
+
+forEach(myElement string from myArray)
+   SysLib.writeStdOut(myElement);
+end
+
+forEach(myElement02 int from myArray02)
+   SysLib.writeStdOut(myElement02);
+end
+        
+forEach (myElement03 MyRecordType from myArray03)
+   SysLib.writeStdOut(myElement03.myString + " " + myElement03.myInt);
+end</pre>
+<div class="p">The output is as follows:<pre class="pre codeblock">one
+two
+three
+1
+2
+3
+01 1
+02 2
+03 3</pre>
+</div>
 <anchor id="sql_example_more"></anchor></div>
 
 <div class="section" id="redt00018__compat"><h2 class="title sectiontitle">Compatibility </h2>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00018__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d13449e115">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d14483e155">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d13449e118">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d14483e158">Issue</th>
 
 </tr>
 
@@ -83,17 +142,19 @@ column in the result set.</dd>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00018__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d13449e115 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d14483e155 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d13449e118 ">No issues<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d14483e158 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00018__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d13449e115 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d14483e155 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d13449e118 ">Database access is not supported in JavaScript.<p class="p compat_javascript_more"></p>
+<td class="entry" valign="top" width="50%" headers="d14483e158 ">Database access is not supported in JavaScript.
+However, the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement is available
+for general use.<p class="p compat_javascript_more"></p>
 </td>
 
 </tr>

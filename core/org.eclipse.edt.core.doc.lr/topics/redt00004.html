@@ -26,12 +26,164 @@
 <div class="body"><p class="shortdesc">An assignment statement copies data from one memory area
 to another.</p>
 
-<p class="p"></p>
+<div class="fig fignone">
+<br></br><img class="image" src="../images/redt_core_assign.gif" alt="Syntax diagram for the assignment statement"></img><br></br>
+</div>
+
+<dl class="dl parml">
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">target</span></span> </dt>
+
+<dd class="dd pd">A variable. <p class="p">You can specify a substring on the left side of
+an assignment statement if the target substring has a fixed length.
+The substring area is padded with blanks if the source is shorter
+than the substring, and the source text is truncated if longer than
+the substring.</p>
+</dd>
+
+
+<dt class="dt pt dlterm"><span class="ph synph"><span class="ph var">source</span></span> </dt>
+
+<dd class="dd pd">Another variable, or a literal.</dd>
+
+</dl>
 
 </div>
 
 
 <anchor id="related_links"></anchor>
+<div class="topic nested1" xml:lang="en-us" lang="en-us" id="complex">
+<h2 class="title topictitle2">Complex assignment operators</h2>
+
+<div class="body">
+<div class="p">The equal sign (=) is a simple assignment operator. Complex assignment
+operators in EGL perform one operation, then assign the result of
+that operation to the target operand. For example, the expression
+"a += b" is equivalent to the following expression:<pre class="pre codeblock">a = a + b</pre>
+</div>
+
+<p class="p">The following table shows the complex assignment operators available
+in EGL.</p>
+
+
+<div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. </span></caption>
+<thead class="thead" align="left">
+<tr class="row" valign="bottom">
+<th class="entry" valign="bottom" width="27.27272727272727%" id="d9256e94">Operator</th>
+
+<th class="entry" valign="bottom" width="72.72727272727273%" id="d9256e97">Meaning</th>
+
+</tr>
+
+</thead>
+
+<tbody class="tbody">
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a += b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a + b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a –= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a – b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a *= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a * b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a /= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a / b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a **= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a ** b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a %= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a % b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a |= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a | b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a &amp;= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a &amp; b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a xor= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a xor b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a &lt;&lt;= n</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a &lt;&lt; n</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a &gt;&gt;= n</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a &gt;&gt; n</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a&gt;&gt;&gt;=n</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a &gt;&gt;&gt; n</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a ::= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a :: b</td>
+
+</tr>
+
+<tr class="row">
+<td class="entry" valign="top" width="27.27272727272727%" headers="d9256e94 ">a?:= b</td>
+
+<td class="entry" valign="top" width="72.72727272727273%" headers="d9256e97 ">a = a ?: b</td>
+
+</tr>
+
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+</div>
+
 
 </body>
 </html>

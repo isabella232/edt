@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="EGL character types"></meta>
-<meta name="abstract" content="The next table lists the simple character types. Noted here is the encoding, which is a mapping of each display character such as “A” and the related binary value such as 01000001. The code page. is a table of such encodings and is important for globalization."></meta>
-<meta name="description" content="The next table lists the simple character types. Noted here is the encoding, which is a mapping of each display character such as “A” and the related binary value such as 01000001. The code page. is a table of such encodings and is important for globalization."></meta>
+<meta name="abstract" content="The next table lists the simple character types. Noted here is the encoding, which is a mapping of each display character such as “A” and the related binary value such as 01000001. The code page is a table of such encodings and is important for globalization."></meta>
+<meta name="description" content="The next table lists the simple character types. Noted here is the encoding, which is a mapping of each display character such as “A” and the related binary value such as 01000001. The code page is a table of such encodings and is important for globalization."></meta>
 <meta name="DC.subject" content="EGL types, character, character types, EGL"></meta>
 <meta name="keywords" content="EGL types, character, character types, EGL"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt00018.html"></meta>
@@ -29,24 +29,23 @@
 <div class="body"><p class="shortdesc">The next table lists the simple character types. Noted
 here is the <dfn class="term">encoding</dfn>, which is a mapping of each display
 character such as “A” and the related binary value such as 01000001.
-The <dfn class="term">code page</dfn>. is a table of such encodings and is important
+The <dfn class="term">code page</dfn> is a table of such encodings and is important
 for globalization.</p>
-
 
 <div class="p">
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__char_table" class="table" frame="border" border="1" rules="all">
 
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="18.84057971014493%" id="d908e58">Type</th>
+<th class="entry" valign="bottom" width="18.84057971014493%" id="d925e54">Type</th>
 
-<th class="entry" valign="bottom" width="16.563146997929607%" id="d908e61">Meaning of <em class="ph i">n</em> </th>
+<th class="entry" valign="bottom" width="16.563146997929607%" id="d925e57">Meaning of <em class="ph i">n</em> </th>
 
-<th class="entry" valign="bottom" width="17.184265010351968%" id="d908e67">Limits</th>
+<th class="entry" valign="bottom" width="17.184265010351968%" id="d925e63">Limits</th>
 
-<th class="entry" valign="bottom" width="23.395445134575567%" id="d908e70">Value or reference type?</th>
+<th class="entry" valign="bottom" width="23.395445134575567%" id="d925e66">Value or reference type?</th>
 
-<th class="entry" valign="bottom" width="24.016563146997928%" id="d908e73">Comments</th>
+<th class="entry" valign="bottom" width="24.016563146997928%" id="d925e69">Comments</th>
 
 </tr>
 
@@ -54,70 +53,72 @@ for globalization.</p>
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">BYTES, BYTES(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">BYTES, BYTES(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "> </td>
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "> </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "> </td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "> </td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">BYTES is a reference type, BYTES(n) is a
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">BYTES is a reference type, BYTES(n) is a
 value type.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "> </td>
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+Developers.</strong></p>
+</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">CHAR(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">CHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of one-byte characters, with single-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of one-byte characters, with single-byte
 blanks used as padding, if necessary.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 32767.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 32767.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Value.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">DBCHAR(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">DBCHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte characters, with double-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of two-byte characters, with double-byte
 blanks used as padding, if necessary.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 16383.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Value.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">HEX(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">HEX(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of four-bit HEX digits, with binary
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of four-bit HEX digits, with binary
 zeros used as padding, if necessary.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 65534; the <em class="ph i">n</em> must
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 65534; the <em class="ph i">n</em> must
 be even.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Value.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 The only valid characters are the hexadecimal digits
 0-9, a-f, and A-F. </td>
@@ -125,54 +126,65 @@ The only valid characters are the hexadecimal digits
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">MBCHAR(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">MBCHAR(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of one-byte characters; with single-byte
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of one-byte characters; with single-byte
 characters used as padding; however, an instance typically includes
 one- and two-byte characters.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 32767.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 32767.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Value.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is by the local code page. </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 ">STRING, <p class="p">STRING(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 ">STRING, <p class="p">STRING(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte UNICODE characters.</p>
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of two-byte UNICODE characters.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383; here, <em class="ph i">n</em> represents
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 16383; here, <em class="ph i">n</em> represents
 a limit on length, making STRING(<em class="ph i">n</em>) similar to the SQL VARCHAR
 type.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Reference.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Reference.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 ">Encoding is UNICODE; specifically, UTF-16. </td>
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 ">Encoding is UNICODE; specifically, UTF-16. <div class="p">At
+this writing, the string(<em class="ph i">n</em>) type is not supported for the following
+purposes:<ul class="ul">
+<li class="li">To access a relational database.</li>
+
+<li class="li">To access a host program on IBM i.</li>
+
+<li class="li">To read or write a JSON string in code generated for Java.</li>
+
+</ul>
+</div>
+</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="18.84057971014493%" headers="d908e58 "><p class="p">UNICODE(<em class="ph i">n</em>)</p>
+<td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 "><p class="p">UNICODE(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d908e61 "><p class="p">Number of two-byte UNICODE characters, with
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of two-byte UNICODE characters, with
 UNICODE characters used as padding.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d908e67 "><em class="ph i">n</em> &lt;= 16383.</td>
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 16383.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d908e70 ">Value.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Value.</td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d908e73 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 Encoding is UNICODE; specifically, UTF-16. </td>
 
@@ -188,9 +200,9 @@ Encoding is UNICODE; specifically, UTF-16. </td>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__compat_table" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="29.145728643216078%" id="d908e291">Platform</th>
+<th class="entry" valign="bottom" width="29.145728643216078%" id="d925e307">Platform</th>
 
-<th class="entry" valign="bottom" width="70.85427135678391%" id="d908e294">Issue</th>
+<th class="entry" valign="bottom" width="70.85427135678391%" id="d925e310">Issue</th>
 
 </tr>
 
@@ -199,10 +211,10 @@ Encoding is UNICODE; specifically, UTF-16. </td>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="cedt00020__compat_javascript" class="row">
-<td class="entry" valign="top" width="29.145728643216078%" headers="d908e291 ">JavaScript generation</td>
+<td class="entry" valign="top" width="29.145728643216078%" headers="d925e307 ">JavaScript generation</td>
 
-<td class="entry" valign="top" width="70.85427135678391%" headers="d908e294 ">The reference type STRING is the only supported
-character type. </td>
+<td class="entry" valign="top" width="70.85427135678391%" headers="d925e310 ">The reference types STRING and STRING(<em class="ph i">n</em>)
+are the only supported character types. </td>
 
 </tr>
 
