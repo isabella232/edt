@@ -24,6 +24,6 @@ public class SMAPViewerFilter extends ViewerFilter
 	@Override
 	public boolean select( Viewer arg0, Object parent, Object element )
 	{
-		return !(element instanceof IFile) || !((IFile)element).getFileExtension().equals( IEGLDebugCoreConstants.SMAP_EXTENSION );
+		return !(element instanceof IFile) || !IEGLDebugCoreConstants.SMAP_EXTENSION.equals( ((IFile)element).getFileExtension() );
 	}
 }
