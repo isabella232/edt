@@ -75,7 +75,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class ProjectWizardRUILibraryPage extends ProjectWizardPage {	
 	
-	private static final String RUI_WIDGET_LIBRARY_ID = "org.eclipse.edt.rui.widgets_0.8.0";
+	private static final String RUI_WIDGET_LIBRARY_ID = "org.eclipse.edt.rui.widgets_0.8.1";
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.rui", 0, "OK", null); //$NON-NLS-1$
 	private static final String BASE_PACKAGE_HINT = "com.mycompany.myapp"; //$NON-NLS-1$
 	private Label basePackageLabel;
