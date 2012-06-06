@@ -454,7 +454,7 @@ public class JsonLib {
     		retVal = convertToEgl(EFloat.class, null, null, jsonValue);
     	}
     	else if(jsonValue instanceof IntegerNode){
-    		retVal = convertToEgl(EBigint.class, null, null, jsonValue);
+    		retVal = convertToEgl(EDecimal.class, new String[] {"32", "0"}, null, jsonValue);
     	}
     	else if(jsonValue instanceof NullNode){
         	return NullType.ezeWrap(null);
