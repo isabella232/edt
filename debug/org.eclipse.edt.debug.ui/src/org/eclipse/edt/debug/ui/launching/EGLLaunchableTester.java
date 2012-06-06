@@ -101,7 +101,7 @@ public class EGLLaunchableTester extends PropertyTester
 		else if ( element instanceof IEGLElement )
 		{
 			IResource resource = ((IEGLElement)element).getResource();
-			if ( resource.getType() == IResource.FILE )
+			if ( resource != null && resource.getType() == IResource.FILE )
 			{
 				eglFile = (IFile)resource;
 			}
