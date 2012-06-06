@@ -154,14 +154,13 @@ public class BinaryReadOnlyFile implements IFile {
 	 * demointerface.ir
 	 */
 	  public String getName() {
-//	    return getFullPath().lastSegment();
-		  String irFileName = "";
-		  int index = fileString.lastIndexOf(".");
+		  String irFileName = new Path(fileString).lastSegment();
+		  int index = irFileName.lastIndexOf(".");
 		  if(index > -1){	//has package
-			  irFileName = fileString.substring(index + 1) + IR_EXTENSION;
+			  irFileName = irFileName.substring(0,index) + IR_EXTENSION;
 		  }
 		  else{	//no package
-			  irFileName = fileString + IR_EXTENSION;
+			  irFileName = irFileName + IR_EXTENSION;
 		  }
 		  return irFileName;
 	  }
