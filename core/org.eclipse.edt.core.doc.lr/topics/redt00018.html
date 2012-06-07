@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="ForEach statement"></meta>
-<meta name="abstract" content="The forEach statement defines a loop that runs once for each element in an array or result set."></meta>
-<meta name="description" content="The forEach statement defines a loop that runs once for each element in an array or result set."></meta>
+<meta name="abstract" content="The forEach statement defines a loop that runs once for each element in a list or result set."></meta>
+<meta name="description" content="The forEach statement defines a loop that runs once for each element in a list or result set."></meta>
 <meta name="DC.subject" content="EGL statements, forEach, forEach EGL statement"></meta>
 <meta name="keywords" content="EGL statements, forEach, forEach EGL statement"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00030.html"></meta>
@@ -27,12 +27,12 @@
 
 
 <div class="body" id="body"><div class="abstract"><span class="shortdesc">The <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement
-defines a loop that runs once for each element in an array or result
+defines a loop that runs once for each element in a list or result
 set.</span>
  </div>
 
 <p class="p">In the general use of the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement,
-a loop iteration retrieves the next element in an array and operates
+a loop iteration retrieves the next element in a list and operates
 on that element.</p>
 
 <p class="p">In the usage that is specific to SQL, an iteration retrieves the
@@ -66,12 +66,12 @@ column in the result set.</dd>
 <dt class="dt dlterm"><var class="keyword varname">varDeclaration</var></dt>
 
 <dd class="dd">A variable declaration, including the name and type. The type
-must be compatible with the type of each array element.</dd>
+must be compatible with the type of each list element.</dd>
 
 
-<dt class="dt dlterm"><var class="keyword varname">array</var></dt>
+<dt class="dt dlterm"><var class="keyword varname">list</var></dt>
 
-<dd class="dd">An array.</dd>
+<dd class="dd">A list.</dd>
 
 
 <dt class="dt dlterm"><var class="keyword varname">statement</var></dt>
@@ -89,30 +89,30 @@ end</pre>
 </div>
 <p class="p">The following code illustrates the general use
 of the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement:</p>
-<pre class="pre codeblock">myArray string[];
-myArray.appendElement("one");
-myArray.appendElement("two");
-myArray.appendElement("three");
+<pre class="pre codeblock">myList string[];
+myList.appendElement("one");
+myList.appendElement("two");
+myList.appendElement("three");
 
-myArray02 int[];
-myArray02.appendElement(1);
-myArray02.appendElement(2);
-myArray02.appendElement(3);
+myList02 int[];
+myList02.appendElement(1);
+myList02.appendElement(2);
+myList02.appendElement(3);
 
-myArray03 MyRecordType[];
-myArray03.appendElement(new MyRecordType{myString = "01", myInt = 1});
-myArray03.appendElement(new MyRecordType{myString = "02", myInt = 2});
-myArray03.appendElement(new MyRecordType{myString = "03", myInt = 3});        
+myList03 MyRecordType[];
+myList03.appendElement(new MyRecordType{myString = "01", myInt = 1});
+myList03.appendElement(new MyRecordType{myString = "02", myInt = 2});
+myList03.appendElement(new MyRecordType{myString = "03", myInt = 3});        
 
-forEach(myElement string from myArray)
+forEach(myElement string from myList)
    SysLib.writeStdOut(myElement);
 end
 
-forEach(myElement02 int from myArray02)
+forEach(myElement02 int from myList02)
    SysLib.writeStdOut(myElement02);
 end
         
-forEach (myElement03 MyRecordType from myArray03)
+forEach (myElement03 MyRecordType from myList03)
    SysLib.writeStdOut(myElement03.myString + " " + myElement03.myInt);
 end</pre>
 <div class="p">The output is as follows:<pre class="pre codeblock">one
@@ -131,9 +131,9 @@ three
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="redt00018__compat_table" class="table" frame="border" border="1" rules="all"><caption><span class="tablecap">Table 1. Compatibility</span></caption>
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="50%" id="d14483e155">Target</th>
+<th class="entry" valign="bottom" width="50%" id="d14483e156">Target</th>
 
-<th class="entry" valign="bottom" width="50%" id="d14483e158">Issue</th>
+<th class="entry" valign="bottom" width="50%" id="d14483e159">Issue</th>
 
 </tr>
 
@@ -142,17 +142,17 @@ three
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="redt00018__compat_java" class="row">
-<td class="entry" valign="top" width="50%" headers="d14483e155 ">Java</td>
+<td class="entry" valign="top" width="50%" headers="d14483e156 ">Java</td>
 
-<td class="entry" valign="top" width="50%" headers="d14483e158 ">No issues.<anchor id="compat_java_more"></anchor></td>
+<td class="entry" valign="top" width="50%" headers="d14483e159 ">No issues.<anchor id="compat_java_more"></anchor></td>
 
 </tr>
 
 <anchor id="compat_rows_postjava"></anchor>
 <tr id="redt00018__compat_javascript" class="row">
-<td class="entry" valign="top" width="50%" headers="d14483e155 ">JavaScript</td>
+<td class="entry" valign="top" width="50%" headers="d14483e156 ">JavaScript</td>
 
-<td class="entry" valign="top" width="50%" headers="d14483e158 ">Database access is not supported in JavaScript.
+<td class="entry" valign="top" width="50%" headers="d14483e159 ">Database access is not supported in JavaScript.
 However, the <span class="ph synph"><span class="keyword kwd">forEach</span></span> statement is available
 for general use.<p class="p compat_javascript_more"></p>
 </td>
