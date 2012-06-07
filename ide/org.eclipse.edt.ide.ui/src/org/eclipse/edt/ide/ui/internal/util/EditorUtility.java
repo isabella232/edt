@@ -44,6 +44,7 @@ import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 import org.eclipse.jface.action.Action;
+import org.eclipse.search.ui.text.Match;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -145,6 +146,18 @@ public class EditorUtility {
 		if (node != null && (part instanceof EGLEditor || part instanceof IEvEditor)) {
 			int start = node.getOffset();
 			int length = node.getLength();
+			if(part instanceof EGLEditor){
+				((EGLEditor) part).selectAndReveal(start, length);
+			}else if(part instanceof IEvEditor){
+				((IEvEditor) part).selectAndReveal(start, length);
+			}
+		}
+	}
+	
+	public static void revealInEditor(IEditorPart part, Match match) {
+		if (match != null && (part instanceof EGLEditor || part instanceof IEvEditor)) {
+			int start = match.getOffset();
+			int length = match.getLength();
 			if(part instanceof EGLEditor){
 				((EGLEditor) part).selectAndReveal(start, length);
 			}else if(part instanceof IEvEditor){

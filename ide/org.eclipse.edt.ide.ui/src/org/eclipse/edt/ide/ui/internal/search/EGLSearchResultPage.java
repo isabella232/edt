@@ -25,6 +25,9 @@ import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IMember;
+import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.ui.internal.EGLLogger;
+import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
@@ -109,7 +112,12 @@ public class EGLSearchResultPage extends AbstractTextSearchViewPage implements I
 				IEditorPart editor = EditorUtility.openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
 			}
 			
-		}
+		} else if(matchElement instanceof IClassFile ) {
+		  IPart type = ((IClassFile) matchElement).getPart();
+		  if (type != null)
+			 openInEditor(type,match);
+		//EditorUtility.openClassFile((ClassFile)firstElement, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+	}
 	}
     
 	private void showWithMarker(IEditorPart editor, IFile file, int offset, int length) throws PartInitException {
@@ -236,22 +244,31 @@ public class EGLSearchResultPage extends AbstractTextSearchViewPage implements I
 		return null;
 	}
 	@Override
-	//TODO switch to read-only editor when it's ClassFile
 	protected void handleOpen(OpenEvent event) {
 		Object firstElement= ((IStructuredSelection)event.getSelection()).getFirstElement();
 		if (firstElement instanceof IEGLFile ||
-				firstElement instanceof IClassFile ||
 				firstElement instanceof IMember) {
 			if (getDisplayedMatchCount(firstElement) == 0) {
 				try {
 					fEditorOpener.open((Match) firstElement);
 				} catch (CoreException e) {
 					e.printStackTrace();
-//					ExceptionHandler.handle(e, getSite().getShell(), SearchMessages.JavaSearchResultPage_open_editor_error_title, SearchMessages.JavaSearchResultPage_open_editor_error_message);
 				}
 				return;
 			}
-		}
+		} 
 		super.handleOpen(event);
+	}
+	
+	private boolean openInEditor(IPart type,Match match) {
+		boolean beep = false;
+		try {
+			IEditorPart part= EditorUtility.openInEditor(type, true);
+			EditorUtility.revealInEditor(part, match);
+		} catch (CoreException x) {
+			beep = true;
+			EGLLogger.log(this, UINlsStrings.OpenPartErrorMessage);
+		}
+		return beep;
 	}
 }
