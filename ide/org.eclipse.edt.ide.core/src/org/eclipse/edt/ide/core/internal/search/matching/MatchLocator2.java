@@ -64,7 +64,6 @@ import org.eclipse.edt.ide.core.model.IMember;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
-import org.eclipse.edt.ide.core.model.ISourceRange;
 import org.eclipse.edt.ide.core.model.IUseDeclaration;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
 import org.eclipse.edt.ide.core.model.Signature;
@@ -1329,16 +1328,10 @@ public class MatchLocator2 {//extends MatchLocator {
 	
 	public void reportFunctionDeclaration(IFunction functionDeclaration, IEGLElement parent,
 			int accuracy) throws CoreException {
-		int elementStart = 0;
-		int elementEnd = 0;
-		ISourceRange sourceRange = functionDeclaration.getNameRange();
-		if(sourceRange != null) {
-			elementStart = sourceRange.getOffset();
-			elementEnd = elementStart+ sourceRange.getLength();
-		}
+		//TODO Name name = partDeclaration.getName();
 		this.collector.accept(
-				(parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), elementStart,
-				elementEnd,
+				(parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), 0,
+				0,
 				this.getCurrentResource(),
 				accuracy);
 	}

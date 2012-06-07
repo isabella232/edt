@@ -120,7 +120,7 @@ public class BinaryElementParser {
 		
 		ElementLocation location = getElementLocation(partElement);
 		partInfo.nameStart = location.elementOffSet;
-		partInfo.nameEnd = location.elementOffSet + location.elementLen;
+		partInfo.nameEnd = location.elementLen;
 		
 		partInfo.name = partElement.getName().toCharArray();
 		partInfo.modifier = (partElement.getAccessKind() == AccessKind.ACC_PRIVATE) ? Flags.AccPrivate : Flags.AccPublic;
@@ -154,7 +154,7 @@ public class BinaryElementParser {
 			if (annotation.getValue(IEGLConstants.EGL_PARTLENGTH) != null)
 				length = ((Integer) annotation.getValue(IEGLConstants.EGL_PARTLENGTH)).intValue();
 			
-			location = new ElementLocation(startOffset,length);
+			location = new ElementLocation(startOffset,startOffset + length);
 		} else {
 			location = new ElementLocation(0,0);
 		}
@@ -218,7 +218,7 @@ public class BinaryElementParser {
 			int modifier = isPublic ? Flags.AccPublic : Flags.AccPrivate;
 			ElementLocation location = getElementLocation(delegate);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+			int declEnd = location.elementLen; 
 			int nameStart = 0;
 			int nameEnd = nameStart;
 			
@@ -310,7 +310,7 @@ public class BinaryElementParser {
 			
 			ElementLocation location = getElementLocation(function);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+			int declEnd = location.elementLen; 
 			
 			AccessKind accessKind = function.getAccessKind();
 			boolean isPublic = true;
@@ -318,8 +318,8 @@ public class BinaryElementParser {
 				isPublic = false;
 			}
 			int modifier = isPublic ? Flags.AccPublic : Flags.AccPrivate;
-			int nameStart = declStart;
-			int nameEnd = declStart + functionName.length() - 1;
+			int nameStart = 0;
+			int nameEnd = nameStart;
 			
 			List<FunctionParameter> funPara = function.getParameters();
 			int funcParaLen = funPara.size();
@@ -398,7 +398,7 @@ public class BinaryElementParser {
 		public boolean visit(FunctionParameter parameter) {
 			ElementLocation location = getElementLocation(parameter);
 			int declStart = location.elementOffSet;
-			int declEnd = location.elementOffSet + location.elementLen; 
+			int declEnd = location.elementLen; 
 			
 			if(parameter.getType().getClassifier() != null) {
 				String fullyQualifiedName = parameter.getName() + " " + parameter.getType().getClassifier().getId();
