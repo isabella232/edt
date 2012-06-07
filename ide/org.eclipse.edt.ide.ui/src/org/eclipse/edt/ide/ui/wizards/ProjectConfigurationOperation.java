@@ -180,10 +180,13 @@ public class ProjectConfigurationOperation extends WorkspaceModifyOperation {
 				for (IEGLPathEntry iEGLpathEntry : selectedEntries) {
 					if (iEGLpathEntry.getEntryKind() == IEGLPathEntry.CPE_PROJECT) {
 						IPath eglProjectPath = iEGLpathEntry.getPath();
-						if (ResourcesPlugin.getWorkspace().getRoot().findMember(eglProjectPath).getProject().hasNature(JavaCore.NATURE_ID)
+						IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(eglProjectPath);
+						if(resource != null && resource.exists()){
+							if (resource.getProject().hasNature(JavaCore.NATURE_ID)
 								&& !ipathSet.contains(eglProjectPath)) {
-							ipathSet.add(eglProjectPath);
-							afterChangeEntries.add(JavaCore.newProjectEntry(eglProjectPath));
+								ipathSet.add(eglProjectPath);
+								afterChangeEntries.add(JavaCore.newProjectEntry(eglProjectPath));
+							}
 						}
 					}
 				}
