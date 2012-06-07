@@ -249,7 +249,7 @@ public class Utils
 		return buf.toString();
 	}
 	
-	public static InputStream shrinkJavascript( InputStream in, String fileName ) {
+	public static InputStream shrinkJavascript( InputStream in, String fileName, String encoding ) {
 		if ( !useCompression || isExcludedCompression( fileName ) ) {
 			return in;
 		}
@@ -261,8 +261,8 @@ public class Utils
 			while( (len = in.read(b))!=-1){
 			    bao.write(b, 0, len);
 			}  
-			String js = shrinkJavascript( bao.toString(), fileName );
-			ByteArrayInputStream bio = new ByteArrayInputStream( js.getBytes() );
+			String js = shrinkJavascript( bao.toString(encoding), fileName );
+			ByteArrayInputStream bio = new ByteArrayInputStream( js.getBytes("UTF-8") );
 
 			return bio;
 		} catch (Exception e) {

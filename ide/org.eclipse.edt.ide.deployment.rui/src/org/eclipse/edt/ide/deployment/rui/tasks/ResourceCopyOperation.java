@@ -134,7 +134,7 @@ public class ResourceCopyOperation {
 						if( targetFile.exists() ) {
 							if( file.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
 								if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
-									is = Utils.shrinkJavascript( file.getContents(), file.getName() );
+									is = Utils.shrinkJavascript( file.getContents(), file.getName(), file.getCharset() );
 								} else {
 									is = file.getContents();
 								}
@@ -144,7 +144,7 @@ public class ResourceCopyOperation {
 						}
 						else {
 							if ( "js".equalsIgnoreCase( file.getFileExtension() ) ) {
-								is = Utils.shrinkJavascript( file.getContents(), file.getName() );
+								is = Utils.shrinkJavascript( file.getContents(), file.getName(), file.getCharset() );
 							} else {
 								is = file.getContents();
 							}

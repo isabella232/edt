@@ -82,13 +82,13 @@ public class CopyJSRuntimeResourcesOperation extends AbstractDeploymentOperation
 				if( targetFile.exists() ) {
 					if( resource.getLocalTimeStamp() != targetFile.getLocalTimeStamp() ){
 						if ( isJS ) {
-							is = Utils.shrinkJavascript( is,  resource.getFullName() );
+							is = Utils.shrinkJavascript( is,  resource.getFullName(), "UTF-8" );
 						}
 						targetFile.setContents(is, true, false, monitor);
 					}
 				} else {
 					if ( isJS ) {
-						is = Utils.shrinkJavascript( is,  resource.getFullName() );
+						is = Utils.shrinkJavascript( is,  resource.getFullName(), "UTF-8" );
 					}
 					targetFile.create(is, true, monitor);
 				}
