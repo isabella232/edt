@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright ï¿½ 2011 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -78,7 +78,7 @@ ExternalType DojoCurrencyTextBox Extends DojoValidationBase type JavaScriptObjec
 	 * The 3-letter currency code for the currency sign to be used, see http://en.wikipedia.org/wiki/ISO_4217
 	 * Note that not all country codes are supported by this Dojo widget.
 	 */
-	currency String {@VEProperty};	
+	currency String {@Property{ setMethod = "setCurrency" , getMethod = "getCurrency" },@VEProperty};	
 	errorMessage string { @Property, @VEProperty };
 	
 	function getValidState() returns (string?);

@@ -15,7 +15,7 @@ egl.defineWidget(
 	'div',									
 {
 	"constructor" : function() {
-		this.renderWhenDojoIsDoneLoading(["dojo/date/locale", "dijit/form/CurrencyTextBox"]);
+		this.renderWhenDojoIsDoneLoading(["dojo/date/locale", "dijit/form/CurrencyTextBox", "dojo/_base/kernel"]);
 	},
 	"createDojoWidget" : function(parent){
 		var eglWidget = this;
@@ -46,5 +46,27 @@ egl.defineWidget(
 	},
 	"getValue" : function() {
 		return(this.getText());
+	},
+	
+	"setCurrency" : function(currency){
+		this.currency = currency;
+		if(this.dojoWidget){
+			this.dojoWidget.set("currency", currency);
+			var constraints = {
+				currency: currency,
+				exponent: false,
+				type: "currency"	
+			};
+			this.dojoWidget._setConstraintsAttr(constraints);
+			this.dojoWidget.parse(this.value, constraints);
+		}
+	},
+	
+	"getCurrency" : function(){
+		if(this.dojoWidget){
+			return this.dojoWidget.currency;
+		}else{
+			return this.currency;
+		}
 	}
 });
