@@ -111,6 +111,10 @@ public class EvServer implements IClientProxy {
 	private static int portNumber = START_PORT_NUMBER;
 	private int contextKeyInc = 1;
 	
+	private static List<String> keys2Remove = new ArrayList<String>();
+	static {
+		keys2Remove.add("transfer-encoding");
+	}
 	public static class Event {
 		public PrintStream ps = null;
 		public Socket socket = null;
@@ -379,13 +383,15 @@ public class EvServer implements IClientProxy {
 				super.setBody(outerResponse, innerResponse);
 			}
 		}
-	
 		private void updateHeaders(Response response){
 			Pattern p = Pattern.compile("(?i)http/[0-9].[0-9]");
+			List<Object> keys = new ArrayList<Object>();
 	    	if(response.getHeaders() != null){
+				boolean fixedStatus = false;
 		    	for( Map.Entry<?, ?> entry : response.getHeaders().entrySet())
 		    	{
-		    		if(entry.getKey() == null || entry.getKey().toString() == null)
+		    		if(!fixedStatus &&
+		    				entry.getKey() == null || entry.getKey().toString() == null)
 		    		{
 		    			if(entry.getValue() instanceof List<?>){
 			    			for(int idx = 0; idx < ((List<?>)entry.getValue()).size(); idx++){
@@ -394,11 +400,19 @@ public class EvServer implements IClientProxy {
 			    				if(m.find()){
 			    					//we support HTTP/1.0
 			    					 ((List<String>)entry.getValue()).set(idx, m.replaceFirst(ProxyUtilities.HTTP10STATUS));
-			    					return;
+			    					 fixedStatus = true;
 			    				}
 			    			}
 			    		}
 		    		}
+		    		else if(isDedicated && 
+		    				entry.getKey() != null && 
+		    				keys2Remove.contains(entry.getKey().toString().toLowerCase())){
+		    			keys.add(entry.getKey());
+		    		}
+		    	}
+		    	for(Object key : keys){
+		    		response.getHeaders().remove(key);
 		    	}
 	    	}
 		}
