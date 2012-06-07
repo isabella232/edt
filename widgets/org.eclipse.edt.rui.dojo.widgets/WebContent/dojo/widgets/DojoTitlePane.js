@@ -15,7 +15,6 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		this.renderWhenDojoIsDoneLoading(["dijit/TitlePane"]);
 		this.setRequireWidgetList(["dijit/TitlePane"]);
 		this.open = true;
 	},
