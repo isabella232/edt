@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.edt.ide.core.internal.model.ClassFile;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
+import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRootContainer;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
@@ -145,6 +149,19 @@ public class EditActionGroup extends CommonActionProvider
 	public void fillActionBars(IActionBars actionBars) {
 		super.fillActionBars(actionBars);
 		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+
+		for (Iterator iter= selection.toList().iterator(); iter.hasNext();) {
+			Object element= iter.next();
+			if (element instanceof IEGLElement)
+			{				
+				if(isEGLARPackage((IEGLElement)element)){						
+					return;
+				}else if(element instanceof ClassFile && isEGLARPackage(((ClassFile)element).getParent()) ){
+					return;
+				}
+			}
+		}		
+		
 		if(selectionChangedToEGL(selection, fDeleteAction))
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), fDeleteAction);
 		if(selectionChangedToEGL(selection, fCopyAction))
@@ -161,6 +178,18 @@ public class EditActionGroup extends CommonActionProvider
 	public void fillContextMenu(IMenuManager menu) {
 		super.fillContextMenu(menu);
 		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
+		
+		for (Iterator iter= selection.toList().iterator(); iter.hasNext();) {
+			Object element= iter.next();
+			if (element instanceof IEGLElement)
+			{				
+				if(isEGLARPackage((IEGLElement)element)){						
+					return;
+				}else if(element instanceof ClassFile && isEGLARPackage(((ClassFile)element).getParent()) ){
+					return;
+				}
+			}
+		}		
 		selectionChangedToEGL(selection, fDeleteAction);
 		//fDeleteAction.selectionChanged(selection);
 		
@@ -191,6 +220,18 @@ public class EditActionGroup extends CommonActionProvider
 		}
 	}		
 	
+	private static boolean isEGLARPackage(IEGLElement element ){
+		if(element !=null && 
+			(element instanceof EglarPackageFragmentRoot
+				|| element instanceof EglarPackageFragmentRootContainer
+				|| element instanceof EglarPackageFragment)){
+			
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
 	private boolean selectionChangedToEGL(IStructuredSelection selection, SelectionListenerAction action) {
 		if (selection.size() >= 1){
 			for(Iterator it = selection.iterator(); it.hasNext();){

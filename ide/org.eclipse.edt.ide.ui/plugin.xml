@@ -748,7 +748,7 @@ Templates
     		        overrides="org.eclipse.ui.navigator.resources.OpenActions">
 					<enablement>
 						<or>
-							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" /> 	
+							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" />	
 						</or>
 					</enablement>					
 			</actionProvider> 	
@@ -756,7 +756,7 @@ Templates
 		            class="org.eclipse.edt.ide.ui.internal.packageexplorer.EditActionGroup"
 		            overrides="org.eclipse.jdt.internal.ui.navigator.PackageExplorerActionProvider">
 		<!--        overrides="org.eclipse.ui.navigator.resources.actions.RefactorActions"> -->
-		         	<enablement>
+					<enablement>
 		         		<or>
 							<instanceof value="org.eclipse.edt.ide.core.model.IEGLElement" />	         	
 						</or>
@@ -1375,22 +1375,36 @@ Templates
         		name="projectNature"
         		value="org.eclipse.edt.ide.core.eglnature">
       		</filter>
-   <enabledWhen>
-      <or>
-         <adapt
-               type="org.eclipse.edt.ide.core.model.IEGLFile">
-         </adapt>
-         <adapt
-               type="org.eclipse.core.resources.IProject">
-         </adapt>
-         <adapt
-               type="org.eclipse.edt.ide.core.model.IPackageFragment">
-         </adapt>
-         <adapt
-               type="org.eclipse.edt.ide.core.model.IPackageFragmentRoot">
-         </adapt>
-      </or>
-   </enabledWhen>
+		   <enabledWhen>
+		      <or>
+		         <adapt
+		               type="org.eclipse.edt.ide.core.model.IEGLFile">
+		         </adapt>
+		         <adapt
+		               type="org.eclipse.core.resources.IProject">
+		         </adapt>
+           		<and>
+              		<not>
+              			<adapt
+			               type="org.eclipse.edt.ide.core.internal.model.EglarPackageFragment">
+			        	 </adapt>
+			         </not>
+			         <adapt
+			               type="org.eclipse.edt.ide.core.model.IPackageFragment">
+			         </adapt>
+              	</and>
+              	<and>
+              		<not>
+              			<adapt
+			               type="org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot">
+			        	 </adapt>
+			         </not>
+			         <adapt
+			               type="org.eclipse.edt.ide.core.model.IPackageFragmentRoot">
+			         </adapt>
+              	</and>
+		      </or>
+		   </enabledWhen>
    		</page>
    		<page
             name="%eglDevelopmentDeploymentDescriptorPropertyPage"

@@ -58,9 +58,17 @@ public class OpenActionProvider extends CommonActionProvider {
 		}
 		IStructuredSelection selection = (IStructuredSelection) getContext().getSelection();
 
-		openFileAction.selectionChanged(selection);
-		if(openFileAction.isEnabled())
-			menu.insertAfter(ICommonMenuConstants.GROUP_OPEN, openFileAction);
+		if (selection.size() == 1){
+			Object selObj = selection.getFirstElement();
+			if( selObj instanceof IClassFile){
+				openIRFileAction.setClassFile((IClassFile)selObj);
+				menu.insertAfter(ICommonMenuConstants.GROUP_OPEN, openIRFileAction);
+			}
+		}else{
+			openFileAction.selectionChanged(selection);
+			if(openFileAction.isEnabled())
+				menu.insertAfter(ICommonMenuConstants.GROUP_OPEN, openFileAction);
+		}
 		addOpenWithMenu(selection, menu);
 	}
 	
