@@ -45,6 +45,7 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
+import org.eclipse.edt.mof.egl.UnaryExpression;
 
 public class CommonUtilities {
 
@@ -174,6 +175,22 @@ public class CommonUtilities {
 		}
 
 		return false;
+	}
+
+	@SuppressWarnings("static-access")
+	public static String getNativeRuntimeOperationName(UnaryExpression expr) throws GenerationException {
+		// safety check to make sure the operation has been defined properly
+		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+			throw new GenerationException();
+		// process the operator
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_BITWISENOT))
+			return "bitwiseNot";
+		if (op.equals(expr.Op_NEGATE))
+			return "negate";
+		if (op.equals(expr.Op_NOT))
+			return "not";
+		return "UnknownOp";
 	}
 
 	@SuppressWarnings("static-access")
