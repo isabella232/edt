@@ -395,7 +395,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		if (CommonUtilities.hasSideEffects(object.getCondition(), ctx)) {
 			// create a unary condition
 			UnaryExpression unaryExpression = factory.createUnaryExpression();
-			unaryExpression.setOperator("!");
+			unaryExpression.setOperator(unaryExpression.Op_NOT);
 			unaryExpression.setExpression(object.getCondition());
 			// we need to create an if statement
 			IfStatement ifStatement = factory.createIfStatement();
