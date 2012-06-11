@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,6 +22,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.PartEnvironment;
 import org.eclipse.edt.mof.egl.utils.LoadPartException;
+import org.eclipse.edt.mof.impl.Bootstrap;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.FileSystemObjectStore;
@@ -72,6 +73,7 @@ public class IRLoader {
 		try {
 			Environment env = new Environment();
 			Environment.pushEnv(env);
+			Bootstrap.initialize(env);
 			
 			PartEnvironment partEnv = new PartEnvironment(env);
 			PartEnvironment.pushEnv(partEnv);

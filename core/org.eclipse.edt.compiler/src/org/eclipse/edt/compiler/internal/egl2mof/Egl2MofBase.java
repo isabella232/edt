@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -64,6 +64,7 @@ import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.internal.core.builder.CircularBuildRequestException;
+import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.sdk.compile.ASTManager;
@@ -548,8 +549,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	}
 	
 	private ICompilerOptions getCompilerOptions() {
-		ICompilerOptions compilerOptions = new ICompilerOptions() {
-		};
+		ICompilerOptions compilerOptions = DefaultCompilerOptions.getInstance();
 		return compilerOptions;
 	}
 
@@ -906,7 +906,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 	
 	
 	protected EObject mofTypeFor(ITypeBinding type) {
-		if (type == null) return null;
+		if (!Binding.isValidBinding(type)) return null;
 		EObject eType;
 		switch (type.getKind()) {
 		case ITypeBinding.MULTIPLY_OCCURING_ITEM:
@@ -969,6 +969,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 					PrimitiveTypeBinding prim = ((PrimitiveTypeBinding)type);
 					eType = createPrimitiveType(key, prim);
 					switch (prim.getPrimitive().getType()) {
+						case Primitive.BYTES_PRIMITIVE:
 						case Primitive.CHAR_PRIMITIVE:
 						case Primitive.MBCHAR_PRIMITIVE:
 						case Primitive.DBCHAR_PRIMITIVE:
@@ -1129,6 +1130,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			case Primitive.BIGINT_PRIMITIVE: typeSignature = Type_EGLBigint;break; 
 			case Primitive.BIN_PRIMITIVE: typeSignature = Type_EGLBin;break; 
 			case Primitive.BLOB_PRIMITIVE: typeSignature = Type_EGLBlob;break; 
+			case Primitive.BYTES_PRIMITIVE: typeSignature = Type_EGLBytes;break;
 			case Primitive.CHAR_PRIMITIVE: typeSignature = inMofContext ? Type_EString : Type_EGLChar;break; 
 			case Primitive.CLOB_PRIMITIVE: typeSignature = Type_EGLClob;break; 
 			case Primitive.DATE_PRIMITIVE: typeSignature = Type_EGLDate;break; 
@@ -1162,6 +1164,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (inMofContext) return typeSignature;
 		
 		switch (type.getPrimitive().getType()) {
+		case Primitive.BYTES_PRIMITIVE:
 		case Primitive.CHAR_PRIMITIVE:
 		case Primitive.MBCHAR_PRIMITIVE:
 		case Primitive.DBCHAR_PRIMITIVE:
@@ -1204,6 +1207,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 		if (inMofContext) return typeSignature;
 		
 		switch (type.getPrimitive().getType()) {
+			case Primitive.BYTES_PRIMITIVE:
 			case Primitive.CHAR_PRIMITIVE:
 			case Primitive.MBCHAR_PRIMITIVE:
 			case Primitive.DBCHAR_PRIMITIVE:
@@ -1244,6 +1248,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 				is = type.getPattern() != null;
 				break;
 			}
+			case Primitive.BYTES_PRIMITIVE:
 			case Primitive.CHAR_PRIMITIVE:
 			case Primitive.MBCHAR_PRIMITIVE:
 			case Primitive.DBCHAR_PRIMITIVE:

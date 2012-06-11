@@ -1,6 +1,0 @@
-package egl.lang.reflect;
-
-Record Dynamic type annotation {
-	targets = [ElementKind.ExternalTypePart]
-}
-end

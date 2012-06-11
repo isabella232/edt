@@ -61,6 +61,10 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(BytesLiteral bytesLiteral) {
+		return false;
+	}
+	
 	public boolean visit(CallStatement callStatement) {
 		return false;
 	}
@@ -473,6 +477,14 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 		return false;
 	}
 	
+	public boolean visit(SuperExpression superExpression) {
+		return false;
+	}
+	
+	public boolean visit(TernaryExpression ternaryExpression) {
+		return false;
+	}
+	
 	public boolean visit(ThisExpression thisExpression) {
 		return false;
 	}
@@ -572,6 +584,8 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(BinaryExpression binaryExpression) {}
 	
 	public void endVisit(BooleanLiteral booleanLiteral) {}
+	
+	public void endVisit(BytesLiteral bytesLiteral) {}
 	
 	public void endVisit(CallStatement callStatement) {}
 	
@@ -778,6 +792,10 @@ public abstract class DefaultASTVisitor implements IASTVisitor {
 	public void endVisit(SQLLiteral sQLLiteral) {}
 	
 	public void endVisit(SubstringAccess substringAccess) {}
+	
+	public void endVisit(SuperExpression superExpression) {}
+	
+	public void endVisit(TernaryExpression ternaryExpression) {}
 	
 	public void endVisit(ThisExpression thisExpression) {}
 	

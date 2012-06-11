@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,6 +22,9 @@ import org.eclipse.edt.compiler.core.ast.File;
 import org.eclipse.edt.compiler.core.ast.ImportDeclaration;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -46,7 +49,7 @@ public class FileASTScope extends FileScope {
 		}
     }
 
-    public ITypeBinding findType(String simpleName) {
+    public List<Type> findType(String simpleName) {
         IPartBinding result = null;
          
         // First check the single part imports from the AST
@@ -63,7 +66,9 @@ public class FileASTScope extends FileScope {
 		            
 	            	if(temp != null){
 	    	            if((fileBinding.getDeclaringPackage() != null && NameUtile.equals(fileBinding.getDeclaringPackage().getPackageName(), temp.getPackageName())) || !((IPartBinding)temp).isPrivate()){
-	    	            	return temp;
+	    	            	List<Type> list = new ArrayList<Type>();
+	    	            	list.add(BindingUtil.getPart(temp));
+	    	            	return list;
 	    	            }else{
 	    	                // error - unreachable import
 	    	            }
@@ -73,9 +78,13 @@ public class FileASTScope extends FileScope {
         }
         
         // Then check the declaring package
-        result = findTypeInDeclaringPackage(simpleName);
-        if(result != null){ return result; };
-        
+        Part part = findTypeInDeclaringPackage(simpleName);
+        if(part != null){
+        	List<Type> list = new ArrayList<Type>();
+        	list.add(part);
+        	return list;
+        };
+
         // Then check the on demand imports
         return findTypeInOnDemandImports(simpleName);
     }

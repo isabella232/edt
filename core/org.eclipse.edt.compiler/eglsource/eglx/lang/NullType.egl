@@ -12,16 +12,10 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.mof.Operation;
 
 /**
  * This is the type for the null literal.
  */
 externalType NullType extends EAny type ClassType
-
-	static function $EQ(lvalue EAny in, rvalue NullType in) returns(EBoolean) {@Operation{"=="}};
-	static function $EQ(lvalue NullType in, rvalue EAny in) returns(EBoolean) {@Operation{"=="}};
-	static function $NEQ(lvalue EAny in, rvalue NullType in) returns(EBoolean) {@Operation{"!="}};
-	static function $NEQ(lvalue NullType in, rvalue EAny in) returns(EBoolean) {@Operation{"!="}};
 
 end

@@ -61,6 +61,12 @@ public class AbstractSqlStatementValidator {
 			return true;
 		}
 		
+		for (ITypeBinding parent : (List<ITypeBinding>)((ExternalTypeBinding)type).getExtendedTypes()) {
+			if (isDataSource(parent)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 

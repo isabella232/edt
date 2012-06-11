@@ -15,6 +15,6 @@ import egl.lang.reflect.ClassType;
 import egl.lang.reflect.mof.Operation;
 
 externalType AnyDelegate extends EAny type ClassType
-	static function $EQ(lvalue AnyDelegate in, rvalue AnyDelegate in) returns(EBoolean) {@Operation{"=="}};
-	static function $NEQ(lvalue AnyDelegate in, rvalue AnyDelegate in) returns(EBoolean) {@Operation{"!="}};
+	static function $EQ(lvalue AnyDelegate? in, rvalue AnyDelegate? in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue AnyDelegate? in, rvalue AnyDelegate? in) returns(EBoolean) {@Operation{"!="}};
 end

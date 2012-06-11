@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,8 +19,9 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 public abstract class Type extends Node {
     
     public static final int NAMETYPE = 0;
-    public static final int ARRAYTYPE = 1;
-    public static final int NULLABLETYPE = 2;
+    public static final int PRIMITIVETYPE = 1;
+    public static final int ARRAYTYPE = 2;
+    public static final int NULLABLETYPE = 3;
     
     public Type(int startOffset, int endOffset) {
         super(startOffset, endOffset);

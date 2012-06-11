@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -43,6 +43,9 @@ public static class Operator {
 		public static final Operator XOR = new Operator("xor=");//$NON-NLS-1$
 		public static final Operator CONCAT = new Operator("::=");//$NON-NLS-1$
 		public static final Operator NULLCONCAT = new Operator("?:=");//$NON-NLS-1$
+		public static final Operator LEFT_SHIFT = new Operator("<<=");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_ARITHMETIC = new Operator(">>=");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_LOGICAL = new Operator(">>>=");//$NON-NLS-1$
 		
 		private static final Map CODES;
 		static {
@@ -59,7 +62,10 @@ public static class Operator {
 					AND,
 					XOR,
 					CONCAT,
-					NULLCONCAT
+					NULLCONCAT,
+					LEFT_SHIFT,
+					RIGHT_SHIFT_ARITHMETIC,
+					RIGHT_SHIFT_LOGICAL
 				};
 			for (int i = 0; i < ops.length; i++) {
 				CODES.put(ops[i].toString(), ops[i]);

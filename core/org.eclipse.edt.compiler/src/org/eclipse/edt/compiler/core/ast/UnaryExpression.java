@@ -31,6 +31,7 @@ public class UnaryExpression extends Expression {
 		public static final Operator PLUS = new Operator("+");//$NON-NLS-1$
 		public static final Operator MINUS = new Operator("-");//$NON-NLS-1$
 		public static final Operator BANG = new Operator("!");//$NON-NLS-1$
+		public static final Operator NEGATE = new Operator("~");//$NON-NLS-1$
 		
 		private static final Map CODES;
 		static {
@@ -38,7 +39,8 @@ public class UnaryExpression extends Expression {
 			Operator[] ops = {
 					PLUS,
 					MINUS,
-					BANG
+					BANG,
+					NEGATE
 				};
 			for (int i = 0; i < ops.length; i++) {
 				CODES.put(ops[i].toString(), ops[i]);

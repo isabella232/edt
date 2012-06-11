@@ -629,8 +629,8 @@ ExternalType Widget type JavaScriptObject {
 	function getNumericSwap() returns (string);
 	function setNumericSwap(value string in);
 
-	static function $EQ(lvalue Widget in, rvalue Widget in) returns(EBoolean) {@Operation{"=="}};
-	static function $NEQ(lvalue Widget in, rvalue Widget in) returns(EBoolean) {@Operation{"!="}};
+	static function $EQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"!="}};
 
 	static function asWidget(value Widget in) returns(Widget) {@Operation{"widen"}};
 	
@@ -644,8 +644,8 @@ ExternalType View type JavaScriptObject { relativePath = "eglx/ui/rui"	}
 	private document Document;
 	private initialUI Widget[];
 	
-	static function $EQ(lvalue View in, rvalue View in) returns(EBoolean) {@Operation{"=="}};
-	static function $NEQ(lvalue View in, rvalue View in) returns(EBoolean) {@Operation{"!="}};
+	static function $EQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"=="}};
+	static function $NEQ(lvalue View? in, rvalue View? in) returns(EBoolean) {@Operation{"!="}};
 	
 	static function asView(value View in) returns(View) {@Operation{"widen"}};
 end

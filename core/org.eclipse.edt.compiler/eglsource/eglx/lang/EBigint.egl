@@ -81,12 +81,12 @@ externalType EBigint extends ENumber type ClassType
 	/**
 	 * {@Operation ==} Compares two numbers.
 	 */
-	static function $EQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EBigint? in, rvalue EBigint? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two numbers.
 	 */
-	static function $NEQ(lvalue EBigint in, rvalue EBigint in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EBigint? in, rvalue EBigint? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a bigint.  The string is parsed

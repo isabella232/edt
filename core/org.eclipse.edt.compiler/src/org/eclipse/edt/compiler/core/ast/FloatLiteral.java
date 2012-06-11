@@ -19,16 +19,18 @@ package org.eclipse.edt.compiler.core.ast;
  */
 public class FloatLiteral extends LiteralExpression {
 
-	private String FLOATLIT;
+	private final int type;
+	private final String value;
 
-	public FloatLiteral(String FLOATLIT, int startOffset, int endOffset) {
+	public FloatLiteral(int type, String value, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.FLOATLIT = FLOATLIT;
+		this.type = type;
+		this.value = value;
 	}
 	
 	public String getValue() {
-		return FLOATLIT;
+		return value;
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -37,14 +39,14 @@ public class FloatLiteral extends LiteralExpression {
 	}
 	
 	public int getLiteralKind() {
-		return FLOAT_LITERAL;
+		return type;
 	}
 	
 	public String getCanonicalString() {
-		return FLOATLIT;
+		return value + (type == SMALLFLOAT_LITERAL ? "f" : "F");
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new FloatLiteral(new String(FLOATLIT), getOffset(), getOffset() + getLength());
+		return new FloatLiteral(type, new String(value), getOffset(), getOffset() + getLength());
 	}
 }

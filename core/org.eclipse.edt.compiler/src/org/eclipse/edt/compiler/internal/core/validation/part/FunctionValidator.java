@@ -72,6 +72,7 @@ import org.eclipse.edt.compiler.core.ast.SetStatement;
 import org.eclipse.edt.compiler.core.ast.SetValuesStatement;
 import org.eclipse.edt.compiler.core.ast.ShowStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThrowStatement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.TransferStatement;
@@ -183,7 +184,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation functionInvocation) {
 				
 				//ensure that constructor invocations are the first statement in a constructor
-				if (Binding.isValidBinding(functionInvocation.getTarget().resolveDataBinding()) && functionInvocation.getTarget().resolveDataBinding().getKind() == IDataBinding.CONSTRUCTOR_BINDING) {
+				if (functionInvocation.getTarget() instanceof SuperExpression ||
+						(Binding.isValidBinding(functionInvocation.getTarget().resolveDataBinding()) && functionInvocation.getTarget().resolveDataBinding().getKind() == IDataBinding.CONSTRUCTOR_BINDING)) {
 					if (functionInvocation.getParent() instanceof FunctionInvocationStatement) {
 						if (functionInvocation.getParent().getParent() instanceof Constructor) {
 							Constructor constructor = (Constructor)functionInvocation.getParent().getParent();

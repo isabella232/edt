@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -66,10 +66,12 @@ public class ErrorCorrectingParser extends Parser { // TODO we are only extendin
     }
     
     public ErrorCorrectingParser(Scanner lexer, int whitespaceMask) {
-		Lexer eglLexer = (Lexer) lexer;
-		eglLexer.returnBlockComments = (whitespaceMask & RETURN_BLOCK_COMMENT) != 0;
-		eglLexer.returnLineBreaks = (whitespaceMask & RETURN_LINEBREAKS) != 0;
-		eglLexer.returnLineComments = (whitespaceMask & RETURN_LINE_COMMENT) != 0;
+    	if(lexer instanceof Lexer) {
+    		Lexer eglLexer = (Lexer) lexer;
+    		eglLexer.returnBlockComments = (whitespaceMask & RETURN_BLOCK_COMMENT) != 0;
+    		eglLexer.returnLineBreaks = (whitespaceMask & RETURN_LINEBREAKS) != 0;
+    		eglLexer.returnLineComments = (whitespaceMask & RETURN_LINE_COMMENT) != 0;
+    	}
         stream = new TokenStream(RECOVERY_SUCCESS + AdvancedPhraseRecovery.INPUT_DELETION_LIMIT, lexer);
     }
     
@@ -270,10 +272,12 @@ public class ErrorCorrectingParser extends Parser { // TODO we are only extendin
         
         // Record whitespaces
         Scanner lexer = stream.getLexer();
-		Lexer eglLexer = (Lexer) lexer;
-		file.blockComments = eglLexer.blockComments;
-		file.lineBreaks = eglLexer.lineBreaks;
-		file.lineComments = eglLexer.lineComments;
+    	if(lexer instanceof Lexer) {
+    		Lexer eglLexer = (Lexer) lexer;
+    		file.blockComments = eglLexer.blockComments;
+    		file.lineBreaks = eglLexer.lineBreaks;
+    		file.lineComments = eglLexer.lineComments;
+    	}
 
         // Return the value
         return (Symbol) realStack.peek();

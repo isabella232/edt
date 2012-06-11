@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.edt.compiler.binding.FunctionBindingCompletor;
 import org.eclipse.edt.compiler.binding.SettingsBlockAnnotationBindingsCompletor;
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.Constructor;
@@ -29,9 +28,7 @@ import org.eclipse.edt.compiler.core.ast.ForEachStatement;
 import org.eclipse.edt.compiler.core.ast.ForStatement;
 import org.eclipse.edt.compiler.core.ast.FunctionDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
-import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IfStatement;
-import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -267,7 +264,9 @@ public class FunctionBinder extends DefaultBinder {
     
     public boolean visit(CallStatement callStatement) {
         
-		bindInvocationTarget(callStatement.getInvocationTarget(), true);
+		bindingCallTarget = true;
+		bindInvocationTarget(callStatement.getInvocationTarget());
+		bindingCallTarget = false;
 		
 		if(callStatement.hasArguments()) {
 			for(Node node : callStatement.getArguments()) {
@@ -279,12 +278,22 @@ public class FunctionBinder extends DefaultBinder {
 			callStatement.getSettingsBlock().accept(this);
 		}
 		
-		if (callStatement.getCallbackTarget() != null) {
-			callStatement.getCallbackTarget().accept(this);
+		if (callStatement.getUsing() != null) {
+			callStatement.getUsing().accept(this);
 		}
 		
-		if (callStatement.getErrorCallbackTarget() != null) {
-			callStatement.getErrorCallbackTarget().accept(this);
+		if (callStatement.getCallSynchronizationValues() != null) {
+			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
+				callStatement.getCallSynchronizationValues().getReturns().accept(this);
+			}
+			
+			if (callStatement.getCallSynchronizationValues().getReturnTo() != null) {
+				callStatement.getCallSynchronizationValues().getReturnTo().accept(this);
+			}
+
+			if (callStatement.getCallSynchronizationValues().getOnException() != null) {
+				callStatement.getCallSynchronizationValues().getOnException().accept(this);
+			}
 		}
 				
 		return false;
@@ -292,7 +301,7 @@ public class FunctionBinder extends DefaultBinder {
     
     public boolean visit(TransferStatement transferStatement) {
         
-		bindInvocationTarget(transferStatement.getInvocationTarget(), false);
+		bindInvocationTarget(transferStatement.getInvocationTarget());
 		
 		if(transferStatement.hasPassingRecord()){
 			transferStatement.getPassingRecord().accept(this);
@@ -317,7 +326,7 @@ public class FunctionBinder extends DefaultBinder {
 					return false;
 				}
 				public boolean visit(org.eclipse.edt.compiler.core.ast.ReturningToInvocationTargetClause returningToInvocationTargetClause) {
-					bindInvocationTarget(returningToInvocationTargetClause.getExpression(), false);
+					bindInvocationTarget(returningToInvocationTargetClause.getExpression());
 					return false;
 				}
 			});
@@ -412,36 +421,29 @@ public class FunctionBinder extends DefaultBinder {
     }
     
     public boolean visit(ForEachStatement forEachStatement) {
-    	for (Node node : forEachStatement.getTargets()) {
-    		node.accept(this);
+    	currentScope = new StatementBlockScope(currentScope);
+    	
+    	if(forEachStatement.hasVariableDeclaration()) {
+    		processDataDeclaration(
+    			Arrays.asList(new Name[] {forEachStatement.getVariableDeclarationName()}),
+    			forEachStatement.getVariableDeclarationType(),
+    			null,
+    			false,
+    			null);
+    	}
+    	else {
+	    	for (Node n : (List<Node>)forEachStatement.getTargets()) {
+	    		n.accept(this);
+	    	}
     	}
     	
     	forEachStatement.getResultSet().getExpression().accept(this);
     	
-    	final IASTVisitor binder = this;
+    	for(Node node : forEachStatement.getStmts()) {
+    		node.accept(this);
+    	}
     	
-    	forEachStatement.accept(new AbstractASTVisitor() {
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.UsingClause usingClause) {
-        		for(Node node : usingClause.getExpressions()) {
-        			node.accept(binder);
-        		}
-        		return false;
-    		};
-    		
-    		public boolean visit(IntoClause intoClause) {
-        		for(Node node : intoClause.getExpressions()) {
-        			node.accept(binder);
-        		}
-        		return false;
-    		}
-    		
-    		public boolean visit(org.eclipse.edt.compiler.core.ast.WithExpressionClause withExpressionClause) {
-    			withExpressionClause.accept(binder);
-    			return false;
-    		}
-		});
-    	
-    	visitStatementBlocks(forEachStatement);
+    	currentScope = currentScope.getParentScope();
     	
     	return false;
     }

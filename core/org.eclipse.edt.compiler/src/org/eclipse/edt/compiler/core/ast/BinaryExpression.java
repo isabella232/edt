@@ -47,6 +47,9 @@ public class BinaryExpression extends Expression {
 		public static final Operator BITAND = new Operator("&");//$NON-NLS-1$
 		public static final Operator BITOR = new Operator("|");//$NON-NLS-1$
 		public static final Operator XOR = new Operator("xor");//$NON-NLS-1$
+		public static final Operator LEFT_SHIFT = new Operator("<<");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_ARITHMETIC = new Operator(">>");//$NON-NLS-1$
+		public static final Operator RIGHT_SHIFT_LOGICAL = new Operator(">>>");//$NON-NLS-1$
 		
 		private static final Map CODES;
 		static {
@@ -70,7 +73,10 @@ public class BinaryExpression extends Expression {
 					NULLCONCAT,
 					BITAND,
 					BITOR,
-					XOR
+					XOR,
+					LEFT_SHIFT,
+					RIGHT_SHIFT_ARITHMETIC,
+					RIGHT_SHIFT_LOGICAL
 				};
 			for (int i = 0; i < ops.length; i++) {
 				CODES.put(ops[i].toString(), ops[i]);

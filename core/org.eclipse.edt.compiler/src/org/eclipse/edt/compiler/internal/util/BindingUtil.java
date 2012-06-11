@@ -46,6 +46,7 @@ import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.ShowStatement;
+import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.StructuredRecord;
 import org.eclipse.edt.mof.egl.TransferStatement;
@@ -755,11 +756,13 @@ public class BindingUtil {
 	
 	
 	public static boolean isDynamicallyAccessible(Type type) {
-		if (type == null) {
+		//All types are dynamically accessible, as long as they do not inherit from AnyValue
+		if (type == null || !(type.getClassifier() instanceof StructPart)) {
 			return false;
 		}
-		Classifier cls = type.getClassifier();
-		return cls.getAnnotation("egl.lang.reflect.Dynamic") != null;
+		
+		StructPart sp = (StructPart)type.getClassifier();
+		return !(sp.isSubtypeOf((StructPart)TypeUtils.getType(TypeUtils.Type_AnyValue)));
 	}
 	
 	public static Member createDynamicAccessMember(Type type, String caseSensitiveName) {

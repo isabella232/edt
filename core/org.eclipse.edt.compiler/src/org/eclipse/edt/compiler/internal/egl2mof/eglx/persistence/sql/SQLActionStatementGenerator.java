@@ -25,7 +25,6 @@ import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
-import org.eclipse.edt.mof.egl.sql.SqlGetByPositionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlAddStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlCloseStatement;
@@ -109,8 +108,6 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 				return false;
 			};
 		});
-		
-		setElementInformation(node, stmt);
 	}
 
 	@Override
@@ -132,7 +129,6 @@ public class SQLActionStatementGenerator extends AbstractIOStatementGenerator {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.GetByPositionStatement getByPositionStatement) {
 		Statement stmt = factory.createGetByPositionStatement();
 		stack.push(stmt);
-		setElementInformation(getByPositionStatement, stmt);
 		return false;
 	}
 

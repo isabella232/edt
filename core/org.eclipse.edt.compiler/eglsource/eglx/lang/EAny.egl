@@ -12,23 +12,22 @@
 package eglx.lang;
 
 import egl.lang.reflect.ClassType;
-import egl.lang.reflect.Dynamic;
 import egl.lang.reflect.mof.Operation;
 
 /**
  * EAny represents EGL's "any" type.  It is the supertype of all other types,
  * and as the name implies it can hold any kind of value.
  */
-externalType EAny type ClassType {@Dynamic}
+externalType EAny type ClassType 
 	/**
 	 * {@Operation ==} Compares two EAnys.
 	 */
-	static function $EQ(lvalue EAny in, rvalue EAny in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EAny? in, rvalue EAny? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two EAnys.
 	 */
-	static function $NEQ(lvalue EAny in, rvalue EAny in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EAny? in, rvalue EAny? in) returns(EBoolean) {@Operation{"!="}};
 
 	// This is necessary because it results in boxing.
 	/**

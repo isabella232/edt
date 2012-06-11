@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -61,11 +61,23 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
+	public boolean visit(BytesLiteral bytesLiteral) {
+		return true;
+	}
+	
 	public boolean visit(CallStatement callStatement) {
 		return true;
 	}
 	
 	public boolean visit(CallbackTarget callbackTarget) {
+		return true;
+	}
+	
+	public boolean visit(CallReturns callReturns) {
+		return true;
+	}
+	
+	public boolean visit(CallSynchronizationValues callSynch) {
 		return true;
 	}
 	
@@ -457,6 +469,14 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
+	public boolean visit(SuperExpression superExpression) {
+		return true;
+	}
+	
+	public boolean visit(TernaryExpression ternaryExpression) {
+		return true;
+	}
+	
 	public boolean visit(ThisExpression thisExpression) {
 		return true;
 	}
@@ -557,9 +577,15 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	
 	public void endVisit(BooleanLiteral booleanLiteral) {}
 	
+	public void endVisit(BytesLiteral bytesLiteral) {}
+	
 	public void endVisit(CallStatement callStatement) {}
 	
 	public void endVisit(CallbackTarget callbackTarget) {}
+	
+	public void endVisit(CallSynchronizationValues callSynch) {}
+	
+	public void endVisit(CallReturns callReturns) {}
 	
 	public void endVisit(CaseStatement caseStatement) {}
 	
@@ -754,6 +780,10 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(SQLLiteral sQLLiteral) {}
 	
 	public void endVisit(SubstringAccess substringAccess) {}
+	
+	public void endVisit(SuperExpression superExpression) {}
+	
+	public void endVisit(TernaryExpression ternaryExpression) {}
 	
 	public void endVisit(ThisExpression thisExpression) {}
 	

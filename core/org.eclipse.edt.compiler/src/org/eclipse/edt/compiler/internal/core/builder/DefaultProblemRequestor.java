@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -411,6 +411,7 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(DLI_ITEM_MUST_RESOLVE_TO_PCB_IN_PROGRAM_PSB_OR_PARM_LIST),
 		new Integer(DLI_IO_ONLY_ALLOWED_IN_PROGRAM_WITH_DLI),
 		new Integer(SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION),
+		new Integer(CANNOT_PASS_NULL),
 		new Integer(FUNCTION_PARAMETER_REQUIRES_LENGTH),
 		new Integer(ROUTINE_MUST_HAVE_EVEN_NUM_OF_ARGS),
 		new Integer(ROUTINE_CANT_HAVE_MORE_THAN_ARGS),
@@ -446,6 +447,7 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_LOOSE_NUMERIC_PARM),
 		new Integer(FUNCTION_ARG_NOT_COMPATIBLE_WITH_IO_RECORD_PARM),
 		new Integer(FUNCTION_ARG_CANNOT_BE_THIS),
+		new Integer(FUNCTION_ARG_CANNOT_BE_SUPER),
 		new Integer(UNLOADONEXIT_NOT_VALID_IN_MAIN),
 		new Integer(CANNOT_ASSIGN_NULL),
 		new Integer(MOVE_MUST_BE_REFERENCE),
@@ -485,6 +487,8 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(COMPARING_TEXT_AND_NUMERIC),
 		new Integer(TYPE_INVALID_CONSOLE_FIELD_TYPE_COMPARISON),
 		new Integer(FOR_STATEMENT_COUNTER_MUST_BE_INT),
+		new Integer(FOREACH_ARRAY_MUST_DECLARE_VARIABLE),
+		new Integer(FOREACH_SOURCE_MUST_BE_ARRAY),
 		new Integer(TRUNC_OPERAND_INVALID_MODIFIED),
 		new Integer(INCORRECT_UNICODE_LENGTH_IN_UNICODE_CONVERSION_FUNCTION),
 		new Integer(ITEM_RESOLVED_TO_CONTAINER_WITH_SAME_NAME_AS_FIELD),
@@ -509,6 +513,7 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(FUNCTION_TYPE_NOT_COMPAT_WITH_PARM),
 		new Integer(FUNCTION_CANNOT_HAVE_RETURN_TYPE),
 		
+		new Integer(SERVICE_CALL_USING_WRONG_TYPE),
 		
 		new Integer(SQL_EXPR_HAS_WRONG_TYPE),
 		new Integer(SQL_WITH_STMT_REQUIRED),
@@ -519,6 +524,14 @@ public abstract class DefaultProblemRequestor implements IProblemRequestor {
 		new Integer(SQL_WITH_STMT_REQUIRED_FOR_DELETE),
 		new Integer(SQL_NO_WITH_FOR_USING),
 		new Integer(SQL_NO_WITH_USING),
+
+		new Integer(IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED),
+		new Integer(IBMIPROGRAM_RETURNS_NOT_ALLOWED),
+		new Integer(IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION),
+		new Integer(IBMIPROGRAM_USING_HAS_WRONG_TYPE), 
+		new Integer(IBMIPROGRAM_MUST_BE_SPECIFIED),
+		new Integer(IBMIPROGRAM_CALLBACK_NOT_SUPPORTED),
+	
 	}));
 	
 	/**

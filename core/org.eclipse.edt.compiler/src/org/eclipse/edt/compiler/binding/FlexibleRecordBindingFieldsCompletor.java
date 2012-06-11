@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -56,9 +56,6 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
         }
 
         public boolean visit(StructureItem structureItem) {
-            if (structureItem.hasSettingsBlock()) {
-                structureItem.getSettingsBlock().accept(this);
-            }
             if(structureItem.hasInitializer()) {
              	fieldBinding.setInitialValue(getConstantValue(structureItem.getInitializer(), NullProblemRequestor.getInstance(), true));
             }
@@ -67,15 +64,6 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
  
         public void endVisit(StructureItem structureItem) {
         	// don't let defaultbinder run twice
-        }
-        public boolean visit(SettingsBlock settingsBlock) {
-
-            Scope fieldScope = new DataBindingScope(currentScope, fieldBinding);
-            AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(fieldScope, fieldBinding, fieldBinding.getType(),
-                    fieldBinding, -1, fieldBinding.getDeclaringPart());
-            settingsBlock.accept(new SettingsBlockAnnotationBindingsCompletor(new RecordScope(currentScope, recordBinding), fieldBinding.getDeclaringPart(), annotationScope, dependencyRequestor,
-                    problemRequestor, compilerOptions));
-            return false;
         }
     }
 
@@ -100,6 +88,45 @@ public class FlexibleRecordBindingFieldsCompletor extends AbstractBinder {
 
     public boolean visit(Record record) {
         return true;
+    }
+
+    @Override
+    public void endVisit(Record record) {
+    	IASTVisitor visitor = new AbstractASTVisitor() {
+    		public boolean visit(StructureItem structureItem) {
+    			if (structureItem.hasSettingsBlock()) {
+    				IDataBinding fb = null;
+    				if (structureItem.isFiller()) {
+    					fb =  (IDataBinding)structureItem.resolveBinding();
+    				}
+    				else {
+    					if (structureItem.getName() != null) {
+    						fb = structureItem.getName().resolveDataBinding();
+    					}
+    				}
+    				
+    				if (Binding.isValidBinding(fb)) {
+    					final IDataBinding fieldBinding = fb;
+    					IASTVisitor sbVisitor = new DefaultASTVisitor() {
+    				        public boolean visit(SettingsBlock settingsBlock) {
+    				        	Scope fieldScope = new DataBindingScope(currentScope, fieldBinding);
+    				            AnnotationLeftHandScope annotationScope = new AnnotationLeftHandScope(fieldScope, fieldBinding, fieldBinding.getType(),
+    				                    fieldBinding, -1, fieldBinding.getDeclaringPart());
+    				            settingsBlock.accept(new SettingsBlockAnnotationBindingsCompletor(new FlexibleRecordScope(currentScope, recordBinding), fieldBinding.getDeclaringPart(), annotationScope, dependencyRequestor,
+    				                    problemRequestor, compilerOptions));
+    				            return false;
+    				        }
+						};
+						structureItem.getSettingsBlock().accept(sbVisitor);
+    				}
+    				
+    			}
+    			
+    			return false;
+    		}
+		};
+		
+		record.accept(visitor);
     }
 
     public boolean visit(SettingsBlock settingsBlock) {

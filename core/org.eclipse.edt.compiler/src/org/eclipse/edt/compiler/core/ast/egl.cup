@@ -26,7 +26,8 @@ terminal ERRORSQLSTMTLIT;
 terminal ERROR_INLINE_DLI;
 
 // Named, single token terminals
-terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE;
+terminal OR, AND, BITOR, BITAND, XOR, IS, NOT, IN, LIKE, MATCHES, ESCAPE, BANG, EQ, NE, LT, GT, LE, NEGATE;
+terminal LEFTSHIFT, LEFTSHIFTEQ, RIGHTSHIFTLOGICAL, RIGHTSHIFTLOGICALEQ, RIGHTSHIFTARITHMETIC, RIGHTSHIFTARITHMETICEQ;
 terminal GE, AS, ISA, PLUS, MINUS, MODULO, TIMES, DIV, TIMESTIMES, CONCAT, NULLCONCAT, AT, DOT, QUESTION;
 terminal BITANDEQ, BITOREQ, PLUSEQ, MINUSEQ, TIMESEQ, DIVEQ, TIMESTIMESEQ, CONCATEQ, NULLCONCATEQ, MODULOEQ, XOREQ;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLY, RCURLY, SEMI, CONST, ASSIGN;
@@ -47,18 +48,21 @@ terminal IMPLEMENTS, EXTENDS;
 terminal TYPE;
 terminal EMBED, USE, RETURNS;
 terminal SQLNULLABLE, FIELD, INOUT, OUT;
-terminal THIS, NEW;
+terminal THIS, NEW, SUPER;
 terminal PRIVATE, STATIC;
 terminal CONSTRUCTOR;
 
 terminal String ID;
-terminal String INTEGER, DECIMALLIT, FLOATLIT;
+terminal String INTEGER, DECIMALLIT;
 terminal org.eclipse.edt.compiler.core.Boolean BOOLEANLIT;
 terminal StringLiteral STRING;
 terminal HexLiteral HEXLIT;
 terminal CharLiteral CHARLIT;
 terminal DBCharLiteral DBCHARLIT;
 terminal MBCharLiteral MBCHARLIT;
+terminal BytesLiteral BYTESLIT;
+terminal FloatLiteral FLOATLIT, SMALLFLOATLIT;
+terminal IntegerLiteral BIGINTLIT, SMALLINTLIT;
 terminal NULL;
 terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
 terminal InlineDLIStatement INLINE_DLI;
@@ -107,6 +111,7 @@ nonterminal deleteOption;
 nonterminal GetByPositionStatement.Direction direction;
 nonterminal ElseBlock elseOpt;
 nonterminal EnumerationField enumerationField;
+nonterminal Expression integerLiteralEnumValue;
 nonterminal OnEventBlock eventBlock;
 nonterminal executeOption;
 nonterminal ExitStatement.ExitModifier exitModifierOpt;
@@ -142,6 +147,8 @@ nonterminal Expression lvalue;
 nonterminal MoveModifier moveModifierOpt;
 nonterminal Name name;
 nonterminal Type namedType;
+nonterminal Type notNullableNamedType;
+nonterminal Type nullableNamedType;
 nonterminal Boolean sqlNullableOpt;
 nonterminal Boolean parmConstOpt;
 nonterminal String[] numericPrimitiveSpecOpt;
@@ -160,7 +167,6 @@ nonterminal Boolean privateAccessModifierOpt;
 nonterminal ProgramParameter programParameter;
 nonterminal List programParametersOpt;
 nonterminal replaceOption;
-nonterminal foreachOption;
 nonterminal ReturnsDeclaration returnsOpt;
 nonterminal Expression setTarget;
 nonterminal setting;
@@ -177,7 +183,11 @@ nonterminal Node structureContent;
 nonterminal String timestampIntervalPrimitiveSpecOpt;
 nonterminal TransferStatement.TransferTarget transferTargetOpt;
 nonterminal Type type;
+nonterminal Type nullableType;
+nonterminal Type notNullableType;
 nonterminal Type typeNoName;
+nonterminal Type notNullableTypeNoName;
+nonterminal Type nullableTypeNoName;
 nonterminal FunctionParameter.UseType useTypeOpt;
 nonterminal WhenClause whenClause;
 nonterminal Name withNameOpt;
@@ -208,7 +218,6 @@ nonterminal List openTarget_star, openTarget_plus;
 nonterminal List part_star, part_plus;
 nonterminal List programParameter_star, programParameter_plus;
 nonterminal List replaceOption_star, replaceOption_plus;
-nonterminal List foreachOption_star, foreachOption_plus;
 nonterminal List setting_star, setting_plus;
 nonterminal List objExprEntry_plus;
 nonterminal List settingsBlock_star, settingsBlock_plus;
@@ -218,10 +227,11 @@ nonterminal List structureContent_star, structureContent_plus;
 nonterminal List whenClause_star, whenClause_plus;
 
 // Precedences
+precedence left QUESTION;
 precedence left OR;
 precedence left AND;
 precedence left IS, NOT, IN, LIKE, MATCHES;
-precedence left BITOR, BITAND, XOR;
+precedence left BITOR, BITAND, XOR, LEFTSHIFT, RIGHTSHIFTLOGICAL, RIGHTSHIFTARITHMETIC;
 precedence left EQ, NE, LT, GT, LE, GE, ISA;
 precedence left CONCAT, NULLCONCAT;
 precedence left PLUS, MINUS;
@@ -230,6 +240,7 @@ precedence left TIMES, DIV;
 precedence left TIMESTIMES;
 precedence left AS;
 precedence left BANG;
+precedence left NEGATE;
 precedence left UMINUS, UPLUS;
 precedence left ESCAPE, FROM;
 
@@ -494,12 +505,26 @@ interfaceContent
 	{: RESULT = settingsBlock1; :}
 	;
 
-enumerationField
-	::=	ID:id1
-	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, id1left, id1right); :}
+integerLiteralEnumValue
+	::=	INTEGER:value
+	{: RESULT = new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright); :}
 	
-	|	ID:id1 ASSIGN expr:expr1
-	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), expr1, id1left, expr1right); :}
+	|	PLUS:plus1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.PLUS, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), plus1left, valueright); :} %prec UPLUS
+
+	|	MINUS:minus1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), minus1left, valueright); :} %prec UMINUS
+	
+	|	NEGATE:negate1 INTEGER:value
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright), negate1left, valueright); :}
+	;
+
+enumerationField
+	::=	ID:id1 settingsBlockOpt:settingsBlock1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), null, settingsBlock1, id1left, settingsBlock1right); :}
+	
+	|	ID:id1 settingsBlockOpt:settingsBlock1 ASSIGN integerLiteralEnumValue:value1
+	{: RESULT = new EnumerationField(new SimpleName(id1, id1left, id1right), value1, settingsBlock1, id1left, value1right); :}
 	;
 
 //==============================
@@ -545,6 +570,9 @@ stmt
 	|	RETURN:return1 SEMI:semi1
 	{: RESULT = new ReturnStatement(null, return1left, semi1right); :}
 	
+	|	RETURN:return1 expr:expr1 SEMI:semi1
+	{: RESULT = new ReturnStatement(new ParenthesizedExpression(expr1, expr1left, expr1right), return1left, semi1right); :}
+	
 	|	RETURN:return1 LPAREN:lparen expr:expr1 RPAREN:rparen SEMI:semi1
 	{: RESULT = new ReturnStatement(new ParenthesizedExpression(expr1, lparenleft, rparenright), return1left, semi1right); :}
 
@@ -584,8 +612,11 @@ stmt
 	|	FOR:for1 LPAREN ID:id1 type:type1 fromExprOpt:fromExpr1 TO expr:expr1 stepOpt:step1 RPAREN stmt_star:stmts1 END:end1
 	{: RESULT = new ForStatement(null, new SimpleName(id1, id1left, id1right), type1, fromExpr1, expr1, step1, stmts1, for1left, end1right); :}
 
-	|	FOREACH:foreach1 LPAREN expr_plus:exprs1 FROM:from1 expr:fromexpr1 foreachOption_star:foreachOpts1 RPAREN:rparen1 stmt_star:stmts1 END:end1
-	{: RESULT = new ForEachStatement(exprs1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), foreachOpts1, stmts1, rparen1left, foreach1left, end1right); :}
+	|	FOREACH:foreach1 LPAREN expr_plus:exprs1 FROM:from1 expr:fromexpr1 RPAREN:rparen1 stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(exprs1, null, null, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
+	
+	|	FOREACH:foreach1 LPAREN ID:id1 type:type1 FROM:from1 expr:fromexpr1 RPAREN:rparen1 stmt_star:stmts1 END:end1
+	{: RESULT = new ForEachStatement(null, new SimpleName(id1, id1left, id1right), type1, new FromOrToExpressionClause(fromexpr1, from1left, fromexpr1right), stmts1, rparen1left, foreach1left, end1right); :}
 
 	|	CONTINUE:continue1 continueModifierOpt:continueModifier1 SEMI:semi1
 	{: RESULT = new ContinueStatement(continueModifier1, continue1left, semi1right); :}
@@ -813,21 +844,6 @@ replaceOption
 
 	|	USING:using1 expr_plus:exprs1
 	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
-	;
-
-foreachOption
-	::=	WITH:with1 inlineSQLStatement:inlineSQLStatement1
-	{: RESULT = new WithInlineSQLClause(inlineSQLStatement1, with1left, inlineSQLStatement1right); :}
-
-	|	WITH:with1 expr:expr1
-	{: RESULT = new WithExpressionClause(expr1, with1left, expr1right); :}
-
-	|	USING:using1 expr_plus:exprs1
-	{: RESULT = new UsingClause(exprs1, using1left, exprs1right); :}
-
-	|	INTO:into1 expr_plus:exprs1
-	{: RESULT = new IntoClause(exprs1, into1left, exprs1right); :}
-		
 	;
 
 getByKeyOption
@@ -1164,6 +1180,9 @@ expr
 
 	|	MINUS:minus1 expr:expr1
 	{: RESULT = new UnaryExpression(UnaryExpression.Operator.MINUS, expr1, minus1left, expr1right); :} %prec UMINUS
+	
+	|	NEGATE:negate1 expr:expr1
+	{: RESULT = new UnaryExpression(UnaryExpression.Operator.NEGATE, expr1, negate1left, expr1right); :}
 
 	|	expr:expr1 PLUS expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.PLUS, expr1, expr2, expr1left, expr2right); :}
@@ -1206,7 +1225,16 @@ expr
 	
 	|	expr:expr1 XOR expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.XOR, expr1, expr2, expr1left, expr2right); :}
-
+	
+	|	expr:expr1 LEFTSHIFT expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.LEFT_SHIFT, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 RIGHTSHIFTARITHMETIC expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC, expr1, expr2, expr1left, expr2right); :}
+	
+	|	expr:expr1 RIGHTSHIFTLOGICAL expr:expr2
+	{: RESULT = new BinaryExpression(BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL, expr1, expr2, expr1left, expr2right); :}
+	
 	|	expr:expr1 EQ expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.EQUALS, expr1, expr2, expr1left, expr2right); :}
 
@@ -1225,10 +1253,10 @@ expr
 	|	expr:expr1 GE expr:expr2
 	{: RESULT = new BinaryExpression(BinaryExpression.Operator.GREATER_EQUALS, expr1, expr2, expr1left, expr2right); :}
 
-	|	expr:expr1 ISA type:type1
+	|	expr:expr1 ISA notNullableType:type1
 	{: RESULT = new IsAExpression(expr1, type1, expr1left, type1right); :}
 	
-	|	expr:expr1 AS type:type1
+	|	expr:expr1 AS notNullableType:type1
 	{: RESULT = new AsExpression(expr1, type1, expr1left, type1right); :}
 	
 	|	expr:expr1 AS STRING:stringLiteral
@@ -1246,17 +1274,17 @@ expr
 	|	expr:expr1 NOT expr:expr2
 	{: RESULT = new IsNotExpression(IsNotExpression.Operator.NOT, expr1, expr2, expr1left, expr2right); :}
 
-	|	expr:expr1 LIKE expr:expr2
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
+//	|	expr:expr1 LIKE expr:expr2
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, null, expr1left, expr2right); :}
 
-	|	expr:expr1 MATCHES expr:expr2
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
+//	|	expr:expr1 MATCHES expr:expr2
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, null, expr1left, expr2right); :}
 	
-	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+//	|	expr:expr1 LIKE expr:expr2 ESCAPE STRING:escapeCharacter
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.LIKE, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
-	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
-	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getCanonicalString(), expr1left, escapeCharacterright); :}
+//	|	expr:expr1 MATCHES expr:expr2 ESCAPE STRING:escapeCharacter
+//	{: RESULT = new LikeMatchesExpression(LikeMatchesExpression.Operator.MATCHES, expr1, expr2, escapeCharacter.getValue(), expr1left, escapeCharacterright); :}
 
 	|	name:name1
 	{: RESULT = name1; :}
@@ -1302,6 +1330,9 @@ expr
 
 	|	LCURLY:lcurly1 objExprEntry_plus:objExprEntries1 RCURLY:rcurly1
 	{: RESULT = new ObjectExpression(objExprEntries1, lcurly1left, rcurly1right); :}
+
+	|	expr:expr1 QUESTION expr:expr2 COLON expr:expr3
+	{: RESULT = new TernaryExpression(expr1, expr2, expr3, expr1left, expr3right); :}
 	;
 		
 	
@@ -1341,6 +1372,9 @@ primaryNoNew
 
 	|	THIS:this1
 	{: RESULT = new ThisExpression(this1left, this1right); :}
+	
+	|	SUPER:super1
+	{: RESULT = new SuperExpression(super1left, super1right); :}
 
 	|	literal:literal1
 	{: RESULT = literal1; :}
@@ -1417,13 +1451,22 @@ objExprEntry
 
 literal
 	::=	INTEGER:value
-	{: RESULT = new IntegerLiteral(value, valueleft, valueright); :}
+	{: RESULT = new IntegerLiteral(LiteralExpression.INTEGER_LITERAL, value, valueleft, valueright); :}
+	
+	|	BIGINTLIT:value
+	{: RESULT = value; :}
+	
+	|	SMALLINTLIT:value
+	{: RESULT = value; :}
 
 	|	DECIMALLIT:value
 	{: RESULT = new DecimalLiteral(value, valueleft, valueright); :}
 
 	|	FLOATLIT:value
-	{: RESULT = new FloatLiteral(value, valueleft, valueright); :}
+	{: RESULT = value; :}
+	
+	|	SMALLFLOATLIT:value
+	{: RESULT = value; :}
 
 	|	STRING:value
 	{: RESULT = value; :}
@@ -1442,6 +1485,9 @@ literal
 	
 	|	BOOLEANLIT:value
 	{: RESULT = new BooleanLiteral(value, valueleft, valueright); :}
+	
+	|	BYTESLIT:value
+	{: RESULT = value; :}
 
 	|	NULL:null1
 	{: RESULT = new NullLiteral(null1left, null1right); :}
@@ -1497,6 +1543,15 @@ assignment
 	
 	|	lvalue:lvalue1 NULLCONCATEQ expr:expr1
 	{: RESULT = new Assignment(Assignment.Operator.NULLCONCAT, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 LEFTSHIFTEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.LEFT_SHIFT, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 RIGHTSHIFTARITHMETICEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.RIGHT_SHIFT_ARITHMETIC, lvalue1, expr1, lvalue1left, expr1right); :}
+	
+	|	lvalue:lvalue1 RIGHTSHIFTLOGICALEQ expr:expr1
+	{: RESULT = new Assignment(Assignment.Operator.RIGHT_SHIFT_LOGICAL, lvalue1, expr1, lvalue1left, expr1right); :}
 	;
 
 
@@ -1534,17 +1589,46 @@ name
 	;
 	
 type
-	::=	typeNoName:typeNoName1
-	{: RESULT = typeNoName1; :}
+	::=	nullableType:nullableType1
+	{: RESULT = nullableType1; :}
 
-	|	namedType:namedType1
-	{: RESULT = namedType1; :}
+	|	notNullableType:notNullableType1
+	{: RESULT = notNullableType1; :}
+	;
+
+nullableType
+	::=	nullableTypeNoName:nullableTypeNoName1
+	{: RESULT = nullableTypeNoName1; :}
+
+	|	nullableNamedType:nullableNamedType1
+	{: RESULT = nullableNamedType1; :}
+	;
+
+notNullableType
+	::=	notNullableTypeNoName:notNullableTypeNoName1
+	{: RESULT = notNullableTypeNoName1; :}
+
+	|	notNullableNamedType:notNullableNamedType1
+	{: RESULT = notNullableNamedType1; :}
+	;
+
+typeNoName
+	::= nullableTypeNoName:nullableTypeNoName1
+	{: RESULT = nullableTypeNoName1; :}
+
+	|	notNullableTypeNoName:notNullableTypeNoName1
+	{: RESULT = notNullableTypeNoName1; :}
 	;
 	
-typeNoName
-	::=	PRIMITIVE:prim1
+nullableTypeNoName
+	::=	notNullableTypeNoName:typeNoName1 QUESTION:question1
+	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+	;
+	
+notNullableTypeNoName
+	::= PRIMITIVE:prim1
 	{: RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); :}
-
+	
 	|	NUMERICPRIMITIVE:numericprimitive1 numericPrimitiveSpecOpt:numericPrimitiveSpec1
 	{: RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); :}
 
@@ -1553,15 +1637,18 @@ typeNoName
 
 	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 timestampIntervalPrimitiveSpecOpt:timestampIntervalPrimitiveSpec1
 	{: RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); :}
-
-	|	typeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
+	
+	|	notNullableTypeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, null, typeNoName1left, rbracket1right); :}
 
-	|	typeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	|	notNullableTypeNoName:typeNoName1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, expr1, typeNoName1left, rbracket1right); :}
-	
-	|	typeNoName:typeNoName1 QUESTION:question1
-	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
+
+	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), null, typeNoName1left, rbracket1right); :}
+
+	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), expr1, typeNoName1left, rbracket1right); :}
 	;
 	
 charPrimitiveSpecOpt
@@ -1584,18 +1671,34 @@ timestampIntervalPrimitiveSpecOpt
 	|	LPAREN:lparen1 STRING:pattern RPAREN:rparen1
 	{: RESULT = pattern.getCanonicalString(); :}
 	;
-	
+
 namedType
+	::=	notNullableNamedType:notNullableNamedType1
+	{: RESULT = notNullableNamedType1; :}
+	
+	|	nullableNamedType:nullableNamedType1
+	{: RESULT = nullableNamedType1; :}
+	;
+	
+notNullableNamedType
 	::=	name:name1
 	{: RESULT = new NameType(name1, name1left, name1right); :}
 
-	|	namedType:name1 LBRACKET RBRACKET:rbracket1
+	|	notNullableNamedType:name1 LBRACKET RBRACKET:rbracket1
 	{: RESULT = new ArrayType(name1, null, name1left, rbracket1right); :}
 
-	|	namedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	|	notNullableNamedType:name1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(name1, expr1, name1left, rbracket1right); :}
+
+	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), null, name1left, rbracket1right); :}
+
+	|	notNullableNamedType:name1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
+	{: RESULT = new ArrayType(new NullableType(name1, name1left, question1right), expr1, name1left, rbracket1right); :}
+	;
 	
-	|	namedType:name1 QUESTION:question1
+nullableNamedType
+	::= notNullableNamedType:name1 QUESTION:question1
 	{: RESULT = new NullableType(name1, name1left, question1right); :}
 	;
 	
@@ -1933,21 +2036,6 @@ replaceOption_plus
 	{: if(replaceOption != null) replaceOptions.add(replaceOption); RESULT = replaceOptions; :}
 	;
 	
-foreachOption_star
-	::=
-	{: RESULT = Collections.EMPTY_LIST; :}
-	|	foreachOption_plus:foreachOptions
-	{: RESULT = foreachOptions; :}
-	;
-
-foreachOption_plus
-	::=	foreachOption:foreachOption
-	{: RESULT = new ArrayList(); RESULT.add(foreachOption); :}
-	|	foreachOption_plus:foreachOptions foreachOption:foreachOption
-	{: if(foreachOption != null) foreachOptions.add(foreachOption); RESULT = foreachOptions; :}
-	;
-	
-
 setting_star
 	::=
 	{: RESULT = Collections.EMPTY_LIST; :}

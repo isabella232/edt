@@ -1,0 +1,26 @@
+<project name="Parse egl.cup" default="run">
+	<target name="run">
+		<!-- Set this to the location of JavaCup on your machine. -->
+		<property name="JavaCup" value="/tmp/"/>
+		
+		<java classpath="${JavaCup}" classname="java_cup.Main" fork="true" error="egl.cup.dump" failonerror="true">
+			<jvmarg value="-Xmx64m"/>
+			<arg value="-nonterms"/>
+			<arg value="-parser"/>
+			<arg value="Parser"/>
+			<arg value="-dump_grammar"/>
+			<arg value="-dump_states"/>
+			<arg value="-symbols"/>
+			<arg value="NodeTypes"/>
+			<arg value="egl.cup"/>
+		</java>
+		
+		<java classpath="../../../../../../../bin2" fork="true" classname="org.eclipse.edt.compiler.core.ast.ActionMethodSplitter" output="temp.file" failonerror="true">
+			<arg value="Parser"/>
+		</java>
+		
+		<move file="temp.file" tofile="Parser.java" verbose="true"/>
+		
+		<eclipse.refreshLocal resource="org.eclipse.edt.compiler"/>
+	</target>
+</project>

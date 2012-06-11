@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -92,18 +92,28 @@ public class ForEachStatement extends Statement {
 	}
 
 	private List targets;
+	private SimpleName declarationName;
+	private Type declarationType;
 	private FromOrToExpressionClause resultSet;
-	private List foreachOptions;	// List of Nodes
 	private List stmts;	// List of Statements
 	private int closingParenOffset;
 
-	public ForEachStatement(List targets, FromOrToExpressionClause resultSet, List options, List stmts, int closingParenOffset, int startOffset, int endOffset) {
+	public ForEachStatement(List targets, SimpleName declarationName, Type declarationType, FromOrToExpressionClause resultSet, List stmts, int closingParenOffset, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.targets = setParent(targets);
+		if (targets != null) {
+			this.targets = setParent(targets);
+		}
+		if (declarationName != null) {
+			this.declarationName = declarationName;
+			declarationName.setParent(this);
+		}
+		if (declarationType != null) {
+			this.declarationType = declarationType;
+			declarationType.setParent(this);
+		}
 		this.resultSet = resultSet;
 		resultSet.setParent(this);
-		this.foreachOptions = setParent(options);
 		this.stmts = setParent(stmts);
 		this.closingParenOffset = closingParenOffset;
 	}
@@ -129,26 +139,46 @@ public class ForEachStatement extends Statement {
 	}
 	
 	public Expression getSQLRecord() {
-		if (targets.size() > 0) {
+		if (targets != null && targets.size() > 0) {
 			return (Expression)targets.get(0);
 		}
 		return null;
 	}
 		
-	public List getStmts() {
+	public List<Node> getStmts() {
 		return stmts;
 	}
 	
-	public List getForeachOptions() {
-		return foreachOptions;
+	public boolean hasVariableDeclaration() {
+		return declarationName != null;
 	}
-
+	
+	/**
+	 * Returns the declaration name if this is a foreach statement that
+	 * include a variable declaration. Otherwise, returns null.
+	 */
+	public SimpleName getVariableDeclarationName() {
+		return declarationName;
+	}
+	
+	/**
+	 * Returns the declaration type if this is a foreach statement that
+	 * include a variable declaration. Otherwise, returns null.
+	 */
+	public Type getVariableDeclarationType() {
+		return declarationType;
+	}
+	
 	public void accept(IASTVisitor visitor) {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
-			acceptChildren(visitor, targets);
+			if (targets != null) {
+				acceptChildren(visitor, targets);
+			}
+			else {
+				declarationName.accept(visitor);
+			}
 			resultSet.accept(visitor);
-			acceptChildren(visitor, foreachOptions);			
 			acceptChildren(visitor, stmts);
 		}
 		visitor.endVisit(this);
@@ -162,7 +192,39 @@ public class ForEachStatement extends Statement {
 		return Arrays.asList(new List[] {stmts});
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder buf = new StringBuilder(50);
+		buf.append("foreach(");
+		
+		if (targets != null) {
+			boolean comma = false;
+			for (Expression e : (List<Expression>)targets) {
+				buf.append(e.getCanonicalString());
+				if (comma) {
+					buf.append(", ");
+				}
+				else {
+					comma = true;
+				}
+			}
+		}
+		else {
+			buf.append(declarationName.getCanonicalString());
+			buf.append(' ');
+			buf.append(declarationType.getCanonicalName());
+		}
+		
+		buf.append(" from ");
+		buf.append(resultSet.getExpression().getCanonicalString());
+		buf.append(')');
+		return buf.toString();
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {		
-		return new ForEachStatement(cloneList(targets), (FromOrToExpressionClause) resultSet.clone(), cloneList(foreachOptions), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
+		return new ForEachStatement(cloneList(targets),
+				declarationName == null ? null : (SimpleName)declarationName.clone(),
+				declarationType == null ? null : (Type)declarationType.clone(),
+				(FromOrToExpressionClause) resultSet.clone(), cloneList(stmts), closingParenOffset, getOffset(), getOffset() + getLength());
 	}
 }

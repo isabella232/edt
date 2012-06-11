@@ -46,6 +46,7 @@ import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.Assignment;
 import org.eclipse.edt.compiler.core.ast.BinaryExpression;
 import org.eclipse.edt.compiler.core.ast.BooleanLiteral;
+import org.eclipse.edt.compiler.core.ast.BytesLiteral;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.CaseStatement;
 import org.eclipse.edt.compiler.core.ast.CharLiteral;
@@ -445,6 +446,11 @@ public class StatementValidator implements IOStatementValidatorConstants{
 				}
 				
 				public boolean visit(BooleanLiteral booleanLiteral) {
+					exprValid[0] = true;
+					return false;
+				}
+				
+				public boolean visit(BytesLiteral bytesLiteral) {
 					exprValid[0] = true;
 					return false;
 				}

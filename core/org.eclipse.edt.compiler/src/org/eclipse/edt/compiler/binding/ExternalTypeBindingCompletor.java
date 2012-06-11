@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -108,10 +109,6 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     
     
 	public void endVisit(ExternalType externalType) {
-		if(externalTypeBinding.getConstructors().isEmpty()) {
-			//Add default constructor
-			externalTypeBinding.addConstructor(new ConstructorBinding(externalTypeBinding));
-		}
 		processSettingsBlocks();
 		externalTypeBinding.setValid(true);
 	}
@@ -270,7 +267,17 @@ public class ExternalTypeBindingCompletor extends AbstractBinder {
     	});
     	
     	externalTypeBinding.addConstructor(constructorBinding);
+ 
+    	if (constructor.hasSettingsBlock()) {
+            FunctionScope functionScope = new FunctionScope(currentScope, (FunctionBinding)constructorBinding.getType());
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding, -1, externalTypeBinding);
+            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, externalTypeBinding, scope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.getSettingsBlock().accept(blockCompletor);
+    		
+    	}
     	
+
     	return false;
     }
     

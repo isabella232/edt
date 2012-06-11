@@ -11,54 +11,74 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.statement;
 
+import java.util.Collection;
+
+import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
-import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ForEachStatement;
-import org.eclipse.edt.compiler.core.ast.IntoClause;
+import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 
 
 /**
- * @author Dave Murray
+ * Validates a foreach statement when the target is an array.
  */
 public class ForEachStatementValidator extends DefaultASTVisitor implements IOStatementValidatorConstants{
 	
 	private IProblemRequestor problemRequestor;
+	private ICompilerOptions compilerOptions;
 	
-	public ForEachStatementValidator(IProblemRequestor problemRequestor) {
+	public ForEachStatementValidator(IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
 		this.problemRequestor = problemRequestor;
 	}
 	
-	private void checkTargetIsSQLRecord(Expression expr) {
-		ITypeBinding tBinding = expr.resolveTypeBinding();
-		if(tBinding != null && tBinding.getAnnotation(EGLIOSQL, "SQLRecord") == null) {
-			problemRequestor.acceptProblem(
-				expr,
-				IProblemRequestor.STATEMENT_TARGET_NOT_SQL_RECORD,
-				new String[] {expr.getCanonicalString()});
-		}
-	}
-	
 	public boolean visit(ForEachStatement forEachStatement) {
-		if(forEachStatement.hasSQLRecord()) {
-			checkTargetIsSQLRecord(forEachStatement.getSQLRecord());
+		Expression source = forEachStatement.getResultSet().getExpression();
+		ITypeBinding sourceType = source.resolveTypeBinding();
+		if (Binding.isValidBinding(sourceType) && sourceType.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+			// Must have a variable declaration.
+			if (!forEachStatement.hasVariableDeclaration()) {
+				problemRequestor.acceptProblem(forEachStatement, IProblemRequestor.FOREACH_ARRAY_MUST_DECLARE_VARIABLE, new String[]{});
+			}
+			
+			ITypeBinding targetType = forEachStatement.getVariableDeclarationType().resolveTypeBinding();
+			ITypeBinding elementType = ((ArrayTypeBinding)sourceType).getElementType();
+			if (Binding.isValidBinding(targetType) && !(TypeCompatibilityUtil.isMoveCompatible(targetType, elementType, source, compilerOptions)
+					|| TypeCompatibilityUtil.areCompatibleExceptions(elementType, targetType, compilerOptions))) {
+				problemRequestor.acceptProblem(source, IProblemRequestor.ASSIGNMENT_STATEMENT_TYPE_MISMATCH, new String[]{
+						StatementValidator.getShortTypeString(targetType),
+						StatementValidator.getShortTypeString(elementType),
+						forEachStatement.toString()
+				});
+			}
+		}
+		else if (Binding.isValidBinding(sourceType)) {
+			problemRequestor.acceptProblem(source,
+					IProblemRequestor.FOREACH_SOURCE_MUST_BE_ARRAY,
+					new String[] {source.getCanonicalString()});
 		}
 		
-		forEachStatement.accept(new AbstractASTVisitor(){
-			public boolean visit (IntoClause intoClause){
-				intoClause.accept(new AbstractASTExpressionVisitor(){
-					public boolean visitExpression(Expression expression) {
-						StatementValidator.validateItemInIntoClause(expression,problemRequestor);
-					    return false;
-					}
-					
-					});
-				return false;
-			}
-			});
 		return false;
+	}
+	
+	protected int[] getOffsets(Collection<Node> nodes) {
+		int startOffset = -1;
+		int endOffset = -1;
+		for (Node n : nodes) {
+			int nextStart = n.getOffset();
+			int nextEnd = nextStart + n.getLength();
+			if (startOffset == -1 || nextStart < startOffset) {
+				startOffset = nextStart;
+			}
+			if (endOffset == -1 || nextEnd > endOffset) {
+				endOffset = nextEnd;
+			}
+		}
+		return new int[]{startOffset, endOffset};
 	}
 }

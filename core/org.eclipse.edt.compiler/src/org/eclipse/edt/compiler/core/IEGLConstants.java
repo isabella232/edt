@@ -51,6 +51,7 @@ public interface IEGLConstants {
 	public static final String EGL_PARTOFFSET  			="off";
 	public static final String EGL_PARTLINE 			= "line";
 	public static final String EGL_PARTABSOLUTEPATH 	= "abs";
+	public static final String EGL_STATEMENTLOCATION	= "EGL_Stmt_Loc";
 //	public static final String EGL_PARTLENGTH  			="EGL Part Length";
 //	public static final String EGL_PARTOFFSET  			="EGL Part Offset";
 //	public static final String EGL_PARTABSOLUTEPATH 	= "EGL ABS Path";
@@ -85,6 +86,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_BY = "by";  //$NON-NLS-1$
 	public static final String KEYWORD_BYNAME = "byName";  //$NON-NLS-1$
 	public static final String KEYWORD_BYPOSITION = "byPosition";  //$NON-NLS-1$
+	public static final String KEYWORD_BYTES = "bytes";  //$NON-NLS-1$
 	public static final String KEYWORD_CALL = "call";  //$NON-NLS-1$
 	public static final String KEYWORD_CASE = "case";  //$NON-NLS-1$
 	public static final String KEYWORD_CHAR = "char";  //$NON-NLS-1$
@@ -200,6 +202,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_STACK = "stack";  //$NON-NLS-1$
 	public static final String KEYWORD_STATIC = "static";  //$NON-NLS-1$
 	public static final String KEYWORD_STRING = "string";  //$NON-NLS-1$
+	public static final String KEYWORD_SUPER = "super";  //$NON-NLS-1$
 	public static final String KEYWORD_THIS = "this";  //$NON-NLS-1$
 	public static final String KEYWORD_THROW = "throw";  //$NON-NLS-1$
 	public static final String KEYWORD_TIME = "time";  //$NON-NLS-1$

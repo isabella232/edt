@@ -41,12 +41,12 @@ externalType ETime extends AnyValue type ClassType
 	/**
 	 * {@Operation ==} Compares two times.
 	 */
-	static function $EQ(lvalue ETime in, rvalue ETime in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue ETime? in, rvalue ETime? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two times.
 	 */
-	static function $NEQ(lvalue ETime in, rvalue ETime in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue ETime? in, rvalue ETime? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a time. The string is parsed

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -75,7 +75,7 @@ public class EnumerationManager {
     	if (ElementKind == null) {
     		ElementKind = IrFactory.INSTANCE.createEnumeration();
     		ElementKind.setName("ElementKind");
-    		ElementKind.setPackageName(SystemEnvironmentPackageNames.EGL_CORE_STRING);
+    		ElementKind.setPackageName("eglx.lang");
     		ElementKind.addMember((Member)createEntry(DATATABLEPART)); 
     		ElementKind.addMember((Member)createEntry(DATAITEMPART));
     		ElementKind.addMember((Member)createEntry(DELEGATEPART));

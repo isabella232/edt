@@ -65,6 +65,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( booleanLiteral );
 	}
 	
+	public boolean visit(BytesLiteral bytesLiteral) {
+		return visitNode( bytesLiteral );
+	}
+	
 	public boolean visit(CallStatement callStatement) {
 		return visitNode( callStatement );
 	}
@@ -477,6 +481,14 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( substringAccess );
 	}
 	
+	public boolean visit(SuperExpression superExpression) {
+		return visitNode( superExpression );
+	}
+	
+	public boolean visit(TernaryExpression ternaryExpression) {
+		return visitNode( ternaryExpression );
+	}
+	
 	public boolean visit(ThisExpression thisExpression) {
 		return visitNode( thisExpression );
 	}
@@ -595,6 +607,10 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(BooleanLiteral booleanLiteral) {
 		 endVisitNode( booleanLiteral );
+	}
+	
+	public void endVisit(BytesLiteral bytesLiteral) {
+		 endVisitNode( bytesLiteral );
 	}
 	
 	public void endVisit(CallStatement callStatement) {
@@ -1007,6 +1023,14 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(SubstringAccess substringAccess) {
 		 endVisitNode( substringAccess );
+	}
+	
+	public void endVisit(SuperExpression superExpression) {
+		 endVisitNode( superExpression );
+	}
+	
+	public void endVisit(TernaryExpression ternaryExpression) {
+		 endVisitNode( ternaryExpression );
 	}
 	
 	public void endVisit(ThisExpression thisExpression) {

@@ -45,7 +45,7 @@ public class DefaultStatementValidator extends AbstractStatementValidator {
 	}
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement foreachStatement) {
-		foreachStatement.accept(new ForEachStatementValidator(problemRequestor));
+		foreachStatement.accept(new ForEachStatementValidator(problemRequestor, compilerOptions));
 		return false;
 	}
 	

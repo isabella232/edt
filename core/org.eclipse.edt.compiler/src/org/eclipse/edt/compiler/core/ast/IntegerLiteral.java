@@ -19,16 +19,18 @@ package org.eclipse.edt.compiler.core.ast;
  */
 public class IntegerLiteral extends LiteralExpression {
 
-	private String integer;
+	private final int type;
+	private final String value;
 
-	public IntegerLiteral(String integer, int startOffset, int endOffset) {
+	public IntegerLiteral(int type, String value, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
-		this.integer = integer;
+		this.type = type;
+		this.value = value;
 	}
 	
 	public String getValue() {
-		return integer;
+		return value;
 	}
 	
 	public void accept(IASTVisitor visitor) {
@@ -37,14 +39,17 @@ public class IntegerLiteral extends LiteralExpression {
 	}
 	
 	public int getLiteralKind() {
-		return INTEGER_LITERAL;
+		return type;
 	}
 	
 	public String getCanonicalString() {
-		return integer;
+		if (type == INTEGER_LITERAL) {
+			return value;
+		}
+		return value + (type == SMALLINT_LITERAL ? "i" : "I");
 	}
 	
 	protected Object clone() throws CloneNotSupportedException {
-		return new IntegerLiteral(new String(integer), getOffset(), getOffset() + getLength());
+		return new IntegerLiteral(type, new String(value), getOffset(), getOffset() + getLength());
 	}
 }

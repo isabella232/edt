@@ -142,6 +142,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
 		return visitLiteral(booleanLiteral);
 	}
     
+    public boolean visit(BytesLiteral bytesLiteral) {
+		return visitLiteral(bytesLiteral);
+	}
+    
     public boolean visit(NewExpression newExpression) {
         return visitExpression(newExpression);
     }
@@ -156,6 +160,14 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public boolean visit(SubstringAccess substringAccess) {
         return visitExpression(substringAccess);
+    }
+    
+    public boolean visit(SuperExpression superExpression) {
+        return visitExpression(superExpression);
+    }
+    
+    public boolean visit(TernaryExpression ternaryExpression) {
+        return visitExpression(ternaryExpression);
     }
     
     public boolean visit(ThisExpression thisExpression) {
@@ -270,6 +282,10 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
 		endVisitLiteral(booleanLiteral);
 	}
     
+    public void endVisit(BytesLiteral bytesLiteral) {
+		endVisitLiteral(bytesLiteral);
+	}
+    
     public void endVisit(NewExpression newExpression) {
         endVisitExpression(newExpression);
     }
@@ -284,6 +300,14 @@ public abstract class AbstractASTExpressionVisitor extends AbstractASTVisitor {
     
     public void endVisit(SubstringAccess substringAccess) {
         endVisitExpression(substringAccess);
+    }
+    
+    public void endVisit(SuperExpression superExpression) {
+        endVisitExpression(superExpression);
+    }
+    
+    public void endVisit(TernaryExpression ternaryExpression) {
+        endVisitExpression(ternaryExpression);
     }
     
     public void endVisit(ThisExpression thisExpression) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -47,6 +47,7 @@ import org.eclipse.edt.compiler.core.ast.IntoClause;
 import org.eclipse.edt.compiler.core.ast.IsAExpression;
 import org.eclipse.edt.compiler.core.ast.IsNotExpression;
 import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.MoveStatement;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
@@ -67,6 +68,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.SubstringAccess;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
 import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.TypeLiteralExpression;
@@ -76,6 +78,7 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -88,6 +91,7 @@ import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -155,6 +159,28 @@ public abstract class DefaultBinder extends AbstractBinder {
 		
         return false;
 	}
+	
+	public boolean visit(SuperExpression superExpression) {
+		if (superExpression.isBindAttempted()) {
+	        return false;
+	    }
+		
+		Scope scopeForThis = currentScope.getScopeForKeywordThis();
+		if(scopeForThis instanceof FunctionContainerScope) {
+			Part part = ((FunctionContainerScope) scopeForThis).getPart();
+			if (part instanceof SubType) {
+				SubType sub = (SubType) part;
+				if (sub.getSuperTypes().size() > 0) {
+					superExpression.setType(sub.getSuperTypes().get(0));
+					return false;
+				}
+			}
+		}	
+		superExpression.setBindAttempted(true);
+		problemRequestor.acceptProblem(superExpression, IProblemRequestor.VARIABLE_NOT_FOUND, new String[] {superExpression.getCanonicalString()});
+		return false;
+	}
+	
 	
 	public boolean visit(ThisExpression thisExpression) {
 	    if (thisExpression.isBindAttempted()) {
@@ -511,7 +537,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				expr.accept(this);
 			}
 			else {
-				bindInvocationTarget(expr, false);
+				bindInvocationTarget(expr);
 			}
 		}
 	
@@ -562,6 +588,21 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 	}
 	
+	public void endVisit(org.eclipse.edt.compiler.core.ast.TernaryExpression ternaryExpression) {
+		org.eclipse.edt.mof.egl.Type secondType = ternaryExpression.getSecondExpr().resolveType();
+		org.eclipse.edt.mof.egl.Type thirdType = ternaryExpression.getThirdExpr().resolveType();
+		if (secondType != null && thirdType != null) {
+			ternaryExpression.setType(IRUtils.getCommonSupertype(secondType, thirdType));
+		}
+		else {
+			if((secondType != null || ternaryExpression.getSecondExpr().resolveMember() != null) && (thirdType != null || ternaryExpression.getThirdExpr().resolveMember() != null)) {
+				ternaryExpression.setType(TypeUtils.Type_ANY);
+			}
+			else {
+				ternaryExpression.setBindAttempted(true);
+			}
+		}
+	}
 	
 	public void endVisit(Assignment assignment) {}
 	
@@ -602,7 +643,17 @@ public abstract class DefaultBinder extends AbstractBinder {
 				
 	public void endVisit(IntegerLiteral integerLiteral) {
 		if(!integerLiteral.isBindAttempted()){
-			integerLiteral.setType(TypeUtils.Type_INT);
+			
+			switch (integerLiteral.getLiteralKind()) {
+				case LiteralExpression.BIGINT_LITERAL:
+					integerLiteral.setType(TypeUtils.Type_BIGINT);
+					break;
+				case LiteralExpression.SMALLINT_LITERAL:
+					integerLiteral.setType(TypeUtils.Type_SMALLINT);
+					break;
+				default:
+					integerLiteral.setType(TypeUtils.Type_INT);
+				}
 		}
 	}
 	
@@ -616,7 +667,13 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(FloatLiteral floatLiteral) {
 		if(!floatLiteral.isBindAttempted()){
-			floatLiteral.setType(TypeUtils.Type_FLOAT);
+			
+			if (floatLiteral.getLiteralKind() == LiteralExpression.SMALLFLOAT_LITERAL) {
+				floatLiteral.setType(TypeUtils.Type_SMALLFLOAT);
+			}
+			else {
+				floatLiteral.setType(TypeUtils.Type_FLOAT);
+			}
 		}
 	}
 	
@@ -628,31 +685,37 @@ public abstract class DefaultBinder extends AbstractBinder {
 	
 	public void endVisit(StringLiteral stringLiteral) {
 		if(!stringLiteral.isBindAttempted()){
-			stringLiteral.setType(TypeUtils.Type_STRING);
+			stringLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_String, stringLiteral.getValue().length()));
+		}
+	}
+	
+	public void endVisit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
+		if(!bytesLiteral.isBindAttempted()){
+			bytesLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_String, bytesLiteral.getValue().length() / 2));
 		}
 	}
 	
 	public void endVisit(HexLiteral hexLiteral) {
 		if(!hexLiteral.isBindAttempted()){
-			IRUtils.getEGLPrimitiveType(MofConversion.Type_Hex, hexLiteral.getValue().length());
+			hexLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Hex, hexLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(CharLiteral charLiteral) {
 		if(!charLiteral.isBindAttempted()){
-			IRUtils.getEGLPrimitiveType(MofConversion.Type_Char, charLiteral.getValue().length());
+			charLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_Char, charLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(DBCharLiteral dbcharLiteral) {
 		if(!dbcharLiteral.isBindAttempted()){
-			IRUtils.getEGLPrimitiveType(MofConversion.Type_DBChar, dbcharLiteral.getValue().length());
+			dbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_DBChar, dbcharLiteral.getValue().length()));
 		}
 	}
 	
 	public void endVisit(MBCharLiteral mbcharLiteral) {
 		if(!mbcharLiteral.isBindAttempted()){
-			IRUtils.getEGLPrimitiveType(MofConversion.Type_MBChar, mbcharLiteral.getValue().length());
+			mbcharLiteral.setType(IRUtils.getEGLPrimitiveType(MofConversion.Type_MBChar, mbcharLiteral.getValue().length()));
 		}
 	}
 	
@@ -766,6 +829,12 @@ public abstract class DefaultBinder extends AbstractBinder {
             return false;
         }
 
+        public boolean visit(SuperExpression superExpression) {
+        	//This is not really right, but it is not legal
+            superExpression.setType(leftHandScope.getType());
+            return false;
+        }
+
         public boolean visit(ThisExpression thisExpression) {
             thisExpression.setType(leftHandScope.getType());
             return false;
@@ -822,8 +891,8 @@ public abstract class DefaultBinder extends AbstractBinder {
 			return;
 		}
 		
-		//Handle this()
-		if (functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.ThisExpression) {
+		//Handle this() and super()
+		if (functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.ThisExpression || functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.SuperExpression) {
 			org.eclipse.edt.mof.egl.Type type = functionInvocation.getTarget().resolveType();
 			if (type != null) {
 				List<Constructor> constructors = getConstructors(type);
@@ -831,7 +900,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				if (constructors != null) {
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)type.getClassifier(), getArgumentTypes(functionInvocation.getArguments()), false);
 				}
-				if (cons == null) {
+				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.SuperExpression)) {
 					if (functionInvocation.getArguments().size() > 0) {
 						problemRequestor.acceptProblem(
 							functionInvocation,

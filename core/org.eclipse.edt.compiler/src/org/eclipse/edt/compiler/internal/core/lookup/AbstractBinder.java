@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NameType;
@@ -44,6 +45,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
+import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionPart;
@@ -51,6 +53,7 @@ import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 /**
@@ -63,6 +66,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     protected Part currentBinding;
     protected String packageName;
     protected ICompilerOptions compilerOptions;
+    protected boolean bindingCallTarget;
         
     public AbstractBinder(Scope currentScope, String packageName, IDependencyRequestor dependencyRequestor, ICompilerOptions compilerOptions) {
         this.currentScope = currentScope;
@@ -265,6 +269,11 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return null;
 		}
 		
+		//when binding a call target, allow references to non-static members
+		if (bindingCallTarget) {
+			return allMbrs;
+		}
+		
 		List <Member> staticMbrs = new ArrayList<Member>();
 		
 		for (Member mbr : allMbrs) {
@@ -434,7 +443,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
         return value;
     }
     
-    public void bindInvocationTarget(Expression invocationTarget, final boolean allowFuncs) {
+    public void bindInvocationTarget(Expression invocationTarget) {
     	final IASTVisitor thisVisitor = this;
     	invocationTarget.accept(new AbstractASTExpressionVisitor() {
     		public void endVisit(StringLiteral stringLiteral) {
@@ -502,7 +511,21 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     		org.eclipse.edt.mof.egl.IntegerLiteral lit = IrFactory.INSTANCE.createIntegerLiteral();
     		lit.setIsNegated(isNegative);
     		lit.setValue(str);
-    		constantValue = lit;
+    		org.eclipse.edt.mof.egl.Type type;
+    		switch (integerLiteral.getLiteralKind()) {
+			case LiteralExpression.BIGINT_LITERAL:
+    			type = TypeUtils.Type_BIGINT;
+				break;
+			case LiteralExpression.INTEGER_LITERAL:
+    			type = TypeUtils.Type_INT;
+				break;
+			case LiteralExpression.SMALLINT_LITERAL:
+    			type = TypeUtils.Type_SMALLINT;
+				break;
+			default:
+    			type = TypeUtils.Type_INT;
+			}
+    		lit.setType(type);
     		
 			return false;
 		}
@@ -513,6 +536,19 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     		org.eclipse.edt.mof.egl.FloatingPointLiteral lit = IrFactory.INSTANCE.createFloatingPointLiteral();
     		lit.setIsNegated(isNegative);
     		lit.setValue(str);
+    		org.eclipse.edt.mof.egl.Type type;
+    		switch (floatLiteral.getLiteralKind()) {
+			case LiteralExpression.FLOAT_LITERAL:
+    			type = TypeUtils.Type_FLOAT;
+				break;
+			case LiteralExpression.SMALLFLOAT_LITERAL:
+    			type = TypeUtils.Type_SMALLFLOAT;
+				break;
+			default:
+    			type = TypeUtils.Type_FLOAT;
+			}
+
+    		lit.setType(type);
     		constantValue = lit;
     		
 			return false;
@@ -590,6 +626,15 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return false;
 		}
 		
+		public boolean visit(org.eclipse.edt.compiler.core.ast.BytesLiteral bytesLiteral) {
+    		String str = bytesLiteral.getValue();
+
+    		BytesLiteral lit = IrFactory.INSTANCE.createBytesLiteral();
+    		lit.setValue(str);
+			constantValue = lit;
+			return false;
+		};
+
 		public boolean visit(UnaryExpression unaryExpression) {
 			if(unaryExpression.getOperator() == UnaryExpression.Operator.MINUS) {
 				isNegative = !isNegative;
@@ -597,6 +642,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 			return true;
 		}
 		
+		//TODO handle array literals when mof constant fields support them
     }
     
     protected static void setBindAttemptedForNames(Node node) {

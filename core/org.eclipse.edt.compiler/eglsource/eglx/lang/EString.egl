@@ -57,12 +57,12 @@ externalType EString extends AnyText type ParameterizableType {
 	/**
 	 * {@Operation ==} Compares two strings.
 	 */
-	static function $EQ(lvalue EString in, rvalue EString in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EString? in, rvalue EString? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two strings.
 	 */
-	static function $NEQ(lvalue EString in, rvalue EString in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EString? in, rvalue EString? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation [:} Returns the substring starting at fromIndex and ending at toIndex.

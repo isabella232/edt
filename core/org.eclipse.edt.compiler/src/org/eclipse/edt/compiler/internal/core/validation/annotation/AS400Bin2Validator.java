@@ -9,18 +9,19 @@
  * IBM Corporation - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.edt.compiler.binding;
+package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import java.util.List;
+import org.eclipse.edt.compiler.binding.AS400Bin2AnnotationTypeBinding;
 
-/**
- * @author Harmon
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-public interface IAnnotationBindingContainer extends IBinding{
-    public List getAnnotations();
-    public void addAnnotation(IAnnotationBinding annotation);
-
+public class AS400Bin2Validator extends AS400SmallIntValidator implements IAnnotationValidationRule {
+		
+	@Override
+	protected String getName() {
+		return AS400Bin2AnnotationTypeBinding.caseSensitiveName;
+	}
+	
+	@Override
+	protected String getInternedName() {
+		return AS400Bin2AnnotationTypeBinding.name;
+	}
 }

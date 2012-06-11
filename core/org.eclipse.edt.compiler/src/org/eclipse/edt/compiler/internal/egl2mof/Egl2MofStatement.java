@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.FunctionBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -828,7 +827,17 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		// Lookup statement generator based on DataSource operand in FROM/TO clause
 		// TODO this is not properly generalized yet
 		final Class<? extends IOStatementGenerator>[] generator = new Class[1];
-		node.accept(new AbstractASTExpressionVisitor() {	
+		node.accept(new AbstractASTExpressionVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.ForEachStatement forEachStatement) {
+				if (generator[0] == null) {
+					if (forEachStatement.getVariableDeclarationName() != null) {
+						generator[0] = IOStatementGenerator.Registry.get(EGL_lang_package);
+						return false;
+					}
+					return true;
+				}
+				return false;
+			};
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
 				if (generator[0] == null && clause.getExpression() != null) {
 					ITypeBinding type = clause.getExpression().resolveTypeBinding();

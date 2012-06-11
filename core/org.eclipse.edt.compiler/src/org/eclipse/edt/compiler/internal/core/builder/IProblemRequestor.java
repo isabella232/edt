@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -347,6 +347,10 @@ public interface IProblemRequestor {
 	public static final int TYPE_VALIDATOR_FUNCTION_NOT_VALID_FOR_VGUIRECORD = 3274;
 	public static final int NULLABLE_INVALID_IN_ISA_AS_OR_NEW = 3275;
 	public static final int VALIDATION_PROPERTIES_LIBRARY_WRONG_TYPE = 3276;
+	public static final int BYTES_LITERAL_LENGTH_MUST_BE_EVEN = 3277;
+	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
+	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
+	public static final int SMALLFLOAT_LITERAL_OUT_OF_RANGE = 3280;
 	
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	
@@ -440,6 +444,8 @@ public interface IProblemRequestor {
 
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
 	
+	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
+
 	public static final int SYSTEM_FUNCTION_CANNOT_BE_DELEGATED = 3416;
 	public static final int FUNCTION_WITH_CONVERSE_CANNOT_BE_DELEGATED = 3417;
 	public static final int MAIN_FUNCTION_CANNOT_BE_ASSIGNED_TO_DELEGATE = 3418;
@@ -452,7 +458,8 @@ public interface IProblemRequestor {
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE = 3425;
 	public static final int TYPE_INVALID_IN_EXTERNALTYPE_UNLESS_PROPERTY_SPECIFIED = 3426;
 	public static final int INTERFACE_MUST_EXTEND_INTERFACE = 3427;
-	
+	public static final int INVOCATION_MUST_BE_IN_TRY = 3428;
+	public static final int NO_DEFAULT_CONSTRUCTOR = 3429;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PART = 3430;
 	public static final int NULLABLE_TYPE_NOT_ALLOWED_IN_PROGRAM_PARAMETER = 3431;
 	public static final int NULLABLE_TYPE_BASE_MUST_BE_VALUE_TYPE = 3432;
@@ -463,6 +470,7 @@ public interface IProblemRequestor {
 	public static final int SETTING_NOT_ALLOWED = 3436;
 	public static final int SETTING_NOT_ALLOWED_NULL = 3437;
 	public static final int PROPERTY_OVERRIDES_NOT_SUPPORTED = 3438;
+	public static final int POSITIONAL_PROPERTY_NOT_ALLOWED_WITH_INITIAL_SIZE = 3439;
 
 	public static final int TYPE_IN_CATCH_BLOCK_NOT_EXCEPTION = 3440;
 	public static final int DUPLICATE_ONEXCEPTION_EXCEPTION = 3441;
@@ -485,7 +493,7 @@ public interface IProblemRequestor {
 	public static final int LIBRARY_FUNCTION_NOT_ALLOWED_FOR_PROPERTY = 3461;
 	public static final int PROPERTY_NOT_VALID_FOR_TYPES = 3462;
 
-	public static final int MOVE_NOT_SUPPORTED = 3463;
+	public static final int STATEMENT_NOT_SUPPORTED = 3463;
 	
 	public static final int LENGTH_OF_NONDECIMAL_DIGITS_FOR_CONSTANT_TOO_LONG = 3465;
 	public static final int DECIMALS_OF_VALUE_FOR_CONSTANT_TOO_LONG = 3466;
@@ -498,6 +506,8 @@ public interface IProblemRequestor {
 	public static final int MULTI_INDICES_NOT_SUPPORTED= 3472;
 	public static final int ENUMERATION_NO_FIELDS= 3473;
 	
+	public static final int THROWS_NOT_VALID_HERE= 3480;
+
 
 //3896-3999 ARE IN EGLMESSAGES 					
 
@@ -911,6 +921,8 @@ public interface IProblemRequestor {
 	//5035-5050: Used for For statement messages
 	public static final int FOR_STATEMENT_COUNTER_MUST_BE_INT = 5035;
 	public static final int FOR_STATEMENT_EXPR_MUST_BE_INT = 5036;
+	public static final int FOREACH_ARRAY_MUST_DECLARE_VARIABLE = 5037;
+	public static final int FOREACH_SOURCE_MUST_BE_ARRAY = 5038;
 
 	public static final int COND_INVALID_ESCAPE_CHARACTER = 5040;
 	public static final int COND_OPERAND_MUST_BE_STRING = 5041;
@@ -1256,6 +1268,40 @@ public interface IProblemRequestor {
     public static final int NATIVE_LIBRARYS_DO_NOT_SUPPORT_USE_STATEMENTS = 5616;
     public static final int LIBRARY_HAS_INVALID_SUBTYPE = 5617;
     public static final int SUBSTRUCTURED_ITEM_CANNOT_BE_ARGUMENT_TO_NATIVE_LIBRARY_FUNCTION = 5618;
+    public static final int CANNOT_PASS_NULL = 5619;
+    public static final int CANNOT_RETURN_NULL = 5620;
+    
+    public static final int AS400_ANNOTATION_TYPE_MISMATCH = 5700;
+    public static final int WRONG_NUMBER_OF_PARAMETER_ANNOTATIONS = 5701;
+    public static final int PARAMETER_ANNOTATION_INVALID = 5702;
+    public static final int IBMIPROGRAM_CONTAINER_INVALID = 5703;
+    public static final int IBMIPROGRAM_CANNOT_HAVE_STMTS = 5704;
+    public static final int IBMIPROGRAM_ONLY_SERVICE_CAN_RETURN = 5705;
+    public static final int IBMIPROGRAM_CAN_ONLY_RETURN_INT = 5706;
+    public static final int AS400_BAD_LENGTH = 5707;
+    public static final int AS400_NEGATIVE_DECIMAL = 5708;
+    public static final int AS400_BAD_DECIMAL = 5709;
+    public static final int AS400_PROPERTY_REQUIRED = 5710;
+    public static final int AS400_PROPERTY_NOT_ALLOWED = 5711;
+    public static final int ELEMENTTYPE_ANNOTATION_INVALID = 5712;
+    public static final int RETURN_COUNT_VAR_MUST_BE_INT_COMPAT = 5713;
+    public static final int RETURN_COUNT_VAR_DEFINED_IN_WRONG_PLACE = 5714;
+    public static final int PROGRAM_PARAMETER_ANNOTATION_REQUIRED = 5715;
+    public static final int AS400_ANNOTATION_NULLABLE_TYPE_INVALID = 5716;
+    public static final int IBMIPROGRAM_PARM_TYPE_INVALID = 5717;
+    public static final int IBMIPROGRAM_NULLABLE_PARM_INVALID = 5718;
+    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_INVALID = 5719;
+    public static final int IBMIPROGRAM_PARM_STRUCT_TYPE_INVALID = 5720;
+    public static final int IBMIPROGRAM_NULLABLE_PARM_STRUCT_INVALID = 5721;
+    public static final int IBMIPROGRAM_ARRAY_NULLABLE_PARM_STRUCT_INVALID = 5722;
+    public static final int IBMIPROGRAM_PARM_STRUCT_REQUIRES_AS400 = 5723;
+    public static final int IBMIPROGRAM_CALLBACK_OR_RETURNS_REQUIRED = 5724;
+    public static final int IBMIPROGRAM_RETURNS_NOT_ALLOWED = 5725;
+    public static final int IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION = 5726;
+    public static final int IBMIPROGRAM_USING_HAS_WRONG_TYPE = 5727;
+    public static final int IBMIPROGRAM_MUST_BE_SPECIFIED = 5728;
+    public static final int IBMIPROGRAM_CALLBACK_NOT_SUPPORTED = 5729;
+    
     
 //6000-6050 ARE IN EGLMESSAGES
 
@@ -1573,6 +1619,7 @@ public interface IProblemRequestor {
 	public static final int CONSTRUCTOR_CALL_WRONG_PLACE = 6756;
 
 	public static final int CANNOT_ASSIGN_NULL = 6757;
+	public static final int FUNCTION_ARG_CANNOT_BE_SUPER = 6758;
 
 	public static final int MOVE_MODIFIER_INVALID = 6760;
 	public static final int MOVE_MUST_BE_REFERENCE = 6761;
@@ -1786,9 +1833,9 @@ public interface IProblemRequestor {
 	public static final int VIEWROOTVAR_NOT_FOUND = 7821;
 	public static final int VIEWROOTVAR_NOT_JAVAOBJECT_INTERFACE = 7822;
 	public static final int RECORDS_CANNOT_BE_PARAMETERS_IN_JAVAOBJECT_INTERFACE = 7823;
-	public static final int IN_MODIFIER_REQUIRED_FOR_PRIMITIVE_JAVAOBJECT_FUNCTION_PARAMETERS = 7824;
+	public static final int IN_MODIFIER_REQUIRED_FOR_JAVAOBJECT_FUNCTION_PARAMETERS = 7824;
 	public static final int NEW_NOT_SUPPORTED_FOR_SERVICE_OR_INTERFACE = 7825;
-	public static final int IN_MODIFIER_REQUIRED_FOR_PRIMITIVE_JAVASCRIPTOBJECT_FUNCTION_PARAMETERS = 7826;
+	public static final int IN_MODIFIER_REQUIRED_FOR_JAVASCRIPTOBJECT_FUNCTION_PARAMETERS = 7826;
 
 	public static final int MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND = 7830;
 	

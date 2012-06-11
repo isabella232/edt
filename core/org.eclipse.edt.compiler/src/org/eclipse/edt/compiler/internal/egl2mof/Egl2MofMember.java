@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -39,6 +39,7 @@ import org.eclipse.edt.compiler.core.ast.FloatLiteral;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.NullLiteral;
 import org.eclipse.edt.compiler.core.ast.SetValuesExpression;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
@@ -58,6 +59,8 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
+import org.eclipse.edt.mof.egl.BytesLiteral;
+import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.ConstantFormField;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.DynamicAccess;
@@ -79,6 +82,7 @@ import org.eclipse.edt.mof.egl.Parameter;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
+import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
@@ -86,8 +90,10 @@ import org.eclipse.edt.mof.egl.StatementBlock;
 import org.eclipse.edt.mof.egl.StructuredField;
 import org.eclipse.edt.mof.egl.TypedElement;
 import org.eclipse.edt.mof.egl.VariableFormField;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -270,8 +276,16 @@ class Egl2MofMember extends Egl2MofPart {
 			obj = func;
 		}
 		else {
-			EClass funcClass = mofMemberTypeFor(function);
-			Function func = (Function)funcClass.newInstance();
+			Function func; 
+//FIXME JV this need to be extensible 		
+			IAnnotationBinding ibmiProgram = function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram");
+			if(ibmiProgram == null){
+				EClass funcClass = mofMemberTypeFor(function);
+				func = (Function)funcClass.newInstance();
+			}
+			else{
+				func = IBMiFactory.INSTANCE.createIBMiFunction();
+			}
 			if (func instanceof Operation) {
 				IAnnotationBinding ann = this.getAnnotation(function.getType(), "Operation");
 				((Operation)func).setOpSymbol((String)getFieldValue(ann, "opSymbol"));
@@ -279,7 +293,7 @@ class Egl2MofMember extends Egl2MofPart {
 			setUpEglTypedElement(func, function);
 			func.setIsStatic(node.isStatic());
 					
-			if (!node.isAbstract() && !isEglSystemFunction(function)) {
+			if (!node.isAbstract()) {
 				StatementBlock stmts = factory.createStatementBlock();
 				stmts.setContainer(func);
 				func.setStatementBlock(stmts);
@@ -434,6 +448,7 @@ class Egl2MofMember extends Egl2MofPart {
 				EEnumLiteral literal = (EEnumLiteral)mof.getEEnumLiteralClass().newInstance();
 				literal.setName(binding.getCaseSensitiveName());
 				literal.setValue(value);
+				createAnnotations(binding, literal);
 				stack.push(literal);
 			}
 			else {
@@ -441,6 +456,7 @@ class Egl2MofMember extends Egl2MofPart {
 				entry.setName(binding.getCaseSensitiveName());
 				entry.setValue(value);
 				eObjects.put(binding, entry);
+				createAnnotations(binding, (Element)entry);
 				setElementInformation(enumField, entry);
 				stack.push(entry);
 			}
@@ -521,6 +537,9 @@ class Egl2MofMember extends Egl2MofPart {
 				if (Binding.isValidBinding(lhsExpr.resolveDataBinding())) {
 					if (lhsExpr.resolveDataBinding() instanceof IAnnotationBinding) {
 						Annotation value = (Annotation)mofValueFrom(lhsExpr.resolveDataBinding());
+						if (assignment.getRightHandSide() instanceof NullLiteral && value != null) {
+							value.setValue(factory.createNullLiteral());
+						}
 						context.getAnnotations().add(value);
 					}
 					// Check if this is setting a value into the context element, i.e. setting contents into a DataTable
@@ -650,6 +669,7 @@ class Egl2MofMember extends Egl2MofPart {
 							qualifier = (Expression)context;
 						}
 						org.eclipse.edt.mof.egl.IntegerLiteral indexExpr = factory.createIntegerLiteral();
+						indexExpr.setType(IRUtils.getEGLPrimitiveType(Type_Int));
 						indexExpr.setValue(String.valueOf(arrayIndex));
 						QualifiedFunctionInvocation func = factory.createQualifiedFunctionInvocation();
 						setElementInformation(expr, func);
@@ -689,9 +709,23 @@ class Egl2MofMember extends Egl2MofPart {
 		else if (expr instanceof BooleanLiteral) {
 			value = ((BooleanLiteral)expr).booleanValue() == org.eclipse.edt.compiler.core.Boolean.YES ? Boolean.TRUE : Boolean.FALSE;
 		}
+		else if (expr instanceof BytesLiteral) {
+			value = ((BytesLiteral)expr).getValue();
+		}
 		else if (expr instanceof IntegerLiteral) {
 			try {
-				value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+				switch (((IntegerLiteral)expr).getLiteralKind()) {
+					case LiteralExpression.BIGINT_LITERAL:
+						value = Long.parseLong(((IntegerLiteral)expr).getValue());
+						break;
+					case LiteralExpression.SMALLINT_LITERAL:
+						value = Short.parseShort(((IntegerLiteral)expr).getValue());
+						break;
+					case LiteralExpression.INTEGER_LITERAL:
+					default:
+						value = Integer.parseInt(((IntegerLiteral)expr).getValue());
+						break;
+				}
 			} catch (NumberFormatException e) {
 			}
 		}
@@ -699,10 +733,7 @@ class Egl2MofMember extends Egl2MofPart {
 			value = ((StringLiteral)expr).getValue();
 		}
 		else if (expr instanceof FloatLiteral) {
-			try {
-				value = Float.parseFloat(((FloatLiteral)expr).getValue());
-			} catch (NumberFormatException e) {
-			}
+			value = Float.parseFloat(((FloatLiteral)expr).getValue());
 		}
 		else if (expr instanceof AnnotationExpression) {
 			ITypeBinding typeBinding = ((AnnotationExpression)expr).resolveTypeBinding();
@@ -742,11 +773,18 @@ class Egl2MofMember extends Egl2MofPart {
 					// as in "displayName = "abc" being the same thing as "@DisplayName{"abc")"
 					EField field = (EField)target.getEClass().getEField((nameExpr.getNameComponents()[0]));
 					if (field == null) {
-						source = mofValueFrom(nameExpr.resolveBinding());
-						((Element)target).getAnnotations().add((Annotation)source);
+						if (Binding.isValidBinding(nameExpr.resolveBinding())) {
+							source = mofValueFrom(nameExpr.resolveBinding());
+							((Element)target).getAnnotations().add((Annotation)source);
+						}
 					}
 					else {
-						source = evaluateExpression(assignment.getRightHandSide());
+						if (assignment.getRightHandSide() instanceof NullLiteral) {
+							source = factory.createNullLiteral();
+						}
+						else {
+							source = evaluateExpression(assignment.getRightHandSide());
+						}
 						String[] names = nameExpr.getNameComponents();
 						if (nameExpr.getNameComponents().length > 1) {
 							for (int i=1; i<names.length; i++) {
@@ -856,6 +894,9 @@ class Egl2MofMember extends Egl2MofPart {
 			setElementInformation(initializer, field.getInitializerStatements());
 			initializer.accept(this);
 			Expression expr = (Expression)stack.pop();
+			if (field instanceof ConstantField && expr instanceof PrimitiveTypeLiteral) {
+				((ConstantField)field).setValue((PrimitiveTypeLiteral)expr);
+			}
 			Statement stmt = createAssignmentStatement(field, expr);
 			setElementInformation(initializer, stmt);
 			field.getInitializerStatements().getStatements().add(stmt);

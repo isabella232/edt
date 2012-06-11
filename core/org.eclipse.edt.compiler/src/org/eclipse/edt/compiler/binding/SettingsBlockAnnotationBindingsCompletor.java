@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011 IBM Corporation and others.
+ * Copyright © 2011, 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.AnnotationExpression;
@@ -37,6 +36,7 @@ import org.eclipse.edt.compiler.core.ast.FunctionInvocation;
 import org.eclipse.edt.compiler.core.ast.HexLiteral;
 import org.eclipse.edt.compiler.core.ast.IASTVisitor;
 import org.eclipse.edt.compiler.core.ast.IntegerLiteral;
+import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -59,7 +59,6 @@ import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationRightHandScope;
-import org.eclipse.edt.compiler.internal.core.lookup.DataBindingScope;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.NullScope;
@@ -72,7 +71,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.TypeScope;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemPartManager;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.core.utils.TypeParser;
+import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.SuperExpression;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
@@ -209,6 +210,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							if(parentScope instanceof AnnotationLeftHandScope &&
 							   annotationTypeBindingImpl.isApplicableFor(((AnnotationLeftHandScope) parentScope).getBindingBeingAnnotated())) {
 								qualifiedName.setBinding(annotationBinding);
+								qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 							}
 							else {
 								getAnnotationLeftHandScope().setNotApplicableBinding(annotationBinding);
@@ -218,6 +220,7 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 							}
 						} else {
 							qualifiedName.setBinding(annotationBinding);
+							qualifiedName.setTypeBinding(annotationTypeBindingImpl);
 						}
 					}
 				} catch (ResolutionException e) {
@@ -247,6 +250,37 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		public void setAnnotation(IAnnotationBinding annotation) {
 			this.annotation = annotation;
+		}
+
+		public boolean visit(SuperExpression superExpression) {
+			AnnotationLeftHandScope myScope = getAnnotationLeftHandScope().getTopLevelAnnotationLeftHandScope();
+			if (myScope.getBindingBeingAnnotated().isDataBinding()) {
+				ITypeBinding typeBinding = myScope.getTypeOfBindingBeingAnnotated();
+				
+				if (typeBinding instanceof PartBinding) {
+					typeBinding = ((PartBinding)typeBinding).getDefaultSuperType();
+					if (Binding.isValidBinding(typeBinding)) {
+						superExpression.setTypeBinding(typeBinding);
+						return false;
+					}
+				}
+			}
+
+			if (myScope.getBindingBeingAnnotated().isTypeBinding()) {
+				ITypeBinding typeBinding = (ITypeBinding) myScope.getBindingBeingAnnotated();
+				if (typeBinding instanceof PartBinding) {
+					typeBinding = ((PartBinding)typeBinding).getDefaultSuperType();
+					if (Binding.isValidBinding(typeBinding)) {
+						superExpression.setTypeBinding(typeBinding);
+						return false;
+					}
+				}
+			}
+
+			superExpression.setDataBinding(IBinding.NOT_FOUND_BINDING);
+			superExpression.setTypeBinding(IBinding.NOT_FOUND_BINDING);
+			
+			return false;
 		}
 
 		public boolean visit(ThisExpression thisExpression) {
@@ -465,11 +499,30 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			if (isNegative) {
 				str = "-" + str;
 			}
-			try {
-				value = new Integer(str);
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
+			
+			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+				try {
+					value = new Long(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+				try {
+					value = new Short(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			else {
+				try {
+					value = new Integer(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
 			}
 			return false;
 		}
@@ -617,6 +670,11 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 
 		public boolean visit(BooleanLiteral booleanLiteral) {
 			value = booleanLiteral.booleanValue();
+			return false;
+		}
+
+		public boolean visit(BytesLiteral bytesLiteral) {
+			value = bytesLiteral.getValue();
 			return false;
 		}
 
@@ -996,20 +1054,32 @@ public class SettingsBlockAnnotationBindingsCompletor extends DefaultBinder {
 			if (isNegative) {
 				str = "-" + str;
 			}
-			try {
-				if (integerLiteral.getValue().length() > 18) {
-					value = new BigInteger(str);
-				} else {
-					if (integerLiteral.getValue().length() > 9) {
-						value = new Long(str);
-					} else {
-						value = new Integer(str);
-					}
+			
+			if (integerLiteral.getLiteralKind() == LiteralExpression.BIGINT_LITERAL) {
+				try {
+					value = new Long(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.BIGINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
 				}
-			} catch (NumberFormatException e) {
-				problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
-				value = null;
 			}
+			else if (integerLiteral.getLiteralKind() == LiteralExpression.SMALLINT_LITERAL) {
+				try {
+					value = new Short(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.SMALLINT_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			else {
+				try {
+					value = new Integer(str);
+				} catch (NumberFormatException e) {
+					problemRequestor.acceptProblem(integerLiteral, IProblemRequestor.INTEGER_LITERAL_OUT_OF_RANGE, new String[] { str });
+					value = null;
+				}
+			}
+			
 			return false;
 		}
 

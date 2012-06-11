@@ -66,7 +66,6 @@ public class ServicesActionStatementGenerator extends AbstractIOStatementGenerat
 				stmt.setReturns((LHSExpr)stack.pop());
 			}
 		}
-		setElementInformation(callStatement, stmt);
 		stack.push(stmt);
 		if (callStatement.hasSettingsBlock())
 			processSettings(stmt, callStatement.getSettingsBlock());

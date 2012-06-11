@@ -57,12 +57,12 @@ externalType EBytes extends AnyValue type ParameterizableType {
 	/**
 	 * {@Operation ==} Compares two bytes.
 	 */
-	static function $EQ(lvalue EBytes in, rvalue EBytes in) returns(EBoolean) {@Operation{"=="}};
+	static function $EQ(lvalue EBytes? in, rvalue EBytes? in) returns(EBoolean) {@Operation{"=="}};
 
 	/**
 	 * {@Operation !=} Compares two bytes.
 	 */
-	static function $NEQ(lvalue EBytes in, rvalue EBytes in) returns(EBoolean) {@Operation{"!="}};
+	static function $NEQ(lvalue EBytes? in, rvalue EBytes? in) returns(EBoolean) {@Operation{"!="}};
 
 	/**
 	 * {@Operation [:} Returns the substring starting at fromIndex and ending at toIndex.
