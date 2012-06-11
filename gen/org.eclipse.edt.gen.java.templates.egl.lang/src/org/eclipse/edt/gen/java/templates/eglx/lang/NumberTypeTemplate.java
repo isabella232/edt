@@ -71,13 +71,13 @@ public class NumberTypeTemplate extends JavaTemplate {
 
 	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// we only need to check for minus sign and if found, we need to change it to .negate()
-		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals("-")) {
+		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals(arg.Op_NEGATE)) {
 			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".negate(");
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(")");
-			// we only need to check for bitwise negate sign and if found, we need to change it to .negate() - 1
-		} else if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals("~")) {
+			// we only need to check for bitwise not sign and if found, we need to change it to .negate() - 1
+		} else if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber") && arg.getOperator().equals(arg.Op_BITWISENOT)) {
 			out.print("(");
 			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.EGLImplementation);
 			out.print(".negate(");
