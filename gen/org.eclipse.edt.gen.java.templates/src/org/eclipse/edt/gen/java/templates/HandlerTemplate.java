@@ -41,6 +41,9 @@ public class HandlerTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, type, ctx, out);
 		out.println(");");
+		out.println("}");
+
+		out.println("{");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

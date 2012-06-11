@@ -48,10 +48,11 @@ public class ServiceTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, service, ctx, out);
 		out.println(");");
-		out.println("if(Runtime.getRunUnit().getActiveExecutable() == null){");
-		out.println("Runtime.getRunUnit().setActiveExecutable(this);");
 		out.println("}");
 
+		out.println("{");
+		out.println("if(Runtime.getRunUnit().getActiveExecutable() == null)");
+		out.println("Runtime.getRunUnit().setActiveExecutable(this);");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

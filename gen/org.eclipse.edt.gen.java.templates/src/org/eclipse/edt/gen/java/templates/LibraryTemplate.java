@@ -69,6 +69,9 @@ public class LibraryTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, library, ctx, out);
 		out.println(");");
+		out.println("}");
+
+		out.println("{");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}

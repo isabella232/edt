@@ -62,8 +62,12 @@ public class RecordTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, part, ctx, out);
 		out.println(");");
+		out.println("}");
+
+		out.println("{");
 		out.println("ezeInitialize();");
 		out.println("}");
+
 		// generate inherited methods
 		genConstructorEzeCopy(part, ctx, out);
 		genConstructorEzeNewValue(part, ctx, out);

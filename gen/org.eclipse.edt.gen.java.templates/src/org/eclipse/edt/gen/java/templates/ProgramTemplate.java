@@ -60,9 +60,11 @@ public class ProgramTemplate extends JavaTemplate {
 		out.print("super(");
 		ctx.invoke(genAdditionalSuperConstructorArgs, program, ctx, out);
 		out.println(");");
-		out.println("if(org.eclipse.edt.javart.Runtime.getRunUnit().getActiveExecutable() == null){");
-		out.println("org.eclipse.edt.javart.Runtime.getRunUnit().setActiveExecutable(this);");
 		out.println("}");
+
+		out.println("{");
+		out.println("if(org.eclipse.edt.javart.Runtime.getRunUnit().getActiveExecutable() == null)");
+		out.println("org.eclipse.edt.javart.Runtime.getRunUnit().setActiveExecutable(this);");
 		out.println("ezeInitialize();");
 		out.println("}");
 	}
