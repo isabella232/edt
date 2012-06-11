@@ -48,10 +48,10 @@ public class ParameterizedTypeTemplate extends JavaTemplate {
 
 	public void genUnaryExpression(ParameterizedType type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// we only need to check for minus sign and if found, we need to change it to .negate()
-		if (arg.getOperator().equals("-")) {
+		if (arg.getOperator().equals(arg.Op_NEGATE)) {
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(".negate()");
-		} else if (arg.getOperator().equals("~")) {
+		} else if (arg.getOperator().equals(arg.Op_BITWISENOT)) {
 			out.print("(");
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(".negate()");

@@ -384,14 +384,23 @@ public class TypeTemplate extends JavaTemplate {
 		}
 	}
 
-	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, UnaryExpression arg) {
-		// we only need to check for minus sign and if found, we need to change it to -()
-		if (arg.getOperator().equals("-") || arg.getOperator().equals("!") || arg.getOperator().equals("~")) {
-			out.print(arg.getOperator() + "(");
+	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, UnaryExpression arg) throws GenerationException {
+		// if either side of this expression is nullable
+		if (arg.getExpression().isNullable()) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + ".");
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+			out.print("(");
 			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 			out.print(")");
-		} else
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+		} else {
+			// we only need to check for minus sign and if found, we need to change it to -()
+			if (arg.getOperator().equals(arg.Op_NEGATE) || arg.getOperator().equals(arg.Op_NOT) || arg.getOperator().equals(arg.Op_BITWISENOT)) {
+				out.print(arg.getOperator() + "(");
+				ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+				out.print(")");
+			} else
+				ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+		}
 	}
 
 	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg1, Field arg2) {
