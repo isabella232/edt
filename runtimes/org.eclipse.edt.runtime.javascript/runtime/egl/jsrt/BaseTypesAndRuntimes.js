@@ -328,7 +328,7 @@ egl.stringToTime = function(s, format)
 
 egl.stringToTimeInternal = function(s, format, strict, defaultSeparator)
 {
-	var result = new Date(0);
+	var result = new Date(1970, 0, 1);
 	var tokens = format.match(/HH|hh|mm|ss|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	result.setSeconds(0);
@@ -1000,7 +1000,7 @@ egl.stringToTimeStamp = function(s, format)
 
 egl.stringToTimeStampInternal = function( s, format, strict, defaultSeparator )
 {
-	var result = new Date(0);
+	var result = new Date(1970, 0, 1);
 
 	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|fff|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
