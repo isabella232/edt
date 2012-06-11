@@ -398,7 +398,7 @@ public abstract class EglContext extends TemplateContext {
 		Classifier classifier = getClassifierForTemplate(template);
 		StructPart superType = null;
 		if (classifier instanceof StructPart && !((StructPart) classifier).getSuperTypes().isEmpty()) {
-			superType = ((StructPart) type.getClassifier()).getSuperTypes().get(0);
+			superType = ((StructPart) classifier).getSuperTypes().get(0);
 		}
 		if (superType == null) {
 			return invokeSuper(template, methodName, (EObject) type, args);
