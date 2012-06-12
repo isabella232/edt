@@ -20,7 +20,6 @@ import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.TestResultRoot
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
@@ -30,18 +29,18 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 	private Color red;
 	private Color green;
 	private Color purple;
-	private Color yellow;
+	private Color orange;
 	
 	public RSTreeLabelProvider(){
 		red = new Color(Display.getCurrent(), new RGB(255, 0, 0));			
 		green = new Color(Display.getCurrent(), new RGB(0, 128, 0));
 		purple = new Color(Display.getCurrent(), new RGB(184, 0, 73));
-		yellow = new Color(Display.getCurrent(), new RGB(255, 255, 0));
+		orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
 		colors = new ArrayList<Color>();
 		colors.add(red);
 		colors.add(green);
 		colors.add(purple);
-		colors.add(yellow);
+		colors.add(orange);
 	}
 	
 	@Override
@@ -59,16 +58,6 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 			return ((TestResultPkgNode)element).pkgName;
 		
 		return element.toString();
-	}
-	
-	@Override
-	public Image getImage(Object element) {
-		if(element instanceof Record_ResultSummary){
-			Record_ResultSummary rs = (Record_ResultSummary)element;
-			//if(rs.resultCode == ConstantUtil.SPASSED)
-				//ImageDescriptor.createFromURL(url)
-		}
-		return super.getImage(element);
 	}
 
 	@Override
@@ -89,7 +78,7 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 			case ConstantUtil.SERROR:
 				return purple;
 			case ConstantUtil.SNOT_RUN:
-				return yellow;
+				return orange;
 			default:
 				return red;
 			}			

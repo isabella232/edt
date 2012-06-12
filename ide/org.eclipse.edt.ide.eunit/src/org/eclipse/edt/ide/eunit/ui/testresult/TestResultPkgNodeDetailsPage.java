@@ -61,7 +61,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	private Color red;
 	private Color green;
 	private Color purple;
-	private Color yellow;
+	private Color orange;
 	private Color blue;
 	
 	public TestResultPkgNodeDetailsPage(ResultStatisticCnts statistic){
@@ -124,12 +124,12 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		return purple;
 	}
 	
-	protected Color getYellow(){
-		if(yellow == null){
-			yellow = new Color(Display.getCurrent(), new RGB(255, 255, 0));
-			colors.add(yellow);
+	protected Color getOrange(){
+		if(orange == null){
+			orange = new Color(Display.getCurrent(), new RGB(255, 127, 0));
+			colors.add(orange);
 		}
-		return yellow;
+		return orange;
 	}
 	
 	@Override
@@ -215,7 +215,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getErrCnt(), " HAVE ERROR.", getPurple(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getBadCnt(), " ARE BAD.", getBlue(), false);
-		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getYellow(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getOrange(), false);
 				
 		if(statisticCnt.getTestCnt() != statisticCnt.getExpectedCnt())
 		{
@@ -259,7 +259,7 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		
 		// Data Set
 		TextDataSet categoryValues = TextDataSetImpl.create( new String[]{
-				"passed", "failed", "err", "bad", "notRun"} );//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				"Passed", "Failed", "Error", "Bad", "Not Run"} );//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		NumberDataSet seriesOneValues = NumberDataSetImpl.create( new double[]{
 				statisticCnt.getPassedCnt(), statisticCnt.getFailedCnt(), 
 				statisticCnt.getErrCnt(), statisticCnt.getBadCnt(), statisticCnt.getNotRunCnt()

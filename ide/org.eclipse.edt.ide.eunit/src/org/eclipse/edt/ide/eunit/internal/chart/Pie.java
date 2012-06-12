@@ -13,12 +13,8 @@ package org.eclipse.edt.ide.eunit.internal.chart;
 
 import org.eclipse.birt.chart.model.Chart;
 import org.eclipse.birt.chart.model.ChartWithoutAxes;
-import org.eclipse.birt.chart.model.attribute.ChartDimension;
-import org.eclipse.birt.chart.model.attribute.DataPointComponent;
-import org.eclipse.birt.chart.model.attribute.DataPointComponentType;
-import org.eclipse.birt.chart.model.attribute.impl.DataPointComponentImpl;
-import org.eclipse.birt.chart.model.attribute.impl.JavaNumberFormatSpecifierImpl;
-import org.eclipse.birt.chart.model.attribute.impl.StringFormatSpecifierImpl;
+import org.eclipse.birt.chart.model.attribute.*;
+import org.eclipse.birt.chart.model.attribute.impl.*;
 import org.eclipse.birt.chart.model.component.Series;
 import org.eclipse.birt.chart.model.component.impl.SeriesImpl;
 import org.eclipse.birt.chart.model.data.NumberDataSet;
@@ -36,7 +32,7 @@ public class Pie
 	public static final Chart createPie( TextDataSet categoryValues, NumberDataSet seriesOneValues )
 	{
 		ChartWithoutAxes cwoaPie = ChartWithoutAxesImpl.create( );
-		cwoaPie.setDimension( ChartDimension.TWO_DIMENSIONAL_WITH_DEPTH_LITERAL );
+		cwoaPie.setDimension( ChartDimension.TWO_DIMENSIONAL_LITERAL );
 		cwoaPie.setType( "Pie Chart" ); //$NON-NLS-1$	
 		cwoaPie.setSubType( "Standard Pie Chart" ); //$NON-NLS-1$
 		
@@ -48,7 +44,7 @@ public class Pie
 		lg.getOutline( ).setVisible( true );
 
 		// Title
-		cwoaPie.getTitle( ).getLabel( ).getCaption( ).setValue( "Test Result Statistics Chart" );//$NON-NLS-1$
+		cwoaPie.getTitle( ).getLabel( ).getCaption( ).setValue( "Test Results" );//$NON-NLS-1$
 
 
 		// Base Series
@@ -57,8 +53,15 @@ public class Pie
 
 		SeriesDefinition sd = SeriesDefinitionImpl.create( );
 		cwoaPie.getSeriesDefinitions( ).add( sd );
-		sd.getSeriesPalette( ).shift( 0 );
 		sd.getSeries( ).add( seCategory );
+
+		Palette palette = PaletteImpl.create( 0, true );
+		palette.getEntries().add( ColorDefinitionImpl.create( 0, 128, 0 ) );
+		palette.getEntries().add( ColorDefinitionImpl.RED() );
+		palette.getEntries().add( ColorDefinitionImpl.create( 184, 0, 73 ) );
+		palette.getEntries().add( ColorDefinitionImpl.BLUE() );
+		palette.getEntries().add( ColorDefinitionImpl.create( 255, 127, 0 ) );
+		sd.setSeriesPalette( palette );
 
 		// Orthogonal Series
 		DataPointComponent dpc = DataPointComponentImpl.create(DataPointComponentType.ORTHOGONAL_VALUE_LITERAL, JavaNumberFormatSpecifierImpl.create("###,###"));
@@ -67,7 +70,6 @@ public class Pie
 				
 		PieSeries sePie = (PieSeries) PieSeriesImpl.create( );
 		sePie.setDataSet( seriesOneValues );
-		sePie.setSeriesIdentifier( "Test Result Count" );//$NON-NLS-1$ 
 		sePie.setExplosion( 5 );
 				
 		sePie.getDataPoint().getComponents().clear();

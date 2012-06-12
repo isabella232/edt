@@ -15,9 +15,9 @@ public class ConstantUtil {
 
 	public static final int SPASSED = 0;		//green
 	public static final int SFAILED = 1;		//red
-	public static final int SERROR = 2;			//orange
-	public static final int SNOT_RUN = 3;		//yellow
-	public static final int SBAD = 4;
+	public static final int SERROR = 2;			//purple
+	public static final int SNOT_RUN = 3;		//orange
+	public static final int SBAD = 4;			//blue
 
 	final static String[] STEXTS  = {"Passed.", "Failed.", "Error.", "Not run.", "Bad."};
 	
