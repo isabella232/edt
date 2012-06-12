@@ -427,8 +427,7 @@ public class BinaryReadOnlyFile implements IFile {
 
 	@Override
 	public IWorkspace getWorkspace() {
-		// TODO Auto-generated method stub
-		return null;
+		return getProject() != null ?  getProject().getWorkspace() : null;
 	}
 
 	@Override
