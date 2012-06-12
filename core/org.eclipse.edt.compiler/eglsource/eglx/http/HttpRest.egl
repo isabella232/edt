@@ -11,11 +11,9 @@
  *******************************************************************************/
 package eglx.http;
 
+import eglx.lang.NativeType;
+
 // RUI Handler
-
-
-//
-//
 externalType HttpRest extends IHttp type NativeType
 	constructor();
 	request Request{@Property {}};

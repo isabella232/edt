@@ -11,7 +11,9 @@
  *******************************************************************************/
 package eglx.jws;
 
-import eglx.xml.binding.annotation.*;
+import eglx.xml.binding.annotation.XMLElement;
+import eglx.xml.binding.annotation.XMLRootElement;
+
 /**
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tns1="http://services" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <soapenv:Header xmlns:tns10="http://www.w3.org/2005/08/addressing">

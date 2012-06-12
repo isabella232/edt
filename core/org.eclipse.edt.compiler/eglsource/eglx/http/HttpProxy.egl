@@ -11,6 +11,7 @@
  *******************************************************************************/
 package eglx.http;
 
+import eglx.lang.NativeType;
 // basic handler
 
 externalType HttpProxy extends HttpRest type NativeType

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package eglx.persistence.sql;
 
+import eglx.lang.NativeType;
+
 externalType SQLJNDIDataSource extends SQLDataSource type NativeType
 	private constructor();
 	constructor(jndiName string in);
