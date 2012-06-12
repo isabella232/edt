@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -374,6 +378,119 @@ public class SMAPTransformer implements ClassFileTransformer
 			for ( int i = 0; i < Constants.smap_attribute.length(); i++ )
 			{
 				writeU1( Constants.smap_attribute.charAt( i ) );
+			}
+		}
+	}
+	
+	/**
+	 * Given a set of directories, it looks for all *.eglsmap files and puts the contents into the *.class files.
+	 * 
+	 * @param args One or more directories. The path must be valid for passing into java.io.File's constructor.
+	 */
+	public static void main( String[] args )
+	{
+		for ( String path : args )
+		{
+			File dir = new File( path );
+			if ( dir.exists() && dir.isDirectory() )
+			{
+				processDirectory( dir );
+			}
+		}
+	}
+	
+	static void processDirectory( File dir )
+	{
+		for ( File file : dir.listFiles() )
+		{
+			if ( file.isDirectory() )
+			{
+				processDirectory( file );
+			}
+			else if ( file.getName().endsWith( IEGLDebugCoreConstants.SMAP_EXTENSION ) )
+			{
+				File classFile = new File( dir, file.getName()
+						.substring( 0, file.getName().length() - IEGLDebugCoreConstants.SMAP_EXTENSION.length() ) + "class" );
+				if ( classFile.exists() )
+				{
+					byte[] smapBytes = getBytes( file );
+					if ( smapBytes != null )
+					{
+						byte[] classBytes = getBytes( classFile );
+						if ( classBytes != null )
+						{
+							try
+							{
+								byte[] newBytes = new SMAPTransformer.TransformerWorker().transform( file.getAbsolutePath(), classBytes, smapBytes );
+								if ( newBytes != null )
+								{
+									writeBytes( classFile, newBytes );
+								}
+							}
+							catch ( IllegalClassFormatException e )
+							{
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	static byte[] getBytes( File file )
+	{
+		BufferedInputStream is = null;
+		try
+		{
+			is = new BufferedInputStream( new FileInputStream( file ) );
+			byte[] b = new byte[ is.available() ];
+			is.read( b );
+			return b;
+		}
+		catch ( Exception e )
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if ( is != null )
+			{
+				try
+				{
+					is.close();
+				}
+				catch ( Exception e )
+				{
+				}
+			}
+		}
+		return null;
+	}
+	
+	static void writeBytes( File file, byte[] contents )
+	{
+		OutputStream os = null;
+		try
+		{
+			os = new BufferedOutputStream( new FileOutputStream( file ) );
+			os.write( contents );
+		}
+		catch ( Exception e )
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if ( os != null )
+			{
+				try
+				{
+					os.close();
+				}
+				catch ( Exception e )
+				{
+				}
 			}
 		}
 	}
