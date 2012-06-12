@@ -31,7 +31,6 @@ import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.eunit.Activator;
 import org.eclipse.edt.ide.eunit.ui.testresult.ResultSummaryBlock.Record_ResultSummary;
-import org.eclipse.edt.ide.ui.internal.deployment.ui.EGLDeploymentDescriptorEditor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
