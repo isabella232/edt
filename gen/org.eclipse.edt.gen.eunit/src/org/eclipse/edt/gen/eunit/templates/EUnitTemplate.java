@@ -98,13 +98,11 @@ public abstract class EUnitTemplate extends AbstractTemplate {
 		out.pushIndent();
 		out.print("testMethods String[] = [");
 		boolean flag2 = false;
-		int functionCnt = 0;
 		for (String function : functions) {
 			if (flag2)
 				out.print(", ");
 			out.print("\"" + function + "\"");
 			flag2 = true;
-			functionCnt++;
 		}
 		out.println("];");
 		
