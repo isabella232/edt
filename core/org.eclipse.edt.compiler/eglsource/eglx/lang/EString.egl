@@ -149,6 +149,31 @@ externalType EString extends AnyText type ParameterizableType {
 	static function asString(value ETime? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
+	 * Creates a string from the given bytes using the environment's default encoding.
+	 *
+	 * @param value  the bytes to convert.
+	 * @return the bytes as a string.
+	 */
+	static function fromBytes(value EBytes in) returns(EString);
+	
+	/**
+	 * Creates a string from the given bytes using the specified encoding.
+	 *
+	 * @param value     the bytes to convert.
+	 * @param encoding  the encoding to use in the conversion.
+	 * @return the bytes as a string.
+	 * @throws InvalidArgumentException if the encoding is not supported.
+	 */ 
+	static function fromBytes(value EBytes in, encoding EString in) returns(EString);
+	
+	/**
+	 * Returns the environment's default encoding.
+	 *
+	 * @return the environment's default encoding.
+	 */
+	static function getDefaultEncoding() returns(EString);
+	
+	/**
 	 * A pattern-matching function which compares this string to a pattern using
 	 * the rules of SQL's LIKE operator. 
 	 *
@@ -375,4 +400,20 @@ externalType EString extends AnyText type ParameterizableType {
 	 *    than the length of this string.
 	 */
 	function charCodeAt(index EInt in) returns(EInt);
+	
+	/**
+	 * Converts this string as bytes using the environment's default encoding.
+	 *
+	 * @return this string as bytes.
+	 */
+	function toBytes() returns(EBytes);
+	
+	/**
+	 * Converts this string as bytes using the given encoding.
+	 *
+	 * @param encoding  the encoding to use in the conversion.
+	 * @return this string as bytes.
+	 * @throws InvalidArgumentException if the encoding is not supported.
+	 */
+	function toBytes(encoding EString in);
 end

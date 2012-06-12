@@ -715,7 +715,7 @@ public class TypeCompatibilityUtil {
 		time			T, timestamp, time
 		interval		interval, T, int, smallint, bigint, bin/decimal/num/pacf/numc/money with no decimals
 		timestamp		T, timestamp, time, date
-		bytes			N, T
+		bytes			N
 		*/
 		boolean targetIsNumeric = isNumeric(targetPrim);
 		boolean sourceIsNumeric = isNumeric(sourcePrim);
@@ -741,7 +741,7 @@ public class TypeCompatibilityUtil {
 		if(targetIsFloat) {
 			if(Primitive.HEX == sourcePrim && (16 == source.getLength() || 8 == source.getLength())) return true;
 			
-			return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim;
+			return sourceIsNumeric || sourceIsText || Primitive.BOOLEAN == sourcePrim || Primitive.BYTES == sourcePrim;
 		}
 		if(targetIsNumeric) {
 			if (sourcePrim == Primitive.BYTES) {
@@ -813,7 +813,7 @@ public class TypeCompatibilityUtil {
 				return target.getLength() == 0 || source.getLength() == 0 || target.getLength() == source.getBytes();
 			}
 			
-			return sourceIsText;
+			return false;
 		}
 		
 		return false;
@@ -916,7 +916,7 @@ public class TypeCompatibilityUtil {
 				return true;
 			}
 			
-			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim) || tgtPrim == Primitive.BYTES)) {
+			if (srcPrim == Primitive.STRING && (Primitive.isStringType(tgtPrim) || Primitive.isNumericType(tgtPrim) || Primitive.isDateTimeType(tgtPrim))) {
 				return true;
 			}
 			
@@ -1713,7 +1713,6 @@ public class TypeCompatibilityUtil {
 					
 				case Primitive.STRING_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[] {Primitive.BYTES},
 						new Set[] {numericPrimitives, dateTimePrimitives}
 					));
 					break;
@@ -1798,12 +1797,6 @@ public class TypeCompatibilityUtil {
 				case Primitive.TIME_PRIMITIVE:
 					result.add(new TargetInPrimitiveListOrSetTypeWidener(
 						Primitive.TIMESTAMP
-					));
-					break;
-					
-				case Primitive.BYTES_PRIMITIVE:
-					result.add(new TargetInPrimitiveListOrSetTypeWidener(
-						new Primitive[]{Primitive.BIGINT, Primitive.INT, Primitive.SMALLINT, Primitive.FLOAT, Primitive.SMALLFLOAT, Primitive.DECIMAL}
 					));
 					break;
 			}

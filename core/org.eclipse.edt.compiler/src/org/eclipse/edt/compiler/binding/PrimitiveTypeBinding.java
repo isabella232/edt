@@ -265,6 +265,33 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		MATCHESPATTERN3.addNestedFunctionBinding(new NestedFunctionBinding(MATCHESPATTERN2.getCaseSensitiveName(), null, MATCHESPATTERN2));
 	}
 	
+	public static final SystemFunctionBinding TOBYTES1 = SystemLibrary.createSystemFunction(
+			"toBytes",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BYTES),
+			new String[]		{},
+			new ITypeBinding[]	{},
+			new UseType[]		{},
+			0
+		);
+	
+	public static final SystemFunctionBinding TOBYTES2 = SystemLibrary.createSystemFunction(
+			"toBytes",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.BYTES),
+			new String[]		{"encoding"},
+			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
+			new UseType[]		{UseType.IN},
+			0
+		);
+	
+	public static final OverloadedFunctionSet TOBYTES3 = new OverloadedFunctionSet();
+	static {
+		TOBYTES3.setName(TOBYTES1.getCaseSensitiveName());
+		TOBYTES3.addNestedFunctionBinding(new NestedFunctionBinding(TOBYTES1.getCaseSensitiveName(), null, TOBYTES1));
+		TOBYTES3.addNestedFunctionBinding(new NestedFunctionBinding(TOBYTES2.getCaseSensitiveName(), null, TOBYTES2));
+	}
+	
 	protected static final Map<String, IDataBinding> STRING_FUNCTIONS = new HashMap();
 	static {		
 		STRING_FUNCTIONS.put(LENGTH.getName(), new NestedFunctionBinding(LENGTH.getName(), null, LENGTH));
@@ -281,6 +308,7 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		STRING_FUNCTIONS.put(CHARCODEAT.getName(), new NestedFunctionBinding(CHARCODEAT.getName(), null, CHARCODEAT));
 		STRING_FUNCTIONS.put(ISLIKE3.getName(), ISLIKE3);
 		STRING_FUNCTIONS.put(MATCHESPATTERN3.getName(), MATCHESPATTERN3);
+		STRING_FUNCTIONS.put(TOBYTES3.getName(), TOBYTES3);
 	}
 	
 	public static Map getStringFunctions(){
@@ -391,27 +419,8 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		TIMESTAMP_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
 	}
 	
-	public static final SystemFunctionBinding TOSTRING = SystemLibrary.createSystemFunction(
-			"toString",
-			null,
-			PrimitiveTypeBinding.getInstance(Primitive.STRING),
-			new String[]		{"encoding"},
-			new ITypeBinding[]	{PrimitiveTypeBinding.getInstance(Primitive.STRING)},
-			new UseType[]		{UseType.IN},
-			0
-		);
-	
-	protected static final Map<String, IDataBinding> BYTES_FUNCTIONS = new HashMap();
-	static {		
-		BYTES_FUNCTIONS.put(TOSTRING.getName(), new NestedFunctionBinding(TOSTRING.getName(), null, TOSTRING));
-	}
-	
 	public static Map getTimestampFunctions(){
 		return(TIMESTAMP_FUNCTIONS);
-	}
-	
-	public static Map getBytesFunctions(){
-		return(BYTES_FUNCTIONS);
 	}
 	
 	protected PrimitiveTypeBinding(String caseSensitiveInternedName) {
@@ -497,12 +506,6 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 			return IBinding.NOT_FOUND_BINDING;			
 		}
 		
-		if (getPrimitive() == Primitive.BYTES) {
-			IDataBinding result = (IDataBinding) BYTES_FUNCTIONS.get(simpleName);
-			if(result != null) return result;
-			return IBinding.NOT_FOUND_BINDING;			
-		}
-
 		return IBinding.NOT_FOUND_BINDING;
 	}
 
