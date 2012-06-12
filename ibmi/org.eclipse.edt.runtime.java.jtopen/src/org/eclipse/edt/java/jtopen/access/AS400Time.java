@@ -14,6 +14,9 @@ package org.eclipse.edt.java.jtopen.access;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.eclipse.edt.javart.util.DateTimeUtil;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
+
 import eglx.jtopen.IBMiConnection;
 
 
@@ -73,13 +76,13 @@ public class AS400Time extends com.ibm.as400.access.AS400Time {
 	}
 	private Object convert(Object obj) {
 		if(obj instanceof Calendar){
-//FIXME			return ETime.asDate((Calendar)obj);
+			return ETime.asTime((Calendar)obj);
 		}
 		else if(obj instanceof java.sql.Time){
-//FIXME				return ETime.asDate(DateTimeUtil.getNewCalendar((java.sql.Time)obj));
+				return ETime.asTime(DateTimeUtil.getNewCalendar((java.sql.Time)obj));
 		}
 		else if(obj instanceof java.util.Date){
-//FIXME				return ETime.asDate(DateTimeUtil.getNewCalendar((java.util.Date)obj));
+				return ETime.asTime(DateTimeUtil.getNewCalendar((java.util.Date)obj));
 		}
 		return obj;
 	}
