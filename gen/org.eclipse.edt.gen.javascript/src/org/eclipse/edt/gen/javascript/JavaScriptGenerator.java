@@ -75,6 +75,15 @@ public class JavaScriptGenerator extends Generator {
 			context.invoke(JavaScriptTemplate.preGenPart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
+				
+				// Add the header.
+				boolean autoIndent = out.getAutoIndent();
+				out.setAutoIndent(false);
+				if (getHeader() != null && getHeader().length() > 0) {
+					out.println(getHeader());
+				}
+				out.setAutoIndent(autoIndent);
+				
 				context.invoke(JavaScriptTemplate.genPart, part, context, out);
 				out.flush();
 			}
