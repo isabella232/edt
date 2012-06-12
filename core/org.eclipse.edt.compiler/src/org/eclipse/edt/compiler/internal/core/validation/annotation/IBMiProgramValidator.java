@@ -173,10 +173,10 @@ public class IBMiProgramValidator implements IAnnotationValidationRule {
 		}
 	}
 	
-	private AbstractAS400ParameterAnnotaionValidator getAS400ParmValidator(IDataBinding binding) {
+	private AbstractStructParameterAnnotaionValidator getAS400ParmValidator(IDataBinding binding) {
 		Iterator i = binding.getAnnotations().iterator();
 		while (i.hasNext()) {
-			AbstractAS400ParameterAnnotaionValidator val = IBMiProgramParameterAnnotationsValidator.getValidator(i.next());
+			AbstractStructParameterAnnotaionValidator val = IBMiProgramParameterAnnotationsValidator.getValidator(i.next());
 			if (val != null) {
 				return val;
 			}

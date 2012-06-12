@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.AS400ParmeterAnnotationTypeBinding;
+import org.eclipse.edt.compiler.binding.StructParmeterAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.FlexibleRecordBinding;
 import org.eclipse.edt.compiler.binding.FunctionBinding;
@@ -72,7 +72,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 				
 			}
 			else {
-				AbstractAS400ParameterAnnotaionValidator validator = getValidator(values[i]);
+				AbstractStructParameterAnnotaionValidator validator = getValidator(values[i]);
 				
 				if (validator == null) {
 					problemRequestor.acceptProblem(getNodeForArrayEntry(errorNode, i), 
@@ -86,7 +86,7 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 		}
 	}
 	
-	public static AbstractAS400ParameterAnnotaionValidator getValidator(Object obj) {
+	public static AbstractStructParameterAnnotaionValidator getValidator(Object obj) {
 		if (! (obj instanceof IAnnotationBinding)) {
 			return null;
 		}
@@ -97,8 +97,8 @@ public class IBMiProgramParameterAnnotationsValidator implements IValueValidatio
 		
 		IAnnotationTypeBinding proxy = (((IAnnotationBinding)obj).getAnnotationType()).getValidationProxy();
 		
-		if (proxy instanceof AS400ParmeterAnnotationTypeBinding) {
-			return ((AS400ParmeterAnnotationTypeBinding)proxy).getValidator();
+		if (proxy instanceof StructParmeterAnnotationTypeBinding) {
+			return ((StructParmeterAnnotationTypeBinding)proxy).getValidator();
 		}
 		
 		return null;
