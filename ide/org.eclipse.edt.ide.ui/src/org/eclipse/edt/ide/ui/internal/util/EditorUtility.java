@@ -416,7 +416,7 @@ public class EditorUtility {
 		return input;
 	}
 	
-	private static BinaryEditorInput getClassfileSourceEditor(IProject proj, String eglarFilePath, String irFullQualifiedFile, String editorId,ClassFile classFile) {
+	/*private static BinaryEditorInput getClassfileSourceEditor(IProject proj, String eglarFilePath, String irFullQualifiedFile, String editorId,ClassFile classFile) {
 		BinaryReadOnlyFile storage = getBinaryReadonlyFile(proj, eglarFilePath, irFullQualifiedFile);
 		
 		
@@ -432,7 +432,7 @@ public class EditorUtility {
 			}
 		}
 		return input;
-	}
+	}*/
 	
 	public static BinaryReadOnlyFile getBinaryReadonlyFile(IProject proj, String eglarFilePath, String irFullQualifiedFile) {
 		if(proj.getWorkspace().getRoot().findMember(new Path(eglarFilePath)) == null){	//external eglar file
@@ -551,11 +551,17 @@ public class EditorUtility {
 	
 	public static IEditorPart openSourceFromEglarInBinaryEditor(final ClassFile classFile, final IProject proj, final String eglarFilePath, final String irFullQualifiedFile, final String editorId){
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
-		BinaryEditorInput input = getClassfileSourceEditor(proj, eglarFilePath, irFullQualifiedFile, editorId,classFile);
+        BinaryReadOnlyFile storage = getBinaryReadonlyFile(proj, eglarFilePath, irFullQualifiedFile);
 		
-		if(input == null) {
-			return null;
-		} 
+		BinaryEditorInput input = new BinaryEditorInput(storage,classFile);
+		IWorkbenchPage p= EDTUIPlugin.getActivePage();
+		if (p != null) {
+			IEditorPart editorPart = p.findEditor(input);
+			if(editorPart != null) {
+				p.bringToTop(editorPart);
+				return editorPart;
+			}
+		}
 		
 		try {
 			return ww.getActivePage().openEditor(

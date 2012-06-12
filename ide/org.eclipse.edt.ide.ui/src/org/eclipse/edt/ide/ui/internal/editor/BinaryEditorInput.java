@@ -89,7 +89,7 @@ public class BinaryEditorInput implements IStorageEditorInput {
     	}
 		IEGLProject eglProj = EGLCore.create(proj);
 		try {
-			IPackageFragmentRoot myRoot = eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getEGLARPath());
+			IPackageFragmentRoot myRoot = eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getFullPath().toString());
 			if(myRoot instanceof  EglarPackageFragmentRoot && myRoot.exists()){
 				EglarPackageFragmentRoot packageFragmentRoot = (EglarPackageFragmentRoot)myRoot;
 				String pkg = binaryReadOnlyFile.getPackage();
@@ -121,7 +121,7 @@ public class BinaryEditorInput implements IStorageEditorInput {
    	 * 
    	 */
     public String getFullPath() {
-    	return binaryReadOnlyFile.getFullPath().toString();
+    	return binaryReadOnlyFile.getIrFullPathString();
     }
     
     public IProject getProject(){

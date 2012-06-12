@@ -14,6 +14,7 @@ package org.eclipse.edt.ide.ui.internal.handlers;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
@@ -45,10 +46,14 @@ import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.EGLLogger;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.UINlsStrings;
+import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryFileEditor;
+import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.ide.ui.internal.editor.util.BoundNodeModelUtility;
 import org.eclipse.edt.ide.ui.internal.editor.util.IBoundNodeRequestor;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
@@ -102,7 +107,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		beep = true;
 
 		ISelection selection = fEditor.getSelectionProvider().getSelection();
-
+		
 		//We are working with the editor's model (no bindings) and an identical bound AST tree
 		//First find the node associated with the selection in the bound AST.
 		//Get the binding for the node
@@ -112,378 +117,120 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		//If there is no match, need to find the target in another file.
 		//Get the IFile from the binding and open the file
 		//Reveal the node
+		
+		final IFile currentFile;
+		if(fEditor instanceof BinaryFileEditor){
+			currentFile = (BinaryReadOnlyFile)((BinaryEditorInput)fEditor.getEditorInput()).getStorage();
+		} else {
+			currentFile = ((FileEditorInput)fEditor.getEditorInput()).getFile();
+		}
+		final IProject currentProject = currentFile.getProject();
+		
+		int currentPosition = ((ITextSelection) selection).getOffset();
+		final IEGLDocument document = (IEGLDocument) fEditor.getDocumentProvider().getDocument(fEditor.getEditorInput());
+		
+		final int[][] localVariableDefinition = new int[][] {null};
+		final IBoundNodeAddress[]  address = new IBoundNodeAddress[]{null};
+		final String[] selectedNodeName = new String[]{null};
+		BoundNodeModelUtility.getBoundNodeAtOffset(currentFile, currentPosition, new IBoundNodeRequestor(){
 
-		//for file not opened in binary read-only editor
-		if(!(fEditor instanceof BinaryFileEditor)){
-			final IFile currentFile = ((FileEditorInput)fEditor.getEditorInput()).getFile();
-			int currentPosition = ((ITextSelection) selection).getOffset();
-			final IEGLDocument document = (IEGLDocument) fEditor.getDocumentProvider().getDocument(fEditor.getEditorInput());
-
-			final int[][] localVariableDefinition = new int[][] {null};
-			final IBoundNodeAddress[] address = new IBoundNodeAddress[]{null};
-			final String[] selectedNodeName = new String[]{null};
-			BoundNodeModelUtility.getBoundNodeAtOffset(currentFile, currentPosition, new IBoundNodeRequestor(){
-
-				public void acceptNode(final Node boundPart, final Node selectedNode) {
-
-					if(!(selectedNode instanceof Part) && !(selectedNode instanceof Statement)) {
-						selectedNode.accept(new AbstractASTExpressionVisitor(){
-							public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
-								//short circuit here so we do not end up visiting the imports of the file
-								return false;
-							}
-							public boolean visitName(Name name){
-								IBinding binding = name.resolveBinding();
-								if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
-									if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
-										localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-									}
-									else {
-										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-									}
-									selectedNodeName[0] = name.getIdentifier();
-								}				
-								return false;
-							}
-
-							public boolean visit(FieldAccess fieldAccess){
-								IDataBinding binding = fieldAccess.resolveDataBinding();
-								if(Binding.isValidBinding(binding)) {
-									ITypeBinding type = binding.getType();
-									if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
-										localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-									}
-									else {
-										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-									}
-									selectedNodeName[0] = fieldAccess.getID();
+			public void acceptNode(final Node boundPart, final Node selectedNode) {
+				
+				if(!(selectedNode instanceof Part) && !(selectedNode instanceof Statement)) {
+				
+					selectedNode.accept(new AbstractASTExpressionVisitor(){
+						public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
+							//short circuit here so we do not end up visiting the imports of the file
+							return false;
+						}
+						
+						public boolean visitName(Name name){
+							IBinding binding = name.resolveBinding();
+							if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
+								if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
+									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
 								}
-								return false;
-							}
-
-							public boolean visit(StringLiteral stringLiteral){
-								ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
-								if (Binding.isValidBinding(typeBinding)) {
-									if (typeBinding.isPartBinding()) {
-										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
+								else {
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
+									IFile boundFile = null;
+									if(address[0] != null) {
+										boundFile = address[0].getDeclaringFile();
 									}
+									
+									if(boundFile != null) {
+										if (boundFile.getProject() == null 
+												&& boundFile instanceof BinaryReadOnlyFile) {
+											((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
+										}
+									} else {
+										//for files in MOFAR
+									}
+									
 								}
-								return false;
-							}
-
-							public boolean visit(NestedFunction nestedFunction) {
-								return false;
-							}
-
-							public boolean visit(Constructor constructor) {
-								return false;
-							}
-
-							private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
-								final int[][] result = new int[][] {null};
-								LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
-								boundPart.accept(finder);
-								if(finder.localVariableDeclarationName != null) {
-									result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
+								selectedNodeName[0] = name.getIdentifier();
+							}				
+							return false;
+						}
+						
+						public boolean visit(FieldAccess fieldAccess){
+							IDataBinding binding = fieldAccess.resolveDataBinding();
+							if(Binding.isValidBinding(binding)) {
+								ITypeBinding type = binding.getType();
+								if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
+									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
 								}
-								return result[0];
-							}
-						});						
-					}
-				}
-			});
-
-			if(localVariableDefinition[0] != null) {
-				fEditor.selectAndReveal(localVariableDefinition[0][0], localVariableDefinition[0][1]);
-				beep = false;
-			}
-			else if(address[0] != null ){
-//roll back f3 for eglar
-//				if (address[0].getDeclaringFile().getProject() == null ) {
-//					((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
-//				}
-				Node boundNode = BoundNodeLocationUtility.getInstance().getASTNodeForAddress(address[0], EGLUI.getSharedWorkingCopies());
-				if(boundNode != null) {
-					final IFile file = address[0].getDeclaringFile();
-					AbstractASTVisitor nodeFinder = new AbstractASTPartVisitor(){
-						public boolean visit(ClassDataDeclaration classDataDeclaration) {
-							for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
-								Name name = (Name) iter.next();
-
-								if(name.getIdentifier() == selectedNodeName[0]){
-									selectAndReveal(name);
+								else {
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
 								}
+								selectedNodeName[0] = fieldAccess.getID();
 							}
-							return true;
+							return false;
 						}
 
-						public boolean visit(FunctionParameter functionParameter) {
-							selectAndReveal(functionParameter.getName());
+						public boolean visit(StringLiteral stringLiteral){
+							ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
+							if (Binding.isValidBinding(typeBinding)) {
+								if (typeBinding.isPartBinding()) {
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
+								}
+							}
 							return false;
 						}
 
 						public boolean visit(NestedFunction nestedFunction) {
-							selectAndReveal(nestedFunction.getName());								
 							return false;
 						}
 
-						public boolean visit(VariableFormField field) {
-							selectAndReveal(field.getName());								
+						public boolean visit(Constructor constructor) {
 							return false;
 						}
 
-						public boolean visit(NestedForm nestedForm) {
-							selectAndReveal(nestedForm.getName());								
-							return false;
-						}
-
-						public boolean visit(ProgramParameter programParameter) {
-							selectAndReveal(programParameter.getName());
-							return false;
-						}
-
-						public boolean visit(StructureItem structureItem){
-							selectAndReveal(structureItem.getName());
-							return false;
-						}
-
-						public boolean visit(ServiceReference serviceReference){
-							selectAndReveal(serviceReference.getName());
-							return false;
-						}
-
-						public void visitPart(Part part) {
-							selectAndReveal(part.getName());
-						}
-
-						private void selectAndReveal(Name name){
-							if(file.equals(currentFile)){
-								document.reconcile();
-								EditorUtility.revealInEditor(fEditor, name);
-							}else{
-//roll back f3 for eglar
-//								if(file instanceof BinaryReadOnlyFile) {
-//									IFile eglfile = address[0].getDeclaringFile();
-//									IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, eglfile.getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-//									int start = name.getOffset();
-//									int length = name.getLength();
-//									if(part instanceof EGLEditor){
-//										((EGLEditor) part).selectAndReveal(start, length);
-//									}else if(part instanceof IEvEditor){
-//										((IEvEditor) part).selectAndReveal(start, length);
-//									}
-//								} else {
-									EditorUtility.revealInEditor(openInEditor(file), name);		
-//								}
+						private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
+							final int[][] result = new int[][] {null};
+							LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
+							boundPart.accept(finder);
+							if(finder.localVariableDeclarationName != null) {
+								result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
 							}
-
-							beep = false;
+							return result[0];
 						}
-					};						
-
-					boundNode.accept(nodeFinder);
+					} ); //selectedNode.accept
+							
 				}
 			}
+		});
+		
+		if(localVariableDefinition[0] != null) {
+			fEditor.selectAndReveal(localVariableDefinition[0][0], localVariableDefinition[0][1]);
+			beep = false;
+		} else if(address[0] != null ){
+			Node boundNode = BoundNodeLocationUtility.getInstance().getASTNodeForAddress(address[0], EGLUI.getSharedWorkingCopies());
+			if(boundNode != null) {
+				AbstractASTVisitor nodeFinder = new NodeFinderASTPartVisitor(selectedNodeName,document,address,currentFile);
+				boundNode.accept(nodeFinder);
+			}
 		}
-//roll back f3 for eglar
-//		else {
-//			final IFile currentFile = (IFile)((BinaryEditorInput)fEditor.getEditorInput()).getStorage();
-//			final IProject currentProject = currentFile.getProject();
-//			
-//			int currentPosition = ((ITextSelection) selection).getOffset();
-//			final IEGLDocument document = (IEGLDocument) fEditor.getDocumentProvider().getDocument(fEditor.getEditorInput());
-//
-//			final int[][] localVariableDefinition = new int[][] {null};
-//			final IBoundNodeAddress[] address = new IBoundNodeAddress[]{null};
-//			final String[] selectedNodeName = new String[]{null};
-//			
-//			File fileAST = ASTManager.getInstance().getFileAST(currentFile);
-//			Part part = null;
-//			for( int i = 0; i < fileAST.getParts().size(); i ++ ) {
-//				 part = (Part)fileAST.getParts().get( i );
-//				 if ((part.getOffset() <= currentPosition) && ((part.getOffset() + part.getLength()) >= currentPosition)) {
-//					 break;
-//				 }
-//			}
-//			
-//			ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(currentFile.getProject());
-//			try {
-//				Environment.pushEnv(env.getIREnvironment());
-//				env.initIREnvironments();
-//				ProjectBuildPathEntry entry = ProjectBuildPathEntryManager.getInstance().getProjectBuildPathEntry( currentFile.getProject() );
-//				Node boundPart = entry.compileLevel2Binding(  ((BinaryReadOnlyFile)currentFile).getPackageSegments(), part.getName().getCanonicalName(), currentFile);
-//				
-//			IBoundNodeRequestor requestor = new IBoundNodeRequestor(){
-//
-//				public void acceptNode(final Node boundPart, final Node selectedNode) {
-//
-//					if(!(selectedNode instanceof Part) && !(selectedNode instanceof Statement)) {
-//						selectedNode.accept(new AbstractASTExpressionVisitor(){
-//							public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
-//								//short circuit here so we do not end up visiting the imports of the file
-//								return false;
-//							}
-//							public boolean visitName(Name name){
-//								IBinding binding = name.resolveBinding();
-//								if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
-//									if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
-//										localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-//									}
-//									else {
-//										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-//									}
-//									selectedNodeName[0] = name.getIdentifier();
-//								}				
-//								return false;
-//							}
-//
-//							public boolean visit(FieldAccess fieldAccess){
-//								IDataBinding binding = fieldAccess.resolveDataBinding();
-//								if(Binding.isValidBinding(binding)) {
-//									ITypeBinding type = binding.getType();
-//									if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
-//										localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-//									}
-//									else {
-//										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-//									}
-//									selectedNodeName[0] = fieldAccess.getID();
-//								}
-//								return false;
-//							}
-//
-//							public boolean visit(StringLiteral stringLiteral){
-//								ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
-//								if (Binding.isValidBinding(typeBinding)) {
-//									if (typeBinding.isPartBinding()) {
-//										address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
-//									}
-//								}
-//								return false;
-//							}
-//
-//							public boolean visit(NestedFunction nestedFunction) {
-//								return false;
-//							}
-//
-//							public boolean visit(Constructor constructor) {
-//								return false;
-//							}
-//
-//							private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
-//								final int[][] result = new int[][] {null};
-//								LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
-//								boundPart.accept(finder);
-//								if(finder.localVariableDeclarationName != null) {
-//									result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
-//								}
-//								return result[0];
-//							}
-//						});						
-//					}
-//				}
-//			};
-//			
-//			// Make sure that the selected node is within this part
-//			if((boundPart.getOffset() <= currentPosition) && ((boundPart.getOffset() + boundPart.getLength()) >= currentPosition)){
-//				
-//				// Get the selected node within this part
-//				GetNodeAtOffsetVisitor visitor = new GetNodeAtOffsetVisitor(currentPosition); 
-//				boundPart.accept(visitor);
-//				
-//				Node selectedNode = visitor.getNode();
-//				
-//				requestor.acceptNode(boundPart, selectedNode);
-//			}
-//
-//			if(localVariableDefinition[0] != null) {
-//				fEditor.selectAndReveal(localVariableDefinition[0][0], localVariableDefinition[0][1]);
-//				beep = false;
-//			} else if(address[0] != null && address[0].getDeclaringFile() != null){
-//				if (address[0].getDeclaringFile().getProject() == null ) {
-//					((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
-//				}
-//				Node boundNode = BoundNodeLocationUtility.getInstance().getASTNodeForAddress(address[0], EGLUI.getSharedWorkingCopies());
-//				if(boundNode != null) {
-//					final IFile file = address[0].getDeclaringFile();
-//					AbstractASTVisitor nodeFinder = new AbstractASTPartVisitor(){
-//						public boolean visit(ClassDataDeclaration classDataDeclaration) {
-//							for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
-//								Name name = (Name) iter.next();
-//
-//								if(name.getIdentifier() == selectedNodeName[0]){
-//									selectAndReveal(name);
-//								}
-//							}
-//							return true;
-//						}
-//
-//						public boolean visit(FunctionParameter functionParameter) {
-//							selectAndReveal(functionParameter.getName());
-//							return false;
-//						}
-//
-//						public boolean visit(NestedFunction nestedFunction) {
-//							selectAndReveal(nestedFunction.getName());								
-//							return false;
-//						}
-//
-//						public boolean visit(VariableFormField field) {
-//							selectAndReveal(field.getName());								
-//							return false;
-//						}
-//
-//						public boolean visit(NestedForm nestedForm) {
-//							selectAndReveal(nestedForm.getName());								
-//							return false;
-//						}
-//
-//						public boolean visit(ProgramParameter programParameter) {
-//							selectAndReveal(programParameter.getName());
-//							return false;
-//						}
-//
-//						public boolean visit(StructureItem structureItem){
-//							selectAndReveal(structureItem.getName());
-//							return false;
-//						}
-//
-//						public boolean visit(ServiceReference serviceReference){
-//							selectAndReveal(serviceReference.getName());
-//							return false;
-//						}
-//
-//						public void visitPart(Part part) {
-//							selectAndReveal(part.getName());
-//						}
-//
-//						private void selectAndReveal(Name name){
-//							if(file.getFullPath().toString().startsWith( currentFile.getFullPath().toString() )){
-//								document.reconcile();
-//								EditorUtility.revealInEditor(fEditor, name);
-//							}else{	
-//								IFile eglfile = address[0].getDeclaringFile();
-//								IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, eglfile.getProject(), ((BinaryReadOnlyFile)eglfile).getEGLARPath(), ((BinaryReadOnlyFile)eglfile).getFullQualifiedName(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
-//								int start = name.getOffset();
-//								int length = name.getLength();
-//								if(part instanceof EGLEditor){
-//									((EGLEditor) part).selectAndReveal(start, length);
-//								}else if(part instanceof IEvEditor){
-//									((IEvEditor) part).selectAndReveal(start, length);
-//								}
-//							}
-//
-//							beep = false;
-//						}
-//					};						
-//
-//					boundNode.accept(nodeFinder);
-//				}
-//			}
-//		} finally {
-//			Environment.popEnv();
-//		}
-//	 }
+
 		if (beep)
 			fEditor.getSite().getShell().getDisplay().beep();
 	}
@@ -501,4 +248,168 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		return targetBinding;
 	}
 	
+	class NodeFinderASTPartVisitor extends AbstractASTPartVisitor {
+		final String[] selectedNodeName;
+		final IEGLDocument document;
+		final IBoundNodeAddress[] address;
+		final IFile currentFile;
+		
+		public NodeFinderASTPartVisitor(String[] selectedNodeName,IEGLDocument document,
+				IBoundNodeAddress[] address,IFile currentFile) {
+			this.selectedNodeName = selectedNodeName;
+			this.document = document;
+			this.address = address;
+			this.currentFile = currentFile;
+		}
+		
+		
+		public boolean visit(ClassDataDeclaration classDataDeclaration) {
+			for (Iterator iter = classDataDeclaration.getNames().iterator(); iter.hasNext();) {
+				Name name = (Name) iter.next();
+
+				if(name.getIdentifier() == selectedNodeName[0]){
+					selectAndReveal(name);
+				}
+			}
+			return true;						
+		}
+		
+		public boolean visit(FunctionParameter functionParameter) {
+			selectAndReveal(functionParameter.getName());
+			return false;
+		}
+		
+		public boolean visit(NestedFunction nestedFunction) {
+			selectAndReveal(nestedFunction.getName());								
+			return false;
+		}
+
+		public boolean visit(VariableFormField field) {
+			selectAndReveal(field.getName());								
+			return false;
+		}
+
+		public boolean visit(NestedForm nestedForm) {
+			selectAndReveal(nestedForm.getName());								
+			return false;
+		}
+
+		public boolean visit(ProgramParameter programParameter) {
+			selectAndReveal(programParameter.getName());
+			return false;
+		}
+
+		public boolean visit(StructureItem structureItem){
+			selectAndReveal(structureItem.getName());
+			return false;
+		}
+
+		public boolean visit(ServiceReference serviceReference){
+			selectAndReveal(serviceReference.getName());
+			return false;
+		}
+
+		public void visitPart(Part part) {
+			selectAndReveal(part.getName());
+		}
+		
+		private void selectAndReveal(Name name) {
+			final IFile file = address[0].getDeclaringFile();
+			if(file.equals(currentFile)){
+				document.reconcile();
+				EditorUtility.revealInEditor(fEditor, name);
+			}else{	
+				if(file.isReadOnly()) {
+					IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, file.getProject(), file.getFullPath().toString(), file.getProjectRelativePath().toString(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+					int start = name.getOffset();
+					int length = name.getLength();
+					if(part instanceof EGLEditor){
+						((EGLEditor) part).selectAndReveal(start, length);
+					}else if(part instanceof IEvEditor){
+						((IEvEditor) part).selectAndReveal(start, length);
+					}
+				} else {
+					EditorUtility.revealInEditor(openInEditor(file), name);		
+				}
+			}
+			beep = false;
+		}
+	}
+	
+	class NavigationASTExpressionVisitor extends AbstractASTExpressionVisitor {
+		final String[] selectedNodeName;
+		final IBoundNodeAddress[] address;
+		final int[][] localVariableDefinition;
+		Node boundPart;
+		
+		public NavigationASTExpressionVisitor(String[] selectedNodeName,IBoundNodeAddress[] address,
+				int[][] localVariableDefinition,Node boundPart) {
+			this.selectedNodeName = selectedNodeName;
+			this.address = address;
+			this.localVariableDefinition = localVariableDefinition;
+			this.boundPart = boundPart;
+		}
+		
+		public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
+			//short circuit here so we do not end up visiting the imports of the file
+			return false;
+		}
+		
+		public boolean visitName(Name name){
+			IBinding binding = name.resolveBinding();
+			if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
+				if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
+					localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
+				}
+				else {
+					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
+				}
+				selectedNodeName[0] = name.getIdentifier();
+			}				
+			return false;
+		}
+		
+		public boolean visit(FieldAccess fieldAccess){
+			IDataBinding binding = fieldAccess.resolveDataBinding();
+			if(Binding.isValidBinding(binding)) {
+				ITypeBinding type = binding.getType();
+				if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
+					localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
+				}
+				else {
+					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
+				}
+				selectedNodeName[0] = fieldAccess.getID();
+			}
+			return false;
+		}
+
+		public boolean visit(StringLiteral stringLiteral){
+			ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
+			if (Binding.isValidBinding(typeBinding)) {
+				if (typeBinding.isPartBinding()) {
+					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
+				}
+			}
+			return false;
+		}
+
+		public boolean visit(NestedFunction nestedFunction) {
+			return false;
+		}
+
+		public boolean visit(Constructor constructor) {
+			return false;
+		}
+
+		private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
+			final int[][] result = new int[][] {null};
+			LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
+			boundPart.accept(finder);
+			if(finder.localVariableDeclarationName != null) {
+				result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
+			}
+			return result[0];
+		}
+	}//class NavigationASTExpressionVisitor
 }

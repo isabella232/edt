@@ -22,6 +22,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompile
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 
 public class BoundNodeModelUtility {
@@ -96,7 +97,13 @@ public class BoundNodeModelUtility {
 	 */
 	public static void getBoundNodeAtOffset(final IFile file, final int offset, final IBoundNodeRequestor requestor){
 		WorkingCopyCompiler compiler = WorkingCopyCompiler.getInstance();
-		compiler.compileAllParts(file.getProject(), ((EGLFile)EGLCore.create(file)).getPackageName(), file, EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory()), new IWorkingCopyCompileRequestor(){
+		String[] packageName;
+		if(file instanceof BinaryReadOnlyFile) {
+			packageName = ((BinaryReadOnlyFile)file).getPackageSegments();
+		} else {
+			packageName = ((EGLFile)EGLCore.create(file)).getPackageName();
+		}
+		compiler.compileAllParts(file.getProject(), packageName, file, EGLCore.getSharedWorkingCopies(EGLUI.getBufferFactory()), new IWorkingCopyCompileRequestor(){
 
 			public void acceptResult(WorkingCopyCompilationResult result) {
 				
