@@ -60,22 +60,22 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a timestamp or the mask is invalid.
 	 */
-	static function asTimestamp(value EString in, mask EString in) returns (ETimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value EString? in, mask EString in) returns (ETimestamp?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts any timestamp to a timestamp with the specified mask.
 	 */
-	static function asTimestamp(value ETimestamp in, mask EString in) returns (ETimestamp) {@Operation{"widen"}};
+	static function asTimestamp(value ETimestamp? in, mask EString in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation widen} Converts a date to a timestamp.
 	 */
-	static function asTimestamp(value EDate in) returns (ETimestamp) {@Operation{"widen"}};
+	static function asTimestamp(value EDate? in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a timestamp.
 	 */
-	static function asTimestamp(value EString in) returns (ETimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value EString? in) returns (ETimestamp?) {@Operation{"narrow"}};
 
 	function dayOf() returns(EInt);
 

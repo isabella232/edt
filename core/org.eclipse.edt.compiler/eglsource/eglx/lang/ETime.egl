@@ -57,7 +57,7 @@ externalType ETime extends AnyValue type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a time.
 	 */
-	static function asTime(value EString in) returns (ETime) {@Operation{"narrow"}};
+	static function asTime(value EString? in) returns (ETime?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a timestamp to a time.  The timestamp is
@@ -66,7 +66,7 @@ externalType ETime extends AnyValue type ClassType
 	 *
 	 * @throws TypeCastException if the timeStamp can't be parsed into a time.
 	 */
-	static function asTime(value ETimeStamp in) returns (ETime) {@Operation{"narrow"}};
+	static function asTime(value ETimeStamp? in) returns (ETime?) {@Operation{"narrow"}};
 	
 	/**
 	 * Creates a timestamp from a time.

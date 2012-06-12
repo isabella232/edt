@@ -95,21 +95,21 @@ externalType EFloat extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a float.
 	 */
-	static function asFloat(value EString in) returns(EFloat) {@Operation{"narrow"}};
+	static function asFloat(value EString? in) returns(EFloat?) {@Operation{"narrow"}};
 
-	static function asFloat(value ESmallint in) returns(EFloat) {@Operation{"widen"}};
-	static function asFloat(value ESmallfloat in) returns(EFloat) {@Operation{"widen"}};
-	static function asFloat(value EDecimal in) returns(EFloat) {@Operation{"widen"}};
-	static function asFloat(value EInt in) returns(EFloat) {@Operation{"widen"}};
-	static function asFloat(value EBigint in) returns(EFloat) {@Operation{"narrow"}};
-	static function asFloat(value ENumber in) returns(EFloat) {@Operation{"narrow"}};
+	static function asFloat(value ESmallint? in) returns(EFloat?) {@Operation{"widen"}};
+	static function asFloat(value ESmallfloat? in) returns(EFloat?) {@Operation{"widen"}};
+	static function asFloat(value EDecimal? in) returns(EFloat?) {@Operation{"widen"}};
+	static function asFloat(value EInt? in) returns(EFloat?) {@Operation{"widen"}};
+	static function asFloat(value EBigint? in) returns(EFloat?) {@Operation{"narrow"}};
+	static function asFloat(value ENumber? in) returns(EFloat?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts bytes to a float.
 	 *
 	 * @throws TypeCastException if the bytes are not valid format for a float.
 	 */
-	static function asFloat(value EBytes in) returns(EFloat) {@Operation{"narrow"}};
+	static function asFloat(value EBytes? in) returns(EFloat?) {@Operation{"narrow"}};
 
-	static function asNumber(value EFloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EFloat? in) returns(ENumber?) {@Operation{"widen"}};
 end

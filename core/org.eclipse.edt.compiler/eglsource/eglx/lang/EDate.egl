@@ -60,7 +60,7 @@ externalType EDate extends AnyValue type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a date.
 	 */
-	static function asDate(value EString in) returns (EDate) {@Operation{"narrow"}};
+	static function asDate(value EString? in) returns (EDate?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a timestamp to a date.  The timestamp is
@@ -69,7 +69,7 @@ externalType EDate extends AnyValue type ClassType
 	 *
 	 * @throws TypeCastException if the timeStamp can't be parsed into a date.
 	 */
-	static function asDate(value ETimeStamp in) returns (EDate) {@Operation{"narrow"}};
+	static function asDate(value ETimeStamp? in) returns (EDate?) {@Operation{"narrow"}};
 	
 	// this replaces date-time math: date - date = int
 	/**

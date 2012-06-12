@@ -70,35 +70,35 @@ externalType EString extends AnyText type ParameterizableType {
 	 */
 	static function $Substr(value EString in, fromIndex EInt in, toIndex EInt in) returns(EString) {@Operation{"[:"}};
 	
-	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
+	static function asNumber(value EString? in) returns(ENumber?) {@Operation{"narrow"}};
 	
-	static function asString(value ENumber in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ENumber? in) returns (EString?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation widen} Converts a bigint to a string.  The string will consist of
 	 * one or more digit characters.  It will begin with a - sign if the value is
 	 * negative.
 	 */
-	static function asString(value EBigint in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EBigint? in) returns (EString?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts a boolean to "true" or "false".
 	 */
-	static function asString(value EBoolean in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EBoolean? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a date to a string in the format "MM/dd/yyyy".
 	 * Leading zeros are included in the string, so April 1st in the year 9 A.D. is
 	 * converted to "04/01/0009".
 	 */
-	static function asString(value EDate in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EDate? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a decimal to a string.  The string will consist of
 	 * one or more digit characters, with a period used for a decimal point.  The string
 	 * will begin with a - sign if the value is negative.
 	 */
-	static function asString(value EDecimal in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EDecimal? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a float to a string.  The string will consist of
@@ -107,14 +107,14 @@ externalType EString extends AnyText type ParameterizableType {
 	 * which is the letter e or E, followed by an optional negative sign, followed by one
 	 * or more digit characters.
 	 */
-	static function asString(value EFloat in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EFloat? in) returns (EString?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation widen} Converts an int to a string.  The string will consist of
 	 * one or more digit characters.  It will begin with a - sign if the value is
 	 * negative.
 	 */
-	static function asString(value EInt in) returns (EString) {@Operation{"widen"}};
+	static function asString(value EInt? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a smallfloat to a string.  The string will consist of
@@ -123,14 +123,14 @@ externalType EString extends AnyText type ParameterizableType {
 	 * which is the letter e or E, followed by an optional negative sign, followed by one
 	 * or more digit characters.
 	 */
-	static function asString(value ESmallfloat in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ESmallfloat? in) returns (EString?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation widen} Converts a smallint to a string.  The string will consist of
 	 * one or more digit characters.  It will begin with a - sign if the value is
 	 * negative.
 	 */
-	static function asString(value ESmallint in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ESmallint? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a timestamp to a string.  The 26-character result
@@ -139,14 +139,14 @@ externalType EString extends AnyText type ParameterizableType {
 	 * included in each field of the string when necessary, e.g. January is 
 	 * represented as "01" not "1". 
 	 */
-	static function asString(value ETimestamp in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ETimestamp? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a time to a string.  The result will be in the
 	 * 24-hour format "HH:mm:ss".  Leading zeros are included in each field of the string
 	 * when necessary, e.g. 5 o'clock is represented as "05:00:00".
 	 */
-	static function asString(value ETime in) returns (EString) {@Operation{"widen"}};
+	static function asString(value ETime? in) returns (EString?) {@Operation{"widen"}};
 	
 	/**
 	 * A pattern-matching function which compares this string to a pattern using

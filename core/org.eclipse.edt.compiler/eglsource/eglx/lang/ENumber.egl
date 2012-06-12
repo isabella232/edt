@@ -88,35 +88,35 @@ externalType ENumber extends AnyValue type ClassType
 	/**
 	 * {@Operation{"widen"} Converts a bigint to a number.
 	 */
-	static function asNumber(value EBigint in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EBigint? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts a decimal to a number.
 	 */
-	static function asNumber(value EDecimal in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EDecimal? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts a float to a number.
 	 */
-	static function asNumber(value EFloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EFloat? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts an int to a number.
 	 */
-	static function asNumber(value EInt in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EInt? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts a smallfloat to a number.
 	 */
-	static function asNumber(value ESmallfloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallfloat? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"widen"} Converts a smallint to a number.
 	 */
-	static function asNumber(value ESmallint in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallint? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation{"narrow"} Converts a string to a number.
 	 */
-	static function asNumber(value EString in) returns(ENumber) {@Operation{"narrow"}};
+	static function asNumber(value EString? in) returns(ENumber?) {@Operation{"narrow"}};
 end

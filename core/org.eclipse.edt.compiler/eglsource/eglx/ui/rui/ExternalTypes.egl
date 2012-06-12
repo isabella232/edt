@@ -632,7 +632,7 @@ ExternalType Widget type JavaScriptObject {
 	static function $EQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"=="}};
 	static function $NEQ(lvalue Widget? in, rvalue Widget? in) returns(EBoolean) {@Operation{"!="}};
 
-	static function asWidget(value Widget in) returns(Widget) {@Operation{"widen"}};
+	static function asWidget(value Widget? in) returns(Widget?) {@Operation{"widen"}};
 	
 end
 

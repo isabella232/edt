@@ -33,5 +33,5 @@ externalType EAny type ClassType
 	/**
 	 * {@Operation widen} Performs conversion from any to any.
 	 */
-	static function asAny(value EAny in) returns(EAny) {@Operation{"widen"}};
+	static function asAny(value EAny? in) returns(EAny?) {@Operation{"widen"}};
 end
