@@ -185,7 +185,7 @@ public class CommonUtilities {
 		// process the operator
 		String op = expr.getOperator();
 		if (op.equals(expr.Op_BITWISENOT))
-			return "bitwiseNot";
+			return "bitnot";
 		if (op.equals(expr.Op_NEGATE))
 			return "negate";
 		if (op.equals(expr.Op_NOT))
