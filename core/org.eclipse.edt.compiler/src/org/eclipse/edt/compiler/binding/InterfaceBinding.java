@@ -117,9 +117,9 @@ public class InterfaceBinding extends PartBinding {
     		List extendedTypes = getExtendedTypes();
     		boolean hasEnvironment = (getEnvironment() != null);
     		for(Iterator iter = extendedTypes.iterator(); iter.hasNext();) {
-    			ExternalTypeBinding et = (ExternalTypeBinding) iter.next();
-    			tempDeclaredAndInheritedFunctions.addAll(et.getDeclaredFunctions());
-    			hasEnvironment = hasEnvironment && (et.getEnvironment() != null);
+    			InterfaceBinding inter = (InterfaceBinding) iter.next();
+    			tempDeclaredAndInheritedFunctions.addAll(inter.getDeclaredFunctions());
+    			hasEnvironment = hasEnvironment && (inter.getEnvironment() != null);
     		}
     		
     		if (hasEnvironment) {
