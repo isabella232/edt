@@ -19,6 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.NullValueException;
 import eglx.lang.NumericOverflowException;
 import eglx.lang.TypeCastException;
 
@@ -305,6 +306,22 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 
 	public static int precision() {
 		return Precision;
+	}
+
+	public static int bitnot(Integer op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return ~op;
+	}
+
+	public static int negate(Integer op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return -op;
 	}
 
 	public static int plus(int op1, int op2) throws AnyException {

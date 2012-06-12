@@ -13,8 +13,10 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
+import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.NullValueException;
 
 public class EBoolean extends AnyBoxedObject<Boolean> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -50,6 +52,14 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 		if (value == null)
 			return null;
 		return value.ezeUnbox();
+	}
+
+	public static boolean not(Boolean op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return (!op);
 	}
 
 	public static boolean and(Boolean op1, Boolean op2) {

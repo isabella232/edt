@@ -19,6 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.NullValueException;
 import eglx.lang.NumericOverflowException;
 import eglx.lang.TypeCastException;
 
@@ -282,6 +283,14 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		if (value == null)
 			return null;
 		return value;
+	}
+
+	public static long negate(Long op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return -op;
 	}
 
 	public static long plus(long op1, long op2) throws AnyException {

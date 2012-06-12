@@ -19,6 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
 import eglx.lang.AnyException;
+import eglx.lang.NullValueException;
 import eglx.lang.NumericOverflowException;
 import eglx.lang.TypeCastException;
 
@@ -509,6 +510,14 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		if (value == null)
 			return null;
 		return value;
+	}
+
+	public static BigDecimal negate(BigDecimal op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return op.negate();
 	}
 
 	public static BigDecimal plus(BigDecimal op1, BigDecimal op2) {

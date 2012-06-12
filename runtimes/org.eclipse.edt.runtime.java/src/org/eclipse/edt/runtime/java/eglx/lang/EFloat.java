@@ -20,6 +20,7 @@ import org.eclipse.edt.javart.messages.Message;
 
 import eglx.java.JavaObjectException;
 import eglx.lang.AnyException;
+import eglx.lang.NullValueException;
 import eglx.lang.TypeCastException;
 
 public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber {
@@ -178,6 +179,14 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 		if (value == null)
 			return null;
 		return value;
+	}
+
+	public static double negate(Double op) throws AnyException {
+		if (op == null) {
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
+		return -op;
 	}
 
 	public static double plus(double op1, double op2) throws AnyException {
