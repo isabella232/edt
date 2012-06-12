@@ -97,6 +97,7 @@ public abstract class ClasspathEntryFilter extends AbstractTypeFilter
 	@Override
 	public void dispose()
 	{
+		super.dispose();
 		this.commonClassesToFilter = null;
 		this.targetClassMap = null;
 	}
