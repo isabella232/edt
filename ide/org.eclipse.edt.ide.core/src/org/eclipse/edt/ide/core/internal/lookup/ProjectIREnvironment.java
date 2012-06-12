@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.GenericType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.lookup.EglLookupDelegate;
 import org.eclipse.edt.mof.impl.Bootstrap;
@@ -27,7 +26,6 @@ import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.serialization.ObjectStore;
 import org.eclipse.edt.mof.serialization.ProxyEObject;
 import org.eclipse.edt.mof.serialization.SerializationException;
-import org.eclipse.edt.mof.serialization.IEnvironment.LookupDelegate;
 
 /**
  * The IR environment for a project within the IDE. This will contain object stores for all the
