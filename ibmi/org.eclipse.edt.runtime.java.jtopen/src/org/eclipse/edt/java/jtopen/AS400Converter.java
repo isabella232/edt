@@ -32,6 +32,7 @@ import org.eclipse.edt.runtime.java.eglx.lang.EList;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import org.eclipse.edt.runtime.java.eglx.lang.ETime;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
 import com.ibm.as400.access.AS400DataType;
@@ -215,6 +216,9 @@ public class AS400Converter {
 		}
 		else if(EString.class.equals(as400Array.getEGLElementType())){
 			EList.resize(list, as400Array.getNumberOfElements(), EList.StringFactory);
+		}
+		else if(ETime.class.equals(as400Array.getEGLElementType())){
+			EList.resize(list, as400Array.getNumberOfElements(), EList.TimeFactory);
 		}
 		else if(ETimestamp.class.equals(as400Array.getEGLElementType())){
 			AS400DataType elementType = as400Array.getType();
