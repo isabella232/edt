@@ -289,7 +289,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (date == null)
 			return null;
-		if (args == null)
+		if (args == null || args.length == 0)
 			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
 			return asTimestamp((Calendar) date, args[0], args[1]);
