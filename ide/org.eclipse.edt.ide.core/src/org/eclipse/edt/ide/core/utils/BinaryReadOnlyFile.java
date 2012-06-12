@@ -135,7 +135,7 @@ public class BinaryReadOnlyFile implements IFile {
 	 * get the package name
 	 */
 	public String getPackage(){
-		  int index = filePath.lastIndexOf(".");
+		  int index = filePath.lastIndexOf("/");
 		  if(index > -1){	//has pacakge
 			  return filePath.substring(0, index);
 		  }
