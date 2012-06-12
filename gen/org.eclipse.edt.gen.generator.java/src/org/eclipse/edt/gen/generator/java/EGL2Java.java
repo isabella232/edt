@@ -45,7 +45,9 @@ public class EGL2Java extends AbstractGeneratorCommand {
 			Context context = (Context)generator.getContext();
 			
 			// Always write the SMAP when there was a .java file, otherwise write it if a property was set (e.g. for external types)
-			boolean writeSMAP = generator.getResult() != null && generator.getResult().toString().length() != 0;
+			boolean writeSMAP = generator.getResult() != null && generator.getResult().toString().length() != 0
+					&& (generator.getHeader() == null || generator.getHeader().length() == 0 
+					|| !((String) generator.getResult()).trim().equals(generator.getHeader().trim()));
 			if (!writeSMAP) {
 				Boolean forceSMAP = (Boolean)context.getAttribute(context.getClass(), Constants.SubKey_forceWriteSMAP);
 				writeSMAP = forceSMAP != null && forceSMAP.booleanValue();
