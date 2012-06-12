@@ -11,11 +11,9 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400ZonedDecimal type Annotation
+Record StructBin4 type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400ZonedDecimalAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructBin4AnnotationTypeBinding"
 }
-	decimals int?;
-	length int?;
 end

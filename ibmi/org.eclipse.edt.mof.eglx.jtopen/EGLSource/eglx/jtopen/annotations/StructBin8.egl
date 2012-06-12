@@ -11,12 +11,9 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400Time type Annotation
+Record StructBin8 type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400TimeAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructBin8AnnotationTypeBinding"
 }
-	ibmiFormat any?;
-	ibmiSeparatorChar string? = "";
-	ibmiTimezoneID string?;
 end

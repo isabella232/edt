@@ -11,12 +11,10 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400Text type Annotation
+Record StructByetArray type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400TextAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructByteArrayAnnotationTypeBinding"
 }
 	length int?;
-	encoding string?;
-	preserveTrailingSpaces boolean = false;
 end

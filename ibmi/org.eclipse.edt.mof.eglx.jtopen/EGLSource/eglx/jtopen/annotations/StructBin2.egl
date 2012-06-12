@@ -11,9 +11,9 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400Bin4 type Annotation
+Record StructBin2 type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400Bin4AnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructBin2AnnotationTypeBinding"
 }
 end

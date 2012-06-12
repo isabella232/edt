@@ -11,9 +11,12 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400UnsignedBin4 type Annotation
+Record StructText type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400UnsignedBin4AnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructTextAnnotationTypeBinding"
 }
+	length int?;
+	encoding string?;
+	preserveTrailingSpaces boolean = false;
 end

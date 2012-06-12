@@ -11,10 +11,11 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400DecFloat type Annotation
+Record StructPackedDecimal type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DecFloatAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructPackedDecimalAnnotationTypeBinding"
 }
+	decimals int?;
 	length int?;
 end

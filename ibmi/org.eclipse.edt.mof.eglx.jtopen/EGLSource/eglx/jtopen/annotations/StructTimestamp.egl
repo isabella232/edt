@@ -11,13 +11,12 @@
  *******************************************************************************/
 package eglx.jtopen.annotations;
 
-Record AS400Date type Annotation
+Record StructTimestamp type Annotation
 {	
 	targets=[ElementKind.FieldMbr],
-	ValidationProxy="org.eclipse.edt.compiler.binding.AS400DateAnnotationTypeBinding"
+	ValidationProxy="org.eclipse.edt.compiler.binding.StructTimestampAnnotationTypeBinding"
 }
 	ibmiFormat any?;
-	ibmiSeparatorChar string? = "";
+	eglPattern string?;
 	ibmiTimezoneID string?;
 end
-
