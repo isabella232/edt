@@ -264,33 +264,6 @@ public class ProjectBuildPathEntry implements IBuildPathEntry {
         return partBinding;
     }
     
-    public Node compileLevel2Binding(String[] packageName, String caseSensitiveInternedPartName, IFile declaringFile) {
-    	Node partAST;
-    	
-    	String caseInsensitiveInternedPartName = InternUtil.intern(caseSensitiveInternedPartName);
-        partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitiveInternedPartName);
-        IPartBinding partBinding = new BindingCreator(declaringEnvironment, packageName, caseSensitiveInternedPartName, partAST).getPartBinding();
- 
-        partBinding.setEnvironment(declaringEnvironment);
-
-        
-        Scope scope;
-        File fileAST = null;
-        if(partBinding.getKind() == ITypeBinding.FILE_BINDING){
-            scope = new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance());
-        }else{
-        	fileAST = WorkingCopyASTManager.getInstance().getFileAST(declaringFile);
-        	
-			IPartBinding fileBinding = getFileBinding( packageName, declaringFile.getName().substring( 0, declaringFile.getName().length()), fileAST);
-			scope = new SystemScope(new FileScope(new EnvironmentScope(declaringEnvironment, NullDependencyRequestor.getInstance()), (FileBinding)fileBinding, NullDependencyRequestor.getInstance()),getSystemEnvironment());
-        }
-        BindingCompletor.getInstance().completeBinding(partAST, partBinding, scope, DefaultCompilerOptions.getInstance());
-               
-        bindingCache.put(packageName, caseInsensitiveInternedPartName, partBinding);
-    	
-        return partAST;
-    }
-    
     /**
      * 
      * Mark this part binding as invalid if it is in the cache.

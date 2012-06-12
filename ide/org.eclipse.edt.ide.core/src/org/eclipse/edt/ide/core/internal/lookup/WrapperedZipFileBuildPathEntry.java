@@ -11,12 +11,18 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.core.internal.lookup;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.ZipFileBindingBuildPathEntry;
 import org.eclipse.edt.compiler.binding.IPartBinding;
+import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IZipFileBindingBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.IWorkingCopyBuildPathEntry;
@@ -29,6 +35,8 @@ import org.eclipse.edt.mof.serialization.ObjectStore;
 public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathEntry, IWorkingCopyBuildPathEntry{
 	ZipFileBindingBuildPathEntry zipEntry;
 	IProject project;
+	
+	private HashMap<String,IPartOrigin> partOriginByPart = new HashMap<String,IPartOrigin>(32);
 
 	public WrapperedZipFileBuildPathEntry(ZipFileBindingBuildPathEntry zipEntry, IProject project) {
 		super();
@@ -38,32 +46,62 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 
 	@Override
 	public IPartOrigin getPartOrigin(String[] packageName, String partName) {
+		IPartOrigin partOrigin = null;
 		try {
 			Part part = findPart(packageName, partName);
-			if (part != null) {
-				String sourceName = part.eGet("filename").toString();
-				final BinaryReadOnlyFile brf = new BinaryReadOnlyFile(getID(), sourceName);
-				brf.setProject(project);
-				return new IPartOrigin() {
-
-					@Override
-					public boolean isOriginEGLFile() {
-						return true;
-					}
-
-					@Override
-					public IFile getEGLFile() {
-						return brf;
-					}
-
-					@Override
-					public boolean isSourceCodeAvailable() {
-						return brf.exists();
-					}};
+			
+			String sourceName = null;
+			if(part != null) {
+				sourceName = part.eGet("filename").toString();
+			} else {
+				ZipFile zipFile = null;
+				try {
+					  zipFile = new ZipFile(getID());
+					  if(partName != null) {
+						  ZipEntry ze = zipFile.getEntry(partName); 
+						  if(ze != null) {
+							  sourceName = partName;
+						  }
+					  }
+					  zipFile.close(); 
+				  } catch(IOException io){ 
+				  } 
 			}
+			
+			if(sourceName != null) {
+				StringBuffer key = new StringBuffer(new Path(getID()).toString());
+				key.append(BinaryReadOnlyFile.EGLAR_IR_SEPARATOR);
+				key.append(sourceName);
+				partOrigin = partOriginByPart.get( key.toString() );
+				
+				if ( partOrigin == null) {
+					final BinaryReadOnlyFile brf = new BinaryReadOnlyFile(getID(), sourceName);
+					brf.setProject(project);
+					partOrigin = new IPartOrigin() {
+
+						@Override
+						public boolean isOriginEGLFile() {
+							return true;
+						}
+
+						@Override
+						public IFile getEGLFile() {
+							return brf;
+						}
+
+						@Override
+						public boolean isSourceCodeAvailable() {
+							return brf.exists();
+						}};
+						
+					partOriginByPart.put(brf.getIrFullPathString(), partOrigin);
+				} 
+			}
+		    
 		} catch (PartNotFoundException e) {
 		}
-		return null;
+		
+		return partOrigin;
 	}
 
 	@Override
@@ -78,7 +116,22 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 
 	@Override
 	public int hasPart(String[] packageName, String partName) {
-		return zipEntry.hasPart(packageName, partName);
+		int typeBindingKind = zipEntry.hasPart(packageName, partName);
+		if(ITypeBinding.NOT_FOUND_BINDING == typeBindingKind) {
+			ZipFile zipFile = null;
+			try {
+				  zipFile = new ZipFile(getID());
+				  if(partName != null) {
+					  ZipEntry ze = zipFile.getEntry(partName); 
+					  if(ze != null) {
+						  typeBindingKind = ITypeBinding.FILE_BINDING;
+					  }
+				  }
+				  zipFile.close(); 
+			  } catch(IOException io){ 
+			  } 
+		}
+		return typeBindingKind;
 	}
 
 	@Override

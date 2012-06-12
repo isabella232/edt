@@ -21,6 +21,7 @@ import org.eclipse.edt.ide.core.internal.lookup.AbstractFileInfoCreator;
 import org.eclipse.edt.ide.core.internal.lookup.IDuplicatePartRequestor;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IWorkingCopy;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 
 /**
  * Create a working copy FileInfo that is based on a working copy in the EGL TModel.
@@ -36,7 +37,14 @@ public class WorkingCopyFileInfoCreator extends AbstractFileInfoCreator {
 	}
 	
 	public String getContents() throws CoreException, IOException {
-		return ((IEGLFile)workingCopy).getBuffer().getContents();
+		if(workingCopy != null) {
+		  return ((IEGLFile)workingCopy).getBuffer().getContents();
+		} else {
+			if(file.isReadOnly()) {
+				return ((BinaryReadOnlyFile)file).getSource();
+			} else
+				 return null;
+		}
 	}
 	
 	/**

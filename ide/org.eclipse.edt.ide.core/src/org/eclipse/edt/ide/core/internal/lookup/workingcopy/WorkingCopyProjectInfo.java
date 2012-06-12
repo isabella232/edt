@@ -18,10 +18,15 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.internal.core.lookup.IBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.lookup.AbstractProjectInfo;
 import org.eclipse.edt.ide.core.internal.lookup.IFileInfo;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPath;
+import org.eclipse.edt.ide.core.internal.lookup.ProjectBuildPathManager;
+import org.eclipse.edt.ide.core.internal.lookup.WrapperedZipFileBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.EGLFileOrigin;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
+import org.eclipse.edt.mof.egl.PartNotFoundException;
 
 public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 
@@ -62,12 +67,34 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		}
 		
 		// Now check the main project info
-		return super.getPartOrigin(packageName, partName);
+		IPartOrigin partOrigin =  super.getPartOrigin(packageName, partName);
+		if(partOrigin == null) {
+			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
+    		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
+    		for(IBuildPathEntry pathEntry : pathEntries) {
+    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
+    				partOrigin = ((WrapperedZipFileBuildPathEntry) pathEntry).getPartOrigin(packageName, partName);
+    				if(partOrigin != null)
+    					break;
+    			}
+    		}
+	    }
+		
+		return partOrigin;
 	}
 
 	public boolean hasPackage(String[] packageName) {
 		// always go to the project info for packages
-		return super.hasPackage(packageName);
+		boolean hasPackage = super.hasPackage(packageName);
+		if(!hasPackage) {
+			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
+    		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
+    		for(IBuildPathEntry pathEntry : pathEntries) {
+    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) && (pathEntry.hasPackage(packageName)))
+    				return true;
+    		}
+		}
+		return hasPackage;
 	}
 
 	public int hasPart(String[] packageName, String partName) {
@@ -89,7 +116,20 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		}
 		
 		// now check the main project info
-		return super.hasPart(packageName, partName);
+		int partType = super.hasPart(packageName, partName);
+		if(partType == ITypeBinding.NOT_FOUND_BINDING) {
+			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
+    		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
+    		for(IBuildPathEntry pathEntry : pathEntries) {
+    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
+    				partType = pathEntry.hasPart(packageName, partName);
+    				if(ITypeBinding.NOT_FOUND_BINDING != partType) 
+    					break;
+    			}
+    		}
+		}
+			
+		return partType;
 	}
 	
 	private void recordEntry(String[] packageName, String partName, WorkingCopyProjectInfoEntry entry){
@@ -129,7 +169,35 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		}
 		
 		// Now check the main project info
-		return super.getCaseSensitivePartName(packageName, partName);
+		String  caseSensitivePartName = super.getCaseSensitivePartName(packageName, partName);
+		if(caseSensitivePartName == null) {
+			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
+    		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
+    		for(IBuildPathEntry pathEntry : pathEntries) {
+    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
+    				try {
+    					org.eclipse.edt.mof.egl.Part part = pathEntry.findPart(packageName, partName);
+    					if(part != null) {
+    						caseSensitivePartName = part.getName();
+    					} else  {
+    						int index = partName.lastIndexOf(".");
+    						if(index > -1) {	
+    							String fileExtension = partName.substring(index+1);
+    							if("egl".equalsIgnoreCase(fileExtension)) {
+    								caseSensitivePartName = partName;
+    							}
+    						}
+    					}
+    					return caseSensitivePartName;
+    				} catch(PartNotFoundException pnf) {
+    					//swallow down exceptions
+    				}
+    				
+    				
+    			}
+    		}
+		}
+		return caseSensitivePartName;
 	}
 
 	protected IContainer[] getSourceLocations(IProject project) {

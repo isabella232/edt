@@ -198,6 +198,7 @@ public class WorkingCopyCompiler {
 			initialize();
 			
 			processWorkingCopies(workingCopies, problemRequestorFactory);
+			processBinaryReadOnlyFile(file,packageName,problemRequestorFactory);
 			 
 			queue = new WorkingCopyProcessingQueue(project, problemRequestorFactory);
 			WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
@@ -385,6 +386,35 @@ public class WorkingCopyCompiler {
 				addWorkingCopy(project, packageName, copy, problemRequestorFactory);
 			}
 		}
+	}
+	
+	private void processBinaryReadOnlyFile(IFile file,String[] packageName,IProblemRequestorFactory problemRequestorFactory) {
+		if ("eglar".equalsIgnoreCase(file.getFullPath().getFileExtension())) {
+			final String[] packageNames = InternUtil.intern(packageName);
+			
+			addFileInfoForBinaryReadOnlyFile(file.getProject(),file,packageNames,problemRequestorFactory);
+		}
+	}
+	
+	private void addFileInfoForBinaryReadOnlyFile(final IProject project,IFile file,final String[] packageName,IProblemRequestorFactory problemRequestorFactory) {
+		File fileAST = WorkingCopyASTManager.getInstance().getFileAST(file);
+		final WorkingCopyProjectInfo projectInfo = WorkingCopyProjectInfoManager.getInstance().getProjectInfo(project);
+		final IASTFileInfo newFileInfo = new WorkingCopyFileInfoCreator(project, packageName, file, null, fileAST, new WorkingCopyUnsavedDuplicatePartRequestor(project, packageName, file)).getASTInfo();
+		
+		// Report file related errors (duplicate parts, more than one generateable part per file)
+		newFileInfo.accept(problemRequestorFactory.getFileProblemRequestor(file));
+				
+		// Perform Syntax Checking
+		fileAST.accept(problemRequestorFactory.getSyntaxErrorRequestor(file));
+		
+		Set partNames = newFileInfo.getPartNames();
+		
+		for (Iterator iter = partNames.iterator(); iter.hasNext();) {
+			String partName = (String) iter.next();
+			projectInfo.workingCopyPartAdded(packageName, partName, newFileInfo.getPartType(partName), file, newFileInfo.getCaseSensitivePartName(partName));
+		}
+		
+		WorkingCopyFileInfoManager.getInstance().addFileInfo(project, file.getProjectRelativePath(), newFileInfo);
 	}
 
 	private void processDuplicateFiles(Set duplicateFilesToProcess, IProblemRequestorFactory problemRequestorFactory){

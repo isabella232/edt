@@ -43,37 +43,39 @@ import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.edt.ide.core.internal.model.util.Util;
 
 public class BinaryReadOnlyFile implements IFile {
-	  private String pathString;	//full path for eglar file
-	  private String fileString;	//full qualified ir file name (with no extension)
+	  private IPath eglarPath;	//full path for eglar file
+	  private String filePath;	//full qualified ir file name (with extension)
 	  private boolean isExternal;
 	  private IProject project;
 	  public static final String IR_EXTENSION = ".eglxml";
 	  public static final String EGLAR_IR_SEPARATOR = "|";
 	  
-	  public BinaryReadOnlyFile(String path, String file) {
-	    this.pathString = path;
-	    this.fileString = resolveFileString(file);
+	  private String irFileFullPath;
+	  private IPath projectRelativePath;
+	  private String sourceContent;
+	  
+	  public BinaryReadOnlyFile(String eglarPath, String filePackageInEglar) {
+	    this.eglarPath = new Path(eglarPath);
+	    this.filePath = resolveFileString(filePackageInEglar);
 	    this.isExternal = false;
 	  }
 	  
-	  public BinaryReadOnlyFile(String path, String file, IProject project, boolean isExternal) {
-		  this.pathString = path;
-		  this.fileString = resolveFileString(file);
+	  public BinaryReadOnlyFile(String eglarPath, String filePackageInEglar, IProject project, boolean isExternal) {
+		  this.eglarPath = new Path(eglarPath);
+		  this.filePath = resolveFileString(filePackageInEglar);
 		  this.project = project;
 		  this.isExternal = isExternal;		  
 	  }
 	  
 	  public String getFullQualifiedName() {
-		  return fileString;
+		  return filePath;
 	  }
-	  
-	  
 	 
 	  public InputStream getContents() throws CoreException {
 		  InputStream fs = null;
 		  try {
-			  JarFile jarFile = (new JarFile( pathString ));
-			  ZipEntry  entry = jarFile.getEntry( fileString );
+			  JarFile jarFile = (new JarFile( eglarPath.toString() ));
+			  ZipEntry  entry = jarFile.getEntry( filePath );
 			  fs = jarFile.getInputStream( entry );
 		  } catch (IOException e) {
 			e.printStackTrace();
@@ -86,75 +88,67 @@ public class BinaryReadOnlyFile implements IFile {
 	  }
 	  
 	  public String getSource() {
-		  ZipFile zip = null;
-		  String out = "";
-		  try {
-			  IPath eglarPath = new Path(getEGLARPath());
-			  zip = new ZipFile(eglarPath.toFile());
-			  ZipEntry ze = new ZipEntry(fileString);
-			  out = new String(Util.getZipEntryByteContent(ze, zip));
-		  } catch (ZipException e) {
-			  e.printStackTrace();
-		  } catch (IOException e) {
-			  e.printStackTrace();
+		  if(sourceContent == null) {
+			  ZipFile zip = null;
+			  sourceContent = "";
+			  try {
+				  zip = new ZipFile(eglarPath.toFile());
+				  ZipEntry ze = new ZipEntry(filePath);
+				  sourceContent = new String(Util.getZipEntryByteContent(ze, zip));
+			  } catch (ZipException e) {
+				  e.printStackTrace();
+			  } catch (IOException e) {
+				  e.printStackTrace();
+			  }
 		  }
-		  
-		  return out;
+		  return sourceContent;
 	  }
 	  
 	  public String[] getPackageSegments() {
-		  String[] package1 = fileString.split( "/" );
-		  String[] package2 = new String[ package1.length - 1];
-		  System.arraycopy(package1, 0, package2, 0, package2.length );
-		  
-		  return package2;
+		  if(filePath != null) {
+			  String[] package1 = filePath.split( "/" );
+			  String[] package2 = new String[ package1.length - 1];
+			  System.arraycopy(package1, 0, package2, 0, package2.length );
+			  
+			  return package2;
+		  } else 
+			  return null;
+		 
 	  }
 	  
 	  public IPath getFullPath() {
-		  String path = pathString;
-		  path += EGLAR_IR_SEPARATOR;
-		  path += fileString;
-		  return new Path(path);
+		  return eglarPath;
 	  }
 	  
-	  public String getEGLARPath() {
-		  return pathString;
+	  public String getIrFullPathString() {
+		  if(irFileFullPath != null) {
+			  return irFileFullPath;
+		  } else {
+			  String irFileFullPath = eglarPath.toString();
+			  irFileFullPath += EGLAR_IR_SEPARATOR;
+			  irFileFullPath += filePath;
+			  return irFileFullPath;  
+		  }
 	  }
 	  
 	  /*
 	 * get the package name
 	 */
 	public String getPackage(){
-		  int index = fileString.lastIndexOf(".");
+		  int index = filePath.lastIndexOf(".");
 		  if(index > -1){	//has pacakge
-			  return fileString.substring(0, index);
+			  return filePath.substring(0, index);
 		  }
 		  return "";	//no package
 	  }
 	  
-//	 /*
-//	 * get the ir file name (without package, with extension)
-//	 * e.g.
-//	 * demointerface.ir
-//	 */
-//	  public String getIRFileName(){
-////		  int index = fileString.lastIndexOf(":");
-//		  int index = fileString.lastIndexOf(".");
-//		  if(index > -1){	//has package
-//			  return fileString.substring(index + 1);
-//		  }
-//		  else{		//no package
-//			  return fileString;
-//		  }
-//	  }
-	  
 	  /*
 	 * get the ir file name (without package, with extension)
 	 * e.g.
-	 * demointerface.ir
+	 * demointerface.eglxml
 	 */
 	  public String getName() {
-		  String irFileName = new Path(fileString).lastSegment();
+		  String irFileName = getProjectRelativePath().lastSegment();
 		  int index = irFileName.lastIndexOf(".");
 		  if(index > -1){	//has package
 			  irFileName = irFileName.substring(0,index) + IR_EXTENSION;
@@ -180,6 +174,20 @@ public class BinaryReadOnlyFile implements IFile {
 	  public void setProject(IProject project) {
 		  this.project = project;
 	  }
+	  
+	  @Override
+	  public String getFileExtension() {
+		  return "egl";
+	  }
+	  
+	  @Override
+	  public IPath getProjectRelativePath() {
+		  if(projectRelativePath == null) {
+			  projectRelativePath = new Path(filePath);
+		  }
+		 return projectRelativePath;
+	  }
+
 	
 	  //for Forms in FormGroup, to eliminate the Form section, only keep the FormGroup section, which exactly is the ClassFile name
 	  private static String resolveFileString(String file){
@@ -189,6 +197,20 @@ public class BinaryReadOnlyFile implements IFile {
 			  fileString = fileString.substring(0, index);
 		  }
 		  return fileString;
+	  }
+	  
+	  public boolean equals(Object target) {
+		  if (this == target)
+			 return true;
+		  if (!(target instanceof BinaryReadOnlyFile))
+				return false;
+		  BinaryReadOnlyFile resource = (BinaryReadOnlyFile) target;
+		  
+		  return getFullPath().equals(resource.getFullPath()) && getProjectRelativePath().equals(resource.getProjectRelativePath());
+	  }
+	  
+	  public int hashCode() {
+			return getFullPath().hashCode()+ getProjectRelativePath().hashCode() * 17;
 	  }
 
 	@Override
@@ -312,12 +334,6 @@ public class BinaryReadOnlyFile implements IFile {
 	}
 
 	@Override
-	public String getFileExtension() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public long getLocalTimeStamp() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -370,12 +386,6 @@ public class BinaryReadOnlyFile implements IFile {
 	public String getPersistentProperty(QualifiedName key) throws CoreException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public IPath getProjectRelativePath() {
-		// TODO Auto-generated method stub
-		return new Path("");
 	}
 
 	@Override
