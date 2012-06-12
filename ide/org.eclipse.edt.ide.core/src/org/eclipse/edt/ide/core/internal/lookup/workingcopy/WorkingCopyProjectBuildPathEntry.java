@@ -144,32 +144,41 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
             		// It is a project with no source, read the IRs
             		return readPartBinding(packageName, partName);
             	}else{
-            		// This project has source, compile from the source
-            		IPartOrigin partOrigin = projectInfo.getPartOrigin(packageName, partName);
-            		boolean shouldCompiled = true;
             		
-            		if(partOrigin != null && partOrigin.getEGLFile().isReadOnly()) {
-            			int index = partName.lastIndexOf(".");
-    					if(index > -1) {//if the part name represents FileName, will continue Compilation	
-    						String fileExtension = partName.substring(index+1);
-    						if(!"egl".equalsIgnoreCase(fileExtension)) {
-    							shouldCompiled = false;
-    						}
-    					}
-            		} //shouldCompiled &&
-            		
-            		if( shouldCompiled && projectInfo.hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING) {
-            			try{
-            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
-            			}catch(CircularBuildRequestException e){
-                			// Remove this part from the cache, so that it is not used incorrectly in the future
-                			removePartBindingInvalid(packageName, partName);
-                			throw e;
-                		}
-                    }
-                    else {
-                        return null;
-                    }
+            		if (projectInfo.hasPart(packageName, partName) != ITypeBinding.NOT_FOUND_BINDING) {
+	
+	            		// This project has source, compile from the source
+	            		IPartOrigin partOrigin = projectInfo.getPartOrigin(packageName, partName);
+	            		boolean shouldCompiled = true;
+	            		
+	            		if(partOrigin != null && partOrigin.getEGLFile().isReadOnly()) {
+	            			int index = partName.lastIndexOf(".");
+	    					if(index > -1) {//if the part name represents FileName, will continue Compilation	
+	    						String fileExtension = partName.substring(25+1);
+	    						if(!"egl".equalsIgnoreCase(fileExtension)) {
+	    							shouldCompiled = false;
+	    						}
+	    					}
+	    					else {
+	    						shouldCompiled = false;
+	    					}
+	            		} //shouldCompiled &&
+	            		
+	            		if( shouldCompiled) {
+	            			try{
+	            				return compileLevel2Binding(packageName, projectInfo.getCaseSensitivePartName(packageName, partName));
+	            			}catch(CircularBuildRequestException e){
+	                			// Remove this part from the cache, so that it is not used incorrectly in the future
+	                			removePartBindingInvalid(packageName, partName);
+	                			throw e;
+	                		}
+	                    }
+	                    else {
+	                        return null;
+	                    }
+	            	}
+	            		
+	            	else {return null;}
             	}
             }
         }
