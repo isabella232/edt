@@ -60,10 +60,6 @@ import org.eclipse.edt.debug.core.java.SMAPLineInfo;
 import org.eclipse.edt.debug.core.java.SMAPUtil;
 import org.eclipse.edt.debug.core.java.filters.ITypeFilter;
 import org.eclipse.edt.debug.core.java.filters.TypeFilterUtil;
-import org.eclipse.edt.ide.core.model.EGLCore;
-import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IEGLFile;
-import org.eclipse.edt.ide.core.model.IPackageDeclaration;
 import org.eclipse.edt.javart.util.JavaAliaser;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -515,28 +511,8 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 		IMarker marker = bp.getMarker();
 		if ( marker != null && marker.exists() )
 		{
-			IResource resource = null;
-			if ( bp.isRunToLine() )
-			{
-				// RTL is created on the workspace root so that the marker doesn't appear in the editor.
-				// It will have stored its resource path.
-				String path = marker.getAttribute( IEGLDebugCoreConstants.RUN_TO_LINE_PATH, null );
-				if ( path != null )
-				{
-					resource = ResourcesPlugin.getWorkspace().getRoot().findMember( path );
-				}
-			}
-			else
-			{
-				resource = marker.getResource();
-			}
-			
-			if ( resource == null )
-			{
-				return null;
-			}
-			
-			String qualifiedName = getGeneratedClassName( resource );
+			String typeName = bp.getTypeName();
+			String qualifiedName = getGeneratedClassName( typeName );
 			if ( qualifiedName != null )
 			{
 				int hitcount = 0;
@@ -550,9 +526,16 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 				
 				if ( supportsSourceDebugExtension )
 				{
+					String sourceName = typeName;
+					int lastDot = sourceName.lastIndexOf( '.' );
+					if ( lastDot != -1 )
+					{
+						sourceName = sourceName.substring( lastDot + 1 );
+					}
+					sourceName += ".egl"; //$NON-NLS-1$
+					
 					return JDIDebugModel.createStratumBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), IEGLDebugCoreConstants.EGL_STRATUM,
-							resource.getName(), null, qualifiedName, bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false,
-							attributes );
+							sourceName, null, qualifiedName, bp.getLineNumber(), bp.getCharStart(), bp.getCharEnd(), hitcount, false, attributes );
 				}
 				else
 				{
@@ -683,38 +666,26 @@ public class EGLJavaDebugTarget extends EGLJavaDebugElement implements IEGLJavaD
 	/**
 	 * @return the fully-qualified class name of the generated file.
 	 */
-	private String getGeneratedClassName( IResource resource )
+	private String getGeneratedClassName( String name )
 	{
 		// TODO remove this dependency on the Java generator. need some other way to get the generated name for a resource.
 		// Different Java generators will use different naming conventions
-		IEGLFile eglFile = (IEGLFile)EGLCore.create( resource );
-		if ( eglFile != null && eglFile.exists() )
+		if ( name == null || name.length() == 0 )
 		{
-			try
-			{
-				StringBuilder buf = new StringBuilder( 50 );
-				IPackageDeclaration[] pkg = eglFile.getPackageDeclarations();
-				if ( pkg != null && pkg.length > 0 )
-				{
-					buf.append( JavaAliaser.packageNameAlias( pkg[ 0 ].getElementName() ) );
-					buf.append( '.' );
-				}
-				
-				String name = eglFile.getElementName();
-				int idx = name.lastIndexOf( '.' );
-				if ( idx != -1 )
-				{
-					name = name.substring( 0, idx );
-				}
-				
-				buf.append( JavaAliaser.getAlias( name ) );
-				return buf.toString();
-			}
-			catch ( EGLModelException e )
-			{
-			}
+			return null;
 		}
-		return null;
+		
+		int lastDot = name.lastIndexOf( '.' );
+		if ( lastDot == -1 )
+		{
+			return JavaAliaser.getAlias( name );
+		}
+		
+		StringBuilder buf = new StringBuilder( name.length() );
+		buf.append( JavaAliaser.packageNameAlias( name.substring( 0, lastDot ) ) );
+		buf.append( '.' );
+		buf.append( JavaAliaser.getAlias( name.substring( lastDot + 1 ) ) );
+		return buf.toString();
 	}
 	
 	@Override

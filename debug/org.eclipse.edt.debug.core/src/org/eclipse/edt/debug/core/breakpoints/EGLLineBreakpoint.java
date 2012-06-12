@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.breakpoints;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRunnable;
@@ -29,20 +32,31 @@ public class EGLLineBreakpoint extends EGLBreakpoint implements ILineBreakpoint
 		super();
 	}
 	
-	public EGLLineBreakpoint( final IResource resource, final int lineNumber, final int charStart, final int charEnd, final boolean register,
-			final boolean runToLine ) throws DebugException
+	public EGLLineBreakpoint( IResource resource, String typeName, int lineNumber, int charStart, int charEnd, boolean register, boolean runToLine )
+			throws DebugException
+	{
+		this( resource, typeName, lineNumber, charStart, charEnd, register, runToLine, new HashMap() );
+	}
+	
+	public EGLLineBreakpoint( final IResource resource, final String typeName, final int lineNumber, final int charStart, final int charEnd,
+			final boolean register, final boolean runToLine, final Map attributes ) throws DebugException
 	{
 		IWorkspaceRunnable runnable = new IWorkspaceRunnable() {
 			@Override
 			public void run( IProgressMonitor monitor ) throws CoreException
 			{
-				IMarker marker = resource.createMarker( IEGLDebugCoreConstants.EGL_LINE_BREAKPOINT_MARKER_ID );
-				marker.setAttributes(
-						new String[] { IBreakpoint.ID, IBreakpoint.ENABLED, IMarker.LINE_NUMBER, IMarker.CHAR_START, IMarker.CHAR_END,
-								IEGLDebugCoreConstants.RUN_TO_LINE, IBreakpoint.PERSISTED },
-						new Object[] { IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID, Boolean.TRUE, Integer.valueOf( lineNumber ),
-								Integer.valueOf( charStart ), Integer.valueOf( charEnd ), Boolean.valueOf( runToLine ), Boolean.valueOf( !runToLine ) } );
-				setMarker( marker );
+				setMarker( resource.createMarker( IEGLDebugCoreConstants.EGL_LINE_BREAKPOINT_MARKER_ID ) );
+				
+				attributes.put( IBreakpoint.ID, IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID );
+				attributes.put( IEGLDebugCoreConstants.BREAKPOINT_TYPE_NAME, typeName );
+				attributes.put( IBreakpoint.ENABLED, Boolean.TRUE );
+				attributes.put( IMarker.LINE_NUMBER, Integer.valueOf( lineNumber ) );
+				attributes.put( IMarker.CHAR_START, Integer.valueOf( charStart ) );
+				attributes.put( IMarker.CHAR_END, Integer.valueOf( charEnd ) );
+				attributes.put( IEGLDebugCoreConstants.RUN_TO_LINE, Boolean.valueOf( runToLine ) );
+				attributes.put( IBreakpoint.PERSISTED, Boolean.valueOf( !runToLine ) );
+				
+				ensureMarker().setAttributes( attributes );
 				
 				if ( register )
 				{

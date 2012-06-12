@@ -34,14 +34,14 @@ public interface IEGLDebugCoreConstants
 	public static final String EGL_LINE_BREAKPOINT_MARKER_ID = EDTDebugCorePlugin.PLUGIN_ID + ".eglLineBreakpointMarker"; //$NON-NLS-1$
 	
 	/**
+	 * The EGL breakpoint attribute specifying the fully qualified type name.
+	 */
+	public static final String BREAKPOINT_TYPE_NAME = EDTDebugCorePlugin.PLUGIN_ID + ".typeName"; //$NON-NLS-1$
+	
+	/**
 	 * The Run to line attribute for EGL line breakpoints.
 	 */
 	public static final String RUN_TO_LINE = EDTDebugCorePlugin.PLUGIN_ID + ".runToLine"; //$NON-NLS-1$
-	
-	/**
-	 * The path to the file which the run to line operation was performed.
-	 */
-	public static final String RUN_TO_LINE_PATH = EDTDebugCorePlugin.PLUGIN_ID + ".runToLinePath"; //$NON-NLS-1$
 	
 	/**
 	 * Preference key for the boolean value indicating if filtering is enabled.

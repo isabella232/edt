@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.sourcelookup.ISourceContainerType;
 import org.eclipse.debug.core.sourcelookup.containers.AbstractSourceContainer;
@@ -23,7 +22,6 @@ import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageFragment;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
-import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.ui.internal.PluginImages;
 import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -93,38 +91,25 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 			{
 				case IPackageFragmentRoot.K_BINARY:
 				{
-					IClassFile file = findIR( fragment, type );
+					IClassFile file = findClassFile( fragment, type );
 					if ( file.exists() )
 					{
-						IProject proj = file.getEGLProject().getProject();
-						String eglarPath = file.getPath().toString();
-						
-						IPart part = file.getPart();
-						if ( part != null )
+						return new Object[] { EditorUtility
+								.getBinaryReadonlyFile( file.getEGLProject().getProject(), file.getPath().toString(), name ) };
+					}
+					else
+					{
+						// Some source files will have no parts matching the file name (e.g. a file full of records). Check all the kids of the parent
+						// to see if they have the right file name, and go with one of those IRs instead. Doesn't matter which.
+						String eglName = type + ".egl"; //$NON-NLS-1$
+						IClassFile[] classes = fragment.getClassFiles();
+						for ( int i = 0; i < classes.length; i++ )
 						{
-							String fullyqualifiedPartName = part.getFullyQualifiedName();
-							return new Object[] { EditorUtility.getBinaryReadonlyFile( proj, eglarPath, fullyqualifiedPartName ) };
-						}
-						else
-						{
-							// TLFs might have no part (could be a source file with just functions)
-							// Check all the kids of the parent to see if they have the right file name, and
-							// go with one of those IRs instead. Doesn't matter which.
-							String eglName = type + ".egl"; //$NON-NLS-1$
-							IClassFile[] classes = fragment.getClassFiles();
-							for ( int i = 0; i < classes.length; i++ )
+							Object info = EGLModelManager.getEGLModelManager().getInfo( classes[ i ] );
+							if ( info instanceof ClassFileElementInfo && eglName.equalsIgnoreCase( ((ClassFileElementInfo)info).getEglFileName() ) )
 							{
-								if ( classes[ i ] != file && (part = classes[ i ].getPart()) != null )
-								{
-									Object info = EGLModelManager.getEGLModelManager().getInfo( classes[ i ] );
-									if ( info instanceof ClassFileElementInfo
-											&& eglName.equalsIgnoreCase( ((ClassFileElementInfo)info).getEglFileName() ) )
-									{
-										// This IR is inside the target file. Use its info even if it's not the IR for the TLF.
-										String fullyqualifiedPartName = part.getFullyQualifiedName();
-										return new Object[] { EditorUtility.getBinaryReadonlyFile( proj, eglarPath, fullyqualifiedPartName ) };
-									}
-								}
+								return new Object[] { EditorUtility.getBinaryReadonlyFile( classes[ i ].getEGLProject().getProject(), classes[ i ]
+										.getPath().toString(), name ) };
 							}
 						}
 					}
@@ -159,7 +144,7 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 		return EMPTY;
 	}
 	
-	private IClassFile findIR( IPackageFragment fragment, String name )
+	private IClassFile findClassFile( IPackageFragment fragment, String name )
 	{
 		name = IRFileNameUtility.toIRFileName( name );
 		IClassFile file = fragment.getClassFile( name + ".eglxml" ); //$NON-NLS-1$
