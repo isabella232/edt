@@ -153,7 +153,7 @@ public interface EGLDataTypeUtility {
   		IEGLConstants.KEYWORD_BIGINT,
 //		IEGLConstants.KEYWORD_BIN,
 		IEGLConstants.KEYWORD_BOOLEAN,
-//		IEGLConstants.KEYWORD_BYTES,
+		IEGLConstants.KEYWORD_BYTES,
 //		IEGLConstants.KEYWORD_CHAR,
 		IEGLConstants.KEYWORD_DATE,
 //		IEGLConstants.KEYWORD_DBCHAR,
