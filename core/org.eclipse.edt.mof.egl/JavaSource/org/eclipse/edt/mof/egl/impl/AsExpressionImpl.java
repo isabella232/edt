@@ -50,10 +50,7 @@ public class AsExpressionImpl extends TypeExpressionImpl implements AsExpression
 
 	@Override
 	public boolean isNullable() {
-		if (getConversionOperation() != null) {
-			return getConversionOperation().isNullable();
-		}
-		return super.isNullable();
+		return getObjectExpr().isNullable();
 	}
 
 	
