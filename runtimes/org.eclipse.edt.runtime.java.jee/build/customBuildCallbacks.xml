@@ -68,8 +68,7 @@
 	<target name="post.compile.@dot">
 		<!-- Add SMAP data into the .class files. transformer.jar was created by enabling the SMAP Transformer builder
 		     on the org.eclipse.edt.debug.core project, and copying the jar to this project. -->
-		<echo message="[debug] basedir = ${basedir}"/>
-		<java classpath="transformer.jar" classname="org.eclipse.edt.debug.core.SMAPTransformer">
+		<java classpath="build/transformer.jar" classname="org.eclipse.edt.debug.core.SMAPTransformer">
 			<arg value="${target.folder}"/>
 		</java>
 	</target>
