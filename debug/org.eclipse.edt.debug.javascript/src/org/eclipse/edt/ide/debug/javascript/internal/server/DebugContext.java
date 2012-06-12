@@ -354,8 +354,7 @@ public class DebugContext extends AbstractContext implements IContext2
 				{
 					try
 					{
-						String relativePath = RUIDebugUtil
-								.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( breakpoint.getMarker().getResource() ) );
+						String relativePath = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( breakpoint ) );
 						if ( relativePath != null )
 						{
 							sb.append( relativePath );

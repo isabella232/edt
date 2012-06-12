@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -38,8 +37,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.edt.debug.core.DebugUtil;
-import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
-import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
+import org.eclipse.edt.debug.core.breakpoints.EGLBreakpoint;
 import org.eclipse.edt.debug.javascript.EDTJavaScriptDebugPlugin;
 import org.eclipse.edt.debug.javascript.internal.launching.IRUIDebugConstants;
 import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationConstants;
@@ -50,10 +48,8 @@ import org.eclipse.edt.ide.core.internal.model.SourcePart;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
-import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IPackageDeclaration;
-import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
 import org.eclipse.edt.ide.debug.javascript.internal.server.DebugContext;
 import org.eclipse.edt.ide.rui.server.EvServer;
@@ -79,12 +75,8 @@ public class RUIDebugUtil
 	 * The image registry which holds <code>Image</code>s
 	 */
 	private static ImageRegistry imageRegistry;
-	/**
-	 * A table of all the <code>ImageDescriptor</code>s
-	 */
-//	private static HashMap imageDescriptors;
 	
-	private static URL ICON_BASE_URL = null;
+	private static URL ICON_BASE_URL;
 	static
 	{
 		ICON_BASE_URL = EDTJavaScriptDebugPlugin.getDefault().getBundle().getEntry( "icons/full/" ); //$NON-NLS-1$
@@ -557,61 +549,25 @@ public class RUIDebugUtil
 	}
 	
 	/**
-	 * @return the path of the resource relative to the source directory, or null if it was not in a source directory.
+	 * @return the path of the breakpoint relative to the source directory, possibly null.
 	 */
-	public static String getRelativeBreakpointPath( IResource resource )
+	public static String getRelativeBreakpointPath( IBreakpoint bp )
 	{
-		if ( resource != null && resource.getType() == IResource.FILE )
+		if ( bp instanceof EGLBreakpoint )
 		{
-			// Send the path of the resource, relative to its source directory.
-			IEGLElement element = EGLCore.create( (IFile)resource );
-			if ( element != null )
+			try
 			{
-				// Find the source folder
-				IEGLElement parent = element.getParent();
-				while ( parent != null && !(parent instanceof IPackageFragmentRoot) )
+				String typeName = ((EGLBreakpoint)bp).getTypeName();
+				if ( typeName != null && typeName.length() > 0 )
 				{
-					parent = parent.getParent();
+					return typeName.replace( '.', '/' ) + ".egl"; //$NON-NLS-1$
 				}
-				
-				if ( parent instanceof IPackageFragmentRoot )
-				{
-					return resource.getProjectRelativePath().removeFirstSegments( parent.getResource().getProjectRelativePath().segmentCount() )
-							.toString();
-				}
+			}
+			catch ( CoreException ce )
+			{
+				EDTJavaScriptDebugPlugin.log( ce );
 			}
 		}
 		return null;
-	}
-	
-	/**
-	 * @return the IResource for the breakpoint.
-	 */
-	public static IResource getBreakpointResource( IBreakpoint bp )
-	{
-		IResource resource = null;
-		try
-		{
-			if ( bp instanceof EGLLineBreakpoint && ((EGLLineBreakpoint)bp).isRunToLine() )
-			{
-				// RTL is created on the workspace root so that the marker doesn't appear in the editor.
-				// It will have stored its resource path.
-				String path = bp.getMarker().getAttribute( IEGLDebugCoreConstants.RUN_TO_LINE_PATH, null );
-				if ( path != null )
-				{
-					resource = ResourcesPlugin.getWorkspace().getRoot().findMember( path );
-				}
-			}
-		}
-		catch ( CoreException e )
-		{
-		}
-		
-		if ( resource == null )
-		{
-			resource = bp.getMarker().getResource();
-		}
-		
-		return resource;
 	}
 }

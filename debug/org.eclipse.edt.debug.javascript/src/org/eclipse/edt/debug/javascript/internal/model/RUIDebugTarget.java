@@ -18,7 +18,6 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -255,10 +254,10 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	{
 		if ( supportsBreakpoint( breakpoint ) && context != null )
 		{
-			IResource resource = RUIDebugUtil.getBreakpointResource( breakpoint );
-			if ( resource != null )
+			String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+			if ( bpPath != null && bpPath.length() > 0 )
 			{
-				String file = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( resource ) );
+				String file = RUIDebugUtil.encodeValue( bpPath );
 				String line = Integer.toString( breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
 				String enabled = Boolean.toString( breakpoint.getMarker().getAttribute( IBreakpoint.ENABLED, true ) );
 				
@@ -282,10 +281,10 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	{
 		if ( supportsBreakpoint( breakpoint ) && context != null )
 		{
-			IResource resource = RUIDebugUtil.getBreakpointResource( breakpoint );
-			if ( resource != null )
+			String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+			if ( bpPath != null && bpPath.length() > 0 )
 			{
-				String file = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( resource ) );
+				String file = RUIDebugUtil.encodeValue( bpPath );
 				String line = Integer.toString( breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
 				
 				if ( isSuspended() )
@@ -329,10 +328,10 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 			// code being run will be using the old line numbers.
 			if ( currentEnable != oldEnable )
 			{
-				IResource resource = RUIDebugUtil.getBreakpointResource( breakpoint );
-				if ( resource != null )
+				String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+				if ( bpPath != null && bpPath.length() > 0 )
 				{
-					String file = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( resource ) );
+					String file = RUIDebugUtil.encodeValue( bpPath );
 					String line = Integer.toString( oldLine );
 					String enabled = Boolean.toString( currentEnable );
 					
@@ -906,7 +905,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 				try
 				{
 					if ( breakpoint.isEnabled() && line == breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 )
-							&& RUIDebugUtil.getRelativeBreakpointPath( RUIDebugUtil.getBreakpointResource( breakpoint ) ).equals( file ) )
+							&& file.equals( RUIDebugUtil.getRelativeBreakpointPath( breakpoint ) ) )
 					{
 						return breakpoint;
 					}

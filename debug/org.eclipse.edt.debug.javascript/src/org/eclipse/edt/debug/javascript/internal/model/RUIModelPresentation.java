@@ -23,8 +23,10 @@ import org.eclipse.debug.ui.IDebugEditorPresentation;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IValueDetailListener;
 import org.eclipse.edt.debug.javascript.internal.launching.IRUIDebugConstants;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.debug.javascript.internal.utils.RUIDebugUtil;
 import org.eclipse.edt.ide.rui.utils.Util;
+import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -32,8 +34,9 @@ import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.editors.text.EditorsUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class RUIModelPresentation extends LabelProvider implements IDebugModelPresentation, IDebugEditorPresentation
@@ -110,7 +113,11 @@ public class RUIModelPresentation extends LabelProvider implements IDebugModelPr
 	@Override
 	public IEditorInput getEditorInput( Object element )
 	{
-		if ( element instanceof IFile )
+		if ( element instanceof BinaryReadOnlyFile )
+		{
+			return new BinaryEditorInput( (BinaryReadOnlyFile)element );
+		}
+		else if ( element instanceof IFile )
 		{
 			return new FileEditorInput( (IFile)element );
 		}
@@ -166,8 +173,14 @@ public class RUIModelPresentation extends LabelProvider implements IDebugModelPr
 			}
 		}
 		
-		// Don't know which editor to use so fall back to default text editor.
-		return EditorsUI.DEFAULT_TEXT_EDITOR_ID;
+		try
+		{
+			return IDE.getEditorDescriptor( input.getName() ).getId();
+		}
+		catch ( PartInitException e )
+		{
+			return null;
+		}
 	}
 	
 	@Override
