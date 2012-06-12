@@ -410,7 +410,7 @@ public class SMAPTransformer implements ClassFileTransformer
 			else if ( file.getName().endsWith( IEGLDebugCoreConstants.SMAP_EXTENSION ) )
 			{
 				File classFile = new File( dir, file.getName()
-						.substring( 0, file.getName().length() - IEGLDebugCoreConstants.SMAP_EXTENSION.length() ) + "class" );
+						.substring( 0, file.getName().length() - IEGLDebugCoreConstants.SMAP_EXTENSION.length() ) + "class" ); //$NON-NLS-1$
 				if ( classFile.exists() )
 				{
 					byte[] smapBytes = getBytes( file );
