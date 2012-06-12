@@ -67,6 +67,15 @@ public class JavaCoreGenerator extends Generator {
 			context.invoke(JavaTemplate.preGenPart, part, context);
 			if (!context.getMessageRequestor().isError()) {
 				out.getWriter().flush();
+				
+				// Add the header before anything else so that SMAP lines are not thrown off by adding it later.
+				boolean autoIndent = out.getAutoIndent();
+				out.setAutoIndent(false);
+				if (getHeader() != null && getHeader().length() > 0) {
+					out.println(getHeader());
+				}
+				out.setAutoIndent(autoIndent);
+				
 				// get the egl file being processed
 				String eglFileName = ((Part) part).getFileName();
 				if (eglFileName.indexOf('\\') >= 0)
