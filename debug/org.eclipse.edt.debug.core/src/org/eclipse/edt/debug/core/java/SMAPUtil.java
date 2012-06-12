@@ -383,7 +383,7 @@ public class SMAPUtil
 							IPath workspaceRoot = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 							if ( workspaceRoot.isPrefixOf( smapPath ) )
 							{
-								workspacePath = "/" + smapPath.removeFirstSegments( workspaceRoot.segmentCount() ).toString();
+								workspacePath = "/" + smapPath.removeFirstSegments( workspaceRoot.segmentCount() ).toString(); //$NON-NLS-1$
 							}
 							
 						}
