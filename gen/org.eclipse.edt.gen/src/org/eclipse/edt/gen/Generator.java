@@ -12,6 +12,7 @@
 package org.eclipse.edt.gen;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
+import org.eclipse.edt.compiler.internal.util.IGenerationResultsMessage;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.codegen.api.TabbedReportWriter;
 import org.eclipse.edt.mof.codegen.api.TemplateFactory;
@@ -29,6 +31,7 @@ public abstract class Generator {
 	protected TemplateFactory factory = new TemplateFactory();
 	protected EglContext context;
 	protected IGenerationMessageRequestor requestor;
+	private String header;
 
 	public Generator(AbstractGeneratorCommand processor, IGenerationMessageRequestor requestor) {
 		this.requestor = requestor;
@@ -112,5 +115,59 @@ public abstract class Generator {
 		catch (Exception e) {
 			System.err.println("Error writing generation report for " + fileName);
 		}
+	}
+	
+	public String getHeader() {
+		if (header != null) {
+			return header;
+		}
+		
+		if (context == null) {
+			return null;
+		}
+		
+		String headerFile = (String)context.getParameter(Constants.parameter_headerFile);
+		if (headerFile != null && headerFile.length() > 0) {
+			File file = new File(headerFile);
+			if (file.exists()) {
+				FileInputStream stream = null;
+				try {
+					stream = new FileInputStream(file);
+					int fileLen = (int)file.length();
+					byte[] bytes = new byte[fileLen];
+					int totalRead = 0;
+					int currentRead = 0;
+					while (currentRead != -1 && (totalRead != fileLen)) {
+						totalRead += currentRead;
+						currentRead = stream.read(bytes, totalRead, fileLen - totalRead);
+					}
+					header = new String(bytes);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					context.getMessageRequestor().addMessage(EGLMessage.createEGLMessage(context.getMessageMapping(),
+							IGenerationResultsMessage.EGL_WARNING_MESSAGE, Constants.EGLMESSAGE_MISSING_HEADER_FILE, null, new String[]{headerFile}, null));
+				}
+				finally {
+					if (stream != null) {
+						try {
+							stream.close();
+						}
+						catch (IOException ioe) {
+						}
+					}
+				}
+			}
+			else {
+				context.getMessageRequestor().addMessage(EGLMessage.createEGLMessage(context.getMessageMapping(),
+						IGenerationResultsMessage.EGL_WARNING_MESSAGE, Constants.EGLMESSAGE_MISSING_HEADER_FILE, null, new String[]{headerFile}, null));
+			}
+		}
+		
+		if (header == null) {
+			header = "";
+		}
+		
+		return header;
 	}
 }

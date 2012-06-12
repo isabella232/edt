@@ -22,6 +22,7 @@ public class Constants {
 	public static final String parameter_report = "report";
 	public static final String parameter_report_dir = "reportDir";
 	public static final String parameter_report_dir_default = "genReports/";
+	public static final String parameter_headerFile = "headerFile";
 
 	// Extension to use for generation reports
 	public static final String report_fileExtension = ".html";
@@ -44,4 +45,6 @@ public class Constants {
 	public static final String isMathLibDecimalBoxingWanted = "isMathLibDecimalBoxingWanted";
 	public static final String isStringLibFormatBoxingWanted = "isStringLibFormatBoxingWanted";
 	public static final String isStatementRequiringWrappedParameters = "isStatementRequiringWrappedParameters";
+	
+	public static final String EGLMESSAGE_MISSING_HEADER_FILE = "7000";
 }

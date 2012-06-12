@@ -42,6 +42,8 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 			"Root must identify the root location to be used in generation");
 		this.installParameter(true, Constants.parameter_contribution, new String[] { "contribution", "c" }, new Object[] { null },
 			"Contribution must identify the contribution classes used in generation");
+		this.installParameter(false, Constants.parameter_headerFile, new String[] { "headerFile" }, new String[] { null },
+				"headerFile must be an absolute path to a file");
 	}
 
 	public String getTemplates() {
@@ -70,6 +72,7 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 
 	public String getEGLMessages() {
 		String[] EGLMessageList = getMessagePath().toArray(new String[getMessagePath().size()]);
+		EGLMessages = EGLMessages + "org.eclipse.edt.gen.EGLMessages;";
 		for (String EGLMessage : EGLMessageList) {
 			EGLMessages = EGLMessages + EGLMessage + ";";
 		}
@@ -91,8 +94,10 @@ public abstract class AbstractGeneratorCommand extends CommandProcessor implemen
 						generator.generate(part);
 						// now try to write out the file, based on the output location and the part's type signature
 						try {
-							// only write the data, if there was some
-							if (generator.getResult() instanceof String && ((String) generator.getResult()).length() > 0)
+							// only write the data, if there was some (if it's just the header then skip it)
+							if (generator.getResult() instanceof String && ((String) generator.getResult()).length() > 0
+									&& (generator.getHeader() == null || generator.getHeader().length() == 0 
+									|| !((String) generator.getResult()).trim().equals(generator.getHeader().trim())))
 								writeFile(part, generator);
 							
 							// Always let the generator perform auxiliary tasks
