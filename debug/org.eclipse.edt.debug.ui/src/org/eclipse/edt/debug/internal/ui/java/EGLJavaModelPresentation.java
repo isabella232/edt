@@ -32,9 +32,12 @@ import org.eclipse.edt.debug.internal.core.java.EGLJavaFunctionVariable;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaStackFrame;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaThread;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
+import org.eclipse.edt.debug.internal.ui.actions.BreakpointUtils;
+import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
+import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.internal.debug.ui.JDIModelPresentation;
-import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.ISharedImages;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.osgi.util.NLS;
@@ -245,8 +248,13 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 			EGLLineBreakpoint lineBP = (EGLLineBreakpoint)bp;
 			try
 			{
-				return NLS.bind( EGLJavaMessages.LineBreakpointLabel,
-						new Object[] { bp.getMarker().getResource().getLocation().lastSegment(), lineBP.getLineNumber() } );
+				String name = bp.getTypeName();
+				if ( name == null )
+				{
+					return EGLJavaMessages.LineBreakpointUnkown;
+				}
+				
+				return NLS.bind( EGLJavaMessages.LineBreakpointLabel, new Object[] { name, lineBP.getLineNumber() } );
 			}
 			catch ( CoreException e )
 			{
@@ -261,12 +269,25 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 	{
 		if ( item instanceof IMarker )
 		{
-			return EditorUtility.getEditorInput( ((IMarker)item).getResource() );
+			item = DebugPlugin.getDefault().getBreakpointManager().getBreakpoint( (IMarker)item );
 		}
 		
 		if ( item instanceof EGLBreakpoint )
 		{
-			return EditorUtility.getEditorInput( ((EGLBreakpoint)item).getMarker().getResource() );
+			IEGLElement element = BreakpointUtils.getElement( (EGLBreakpoint)item );
+			if ( element != null )
+			{
+				item = element.getResource();
+			}
+			else
+			{
+				item = ((EGLBreakpoint)item).getMarker().getResource();
+			}
+		}
+		
+		if ( item instanceof BinaryReadOnlyFile )
+		{
+			return new BinaryEditorInput( (BinaryReadOnlyFile)item );
 		}
 		
 		return super.getEditorInput( item );

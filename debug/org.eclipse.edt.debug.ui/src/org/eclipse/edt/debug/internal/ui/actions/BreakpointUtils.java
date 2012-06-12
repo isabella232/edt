@@ -14,8 +14,11 @@ package org.eclipse.edt.debug.internal.ui.actions;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IBreakpointManager;
@@ -32,10 +35,22 @@ import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.WhenClause;
+import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.edt.debug.core.breakpoints.EGLBreakpoint;
 import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
+import org.eclipse.edt.ide.core.EDTCoreIDEPlugin;
 import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.EGLModelException;
+import org.eclipse.edt.ide.core.model.IClassFile;
+import org.eclipse.edt.ide.core.model.IEGLElement;
+import org.eclipse.edt.ide.core.model.IEGLFile;
+import org.eclipse.edt.ide.core.model.IPackageFragment;
+import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
+import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.ui.IWorkbenchPart;
@@ -67,11 +82,12 @@ public class BreakpointUtils
 	 * Returns true if an EGL breakpoint exists on the resource at the given line number.
 	 * 
 	 * @param resource The resource.
+	 * @param typeName The type name of the breakpoint.
 	 * @param lineNumber The line number.
 	 * @return true if an EGL breakpoint exists on the resource at the given line number.
 	 * @throws CoreException
 	 */
-	public static EGLLineBreakpoint eglLineBreakpointExists( IResource resource, int lineNumber ) throws CoreException
+	public static EGLLineBreakpoint eglLineBreakpointExists( IResource resource, String typeName, int lineNumber ) throws CoreException
 	{
 		IBreakpointManager manager = DebugPlugin.getDefault().getBreakpointManager();
 		IBreakpoint[] breakpoints = manager.getBreakpoints( IEGLDebugCoreConstants.EGL_JAVA_MODEL_PRESENTATION_ID );
@@ -85,7 +101,8 @@ public class BreakpointUtils
 			IMarker marker = breakpoint.getMarker();
 			if ( marker != null && marker.exists() && IEGLDebugCoreConstants.EGL_LINE_BREAKPOINT_MARKER_ID.equals( marker.getType() ) )
 			{
-				if ( breakpoint.getLineNumber() == lineNumber && resource.equals( marker.getResource() ) )
+				if ( breakpoint.getLineNumber() == lineNumber && resource.equals( marker.getResource() )
+						&& typeName.equals( breakpoint.getTypeName() ) )
 				{
 					return breakpoint;
 				}
@@ -257,6 +274,130 @@ public class BreakpointUtils
 			}
 		}
 		
+		return null;
+	}
+	
+	/**
+	 * Given a resource, returns a corresponding IEGLElement.
+	 * 
+	 * @param resource The resource.
+	 * @return the corresponding IEGLElement, possibly null or non-existant.
+	 */
+	public static IEGLElement getElement( IResource resource )
+	{
+		if ( resource instanceof BinaryReadOnlyFile )
+		{
+			IProject project = resource.getProject();
+			if ( project != null )
+			{
+				BinaryReadOnlyFile roFile = (BinaryReadOnlyFile)resource;
+				IPackageFragmentRoot root = EGLCore.create( resource.getProject() ).getPackageFragmentRoot( roFile.getFullPath().toString() );
+				if ( root != null && root.exists() )
+				{
+					// Packages in eglars are always lowercased.
+					IPackageFragment frag = root.getPackageFragment( IRFileNameUtility.toIRFileName( roFile.getPackage().replace( '/', '.' ) ) );
+					if ( frag.exists() )
+					{
+						return frag.getClassFile( IRFileNameUtility.toIRFileName( roFile.getName() ) );
+					}
+				}
+			}
+		}
+		else if ( resource instanceof IFile )
+		{
+			return EGLCore.create( (IFile)resource );
+		}
+		return null;
+	}
+	
+	/**
+	 * Given an IEGLElement, returns the resource that should be used for the breakpoint marker. Some elements have no resource (such as external
+	 * eglars), in which case the workspace root will be used.
+	 * 
+	 * @param element The EGL element.
+	 * @return the resource to use for the breakpoint marker, never null.
+	 */
+	public static IResource getResource( IEGLElement element )
+	{
+		IResource resource = element.getResource();
+		if ( resource == null )
+		{
+			resource = ResourcesPlugin.getWorkspace().getRoot();
+		}
+		return resource;
+	}
+	
+	/**
+	 * Given an IEGLElement, the qualified type name for the element is returned. For example, "pkg1.Foo".
+	 * 
+	 * @param element The EGL element.
+	 * @return the qualified name for the element, or the empty string if it could not be computed.
+	 */
+	public static String getTypeName( IEGLElement element )
+	{
+		if ( element.exists() )
+		{
+			try
+			{
+				IPart[] parts = null;
+				if ( element instanceof IEGLFile )
+				{
+					parts = ((IEGLFile)element).getParts();
+				}
+				else if ( element instanceof IClassFile )
+				{
+					parts = ((IClassFile)element).getParts();
+				}
+				
+				if ( parts != null && parts.length > 0 )
+				{
+					// Find the part whose name matches the element's name (this will be the main logic part).
+					// We must use the IPart method so that the original case is maintained in eglars.
+					String name = element.getElementName();
+					int lastDot = name.lastIndexOf( '.' ); // remove file extension
+					if ( lastDot != -1 )
+					{
+						name = name.substring( 0, lastDot );
+					}
+					
+					for ( int i = 0; i < parts.length; i++ )
+					{
+						if ( name.equalsIgnoreCase( parts[ i ].getElementName() ) )
+						{
+							// Found it!
+							return parts[ i ].getFullyQualifiedName();
+						}
+					}
+				}
+			}
+			catch ( EGLModelException eme )
+			{
+				EDTDebugUIPlugin.log( eme );
+			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+	
+	/**
+	 * Given a breakpoint, this attempts to create an IEGLElement.
+	 * 
+	 * @param breakpoint The EGL breakpoint.
+	 * @return an IEGLElement, or null if it couldn't be computed.
+	 */
+	public static IEGLElement getElement( EGLBreakpoint breakpoint )
+	{
+		try
+		{
+			String handleId = (String)breakpoint.getMarker().getAttribute( EDTCoreIDEPlugin.ATT_HANDLE_ID );
+			if ( handleId != null )
+			{
+				return EGLCore.create( handleId );
+			}
+		}
+		catch ( CoreException ce )
+		{
+			EDTDebugUIPlugin.log( ce );
+		}
 		return null;
 	}
 }

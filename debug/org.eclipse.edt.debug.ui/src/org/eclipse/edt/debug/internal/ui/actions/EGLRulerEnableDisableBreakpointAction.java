@@ -11,14 +11,17 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.ui.actions;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.internal.ui.actions.breakpoints.RulerEnableDisableBreakpointAction;
 import org.eclipse.edt.compiler.core.ast.Statement;
+import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jface.text.source.IVerticalRulerInfo;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 @SuppressWarnings("restriction")
@@ -45,7 +48,7 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 					? null
 					: (IEGLEditor)editor.getAdapter( IEGLEditor.class );
 			IEditorInput input = editor.getEditorInput();
-			if ( eglEditor != null && input instanceof IFileEditorInput )
+			if ( eglEditor != null && input instanceof IStorageEditorInput )
 			{
 				int line = getVerticalRulerInfo().getLineOfLastMouseButtonActivity();
 				if ( line != -1 )
@@ -56,7 +59,20 @@ public class EGLRulerEnableDisableBreakpointAction extends RulerEnableDisableBre
 						line = eglEditor.getLineAtOffset( stmt.getOffset() ) + 1;
 						try
 						{
-							bp = BreakpointUtils.eglLineBreakpointExists( ((IFileEditorInput)input).getFile(), line );
+							IStorage storage = ((IStorageEditorInput)input).getStorage();
+							if ( storage instanceof IResource )
+							{
+								IEGLElement element = BreakpointUtils.getElement( (IResource)storage );
+								if ( element != null )
+								{
+									String typeName = BreakpointUtils.getTypeName( element );
+									if ( typeName.length() > 0 )
+									{
+										IResource resource = BreakpointUtils.getResource( element );
+										bp = BreakpointUtils.eglLineBreakpointExists( resource, typeName, line );
+									}
+								}
+							}
 						}
 						catch ( CoreException ce )
 						{

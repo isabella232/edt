@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.ui.actions;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -23,17 +24,17 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
 import org.eclipse.debug.ui.actions.IRunToLineTarget;
 import org.eclipse.debug.ui.actions.RunToLineHandler;
-import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
+import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jdt.debug.ui.IJavaDebugUIConstants;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -61,11 +62,11 @@ public class RunToLineTarget implements IRunToLineTarget
 				if ( provider != null )
 				{
 					IEditorInput input = editor.getEditorInput();
-					if ( input instanceof IFileEditorInput )
+					if ( input instanceof IStorageEditorInput )
 					{
-						IFile file = ((IFileEditorInput)input).getFile();
+						IStorage storage = ((IStorageEditorInput)input).getStorage();
 						IDocument document = provider.getDocument( input );
-						if ( document != null )
+						if ( storage instanceof IResource && document != null )
 						{
 							errorMessage = "Could not locate debug target"; //$NON-NLS-1$
 							if ( target instanceof IAdaptable )
@@ -77,11 +78,27 @@ public class RunToLineTarget implements IRunToLineTarget
 											.getOffset() ) + 1;
 									
 									// Use workspace root instead of the file so that the marker doesn't show up in the editor during the RTL
-									EGLLineBreakpoint bp = new EGLLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), line, -1, -1, false, true );
-									bp.getMarker().setAttribute( IEGLDebugCoreConstants.RUN_TO_LINE_PATH, file.getFullPath().toString() );
-									RunToLineHandler handler = new RunToLineHandler( debugTarget, target, bp );
-									handler.run( new NullProgressMonitor() );
-									return;
+									IEGLElement element = BreakpointUtils.getElement( (IResource)storage );
+									if ( element != null )
+									{
+										String typeName = BreakpointUtils.getTypeName( element );
+										if ( typeName.length() > 0 )
+										{
+											EGLLineBreakpoint bp = new EGLLineBreakpoint( ResourcesPlugin.getWorkspace().getRoot(), typeName, line,
+													-1, -1, false, true );
+											RunToLineHandler handler = new RunToLineHandler( debugTarget, target, bp );
+											handler.run( new NullProgressMonitor() );
+											return;
+										}
+										else
+										{
+											errorMessage = "Could not resolve type name"; //$NON-NLS-1$
+										}
+									}
+									else
+									{
+										errorMessage = "Could not find IEGLElement"; //$NON-NLS-1$
+									}
 								}
 							}
 						}
@@ -92,7 +109,7 @@ public class RunToLineTarget implements IRunToLineTarget
 					}
 					else
 					{
-						errorMessage = "Editor input not IFileEditorInput"; //$NON-NLS-1$
+						errorMessage = "Editor input not IStorageEditorInput"; //$NON-NLS-1$
 					}
 				}
 				else

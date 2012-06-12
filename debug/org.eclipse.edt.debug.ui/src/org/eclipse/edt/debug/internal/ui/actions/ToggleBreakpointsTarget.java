@@ -11,7 +11,11 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.ui.actions;
 
-import org.eclipse.core.resources.IFile;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -20,12 +24,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTargetExtension;
 import org.eclipse.edt.debug.core.breakpoints.EGLLineBreakpoint;
+import org.eclipse.edt.ide.core.model.EGLCore;
+import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.ui.editor.IEGLEditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.texteditor.ITextEditor;
@@ -56,7 +62,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 					}
 					
 					IEditorInput input = editor.getEditorInput();
-					if ( !(input instanceof IFileEditorInput) )
+					if ( !(input instanceof IStorageEditorInput) )
 					{
 						return Status.CANCEL_STATUS;
 					}
@@ -67,10 +73,30 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 						try
 						{
 							ITextSelection textSelection = (ITextSelection)selection;
-							IFile file = ((IFileEditorInput)input).getFile();
+							IStorage storage = ((IStorageEditorInput)input).getStorage();
+							
+							if ( !(storage instanceof IResource) )
+							{
+								return Status.CANCEL_STATUS;
+							}
+							
+							IEGLElement element = BreakpointUtils.getElement( (IResource)storage );
+							if ( element == null )
+							{
+								return Status.CANCEL_STATUS;
+							}
+							
+							String typeName = BreakpointUtils.getTypeName( element );
+							if ( typeName.length() == 0 )
+							{
+								return Status.CANCEL_STATUS;
+							}
+							
+							IResource resource = BreakpointUtils.getResource( element );
 							
 							// First check if there's a breakpoint on the actual line selected.
-							EGLLineBreakpoint breakpoint = BreakpointUtils.eglLineBreakpointExists( file, textSelection.getStartLine() + 1 );
+							EGLLineBreakpoint breakpoint = BreakpointUtils.eglLineBreakpointExists( resource, typeName,
+									textSelection.getStartLine() + 1 );
 							if ( breakpoint != null )
 							{
 								DebugPlugin.getDefault().getBreakpointManager().removeBreakpoint( breakpoint, true );
@@ -93,7 +119,7 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								// line contains a breakpoint already.
 								if ( line != textSelection.getStartLine() + 1 )
 								{
-									breakpoint = BreakpointUtils.eglLineBreakpointExists( file, line );
+									breakpoint = BreakpointUtils.eglLineBreakpointExists( resource, typeName, line );
 								}
 								if ( breakpoint != null )
 								{
@@ -101,7 +127,12 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 								}
 								else
 								{
-									new EGLLineBreakpoint( file, line, -1, -1, true, false );
+									Map attributes = new HashMap();
+									if ( element != null )
+									{
+										EGLCore.addEGLElementMarkerAttributes( attributes, element );
+									}
+									new EGLLineBreakpoint( resource, typeName, line, -1, -1, true, false, attributes );
 								}
 							}
 						}
@@ -130,14 +161,26 @@ public class ToggleBreakpointsTarget implements IToggleBreakpointsTargetExtensio
 			IEditorInput input = textEditor.getEditorInput();
 			
 			// If the breakpoint already exists, allow the action to run so it can be removed.
-			if ( input instanceof IFileEditorInput )
+			if ( input instanceof IStorageEditorInput )
 			{
 				try
 				{
-					if ( BreakpointUtils.eglLineBreakpointExists( ((IFileEditorInput)textEditor.getEditorInput()).getFile(),
-							textSelection.getStartLine() + 1 ) != null )
+					IStorage storage = ((IStorageEditorInput)textEditor.getEditorInput()).getStorage();
+					if ( storage instanceof IResource )
 					{
-						return true;
+						IEGLElement element = BreakpointUtils.getElement( (IResource)storage );
+						if ( element != null )
+						{
+							String typeName = BreakpointUtils.getTypeName( element );
+							if ( typeName.length() > 0 )
+							{
+								IResource resource = BreakpointUtils.getResource( element );
+								if ( BreakpointUtils.eglLineBreakpointExists( resource, typeName, textSelection.getStartLine() + 1 ) != null )
+								{
+									return true;
+								}
+							}
+						}
 					}
 				}
 				catch ( CoreException ce )
