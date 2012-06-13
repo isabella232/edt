@@ -12,8 +12,8 @@
 package org.eclipse.edt.ide.ui.internal.editor;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.ui.IEditorInput;
 
 
@@ -36,5 +36,13 @@ public class BinaryFileDocumentProvider extends DocumentProvider {
 		}
 		
 		return super.setDocumentContent(document, editorInput, encoding);
+	}
+	
+	protected IAnnotationModel createAnnotationModel(Object element) throws CoreException {
+		if (element instanceof BinaryEditorInput) {
+			BinaryEditorInput input = (BinaryEditorInput) element;
+			return new EGLMarkerAnnotationModel(input.getBinaryReadOnlyFile());
+		}
+		return super.createAnnotationModel(element);
 	}
 }

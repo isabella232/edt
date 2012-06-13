@@ -29,7 +29,7 @@ public class BinaryFileEditor extends EGLEditor {
 	private OutlineAdapterFactory factory;
 	
 	public BinaryFileEditor() {
-		super(true);
+		super(false);
 	}
 	
 	protected void initializeEditor() {

@@ -135,4 +135,7 @@ public class BinaryEditorInput implements IStorageEditorInput {
     	return super.equals(o);
     }
 	
+    public BinaryReadOnlyFile getBinaryReadOnlyFile(){
+    	return(this.binaryReadOnlyFile);
+    }
 }
