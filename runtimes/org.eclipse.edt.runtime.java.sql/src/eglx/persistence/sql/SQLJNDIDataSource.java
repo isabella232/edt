@@ -13,7 +13,6 @@ package eglx.persistence.sql;
 
 import java.sql.Connection;
 
-import javax.naming.NamingException;
 import javax.sql.CommonDataSource;
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.DataSource;
@@ -52,15 +51,15 @@ public class SQLJNDIDataSource extends SQLDataSource {
 			CommonDataSource ds;
 			try {
 				ds = (CommonDataSource)Runtime.getRunUnit().jndiLookup(jndiName);
-			} catch (NamingException ne) {
+			} catch (Exception ex) {
 				// Try a direct lookup.
 				try {
 					ds = (CommonDataSource)Runtime.getRunUnit().jndiLookup(connectionUrl);
 				}
-				catch (NamingException ne2) {
+				catch (Exception ex2) {
 					// Throw an error based on the indirect lookup's exception.
 					SQLException sqlEx = new SQLException();
-					throw sqlEx.fillInMessage(Message.JNDI_LOOKUP_ERROR, jndiName, ne);
+					throw sqlEx.fillInMessage(Message.JNDI_LOOKUP_ERROR, jndiName, ex);
 				}
 			}
 			
