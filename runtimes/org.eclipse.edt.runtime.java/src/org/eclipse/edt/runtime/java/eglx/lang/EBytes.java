@@ -63,10 +63,6 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 		return isa;
 	}
 
-	public String toString(String encoding, Integer... length) {
-		return EString.asString(EString.asString(object, encoding, length));
-	}
-
 	public static byte[] asBytes(Boolean value, Integer... length) {
 		if (value == null)
 			return null;

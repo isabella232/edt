@@ -332,13 +332,29 @@ public class EString extends AnyBoxedObject<String> {
 		}
 	}
 
-	public static String asString(EBytes value, String encoding, Integer... length) {
-		if (value == null)
-			return null;
-		return asString(value.ezeUnbox(), encoding, length);
+	public static String getDefaultEncoding() {
+		return System.getProperty("file.encoding");
 	}
 
-	protected static String asString(byte[] value, String encoding, Integer... length) {
+	public static String fromBytes(EBytes value, Integer... length) {
+		if (value == null)
+			return null;
+		return fromBytes(value.ezeUnbox(), getDefaultEncoding(), length);
+	}
+
+	public static String fromBytes(byte[] value, Integer... length) {
+		if (value == null)
+			return null;
+		return fromBytes(value, getDefaultEncoding(), length);
+	}
+
+	public static String fromBytes(EBytes value, String encoding, Integer... length) {
+		if (value == null)
+			return null;
+		return fromBytes(value.ezeUnbox(), encoding, length);
+	}
+
+	public static String fromBytes(byte[] value, String encoding, Integer... length) {
 		if (encoding == null)
 			return new String(value);
 		else {
@@ -350,6 +366,40 @@ public class EString extends AnyBoxedObject<String> {
 				ex.initCause( e );
 				throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
 			}
+		}
+	}
+
+	public static byte[] toBytes(EString value, Integer... length) {
+		if (value == null)
+			return null;
+		return toBytes(value.ezeUnbox(), getDefaultEncoding(), length);
+	}
+
+	public static byte[] toBytes(String value, Integer... length) {
+		if (value == null)
+			return null;
+		return toBytes(value, getDefaultEncoding(), length);
+	}
+
+	public static byte[] toBytes(EString value, String encoding, Integer... length) {
+		if (value == null)
+			return null;
+		return toBytes(value.ezeUnbox(), encoding, length);
+	}
+
+	public static byte[] toBytes(String value, String encoding, Integer... length) {
+		if (value == null)
+			return null;
+		try {
+			if (encoding == null)
+				return value.getBytes();
+			else
+				return value.getBytes(encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
 		}
 	}
 
