@@ -216,101 +216,89 @@ public class BinaryReadOnlyFile implements IFile {
 	@Override
 	public void accept(IResourceProxyVisitor visitor, int memberFlags)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void accept(IResourceVisitor visitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void accept(IResourceVisitor visitor, int depth,
 			boolean includePhantoms) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void accept(IResourceVisitor visitor, int depth, int memberFlags)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void clearHistory(IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void copy(IPath destination, boolean force, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void copy(IPath destination, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void copy(IProjectDescription description, boolean force,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void copy(IProjectDescription description, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public IMarker createMarker(String type) throws CoreException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public IResourceProxy createProxy() {
-		// TODO Auto-generated method stub
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void delete(boolean force, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void delete(int updateFlags, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void deleteMarkers(String type, boolean includeSubtypes, int depth)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean exists() {
-		// TODO Auto-generated method stub
-		return false;
+		if(getSource() != null)
+			return true;
+		else		
+		    return false;
 	}
 
 	@Override
@@ -511,29 +499,25 @@ public class BinaryReadOnlyFile implements IFile {
 	@Override
 	public void move(IPath destination, boolean force, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void move(IPath destination, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void move(IProjectDescription description, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void move(IProjectDescription description, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -545,80 +529,68 @@ public class BinaryReadOnlyFile implements IFile {
 
 	@Override
 	public void revertModificationStamp(long value) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setDerived(boolean isDerived) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setDerived(boolean isDerived, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setHidden(boolean isHidden) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setLocal(boolean flag, int depth, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public long setLocalTimeStamp(long value) throws CoreException {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void setPersistentProperty(QualifiedName key, String value)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setReadOnly(boolean readOnly) {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setResourceAttributes(ResourceAttributes attributes)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setSessionProperty(QualifiedName key, Object value)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setTeamPrivateMember(boolean isTeamPrivate)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void touch(IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -629,62 +601,53 @@ public class BinaryReadOnlyFile implements IFile {
 
 	@Override
 	public boolean isConflicting(ISchedulingRule rule) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void appendContents(InputStream source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void appendContents(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void create(InputStream source, boolean force,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void create(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void createLink(IPath localLocation, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void createLink(URI location, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void delete(boolean force, boolean keepHistory,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public String getCharset() throws CoreException {
-		// TODO Auto-generated method stub
 		return "UTF-8";
 	}
 
@@ -708,7 +671,6 @@ public class BinaryReadOnlyFile implements IFile {
 
 	@Override
 	public InputStream getContents(boolean force) throws CoreException {
-		// TODO Auto-generated method stub
 		return getContents();
 	}
 
@@ -728,49 +690,45 @@ public class BinaryReadOnlyFile implements IFile {
 	@Override
 	public void move(IPath destination, boolean force, boolean keepHistory,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setCharset(String newCharset) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setCharset(String newCharset, IProgressMonitor monitor)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setContents(InputStream source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
 	}
 
 	@Override
 	public void setContents(IFileState source, boolean force,
 			boolean keepHistory, IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
 	}
 
 	@Override
 	public void setContents(InputStream source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
 		
 	}
 
 	@Override
 	public void setContents(IFileState source, int updateFlags,
 			IProgressMonitor monitor) throws CoreException {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException();
 	}
 	   
 }
