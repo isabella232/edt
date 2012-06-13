@@ -415,5 +415,5 @@ externalType EString extends AnyText type ParameterizableType {
 	 * @return this string as bytes.
 	 * @throws InvalidArgumentException if the encoding is not supported.
 	 */
-	function toBytes(encoding EString in);
+	function toBytes(encoding EString in) returns(EBytes);
 end
