@@ -145,7 +145,7 @@ externalType EBigint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the bytes are not valid format for a bigint.
 	 */
-	static function asBigInt(value EBytes? in) returns(EBigInt?) {@Operation{"narrow"}};
+	static function asBigint(value EBytes? in) returns(EBigint?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation widen} Converts a bigint to a number.
