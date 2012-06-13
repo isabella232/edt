@@ -394,7 +394,7 @@ public class TypeTemplate extends JavaTemplate {
 			out.print(")");
 		} else {
 			// we only need to check for minus sign and if found, we need to change it to -()
-			if (arg.getOperator().equals(arg.Op_NEGATE) || arg.getOperator().equals(arg.Op_NOT) || arg.getOperator().equals(arg.Op_BITWISENOT)) {
+			if (arg.getOperator().equals(UnaryExpression.Op_NEGATE) || arg.getOperator().equals(UnaryExpression.Op_NOT) || arg.getOperator().equals(UnaryExpression.Op_BITWISENOT)) {
 				out.print(arg.getOperator() + "(");
 				ctx.invoke(genExpression, arg.getExpression(), ctx, out);
 				out.print(")");
