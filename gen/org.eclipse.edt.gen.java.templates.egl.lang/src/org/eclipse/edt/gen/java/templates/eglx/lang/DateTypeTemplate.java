@@ -62,9 +62,7 @@ public class DateTypeTemplate extends JavaTemplate {
 		// do a callout to allow certain source types to decide to create a boxing expression
 		ctx.invoke(genContainerBasedInvocationBoxing, type, ctx, out, expr);
 		// then process the expression
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-		if (expr.getArguments() != null && expr.getArguments().size() > 0)
-			out.print(", ");
+		ctx.invoke(genInvocationNonstaticArgument, expr, ctx, out);
 		ctx.invoke(genInvocationArguments, expr, ctx, out);
 		out.print(")");
 	}

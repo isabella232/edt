@@ -52,9 +52,7 @@ public class StringTypeTemplate extends JavaTemplate {
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-		if (expr.getArguments() != null && expr.getArguments().size() > 0)
-			out.print(", ");
+		ctx.invoke(genInvocationNonstaticArgument, expr, ctx, out);
 		ctx.invoke(genInvocationArguments, expr, ctx, out);
 		out.print(")");
 	}

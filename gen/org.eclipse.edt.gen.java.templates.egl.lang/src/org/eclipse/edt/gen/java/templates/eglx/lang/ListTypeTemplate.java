@@ -69,14 +69,13 @@ public class ListTypeTemplate extends JavaTemplate
 		out.print( '.' );
 		ctx.invoke( genName, expr.getTarget(), ctx, out );
 		out.print( '(' );
-		ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
+		ctx.invoke(genInvocationNonstaticArgument, expr, ctx, out);
 
 		// Special cases: 1. Pass a factory to resize so it can create new elements.
 		// 2. We may need to copy the first argument to appendElement, insertElement,
 		// and setElement.
 		if ( expr.getId().equalsIgnoreCase( "resize" ) )
 		{
-			out.print( ", " );
 			ctx.invoke( genExpression, expr.getArguments().get( 0 ), ctx, out );
 			out.print( ", " );
 			factory( (ArrayType)expr.getQualifier().getType(), ctx, out, null, 0 );
@@ -84,7 +83,6 @@ public class ListTypeTemplate extends JavaTemplate
 		}
 		else if ( expr.getId().equalsIgnoreCase( "appendElement" ) )
 		{
-			out.print( ", " );
 			// if the array is not nullable, make sure we aren't using a nullable element
 			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
@@ -110,7 +108,6 @@ public class ListTypeTemplate extends JavaTemplate
 		else if ( expr.getId().equalsIgnoreCase( "insertElement" )
 					|| expr.getId().equalsIgnoreCase( "setElement" ) )
 		{
-			out.print( ", " );
 			// if the array is not nullable, make sure we aren't using a nullable element
 			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
@@ -137,8 +134,6 @@ public class ListTypeTemplate extends JavaTemplate
 		}
 		else
 		{
-			if ( expr.getArguments() != null && expr.getArguments().size() > 0 )
-				out.print( ", " );
 			ctx.invoke(genInvocationArguments, expr, ctx, out);
 			out.print( ')' );
 		}
