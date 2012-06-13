@@ -13,6 +13,8 @@ package org.eclipse.edt.javart;
 
 import java.util.Locale;
 
+import javax.naming.InitialContext;
+
 import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 
@@ -60,5 +62,16 @@ public class JSERunUnit extends RunUnitBase
 	{
 		// A transfer to transaction effectively begins a new RunUnit.
 		return trans.toTransaction;
+	}
+
+	@Override
+	public Object jndiLookup( String name ) throws Exception
+	{
+		if ( initialContext == null )
+		{
+			//TODO provide API so that users can specify parameters to be passed? Or just require they set the appropriate env vars.
+			initialContext = new InitialContext();
+		}
+		return initialContext.lookup( name );
 	}
 }

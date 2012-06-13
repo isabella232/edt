@@ -13,6 +13,8 @@ package org.eclipse.edt.javart;
 
 import java.util.Locale;
 
+import javax.naming.InitialContext;
+
 import org.eclipse.edt.javart.resources.RunUnitBase;
 import org.eclipse.edt.javart.resources.StartupInfo;
 
@@ -59,5 +61,16 @@ public class JEERunUnit extends RunUnitBase
 	{
 		// In JEE all properties come from the same place so there's no need to reload.
 		return false;
+	}
+
+	@Override
+	public Object jndiLookup( String name ) throws Exception
+	{
+		if ( initialContext == null )
+		{
+			//TODO provide API so that users can specify parameters to be passed? Or just require they set the appropriate env vars.
+			initialContext = new InitialContext();
+		}
+		return initialContext.lookup( name );
 	}
 }

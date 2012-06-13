@@ -28,7 +28,6 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.EglExit;
@@ -36,14 +35,13 @@ import org.eclipse.edt.javart.Executable;
 import org.eclipse.edt.javart.ExitProgram;
 import org.eclipse.edt.javart.ExitRunUnit;
 import org.eclipse.edt.javart.FatalProblem;
-
-import eglx.lang.AnyException;
-
 import org.eclipse.edt.javart.Program;
 import org.eclipse.edt.javart.RunUnit;
 import org.eclipse.edt.javart.Transfer;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.JavartUtil;
+
+import eglx.lang.AnyException;
 
 /**
  * This is a RunUnit.
@@ -672,17 +670,6 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 		}
 	
 		return newProgram;
-	}
-	
-	@Override
-	public Object jndiLookup( String name ) throws NamingException
-	{
-		if ( initialContext == null )
-		{
-			//TODO provide API so that users can specify parameters to be passed? Or just require they set the appropriate env vars.
-			initialContext = new InitialContext();
-		}
-		return initialContext.lookup( name );
 	}
 	
 	/**

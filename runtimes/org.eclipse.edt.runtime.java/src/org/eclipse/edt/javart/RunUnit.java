@@ -47,5 +47,5 @@ public interface RunUnit {
 	Trace getTrace();
 	Executable getActiveExecutable() throws AnyException;
 	void setActiveExecutable(Executable executable);
-	Object jndiLookup(String name) throws NamingException;
+	Object jndiLookup(String name) throws Exception;
 }
