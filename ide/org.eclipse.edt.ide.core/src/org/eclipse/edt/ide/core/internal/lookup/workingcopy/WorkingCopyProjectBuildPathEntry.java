@@ -154,7 +154,7 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	            		if(partOrigin != null && partOrigin.getEGLFile().isReadOnly()) {
 	            			int index = partName.lastIndexOf(".");
 	    					if(index > -1) {//if the part name represents FileName, will continue Compilation	
-	    						String fileExtension = partName.substring(25+1);
+	    						String fileExtension = partName.substring(index+1);
 	    						if(!"egl".equalsIgnoreCase(fileExtension)) {
 	    							shouldCompiled = false;
 	    						}
