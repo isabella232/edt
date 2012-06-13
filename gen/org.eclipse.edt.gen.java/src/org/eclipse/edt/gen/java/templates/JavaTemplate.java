@@ -70,6 +70,7 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String genInvocation = "genInvocation";
 	public static final String genInvocationArgumentBoxing = "genInvocationArgumentBoxing";
 	public static final String genInvocationArguments = "genInvocationArguments";
+	public static final String genInvocationNonstaticArgument = "genInvocationNonstaticArgument";
 	public static final String genIsaExpression = "genIsaExpression";
 	public static final String genIsaExpressionBoxing = "genIsaExpressionBoxing";
 	public static final String genLibraryAccessMethod = "genLibraryAccessMethod";
