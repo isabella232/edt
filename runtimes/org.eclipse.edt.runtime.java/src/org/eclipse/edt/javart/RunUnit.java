@@ -13,8 +13,6 @@ package org.eclipse.edt.javart;
 
 import java.util.Locale;
 
-import javax.naming.NamingException;
-
 import org.eclipse.edt.javart.resources.JavartProperties;
 import org.eclipse.edt.javart.resources.LocalizedText;
 import org.eclipse.edt.javart.resources.RecoverableResource;
