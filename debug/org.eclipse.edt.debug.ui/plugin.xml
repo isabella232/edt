@@ -49,6 +49,16 @@
                id="org.eclipse.edt.debug.ui.actions.ManageBreakpointRulerAction">
          </action>
       </editorContribution>
+      <editorContribution
+            id="org.eclipse.edt.debug.BinaryFileEditor.BreakpointRulerActions"
+            targetID="org.eclipse.edt.ide.ui.BinaryFileEditor">
+         <action
+               actionID="RulerDoubleClick"
+               class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+               id="org.eclipse.edt.debug.ui.actions.ManageBinaryFileBreakpointRulerAction"
+               label="%AddBreakpoint.label">
+         </action>
+      </editorContribution>
    </extension>
    
    <extension
