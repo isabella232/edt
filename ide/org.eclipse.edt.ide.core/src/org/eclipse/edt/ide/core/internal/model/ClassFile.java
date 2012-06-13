@@ -117,7 +117,7 @@ public class ClassFile extends Openable implements IClassFile, IDocument {
 
 	@Override
 	protected char getHandleMementoDelimiter() {
-		return 0;
+		return EGLM_CLASSFILE;
 	}
 
 	@Override

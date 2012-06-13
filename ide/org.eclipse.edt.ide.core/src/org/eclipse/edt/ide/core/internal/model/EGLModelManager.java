@@ -834,14 +834,27 @@ public class EGLModelManager {
 
 		int end = memento.indexOf(EGLElement.EGLM_EGLFILE, rootEnd);
 		if (end == -1) {
+			end = memento.indexOf(EGLElement.EGLM_CLASSFILE, rootEnd);
+			if (end != -1) {
+				//deal with class file and binary members
+				// return model.getHandleFromMementoForBinaryMembers(memento, root,
+				// rootEnd, end);
+				
+				// For now we only support the IClassFile, nothing that it contains.
+				IPackageFragment frag;
+				if (rootEnd == end - 1) {
+					frag = root.getPackageFragment(IPackageFragment.DEFAULT_PACKAGE_NAME);
+				} else {
+					frag = root.getPackageFragment(memento.substring(rootEnd + 1, end));
+				}
+				return frag.getClassFile(memento.substring(end + 1));
+			}
+			
 			if (rootEnd + 1 == memento.length()) {
 				return root.getPackageFragment(IPackageFragment.DEFAULT_PACKAGE_NAME);
 			} else {
 				return root.getPackageFragment(memento.substring(rootEnd + 1));
 			}
-			//deal with class file and binary members
-			// return model.getHandleFromMementoForBinaryMembers(memento, root,
-			// rootEnd, end);
 		}
 
 		//deal with compilation units and source members

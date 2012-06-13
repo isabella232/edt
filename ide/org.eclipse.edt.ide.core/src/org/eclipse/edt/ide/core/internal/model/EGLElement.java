@@ -45,6 +45,7 @@ public abstract class EGLElement extends PlatformObject implements IEGLElement {
 	public static final char EGLM_FUNCTION= '~';
 	public static final char EGLM_INITIALIZER= '|';
 	public static final char EGLM_EGLFILE= '{';
+	public static final char EGLM_CLASSFILE= '(';
 	public static final char EGLM_PART= '[';
 	public static final char EGLM_PACKAGEDECLARATION= '%';
 	public static final char EGLM_IMPORTDECLARATION= '\'';
