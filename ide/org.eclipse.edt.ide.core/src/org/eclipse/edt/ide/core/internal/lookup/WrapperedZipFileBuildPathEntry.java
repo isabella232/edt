@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.IZipFileBindingBuildPathEntry;
+import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.IWorkingCopyBuildPathEntry;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
@@ -51,8 +52,10 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 			Part part = findPart(packageName, partName);
 			
 			String sourceName = null;
+			String irName = "";
 			if(part != null) {
 				sourceName = part.eGet("filename").toString();
+				irName = IRFileNameUtility.toIRFileName(part.getName());
 			} else {
 				ZipFile zipFile = null;
 				try {
@@ -75,7 +78,7 @@ public class WrapperedZipFileBuildPathEntry implements IZipFileBindingBuildPathE
 				partOrigin = partOriginByPart.get( key.toString() );
 				
 				if ( partOrigin == null) {
-					final BinaryReadOnlyFile brf = new BinaryReadOnlyFile(getID(), sourceName);
+					final BinaryReadOnlyFile brf = new BinaryReadOnlyFile(getID(), sourceName, irName);
 					brf.setProject(project);
 					partOrigin = new IPartOrigin() {
 

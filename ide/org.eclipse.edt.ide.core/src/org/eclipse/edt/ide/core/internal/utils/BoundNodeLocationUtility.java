@@ -50,6 +50,7 @@ import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.TopLevelForm;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
+import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
@@ -468,16 +469,18 @@ public class BoundNodeLocationUtility {
 					EObject irPart = null;
 					
 					String sourceName = null;
+					String irName = null;
 					try {
 						irPart = ((SystemEnvironment)ienv).getIREnvironment().find(eglSignature);
 						sourceName = irPart.eGet("filename").toString();
+						irName = IRFileNameUtility.toIRFileName(irPart.eGet("name").toString());
 					} catch (MofObjectNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (DeserializationException e1) {
 						e1.printStackTrace();
 					}
 
-					result = new BinaryReadOnlyFile( entry.getID(), sourceName);
+					result = new BinaryReadOnlyFile( entry.getID(), sourceName, irName);
 					break;
 				}
 			}//for loop
