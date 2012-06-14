@@ -770,7 +770,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 		for(Iterator iter = getInterfaceFunctionList().iterator(); iter.hasNext();) {
 			IFunctionBinding interfaceFunc = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
 			boolean foundMatchingHandlerFunc = false;
-			for(Iterator iter2 = handlerBinding.getDeclaredFunctions().iterator(); !foundMatchingHandlerFunc && iter2.hasNext();) {
+			for(Iterator iter2 = handlerBinding.getDeclaredAndInheritedFunctions().iterator(); !foundMatchingHandlerFunc && iter2.hasNext();) {
 				IFunctionBinding handlerFunc = (IFunctionBinding) ((NestedFunctionBinding) iter2.next()).getType();
 				if(TypeCompatibilityUtil.functionSignituresAreIdentical(handlerFunc, interfaceFunc, compilerOptions)) {
 					foundMatchingHandlerFunc = true;

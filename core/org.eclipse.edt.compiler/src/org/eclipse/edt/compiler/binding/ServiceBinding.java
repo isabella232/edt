@@ -104,4 +104,32 @@ public class ServiceBinding extends FunctionContainerBinding {
 		return false;
 	}
 	
+	public List getDeclaredAndInheritedFunctions() {
+		IPartBinding dst = getDefaultSuperType();
+		if (!Binding.isValidBinding(dst)) {
+			return getDeclaredFunctions();
+		}
+		
+		List list = new ArrayList();
+		list.addAll(getDeclaredFunctions());
+		
+		switch (dst.getKind()) {
+		case ITypeBinding.EXTERNALTYPE_BINDING:
+			list.addAll(((ExternalTypeBinding)dst).getDeclaredAndInheritedFunctions());		
+			break;
+		case ITypeBinding.HANDLER_BINDING:
+			list.addAll(((HandlerBinding)dst).getDeclaredAndInheritedFunctions());		
+			break;
+		case ITypeBinding.SERVICE_BINDING:
+			list.addAll(((HandlerBinding)dst).getDeclaredAndInheritedFunctions());		
+			break;
+		default:
+			break;
+		}
+		
+		return list;
+	
+	}
+
+	
 }

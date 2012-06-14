@@ -84,7 +84,7 @@ public class ServiceValidator extends FunctionContainerValidator {
 		for(Iterator iter = getInterfaceFunctionList().iterator(); iter.hasNext();) {
 			IFunctionBinding interfaceFunc = (IFunctionBinding) ((NestedFunctionBinding) iter.next()).getType();
 			boolean foundMatchingServiceFunc = false;
-			for(Iterator iter2 = serviceBinding.getDeclaredFunctions().iterator(); !foundMatchingServiceFunc && iter2.hasNext();) {
+			for(Iterator iter2 = serviceBinding.getDeclaredAndInheritedFunctions().iterator(); !foundMatchingServiceFunc && iter2.hasNext();) {
 				IFunctionBinding serviceFunc = (IFunctionBinding) ((NestedFunctionBinding) iter2.next()).getType();
 				if(TypeCompatibilityUtil.functionSignituresAreIdentical(serviceFunc, interfaceFunc, compilerOptions)) {
 					foundMatchingServiceFunc = true;
