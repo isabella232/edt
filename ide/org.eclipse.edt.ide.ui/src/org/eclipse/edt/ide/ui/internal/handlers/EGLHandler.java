@@ -78,6 +78,7 @@ public abstract class EGLHandler extends AbstractHandler implements IHandler {
 				} else if (editorInput instanceof BinaryEditorInput){
 					IClassFile classFile = ((BinaryEditorInput)editorInput).getClassFile();
 					if(classFile != null) {
+						fSite = editor.getSite();
 						fSelection = new StructuredSelection(classFile);
 					}
 				}

@@ -413,6 +413,7 @@
        				<with variable="activePartId">
        					<or>
             				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.ui.BinaryFileEditor"/>
             				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
             			</or>
        				</with>
