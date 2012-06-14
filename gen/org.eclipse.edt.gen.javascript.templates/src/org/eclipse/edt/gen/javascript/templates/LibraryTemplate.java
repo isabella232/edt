@@ -96,12 +96,19 @@ public class LibraryTemplate extends JavaScriptTemplate {
 		out.println(";");
 		ctx.invoke(genAccessor, library, ctx, out);
 		out.println("=this;");
-
-		// instantiate each library
-		ctx.invoke(genLibraries, library, ctx, out);
-		ctx.invoke(genFields, library, ctx, out);
-		out.println("this.eze$$setInitial();");
 		out.println("}");
+	}
+	
+	public void genInitializeMethodBody(Library library, Context ctx, TabbedWriter out) {
+		out.print("if(");
+		ctx.invoke(genAccessor, library, ctx, out);
+		out.print(") return ");
+		ctx.invoke(genAccessor, library, ctx, out);
+		out.println(";");
+		ctx.invoke(genAccessor, library, ctx, out);
+		out.println("=this;");
+		
+		ctx.invokeSuper(this, genInitializeMethodBody, library, ctx, out);
 	}
 
 	public void genCloneMethods(Library library, Context ctx, TabbedWriter out) {

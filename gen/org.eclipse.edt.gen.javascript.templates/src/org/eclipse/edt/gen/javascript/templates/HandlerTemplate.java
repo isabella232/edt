@@ -65,7 +65,6 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		// instantiate each library
 		ctx.invoke(genLibraries, handler, ctx, out);
 		ctx.invoke(genFields, handler, ctx, out);
-		out.println("this.eze$$setInitial();");
 		
 		Stereotype stereotype = handler.getStereotype();
 		if ((stereotype != null) && ("RUIWidget".equals(stereotype.getEClass().getName()))){
@@ -78,6 +77,17 @@ public class HandlerTemplate extends JavaScriptTemplate {
 		}
 		
 		out.println("}");
+	}
+	
+	public void genSetEmptyMethodBody(Handler handler, Context ctx, TabbedWriter out) {
+		// instantiate each user part
+		List<Part> usedParts = handler.getUsedParts();
+		for (Part part : usedParts) {
+			ctx.invoke(genInstantiation, part, ctx, out);
+			out.println(";");
+		}
+		
+		ctx.invokeSuper(this, genSetEmptyMethodBody, handler, ctx, out);
 	}
 
 	public void genContainerBasedAccessor(Handler type, Context ctx, TabbedWriter out, Function arg) {

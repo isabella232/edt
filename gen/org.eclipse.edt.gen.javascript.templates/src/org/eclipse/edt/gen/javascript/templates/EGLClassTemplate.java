@@ -230,9 +230,6 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		// Generate default constructor
 		out.print(quoted("constructor"));
 		out.println(": function() {");
-		ctx.invoke(genLibraries, part, ctx, out);
-		ctx.invoke(genFields, part, ctx, out);
-		out.println("this."+ INITIALIZER_FUNCTION + "();");
 		out.println("}");
 	}
 
@@ -258,6 +255,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	}
 
 	public void genSetEmptyMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genLibraries, part, ctx, out);
+		ctx.invoke(genFields, part, ctx, out);
 		for (Field field : part.getFields()) {
 			if (!(field instanceof ConstantField)) {
 				ctx.invoke(genSetEmptyMethod, part, ctx, out, field);
