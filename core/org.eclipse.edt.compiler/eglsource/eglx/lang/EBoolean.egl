@@ -40,6 +40,11 @@ externalType EBoolean extends AnyValue type ClassType
 	static function $OR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"||"}};
 
 	/**
+	 * {@Operation xor} Returns true if one operand is true and the other is false.
+	 */
+	static function $XOR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"xor"}};
+
+	/**
 	 * {@Operation !} Negates a boolean.
 	 */
 	static function $NOT(value EBoolean in) returns (EBoolean) {@Operation{"!"}};
