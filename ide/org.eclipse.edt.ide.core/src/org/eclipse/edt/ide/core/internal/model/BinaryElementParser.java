@@ -28,6 +28,7 @@ import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -282,6 +283,16 @@ public class BinaryElementParser {
 			requestor.enterFunction(declStart, modifier, fieldName, retFieldPkg, delegate.getId().toCharArray(),
 					nameStart, nameEnd, typeNames, parmNames, useTypes, areNullable, parmPackages);
 			
+			return true;
+		}
+		
+		public boolean visit(Enumeration enumeration) {
+			if (!shouldVisit(enumeration)) {
+				return false;
+			}
+			
+			this.partType = IRPartType.PART_ENUMERATION;
+			visitPart(partType, partInfo, enumeration);
 			return true;
 		}
 		
