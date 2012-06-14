@@ -11,10 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.ui.internal.editor;
 
-import java.util.StringTokenizer;
-
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IStorage;
+import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragment;
 import org.eclipse.edt.ide.core.internal.model.EglarPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -92,18 +91,10 @@ public class BinaryEditorInput implements IStorageEditorInput {
 			IPackageFragmentRoot myRoot = eglProj.getPackageFragmentRoot(binaryReadOnlyFile.getFullPath().toString());
 			if(myRoot instanceof  EglarPackageFragmentRoot && myRoot.exists()){
 				EglarPackageFragmentRoot packageFragmentRoot = (EglarPackageFragmentRoot)myRoot;
-				String pkg = binaryReadOnlyFile.getPackage();
-				StringTokenizer token = new StringTokenizer(pkg, ".");
-				String[] pkgName = new String[token.countTokens()];
-				int i = 0;
-				while(token.hasMoreTokens()){
-					//for file system, the package name can be case sensitive thus variable 'pkg' is case sensitive,
-					//but inside eglar, the package name is case insensitive, so convert to lower case
-					pkgName[i++] = token.nextToken().toLowerCase();
-				}
+				String[] pkgName = IRFileNameUtility.toIRFileName(binaryReadOnlyFile.getPackageSegments());
 				EglarPackageFragment packageFragment = (EglarPackageFragment)packageFragmentRoot.getPackageFragment(pkgName);
 				if(packageFragment != null && packageFragment.exists()){
-					classFile = packageFragment.getClassFile(binaryReadOnlyFile.getName().toLowerCase());
+					classFile = packageFragment.getClassFile(binaryReadOnlyFile.getIrName());
 				}
 			}
 		} catch (Exception e) {
