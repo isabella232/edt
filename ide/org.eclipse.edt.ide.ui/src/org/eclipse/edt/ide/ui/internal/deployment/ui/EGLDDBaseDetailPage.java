@@ -160,10 +160,11 @@ public abstract class EGLDDBaseDetailPage implements IDetailsPage {
 //						new FileEditorInput(file),
 //						editorId);
 					BinaryReadOnlyFile storage = null;
+					//TODO this isn't right
 					if(proj == null){
-						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile);
+						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, "");
 					} else{
-						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, proj, true);
+						storage = new BinaryReadOnlyFile(eglarFilePath, irFullQualifiedFile, "", proj, true);
 					}
 					BinaryEditorInput input = new BinaryEditorInput(storage);
 					ww.getActivePage().openEditor(

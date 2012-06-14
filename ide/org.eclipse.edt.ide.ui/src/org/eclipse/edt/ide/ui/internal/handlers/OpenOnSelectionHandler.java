@@ -43,6 +43,7 @@ import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
+import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -320,7 +321,10 @@ public class OpenOnSelectionHandler extends EGLHandler {
 				EditorUtility.revealInEditor(fEditor, name);
 			}else{	
 				if(file.isReadOnly()) {
-					IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(null, file.getProject(), file.getFullPath().toString(), file.getProjectRelativePath().toString(), BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+					// Resolve the IR part's matching name from the node.
+					String irName = file instanceof BinaryReadOnlyFile ? ((BinaryReadOnlyFile)file).getIrName() : IRFileNameUtility.toIRFileName(name.getIdentifier());
+					
+					IEditorPart part = EditorUtility.openSourceFromEglarInBinaryEditor(file.getProject(), file.getFullPath().toString(), file.getProjectRelativePath().toString(), irName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
 					int start = name.getOffset();
 					int length = name.getLength();
 					if(part instanceof EGLEditor){

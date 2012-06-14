@@ -22,6 +22,7 @@ import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.IClassFile;
+import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IMember;
@@ -104,12 +105,19 @@ public class EGLSearchResultPage extends AbstractTextSearchViewPage implements I
 			IProject project = part.getEGLProject().getProject();
 			IEGLProject eglProj = EGLCore.create(project);
 			IFile file = Util.findPartFile(fullyqualifiedPartName, eglProj);
-			if(file != null && file.exists()){
-				IEditorPart editor = EditorUtility.openClassFile(project, file.getFullPath().toString(), fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+			
+			IEGLElement parent = part.getParent();
+			while (parent != null && !(parent instanceof IClassFile)) {
+				parent = parent.getParent();
 			}
-			else{
-				String filePath = Util.findPartFilePath(fullyqualifiedPartName, eglProj);
-				IEditorPart editor = EditorUtility.openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID);
+			if (parent instanceof IClassFile) {
+				if(file != null && file.exists()){
+					IEditorPart editor = EditorUtility.openClassFile(project, file.getFullPath().toString(), fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID, (IClassFile)parent);
+				}
+				else{
+					String filePath = Util.findPartFilePath(fullyqualifiedPartName, eglProj);
+					IEditorPart editor = EditorUtility.openClassFile(project, filePath, fullyqualifiedPartName, BinaryFileEditor.BINARY_FILE_EDITOR_ID, (IClassFile)parent);
+				}
 			}
 			
 		} else if(matchElement instanceof IClassFile ) {
