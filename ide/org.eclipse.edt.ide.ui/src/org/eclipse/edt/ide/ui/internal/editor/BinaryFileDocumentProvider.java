@@ -21,12 +21,6 @@ public class BinaryFileDocumentProvider extends DocumentProvider {
 	
 	protected boolean setDocumentContent(IDocument document, IEditorInput editorInput, String encoding) throws CoreException {
 		if (editorInput instanceof BinaryEditorInput) {
-			/*IClassFile classFile= ((BinaryEditorInput) editorInput).getClassFile();
-			String source= classFile.getSource();
-			if (source == null)
-				source= ""; //$NON-NLS-1$
-			document.set(source);
-			return true;*/
 			BinaryEditorInput eglfile= ((BinaryEditorInput) editorInput);
 			String source = eglfile.getSource();
 			if (source == null)
@@ -41,6 +35,9 @@ public class BinaryFileDocumentProvider extends DocumentProvider {
 	protected IAnnotationModel createAnnotationModel(Object element) throws CoreException {
 		if (element instanceof BinaryEditorInput) {
 			BinaryEditorInput input = (BinaryEditorInput) element;
+			if (input.getClassFile() != null) {
+				return new ClassFileMarkerAnnotationModel(input.getBinaryReadOnlyFile(), input.getClassFile());
+			}
 			return new EGLMarkerAnnotationModel(input.getBinaryReadOnlyFile());
 		}
 		return super.createAnnotationModel(element);
