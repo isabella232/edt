@@ -88,6 +88,15 @@ externalType StringLib type NativeType
 	 * @return a formatted string.
 	 */
 	static function format(value timestamp in, pattern string in) returns(string);
+	
+	/**
+	 * Converts a time to a string, formatted according to the given pattern.
+	 *
+	 * @param value    the time to be formatted.
+	 * @param pattern  how the time should be formatted.
+	 * @return a formatted string.
+	 */
+	static function format(value time in, pattern string in) returns(string);
 
 	/**
 	 * Returns the next token from the source string, or null if there is none.
