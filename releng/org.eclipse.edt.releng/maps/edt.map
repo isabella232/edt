@@ -1,7 +1,7 @@
 feature@org.eclipse.edt.sdk.feature=v201204131408,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.sdk.feature
 
 feature@org.eclipse.edt.feature=V201205020928,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.feature
-plugin@org.eclipse.edt.compiler=v201206140646,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
+plugin@org.eclipse.edt.compiler=v201206141438,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.compiler
 plugin@org.eclipse.edt.core.doc.cr=v201205142345,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.cr
 plugin@org.eclipse.edt.core.doc.lr=v201206101700,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.lr
 plugin@org.eclipse.edt.core.doc.pg=v201206101700,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/core/org.eclipse.edt.core.doc.pg
