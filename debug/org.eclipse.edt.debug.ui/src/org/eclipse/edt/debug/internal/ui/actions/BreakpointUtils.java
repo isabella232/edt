@@ -291,14 +291,14 @@ public class BreakpointUtils
 			if ( project != null )
 			{
 				BinaryReadOnlyFile roFile = (BinaryReadOnlyFile)resource;
-				IPackageFragmentRoot root = EGLCore.create( resource.getProject() ).getPackageFragmentRoot( roFile.getFullPath().toString() );
+				IPackageFragmentRoot root = EGLCore.create( project ).getPackageFragmentRoot( roFile.getFullPath().toString() );
 				if ( root != null && root.exists() )
 				{
 					// Packages in eglars are always lowercased.
 					IPackageFragment frag = root.getPackageFragment( IRFileNameUtility.toIRFileName( roFile.getPackage().replace( '/', '.' ) ) );
 					if ( frag.exists() )
 					{
-						return frag.getClassFile( IRFileNameUtility.toIRFileName( roFile.getName() ) );
+						return frag.getClassFile( roFile.getIrName() );
 					}
 				}
 			}
