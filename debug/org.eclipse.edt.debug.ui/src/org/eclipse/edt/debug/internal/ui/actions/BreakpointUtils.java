@@ -400,4 +400,27 @@ public class BreakpointUtils
 		}
 		return null;
 	}
+	
+	/**
+	 * @return the path of the breakpoint relative to the source directory, possibly null.
+	 */
+	public static String getRelativeBreakpointPath( IBreakpoint bp )
+	{
+		if ( bp instanceof EGLBreakpoint )
+		{
+			try
+			{
+				String typeName = ((EGLBreakpoint)bp).getTypeName();
+				if ( typeName != null && typeName.length() > 0 )
+				{
+					return typeName.replace( '.', '/' ) + ".egl"; //$NON-NLS-1$
+				}
+			}
+			catch ( CoreException ce )
+			{
+				EDTDebugUIPlugin.log( ce );
+			}
+		}
+		return null;
+	}
 }
