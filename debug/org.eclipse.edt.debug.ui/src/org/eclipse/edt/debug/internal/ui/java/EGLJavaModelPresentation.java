@@ -33,9 +33,11 @@ import org.eclipse.edt.debug.internal.core.java.EGLJavaStackFrame;
 import org.eclipse.edt.debug.internal.core.java.EGLJavaThread;
 import org.eclipse.edt.debug.internal.ui.EDTDebugUIPlugin;
 import org.eclipse.edt.debug.internal.ui.actions.BreakpointUtils;
+import org.eclipse.edt.ide.core.model.IClassFile;
 import org.eclipse.edt.ide.core.model.IEGLElement;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInput;
+import org.eclipse.edt.ide.ui.internal.util.EditorUtility;
 import org.eclipse.jdt.debug.core.IJavaLineBreakpoint;
 import org.eclipse.jdt.internal.debug.ui.JDIModelPresentation;
 import org.eclipse.jdt.ui.ISharedImages;
@@ -267,6 +269,7 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 	
 	public IEditorInput getEditorInput( Object item )
 	{
+		IClassFile classFile = null;
 		if ( item instanceof IMarker )
 		{
 			item = DebugPlugin.getDefault().getBreakpointManager().getBreakpoint( (IMarker)item );
@@ -277,7 +280,19 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 			IEGLElement element = BreakpointUtils.getElement( (EGLBreakpoint)item );
 			if ( element != null )
 			{
-				item = element.getResource();
+				if ( element.getElementType() == IEGLElement.CLASS_FILE )
+				{
+					classFile = (IClassFile)element;
+					String srcName = BreakpointUtils.getRelativeBreakpointPath( (EGLBreakpoint)item );
+					if ( srcName != null )
+					{
+						item = EditorUtility.getBinaryReadonlyFile( element.getEGLProject().getProject(), element.getPath().toString(), srcName );
+					}
+				}
+				else
+				{
+					item = element.getResource();
+				}
 			}
 			else
 			{
@@ -287,7 +302,7 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 		
 		if ( item instanceof BinaryReadOnlyFile )
 		{
-			return new BinaryEditorInput( (BinaryReadOnlyFile)item );
+			return new BinaryEditorInput( (BinaryReadOnlyFile)item, classFile );
 		}
 		
 		return super.getEditorInput( item );
