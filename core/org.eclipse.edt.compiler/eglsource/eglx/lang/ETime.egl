@@ -68,6 +68,12 @@ externalType ETime extends AnyValue type ClassType
 	 */
 	static function asTime(value ETimeStamp? in) returns (ETime?) {@Operation{"narrow"}};
 	
+	function hourOf() returns(EInt);
+
+	function minuteOf() returns(EInt);
+
+	function secondOf() returns(EInt);
+	
 	/**
 	 * Creates a timestamp from a time.
 	 *
