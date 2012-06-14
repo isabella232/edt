@@ -50,14 +50,14 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 		
 		String type = name;
 		
-		// Remove a file extension if it exists, convert separators to dots, then split out the package.
+		// Remove a file extension if it exists.
 		int lastDot = type.lastIndexOf( '.' );
 		if ( lastDot != -1 )
 		{
 			type = type.substring( 0, lastDot );
 		}
 		
-		// Now change all separators to a dot
+		// Now change all separators to a dot.
 		type = type.replace( '/', '.' );
 		
 		// Calculate the package.
@@ -95,21 +95,20 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 					if ( file.exists() )
 					{
 						return new Object[] { EditorUtility
-								.getBinaryReadonlyFile( file.getEGLProject().getProject(), file.getPath().toString(), name ) };
+								.getBinaryReadonlyFile( file.getEGLProject().getProject(), file.getPath().toString(), name, file ) };
 					}
 					else
 					{
 						// Some source files will have no parts matching the file name (e.g. a file full of records). Check all the kids of the parent
 						// to see if they have the right file name, and go with one of those IRs instead. Doesn't matter which.
-						String eglName = type + ".egl"; //$NON-NLS-1$
 						IClassFile[] classes = fragment.getClassFiles();
 						for ( int i = 0; i < classes.length; i++ )
 						{
 							Object info = EGLModelManager.getEGLModelManager().getInfo( classes[ i ] );
-							if ( info instanceof ClassFileElementInfo && eglName.equalsIgnoreCase( ((ClassFileElementInfo)info).getEglFileName() ) )
+							if ( info instanceof ClassFileElementInfo && name.equalsIgnoreCase( ((ClassFileElementInfo)info).getEglFileName() ) )
 							{
 								return new Object[] { EditorUtility.getBinaryReadonlyFile( classes[ i ].getEGLProject().getProject(), classes[ i ]
-										.getPath().toString(), name ) };
+										.getPath().toString(), name, classes[ i ] ) };
 							}
 						}
 					}
