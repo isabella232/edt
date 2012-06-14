@@ -36,6 +36,7 @@ import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
 import org.eclipse.edt.debug.core.IEGLDebugTarget;
 import org.eclipse.edt.debug.core.IEGLVariable;
 import org.eclipse.edt.debug.core.breakpoints.EGLBreakpoint;
+import org.eclipse.edt.debug.internal.ui.actions.BreakpointUtils;
 import org.eclipse.edt.ide.debug.javascript.internal.server.DebugContext;
 import org.eclipse.edt.ide.debug.javascript.internal.utils.RUIDebugUtil;
 import org.eclipse.edt.ide.rui.server.EvServer;
@@ -254,7 +255,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	{
 		if ( supportsBreakpoint( breakpoint ) && context != null )
 		{
-			String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+			String bpPath = BreakpointUtils.getRelativeBreakpointPath( breakpoint );
 			if ( bpPath != null && bpPath.length() > 0 )
 			{
 				String file = RUIDebugUtil.encodeValue( bpPath );
@@ -281,7 +282,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 	{
 		if ( supportsBreakpoint( breakpoint ) && context != null )
 		{
-			String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+			String bpPath = BreakpointUtils.getRelativeBreakpointPath( breakpoint );
 			if ( bpPath != null && bpPath.length() > 0 )
 			{
 				String file = RUIDebugUtil.encodeValue( bpPath );
@@ -328,7 +329,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 			// code being run will be using the old line numbers.
 			if ( currentEnable != oldEnable )
 			{
-				String bpPath = RUIDebugUtil.getRelativeBreakpointPath( breakpoint );
+				String bpPath = BreakpointUtils.getRelativeBreakpointPath( breakpoint );
 				if ( bpPath != null && bpPath.length() > 0 )
 				{
 					String file = RUIDebugUtil.encodeValue( bpPath );
@@ -905,7 +906,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 				try
 				{
 					if ( breakpoint.isEnabled() && line == breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 )
-							&& file.equals( RUIDebugUtil.getRelativeBreakpointPath( breakpoint ) ) )
+							&& file.equals( BreakpointUtils.getRelativeBreakpointPath( breakpoint ) ) )
 					{
 						return breakpoint;
 					}

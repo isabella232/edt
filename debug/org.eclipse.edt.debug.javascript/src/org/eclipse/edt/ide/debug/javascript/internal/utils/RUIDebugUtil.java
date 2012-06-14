@@ -33,11 +33,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.edt.debug.core.DebugUtil;
-import org.eclipse.edt.debug.core.breakpoints.EGLBreakpoint;
 import org.eclipse.edt.debug.javascript.EDTJavaScriptDebugPlugin;
 import org.eclipse.edt.debug.javascript.internal.launching.IRUIDebugConstants;
 import org.eclipse.edt.debug.javascript.internal.model.IRUILaunchConfigurationConstants;
@@ -546,28 +544,5 @@ public class RUIDebugUtil
 			return value.replaceAll( "\\%20", " " ).replaceAll( "\\!", "\\%21" ).replaceAll( "\\'", "\\%27" ).replaceAll( "\\(", "\\%28" ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 					.replaceAll( "\\)", "\\%29" ).replaceAll( "\\~", "\\%7E" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
-	}
-	
-	/**
-	 * @return the path of the breakpoint relative to the source directory, possibly null.
-	 */
-	public static String getRelativeBreakpointPath( IBreakpoint bp )
-	{
-		if ( bp instanceof EGLBreakpoint )
-		{
-			try
-			{
-				String typeName = ((EGLBreakpoint)bp).getTypeName();
-				if ( typeName != null && typeName.length() > 0 )
-				{
-					return typeName.replace( '.', '/' ) + ".egl"; //$NON-NLS-1$
-				}
-			}
-			catch ( CoreException ce )
-			{
-				EDTJavaScriptDebugPlugin.log( ce );
-			}
-		}
-		return null;
 	}
 }

@@ -24,6 +24,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.edt.debug.core.IEGLDebugCoreConstants;
+import org.eclipse.edt.debug.internal.ui.actions.BreakpointUtils;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugContextResolver;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugMessages;
 import org.eclipse.edt.debug.javascript.internal.model.RUIDebugTarget;
@@ -354,7 +355,7 @@ public class DebugContext extends AbstractContext implements IContext2
 				{
 					try
 					{
-						String relativePath = RUIDebugUtil.encodeValue( RUIDebugUtil.getRelativeBreakpointPath( breakpoint ) );
+						String relativePath = RUIDebugUtil.encodeValue( BreakpointUtils.getRelativeBreakpointPath( breakpoint ) );
 						if ( relativePath != null )
 						{
 							sb.append( relativePath );
