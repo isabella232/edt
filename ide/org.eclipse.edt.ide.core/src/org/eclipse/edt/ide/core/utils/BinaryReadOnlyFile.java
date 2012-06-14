@@ -310,8 +310,7 @@ public class BinaryReadOnlyFile implements IFile {
 	@Override
 	public IMarker[] findMarkers(String type, boolean includeSubtypes, int depth)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return new IMarker[0];
 	}
 
 	@Override
