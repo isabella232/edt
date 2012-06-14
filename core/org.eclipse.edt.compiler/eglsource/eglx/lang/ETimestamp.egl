@@ -53,10 +53,12 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 * {@Operation narrow} Converts a string to a timestamp.  The string is parsed
 	 * by searching for the timestamp fields specified in the mask, in order
 	 * from years down to fractions of seconds.  Each field from the mask must
-	 * be present in the string.  Years must be represented with four digits,
-	 * fractions of seconds with six digits, and other fields with two digits.
-	 * One separator character must appear in between each field.  Any character
-	 * may be used as a separator, and the separators do not have to match.
+	 * be present in the string.  Years must be represented with four digits, and
+	 * two digits must be used for months, days, hours, minutes, and seconds.  If
+	 * the mask includes fractions, there must be one digit in the string for each
+	 * fraction specified by the mask.  One separator character must appear in between
+	 * each field.  Any character may be used as a separator, and the separators do 
+	 * not have to match.
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a timestamp or the mask is invalid.
 	 */
@@ -87,7 +89,13 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 
 	function dateOf() returns(EDate);
 
-	function timeOf() returns(ETimestamp);//TODO this really should return ETimestamp("hhmmss"), but we can't handle that.
+	function timeOf() returns(ETime);
+
+	function hourOf() returns(EInt);
+
+	function minuteOf() returns(EInt);
+
+	function secondOf() returns(EInt);
 
 	function extend(timeSpanMask EString in) returns(ETimestamp);
 end
