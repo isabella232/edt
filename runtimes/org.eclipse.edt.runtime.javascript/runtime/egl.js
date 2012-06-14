@@ -535,6 +535,8 @@ egl._defineClass = function(
 			}	
 			if (functions.constructor) {
 				try {
+					if(functions.eze$$setInitial)
+						functions.eze$$setInitial.call(this);
 					functions.constructor.apply( this, arguments );
 				}
 				catch (e) {
@@ -625,6 +627,8 @@ egl.defineRUIPropertiesLibrary = function(
 		var superClassName = 'RUIPropertiesLibrary';
 		var clazz = function( derivedClazz ) {
 			superPkg[superClassName].call( this, derivedClazz );
+			if(functions.eze$$setInitial)
+				functions.eze$$setInitial.call(this);
 			functions.constructor.call( this );	
 			this.eze$$initializeProperties(propertiesFile);
 		};
@@ -671,7 +675,9 @@ egl.defineWidget = function(
 			superPkg[superClassName].call( this, derivedClazz );
 			if( !derivedClazz ){
 				this.createeze$$DOMElement();
-			}	
+			}
+			if(functions.eze$$setInitial)
+				functions.eze$$setInitial.call(this);
 			functions.constructor.call( this );	
 			egl.startVEWidgetTimer();
 		};	
@@ -743,6 +749,8 @@ egl.defineRUIHandler = function(/*String*/   packageName,
 				egl.handlerStack = egl.handlerStack || [];
 				egl.handlerStack.push(this);
 				//Call routine to instantiate class variables
+				if(functions.eze$$setInitial)
+					functions.eze$$setInitial.call(this);
 				functions.constructor.call( this );
 				if(this._layoutWidgets){
 					var widgets = this._layoutWidgets;
@@ -814,6 +822,8 @@ egl.defineRUIWidget = function (/*String*/   packageName,
 						return "["+className+"]";
 					}
 				};
+				if(functions.eze$$setInitial)
+					functions.eze$$setInitial.call(this);
 				functions.constructor.call( this );
 				if (this.targetWidget)
 					this.eze$$becomeTarget(egl.unboxAny(this.targetWidget));
