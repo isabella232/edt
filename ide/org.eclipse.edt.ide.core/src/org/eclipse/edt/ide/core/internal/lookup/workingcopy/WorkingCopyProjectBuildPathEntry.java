@@ -150,19 +150,23 @@ public class WorkingCopyProjectBuildPathEntry implements IWorkingCopyBuildPathEn
 	            		// This project has source, compile from the source
 	            		IPartOrigin partOrigin = projectInfo.getPartOrigin(packageName, partName);
 	            		boolean shouldCompiled = true;
-	            		
-	            		if(partOrigin != null && partOrigin.getEGLFile().isReadOnly()) {
-	            			int index = partName.lastIndexOf(".");
-	    					if(index > -1) {//if the part name represents FileName, will continue Compilation	
-	    						String fileExtension = partName.substring(index+1);
-	    						if(!"egl".equalsIgnoreCase(fileExtension)) {
-	    							shouldCompiled = false;
-	    						}
-	    					}
-	    					else {
-	    						shouldCompiled = false;
-	    					}
-	            		} //shouldCompiled &&
+	            		if (partOrigin == null || partOrigin.getEGLFile() == null) {
+	            			shouldCompiled = false;
+	            		}
+	            		else {
+		            		if(partOrigin.getEGLFile().isReadOnly()) {
+		            			int index = partName.lastIndexOf(".");
+		    					if(index > -1) {//if the part name represents FileName, will continue Compilation	
+		    						String fileExtension = partName.substring(index+1);
+		    						if(!"egl".equalsIgnoreCase(fileExtension)) {
+		    							shouldCompiled = false;
+		    						}
+		    					}
+		    					else {
+		    						shouldCompiled = false;
+		    					}
+		            		} //shouldCompiled &&
+	            		}
 	            		
 	            		if( shouldCompiled) {
 	            			try{
