@@ -63,31 +63,25 @@ public class EBoolean extends AnyBoxedObject<Boolean> {
 	}
 
 	public static boolean and(Boolean op1, Boolean op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if (op1 == null || op2 == null)
-			return false;
+		if ( op1 == null || op2 == null )
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
 		return (op1 && op2);
 	}
 
 	public static boolean or(Boolean op1, Boolean op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if (op1 == null || op2 == null)
-			return false;
+		if ( op1 == null || op2 == null )
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
 		return (op1 || op2);
 	}
 
 	public static boolean xor(Boolean op1, Boolean op2) {
-		if (op1 == null && op2 == null)
-			return true;
-		if (op1 == null || op2 == null)
-			return false;
+		if ( op1 == null || op2 == null )
+			throw new NullValueException().fillInMessage( Message.NULL_NOT_ALLOWED );
 		return (op1 ^ op2);
 	}
 
 	public static boolean equals(Boolean op1, Boolean op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
