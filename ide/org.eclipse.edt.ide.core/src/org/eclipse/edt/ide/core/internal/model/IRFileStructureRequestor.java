@@ -463,23 +463,22 @@ public class IRFileStructureRequestor extends AbstractSourceElementRequestor imp
 	private static class PartTypeConversion{
 		public static int getType(int irType){
 			int astType = -1;
-			switch(irType){
-// TODO EDT Uncomment when supported			
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_FUNCTION:	astType = com.ibm.etools.edt.core.ast.Part.FUNCTION; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_FORM:		astType = com.ibm.etools.edt.core.ast.Part.FORM; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_FORMGROUP : 	astType = com.ibm.etools.edt.core.ast.Part.FORMGROUP; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_LIBRARY : 	astType = com.ibm.etools.edt.core.ast.Part.LIBRARY; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_PROGRAM : 	astType = com.ibm.etools.edt.core.ast.Part.PROGRAM; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_DATATABLE : 	astType = com.ibm.etools.edt.core.ast.Part.DATATABLE; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_STRUCTURED_RECORD:
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_RECORD : 	astType = com.ibm.etools.edt.core.ast.Part.RECORD; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_DATAITEM :	astType = com.ibm.etools.edt.core.ast.Part.DATAITEM; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_HANDLER : 	astType = com.ibm.etools.edt.core.ast.Part.HANDLER; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_INTERFACE : 	astType = com.ibm.etools.edt.core.ast.Part.INTERFACE; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_DELEGATE : 	astType = com.ibm.etools.edt.core.ast.Part.DELEGATE; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_EXTERNALTYPE : astType = com.ibm.etools.edt.core.ast.Part.EXTERNALTYPE; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_ENUMERATION : astType = com.ibm.etools.edt.core.ast.Part.ENUMERATION; break;
-//				case com.ibm.etools.edt.core.ir.api.Part.PART_SERVICE : 	astType = com.ibm.etools.edt.core.ast.Part.SERVICE; break;
+			switch(irType){		
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FUNCTION:	  astType = org.eclipse.edt.compiler.core.ast.Part.FUNCTION; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FORM:		  astType = org.eclipse.edt.compiler.core.ast.Part.FORM; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_FORMGROUP :  astType = org.eclipse.edt.compiler.core.ast.Part.FORMGROUP; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_LIBRARY : 	  astType = org.eclipse.edt.compiler.core.ast.Part.LIBRARY; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_PROGRAM : 	  astType = org.eclipse.edt.compiler.core.ast.Part.PROGRAM; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATATABLE :  astType = org.eclipse.edt.compiler.core.ast.Part.DATATABLE; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_STRUCTURED_RECORD:
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_RECORD : 	  astType = org.eclipse.edt.compiler.core.ast.Part.RECORD; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATAITEM :	  astType = org.eclipse.edt.compiler.core.ast.Part.DATAITEM; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_HANDLER : 	  astType = org.eclipse.edt.compiler.core.ast.Part.HANDLER; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_INTERFACE :  astType = org.eclipse.edt.compiler.core.ast.Part.INTERFACE; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DELEGATE :   astType = org.eclipse.edt.compiler.core.ast.Part.DELEGATE; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_EXTERNALTYPE : astType = org.eclipse.edt.compiler.core.ast.Part.EXTERNALTYPE; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_ENUMERATION : astType = org.eclipse.edt.compiler.core.ast.Part.ENUMERATION; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_SERVICE : 	   astType = org.eclipse.edt.compiler.core.ast.Part.SERVICE; break;
 			}
 			return astType;
 		}
