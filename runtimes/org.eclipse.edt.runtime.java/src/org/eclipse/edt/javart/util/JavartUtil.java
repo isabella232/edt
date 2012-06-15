@@ -264,16 +264,11 @@ public class JavartUtil
 	}
 	/**
 	 * Returns an AnyException for the given Throwable.  If the Throwable is
-	 * already an AnyException, it is returned.  If it's a NullPointerException,
-	 * a NullValueException will be returned.  In all other cases we'll return a
-	 * JavaObjectException. 
+	 * already an AnyException, it is returned.  In all other cases we'll return
+	 * a JavaObjectException. 
 	 */
 	public static AnyException makeEglException( Throwable ex )
 	{
-		// This needs to be modified when we do https://bugs.eclipse.org/bugs/show_bug.cgi?id=355170
-		// because NullPointerExceptions that come from a JavaObject ET should be treated as
-		// JavaObjectExceptions, not NullValueExceptions.  Right now we assume
-		// every NullPointerException should become a NullValueException.
 		if ( ex instanceof AnyException )
 		{
 			return (AnyException)ex;
@@ -286,19 +281,10 @@ public class JavartUtil
 			msg = className;
 		}
 
-		if ( ex instanceof NullPointerException )
-		{
-			NullValueException nvx = new NullValueException();
-			nvx.initCause( ex );
-			return nvx.fillInMessage( Message.NULL_NOT_ALLOWED, msg );
-		}
-		else
-		{
-			JavaObjectException jox = new JavaObjectException();
-			jox.exceptionType = className;
-			jox.initCause( ex );
-			return jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, msg );
-		}
+		JavaObjectException jox = new JavaObjectException();
+		jox.exceptionType = className;
+		jox.initCause( ex );
+		return jox.fillInMessage( Message.CAUGHT_JAVA_EXCEPTION, msg );
 	}
 	
 	/**
@@ -307,12 +293,8 @@ public class JavartUtil
 	 */
 	public static boolean isJavaObjectException( Exception ex )
 	{
-		// This needs to be modified when we do https://bugs.eclipse.org/bugs/show_bug.cgi?id=355170
-		// because NullPointerExceptions that come from a JavaObject ET should be treated as
-		// JavaObjectExceptions, not NullValueExceptions.  Right now we assume
-		// every NullPointerException should become a NullValueException.
 		return ex instanceof JavaObjectException 
-				|| (!(ex instanceof eglx.lang.AnyException) && !(ex instanceof NullPointerException));
+				|| !(ex instanceof eglx.lang.AnyException);
 	}
 
 	/**
