@@ -22,7 +22,7 @@ public class NamedElementTemplate extends JavaTemplate {
 	public void genAccessor(NamedElement element, Context ctx, TabbedWriter out) {
 		String propertyFunction = CommonUtilities.getPropertyFunction(element, false, ctx);
 		if (propertyFunction != null) {
-			Function currentFunction = ctx.getCurrentFunction();
+			FunctionMember currentFunction = ctx.getCurrentFunction();
 			if (currentFunction != null && propertyFunction.equals(currentFunction.getName()))
 				genName(element, ctx, out);
 			else {
