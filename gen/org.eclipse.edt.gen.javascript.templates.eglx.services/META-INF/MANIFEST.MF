@@ -12,5 +12,6 @@ Require-Bundle: org.eclipse.edt.gen.javascript.templates;bundle-version="0.8.0",
  org.eclipse.edt.gen.javascript;bundle-version="0.8.0",
  org.eclipse.edt.compiler;bundle-version="0.8.0",
  org.eclipse.edt.gen;bundle-version="0.8.0"
-Export-Package: org.eclipse.edt.gen.javascript.templates.eglx.services
+Export-Package: org.eclipse.edt.gen.javascript.templates.eglx.services,
+ org.eclipse.edt.gen.javascript.templates.eglx.services.annotations
 Bundle-Localization: plugin
