@@ -47,4 +47,11 @@ public class Constants {
 	public static final String isStatementRequiringWrappedParameters = "isStatementRequiringWrappedParameters";
 	
 	public static final String EGLMESSAGE_MISSING_HEADER_FILE = "7000";
+
+	// these are sub key values used on annotations 
+	public static final String SubKey_uri = "uri";
+	
+	// part names
+	public static final String signature_Resource = "eglx.lang.Resource";
+	public static final String signature_ExternalName = "eglx.lang.ExternalName";
 }
