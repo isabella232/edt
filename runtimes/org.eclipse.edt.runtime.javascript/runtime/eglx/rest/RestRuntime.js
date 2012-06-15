@@ -71,7 +71,7 @@ egl.eglx.rest.invokeService = function(http,
 	http.restType = egl.eglx.rest.ServiceType.TrueRest;
 	if(firstInDataNotInURL == null && http.request.userUri != undefined && http.request.userUri){
 		if(http.request.uri != undefined && http.request.uri != null){
-			for(idx = 0; idx < inFunctionParameterNames.length; idx++){
+			for(var idx = 0; idx < inFunctionParameterNames.length; idx++){
 				var indexOf = http.request.uri.indexOf(http.request.uri.indexOf("{" + inFunctionParameterNames[idx] + "}"));
 				if(idx == 0 && 
 						(inFunctionParameterNames[idx].indexOf("http://") != -1 || inFunctionParameterNames[idx].indexOf("https://") != -1)&&
