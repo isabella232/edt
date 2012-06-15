@@ -15,11 +15,6 @@ setTimeout(function() {
 }, 2000);
 
 egl.startTime = new Date().getTime();
-egl.LRO = String.fromCharCode(8237);
-egl.RLO = String.fromCharCode(8238);
-egl.LRE = String.fromCharCode(8234);
-egl.RLE = String.fromCharCode(8235);
-egl.PDF = String.fromCharCode(8236); 
 
 egl.startup = function(){
     //
@@ -57,11 +52,6 @@ egl.defineClass(
 		this.renderingStep = 4;	
 		this.createDojoWidget(this.eze$$DOMElement);
 		this.copyAttribute();		
-		if (this.getWidgetOrientation() == "rtl"){
-			this.eze$$DOMElement.dir = "rtl";
-		} else if (this.getWidgetOrientation() == "ltr"){
-			this.eze$$DOMElement.dir = "ltr";
-		}
 		this.eze$$DOMElement.eze$$widget = this;
 		this.setID(id);
 		this.renderingStep = 5;
@@ -242,10 +232,6 @@ egl.defineClass(
 		this.text = text;
 	},
 	"getText" : function(){
-		var isVisual = this.getTextLayout() == "Visual";
-		var isReverseDirection = this.getReverseTextDirection() == "Yes";
-		if ((isVisual || isReverseDirection) && (this.text.charAt(0)>=egl.LRE && this.text.charAt(0) <= egl.RLO))
-			return this.text.substring(1);
 		return this.text;
 	},
 	"setWidth" : function(width){ 
@@ -271,57 +257,7 @@ egl.defineClass(
 			egl.eglx.ui.rui.Widget.prototype.focus.call(this);
 		}
 	},
-	"getTextLayout" : function() {
-		if (this.dojoWidget && this.dojoWidget.textLayoutThis)
-			return (this.dojoWidget.textLayoutThis);
-		else
-		return (this.textLayoutThis);
-	},
 	
-	"setTextLayout" : function(textLayout){
-		this.textLayoutThis = textLayout;
-		this.setBiDiMarkers();
-	},
-	"setReverseTextDirection" : function (reverseTextDirection){
-		this.reverseTextDirectionThis = reverseTextDirection;			
-		this.setBiDiMarkers();
-	},
-	"getReverseTextDirection" : function (){
-		if (this.dojoWidget && this.dojoWidget.reverseTextDirectionThis)
-			return (this.dojoWidget.reverseTextDirectionThis);
-		else
-		return (this.reverseTextDirectionThis);
-	},
-	"setWidgetOrientation" : function(widgetOrientation) {
-		var tagName = this.eze$$getDOMElement().tagName;
-		if(tagName == "SELECT" || tagName == "DIV"){
-			this.widgetOrientationThis = widgetOrientation.toLowerCase();
-		}
-		
-  	},
-	"getWidgetOrientation" : function( ) {
-		return this.widgetOrientationThis;
-  	}, 
-  	"applyBiDiMarkersToWidgetText" : function( ) {
-		if (this.text && (this.textLayoutThis || this.reverseTextDirectionThis)){			
-			var isVisual = this.textLayoutThis == "Visual";
-			var isReverseDirection = this.reverseTextDirectionThis == "Yes";
-			this.text = this.setBiDiMarkersStr(this.text,isVisual,isReverseDirection);
-		}  		
-  	},
-	"setBiDiMarkersStr" : function(text, isTextTypeVisual, isTextOrientationRightToLeft) {
-		if (!isTextTypeVisual && !isTextOrientationRightToLeft)
-			return (text);
-		var startMarker = "";
-		if(text.charAt(0) >= egl.LRE && text.charAt(0) <= egl.RLO) 
-			text = text.substring(1);
-		if(isTextTypeVisual) 
-			startMarker = (isTextOrientationRightToLeft) ? egl.RLO : egl.LRO;
-		else if(this.eze$$getDOMElement().type != "text")
-			startMarker = (isTextOrientationRightToLeft) ? egl.RLE : egl.LRE;
-		text = startMarker + text;
-		return (text);
-  	},
   	"eze$$getChildVariables" : function() {
   		var childVars = this.eze$$getBaseChildVariables();
   		if (egl && egl.debugg) {
