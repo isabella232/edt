@@ -12,6 +12,7 @@
 package org.eclipse.edt.mof.eglx.services.impl;
 
 import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.impl.EFactoryImpl;
@@ -24,8 +25,17 @@ public class ServicesFactoryImpl extends EFactoryImpl implements ServicesFactory
 	}
 	
 	@Override
-	public ServicesCallStatement createServicesCallStatement() {
+	public CallStatement createServicesCallStatement() {
 		return (ServicesCallStatement)getServicesCallStatementEClass().newInstance();
 	}
 	
+	@Override
+	public EClass getServiceFunctionEClass() {
+		return (EClass)getTypeNamed(ServiceFunction);
+	}
+
+	@Override
+	public org.eclipse.edt.mof.egl.Function createServiceFunction() {
+		return (org.eclipse.edt.mof.egl.Function)getServiceFunctionEClass().newInstance();
+	}
 }

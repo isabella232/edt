@@ -13,6 +13,7 @@ package org.eclipse.edt.mof.eglx.services;
 
 import org.eclipse.edt.mof.EClass;
 import org.eclipse.edt.mof.EFactory;
+import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.eglx.services.impl.ServicesFactoryImpl;
 
 public interface ServicesFactory extends EFactory  {
@@ -21,6 +22,10 @@ public interface ServicesFactory extends EFactory  {
 	
 	String ServicesCallStatement = packageName+".ServicesCallStatement";
 	
+	String ServiceFunction = packageName+".ServiceFunction";
+	
+	EClass getServiceFunctionEClass();
+	public org.eclipse.edt.mof.egl.Function createServiceFunction();
 	EClass getServicesCallStatementEClass();
-	public ServicesCallStatement createServicesCallStatement();
+	public CallStatement createServicesCallStatement();
 }
