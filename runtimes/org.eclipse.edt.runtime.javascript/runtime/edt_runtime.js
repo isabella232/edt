@@ -939,6 +939,15 @@ egl.eglx.lang.ETime.notEquals = function (x, y) {
 egl.eglx.lang.ETime.compareTo = function (x, y) {   
 	return egl.eglx.lang.ETimestamp.compareTo(x, y);
 };
+egl.eglx.lang.ETime.hourOf = function(t) {   
+	return t.getHours();
+};
+egl.eglx.lang.ETime.minuteOf = function(t) {   
+	return t.getMinutes();
+};
+egl.eglx.lang.ETime.secondOf = function(t) {   
+	return t.getSeconds();
+};
 
 egl.eglx.lang.ETime.extend = function(/*extension*/ time, /*optional mask*/pattern ) {
 	if (time === null)
@@ -1142,7 +1151,10 @@ egl.eglx.lang.ETimestamp.checkArgument = function(functionName, pattern){
 		"dayOf" : [ egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ],
 		"monthOf" : [ egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE, egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE ],
 		"yearOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE ],
-		"weekdayOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ]
+		"weekdayOf" : [ egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE, egl.eglx.lang.ETimestamp.CodeKind.DAY_CODE ],
+		"hourOf" : [ egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE, egl.eglx.lang.ETimestamp.CodeKind.HOUR_CODE ],
+		"minuteOf" : [ egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE, egl.eglx.lang.ETimestamp.CodeKind.MINUTE_CODE ],
+		"secondOf" : [ egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE, egl.eglx.lang.ETimestamp.CodeKind.SECOND_CODE ]
 	};
 	var args = checkFuncs[functionName];
 	return 	checkArgs(args[0], args[1], args[2]);
@@ -1196,6 +1208,27 @@ egl.eglx.lang.ETimestamp.weekdayOf = function (ts, pattern){
 		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
 	};
 	return ( (ts) ? ts.getDay() : null );
+};
+
+egl.eglx.lang.ETimestamp.hourOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("hourOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getHours() : null );
+};
+
+egl.eglx.lang.ETimestamp.minuteOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("minuteOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getMinutes() : null );
+};
+
+egl.eglx.lang.ETimestamp.secondOf = function (ts, pattern){
+	if(	egl.eglx.lang.ETimestamp.checkArgument("secondOf", pattern) ){
+		throw egl.createInvalidArgumentException("CRRUI2033E", [ts]);
+	};
+	return ( (ts) ? ts.getSeconds() : null );
 };
 
 
