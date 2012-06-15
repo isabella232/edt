@@ -64,7 +64,7 @@
    <extension
          point="org.eclipse.ui.popupMenus">
          <viewerContribution
-            targetID="#EGLRulerContext"
+            targetID="#ReadOnlyEGLRulerContext"
             id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
             <action
                label="%EnableBreakpoint.label"
