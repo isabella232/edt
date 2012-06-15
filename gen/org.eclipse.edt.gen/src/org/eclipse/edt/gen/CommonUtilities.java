@@ -16,6 +16,7 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BoxingExpression;
+import org.eclipse.edt.mof.egl.ConstructorInvocation;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
@@ -138,6 +139,11 @@ public class CommonUtilities {
 			has = true;
 			setReturnData(has);
 			return true;
+		}
+		public boolean visit(ConstructorInvocation expr) {
+			has = true;
+			setReturnData(has);
+			return false;
 		}
 		public boolean visit(FunctionInvocation expr) {
 			has = true;
