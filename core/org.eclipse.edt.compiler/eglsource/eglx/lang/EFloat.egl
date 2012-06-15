@@ -101,7 +101,7 @@ externalType EFloat extends ENumber type ClassType
 	static function asFloat(value ESmallfloat? in) returns(EFloat?) {@Operation{"widen"}};
 	static function asFloat(value EDecimal? in) returns(EFloat?) {@Operation{"widen"}};
 	static function asFloat(value EInt? in) returns(EFloat?) {@Operation{"widen"}};
-	static function asFloat(value EBigint? in) returns(EFloat?) {@Operation{"narrow"}};
+	static function asFloat(value EBigint? in) returns(EFloat?) {@Operation{"widen"}};
 	static function asFloat(value ENumber? in) returns(EFloat?) {@Operation{"narrow"}};
 	
 	/**

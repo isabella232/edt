@@ -102,9 +102,9 @@ externalType ESmallfloat extends ENumber type ClassType
 	static function asSmallfloat(value EString? in) returns(ESmallfloat?) {@Operation{"narrow"}};
 	
 	static function asSmallfloat(value ESmallint? in) returns(ESmallfloat?) {@Operation{"widen"}};
-	static function asSmallfloat(value EInt? in) returns(ESmallfloat?) {@Operation{"narrow"}};
+	static function asSmallfloat(value EInt? in) returns(ESmallfloat?) {@Operation{"widen"}};
 	static function asSmallfloat(value EFloat? in) returns(ESmallfloat?) {@Operation{"narrow"}};
-	static function asSmallfloat(value EBigint? in) returns(ESmallfloat?) {@Operation{"narrow"}};
+	static function asSmallfloat(value EBigint? in) returns(ESmallfloat?) {@Operation{"widen"}};
 	static function asSmallfloat(value ENumber? in) returns(ESmallfloat?) {@Operation{"narrow"}};
 	
 	/**

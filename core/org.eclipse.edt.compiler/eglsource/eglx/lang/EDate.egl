@@ -63,11 +63,9 @@ externalType EDate extends AnyValue type ClassType
 	static function asDate(value EString? in) returns (EDate?) {@Operation{"narrow"}};
 
 	/**
-	 * {@Operation narrow} Converts a timestamp to a date.  The timestamp is
-	 * first converted to a string (as defined in EString.asString(ETimeStamp)).
-	 * This string value is then converted to a date (as defined in EDate.asDate(EString))
+	 * {@Operation narrow} Converts a timestamp to a date.
 	 *
-	 * @throws TypeCastException if the timeStamp can't be parsed into a date.
+	 * @throws TypeCastException if the timeStamp can't be converted to a date.
 	 */
 	static function asDate(value ETimeStamp? in) returns (EDate?) {@Operation{"narrow"}};
 	
