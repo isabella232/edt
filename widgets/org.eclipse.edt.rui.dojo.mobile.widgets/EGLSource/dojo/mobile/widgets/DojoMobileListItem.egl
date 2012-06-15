@@ -1,0 +1,59 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+package dojo.mobile.widgets;                       
+
+ExternalType DojoMobileListItem extends DojoMobileContainer type JavaScriptObject {
+		relativePath = "dojo/mobile/widgets",
+		ExternalName = "DojoMobileListItem",
+		@VEWidget{ 
+			category = "Mobile", 
+			template = "${typeName}{\n" +
+			"\t\ttext = \"My List Item\", icon = \"dojo/mobile/images/i-icon-1.png\",\n" +
+			"\t\t/*actionText = \"Jump to View 1\", actionView = View1, */\n" + 
+			"\t\tchildren = [\n\t\t]\n\t}",
+			displayName = "ListItem", 
+			smallIcon = "icons/ctool16/mobile_listItem_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_listItem_pal16.gif",
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+			eventFilter  = ["onClick"],
+			container = @VEContainer{}
+		}   
+	}
+	//A label of the item
+	text String { @Property{}, @VEProperty{displayName = "Text"} };
+	
+	//An icon to display at the right hand side of the item. The value can be either a path for an image file or a class name of a DOM button.
+	icon String { @Property{}, @VEProperty{displayName = "Icon"} };
+	
+	//A right-aligned text to display on the item.
+	actionText String { @Property{}, @VEProperty{displayName = "Action Text"} };
+	
+	//corresponding action view object
+	actionView DojoMobileView { @Property{} };
+	
+	//transition type
+	actionTransition String { @Property{}, @VEProperty{
+		propertyType = "choice",
+		displayName = "Action Transition",
+		choices = [
+			@VEPropertyChoice {displayName = "slide", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TRANSITION_SLIDE"},
+			@VEPropertyChoice {displayName = "flip", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TRANSITION_FLIP"},
+			@VEPropertyChoice {displayName = "fade", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TRANSITION_FADE"}
+		],
+		default = "${typeName:dojo.widgets.DojoMobileLib}.TRANSITION_SLIDE"
+	}};
+end

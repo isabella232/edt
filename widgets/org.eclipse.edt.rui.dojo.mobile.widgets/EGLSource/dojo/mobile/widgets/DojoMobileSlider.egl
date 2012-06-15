@@ -1,0 +1,67 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+
+package dojo.mobile.widgets; 
+
+//*** A control that allows changing a numeric value by touching and dragging a slide handle ***//
+
+ExternalType DojoMobileSlider extends DojoMobileBase type JavaScriptObject{
+		relativePath = "dojo/mobile/widgets",
+		ExternalName = "DojoMobileSlider",
+		@VEWidget{
+			category = "Mobile",
+			template = "${typeName}{  }",
+			displayName = "Slider",
+			smallIcon = "icons/ctool16/mobile_slider_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_slider_pal24.gif",
+			propertyFilterType  = FilterKind.excludeAllExcept,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+			eventFilter  = ["onChange"],
+       		container = @VEContainer{}
+		}   
+	}
+	/* 
+	 * The current value for this slider. Constraint:  minimum <= value <= maximum
+	 */
+	value int { @Property {}, @VEProperty {}};
+	
+	/*
+	 * The minimum value. Should not be larger than the maximum value
+	 */
+	minimum int { @VEProperty };
+
+	/*
+	 * The maximum value. Should not be smaller than the maximum value
+	 */
+	maximum int { @VEProperty };
+	
+	/*
+	 * step size for incremental changes when the user drags the slider handle
+	 */
+	step int { @VEProperty };
+	/*
+	 * One of H(horizaontal), V(vertical), or atuo(selects best fit) for Slider handle to move
+	 */
+	orientation String { @Property{}, @VEProperty {
+		propertyType = "choice",
+		choices = [
+			@VEPropertyChoice {displayName = "Horizontal", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.SLIDER_HORIZONTAL"},
+			@VEPropertyChoice {displayName = "Vertical", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.SLIDER_VERTICAL"},
+			@VEPropertyChoice {displayName = "Auto", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.SLIDER_AUTO"}
+		],
+		default = "${dojo.mobile.widgets.DojoMobileLib}.SLIDER_AUTO"
+	}};
+end

@@ -1,0 +1,43 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+package dojo.mobile.widgets; 
+
+ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
+		relativePath = "dojo/mobile/widgets",
+		ExternalName = "DojoMobileTextArea",
+		@VEWidget{
+			category = "Mobile",
+			template = "${typeName}{  }",
+			displayName = "Progress",
+			smallIcon = "icons/ctool16/mobile_progress_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_progress_pal24.gif",
+			propertyFilterType  = FilterKind.excludeAll,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll
+		}   
+	}
+	/* 
+	 * The time interval in milliseconds for updating the spinning indicator.
+	 */
+	intervalTime int { @Property {}, @VEProperty {displayName = "Interval Time"}};
+	/*
+	 *	Sets an indicator icon image file (typically animated GIF). If null is specified, restores the default spinner.
+	*/		
+	imgPath string {@Property {}, @VEProperty {displayName = "Upload Progress Image"}};
+	
+	function setImage(imgPath string in);
+	function showProgress(intervalTime int in);
+	function hideProgress();
+end

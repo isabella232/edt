@@ -1,0 +1,44 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+//    
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+package dojo.mobile.widgets;                                       
+                
+ExternalType DojoMobileTab extends DojoMobileContainer type JavaScriptObject {
+		relativePath = "dojo/mobile/widgets",
+		ExternalName = "DojoMobileTab",
+		@VEWidget{                               
+			category = "Mobile",  
+			template = "${typeName}{ title = \"My Tab\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\", */ children = [\n"+
+						"\t\t]}",
+			displayName = "Tab",
+			smallIcon = "icons/ctool16/mobile_tab_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_tab_pal24..gif",
+			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAllExcept,
+       		eventFilter  = ["onClick"],
+			container = @VEContainer{}
+		}		     
+	}   
+	
+	title String { @Property{}, @VEProperty{displayName="Title"} };	
+	/*
+	* A path for the unselected (typically dark) icon. If icon is not specified, the iconBase parameter of the parent widget is used.
+	*/
+	icon1 String { @Property{}, @VEProperty{displayName="Icon1"} };	
+	/*
+	* A path for the selected (typically highlight) icon. If icon is not specified, the iconBase parameter of the parent widget or icon1 is used.
+	*/
+	icon2 String { @Property{}, @VEProperty{displayName="Icon2"} };	
+end

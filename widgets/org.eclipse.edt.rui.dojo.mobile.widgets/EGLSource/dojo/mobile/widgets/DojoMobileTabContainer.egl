@@ -1,0 +1,66 @@
+////////////////////////////////////////////////////////////////////////////////
+// This sample is provided AS IS.
+// Permission to use, copy and modify this software for any purpose and
+// without fee is hereby granted. provided that the name of IBM not be used in
+// advertising or publicity pertaining to distribution of the software without
+// specific written permission.
+// 
+// IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SAMPLE, INCLUDING ALL
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL IBM
+// BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+// DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER
+// IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
+// OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
+////////////////////////////////////////////////////////////////////////////////
+package dojo.mobile.widgets;        
+           
+ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptObject {
+		relativePath = "dojo/mobile/widgets", 
+		ExternalName = "DojoMobileTabContainer",
+		@VEWidget{                            
+			category = "Mobile",         
+			template =               
+				"${typeName}{\n" +                
+					"\t\tselection = 1, segmentedControl=true,\n"+  
+			 		"\t\tchildren = [\n"+    
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 1\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\t] },\n"+ 
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 2\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\t]},\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 3\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\t]}\n"+
+					"\t\t]\n"+        
+				"\t}",       
+			displayName = "TabContainer",   
+			smallIcon = "icons/ctool16/mobile_tabcontainer_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_tabcontainer_pal24.gif",
+	 		propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
+			propertyFilter = [],
+			eventFilterType  = filterKind.excludeAll,
+			container = @VEContainer{} 
+		}      
+	}   
+
+	layout String { @Property{}, @VEProperty{
+		propertyType = "choice", 
+		displayName  = "Layout",   
+		choices = [     
+			@VEPropertyChoice {displayName = "Top", id = "\"Top\""},
+			@VEPropertyChoice {displayName = "Bottom", id = "\"Bottom\""},
+			@VEPropertyChoice {displayName = "Fixed Top", id = "\"Fixed Top\""},
+			@VEPropertyChoice {displayName = "Fixed Bottom", id = "\"Fixed Bottom\""}
+		], 
+		default = "Top"
+	}};
+	/*
+	* This type of bar is typically used at the top of the screen to control visibility of multiple views.
+	*/
+	segmentedControl Boolean{ @Property{}, @VEProperty{ displayName = "Segmented Control"} };  
+	// Which one is selection 
+	selection int   { @Property{}, @VEProperty{ displayName = "Selection"} };
+	 
+	className string{ @Property{}};
+	function addTab( tab DojoMobileTab, index int in );
+	function removeTab( index int in ); 
+end  
+ 
