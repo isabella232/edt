@@ -57,7 +57,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 			try {
 				field.setType((Type)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_IBMiConnection));
 			} catch (Exception e) {}
-			ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
+			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 		else{
@@ -66,7 +66,6 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 			out.print("null;");
 		}
 
-		out.println("}");
 		out.println("returnConnectionToPool = true;");
 		out.println("}");
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
