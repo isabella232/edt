@@ -55,6 +55,8 @@ public class TestServer {
 	
 	private boolean ready;
 	
+	private String tempDirectory;
+	
 	/**
 	 * Required arguments:
 	 * <ul>
@@ -77,6 +79,7 @@ public class TestServer {
 		Integer port = null;
 		Integer idePort = null;
 		String contextRoot = null;
+		String tempDir = null;
 		boolean debug = false;
 		
 		// First-pass through args is to gather the contributions and any core arg values.
@@ -130,6 +133,15 @@ public class TestServer {
 					logWarning("Missing value for argument \"" + args[i] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
+			else if ("-td".equals(args[i])) { //$NON-NLS-1$
+				if (i + 1 < args.length) {
+					tempDir = args[i+1]; // don't trim, spaces are valid in a path on some systems
+					i++;
+				}
+				else {
+					logWarning("Missing value for argument \"" + args[i] + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
 			else {
 				remainingArgs.add(args[i]);
 			}
@@ -155,7 +167,7 @@ public class TestServer {
 		}
 		
 		// Initialize the test server. This must be done before we invoke any methods in the contributions.
-		TestServer server = new TestServer(port, idePort, contextRoot, configurators, debug);
+		TestServer server = new TestServer(port, idePort, contextRoot, tempDir, configurators, debug);
 		
 		// Let the contributions process the remaining arguments.
 		int size = remainingArgs.size();
@@ -185,10 +197,11 @@ public class TestServer {
 		server.start();
 	}
 	
-	public TestServer(Integer port, Integer idePort, String contextRoot, List<AbstractConfigurator> configurators, boolean debug) {
+	public TestServer(Integer port, Integer idePort, String contextRoot, String tempDir, List<AbstractConfigurator> configurators, boolean debug) {
 		this.port = port;
 		this.idePort = idePort;
 		this.configurators = configurators;
+		this.tempDirectory = tempDir;
 		
 		// Set up logging.
 		Log.setLog(new Logger());
@@ -245,6 +258,14 @@ public class TestServer {
 			public void handle(String arg0, Request arg1, HttpServletRequest arg2, HttpServletResponse arg3) throws IOException {
 			}
 		});
+		
+		if (tempDirectory != null && tempDirectory.length() > 0) {
+			File temp = new File(tempDirectory);
+			if (!temp.exists()) {
+				temp.mkdirs();
+			}
+			webApp.setTempDirectory(temp);
+		}
 		
 		jettyServer = new Server(port);
 		jettyServer.setHandler(webApp);

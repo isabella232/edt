@@ -11,11 +11,13 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.testserver;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -43,6 +45,11 @@ public class TestServerPlugin extends AbstractUIPlugin {
 	private static AbstractTestServerContribution[] contributions;
 	
 	/**
+	 * Root path for all test server temp directories.
+	 */
+	private IPath tempDirectory;
+	
+	/**
 	 * The constructor
 	 */
 	public TestServerPlugin() {
@@ -55,6 +62,22 @@ public class TestServerPlugin extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		// Clear out anything in the temp directory.
+		tempDirectory = getStateLocation().append("jettyTemp"); //$NON-NLS-1$
+		File tempDir = tempDirectory.toFile();
+		if (tempDir.exists()) {
+			delete(tempDir);
+		}
+	}
+	
+	private void delete(File file) {
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				delete(f);
+			}
+		}
+		file.delete();
 	}
 
 	/*
@@ -62,9 +85,6 @@ public class TestServerPlugin extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-		
 		synchronized (syncObj) {
 			if (contributions != null) {
 				for (AbstractTestServerContribution contrib : contributions) {
@@ -73,6 +93,10 @@ public class TestServerPlugin extends AbstractUIPlugin {
 				contributions = null;
 			}
 		}
+		
+		tempDirectory = null;
+		plugin = null;
+		super.stop(context);
 	}
 	
 	/**
@@ -154,5 +178,9 @@ public class TestServerPlugin extends AbstractUIPlugin {
 	
 	public void logWarning(String msg) {
 		getLog().log(new Status(IStatus.WARNING, PLUGIN_ID, msg));
+	}
+	
+	public IPath getTempDirectory() {
+		return tempDirectory;
 	}
 }

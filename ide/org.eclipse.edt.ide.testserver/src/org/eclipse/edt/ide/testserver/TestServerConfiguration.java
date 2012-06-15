@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -140,7 +141,7 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			ClasspathUtil.buildClasspath(this, classpath);
 			copy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpath);
 			
-			StringBuilder args = new StringBuilder( 100 );
+			StringBuilder args = new StringBuilder(100);
 			args.append(copy.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, "")); //$NON-NLS-1$
 			args.append(" -p "); //$NON-NLS-1$
 			args.append(port);
@@ -149,6 +150,13 @@ public class TestServerConfiguration implements IDebugEventSetListener, IResourc
 			args.append(" -c \"/"); //$NON-NLS-1$
 			args.append(project.getName());
 			args.append("\""); //$NON-NLS-1$
+			
+			IPath tempDir = TestServerPlugin.getDefault().getTempDirectory();
+			if (tempDir != null) {
+				args.append(" -td \""); //$NON-NLS-1$
+				args.append(tempDir.append(project.getName()).toOSString());
+				args.append("\""); //$NON-NLS-1$
+			}
 			
 			if (TestServerPlugin.getDefault().getPreferenceStore().getBoolean(ITestServerPreferenceConstants.PREFERENCE_TESTSERVER_ENABLE_DEBUG)) {
 				args.append(" -d"); //$NON-NLS-1$
