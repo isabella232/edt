@@ -261,7 +261,7 @@ public class JsonLib {
 		} catch (ParseException e) {
 		    InvalidArgumentException ex = new InvalidArgumentException();
 			ex.initCause(e);
-			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, obj, jsonString );
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARAMETERS_JSON2EGL, obj, jsonString );
 		}
 	}
 	public static Object convertToEgl(ValueNode jsonValue) throws AnyException{
@@ -422,11 +422,11 @@ public class JsonLib {
 		} catch (Throwable t) {
 		    InvalidArgumentException ex = new InvalidArgumentException();
 			ex.initCause(t);
-			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, field, jsonValue );
+			throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARAMETERS_JSON2EGL, field, jsonValue );
 		}
 		
 	    InvalidArgumentException ex = new InvalidArgumentException();
-		throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, field, jsonValue );
+		throw ex.fillInMessage( Message.SOA_E_WS_PROXY_PARAMETERS_JSON2EGL, field, jsonValue );
 	}
 
     private static EDictionary convertObject(EDictionary dictionary, ObjectNode objectNode)
