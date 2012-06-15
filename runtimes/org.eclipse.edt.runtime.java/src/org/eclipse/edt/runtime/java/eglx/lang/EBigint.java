@@ -18,10 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.AnyException;
-import eglx.lang.NullValueException;
-import eglx.lang.NumericOverflowException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -234,13 +231,13 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		long result = 0;
 		if (throwOverflowExceptions)
 			try {
-				result = ((Number) value.ezeUnbox()).longValue();
+				result = value.ezeUnbox().longValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		else
-			result = ((Number) value.ezeUnbox()).longValue();
+			result = value.ezeUnbox().longValue();
 		return result;
 	}
 
@@ -267,6 +264,40 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		if (value == null)
 			return null;
 		return asBigint(value.ezeUnbox());
+	}
+	
+	public static Long asBigint( byte[] value ) throws AnyException
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		if ( value.length != 8 )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "bigint";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		return ((value[ 0 ] & 0xFFL) << 56)
+				| ((value[ 1 ] & 0xFFL) << 48)
+				| ((value[ 2 ] & 0xFFL) << 40)
+				| ((value[ 3 ] & 0xFFL) << 32)
+				| ((value[ 4 ] & 0xFFL) << 24)
+				| ((value[ 5 ] & 0xFFL) << 16)
+				| ((value[ 6 ] & 0xFFL) << 8)
+				| (value[ 7 ] & 0xFFL);
+	}
+
+	public static Long asBigint( EBytes value ) throws AnyException
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asBigint( value.ezeUnbox() );
 	}
 
 	/**
@@ -317,38 +348,12 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Long op1, Long op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2);
-	}
-
-	public static int compareTo(Integer op1, Long op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return ((Long) op1.longValue()).compareTo(op2);
-	}
-
-	public static int compareTo(Long op1, Integer op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2.longValue());
-	}
-
-	public static int compareTo(Short op1, Long op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return ((Long) op1.longValue()).compareTo(op2);
-	}
-
-	public static int compareTo(Long op1, Short op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2.longValue());
+	public static int compareTo(long op1, long op2) throws AnyException {
+		return Long.valueOf(op1).compareTo(op2);
 	}
 
 	public static boolean equals(Long op1, Long op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
