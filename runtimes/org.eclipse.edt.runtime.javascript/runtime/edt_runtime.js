@@ -518,8 +518,9 @@ egl.eglx.lang.EString.notEquals = function(str1, str2) {
 	return (str1 != str2);
 };
 egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
-	if (str == null || startIndex == null || endIndex == null)
-		return null;
+	if (str == null) {
+		throw egl.createNullValueException( "CRRUI2005E", [] );
+	}
 	start = startIndex;
 	end = endIndex;
 	max = str.length;
