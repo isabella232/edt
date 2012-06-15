@@ -14,7 +14,6 @@ package org.eclipse.edt.runtime.java.eglx.lang;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
@@ -23,9 +22,7 @@ import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
-import eglx.lang.AnyException;
-import eglx.lang.InvalidArgumentException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 /**
  * A class for Timestamps. The value is a Calendar and a number of microseconds (an int) which is encapsulated in a
@@ -40,61 +37,73 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 
 	/**
 	 * Indicates that years are stored by this timestamp.
+	 * Its value is 0.
 	 */
 	public static final int YEAR_CODE = 0;
 
 	/**
 	 * Indicates that months are stored by this timestamp.
+	 * Its value is 1.
 	 */
 	public static final int MONTH_CODE = 1;
 
 	/**
 	 * Indicates that days are stored by this timestamp.
+	 * Its value is 2.
 	 */
 	public static final int DAY_CODE = 2;
 
 	/**
 	 * Indicates that hours are stored by this timestamp.
+	 * Its value is 3.
 	 */
 	public static final int HOUR_CODE = 3;
 
 	/**
 	 * Indicates that minutes are stored by this timestamp.
+	 * Its value is 4.
 	 */
 	public static final int MINUTE_CODE = 4;
 
 	/**
 	 * Indicates that seconds are stored by this timestamp.
+	 * Its value is 5.
 	 */
 	public static final int SECOND_CODE = 5;
 
 	/**
 	 * Indicates that tenths of seconds are stored by this timestamp.
+	 * Its value is 6.
 	 */
 	public static final int FRACTION1_CODE = 6;
 
 	/**
 	 * Indicates that hundredths of seconds are stored by this timestamp.
+	 * Its value is 7.
 	 */
 	public static final int FRACTION2_CODE = 7;
 
 	/**
 	 * Indicates that milliseconds are stored by this timestamp.
+	 * Its value is 8.
 	 */
 	public static final int FRACTION3_CODE = 8;
 
 	/**
 	 * Indicates that ten-thousandths of seconds are stored by this timestamp.
+	 * Its value is 9.
 	 */
 	public static final int FRACTION4_CODE = 9;
 
 	/**
 	 * Indicates that hundred-thousandths of seconds are stored by this timestamp.
+	 * Its value is 10.
 	 */
 	public static final int FRACTION5_CODE = 10;
 
 	/**
 	 * Indicates that microseconds are stored by this timestamp.
+	 * Its value is 11.
 	 */
 	public static final int FRACTION6_CODE = 11;
 
@@ -174,12 +183,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox());
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar timestamp) throws AnyException {
-		if (timestamp == null)
-			return null;
-		return asTimestamp((Calendar) timestamp);
-	}
-
 	public static Calendar asTimestamp(Calendar timestamp) throws AnyException {
 		if (timestamp == null)
 			return null;
@@ -202,12 +205,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), timespanMask);
-	}
-
-	public static Calendar asTimestamp(GregorianCalendar timestamp, String timespanMask) throws AnyException {
-		if (timestamp == null)
-			return null;
-		return asTimestamp((Calendar) timestamp, timespanMask);
 	}
 
 	public static Calendar asTimestamp(Calendar original, String timespanMask) throws AnyException {
@@ -280,16 +277,10 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return asTimestamp(timestamp.ezeUnbox(), args);
 	}
 
-	public static Calendar asTimestamp(GregorianCalendar timestamp, Integer... args) throws AnyException {
-		if (timestamp == null)
-			return null;
-		return asTimestamp((Calendar) timestamp, args);
-	}
-
 	public static Calendar asTimestamp(Calendar date, Integer... args) {
 		if (date == null)
 			return null;
-		if (args == null || args.length == 0)
+		if (args == null || args.length < 2)
 			return asTimestamp((Calendar) date, YEAR_CODE, SECOND_CODE);
 		else
 			return asTimestamp((Calendar) date, args[0], args[1]);
@@ -311,12 +302,6 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		if (timestamp == null)
 			return null;
 		return asTimestamp(timestamp.ezeUnbox(), startCode, endCode);
-	}
-
-	public static Calendar asTimestamp(GregorianCalendar timestamp, int startCode, int endCode) throws AnyException {
-		if (timestamp == null)
-			return null;
-		return asTimestamp((Calendar) timestamp, startCode, endCode);
 	}
 
 	public static Calendar asTimestamp(Calendar original, int startCode, int endCode) {
@@ -381,13 +366,11 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
@@ -398,225 +381,237 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		return !equals(op1, op2);
 	}
 
-	public static Calendar convert(String timestamp, int startCode, int endCode) {
-		// Try to parse the string by hand, looking for each field (years, months,
-		// etc.) that this ETimestamp stores.
-		boolean invalidSeparator = false;
+	/**
+	 * {@Operation narrow} Converts a string to a timestamp.  The string is parsed
+	 * by searching for the timestamp fields specified in the mask, in order
+	 * from years down to fractions of seconds.  Each field from the mask must
+	 * be present in the string.  Years must be represented with four digits, and
+	 * two digits must be used for months, days, hours, minutes, and seconds.  If
+	 * the mask includes fractions, there must be one digit in the string for each
+	 * fraction specified by the mask.  One separator character must appear in between
+	 * each field.  Any character may be used as a separator, and the separators do 
+	 * not have to match.
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a timestamp or the mask is invalid.
+	 */
+	public static Calendar convert( String timestamp, int startCode, int endCode ) 
+	{
 		int years = -1;
 		int months = -1;
 		int days = -1;
 		int hours = -1;
 		int minutes = -1;
 		int seconds = -1;
-		int microseconds = -1;
+		int milliseconds = -1; // Calendar supports milliseconds (3 fraction digits), not microseconds (6 fraction digits).
 		int length = timestamp.length();
-		PARSE: if (length > 0) {
-			// ch is the character we're currently looking at. i is the index of
-			// the next character after ch.
-			char ch;
-			int i = 0;
-			// Locate the first digit.
-			do {
-				ch = timestamp.charAt(i++);
-			}
-			while (i < length && !('0' <= ch && ch <= '9'));
-			// Read in the number of years.
-			if (i <= length && startCode == YEAR_CODE) {
-				years = 0;
-				for (int j = 0; '0' <= ch && ch <= '9' && j < 4; j++) {
-					years = years * 10 + ch - '0';
-					if (i < length) {
-						ch = timestamp.charAt(i++);
-					} else {
-						// make sure there were 4 digits (when we get here it points exactly)
-						if (i != 4)
-							years = -1;
-						break PARSE;
-					}
-				}
-				// make sure there were 4 digits (when we get here it points past)
-				if (i != 5)
-					years = -1;
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of months.
-			if (i <= length && startCode <= MONTH_CODE && endCode >= MONTH_CODE) {
-				months = ch - '0';
-				if (i < length) {
-					ch = timestamp.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						months = months * 10 + ch - '0';
-						if (i < length) {
-							ch = timestamp.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of days.
-			if (i <= length && startCode <= DAY_CODE && endCode >= DAY_CODE) {
-				days = ch - '0';
-				if (i < length) {
-					ch = timestamp.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						days = days * 10 + ch - '0';
-						if (i < length) {
-							ch = timestamp.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of hours.
-			if (i <= length && startCode <= HOUR_CODE && endCode >= HOUR_CODE) {
-				hours = ch - '0';
-				if (i < length) {
-					ch = timestamp.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						hours = hours * 10 + ch - '0';
-						if (i < length) {
-							ch = timestamp.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of minutes.
-			if (i <= length && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) {
-				minutes = ch - '0';
-				if (i < length) {
-					ch = timestamp.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						minutes = minutes * 10 + ch - '0';
-						if (i < length) {
-							ch = timestamp.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of seconds.
-			if (i <= length && startCode <= SECOND_CODE && endCode >= SECOND_CODE) {
-				seconds = ch - '0';
-				if (i < length) {
-					ch = timestamp.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						seconds = seconds * 10 + ch - '0';
-						if (i < length) {
-							ch = timestamp.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ('0' <= ch && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = timestamp.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of microseconds.
-			if (i <= length && endCode >= FRACTION1_CODE) {
-				microseconds = 0;
-				int microsecondsFound = 0;
-				int fractionDigits = endCode - FRACTION1_CODE + 1;
-				while (microsecondsFound < fractionDigits && '0' <= ch && ch <= '9') {
-					microseconds *= 10;
-					microseconds += ch - '0';
-					microsecondsFound++;
-					if (i < length) {
-						ch = timestamp.charAt(i++);
-					} else {
-						break;
-					}
-				}
-				if (microsecondsFound < 6) {
-					// If we didn't read in the full number of fraction digits,
-					// then adjust what we saw. If we read "650" then microseconds
-					// should be 65000 not 650.
-					for (int j = microsecondsFound; j < 6; j++) {
-						microseconds *= 10;
-					}
-				}
-				// ensure valid separator if more digits present
-				if (i < length)
-					invalidSeparator = true;
-			}
+		
+		// Calculate the required length of the string.
+		int requiredFields = ((endCode > FRACTION1_CODE) ? FRACTION1_CODE : endCode) - startCode + 1;
+		int requiredLength = 
+				requiredFields * 2    // start by counting two characters per field, adjust below
+				+ requiredFields - 1; // the number of separator characters
+		if ( startCode == YEAR_CODE )
+		{
+			requiredLength += 2;
 		}
+		if ( endCode == FRACTION1_CODE )
+		{
+			requiredLength--;
+		}
+		else if ( endCode >= FRACTION3_CODE )
+		{
+			requiredLength += endCode - FRACTION3_CODE + 1;
+		}
+		
+		if ( length == requiredLength )
+		{
+			// This loop will process one field at a time.  If an invalid character
+			// is found, we exit the loop.
+			int tempMillis = 0;
+			for ( int i = 0, code = startCode; i < length; code++ )
+			{
+				char digit1 = timestamp.charAt( i );
+				char digit2 = code < FRACTION1_CODE ? timestamp.charAt( i + 1 ) : '0';
+				if ( digit1 < '0' || digit1 > '9' || digit2 < '0' || digit2 > '9' )
+				{
+					break;
+				}
+				
+				switch ( code )
+				{
+					case YEAR_CODE:
+						char digit3 = timestamp.charAt( 2 );
+						char digit4 = timestamp.charAt( 3 );
+						if ( '0' <= digit3 && digit3 <= '9' && '0' <= digit4 && digit4 <= '9' )
+						{
+							years = (digit1 - '0') * 1000 + (digit2 - '0') * 100 + (digit3 - '0') * 10 + (digit4 - '0');
+						}
+						i += 5;
+						break;
+					case MONTH_CODE:
+						months = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case DAY_CODE:
+						days = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case HOUR_CODE:
+						hours = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case MINUTE_CODE:
+						minutes = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case SECOND_CODE:
+						seconds = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case FRACTION1_CODE:
+						if ( code == endCode )
+						{
+							milliseconds = (digit1 - '0') * 100;
+						}
+						else
+						{
+							// We need to check more fraction digits.  Don't assign 
+							// to milliseconds yet.
+							tempMillis = (digit1 - '0') * 100;
+						}
+						i++;
+						break;
+					case FRACTION2_CODE:
+						if ( code == endCode )
+						{
+							milliseconds = tempMillis + (digit1 - '0') * 10;
+						}
+						else
+						{
+							// We need to check more fraction digits.  Don't assign 
+							// to milliseconds yet.
+							tempMillis += (digit1 - '0') * 10;
+						}
+						i++;
+						break;
+					case FRACTION3_CODE:
+						if ( code == endCode )
+						{
+							milliseconds = tempMillis + (digit1 - '0');
+						}
+						else
+						{
+							// We need to check more fraction digits.  Don't assign 
+							// to milliseconds yet.
+							tempMillis += (digit1 - '0');
+						}
+						i++;
+						break;
+					default:
+						// Fraction digits 4 to 6.  Don't use the digit because a Calendar
+						// can only store milliseconds, not microseconds.
+						milliseconds = tempMillis;
+						i++;
+						break;
+				}
+			}
+			
+			
+			
+/*
+			// This loop will process one field at a time.
+			LOOP:
+			for ( int i = 0, code = startCode; i < length; code++ )
+			{
+				char digit1 = timestamp.charAt( i );
+				char digit2 = timestamp.charAt( i + 1 );
+				if ( digit1 < '0' || digit1 > '9' || digit2 < '0' || digit2 > '9' )
+				{
+					break;
+				}
+				
+				switch ( code )
+				{
+					case YEAR_CODE:
+						char digit3 = timestamp.charAt( 2 );
+						char digit4 = timestamp.charAt( 3 );
+						if ( '0' <= digit3 && digit3 <= '9' && '0' <= digit4 && digit4 <= '9' )
+						{
+							years = (digit1 - '0') * 1000 + (digit2 - '0') * 100 + (digit3 - '0') * 10 + (digit4 - '0');
+						}
+						i += 5;
+						break;
+					case MONTH_CODE:
+						months = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case DAY_CODE:
+						days = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case HOUR_CODE:
+						hours = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case MINUTE_CODE:
+						minutes = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case SECOND_CODE:
+						seconds = (digit1 - '0') * 10 + (digit2 - '0');
+						i += 3;
+						break;
+					case FRACTION1_CODE:
+						// All FRACTION codes are handled here.  We have to verify that
+						// all characters in the fraction are digits.  Some may not
+						// become part of the value because a Calendar can only store 
+						// milliseconds.
+//TODO fix this, may fail reading digit2 above						
+						digit3 = timestamp.charAt( i + 2 );
+						digit4 = timestamp.charAt( i + 3 );
+						char digit5 = timestamp.charAt( i + 4 );
+						char digit6 = timestamp.charAt( i + 5 );
+						if ( '0' <= digit3 && digit3 <= '9' && '0' <= digit4 && digit4 <= '9'
+								&& '0' <= digit5 && digit5 <= '9' && '0' <= digit6 && digit6 <= '9' )
+						{
+							milliseconds = 0;
+							switch ( endCode )
+							{
+								case FRACTION6_CODE:
+								case FRACTION5_CODE:
+								case FRACTION4_CODE:
+								case FRACTION3_CODE:
+									milliseconds = (digit3 - '0');
+									// Fall through.
+								case FRACTION2_CODE:
+									milliseconds += (digit2 - '0') * 10;
+									// Fall through.
+								case FRACTION1_CODE:
+									milliseconds += (digit1 - '0') * 100;
+									break;
+							}
+						}
+						
+						// We're done.  No need to check the for loop's condition again.
+						break LOOP;
+				}
+			}
+ */
+		}
+		
 		// Make sure all required fields were found.
-		if (invalidSeparator || (years == -1 && startCode == YEAR_CODE) || (months == -1 && startCode <= MONTH_CODE && endCode >= MONTH_CODE)
+		if ( (years == -1 && startCode == YEAR_CODE) || (months == -1 && startCode <= MONTH_CODE && endCode >= MONTH_CODE)
 			|| (days == -1 && startCode <= DAY_CODE && endCode >= DAY_CODE) || (hours == -1 && startCode <= HOUR_CODE && endCode >= HOUR_CODE)
 			|| (minutes == -1 && startCode <= MINUTE_CODE && endCode >= MINUTE_CODE) || (seconds == -1 && startCode <= SECOND_CODE && endCode >= SECOND_CODE)
-			|| (microseconds == -1 && endCode >= FRACTION1_CODE))
+			|| (milliseconds == -1 && endCode >= FRACTION1_CODE) )
 		{
 			TypeCastException tcx = new TypeCastException();
 			tcx.actualTypeName = "string";
-			tcx.castToName = "timestamp";
+			tcx.castToName = "timestamp(\"" + createMask( startCode, endCode ) + "\")";
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
 		}
-		// The last thing to do is put the values into a calendar and TimestampData.
+		
+		// The last thing to do is put the values into a Calendar.
 		Calendar cal = DateTimeUtil.getBaseCalendar();
 		if (years != -1)
 			cal.set(Calendar.YEAR, years);
@@ -624,22 +619,21 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			cal.set(Calendar.MONTH, months - 1);
 		if (days != -1)
 			cal.set(Calendar.DATE, days);
-//		else if (months != -1)
-//			// No day was specified, but a month was specified. Set the day to
-//			// one. Without this we'd default to the current day, which might
-//			// be invalid for the month that was specified. For example, this
-//			// change was put in on May 30 after setting a timestamp to
-//			// Feb 2007: Feb 30 is not a valid date.
-//			cal.set(Calendar.DATE, 1);
+		else if (months != -1)
+			// No day was specified, but a month was specified. Set the day to
+			// one. Without this we'd default to the current day, which might
+			// be invalid for the month that was specified. For example, this
+			// change was put in on May 30 after setting a timestamp to
+			// Feb 2007: Feb 30 is not a valid date.
+			cal.set(Calendar.DATE, 1);
 		if (hours != -1)
 			cal.set(Calendar.HOUR_OF_DAY, hours);
 		if (minutes != -1)
 			cal.set(Calendar.MINUTE, minutes);
 		if (seconds != -1)
 			cal.set(Calendar.SECOND, seconds);
-		if (microseconds != -1)
-			//Calendar only supports miliseconds, so drop the last 3 digits of precision from microseconds
-			cal.set(Calendar.MILLISECOND, microseconds / 1000);
+		if (milliseconds != -1)
+			cal.set(Calendar.MILLISECOND, milliseconds);
 		// Verify that the values are valid. We only do this if year month and date are at least there
 		try {
 			if (years != -1 && months != -1 && days != -1)
@@ -648,13 +642,13 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		catch (Exception ex) {
 			TypeCastException tcx = new TypeCastException();
 			tcx.actualTypeName = "string";
-			tcx.castToName = "timestamp";
+			tcx.castToName = "timestamp(\"" + createMask( startCode, endCode ) + "\")";
 			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, timestamp, tcx.actualTypeName, tcx.castToName );
 		}
 		return cal;
 	}
-
+	
 	public static Calendar convert(String timestamp, String format) throws ParseException {
 		synchronized (DateTimeUtil.LOCK) {
 			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
@@ -675,13 +669,33 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 		}
 		String[] code = { "yyyy", "MM", "dd", "HH", "mm", "ss", "SSSSSS" };
 		String[] delimiters = { "-", "-", " ", ":", ":", "." };
-		int sindex = (startCode > 6) ? 6 : startCode;
-		int eindex = (endCode > 6) ? 6 : endCode;
+		int sindex = (startCode > FRACTION1_CODE) ? 6 : startCode;
+		int eindex = (endCode > FRACTION1_CODE) ? 6 : endCode;
 		StringBuilder patternString = new StringBuilder(26);
 		for (int i = sindex, j = 0; i <= eindex; i++, j++) {
 			if (j > 0)
 				patternString.append(delimiters[i - 1]);
 			patternString.append(code[i]);
+		}
+		return patternString.toString();
+	}
+
+	/**
+	 * Create a Timestamp mask based on a startcode and endcode value
+	 */
+	public static String createMask(int startCode, int endCode) {
+		if (startCode > endCode) {
+			return null;
+		}
+		StringBuilder patternString = new StringBuilder(20);
+		String[] code = { "yyyy", "MM", "dd", "HH", "mm", "ss" };
+		int eindex = (endCode > SECOND_CODE) ? 5 : endCode;
+		for (int i = startCode; i <= eindex; i++) {
+			patternString.append(code[i]);
+		}
+		if ( endCode >= FRACTION1_CODE )
+		{
+			patternString.append( "ffffff".substring( 0, endCode - FRACTION1_CODE + 1 ) );
 		}
 		return patternString.toString();
 	}
@@ -735,7 +749,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "dayOf", "dd");
 		}
-		Calendar aTimestamp = (Calendar) original.ezeUnbox().clone();
+		Calendar aTimestamp = original.ezeUnbox();
 		return aTimestamp.get(Calendar.DATE);
 	}
 
@@ -747,7 +761,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "monthOf", "MM");
 		}
-		Calendar aTimestamp = (Calendar) original.ezeUnbox().clone();
+		Calendar aTimestamp = original.ezeUnbox();
 		return aTimestamp.get(Calendar.MONTH) + 1;
 	}
 
@@ -759,7 +773,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "yearOf", "yyyy");
 		}
-		Calendar aTimestamp = (Calendar) original.ezeUnbox().clone();
+		Calendar aTimestamp = original.ezeUnbox();
 		return aTimestamp.get(Calendar.YEAR);
 	}
 
@@ -771,7 +785,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			InvalidArgumentException ex = new InvalidArgumentException();
 			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "weekdayOf", "dd");
 		}
-		Calendar aTimestamp = (Calendar) original.ezeUnbox().clone();
+		Calendar aTimestamp = original.ezeUnbox();
 		return aTimestamp.get(Calendar.DAY_OF_WEEK) - 1;
 	}
 
@@ -795,6 +809,39 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "timeOf", "HHmmss");
 		}
 		return asTimestamp(aTimestamp, HOUR_CODE, SECOND_CODE);
+	}
+
+	/**
+	 * Returns the hour of a timestamp
+	 */
+	public static int hourOf(ETimestamp aTimestamp) throws AnyException {
+		if (aTimestamp.getStartCode() > HOUR_CODE || aTimestamp.getEndCode() < HOUR_CODE) {
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "hourOf", "HH");
+		}
+		return aTimestamp.ezeUnbox().get(Calendar.HOUR_OF_DAY);
+	}
+
+	/**
+	 * Returns the minute of a timestamp
+	 */
+	public static int minuteOf(ETimestamp aTimestamp) throws AnyException {
+		if (aTimestamp.getStartCode() > MINUTE_CODE || aTimestamp.getEndCode() < MINUTE_CODE) {
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "minuteOf", "mm");
+		}
+		return aTimestamp.ezeUnbox().get(Calendar.MINUTE);
+	}
+
+	/**
+	 * Returns the second of a timestamp
+	 */
+	public static int secondOf(ETimestamp aTimestamp) throws AnyException {
+		if (aTimestamp.getStartCode() > SECOND_CODE || aTimestamp.getEndCode() < SECOND_CODE) {
+			InvalidArgumentException ex = new InvalidArgumentException();
+			throw ex.fillInMessage(Message.NO_FIELD_IN_TIMESTAMP, "secondOf", "ss");
+		}
+		return aTimestamp.ezeUnbox().get(Calendar.SECOND);
 	}
 
 	/**
