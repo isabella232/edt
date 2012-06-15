@@ -52,10 +52,4 @@ ExternalType DojoBase extends Widget type JavaScriptObject {
 	  */
 	 baseClass String;
 	 
-	 /*
-	  * The following two are Bidi-specific properties
-	  */
-	 symmetricSwap String;
-	 numericSwap String;	
-	 
 end
