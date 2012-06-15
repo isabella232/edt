@@ -15,20 +15,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen.IBMiProgramCallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementValidator;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.eglx.jtopen.IBMiCallStatement;
+import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
@@ -54,7 +55,7 @@ public class EDTCompiler extends BaseCompiler {
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(ServicesCallStatement.class, "egllib");
 			path += File.pathSeparator;
-			path += SystemEnvironmentUtil.getSystemLibraryPath(IBMiCallStatement.class, "egllib");
+			path += SystemEnvironmentUtil.getSystemLibraryPath(IBMiFactory.class, "egllib");
 			path += File.pathSeparator;
 			systemEnvironmentRootPath = path + super.getSystemEnvironmentPath();
 		}
@@ -130,13 +131,14 @@ public class EDTCompiler extends BaseCompiler {
 		}
 		else if (validator[0] == null && stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
 			CallStatement call = (CallStatement) stmt;
-			if (CallStatementValidator.isFunctionCallStatement(call)) {
-				if (CallStatementValidator.isLocalFunctionCallStatement(call)) {
-					return StatementValidator.Registry.get("eglx.jtopen");
-				}
-				else {
-					return StatementValidator.Registry.get("eglx.services");
-				}
+			Expression exp = call.getInvocationTarget();
+			IDataBinding binding = exp.resolveDataBinding();
+			if(binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
+				return StatementValidator.Registry.get("eglx.jtopen");
+			}
+			else if(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
+					binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
+				return StatementValidator.Registry.get("eglx.services");
 			}
 			else {
 				return StatementValidator.Registry.get(MofConversion.EGL_lang_package);

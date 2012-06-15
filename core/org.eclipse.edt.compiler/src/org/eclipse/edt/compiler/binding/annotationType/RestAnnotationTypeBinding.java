@@ -16,25 +16,25 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.DeleteRestValidator;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.RestValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-public class DeleteRestAnnotationTypeBinding extends ComplexAnnotationTypeBinding {
-	public static final String name = InternUtil.intern("DeleteRest");
+public class RestAnnotationTypeBinding extends ComplexAnnotationTypeBinding {
+	public static final String name = InternUtil.intern("Rest");
 	
-	private static DeleteRestAnnotationTypeBinding INSTANCE = new DeleteRestAnnotationTypeBinding();
+	private static RestAnnotationTypeBinding INSTANCE = new RestAnnotationTypeBinding();
 		
 	private static final List myAnnotations = new ArrayList();
    	static{
-   		myAnnotations.add(new UserDefinedAnnotationValidationRule(DeleteRestValidator.class));
+   		myAnnotations.add(new UserDefinedAnnotationValidationRule(RestValidator.class));
    	}
    	
-	private DeleteRestAnnotationTypeBinding() {
+	private RestAnnotationTypeBinding() {
 		super(name, new Object[0]);
 	}
 	
-	public static DeleteRestAnnotationTypeBinding getInstance() {
+	public static RestAnnotationTypeBinding getInstance() {
 		return INSTANCE;
 	}
 	

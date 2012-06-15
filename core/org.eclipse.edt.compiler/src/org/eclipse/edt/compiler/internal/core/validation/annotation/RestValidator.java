@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
 
-public class PostRestValidator extends XXXrestValidator {
+public class RestValidator extends XXXrestValidator {
 	protected String getName() {
-		return IEGLConstants.PROPERTY_POSTREST;
+		return "REST";
 	}
 
 }

@@ -89,13 +89,13 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 
 		if (dataBinding.getKind() == IDataBinding.NESTED_FUNCTION_BINDING) {
 			//check to make sure it is in service or interface
-			if (dataBinding.getDeclaringPart() == null || (dataBinding.getDeclaringPart().getKind() != ITypeBinding.SERVICE_BINDING && dataBinding.getDeclaringPart().getKind() != ITypeBinding.INTERFACE_BINDING )) {
-				problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_MUST_BE_SERVICE_OR_INTERFACE, IMarker.SEVERITY_ERROR, new String[] {dataBinding.getCaseSensitiveName()});
-			}
-			else {
+//			if (dataBinding.getDeclaringPart() == null || (dataBinding.getDeclaringPart().getKind() != ITypeBinding.SERVICE_BINDING && dataBinding.getDeclaringPart().getKind() != ITypeBinding.INTERFACE_BINDING )) {
+//				problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.FUNCTION_MUST_BE_SERVICE_OR_INTERFACE, IMarker.SEVERITY_ERROR, new String[] {dataBinding.getCaseSensitiveName()});
+//			}
+//			else {
 				//validate the arguments against the parms
 				callStatement.accept(new FunctionArgumentValidator((IFunctionBinding)dataBinding.getType(), dataBinding.getDeclaringPart(), problemRequestor, compilerOptions));
-			}
+//			}
 			
 			//check to make sure a callback is specified
 			if (callStatement.getCallSynchronizationValues() == null || callStatement.getCallSynchronizationValues().getReturnTo() == null) {

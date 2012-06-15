@@ -11,10 +11,24 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.validation.annotation;
 
-import org.eclipse.edt.compiler.core.IEGLConstants;
+import java.util.Map;
 
-public class DeleteRestValidator extends XXXrestValidator {
+import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
+import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+
+
+
+public class EglRestRpcValidator extends XXXrestValidator {
 	protected String getName() {
-		return IEGLConstants.PROPERTY_DELETEREST;
+		return "EglRestRpc";
+	}
+	@Override
+	protected boolean methodIsValid() {
+		return true;
+	}
+	public void validate(Node errorNode, Node target, ITypeBinding targetTypeBinding, Map allAnnotations, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+
 	}
 }

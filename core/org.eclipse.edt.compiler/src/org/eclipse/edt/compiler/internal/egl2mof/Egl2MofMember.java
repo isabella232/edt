@@ -94,6 +94,7 @@ import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.utils.EList;
 
@@ -278,13 +279,16 @@ class Egl2MofMember extends Egl2MofPart {
 		else {
 			Function func; 
 //FIXME JV this need to be extensible 		
-			IAnnotationBinding ibmiProgram = function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram");
-			if(ibmiProgram == null){
-				EClass funcClass = mofMemberTypeFor(function);
-				func = (Function)funcClass.newInstance();
+			if(function.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
+				func = IBMiFactory.INSTANCE.createIBMiFunction();
+			}
+			else if(function.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
+					function.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
+				func = ServicesFactory.INSTANCE.createServiceFunction();
 			}
 			else{
-				func = IBMiFactory.INSTANCE.createIBMiFunction();
+				EClass funcClass = mofMemberTypeFor(function);
+				func = (Function)funcClass.newInstance();
 			}
 			if (func instanceof Operation) {
 				IAnnotationBinding ann = this.getAnnotation(function.getType(), "Operation");

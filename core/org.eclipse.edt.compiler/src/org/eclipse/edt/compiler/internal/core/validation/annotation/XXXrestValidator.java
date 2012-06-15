@@ -136,16 +136,19 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 			return;
 		}
 		
-		final boolean[] inInterface = new boolean[1];
+		final boolean[] correctPart = new boolean[1];
 		target.getParent().accept(new DefaultASTVisitor() {
-			public boolean visit(org.eclipse.edt.compiler.core.ast.Interface interfaceNode) {
-				inInterface[0] = true;
+			public boolean visit(org.eclipse.edt.compiler.core.ast.Library node) {
+				correctPart[0] = true;
+				return false;
+			}
+			public boolean visit(org.eclipse.edt.compiler.core.ast.Handler node) {
+				correctPart[0] = true;
 				return false;
 			}
 		});
 		
-		//must be in an interface
-		if (!inInterface[0]) {
+		if (!correctPart[0]) {
 			problemRequestor.acceptProblem(errorNode, IProblemRequestor.ANNOTATION_NOT_APPLICABLE, IMarker.SEVERITY_ERROR, new String[] {getName()});
 		}
 
@@ -301,9 +304,17 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 			problemRequestor.acceptProblem(getResponseFormatNode(), IProblemRequestor.XXXREST_RESPONSEFORMAT_NOT_SUPPORTD, IMarker.SEVERITY_ERROR, new String[] { getResponseFormat(), IEGLConstants.PROPERTY_RESPONSEFORMAT});
 		}
 		
+		if (!methodIsValid()) {
+			problemRequestor.acceptProblem(getResponseFormatNode(), IProblemRequestor.XXXREST_NO_METHOD, IMarker.SEVERITY_ERROR, new String[] { getResponseFormat(), IEGLConstants.PROPERTY_RESPONSEFORMAT});
+		}
+		
 		
 	}
 
+	protected boolean methodIsValid(){
+		return getMethod() != null;
+	}
+	
 	private boolean isFlatRecord(ITypeBinding binding) {
 		if (!Binding.isValidBinding(binding)) {
 			return false;
@@ -338,6 +349,11 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 			responseFormatNode = getAnnotationValueNode(IEGLConstants.PROPERTY_RESPONSEFORMAT);
 		}
 		return responseFormatNode;		
+	}
+
+	private IAnnotationBinding getMethod() {
+		return (IAnnotationBinding)allAnnotations.get(InternUtil.intern("method"));
+
 	}
 
 	private String getRequestFormat() {
@@ -412,7 +428,8 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 	
 	protected abstract String getName();
 	
-	protected boolean supportsResourceParm() {
-		return true;
+	private boolean supportsResourceParm() {
+		IAnnotationBinding method = getMethod();
+		return !(method != null && method.getValue() != null && "_GET".equalsIgnoreCase(method.getValue().toString()));
 	}
 }

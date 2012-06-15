@@ -15,13 +15,14 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.Binding;
+import org.eclipse.edt.compiler.binding.IDataBinding;
+import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
 import org.eclipse.edt.compiler.core.ast.OtherwiseClause;
-import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementGenerator;
 import org.eclipse.edt.compiler.internal.egl2mof.sql.SQLIOStatementGenerator;
@@ -61,6 +62,7 @@ import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
+import org.eclipse.edt.mof.eglx.services.ServicesFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
 
@@ -172,14 +174,15 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
 		//FIXME JV this need to be extensible 
 		CallStatement stmt;
-		if (CallStatementValidator.isFunctionCallStatement(callStatement)) {
-			if (CallStatementValidator.isLocalFunctionCallStatement(callStatement)) {
-				stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
-			}
-			else {
-				IOStatementGenerator generator = getGeneratorFor(callStatement);
-				stmt = generator.genCallStatement(callStatement, eObjects);
-			}
+		org.eclipse.edt.compiler.core.ast.Expression exp = callStatement.getInvocationTarget();
+		IDataBinding binding = exp.resolveDataBinding();
+		if(Binding.isValidBinding(binding) && binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
+			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
+		}
+		else if(Binding.isValidBinding(binding) && (binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
+				binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null ||
+				binding.getDeclaringPart().getKind() == IPartBinding.SERVICE_BINDING)){
+			stmt = ServicesFactory.INSTANCE.createServicesCallStatement();
 		}
 		else {
 			//TODO this should create a "plain" CallStatement

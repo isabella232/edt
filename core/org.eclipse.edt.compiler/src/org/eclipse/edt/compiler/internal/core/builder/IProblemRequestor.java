@@ -443,6 +443,7 @@ public interface IProblemRequestor {
 	public static final int TYPE_NOT_VALID_FOR_DECLARATION_IN_STEREOTYPE = 3410;
 
 	public static final int XXXREST_NO_RESOURCE_PARM = 3411;
+	public static final int XXXREST_NO_METHOD = 3412;
 
 	public static final int SERVICE_CALL_USING_WRONG_TYPE = 3415;
 
