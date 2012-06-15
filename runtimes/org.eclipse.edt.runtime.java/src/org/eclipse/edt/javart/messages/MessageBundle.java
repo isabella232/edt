@@ -29,7 +29,6 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.SOA_E_WS_PROXY_INVALID_HTTP_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. It does not contain the http:// protocol." },
 		{ Message.SOA_E_WS_PROXY_INVALID_URL_EXCEPTION, "The URL ''{0}'' used to invoke the service is invalid. {1}" },
 		{ Message.SOA_E_WS_PROXY_EMPTY_URL_EXCEPTION, "The URL used to invoke the service is blank. Specify a URL that points to the service." },
-		{ Message.SOA_E_JSON_FIELD_TYPE_EXCEPTION, "JSON conversion cannot be performed on field:{0} in {1}." },
 		{ Message.SOA_E_JSON_TYPE_EXCEPTION, "JSON conversion cannot be performed on a value of type {0}." },
 		{ Message.MDY_ERROR, "The DateTimeLib.mdy function cannot convert the values {0}, {1}, and {2} into a month, day, and year." },
 		{ Message.CONVERSION_ERROR, "The value {0} of type {1} cannot be converted to the type {2}." },
@@ -45,7 +44,8 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.NO_FIELD_IN_TIMESTAMP, "Function {0} can only be called on timestamps whose pattern includes ''{1}''." },
 		{ Message.INVALID_MATCH_PATTERN, "The string-matching pattern {0} is invalid." },
 		{ Message.NEGATIVE_SIZE, "The size value {0} is less than zero." },
-		{ Message.SOA_E_WS_PROXY_PARMETERS_JSON2EGL, "An exception occurred while converting from JSON. parameter:{0}, json:{1}" },
+		{ Message.SOA_E_JSON_FIELD_TYPE_EXCEPTION, "JSON conversion cannot be performed on field:{0} in {1}." },
+		{ Message.SOA_E_WS_PROXY_PARAMETERS_JSON2EGL, "An exception occurred while converting from JSON. parameter:{0}, json:{1}" },
 		{ Message.SOA_E_WS_PROXY_COMMUNICATION, "An exception occurred while communicating with the service. URL:{0}" },
 		{ Message.SOA_E_EGL_SERVICE_INVOCATION, "An error occurred while trying to invoke function:{0} on EGL Service:{1}." },
 		{ Message.SOA_E_WS_SERVICE, "An exception occurred during a service call. Service:{0}, Function:{0}" },
@@ -68,14 +68,16 @@ public class MessageBundle extends ListResourceBundle
 		{ Message.RESOURCE_FILE_NOT_FOUND, "The file ({0}) could not be found." },
 		{ Message.ERROR_PARSING_RESOURCE_FILE, "An Exception occurred while parsing the file ({0}). exception:{1}" },
 		{ Message.ERROR_RESOURCE_FACTORY_NOT_FOUND, "Factory not found for binding name: {0}, type:{1}, binding property file:{2}." },
-		{ Message.ERROR_NO_RESOURCE_IMPLEMENTATION, "There is no resource implementation for binding name: {0}, type:{1}, binding property file:{2}." },
 		{ Message.ERROR_RESOURCE_BINDING_NOT_FOUND, "No resource binding found for for binding name: {0}, binding property file:{1}." },
+		{ Message.ERROR_NO_RESOURCE_IMPLEMENTATION, "There is no resource implementation for binding name: {0}, type:{1}, binding property file:{2}." },
 		{ Message.ERROR_RESOURCE_IMPLEMENTATION_EXCEPTION, "An exception occurred while getting th eresource implementation for binding found for for binding name: {0}, type:{1}, binding property file:{2}." },
 		{ Message.RESOURCE_URI_EXCEPTION, "The URI {0} is not a valid URI." },
 		{ Message.RESOURCE_NO_PROCESSOR, "Unable to processor the uri {0} into a resource." },
 		{ Message.MISSING_DEFAULT_DD, "No default deployment descriptor was specified." },
 		{ Message.JNDI_LOOKUP_ERROR, "An Exception occurred while performing a JNDI lookup. JNDI name: {0}. exception:{1}" },
 		{ Message.JNDI_UNKNOWN_TYPE, "JNDI lookup resulted in unknown data source type: {0}." },
+		{ Message.INVALID_TYPES_FOR_COMPARE, "Values of types {0} and {1} cannot be compared." },
+		{ Message.INVALID_DATA, "The data is not in {0} format." }
 	};
 	
 	/**
