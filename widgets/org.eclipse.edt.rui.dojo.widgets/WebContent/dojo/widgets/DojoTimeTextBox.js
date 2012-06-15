@@ -52,7 +52,7 @@ egl.defineWidget(
 		}
 	},
 	"convertEGLTimeToDojoTime" : function(eglTime) {
-		return eglTime == null? "" : egl.timeStampToString(eglTime, this.timePattern);
+		return eglTime == null? "" : egl.eglx.lang.StringLib.formatTime(eglTime, this.timePattern);
 	},
 	"getValue" : function(){
         if (this.dojoWidget) {            
@@ -66,7 +66,7 @@ egl.defineWidget(
                 var s = "" + this.twoDigits(time.getHours()) + ":" +
                     this.twoDigits(time.getMinutes()) + ":" +
                     this.twoDigits(time.getSeconds());
-               	return egl.stringToTime( s, "HHmmss" );
+               	return egl.eglx.lang.ETime.fromEString(s);
             }
             catch (e) {
                 egl.printError("Cannot convert time "+time, e);
@@ -122,7 +122,7 @@ egl.defineWidget(
 	"getValueAsText" : function(){
 		if (this.dojoWidget) {
 			if(this.getValue())
-				return(egl.eglx.lang.EString.fromETimestamp(this.getValue(), "HH:mm:ss"));
+				return(egl.eglx.lang.StringLib.formatTime(this.getValue()));
 			else
 				return "";
         }
@@ -133,6 +133,6 @@ egl.defineWidget(
 		if(time == "")
 			this.setValue(null);
 		else
-			this.setValue(egl.stringToTime( time, "HH:mm:ss" ));
+			this.setValue(egl.eglx.lang.ETime.fromEString(time));
 	}
 });
