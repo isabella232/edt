@@ -18,10 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.AnyException;
-import eglx.lang.NullValueException;
-import eglx.lang.NumericOverflowException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -131,7 +128,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
-		short result = 0;;
+		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
 				result = BigDecimal.valueOf(value).shortValueExact();
@@ -148,7 +145,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		if (value == null)
 			return null;
 		boolean throwOverflowExceptions = false; // TODO need program flag on whether to throw exceptions or not.
-		short result = 0;;
+		short result = 0;
 		if (throwOverflowExceptions) {
 			try {
 				result = BigDecimal.valueOf(value.ezeUnbox()).shortValueExact();
@@ -270,13 +267,13 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		short result = 0;;
 		if (throwOverflowExceptions) {
 			try {
-				result = ((Number) value.ezeUnbox()).shortValue();
+				result = value.ezeUnbox().shortValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		} else
-			result = ((Number) value.ezeUnbox()).shortValue();
+			result = value.ezeUnbox().shortValue();
 		return result;
 	}
 
@@ -304,6 +301,33 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 			return null;
 		return asSmallint(value.ezeUnbox());
 	}
+	
+	public static Short asSmallint( byte[] value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		if ( value.length != 2 )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "smallint";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		return (short)(((value[ 0 ] & 0xFF) << 8) | (value[ 1 ] & 0xFF));
+	}
+
+	public static Short asSmallint( EBytes value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asSmallint( value.ezeUnbox() );
+	}
 
 	/**
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
@@ -320,7 +344,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 			return null;
 		return value;
 	}
-
+	
 	public static int bitnot(Short op) throws AnyException {
 		if (op == null) {
 			NullValueException nvx = new NullValueException();
@@ -361,14 +385,12 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Short op1, Short op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2);
+	public static int compareTo(short op1, short op2) throws AnyException {
+		return Short.valueOf(op1).compareTo(op2);
 	}
 
 	public static boolean equals(Short op1, Short op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
@@ -395,15 +417,15 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 		return op1 ^ op2;
 	}
 
-	public static Short leftShift(Short op1, Short op2) {
+	public static short leftShift(short op1, short op2) {
 		return (short)(op1 << op2);
 	}
 
-	public static Short rightShiftArithmetic(Short op1, Short op2) {
+	public static short rightShiftArithmetic(short op1, short op2) {
 		return (short)(op1 >> op2);
 	}
 
-	public static Short rightShiftLogical(Short op1, Short op2) {
+	public static short rightShiftLogical(short op1, short op2) {
 		return (short)(op1 >>> op2);
 	}
 }

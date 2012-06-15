@@ -136,7 +136,7 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	public static Double asFloat(eglx.lang.ENumber value) {
 		if (value == null)
 			return null;
-		return ((Number) value.ezeUnbox()).doubleValue();
+		return value.ezeUnbox().doubleValue();
 	}
 
 	public static Double asFloat(String value) throws AnyException {
@@ -163,6 +163,41 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 		if (value == null)
 			return null;
 		return asFloat(value.ezeUnbox());
+	}
+
+	public static Double asFloat( byte[] value ) throws AnyException
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		if ( value.length != 8 )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "float";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		long bits = ((value[ 0 ] & 0xFFL) << 56)
+				| ((value[ 1 ] & 0xFFL) << 48)
+				| ((value[ 2 ] & 0xFFL) << 40)
+				| ((value[ 3 ] & 0xFFL) << 32)
+				| ((value[ 4 ] & 0xFFL) << 24)
+				| ((value[ 5 ] & 0xFFL) << 16)
+				| ((value[ 6 ] & 0xFFL) << 8)
+				| (value[ 7 ] & 0xFFL);
+		return Double.longBitsToDouble( bits );
+	}
+
+	public static Double asFloat( EBytes value ) throws AnyException
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asFloat( value.ezeUnbox() );
 	}
 
 	/**
@@ -218,14 +253,12 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Double op1, Double op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2);
+	public static int compareTo(double op1, double op2) throws AnyException {
+		return Double.valueOf(op1).compareTo(op2);
 	}
 
 	public static boolean equals(Double op1, Double op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;

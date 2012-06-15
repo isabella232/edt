@@ -18,10 +18,7 @@ import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 
-import eglx.lang.AnyException;
-import eglx.lang.NullValueException;
-import eglx.lang.NumericOverflowException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -249,13 +246,13 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		int result = 0;
 		if (throwOverflowExceptions)
 			try {
-				result = ((Number) value.ezeUnbox()).intValue();
+				result = value.ezeUnbox().intValue();
 			}
 			catch (ArithmeticException ex) {
 				throw new NumericOverflowException();
 			}
 		else
-			result = ((Number) value.ezeUnbox()).intValue();
+			result = value.ezeUnbox().intValue();
 		return result;
 	}
 
@@ -283,6 +280,36 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 			return null;
 		return asInt(value.ezeUnbox());
 	}
+	
+	public static Integer asInt( byte[] value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		if ( value.length != 4 )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "int";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		return ((value[ 0 ] & 0xFF) << 24)
+				| ((value[ 1 ] & 0xFF) << 16)
+				| ((value[ 2 ] & 0xFF) << 8)
+				| (value[ 3 ] & 0xFF);
+	}
+
+	public static Integer asInt( EBytes value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asInt( value.ezeUnbox() );
+	}
 
 	/**
 	 * this is different. Normally we need to place the "as" methods in the corresponding class, but asNumber methods need to
@@ -307,7 +334,7 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	public static int precision() {
 		return Precision;
 	}
-
+	
 	public static int bitnot(Integer op) throws AnyException {
 		if (op == null) {
 			NullValueException nvx = new NullValueException();
@@ -360,26 +387,12 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 		return op1 ^ op2;
 	}
 
-	public static int compareTo(Integer op1, Integer op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2);
-	}
-
-	public static int compareTo(Short op1, Integer op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return ((Integer) op1.intValue()).compareTo(op2);
-	}
-
-	public static int compareTo(Integer op1, Short op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2.intValue());
+	public static int compareTo(int op1, int op2) throws AnyException {
+		return Integer.valueOf(op1).compareTo(op2);
 	}
 
 	public static boolean equals(Integer op1, Integer op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
@@ -413,15 +426,15 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	public static boolean notEquals(Integer op1, Short op2) {
 		return !equals(op1, op2);
 	}
-	public static Integer leftShift(Integer op1, Integer op2) {
+	public static int leftShift(int op1, int op2) {
 		return op1 << op2;
 	}
 
-	public static Integer rightShiftArithmetic(Integer op1, Integer op2) {
+	public static int rightShiftArithmetic(int op1, int op2) {
 		return op1 >> op2;
 	}
 
-	public static Integer rightShiftLogical(Integer op1, Integer op2) {
+	public static int rightShiftLogical(int op1, int op2) {
 		return op1 >>> op2;
 	}
 }

@@ -17,11 +17,9 @@ import java.math.BigInteger;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
+import org.eclipse.edt.javart.util.NumericUtil;
 
-import eglx.lang.AnyException;
-import eglx.lang.NullValueException;
-import eglx.lang.NumericOverflowException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 /**
  * Class to be used in processing Decimal operations
@@ -96,21 +94,6 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		MIN_BYTE_ORIENTED_BD_VALUES[2] = new BigDecimal[19];
 		MIN_BYTE_ORIENTED_BD_VALUES[2][0] = BigDecimal.ZERO;
 	}
-
-	/**
-	 * An array used for the upper limits of digit-oriented items (their length specifies a number of digits not a number of
-	 * bytes) without decimals.
-	 */
-	private static final long[] MAX_DIGIT_ORIENTED_LONG_VALUES = { 0, 9, 99, 999, 9999, 99999, 999999, 9999999, 99999999, 999999999, 9999999999L, 99999999999L,
-		999999999999L, 9999999999999L, 99999999999999L, 999999999999999L, 9999999999999999L, 99999999999999999L, 999999999999999999L, Long.MAX_VALUE };
-
-	/**
-	 * An array used for the lower limits of digit-oriented items (their length specifies a number of digits not a number of
-	 * bytes) without decimals.
-	 */
-	private static final long[] MIN_DIGIT_ORIENTED_LONG_VALUES = { 0, -9, -99, -999, -9999, -99999, -999999, -9999999, -99999999, -999999999, -9999999999L,
-		-99999999999L, -999999999999L, -9999999999999L, -99999999999999L, -999999999999999L, -9999999999999999L, -99999999999999999L, -999999999999999999L,
-		Long.MIN_VALUE };
 
 	/**
 	 * An array used for the upper limits of digit-oriented items (their length specifies a number of digits not a number of
@@ -415,13 +398,13 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale) throws AnyException {
-		if (value == null || max == null || min == null)
+		if (value == null || max == null || min == null) //TODO why check max and min?  can they ever be null?
 			return null;
 		return asDecimal(value, max, min, precision, scale, false);
 	}
 
 	public static BigDecimal asDecimal(BigDecimal value, BigDecimal max, BigDecimal min, int precision, int scale, boolean ignoreOverflow) throws AnyException {
-		if (value == null || max == null || min == null)
+		if (value == null || max == null || min == null) //TODO why check max and min?  can they ever be null?
 			return null;
 		BigDecimal result = value;
 		if (scale < value.scale()) {
@@ -466,9 +449,9 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		if (value == null)
 			return null;
 		if (args.length == 2)
-			return asDecimal(BigDecimal.valueOf(((Number) value.ezeUnbox()).doubleValue()), args[0], args[1]);
+			return asDecimal(BigDecimal.valueOf(value.ezeUnbox().doubleValue()), args[0], args[1]);
 		else
-			return BigDecimal.valueOf(((Number) value.ezeUnbox()).doubleValue());
+			return BigDecimal.valueOf(value.ezeUnbox().doubleValue());
 	}
 
 	public static BigDecimal asDecimal(String value, Integer... args) throws AnyException {
@@ -491,6 +474,34 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 		if (value == null)
 			return null;
 		return asDecimal(value.ezeUnbox(), args);
+	}
+	
+	public static BigDecimal asDecimal( byte[] value, int precision, int scale ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		int byteLength = precision / 2 + 1;
+		if ( value.length != byteLength )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "decimal(" + precision + ',' + scale + ')';
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		return new BigDecimal( NumericUtil.decimalToBigInteger( value, 0, precision ), scale );
+	}
+
+	public static BigDecimal asDecimal( EBytes value, int precision, int scale ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asDecimal( value.ezeUnbox(), precision, scale );
 	}
 
 	/**
@@ -545,13 +556,11 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static int compareTo(BigDecimal op1, BigDecimal op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(BigDecimal op1, BigDecimal op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;

@@ -136,7 +136,7 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	public static Float asSmallfloat(eglx.lang.ENumber value) {
 		if (value == null)
 			return null;
-		return ((Number) value.ezeUnbox()).floatValue();
+		return value.ezeUnbox().floatValue();
 	}
 
 	public static Float asSmallfloat(String value) throws AnyException {
@@ -163,6 +163,39 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 		if (value == null)
 			return null;
 		return asSmallfloat(value.ezeUnbox());
+	}
+
+	public static Float asSmallfloat( byte[] value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		
+		if ( value.length != 4 )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "bytes(" + value.length + ')';
+			tcx.castToName = "smallfloat";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, value, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		int bits = 
+				((value[ 0 ] & 0xFF) << 24)
+				| ((value[ 1 ] & 0xFF) << 16)
+				| ((value[ 2 ] & 0xFF) << 8)
+				| (value[ 3 ] & 0xFF);
+
+		return Float.intBitsToFloat( bits );
+	}
+
+	public static Float asSmallfloat( EBytes value ) throws AnyException 
+	{
+		if ( value == null )
+		{
+			return null;
+		}
+		return asSmallfloat( value.ezeUnbox() );
 	}
 
 	/**
@@ -218,14 +251,12 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 		return StrictMath.pow(op1, op2);
 	}
 
-	public static int compareTo(Float op1, Float op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
-		return op1.compareTo(op2);
+	public static int compareTo(float op1, float op2) throws AnyException {
+		return Float.valueOf(op1).compareTo(op2);
 	}
 
 	public static boolean equals(Float op1, Float op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
