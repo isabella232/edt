@@ -13,7 +13,11 @@ package org.eclipse.edt.javart.util;
 
 import java.math.BigInteger;
 
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.Platform;
+
+import eglx.lang.AnyException;
+import eglx.lang.InvalidArgumentException;
 
 /**
  * Utility methods that are used by the various "Numeric" Value classes.
@@ -353,6 +357,162 @@ public class NumericUtil
 			buffer[ bufferIndex ] = 0;
 			bufferIndex--;
 			digitsToWrite -= 2;
+		}
+	}
+	
+	/**
+	 * Returns a long made from the DECIMAL or PACF data in the buffer.
+	 * 
+	 * @param buffer  where to read the value from.
+	 * @param offset  index of the first byte in the buffer.
+	 * @param length  the number of digits to read.
+	 * @return the value as a long.
+	 * @throws InvalidArgumentException if the bytes are not in the expected format.
+	 */
+	public static long decimalToLong( byte[] buffer, int offset, int length )
+		throws AnyException
+	{
+		// Make a long from the first digit, which is in the high nibble
+		// of the first byte.
+		long result = (buffer[ offset ] & 0xF0) >> 4;  
+		
+		// Now loop over the rest of the digits.
+		for ( int lastByte = offset + (length / 2); offset < lastByte; )
+		{
+			// Pick up the next digit, which is in the low nibble of the byte.
+			int nextDigit = buffer[ offset ] & 0xF;
+			if ( nextDigit < 10 )
+			{
+				result = result * 10 + nextDigit;
+			}
+			else
+			{
+				throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+			}
+			
+			// Move to the next byte.
+			offset++;
+			
+			// Pick up the next digit, which is in the high nibble of the byte.
+			nextDigit = (buffer[ offset ] & 0xF0) >> 4;
+			if ( nextDigit < 10 )
+			{
+				result = result * 10 + nextDigit;
+			}
+			else
+			{
+				throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+			}
+		}
+		
+		// Now check the sign, which is in the low nibble of the byte.  The
+		// negative sign is usually 0xD, but we recognize 0xB as well.
+		int sign = buffer[ offset ] & 0xF;
+		if ( sign == 0xC || sign == 0xF )
+		{
+			return result;
+		}
+		else if ( sign == 0xD || sign == 0xB )
+		{
+			return -result;
+		}
+		else
+		{
+			throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+		}
+	}
+
+	/**
+	 * Returns a BigInteger made from the DECIMAL or PACF data in the buffer.
+	 * 
+	 * @param buffer  where to read the value from.
+	 * @param offset  index of the first byte in the buffer.
+	 * @param length  the number of digits to read.
+	 * @return the value as a BigInteger.
+	 * @throws InvalidArgumentException if the bytes are not in the expected format.
+	 */
+	public static BigInteger decimalToBigInteger( byte[] buffer, int offset, int length )
+		throws AnyException
+	{
+		// Avoid using BigIntegers as much as possible.  Get the bottom 17 digits
+		// and the sign as a long.
+		int byteOfSeventeethDigit = offset + (length / 2) - 8;
+		long bottom = decimalToLong( buffer, byteOfSeventeethDigit, 17 );
+		
+		// Note the sign for later and make the value positive.
+		boolean positive = true;
+		if ( bottom < 0 )
+		{
+			bottom = -bottom;
+			positive = false;
+		}
+		
+		// Make a long from the top 1-15 digits.  Start by grabbing the digits
+		// from the first byte.
+		long top = (buffer[ offset ] & 0xF0) >> 4;
+		if ( top > 9 )
+		{
+			throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+		}
+		int nextDigit = buffer[ offset ] & 0xF;
+		if ( nextDigit < 10 )
+		{
+			top = top * 10 + nextDigit;
+		}
+		else
+		{
+			throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+		}
+		
+		// Collect the rest of the remaining digits.
+		for ( offset++; offset < byteOfSeventeethDigit; offset++ )
+		{
+			// Add in the digit from the high nibble.
+			nextDigit = (buffer[ offset ] & 0xF0) >> 4;
+			if ( nextDigit < 10 )
+			{
+				top = top * 10 + nextDigit;
+			}
+			else
+			{
+				throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+			}
+
+			// Add in the digit from the low nibble.
+			nextDigit = buffer[ offset ] & 0xF;
+			if ( nextDigit < 10 )
+			{
+				top = top * 10 + nextDigit;
+			}
+			else
+			{
+				throw new InvalidArgumentException().fillInMessage( Message.INVALID_DATA, "decimal" );
+			}
+		}
+		
+		// Now merge bottom and top into a BigInteger.
+		BigInteger bi;
+		if ( top == 0 )
+		{
+			// There aren't any significant digits in top.
+			bi = BigInteger.valueOf( bottom );
+		}
+		else
+		{
+			// The value is (top * 10^17) + bottom.
+			bi = BigInteger.valueOf( top );
+			bi = bi.multiply( TEN_TO_THE_SEVENTEENTH );
+			bi = bi.add( BigInteger.valueOf( bottom ) );
+		}
+		
+		// Correct the sign if we changed it.
+		if ( positive )
+		{
+			return bi;
+		}
+		else
+		{
+			return bi.negate();
 		}
 	}
 
