@@ -20,8 +20,7 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.TimestampIntervalMask;
 
-import eglx.lang.AnyException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 /**
  * A class for Times. The value is a Calendar.
@@ -71,21 +70,81 @@ public class ETime extends AnyBoxedObject<Calendar> {
 		return cal;
 	}
 
-	/**
-	 * {@Operation narrow} Converts a string to a time. The string is parsed by searching for the month, then the day, then
-	 * the year. One or two digits can be specified for the month and day. The year requires a minimum of one digit and a
-	 * maximum of at least four digits (in other words, some implementations can support years beyond 9999). One separator
-	 * character is required between the month and day, and another between the day and year. The separator character can be
-	 * anything, even a digit (though that's probably a bad idea) and the two separator characters don't have to be
-	 * identical.
-	 * @throws TypeCastException if the string can't be parsed into a time.
-	 */
 	public static Calendar asTime(EString time) throws TypeCastException {
+		if (time == null)
+			return null;
 		return asTime(time.ezeUnbox());
 	}
 
-	public static Calendar asTime(String time) throws TypeCastException {
-		return convert(time);
+	/**
+	 * {@Operation narrow} Converts a string to a time. The string is parsed
+	 * by searching for the hour, then the minute, then the second.  Two digits
+	 * must be specified for each segment.  One separator character is required between
+	 * the hour and minute, and another between the minute and second.  The separator 
+	 * character must be a ":".
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a time.
+	 */
+	public static Calendar asTime( String time ) throws TypeCastException
+	{
+		if ( time == null )
+			return null;
+
+		// Check the length and separators.
+		if ( time.length() != 8 || time.charAt( 2 ) != ':' || time.charAt( 5 ) != ':' )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "time";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
+		}
+		
+		// Get the digits and put the values into a Calendar.
+		try
+		{
+			int hours = -1;
+			char digit1 = time.charAt( 0 );
+			char digit2 = time.charAt( 1 );
+			if ( '0' <= digit1 && digit1 <= '9' && '0' <= digit2 && digit2 <= '9' )
+			{
+				hours = (digit1 - '0') * 10 + (digit2 - '0');
+			}
+			int minutes = -1;
+			digit1 = time.charAt( 3 );
+			digit2 = time.charAt( 4 );
+			if ( '0' <= digit1 && digit1 <= '9' && '0' <= digit2 && digit2 <= '9' )
+			{
+				minutes = (digit1 - '0') * 10 + (digit2 - '0');
+			}
+			int seconds = -1;
+			digit1 = time.charAt( 6 );
+			digit2 = time.charAt( 7 );
+			if ( '0' <= digit1 && digit1 <= '9' && '0' <= digit2 && digit2 <= '9' )
+			{
+				seconds = (digit1 - '0') * 10 + (digit2 - '0');
+			}
+
+			Calendar cal = DateTimeUtil.getBaseCalendar();
+			cal.set( Calendar.YEAR, cal.get( Calendar.YEAR ) );
+			cal.set( Calendar.MONTH, cal.get( Calendar.MONTH ) );
+			cal.set( Calendar.DATE, cal.get( Calendar.DATE ) );
+			cal.set( Calendar.HOUR_OF_DAY, hours );
+			cal.set( Calendar.MINUTE, minutes );
+			cal.set( Calendar.SECOND, seconds );
+			
+			// Verify that the values are valid.
+			cal.setTimeInMillis( cal.getTimeInMillis() );
+			
+			return cal;
+		}
+		catch ( Exception ex )
+		{
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "time";
+			tcx.initCause( ex );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
+		}
 	}
 
 	public static Calendar asTime(ETime time) throws AnyException {
@@ -118,7 +177,7 @@ public class ETime extends AnyBoxedObject<Calendar> {
 		// Make sure all required fields were found.
 		if (startCode > ETimestamp.HOUR_CODE || endCode < ETimestamp.SECOND_CODE) {
 			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "timestamp";
+			tcx.actualTypeName = "timestamp(\"" + ETimestamp.createMask( startCode, endCode ) + "\")";
 			tcx.castToName = "time";
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, original, tcx.actualTypeName, tcx.castToName );
 		}
@@ -134,7 +193,7 @@ public class ETime extends AnyBoxedObject<Calendar> {
 		}
 		catch (Exception ex) {
 			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "timestamp";
+			tcx.actualTypeName = "timestamp(\"" + ETimestamp.createMask( startCode, endCode ) + "\")";
 			tcx.castToName = "time";
 			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, original, tcx.actualTypeName, tcx.castToName );
@@ -142,145 +201,12 @@ public class ETime extends AnyBoxedObject<Calendar> {
 		return result;
 	}
 
-	public static Calendar convert(String time) {
-		if (time == null)
-			return null;
-		// Quick check for strings that are too long or too short.
-		int length = time.length();
-		if (length < 5 || length > 8) {
-			// Minimum is 5 characters: 1:1:1
-			// Maximum is 10 characters: 11:11:11
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "time";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
-		}
-
-		boolean invalidSeparator = false;
-		int hours = -1;
-		int minutes = -1;
-		int seconds = -1;
-		PARSE: if (length > 0) {
-			// ch is the character we're currently looking at. i is the index of
-			// the next character after ch.
-			char ch;
-			int i = 0;
-			ch = time.charAt(i++);
-			if (ch < '0' || ch > '9') {
-				break PARSE;
-			}
-			// Read in the number of hours.
-			if (i <= length) {
-				hours = ch - '0';
-				if (i < length) {
-					ch = time.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						hours = hours * 10 + ch - '0';
-						if (i < length) {
-							ch = time.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ch != ':')
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = time.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of minutes.
-			if (i <= length) {
-				minutes = ch - '0';
-				if (i < length) {
-					ch = time.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						minutes = minutes * 10 + ch - '0';
-						if (i < length) {
-							ch = time.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || ch != ':')
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = time.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of seconds.
-			if (i <= length) {
-				seconds = ch - '0';
-				if (i < length) {
-					ch = time.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						seconds = seconds * 10 + ch - '0';
-						if (i < length) {
-							ch = time.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i < length)
-					invalidSeparator = true;
-			}
-		}
-
-		// Make sure all required fields were found.
-		if (invalidSeparator || hours == -1 || minutes == -1 || seconds == -1) {
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "time";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
-		}
-
-		// The last thing to do is put the values into a Calendar.
-		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-		cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-		cal.set(Calendar.DATE, cal.get(Calendar.DATE));
-		cal.set(Calendar.HOUR_OF_DAY, hours);
-		cal.set(Calendar.MINUTE, minutes);
-		cal.set(Calendar.SECOND, seconds);
-		// Verify that the values are valid.
-		try {
-			cal.setTimeInMillis(cal.getTimeInMillis());
-		}
-		catch (Exception ex) {
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "time";
-			tcx.initCause( ex );
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, time, tcx.actualTypeName, tcx.castToName );
-		}
-		return cal;
-	}
-
 	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
@@ -290,6 +216,27 @@ public class ETime extends AnyBoxedObject<Calendar> {
 
 	public static boolean notEquals(Calendar op1, Calendar op2) {
 		return !equals(op1, op2);
+	}
+	
+	/**
+	 * Returns the hour of a time
+	 */
+	public static int hourOf(ETime aTime) {
+		return aTime.ezeUnbox().get(Calendar.HOUR_OF_DAY);
+	}
+
+	/**
+	 * Returns the minute of a time
+	 */
+	public static int minuteOf(ETime aTime) {
+		return aTime.ezeUnbox().get(Calendar.MINUTE);
+	}
+
+	/**
+	 * Returns the second of a time
+	 */
+	public static int secondOf(ETime aTime) {
+		return aTime.ezeUnbox().get(Calendar.SECOND);
 	}
 
 	/**
