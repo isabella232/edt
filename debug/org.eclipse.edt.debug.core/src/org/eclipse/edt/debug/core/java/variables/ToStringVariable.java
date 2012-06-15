@@ -38,7 +38,7 @@ public class ToStringVariable extends EGLJavaVariable
 	@Override
 	protected IEGLJavaValue createEGLValue( IJavaValue javaValue )
 	{
-		return new EGLJavaValue( getDebugTarget(), (IJavaValue)javaValue, this ) {
+		return new EGLJavaValue( getDebugTarget(), javaValue, this ) {
 			@Override
 			public String getValueString() throws DebugException
 			{
