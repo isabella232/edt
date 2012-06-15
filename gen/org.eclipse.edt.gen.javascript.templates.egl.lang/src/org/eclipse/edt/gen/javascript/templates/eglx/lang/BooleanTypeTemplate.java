@@ -82,6 +82,8 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 			return " || ";
 		if (op.equals(expr.Op_CONCAT))
 			return " + ";
+		if (op.equals(expr.Op_XOR))
+			return " ^ ";
 		return "";
 	}
 
