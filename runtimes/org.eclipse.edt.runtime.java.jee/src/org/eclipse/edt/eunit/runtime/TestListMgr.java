@@ -12,47 +12,41 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import eglx.http.IHttp;
-import org.eclipse.edt.eunit.runtime.MultiStatus;
 import org.eclipse.edt.eunit.runtime.AssertionFailedException;
 import eglx.lang.SysLib;
-import eglx.lang.AnyException;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.eunit.runtime.ServiceBindingType;
-import eglx.services.ServiceInvocationException;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
 import org.eclipse.edt.runtime.java.eglx.lang.EAny;
 import java.lang.Object;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.runtime.java.eglx.lang.EList;
+import java.util.List;
+import eglx.http.IHttp;
+import eglx.lang.AnyException;
+import eglx.services.ServiceInvocationException;
+import org.eclipse.edt.eunit.runtime.MultiStatus;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.eunit.runtime.ServiceBindingType;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
-import org.eclipse.edt.runtime.java.eglx.lang.EList;
-import java.util.List;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="TestListMgr")
 public class TestListMgr extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
-	@javax.xml.bind.annotation.XmlTransient
 	public ServiceBindingType bindingType;
-	@javax.xml.bind.annotation.XmlTransient
 	public MultiStatus ms;
-	@javax.xml.bind.annotation.XmlTransient
 	public int testIndex;
-	@javax.xml.bind.annotation.XmlTransient
 	public List<String> testMethodNames;
-	@javax.xml.bind.annotation.XmlTransient
 	public List<org.eclipse.edt.javart.Delegate> runTestMtds;
-	@javax.xml.bind.annotation.XmlTransient
 	public String testLibName;
-	@javax.xml.bind.annotation.XmlTransient
 	public List<org.eclipse.edt.javart.Delegate> LibraryStartTests;
-	@javax.xml.bind.annotation.XmlTransient
 	private int libIndex;
 	public LogResult eze_Lib_org_eclipse_edt_eunit_runtime_LogResult;
 	public ConstantsLib eze_Lib_org_eclipse_edt_eunit_runtime_ConstantsLib;
 	public TestListMgr() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeInitialize() {
@@ -65,56 +59,48 @@ public class TestListMgr extends ExecutableBase {
 		testIndex = 1;
 		libIndex = 1;
 	}
-	@org.eclipse.edt.javart.json.Json(name="bindingType", clazz=ServiceBindingType.class, asOptions={})
 	public ServiceBindingType getBindingType() {
 		return bindingType;
 	}
 	public void setBindingType(ServiceBindingType ezeValue) {
 		bindingType = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="ms", clazz=MultiStatus.class, asOptions={})
 	public MultiStatus getMs() {
 		return ms;
 	}
 	public void setMs(MultiStatus ezeValue) {
 		ms = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="testIndex", clazz=EInt.class, asOptions={})
 	public int getTestIndex() {
 		return testIndex;
 	}
 	public void setTestIndex(int ezeValue) {
 		testIndex = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="testMethodNames", clazz=EString.class, asOptions={})
 	public List<String> getTestMethodNames() {
 		return testMethodNames;
 	}
 	public void setTestMethodNames(List<String> ezeValue) {
 		testMethodNames = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="runTestMtds", clazz=org.eclipse.edt.javart.Delegate.class, asOptions={})
 	public List<org.eclipse.edt.javart.Delegate> getRunTestMtds() {
 		return runTestMtds;
 	}
 	public void setRunTestMtds(List<org.eclipse.edt.javart.Delegate> ezeValue) {
 		runTestMtds = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="testLibName", clazz=EString.class, asOptions={})
 	public String getTestLibName() {
 		return testLibName;
 	}
 	public void setTestLibName(String ezeValue) {
 		testLibName = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="LibraryStartTests", clazz=org.eclipse.edt.javart.Delegate.class, asOptions={})
 	public List<org.eclipse.edt.javart.Delegate> getLibraryStartTests() {
 		return LibraryStartTests;
 	}
 	public void setLibraryStartTests(List<org.eclipse.edt.javart.Delegate> ezeValue) {
 		LibraryStartTests = ezeValue;
 	}
-	@org.eclipse.edt.javart.json.Json(name="libIndex", clazz=EInt.class, asOptions={})
 	public int getLibIndex() {
 		return libIndex;
 	}

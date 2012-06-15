@@ -1,0 +1,30 @@
+SMAP
+Constants.java
+egl
+*S egl
+*F
++ 1 Constants.egl
+eglx/lang/Constants.egl
+*L
+16#1:23
+17#1:25
+18#1:27
+19#1:29
+20#1:31
+21#1:33
+22#1:35
+23#1:37
+24#1:39
+25#1:41
+*E
+16#1;isoDateFormat;isoDateFormat;eglx.lang.EString
+17#1;usaDateFormat;usaDateFormat;eglx.lang.EString
+18#1;eurDateFormat;eurDateFormat;eglx.lang.EString
+19#1;jisDateFormat;jisDateFormat;eglx.lang.EString
+20#1;isoTimeFormat;isoTimeFormat;eglx.lang.EString
+21#1;usaTimeFormat;usaTimeFormat;eglx.lang.EString
+22#1;eurTimeFormat;eurTimeFormat;eglx.lang.EString
+23#1;jisTimeFormat;jisTimeFormat;eglx.lang.EString
+24#1;db2TimeStampFormat;db2TimeStampFormat;eglx.lang.EString
+25#1;odbcTimeStampFormat;odbcTimeStampFormat;eglx.lang.EString
+*X

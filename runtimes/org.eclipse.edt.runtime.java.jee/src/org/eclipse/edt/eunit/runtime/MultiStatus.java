@@ -12,18 +12,18 @@
 package org.eclipse.edt.eunit.runtime;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.eunit.runtime.Status;
 import eglx.rbd.StrLib;
-import org.eclipse.edt.eunit.runtime.ConstantsLib;
-import org.eclipse.edt.runtime.java.eglx.lang.EInt;
-import java.lang.Integer;
-import org.eclipse.edt.eunit.runtime.LogResult;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
-import org.eclipse.edt.runtime.java.eglx.lang.EString;
-import java.lang.String;
 import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
 import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
+import org.eclipse.edt.eunit.runtime.ConstantsLib;
+import org.eclipse.edt.eunit.runtime.LogResult;
+import org.eclipse.edt.eunit.runtime.Status;
+import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
 @SuppressWarnings("unused")
 @javax.xml.bind.annotation.XmlRootElement(name="MultiStatus")
 public class MultiStatus extends ExecutableBase {
@@ -50,6 +50,8 @@ public class MultiStatus extends ExecutableBase {
 	
 	public MultiStatus() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeInitialize() {

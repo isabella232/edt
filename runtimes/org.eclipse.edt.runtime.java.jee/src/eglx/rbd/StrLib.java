@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright © 2011, 2012 IBM Corporation and others.
+ * Copyright © 2012 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,33 +12,36 @@
 package eglx.rbd;
 import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
-import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import java.util.Calendar;
+import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
+import java.math.BigDecimal;
 import org.eclipse.edt.runtime.java.eglx.lang.ESmallint;
 import java.lang.Short;
 import eglx.lang.StringLib;
+import org.eclipse.edt.runtime.java.eglx.lang.EBoolean;
+import java.lang.Boolean;
+import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
+import java.lang.Long;
 import org.eclipse.edt.runtime.java.eglx.lang.EDate;
-import java.util.Calendar;
-import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
+import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
+import java.lang.Float;
+import org.eclipse.edt.runtime.java.eglx.lang.EAny;
+import java.lang.Object;
 import org.eclipse.edt.runtime.java.eglx.lang.EFloat;
 import java.lang.Double;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
 import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
-import org.eclipse.edt.runtime.java.eglx.lang.EAny;
-import java.lang.Object;
-import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
-import java.math.BigDecimal;
-import org.eclipse.edt.runtime.java.eglx.lang.ESmallfloat;
-import java.lang.Float;
-import org.eclipse.edt.runtime.java.eglx.lang.EBigint;
-import java.lang.Long;
 @SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="StrLib")
 public class StrLib extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	public StrLib() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeInitialize() {
@@ -55,7 +58,7 @@ public class StrLib extends ExecutableBase {
 		return EString.length(EString.clip(text));
 	}
 	public String clip(String source) {
-		if ((source == null)) {
+		if ((EAny.equals(source, null))) {
 			return null;
 		}
 		else {
@@ -63,7 +66,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String clip(String source, Integer clipType) {
-		if (((source == null) || (clipType == null))) {
+		if (((EAny.equals(source, null)) || (EAny.equals(clipType, null)))) {
 			return null;
 		}
 		else {
@@ -88,7 +91,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatDate(Calendar dateValue, String format) {
-		if (((dateValue == null) || (format == null))) {
+		if (((EAny.equals(dateValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -100,7 +103,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Short intValue, String format) {
-		if (((intValue == null) || (format == null))) {
+		if (((EAny.equals(intValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -112,7 +115,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Integer intValue, String format) {
-		if (((intValue == null) || (format == null))) {
+		if (((EAny.equals(intValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -124,7 +127,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Long intValue, String format) {
-		if (((intValue == null) || (format == null))) {
+		if (((EAny.equals(intValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -136,7 +139,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(BigDecimal decValue, String format) {
-		if (((decValue == null) || (format == null))) {
+		if (((EAny.equals(decValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -144,7 +147,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Float floatValue, String format) {
-		if (((floatValue == null) || (format == null))) {
+		if (((EAny.equals(floatValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -156,7 +159,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatNumber(Double floatValue, String format) {
-		if (((floatValue == null) || (format == null))) {
+		if (((EAny.equals(floatValue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -168,7 +171,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String formatTimeStamp(Calendar timestampvalue, String format) {
-		if (((timestampvalue == null) || (format == null))) {
+		if (((EAny.equals(timestampvalue, null)) || (EAny.equals(format, null)))) {
 			return null;
 		}
 		else {
@@ -177,7 +180,7 @@ public class StrLib extends ExecutableBase {
 	}
 	public String getNextToken(String source, AnyBoxedObject<Integer> index, String delimiters) {
 		int charIndex;
-		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), 2)), EDecimal.asDecimal((short) 1))));
+		charIndex = EInt.asInt((EDecimal.plus((EInt.divide(index.ezeUnbox(), 2)), EDecimal.asDecimal(1))));
 		AnyBoxedObject<Integer> eze$Temp27;
 		eze$Temp27 = org.eclipse.edt.runtime.java.eglx.lang.EAny.ezeWrap(charIndex);
 		String token;
@@ -196,7 +199,7 @@ public class StrLib extends ExecutableBase {
 		return EString.indexOf(source, pattern, startIndex);
 	}
 	public String lowerCase(String characterItem) {
-		if ((characterItem == null)) {
+		if ((EAny.equals(characterItem, null))) {
 			return null;
 		}
 		else {
@@ -204,7 +207,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String spaces(Integer characterCount) {
-		if ((characterCount == null)) {
+		if ((EAny.equals(characterCount, null))) {
 			return null;
 		}
 		else {
@@ -222,7 +225,7 @@ public class StrLib extends ExecutableBase {
 		}
 	}
 	public String upperCase(String characterItem) {
-		if ((characterItem == null)) {
+		if ((EAny.equals(characterItem, null))) {
 			return null;
 		}
 		else {
