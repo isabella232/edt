@@ -20,6 +20,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ConstantField;
+import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
@@ -34,6 +35,7 @@ public class EGLClassTemplate extends JavaTemplate {
 	public void preGenClassBody(EGLClass part, Context ctx) {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
+		ctx.invoke(preGenConstructors, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
 	}
 
@@ -54,6 +56,16 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void preGenField(EGLClass part, Context ctx, Field arg) {
+		ctx.invoke(preGen, arg, ctx);
+	}
+
+	public void preGenConstructors(EGLClass part, Context ctx) {
+		for (Constructor constructor : part.getConstructors()) {
+			ctx.invoke(preGenConstructor, part, ctx, constructor);
+		}
+	}
+
+	public void preGenConstructor(EGLClass part, Context ctx, Constructor arg) {
 		ctx.invoke(preGen, arg, ctx);
 	}
 
@@ -148,10 +160,16 @@ public class EGLClassTemplate extends JavaTemplate {
 	}
 
 	public void genConstructors(EGLClass part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genConstructor, part, ctx, out);
+		ctx.invokeSuper(this, genConstructor, part, ctx, out);
+		for (Constructor constructor : part.getConstructors()) {
+			ctx.invoke(genConstructor, part, ctx, out, constructor);
+			ctx.writeSmapLine();
+		}
 	}
 
-	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out) {}
+	public void genConstructor(EGLClass part, Context ctx, TabbedWriter out, Constructor arg) {
+		ctx.invoke(genDeclaration, arg, ctx, out);
+	}
 
 	public void genInitializeMethods(EGLClass part, Context ctx, TabbedWriter out) {
 		out.println("public void ezeInitialize() {");
