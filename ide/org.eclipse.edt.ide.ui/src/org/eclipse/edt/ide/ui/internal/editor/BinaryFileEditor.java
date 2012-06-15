@@ -43,7 +43,7 @@ public class BinaryFileEditor extends EGLEditor {
 		setRangeIndicator(new DefaultRangeIndicator());
 
 		setEditorContextMenuId("#EGLEditorContext"); //$NON-NLS-1$
-		setRulerContextMenuId("#EGLRulerContext"); //$NON-NLS-1$
+		setRulerContextMenuId("#ReadOnlyEGLRulerContext"); //$NON-NLS-1$
 		setOutlinerContextMenuId("#EGLOutlinerContext"); //$NON-NLS-1$
 
 		// ensure that the TextTools adds its listener before this editor adds its listener

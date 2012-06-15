@@ -420,6 +420,24 @@
      			</visibleWhen>
  			</menu>
  		</menuContribution>
+ 		<menuContribution locationURI="popup:#ReadOnlyEGLRulerContext">
+ 			<menu label="%Command.folding.name" tooltip="%Command.folding.description">
+                <command commandId="org.eclipse.edt.ide.ui.ruler.folding.toggle" style="toggle"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.expandAll"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.collapseAll"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.expand"/>
+         		<command commandId="org.eclipse.edt.ide.ui.ruler.folding.collapse"/>
+				<visibleWhen>
+       				<with variable="activePartId">
+       					<or>
+            				<equals value="org.eclipse.edt.ide.ui.EGLEditor"/>
+            				<equals value="org.eclipse.edt.ide.ui.BinaryFileEditor"/>
+            				<equals value="org.eclipse.edt.ide.rui.visualeditor.EvEditor"/>
+            			</or>
+       				</with>
+     			</visibleWhen>
+ 			</menu>
+ 		</menuContribution>
 	</extension>
 	
 	<extension 
