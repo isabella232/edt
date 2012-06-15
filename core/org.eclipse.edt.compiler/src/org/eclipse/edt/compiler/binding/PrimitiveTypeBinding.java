@@ -351,10 +351,34 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		DATE_FUNCTIONS.put(ADDDAYS.getName(), new NestedFunctionBinding(ADDDAYS.getName(), null, ADDDAYS));
 		DATE_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
 	}
-	
+
+	public static final SystemFunctionBinding HOUROF = SystemLibrary.createSystemFunction(
+			"hourOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+
+	public static final SystemFunctionBinding MINUTEOF = SystemLibrary.createSystemFunction(
+			"minuteOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+
+	public static final SystemFunctionBinding SECONDOF = SystemLibrary.createSystemFunction(
+			"secondOf",
+			null,
+			PrimitiveTypeBinding.getInstance(Primitive.INT),
+			0
+		);
+
 	protected static final Map<String, IDataBinding> TIME_FUNCTIONS = new HashMap();
 	static {		
 		TIME_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
+		TIME_FUNCTIONS.put(HOUROF.getName(), new NestedFunctionBinding(HOUROF.getName(), null, HOUROF));
+		TIME_FUNCTIONS.put(MINUTEOF.getName(), new NestedFunctionBinding(MINUTEOF.getName(), null, MINUTEOF));
+		TIME_FUNCTIONS.put(SECONDOF.getName(), new NestedFunctionBinding(SECONDOF.getName(), null, SECONDOF));
 	}
 
 	public static Map getDateFunctions(){
@@ -403,11 +427,10 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 	public static final SystemFunctionBinding TIMEOF = SystemLibrary.createSystemFunction(
 			"timeOf",
 			null,
-			PrimitiveTypeBinding.getInstance(Primitive.TIMESTAMP),
+			PrimitiveTypeBinding.getInstance(Primitive.TIME),
 			0
 		);
 
-	
 	protected static final Map<String, IDataBinding> TIMESTAMP_FUNCTIONS = new HashMap();
 	static {		
 		TIMESTAMP_FUNCTIONS.put(DAYOF.getName(), new NestedFunctionBinding(DAYOF.getName(), null, DAYOF));
@@ -416,6 +439,9 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		TIMESTAMP_FUNCTIONS.put(WEEKDAYOF.getName(), new NestedFunctionBinding(WEEKDAYOF.getName(), null, WEEKDAYOF));
 		TIMESTAMP_FUNCTIONS.put(DATEOF.getName(), new NestedFunctionBinding(DATEOF.getName(), null, DATEOF));
 		TIMESTAMP_FUNCTIONS.put(TIMEOF.getName(), new NestedFunctionBinding(TIMEOF.getName(), null, TIMEOF));
+		TIMESTAMP_FUNCTIONS.put(HOUROF.getName(), new NestedFunctionBinding(HOUROF.getName(), null, HOUROF));
+		TIMESTAMP_FUNCTIONS.put(MINUTEOF.getName(), new NestedFunctionBinding(MINUTEOF.getName(), null, MINUTEOF));
+		TIMESTAMP_FUNCTIONS.put(SECONDOF.getName(), new NestedFunctionBinding(SECONDOF.getName(), null, SECONDOF));
 		TIMESTAMP_FUNCTIONS.put(EXTEND.getName(), new NestedFunctionBinding(EXTEND.getName(), null, EXTEND));
 	}
 	
