@@ -957,9 +957,9 @@ define(["runtime/edt_runtime_all.js"], function(){
 						if (type == "eglx.lang.EDate") {
 							varValue = egl.eglx.lang.EString.fromEDate(value);
 						}
-	//unsupported 0.7					else if (type == "eglx.lang.ETime") {
-//								varValue = egl.eglx.lang.EString.fromETime(value);
-//							}
+						else if (type == "eglx.lang.ETime") {
+							varValue = egl.eglx.lang.EString.fromETime(value);
+						}
 						else {
 							varValue = egl.eglx.lang.EString.fromETimestamp(value);
 						}
@@ -977,7 +977,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 					}
 				}
 				else if (typeof value === "string") {
-					varValue = "\"" + value + "\""; // display with quotes
+					varValue = value;
 				}
 				else if (typeof value === "number") {
 					varValue = egl.getFormattedNumber(value);
