@@ -64,51 +64,34 @@ public class ExceptionBlockTemplate extends JavaTemplate {
 	/*
 	 * At most, one of the ExceptionBlocks may be null.
 	 */
-	public void genSpecialOnExceptions(ExceptionBlock anyExBlock, ExceptionBlock nullValueExBlock, ExceptionBlock javaOjbectExBlock, Context ctx,
-		TabbedWriter out) {
+	public void genSpecialOnExceptions(ExceptionBlock anyExBlock, ExceptionBlock javaOjbectExBlock, Context ctx, TabbedWriter out) {
 		// When catching one of the special exceptions, we actually catch java.lang.Exception
 		// and then cast to one of our exceptions (or create a new one) before the
 		// statements in the block.
 		String exTemp = ctx.nextTempName();
 		out.println("catch ( java.lang.Exception " + exTemp + " ) {");
 		out.println("org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );");
-		if (nullValueExBlock != null) {
-			Parameter ex = nullValueExBlock.getException();
-			String exClass = ctx.getNativeImplementationMapping(ex.getType());
-			out.println("if ( " + exTemp + " instanceof " + exClass + " || " + exTemp + " instanceof java.lang.NullPointerException ) {");
-			CommonUtilities.generateSmapExtension(ex, ctx);
-			out.print(exClass + ' ');
-			ctx.invoke(genName, ex, ctx, out);
-			out.println(" = (" + exClass + ")org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");");
-			ctx.invoke(genStatement, nullValueExBlock, ctx, out);
-			out.println('}');
-		}
-		if (javaOjbectExBlock != null) {
-			Parameter ex = javaOjbectExBlock.getException();
-			String exClass = ctx.getNativeImplementationMapping(ex.getType());
-			if (nullValueExBlock != null) {
-				out.print("else ");
-			}
-			out.println("if ( org.eclipse.edt.javart.util.JavartUtil.isJavaObjectException(" + exTemp + ") ) {");
-			CommonUtilities.generateSmapExtension(ex, ctx);
-			out.print(exClass + ' ');
-			ctx.invoke(genName, ex, ctx, out);
-			out.println(" = (" + exClass + ")org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");");
-			ctx.invoke(genStatement, javaOjbectExBlock, ctx, out);
-			out.println('}');
-		}
+
+		Parameter ex = javaOjbectExBlock.getException();
+		String exClass = ctx.getNativeImplementationMapping(ex.getType());
+		out.println("if ( org.eclipse.edt.javart.util.JavartUtil.isJavaObjectException(" + exTemp + ") ) {");
+		CommonUtilities.generateSmapExtension(ex, ctx);
+		out.print(exClass + ' ');
+		ctx.invoke(genName, ex, ctx, out);
+		out.println(" = (" + exClass + ")org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");");
+		ctx.invoke(genStatement, javaOjbectExBlock, ctx, out);
+		out.println('}');
+
 		out.println("else {");
-		if (anyExBlock != null) {
-			Parameter ex = anyExBlock.getException();
-			String exClass = ctx.getNativeImplementationMapping(ex.getType());
-			CommonUtilities.generateSmapExtension(ex, ctx);
-			out.print(exClass + ' ');
-			ctx.invoke(genName, ex, ctx, out);
-			out.println(" = org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");");
-			ctx.invoke(genStatement, anyExBlock, ctx, out);
-		} else {
-			out.println("throw (eglx.lang.AnyException)" + exTemp + ';');
-		}
+
+		ex = anyExBlock.getException();
+		exClass = ctx.getNativeImplementationMapping(ex.getType());
+		CommonUtilities.generateSmapExtension(ex, ctx);
+		out.print(exClass + ' ');
+		ctx.invoke(genName, ex, ctx, out);
+		out.println(" = org.eclipse.edt.javart.util.JavartUtil.makeEglException(" + exTemp + ");");
+		ctx.invoke(genStatement, anyExBlock, ctx, out);
+
 		out.println('}');
 		out.println('}');
 	}

@@ -12,12 +12,15 @@
 package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
-import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
+import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Constants;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ExpressionTemplate extends JavaTemplate {
@@ -26,11 +29,43 @@ public class ExpressionTemplate extends JavaTemplate {
 		ctx.invoke(genExpression, expr, ctx, out);
 	}
 
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out, FunctionParameter parameter) {
+		// if the parameter is non-nullable but the argument is nullable, we have a special case
+		if (!parameter.isNullable() && expr.isNullable() && !CommonUtilities.isBoxedOutputTemp(expr, ctx)) {
+			out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+			// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+			if (expr instanceof NullLiteral) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, parameter.getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(") ");
+			}
+			ctx.invoke(genExpression, expr, ctx, out);
+			out.print(")");
+		} else
+			ctx.invoke(genExpression, expr, ctx, out);
+	}
+
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out, FunctionMember parameter) {
+		// if the parameter is non-nullable but the argument is nullable, we have a special case
+		if (!parameter.isNullable() && expr.isNullable() && !CommonUtilities.isBoxedOutputTemp(expr, ctx)) {
+			out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+			// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+			if (expr instanceof NullLiteral) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, parameter.getType(), ctx, out, TypeNameKind.JavaObject);
+				out.print(") ");
+			}
+			ctx.invoke(genExpression, expr, ctx, out);
+			out.print(")");
+		} else
+			ctx.invoke(genExpression, expr, ctx, out);
+	}
+
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out) {
 		String[] details = new String[] { expr.getEClass().getETypeSignature() };
 		EGLMessage message = EGLMessage.createEGLMessage(ctx.getMessageMapping(), EGLMessage.EGL_ERROR_MESSAGE,
 			Constants.EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT, expr, details,
-			CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
+			org.eclipse.edt.gen.CommonUtilities.includeEndOffset(expr.getAnnotation(IEGLConstants.EGL_LOCATION), ctx));
 		ctx.getMessageRequestor().addMessage(message);
 	}
 }

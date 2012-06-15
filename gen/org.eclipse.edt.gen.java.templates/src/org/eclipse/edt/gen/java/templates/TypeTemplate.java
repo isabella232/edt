@@ -373,9 +373,9 @@ public class TypeTemplate extends JavaTemplate {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + ".");
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(");
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 			out.print(", ");
-			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));
 			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 		} else {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
@@ -390,7 +390,7 @@ public class TypeTemplate extends JavaTemplate {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + ".");
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("(");
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getOperation().getParameters().get(0));
 			out.print(")");
 		} else {
 			// we only need to check for minus sign and if found, we need to change it to -()

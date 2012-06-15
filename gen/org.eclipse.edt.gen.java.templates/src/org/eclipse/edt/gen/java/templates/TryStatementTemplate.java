@@ -34,22 +34,18 @@ public class TryStatementTemplate extends JavaTemplate {
 			out.println("org.eclipse.edt.javart.util.JavartUtil.checkHandleable( " + exTemp + " );");
 			out.println('}');
 		} else {
-			// Three kinds of onException blocks require special generation: AnyException,
-			// NullValueException, and JavaObjectException. They require us to catch
-			// all Exceptions, then check if we got the kind of exception we were
-			// looking for. We generate them after the other onException blocks so
-			// they can't cause an "unreachable catch block" error.
+			// Two kinds of onException blocks require special generation: AnyException
+			// and JavaObjectException. They require us to catch all Exceptions, then 
+			// check if we got the kind of exception we were looking for. We generate 
+			// them after the other onException blocks so they don't cause an 
+			// "unreachable catch block" error.
 			ExceptionBlock anyExBlock = null;
-			ExceptionBlock nullValueExBlock = null;
 			ExceptionBlock javaOjbectExBlock = null;
 			int specialBlocksCount = 0;
 			for (ExceptionBlock exceptionBlock : blocks) {
 				String sig = exceptionBlock.getException().getType().getTypeSignature();
 				if (sig.equals("eglx.lang.AnyException")) {
 					anyExBlock = exceptionBlock;
-					specialBlocksCount++;
-				} else if (sig.equals("eglx.lang.NullValueException")) {
-					nullValueExBlock = exceptionBlock;
 					specialBlocksCount++;
 				} else if (sig.equals("eglx.java.JavaObjectException")) {
 					javaOjbectExBlock = exceptionBlock;
@@ -60,10 +56,10 @@ public class TryStatementTemplate extends JavaTemplate {
 			}
 
 			if (specialBlocksCount == 1) {
-				ExceptionBlock block = anyExBlock != null ? anyExBlock : (nullValueExBlock != null ? nullValueExBlock : javaOjbectExBlock);
+				ExceptionBlock block = anyExBlock != null ? anyExBlock : javaOjbectExBlock;
 				ctx.invoke(genOneSpecialOnException, block, ctx, out);
-			} else if (specialBlocksCount > 1) {
-				ctx.invoke(genSpecialOnExceptions, anyExBlock, nullValueExBlock, javaOjbectExBlock, ctx, out);
+			} else if (specialBlocksCount == 2) {
+				ctx.invoke(genSpecialOnExceptions, anyExBlock, javaOjbectExBlock, ctx, out);
 			}
 		}
 	}
