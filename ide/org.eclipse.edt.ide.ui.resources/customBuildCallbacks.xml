@@ -28,7 +28,7 @@
 		<mkdir dir="${build.result.folder}/widgetzips"/>
 		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
 			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.mobile org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
+			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.mobile.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
 	
 		
 		<!-- Store the root of the extracted projects in a property. -->
@@ -79,20 +79,20 @@
 			basedir="${widgetsBaseDir}"
 			includes="org.eclipse.edt.rui.dojo.remote_${edtVersion}/**"/>
 
-		<!-- Copy the widgets project to a new project named org.eclipse.edt.rui.widgets_${edtVersion} -->
-		<property name="dojoMobileDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile_${edtVersion}"/>
+		<!-- Copy the widgets project to a new project named org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion} -->
+		<property name="dojoMobileDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}"/>
 		<copy todir="${dojoMobileDir}" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile/"/>
+			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile.widgets/"/>
 		</copy>
 		
-		<!-- Update .project file for org.eclipse.edt.rui.dojo.mobile to include a version number -->
-		<replace file="${dojoMobileDir}/.project" encoding="UTF-8" token="&lt;name&gt;org.eclipse.edt.rui.dojo.mobile&lt;/name&gt;" value="&lt;name&gt;org.eclipse.edt.rui.dojo.mobile_${edtVersion}&lt;/name&gt;"/>
+		<!-- Update .project file for org.eclipse.edt.rui.dojo.mobile.widgets to include a version number -->
+		<replace file="${dojoMobileDir}/.project" encoding="UTF-8" token="&lt;name&gt;org.eclipse.edt.rui.dojo.mobile.widgets&lt;/name&gt;" value="&lt;name&gt;org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}&lt;/name&gt;"/>
 			
-		<!-- Make org.eclipse.edt.rui.dojo.mobile_${edtVersion}.zip -->
-		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.mobile_${edtVersion}.zip"
+		<!-- Make org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}.zip -->
+		<zip destfile="org.eclipse.edt.ide.ui.rui/org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}.zip"
 			basedir="${widgetsBaseDir}" 
-			includes="org.eclipse.edt.rui.dojo.mobile_${edtVersion}/.settings/** org.eclipse.edt.rui.dojo.mobile_${edtVersion}/EGLSource/** org.eclipse.edt.rui.dojo.mobile_${edtVersion}/icons/** org.eclipse.edt.rui.dojo.mobile_${edtVersion}/WebContent/** org.eclipse.edt.rui.dojo.mobile_${edtVersion}/.classpath org.eclipse.edt.rui.dojo.mobile_${edtVersion}/.eglPath org.eclipse.edt.rui.dojo.mobile_${edtVersion}/.project org.eclipse.edt.rui.dojo.mobile_${edtVersion}/version.txt "
-			excludes="org.eclipse.edt.rui.dojo.mobile_${edtVersion}/build"/>
+			includes="org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/.settings/** org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/EGLSource/** org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/icons/** org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/WebContent/** org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/.classpath org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/.eglPath org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/.project org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/version.txt "
+			excludes="org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/build"/>
 		
 		<!-- Delete the temporary directory. -->
 		<delete dir="${build.result.folder}/widgetzips"/>
