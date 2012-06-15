@@ -6,16 +6,16 @@ egl
 + 1 Constants.egl
 eglx/lang/Constants.egl
 *L
-16#1:12
-17#1:14
-18#1:16
-19#1:18
-20#1:20
-21#1:22
-22#1:24
-23#1:26
-24#1:28
-25#1:30
+16#1:23
+17#1:25
+18#1:27
+19#1:29
+20#1:31
+21#1:33
+22#1:35
+23#1:37
+24#1:39
+25#1:41
 *E
 16#1;isoDateFormat;isoDateFormat;eglx.lang.EString
 17#1;usaDateFormat;usaDateFormat;eglx.lang.EString
