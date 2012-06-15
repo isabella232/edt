@@ -45,6 +45,7 @@ public class InterfaceTemplate extends JavaTemplate {
 		}
 
 		ctx.invoke(genFields, part, ctx, out);
+		ctx.invoke(genConstructors, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
 	}
 
