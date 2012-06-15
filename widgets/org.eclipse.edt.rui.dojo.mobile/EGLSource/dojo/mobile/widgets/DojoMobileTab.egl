@@ -22,8 +22,8 @@ ExternalType DojoMobileTab extends DojoMobileContainer type JavaScriptObject {
 			template = "${typeName}{ title = \"My Tab\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\", */ children = [\n"+
 						"\t\t]}",
 			displayName = "Tab",
-			smallIcon = "icons/ctool16/dojomobiletabpane_16.gif",
-			largeIcon = "icons/ctool24/dojomobiletabpane_24.gif",
+			smallIcon = "icons/ctool16/mobile_tab_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_tab_pal24..gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
 			propertyFilter = [],
 			eventFilterType  = filterKind.excludeAllExcept,

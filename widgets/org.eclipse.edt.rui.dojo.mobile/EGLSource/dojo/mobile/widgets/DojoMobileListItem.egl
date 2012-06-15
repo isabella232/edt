@@ -24,8 +24,8 @@ ExternalType DojoMobileListItem extends DojoMobileContainer type JavaScriptObjec
 			"\t\t/*actionText = \"Jump to View 1\", actionView = View1, */\n" + 
 			"\t\tchildren = [\n\t\t]\n\t}",
 			displayName = "ListItem", 
-			smallIcon = "icons/ctool16/dojomobilelistitem_16.gif",
-			largeIcon = "icons/ctool24/dojomobilelistitem_24.gif",
+			smallIcon = "icons/ctool16/mobile_listItem_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_listItem_pal16.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
 			propertyFilter = [],
 			eventFilterType  = filterKind.excludeAllExcept,

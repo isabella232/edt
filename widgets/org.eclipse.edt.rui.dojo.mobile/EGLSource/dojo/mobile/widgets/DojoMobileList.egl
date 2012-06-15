@@ -32,8 +32,8 @@ ExternalType DojoMobileList extends DojoMobileContainer type JavaScriptObject {
 						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 5\", icon = \"dojo/mobile/images/i-icon-1.png\" }\n" +  
 						"\t\t]\n\t}",
 			displayName = "List",
-			smallIcon = "icons/ctool16/dojomobilelist_16.gif",
-			largeIcon = "icons/ctool24/dojomobilelist_24.gif",
+			smallIcon = "icons/ctool16/mobile_list_pal16.gif",
+			largeIcon = "icons/ctool24/mobile_list_pal24.gif",
 			propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
 			propertyFilter = [],
 			eventFilterType  = filterKind.excludeAll,
