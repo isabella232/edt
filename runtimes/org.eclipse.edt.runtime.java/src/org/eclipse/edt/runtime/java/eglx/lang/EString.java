@@ -23,11 +23,7 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.DateTimeUtil;
 import org.eclipse.edt.javart.util.JavartDateFormat;
 
-import eglx.lang.AnyException;
-import eglx.lang.InvalidArgumentException;
-import eglx.lang.InvalidIndexException;
-import eglx.lang.InvalidPatternException;
-import eglx.lang.TypeCastException;
+import eglx.lang.*;
 
 public class EString extends AnyBoxedObject<String> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -260,56 +256,56 @@ public class EString extends AnyBoxedObject<String> {
 			return null;
 		Calendar cal = (Calendar) original.clone();
 		// Get the format pattern to use.
-		String format = "";
+		StringBuilder format = new StringBuilder(26);
 		String separator = null;
 		if (startCode <= ETimestamp.YEAR_CODE && endCode >= ETimestamp.YEAR_CODE) {
-			format += "yyyy";
+			format.append( "yyyy" );
 			separator = "-";
 		}
 		if (startCode <= ETimestamp.MONTH_CODE && endCode >= ETimestamp.MONTH_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "MM";
+			format.append( "MM" );
 			separator = "-";
 		}
 		if (startCode <= ETimestamp.DAY_CODE && endCode >= ETimestamp.DAY_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "dd";
+			format.append( "dd" );
 			separator = " ";
 		}
 		if (startCode <= ETimestamp.HOUR_CODE && endCode >= ETimestamp.HOUR_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "HH";
+			format.append( "HH" );
 			separator = ":";
 		}
 		if (startCode <= ETimestamp.MINUTE_CODE && endCode >= ETimestamp.MINUTE_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "mm";
+			format.append( "mm" );
 			separator = ":";
 		}
 		if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.SECOND_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "ss";
+			format.append( "ss" );
 			separator = ".";
 		}
 		if (startCode <= ETimestamp.FRACTION6_CODE && endCode >= ETimestamp.FRACTION1_CODE) {
 			if (separator != null) {
-				format += separator;
+				format.append( separator );
 			}
-			format += "SSSSSS";
+			format.append( "SSSSSS".substring( 0, endCode - ETimestamp.FRACTION1_CODE + 1 ) );
 		}
 		// Get a formatter for the value, set it up, and run it.
 		synchronized (DateTimeUtil.LOCK) {
-			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format);
+			JavartDateFormat formatter = DateTimeUtil.getDateFormat(format.toString());
 			if (startCode <= ETimestamp.SECOND_CODE && endCode >= ETimestamp.FRACTION1_CODE) {
 				int micros = cal.get(Calendar.MILLISECOND) * 1000;
 				if (micros < 0) {
@@ -325,7 +321,7 @@ public class EString extends AnyBoxedObject<String> {
 			catch (IllegalArgumentException iax) {
 				TypeCastException tcx = new TypeCastException();
 				tcx.castToName = "string";
-				tcx.actualTypeName = "timestamp";
+				tcx.actualTypeName = "timestamp(\"" + ETimestamp.createMask( startCode, endCode ) + "\")";
 				tcx.initCause( iax );
 				throw tcx.fillInMessage( Message.CONVERSION_ERROR, cal.getTime(), tcx.actualTypeName, tcx.castToName );
 			}
@@ -336,65 +332,42 @@ public class EString extends AnyBoxedObject<String> {
 		return System.getProperty("file.encoding");
 	}
 
-	public static String fromBytes(EBytes value, Integer... length) {
-		if (value == null)
-			return null;
-		return fromBytes(value.ezeUnbox(), getDefaultEncoding(), length);
+	public static String fromBytes(EBytes value) {
+		return fromBytes(value.ezeUnbox());
 	}
 
-	public static String fromBytes(byte[] value, Integer... length) {
-		if (value == null)
-			return null;
-		return fromBytes(value, getDefaultEncoding(), length);
+	public static String fromBytes(byte[] value) {
+		return new String( value );
 	}
 
-	public static String fromBytes(EBytes value, String encoding, Integer... length) {
-		if (value == null)
-			return null;
-		return fromBytes(value.ezeUnbox(), encoding, length);
+	public static String fromBytes(EBytes value, String encoding) {
+		return fromBytes(value.ezeUnbox(), encoding);
 	}
 
-	public static String fromBytes(byte[] value, String encoding, Integer... length) {
-		if (encoding == null)
-			return new String(value);
-		else {
-			try {
-				return new String(value, encoding);
-			}
-			catch (UnsupportedEncodingException e) {
-				InvalidArgumentException ex = new InvalidArgumentException();
-				ex.initCause( e );
-				throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
-			}
+	public static String fromBytes(byte[] value, String encoding) {
+		try {
+			return new String(value, encoding);
+		}
+		catch (UnsupportedEncodingException e) {
+			InvalidArgumentException ex = new InvalidArgumentException();
+			ex.initCause( e );
+			throw ex.fillInMessage( Message.CONVERSION_ERROR, encoding );
 		}
 	}
 
-	public static byte[] toBytes(EString value, Integer... length) {
-		if (value == null)
-			return null;
-		return toBytes(value.ezeUnbox(), getDefaultEncoding(), length);
+	public static byte[] toBytes(String value) {
+		if (value == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
+		return value.getBytes();
 	}
 
-	public static byte[] toBytes(String value, Integer... length) {
-		if (value == null)
-			return null;
-		return toBytes(value, getDefaultEncoding(), length);
-	}
-
-	public static byte[] toBytes(EString value, String encoding, Integer... length) {
-		if (value == null)
-			return null;
-		return toBytes(value.ezeUnbox(), encoding, length);
-	}
-
-	public static byte[] toBytes(String value, String encoding, Integer... length) {
-		if (value == null)
-			return null;
+	public static byte[] toBytes(String value, String encoding) {
+		if (value == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		try {
-			if (encoding == null)
-				return value.getBytes();
-			else
-				return value.getBytes(encoding);
+			return value.getBytes(encoding);
 		}
 		catch (UnsupportedEncodingException e) {
 			InvalidArgumentException ex = new InvalidArgumentException();
@@ -438,13 +411,11 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static int compareTo(String op1, String op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(String op1, String op2) throws AnyException {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
@@ -456,8 +427,9 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static String substring(String str, int start, int end) throws AnyException {
-		if (str == null)
-			return null;
+		if (str == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		int max = str.length();
 		if (start < 1 || start > max) {
 			InvalidIndexException ex = new InvalidIndexException();
@@ -475,6 +447,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the length of the string or limited string
 	 */
 	public static int length(String source) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.length();
 	}
 
@@ -489,6 +464,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Deletes trailing blank spaces and nulls from the start of strings.
 	 */
 	public static String clipLeading(String value) {
+		if (value == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		int lth = value.length();
 		if (lth > 0) {
 			int startingIdx = 0;
@@ -511,6 +489,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Deletes trailing blank spaces and nulls from the end of strings.
 	 */
 	public static String clip(String source) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		int lth = source.length();
 		if (lth > 0) {
 			int startingIdx = lth - 1;
@@ -533,6 +514,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the lowercase value of the string or limited string
 	 */
 	public static String toLowerCase(String source) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.toLowerCase();
 	}
 
@@ -540,6 +524,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the uppercase value of the string or limited string
 	 */
 	public static String toUpperCase(String source) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.toUpperCase();
 	}
 
@@ -547,6 +534,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns whether the string starts with a specific string
 	 */
 	public static boolean startsWith(String source, String value) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.startsWith(value);
 	}
 
@@ -554,6 +544,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns whether the string ends with a specific string
 	 */
 	public static boolean endsWith(String source, String value) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.endsWith(value);
 	}
 
@@ -561,6 +554,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static int indexOf(String source, String value) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.indexOf(value) + 1;
 	}
 
@@ -568,6 +564,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the position of a specific string within a string
 	 */
 	public static int indexOf(String source, String value, int start) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		if (start < 1 || start > source.length()) {
 			InvalidIndexException ex = new InvalidIndexException();
 			ex.index = start;
@@ -580,6 +579,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * returns the last position of a specific string within a string
 	 */
 	public static int lastIndexOf(String source, String value) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.lastIndexOf(value) + 1;
 	}
 
@@ -587,6 +589,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * replaces the first occurrence of a string in another string
 	 */
 	public static String replaceStr(String source, String search, String replacement) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		return source.replace(search, replacement);
 	}
 
@@ -594,6 +599,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns the integer value of a character code within a string
 	 */
 	public static int charCodeAt(String source, int index) {
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		if (index < 1 || index > source.length()) {
 			InvalidIndexException ex = new InvalidIndexException();
 			ex.index = index;
@@ -613,8 +621,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string is like another
 	 */
 	public static boolean isLike(String source, String pattern, String escape) {
-		if (pattern == null || escape == null)
-			return false;
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		// Get the escape character.
 		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
 		// The strategy here is to convert the pattern to java regex, escaping
@@ -687,8 +696,9 @@ public class EString extends AnyBoxedObject<String> {
 	 * Returns whether the string matches another
 	 */
 	public static boolean matchesPattern(String source, String pattern, String escape) {
-		if (pattern == null || escape == null)
-			return false;
+		if (source == null) {
+			throw new NullValueException().fillInMessage(Message.NULL_NOT_ALLOWED);
+		}
 		// Get the escape character.
 		char escapeChar = escape.length() > 0 ? escape.charAt(0) : '\\';
 		// The strategy here is to convert the pattern to java regex, escaping
