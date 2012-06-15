@@ -267,7 +267,7 @@ public class VariableUtil
 		return false;
 	}
 	
-	private static boolean isInstanceOf( IJavaClassType type, String typeName, boolean skipInterfaces ) throws DebugException
+	public static boolean isInstanceOf( IJavaClassType type, String typeName, boolean skipInterfaces ) throws DebugException
 	{
 		if ( typeName.equals( type.getName() ) )
 		{
