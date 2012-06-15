@@ -122,8 +122,6 @@ public class EglarPackageFragment extends PackageFragment {
 				}
 			}
 		} catch (EGLModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return null;
 		
