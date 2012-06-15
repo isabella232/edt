@@ -6,14 +6,14 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.edt.gen.java.templates;bundle-version="0.8.0",
- org.eclipse.edt.compiler;bundle-version="0.8.0",
+Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.8.0",
  org.eclipse.edt.gen;bundle-version="0.8.0",
  org.eclipse.edt.gen.java;bundle-version="0.8.0",
  org.eclipse.edt.mof.egl;bundle-version="0.8.0",
  org.eclipse.edt.mof;bundle-version="0.8.0",
  org.eclipse.edt.gen.java.templates.eglx.persistence;bundle-version="0.8.0",
  org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.0",
- org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.0"
+ org.eclipse.edt.mof.eglx.jtopen;bundle-version="0.8.0",
+ org.eclipse.edt.gen.java.templates.jee;bundle-version="0.8.0"
 Export-Package: org.eclipse.edt.gen.java.eglx.jtopen,
  org.eclipse.edt.gen.java.templates.eglx.jtopen

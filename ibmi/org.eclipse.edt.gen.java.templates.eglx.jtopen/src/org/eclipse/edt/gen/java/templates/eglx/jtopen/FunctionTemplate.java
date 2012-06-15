@@ -16,6 +16,7 @@ import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -25,10 +26,12 @@ import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.EList;
 
 
-public class FunctionTemplate extends JavaTemplate implements Constants{
+public class FunctionTemplate extends JavaTemplate implements Constants, org.eclipse.edt.gen.java.jee.Constants{
 
 	private MemberName createMember(FunctionParameter parameter){
 		MemberName mn = factory.createMemberName();
@@ -46,19 +49,24 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 		out.print("if(");
 		out.print(as400ConnectionName);
 		out.println(" == null){");
-		out.print(as400ConnectionName);
-		out.print(" = ");
 
-		String resourceBinding = (String)ibmiProgram.getValue(subKey_connectionResource);
-		if(resourceBinding != null){
-			out.print("(eglx.jtopen.IBMiConnection)eglx.lang.Resources.getResource(\"");
-			out.print(resourceBinding);
-			out.print("\")");
+		if (function.getAnnotation(org.eclipse.edt.gen.Constants.signature_Resource) != null) {
+			Annotation annot = function.getAnnotation(org.eclipse.edt.gen.Constants.signature_Resource);
+			Field field = factory.createField();
+			field.setName(as400ConnectionName);
+			try {
+				field.setType((Type)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_IBMiConnection));
+			} catch (Exception e) {}
+			ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
+			ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
 		}
 		else{
-			out.print("null");
+			out.print(as400ConnectionName);
+			out.print(" = ");
+			out.print("null;");
 		}
-		out.println(";");
+
+		out.println("}");
 		out.println("returnConnectionToPool = true;");
 		out.println("}");
 		Boolean isServiceProgram = (Boolean)ibmiProgram.getValue(subKey_isServiceProgram);
@@ -86,7 +94,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants{
 	    // Set the procedure to call in the service program.
 		if(isServiceProgram){
 			out.print("\", \"");
-			Annotation externalName = function.getAnnotation(signature_ExternalName);
+			Annotation externalName = function.getAnnotation(org.eclipse.edt.gen.Constants.signature_ExternalName);
 			String functionName = (String)ctx.getAttribute(function, subKey_realFunctionName);
 			if(externalName != null){
 				functionName = 	(String)externalName.getValue();

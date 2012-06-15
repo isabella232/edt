@@ -26,7 +26,6 @@ public interface Constants {
 	
 	//signatures
 	static final String signature_IBMiProgram = "eglx.jtopen.annotations.IBMiProgram";
-	static final String signature_ExternalName = "eglx.lang.ExternalName";
 	static final String signature_IBMiConnection = "eglx.jtopen.IBMiConnection";
 	static final String signature_StructArray = "eglx.jtopen.annotations.StructArray";
 	static final String signature_StructBin1 = "eglx.jtopen.annotations.StructBin1";
@@ -53,7 +52,6 @@ public interface Constants {
 	static final String subKey_ibmiFormat = "ibmiFormat";
 	static final String subKey_ibmiSeparatorChar = "ibmiSeparatorChar";
 	static final String subKey_eglPattern = "eglPattern";
-	static final String subKey_connectionResource = "connectionResourceBindingURI";
 	static final String subKey_isServiceProgram = "isServiceProgram";
 	static final String subKey_libraryName = "libraryName";
 	static final String subKey_programName = "programName";
