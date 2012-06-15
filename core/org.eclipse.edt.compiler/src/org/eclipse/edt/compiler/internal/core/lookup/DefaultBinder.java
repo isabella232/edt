@@ -2045,13 +2045,32 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			else if(operator == BinaryExpression.Operator.BITAND ||
 					operator == BinaryExpression.Operator.BITOR ||
-					operator == BinaryExpression.Operator.XOR ||
 					operator == BinaryExpression.Operator.LEFT_SHIFT ||
 					operator == BinaryExpression.Operator.RIGHT_SHIFT_ARITHMETIC ||
 					operator == BinaryExpression.Operator.RIGHT_SHIFT_LOGICAL) {
 				type1 = inferTypeForBitwiseOperand(operand1, problemRequestor);
 				type2 = type2 == null ? null : inferTypeForBitwiseOperand(operand2, problemRequestor);
 				binaryExpression.setTypeBinding(type2 == null ? type1 : getWiderType(type1, type2));
+			}
+			else if (operator == BinaryExpression.Operator.XOR) {
+				// Xor either has two boolean operands and returns boolean, or it's
+				// a bitwise operator.
+				boolean bitwise = true;
+				if(type1.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING
+						&& type2.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
+					PrimitiveTypeBinding operand1PrimType = (PrimitiveTypeBinding) type1;
+					PrimitiveTypeBinding operand2PrimType = (PrimitiveTypeBinding) type2;
+					if(Primitive.BOOLEAN == operand1PrimType.getPrimitive()
+						&& Primitive.BOOLEAN == operand2PrimType.getPrimitive()) {
+						bitwise = false;
+						binaryExpression.setTypeBinding(PrimitiveTypeBinding.getInstance(Primitive.BOOLEAN));
+					}
+				}
+				if(bitwise){
+					type1 = inferTypeForBitwiseOperand(operand1, problemRequestor);
+					type2 = type2 == null ? null : inferTypeForBitwiseOperand(operand2, problemRequestor);
+					binaryExpression.setTypeBinding(type2 == null ? type1 : getWiderType(type1, type2));
+				}
 			}
 			else {
 				//Boolean expression -- setting type is easy, afterwards need
@@ -2338,7 +2357,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				//let this fall through to validateArithemeticOperation 
 			}
 			else if(Assignment.Operator.MINUS == operator ||			   
-			   Assignment.Operator.TIMES== operator ||
+			   Assignment.Operator.TIMES == operator ||
 			   Assignment.Operator.DIVIDE == operator ||
 			   Assignment.Operator.MODULO == operator ||
 			   Assignment.Operator.TIMESTIMES == operator) {
@@ -2347,12 +2366,28 @@ public abstract class DefaultBinder extends AbstractBinder {
 			}
 			else if(Assignment.Operator.OR == operator ||
 					Assignment.Operator.AND == operator ||
-					Assignment.Operator.XOR == operator ||
 					Assignment.Operator.LEFT_SHIFT == operator ||
 					Assignment.Operator.RIGHT_SHIFT_ARITHMETIC == operator ||
 					Assignment.Operator.RIGHT_SHIFT_LOGICAL == operator) {
 				inferTypeForBitwiseOperand(leftHandSide, problemRequestor);
 				inferTypeForBitwiseOperand(rightHandSide, problemRequestor);
+			}
+			else if(Assignment.Operator.XOR == operator) {
+				// Xor either has two boolean operands or it's a bitwise operator.
+				boolean bitwise = true;
+				if(lhType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING
+						&& rhType.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
+					PrimitiveTypeBinding leftPrimType = (PrimitiveTypeBinding) lhType;
+					PrimitiveTypeBinding rightPrimType = (PrimitiveTypeBinding) rhType;
+					if(Primitive.BOOLEAN == leftPrimType.getPrimitive()
+						&& Primitive.BOOLEAN == rightPrimType.getPrimitive()) {
+						bitwise = false;
+					}
+				}
+				if(bitwise){
+					inferTypeForBitwiseOperand(leftHandSide, problemRequestor);
+					inferTypeForBitwiseOperand(rightHandSide, problemRequestor);
+				}
 			}
 			else if (Assignment.Operator.CONCAT == operator) {
 				
