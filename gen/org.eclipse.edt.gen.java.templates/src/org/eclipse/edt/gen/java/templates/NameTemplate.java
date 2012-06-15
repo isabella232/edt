@@ -21,7 +21,7 @@ public class NameTemplate extends JavaTemplate {
 	public void genAssignment(Name expr, Context ctx, TabbedWriter out, Expression arg1, String arg2) {
 		String propertyFunction = CommonUtilities.getPropertyFunction(expr.getNamedElement(), true, ctx);
 		if (propertyFunction != null) {
-			Function currentFunction = ctx.getCurrentFunction();
+			FunctionMember currentFunction = ctx.getCurrentFunction();
 			if (currentFunction != null && propertyFunction.equals(currentFunction.getName())) {
 				if (expr.getQualifier() != null) {
 					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
