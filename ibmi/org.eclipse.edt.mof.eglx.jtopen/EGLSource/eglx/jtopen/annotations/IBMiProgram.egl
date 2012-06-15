@@ -22,7 +22,6 @@ Record IBMiProgram type Annotation
 	programName string;
 	libraryName string;
 	isServiceProgram boolean = false;
-	connectionResourceBindingURI String?;
 	parameterAnnotations any?[];
 end
 
