@@ -127,6 +127,8 @@ public abstract class JavaTemplate extends AbstractTemplate {
 	public static final String preGenPartImport = "preGenPartImport";
 	public static final String preGenField = "preGenField";
 	public static final String preGenFields = "preGenFields";
+	public static final String preGenConstructor = "preGenConstructor";
+	public static final String preGenConstructors = "preGenConstructors";
 	public static final String preGenFunction = "preGenFunction";
 	public static final String preGenFunctions = "preGenFunctions";
 	public static final String preGenUsedPart = "preGenUsedPart";

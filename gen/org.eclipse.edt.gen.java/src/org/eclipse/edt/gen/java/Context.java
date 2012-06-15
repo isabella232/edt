@@ -24,7 +24,7 @@ import org.eclipse.edt.mof.codegen.api.TemplateContext;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
-import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 
@@ -42,7 +42,7 @@ public class Context extends EglContext {
 	private int lastJavaLineNumber;
 	private int smapStatementLevel;
 
-	private Function currentFunction;
+	private FunctionMember currentFunction;
 	private String currentFile;
 
 	private String smapPreviousLine = "";
@@ -71,11 +71,11 @@ public class Context extends EglContext {
 		}
 	}
 
-	public Function getCurrentFunction() {
+	public FunctionMember getCurrentFunction() {
 		return currentFunction;
 	}
 
-	public void setCurrentFunction(Function currentFunction) {
+	public void setCurrentFunction(FunctionMember currentFunction) {
 		this.currentFunction = currentFunction;
 	}
 
@@ -247,7 +247,7 @@ public class Context extends EglContext {
 			super.invoke(genMethod, object, ctx, out);
 	}
 
-	public void genSmapEnd(Function object, TabbedWriter out) {
+	public void genSmapEnd(FunctionMember object, TabbedWriter out) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
