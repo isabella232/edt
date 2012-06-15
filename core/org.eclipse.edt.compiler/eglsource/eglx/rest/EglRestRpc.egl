@@ -13,8 +13,11 @@ package eglx.rest;
 
 Record EglRestRpc type Annotation
 { 
-	targets = [ ElementKind.functionMbr]
+	targets = [ ElementKind.functionMbr], 
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EglRestRpcAnnotationTypeBinding"
+	
 }
+	serviceName string?;
 //	requestFormat eglx.services.Encoding?;
 	requestCharset string = "UTF-8";
 	requestContentType string?;//default based on encoding

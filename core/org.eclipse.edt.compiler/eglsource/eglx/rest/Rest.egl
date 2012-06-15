@@ -11,11 +11,12 @@
  *******************************************************************************/
 package eglx.rest;
 
-Record DeleteRest type Annotation
+Record Rest type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.DeleteRestAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.RestAnnotationTypeBinding"
 }
+	method HttpMethod?;
 	uriTemplate string?;
 	requestFormat eglx.services.Encoding?;
 	requestCharset string = "UTF-8";

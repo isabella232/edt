@@ -13,7 +13,7 @@ package eglx.lang;
 
 Record Resource type Annotation
 {
-	targets = [elementKind.fieldMbr]
+	targets = [elementKind.fieldMbr, ElementKind.functionMbr]
 //	targetTypes = [InterfacePart, ServicePart]
 }
   	uri string;
