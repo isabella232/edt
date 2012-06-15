@@ -29,7 +29,7 @@ import eglx.lang.TypeCastException;
  */
 public class EDate extends AnyBoxedObject<Calendar> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
-
+	
 	public EDate() {
 		this(DateTimeUtil.getNewCalendar());
 	}
@@ -71,21 +71,129 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return cal;
 	}
 
-	/**
-	 * {@Operation narrow} Converts a string to a date. The string is parsed by searching for the month, then the day, then
-	 * the year. One or two digits can be specified for the month and day. The year requires a minimum of one digit and a
-	 * maximum of at least four digits (in other words, some implementations can support years beyond 9999). One separator
-	 * character is required between the month and day, and another between the day and year. The separator character can be
-	 * anything, even a digit (though that's probably a bad idea) and the two separator characters don't have to be
-	 * identical.
-	 * @throws TypeCastException if the string can't be parsed into a date.
-	 */
 	public static Calendar asDate(EString date) throws TypeCastException {
+		if (date == null)
+			return null;
 		return asDate(date.ezeUnbox());
 	}
-
+	
+	/**
+	 * {@Operation narrow} Converts a string to a date.  The string is parsed
+	 * by searching for the month, then the day, then the year.  One or two digits
+	 * can be specified for the month and day.  The year requires a minimum of one
+	 * digit and a maximum of at least four digits (in other words, some implementations
+	 * can support years beyond 9999).  One separator character is required between
+	 * the month and day, and another between the day and year.  The separator 
+	 * character can be anything, even a digit (though that's probably a bad idea)
+	 * and the two separator characters don't have to be identical.  
+	 *
+	 * @throws TypeCastException if the string can't be parsed into a date.
+	 */
 	public static Calendar asDate(String date) throws TypeCastException {
-		return convert(date);
+		if (date == null)
+			return null;
+		
+		// Quick check for strings that are too long or too short.
+		int length = date.length();
+		if (length < 5 || length > 10) {
+			// Minimum is 5 characters: 1/1/1
+			// Maximum is 10 characters: 11/11/1111
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
+
+		int months = -1;
+		int days = -1;
+		int years = -1;
+		PARSE: {
+			// ch is the character we're currently looking at. i is the index of
+			// the next character after ch.
+			char ch;
+			int i;
+			
+			// Read in the number of months.
+			ch = date.charAt(0);
+			if (ch < '0' || ch > '9') {
+				break PARSE;
+			}
+			months = ch - '0';
+			ch = date.charAt(1);
+			i = 2;
+			if ('0' <= ch && ch <= '9') {
+				months = months * 10 + ch - '0';
+				i++;
+			}
+
+			// Read in the number of days.
+			ch = date.charAt(i++);
+			if (ch < '0' || ch > '9') {
+				break PARSE;
+			}
+			days = ch - '0';
+			ch = date.charAt(i++);
+			if ('0' <= ch && ch <= '9') {
+				days = days * 10 + ch - '0';
+				i++;
+			}
+			
+			// Read in the number of years.
+			if (i < length) {
+				int tempYears = 0;
+				ch = date.charAt(i++);
+				if ('0' <= ch && ch <= '9') {
+					tempYears = ch - '0';
+					if (i < length) {
+						ch = date.charAt(i++);
+						if ('0' <= ch && ch <= '9') {
+							tempYears = tempYears * 10 + ch - '0';
+							if (i < length) {
+								ch = date.charAt(i++);
+								if ('0' <= ch && ch <= '9') {
+									tempYears = tempYears * 10 + ch - '0';
+									if (i < length) {
+										ch = date.charAt(i++);
+										tempYears = tempYears * 10 + ch - '0';
+									}
+								}
+							}
+						}
+					}
+				}
+				
+				if ( i == length && '0' <= ch && ch <= '9' )
+				{
+					years = tempYears;
+				}
+			}
+		}
+
+		// Make sure all required fields were found.
+		if (months == -1 || days == -1 || years == -1) {
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
+
+		// The last thing to do is put the values into a Calendar.
+		Calendar cal = DateTimeUtil.getBaseCalendar();
+		cal.set(Calendar.YEAR, years);
+		cal.set(Calendar.MONTH, months - 1);
+		cal.set(Calendar.DATE, days);
+		// Verify that the values are valid.
+		try {
+			cal.setTimeInMillis(cal.getTimeInMillis());
+		}
+		catch (Exception ex) {
+			TypeCastException tcx = new TypeCastException();
+			tcx.actualTypeName = "string";
+			tcx.castToName = "date";
+			tcx.initCause( ex );
+			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
+		}
+		return cal;
 	}
 
 	public static Calendar asDate(EDate date) throws AnyException {
@@ -118,7 +226,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		// Make sure all required fields were found.
 		if (startCode > ETimestamp.YEAR_CODE || endCode < ETimestamp.DAY_CODE) {
 			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "timestamp";
+			tcx.actualTypeName = "timestamp(\"" + ETimestamp.createMask( startCode, endCode ) + "\")";
 			tcx.castToName = "date";
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, original, tcx.actualTypeName, tcx.castToName );
 		}
@@ -134,7 +242,7 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		}
 		catch (Exception ex) {
 			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "timestamp";
+			tcx.actualTypeName = "timestamp(\"" + ETimestamp.createMask( startCode, endCode ) + "\")";
 			tcx.castToName = "date";
 			tcx.initCause( ex );
 			throw tcx.fillInMessage( Message.CONVERSION_ERROR, original, tcx.actualTypeName, tcx.castToName );
@@ -142,158 +250,12 @@ public class EDate extends AnyBoxedObject<Calendar> {
 		return result;
 	}
 
-	public static Calendar convert(String date) {
-		if (date == null)
-			return null;
-		// Quick check for strings that are too long or too short.
-		int length = date.length();
-		if (length < 5 || length > 10) {
-			// Minimum is 5 characters: 1/1/1
-			// Maximum is 10 characters: 11/11/1111
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "date";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
-		}
-
-		boolean invalidSeparator = false;
-		int months = -1;
-		int days = -1;
-		int years = -1;
-		PARSE: if (length > 0) {
-			// ch is the character we're currently looking at. i is the index of
-			// the next character after ch.
-			char ch;
-			int i = 0;
-			ch = date.charAt(i++);
-			if (ch < '0' || ch > '9') {
-				break PARSE;
-			}
-			// Read in the number of months.
-			if (i <= length) {
-				months = ch - '0';
-				if (i < length) {
-					ch = date.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						months = months * 10 + ch - '0';
-						if (i < length) {
-							ch = date.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || (ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = date.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of days.
-			if (i <= length) {
-				days = ch - '0';
-				if (i < length) {
-					ch = date.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						days = days * 10 + ch - '0';
-						if (i < length) {
-							ch = date.charAt(i++);
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i >= length || (ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Skip ahead to the next digit.
-			while (i < length && !('0' <= ch && ch <= '9')) {
-				ch = date.charAt(i++);
-				if (!(ch >= '0' && ch <= '9'))
-					invalidSeparator = true;
-			}
-			// Read in the number of years.
-			if (i <= length) {
-				years = ch - '0';
-				if (i < length) {
-					ch = date.charAt(i++);
-					if ('0' <= ch && ch <= '9') {
-						years = years * 10 + ch - '0';
-						if (i < length) {
-							ch = date.charAt(i++);
-							if ('0' <= ch && ch <= '9') {
-								years = years * 10 + ch - '0';
-								if (i < length) {
-									ch = date.charAt(i++);
-									if ('0' <= ch && ch <= '9') {
-										years = years * 10 + ch - '0';
-										if (i < length) {
-											ch = date.charAt(i++);
-										} else {
-											break PARSE;
-										}
-									}
-								} else {
-									break PARSE;
-								}
-							}
-						} else {
-							break PARSE;
-						}
-					}
-				} else {
-					break PARSE;
-				}
-				// ensure valid separator if more digits present
-				if (i < length)
-					invalidSeparator = true;
-			}
-		}
-
-		// Make sure all required fields were found.
-		if (invalidSeparator || months == -1 || days == -1 || years == -1) {
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "date";
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
-		}
-
-		// The last thing to do is put the values into a Calendar.
-		Calendar cal = DateTimeUtil.getBaseCalendar();
-		cal.set(Calendar.YEAR, years);
-		cal.set(Calendar.MONTH, months - 1);
-		cal.set(Calendar.DATE, days);
-		// Verify that the values are valid.
-		try {
-			cal.setTimeInMillis(cal.getTimeInMillis());
-		}
-		catch (Exception ex) {
-			TypeCastException tcx = new TypeCastException();
-			tcx.actualTypeName = "string";
-			tcx.castToName = "date";
-			tcx.initCause( ex );
-			throw tcx.fillInMessage( Message.CONVERSION_ERROR, date, tcx.actualTypeName, tcx.castToName );
-		}
-		return cal;
-	}
-
-	public static int compareTo(Calendar op1, Calendar op2) throws AnyException {
-		if (op1 == null && op2 == null)
-			return 0;
+	public static int compareTo(Calendar op1, Calendar op2) {
 		return op1.compareTo(op2);
 	}
 
 	public static boolean equals(Calendar op1, Calendar op2) {
-		if (op1 == null && op2 == null)
+		if (op1 == op2)
 			return true;
 		if (op1 == null || op2 == null)
 			return false;
