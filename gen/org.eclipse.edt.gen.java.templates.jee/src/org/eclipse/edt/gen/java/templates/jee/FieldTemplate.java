@@ -45,8 +45,8 @@ public class FieldTemplate extends org.eclipse.edt.gen.java.templates.FieldTempl
 	}
 
 	public void genResourceAnnotation(Field field, Context ctx, TabbedWriter out) {
-		if (field.getAnnotation(Constants.AnnotationResource) != null) {
-			Annotation annot = field.getAnnotation(Constants.AnnotationResource);
+		if (field.getAnnotation(org.eclipse.edt.gen.Constants.signature_Resource) != null) {
+			Annotation annot = field.getAnnotation(org.eclipse.edt.gen.Constants.signature_Resource);
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}

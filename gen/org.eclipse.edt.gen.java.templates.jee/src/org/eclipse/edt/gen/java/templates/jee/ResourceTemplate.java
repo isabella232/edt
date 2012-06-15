@@ -72,8 +72,8 @@ public class ResourceTemplate extends JavaTemplate implements Constants {
 		invocation.setQualifier(partName);
 		StringLiteral uri = factory.createStringLiteral();
 		invocation.getArguments().add(uri);
-		if (annot.getValue(Constants.SubKey_uri) instanceof String && !((String) annot.getValue(Constants.SubKey_uri)).isEmpty()) {
-			uri.setValue((String) annot.getValue(Constants.SubKey_uri));
+		if (annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri) instanceof String && !((String) annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri)).isEmpty()) {
+			uri.setValue((String) annot.getValue(org.eclipse.edt.gen.Constants.SubKey_uri));
 		} else {
 			uri.setValue("binding:" + field.getName());
 		}
