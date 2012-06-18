@@ -54,6 +54,7 @@ import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.ThisExpression;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.TypeName;
+import org.eclipse.edt.mof.egl.UnaryExpression;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -101,6 +102,22 @@ public class CommonUtilities {
 		b.setCharAt(0, Character.toUpperCase(name.charAt(0)));
 		return b.toString();
 	}
+	
+	@SuppressWarnings("static-access")
+	public static String getNativeRuntimeOperationName(UnaryExpression expr) throws GenerationException {
+		// safety check to make sure the operation has been defined properly
+		if (expr.getOperation() == null || expr.getOperation().getName() == null)
+			throw new GenerationException();
+		// process the operator
+		String op = expr.getOperator();
+		if (op.equals(expr.Op_BITWISENOT))
+			return "bitnot";
+		if (op.equals(expr.Op_NEGATE))
+			return "negate";
+		if (op.equals(expr.Op_NOT))
+			return "not";
+		return "UnknownOp";
+	}
 
 	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
@@ -145,6 +162,12 @@ public class CommonUtilities {
 			return "bitand";
 		if (op.equals(expr.Op_BITOR))
 			return "bitor";
+		if (op.equals(expr.Op_LEFTSHIFT))
+			return "leftShift";
+		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			return "rightShiftArithmetic";
+		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			return "rightShiftLogical";
 		if (op.equals(expr.Op_POWER))
 			return "power";
 		if (op.equals(expr.Op_IN))
