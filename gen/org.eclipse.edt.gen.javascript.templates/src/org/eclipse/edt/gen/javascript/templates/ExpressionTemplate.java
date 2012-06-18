@@ -12,8 +12,12 @@
 package org.eclipse.edt.gen.javascript.templates;
 
 import org.eclipse.edt.gen.javascript.Context;
+import org.eclipse.edt.gen.javascript.templates.JavaScriptTemplate.TypeNameKind;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
 
 public class ExpressionTemplate extends JavaScriptTemplate {
@@ -24,6 +28,38 @@ public class ExpressionTemplate extends JavaScriptTemplate {
 	
 	public void genTypeBasedExpression(Expression expr, Context ctx, TabbedWriter out, Type arg) {
 		ctx.invoke(genExpression, expr, ctx, out);
+	}
+	
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out, FunctionParameter parameter) {
+		// if the parameter is non-nullable but the argument is nullable, we have a special case
+		if (!parameter.isNullable() && expr.isNullable()) {
+			out.print("egl.checkNull(");
+			// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+			if (expr instanceof NullLiteral) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, parameter.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+				out.print(") ");
+			}
+			ctx.invoke(genExpression, expr, ctx, out);
+			out.print(")");
+		} else
+			ctx.invoke(genExpression, expr, ctx, out);
+	}
+
+	public void genExpression(Expression expr, Context ctx, TabbedWriter out, FunctionMember parameter) {
+		// if the parameter is non-nullable but the argument is nullable, we have a special case
+		if (!parameter.isNullable() && expr.isNullable()) {
+			out.print("egl.checkNull(");
+			// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+			if (expr instanceof NullLiteral) {
+				out.print("(");
+				ctx.invoke(genRuntimeTypeName, parameter.getType(), ctx, out, TypeNameKind.JavascriptImplementation);
+				out.print(") ");
+			}
+			ctx.invoke(genExpression, expr, ctx, out);
+			out.print(")");
+		} else
+			ctx.invoke(genExpression, expr, ctx, out);
 	}
 
 }

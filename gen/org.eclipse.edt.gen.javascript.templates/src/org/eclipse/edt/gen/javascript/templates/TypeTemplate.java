@@ -288,13 +288,14 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) throws GenerationException {
 		// if either side of this expression is nullable, or if there is no direct java operation, we need to use the runtime
-		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
+		if ((arg.getLHS().isNullable() || arg.getRHS().isNullable()) || (arg.getLHS() instanceof ArrayAccess || arg.getRHS() instanceof ArrayAccess)
+				|| CommonUtilities.getNativeJavaScriptOperation(arg, ctx).length() == 0) {
 			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 			out.print("("); // TODO sbg Not needed for JavaScript? ezeProgram, ");
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 			out.print(", ");
-			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));
 			out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 		} else {
 			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
@@ -303,7 +304,14 @@ public class TypeTemplate extends JavaScriptTemplate {
 		}
 	}
 
-	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, UnaryExpression arg) {
+	public void genUnaryExpression(Type type, Context ctx, TabbedWriter out, UnaryExpression arg) throws GenerationException {
+		if (arg.getExpression().isNullable()) {
+			out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + ".");
+			out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
+			out.print("(");
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getOperation().getParameters().get(0));
+			out.print(")");
+		} else 
 		// we only need to check for minus sign and if found, we need to change it to -()
 		if (arg.getOperator().equals("-") || arg.getOperator().equals("!") || arg.getOperator().equals("~")) {
 			out.print(arg.getOperator() + "(");
