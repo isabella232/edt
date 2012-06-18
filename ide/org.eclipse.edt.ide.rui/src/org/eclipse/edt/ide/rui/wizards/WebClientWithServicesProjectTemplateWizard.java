@@ -25,7 +25,7 @@ public class WebClientWithServicesProjectTemplateWizard extends
 	}
 	
 	protected ProjectWizardRUILibraryPage getLibraryPage(){
-		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage);
+		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage, template.getWidgetLibraryContainer());
 	}
 
 }

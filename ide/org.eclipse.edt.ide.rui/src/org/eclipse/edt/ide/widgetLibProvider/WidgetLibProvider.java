@@ -27,6 +27,7 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 	protected ImageDescriptor logo;
 	protected String detail;
 	protected boolean selected;
+	protected boolean isMandatory;
 	protected String resourcePluginName;
 	protected String resourceFolder;
 	protected String projectName;	
@@ -156,9 +157,6 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 			logo = EDTUIPlugin.imageDescriptorFromPlugin(element.getContributor().getName(), element.getAttribute(PROVIDER_LOGO));
 		}
 		detail = element.getAttribute(PROVIDER_DETAIL);
-		if (element.getAttribute(PROVIDER_SELECTED) != null) { 
-			selected = Boolean.parseBoolean(element.getAttribute(PROVIDER_SELECTED));
-		}		
 		resourcePluginName = element.getAttribute(PROVIDER_RESOURCE_PLUGIN_NAME);
 		resourceFolder = element.getAttribute(PROVIDER_RESOURCE_FOLDER);
 		projectName = element.getAttribute(PROVIDER_PROJECT_NAME);		
@@ -171,6 +169,22 @@ public class WidgetLibProvider implements IWidgetLibProvider {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void setIsSelect(boolean isSelected) {
+		this.selected = isSelected;
+		
+	}
+
+	@Override
+	public void setIsMandatory(boolean isMandatory) {
+		this.isMandatory = isMandatory;
+	}
+
+	@Override
+	public boolean isMandatory() {
+		return isMandatory;
 	}
 
 	

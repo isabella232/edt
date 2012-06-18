@@ -26,6 +26,7 @@ Register the Preference Pages
             id="org.eclipse.edt.ide.ui.projects.webClient"
             name="%EGLWebClientProject"
             templateClass="org.eclipse.edt.ide.rui.internal.project.WebClientProjectTemplate"
+            widgetLibraryContainer="org.eclipse.edt.ide.ui.projects.webClient.widget.libraryProviderContainer"
             wizardClass="org.eclipse.edt.ide.rui.wizards.WebClientProjectTemplateWizard">
       </template>
       <template
@@ -36,7 +37,32 @@ Register the Preference Pages
             id="org.eclipse.edt.ide.ui.projects.webClientWithServices"
             name="%EGLWebClientWithServicesProject"
             templateClass="org.eclipse.edt.ide.rui.internal.project.WebClientWithServicesProjectTemplate"
+            widgetLibraryContainer="org.eclipse.edt.ide.ui.projects.webClient.widget.libraryProviderContainer"
             wizardClass="org.eclipse.edt.ide.rui.wizards.WebClientWithServicesProjectTemplateWizard">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.projects"
+            default="false"
+            description="%EGLMobileWebClientProjectDescription"
+            icon="icons/templates/WebClientTemplate.gif"
+            id="org.eclipse.edt.ide.ui.projects.mobileWebClient"
+            name="%EGLMobileWebClientProject"
+            widgetLibraryContainer="org.eclipse.edt.ide.ui.projects.mobileWebServiceClient.widget.libraryProviderContainer"
+            templateClass="org.eclipse.edt.ide.rui.internal.project.MobileWebClientProjectTemplate"
+            wizardClass="org.eclipse.edt.ide.rui.wizards.MobileWebClientProjectTemplateWizard">
+      </template>
+      
+      <template
+            category="org.eclipse.edt.ide.ui.projects"
+            default="false"
+            description="%EGLMobileWebClientWithServicesProjectDescription"
+            icon="icons/templates/WebClientWithServicesTemplate.gif"
+            id="org.eclipse.edt.ide.ui.projects.mobileWebClientWithServices"
+            name="%EGLMobileWebClientWithServicesProject"
+            widgetLibraryContainer="org.eclipse.edt.ide.ui.projects.mobileWebServiceClient.widget.libraryProviderContainer"
+            templateClass="org.eclipse.edt.ide.rui.internal.project.MobileWebClientWithServicesProjectTemplate"
+            wizardClass="org.eclipse.edt.ide.rui.wizards.MobileWebClientWithServicesProjectTemplateWizard">
       </template>
       
       <template
@@ -46,6 +72,7 @@ Register the Preference Pages
             icon="icons/templates/HelloWorldTemplate.gif"
             id="org.eclipse.edt.ide.ui.projects.rui.helloworld"
             name="%RUIHelloWorldProject"
+            widgetLibraryContainer="org.eclipse.edt.ide.ui.projects.helloWorld.libraryProviderContainer"
             templateClass="org.eclipse.edt.ide.rui.internal.project.HelloWorldProjectTemplate" >
       </template>
             
@@ -66,7 +93,6 @@ Register the Preference Pages
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="true"
             version="0.8.1">
       </provider>
       <provider
@@ -80,7 +106,6 @@ Register the Preference Pages
             provider="Eclipse.org"
              resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="false"
             version="0.8.1"
             version_desc="Dojo 1.7.1">
       </provider>
@@ -95,9 +120,62 @@ Register the Preference Pages
             provider="Eclipse.org"
             resourceFolder="/org.eclipse.edt.ide.ui.rui/"
             resourcePluginName="org.eclipse.edt.ide.ui.resources"
-            selected="true"
             version="0.8.1"
             version_desc="Dojo 1.7.1 Remote">
       </provider>
+      <provider 
+            detail="%MobileDojoWidgetLibraryDescription"
+            id="org.eclipse.edt.rui.dojo.mobile_0.8.1"
+            importClass="org.eclipse.edt.ide.rui.internal.project.DefaultWidgetLibraryImporter"
+            libname="%MobileDojoWidgetLibraryName"
+            logo="icons/dojo16_logo.png"
+            projectName="org.eclipse.edt.rui.dojo.mobile.widgets_0.8.1"
+            provider="Eclipse.org"
+            resourceFolder="/org.eclipse.edt.ide.ui.rui/"
+            resourcePluginName="org.eclipse.edt.ide.ui.resources"
+            version="0.8.1"
+            version_desc="Dojo 1.7.1 Mobile">
+      </provider>
+      <providerContainer
+            id="org.eclipse.edt.ide.ui.projects.webClient.widget.libraryProviderContainer">
+         <providerRef
+               id="org.eclipse.edt.rui.widgets_0.8.1"
+               isMandatory="true"
+               selected="true">
+         </providerRef>
+         <providerRef
+               id="org.eclipse.edt.rui.dojo_0.8.1"
+               selected="false">
+         </providerRef>
+         <providerRef
+               id="org.eclipse.edt.rui.dojo.remote_0.8.1"
+               selected="true">
+         </providerRef>
+      </providerContainer>
+      <providerContainer
+            id="org.eclipse.edt.ide.ui.projects.mobileWebServiceClient.widget.libraryProviderContainer">
+         <providerRef
+               id="org.eclipse.edt.rui.widgets_0.8.1"
+               selected="false">
+         </providerRef>
+         <providerRef
+               id="org.eclipse.edt.rui.dojo.mobile_0.8.1"
+               isMandatory="true"
+               selected="true">
+         </providerRef>
+      </providerContainer>
+      <providerContainer
+            id="org.eclipse.edt.ide.ui.projects.helloWorld.libraryProviderContainer">
+         <providerRef
+               id="org.eclipse.edt.rui.widgets_0.8.1"
+               isMandatory="true"
+               selected="true">
+         </providerRef>
+         <providerRef
+               id="org.eclipse.edt.rui.dojo.remote_0.8.1"
+               isMandatory="true"
+               selected="true">
+         </providerRef>
+      </providerContainer>
    </extension>
 </plugin>

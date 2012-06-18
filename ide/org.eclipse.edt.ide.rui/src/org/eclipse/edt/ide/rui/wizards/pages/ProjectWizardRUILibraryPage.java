@@ -75,7 +75,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class ProjectWizardRUILibraryPage extends ProjectWizardPage {	
 	
-	private static final String RUI_WIDGET_LIBRARY_ID = "org.eclipse.edt.rui.widgets_0.8.1";
 	public static IStatus OK_STATUS = new Status(IStatus.OK, "org.eclipse.edt.ide.rui", 0, "OK", null); //$NON-NLS-1$
 	private static final String BASE_PACKAGE_HINT = "com.mycompany.myapp"; //$NON-NLS-1$
 	private Label basePackageLabel;
@@ -90,11 +89,13 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 	private IWidgetLibProvider[] libProviders;
 	
 	private Hashtable libraryImages = new Hashtable();
+	private String widgetLibraryContainer;
 
-	public ProjectWizardRUILibraryPage(String pageName) {
+	public ProjectWizardRUILibraryPage(String pageName, String widgetLibraryContainer) {
 		super(pageName);
 		setTitle(RuiNewWizardMessages.RUILibraryPageTitle);
 		setDescription(RuiNewWizardMessages.RUILibraryPageDescription);
+		this.widgetLibraryContainer = widgetLibraryContainer;
 		populateLibraryData();
 	}
 	
@@ -193,7 +194,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 	
 	private void populateLibraryData() {
 		// Get the project name
-		libProviders = WidgetLibProviderManager.getInstance().getProviders();
+		libProviders = WidgetLibProviderManager.getInstance().getProviders(widgetLibraryContainer);
 		
 		if (libProviders != null) {
 			String id, libName, resourcePluginName, resourceFolder, projectName;
@@ -284,7 +285,8 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 		fTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				LibraryNode newElement = (LibraryNode) event.getElement();
-				if(!(event.getChecked()) && newElement.getId().equals(RUI_WIDGET_LIBRARY_ID)){
+				if( (!(event.getChecked()) )
+						&& newElement.getWProvider().isMandatory()){
 					fTableViewer.setChecked(newElement, true);
 					return;
 				}
@@ -357,7 +359,7 @@ public class ProjectWizardRUILibraryPage extends ProjectWizardPage {
 			// New element has conflict with the current selected library, stop adding it
 			fTableViewer.setChecked(element, true);
 
-			if(((LibraryNode)element).getId().equals(RUI_WIDGET_LIBRARY_ID)){
+			if(((LibraryNode)element).getWProvider().isMandatory()){
 				fTableViewer.setGrayed(element, true);
 			}
 			

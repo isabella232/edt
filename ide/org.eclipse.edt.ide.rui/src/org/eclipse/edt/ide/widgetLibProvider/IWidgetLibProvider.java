@@ -25,12 +25,13 @@ public interface IWidgetLibProvider {
 	public static final String PROVIDER_VERSION_DESC = "version_desc"; //$NON-NLS-1$
 	public static final String PROVIDER_LOGO = "logo"; //$NON-NLS-1$
 	public static final String PROVIDER_DETAIL = "detail"; //$NON-NLS-1$
-	public static final String PROVIDER_SELECTED = "selected"; //$NON-NLS-1$
 	public static final String PROVIDER_RESOURCE_PLUGIN_NAME = "resourcePluginName"; //$NON-NLS-1$
 	public static final String PROVIDER_RESOURCE_FOLDER = "resourceFolder"; //$NON-NLS-1$
 	public static final String PROVIDER_PROJECT_NAME = "projectName"; //$NON-NLS-1$
 	public static final String PROVIDER_IMPORT_CLASS = "importClass"; //$NON-NLS-1$	
 	public static final String PROVIDER_CONFLICT_CLASS = "conflictClass"; //$NON-NLS-1$	
+	public static final String PROVIDER_REF_SELECTED = "selected"; //$NON-NLS-1$
+	public static final String PROVIDER_REF_IS_MANDATORY = "isMandatory"; //$NON-NLS-1$
 	
 	public String getId();
 	/**
@@ -95,6 +96,12 @@ public interface IWidgetLibProvider {
 	public IWidgetLibraryImporter getImporter();
 	
 	public IWidgetLibraryConflict getConflictClass();
+	
+	public void setIsSelect(boolean isSelected);
+	
+	public void setIsMandatory(boolean isMandatory);
+	
+	public boolean isMandatory();
 	
 	/**
 	 * Initializes the template using the supplied IConfigurationElement. 

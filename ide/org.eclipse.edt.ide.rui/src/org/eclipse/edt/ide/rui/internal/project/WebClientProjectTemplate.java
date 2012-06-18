@@ -57,7 +57,7 @@ public class WebClientProjectTemplate extends AbstractProjectTemplateClass {
 		
 		List listOps = new ArrayList();
 		List dependencyOps = new ArrayList();
-		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
+		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders(eglProjConfiguration.getSelectedProjectTemplate().getWidgetLibraryContainer());
 		
 		if (providers != null) {
 			String id, projectName, resourcePluginName, resourceFolder;

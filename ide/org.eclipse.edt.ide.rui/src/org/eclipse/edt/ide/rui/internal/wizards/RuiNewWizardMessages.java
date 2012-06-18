@@ -26,6 +26,7 @@ public class RuiNewWizardMessages extends NLS {
 	}	
 	
 	public static String RUILibraryPage;
+	public static String MobileRUILibraryPage;
 	public static String RUILibraryPageTitle;
 	public static String RUILibraryPageDescription;
 	public static String RUILibraryPage_widget_library;
@@ -39,4 +40,6 @@ public class RuiNewWizardMessages extends NLS {
 	public static String ImportTask_Unzip;
 	public static String WebClientProjectTemplateWizard_0;
 	public static String WebClientWithServicesProjectTemplateWizard_0;
+	public static String MobileWebClientProjectTemplateWizard_0;
+	public static String MobileWebClientWithServicesProjectTemplateWizard_0;
 }

@@ -30,30 +30,7 @@ public class HelloWorldProjectTemplate extends WebClientWithServicesProjectTempl
 	public List<WorkspaceModifyOperation> getImportProjectOperations(
 			ProjectConfiguration eglProjConfiguration, int eglFeatureMask,
 			ISchedulingRule rule) {
-		List listOps = new ArrayList();
-		String[] ids = { "org.eclipse.edt.rui.widgets_0.8.1", "org.eclipse.edt.rui.dojo.remote_0.8.1" };
-
-		List dependencyOps = new ArrayList();
-		IWidgetLibProvider[] providers = WidgetLibProviderManager.getInstance().getProviders();
-		
-		if (providers != null) {
-			String id, projectName, resourcePluginName, resourceFolder;
-			for (int i = 0; i < providers.length; i++) {
-				id = providers[i].getId();
-				projectName = providers[i].getProjectName();
-				resourcePluginName = providers[i].getResourcePluginName();
-				resourceFolder = providers[i].getResourceFolder();
-				for (int j = 0; j < ids.length; j++) {
-					if (id.equals(ids[j])) {
-						IWidgetLibraryImporter importer = providers[i].getImporter();
-						listOps.add(importer.getImportRUIProjectsOperation(  rule, resourcePluginName, resourceFolder, projectName));
-						dependencyOps.add(importer.getAddProjectDependencyOperation(  eglProjConfiguration, rule, projectName ));						
-					}
-				}
-			}
-		}
-		
-		listOps.addAll(dependencyOps);
+		List listOps = super.getImportProjectOperations(eglProjConfiguration, eglFeatureMask, rule);
 				
 		ImportSampleCodeOperation loadSampleCode = new ImportSampleCodeOperation(rule, "org.eclipse.edt.rui.samples.helloworld_0.8.0", eglProjConfiguration.getProjectName() );
 		listOps.add(loadSampleCode);

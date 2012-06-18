@@ -32,13 +32,13 @@ public class WebClientProjectTemplateWizard extends ProjectTemplateWizard {
 	}
 	
 	protected ProjectWizardRUILibraryPage getLibraryPage(){
-		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage);
+		return new ProjectWizardRUILibraryPage(RuiNewWizardMessages.RUILibraryPage, template.getWidgetLibraryContainer());
 	}
 
 	public boolean performFinish() {
 		//if the wizard is not displayed, set the default widget library
 		if(libraryPage == null){
-			IWidgetLibProvider[] libProviders = WidgetLibProviderManager.getInstance().getProviders();
+			IWidgetLibProvider[] libProviders = WidgetLibProviderManager.getInstance().getProviders(template.getWidgetLibraryContainer());
 			if (libProviders != null) {
 				ArrayList<String> selectedWidgetLibraries = new ArrayList<String>();				
 				for (int i = 0; i < libProviders.length; i++) {
