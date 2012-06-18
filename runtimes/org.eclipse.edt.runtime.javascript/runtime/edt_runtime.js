@@ -171,8 +171,20 @@ egl.eglx.lang.EInt16.bitor = function (x1, x2) {
 egl.eglx.lang.EInt16.bitxor = function (x1, x2) {
 	return egl.bitxor(x1, x2); 
 };
+egl.eglx.lang.EInt16.bitnot = function (x) {
+    return egl.bitnot(x); 
+};
 egl.eglx.lang.EInt16.asNumber= function (x) {
 	return egl.boxAny(x, "I;");
+};
+egl.eglx.lang.EInt16.leftShift = function (x1, x2) {
+    return x1 << x2; 
+};
+egl.eglx.lang.EInt16.rightShiftArithmetic = function (x1, x2) {
+    return x1 >> x2; 
+};
+egl.eglx.lang.EInt16.rightShiftLogical = function (x1, x2) {
+    return x1 >>> x2; 
 };
 
 /****************************************************************************
@@ -226,9 +238,22 @@ egl.eglx.lang.EInt32.bitor = function (x1, x2) {
 egl.eglx.lang.EInt32.bitxor = function (x1, x2) {
 	return egl.bitxor(x1, x2); 
 };
+egl.eglx.lang.EInt32.bitnot = function (x) {
+    return egl.bitnot(x); 
+};
 egl.eglx.lang.EInt32.asNumber= function (x) {
 	return egl.boxAny(x, "I;");
 };
+egl.eglx.lang.EInt32.leftShift = function (x1, x2) {
+    return x1 << x2; 
+};
+egl.eglx.lang.EInt32.rightShiftArithmetic = function (x1, x2) {
+    return x1 >> x2; 
+};
+egl.eglx.lang.EInt32.rightShiftLogical = function (x1, x2) {
+    return x1 >>> x2; 
+};
+
 
 /****************************************************************************
  * EFloat32 covers the egl type "smallfloat" and is represented as a native 

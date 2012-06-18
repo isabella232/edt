@@ -1487,6 +1487,11 @@ egl.bitxor = function(var1, var2) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	return var1 ^ var2;
 };
+egl.bitnot = function(var1) {
+    if (var1 == null)
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    return ~var1;
+};
 
 egl.nullabledivide = function(var1, var2) {
 	if (var1 == null || var2 == null)
