@@ -618,6 +618,8 @@ define(["runtime/edt_runtime_all.js"], function(){
 	};
 
 	egl.addSingleUseBreakpoint = function(file, line) {
+		file = decodeURIComponent(file);
+		
 		var breakpointsForFile = null;
 		for(var i = 0; i < egl.singleUseBreakpoints.length; i++){
 			if(egl.singleUseBreakpoints[i].key == file){
@@ -638,25 +640,25 @@ define(["runtime/edt_runtime_all.js"], function(){
 	};
 
 	egl.isBreakpoint = function(file, line) {
-		if (egl.breakpointManagerEnabled) {
-			// Check for single-use breakpoint.
-			for( var i = 0; i < egl.singleUseBreakpoints.length; i++){
-				var key = egl.singleUseBreakpoints[i].key;
-				if(key == file){
-					for( var j = 0; j < egl.singleUseBreakpoints[i].value.length; j++){
-						var nextLine = egl.singleUseBreakpoints[i].value[j];
-						if(nextLine == line) {
-							// Remove it now that it's been used.
-							egl.singleUseBreakpoints[i].value.splice(j,1);
-							if(egl.singleUseBreakpoints[i].value.length == 0){
-								egl.singleUseBreakpoints.splice(i,1);
-							}
-							return true;
+		// Check for single-use breakpoint.
+		for( var i = 0; i < egl.singleUseBreakpoints.length; i++){
+			var key = egl.singleUseBreakpoints[i].key;
+			if(key == file){
+				for( var j = 0; j < egl.singleUseBreakpoints[i].value.length; j++){
+					var nextLine = egl.singleUseBreakpoints[i].value[j];
+					if(nextLine == line) {
+						// Remove it now that it's been used.
+						egl.singleUseBreakpoints[i].value.splice(j,1);
+						if(egl.singleUseBreakpoints[i].value.length == 0){
+							egl.singleUseBreakpoints.splice(i,1);
 						}
+						return true;
 					}
 				}
 			}
-			
+		}
+		
+		if (egl.breakpointManagerEnabled) {
 			for( var i = 0; i < egl.breakpoints.length; i++){
 				var key = egl.breakpoints[i].key;
 				if(key == file){
@@ -901,6 +903,11 @@ define(["runtime/edt_runtime_all.js"], function(){
 							else if(response && response.length > 14 && "addBreakpoint" == response.substring(0,13)) {
 								var arr = response.substring(14).split(",");
 								egl.addBreakpoint(arr[0], arr[1], arr[2] == "true");
+								backgroundRequest = true;
+							}
+							else if(response && response.length > 23 && "addSingleUseBreakpoint" == response.substring(0,22)) {
+								var arr = response.substring(23).split(",");
+								egl.addSingleUseBreakpoint(arr[0], arr[1]);
 								backgroundRequest = true;
 							}
 							else if(response && response.length > 17 && "removeBreakpoint" == response.substring(0,16)) {
