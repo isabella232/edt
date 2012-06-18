@@ -29,10 +29,10 @@ import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.Type;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -305,7 +305,7 @@ public abstract class XXXrestValidator implements IAnnotationValidationRule {
 		}
 		
 		if (!methodIsValid()) {
-			problemRequestor.acceptProblem(getResponseFormatNode(), IProblemRequestor.XXXREST_NO_METHOD, IMarker.SEVERITY_ERROR, new String[] { getResponseFormat(), IEGLConstants.PROPERTY_RESPONSEFORMAT});
+			problemRequestor.acceptProblem(errorNode, IProblemRequestor.XXXREST_NO_METHOD, IMarker.SEVERITY_ERROR, new String[] {});
 		}
 		
 		
