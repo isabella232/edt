@@ -476,6 +476,10 @@ public class StandardEGLElementContentProvider implements ITreeContentProvider, 
 		if (element instanceof IEGLProject) {
 			return ((IEGLProject)element).getEGLModel();
 		}
+		if( (element instanceof EglarPackageFragmentRoot) && !(element instanceof EglarPackageFragmentRootContainer)){
+			EglarPackageFragmentRoot epfr = (EglarPackageFragmentRoot)element;
+			return new EglarPackageFragmentRootContainer(epfr.getEGLProject());
+		}
 		// try to map resources to the containing package fragment
 		if (element instanceof IResource) {
 			IResource parent= ((IResource)element).getParent();

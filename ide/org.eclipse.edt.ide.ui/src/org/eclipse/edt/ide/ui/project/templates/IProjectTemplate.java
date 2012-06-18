@@ -98,4 +98,10 @@ public interface IProjectTemplate {
 	 */
 	public void init(IConfigurationElement configElement);
 	
+
+	public String getWidgetLibraryContainer();
+
+	public void setWidgetLibraryContainer(String widgetLibraryContainer);
+
+	
 }

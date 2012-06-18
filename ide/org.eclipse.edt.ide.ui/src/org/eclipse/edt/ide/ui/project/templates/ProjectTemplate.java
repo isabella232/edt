@@ -26,6 +26,7 @@ public class ProjectTemplate implements IProjectTemplate {
 	protected ImageDescriptor icon;
 	protected IWizardNode wizardNode;
 	protected IProjectTemplateClass templateClass;
+	protected String widgetLibraryContainer;
 	
 	
 
@@ -115,6 +116,10 @@ public class ProjectTemplate implements IProjectTemplate {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+
+		if (element.getAttribute("widgetLibraryContainer") != null) {
+			widgetLibraryContainer = element.getAttribute("widgetLibraryContainer");
+		}
 	}
 
 	@Override
@@ -122,4 +127,13 @@ public class ProjectTemplate implements IProjectTemplate {
 		return templateClass.canFinish();
 	}
 
+	public String getWidgetLibraryContainer() {
+		return widgetLibraryContainer;
+	}
+
+	public void setWidgetLibraryContainer(String widgetLibraryContainer) {
+		this.widgetLibraryContainer = widgetLibraryContainer;
+	}
+
+	
 }

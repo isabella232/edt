@@ -119,6 +119,13 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="widgetLibraryContainer" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
