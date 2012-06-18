@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
@@ -94,9 +95,17 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 			MemberAccess ma = (MemberAccess)ctx.invoke(getFunctionAccess, callStatement, callStatement.getInvocationTarget(), ctx);
 			Function callTarget = (Function)ma.getNamedElement();
 			ctx.putAttribute(callTarget, subKey_realFunctionName, callTarget.getName());
-			if(callStatement.getUsing() != null){
-				ctx.putAttribute(rest, subKey_CallStatement, callStatement);
+			if(callStatement.getUsing() == null){
+				try {
+					callStatement = (CallStatement)callStatement.clone();
+					NewExpression newExpression = factory.createNewExpression();
+					newExpression.setId(Constants.signature_HttpProxy);
+					callStatement.setUsing(newExpression);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			ctx.putAttribute(rest, subKey_CallStatement, callStatement);
 			ctx.invoke(genRestInvocation,rest.getEClass(),ctx, out, rest, callTarget);
 		}
 	}
