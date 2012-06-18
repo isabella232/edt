@@ -62,7 +62,6 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	private Color green;
 	private Color purple;
 	private Color orange;
-	private Color blue;
 	
 	public TestResultPkgNodeDetailsPage(ResultStatisticCnts statistic){
 		statisticCnt = statistic;
@@ -92,14 +91,6 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 
 	}
 
-	protected Color getBlue(){
-		if(blue == null){
-			blue = new Color(Display.getCurrent(), new RGB(0, 0, 255));
-			colors.add(blue);
-		}
-		return blue;
-	}
-	
 	protected Color getGreen(){
 		if(green == null){
 			green = new Color(Display.getCurrent(), new RGB(0, 128, 0));
@@ -202,19 +193,10 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 	
 	protected void createControlsInTopSection(FormToolkit toolkit, Composite parent) {
 		createSpacer(toolkit, parent, nColumnSpan);
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "testCnt: " + statisticCnt.getTestCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "expCnt: " + statisticCnt.getExpectedCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "passedCnt: " + statisticCnt.getPassedCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "failedCnt: " + statisticCnt.getFailedCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "errCnt: " + statisticCnt.getErrCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "badCnt: " + statisticCnt.getBadCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan,  "notRunCnt: " + statisticCnt.getNotRunCnt());
-		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "");
 		
 		createSummaryLine(toolkit, parent, statisticCnt.getPassedCnt(), " PASSED.", getGreen(), true);
 		createSummaryLine(toolkit, parent, statisticCnt.getFailedCnt(), " FAILED.", getRed(), false);
-		createSummaryLine(toolkit, parent, statisticCnt.getErrCnt(), " HAVE ERROR.", getPurple(), false);
-		createSummaryLine(toolkit, parent, statisticCnt.getBadCnt(), " ARE BAD.", getBlue(), false);
+		createSummaryLine(toolkit, parent, statisticCnt.getExCnt(), " THREW EXCEPTION.", getPurple(), false);
 		createSummaryLine(toolkit, parent, statisticCnt.getNotRunCnt(), " SKIPPED.", getOrange(), false);
 				
 		if(statisticCnt.getTestCnt() != statisticCnt.getExpectedCnt())
@@ -229,6 +211,15 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 			String errMsg = "NOTE: You need birt chart engine to view pie chart, please install BIRT feature (version 2.6.2 and up)";
 			createErrorReadOnlyNoBoarderText(toolkit, parent, nColumnSpan, errMsg);
 		}
+
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "");
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "testCnt: " + statisticCnt.getTestCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "expCnt: " + statisticCnt.getExpectedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "passedCnt: " + statisticCnt.getPassedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "failedCnt: " + statisticCnt.getFailedCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "exCnt: " + statisticCnt.getExCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "badCnt: " + statisticCnt.getBadCnt());
+		createReadOnlyNoBorderText(toolkit, parent, nColumnSpan, "notRunCnt: " + statisticCnt.getNotRunCnt());
 	}
 
 	private void createPieChart(Composite parent) {		
@@ -259,10 +250,10 @@ public class TestResultPkgNodeDetailsPage implements IDetailsPage {
 		
 		// Data Set
 		TextDataSet categoryValues = TextDataSetImpl.create( new String[]{
-				"Passed", "Failed", "Error", "Bad", "Not Run"} );//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				"Passed", "Failed", "Exception", "Skipped"} );//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		NumberDataSet seriesOneValues = NumberDataSetImpl.create( new double[]{
 				statisticCnt.getPassedCnt(), statisticCnt.getFailedCnt(), 
-				statisticCnt.getErrCnt(), statisticCnt.getBadCnt(), statisticCnt.getNotRunCnt()
+				statisticCnt.getExCnt(), statisticCnt.getNotRunCnt()
 		} );
 		
 		

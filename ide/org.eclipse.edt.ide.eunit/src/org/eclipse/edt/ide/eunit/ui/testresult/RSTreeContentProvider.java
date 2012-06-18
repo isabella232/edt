@@ -132,11 +132,11 @@ public class RSTreeContentProvider implements ITreeContentProvider{
 		int expectedCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_expCnt));
 		int passedCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_passedCnt));
 		int failedCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_failedCnt));
-		int errCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_errCnt));
+		int exCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_errCnt));
 		int badCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_badCnt));
 		int notRunCnt = Integer.parseInt(el.getAttribute(ConstantUtil.ATTRIB_notRunCnt));
 		
-		ResultStatisticCnts statisticCnt = new ResultStatisticCnts(testCnt, expectedCnt, passedCnt, failedCnt, errCnt, badCnt, notRunCnt);
+		ResultStatisticCnts statisticCnt = new ResultStatisticCnts(testCnt, expectedCnt, passedCnt, failedCnt, exCnt, badCnt, notRunCnt);
 		
 		Record_ResultSummary rs = new Record_ResultSummary(pkgName, name, resultCode, statisticCnt); 
 		return rs;

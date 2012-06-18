@@ -59,14 +59,13 @@ public class Pie
 		palette.getEntries().add( ColorDefinitionImpl.create( 0, 128, 0 ) );
 		palette.getEntries().add( ColorDefinitionImpl.RED() );
 		palette.getEntries().add( ColorDefinitionImpl.create( 184, 0, 73 ) );
-		palette.getEntries().add( ColorDefinitionImpl.BLUE() );
 		palette.getEntries().add( ColorDefinitionImpl.create( 255, 127, 0 ) );
 		sd.setSeriesPalette( palette );
 
 		// Orthogonal Series
-		DataPointComponent dpc = DataPointComponentImpl.create(DataPointComponentType.ORTHOGONAL_VALUE_LITERAL, JavaNumberFormatSpecifierImpl.create("###,###"));
-		DataPointComponent dpca = DataPointComponentImpl.create(DataPointComponentType.PERCENTILE_ORTHOGONAL_VALUE_LITERAL, JavaNumberFormatSpecifierImpl.create("##.##%"));
+		DataPointComponent dpc = DataPointComponentImpl.create(DataPointComponentType.ORTHOGONAL_VALUE_LITERAL, JavaNumberFormatSpecifierImpl.create("###,### "));
 		DataPointComponent dpcb = DataPointComponentImpl.create(DataPointComponentType.BASE_VALUE_LITERAL, StringFormatSpecifierImpl.create(""));
+		DataPointComponent dpca = DataPointComponentImpl.create(DataPointComponentType.PERCENTILE_ORTHOGONAL_VALUE_LITERAL, JavaNumberFormatSpecifierImpl.create("',' ##.##%"));
 				
 		PieSeries sePie = (PieSeries) PieSeriesImpl.create( );
 		sePie.setDataSet( seriesOneValues );
@@ -75,7 +74,8 @@ public class Pie
 		sePie.getDataPoint().getComponents().clear();
 		sePie.getDataPoint().getComponents().add(dpc);
 		sePie.getDataPoint().getComponents().add(dpcb);
-		sePie.getDataPoint().getComponents().add(dpca);		
+		sePie.getDataPoint().getComponents().add(dpca);
+		sePie.getDataPoint().setSeparator( "" );
 		sePie.getLabel().setVisible(true);
 		
 		SeriesDefinition sdCity = SeriesDefinitionImpl.create( );		

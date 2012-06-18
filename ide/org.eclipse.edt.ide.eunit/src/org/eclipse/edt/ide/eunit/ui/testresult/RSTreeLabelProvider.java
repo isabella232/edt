@@ -67,33 +67,38 @@ public class RSTreeLabelProvider extends LabelProvider implements IColorProvider
 	}
 
 	@Override
-	public Color getForeground(Object element) {
-		if(element instanceof Record_ResultSummary){
-			Record_ResultSummary rs = (Record_ResultSummary)element;
-			switch(rs.resultCode){
-			case ConstantUtil.SPASSED:
+	public Color getForeground( Object element ) 
+	{
+		int resultCode = -1;
+
+		if ( element instanceof Record_ResultSummary )
+		{
+			resultCode = ((Record_ResultSummary)element).resultCode;
+		}
+		else if ( element instanceof TestResultPkgNode )
+		{
+			resultCode = ((TestResultPkgNode)element).statisticCnts.overallResult();
+		}
+		else if ( element instanceof TestResultRootNode )
+		{
+			resultCode = ((TestResultRootNode)element).statisticCnts.overallResult();
+		}
+		
+		switch ( resultCode )
+		{
+			case ConstantUtil.PASSED:
 				return green;
-			case ConstantUtil.SFAILED:
+			case ConstantUtil.FAILED:
 				return red;
-			case ConstantUtil.SERROR:
+			case ConstantUtil.EXCEPTION:
 				return purple;
-			case ConstantUtil.SNOT_RUN:
+			case ConstantUtil.NOT_RUN:
 				return orange;
 			default:
-				return red;
-			}			
+				return null;
 		}
-						
-		if(element instanceof TestResultRootNode){
-			return ((TestResultRootNode)element).isSuccessful ? green : red;
-		}
-
-		if(element instanceof TestResultPkgNode)	
-			return ((TestResultPkgNode)element).isSuccessful ? green : red;
-		return null;
 	}
 	
-
 	public void dispose() {
 		super.dispose();
 		

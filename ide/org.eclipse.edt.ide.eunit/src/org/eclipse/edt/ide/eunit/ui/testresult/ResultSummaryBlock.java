@@ -77,7 +77,7 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 		private int expCnt;
 		private int passedCnt;
 		private int failedCnt;
-		private int errCnt;
+		private int exCnt;
 		private int badCnt;
 		private int notRunCnt;	
 		
@@ -97,8 +97,8 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 			return failedCnt;
 		}
 
-		public int getErrCnt() {
-			return errCnt;
+		public int getExCnt() {
+			return exCnt;
 		}
 
 		public int getBadCnt() {
@@ -113,18 +113,18 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 			this(0,0,0,0,0,0,0);
 		}
 		
-		public ResultStatisticCnts(int testCnt, int expCnt, int passedCnt, int failedCnt, int errCnt, int badCnt, int notRunCnt){
+		public ResultStatisticCnts(int testCnt, int expCnt, int passedCnt, int failedCnt, int exCnt, int badCnt, int notRunCnt){
 			this.testCnt = testCnt;
 			this.expCnt = expCnt;
 			this.passedCnt = passedCnt;
 			this.failedCnt = failedCnt;
-			this.errCnt = errCnt;
+			this.exCnt = exCnt;
 			this.badCnt = badCnt;
 			this.notRunCnt = notRunCnt;
 		}
 		
 		public ResultStatisticCnts clone() {
-			return new ResultStatisticCnts(testCnt, expCnt, passedCnt, failedCnt, errCnt, badCnt, notRunCnt);
+			return new ResultStatisticCnts(testCnt, expCnt, passedCnt, failedCnt, exCnt, badCnt, notRunCnt);
 		}
 		
 		public ResultStatisticCnts plus(ResultStatisticCnts other){
@@ -132,11 +132,25 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 											expCnt + other.expCnt,
 											passedCnt+other.passedCnt,
 											failedCnt+other.failedCnt,
-											errCnt+other.errCnt,
+											exCnt+other.exCnt,
 											badCnt+other.badCnt,
 											notRunCnt+other.notRunCnt);
 		}
 		
+		/**
+		 * If any failed, return ConstantUtil.FAILED.  Otherwise, if any got an
+		 * exception, return ConstantUtil.EXCEPTION.  Otherwise, if any were
+		 * skipped, return ConstantUtil.NOT_RUN.  Otherwise, ConstantUtil.PASSED.
+		 */
+		public int overallResult() {
+			if ( failedCnt > 0 )
+				return ConstantUtil.FAILED;
+			if ( exCnt > 0 )
+				return ConstantUtil.EXCEPTION;
+			if ( notRunCnt > 0 )
+				return ConstantUtil.NOT_RUN;
+			return ConstantUtil.PASSED;
+		}
 	}
 	
 	public static class Record_ResultSummary{
@@ -150,7 +164,7 @@ public class ResultSummaryBlock extends MasterDetailsBlock {
 			this.pkgName = pkgName;
 			this.name = name;
 			this.resultCode = resultCode;
-			this.isSuccessful = (this.resultCode == ConstantUtil.SPASSED);
+			this.isSuccessful = (this.resultCode == ConstantUtil.PASSED);
 			
 			this.statisticCnts = statisticCnts.clone(); 
 		}
