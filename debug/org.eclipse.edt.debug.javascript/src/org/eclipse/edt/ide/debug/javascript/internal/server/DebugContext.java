@@ -132,9 +132,16 @@ public class DebugContext extends AbstractContext implements IContext2
 		return eventToSend;
 	}
 	
-	public void addBreakpoint( String file, String line, String enabled )
+	public void addBreakpoint( String file, String line, String enabled, boolean isSingleUse )
 	{
-		addEvent( "egl.addBreakpoint(\"" + file + "\", " + line + ", " + enabled + ")", PRIORITY_NORMAL ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		if ( isSingleUse )
+		{
+			addEvent( "egl.addSingleUseBreakpoint(\"" + file + "\", " + line + ")", PRIORITY_NORMAL ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		}
+		else
+		{
+			addEvent( "egl.addBreakpoint(\"" + file + "\", " + line + ", " + enabled + ")", PRIORITY_NORMAL ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		}
 	}
 	
 	public void changeBreakpoint( String file, String oldline, String enabled )

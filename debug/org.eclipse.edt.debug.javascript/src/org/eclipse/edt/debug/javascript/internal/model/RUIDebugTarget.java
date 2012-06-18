@@ -261,17 +261,21 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 				String file = RUIDebugUtil.encodeValue( bpPath );
 				String line = Integer.toString( breakpoint.getMarker().getAttribute( IMarker.LINE_NUMBER, -1 ) );
 				String enabled = Boolean.toString( breakpoint.getMarker().getAttribute( IBreakpoint.ENABLED, true ) );
+				boolean runToLine = breakpoint.getMarker().getAttribute( IEGLDebugCoreConstants.RUN_TO_LINE, false );
 				
 				if ( isSuspended() )
 				{
-					if ( !setDebugCommand( "addBreakpoint " + file + "," + line + "," + enabled ) ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					String command = runToLine
+							? "addSingleUseBreakpoint " + file + "," + line //$NON-NLS-1$ //$NON-NLS-2$
+							: "addBreakpoint " + file + "," + line + "," + enabled; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					if ( !setDebugCommand( command ) )
 					{
-						context.addBreakpoint( file, line, enabled );
+						context.addBreakpoint( file, line, enabled, runToLine );
 					}
 				}
 				else
 				{
-					context.addBreakpoint( file, line, enabled );
+					context.addBreakpoint( file, line, enabled, runToLine );
 				}
 			}
 		}
