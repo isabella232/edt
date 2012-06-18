@@ -19,7 +19,6 @@ import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
 import org.eclipse.edt.mof.egl.ArrayType;
-import org.eclipse.edt.mof.egl.AsExpression;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.AssignmentStatement;
 import org.eclipse.edt.mof.egl.BinaryExpression;
@@ -117,12 +116,12 @@ public class ReorganizeCode extends AbstractVisitor {
 		return true;
 	}
 
-	public boolean visit(Field object){
+	public boolean visit(Field object) {
 		if (object.getContainer() instanceof Part && !object.getContainer().equals(currentStatementContainer))
 			return false;
 		return true;
 	}
-	
+
 	public boolean visit(Function object) {
 		return false;
 	}
@@ -162,10 +161,6 @@ public class ReorganizeCode extends AbstractVisitor {
 			if ((Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getLHS().getType(), ctx)) {
 				// scan through all array elements and make sure they match the lhs type. if they don't we insert as
 				// expressions
-				Type elementType = ((ArrayType) object.getLHS().getType()).getElementType();
-				while (elementType instanceof ArrayType) {
-					elementType = ((ArrayType) elementType).getElementType();
-				}
 				List<Expression> entries = ((ArrayLiteral) object.getRHS()).getEntries();
 				if (entries != null && entries.size() == 0) {
 					// as there are no entries, the type needs to be changed to the same type as the lhs
@@ -181,7 +176,7 @@ public class ReorganizeCode extends AbstractVisitor {
 					newExpression.setId(object.getLHS().getType().getTypeSignature());
 					object.setRHS(newExpression);
 				} else
-					processArrayLiteral(elementType, (ArrayLiteral) object.getRHS());
+					processArrayLiteral(object.getLHS().getType(), (ArrayLiteral) object.getRHS());
 			}
 		}
 		// if the lhs of this binary expression is an array, then we need to convert this to either appendAll or
@@ -225,11 +220,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	private void processArrayLiteral(Type type, ArrayLiteral object) {
 		List<Expression> entries = object.getEntries();
 		if (entries != null) {
+			while (type instanceof ArrayType) {
+				type = ((ArrayType) type).getElementType();
+			}
 			for (int i = 0; i < entries.size(); i++) {
 				Expression element = entries.get(i);
 				if (element instanceof ArrayLiteral)
 					processArrayLiteral(type, (ArrayLiteral) element);
-				else { 
+				else {
 					entries.set(i, IRUtils.makeExprCompatibleToType(element, type));
 				}
 			}
@@ -241,7 +239,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		// There are cases where someone uses a return statement to break out of a function, even though the function does
 		// not return anything
 		if (object.getExpression() == null) {
-			// if the container of this return statement is a function and it returns a value, then we need to return 
+			// if the container of this return statement is a function and it returns a value, then we need to return
 			// the default of that value
 			if (object.getContainer() instanceof Function && ((Function) object.getContainer()).getType() != null) {
 				// handle the preprocessing
@@ -273,6 +271,14 @@ public class ReorganizeCode extends AbstractVisitor {
 				object.setExpression(nameExpression);
 			}
 		} else {
+			// call out to the type to see if wants this logic to ensure each entry is type matching
+			if ((Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getExpression().getType(), ctx)) {
+				// scan through all array elements and make sure they match the return type. if they don't we insert as
+				// expressions
+				if (object.getContainer() instanceof Function && ((Function) object.getContainer()).getType() != null
+					&& object.getExpression() instanceof ArrayLiteral)
+					processArrayLiteral(((Function) object.getContainer()).getType(), (ArrayLiteral) object.getExpression());
+			}
 			// if the return statement invokes a function that has inout or out parms, then we need to create a local
 			// variable for the return of the function invocation. This is because we need to unbox the inout/out args after
 			// the function is invoked and before the return statement
@@ -389,7 +395,7 @@ public class ReorganizeCode extends AbstractVisitor {
 		if (CommonUtilities.hasSideEffects(object.getCondition(), ctx)) {
 			// create a unary condition
 			UnaryExpression unaryExpression = factory.createUnaryExpression();
-			unaryExpression.setOperator(unaryExpression.Op_NOT);
+			unaryExpression.setOperator(UnaryExpression.Op_NOT);
 			unaryExpression.setExpression(object.getCondition());
 			// we need to create an if statement
 			IfStatement ifStatement = factory.createIfStatement();
@@ -963,15 +969,11 @@ public class ReorganizeCode extends AbstractVisitor {
 			&& object.getQualifier().getType() instanceof ArrayType) {
 			// call out to the type to see if wants this logic to ensure each entry is type matching
 			if ((Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getQualifier().getType(), ctx)) {
-				// scan through all array elements and make sure they match the lhs type. if they don't we insert as
+				// scan through all array elements and make sure they match the type. if they don't we insert as
 				// expressions
-				Type elementType = ((ArrayType) object.getQualifier().getType()).getElementType();
-				while (elementType instanceof ArrayType) {
-					elementType = ((ArrayType) elementType).getElementType();
-				}
 				for (int i = 0; i < object.getArguments().size(); i++) {
 					if (object.getArguments().get(i) instanceof ArrayLiteral)
-						processArrayLiteral(elementType, (ArrayLiteral) object.getArguments().get(i));
+						processArrayLiteral(object.getQualifier().getType(), (ArrayLiteral) object.getArguments().get(i));
 				}
 			}
 		}
@@ -987,7 +989,7 @@ public class ReorganizeCode extends AbstractVisitor {
 				object.getArguments().set(0, boxingExpression);
 			}
 		}
-		
+
 		if (object.getId().equalsIgnoreCase("format") && object.getQualifier() instanceof PartName
 			&& ((PartName) object.getQualifier()).getId().equalsIgnoreCase("StringLib") && object.getArguments().size() == 2
 			&& !(object.getArguments().get(0) instanceof BoxingExpression)) {
@@ -1014,6 +1016,14 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	private void processInvocation(InvocationExpression object) {
+		// scan through all array elements and make sure they match the type. if they don't we insert as
+		// expressions
+		for (int i = 0; i < object.getArguments().size(); i++) {
+			if (object.getTarget().getParameters().get(i).getType() instanceof ArrayType && object.getArguments().get(i) instanceof ArrayLiteral
+				&& (Boolean) ctx.invoke(Constants.isAssignmentArrayMatchingWanted, object.getArguments().get(i).getType(), ctx)) {
+				processArrayLiteral(object.getTarget().getParameters().get(i).getType(), (ArrayLiteral) object.getArguments().get(i));
+			}
+		}
 		boolean altered = false;
 		boolean argumentToBeAltered[] = new boolean[object.getTarget().getParameters().size()];
 		// we need to scan the function arguments for any conditions that require temporary variables to be set
