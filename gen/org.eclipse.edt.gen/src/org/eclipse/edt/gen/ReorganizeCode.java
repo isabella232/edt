@@ -229,14 +229,8 @@ public class ReorganizeCode extends AbstractVisitor {
 				Expression element = entries.get(i);
 				if (element instanceof ArrayLiteral)
 					processArrayLiteral(type, (ArrayLiteral) element);
-				else {
-					if (element.getType() != null && element.getType().getClassifier() != null && type.getClassifier() != null
-						&& !element.getType().getClassifier().equals(type.getClassifier())) {
-						AsExpression asExpression = factory.createAsExpression();
-						asExpression.setEType(type);
-						asExpression.setObjectExpr(element);
-						entries.set(i, asExpression);
-					}
+				else { 
+					entries.set(i, IRUtils.makeExprCompatibleToType(element, type));
 				}
 			}
 		}
