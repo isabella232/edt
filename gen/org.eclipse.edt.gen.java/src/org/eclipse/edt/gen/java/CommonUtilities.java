@@ -177,184 +177,179 @@ public class CommonUtilities {
 		return false;
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeOperationName(UnaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
 		if (expr.getOperation() == null || expr.getOperation().getName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_BITWISENOT))
+		if (op.equals(UnaryExpression.Op_BITWISENOT))
 			return "bitnot";
-		if (op.equals(expr.Op_NEGATE))
+		if (op.equals(UnaryExpression.Op_NEGATE))
 			return "negate";
-		if (op.equals(expr.Op_NOT))
+		if (op.equals(UnaryExpression.Op_NOT))
 			return "not";
 		return "UnknownOp";
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeOperationName(BinaryExpression expr) throws GenerationException {
 		// safety check to make sure the operation has been defined properly
 		if (expr.getOperation() == null || expr.getOperation().getName() == null)
 			throw new GenerationException();
 		// process the operator
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_PLUS))
+		if (op.equals(BinaryExpression.Op_PLUS))
 			return "plus";
-		if (op.equals(expr.Op_MINUS))
+		if (op.equals(BinaryExpression.Op_MINUS))
 			return "minus";
-		if (op.equals(expr.Op_DIVIDE))
+		if (op.equals(BinaryExpression.Op_DIVIDE))
 			return "divide";
-		if (op.equals(expr.Op_MULTIPLY))
+		if (op.equals(BinaryExpression.Op_MULTIPLY))
 			return "multiply";
-		if (op.equals(expr.Op_MODULO))
+		if (op.equals(BinaryExpression.Op_MODULO))
 			return "remainder";
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(BinaryExpression.Op_EQ))
 			return "equals";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return "notEquals";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return "compareTo";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return "compareTo";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return "compareTo";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return "compareTo";
-		if (op.equals(expr.Op_AND))
+		if (op.equals(BinaryExpression.Op_AND))
 			return "and";
-		if (op.equals(expr.Op_OR))
+		if (op.equals(BinaryExpression.Op_OR))
 			return "or";
-		if (op.equals(expr.Op_XOR))
+		if (op.equals(BinaryExpression.Op_XOR))
 			return "xor";
-		if (op.equals(expr.Op_CONCAT))
+		if (op.equals(BinaryExpression.Op_CONCAT))
 			return "concat";
-		if (op.equals(expr.Op_NULLCONCAT))
+		if (op.equals(BinaryExpression.Op_NULLCONCAT))
 			return "concatNull";
-		if (op.equals(expr.Op_BITAND))
+		if (op.equals(BinaryExpression.Op_BITAND))
 			return "bitand";
-		if (op.equals(expr.Op_BITOR))
+		if (op.equals(BinaryExpression.Op_BITOR))
 			return "bitor";
-		if (op.equals(expr.Op_LEFTSHIFT))
+		if (op.equals(BinaryExpression.Op_LEFTSHIFT))
 			return "leftShift";
-		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTARITHMETIC))
 			return "rightShiftArithmetic";
-		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTLOGICAL))
 			return "rightShiftLogical";
-		if (op.equals(expr.Op_POWER))
+		if (op.equals(BinaryExpression.Op_POWER))
 			return "power";
-		if (op.equals(expr.Op_IN))
+		if (op.equals(BinaryExpression.Op_IN))
 			return "in";
-		if (op.equals(expr.Op_MATCHES))
+		if (op.equals(BinaryExpression.Op_MATCHES))
 			return "matches";
-		if (op.equals(expr.Op_LIKE))
+		if (op.equals(BinaryExpression.Op_LIKE))
 			return "like";
 		return "UnknownOp";
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getNativeRuntimeComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return " < 0";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return " > 0";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return " <= 0";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return " >= 0";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getNativeJavaOperation(BinaryExpression expr, Context ctx) {
 		String op = expr.getOperator();
 		// we must not use the equals or notequals from java, as the Object versions of these simply compare the 
 		// object and not the values. we need to pass equals and notequals to the edt runtime instead 
 		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
 		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
-			if (op.equals(expr.Op_LT))
+			if (op.equals(BinaryExpression.Op_LT))
 				return " < ";
-			if (op.equals(expr.Op_GT))
+			if (op.equals(BinaryExpression.Op_GT))
 				return " > ";
-			if (op.equals(expr.Op_LE))
+			if (op.equals(BinaryExpression.Op_LE))
 				return " <= ";
-			if (op.equals(expr.Op_GE))
+			if (op.equals(BinaryExpression.Op_GE))
 				return " >= ";
-			if (op.equals(expr.Op_AND))
+			if (op.equals(BinaryExpression.Op_AND))
 				return " && ";
-			if (op.equals(expr.Op_OR))
+			if (op.equals(BinaryExpression.Op_OR))
 				return " || ";
-			if (op.equals(expr.Op_XOR))
+			if (op.equals(BinaryExpression.Op_XOR))
 				return " ^ ";
-			if (op.equals(expr.Op_CONCAT))
+			if (op.equals(BinaryExpression.Op_CONCAT))
 				return " + ";
-			if (op.equals(expr.Op_BITAND))
+			if (op.equals(BinaryExpression.Op_BITAND))
 				return " & ";
-			if (op.equals(expr.Op_BITOR))
+			if (op.equals(BinaryExpression.Op_BITOR))
 				return " | ";
-			if (op.equals(expr.Op_LEFTSHIFT))
+			if (op.equals(BinaryExpression.Op_LEFTSHIFT))
 				return " << ";
-			if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			if (op.equals(BinaryExpression.Op_RIGHTSHIFTARITHMETIC))
 				return " >> ";
-			if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			if (op.equals(BinaryExpression.Op_RIGHTSHIFTLOGICAL))
 				return " >>> ";
 			return "";
 		}
 		// these are the defaults for all other types
 		// division is intentionally left off as all division must be done through the egl runtime
-		if (op.equals(expr.Op_PLUS))
+		if (op.equals(BinaryExpression.Op_PLUS))
 			return " + ";
-		if (op.equals(expr.Op_MINUS))
+		if (op.equals(BinaryExpression.Op_MINUS))
 			return " - ";
-		if (op.equals(expr.Op_MULTIPLY))
+		if (op.equals(BinaryExpression.Op_MULTIPLY))
 			return " * ";
-		if (op.equals(expr.Op_MODULO))
+		if (op.equals(BinaryExpression.Op_MODULO))
 			return " % ";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return " < ";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return " > ";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return " <= ";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return " >= ";
-		if (op.equals(expr.Op_AND))
+		if (op.equals(BinaryExpression.Op_AND))
 			return " && ";
-		if (op.equals(expr.Op_OR))
+		if (op.equals(BinaryExpression.Op_OR))
 			return " || ";
-		if (op.equals(expr.Op_XOR))
+		if (op.equals(BinaryExpression.Op_XOR))
 			return " ^ ";
-		if (op.equals(expr.Op_CONCAT))
+		if (op.equals(BinaryExpression.Op_CONCAT))
 			return " + ";
-		if (op.equals(expr.Op_BITAND))
+		if (op.equals(BinaryExpression.Op_BITAND))
 			return " & ";
-		if (op.equals(expr.Op_BITOR))
+		if (op.equals(BinaryExpression.Op_BITOR))
 			return " | ";
-		if (op.equals(expr.Op_LEFTSHIFT))
+		if (op.equals(BinaryExpression.Op_LEFTSHIFT))
 			return " << ";
-		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTARITHMETIC))
 			return " >> ";
-		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTLOGICAL))
 			return " >>> ";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getNativeNullTypeJavaOperation(BinaryExpression expr, Context ctx) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(BinaryExpression.Op_EQ))
 			return " == ";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return " != ";
 		return "";
 	}
 
 	public static String getNativeJavaAssignment(String op) {
-		if (op.equals("xor="))
+		if (op.equals(BinaryExpression.Op_XOR + "="))
 			return "^=";
-		if (op.equals("::="))
+		if (op.equals(BinaryExpression.Op_CONCAT + "="))
 			return "+=";
 		return op;
 	}
