@@ -1,0 +1,11 @@
+package org.eclipse.edt.rui.widgets;
+
+// basic library
+library RestLib
+	
+    function invokeGet(reqURL string in) returns(string)  {
+    	@Rest {
+   			method = HttpMethod._GET,
+    		uriTemplate="{reqURL}"}}
+    end
+end

@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.rui.widgets;
 
-import eglx.rest.irest;
 
 
 handler HTML type RUIWidget{ tagName = "div", onConstructionFunction = start,
@@ -51,11 +50,10 @@ handler HTML type RUIWidget{ tagName = "div", onConstructionFunction = start,
 	end
 
 	function setSrc(src string in)
-		restService IRest?{@Resource {uri = "binding:file:org_eclipse_edt_rui_widgets#restServiceHTMLWidget"}};
 		if (src.length() < 4 || src[1:4].toLowerCase() != "http")
-            call restService.invokeGet(contextURL + src) returning to setText;
+           call RestLib.invokeGet(contextURL + src) using new HttpRest returning to setText;
         else
-        	call restService.invokeGet(src) returning to setText;
+        	call RestLib.invokeGet(src) using new HttpRest returning to setText;
 		end
 		this.src = src;
 	end
