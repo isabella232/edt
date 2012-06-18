@@ -205,7 +205,8 @@ public class ReorganizeCode extends AbstractVisitor {
 		// to see if it wants it broken apart
 		if (!object.getOperator().equals("=") && object.getOperator().indexOf("=") >= 0) {
 			// call out to the type to see if wants this broken up
-			if ((Boolean) ctx.invoke(Constants.isAssignmentBreakupWanted, object.getLHS().getType(), ctx, object)) {
+			if (object.getLHS().isNullable() || object.getRHS().isNullable()
+				|| (Boolean) ctx.invoke(Constants.isAssignmentBreakupWanted, object.getLHS().getType(), ctx, object)) {
 				BinaryExpression binExp = factory.createBinaryExpression();
 				binExp.setLHS(object.getLHS());
 				binExp.setRHS(object.getRHS());
