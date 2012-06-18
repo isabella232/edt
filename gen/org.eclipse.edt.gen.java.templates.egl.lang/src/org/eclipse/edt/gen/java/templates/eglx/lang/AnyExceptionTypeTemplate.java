@@ -32,7 +32,7 @@ public class AnyExceptionTypeTemplate extends JavaTemplate {
 
 	public void genContainerBasedAssignment(Type type, Context ctx, TabbedWriter out, Assignment arg1, Field arg2) {
 		if (arg2.getName().equalsIgnoreCase("message") || arg2.getName().equalsIgnoreCase("messageid")) {
-			ctx.invoke(genExpression, arg1.getLHS().getQualifier(), ctx, out);
+			ctx.invoke(genExpression, arg1.getLHS().getQualifier(), ctx, out, arg1.getLHS().getQualifier());
 			out.print(".set");
 			out.print(arg2.getName().substring(0, 1).toUpperCase());
 			if (arg2.getName().length() > 1)
@@ -46,7 +46,7 @@ public class AnyExceptionTypeTemplate extends JavaTemplate {
 
 	public void genContainerBasedMemberAccess(Type type, Context ctx, TabbedWriter out, MemberAccess arg1, Member arg2) {
 		if (arg2.getName().equalsIgnoreCase("message") || arg2.getName().equalsIgnoreCase("messageid")) {
-			ctx.invoke(genExpression, arg1.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, arg1.getQualifier(), ctx, out, arg1.getQualifier());
 			out.print(".get");
 			out.print(arg2.getName().substring(0, 1).toUpperCase());
 			if (arg2.getName().length() > 1)
