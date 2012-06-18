@@ -32,7 +32,7 @@ public class ForEachStatementTemplate extends JavaTemplate {
 		out.print(" ");
 		ctx.invoke(genName, stmt.getDeclarationExpression().getFields().get(0), ctx, out);
 		out.print(" : ");
-		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
+		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out, stmt.getDataSource());
 		out.println(") {");
 		// now process the statement block
 		ctx.invoke(genStatement, stmt.getBody(), ctx, out);

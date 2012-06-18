@@ -33,7 +33,7 @@ public class MemberAccessTemplate extends JavaTemplate {
 		if (expr.getMember() instanceof Function)
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out, expr);
 		else {
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 			out.print(".");
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		}

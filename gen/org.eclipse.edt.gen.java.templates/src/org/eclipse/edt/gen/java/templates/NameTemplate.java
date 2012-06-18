@@ -24,7 +24,7 @@ public class NameTemplate extends JavaTemplate {
 			FunctionMember currentFunction = ctx.getCurrentFunction();
 			if (currentFunction != null && propertyFunction.equals(currentFunction.getName())) {
 				if (expr.getQualifier() != null) {
-					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 					out.print('.');
 				}
 				ctx.invoke(genName, expr.getNamedElement(), ctx, out);
@@ -32,7 +32,7 @@ public class NameTemplate extends JavaTemplate {
 				ctx.invoke(genExpression, arg1, ctx, out);
 			} else {
 				if (expr.getQualifier() != null) {
-					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 					out.print('.');
 				}
 				out.print(propertyFunction);

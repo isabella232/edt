@@ -20,7 +20,7 @@ public class ObjectExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(ObjectExpression expr, Context ctx, TabbedWriter out) {
 		if (expr.getQualifier() != null) {
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 			out.print(".");
 		}
 		out.print("(");

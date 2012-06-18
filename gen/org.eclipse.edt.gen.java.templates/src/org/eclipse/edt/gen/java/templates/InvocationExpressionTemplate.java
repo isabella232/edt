@@ -22,7 +22,7 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 	public void genInvocation(InvocationExpression expr, Context ctx, TabbedWriter out) {
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 			out.print(".");
 		}
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
@@ -35,7 +35,7 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		// for static functions, we don't want to write the qualifier as the 1st argument
 		if (expr.getTarget() instanceof Function && ((Function) expr.getTarget()).isStatic())
 			return;
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
 	}

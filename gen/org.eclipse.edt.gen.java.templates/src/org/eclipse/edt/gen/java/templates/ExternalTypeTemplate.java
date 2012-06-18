@@ -151,7 +151,7 @@ public class ExternalTypeTemplate extends JavaTemplate {
 		if (annot != null) {
 			Annotation eventListener = field.getAnnotation("eglx.lang.EventListener");
 			if (eventListener != null) {
-				ctx.invoke(genExpression, assignment.getLHS().getQualifier(), ctx, out);
+				ctx.invoke(genExpression, assignment.getLHS().getQualifier(), ctx, out, assignment.getLHS().getQualifier());
 				out.print('.');
 				out.print(eventListener.getValue("addMethod").toString());
 				out.print("( new ");
