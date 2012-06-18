@@ -64,7 +64,7 @@
    <extension
          point="org.eclipse.ui.popupMenus">
          <viewerContribution
-            targetID="#ReadOnlyEGLRulerContext"
+            targetID="#EGLRulerContext"
             id="org.eclipse.edt.debug.ui.EGLEditorRulerPopupActions">
             <action
                label="%EnableBreakpoint.label"
@@ -78,6 +78,23 @@
                id="org.eclipse.edt.debug.ui.actions.ToggleBreakpointRulerActionDelegate"
                label="%AddBreakpoint.label"
                menubarPath="debug">
+            </action>
+         </viewerContribution>
+         <viewerContribution
+               id="org.eclipse.edt.debug.ui.BinaryFileEditorRulerPopupActions"
+               targetID="#ReadOnlyEGLRulerContext">
+            <action
+                  class="org.eclipse.edt.debug.internal.ui.actions.EGLRulerEnableDisableBreakpointActionDelegate"
+                  id="org.eclipse.edt.debug.ui.actions.BinaryEnableDisableBreakpointRulerActionDelegate"
+                  label="%EnableBreakpoint.label"
+                  menubarPath="debug">
+            </action>
+            <action
+                  class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+                  icon="icons/full/obj16/brkp_obj.gif"
+                  id="org.eclipse.edt.debug.ui.actions.BinaryToggleBreakpointRulerActionDelegate"
+                  label="%AddBreakpoint.label"
+                  menubarPath="debug">
             </action>
          </viewerContribution>
          <viewerContribution
