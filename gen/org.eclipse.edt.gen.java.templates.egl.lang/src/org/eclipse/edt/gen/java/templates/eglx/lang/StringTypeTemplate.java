@@ -57,55 +57,52 @@ public class StringTypeTemplate extends JavaTemplate {
 		out.print(")");
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringPrefixOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return "!";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
 		// these are the defaults for what can be handled by the java string class
-		if (op.equals(expr.Op_PLUS))
+		if (op.equals(BinaryExpression.Op_PLUS))
 			return " + ";
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(BinaryExpression.Op_EQ))
 			return ".equals(";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return ".equals(";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return ".compareTo(";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return ".compareTo(";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return ".compareTo(";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return ".compareTo(";
-		if (op.equals(expr.Op_AND))
+		if (op.equals(BinaryExpression.Op_AND))
 			return " && ";
-		if (op.equals(expr.Op_OR))
+		if (op.equals(BinaryExpression.Op_OR))
 			return " || ";
-		if (op.equals(expr.Op_CONCAT))
+		if (op.equals(BinaryExpression.Op_CONCAT))
 			return " + ";
 		return "";
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeStringComparisionOperation(BinaryExpression expr) {
 		String op = expr.getOperator();
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(BinaryExpression.Op_EQ))
 			return ")";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return ")";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return ") < 0";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return ") > 0";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return ") <= 0";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return ") >= 0";
 		return "";
 	}

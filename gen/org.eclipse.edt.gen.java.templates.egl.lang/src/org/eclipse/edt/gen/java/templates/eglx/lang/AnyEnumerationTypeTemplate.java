@@ -27,82 +27,81 @@ public class AnyEnumerationTypeTemplate extends JavaTemplate {
 		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
 	}
 
-	@SuppressWarnings("static-access")
 	protected String getNativeEnumerationOperation(BinaryExpression expr, Context ctx) {
 		String op = expr.getOperator();
 		// if we are to use egl overflow checking, then don't pass back that we can do the mathematical operations in java
 		if (expr.isNullable() || (Boolean) ctx.getParameter(Constants.parameter_checkOverflow)) {
-			if (op.equals(expr.Op_EQ))
+			if (op.equals(BinaryExpression.Op_EQ))
 				return " == ";
-			if (op.equals(expr.Op_NE))
+			if (op.equals(BinaryExpression.Op_NE))
 				return " != ";
-			if (op.equals(expr.Op_LT))
+			if (op.equals(BinaryExpression.Op_LT))
 				return " < ";
-			if (op.equals(expr.Op_GT))
+			if (op.equals(BinaryExpression.Op_GT))
 				return " > ";
-			if (op.equals(expr.Op_LE))
+			if (op.equals(BinaryExpression.Op_LE))
 				return " <= ";
-			if (op.equals(expr.Op_GE))
+			if (op.equals(BinaryExpression.Op_GE))
 				return " >= ";
-			if (op.equals(expr.Op_AND))
+			if (op.equals(BinaryExpression.Op_AND))
 				return " && ";
-			if (op.equals(expr.Op_OR))
+			if (op.equals(BinaryExpression.Op_OR))
 				return " || ";
-			if (op.equals(expr.Op_XOR))
+			if (op.equals(BinaryExpression.Op_XOR))
 				return " ^ ";
-			if (op.equals(expr.Op_CONCAT))
+			if (op.equals(BinaryExpression.Op_CONCAT))
 				return " + ";
-			if (op.equals(expr.Op_BITAND))
+			if (op.equals(BinaryExpression.Op_BITAND))
 				return " & ";
-			if (op.equals(expr.Op_BITOR))
+			if (op.equals(BinaryExpression.Op_BITOR))
 				return " | ";
-			if (op.equals(expr.Op_LEFTSHIFT))
+			if (op.equals(BinaryExpression.Op_LEFTSHIFT))
 				return " << ";
-			if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+			if (op.equals(BinaryExpression.Op_RIGHTSHIFTARITHMETIC))
 				return " >> ";
-			if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+			if (op.equals(BinaryExpression.Op_RIGHTSHIFTLOGICAL))
 				return " >>> ";
 			return "";
 		}
 		// these are the defaults for all other types
 		// division is intentionally left off as all division must be done through the egl runtime
-		if (op.equals(expr.Op_PLUS))
+		if (op.equals(BinaryExpression.Op_PLUS))
 			return " + ";
-		if (op.equals(expr.Op_MINUS))
+		if (op.equals(BinaryExpression.Op_MINUS))
 			return " - ";
-		if (op.equals(expr.Op_MULTIPLY))
+		if (op.equals(BinaryExpression.Op_MULTIPLY))
 			return " * ";
-		if (op.equals(expr.Op_MODULO))
+		if (op.equals(BinaryExpression.Op_MODULO))
 			return " % ";
-		if (op.equals(expr.Op_EQ))
+		if (op.equals(BinaryExpression.Op_EQ))
 			return " == ";
-		if (op.equals(expr.Op_NE))
+		if (op.equals(BinaryExpression.Op_NE))
 			return " != ";
-		if (op.equals(expr.Op_LT))
+		if (op.equals(BinaryExpression.Op_LT))
 			return " < ";
-		if (op.equals(expr.Op_GT))
+		if (op.equals(BinaryExpression.Op_GT))
 			return " > ";
-		if (op.equals(expr.Op_LE))
+		if (op.equals(BinaryExpression.Op_LE))
 			return " <= ";
-		if (op.equals(expr.Op_GE))
+		if (op.equals(BinaryExpression.Op_GE))
 			return " >= ";
-		if (op.equals(expr.Op_AND))
+		if (op.equals(BinaryExpression.Op_AND))
 			return " && ";
-		if (op.equals(expr.Op_OR))
+		if (op.equals(BinaryExpression.Op_OR))
 			return " || ";
-		if (op.equals(expr.Op_XOR))
+		if (op.equals(BinaryExpression.Op_XOR))
 			return " ^ ";
-		if (op.equals(expr.Op_CONCAT))
+		if (op.equals(BinaryExpression.Op_CONCAT))
 			return " + ";
-		if (op.equals(expr.Op_BITAND))
+		if (op.equals(BinaryExpression.Op_BITAND))
 			return " & ";
-		if (op.equals(expr.Op_BITOR))
+		if (op.equals(BinaryExpression.Op_BITOR))
 			return " | ";
-		if (op.equals(expr.Op_LEFTSHIFT))
+		if (op.equals(BinaryExpression.Op_LEFTSHIFT))
 			return " << ";
-		if (op.equals(expr.Op_RIGHTSHIFTARITHMETIC))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTARITHMETIC))
 			return " >> ";
-		if (op.equals(expr.Op_RIGHTSHIFTLOGICAL))
+		if (op.equals(BinaryExpression.Op_RIGHTSHIFTLOGICAL))
 			return " >>> ";
 		return "";
 	}
