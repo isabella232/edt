@@ -174,7 +174,7 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
     		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
     		for(IBuildPathEntry pathEntry : pathEntries) {
-    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
+    			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ) {
     				try {
     					org.eclipse.edt.mof.egl.Part part = pathEntry.findPart(packageName, partName);
     					if(part != null) {
@@ -188,14 +188,13 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
     							}
     						}
     					}
-    					return caseSensitivePartName;
+    					if(caseSensitivePartName != null)
+    					     return caseSensitivePartName;
     				} catch(PartNotFoundException pnf) {
     					//swallow down exceptions
     				}
-    				
-    				
-    			}
-    		}
+    			} //if judging for PathEntry
+    		} //for Loop
 		}
 		return caseSensitivePartName;
 	}
