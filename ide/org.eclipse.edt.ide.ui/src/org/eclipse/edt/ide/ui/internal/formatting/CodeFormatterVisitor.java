@@ -2354,6 +2354,8 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //		final IntoClause intoClause = forEachStatement.hasIntoClause() ? forEachStatement.getIntoClause() : null;
 		final List stmts = forEachStatement.getStmts();
 		final Node firstStmt = (stmts != null && !stmts.isEmpty()) ? (Node)stmts.get(0) : null;
+		final SimpleName decVariable = forEachStatement.getVariableDeclarationName();
+		final Type varDeclType = forEachStatement.getVariableDeclarationType();
 		
 		ICallBackFormatter callbackFormatter = new ICallBackFormatter(){
 			public void format(Symbol prevToken, Symbol currToken) {
@@ -2367,7 +2369,15 @@ public class CodeFormatterVisitor extends AbstractASTPartVisitor {
 //					intoClause.accept(thisVisitor);
 //				}
 //				else 
-				if(firstStmt != null && currToken.left == firstStmt.getOffset()){
+
+				if(decVariable != null && currToken.left == decVariable.getOffset()) {
+					setGlobalFormattingSettings(-1,getBooleanPrefSetting(CodeFormatterConstants.FORMATTER_PREF_WS_AFTER_LPAREN_FOREACH),
+							CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+					decVariable.accept(thisVisitor);
+				}else if (varDeclType != null && currToken.left == varDeclType.getOffset()) {
+					setGlobalFormattingSettings(-1, true, CodeFormatterConstants.FORMATTER_PREF_WRAP_POLICY_NOWRAP);
+					varDeclType.accept(thisVisitor);
+				}else if(firstStmt != null && currToken.left == firstStmt.getOffset()){
 					indent();
 					formatStatements(stmts);
 					unindent();
