@@ -33,25 +33,32 @@ egl.defineWidget(
 	"createDojoWidget" : function(parent) {
 		var _this = this;
 		_this.dom = parent;	
+			
 		_this.dojoWidget = new dojox.mobile.ListItem({
 			label: "",
 			rightText: _this.actionText || "",
 			moveTo: _this.moveTo,
 			transition: _this.transition || "slide"
 		},parent);
-
+		
 		_this.synchronor.trigger( _this, "SYN_READY" );
 		
 		if(_this.children.length > 0){
 			dojo.addClass(_this.dojoWidget.domNode,"mblVariableHeight");
 			_this._setIconStyle(true);
 		}
+		
 		var defaultCallBack = _this.dojoWidget.onClick ;
 		_this.dojoWidget.onClick = function( value ) {
-			if( typeof  defaultCallBack === "function" )
+			if( typeof  defaultCallBack === "function" && _this.moveTo )
 				defaultCallBack.apply( _this.dojoWidget, arguments );
 			_this.handleEvent( _this.getOnClick(), "onClick" ); 
 		};
+		
+		// work around default click action not being called problem if 
+		// no moveTo is specified in dojo mobile framework
+		if( !_this.moveTo )
+			_this.dojoWidget._onClickHandle = _this.dojoWidget.connect(_this.dojoWidget.anchorNode, "onclick", "onClick");
 		
 		_this.dojoWidget.startup();
 		_this.textBox = _this._getTextBox();

@@ -11,7 +11,6 @@ egl.defineWidget(
 				_this.options.transitionDir = 1;
 				_this.options.icon = 'dojo/mobile/images/i-icon-1.png';
 				_this.options.lazy = true;
-				
 				require(
 					["dojox/mobile/IconItem"],
 					function(){
@@ -22,24 +21,50 @@ egl.defineWidget(
 			'createDojoWidget' : function( parent ){
 				var _this = this;
 				
-				if( _this.options.moveWidget && _this.options.moveWidget.dojoWidget )
-					_this.options.moveTo = _this.options.moveWidget.dojoWidget.id;
-				
-				_this.dojoWidget = new dojox.mobile.IconItem(
-						_this.options, parent
-				);
-				
-				_this.containerWidget = _this.dojoWidget;
-				
-				if( _this.children )
-					_this.setChildren( _this.children );
+				function callback( synchronor ){
+					_this.dojoWidget = new dojox.mobile.IconItem(
+							_this.options, parent
+					);
+					_this.containerWidget = _this.dojoWidget;
+					if( _this.children )
+						_this.setChildren( _this.children );
+					
+					var defaultCallBack = _this.dojoWidget.onClick ;
+					_this.dojoWidget.onClick = function( value ) {
+						if( typeof  defaultCallBack === "function" && _this.moveTo )
+							defaultCallBack.apply( _this.dojoWidget, arguments );
+						_this.handleEvent( _this.getOnClick(), "onClick" ); 
+					};
+					
+					// work around default click action not being called problem if 
+					// no moveTo is specified in dojo mobile framework
+					if( !_this.moveTo )
+						_this.dojoWidget._onClickHandle = _this.dojoWidget.connect(_this.dojoWidget.domNode, "onclick", "onClick");
+					
+					synchronor.trigger( _this, 'SYN_READY' );
+				}
 				
 				require(
 					["dojo/mobile/utility/Synchronor"],
 					function( synchronor ){
-						synchronor.trigger( _this, 'SYN_READY' );
+						if( _this.options.moveWidget && _this.options.moveWidget.dojoWidget ){
+							_this.options.moveTo = _this.options.moveWidget.dojoWidget.id;
+							callback(synchronor);
+						}
+						else if( _this.options.moveWidget )
+							synchronor.wait( 
+								[_this.options.moveWidget], "SYN_READY",
+								function(){
+									_this.options.moveTo = _this.options.moveWidget.dojoWidget.id;
+									callback(synchronor);
+								}
+							)
+						else
+							callback( synchronor );
 					}
 				);
+				
+				_this.dojoWidget = { "domNode" : parent };
 			},
 			'removeChildren' : function( containerWidget ){
 				var dojoWidget = this._getContainerWidget( containerWidget );

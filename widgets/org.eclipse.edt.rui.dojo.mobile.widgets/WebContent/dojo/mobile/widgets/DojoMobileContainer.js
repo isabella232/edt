@@ -29,9 +29,13 @@ egl.defineWidget(
 			throw egl.createRuntimeException( "Can't append a null child.", [thisNode.tagName]);
 		if (child == this)
 			throw egl.createRuntimeException( "Can't append the widget itself as a child.", [thisNode.tagName]);
+		
+		/* @Smyle: Depreciated
 		if(this.childTypes){ 
 			this._checkChildType(child);          
-		}		
+		}
+		 */
+		
 		var childNode = child.eze$$DOMElement;
 		if (!childNode)
 			throw egl.createRuntimeException( "The child node does not exist.", [thisNode.tagName]);
@@ -44,18 +48,70 @@ egl.defineWidget(
 		thisNode.appendChild( childNode );			
 		this.childrenChanged();
 	},
-	"_checkChildType" : function(child) {
-		for(var n=0;n<this.childTypes.length;n++){
-			if ( child.eze$$package+"."+child.eze$$typename == this.childTypes[n]) {
-				return;
-			} 
+	"checkChildrenType" : function( childToDetect ){
+		var _this = this;
+		var returnResult = true;
+		if( 
+			!childToDetect && _this.children && _this.children.length > 0 
+			&& _this.acceptChildrenTypes 
+		)
+			for( var i = 0; i < _this.children.length; ++ i )
+			{
+				var child = _this.children[i];
+				if( 
+					(child.eze$$package+"."+child.eze$$typename) in _this.acceptChildrenTypes 
+					&& _this.acceptChildrenTypes[(child.eze$$package+"."+child.eze$$typename)] 
+				)
+					continue;
+				else{
+					var widgetId = _this.id || (_this.dojoWidget && _this.dojoWidget.id);
+					var childId = child.id || (child.dojoWidget && child.dojoWidget.id);
+					widgetId = widgetId ? (widgetId+" ") : "";
+					childId  = childId ? (childId+" ") : "";
+					_this.log(
+						"<b>Warning: </b>"
+						+ _this.eze$$package+"."+_this.eze$$typename + 
+						" " +   widgetId +
+						"don't support child " + childId + "of type " + child.eze$$package+"."+child.eze$$typename
+						+ "<br>"
+					);
+					returnResult = false;
+					_this.children.splice( i, 1 );
+					--i;
+				}
+			}
+		else if( childToDetect && _this.acceptChildrenTypes ){
+			if( 
+				(childToDetect.eze$$package+"."+childToDetect.eze$$typename) in _this.acceptChildrenTypes 
+				&& _this.acceptChildrenTypes[(childToDetect.eze$$package+"."+childToDetect.eze$$typename)] 
+			)
+				returnResult = true;
+			else {
+				var widgetId = _this.id || (_this.dojoWidget && _this.dojoWidget.id);
+				var childToDetectId = childToDetect.id || (childToDetect.dojoWidget && childToDetect.dojoWidget.id);
+				widgetId = widgetId ? ( widgetId + " " ) : "";
+				childToDetectId  = childToDetectId ? (childToDetectId + " ") : "";
+				_this.log(
+					"<b>Warning: </b>"
+					+ _this.eze$$package+"."+_this.eze$$typename + 
+					" " +   widgetId +
+					"can't contain child " + childToDetectId + "of " + child.eze$$package+"."+child.eze$$typename
+					+ "<br>"
+				);
+				returnResult = false;
+			}
 		}
-		throw this.eze$$typename+".addChild(child="+child.eze$$typename +"): Invalid child type";
-	},	
+		return returnResult;
+	},
 	"appendChild" : function( child, containerWidget ) {
+		if( !this.checkChildrenType(child) )
+			return;
+		
 		var dojoWidget = this._getContainerWidget(containerWidget);
+		
 		this.children = this.children || [];
 		this.children.push(child);
+		
 		if( dojoWidget ){			
 			this._appendChild( child, dojoWidget );
 		}
@@ -63,6 +119,7 @@ egl.defineWidget(
 	"appendChildren" : function( children, containerWidget ) {
 		var dojoWidget = this._getContainerWidget(containerWidget);
 		this.children = this.children || [];
+		this.checkChildrenType();
 		for(var n=0; n<children.length; n++){				
 			this.children.push(children[n]);
 			if( dojoWidget ){
@@ -74,20 +131,25 @@ egl.defineWidget(
 		var dojoWidget = this._getContainerWidget(containerWidget);
 		if ( dojoWidget ) {
 			this.removeChildren( dojoWidget );
-			if(children){
+			this.children = children;
+			this.checkChildrenType();
+			if( children ) {
 				for (var n=0; n< children.length; n++) {
 					this._appendChild( children[n], dojoWidget );
 				}
 			}			 
 		}
-		this.children = children;
+		else{
+			this.children = children;
+			this.checkChildrenType();
+		}
 	},
 	"getChildren" : function() {
 		return this.children;
 	},
 	"_removeChild" : function( child, containerWidget ) {
 		var dojoWidget = this._getContainerWidget(containerWidget);
-		if(!(dojoWidget.domNode))
+		if( !(dojoWidget.domNode) )
 			alert("no dom");
 		
 		// fixed some ugly asynchronous initializing problems

@@ -165,16 +165,27 @@ egl.defineWidget(
 		var _this = this;
 		var containerWidget = _this._getContainerWidget();
 		
-		if(_this.headerTitle || (_this.toolBar && _this.toolBar.length) ){
+		if( _this.backText || _this.backView  || _this.moveTo || _this.headerTitle || (_this.toolBar && _this.toolBar.length) ){
 			var headStyle = {};
 			
 			if( _this.headerTitle ) 
 				headStyle.label = _this.headerTitle;
 			if( _this.backText ) 
 				headStyle.back = _this.backText;
-			if( _this.moveTo   ) 
-				headStyle.moveTo = _this.moveTo;
 			
+			// work around nullable moveTo & back text situation
+			if( _this.moveTo ) 
+				headStyle.moveTo = _this.moveTo;
+			else if( _this.backView && _this.backView.getID() )
+				headStyle.moveTo = _this.backView.getID();
+			
+			if( headStyle.moveTo && !headStyle.back )
+				headStyle.back = " ";
+			
+			// avoid moving to itself 
+			if( headStyle.moveTo == _this.getID() )
+				delete headStyle.moveTo;
+				
 			_this.heading = new dojox.mobile.Heading( headStyle );	
 			containerWidget.addChild( _this.heading );
 			if( _this.toolBar && _this.toolBar.length && _this.synchronor )
@@ -233,7 +244,7 @@ egl.defineWidget(
 		if(this.backView){
 			this.backView._show();
 			this.moveTo = this.backView.getID();
-			if( !this.moveTo ){
+			if( !this.moveTo && this != this.backView ){
 				this.backView._addRef(this);
 			}
 		}
@@ -340,13 +351,12 @@ egl.defineWidget(
 			throw egl.createRuntimeException( "Can't append child to this dojoWidget. The dojoWidget has not been created.", [thisNode.tagName]);
 		
 		thisNode = dojoWidget.domNode;
+		
 		if (!child)
 			throw egl.createRuntimeException( "Can't append a null child.", [thisNode.tagName]);
 		if (child == this)
 			throw egl.createRuntimeException( "Can't append the widget itself as a child.", [thisNode.tagName]);
-		if(this.childTypes){
-			this._checkChildType(child);          
-		}		
+
 		var childNode = child.eze$$DOMElement;
 		if (!childNode)
 			throw egl.createRuntimeException( "The child node does not exist.", [thisNode.tagName]);

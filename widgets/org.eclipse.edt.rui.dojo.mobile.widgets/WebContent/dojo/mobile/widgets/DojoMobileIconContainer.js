@@ -6,6 +6,9 @@ egl.defineWidget(
 			'constructor' : function(){
 				var _this = this;
 				this.children = [];
+				this.acceptChildrenTypes = {
+					"dojo.mobile.widgets.DojoMobileIconItem" : true	
+				};
 				require(
 					["dojox/mobile/IconContainer"],
 					function( IconContainer ){
@@ -24,6 +27,7 @@ egl.defineWidget(
 				require(
 					["dojo/mobile/utility/Synchronor"],
 					function( synchronor ){
+						synchronor.trigger( _this, "SYN_READY" );
 						synchronor.wait(
 							_this.children, 'SYN_READY',
 							function(){

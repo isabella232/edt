@@ -1,0 +1,213 @@
+define(
+//begin v1.x content
+{
+	"field-weekday": "×™×•×? ×‘×©×‘×•×¢",
+	"dateFormatItem-yQQQ": "y QQQ",
+	"dateFormatItem-yMEd": "EEE, d.M.yyyy",
+	"dateFormatItem-MMMEd": "E, d ×‘MMM",
+	"eraNarrow": [
+		"×œ×¤× ×”×´×¡",
+		"×œ×¡×”×´× "
+	],
+	"dateFormat-long": "d ×‘MMMM y",
+	"months-format-wide": [
+		"×™× ×•×?×¨",
+		"×¤×‘×¨×•×?×¨",
+		"×ž×¨×¡",
+		"×?×¤×¨×™×œ",
+		"×ž×?×™",
+		"×™×•× ×™",
+		"×™×•×œ×™",
+		"×?×•×’×•×¡×˜",
+		"×¡×¤×˜×ž×‘×¨",
+		"×?×•×§×˜×•×‘×¨",
+		"× ×•×‘×ž×‘×¨",
+		"×“×¦×ž×‘×¨"
+	],
+	"dateFormatItem-EEEd": "EEE ×”-d",
+	"dayPeriods-format-wide-pm": "×?×—×”×´×¦",
+	"dateFormat-full": "EEEE, d ×‘MMMM y",
+	"dateFormatItem-Md": "d/M",
+	"field-era": "×ª×§×•×¤×”",
+	"dateFormatItem-yM": "M.yyyy",
+	"months-standAlone-wide": [
+		"×™× ×•×?×¨",
+		"×¤×‘×¨×•×?×¨",
+		"×ž×¨×¡",
+		"×?×¤×¨×™×œ",
+		"×ž×?×™",
+		"×™×•× ×™",
+		"×™×•×œ×™",
+		"×?×•×’×•×¡×˜",
+		"×¡×¤×˜×ž×‘×¨",
+		"×?×•×§×˜×•×‘×¨",
+		"× ×•×‘×ž×‘×¨",
+		"×“×¦×ž×‘×¨"
+	],
+	"timeFormat-short": "HH:mm",
+	"quarters-format-wide": [
+		"×¨×‘×¢×•×Ÿ 1",
+		"×¨×‘×¢×•×Ÿ 2",
+		"×¨×‘×¢×•×Ÿ 3",
+		"×¨×‘×¢×•×Ÿ 4"
+	],
+	"timeFormat-long": "HH:mm:ss z",
+	"field-year": "×©× ×”",
+	"dateFormatItem-yMMM": "MMM y",
+	"dateFormatItem-yQ": "yyyy Q",
+	"dateFormatItem-yyyyMMMM": "MMMM y",
+	"field-hour": "×©×¢×”",
+	"dateFormatItem-MMdd": "dd/MM",
+	"months-format-abbr": [
+		"×™× ×•",
+		"×¤×‘×¨",
+		"×ž×¨×¡",
+		"×?×¤×¨",
+		"×ž×?×™",
+		"×™×•× ",
+		"×™×•×œ",
+		"×?×•×’",
+		"×¡×¤×˜",
+		"×?×•×§",
+		"× ×•×‘",
+		"×“×¦×ž"
+	],
+	"dateFormatItem-yyQ": "Q yy",
+	"timeFormat-full": "HH:mm:ss zzzz",
+	"field-day-relative+0": "×”×™×•×?",
+	"field-day-relative+1": "×ž×—×¨",
+	"field-day-relative+2": "×ž×—×¨×ª×™×™×?",
+	"dateFormatItem-H": "HH",
+	"field-day-relative+3": "×‘×¢×•×“ ×©×œ×•×©×” ×™×ž×™×?",
+	"months-standAlone-abbr": [
+		"×™× ×•×³",
+		"×¤×‘×¨×³",
+		"×ž×¨×¡",
+		"×?×¤×¨×³",
+		"×ž×?×™",
+		"×™×•× ×³",
+		"×™×•×œ×³",
+		"×?×•×’×³",
+		"×¡×¤×˜×³",
+		"×?×•×§×³",
+		"× ×•×‘×³",
+		"×“×¦×ž×³"
+	],
+	"quarters-format-abbr": [
+		"×¨×‘×¢×•×Ÿ 1",
+		"×¨×‘×¢×•×Ÿ 2",
+		"×¨×‘×¢×•×Ÿ 3",
+		"×¨×‘×¢×•×Ÿ 4"
+	],
+	"quarters-standAlone-wide": [
+		"×¨×‘×¢×•×Ÿ 1",
+		"×¨×‘×¢×•×Ÿ 2",
+		"×¨×‘×¢×•×Ÿ 3",
+		"×¨×‘×¢×•×Ÿ 4"
+	],
+	"dateFormatItem-M": "L",
+	"days-standAlone-wide": [
+		"×™×•×? ×¨×?×©×•×Ÿ",
+		"×™×•×? ×©× ×™",
+		"×™×•×? ×©×œ×™×©×™",
+		"×™×•×? ×¨×‘×™×¢×™",
+		"×™×•×? ×—×ž×™×©×™",
+		"×™×•×? ×©×™×©×™",
+		"×™×•×? ×©×‘×ª"
+	],
+	"dateFormatItem-MMMMd": "d ×‘MMMM",
+	"dateFormatItem-yyMMM": "MMM yyyy",
+	"timeFormat-medium": "HH:mm:ss",
+	"dateFormatItem-Hm": "HH:mm",
+	"quarters-standAlone-abbr": [
+		"×¨×‘×¢×•×Ÿ 1",
+		"×¨×‘×¢×•×Ÿ 2",
+		"×¨×‘×¢×•×Ÿ 3",
+		"×¨×‘×¢×•×Ÿ 4"
+	],
+	"eraAbbr": [
+		"×œ×¤× ×”×´×¡",
+		"×œ×¡×”×´× "
+	],
+	"field-minute": "×“×§×”",
+	"field-dayperiod": "×œ×¤×”×´×¦/×?×—×”×´×¦",
+	"days-standAlone-abbr": [
+		"×™×•×? ×?×³",
+		"×™×•×? ×‘×³",
+		"×™×•×? ×’×³",
+		"×™×•×? ×“×³",
+		"×™×•×? ×”×³",
+		"×™×•×? ×•×³",
+		"×©×‘×ª"
+	],
+	"dateFormatItem-d": "d",
+	"dateFormatItem-ms": "mm:ss",
+	"field-day-relative+-1": "×?×ª×ž×•×œ",
+	"field-day-relative+-2": "×©×œ×©×•×?",
+	"field-day-relative+-3": "×œ×¤× ×™ ×©×œ×•×©×” ×™×ž×™×?",
+	"dateFormatItem-MMMd": "d ×‘MMM",
+	"dateFormatItem-MEd": "E, M-d",
+	"dateFormatItem-yMMMM": "MMMM y",
+	"field-day": "×™×•×?",
+	"days-format-wide": [
+		"×™×•×? ×¨×?×©×•×Ÿ",
+		"×™×•×? ×©× ×™",
+		"×™×•×? ×©×œ×™×©×™",
+		"×™×•×? ×¨×‘×™×¢×™",
+		"×™×•×? ×—×ž×™×©×™",
+		"×™×•×? ×©×™×©×™",
+		"×™×•×? ×©×‘×ª"
+	],
+	"field-zone": "×?×–×•×¨",
+	"dateFormatItem-yyyyMM": "MM/yyyy",
+	"dateFormatItem-y": "y",
+	"dateFormatItem-yyMM": "MM/yy",
+	"dateFormatItem-hm": "h:mm a",
+	"days-format-abbr": [
+		"×™×•×? ×?×³",
+		"×™×•×? ×‘×³",
+		"×™×•×? ×’×³",
+		"×™×•×? ×“×³",
+		"×™×•×? ×”×³",
+		"×™×•×? ×•×³",
+		"×©×‘×ª"
+	],
+	"eraNames": [
+		"×œ×¤× ×™ ×”×¡×¤×™×¨×”",
+		"×œ×¡×¤×™×¨×”"
+	],
+	"days-format-narrow": [
+		"×?",
+		"×‘",
+		"×’",
+		"×“",
+		"×”",
+		"×•",
+		"×©"
+	],
+	"field-month": "×—×•×“×©",
+	"days-standAlone-narrow": [
+		"×?",
+		"×‘",
+		"×’",
+		"×“",
+		"×”",
+		"×•",
+		"×©"
+	],
+	"dateFormatItem-MMM": "LLL",
+	"dayPeriods-format-wide-am": "×œ×¤× ×”×´×¦",
+	"dateFormatItem-MMMMEd": "E, d ×‘MMMM",
+	"dateFormat-short": "dd/MM/yy",
+	"field-second": "×©× ×™×™×”",
+	"dateFormatItem-yMMMEd": "EEE, d ×‘MMM y",
+	"dateFormatItem-Ed": "E ×”-d",
+	"field-week": "×©×‘×•×¢",
+	"dateFormat-medium": "d ×‘MMM yyyy",
+	"dateFormatItem-mmss": "mm:ss",
+	"dateFormatItem-Hms": "HH:mm:ss",
+	"dateFormatItem-hms": "h:mm:ss a",
+	"dateFormatItem-yyyy": "y"
+}
+//end v1.x content
+);

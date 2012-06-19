@@ -20,7 +20,6 @@ egl.defineWidget(
 	{
 		"constructor" : function() {
 			var _this = this;
-			_this.className = "";
 			_this.options = {};
 			require(
 			   [ 
@@ -102,9 +101,9 @@ egl.defineWidget(
 			this.options.selected  = v;
 		},
 		"getClassName" : function(){
-			return this.options.classValue;
+			return this.options['class'];
 		},
 		"setClassName" : function(v){
-			this.options.classValue = v;
+			this.options['class'] = v;
 		}
 	});

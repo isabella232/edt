@@ -21,7 +21,10 @@ egl.defineWidget(
 	"constructor" : function() {
 		var _this = this;
 		_this.style = "Rounded Rectangle";
-		_this.childTypes = ["dojo.mobile.widgets.DojoMobileListCategory", "dojo.mobile.widgets.DojoMobileListItem"];		
+		_this.acceptChildrenTypes = {
+			"dojo.mobile.widgets.DojoMobileListCategory" : true, 
+			"dojo.mobile.widgets.DojoMobileListItem" : true
+		};
 		require( 
 			[
 			 	"dojo/mobile/utility/Synchronor"
@@ -29,7 +32,7 @@ egl.defineWidget(
 			function( synchronor ){
 				_this.synchronor = synchronor;
 				_this.renderWhenDojoIsDoneLoading();
-			}
+			} 
 		);
 	},
 	"createDojoWidget" : function(parent) {

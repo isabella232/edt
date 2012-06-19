@@ -12,12 +12,12 @@
 // IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
-package dojo.mobile.widgets;                      
-         
+package dojo.mobile.widgets;                          
+           
 ExternalType DojoMobileDatePicker extends DojoMobileBase type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",  
 		ExternalName = "DojoMobileDatePicker",     
-		@VEWidget{       
+		@VEWidget{           
 			category = "Mobile",       
 			template = "${typeName}{ }",  
 			displayName = "DatePicker",  
@@ -27,8 +27,12 @@ ExternalType DojoMobileDatePicker extends DojoMobileBase type JavaScriptObject {
 			propertyFilter = [],
 			eventFilterType  = filterKind.excludeAll
 		}	        
-	}	    
-	day   int{@Property {}, @VEProperty {displayName="Day"}  };
-	month int{@Property {}, @VEProperty {displayName="Month"}};
-	year  int{@Property {}, @VEProperty {displayName="Year"} };
+	}
+		    
+	day   int {@Property {}, @VEProperty {displayName="Day"}  };
+	month int {@Property {}, @VEProperty {displayName="Month"}};
+	year  int {@Property {}, @VEProperty {displayName="Year"} };
+	
+	value date? { @Property{} };
+	function clear(); 
 end

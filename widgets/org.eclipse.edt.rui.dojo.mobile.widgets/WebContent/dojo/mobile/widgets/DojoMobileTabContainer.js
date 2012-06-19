@@ -21,6 +21,9 @@ egl.defineWidget(
 	"constructor" : function() {		
 		var _this = this;
 		this.selection	= 1;
+		this.acceptChildrenTypes = { 
+			"dojo.mobile.widgets.DojoMobileTab" : true
+		};
 		this.started 	= false;
 		this.segmentedControl = true;
 		require(["dojox/mobile/TabBar"], function(){
@@ -37,6 +40,8 @@ egl.defineWidget(
 	"setChildren" : function(children) {
 		var _this = this;
 		this.children = children;
+		this.checkChildrenType();
+		
 		if( this.tabBarWidget && this.children ){
 			var i = 0, j = 0, toDelete = true, toDeleteArr = [], toStartup = [];
 			var widgetChildren = this.tabBarWidget.getChildren();
@@ -152,7 +157,6 @@ egl.defineWidget(
 		this.children = this.children || [];
 		this.children.push(child);
 		this.setChildren(this.children);
-
 	},
 	"appendChildren" : function(children) {
 		this.children = this.children || [];

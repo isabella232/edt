@@ -1,0 +1,232 @@
+define(
+//begin v1.x content
+{
+	"dateFormatItem-yM": "M.y",
+	"field-dayperiod": "AM/PM",
+	"field-minute": "ÐœÐ¸Ð½ÑƒÑ‚Ð°",
+	"eraNames": [
+		"Ð´Ð¾ Ð½.Ñ?.",
+		"Ð½.Ñ?."
+	],
+	"dateFormatItem-MMMEd": "ccc, d MMM",
+	"field-day-relative+-1": "Ð’Ñ‡ÐµÑ€Ð°",
+	"field-weekday": "Ð”ÐµÐ½ÑŒ Ð½ÐµÐ´ÐµÐ»Ð¸",
+	"dateFormatItem-yQQQ": "y QQQ",
+	"field-day-relative+-2": "ÐŸÐ¾Ð·Ð°Ð²Ñ‡ÐµÑ€Ð°",
+	"dateFormatItem-MMdd": "dd.MM",
+	"days-standAlone-wide": [
+		"Ð’Ð¾Ñ?ÐºÑ€ÐµÑ?ÐµÐ½ÑŒÐµ",
+		"ÐŸÐ¾Ð½ÐµÐ´ÐµÐ»ÑŒÐ½Ð¸Ðº",
+		"Ð’Ñ‚Ð¾Ñ€Ð½Ð¸Ðº",
+		"Ð¡Ñ€ÐµÐ´Ð°",
+		"Ð§ÐµÑ‚Ð²ÐµÑ€Ð³",
+		"ÐŸÑ?Ñ‚Ð½Ð¸Ñ†Ð°",
+		"Ð¡ÑƒÐ±Ð±Ð¾Ñ‚Ð°"
+	],
+	"dateFormatItem-MMM": "LLL",
+	"months-standAlone-narrow": [
+		"Ð¯",
+		"Ð¤",
+		"Ðœ",
+		"Ð?",
+		"Ðœ",
+		"Ð˜",
+		"Ð˜",
+		"Ð?",
+		"Ð¡",
+		"Ðž",
+		"Ð?",
+		"Ð”"
+	],
+	"field-era": "Ð­Ñ€Ð°",
+	"field-hour": "Ð§Ð°Ñ?",
+	"quarters-standAlone-abbr": [
+		"1-Ð¹ ÐºÐ².",
+		"2-Ð¹ ÐºÐ².",
+		"3-Ð¹ ÐºÐ².",
+		"4-Ð¹ ÐºÐ²."
+	],
+	"dateFormatItem-yyMMMEEEd": "EEE, d MMM yy",
+	"dateFormatItem-y": "y",
+	"timeFormat-full": "H:mm:ss zzzz",
+	"dateFormatItem-yyyy": "y",
+	"months-standAlone-abbr": [
+		"Ñ?Ð½Ð².",
+		"Ñ„ÐµÐ²Ñ€.",
+		"Ð¼Ð°Ñ€Ñ‚",
+		"Ð°Ð¿Ñ€.",
+		"Ð¼Ð°Ð¹",
+		"Ð¸ÑŽÐ½ÑŒ",
+		"Ð¸ÑŽÐ»ÑŒ",
+		"Ð°Ð²Ð³.",
+		"Ñ?ÐµÐ½Ñ‚.",
+		"Ð¾ÐºÑ‚.",
+		"Ð½Ð¾Ñ?Ð±.",
+		"Ð´ÐµÐº."
+	],
+	"dateFormatItem-Ed": "E, d",
+	"dateFormatItem-yMMM": "LLL y",
+	"field-day-relative+0": "Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ?",
+	"dateFormatItem-yyyyLLLL": "LLLL y",
+	"field-day-relative+1": "Ð—Ð°Ð²Ñ‚Ñ€Ð°",
+	"days-standAlone-narrow": [
+		"Ð’",
+		"ÐŸ",
+		"Ð’",
+		"Ð¡",
+		"Ð§",
+		"ÐŸ",
+		"Ð¡"
+	],
+	"eraAbbr": [
+		"Ð´Ð¾ Ð½.Ñ?.",
+		"Ð½.Ñ?."
+	],
+	"field-day-relative+2": "ÐŸÐ¾Ñ?Ð»ÐµÐ·Ð°Ð²Ñ‚Ñ€Ð°",
+	"dateFormatItem-yyyyMM": "MM.yyyy",
+	"dateFormatItem-yyyyMMMM": "LLLL y",
+	"dateFormat-long": "d MMMM yÂ 'Ð³'.",
+	"timeFormat-medium": "H:mm:ss",
+	"field-zone": "Ð§Ð°Ñ?Ð¾Ð²Ð¾Ð¹ Ð¿Ð¾Ñ?Ñ?",
+	"dateFormatItem-Hm": "H:mm",
+	"dateFormat-medium": "dd.MM.yyyy",
+	"dateFormatItem-yyMM": "MM.yy",
+	"dateFormatItem-Hms": "H:mm:ss",
+	"dateFormatItem-yyMMM": "LLL yy",
+	"quarters-standAlone-wide": [
+		"1-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"2-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"3-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"4-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»"
+	],
+	"dateFormatItem-ms": "mm:ss",
+	"dateFormatItem-yyyyQQQQ": "QQQQ yÂ 'Ð³'.",
+	"field-year": "Ð“Ð¾Ð´",
+	"months-standAlone-wide": [
+		"Ð¯Ð½Ð²Ð°Ñ€ÑŒ",
+		"Ð¤ÐµÐ²Ñ€Ð°Ð»ÑŒ",
+		"ÐœÐ°Ñ€Ñ‚",
+		"Ð?Ð¿Ñ€ÐµÐ»ÑŒ",
+		"ÐœÐ°Ð¹",
+		"Ð˜ÑŽÐ½ÑŒ",
+		"Ð˜ÑŽÐ»ÑŒ",
+		"Ð?Ð²Ð³ÑƒÑ?Ñ‚",
+		"Ð¡ÐµÐ½Ñ‚Ñ?Ð±Ñ€ÑŒ",
+		"ÐžÐºÑ‚Ñ?Ð±Ñ€ÑŒ",
+		"Ð?Ð¾Ñ?Ð±Ñ€ÑŒ",
+		"Ð”ÐµÐºÐ°Ð±Ñ€ÑŒ"
+	],
+	"field-week": "Ð?ÐµÐ´ÐµÐ»Ñ?",
+	"dateFormatItem-MMMd": "d MMM",
+	"dateFormatItem-yyQ": "Q yy",
+	"timeFormat-long": "H:mm:ss z",
+	"months-format-abbr": [
+		"Ñ?Ð½Ð².",
+		"Ñ„ÐµÐ²Ñ€.",
+		"Ð¼Ð°Ñ€Ñ‚Ð°",
+		"Ð°Ð¿Ñ€.",
+		"Ð¼Ð°Ñ?",
+		"Ð¸ÑŽÐ½Ñ?",
+		"Ð¸ÑŽÐ»Ñ?",
+		"Ð°Ð²Ð³.",
+		"Ñ?ÐµÐ½Ñ‚.",
+		"Ð¾ÐºÑ‚.",
+		"Ð½Ð¾Ñ?Ð±.",
+		"Ð´ÐµÐº."
+	],
+	"timeFormat-short": "H:mm",
+	"dateFormatItem-H": "H",
+	"field-month": "ÐœÐµÑ?Ñ?Ñ†",
+	"quarters-format-abbr": [
+		"1-Ð¹ ÐºÐ².",
+		"2-Ð¹ ÐºÐ².",
+		"3-Ð¹ ÐºÐ².",
+		"4-Ð¹ ÐºÐ²."
+	],
+	"days-format-abbr": [
+		"Ð²Ñ?",
+		"Ð¿Ð½",
+		"Ð²Ñ‚",
+		"Ñ?Ñ€",
+		"Ñ‡Ñ‚",
+		"Ð¿Ñ‚",
+		"Ñ?Ð±"
+	],
+	"dateFormatItem-M": "L",
+	"days-format-narrow": [
+		"Ð’",
+		"ÐŸ",
+		"Ð’",
+		"Ð¡",
+		"Ð§",
+		"ÐŸ",
+		"Ð¡"
+	],
+	"field-second": "Ð¡ÐµÐºÑƒÐ½Ð´Ð°",
+	"field-day": "Ð”ÐµÐ½ÑŒ",
+	"dateFormatItem-MEd": "E, d.M",
+	"months-format-narrow": [
+		"Ð¯",
+		"Ð¤",
+		"Ðœ",
+		"Ð?",
+		"Ðœ",
+		"Ð˜",
+		"Ð˜",
+		"Ð?",
+		"Ð¡",
+		"Ðž",
+		"Ð?",
+		"Ð”"
+	],
+	"days-standAlone-abbr": [
+		"Ð’Ñ?",
+		"ÐŸÐ½",
+		"Ð’Ñ‚",
+		"Ð¡Ñ€",
+		"Ð§Ñ‚",
+		"ÐŸÑ‚",
+		"Ð¡Ð±"
+	],
+	"dateFormat-short": "dd.MM.yy",
+	"dateFormatItem-yMMMEd": "E, d MMM y",
+	"dateFormat-full": "EEEE, d MMMM yÂ 'Ð³'.",
+	"dateFormatItem-Md": "d.M",
+	"dateFormatItem-yMEd": "EEE, d.M.y",
+	"months-format-wide": [
+		"Ñ?Ð½Ð²Ð°Ñ€Ñ?",
+		"Ñ„ÐµÐ²Ñ€Ð°Ð»Ñ?",
+		"Ð¼Ð°Ñ€Ñ‚Ð°",
+		"Ð°Ð¿Ñ€ÐµÐ»Ñ?",
+		"Ð¼Ð°Ñ?",
+		"Ð¸ÑŽÐ½Ñ?",
+		"Ð¸ÑŽÐ»Ñ?",
+		"Ð°Ð²Ð³ÑƒÑ?Ñ‚Ð°",
+		"Ñ?ÐµÐ½Ñ‚Ñ?Ð±Ñ€Ñ?",
+		"Ð¾ÐºÑ‚Ñ?Ð±Ñ€Ñ?",
+		"Ð½Ð¾Ñ?Ð±Ñ€Ñ?",
+		"Ð´ÐµÐºÐ°Ð±Ñ€Ñ?"
+	],
+	"dateFormatItem-d": "d",
+	"quarters-format-wide": [
+		"1-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"2-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"3-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»",
+		"4-Ð¹ ÐºÐ²Ð°Ñ€Ñ‚Ð°Ð»"
+	],
+	"days-format-wide": [
+		"Ð²Ð¾Ñ?ÐºÑ€ÐµÑ?ÐµÐ½ÑŒÐµ",
+		"Ð¿Ð¾Ð½ÐµÐ´ÐµÐ»ÑŒÐ½Ð¸Ðº",
+		"Ð²Ñ‚Ð¾Ñ€Ð½Ð¸Ðº",
+		"Ñ?Ñ€ÐµÐ´Ð°",
+		"Ñ‡ÐµÑ‚Ð²ÐµÑ€Ð³",
+		"Ð¿Ñ?Ñ‚Ð½Ð¸Ñ†Ð°",
+		"Ñ?ÑƒÐ±Ð±Ð¾Ñ‚Ð°"
+	],
+	"eraNarrow": [
+		"Ð´Ð¾ Ð½.Ñ?.",
+		"Ð½.Ñ?."
+	]
+}
+//end v1.x content
+);
