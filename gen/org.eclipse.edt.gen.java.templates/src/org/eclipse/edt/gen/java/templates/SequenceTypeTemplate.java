@@ -29,9 +29,9 @@ public class SequenceTypeTemplate extends JavaTemplate {
 		out.print(ctx.getNativeImplementationMapping(arg.getType()) + ".substring(");
 		ctx.invoke(genExpression, arg.getStringExpression(), ctx, out);
 		out.print(", ");
-		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getStart(), TypeUtils.Type_INT), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getStart(), TypeUtils.Type_INT), ctx, out, arg.getStart());
 		out.print(", ");
-		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getEnd(), TypeUtils.Type_INT), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getEnd(), TypeUtils.Type_INT), ctx, out, arg.getEnd());
 		out.print(")");
 	}
 }

@@ -29,9 +29,9 @@ public class ParameterizableTypeTemplate extends JavaTemplate {
 		out.print(ctx.getNativeImplementationMapping(arg.getType()) + ".substring(");
 		ctx.invoke(genExpression, arg.getStringExpression(), ctx, out);
 		out.print(", ");
-		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getStart(), TypeUtils.Type_INT), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getStart(), TypeUtils.Type_INT), ctx, out, arg.getStart());
 		out.print(", ");
-		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getEnd(), TypeUtils.Type_INT), ctx, out);
+		ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getEnd(), TypeUtils.Type_INT), ctx, out, arg.getEnd());
 		out.print(")");
 	}
 
@@ -49,11 +49,11 @@ public class ParameterizableTypeTemplate extends JavaTemplate {
 	public void genUnaryExpression(ParameterizableType type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// we only need to check for minus sign and if found, we need to change it to .negate()
 		if (arg.getOperator().equals(UnaryExpression.Op_NEGATE)) {
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getExpression());
 			out.print(".negate()");
 		} else if (arg.getOperator().equals(UnaryExpression.Op_BITWISENOT)) {
 			out.print("(");
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getExpression());
 			out.print(".negate()");
 			out.print(" - 1)");
 		} else

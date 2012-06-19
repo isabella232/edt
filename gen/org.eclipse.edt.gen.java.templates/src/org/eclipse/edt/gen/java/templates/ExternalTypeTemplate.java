@@ -162,7 +162,7 @@ public class ExternalTypeTemplate extends JavaTemplate {
 				ctx.invoke(genRuntimeTypeName, ((Delegate) field.getType()).getParameters().get(0).getType(), ctx, out);
 				out.print(" ezeEvent ) { ");
 				ctx.put(DELEGATE_IN_INNER_CLASS, true);
-				ctx.invoke(genExpression, assignment.getRHS(), ctx, out);
+				ctx.invoke(genExpression, assignment.getRHS(), ctx, out, assignment.getRHS());
 				ctx.remove(DELEGATE_IN_INNER_CLASS);
 				out.print(".invoke( ezeEvent );");
 				out.print(" } } )");
