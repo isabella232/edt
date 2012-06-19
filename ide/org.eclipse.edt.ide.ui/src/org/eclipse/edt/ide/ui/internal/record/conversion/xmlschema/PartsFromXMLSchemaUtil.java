@@ -509,11 +509,8 @@ public class PartsFromXMLSchemaUtil extends PartsUtil {
 		// turn an xsd string with a fixed length into a unicode field
 		if (WSDLUtil.isString(simpleType)) {
 			type.setName("string");//$NON-NLS-1$
-		} else if (WSDLUtil.isUnicode(simpleType)) {
-			type.setName("unicode(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
 		} else if (WSDLUtil.isLimitedString(simpleType)) {
-			//type.setName("string(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
-			type.setName("string");//$NON-NLS-1$
+			type.setName("string(" + String.valueOf(WSDLUtil.getItemLength(simpleType)) + ")");//$NON-NLS-1$
 		}
 		// turn an xsd integer (not an int) into a NUM
 		else if (XSConstants.INTEGER_DT == simpleType.getBuiltInKind()) {

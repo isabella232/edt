@@ -85,10 +85,13 @@ public class WSDLUtil {
 
 	public static boolean isLimitedString(XSSimpleTypeDefinition simpleType) {
 		// no collapse and a length or a max with a min
-		return XSConstants.STRING_DT == simpleType.getBuiltInKind() && !isString(getLength(simpleType), getMaxLength(simpleType))
-				&& !isUnicode(hasCollapse(simpleType), getLength(simpleType), getMaxLength(simpleType), getMinLength(simpleType));
+		return XSConstants.STRING_DT == simpleType.getBuiltInKind() && isLimitedString(hasCollapse(simpleType), getLength(simpleType), getMaxLength(simpleType), getMinLength(simpleType));
 	}
-
+	private static boolean isLimitedString(boolean hasCollapse, int length, int maxLength, int minLength) {
+		// no collapse and a length or a max without min
+		return !hasCollapse && (length != -1 || maxLength != -1 );
+	}
+	
 	public static boolean hasCollapse(XSSimpleTypeDefinition simpleType) {
 		boolean result = false;
 		if (simpleType.isDefinedFacet(XSSimpleTypeDefinition.FACET_WHITESPACE)) {

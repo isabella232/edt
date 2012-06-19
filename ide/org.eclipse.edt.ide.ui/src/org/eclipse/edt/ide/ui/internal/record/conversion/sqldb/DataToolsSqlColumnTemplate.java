@@ -108,6 +108,18 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 				builder.append(item.getDecimals());
 			}
 			builder.append(SQLConstants.RPAREN);
+		} else if (item.getPrimitiveType().equals(IEGLConstants.KEYWORD_STRING)) {
+			if(item.getLength() != null) {
+				try {
+					int length = Integer.parseInt(item.getLength());
+					if(length > 0) {
+						builder.append(SQLConstants.LPAREN);
+						builder.append(item.getLength());
+						builder.append(SQLConstants.RPAREN);
+					}
+				} catch (NumberFormatException e) {
+				}
+			}
 		}
 		if (item.isNullable()) {
 			builder.append("?");
@@ -172,7 +184,7 @@ public class DataToolsSqlColumnTemplate extends DataToolsSqlTemplate {
 		   "blob", //$NON-NLS-1$
 		   "clob", //$NON-NLS-1$
 		   "graphic", //$NON-NLS-1$
-		   "time", //$NON-NLS-1$
+//		   "time", //$NON-NLS-1$
 		   "vargraphic", //$NON-NLS-1$
 		   "binary", //$NON-NLS-1$
 		   "char for bit data", //$NON-NLS-1$
