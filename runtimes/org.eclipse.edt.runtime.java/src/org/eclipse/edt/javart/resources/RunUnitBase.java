@@ -27,8 +27,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
 
-import javax.naming.InitialContext;
-
 import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.EglExit;
 import org.eclipse.edt.javart.Executable;
@@ -51,10 +49,10 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
 	
 	/**
-	 * Version information (major.minor only).
+	 * Version information.
 	 * TODO Keep the value of this field up to date!
 	 */
-	public static final String VERSION = "0.7";
+	public static final String VERSION = "0.8.1";
 
 	/**
 	 * The StartupInfo that was used to create this RunUnit.
@@ -102,11 +100,6 @@ public abstract class RunUnitBase implements RunUnit, Serializable
 	 * last Program.
 	 */
 	private int returnCode;
-	
-	/**
-	 * The context used for JNDI lookups.
-	 */
-	protected InitialContext initialContext;
 
 	/**
 	 * Makes a new RunUnit.

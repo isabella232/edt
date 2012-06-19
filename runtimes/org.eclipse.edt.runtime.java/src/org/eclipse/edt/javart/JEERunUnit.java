@@ -23,6 +23,11 @@ import eglx.lang.AnyException;
 public class JEERunUnit extends RunUnitBase 
 {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
+	
+	/**
+	 * The context used for JNDI lookups.
+	 */
+	protected InitialContext initialContext;
 
 	public JEERunUnit( StartupInfo startInfo ) throws AnyException 
 	{
