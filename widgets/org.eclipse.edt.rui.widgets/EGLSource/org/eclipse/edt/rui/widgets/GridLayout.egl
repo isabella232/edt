@@ -76,14 +76,14 @@ handler GridLayout type RUIWidget{targetWidget = table, cssFile = "css/org.eclip
 	
 	function setWidth(width int in)
 		table.width = width;
-		if(table.children!=null)
+		if(table.children!=null && table.children.getSize() > 0)
 			table.children[1].width = width;
 		end
 	end
 	
 	function setHeight(height int in)
 		table.height = height;
-		if(table.children!=null)
+		if(table.children!=null && table.children.getSize() > 0)
 			table.children[1].height = height;
 		end
 	end
