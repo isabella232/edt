@@ -67,6 +67,24 @@ public class WidgetLibProviderManager {
 		return ret.toArray(new IWidgetLibProvider[ret.size()]);
 	}
 	
+	public List<String> getProviders(String widgetLibraryContainerID, boolean isSelected){
+		List<String> ret = new ArrayList<String>();
+		IConfigurationElement[] providerRefs = getProviderRefs(widgetLibraryContainerID);
+		for(int i = 0; i < providerRefs.length; i++){
+				String sSelected = providerRefs[i].getAttribute(IWidgetLibProvider.PROVIDER_REF_SELECTED);
+				if (sSelected!=null) { 
+					boolean selected = Boolean.parseBoolean(sSelected);
+					if(isSelected != selected){
+						continue;
+					}
+				}
+				
+				ret.add(providerRefs[i].getAttribute("id"));
+		}
+
+		return ret;
+	}
+	
 	public IConfigurationElement[] getProviderRefs(String widgetLibraryContainerID){
 		
 		for (int i = 0; i < rootElements.length; i++) {
