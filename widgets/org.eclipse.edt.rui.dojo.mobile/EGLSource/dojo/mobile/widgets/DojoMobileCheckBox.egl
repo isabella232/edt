@@ -32,7 +32,11 @@ ExternalType DojoMobileCheckBox extends DojoMobileBase type JavaScriptObject {
 	/*
 	* Read-only boolean that returns the current state of the INPUT checkbox.
 	*/
-	checked Boolean { @Property{}, @VEProperty{displayName = "Checked"} };	
-	
+	selected Boolean { @Property{}, @VEProperty{displayName = "Selected"} };
+	/*
+	 * The text for the label accompanying this checkbox widget
+	 */
+	text String { @Property, @VEProperty{} };
+  
 end
 
