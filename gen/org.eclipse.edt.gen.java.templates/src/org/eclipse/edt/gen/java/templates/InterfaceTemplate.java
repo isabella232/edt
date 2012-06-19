@@ -49,6 +49,9 @@ public class InterfaceTemplate extends JavaTemplate {
 		ctx.invoke(genFunctions, part, ctx, out);
 	}
 
+	public void genConstructor(Interface part, Context ctx, TabbedWriter out) {
+	}
+
 	public void genFields(Interface part, Context ctx, TabbedWriter out) {
 		for (Field field : part.getFields()) {
 			ctx.invoke(genField, part, ctx, out, field);
