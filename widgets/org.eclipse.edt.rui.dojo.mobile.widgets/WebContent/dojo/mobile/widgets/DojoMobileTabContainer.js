@@ -24,7 +24,7 @@ egl.defineWidget(
 		this.acceptChildrenTypes = { 
 			"dojo.mobile.widgets.DojoMobileTab" : true
 		};
-		this.started 	= false;
+		this.started = false;
 		this.segmentedControl = true;
 		require(["dojox/mobile/TabBar"], function(){
 			_this.renderWhenDojoIsDoneLoading();
@@ -115,7 +115,7 @@ egl.defineWidget(
 				for( i = 0; i < toStartup.length; ++ i )
 					children[toStartup[i]].tabViewWidget.startup();
 			
-			if( this._layout == "Bottom" )
+			if( this._tabPosition == "Bottom" )
 				this.fixBottom();
 		}
 	}, 
@@ -198,7 +198,7 @@ egl.defineWidget(
 		_this.tabContainerNode = parent;	
 		_this.containerNode    = parent;
 		
-		if( _this._layout == "Fixed Bottom" ){
+		if( _this._tabPosition == "Fixed Bottom" ){
 			tabBarNode.style.position = "fixed";
 			tabBarNode.style.left = 0;
 			tabBarNode.style.bottom = 0;
@@ -206,7 +206,7 @@ egl.defineWidget(
 			tabBarNode.style.zIndex = "10000";
 			_this.tabContainerNode.appendChild( tabBarNode );
 		}
-		else if( _this._layout == "Fixed Top" ){
+		else if( _this._tabPosition == "Fixed Top" ){
 			tabBarNode.style.position = "fixed";
 			tabBarNode.style.left = 0;
 			tabBarNode.style.top = 0;
@@ -214,7 +214,7 @@ egl.defineWidget(
 			tabBarNode.style.zIndex = "10000";
 			_this.tabContainerNode.appendChild( tabBarNode );
 		}
-		else if( _this._layout != "Bottom" )
+		else if( _this._tabPosition != "Bottom" )
 			_this.tabContainerNode.appendChild( tabBarNode );
 	
 		tabBarNode.id = _this.id || "";
@@ -241,7 +241,7 @@ egl.defineWidget(
 								_this.children[i].parent = _this;
 						} 
 						
-						if( _this._layout == "Bottom" )
+						if( _this._tabPosition == "Bottom" )
 							_this.tabContainerNode.appendChild( tabBarNode );
 						
 						// initially select
@@ -392,10 +392,10 @@ egl.defineWidget(
 	"setFixedBottom" : function( status ){
 		this._fixedBottom = status;
 	},
-	"getLayout" : function(){
-		return this._layout;
+	"getTabPosition" : function(){
+		return this._tabPosition;
 	},
-	"setLayout" : function( newLayout ){
-		this._layout = newLayout;
+	"setTabPosition" : function( newLayout ){
+		this._tabPosition = newLayout;
 	}
 });

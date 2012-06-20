@@ -44,7 +44,7 @@ ExternalType DojoMobileSlider extends DojoMobileBase type JavaScriptObject{
 	minimum int { @VEProperty };
 
 	/*
-	 * The maximum value. Should not be smaller than the maximum value
+	 * The maximum value. 
 	 */
 	maximum int { @VEProperty };
 	

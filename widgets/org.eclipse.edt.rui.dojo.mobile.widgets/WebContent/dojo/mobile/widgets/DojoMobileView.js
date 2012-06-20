@@ -65,7 +65,7 @@ egl.defineWidget(
 					_this.containerWidget.domNode.childNodes[0].style.width = _this._containerWidth;
 			}
 			
-			if( _this.swappable ){
+			if( _this.isSwappable ){
 				var swappWidget = new dojox.mobile.SwapView({
 					selected: _this.selected || false
 				},	parent );
@@ -154,7 +154,7 @@ egl.defineWidget(
 			scrollStyle = scrollStyle + 'h';
 		if( _this.scrollVertically )
 			scrollStyle = scrollStyle + 'v';
-		if( _this.swappable )
+		if( _this.isSwappable )
 			dependance.push("dojox/mobile/SwapView");
 		if( scrollStyle.indexOf('h') != -1  || scrollStyle.indexOf('v') != -1 )
 			dependance.push("dojox/mobile/ScrollableView");
@@ -397,11 +397,11 @@ egl.defineWidget(
 	"getScrollHorizontally" : function(){
 		return this.scrollHorizontally || false;
 	},
-	"setSwappable" : function( status ){
-		this.swappable = status;
+	"setIsSwappable" : function( status ){
+		this.isSwappable = status;
 	},
-	"getSwappable" : function(){
-		return this.swappable || false;
+	"getIsSwappable" : function(){
+		return this.isSwappable || false;
 	},
 	"getClassName" : function(){
 		return this._class;

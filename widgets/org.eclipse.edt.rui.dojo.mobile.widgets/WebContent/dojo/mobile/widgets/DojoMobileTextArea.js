@@ -15,16 +15,16 @@ egl.defineWidget(
 		},
 		'createDojoWidget' : function( parent ){
 			var _this = this;
-			parent.innerHTML = _this.value || "";
+			parent.innerHTML = _this.text || "";
 			_this.domNode = parent;
 			
 			_this._args = {
-				value : _this.value || "",
+				value : _this.text || "",
 				readOnly : (_this.readOnly ? _this.readOnly : false),
 				maxLength : (_this.maxLength ? _this.maxLength : -1),
 				placeHolder : (_this.placeHolder ? _this.placeHolder : "") 
 			};
-			if( _this.expanding ) 
+			if( _this.isExpandable ) 
 				_this.dojoWidget = new dojox.mobile.ExpandingTextArea(_this._args, parent);
 			else
 				_this.dojoWidget = new dojox.mobile.TextArea(_this._args, parent);
@@ -32,7 +32,7 @@ egl.defineWidget(
 			var cols = (_this.cols > 0) ? _this.cols : 20;
 			var rows = (_this.rows > 0) ? _this.rows : 2;
 			
-			_this.dojoWidget.domNode.innerHTML = _this.value || "";
+			_this.dojoWidget.domNode.innerHTML = _this.text || "";
 			_this.dojoWidget.domNode.cols = cols;
 			_this.dojoWidget.domNode.rows = rows;
 			
@@ -42,17 +42,17 @@ egl.defineWidget(
 			
 			_this.synchronor.trigger( _this, "SYN_READY" );
 		},
-		"setValue" : function(text){
-			this.value = text;
+		"setText" : function(text){
+			this.text = text;
 			if(this.dojoWidget){
 				this.dojoWidget.domNode.innerHTML = text;
 			}
 		},
-		"getValue" : function(){
+		"getText" : function(){
 			if(this.dojoWidget){
 				return this.dojoWidget.value;
 			}
-			return this.value;
+			return this.text;
 		},
 		"setCols" : function(cols){
 			if(this.dojoWidget){
@@ -68,12 +68,12 @@ egl.defineWidget(
 			}
 		},
 		
-		"setExpanding" : function( status ){
-			this.expanding = status || true;
+		"setIsExpandable" : function( status ){
+			this.isExpandable = status || true;
 			
 		},
-		"getExpanding" : function(){
-			return this.expanding;
+		"getIsExpandable" : function(){
+			return this.isExpandable;
 		},
 		
 		"setReadOnly" : function(readOnly){

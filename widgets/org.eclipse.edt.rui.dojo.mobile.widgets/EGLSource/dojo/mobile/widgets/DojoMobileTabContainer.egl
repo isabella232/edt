@@ -34,21 +34,21 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 			displayName = "TabContainer",   
 			smallIcon = "icons/ctool16/mobile_tabcontainer_pal16.gif",
 			largeIcon = "icons/ctool24/mobile_tabcontainer_pal24.gif",
-	 		propertyFilterType  = FilterKind.EXCLUDEALLEXCEPT,
-			propertyFilter = [],
+	 		propertyFilterType  = FilterKind.excludeAllExcept,
+			propertyFilter = ["class"],
 			eventFilterType  = filterKind.excludeAll,
 			container = @VEContainer{} 
 		}      
 	}   
 
-	layout String { @Property{}, @VEProperty{
+	tabPosition String { @Property{}, @VEProperty{
 		propertyType = "choice", 
-		displayName  = "Layout",   
+		displayName  = "tabPosition",   
 		choices = [     
-			@VEPropertyChoice {displayName = "Top", id = "\"Top\""},
-			@VEPropertyChoice {displayName = "Bottom", id = "\"Bottom\""},
-			@VEPropertyChoice {displayName = "Fixed Top", id = "\"Fixed Top\""},
-			@VEPropertyChoice {displayName = "Fixed Bottom", id = "\"Fixed Bottom\""}
+			@VEPropertyChoice {displayName = "Top", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_TOP"},
+			@VEPropertyChoice {displayName = "Bottom", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_BUTTOM"},
+			@VEPropertyChoice {displayName = "Fixed Top", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_FIXED_TOP"},
+			@VEPropertyChoice {displayName = "Fixed Bottom", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_FIXED_BUTTOM"}
 		], 
 		default = "Top"
 	}};
@@ -57,9 +57,8 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 	*/
 	segmentedControl Boolean{ @Property{}, @VEProperty{ displayName = "Segmented Control"} };  
 	// Which one is selection 
-	selection int   { @Property{}, @VEProperty{ displayName = "Selection"} };
+	selection int { @Property{}, @VEProperty{ displayName = "Selection"} };
 	 
-	className string{ @Property{}};
 	function addTab( tab DojoMobileTab, index int in );
 	function removeTab( index int in ); 
 end  

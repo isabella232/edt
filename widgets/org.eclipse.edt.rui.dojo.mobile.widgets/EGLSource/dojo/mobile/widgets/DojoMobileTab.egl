@@ -34,11 +34,11 @@ ExternalType DojoMobileTab extends DojoMobileContainer type JavaScriptObject {
 	
 	title String { @Property{}, @VEProperty{displayName="Title"} };	
 	/*
-	* A path for the unselected (typically dark) icon. If icon is not specified, the iconBase parameter of the parent widget is used.
+	* A path for the unselected (typically dark) icon, when selected the tab, will apply this icon
 	*/
-	icon1 String { @Property{}, @VEProperty{displayName="Icon1"} };	
+	selectedIcon String { @Property{}, @VEProperty{displayName="Selected Icon"} };	
 	/*
-	* A path for the selected (typically highlight) icon. If icon is not specified, the iconBase parameter of the parent widget or icon1 is used.
+	* A path for the selected (typically highlight) icon, when deselected this tab, will apply this icon
 	*/
-	icon2 String { @Property{}, @VEProperty{displayName="Icon2"} };	
+	deSelectedIcon String { @Property{}, @VEProperty{displayName="DeSelected Icon"} };	
 end

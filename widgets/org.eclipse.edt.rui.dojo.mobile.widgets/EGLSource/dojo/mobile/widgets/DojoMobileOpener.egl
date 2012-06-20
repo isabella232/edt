@@ -19,10 +19,12 @@ ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject
 	}     
 }         
  	//Choose which widget type will be used, 'Opener' or 'Overlay' 
-	modal boolean{ @Property{}, @VEProperty{ displayName="Modal"} };
+	isModal boolean{ @Property{}, @VEProperty{ displayName="isModal"} };
 	
 	//Causes the content to shown (popup Tooltip or sliding Overlay).
-	function pop( widget DojoMobileBase? );  
+	function showOpener( widget DojoMobileBase? );  
 	//Hides the Opener content.
-	function hide();
+	function hideOpener();
+	
 end
+

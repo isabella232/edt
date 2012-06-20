@@ -76,11 +76,11 @@ egl.defineWidget(
 		"setTransitionDir" : function(v){
 			this.options.transitionDir = v;
 		},
-		"getIcon" : function(){
-			return this.options.icon || "";
+		"getImagePath" : function(){
+			return this.options.imagePath || "";
 		},
-		"setIcon" : function(v){
-			this.options.icon = v;
+		"setImagePath" : function(v){
+			this.options.imagePath = v;
 		},
 		"getActionView" : function(){
 			return this._actionView || null;
@@ -88,11 +88,11 @@ egl.defineWidget(
 		"setActionView" : function(v){
 			this._actionView = v;
 		},
-		"getLabelString" : function(){
-			return this.options.label || "";
+		"getText" : function(){
+			return this.options.text || "";
 		},
-		"setLabelString" : function(v){
-			this.options.label = v;
+		"setText" : function(v){
+			this.options.text = v;
 		},
 		"getSelected" : function(){
 			return this.options.selected || false;

@@ -22,11 +22,11 @@ ExternalType DojoMobileTextArea extends DojoMobileBase type JavaScriptObject
 	/**
 	* Two type of textarea, expanding and none-expanding
 	*/
-	expanding boolean{ @Property{}, @VEProperty{ displayName="Expanding"} };
+	isExpandable boolean{ @Property{}, @VEProperty{ displayName="isExpandable"} };
 	/*
 	* Initial value of the editable text. If omitted, then the TEXTAREA's innerHTML is used.
 	*/
-	value String { @Property{}, @VEProperty{displayName = "Value"} };
+	text String { @Property{}, @VEProperty{displayName = "text"} };
 	/*
 	* Prompt text to display inside the TEXTAREA when it would otherwise be empty (requires browser support).
 	*/		
@@ -35,18 +35,9 @@ ExternalType DojoMobileTextArea extends DojoMobileBase type JavaScriptObject
 	* Maximum number of characters that can be entered in the TEXTAREA (requires browser support).
 	*/
 	maxLength int{@Property {}, @VEProperty {displayName = "MaxLength"}};
-	
-	/*
-	* column and row of textarea, can control the width & height of textarea
-	*/
-	//cols int { @Property{}, @VEProperty{displayName = "Columns"} };		
-	//rows int { @Property{}, @VEProperty{displayName = "Rows"} };   
-
 	/**
 	* Textarea content is readonly
 	*/
 	readOnly boolean{@Property {}, @VEProperty {displayName = "Readonly"}};
-	
-	
 end
 

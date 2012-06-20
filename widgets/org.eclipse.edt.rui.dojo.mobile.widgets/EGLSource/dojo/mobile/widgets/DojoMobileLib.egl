@@ -33,4 +33,21 @@ library DojoMobileLib {}
 	const SLIDER_VERTICAL String = "V";
 	const SLIDER_AUTO String = "auto";
 	
+	/*
+	* Dojo Mobile TabContainer position
+	*/
+	const TAB_POSITION_TOP String = "top";
+	CONST TAB_POSITION_BUTTOM String = "Bottom";
+	const TAB_POSITION_FIXED_TOP String = "Fixed Top";
+	const TAB_POSITION_FIXED_BUTTOM String = "Fixed Bottom";
+	
+	/*
+	* Dojo Mobile ToolBar transaction type
+	*/
+	const TRANSACTION_SLIDE String = "slide";
+	const TRANSACTION_FADE String = "fade";
+	const TRANSACTION_FLIP String = "flip";
+	
+	const TRANSACTION_DIR_FORWARD int = 1;
+	const TRANSACTION_DIR_BACKWARD int = -1;
 end

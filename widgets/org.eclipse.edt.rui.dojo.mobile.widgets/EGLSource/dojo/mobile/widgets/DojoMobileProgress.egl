@@ -31,13 +31,8 @@ ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
 	/* 
 	 * The time interval in milliseconds for updating the spinning indicator.
 	 */
-	intervalTime int { @Property {}, @VEProperty {displayName = "Interval Time"}};
-	/*
-	 *	Sets an indicator icon image file (typically animated GIF). If null is specified, restores the default spinner.
-	*/		
-	imgPath string {@Property {}, @VEProperty {displayName = "Upload Progress Image"}};
+	updateInterval int { @Property {}, @VEProperty {displayName = "Interval"}};
 	
-	function setImage(imgPath string in);
-	function showProgress(intervalTime int in);
+	function showProgress(updateInterval int in);
 	function hideProgress();
 end

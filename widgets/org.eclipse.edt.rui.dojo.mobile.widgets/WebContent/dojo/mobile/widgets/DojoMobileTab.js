@@ -68,10 +68,10 @@ egl.defineWidget(
 		
 		tabViewNode.innerText = this.text;
 
-		if( _this.icon1 )
-			tabBtnStyle.icon1 = this.icon1;
-		if( _this.icon2 )
-			tabBtnStyle.icon2 = this.icon2;
+		if( _this.selectedIcon )
+			tabBtnStyle.selectedIcon = this.selectedIcon;
+		if( _this.deSelectedIcon )
+			tabBtnStyle.icon2 = this.deSelectedIcon;
 		if( _this.moveTo )
 			tabBtnStyle.moveTo = this.moveTo;
 		if( _this.title )
@@ -120,23 +120,23 @@ egl.defineWidget(
 	"getTitle" : function() {
 		return this.title;
 	},
-	"setIcon1" : function(icon1){
-		this.icon1 = icon1;
+	"setSelectedIcon" : function(icon1){
+		this.selectedIcon = icon1;
 		if( this.tabBtnWidget )
-			this.tabBtnWidget.set({icon1:this.icon1});
+			this.tabBtnWidget.set({icon1:this.selectedIcon});
 		return;
 	},
-	"setIcon2" : function( icon2 ){
-		this.icon2 = icon2;
+	"setDeSelectedIcon" : function( icon2 ){
+		this.deSelectedIcon = icon2;
 		if( this.tabBtnWidget )
-			this.tabBtnWidget.set({icon2:this.icon2});
+			this.tabBtnWidget.set({icon2:this.deSelectedIcon});
 		return;
 	},
-	"getIcon2" : function( icon2 ){
-		return this.icon2;
+	"getDeSelectedIcon" : function(){
+		return this.deSelectedIcon;
 	},
-	"getIcon1" : function() {
-		return this.icon1;
+	"getSelectedIcon" : function() {
+		return this.selectedIcon;
 	},
 	"setID" : function(id) {
 		if(id && id!="undefined"){

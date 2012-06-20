@@ -5,7 +5,7 @@ egl.defineWidget(
 	{ 
 		'constructor' : function(){
 			var _this = this;
-			_this.modal = false;
+			_this.isModal = false;
 			require(
 				[ 
 				  "dojo/mobile/utility/Synchronor",
@@ -20,7 +20,7 @@ egl.defineWidget(
 		'createDojoWidget' : function( parent ){
 			var _this = this;
 			
-			if( _this.modal ) 
+			if( _this.isModal ) 
 				_this.dojoWidget = new dojox.mobile.Opener({},parent);
 			else
 				_this.dojoWidget = new dojox.mobile.Overlay({},parent);
@@ -43,7 +43,7 @@ egl.defineWidget(
 			var dojoWidget = this._getContainerWidget( containerWidget );
 			this._removeChildren( 1, dojoWidget );
 		},
-		'pop' : function( DojoBaseWidget ){
+		'showOpener' : function( DojoBaseWidget ){
 			var _this = this;
 			try{
 				if( _this.dojoWidget )
@@ -56,16 +56,16 @@ egl.defineWidget(
 				console.error( e );
 			}
 		},
-		'hide' : function(){
+		'hideOpener' : function(){
 			var _this = this;
 			if( _this.dojoWidget )
 				_this.dojoWidget.hide();
 		},
-		'setModal' : function( status ){
-			this.modal = status || false;
+		'setIsModal' : function( status ){
+			this.isModal = status || false;
 		},
-		'getModal' : function(){
-			return this.modal;
+		'getIsModal' : function(){
+			return this.isModal;
 		}
 	}
 );

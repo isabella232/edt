@@ -98,10 +98,10 @@ egl.defineWidget(
 			'getLazy' : function(){
 				return this.options.lazy;
 			},
-			'setLabelString' : function( str ){
+			'setText' : function( str ){
 				this.options.label = str;
 			},
-			'getLabelString' : function(){
+			'getText' : function(){
 				return this.options.label
 			}
 		}
