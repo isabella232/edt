@@ -16,25 +16,25 @@ import java.util.List;
 
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.UserDefinedAnnotationValidationRule;
-import org.eclipse.edt.compiler.internal.core.validation.annotation.EglRestRpcValidator;
+import org.eclipse.edt.compiler.internal.core.validation.annotation.EglServiceValidator;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
-public class EglRestRpcAnnotationTypeBinding extends ComplexAnnotationTypeBinding {
-	public static final String name = InternUtil.intern("EglRestRpc");
+public class EglServiceAnnotationTypeBinding extends ComplexAnnotationTypeBinding {
+	public static final String name = InternUtil.intern("EglService");
 	
-	private static EglRestRpcAnnotationTypeBinding INSTANCE = new EglRestRpcAnnotationTypeBinding();
+	private static EglServiceAnnotationTypeBinding INSTANCE = new EglServiceAnnotationTypeBinding();
 		
 	private static final List myAnnotations = new ArrayList();
    	static{
-   		myAnnotations.add(new UserDefinedAnnotationValidationRule(EglRestRpcValidator.class));
+   		myAnnotations.add(new UserDefinedAnnotationValidationRule(EglServiceValidator.class));
    	}
    	
-	private EglRestRpcAnnotationTypeBinding() {
+	private EglServiceAnnotationTypeBinding() {
 		super(name, new Object[0]);
 	}
 	
-	public static EglRestRpcAnnotationTypeBinding getInstance() {
+	public static EglServiceAnnotationTypeBinding getInstance() {
 		return INSTANCE;
 	}
 	

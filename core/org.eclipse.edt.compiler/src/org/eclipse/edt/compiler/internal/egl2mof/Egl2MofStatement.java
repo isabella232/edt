@@ -180,7 +180,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
 		}
 		else if(Binding.isValidBinding(binding) && (binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-				binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null ||
+				binding.getAnnotation(new String[]{"eglx", "rest"}, "EglService") != null ||
 				binding.getDeclaringPart().getKind() == IPartBinding.SERVICE_BINDING)){
 			stmt = ServicesFactory.INSTANCE.createServicesCallStatement();
 		}

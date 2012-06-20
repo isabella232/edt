@@ -139,7 +139,7 @@ public class EDTCompiler extends BaseCompiler {
 					return StatementValidator.Registry.get("eglx.jtopen");
 				}
 				else if(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-						binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
+						binding.getAnnotation(new String[]{"eglx", "rest"}, "EGLService") != null){
 					return StatementValidator.Registry.get("eglx.services");
 				}
 			}

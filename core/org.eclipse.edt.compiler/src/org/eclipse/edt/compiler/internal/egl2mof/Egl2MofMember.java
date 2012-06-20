@@ -283,7 +283,7 @@ class Egl2MofMember extends Egl2MofPart {
 				func = IBMiFactory.INSTANCE.createIBMiFunction();
 			}
 			else if(function.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-					function.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
+					function.getAnnotation(new String[]{"eglx", "rest"}, "EglService") != null){
 				func = ServicesFactory.INSTANCE.createServiceFunction();
 			}
 			else{

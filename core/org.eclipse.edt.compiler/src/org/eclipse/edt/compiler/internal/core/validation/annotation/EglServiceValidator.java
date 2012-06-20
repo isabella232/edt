@@ -20,9 +20,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 
 
 
-public class EglRestRpcValidator extends XXXrestValidator {
+public class EglServiceValidator extends XXXrestValidator {
 	protected String getName() {
-		return "EglRestRpc";
+		return "EglService";
 	}
 	@Override
 	protected boolean methodIsValid() {
