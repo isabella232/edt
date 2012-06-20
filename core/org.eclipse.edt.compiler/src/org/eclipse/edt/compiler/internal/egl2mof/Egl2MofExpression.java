@@ -1099,15 +1099,16 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.UnaryExpression unaryExpression) {
 		unaryExpression.getExpression().accept(this);
 		Expression subExpr = (Expression)stack.pop();
-		boolean isPlusOrMinus = (
-				unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.PLUS ||
-				unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.MINUS
-			);
+		//If the operator is a +, do not create a unary expression, just pass on the subexpr
+		if (unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.PLUS) {
+			stack.push(subExpr);
+			return false;
+		}
+		
+		boolean isMinus = (unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.MINUS);
 
-		if (subExpr instanceof NumericLiteral && isPlusOrMinus) {
-			if (unaryExpression.getOperator() == org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator.MINUS) {
-				((NumericLiteral)subExpr).setIsNegated(!((NumericLiteral)subExpr).isNegated());
-			}
+		if (subExpr instanceof NumericLiteral && isMinus) {
+			((NumericLiteral)subExpr).setIsNegated(!((NumericLiteral)subExpr).isNegated());
 			stack.push(subExpr);
 		}
 		else {		
