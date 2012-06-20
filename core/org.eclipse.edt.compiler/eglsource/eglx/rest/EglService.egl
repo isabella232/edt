@@ -11,10 +11,10 @@
  *******************************************************************************/
 package eglx.rest;
 
-Record EglRestRpc type Annotation
+Record EglService type Annotation
 { 
 	targets = [ ElementKind.functionMbr], 
-	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EglRestRpcAnnotationTypeBinding"
+	validationProxy = "org.eclipse.edt.compiler.binding.annotationType.EglServiceAnnotationTypeBinding"
 	
 }
 	serviceName string?;
