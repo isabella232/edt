@@ -27,6 +27,7 @@ import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.ExternalType;
@@ -38,12 +39,14 @@ import org.eclipse.edt.mof.egl.Handler;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
+import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -305,7 +308,31 @@ public class BinaryElementParser {
 			visitPart(partType, partInfo, externalType);
 			return true;
 		}
+
+		public boolean visit(EGLClass eglClass) {
+			if (!shouldVisit(eglClass)) {
+				return false;
+			}
+			
+			this.partType = IRPartType.PART_EXTERNALTYPE;
+			visitPart(partType, partInfo, eglClass);
+			return true;
+		}
+
+		public boolean visit(Statement stmt) {
+			return false;
+		}
+
+		public boolean visit(Operation operation) {
+			return false;
+		}
 		
+		public void endVisit(Operation operation) {
+			//do nothing
+		}
+
+		
+
 		public boolean visit(Function function) {
 			this.partType = IRPartType.PART_FUNCTION;
 			
