@@ -16,7 +16,7 @@
 egl.defineWidget(
 	'dojo.mobile.widgets', 'DojoMobileCheckBox',
 	'dojo.mobile.widgets', 'DojoMobileBase',
-	'input type=checkbox',
+	'div',
 	{
 		"constructor" : function(){
 			var _this = this;
@@ -33,19 +33,35 @@ egl.defineWidget(
 		},
 		"createDojoWidget" : function(parent){
 			var _this = this;
+			var inputElement = document.createElement("input");
 			_this.dojoWidget = new dojox.mobile.CheckBox(
 					{
-						checked : (_this.checked ? _this.checked : false),
+						checked : (_this.selected ? _this.selected : false),
 						onChange: function(){
 							_this.handleEvent(_this.getOnChange(), "onChange"); 
 						}
 					},
-					parent);
+					inputElement);
+			parent.appendChild(inputElement);
+			var text = (_this.text) ? _this.text : "";
+			parent.appendChild(document.createTextNode(text));
+			
 			_this.synchronor.trigger( _this, "SYN_READY" );
+
+			require( ["dojo/on"], function(on){
+				on( parent, "click", function(evt){
+					if(_this.dojoWidget){
+						if(evt.target == _this.dojoWidget.domNode)
+							return;
+						var checked = _this.dojoWidget.checked;
+						_this.dojoWidget.set('checked', !checked);
+					}
+				});
+			});
 		},
 		
-		"setChecked" : function( status ){
-			this.checked = status;
+		"setSelected" : function( status ){
+			this.selected = status;
 			if( this.dojoWidget ){
 				this.dojoWidget.set('checked', status);
 			}
@@ -54,11 +70,22 @@ egl.defineWidget(
 			}
 		},
 		
-		"getChecked" : function(){
+		"getSelected" : function(){
 			if(this.dojoWidget)
 				return this.dojoWidget.get('checked');
 			else
-				return this.checked || false; 
+				return this.selected || false; 
+		},
+		
+		"setText" : function(text){
+			this.text = text;
+			if(this.dojoWidget){
+				this.dojoWidget.domNode.nextSibling.textContent = text;
+			}
+		},
+		
+		"getText" : function(){
+			return this.text;
 		}
 	}	
 );
