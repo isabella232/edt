@@ -21,7 +21,7 @@ import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 
-public class EglRestRpcTemplate extends RestBase {
+public class EglServiceTemplate extends RestBase {
 
 	public void genConversionControlAnnotation(AnnotationType aType, Context ctx, TabbedWriter out, Annotation annot, Function function) {
 	}

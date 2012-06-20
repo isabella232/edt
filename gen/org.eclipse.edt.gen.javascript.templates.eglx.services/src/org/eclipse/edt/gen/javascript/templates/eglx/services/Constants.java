@@ -13,7 +13,7 @@ public interface Constants {
 	static final String genRestInvocation = "genRestInvocation";
 	//signatures
 	static final String signature_REST = "eglx.rest.Rest";
-	static final String signature_EglRestRpc = "eglx.rest.EglRestRpc";
+	static final String signature_EglService = "eglx.rest.EglService";
 	static final String signature_UsingClauseType = "eglx.http.IHttp";
 	static final String signature_HttpProxy = "eglx.http.HttpProxy";
 	static final String signature_Delegate = "org.eclipse.edt.mof.egl.Delegate";

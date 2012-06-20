@@ -86,7 +86,7 @@ public class ServicesCallStatementTemplate extends JavaScriptTemplate implements
 	public void genServiceName(CallStatement callStatement, Context ctx, TabbedWriter out, Service service) {
 		Annotation rest = null;
 		try {
-			rest = (Annotation)((AnnotationType)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_EglRestRpc)).newInstance();
+			rest = (Annotation)((AnnotationType)Environment.getCurrentEnv().find(Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.signature_EglService)).newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

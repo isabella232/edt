@@ -58,7 +58,7 @@ public class FunctionTemplate extends JavaScriptTemplate implements Constants{
 		out.println("}");
 		Annotation rest = function.getAnnotation(signature_REST);
 		if(rest == null){
-			rest = function.getAnnotation(signature_EglRestRpc);
+			rest = function.getAnnotation(signature_EglService);
 		}
 
 		if(rest != null){
