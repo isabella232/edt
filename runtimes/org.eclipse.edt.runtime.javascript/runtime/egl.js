@@ -534,15 +534,9 @@ egl._defineClass = function(
 				superclazz.apply(this, arguments);
 			}	
 			if (functions.constructor) {
-				try {
-					if(functions.eze$$setInitial)
-						functions.eze$$setInitial.call(this);
-					functions.constructor.apply( this, arguments );
-				}
-				catch (e) {
-					egl.printError(egl.getRuntimeMessage( "CRRUI2082E", [className]), e);
-					throw e;
-				}
+				if(functions.eze$$setInitial)
+					functions.eze$$setInitial.call(this);
+				functions.constructor.apply( this, arguments );
 			}
 			this.toString = function() {
 				try {
