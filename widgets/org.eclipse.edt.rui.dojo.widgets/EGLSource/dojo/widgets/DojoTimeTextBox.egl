@@ -30,7 +30,7 @@ ExternalType DojoTimeTextBox Extends DojoValidationBase type JavaScriptObject{
         @VEWidget{
 			category = "Display and Input",
 			template = "${typeName}{ " ::
-				"value = new Date{}, " ::
+				"value = new time{}, " ::
 				"timePattern = ${typeName:dojo.widgets.DojoLib}.TIMEBOX_FORMAT_12HR, " ::
 				"clickableIncrement = dojo.widgets.DojoLib.TIMEBOX_ONE_QUARTER, " ::			
 				"visibleIncrement = ${typeName:dojo.widgets.DojoLib}.TIMEBOX_ONE_HOUR, " ::
