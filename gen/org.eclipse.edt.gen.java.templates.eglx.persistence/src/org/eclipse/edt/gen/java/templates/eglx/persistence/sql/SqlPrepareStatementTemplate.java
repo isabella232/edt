@@ -17,10 +17,33 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
 
 public class SqlPrepareStatementTemplate extends SqlActionStatementTemplate {
 	
+	public void genSQLString(SqlPrepareStatement stmt, Context ctx, TabbedWriter out){
+		ctx.invoke(genExpression, ((SqlPrepareStatement)stmt).getSqlStringExpr(), ctx, out);
+	}
 	public void genStatementBody(SqlPrepareStatement stmt, Context ctx, TabbedWriter out) {
 		String varName = getExprString(stmt.getPreparedStatement(), ctx);
 		genSqlStatementSetup(stmt, ctx, out, varName, true);
 		genSqlStatementEnd(stmt, ctx, out);
 	}
+
+	public void genGetStatement(SqlPrepareStatement stmt, Context ctx, TabbedWriter out, Integer stmtNumber){
+		out.print(".getStatement(");
+		genPrepareKey(stmt, ctx, out);
+		out.println(", 0);");
+	}
+	private void genPrepareKey(SqlPrepareStatement stmt, Context ctx, TabbedWriter out) {
+		ctx.invoke(genExpression, ((SqlPrepareStatement)stmt).getSqlStringExpr(), ctx, out);
+		if(getResultSet(stmt) != null){
+			out.print(" + \"");
+			ctx.invoke(genStatementOptions, stmt, ctx, out, getResultSet(stmt));
+			out.print("\"");
+		}
+	}
+	public void genRegisterStatement(SqlPrepareStatement stmt, Context ctx, TabbedWriter out, String var_stmt, Integer stmtNumber){
+		out.print(".registerStatement(");
+		genPrepareKey(stmt, ctx, out);
+		out.println(", 0, " + var_stmt + ");");
+	}
+	
 
 }

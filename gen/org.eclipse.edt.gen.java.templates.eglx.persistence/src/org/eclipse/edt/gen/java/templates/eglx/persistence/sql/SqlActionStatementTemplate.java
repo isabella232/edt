@@ -40,12 +40,12 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlPrepareStatement;
 import org.eclipse.edt.mof.eglx.persistence.sql.impl.DummyExpressionDynamicImpl;
 import org.eclipse.edt.mof.eglx.persistence.sql.utils.SQL;
 
-public abstract class SqlActionStatementTemplate extends StatementTemplate {
+public abstract class SqlActionStatementTemplate extends StatementTemplate implements org.eclipse.edt.gen.java.templates.eglx.persistence.Constants{
 	public static final String sqlStmtKey = "org.eclipse.edt.gen.java.sql.stmtkey";
 	public static final String genClause = "genClause";
 	public static final String genSQLAnnotation = "genSQLAnnotation";
-	private static final String genStatementOptions = "genStatementOptions";
-	private static final String AnnotationSQLResultSetControl = "eglx.persistence.sql.SQLResultSetControl";
+	protected static final String genStatementOptions = "genStatementOptions";
+	protected static final String AnnotationSQLResultSetControl = "eglx.persistence.sql.SQLResultSetControl";
 	public static final String AnnotationSQLGeneratedValue = "eglx.persistence.sql.GeneratedValue";
 	public static final String genSelectClause = "genSelectClause";
 	public static final String var_connection = "ezeConn";
@@ -188,7 +188,6 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		out.println("try {");
 		if (stmt.getPreparedStatement() == null || stmt instanceof SqlPrepareStatement) {
 			Integer stmtNumber = getNextStatementKey(ctx);
-			String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
 			if (isCall) {
 				if (!stmtDeclared){
 					out.print(class_CallableStatement + " ");
@@ -202,15 +201,11 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 				out.print(var_stmt + " = (" + class_PreparedStatement + ")");
 			}
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
-			out.println(".getStatement(" + typeSignature + ", " + stmtNumber + ");");
+			ctx.invoke(genGetStatement, stmt, ctx, out, stmtNumber);
+			
 			out.println("if (" + var_stmt + "== null) {");
 			out.print("String stmtStr = ");
-			if (stmt instanceof SqlPrepareStatement) {
-				ctx.invoke(genExpression, ((SqlPrepareStatement)stmt).getSqlStringExpr(), ctx, out);
-			}
-			else {
-				out.print(quoted(SQL.removeCRLFs(stmt.getSqlString())));
-			}
+			ctx.invoke(genSQLString, stmt, ctx, out);
 			out.println(';');
 			out.print(var_stmt + " = ");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
@@ -226,7 +221,7 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 			}
 			out.println(");");
 			ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
-			out.println(".registerStatement(" + typeSignature + ", " + stmtNumber + ", " + var_stmt + ");");
+			ctx.invoke(genRegisterStatement, stmt, ctx, out, var_stmt, stmtNumber);
 			out.println("}");
 		}
 		if (stmt.getUsingExpressions()!= null) {
@@ -262,6 +257,17 @@ public abstract class SqlActionStatementTemplate extends StatementTemplate {
 		return isCall;
 	}
 	
+	public void genSQLString(SqlActionStatement stmt, Context ctx, TabbedWriter out){
+		out.print(quoted(SQL.removeCRLFs(stmt.getSqlString())));
+	}
+	public void genGetStatement(SqlActionStatement stmt, Context ctx, TabbedWriter out, Integer stmtNumber){
+		String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
+		out.println(".getStatement(" + typeSignature + ", " + stmtNumber + ");");
+	}
+	public void genRegisterStatement(SqlActionStatement stmt, Context ctx, TabbedWriter out, String var_stmt, Integer stmtNumber){
+		String typeSignature = quoted(((Type)((Function)stmt.getContainer()).getContainer()).getTypeSignature());
+		out.println(".registerStatement(" + typeSignature + ", " + stmtNumber + ", " + var_stmt + ");");
+	}
 	protected void genSetStatementsForUsingClause(SqlActionStatement stmt, String var_stmt, Context ctx, TabbedWriter out){
 		int i = 1;
 		for (Expression uexpr : stmt.getUsingExpressions()) {
