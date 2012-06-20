@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -133,16 +134,16 @@ public class EDTCompiler extends BaseCompiler {
 			CallStatement call = (CallStatement) stmt;
 			Expression exp = call.getInvocationTarget();
 			IDataBinding binding = exp.resolveDataBinding();
-			if(binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
-				return StatementValidator.Registry.get("eglx.jtopen");
+			if (Binding.isValidBinding(binding)) {			
+				if(binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
+					return StatementValidator.Registry.get("eglx.jtopen");
+				}
+				else if(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
+						binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
+					return StatementValidator.Registry.get("eglx.services");
+				}
 			}
-			else if(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-					binding.getAnnotation(new String[]{"eglx", "rest"}, "EglRestRpc") != null){
-				return StatementValidator.Registry.get("eglx.services");
-			}
-			else {
-				return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
-			}
+			return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
 		}
 		else {
 			return validator[0];
