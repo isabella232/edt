@@ -373,6 +373,9 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.ETimestamp){
 			return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
 		}
+		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.ETime){
+			return egl.stringToTime(jsonObject, "HH:mm:ss");
+		}
 		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.EString){
 			return jsonObject.toString();
 		}
