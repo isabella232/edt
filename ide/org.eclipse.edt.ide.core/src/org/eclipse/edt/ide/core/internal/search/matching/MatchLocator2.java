@@ -15,11 +15,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.edt.compiler.ISystemEnvironment;
 import org.eclipse.edt.compiler.binding.IAnnotationTypeBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -39,6 +41,8 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
+import org.eclipse.edt.ide.core.internal.builder.ASTManager;
+import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.CompiledFileUnit;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompileRequestor;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
@@ -72,6 +76,13 @@ import org.eclipse.edt.ide.core.search.ICompiledFileUnit;
 import org.eclipse.edt.ide.core.search.IEGLSearchResultCollector;
 import org.eclipse.edt.ide.core.search.IEGLSearchScope;
 import org.eclipse.edt.ide.core.search.SearchEngine;
+import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
+import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.IEnvironment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class MatchLocator2 {//extends MatchLocator { 
 	
@@ -1275,13 +1286,89 @@ public class MatchLocator2 {//extends MatchLocator {
 	public void reportPartDeclaration(IPart partDeclaration,	IEGLElement parent,	int accuracy)throws CoreException {
 		//TODO Name name = partDeclaration.getName();
 		// accept class or interface declaration
+		Name name = null;
+		IClassFile classFile = (parent == null) ? partDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : null);
+		if (classFile != null) {
+			name = getName(classFile);
+		}
 		
+		int start = 0;
+		int end = 0;
+		if (name != null) {
+			start = name.getOffset();
+			end = start + name.getLength();
+		}
+		else {
+			start = partDeclaration.getNameRange().getOffset();
+			end = partDeclaration.getNameRange().getOffset() + partDeclaration.getNameRange().getLength();
+		}
+				
 		this.collector.accept(
-				(parent == null) ? partDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), partDeclaration.getNameRange().getOffset(),
-				partDeclaration.getNameRange().getOffset() + partDeclaration.getNameRange().getLength(),
+				(classFile != null) ? classFile : parent, 
+				start,
+				end,
 				this.getCurrentResource(),
 				accuracy);
 	}
+	
+	private Name getFunctionName(IClassFile classFile, String functionName) {
+		Part part = getPart(classFile);
+		if (part != null) {
+			
+			final Name[] result = new Name[1];
+			final String iName = InternUtil.intern(functionName);
+			part.accept(new AbstractASTVisitor() {
+				public boolean visit(NestedFunction nestedFunction) {
+					if (nestedFunction.getName().getIdentifier() == iName) {
+						result[0] = nestedFunction.getName();
+					}
+					return false;
+				}
+			});
+			return result[0];
+		}
+		return null;
+	}
+
+	private Name getName(IClassFile classFile) {
+		
+		Part part = getPart(classFile);
+		if (part != null) {
+			return part.getName();
+		}
+		return null;
+	}
+	
+	private Part getPart(IClassFile classFile) {
+		if (classFile instanceof ClassFile) {
+			String eglarPath = classFile.getPath().toString();
+			String sourceFileName = getClassFileSource((ClassFile)classFile);
+			BinaryReadOnlyFile broFile = new BinaryReadOnlyFile(eglarPath, sourceFileName, classFile.getPart().getElementName());
+			
+	       return (Part) ASTManager.getInstance().getAST(broFile, InternUtil.intern(classFile.getPart().getElementName()));
+		}
+		return null;
+	}
+	
+	private static String getClassFileSource(final ClassFile classFile){
+		String sourceName = null;
+		ISystemEnvironment sysEnv = SystemEnvironmentManager.findSystemEnvironment(classFile.getEGLProject().getProject(), null);
+		IEnvironment sysIREnv = sysEnv.getIREnvironment();
+		String mofSignature = IRUtils.concatWithSeparator(classFile.getPackageName(), ".") + "." + classFile.getTypeName();
+		String eglSignature = org.eclipse.edt.mof.egl.Type.EGL_KeyScheme + ":" + mofSignature;
+		EObject irPart = null;
+		try {
+			irPart = sysIREnv.find(eglSignature);
+			sourceName = irPart.eGet("filename").toString();
+		} catch (MofObjectNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (DeserializationException e1) {
+			e1.printStackTrace();
+		}
+		
+		return sourceName;
+	}
+
 	
 	/**
 	 * Reports the given type declaration to the search requestor.
@@ -1329,15 +1416,30 @@ public class MatchLocator2 {//extends MatchLocator {
 	
 	public void reportFunctionDeclaration(IFunction functionDeclaration, IEGLElement parent,
 			int accuracy) throws CoreException {
+		
+		IClassFile classFile = (parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : null);
+		Name name = null;
+		if (classFile != null) {
+			name = getFunctionName(classFile, functionDeclaration.getElementName());
+		}
+		
 		int elementStart = 0;
 		int elementEnd = 0;
-		ISourceRange sourceRange = functionDeclaration.getNameRange();
-		if(sourceRange != null) {
-			elementStart = sourceRange.getOffset();
-			elementEnd = elementStart+ sourceRange.getLength();
+
+		if (name != null) {
+			elementStart = name.getOffset();
+			elementEnd = elementStart + name.getLength();
 		}
+		else {
+			ISourceRange sourceRange = functionDeclaration.getNameRange();
+			if(sourceRange != null) {
+				elementStart = sourceRange.getOffset();
+				elementEnd = elementStart+ sourceRange.getLength();
+			}
+		}
+				
 		this.collector.accept(
-				(parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : parent), elementStart,
+				(classFile != null) ? classFile : parent, elementStart,
 				elementEnd,
 				this.getCurrentResource(),
 				accuracy);
