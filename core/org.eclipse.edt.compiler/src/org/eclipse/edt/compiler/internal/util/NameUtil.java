@@ -20,7 +20,6 @@ import com.ibm.icu.util.StringTokenizer;
 public class NameUtil {
 
 	public static final String NAME_DELIMITER = ".";
-	private static StringTokenizer parser;
 	/**
 	 * 
 	 */
@@ -32,7 +31,7 @@ public class NameUtil {
 	}
 	
 	public static String[] toStringArray(String str, String delim) {
-		parser = new StringTokenizer(str, delim);
+		StringTokenizer parser = new StringTokenizer(str, delim);
 		String[] names = new String[parser.countTokens()];
 		for(int i=0; i<names.length; i++) {
 			names[i] = parser.nextToken();
