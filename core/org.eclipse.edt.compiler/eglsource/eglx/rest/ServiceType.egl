@@ -12,5 +12,5 @@
 package eglx.rest;
 
 enumeration ServiceType
-	TrueRest, EglRpc, EglDedicated
+	TrueRest=1, EglRpc=2, EglDedicated=3
 end
