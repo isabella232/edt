@@ -20,12 +20,13 @@ egl.defineWidget(
 {
 	"constructor" : function() {		
 		var _this = this;
-		this.selection	= 1;
-		this.acceptChildrenTypes = { 
+		_this.selection	= 1;
+		_this.acceptChildrenTypes = { 
 			"dojo.mobile.widgets.DojoMobileTab" : true
 		};
-		this.started = false;
-		this.segmentedControl = true;
+		_this.started = false;
+		_this.segmentedControl = true;
+		_this.children = [];
 		require(["dojox/mobile/TabBar"], function(){
 			_this.renderWhenDojoIsDoneLoading();
 		});	

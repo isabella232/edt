@@ -21,6 +21,7 @@ egl.defineWidget(
 	"constructor" : function() {
 		var _this = this;
 		_this.style = "Rounded Rectangle";
+		_this.children = [];
 		_this.acceptChildrenTypes = {
 			"dojo.mobile.widgets.DojoMobileListCategory" : true, 
 			"dojo.mobile.widgets.DojoMobileListItem" : true

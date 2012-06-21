@@ -20,10 +20,11 @@ egl.defineWidget(
 {
 	"constructor" : function() {
 		var _this = this;
-		this.started  = false;
-		this.selected = false;
-		this.containerWidget = null;
-		this.text = '';
+		_this.started  = false;
+		_this.selected = false;
+		_this.containerWidget = null;
+		_this.text = '';
+		_this.children = [];
 		require(
 		[
 		 	"dojo/mobile/utility/Synchronor",

@@ -6,6 +6,7 @@ egl.defineWidget(
 		'constructor' : function(){
 			var _this = this;
 			_this.isModal = false;
+			_this.children = [];
 			require(
 				[ 
 				  "dojo/mobile/utility/Synchronor",
@@ -19,6 +20,8 @@ egl.defineWidget(
 		},
 		'createDojoWidget' : function( parent ){
 			var _this = this;
+			
+			parent.style.minHeight = "2em";
 			
 			if( _this.isModal ) 
 				_this.dojoWidget = new dojox.mobile.Opener({},parent);
