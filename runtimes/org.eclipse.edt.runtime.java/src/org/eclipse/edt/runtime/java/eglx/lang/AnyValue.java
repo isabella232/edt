@@ -31,11 +31,8 @@ public abstract class AnyValue extends EAny implements eglx.lang.AnyValue {
 	public abstract <T extends eglx.lang.AnyValue> T ezeNewValue(Object...args) throws AnyException;
 	
 	public static <V extends eglx.lang.AnyValue> V ezeCopyTo(eglx.lang.AnyValue source, V target) throws AnyException {
-		if (source == null) {
-			if (target != null) {
-				target.ezeSetEmpty();
-			}
-		}
+		if (source == null)
+			target = null;
 		else {
 			if (target == null) {
 				target = source.ezeNewValue();
@@ -46,11 +43,8 @@ public abstract class AnyValue extends EAny implements eglx.lang.AnyValue {
 	}
 	
 	public static <V extends eglx.lang.AnyValue> V ezeCopyTo(AnyBoxedObject<? extends eglx.lang.AnyValue> source, V target) throws AnyException {
-		if (source == null || source.ezeUnbox() == null) {
-			if (target != null) {
-				target.ezeSetEmpty();
-			}
-		}
+		if (source == null || source.ezeUnbox() == null)
+			target = null;
 		else {
 			if (target == null) {
 				target = source.ezeUnbox().ezeNewValue();
