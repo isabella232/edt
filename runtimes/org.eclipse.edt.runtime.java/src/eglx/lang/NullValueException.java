@@ -10,12 +10,17 @@
  *
  *******************************************************************************/
 package eglx.lang;
-import org.eclipse.edt.javart.ByteStorage;
-import org.eclipse.edt.javart.Program;
+import org.eclipse.edt.javart.resources.*;
+import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="NullValueException")
 public class NullValueException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	public NullValueException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {

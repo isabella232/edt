@@ -1,10 +1,10 @@
 SMAP
-exceptions.java
+Exceptions.java
 egl
 *S egl
 *F
-+ 1 exceptions.egl
-eglx/lang/exceptions.egl
++ 1 Exceptions.egl
+eglx/lang/Exceptions.egl
 *L
 *E
 *X

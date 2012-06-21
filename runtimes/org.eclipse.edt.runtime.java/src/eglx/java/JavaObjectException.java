@@ -10,15 +10,21 @@
  *
  *******************************************************************************/
 package eglx.java;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
-
 import java.lang.String;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="JavaObjectException")
 public class JavaObjectException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
 	public String exceptionType;
 	public JavaObjectException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
@@ -46,10 +52,11 @@ public class JavaObjectException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		exceptionType = "";
 	}
+	@org.eclipse.edt.javart.json.Json(name="exceptionType", clazz=EString.class, asOptions={})
 	public String getExceptionType() {
-		return (exceptionType);
+		return exceptionType;
 	}
-	public void setExceptionType( String ezeValue ) {
-		this.exceptionType = ezeValue;
+	public void setExceptionType(String ezeValue) {
+		exceptionType = ezeValue;
 	}
 }

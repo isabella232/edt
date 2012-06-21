@@ -10,15 +10,21 @@
  *
  *******************************************************************************/
 package eglx.lang;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
-
 import java.lang.String;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="DynamicAccessException")
 public class DynamicAccessException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
 	public String key;
 	public DynamicAccessException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
@@ -46,10 +52,11 @@ public class DynamicAccessException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		key = "";
 	}
+	@org.eclipse.edt.javart.json.Json(name="key", clazz=EString.class, asOptions={})
 	public String getKey() {
-		return (key);
+		return key;
 	}
-	public void setKey( String ezeValue ) {
-		this.key = ezeValue;
+	public void setKey(String ezeValue) {
+		key = ezeValue;
 	}
 }

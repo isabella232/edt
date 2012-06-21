@@ -10,13 +10,21 @@
  *
  *******************************************************************************/
 package eglx.lang;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="InvalidIndexException")
 public class InvalidIndexException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
 	public int index;
 	public InvalidIndexException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
@@ -44,10 +52,11 @@ public class InvalidIndexException extends eglx.lang.AnyException {
 	public void ezeInitialize() {
 		index = 0;
 	}
+	@org.eclipse.edt.javart.json.Json(name="index", clazz=EInt.class, asOptions={})
 	public int getIndex() {
-		return (index);
+		return index;
 	}
-	public void setIndex( int ezeValue ) {
-		this.index = ezeValue;
+	public void setIndex(int ezeValue) {
+		index = ezeValue;
 	}
 }

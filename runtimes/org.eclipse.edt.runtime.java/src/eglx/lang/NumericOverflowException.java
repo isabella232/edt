@@ -10,11 +10,17 @@
  *
  *******************************************************************************/
 package eglx.lang;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="NumericOverflowException")
 public class NumericOverflowException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
 	public NumericOverflowException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {

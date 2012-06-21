@@ -10,16 +10,23 @@
  *
  *******************************************************************************/
 package eglx.lang;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
-
 import java.lang.String;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="TypeCastException")
 public class TypeCastException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
 	public String castToName;
+	@javax.xml.bind.annotation.XmlTransient
 	public String actualTypeName;
 	public TypeCastException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
@@ -50,16 +57,18 @@ public class TypeCastException extends eglx.lang.AnyException {
 		castToName = "";
 		actualTypeName = "";
 	}
+	@org.eclipse.edt.javart.json.Json(name="castToName", clazz=EString.class, asOptions={})
 	public String getCastToName() {
-		return (castToName);
+		return castToName;
 	}
-	public void setCastToName( String ezeValue ) {
-		this.castToName = ezeValue;
+	public void setCastToName(String ezeValue) {
+		castToName = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="actualTypeName", clazz=EString.class, asOptions={})
 	public String getActualTypeName() {
-		return (actualTypeName);
+		return actualTypeName;
 	}
-	public void setActualTypeName( String ezeValue ) {
-		this.actualTypeName = ezeValue;
+	public void setActualTypeName(String ezeValue) {
+		actualTypeName = ezeValue;
 	}
 }

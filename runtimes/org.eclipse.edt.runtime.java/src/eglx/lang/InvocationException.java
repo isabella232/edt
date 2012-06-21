@@ -10,17 +10,25 @@
  *
  *******************************************************************************/
 package eglx.lang;
+import org.eclipse.edt.javart.resources.*;
 import org.eclipse.edt.javart.*;
-import java.lang.String;
-
+import eglx.lang.AnyException;
 import org.eclipse.edt.runtime.java.eglx.lang.EInt;
+import java.lang.Integer;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
+import java.lang.String;
+@SuppressWarnings("unused")
+@javax.xml.bind.annotation.XmlRootElement(name="InvocationException")
 public class InvocationException extends eglx.lang.AnyException {
 	private static final long serialVersionUID = 10L;
+	@javax.xml.bind.annotation.XmlTransient
 	public String name;
+	@javax.xml.bind.annotation.XmlTransient
 	public int returnValue;
 	public InvocationException() {
 		super();
+	}
+	{
 		ezeInitialize();
 	}
 	public void ezeCopy(Object source) {
@@ -51,16 +59,18 @@ public class InvocationException extends eglx.lang.AnyException {
 		name = "";
 		returnValue = 0;
 	}
+	@org.eclipse.edt.javart.json.Json(name="name", clazz=EString.class, asOptions={})
 	public String getName() {
-		return (name);
+		return name;
 	}
-	public void setName( String ezeValue ) {
-		this.name = ezeValue;
+	public void setName(String ezeValue) {
+		name = ezeValue;
 	}
+	@org.eclipse.edt.javart.json.Json(name="returnValue", clazz=EInt.class, asOptions={})
 	public int getReturnValue() {
-		return (returnValue);
+		return returnValue;
 	}
-	public void setReturnValue( int ezeValue ) {
-		this.returnValue = ezeValue;
+	public void setReturnValue(int ezeValue) {
+		returnValue = ezeValue;
 	}
 }

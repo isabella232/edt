@@ -17,7 +17,7 @@ import java.lang.Object;
 import org.eclipse.edt.runtime.java.eglx.lang.EString;
 import java.lang.String;
 @SuppressWarnings("unused")
-
+@javax.xml.bind.annotation.XmlRootElement(name="Constants")
 public class Constants extends ExecutableBase {
 	private static final long serialVersionUID = 10L;
 	private static final String ezeConst_isoDateFormat = "yyyy-MM-dd";
