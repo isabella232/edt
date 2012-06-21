@@ -57,7 +57,7 @@ public class OpenPartAction extends Action implements IWorkbenchWindowActionDele
 		boolean beep = false;
 		try {
 			IEditorPart part= EditorUtility.openInEditor(type, true);
-			EditorUtility.revealInEditor(part, type);
+			//EditorUtility.revealInEditor(part, type);
 		} catch (CoreException x) {
 			beep = true;
 			EGLLogger.log(this, UINlsStrings.OpenPartErrorMessage);
