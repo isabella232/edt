@@ -31,15 +31,13 @@ public class EnumerationTemplate extends JavaTemplate {
 		List<EEnumLiteral> enums = part.getEntries();
 		if (enums != null && enums.size() != 0) {
 			boolean needsSeparator = false;
-			int position = 1;
 			for (EEnumLiteral literal : enums) {
 				if (needsSeparator)
 					out.println(",");
 				needsSeparator = true;
 				ctx.invoke(genName, literal, ctx, out);
 				int value = literal.getValue();
-				out.print("(" + (value == 0 ? position : value) + ")");
-				position++;
+				out.print("(" + value + ")");
 			}
 			out.println(";");
 		}
