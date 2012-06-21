@@ -22,7 +22,7 @@ import eglx.lang.StringLib;
 
 
 public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
-	private static final long serialVersionUID = 1L;
+
 
 	private int startCode;
 	private int endCode;
@@ -96,7 +96,7 @@ public class AS400Timestamp extends com.ibm.as400.access.AS400Timestamp {
 	}
 	private SimpleDateFormat ibmiSimpleDateFormat(){
 		if(sdf == null){
-			sdf = new SimpleDateFormat(ETimestamp.DefaultFormatPattern);
+			sdf = new SimpleDateFormat(ETimestamp.createPattern(startCode, endCode));
 			sdf.setTimeZone(getTimeZone());
 		}
 		return sdf;
