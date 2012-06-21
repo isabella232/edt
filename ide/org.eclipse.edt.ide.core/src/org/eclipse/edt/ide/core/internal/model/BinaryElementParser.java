@@ -201,7 +201,7 @@ public class BinaryElementParser {
 			}
 			
 			//String name = annoType.getName();
-			this.partType = IRPartType.PART_RECORD;
+			this.partType = IRPartType.PART_ANNOTATION;
 			visitPart(partType , partInfo, annoType);
 			return true;
 		}

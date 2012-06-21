@@ -29,4 +29,5 @@ public interface IRPartType {
 	int PART_DELEGATE = 16;
 	int PART_EXTERNALTYPE = 17;
 	int PART_ENUMERATION = 18;
+	int PART_ANNOTATION = 19;
 }
