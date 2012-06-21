@@ -17,7 +17,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.edt.compiler.ISystemEnvironment;
+import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Node;
+import org.eclipse.edt.compiler.core.ast.Part;
+import org.eclipse.edt.ide.core.internal.builder.ASTManager;
 import org.eclipse.edt.ide.core.internal.compiler.SystemEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.BinaryPart;
 import org.eclipse.edt.ide.core.internal.model.ClassFile;
@@ -40,6 +43,7 @@ import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
 import org.eclipse.edt.ide.ui.internal.editor.IEvEditor;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.DeserializationException;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
@@ -576,19 +580,32 @@ public class EditorUtility {
 		final IWorkbenchWindow ww = EDTUIPlugin.getActiveWorkbenchWindow();		
         BinaryReadOnlyFile storage = getBinaryReadonlyFile(proj, eglarFilePath, sourcePath, classFile.getElementName());
 		
+        Node node = ASTManager.getInstance().getAST(storage, InternUtil.intern(classFile.getPart().getElementName()));
+        Name name = null;
+        if (node != null) {
+        	name = ((Part)node).getName();
+        }
+
 		BinaryEditorInput input = new BinaryEditorInput(storage,classFile);
 		IWorkbenchPage p= EDTUIPlugin.getActivePage();
 		if (p != null) {
 			IEditorPart editorPart = p.findEditor(input);
 			if(editorPart != null) {
 				p.bringToTop(editorPart);
+				if (name != null) {
+					revealInEditor(editorPart, name);
+				}
 				return editorPart;
 			}
 		}
 		
 		try {
-			return ww.getActivePage().openEditor(
+			IEditorPart editorPart =  ww.getActivePage().openEditor(
 			input, editorId, true);
+			if (name != null) {
+				revealInEditor(editorPart, name);
+			}
+			return editorPart;
 		} catch (PartInitException e) {
 			EDTUIPlugin.log( e );
 		}
