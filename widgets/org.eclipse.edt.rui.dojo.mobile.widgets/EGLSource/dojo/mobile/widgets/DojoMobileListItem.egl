@@ -37,7 +37,7 @@ ExternalType DojoMobileListItem extends DojoMobileContainer type JavaScriptObjec
 	text String { @Property{}, @VEProperty{displayName = "Text"} };
 	
 	//An icon to display at the right hand side of the item. The value can be either a path for an image file or a class name of a DOM button.
-	icon String { @Property{}, @VEProperty{displayName = "Icon"} };
+	imagePath String { @Property{}, @VEProperty{displayName = "imagePath"} };
 	
 	//A right-aligned text to display on the item.
 	actionText String { @Property{}, @VEProperty{displayName = "Action Text"} };

@@ -63,8 +63,8 @@ egl.defineWidget(
 		_this.dojoWidget.startup();
 		_this.textBox = _this._getTextBox();
 		
-		if( _this.icon )
-			_this.setIcon( _this.icon );
+		if( _this.imagePath )
+			_this.setImagePath( _this.imagePath );
 		
 		if(_this.text){
 			_this.setText(_this.text);
@@ -163,24 +163,24 @@ egl.defineWidget(
 	"getText" : function() {
 		return this.text;
 	},
-	"setIcon" : function(icon) {
-		this.icon = icon;
+	"setImagePath" : function(icon) {
+		this.imagePath = icon;
 		if(this.dojoWidget){
-			this.dojoWidget.set("icon", this.icon);		
+			this.dojoWidget.set("icon", this.imagePath);		
 			var iconDom = this.dojoWidget.domNode.firstChild;
 			if( iconDom && iconDom.className == "mblListItemIcon" ){
-				iconDom.src = this.icon;
+				iconDom.src = this.imagePath;
 			}else{
 				iconDom= document.createElement("img");
 				iconDom.setAttribute("class", "mblListItemIcon");
-				iconDom.src = this.icon;
+				iconDom.src = this.imagePath;
 				this.dojoWidget.domNode.insertBefore(iconDom, this.dojoWidget.domNode.firstChild);
 				dojo.removeClass(this.dojoWidget.domNode.getElementsByTagName("a")[0],"mblListItemAnchorNoIcon");
 			}
 		}
 	},
-	"getIcon" : function() {
-		return this.icon;
+	"getImagePath" : function() {
+		return this.imagePath;
 	},
 	"setActionText" : function(actionText) {
 		this.actionText = actionText;

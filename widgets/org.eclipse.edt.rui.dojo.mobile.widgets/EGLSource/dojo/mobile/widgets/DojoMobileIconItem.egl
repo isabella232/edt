@@ -25,7 +25,7 @@ ExternalType DojoMobileIconItem extends DojoMobileContainer type JavaScriptObjec
 	* An icon image to display. The value can be either a path for an image file or a class name of a DOM button. 
 	*If icon is not specified, the iconBase parameter of the parent widget is used.
 	*/
-	icon string{ @Property{}, @VEProperty { displayName="Icon"} };
+	imagePath string{ @Property{}, @VEProperty { displayName="ImagePath"} };
 	/*
 	* Which view will be turned to when click
 	*/
