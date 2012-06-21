@@ -123,7 +123,7 @@ public class EglarPackageFragment extends PackageFragment {
 			}
 		} catch (EGLModelException e) {
 		}
-		return null;
+		return super.getClassFile(name);
 		
 	}
 	
