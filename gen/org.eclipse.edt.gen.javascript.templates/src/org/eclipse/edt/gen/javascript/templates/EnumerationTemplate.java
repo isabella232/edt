@@ -38,7 +38,7 @@ public class EnumerationTemplate extends JavaScriptTemplate {
 				out.print("['");
 				ctx.invoke(genName, enums.get(idx), ctx, out);
 				out.print("'] = ");
-				ctx.putAttribute(part, genConstructorOptions, enums.get(idx).getValue() == 0 ? Integer.valueOf(idx + 1) : Integer.valueOf(enums.get(idx).getValue())  );
+				ctx.putAttribute(part, genConstructorOptions, Integer.valueOf(enums.get(idx).getValue())  );
 				ctx.invoke(genInstantiation, (Type)part, ctx, out);
 				out.println(";");
 			}
