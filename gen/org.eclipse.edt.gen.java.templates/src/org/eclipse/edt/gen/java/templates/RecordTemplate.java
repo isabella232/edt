@@ -208,7 +208,13 @@ public class RecordTemplate extends JavaTemplate {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
 			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
-			ctx.invoke(genExpression, arg2, ctx, out);
+			// if the parameter is non-nullable but the argument is nullable, we have a special case
+			if (!arg1.isNullable() && arg2.isNullable() && !CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				ctx.invoke(genExpression, arg2, ctx, out);
+				out.print(")");
+			} else
+				ctx.invoke(genExpression, arg2, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
@@ -226,7 +232,14 @@ public class RecordTemplate extends JavaTemplate {
 			out.println(" " + temporary + " = null;");
 			out.print("return (");
 			CommonUtilities.genEzeCopyTo(arg.getExpression(), ctx, out);
-			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType()), ctx, out);
+			Expression returnExpr = IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType());
+			// if the parameter is non-nullable but the argument is nullable, we have a special case
+			if (!((FunctionMember) arg.getContainer()).isNullable() && arg.getExpression().isNullable() && !CommonUtilities.isBoxedOutputTemp(arg.getExpression(), ctx)) {
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				ctx.invoke(genExpression, returnExpr, ctx, out);
+				out.print(")");
+			} else
+				ctx.invoke(genExpression, returnExpr, ctx, out);
 			out.print(", ");
 			out.print(temporary);
 			out.print(")");

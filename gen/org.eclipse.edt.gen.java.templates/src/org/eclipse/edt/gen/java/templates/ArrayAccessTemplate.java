@@ -90,7 +90,13 @@ public class ArrayAccessTemplate extends JavaTemplate {
 		} else {
 			// non-nullable array
 			CommonUtilities.genEzeCopyTo(arg1, ctx, out);
-			ctx.invoke(genExpression, arg1, ctx, out);
+			// if the parameter is non-nullable but the argument is nullable, we have a special case
+			if (arg1.isNullable() && !CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				ctx.invoke(genExpression, arg1, ctx, out);
+				out.print(")");
+			} else
+				ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(", ");
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(")");
