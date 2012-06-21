@@ -28,22 +28,14 @@ public class EGLKeywordHandler {
 			"absolute", //$NON-NLS-1$
 			"add", //$NON-NLS-1$
 			"all", //$NON-NLS-1$
-			"any", //$NON-NLS-1$
 			"and", //$NON-NLS-1$
 			"as", //$NON-NLS-1$
-			"bigInt", //$NON-NLS-1$
-			"bin", //$NON-NLS-1$
 			"bind", //$NON-NLS-1$
-			"blob", //$NON-NLS-1$
-			"boolean", //$NON-NLS-1$
 			"by", //$NON-NLS-1$
 			"byName", //$NON-NLS-1$
 			"byPosition", //$NON-NLS-1$
-			"bytes", //$NON-NLS-1$
 			"call", //$NON-NLS-1$
 			"case", //$NON-NLS-1$
-			"char", //$NON-NLS-1$
-			"clob", //$NON-NLS-1$
 			"close", //$NON-NLS-1$
 			"const", //$NON-NLS-1$
 			"continue", //$NON-NLS-1$
@@ -52,9 +44,6 @@ public class EGLKeywordHandler {
 			"current", //$NON-NLS-1$
 			"dataItem", //$NON-NLS-1$
 			"dataTable", //$NON-NLS-1$
-			"date", //$NON-NLS-1$
-			"dbChar", //$NON-NLS-1$
-			"decimal", //$NON-NLS-1$
 			"decrement", //$NON-NLS-1$
 			"delegate", //$NON-NLS-1$
 			"delete", //$NON-NLS-1$
@@ -72,7 +61,6 @@ public class EGLKeywordHandler {
 			"false", //$NON-NLS-1$
 			"field", //$NON-NLS-1$
 			"first", //$NON-NLS-1$
-			"float", //$NON-NLS-1$
 			"for", //$NON-NLS-1$
 			"forEach", //$NON-NLS-1$
 			"form", //$NON-NLS-1$
@@ -86,7 +74,6 @@ public class EGLKeywordHandler {
 			"goto", //$NON-NLS-1$
 			"group", //$NON-NLS-1$
 			"handler", //$NON-NLS-1$
-			"hex", //$NON-NLS-1$
 			"hold", //$NON-NLS-1$
 			"if", //$NON-NLS-1$
 			"implements", //$NON-NLS-1$
@@ -95,9 +82,7 @@ public class EGLKeywordHandler {
 			"inOut", //$NON-NLS-1$
 			"inparent", //$NON-NLS-1$
 			"insert", //$NON-NLS-1$
-			"int", //$NON-NLS-1$
 			"interface", //$NON-NLS-1$
-			"interval", //$NON-NLS-1$
 			"into", //$NON-NLS-1$
 			"is", //$NON-NLS-1$
 			"isa", //$NON-NLS-1$
@@ -107,8 +92,6 @@ public class EGLKeywordHandler {
 			"library", //$NON-NLS-1$
 			"like", //$NON-NLS-1$
 			"matches", //$NON-NLS-1$
-			"mbChar", //$NON-NLS-1$
-			"money", //$NON-NLS-1$
 			"move", //$NON-NLS-1$
 			"new", //$NON-NLS-1$
 			"next", //$NON-NLS-1$
@@ -116,9 +99,6 @@ public class EGLKeywordHandler {
 			"no", //$NON-NLS-1$
 			"noCursor", //$NON-NLS-1$
 			"not", //$NON-NLS-1$
-			"num", //$NON-NLS-1$
-			"number", //$NON-NLS-1$
-			"numc", //$NON-NLS-1$
 			"of", //$NON-NLS-1$
 			"onEvent", //$NON-NLS-1$
 			"onException", //$NON-NLS-1$
@@ -127,7 +107,6 @@ public class EGLKeywordHandler {
 			"or", //$NON-NLS-1$
 			"otherwise", //$NON-NLS-1$
 			"out", //$NON-NLS-1$
-			"pacf", //$NON-NLS-1$
 			"package", //$NON-NLS-1$
 			"passing", //$NON-NLS-1$
 			"prepare", //$NON-NLS-1$
@@ -149,24 +128,18 @@ public class EGLKeywordHandler {
 			"set", //$NON-NLS-1$
 			"show", //$NON-NLS-1$
 			"singleRow", //$NON-NLS-1$
-			"smallFloat", //$NON-NLS-1$
-			"smallInt", //$NON-NLS-1$
 			"sqlnullable", //$NON-NLS-1$
 			"stack", //$NON-NLS-1$
 			"static", //$NON-NLS-1$
-			"string", //$NON-NLS-1$
 			"super", //$NON-NLS-1$
 			"this", //$NON-NLS-1$
 			"throw", //$NON-NLS-1$
-			"time", //$NON-NLS-1$
-			"timeStamp", //$NON-NLS-1$
 			"to", //$NON-NLS-1$
 			"transaction", //$NON-NLS-1$
 			"transfer", //$NON-NLS-1$
 			"true", //$NON-NLS-1$
 			"try", //$NON-NLS-1$
 			"type", //$NON-NLS-1$
-			"unicode", //$NON-NLS-1$
 			"update", //$NON-NLS-1$
 			"url", //$NON-NLS-1$
 			"use", //$NON-NLS-1$
