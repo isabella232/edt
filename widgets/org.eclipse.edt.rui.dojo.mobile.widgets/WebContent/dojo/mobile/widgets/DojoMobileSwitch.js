@@ -29,7 +29,7 @@ egl.defineWidget(
 				_this.renderWhenDojoIsDoneLoading();
 			}
 		);	
-		_this.value = "on";				
+		_this.value = "off";				
 	},
 	"createDojoWidget" : function(parent) {
 		var eglWidget = this;
