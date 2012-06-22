@@ -47,6 +47,9 @@ egl.eglx.lang.Resources["getResource"] = function(uri) {
 		ret.request.uri = binding.baseURI;
 		ret.restType = egl.eglx.rest.ServiceType.EglRpc;
 	}
+	else if(binding instanceof egl.eglx.services.DedicatedBinding){
+		ret = new egl.eglx.http.HttpProxy();
+	}
 	if(ret === undefined || ret === null){
 		throw egl.eglx.services.createServiceInvocationException("CRRUI3651E", [uri, eglddName]);  
 	}

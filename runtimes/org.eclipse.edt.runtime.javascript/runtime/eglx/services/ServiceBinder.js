@@ -115,4 +115,12 @@ egl.defineClass( "eglx.services", "RestBinding", {
     }
     
 });
+
+egl.defineClass( "eglx.services", "DedicatedBinding", {
+    "constructor" : function(/*String*/ _name) {
+        this.type = "dedicated";
+        this.name = _name;
+    }
+    
+});
 new egl.eglx.services.ServiceBinder();
