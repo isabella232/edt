@@ -1,12 +1,11 @@
 package org.eclipse.edt.jtopen.data.area;
 
-import org.eclipse.edt.jtopen.data.common.SystemDefinition;
-import eglx.jtopen.annotations.AS400Text;
+import org.eclipse.edt.jtopen.data.Common.SystemDefinition;
 
 record DataAreaDefinition 
 
-    areaname string{@AS400Text{length=10}};//char(10);
-    libname string{@AS400Text{length=10}};//char(10);
+    areaname string{@StructText{length=10}};//char(10);
+    libname string{@StructText{length=10}};//char(10);
     noBytes int;
     noDecimals int;
     areaType int;
