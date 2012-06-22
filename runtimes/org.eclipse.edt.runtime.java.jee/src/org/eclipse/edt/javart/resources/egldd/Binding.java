@@ -24,9 +24,11 @@ public class Binding {
 	public static int NATIVEBINDING = 3;
 	public static int RESTBINDING = 4;
 	public static int SQLDATABASEBINDING = 5;
+	public static int DEDICATEDBINDING = 6;
 	
 	public static String BINDING_SERVICE_LOCAL = " edt.binding.local";
 	public static String BINDING_SERVICE_REST = " edt.binding.rest";
+	public static String BINDING_SERVICE_DEDICATED = "edt.binding.dedicated"; //TODO add support for this
 	public static String BINDING_DB_SQL = "edt.binding.sql";
 	
 	public static String SOAP11VERSION = "SOAP-1.1";

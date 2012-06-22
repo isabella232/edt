@@ -115,6 +115,16 @@ public class RuntimeDeploymentDesc {
 		}
 		return restBindings;
 	}
+	
+	public List<DedicatedBinding> getDedicatedBindings() {
+		List<DedicatedBinding> dedicatedBindings = new ArrayList<DedicatedBinding>();
+		for(Binding binding : bindings){
+			if(binding instanceof DedicatedBinding){
+				dedicatedBindings.add((DedicatedBinding)binding);
+			}
+		}
+		return dedicatedBindings;
+	}
 
 	public void addInclude(String location)
 	{
@@ -138,6 +148,9 @@ public class RuntimeDeploymentDesc {
 		}
 		else if(Binding.BINDING_SERVICE_REST.equalsIgnoreCase(binding.getType())){
 			bindings.add(new RestBinding(binding));
+		}
+		else if(Binding.BINDING_SERVICE_DEDICATED.equalsIgnoreCase(binding.getType())){
+			bindings.add(new DedicatedBinding(binding));
 		}
 		else{
 			bindings.add(new Binding(binding));
