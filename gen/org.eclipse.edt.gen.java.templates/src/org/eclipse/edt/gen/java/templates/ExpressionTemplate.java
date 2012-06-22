@@ -31,7 +31,7 @@ public class ExpressionTemplate extends JavaTemplate {
 
 	public void genExpression(Expression expr, Context ctx, TabbedWriter out, Expression parameter) {
 		// if the parameter is nullable we need to wrap with a checkNullable
-		if (parameter.isNullable()) {
+		if (parameter.isNullable() && !CommonUtilities.isBoxedOutputTemp(expr, ctx)) {
 			out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			ctx.invoke(genExpression, expr, ctx, out);
 			out.print(")");
