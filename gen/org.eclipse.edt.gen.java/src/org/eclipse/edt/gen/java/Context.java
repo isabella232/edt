@@ -247,7 +247,7 @@ public class Context extends EglContext {
 			super.invoke(genMethod, object, ctx, out);
 	}
 
-	public void genSmapEnd(FunctionMember object, TabbedWriter out) {
+	public void genSmapEnd(Element object, TabbedWriter out) {
 		// is this the first time into an expression group
 		Annotation annotation = object.getAnnotation(IEGLConstants.EGL_LOCATION);
 		if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
