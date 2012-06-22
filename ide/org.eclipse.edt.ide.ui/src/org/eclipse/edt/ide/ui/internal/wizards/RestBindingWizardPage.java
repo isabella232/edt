@@ -92,7 +92,7 @@ public class RestBindingWizardPage extends EGLDDBindingWizardPage {
 		desc.setText(SOAMessages.BaseURIDesc);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = nColumns;
-		gd.widthHint = 550;
+		gd.widthHint = convertWidthInCharsToPixels(80);
 		desc.setLayoutData(gd);
 		
 		spacer = new Label(composite, SWT.WRAP);

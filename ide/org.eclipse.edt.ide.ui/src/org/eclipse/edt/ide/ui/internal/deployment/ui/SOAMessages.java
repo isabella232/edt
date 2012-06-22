@@ -169,6 +169,10 @@ public class SOAMessages extends NLS {
 	public static String RestBindingDetailSecDescp;
 
 	public static String RestBindingDetailSecTitle;
+	
+	public static String DedicatedBindingDetailSecDescp;
+	
+	public static String DedicatedBindingDetailSecTitle;
 
 	public static String DefaultComponentTitle;
 

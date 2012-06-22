@@ -122,7 +122,8 @@ public interface IUIHelpConstants {
 	public static final String MODULE_ADDREFERENCE = PREFIX + "modwiz0013";
 	public static final String MODULE_ADDPROPERTY = PREFIX + "modwiz0014";
 	public static final String MODULE_RESTBINDING = PREFIX + "modwiz0015"; 
-	public static final String MODULE_SQLDATABASEBINDING = PREFIX + "modwiz0016"; 
+	public static final String MODULE_SQLDATABASEBINDING = PREFIX + "modwiz0016";
+	public static final String MODULE_DEDICATEDBINDING = PREFIX + "modwiz0017";
 	public static final String IBMI2EGL_EXTERNALTYPE = PREFIX + "ibmi2egl0001"; //$NON-NLS-1$
 	public static final String IBMI2EGL_ENTRYPOINTS = PREFIX + "ibmi2egl0002"; //$NON-NLS-1$
 	public static final String IBMI2EGL_REST = PREFIX + "ibmi2egl0003"; //$NON-NLS-1$

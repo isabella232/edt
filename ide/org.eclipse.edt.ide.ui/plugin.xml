@@ -15,7 +15,7 @@
 	   
    <extension
          point="org.eclipse.edt.ide.ui.eglDDEditorBindingProvider">
-      <provider id="edt.binding.rest" description="Rest Binding"
+      <provider id="edt.binding.rest" description="%RestBindingDesc"
          bindingconfigurationClass="org.eclipse.edt.ide.ui.wizards.BindingRestConfiguration"
          bindingdetailsPageClass="org.eclipse.edt.ide.ui.internal.deployment.ui.RestBindingDetailPage">
 	      <wizardPage
@@ -24,7 +24,18 @@
 	            name="org.eclipse.edt.ide.ui.internal.wizards.RestBindingWizardPage">
 	      </wizardPage>
       </provider>
-      <provider id="edt.binding.sql" description="SQL Binding"
+      <provider
+            bindingconfigurationClass="org.eclipse.edt.ide.ui.wizards.BindingDedicatedConfiguration"
+            bindingdetailsPageClass="org.eclipse.edt.ide.ui.internal.deployment.ui.DedicatedBindingDetailPage"
+            description="%DedicatedBindingDesc"
+            id="edt.binding.dedicated">
+         <wizardPage
+               class="org.eclipse.edt.ide.ui.internal.wizards.DedicatedBindingWizardPageFactory"
+               id="org.eclipse.edt.ide.ui.internal.wizards.DedicatedBindingWizardPage"
+               name="org.eclipse.edt.ide.ui.internal.wizards.DedicatedBindingWizardPage">
+         </wizardPage>
+      </provider>
+      <provider id="edt.binding.sql" description="%SqlBindingDesc"
          bindingconfigurationClass="org.eclipse.edt.ide.ui.wizards.BindingSQLDatabaseConfiguration"
          bindingdetailsPageClass="org.eclipse.edt.ide.ui.internal.deployment.ui.SQLDatabaseBindingDetailPage">
 	      <wizardPage

@@ -80,6 +80,7 @@ public class NewWizardMessages extends NLS {
 	public static String CreateAsWebService ;
 	public static String CreateWSClientBindingLabel;
 	public static String DescAddRestBinding;
+	public static String DescAddDedicatedBinding;
 	public static String DescAddSQLDatabaseBinding;
 	public static String DuplicateImportedFormatProfile ;
 	public static String Edit ;
@@ -140,6 +141,8 @@ public class NewWizardMessages extends NLS {
 	public static String LabelPreserveReqHeaders;
 	public static String LabelRestBaseURI;
 	public static String LabelRestBindingName;
+	public static String LabelDedicatedBindingName;
+	public static String LabelDedicatedBindingNote;
 	public static String LabelServiceName ;
 	public static String LabelSessionCookieId;
 	public static String RestBindingBlankError;
@@ -763,6 +766,7 @@ public class NewWizardMessages extends NLS {
 	public static String TableColPort;
 	public static String TableColValue;
 	public static String TitleAddRestBinding;
+	public static String TitleAddDedicatedBinding;
 	public static String UpdateBindingLabel;
 	public static String UpdateEGLBindingLabel;
 	public static String ValidateEGLInterfaceEmpty;

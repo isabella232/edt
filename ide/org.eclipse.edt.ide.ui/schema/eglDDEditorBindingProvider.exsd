@@ -86,6 +86,9 @@
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.edt.ide.ui.wizards.BindingEGLConfiguration:"/>
+               </appinfo>
             </annotation>
          </attribute>
          <attribute name="bindingdetailsPageClass" type="string">
@@ -93,6 +96,9 @@
                <documentation>
                   
                </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.ui.forms.IDetailsPage"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>
