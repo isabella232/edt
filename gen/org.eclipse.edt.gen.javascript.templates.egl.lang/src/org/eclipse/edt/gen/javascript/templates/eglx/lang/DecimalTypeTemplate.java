@@ -78,16 +78,13 @@ public class DecimalTypeTemplate extends JavaScriptTemplate {
 	}
 
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) {
-		if (false) { // TODO sbg other impls of genBinaryExpression consider nullables
-		} else {
-			out.print(getNativeStringPrefixOperation(arg));
-			out.print("(");
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
-			out.print(getNativeStringOperation(arg));
-			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
-			out.print(getNativeStringComparisionOperation(arg));
-			out.print(")");
-		}
+		out.print(getNativeStringPrefixOperation(arg));
+		out.print("(");
+		ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
+		out.print(getNativeStringOperation(arg));
+		ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));
+		out.print(getNativeStringComparisionOperation(arg));
+		out.print(")");
 	}
 
 	protected boolean needsConversion(Type fromType, Type toType) {
