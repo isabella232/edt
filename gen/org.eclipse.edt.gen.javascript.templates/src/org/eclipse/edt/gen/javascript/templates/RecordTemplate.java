@@ -129,18 +129,34 @@ public class RecordTemplate extends JavaScriptTemplate {
 	}
 
 	public void genAssignment(Record type, Context ctx, TabbedWriter out, Expression arg1, Expression arg2, String arg3) {
+		boolean needCheckNull = false;
+		if ( !arg1.isNullable() && arg2.isNullable() ) {
+			needCheckNull = true;
+		}
 		if (TypeUtils.isValueType(type)) {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
 			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
+			if ( needCheckNull ) {
+				out.print("egl.checkNull(");
+			}
 			ctx.invoke(genExpression, arg2, ctx, out);
+			if ( needCheckNull ) {
+				out.print(")");
+			}
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
 		} else {
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
+			if ( needCheckNull ) {
+				out.print("egl.checkNull(");
+			}
 			ctx.invoke(genExpression, arg2, ctx, out);
+			if ( needCheckNull ) {
+				out.print(")");
+			}
 		}
 	}
 
