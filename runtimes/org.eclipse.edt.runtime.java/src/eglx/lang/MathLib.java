@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.Constants;
 
+import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 import org.eclipse.edt.runtime.java.eglx.lang.EDecimal;
 
@@ -202,6 +203,11 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static int decimals(EDecimal numericField) {
+		if (numericField == null || numericField.ezeUnbox() == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
 		return numericField.getDecimals();
 	}
 
@@ -421,6 +427,11 @@ public class MathLib extends ExecutableBase {
 	}
 
 	public static int precision(EDecimal numericField) {
+		if (numericField == null || numericField.ezeUnbox() == null)
+		{
+			NullValueException nvx = new NullValueException();
+			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
+		}
 		return numericField.getPrecision();
 	}
 
