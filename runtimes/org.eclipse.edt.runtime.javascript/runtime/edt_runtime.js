@@ -543,7 +543,7 @@ egl.eglx.lang.EString.notEquals = function(str1, str2) {
 	return (str1 != str2);
 };
 egl.eglx.lang.EString.substring = function(str, startIndex, endIndex) {
-	if (str == null) {
+	if (str == null || startIndex == null || endIndex == null) {
 		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 	start = startIndex;
@@ -692,6 +692,13 @@ egl.eglx.lang.EString.startsWith = function(s, substr) {
 };
 egl.eglx.lang.EString.asNumber = function (x) {
 	return egl.convertAnyToNumber(egl.boxAny(x, "S;"), false);  //TODO sbg avoid hardcoding the boolean flag
+};
+egl.eglx.lang.EString.compareTo = function (x1, x2) {
+    if ((x1 === null) || (x2 === null))
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    else {
+        return x1 == x2 ? 0 : ( x1 > x2 ? 1 : -1 );
+    }
 };
 //Below are private methods, just for internal use in EString
 egl.eglx.lang.EString.asString = function (x, len) {

@@ -52,7 +52,7 @@ egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
 };
 egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
-	if (x.eze$$value === null) {
+	if (x.eze$$value === null || x.eze$$value === undefined) {
 		return 0;
 	}
 
@@ -223,6 +223,7 @@ egl.eglx.lang.MathLib["precision"] = function(x) {
 
 egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
 	var rounder;
+	//TODO: BigDecimal has "round" method, consider its method future.
 	var isBigDecimal = ( v instanceof egl.javascript.BigDecimal );
 
 	if (e > 0) {
@@ -232,9 +233,9 @@ egl.eglx.lang.MathLib["round"] = function( /* value */v, /* exp */e) {
 	}
 
 	if (v >= 0) {
-		v = v + rounder;
+		v = Number( v ) + rounder;
 	} else {
-		v = v - rounder;
+		v = Number( v ) - rounder;
 	}
 
 	if (e > 0) {

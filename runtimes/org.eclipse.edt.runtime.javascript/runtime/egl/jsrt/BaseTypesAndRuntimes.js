@@ -3140,6 +3140,11 @@ Array.prototype.resize = function Array_resize(val) {
 		return;
 	}
 	var elementType = this.getType();
+	if ( typeof elementType == 'string' ) {
+	     //the Array type is "[X;", X is the element type.
+	     //Below line gets the element type
+	     elementType = elementType.substring( 1, elementType.length );
+	}
 	
 	for (var n=this.length; n < val; n++) {
 		if ( typeof elementType == 'function')
