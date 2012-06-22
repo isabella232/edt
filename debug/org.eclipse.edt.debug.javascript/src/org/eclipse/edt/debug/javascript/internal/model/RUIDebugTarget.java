@@ -509,7 +509,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 			{
 				try
 				{
-					if ( timeLeft == 0 )
+					if ( fTerminating || fTerminated || timeLeft == 0 )
 					{
 						// If we sit here waiting forever, we break the variables view.
 						completion.completed( new String[] { "", "" } ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -569,7 +569,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 				{
 					try
 					{
-						if ( timeLeft == 0 )
+						if ( fTerminating || fTerminated || timeLeft == 0 )
 						{
 							// If we sit here waiting forever, we break the variables view.
 							completion.completed( "0" ); //$NON-NLS-1$
@@ -658,7 +658,7 @@ public class RUIDebugTarget extends RUIDebugElement implements IEGLDebugTarget, 
 			{
 				try
 				{
-					if ( timeLeft == 0 )
+					if ( fTerminating || fTerminated || timeLeft == 0 )
 					{
 						// If we sit here waiting forever, we break the variables view.
 						completion.completed( new RUIVariable[ 0 ] );
