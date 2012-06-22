@@ -11,3 +11,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
 Export-Package: org.eclipse.edt.mof.eglx.services
 Bundle-Localization: plugin
+Bundle-ClassPath: src.jar
