@@ -64,8 +64,8 @@ service GETREC
 			programName = "GETREC",
 			libraryName = "/QSYS.LIB/VARLABXX.LIB",
 			parameterAnnotations = [
-				@AS400Array {elementCount = 10,returnCountVariable = count},
-				@AS400Text {length = 1},
+				@StructArray {elementCount = 10,returnCountVariable = count},
+				@StructText {length = 1},
 				null
 			]		
 		}

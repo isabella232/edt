@@ -4,7 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>org.eclipse.edt.jtopen.samples</project>
-		<project>org.eclipse.edt.rui.widgets_0.8.0</project>
+		<project>org.eclipse.edt.rui.widgets_0.8.1</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

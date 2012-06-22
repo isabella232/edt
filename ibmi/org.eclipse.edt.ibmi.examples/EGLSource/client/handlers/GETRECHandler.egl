@@ -21,9 +21,9 @@ handler GETRECHandler
 		if(dataObject isa ServiceInfoRecord)
 			case((dataObject as ServiceInfoRecord).serviceType)
 				when(ServiceLocation.jetty)
-					httpSession1 = SysLib.getResource("binding:GETRECServiceWorkspace");
+					httpSession1 = Resources.getResource("binding:GETRECServiceWorkspace");
 				when(ServiceLocation.rest)
-					httpSession1 = SysLib.getResource("binding:GETRECService");
+					httpSession1 = Resources.getResource("binding:GETRECService");
 					if((dataObject as ServiceInfoRecord).serverAddress.length() > 0)
 						httpSession1.getRequest().uri = (dataObject as ServiceInfoRecord).serverAddress + httpSession1.getRequest().uri;
 					end
