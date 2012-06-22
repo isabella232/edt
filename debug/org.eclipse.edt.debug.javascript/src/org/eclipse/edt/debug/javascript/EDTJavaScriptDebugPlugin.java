@@ -52,10 +52,9 @@ public class EDTJavaScriptDebugPlugin extends AbstractUIPlugin
 	@Override
 	public void stop( BundleContext bundleContext ) throws Exception
 	{
-		super.stop( bundleContext );
-		plugin = null;
-		
 		EvServer.getInstance().removeContextResolver( RUIDebugContextResolver.getInstance() );
+		plugin = null;
+		super.stop( bundleContext );
 	}
 	
 	public static EDTJavaScriptDebugPlugin getDefault()
