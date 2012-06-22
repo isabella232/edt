@@ -47,6 +47,7 @@ import org.eclipse.edt.mof.egl.ProgramParameter;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.Statement;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
 import org.eclipse.edt.mof.serialization.DeserializationException;
@@ -205,7 +206,18 @@ public class BinaryElementParser {
 			visitPart(partType , partInfo, annoType);
 			return true;
 		}
-		
+
+		public boolean visit(StereotypeType annoType) {
+			if (!shouldVisit(annoType)) {
+				return false;
+			}
+			
+			//String name = annoType.getName();
+			this.partType = IRPartType.PART_STEREOTYPE;
+			visitPart(partType , partInfo, annoType);
+			return true;
+		}
+
 		public boolean visit(Delegate delegate) {
 			if (!shouldVisit(delegate)) {
 				return false;

@@ -531,10 +531,9 @@ private boolean matchesPartType(IPart part){
 			match = partTypes == IIndexConstants.PROGRAM_SUFFIX;
 		}
 		else if(partInfo.isRecord()){
-			match = partTypes == IIndexConstants.RECORD_SUFFIX;
-			if(!match) {
-				match = partTypes == IIndexConstants.ANNOTATION_SUFFIX;
-			}
+			match = partTypes == IIndexConstants.RECORD_SUFFIX ||
+					partTypes == IIndexConstants.ANNOTATION_SUFFIX ||
+					partTypes == IIndexConstants.STEREOTYPE_SUFFIX;
 		}
 		else if(partInfo.isDataItem()){
 			match = partTypes == IIndexConstants.ITEM_SUFFIX;
