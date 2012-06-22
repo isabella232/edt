@@ -71,8 +71,11 @@ public class DeclarationExpressionTemplate extends JavaTemplate {
 			ctx.invoke(genInitialization, field, ctx, out);
 			out.println(";");
 			// now check for any statements to be processed
-			if (field.getInitializerStatements() != null)
+			if (field.getInitializerStatements() != null) {
+				if (field.getInitializerStatements().getStatements() != null && field.getInitializerStatements().getStatements().size() > 0)
+					ctx.genSmapEnd(field.getInitializerStatements().getStatements().get(0), out);
 				ctx.invoke(genStatementNoBraces, field.getInitializerStatements(), ctx, out);
+			}
 		}
 	}
 }
