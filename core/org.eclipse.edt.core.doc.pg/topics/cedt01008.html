@@ -36,10 +36,12 @@ in the resource bindings section of the EGL deployment descriptor. </p>
 
 <div class="p">The entry in the service bindings section behaves differently depending
 on the type of service that you access:<ul class="ul">
-<li class="li">If you access a SOAP service, the entry in the service bindings
-section refers to a WSDL file that in turn refers to the service location.
-If a service location changes, you do not need to change the code
-or deployment descriptor. You must change the WSDL file only.</li>
+<li class="li"><strong class="ph b">At this writing, the following detail is not in effect; SOAP
+is not supported.</strong> If you access a SOAP service, the entry in the
+service bindings section refers to a WSDL file that in turn refers
+to the service location. If a service location changes, you do not
+need to change the code or deployment descriptor. You must change
+the WSDL file only.</li>
 
 <li class="li">If you access any other type of service, the entry in the service
 bindings section refers to the service itself.</li>

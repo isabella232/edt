@@ -8,11 +8,12 @@
 <meta name="DC.Title" content="Resource bindings"></meta>
 <meta name="abstract" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application."></meta>
 <meta name="description" content="One of the more elegant aspects of EGL is its use of resource bindings, each of which is a value that describes how to access a service or database. In most cases, you maintain bindings in an EGL deployment descriptor, which is external to your logic. The deployment descriptor provides the access details when you are developing or deploying your application."></meta>
-<meta name="DC.subject" content="Resource bindings"></meta>
-<meta name="keywords" content="Resource bindings"></meta>
+<meta name="DC.subject" content="Resource bindings, Bindings, resource, overview"></meta>
+<meta name="keywords" content="Resource bindings, Bindings, resource, overview"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01001.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01032.html"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01033.html"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/tedt01042.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Format" content="XHTML"></meta>
@@ -36,56 +37,59 @@ The deployment descriptor provides the access details when you are
 developing or deploying your application.</p>
 
 <p class="p">This use of the deployment descriptor is safe and flexible. You
-can change the details stored there and redeploy the code without
-changing the logic and without spending the time to regenerate output.</p>
+can change the details stored there and redeploy the code. </p>
+
+<p class="p">By "redeploy," we mean to fulfill the EGL deployment step to repackage
+the code for subsequent distribution. The redeployment is quick; you
+neither change the logic nor regenerate your output.</p>
 
 <div class="section"><h2 class="title sectiontitle">The typical process</h2><div class="p">The binding mechanism
 equivalent for accessing a service or database. The typical process
 is as follows: <ol class="ol">
 <li class="li">Write a resource binding in an EGL deployment descriptor.</li>
 
-<li class="li">Relate a variable to the stored resource binding in either of
-two ways: <ul class="ul">
-<li class="li">By invoking the<strong class="ph b">Resources.getResource</strong> function; or</li>
+<li class="li">Relate a variable to the stored resource binding. You relate the
+two either by invoking the <strong class="ph b">Resources.getResource</strong> function or
+by writing a <strong class="ph b">Resource</strong> annotation. A variable that includes
+binding detail is called a <dfn class="term">binding variable</dfn>.</li>
 
-<li class="li">By writing a <strong class="ph b">Resource</strong> annotation.</li>
-
-</ul>
-<p class="p">A variable that includes binding detail is called a <strong class="ph b">binding
-variable</strong>.</p>
-</li>
-
-<li class="li">Place the binding variable in an EGL statement. If you are accessing
-external logic, use the <strong class="ph b">call</strong> statement. If you are accessing
-a database, use one of the statements that read or write data; for
+<li class="li">Place the binding variable in an EGL <dfn class="term">action statement</dfn>,
+which is a statement that interacts with logic that is external to
+the code you are writing. If you are accessing external logic, use
+the <strong class="ph b">call</strong> statement. If you are accessing a database management
+system, you use one of the statements that read or write data; for
 example, the <strong class="ph b">add</strong> or <strong class="ph b">get</strong> statement.</li>
 
 </ol>
 </div>
-<div class="p">Here is an example use of the <strong class="ph b">Resources.getResource</strong> function,
-which can be invoked only inside an EGL function: <pre class="pre codeblock">myBindingVar HttpRest? = Resources.getResource("binding:myEntry");
+<p class="p">The essential point is that when you are writing your
+logic, you often fulfill a two-step process:  declare a binding variable
+and include it in an action statement.</p>
+<div class="p">When you declare a binding
+variable, you might use the <strong class="ph b">Resources.getResource</strong> function,
+which can be invoked only inside an EGL function: <pre class="pre codeblock">myBindingVar IHttp? = Resources.getResource("binding:myEntry");
 </pre>
 </div>
-<p class="p">The function call requires a single argument, which
-identifies an entry in the EGL deployment descriptor.</p>
-<div class="p">Here is
-an example use of the equivalent <strong class="ph b">Resource</strong> annotation, which
-you can specify anywhere that you can declare a variable:<pre class="pre codeblock">myBindingVar HttpRest?{@Resource{uri="binding:myEntry"}};
+<p class="p">The call to <strong class="ph b">Resources.getResource</strong> requires
+a single argument, which identifies an entry in the EGL deployment
+descriptor.</p>
+<div class="p">A simpler option is to declare a <strong class="ph b">Resource</strong> annotation
+when you declare a variable:<pre class="pre codeblock">myBindingVar IHttp? {@Resource{uri="binding:myEntry"}};
 </pre>
 </div>
 <div class="p">The <strong class="ph b">uri</strong> annotation field is optional and
 refers by default to a resource binding that has the same name as
 the binding variable. For example, the missing value for the <strong class="ph b">uri</strong> field
-in the following annotation is <samp class="ph codeph">"binding:myBindingVar"</samp>:<pre class="pre codeblock">myBindingVar HttpRest{@Resource};</pre>
+in the following annotation is <samp class="ph codeph">"binding:myBindingVar"</samp>:<pre class="pre codeblock">myBindingVar IHttp? {@Resource};</pre>
 </div>
 <div class="p">Whether
 you specify the <strong class="ph b">Resources.getResource</strong> function or <strong class="ph b">Resource</strong> annotation,
 you can use an extended format ("binding:file:<em class="ph i">fileName</em>#<em class="ph i">entry</em>")
 to identify the EGL deployment descriptor that contains the entry.
-Here is an example:<pre class="pre codeblock">myBindingVar HttpRest? = Resources.getResource("binding:file:myDDFile#myEntry"); 
+Here is an example:<pre class="pre codeblock">myBindingVar IHttp? = Resources.getResource("binding:file:myDDFile#myEntry"); 
 
 // equivalent annotation
-myBindingVar HttpRest?{@Resource{uri = "binding:file:myDDFile#myEntry"}};</pre>
+myBindingVar IHttp? {@Resource{uri = "binding:file:myDDFile#myEntry"}};</pre>
 </div>
 <div class="p">If
 you do not use the extended format, the referenced EGL deployment
@@ -99,6 +103,9 @@ that you deploy.</li>
 
 </ul>
 </div>
+<p class="p">You might have multiple deployment descriptors; for example,
+one for a development environment, one for a test environment, and
+one for production.</p>
 </div>
 
 <div class="section"><h2 class="title sectiontitle">Bindings in your code</h2><div class="p">A resource binding
@@ -118,13 +125,17 @@ fields in your code.</li>
 
 </ul>
      </div>
+<p class="p">The typical process is unchanged: you declare a binding
+variable and include it in an action statement.</p>
 </div>
 
 <div class="section"><h2 class="title sectiontitle">For further information</h2><div class="p">The next topics
 give further details: <ul class="ul">
-<li class="li"><a class="xref" href="cedt01032.html" title="If the purpose of a resource binding is service access, the definition is called a service binding. The main detail is in one of three categories:">Service bindings</a></li>
+<li class="li"><a class="xref" href="cedt01032.html" title="To access a service, you must specify both how to interact with the external logic and where it resides. You can think of the two kinds of information in an abbreviated way: &#34;how&#34; and &#34;where.&#34;">Service bindings</a></li>
 
 <li class="li"><a class="xref" href="cedt01033.html" title="If the purpose of a resource binding is to specify the connection used for database access, the definition is called a SQL database binding.">SQL database bindings</a></li>
+
+<li class="li"><a class="xref" href="tedt01042.html" title="EGL code that is generated to Java can access IBM i called programs, as well as procedures in IBM service programs. The language also supports access of those programs from a Rich UI application, by way of an EGL service type generated to Java.">IBM i bindings</a></li>
 
 </ul>
 </div>

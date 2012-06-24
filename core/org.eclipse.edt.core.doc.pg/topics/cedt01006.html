@@ -5,11 +5,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
-<meta name="DC.Title" content="Function prototypes for service access"></meta>
-<meta name="abstract" content="When you specify parameters in a function prototype to access a service, you must follow the rules described here."></meta>
-<meta name="description" content="When you specify parameters in a function prototype to access a service, you must follow the rules described here."></meta>
-<meta name="DC.subject" content="prototypes, EGL functions, parameters, Rich UI, services, access parameters"></meta>
-<meta name="keywords" content="prototypes, EGL functions, parameters, Rich UI, services, access parameters"></meta>
+<meta name="DC.Title" content="Rules for a proxy function used for service access"></meta>
+<meta name="abstract" content="Follow the rules described here when you define a proxy function that is used to access a service."></meta>
+<meta name="description" content="Follow the rules described here when you define a proxy function that is used to access a service."></meta>
+<meta name="DC.subject" content="Proxy function, rules, Service access, proxy function"></meta>
+<meta name="keywords" content="Proxy function, rules, Service access, proxy function"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
 <meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
 <meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
@@ -17,23 +17,25 @@
 <meta name="DC.Identifier" content="cedt01006"></meta>
 <meta name="DC.Language" content="en-us"></meta>
 <link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
-<title>Function prototypes for service access</title>
+<title>Rules for a proxy function used for service access</title>
 </head>
 <body id="cedt01006">
 
 
-<h1 class="title topictitle1">Function prototypes for service access</h1>
+<h1 class="title topictitle1">Rules for a proxy function used for service access</h1>
 
 
 
-<div class="body"><p class="shortdesc">When you specify parameters in a function prototype to
-access a service, you must follow the rules described here.</p>
+<div class="body"><p class="shortdesc">Follow the rules described here when you define a proxy
+function that is used to access a service.</p>
 
-<div class="p">An Interface part is used for service access and includes function
-prototypes such as the following one: <pre class="pre codeblock">Function GetEmployeeDetail(employeeCode STRING IN,                             
+<div class="p">Assume that the outline of a proxy function for service access
+is as follows:<pre class="pre codeblock">Function GetEmployeeDetail(employeeCode STRING IN,                             
                            employeeSalary FLOAT OUT,
                            employeeStatus STRING INOUT)
-         returns(myEmployeeRecordPart);
+         returns(myEmployeeRecordPart)
+{}
+end
 </pre>
 </div>
 

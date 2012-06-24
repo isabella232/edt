@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="Service access outside of Rich UI"></meta>
-<meta name="abstract" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. Synchronous service access is not yet available.."></meta>
-<meta name="description" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. Synchronous service access is not yet available.."></meta>
+<meta name="abstract" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. At this writing, synchronous service access is not available.."></meta>
+<meta name="description" content="Except in a Rich UI handler or library, service access in EGL is synchronous: the requester waits for a response from the service. At this writing, synchronous service access is not available.."></meta>
 <meta name="DC.subject" content="service access, overview, non-Rich UI"></meta>
 <meta name="keywords" content="service access, overview, non-Rich UI"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/cedt01003.html"></meta>
@@ -28,36 +28,10 @@
 
 <div class="body"><p class="shortdesc">Except in a Rich UI handler or library, service access
 in EGL is <dfn class="term">synchronous</dfn>: the requester waits for a response
-from the service. <strong class="ph b">Synchronous service access is not yet available.</strong>.</p>
+from the service. <strong class="ph b">At this writing, synchronous service access is
+not available.</strong>.</p>
 
-<div class="p">For example, the following code accesses the implementation that
-is shown in “EGL support for SOA:”<pre class="pre codeblock">returnValue String{};
-myInterface MyInterfaceType?{@Resource{bindingKey = "MyBinding"}};
-
-try
-   returnValue = myInterface.myEcho("world");
-
-   onException(except AnyException)
-      // exception handling
-end</pre>
-</div>
-
-<div class="p">Typically, accessing a service outside of Rich UI involves creating
-an EGL Interface part: <ol class="ol">
-<li class="li">Use a workbench tool to create an EGL Interface part that describes
-the service operations.</li>
-
-<li class="li">Create a service-access variable that is based on the Interface
-part. </li>
-
-<li class="li">Use the variable in a service-access statement that places a returned
-value into a second variable. You can embed the service-access in
-a <span class="ph synph"><span class="keyword kwd">try</span></span> block that references an exception
-handler. The exception handler is invoked at run time if the invocation
-fails.</li>
-
-</ol>
-</div>
+<p class="p"></p>
 
 </div>
 

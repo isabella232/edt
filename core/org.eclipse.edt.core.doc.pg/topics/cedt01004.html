@@ -33,31 +33,32 @@ interact with the user interface while the requester waits for the
 service to respond.</p>
 
 <div class="section"><div class="p">The following code accesses the implementation that is
-shown in “EGL support for SOA”:<pre class="pre codeblock">myService MyServiceType?{@Resource{bindingKey = "MyBinding"}};
+shown in “EGL support for SOA”:<pre class="pre codeblock">myBindingVar IHttp?{@Resource{uri = "binding:myEntry"}};
 
 call myService.myEcho("world")
+     using myBindingVar
      returning to myCallBack
-     onException serviceLib.serviceExceptionHandler;</pre>
+     onException myExceptionHandler;</pre>
 </div>
-<p class="p">The
-first statement accesses an instance of a binding that is created
-from the specified entry in an EGL deployment descriptor. The second
-statement uses that binding detail in an invocation.</p>
-<p class="p">After the
-invocation, the service does a task and, in most cases, responds to
-the EGL runtime code. The EGL runtime code then invokes a callback
-function. A callback function is a Rich UI function that you code
-and that you specify in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement
-that accesses the service. The invocation by the EGL runtime code
-is described as <dfn class="term">issuing a callback</dfn>. If an error occurs
-during service access and you have specified an exception handler
-in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement, the EGL runtime code
-invokes the exception handler.</p>
-<p class="p">In the previous example, the <samp class="ph codeph">myCallBack</samp> callback
-function (not shown) receives the text that is returned from a service
-and places it on the web page at run time.</p>
-<div class="p">Typically, the process
-for accessing services from Rich UI is as follows:<ol class="ol">
+<p class="p">The first statement
+accesses an instance of a binding that is created from the specified
+entry in an EGL deployment descriptor. The second statement uses that
+binding detail in an invocation.</p>
+<p class="p">After the invocation, the service
+does a task and, in most cases, responds to the EGL runtime code.
+The EGL runtime code then invokes a callback function. A callback
+function is a Rich UI function that you code and that you specify
+in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement that accesses the
+service. The invocation by the EGL runtime code is described as <dfn class="term">issuing
+a callback</dfn>. If an error occurs during service access and you
+have specified an exception handler in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement,
+the EGL runtime code invokes the exception handler.</p>
+<p class="p">In the previous
+example, the <samp class="ph codeph">myCallBack</samp> callback function (not shown)
+receives the text that is returned from a service and places it on
+the web page at run time.</p>
+<div class="p">Typically, the process for accessing
+services from Rich UI is as follows:<ol class="ol">
 <li class="li">Use a workbench tool to create an EGL Interface part that describes
 the service operations. For a given operation, the part identifies
 the return value and argument list.</li>
@@ -103,14 +104,12 @@ access every invoked service, even services that are on the same server. </p>
 Rich UI application can access the following kinds of services:<ul class="ul">
 <li class="li">A web service, including an EGL REST-RPC service</li>
 
-<li class="li">An EGL service that is deployed as a <dfn class="term">dedicated service</dfn>,
-which is available to the other logic in the Rich UI application.
+<li class="li">A service (essentially, a Java class) that is deployed as a <dfn class="term">dedicated
+service</dfn>, which is available only to the Rich UI application.
 That service is local to the Rich UI proxy and runs in the application
 server that transmitted the Rich UI application. <p class="p">You can use the
-dedicated service to do tasks that other EGL-generated Java services can do, such as accessing a database,
-or <strong class="ph b">(in a later version of EDT)</strong> a file system or a local IBM<sup>®</sup> i service program. However,
-the dedicated service is not available to other code unless you redeploy
-it as a SOAP or EGL REST-RPC service.</p>
+dedicated service to do tasks that other EGL-generated Java services can do, such as accessing a database. However, the dedicated service is not available to other
+code unless you redeploy it as a web service.</p>
 </li>
 
 </ul>
