@@ -62,30 +62,34 @@ and "where."</p>
 <div class="p">If you are accessing a service that was written in EGL, you can
 specify "how" and "where" in the <span class="ph synph"><span class="keyword kwd">call</span></span> statement.
  The usage is particularly simple and is available whether the service
-is being deployed with a Rich UI application, as a dedicated service,
-or outside of a Rich UI application, as an EGL REST-RPC service:<ul class="ul">
-<li class="li">The following example accesses either a dedicated or EGL REST-RPC
-service and uses the IHttp? Interface type for flexibility: <pre class="pre codeblock">myBindingVar IHttp?{@Resource {uri="binding:myEntry"}};
+is being deployed with a Rich UI application (as a dedicated service)
+or outside of a Rich UI application (as an EGL REST-RPC service):<ul class="ul">
+<li class="li">The following example accesses either kind of service, depending
+on the EGL deployment-descriptor entry named <samp class="ph codeph">myEntry</samp>: <pre class="pre codeblock">myBindingVar IHttp?{@Resource {uri="binding:myEntry"}};
 
 call 
-   MyServiceType.myFunction("abc")          // "how"
-   using myBindingVar                       // "where"
+   MyServiceType.myFunction("abc")        // "how"
+   using myBindingVar                     // "where"
    returning to myCallBackFunction
    onException myExceptionHandler;    </pre>
-<p class="p">Later, you can
-switch the EGL deployment descriptor, and the entry named <samp class="ph codeph">myEntry</samp> might
-refer to a different kind of EGL service. The switch to a different
-kind of service will not require that you change the invocation.</p>
+<p class="p">The example uses
+the <samp class="ph codeph">IHttp?</samp> Interface type for flexibility. Later,
+if you want to switch to a different kind of access target, you switch
+to a different deployment descriptor. You will not need to change
+the invocation, and you will not need to regenerate the example.</p>
 </li>
 
-<li class="li">The following example accesses a dedicated service in the simplest
-way:<pre class="pre codeblock">call 
-   MyServiceType.myFunction("abc")          // "how" and "where"
-   returning to myCallBackFunction
+<li class="li">In the next example, the Service type identifies "how," and the
+lack of a <span class="ph synph"><span class="keyword kwd">call</span></span>-statement <span class="ph synph"><span class="keyword kwd">using</span></span> clause
+indicates that you are accessing a dedicated service: <pre class="pre codeblock">call 
+   MyServiceType.myFunction("abc")        // "how"
+                                          // "where" (the service is deployed
+                                          //          with the Rich UI application)
+  returning to myCallBackFunction
    onException myExceptionHandler;   </pre>
-<p class="p">In this case,
-any future use of an EGL REST-RPC service requires that you change
-the invocation.</p>
+<p class="p">This second case
+is even simpler, but any future use of an EGL REST-RPC service requires
+that you change the invocation and regenerate the example code. </p>
 </li>
 
 </ul>
@@ -103,7 +107,7 @@ the invocation.</p>
 the "how" and "where" information in a single location, by adding
 a <dfn class="term">proxy function</dfn> to a library or handler. The <span class="ph synph"><span class="keyword kwd">call</span></span> statement
 invokes the proxy function, which acts as an intermediary between
-that statement and the back-end code. You also specify a third kind
+that statement and the backend code. You also specify a third kind
 of information in the proxy function, for use by the EGL generator
 that is storing invocation code in place of the annotations.  </p>
 
@@ -120,7 +124,8 @@ an annotation that is specific to the kind of backend code that will
 be invoked. </p>
 
 <div class="p">Here are examples: <ul class="ul">
-<li class="li">For a dedicated or EGL REST-RPC service invocation, declare an <span class="ph synph"><span class="keyword kwd">EglService</span></span> annotation:<pre class="pre codeblock">function myProxyFunction(p1 string, p2 string) RETURNS(int) // "how" 
+<li class="li">If you accessing a dedicated or EGL REST-RPC service, declare
+an <span class="ph synph"><span class="keyword kwd">EglService</span></span> annotation:<pre class="pre codeblock">function myProxyFunction(p1 string, p2 string) RETURNS(int) // "how" 
 {
    @EglService{serviceName="MyServiceType"}                 // "what more" does
                                                             //  the generator need?
@@ -128,7 +133,7 @@ be invoked. </p>
 end</pre>
 </li>
 
-<li class="li">For a REST service invocation, declare a <span class="ph synph"><span class="keyword kwd">Rest</span></span>annotation:<pre class="pre codeblock">function myProxyFunction02(p1 string, p2 string) RETURNS(int) // "how" 
+<li class="li">If you are accessing a third-party REST service, declare a <span class="ph synph"><span class="keyword kwd">Rest</span></span>annotation:<pre class="pre codeblock">function myProxyFunction02(p1 string, p2 string) RETURNS(int) // "how" 
 {  
    @Rest                                                      // "what more" does
                                                               // the generator need?
@@ -145,10 +150,10 @@ end</pre>
 
 <div class="p">To add "where" information to the proxy function, specify the <span class="ph synph"><span class="keyword kwd">Resource</span></span> annotation
 at the same level as the other annotation. Here are the previous examples
-with the additional detail:<pre class="pre codeblock">function myProxyFunction(p1 string, p2 string) RETURNS(int) // "how" 
+with the additional detail:<pre class="pre codeblock">function myProxyFunction(p1 string, p2 string) RETURNS(int)   // "how" 
 {
-   @EglService{serviceName="MyServiceType"}                 // "what more" 
-   @Resource{uri = "binding:myEntry"}                       // "where"  
+   @EglService{serviceName="MyServiceType"},                  // "what more" 
+   @Resource{uri = "binding:myEntry"}                         // "where"  
 }
 end
 
@@ -158,7 +163,7 @@ function myProxyFunction02(p1 string, p2 string) RETURNS(int) // "how"
    {
       method = HttpMethod._GET, 
       uriTemplate = "/org/search/?string01={p1}&amp;string02={p2}"     
-   }   
+   },   
    @Resource{uri = "binding:myEntry02"}                       // "where"  
 } 
 end</pre>
@@ -168,6 +173,25 @@ end</pre>
 is optional and, if present, is a default. The detail is ignored if
 you specify the "where" detail in the code that invokes the proxy
 function.</p>
+
+<div class="p">Last, if the proxy function has a name different from the name
+of the service operation, declare an <strong class="ph b">ExternalName</strong> annotation:<pre class="pre codeblock">function myProxyFunction02(p1 string, p2 string) RETURNS(int) // "how" 
+{  
+   @Rest                                                      // "what more"
+   {
+      method = HttpMethod._GET, 
+      uriTemplate = "/org/search/?string01={p1}&amp;string02={p2}"     
+   },   
+   @ExternalName{value = "my-Operation"},                     // "what more"  
+   @Resource{uri = "binding:myEntry02"}                       // "where"  
+} 
+end
+</pre>
+</div>
+
+<p class="p">The primary reason to declare an <strong class="ph b">ExternalName</strong> annotation
+is that the name of a third-party service operation is not valid as
+the name of an EGL proxy function.</p>
 
 </div>
 
@@ -184,7 +208,7 @@ places. What is the best practice?"</p>
 a service that is in a more-or-less permanent location. In this case,
 you have the minor complexity of creating a proxy function, but you
 invoke the backend logic simply:<pre class="pre codeblock">call 
-   myProxyFunction("abc")                      // "how" and "where"
+   myProxyFunction("abc")                   // "how" and "where"
    returning to myCallBackFunction
    onException myExceptionHandler;</pre>
  </div>
@@ -198,19 +222,23 @@ to tell "how." Two variations apply:<ul class="ul">
 <li class="li">As shown earlier, the EGL deployer handles the "where" automatically
 if you are accessing a dedicated service. You can write a <span class="ph synph"><span class="keyword kwd">call</span></span> statement
 without specifying either a binding variable or a <span class="ph synph"><span class="keyword kwd">call</span></span>-statement <span class="ph synph"><span class="keyword kwd">using</span></span> clause:<pre class="pre codeblock">call 
-   MyServiceType.myFunction("abc")           // "how" and "where"
+   MyServiceType.myFunction("abc")        // "how"
+                                          // "where" (the service is deployed
+                                          //          with the Rich UI application)
+
    returning to myCallBackFunction
    onException myExceptionHandler;</pre>
 </li>
 
 <li class="li">If you are developing an EGL REST-RPC service and want to switch
 easily between accessing the code being developed and, later, the
-code that is deployed, you can handle the situation by switching deployment
-descriptors. The practice is robust, but requires that you assign
-the same-named entry in each of your deployment descriptors. Alternatively,
+code that is deployed, you can handle the situation by updating the
+deployment-descriptor entry or by switching deployment descriptors.
+The use of multiple deployment descriptors is robust, but requires
+that you assign the same-named entry in each of them. <div class="p">Alternatively,
 you can rely on the following rule: if the <span class="ph synph"><span class="keyword kwd">using</span></span> clause
 is present but contains a null, a call to an EGL Service type accesses
-a dedicated service.<div class="p">Here is a partial example: <pre class="pre codeblock">function callTheService()
+a dedicated service. Here is a partial example: <pre class="pre codeblock">function callTheService()
 
    try 
       myBindingVar IHttp? = Resources.getResource("binding:myEntry");   
@@ -224,8 +252,10 @@ a dedicated service.<div class="p">Here is a partial example: <pre class="pre co
       onException myExceptionHandler;    		
 end</pre>
 </div>
-<p class="p">If the EGL DD entry is present, the call statement
-accesses an EGL REST-RPC service. If the EGL DD entry is absent, the <span class="ph synph"><span class="keyword kwd">call</span></span> statement
+</li>
+
+<li class="li"><p class="p">If the EGL DD entry is present, the call statement accesses
+an EGL REST-RPC service. If the EGL DD entry is absent, the <span class="ph synph"><span class="keyword kwd">call</span></span> statement
 accesses the service under development or, at run time, a dedicated
 service.</p>
 </li>
@@ -270,7 +300,8 @@ you update not only the Resource Binding tab, but the Service Deployment
 tab as well. That secondary requirement ensures that the deployment
 descriptor file includes the detail necessary to deploy the service.
 However, before you fulfill the EGL deployment step, you'll need to
-replace the workspace URI with an external one.</p>
+ensure that the URI in the resource binding is pointing to the deployed
+EGL REST-RPC service.</p>
 </li>
 
 <li class="li">If a Rich UI application references a Service type in a way that
