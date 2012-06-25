@@ -19,7 +19,7 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.runtime.java.eglx.lang.ETimestamp;
 
-import eglx.lang.TypeCastException;
+import eglx.lang.InvalidArgumentException;
 
 /**
  * Helper class used to calculate arguments to be passed when instantiating
@@ -40,36 +40,61 @@ public class TimestampIntervalMask implements Serializable
 		if ( pattern != null )
 		{
 			pattern = pattern.trim();
-			for ( int i = 0; i < pattern.length(); i++ )
-			{
-				switch ( pattern.charAt( i ) )
+			if (pattern.length() > 0) {
+				// make this big enough so that repeated characters don't cause an overflow in the array
+				int[] flags = new int[100];
+				int index = 0;
+				for ( int i = 0; i < pattern.length(); i++ )
 				{
-					case 'y':
-					case 'Y':
-					case 'm':
-					case 'M':
-					case 'd':
-					case 'D':
-					case 'h':
-					case 'H':
-					case 's':
-					case 'S':
-					case 'f':
-					case 'F':
-						break;
-					default:
-						TypeCastException tcx = new TypeCastException();
-						tcx.actualTypeName = "string";
-						tcx.castToName = "timestamp";
-						throw tcx.fillInMessage( Message.CONVERSION_ERROR, pattern, tcx.actualTypeName, tcx.castToName );
+					switch ( pattern.charAt( i ) )
+					{
+						case 'y':
+						case 'Y':
+							flags[index++] = ETimestamp.YEAR_CODE;
+							break;
+						case 'm':
+							flags[index++] = ETimestamp.MINUTE_CODE;
+							break;
+						case 'M':
+							flags[index++] = ETimestamp.MONTH_CODE;
+							break;
+						case 'd':
+						case 'D':
+							flags[index++] = ETimestamp.DAY_CODE;
+							break;
+						case 'h':
+						case 'H':
+							flags[index++] = ETimestamp.HOUR_CODE;
+							break;
+						case 's':
+						case 'S':
+							flags[index++] = ETimestamp.SECOND_CODE;
+							break;
+						case 'f':
+						case 'F':
+							flags[index++] = ETimestamp.FRACTION1_CODE;
+							break;
+						default:
+							InvalidArgumentException ex = new InvalidArgumentException();
+							throw ex.fillInMessage(Message.INVALID_DATA, "yyyyMMddhhmmssffffff");
+					}
 				}
+				// make sure that from the start of the flag array to endIndex, the values are >= the current one
+				int endIndex = index - 1;
+				for (index = 0; index < endIndex; index++) {
+					// if the next value is the same or exactly 1 larger, then pattern is still ok
+					if (!(flags[index] == flags[index + 1] || (flags[index] + 1) == flags[index + 1])) {
+						InvalidArgumentException ex = new InvalidArgumentException();
+						throw ex.fillInMessage(Message.INVALID_DATA, "yyyyMMddhhmmssffffff");
+					}
+				}
+				// copy the valid pattern
+				this.pattern = pattern;
+				// Before we make the lowerCasePattern, replace 'S' with 'f' so we can
+				// tell the difference between 'S' and 's'.  They'll both be 's' after
+				// conversion to lower case.
+				this.lowerCasePattern = pattern.replace( 'S', 'f' ).toLowerCase();
 			}
-			this.pattern = pattern;
-			
-			// Before we make the lowerCasePattern, replace 'S' with 'f' so we can
-			// tell the difference between 'S' and 's'.  They'll both be 's' after
-			// conversion to lower case.
-			this.lowerCasePattern = pattern.replace( 'S', 'f' ).toLowerCase();
 		}
 	}
 	
