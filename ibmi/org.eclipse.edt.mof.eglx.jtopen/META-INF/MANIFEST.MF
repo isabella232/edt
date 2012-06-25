@@ -2,14 +2,14 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof.eglx.jtopen;singleton:=true
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.8.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Eclipse-RegisterBuddy: org.eclipse.edt.mof
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.0",
+Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.1",
  org.eclipse.core.runtime;bundle-version="3.6.0",
- org.eclipse.edt.mof;bundle-version="0.8.0"
+ org.eclipse.edt.mof;bundle-version="0.8.1"
 Export-Package: org.eclipse.edt.mof.eglx.jtopen,
  org.eclipse.edt.mof.eglx.jtopen.impl
 Bundle-ClassPath: src.jar
