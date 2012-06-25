@@ -72,6 +72,7 @@ public class BinaryElementParser {
 		byte[] contents;
 		try { 
 			contents = file.getByteContent();
+			if (contents == null) {return;};
 			index(contents);
 		} catch (IOException e) {
 			e.printStackTrace();
