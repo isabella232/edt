@@ -383,7 +383,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 			out.print(" == null ? \"\" : ");
 		}
 		
-		if (!model.getType().equals(TypeUtils.Type_STRING)) {
+		if (!TypeUtils.Type_STRING.equals(model.getType().getClassifier())) {
 			AsExpression asExpr;
 			if (TypeUtils.Type_TIMESTAMP.equals(model.getType().getClassifier())) {
 				// We want it to use the full, default pattern, not what's defined on the field.
@@ -811,7 +811,7 @@ public class MVCTemplate extends JavaScriptTemplate {
 		
 		if (member instanceof TypedElement) {
 			Type type = ((TypedElement)member).getType();
-			if ((TypeUtils.Type_STRING.equals(type) /* TODO sbg !070 || (TypeUtils.Type_LIMITEDSTRING.equals(type) */)) {
+			if (TypeUtils.Type_STRING.equals(type.getClassifier())) {
 				return setCharacterFormatterProperties(ctx, member, properties, fastCheck );
 			}
 			else if ((TypeUtils.Type_DATE.equals(type))) {
