@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.mof.eglx.services
-Bundle-Version: 0.8.0.qualifier
-Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.0";visibility:=reexport,
- org.eclipse.edt.mof;bundle-version="0.8.0";visibility:=reexport,
+Bundle-Version: 0.8.1.qualifier
+Require-Bundle: org.eclipse.edt.mof.egl;bundle-version="0.8.1";visibility:=reexport,
+ org.eclipse.edt.mof;bundle-version="0.8.1";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="3.6.0"
 Eclipse-RegisterBuddy: org.eclipse.edt.mof
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
