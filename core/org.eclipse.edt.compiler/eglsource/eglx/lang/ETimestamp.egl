@@ -78,24 +78,76 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 * {@Operation narrow} Converts a string to a timestamp.
 	 */
 	static function asTimestamp(value EString? in) returns (ETimestamp?) {@Operation{"narrow"}};
-
+	
+	/**
+	 * Returns the day value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'dd'.
+	 */
 	function dayOf() returns(EInt);
-
+	
+	/**
+	 * Returns the month value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'MM'.
+	 */
 	function monthOf() returns(EInt);
-
+	
+	/**
+	 * Returns the year value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'yyyy'.
+	 */
 	function yearOf() returns(EInt);
-
+	
+	/**
+	 * Returns the day of the week value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'dd'.
+	 */
 	function weekdayOf() returns(EInt);
-
+	
+	/**
+	 * Returns the date portion of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'yyyyMMdd'.
+	 */
 	function dateOf() returns(EDate);
-
+	
+	/**
+	 * Returns the time portion of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'HHmmss'.
+	 */
 	function timeOf() returns(ETime);
-
+	
+	/**
+	 * Returns the hour value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'HH'.
+	 */
 	function hourOf() returns(EInt);
-
+	
+	/**
+	 * Returns the minute value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'mm'.
+	 */
 	function minuteOf() returns(EInt);
-
+	
+	/**
+	 * Returns the second value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'ss'.
+	 */
 	function secondOf() returns(EInt);
-
+	
+	/**
+	 * Returns a new timestamp based on this one, using the given mask. Any fields in this timestamp
+	 * that exist in the given mask will be copied into the new timestamp being returned.
+	 * 
+	 * @param timeSpanMask the mask to use for the new timestamp being returned.
+	 * @throws InvalidArgumentException if the mask is not valid.
+	 */
 	function extend(timeSpanMask EString in) returns(ETimestamp);
 end
