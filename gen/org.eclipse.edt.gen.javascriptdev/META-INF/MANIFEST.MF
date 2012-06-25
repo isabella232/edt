@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.javascriptdev;singleton:=true
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.8.1.qualifier
 Bundle-Activator: org.eclipse.edt.gen.javascriptdev.ide.Activator
 Bundle-Localization: plugin
 Bundle-ActivationPolicy: lazy
@@ -13,20 +13,20 @@ Export-Package: org.eclipse.edt.gen.javascriptdev,
  org.eclipse.edt.gen.javascriptdev.templates.eglx.services
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
- org.eclipse.edt.gen;bundle-version="0.8.0",
- org.eclipse.edt.mof;bundle-version="0.8.0",
- org.eclipse.edt.mof.egl;bundle-version="0.8.0",
+ org.eclipse.edt.gen;bundle-version="0.8.1",
+ org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.1",
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipse.edt.ide.compiler;bundle-version="0.8.0",
- org.eclipse.edt.ide.core;bundle-version="0.8.0",
- org.eclipse.edt.ide.ui;bundle-version="0.8.0",
+ org.eclipse.edt.ide.compiler;bundle-version="0.8.1",
+ org.eclipse.edt.ide.core;bundle-version="0.8.1",
+ org.eclipse.edt.ide.ui;bundle-version="0.8.1",
  org.eclipse.jdt.core;bundle-version="3.0.0",
- org.eclipse.edt.gen.javascript;bundle-version="0.8.0",
- org.eclipse.edt.gen.javascript.templates;bundle-version="0.8.0",
- org.eclipse.edt.gen.javascript.templates.egl.core;bundle-version="0.8.0",
- org.eclipse.edt.gen.javascript.templates.egl.lang;bundle-version="0.8.0",
- org.eclipse.edt.gen.generator.javascript;bundle-version="0.8.0",
+ org.eclipse.edt.gen.javascript;bundle-version="0.8.1",
+ org.eclipse.edt.gen.javascript.templates;bundle-version="0.8.1",
+ org.eclipse.edt.gen.javascript.templates.egl.core;bundle-version="0.8.1",
+ org.eclipse.edt.gen.javascript.templates.egl.lang;bundle-version="0.8.1",
+ org.eclipse.edt.gen.generator.javascript;bundle-version="0.8.1",
  org.eclipse.ui.navigator;bundle-version="3.5.0",
- org.eclipse.edt.gen.javascript.templates.eglx.services;bundle-version="0.8.0"
+ org.eclipse.edt.gen.javascript.templates.eglx.services;bundle-version="0.8.1"
 Bundle-Vendor: %providerName
