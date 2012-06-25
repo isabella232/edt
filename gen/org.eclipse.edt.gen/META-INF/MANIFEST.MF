@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen;singleton:=true
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.8.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",
- org.eclipse.edt.mof;bundle-version="0.8.0",
- org.eclipse.edt.mof.egl;bundle-version="0.8.0",
- org.eclipse.edt.compiler;bundle-version="0.8.0"
+ org.eclipse.edt.mof;bundle-version="0.8.1",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.1",
+ org.eclipse.edt.compiler;bundle-version="0.8.1"
 Import-Package: org.eclipse.edt.mof
 Export-Package: org.eclipse.edt.gen,
  org.eclipse.edt.gen.EGLMessages
