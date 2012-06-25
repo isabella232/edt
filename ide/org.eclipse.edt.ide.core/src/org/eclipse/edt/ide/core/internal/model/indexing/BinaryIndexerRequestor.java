@@ -153,8 +153,6 @@ public class BinaryIndexerRequestor implements ISourceElementRequestor, IIndexCo
 			case IRPartType.PART_EXTERNALTYPE : partChar = EXTERNALTYPE_SUFFIX; break;
 			case IRPartType.PART_ENUMERATION :  partChar = ENUMERATION_SUFFIX; break;
 			case IRPartType.PART_SERVICE : 	    partChar = SERVICE_SUFFIX; break;
-			case IRPartType.PART_ANNOTATION : 	partChar = ANNOTATION_SUFFIX; break;
-			case IRPartType.PART_STEREOTYPE : 	partChar = ANNOTATION_SUFFIX | STEREOTYPE_SUFFIX; break;
 			default : 					        partChar = PART_SUFFIX; break;
 		}
 		this.indexer.addPartDeclaration(partChar, modifiers, packageName, name, enclosingTypeNames, interfaces);

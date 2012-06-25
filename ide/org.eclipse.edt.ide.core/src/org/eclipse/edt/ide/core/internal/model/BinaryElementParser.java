@@ -138,6 +138,12 @@ public class BinaryElementParser {
 		String subTypeName = "";
 		if(partElement instanceof DataItem){
 			subTypeName = ((DataItem)partElement).getBaseType().toString();
+		}
+		else if (partElement instanceof StereotypeType) {
+			subTypeName = IRPartType.STEREOTYPETYPE;
+		}
+		else if (partElement instanceof AnnotationType)  {
+			subTypeName = IRPartType.ANNOTATION;
 		} else if(partElement.getSubType() != null){
 			subTypeName = partElement.getSubType().getEClass().getName();
 		}
@@ -203,7 +209,7 @@ public class BinaryElementParser {
 			}
 			
 			//String name = annoType.getName();
-			this.partType = IRPartType.PART_ANNOTATION;
+			this.partType = IRPartType.PART_RECORD;
 			visitPart(partType , partInfo, annoType);
 			return true;
 		}
@@ -214,7 +220,7 @@ public class BinaryElementParser {
 			}
 			
 			//String name = annoType.getName();
-			this.partType = IRPartType.PART_STEREOTYPE;
+			this.partType = IRPartType.PART_RECORD;
 			visitPart(partType , partInfo, annoType);
 			return true;
 		}

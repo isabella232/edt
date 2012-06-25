@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.utils.CharOperation;
 import org.eclipse.edt.ide.core.internal.model.EGLElement;
+import org.eclipse.edt.ide.core.internal.model.IRPartType;
 import org.eclipse.edt.ide.core.internal.model.SourcePartElementInfo;
 import org.eclipse.edt.ide.core.internal.model.Util;
 import org.eclipse.edt.ide.core.internal.model.index.IEntryResult;
@@ -494,6 +495,24 @@ private boolean matchesPartType(Part part){
 	return match;
 }
 
+private boolean isAnnotation(IPart part) {
+	try {
+		SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
+
+		return IRPartType.ANNOTATION.equals(new String(partInfo.getSubTypeName())) || isStereotype(part);
+	} catch (EGLModelException e) {
+	}
+	return false;
+}
+private boolean isStereotype(IPart part) {
+	try {
+		SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
+
+		return IRPartType.STEREOTYPETYPE.equals(new String(partInfo.getSubTypeName()));
+	} catch (EGLModelException e) {
+	}
+	return false;
+}
 private boolean isAnnotation(Part part) {
 	Name name = part.getName();
 	IBinding binding = name.resolveBinding();
@@ -524,52 +543,60 @@ private boolean matchesPartType(IPart part){
 	boolean match = false;
 	try {
 		SourcePartElementInfo partInfo = (SourcePartElementInfo)(((EGLElement)part).getElementInfo());
-		if(partTypes == IIndexConstants.PART_SUFFIX){
-			match = true;
-		}
-		else if(partInfo.isProgram()){
-			match = partTypes == IIndexConstants.PROGRAM_SUFFIX;
-		}
-		else if(partInfo.isRecord()){
-			match = partTypes == IIndexConstants.RECORD_SUFFIX ||
-					partTypes == IIndexConstants.ANNOTATION_SUFFIX ||
-					partTypes == IIndexConstants.STEREOTYPE_SUFFIX;
-		}
-		else if(partInfo.isDataItem()){
-			match = partTypes == IIndexConstants.ITEM_SUFFIX;
-		}
-		else if(partInfo.isLibrary()){
-			match = partTypes == IIndexConstants.LIBRARY_SUFFIX;
-		}
-		else if(partInfo.isFunction()){
-			match = partTypes == IIndexConstants.FUNCTION_SUFFIX;
-		}
-		else if(partInfo.isFormGroup()){
-			match = partTypes == IIndexConstants.FORMGRP_SUFFIX;
-		}
-		else if(partInfo.isForm()){
-			match = partTypes == IIndexConstants.FORM_SUFFIX;
-		}
-		else if(partInfo.isDataTable()){
-			match = partTypes == IIndexConstants.TABLE_SUFFIX;
-		}
-		else if(partInfo.isHandler()){
-			match = partTypes == IIndexConstants.HANDLER_SUFFIX;
-		}
-		else if(partInfo.isService()){
-			match = partTypes == IIndexConstants.SERVICE_SUFFIX;
-		}
-		else if(partInfo.isInterface()){
-			match = partTypes == IIndexConstants.INTERFACE_SUFFIX;
-		}
-		else if(partInfo.isDelegate()){
-			match = partTypes == IIndexConstants.DELEGATE_SUFFIX;
-		}
-		else if(partInfo.isExternalType()){
-			match = partTypes == IIndexConstants.EXTERNALTYPE_SUFFIX;
-		}
-		else if(partInfo.isEnumeration()){
-			match = partTypes == IIndexConstants.ENUMERATION_SUFFIX;
+		
+		switch(partTypes)
+		{
+			case IIndexConstants.PROGRAM_SUFFIX:
+				match = partInfo.isProgram();
+				break;
+			case IIndexConstants.RECORD_SUFFIX:
+				match = partInfo.isRecord() && !isAnnotation(part);
+				break;
+			case IIndexConstants.ANNOTATION_SUFFIX:
+				match = partInfo.isRecord() && isAnnotation(part);
+				break;
+			case IIndexConstants.STEREOTYPE_SUFFIX:
+				match = partInfo.isRecord() && isStereotype(part);
+				break;
+			case IIndexConstants.ITEM_SUFFIX:
+				match = partInfo.isDataItem();
+				break;
+			case IIndexConstants.LIBRARY_SUFFIX:
+				match = partInfo.isLibrary();
+				break;
+			case IIndexConstants.FUNCTION_SUFFIX:
+				match = partInfo.isFunction();
+				break;
+			case IIndexConstants.FORMGRP_SUFFIX:
+				match = partInfo.isFormGroup();
+				break;
+			case IIndexConstants.FORM_SUFFIX:
+				match = partInfo.isForm();
+				break;
+			case IIndexConstants.TABLE_SUFFIX:
+				match = partInfo.isDataTable();
+				break;
+			case IIndexConstants.HANDLER_SUFFIX:
+				match = partInfo.isHandler();
+				break;
+			case IIndexConstants.SERVICE_SUFFIX:
+				match = partInfo.isService();
+				break;
+			case IIndexConstants.INTERFACE_SUFFIX:
+				match = partInfo.isInterface();
+				break;
+			case IIndexConstants.DELEGATE_SUFFIX:
+				match = partInfo.isDelegate();
+				break;
+			case IIndexConstants.EXTERNALTYPE_SUFFIX:
+				match = partInfo.isExternalType();
+				break;
+			case IIndexConstants.ENUMERATION_SUFFIX:
+				match = partInfo.isEnumeration();
+				break;
+			case IIndexConstants.PART_SUFFIX:
+				match = true;
+				break;
 		}
 	} catch (EGLModelException e) {
 		e.printStackTrace();

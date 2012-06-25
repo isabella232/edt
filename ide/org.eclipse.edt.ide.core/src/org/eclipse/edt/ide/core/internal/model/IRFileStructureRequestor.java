@@ -471,8 +471,6 @@ public class IRFileStructureRequestor extends AbstractSourceElementRequestor imp
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_PROGRAM : 	  astType = org.eclipse.edt.compiler.core.ast.Part.PROGRAM; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATATABLE :  astType = org.eclipse.edt.compiler.core.ast.Part.DATATABLE; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_STRUCTURED_RECORD:
-				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_ANNOTATION:
-				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_STEREOTYPE:
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_RECORD : 	  astType = org.eclipse.edt.compiler.core.ast.Part.RECORD; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_DATAITEM :	  astType = org.eclipse.edt.compiler.core.ast.Part.DATAITEM; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_HANDLER : 	  astType = org.eclipse.edt.compiler.core.ast.Part.HANDLER; break;
