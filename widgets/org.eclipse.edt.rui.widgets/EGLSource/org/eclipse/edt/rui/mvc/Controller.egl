@@ -17,6 +17,7 @@ handler Controller
 	use InternalDateFormatter;
 	use InternalFormatters;
 	use InternalNumericFormatter;
+	use InternalTimeFormatter;
 	use InternalTimestampFormatter;
 	use InternalValidators;
 	

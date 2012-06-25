@@ -48,6 +48,12 @@ egl.defineClass('org.eclipse.edt.rui.mvc', 'InternalFormattingUtil',
 		}
 		return egl.stringToDateInternal(inputValue, mask, strict);		
 	},
+	"asTime" : function(inputValue, mask, strict){
+		if (inputValue == null || mask == null) {
+			return false;
+		}
+		return egl.stringToTimeInternal(inputValue, mask, strict);		
+	},
 	"asTimestamp" : function(inputValue, mask, strict){
 		if (inputValue == null || mask == null) {
 			return false;

@@ -20,5 +20,6 @@ externalType InternalFormattingUtil type JavaScriptObject
 	function getDecimalSeparator() returns(string);
 	function getGroupingSeparator() returns(string);
 	function asDate(s String in, mask String in, strict boolean in) returns(date);
+	function asTime(s String in, mask String in, strict boolean in) returns(time);
 	function asTimestamp(s String in, mask String in, strict boolean in)returns(timestamp);
 end
