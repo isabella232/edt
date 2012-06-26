@@ -68,14 +68,16 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		
 		// Now check the main project info
 		IPartOrigin partOrigin =  super.getPartOrigin(packageName, partName);
+		
 		if(partOrigin == null || partOrigin.getEGLFile() == null) {
+			IPartOrigin zipPartOrigin;
 			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
     		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
     		for(IBuildPathEntry pathEntry : pathEntries) {
     			if((pathEntry instanceof WrapperedZipFileBuildPathEntry) ){
-    				partOrigin = ((WrapperedZipFileBuildPathEntry) pathEntry).getPartOrigin(packageName, partName);
-    				if(partOrigin != null)
-    					break;
+    				zipPartOrigin = ((WrapperedZipFileBuildPathEntry) pathEntry).getPartOrigin(packageName, partName);
+    				if(zipPartOrigin != null)
+    					return zipPartOrigin;
     			}
     		}
 	    }
