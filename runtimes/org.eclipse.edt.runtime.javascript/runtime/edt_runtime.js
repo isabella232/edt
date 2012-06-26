@@ -186,6 +186,9 @@ egl.eglx.lang.EInt16.rightShiftArithmetic = function (x1, x2) {
 egl.eglx.lang.EInt16.rightShiftLogical = function (x1, x2) {
     return x1 >>> x2; 
 };
+egl.eglx.lang.EInt16.negate = function (x) {
+    return -x; 
+};
 
 /****************************************************************************
  * EInt32 covers the egl type "int" and is represented as a native JavaScript 
@@ -253,6 +256,9 @@ egl.eglx.lang.EInt32.rightShiftArithmetic = function (x1, x2) {
 egl.eglx.lang.EInt32.rightShiftLogical = function (x1, x2) {
     return x1 >>> x2; 
 };
+egl.eglx.lang.EInt32.negate = function (x) {
+    return -x; 
+};
 
 
 /****************************************************************************
@@ -297,6 +303,9 @@ egl.eglx.lang.EFloat32.fromENumber = function (x, nullable) {
 };
 egl.eglx.lang.EFloat32.asNumber= function (x) {
 	return egl.boxAny(x, "f;");
+};
+egl.eglx.lang.EFloat32.negate = function (x) {
+    return -x; 
 };
 
 
@@ -437,6 +446,9 @@ egl.eglx.lang.EInt64.fromEInt64 = function (x) {
 egl.eglx.lang.EInt64.asNumber= function (x) {
 	return egl.boxAny(x, "B;");
 };
+egl.eglx.lang.EInt64.negate = function (x) {
+	return -x;
+};
 
 
 /****************************************************************************
@@ -472,6 +484,9 @@ egl.eglx.lang.EFloat64.pow = function (x, exp) {
 };
 egl.eglx.lang.EFloat64.asNumber= function (x) {
 	return egl.boxAny(x, "F;");
+};
+egl.eglx.lang.EFloat64.negate = function (x) {
+    return -x; 
 };
 
 
@@ -1285,9 +1300,11 @@ egl.eglx.lang.ENumber.fromEDecimal = function (x, decimals, limit) {
 egl.eglx.lang.ENumber.fromEFloat64 = function (x, decimals, limit) { 
 	return egl.convertFloatToDecimal(x, decimals, limit, egl.createNumericOverflowException);
 };
-
 egl.eglx.lang.ENumber.ezeCast = function(x, nullable, decimals, limit){
 	return egl.convertDecimalToDecimal(x, decimals, limit, nullable, egl.createNumericOverflowException);
+};
+egl.eglx.lang.ENumber.negate = function (x) {
+    return {eze$$value : -x.eze$$value, eze$$signature : x.eze$$signature}; 
 };
 
 
