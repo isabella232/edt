@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.internal.core.java;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.debug.core.DebugException;
@@ -22,6 +23,7 @@ import org.eclipse.edt.debug.core.java.IEGLJavaVariable;
 import org.eclipse.edt.debug.core.java.SMAPVariableInfo;
 import org.eclipse.edt.debug.core.java.variables.VariableUtil;
 import org.eclipse.jdt.debug.core.IJavaValue;
+import org.eclipse.jdt.debug.core.IJavaVariable;
 
 /**
  * A value that contains local variables.
@@ -63,14 +65,25 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 			return children;
 		}
 		
+		// Cannot just ask the frame for its locals, that creates new instances which means we can't keep track of changed variables.
+		IVariable[] frameVariables = frame.getJavaStackFrame().getVariables();
+		List<IJavaVariable> localVariables = new ArrayList<IJavaVariable>( frameVariables.length );
+		for ( int i = 0; i < frameVariables.length; i++ )
+		{
+			if ( ((IJavaVariable)frameVariables[ i ]).isLocal() )
+			{
+				localVariables.add( (IJavaVariable)frameVariables[ i ] );
+			}
+		}
+		
 		if ( frame.getSMAP().length() == 0 )
 		{
 			// Couldn't get the variable info from the SMAP...just return the local Java variables.
-			children = frame.getJavaStackFrame().getLocalVariables();
+			children = localVariables.toArray( new IVariable[ localVariables.size() ] );
 		}
 		else
 		{
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( frame.getJavaStackFrame().getLocalVariables(),
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( localVariables.toArray( new IJavaVariable[ localVariables.size() ] ),
 					parentVariable.getEGLStackFrame(), false, this );
 			children = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
