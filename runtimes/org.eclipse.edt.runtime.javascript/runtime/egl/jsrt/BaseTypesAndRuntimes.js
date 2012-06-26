@@ -4186,7 +4186,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		i++;
 	}
 	if ( i >= chars.length ) {
-		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
+		throw egl.createInvalidArgumentException( "CRRUI2717E", [pattern] );
 	}
 	for(var j = indexes.length - 1; j >= 0; j--){
 		(chars[ indexes[j] ][ 1 ])( dateCopy );
@@ -4200,7 +4200,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 		i--;
 	}
 	if ( i < 0 ) {
-		throw egl.createTypeCastException( "CRRUI2717E", [pattern] );
+		throw egl.createInvalidArgumentException( "CRRUI2717E", [pattern] );
 	}
 	return dateCopy;
 };
