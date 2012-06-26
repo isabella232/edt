@@ -83,8 +83,8 @@ public class EGLJavaFunctionValue extends EGLJavaDebugElement implements IEGLJav
 		}
 		else
 		{
-			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables( localVariables.toArray( new IJavaVariable[ localVariables.size() ] ),
-					parentVariable.getEGLStackFrame(), false, this );
+			List<IEGLJavaVariable> newEGLVariables = VariableUtil.filterAndWrapVariables(
+					localVariables.toArray( new IJavaVariable[ localVariables.size() ] ), parentVariable.getEGLStackFrame(), false, this );
 			children = newEGLVariables.toArray( new EGLJavaVariable[ newEGLVariables.size() ] );
 		}
 		
