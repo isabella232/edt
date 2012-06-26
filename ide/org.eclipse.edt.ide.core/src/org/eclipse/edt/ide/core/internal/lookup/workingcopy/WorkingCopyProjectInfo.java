@@ -68,7 +68,7 @@ public class WorkingCopyProjectInfo extends AbstractProjectInfo {
 		
 		// Now check the main project info
 		IPartOrigin partOrigin =  super.getPartOrigin(packageName, partName);
-		if(partOrigin == null) {
+		if(partOrigin == null || partOrigin.getEGLFile() == null) {
 			ProjectBuildPath buildPath = ProjectBuildPathManager.getInstance().getProjectBuildPath(getProject());
     		IBuildPathEntry[] pathEntries = buildPath.getBuildPathEntries();
     		for(IBuildPathEntry pathEntry : pathEntries) {
