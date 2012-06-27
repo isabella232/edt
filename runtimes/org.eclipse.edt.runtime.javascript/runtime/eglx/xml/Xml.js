@@ -395,11 +395,11 @@ egl.eglx.xml.XmlLib["fromXML"] = function( /*node*/elements, /*FieldInfo*/fieldI
 egl.eglx.xml.XmlLib["isElementArray"] = function(element) {
 	var elementName = null;
 	var elements = null;
-	if(element instanceof Element){
-		elements = this.getChildElements(element);
-	}
-	else if(element instanceof Array){
+	if(element instanceof Array){
 		elements = element;
+	}
+	else if(element instanceof Element){
+		elements = this.getChildElements(element);
 	}
 	if(elements != null && elements.length > 1){
 		for (var idx = 0; idx < elements.length; idx++) {
