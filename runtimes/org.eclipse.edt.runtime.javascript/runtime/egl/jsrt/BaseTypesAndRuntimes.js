@@ -68,6 +68,18 @@ egl.padWithLeadingZeros = function(s, totChars)
 	}
 	return s;
 };
+egl.padWithTrailingZeros = function(s, totChars)
+{
+    var zerosToAdd = (totChars - egl.textLen(s));
+    {
+        var i = 1;
+        for ( ; (i <= zerosToAdd); i = (i + 1) )
+        {
+            s = (s + "0");
+        }
+    }
+    return s;
+};
 
 egl.getDateInfo = function( d )
 {
@@ -753,11 +765,7 @@ egl.processToken = function(token, s, result, strict)
 			return null;
 		}
 		result.setMilliseconds(s.substr(0,3));
-		if(s.length == 6){
-			s = s.substr(6);
-		}else{
-			s = s.substr(3);
-		}			
+		s = s.substr(3);
 	}
 	else if(token == "a")
 	{
@@ -852,13 +860,13 @@ egl.timeStampToString = function( ts, format )
 	var timeParts = egl.getTimeInfo(ts);
 	var result = "";
 	
-	var validCheck = format.replace(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|SSS|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|S+|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|SSS|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|S+|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -926,10 +934,10 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += timeParts[3];
 		}
-		else if(tokens[i] == "SSS")
-		{
-			result += egl.padWithLeadingZeros("" + ts.getMilliseconds(),3);
-		}
+        else if(tokens[i].match( /S+/ ) == tokens[i])
+        {
+            result += egl.padWithTrailingZeros("" + ts.getMilliseconds(),tokens[i].length);
+        }
 		else if(tokens[i] == "a")
 		{
 			result += timeParts[4];
@@ -1061,6 +1069,9 @@ egl.stringToTimeStampInternal = function( s, format, strict, defaultSeparator )
 			}
 		}
 	}
+	if(s.length != 0){
+	   return null;
+    }
 	
 	if(result["eze$$adjustdate"])
 	{
@@ -1203,6 +1214,23 @@ egl.convertFloatToDecimal = function( x, decimals, limit, creatx )
 		x = new egl.javascript.BigDecimal( (x*1.0).toFixed( decimals + 1 ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
 		return egl.convertDecimalToDecimal( x, decimals, limit, creatx );
 	}
+};
+egl.convertNumberToDecimal = function( x, decimals, limit, creatx )
+{
+    if ( !isFinite( x ) )
+    {
+        if (!creatx)
+        {
+            creatx = egl.createTypeCastException;
+        }
+        throw creatx( "CRRUI2018E", [ String( x ), "decimal" ] );
+    }
+    if ( decimals < 0 ) {
+        return  new egl.javascript.BigDecimal( x );
+    } else {
+        x = new egl.javascript.BigDecimal( (x*1.0).toFixed( decimals + 1 ) );// toFixed rounds half-up so give an extra decimal, let the next call round down
+        return egl.convertDecimalToDecimal( x, decimals, limit, creatx );
+    }
 };
 
 egl.convertDecimalToDecimal = function( x, decimals, limit, creatx )
@@ -2678,6 +2706,7 @@ egl.convertAnyToDecimal = function( any, decimals, limit, nullable, creatx )
 
 			case 'N':
 			case 'n':
+                return egl.convertNumberToDecimal(any.eze$$value,decimals,limit,creatx);
 			case 'd':
 			case '9':
 			case 'p':
@@ -4179,6 +4208,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	//char in the formatting string appears
 	var leadChar = pattern.charAt( 0 );
 	var i = 0;
+	var k = 0;
 	var indexes = [];
 	//bug 379285: only 'm' is case sensitive
 	while ( i < chars.length && leadChar != chars[ i ][ 0 ] && (leadChar.toLowerCase() == "m" || leadChar.toLowerCase() != chars[ i ][ 0 ]) ) {
@@ -4194,13 +4224,22 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 	
 	//find the last character and set everything after it to zeros
 	var lastChar = pattern.charAt( pattern.length - 1 );
-	i = chars.length - 1;
-	while ( i >= 0 && lastChar != chars[ i ][ 0 ] && (lastChar.toLowerCase() == "m" || lastChar.toLowerCase() != chars[ i ][ 0 ]) ) {
-		(chars[ i ][ 2 ])( dateCopy );
-		i--;
+	k = chars.length - 1;
+	while ( k >= 0 && lastChar != chars[ k ][ 0 ] && (lastChar.toLowerCase() == "m" || lastChar.toLowerCase() != chars[ k ][ 0 ]) ) {
+		(chars[ k ][ 2 ])( dateCopy );
+		k--;
 	}
-	if ( i < 0 ) {
+	if ( k < 0 ) {
 		throw egl.createInvalidArgumentException( "CRRUI2717E", [pattern] );
+	}
+    if ( i > k ) {
+        throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
+    }
+    var tempPattern = pattern.replace(/[^\w\s]|(.)(?=\1)/gi, "").toLowerCase();
+	for ( var h = 0; h < k - i - 1; h ++ ) {
+	   if ( tempPattern[h] != chars[ h + i ][ 0 ].toLowerCase() ) {
+	       throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
+	   }
 	}
 	return dateCopy;
 };

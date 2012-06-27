@@ -52,6 +52,9 @@ egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
 };
 egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
+    if (x instanceof egl.javascript.BigDecimal) {
+        return x.scale();
+    }
 	if (x.eze$$value === null || x.eze$$value === undefined) {
 		return 0;
 	}
@@ -74,8 +77,8 @@ egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
 	case '9':
 	case 'p':
 		var colon = x.eze$$signature.indexOf(':');
-		result = x.eze$$signature.substring(colon + 1, x.eze$$signature
-				.indexOf(';'));
+		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
+				.indexOf(';')) : x.eze$$value.scale() ;
 	}
 
 	return result;
@@ -207,8 +210,8 @@ egl.eglx.lang.MathLib["precision"] = function(x) {
 	case 'd':
 	case '9':
 	case 'p':
-		return x.eze$$signature.substring(firstCharIdx + 1, x.eze$$signature
-				.indexOf(':'));
+        var colon = x.eze$$signature.indexOf(':');
+        return (colon > 0 ? x.eze$$signature.substring(firstCharIdx + 1, colon) : x.eze$$value.mant.length) ;
 	case 'X':
 		var length = x.eze$$signature.substring(firstCharIdx + 1,
 				x.eze$$signature.indexOf(';'));
