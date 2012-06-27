@@ -33,11 +33,11 @@ of which are value types.</p>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00022__char_table" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="27.142857142857142%" id="d3731e45">Type</th>
+<th class="entry" valign="bottom" width="27.142857142857142%" id="d3738e45">Type</th>
 
-<th class="entry" valign="bottom" width="19.428571428571427%" id="d3731e48">Limits</th>
+<th class="entry" valign="bottom" width="19.428571428571427%" id="d3738e48">Limits</th>
 
-<th class="entry" valign="bottom" width="53.42857142857142%" id="d3731e51">Comments</th>
+<th class="entry" valign="bottom" width="53.42857142857142%" id="d3738e51">Comments</th>
 
 </tr>
 
@@ -45,25 +45,25 @@ of which are value types.</p>
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" valign="top" width="27.142857142857142%" headers="d3731e45 ">DATE</td>
+<td class="entry" valign="top" width="27.142857142857142%" headers="d3738e45 ">DATE</td>
 
-<td class="entry" valign="top" width="19.428571428571427%" headers="d3731e48 ">1 January 0001 <p class="p">to 31 December 9999.</p>
+<td class="entry" valign="top" width="19.428571428571427%" headers="d3738e48 ">1 January 0001 <p class="p">to 31 December 9999.</p>
 </td>
 
-<td class="entry" valign="top" width="53.42857142857142%" headers="d3731e51 ">Each Date value reflects the following pattern:
+<td class="entry" valign="top" width="53.42857142857142%" headers="d3738e51 ">Each Date value reflects the following pattern:
 yyyyMMdd; that is, four digits for year, two for month, and two for
 day, in the Gregorian calendar.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="27.142857142857142%" headers="d3731e45 ">INTERVAL types</td>
+<td class="entry" valign="top" width="27.142857142857142%" headers="d3738e45 ">INTERVAL types</td>
 
-<td class="entry" valign="top" width="19.428571428571427%" headers="d3731e48 "> // ???? max number of days seems to be
+<td class="entry" valign="top" width="19.428571428571427%" headers="d3738e48 "> // ???? max number of days seems to be
 283067, despite the use of nine d characters; and the yyyyMM form
 fails altogether.</td>
 
-<td class="entry" valign="top" width="53.42857142857142%" headers="d3731e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
+<td class="entry" valign="top" width="53.42857142857142%" headers="d3738e51 "><p class="p"><strong class="ph b">Not implemented in Eclipse IDE for EGL
 Developers.</strong></p>
 An instance of type INTERVAL is a duration; for
 example, the difference between two timestamps. <p class="p">An INTERVAL value
@@ -79,12 +79,12 @@ as shown here:<pre class="pre codeblock">myInterval INTERVAL("<strong class="ph 
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="27.142857142857142%" headers="d3731e45 ">TIME</td>
+<td class="entry" valign="top" width="27.142857142857142%" headers="d3738e45 ">TIME</td>
 
-<td class="entry" valign="top" width="19.428571428571427%" headers="d3731e48 "><p class="p">12:00:00 AM to 11:59:59 PM.</p>
+<td class="entry" valign="top" width="19.428571428571427%" headers="d3738e48 "><p class="p">12:00:00 AM to 11:59:59 PM.</p>
 </td>
 
-<td class="entry" valign="top" width="53.42857142857142%" headers="d3731e51 ">Stored TIME values reflect the following pattern:
+<td class="entry" valign="top" width="53.42857142857142%" headers="d3738e51 ">Stored TIME values reflect the following pattern:
 HHmmss; that is, two digits for hour, two for minute, and two for
 second.<div class="p">At this writing, this type is not supported for the following
 purposes:<ul class="ul">
@@ -101,13 +101,13 @@ purposes:<ul class="ul">
 </tr>
 
 <tr class="row">
-<td class="entry" valign="top" width="27.142857142857142%" headers="d3731e45 ">TIMESTAMP types</td>
+<td class="entry" valign="top" width="27.142857142857142%" headers="d3738e45 ">TIMESTAMP types</td>
 
-<td class="entry" valign="top" width="19.428571428571427%" headers="d3731e48 ">1 January 0001 at 12:00:00 AM <p class="p">to 31 December
+<td class="entry" valign="top" width="19.428571428571427%" headers="d3738e48 ">1 January 0001 at 12:00:00 AM <p class="p">to 31 December
 9999 at 11:59:59 PM.</p>
 </td>
 
-<td class="entry" valign="top" width="53.42857142857142%" headers="d3731e51 ">TIMESTAMP values are stored along with a type
+<td class="entry" valign="top" width="53.42857142857142%" headers="d3738e51 ">TIMESTAMP values are stored along with a type
 pattern. The default pattern is yyyyMMddHHmmss, which is a concatenation
 of the type patterns for DATE and TIME. <div class="p">You can specify a type
 pattern when you declare a field of a TIMESTAMP type, as shown here: <pre class="pre codeblock">myTimestamp TIMESTAMP("<strong class="ph b">ddHHmmssffffff</strong>");</pre>
@@ -144,9 +144,9 @@ a field of a character type, you use a <dfn class="term">display pattern</dfn>.<
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00022__compat_table" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="29.145728643216078%" id="d3731e191">Platform</th>
+<th class="entry" valign="bottom" width="29.145728643216078%" id="d3738e191">Platform</th>
 
-<th class="entry" valign="bottom" width="70.85427135678391%" id="d3731e194">Issue</th>
+<th class="entry" valign="bottom" width="70.85427135678391%" id="d3738e194">Issue</th>
 
 </tr>
 
@@ -155,9 +155,9 @@ a field of a character type, you use a <dfn class="term">display pattern</dfn>.<
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="cedt00022__compat_javascript" class="row">
-<td class="entry" valign="top" width="29.145728643216078%" headers="d3731e191 ">JavaScript generation</td>
+<td class="entry" valign="top" width="29.145728643216078%" headers="d3738e191 ">JavaScript generation</td>
 
-<td class="entry" valign="top" width="70.85427135678391%" headers="d3731e194 "><ul class="ul">
+<td class="entry" valign="top" width="70.85427135678391%" headers="d3738e194 "><ul class="ul">
 <li class="li">The INTERVAL types are not supported.</li>
 
 <li class="li">When you assign a field of type DATE, TIME, or TIMESTAMP to a

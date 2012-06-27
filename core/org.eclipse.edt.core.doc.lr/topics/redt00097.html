@@ -37,9 +37,9 @@ same precedence in an expression are evaluated in left-to-right order.</p>
 
 <thead class="thead" align="left">
 <tr class="row">
-<th class="entry" align="center" valign="top" width="38.72549019607843%" id="d45754e45">Symbols</th>
+<th class="entry" align="center" valign="top" width="38.72549019607843%" id="d45761e45">Symbols</th>
 
-<th class="entry" align="center" valign="top" width="61.274509803921575%" id="d45754e48">Meaning</th>
+<th class="entry" align="center" valign="top" width="61.274509803921575%" id="d45761e48">Meaning</th>
 
 </tr>
 
@@ -47,9 +47,9 @@ same precedence in an expression are evaluated in left-to-right order.</p>
 
 <tbody class="tbody">
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">{</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">{</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Curly brackets define a set-values block.<p class="p">The
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Curly brackets define a set-values block.<p class="p">The
 high precedence of the left curly bracket ensures that the clause <samp class="ph codeph">new
 Record {}</samp> means <samp class="ph codeph">(new Record) {}</samp> rather than <samp class="ph codeph">(new
 Record {})</samp>.</p>
@@ -58,9 +58,9 @@ Record {})</samp>.</p>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">[</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">[</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Hard brackets define a list. They also separate
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Hard brackets define a list. They also separate
 an index value from a list name, or a substring value from a value
 of type string. For example, <samp class="ph codeph">a[x]</samp> is a list subscript
 and <samp class="ph codeph">b[x:y]</samp> is a substring.<p class="p">The high precedence
@@ -72,9 +72,9 @@ Record)[]</samp></p>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">.</strong> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">.</strong> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">The member access operator (a dot) provides
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">The member access operator (a dot) provides
 access to members of an entity; for example, fields in records, or
 functions in libraries. Multiple levels of qualification are permitted.
 Members become more specific as you move from left to right.</td>
@@ -82,18 +82,18 @@ Members become more specific as you move from left to right.</td>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Unary plus (+) or minus (-) is a sign that
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Unary plus (+) or minus (-) is a sign that
 precedes an operand or parenthesized expression. These are not the
 binary plus and minus operators.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">~</samp></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">~</samp></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">~ is the bitwise negation operator. It changes
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">~ is the bitwise negation operator. It changes
 1s to 0s, 0s to 1s. The operator is unary; it affects a single operand,
 which might be of type smallint, int, or bigint.<div class="p">You typically assign
 the result, as in the following code: <pre class="pre codeblock">   myvar int = ~10;     // bit pattern (4 bytes)
@@ -108,9 +108,9 @@ the number -11.</p>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">!</samp> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">!</samp> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">! is the <em class="ph i">not</em> operator, which EGL
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">! is the <em class="ph i">not</em> operator, which EGL
 evaluates to a Boolean value (true or false) opposite to the value
 of a logical expression that immediately follows. That subsequent
 expression must be in parentheses.</td>
@@ -118,17 +118,17 @@ expression must be in parentheses.</td>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">as</samp></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">as</samp></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">The casting operator specifies a type (second
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">The casting operator specifies a type (second
 operand) for the first operand.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">**</strong> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">**</strong> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">** is the exponent operator, which can be
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">** is the exponent operator, which can be
 read as "to the power of."  For example c = a**b means that c is assigned
 the value of a to the power of b. The first operand (a in the example
 above) is a FLOAT that cannot have a negative value. The second operand
@@ -138,53 +138,53 @@ negative or 0.</td>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">*</strong>, <strong class="ph b">/</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">*</strong>, <strong class="ph b">/</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">The operators for multiplication and integer
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">The operators for multiplication and integer
 division are of equal precedence. Division of integers can result
 in a fractional value; for example, 7/5 yields 1.4. </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">%</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">%</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">% is the remainder operator. It resolves
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">% is the remainder operator. It resolves
 to the modulus when the first of two operands or numeric expressions
 is divided by the second. For example, 7%5 yields 2.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">+</strong>, <strong class="ph b">-</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Addition (+) and subtraction (-) are binary
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Addition (+) and subtraction (-) are binary
 operations of equal precedence. The plus sign is used to sum numbers
 and to concatenate strings.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">::</strong>, <strong class="ph b">?:</strong> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">::</strong>, <strong class="ph b">?:</strong> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">EGL uses two operators exclusively for concatenation
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">EGL uses two operators exclusively for concatenation
 (:: and ?:). </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">==</strong>, <strong class="ph b">!=</strong>, <strong class="ph b">&lt;</strong>,<strong class="ph b"> &gt;</strong>, <strong class="ph b">&lt;=</strong>, <strong class="ph b">&gt;=</strong>, <strong class="ph b">isa</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">==</strong>, <strong class="ph b">!=</strong>, <strong class="ph b">&lt;</strong>,<strong class="ph b"> &gt;</strong>, <strong class="ph b">&lt;=</strong>, <strong class="ph b">&gt;=</strong>, <strong class="ph b">isa</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Logical operators for Boolean comparison
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Logical operators for Boolean comparison
 are of equal precedence; each expression that contains one of these
 operators evaluates to either true or false.</td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">&amp;</strong>, <strong class="ph b">|</strong>, <strong class="ph b">xor</strong>, <strong class="ph b">&lt;&lt;<em class="ph i">n</em></strong>, <strong class="ph b">&gt;&gt;<em class="ph i">n</em></strong>,<strong class="ph b">&gt;&gt;&gt;<em class="ph i">n</em></strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">&amp;</strong>, <strong class="ph b">|</strong>, <strong class="ph b">xor</strong>, <strong class="ph b">&lt;&lt;<em class="ph i">n</em></strong>, <strong class="ph b">&gt;&gt;<em class="ph i">n</em></strong>,<strong class="ph b">&gt;&gt;&gt;<em class="ph i">n</em></strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">Each of these bitwise operators reads an
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">Each of these bitwise operators reads an
 operand to its left and right and returns a value of type int. Either
 operand may be of type int or smallint. The operation begins by converting
 any smallint operand to type int.<div class="p">You typically assign the result, as
@@ -230,18 +230,18 @@ results in a positive number.</p>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">is</samp>, <samp class="ph codeph">not</samp>, <samp class="ph codeph">in</samp></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">is</samp>, <samp class="ph codeph">not</samp>, <samp class="ph codeph">in</samp></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">These logical operators used for comparison
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">These logical operators used for comparison
 are of equal precedence; each expression that contains one of these
 operators is evaluated as true or false. See "in operator." </td>
 
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">&amp;&amp;</samp>, <samp class="ph codeph">and</samp> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">&amp;&amp;</samp>, <samp class="ph codeph">and</samp> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">The <strong class="ph b">&amp;&amp;</strong> or <span class="ph synph"><span class="keyword kwd">and</span></span> operator
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">The <strong class="ph b">&amp;&amp;</strong> or <span class="ph synph"><span class="keyword kwd">and</span></span> operator
 combines two logical expressions. The resulting expression resolves
 to true only if both of the component expressions are true; otherwise,
 the resulting expression resolves to false. </td>
@@ -249,9 +249,9 @@ the resulting expression resolves to false. </td>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><samp class="ph codeph">||</samp>, <samp class="ph codeph">or</samp> </td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><samp class="ph codeph">||</samp>, <samp class="ph codeph">or</samp> </td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 ">The <strong class="ph b">||</strong> or <span class="ph synph"><span class="keyword kwd">or</span></span> operator
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 ">The <strong class="ph b">||</strong> or <span class="ph synph"><span class="keyword kwd">or</span></span> operator
 combines two logical expressions. The resulting expression resolves
 to true if one or both of the component expressions are true; otherwise,
 the resulting expression resolves to false. </td>
@@ -259,9 +259,9 @@ the resulting expression resolves to false. </td>
 </tr>
 
 <tr class="row">
-<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45754e45 "><strong class="ph b">=</strong></td>
+<td class="entry" align="center" valign="top" width="38.72549019607843%" headers="d45761e45 "><strong class="ph b">=</strong></td>
 
-<td class="entry" valign="top" width="61.274509803921575%" headers="d45754e48 "><samp class="ph codeph">=</samp> is the <em class="ph i">assignment</em> operator,
+<td class="entry" valign="top" width="61.274509803921575%" headers="d45761e48 "><samp class="ph codeph">=</samp> is the <em class="ph i">assignment</em> operator,
 which copies a value from an expression or operand into an operand.
 For details on complex assignment operators such as +=, see "Assignment
 statement."</td>

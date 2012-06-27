@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DojoMobileSlider widget"></meta>
-<meta name="abstract" content="A Dojo mobile slider"></meta>
-<meta name="description" content="A Dojo mobile slider"></meta>
+<meta name="abstract" content="A Dojo mobile slider displays a vertical or horizontal bar with a handle, which is a circular end that the user drags to update a numeric value."></meta>
+<meta name="description" content="A Dojo mobile slider displays a vertical or horizontal bar with a handle, which is a circular end that the user drags to update a numeric value."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoMobileSlider, DojoMobileSlider Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoMobileSlider, DojoMobileSlider Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00281.html"></meta>
@@ -26,18 +26,55 @@
 
 
 
-<div class="body"><p class="shortdesc">A Dojo mobile slider</p>
+<div class="body"><p class="shortdesc">A Dojo mobile slider displays a vertical or horizontal
+bar with a <dfn class="term">handle</dfn>, which is a circular end that the user
+drags to update a numeric value.</p>
 
 <div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
-<dt class="dt dlterm"></dt>
+<dt class="dt dlterm">maximum</dt>
 
-<dd class="dd"></dd>
+<dd class="dd">An integer that represents the maximum value.</dd>
+
+
+<dt class="dt dlterm">minimum</dt>
+
+<dd class="dd">An integer that represents the minimum value.</dd>
+
+
+<dt class="dt dlterm">orientation</dt>
+
+<dd class="dd">A string that represents the slider orientation. One of these
+values: <ul class="ul">
+<li class="li">DojoMobileLib.SLIDER_HORIZONTAL, for a bar that runs sideways.</li>
+
+<li class="li">DojoMobileLib.SLIDER_VERTICAL, for a bar that runs up and down.</li>
+
+<li class="li">DojoMobileLib.SLIDER_AUTO, for a bar that runs in the direction
+that best fits the available space.</li>
+
+</ul>
+</dd>
+
+
+<dt class="dt dlterm">step</dt>
+
+<dd class="dd">An integer that represents the change in value as the user drags
+the handler. A zero represents the smallest possible change. The default
+is 1. </dd>
+
+
+<dt class="dt dlterm">value</dt>
+
+<dd class="dd">A string that represents the current numeric value.</dd>
 
 </dl>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">Example</h2></div>
+<div class="section"><h2 class="title sectiontitle">Events</h2><p class="p">The <strong class="ph b">onChange</strong> event fires when
+the user drags the handle.</p>
+</div>
 
+<div class="section"><h2 class="title sectiontitle">Example</h2></div>
 
 <div class="p">Use of this widget requires a statement like this:<pre class="pre codeblock">import dojo.mobile.widgets.DojoMobileSlider;</pre>
 </div>

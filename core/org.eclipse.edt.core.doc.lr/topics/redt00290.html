@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DojoMobileOpener widget"></meta>
-<meta name="abstract" content="A Dojo mobile opener"></meta>
-<meta name="description" content="A Dojo mobile opener"></meta>
+<meta name="abstract" content="A Dojo mobile opener displays as either a modal box (a tooltip, which is typical for small screens) or a non-modal box (an overlay, which allows access to other widgets that are in the same container as the Dojo mobile opener)."></meta>
+<meta name="description" content="A Dojo mobile opener displays as either a modal box (a tooltip, which is typical for small screens) or a non-modal box (an overlay, which allows access to other widgets that are in the same container as the Dojo mobile opener)."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoMobileOpener, DojoMobileOpener Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoMobileOpener, DojoMobileOpener Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00281.html"></meta>
@@ -26,18 +26,42 @@
 
 
 
-<div class="body"><p class="shortdesc">A Dojo mobile opener</p>
+<div class="body"><p class="shortdesc">A Dojo mobile opener displays as either a modal box (a
+tooltip, which is typical for small screens) or a non-modal box (an
+overlay, which allows access to other widgets that are in the same
+container as the Dojo mobile opener). </p>
 
-<div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
-<dt class="dt dlterm"></dt>
+<div class="section"><h2 class="title sectiontitle">Fields and functions</h2><p class="p">Here are the fields:</p>
+<dl class="dl">
 
-<dd class="dd"></dd>
+<dt class="dt dlterm">isModal</dt>
+
+<dd class="dd">A boolean value to indicate whether the widget is presented as
+a modal box.</dd>
+
+
+<dt class="dt dlterm">children</dt>
+
+<dd class="dd">The list typically references a single widget of type DojoMobileView.</dd>
+
+</dl>
+<div class="p">Here are functions:<dl class="dl">
+<dt class="dt dlterm">hideOpener</dt>
+
+<dd class="dd">Hides the mobile opener. The function does not take a parameter
+or return a value.</dd>
+
+
+<dt class="dt dlterm">showOpener</dt>
+
+<dd class="dd">Shows the mobile opener. The function can receive a widget of
+type DojoMobileBase? and does not return a value.</dd>
 
 </dl>
 </div>
+</div>
 
 <div class="section"><h2 class="title sectiontitle">Example</h2></div>
-
 
 <div class="p">Use of this widget requires a statement like this:<pre class="pre codeblock">import dojo.mobile.widgets.DojoMobileOpener;</pre>
 </div>
