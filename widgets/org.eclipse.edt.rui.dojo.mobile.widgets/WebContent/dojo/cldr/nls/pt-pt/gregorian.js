@@ -2,24 +2,24 @@ define(
 //begin v1.x content
 {
 	"quarters-standAlone-wide": [
-		"1.Âº trimestre",
-		"2.Âº trimestre",
-		"3.Âº trimestre",
-		"4.Âº trimestre"
+		"1.º trimestre",
+		"2.º trimestre",
+		"3.º trimestre",
+		"4.º trimestre"
 	],
 	"quarters-format-abbr": [
-		"1.Âº trimestre",
-		"2.Âº trimestre",
-		"3.Âº trimestre",
-		"4.Âº trimestre"
+		"1.º trimestre",
+		"2.º trimestre",
+		"3.º trimestre",
+		"4.º trimestre"
 	],
 	"dayPeriods-standAlone-wide-am": "a.m.",
 	"dateFormat-medium": "d 'de' MMM 'de' yyyy",
 	"quarters-standAlone-abbr": [
-		"1.Âº trimestre",
-		"2.Âº trimestre",
-		"3.Âº trimestre",
-		"4.Âº trimestre"
+		"1.º trimestre",
+		"2.º trimestre",
+		"3.º trimestre",
+		"4.º trimestre"
 	],
 	"dateFormatItem-Hm": "HH:mm",
 	"dayPeriods-standAlone-abbr-pm": "p.m.",
@@ -28,7 +28,7 @@ define(
 	"months-standAlone-wide": [
 		"Janeiro",
 		"Fevereiro",
-		"MarÃ§o",
+		"Março",
 		"Abril",
 		"Maio",
 		"Junho",
@@ -65,7 +65,7 @@ define(
 	"months-format-wide": [
 		"Janeiro",
 		"Fevereiro",
-		"MarÃ§o",
+		"Março",
 		"Abril",
 		"Maio",
 		"Junho",
@@ -79,11 +79,11 @@ define(
 	"days-standAlone-wide": [
 		"Domingo",
 		"Segunda-feira",
-		"TerÃ§a-feira",
+		"Terça-feira",
 		"Quarta-feira",
 		"Quinta-feira",
 		"Sexta-feira",
-		"SÃ¡bado"
+		"Sábado"
 	],
 	"dateFormatItem-HHmm": "HH:mm",
 	"months-format-abbr": [
@@ -103,38 +103,38 @@ define(
 	"days-standAlone-abbr": [
 		"Domingo",
 		"Segunda-feira",
-		"TerÃ§a-feira",
+		"Terça-feira",
 		"Quarta-feira",
 		"Quinta-feira",
 		"Sexta-feira",
-		"SÃ¡bado"
+		"Sábado"
 	],
 	"days-format-wide": [
 		"Domingo",
 		"Segunda-feira",
-		"TerÃ§a-feira",
+		"Terça-feira",
 		"Quarta-feira",
 		"Quinta-feira",
 		"Sexta-feira",
-		"SÃ¡bado"
+		"Sábado"
 	],
 	"dateFormatItem-hms": "h:mm:ss a",
 	"dateFormatItem-yQ": "QQQ 'de' yyyy",
 	"quarters-format-wide": [
-		"1.Âº trimestre",
-		"2.Âº trimestre",
-		"3.Âº trimestre",
-		"4.Âº trimestre"
+		"1.º trimestre",
+		"2.º trimestre",
+		"3.º trimestre",
+		"4.º trimestre"
 	],
 	"dayPeriods-standAlone-wide-pm": "p.m.",
 	"days-format-abbr": [
 		"Domingo",
 		"Segunda-feira",
-		"TerÃ§a-feira",
+		"Terça-feira",
 		"Quarta-feira",
 		"Quinta-feira",
 		"Sexta-feira",
-		"SÃ¡bado"
+		"Sábado"
 	]
 }
 //end v1.x content

@@ -121,11 +121,11 @@ define(
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
 		"Domenica",
-		"LunedÃ¬",
-		"MartedÃ¬",
-		"MercoledÃ¬",
-		"GiovedÃ¬",
-		"VenerdÃ¬",
+		"Lunedì",
+		"Martedì",
+		"Mercoledì",
+		"Giovedì",
+		"Venerdì",
 		"Sabato"
 	],
 	"timeFormat-medium": "HH:mm:ss",
@@ -162,11 +162,11 @@ define(
 	"field-day": "giorno",
 	"days-format-wide": [
 		"domenica",
-		"lunedÃ¬",
-		"martedÃ¬",
-		"mercoledÃ¬",
-		"giovedÃ¬",
-		"venerdÃ¬",
+		"lunedì",
+		"martedì",
+		"mercoledì",
+		"giovedì",
+		"venerdì",
 		"sabato"
 	],
 	"field-zone": "zona",

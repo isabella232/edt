@@ -15,7 +15,7 @@ define(
 		"M",
 		"J"
 	],
-	"field-weekday": "viikonpÃ¤ivÃ¤",
+	"field-weekday": "viikonpäivä",
 	"dateFormatItem-yQQQ": "QQQ y",
 	"dateFormatItem-yMEd": "EEE d.M.yyyy",
 	"dateFormatItem-MMMEd": "E d. MMM",
@@ -30,8 +30,8 @@ define(
 		"maaliskuuta",
 		"huhtikuuta",
 		"toukokuuta",
-		"kesÃ¤kuuta",
-		"heinÃ¤kuuta",
+		"kesäkuuta",
+		"heinäkuuta",
 		"elokuuta",
 		"syyskuuta",
 		"lokakuuta",
@@ -51,8 +51,8 @@ define(
 		"maaliskuu",
 		"huhtikuu",
 		"toukokuu",
-		"kesÃ¤kuu",
-		"heinÃ¤kuu",
+		"kesäkuu",
+		"heinäkuu",
 		"elokuu",
 		"syyskuu",
 		"lokakuu",
@@ -61,10 +61,10 @@ define(
 	],
 	"timeFormat-short": "H.mm",
 	"quarters-format-wide": [
-		"1. neljÃ¤nnes",
-		"2. neljÃ¤nnes",
-		"3. neljÃ¤nnes",
-		"4. neljÃ¤nnes"
+		"1. neljännes",
+		"2. neljännes",
+		"3. neljännes",
+		"4. neljännes"
 	],
 	"timeFormat-long": "H.mm.ss z",
 	"field-year": "vuosi",
@@ -78,8 +78,8 @@ define(
 		"maaliskuuta",
 		"huhtikuuta",
 		"toukokuuta",
-		"kesÃ¤kuuta",
-		"heinÃ¤kuuta",
+		"kesäkuuta",
+		"heinäkuuta",
 		"elokuuta",
 		"syyskuuta",
 		"lokakuuta",
@@ -89,7 +89,7 @@ define(
 	"dateFormatItem-yyQ": "Q/yy",
 	"timeFormat-full": "H.mm.ss zzzz",
 	"dateFormatItem-yyyyMEEEd": "EEE d.M.yyyy",
-	"field-day-relative+0": "tÃ¤nÃ¤Ã¤n",
+	"field-day-relative+0": "tänään",
 	"field-day-relative+1": "huomenna",
 	"field-day-relative+2": "ylihuomenna",
 	"dateFormatItem-H": "H",
@@ -99,8 +99,8 @@ define(
 		"maalis",
 		"huhti",
 		"touko",
-		"kesÃ¤",
-		"heinÃ¤",
+		"kesä",
+		"heinä",
 		"elo",
 		"syys",
 		"loka",
@@ -114,10 +114,10 @@ define(
 		"4. nelj."
 	],
 	"quarters-standAlone-wide": [
-		"1. neljÃ¤nnes",
-		"2. neljÃ¤nnes",
-		"3. neljÃ¤nnes",
-		"4. neljÃ¤nnes"
+		"1. neljännes",
+		"2. neljännes",
+		"3. neljännes",
+		"4. neljännes"
 	],
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
@@ -156,10 +156,10 @@ define(
 	"dateFormatItem-d": "d",
 	"dateFormatItem-ms": "mm.ss",
 	"field-day-relative+-1": "eilen",
-	"field-day-relative+-2": "toissapÃ¤ivÃ¤nÃ¤",
+	"field-day-relative+-2": "toissapäivänä",
 	"dateFormatItem-MMMd": "d. MMM",
 	"dateFormatItem-MEd": "E d.M.",
-	"field-day": "pÃ¤ivÃ¤",
+	"field-day": "päivä",
 	"dateFormatItem-yMMMMccccd": "cccc, d. MMMM y",
 	"days-format-wide": [
 		"sunnuntaina",
@@ -170,7 +170,7 @@ define(
 		"perjantaina",
 		"lauantaina"
 	],
-	"field-zone": "aikavyÃ¶hyke",
+	"field-zone": "aikavyöhyke",
 	"dateFormatItem-y": "y",
 	"months-standAlone-narrow": [
 		"T",
@@ -199,8 +199,8 @@ define(
 		"la"
 	],
 	"eraNames": [
-		"ennen Kristuksen syntymÃ¤Ã¤",
-		"jÃ¤lkeen Kristuksen syntymÃ¤n"
+		"ennen Kristuksen syntymää",
+		"jälkeen Kristuksen syntymän"
 	],
 	"days-format-narrow": [
 		"S",

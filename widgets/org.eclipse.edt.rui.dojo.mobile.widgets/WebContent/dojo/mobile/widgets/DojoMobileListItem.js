@@ -18,33 +18,124 @@ egl.defineWidget(
 	'dojo.mobile.widgets', 'DojoMobileContainer',
 	'li',
 {
-	"constructor" : function() {
-		var _this = this;
-		_this.children = [];
-		_this.text = "";
+	"constructor" : function(){
+		var _eglWidget = this;
+		_eglWidget.children = [];
+		_eglWidget.text = "";
 		require( 
-			["dojo/mobile/utility/Synchronor"],
-			function( synchronor ){
-				_this.synchronor = synchronor;
-				_this.renderWhenDojoIsDoneLoading();
+			[
+			 	"dojo/mobile/utility/Synchronor",
+			 	"dojox/mobile/ListItem",
+			 	"dojo/on", 
+			 	"dojo/_base/sniff",
+			 	"dojo/_base/lang",
+			 	"dojo/dom-class",
+			 	"dojo/dom-construct",
+			 	"dojox/mobile/common"
+			 ],
+			function( synchronor, li, on, has, lang, domClass, domConstruct, common ){
+				_eglWidget.synchronor = synchronor;
+				
+				/** 
+				 * @Smyle: This is a fix to dojox.mobile.ListItem's bug where icon should be 
+				 * relocated after it has loaded, otherwise its offset will be miscalculated.
+				*/
+				if( !li.extendedStartup ){
+					li.extend(
+						{
+							"startup" : function(){
+								var _this = this;
+								
+								if(_this._started){ return; }
+								_this.inheritParams();
+							
+								var parent = _this.getParent();
+								if(_this.moveTo || _this.href || _this.url || _this.clickable || (parent && parent.select)){
+									_this._onClickHandle = _this.connect(_this.anchorNode, "onclick", "onClick");
+								}
+								
+								_this.setArrow();
+	
+								if(domClass.contains(_this.domNode, "mblVariableHeight")){
+									_this.variableHeight = true;
+								}
+								
+								if(_this.variableHeight){
+									domClass.add(_this.domNode, "mblVariableHeight");
+								}
+								
+								_this.set("icon", _this.icon); // _setIconAttr may be called twice but this is necessary for offline instantiation
+								if(!_this.checked && _this.checkClass.indexOf(',') !== -1){
+									_this.set("checked", _this.checked);
+								}
+								
+								_this.inherited(arguments);
+								
+								var imgNode = null;
+								if( _this.iconNode )
+									imgNode = _this.iconNode.getElementsByTagName("IMG")[0];
+								if ( imgNode )
+									on(
+										imgNode,
+										"load",
+										function() {
+											_this.layoutVariableHeight();
+										}
+									);
+								
+								// 45 is the default height of dojo mobile list item widget
+								if( (_this.domNode.offsetHeight > 45) && !dojo.hasClass(this.domNode,"mblVariableHeight") ){
+									dojo.addClass(this.domNode,"mblVariableHeight");
+								}
+							},
+							_setIconAttr: function(icon){
+								// if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
+								this.icon = icon;
+								var a = this.anchorNode;
+								if(!this.iconNode){
+									if(icon){
+										var ref = this.rightIconNode || this.rightIcon2Node || this.rightTextNode || this.box;
+										this.iconNode = domConstruct.create("DIV", {className:"mblListItemIcon"}, ref, "before");
+									}
+								}else{
+									domConstruct.empty(this.iconNode);
+								}
+								if(icon && icon !== "none"){
+									common.createIcon(icon, this.iconPos, null, this.alt, this.iconNode);
+									if(this.iconPos){
+										domClass.add(this.iconNode.firstChild, "mblListItemSpriteIcon");
+									}
+									domClass.remove(a, "mblListItemAnchorNoIcon");
+								}else{
+									domClass.add(a, "mblListItemAnchorNoIcon");
+								}
+							}
+						}
+					);
+					li.extendedStartup = true;
+				}
+				_eglWidget.renderWhenDojoIsDoneLoading();
 			}
 		);
 	},
 	"createDojoWidget" : function(parent) {
 		var _this = this;
 		_this.dom = parent;	
-			
+		_this.dom.style.minHeight = "44px";
 		_this.dojoWidget = new dojox.mobile.ListItem({
-			label: "",
+			label: _this.text,
 			rightText: _this.actionText || "",
 			moveTo: _this.moveTo,
+			icon : _this.icon,
 			transition: _this.transition || "slide"
 		},parent);
 		
 		_this.synchronor.trigger( _this, "SYN_READY" );
 		
+		_this.textBox = _this._getTextBox();
+		_this.setChildren( _this.children, _this.dojoWidget );
+		
 		if(_this.children.length > 0){
-			dojo.addClass(_this.dojoWidget.domNode,"mblVariableHeight");
 			_this._setIconStyle(true);
 		}
 		
@@ -59,16 +150,6 @@ egl.defineWidget(
 		// no moveTo is specified in dojo mobile framework
 		if( !_this.moveTo )
 			_this.dojoWidget._onClickHandle = _this.dojoWidget.connect(_this.dojoWidget.anchorNode, "onclick", "onClick");
-		
-		_this.dojoWidget.startup();
-		_this.textBox = _this._getTextBox();
-		
-		if( _this.imagePath )
-			_this.setImagePath( _this.imagePath );
-		
-		if(_this.text){
-			_this.setText(_this.text);
-		}
 	},
 	"_setIconStyle" : function(hasChildren){		
 		var iconDom = this.dojoWidget.domNode.firstChild;
@@ -103,11 +184,14 @@ egl.defineWidget(
 	"_appendChild" : function(child) {
 		if (this.dojoWidget) {
 			var textBox = this.textBox;
-			if(!dojo.hasClass(this.dojoWidget.domNode,"mblVariableHeight")){				
+			
+			/* Depreciated*/
+			if(!dojo.hasClass(this.dojoWidget.domNode,"mblVariableHeight")){
 				dojo.addClass(this.dojoWidget.domNode,"mblVariableHeight");
-				this._setIconStyle(true);
-				textBox.innerHTML = "";
+				//this._setIconStyle(true);
+				//textBox.innerHTML = "";
 			}
+			
 			textBox.appendChild(child.eze$$DOMElement);					
 		}
 	},
@@ -155,32 +239,46 @@ egl.defineWidget(
 			}
 			if(textBox){
 				textBox.innerHTML = this.text;
-			}else{
-
-			}		
+			}	
 		}
 	},
 	"getText" : function() {
 		return this.text;
 	},
 	"setImagePath" : function(icon) {
-		this.imagePath = icon;
-		if(this.dojoWidget){
-			this.dojoWidget.set("icon", this.imagePath);		
-			var iconDom = this.dojoWidget.domNode.firstChild;
-			if( iconDom && iconDom.className == "mblListItemIcon" ){
-				iconDom.src = this.imagePath;
-			}else{
-				iconDom= document.createElement("img");
-				iconDom.setAttribute("class", "mblListItemIcon");
-				iconDom.src = this.imagePath;
-				this.dojoWidget.domNode.insertBefore(iconDom, this.dojoWidget.domNode.firstChild);
-				dojo.removeClass(this.dojoWidget.domNode.getElementsByTagName("a")[0],"mblListItemAnchorNoIcon");
+		var _this = this;
+		_this.icon = icon;
+		require(
+			["dojo/mobile/utility/Synchronor"],
+			function( synchronor ){
+				synchronor.wait( 
+					[_this], "SYN_READY",
+					function(){
+						if( _this.dojoWidget )
+							_this.dojoWidget.set( {icon:_this.icon} );
+						
+						/** @Depreciated
+						var iconDom = this.dojoWidget.domNode.firstChild;
+						imgNode = this.dojoWidget.domNode.find
+						if( iconDom && iconDom.className == "mblListItemIcon" ){
+							iconDom.src = this.icon;
+						}else{
+							iconDom= document.createElement("img");
+							iconDom.setAttribute("class", "mblListItemIcon");
+							iconDom.src = this.icon;
+							this.dojoWidget.domNode.insertBefore(iconDom, this.dojoWidget.domNode.firstChild);
+							dojo.removeClass(this.dojoWidget.domNode.getElementsByTagName("a")[0],"mblListItemAnchorNoIcon");
+						}*/
+					}
+				);
 			}
-		}
+		);
+		
+		
+		
 	},
 	"getImagePath" : function() {
-		return this.imagePath;
+		return this.icon;
 	},
 	"setActionText" : function(actionText) {
 		this.actionText = actionText;

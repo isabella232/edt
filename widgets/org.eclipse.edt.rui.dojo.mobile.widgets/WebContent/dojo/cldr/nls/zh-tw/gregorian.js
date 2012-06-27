@@ -2,36 +2,36 @@ define(
 //begin v1.x content
 {
 	"quarters-standAlone-wide": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
 	"quarters-format-abbr": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
 	"dateFormat-medium": "yyyy/M/d",
-	"field-second": "ç§’",
+	"field-second": "秒",
 	"quarters-standAlone-abbr": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
 	"dateFormatItem-MMdd": "MM/dd",
-	"dateFormatItem-MEd": "M/dï¼ˆEï¼‰",
-	"dateFormatItem-yMEd": "yyyy/M/dï¼ˆEEEï¼‰",
-	"field-week": "é€±",
-	"dateFormatItem-H": "Hæ™‚",
+	"dateFormatItem-MEd": "M/d（E）",
+	"dateFormatItem-yMEd": "yyyy/M/d（EEE）",
+	"field-week": "週",
+	"dateFormatItem-H": "H時",
 	"eraNarrow": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"field-day-relative+-3": "å¤§å‰?å¤©",
-	"timeFormat-full": "zzzzahæ™‚mmåˆ†ssç§’",
+	"field-day-relative+-3": "大前天",
+	"timeFormat-full": "zzzzah時mm分ss秒",
 	"dateFormatItem-Md": "M/d",
 	"months-standAlone-narrow": [
 		"1",
@@ -48,33 +48,33 @@ define(
 		"12"
 	],
 	"eraNames": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"field-minute": "åˆ†é?˜",
-	"field-hour": "å°?æ™‚",
-	"field-day-relative+2": "å¾Œå¤©",
-	"field-day-relative+3": "å¤§å¾Œå¤©",
+	"field-minute": "分鐘",
+	"field-hour": "小時",
+	"field-day-relative+2": "後天",
+	"field-day-relative+3": "大後天",
 	"dateFormat-short": "yy/M/d",
-	"dateFormatItem-yMMMEd": "yå¹´Mæœˆdæ—¥EEE",
-	"field-era": "å¹´ä»£",
+	"dateFormatItem-yMMMEd": "y年M月d日EEE",
+	"field-era": "年代",
 	"dateFormatItem-yM": "yyyy/M",
-	"timeFormat-long": "zahæ™‚mmåˆ†ssç§’",
+	"timeFormat-long": "zah時mm分ss秒",
 	"eraAbbr": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"dateFormatItem-h": "ahæ™‚",
-	"dateFormatItem-yMMM": "yå¹´Mæœˆ",
+	"dateFormatItem-h": "ah時",
+	"dateFormatItem-yMMM": "y年M月",
 	"quarters-format-wide": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
-	"field-weekday": "é€±å¤©",
-	"field-zone": "å?€åŸŸ",
-	"dateFormatItem-Ed": "dæ—¥(E)"
+	"field-weekday": "週天",
+	"field-zone": "區域",
+	"dateFormatItem-Ed": "d日(E)"
 }
 //end v1.x content
 );

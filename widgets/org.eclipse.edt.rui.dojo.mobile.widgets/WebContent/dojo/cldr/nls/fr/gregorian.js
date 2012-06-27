@@ -29,37 +29,37 @@ define(
 	"dateFormat-long": "d MMMM y",
 	"months-format-wide": [
 		"janvier",
-		"fÃ©vrier",
+		"février",
 		"mars",
 		"avril",
 		"mai",
 		"juin",
 		"juillet",
-		"aoÃ»t",
+		"août",
 		"septembre",
 		"octobre",
 		"novembre",
-		"dÃ©cembre"
+		"décembre"
 	],
 	"dayPeriods-format-wide-pm": "PM",
 	"dateFormat-full": "EEEE d MMMM y",
 	"dateFormatItem-Md": "d/M",
 	"dayPeriods-format-wide-noon": "midi",
-	"field-era": "Ã¨re",
+	"field-era": "ère",
 	"dateFormatItem-yM": "M/yyyy",
 	"months-standAlone-wide": [
 		"janvier",
-		"fÃ©vrier",
+		"février",
 		"mars",
 		"avril",
 		"mai",
 		"juin",
 		"juillet",
-		"aoÃ»t",
+		"août",
 		"septembre",
 		"octobre",
 		"novembre",
-		"dÃ©cembre"
+		"décembre"
 	],
 	"timeFormat-short": "HH:mm",
 	"quarters-format-wide": [
@@ -69,7 +69,7 @@ define(
 		"4e trimestre"
 	],
 	"timeFormat-long": "HH:mm:ss z",
-	"field-year": "annÃ©e",
+	"field-year": "année",
 	"dateFormatItem-yMMM": "MMM y",
 	"dateFormatItem-yQ": "'T'Q y",
 	"dateFormatItem-yyyyMMMM": "MMMM y",
@@ -77,37 +77,37 @@ define(
 	"dateFormatItem-MMdd": "dd/MM",
 	"months-format-abbr": [
 		"janv.",
-		"fÃ©vr.",
+		"févr.",
 		"mars",
 		"avr.",
 		"mai",
 		"juin",
 		"juil.",
-		"aoÃ»t",
+		"août",
 		"sept.",
 		"oct.",
 		"nov.",
-		"dÃ©c."
+		"déc."
 	],
 	"dateFormatItem-yyQ": "'T'Q yy",
 	"timeFormat-full": "HH:mm:ss zzzz",
-	"field-day-relative+0": "aujourdâ€™hui",
+	"field-day-relative+0": "aujourd’hui",
 	"field-day-relative+1": "demain",
-	"field-day-relative+2": "aprÃ¨s-demain",
-	"field-day-relative+3": "aprÃ¨s-aprÃ¨s-demain",
+	"field-day-relative+2": "après-demain",
+	"field-day-relative+3": "après-après-demain",
 	"months-standAlone-abbr": [
 		"janv.",
-		"fÃ©vr.",
+		"févr.",
 		"mars",
 		"avr.",
 		"mai",
 		"juin",
 		"juil.",
-		"aoÃ»t",
+		"août",
 		"sept.",
 		"oct.",
 		"nov.",
-		"dÃ©c."
+		"déc."
 	],
 	"quarters-format-abbr": [
 		"T1",
@@ -208,8 +208,8 @@ define(
 		"sam."
 	],
 	"eraNames": [
-		"avant JÃ©sus-Christ",
-		"aprÃ¨s JÃ©sus-Christ"
+		"avant Jésus-Christ",
+		"après Jésus-Christ"
 	],
 	"days-format-narrow": [
 		"D",
@@ -235,7 +235,7 @@ define(
 	"dateFormatItem-MMMMEd": "EEE d MMMM",
 	"dateFormat-short": "dd/MM/yy",
 	"dateFormatItem-MMd": "d/MM",
-	"dayPeriods-format-wide-afternoon": "aprÃ¨s-midi",
+	"dayPeriods-format-wide-afternoon": "après-midi",
 	"field-second": "seconde",
 	"dateFormatItem-yMMMEd": "EEE d MMM y",
 	"dateFormatItem-Ed": "E d",

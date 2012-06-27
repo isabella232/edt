@@ -4,12 +4,12 @@ define({ root:
 {
 	"USD_symbol": "US$",
 	"CAD_symbol": "CA$",
-	"GBP_symbol": "Â£",
+	"GBP_symbol": "£",
 	"HKD_symbol": "HK$",
-	"JPY_symbol": "JPÂ¥",
+	"JPY_symbol": "JP¥",
 	"AUD_symbol": "AU$",
-	"CNY_symbol": "CNÂ¥",
-	"EUR_symbol": "â‚¬"
+	"CNY_symbol": "CN¥",
+	"EUR_symbol": "€"
 }
 //end v1.x content
 ,

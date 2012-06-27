@@ -73,7 +73,7 @@ define(
 		"4:e kvartalet"
 	],
 	"timeFormat-long": "HH:mm:ss z",
-	"field-year": "Ã¥r",
+	"field-year": "år",
 	"dateFormatItem-yMMM": "MMM y",
 	"dateFormatItem-yQ": "yyyy Q",
 	"field-hour": "timme",
@@ -96,8 +96,8 @@ define(
 	"timeFormat-full": "'kl'. HH:mm:ss zzzz",
 	"field-day-relative+0": "i dag",
 	"field-day-relative+1": "i morgon",
-	"field-day-relative+2": "i Ã¶vermorgon",
-	"field-day-relative+3": "i Ã¶verÃ¶vermorgon",
+	"field-day-relative+2": "i övermorgon",
+	"field-day-relative+3": "i överövermorgon",
 	"months-standAlone-abbr": [
 		"jan",
 		"feb",
@@ -126,13 +126,13 @@ define(
 	],
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
-		"sÃ¶ndag",
-		"mÃ¥ndag",
+		"söndag",
+		"måndag",
 		"tisdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lÃ¶rdag"
+		"lördag"
 	],
 	"dateFormatItem-yyyyMMM": "MMM y",
 	"dateFormatItem-MMMMd": "d:'e' MMMM",
@@ -152,30 +152,30 @@ define(
 	"field-minute": "minut",
 	"field-dayperiod": "fm/em",
 	"days-standAlone-abbr": [
-		"sÃ¶n",
-		"mÃ¥n",
+		"sön",
+		"mån",
 		"tis",
 		"ons",
 		"tors",
 		"fre",
-		"lÃ¶r"
+		"lör"
 	],
 	"dateFormatItem-d": "d",
 	"dateFormatItem-ms": "mm:ss",
-	"field-day-relative+-1": "i gÃ¥r",
-	"field-day-relative+-2": "i fÃ¶rrgÃ¥r",
-	"field-day-relative+-3": "i fÃ¶rrfÃ¶rrgÃ¥r",
+	"field-day-relative+-1": "i går",
+	"field-day-relative+-2": "i förrgår",
+	"field-day-relative+-3": "i förrförrgår",
 	"dateFormatItem-MMMd": "d MMM",
 	"dateFormatItem-MEd": "E d/M",
 	"field-day": "dag",
 	"days-format-wide": [
-		"sÃ¶ndag",
-		"mÃ¥ndag",
+		"söndag",
+		"måndag",
 		"tisdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lÃ¶rdag"
+		"lördag"
 	],
 	"field-zone": "tidszon",
 	"dateFormatItem-yyyyMM": "yyyy-MM",
@@ -197,16 +197,16 @@ define(
 	"dateFormatItem-yyMM": "yy-MM",
 	"dateFormatItem-hm": "h:mm a",
 	"days-format-abbr": [
-		"sÃ¶n",
-		"mÃ¥n",
+		"sön",
+		"mån",
 		"tis",
 		"ons",
 		"tors",
 		"fre",
-		"lÃ¶r"
+		"lör"
 	],
 	"eraNames": [
-		"fÃ¶re Kristus",
+		"före Kristus",
 		"efter Kristus"
 	],
 	"days-format-narrow": [
@@ -218,7 +218,7 @@ define(
 		"F",
 		"L"
 	],
-	"field-month": "mÃ¥nad",
+	"field-month": "månad",
 	"days-standAlone-narrow": [
 		"S",
 		"M",

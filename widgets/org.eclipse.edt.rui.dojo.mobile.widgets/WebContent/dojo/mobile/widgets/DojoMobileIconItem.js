@@ -1,6 +1,6 @@
 egl.defineWidget( 
 		'dojo.mobile.widgets', 'DojoMobileIconItem',
-		'dojo.mobile.widgets', 'DojoMobileContainer',
+		'dojo.mobile.widgets', 'DojoMobileBase',
 		'li',
 		{ 
 			'constructor' : function(){
@@ -9,7 +9,7 @@ egl.defineWidget(
 				_this.options  = {};
 				_this.options.transition = 'slide';
 				_this.options.transitionDir = 1;
-				_this.options.imagePath = 'dojo/mobile/images/i-imagePath-1.png';
+				_this.options.icon = 'dojo/mobile/images/i-imagePath-1.png';
 				_this.options.lazy = true;
 				require(
 					["dojox/mobile/IconItem"],
@@ -26,9 +26,10 @@ egl.defineWidget(
 							_this.options, parent
 					);
 					_this.containerWidget = _this.dojoWidget;
+					/** @deprecated
 					if( _this.children )
 						_this.setChildren( _this.children );
-					
+					*/
 					var defaultCallBack = _this.dojoWidget.onClick ;
 					_this.dojoWidget.onClick = function( value ) {
 						if( typeof  defaultCallBack === "function" && _this.moveTo )
@@ -71,7 +72,7 @@ egl.defineWidget(
 				this._removeChildren( 1, dojoWidget );
 			},
 			'setImagePath' : function( icon ){
-				this.options.imagePath = icon;
+				this.options.icon = icon;
 			},
 			'setTargetView' : function( view ){
 				if( view && view.dojoWidget ){
@@ -81,7 +82,7 @@ egl.defineWidget(
 					this.options.moveWidget = view;
 			},
 			'getImagePath' : function(){
-				return this.options.imagePath;
+				return this.options.icon;
 			},
 			'getTargetView' : function(){
 				return this.options.moveTo;

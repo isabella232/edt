@@ -30,7 +30,7 @@ define(
 	"months-format-wide": [
 		"Januar",
 		"Februar",
-		"MÃ¤rz",
+		"März",
 		"April",
 		"Mai",
 		"Juni",
@@ -52,7 +52,7 @@ define(
 	"months-standAlone-wide": [
 		"Januar",
 		"Februar",
-		"MÃ¤rz",
+		"März",
 		"April",
 		"Mai",
 		"Juni",
@@ -80,7 +80,7 @@ define(
 	"months-format-abbr": [
 		"Jan",
 		"Feb",
-		"MÃ¤r",
+		"Mär",
 		"Apr",
 		"Mai",
 		"Jun",
@@ -95,13 +95,13 @@ define(
 	"timeFormat-full": "HH:mm:ss zzzz",
 	"field-day-relative+0": "heute",
 	"field-day-relative+1": "morgen",
-	"field-day-relative+2": "Ã¼bermorgen",
+	"field-day-relative+2": "übermorgen",
 	"dateFormatItem-H": "HH 'Uhr'",
-	"field-day-relative+3": "Ã¼berÃ¼bermorgen",
+	"field-day-relative+3": "überübermorgen",
 	"months-standAlone-abbr": [
 		"Jan",
 		"Feb",
-		"MÃ¤r",
+		"Mär",
 		"Apr",
 		"Mai",
 		"Jun",
@@ -142,7 +142,7 @@ define(
 		"n. Chr."
 	],
 	"field-minute": "Minute",
-	"field-dayperiod": "TageshÃ¤lfte",
+	"field-dayperiod": "Tageshälfte",
 	"days-standAlone-abbr": [
 		"So.",
 		"Mo.",

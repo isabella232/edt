@@ -77,10 +77,10 @@ egl.defineWidget(
 			this.options.transitionDir = v;
 		},
 		"getImagePath" : function(){
-			return this.options.imagePath || "";
+			return this.options.icon || "";
 		},
 		"setImagePath" : function(v){
-			this.options.imagePath = v;
+			this.options.icon = v;
 		},
 		"getActionView" : function(){
 			return this._actionView || null;
@@ -89,10 +89,10 @@ egl.defineWidget(
 			this._actionView = v;
 		},
 		"getText" : function(){
-			return this.options.text || "";
+			return this.options.label || "";
 		},
 		"setText" : function(v){
-			this.options.text = v;
+			this.options.label = v;
 		},
 		"getSelected" : function(){
 			return this.options.selected || false;

@@ -23,12 +23,12 @@ define(
 		"a.C.",
 		"d.C."
 	],
-	"dayPeriods-format-wide-morning": "manhÃ£",
+	"dayPeriods-format-wide-morning": "manhã",
 	"dateFormat-long": "d 'de' MMMM 'de' y",
 	"months-format-wide": [
 		"janeiro",
 		"fevereiro",
-		"marÃ§o",
+		"março",
 		"abril",
 		"maio",
 		"junho",
@@ -48,7 +48,7 @@ define(
 	"months-standAlone-wide": [
 		"janeiro",
 		"fevereiro",
-		"marÃ§o",
+		"março",
 		"abril",
 		"maio",
 		"junho",
@@ -61,10 +61,10 @@ define(
 	],
 	"timeFormat-short": "HH:mm",
 	"quarters-format-wide": [
-		"1Âº trimestre",
-		"2Âº trimestre",
-		"3Âº trimestre",
-		"4Âº trimestre"
+		"1º trimestre",
+		"2º trimestre",
+		"3º trimestre",
+		"4º trimestre"
 	],
 	"timeFormat-long": "HH'h'mm'min'ss's' z",
 	"field-year": "Ano",
@@ -89,9 +89,9 @@ define(
 	"dateFormatItem-yyQ": "Q yy",
 	"timeFormat-full": "HH'h'mm'min'ss's' zzzz",
 	"field-day-relative+0": "Hoje",
-	"field-day-relative+1": "AmanhÃ£",
-	"field-day-relative+2": "Depois de amanhÃ£",
-	"field-day-relative+3": "Daqui a trÃªs dias",
+	"field-day-relative+1": "Amanhã",
+	"field-day-relative+2": "Depois de amanhã",
+	"field-day-relative+3": "Daqui a três dias",
 	"months-standAlone-abbr": [
 		"jan",
 		"fev",
@@ -113,21 +113,21 @@ define(
 		"T4"
 	],
 	"quarters-standAlone-wide": [
-		"1Âº trimestre",
-		"2Âº trimestre",
-		"3Âº trimestre",
-		"4Âº trimestre"
+		"1º trimestre",
+		"2º trimestre",
+		"3º trimestre",
+		"4º trimestre"
 	],
 	"dateFormatItem-HHmmss": "HH'h'mm'min'ss's'",
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
 		"domingo",
 		"segunda-feira",
-		"terÃ§a-feira",
+		"terça-feira",
 		"quarta-feira",
 		"quinta-feira",
 		"sexta-feira",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"dateFormatItem-yyyyMMM": "MMM 'de' y",
 	"dateFormatItem-yyMMMEEEd": "EEE, d 'de' MMM 'de' yy",
@@ -145,7 +145,7 @@ define(
 		"d.C."
 	],
 	"field-minute": "Minuto",
-	"field-dayperiod": "PerÃ­odo do dia",
+	"field-dayperiod": "Período do dia",
 	"days-standAlone-abbr": [
 		"dom",
 		"seg",
@@ -153,7 +153,7 @@ define(
 		"qua",
 		"qui",
 		"sex",
-		"sÃ¡b"
+		"sáb"
 	],
 	"dayPeriods-format-wide-night": "noite",
 	"dateFormatItem-yyMMMd": "d 'de' MMM 'de' yy",
@@ -161,18 +161,18 @@ define(
 	"dateFormatItem-ms": "mm'min'ss's'",
 	"field-day-relative+-1": "Ontem",
 	"field-day-relative+-2": "Anteontem",
-	"field-day-relative+-3": "HÃ¡ trÃªs dias",
+	"field-day-relative+-3": "Há três dias",
 	"dateFormatItem-MMMd": "d 'de' MMM",
 	"dateFormatItem-MEd": "EEE, dd/MM",
 	"field-day": "Dia",
 	"days-format-wide": [
 		"domingo",
 		"segunda-feira",
-		"terÃ§a-feira",
+		"terça-feira",
 		"quarta-feira",
 		"quinta-feira",
 		"sexta-feira",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"field-zone": "Fuso",
 	"dateFormatItem-yyyyMM": "MM/yyyy",
@@ -199,7 +199,7 @@ define(
 		"qua",
 		"qui",
 		"sex",
-		"sÃ¡b"
+		"sáb"
 	],
 	"eraNames": [
 		"Antes de Cristo",
@@ -214,7 +214,7 @@ define(
 		"S",
 		"S"
 	],
-	"field-month": "MÃªs",
+	"field-month": "Mês",
 	"days-standAlone-narrow": [
 		"D",
 		"S",

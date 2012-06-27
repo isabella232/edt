@@ -17,19 +17,42 @@ egl.defineWidget(
 				[
 				 	"dojo/date/locale",
 				 	"dojo/mobile/utility/Synchronor",
-				 	"dojox/mobile/SpinWheelDatePicker"
+				 	"dojox/mobile/SpinWheelDatePicker",
+				 	"dojox/mobile/SpinWheelSlot"
 				],
-				function( datelocale, synchronor ){
+				function( datelocale, synchronor, dp, swl ){
 					_this.synchronor = synchronor;
 					_this.datelocale = datelocale;
+					
+					// Resolve the problem that date picker's original startup will conflict 
+					// with the EGL widget framework's startup
+					if( !swl.extendedStartup ){
+						swl.extend(
+							{
+								"startup" : function(){
+									var parentWidget = this.getParent();
+									if( parentWidget.centerPos == 0 && parentWidget.domNode.offsetHeight != 0 )
+										parentWidget.centerPos = Math.round(parentWidget.domNode.offsetHeight / 2);
+									this.centerPos = parentWidget.centerPos;
+									this.inherited(arguments);
+									var items = this.panelNodes[1].childNodes;
+									this._itemHeight = items[0].offsetHeight;
+									this.adjust();
+								}
+							}
+						);
+						swl.extendedStartup = true;
+					}
 					_this.renderWhenDojoIsDoneLoading();
 				}
 			);
 		},
 		"createDojoWidget" : function( parent ){
-			var datelocale = this.datelocale;
 			var _this = this;
-			var now = new Date();		
+			var _needAdjust = false;
+			var datelocale = this.datelocale;
+			var now = new Date();
+			
 			_this.dojoWidget = { "domNode" : parent };
 			require(
 				["dojo/ready"],
@@ -40,9 +63,25 @@ egl.defineWidget(
 									{}, parent
 							);
 							
+							if( _this.dojoWidget.domNode.offsetHeight == 0 )
+								_needAdjust = true;
+							
 							_this.containerWidget = _this.dojoWidget;
 						
-							_this.containerWidget.startup();
+							require( 
+								["dojo/_base/sniff"], 
+								function( has ){
+									setTimeout(
+										function(){
+											ready(
+												function(){
+													_this.containerWidget.startup();
+													_this.synchronor.trigger( _this, "SYN_READY" );
+												}
+											);
+										}, has("ie") ? 100 : 0);
+								}
+							);
 							
 							_this.dojoWidget.connect( 
 								_this.dojoWidget.slots[0], 
@@ -76,8 +115,6 @@ egl.defineWidget(
 									|| _this.isSettingMonth || _this.isSettingDay;
 								}
 							);
-							
-							_this.synchronor.trigger( _this, "SYN_READY" );
 						});
 					}
 			);
@@ -164,6 +201,7 @@ egl.defineWidget(
 			}
 			return _this.value;	
 		},
+		
 		// Since this.year, this.month, this.day, this.value doesn't keep update with 
 		// user dragging animation, so they need to be handled carefully seperately
 		"getYear" : function(){

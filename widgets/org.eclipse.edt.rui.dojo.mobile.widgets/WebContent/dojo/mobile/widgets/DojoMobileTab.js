@@ -70,7 +70,7 @@ egl.defineWidget(
 		tabViewNode.innerText = this.text;
 
 		if( _this.selectedIcon )
-			tabBtnStyle.selectedIcon = this.selectedIcon;
+			tabBtnStyle.icon1 = this.selectedIcon;
 		if( _this.deSelectedIcon )
 			tabBtnStyle.icon2 = this.deSelectedIcon;
 		if( _this.moveTo )

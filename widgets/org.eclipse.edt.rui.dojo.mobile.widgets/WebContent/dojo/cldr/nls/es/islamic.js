@@ -40,8 +40,8 @@ define(
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"dateFormatItem-yMMM": "MMM y",
 	"days-standAlone-narrow": [
@@ -70,16 +70,16 @@ define(
 	"months-standAlone-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"dateFormatItem-yyyyMEd": "EEE d/M/y G",
 	"dateFormatItem-MMMd": "d MMM",
@@ -95,8 +95,8 @@ define(
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"dateFormatItem-MMMMd": "d 'de' MMMM",
 	"quarters-format-abbr": [
@@ -109,10 +109,10 @@ define(
 		"dom",
 		"lun",
 		"mar",
-		"miÃ©",
+		"mié",
 		"jue",
 		"vie",
-		"sÃ¡b"
+		"sáb"
 	],
 	"dateFormatItem-M": "L",
 	"dateFormatItem-MEd": "E, d/M",
@@ -142,24 +142,24 @@ define(
 	"months-format-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"dateFormatItem-yyyyMMM": "MMM y G",
 	"dateFormatItem-d": "d",
 	"quarters-format-wide": [
 		"1er trimestre",
-		"2Âº trimestre",
+		"2º trimestre",
 		"3er trimestre",
-		"4Âº trimestre"
+		"4º trimestre"
 	],
 	"eraNarrow": [
 		"AH"
@@ -168,10 +168,10 @@ define(
 		"domingo",
 		"lunes",
 		"martes",
-		"miÃ©rcoles",
+		"miércoles",
 		"jueves",
 		"viernes",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"dateFormatItem-h": "hh a"
 }

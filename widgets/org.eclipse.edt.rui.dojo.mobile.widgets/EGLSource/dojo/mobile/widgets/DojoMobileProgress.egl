@@ -16,7 +16,7 @@ package dojo.mobile.widgets;
 
 ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",
-		ExternalName = "DojoMobileTextArea",
+		ExternalName = "DojoMobileProgress",
 		@VEWidget{
 			category = "Mobile",
 			template = "${typeName}{  }",

@@ -23,11 +23,11 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 				"${typeName}{\n" +                
 					"\t\tselection = 1, segmentedControl=true,\n"+  
 			 		"\t\tchildren = [\n"+    
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 1\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 1\", /*deSelectedIcon = \"dojo/mobile/images/tab-icon-10.png\", selectedIcon = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
 						"\t\t\t] },\n"+ 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 2\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 2\", /*deSelectedIcon = \"dojo/mobile/images/tab-icon-10.png\", selectedIcon = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
 						"\t\t\t]},\n"+
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 3\", /*icon1 = \"dojo/mobile/images/tab-icon-10.png\", icon2 = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileTab} { title = \"Topic 3\", /*deSelectedIcon = \"dojo/mobile/images/tab-icon-10.png\", selectedIcon = \"dojo/mobile/images/tab-icon-10h.png\",*/ children = [\n"+
 						"\t\t\t]}\n"+
 					"\t\t]\n"+        
 				"\t}",       
@@ -45,10 +45,10 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 		propertyType = "choice", 
 		displayName  = "tabPosition",   
 		choices = [     
-			@VEPropertyChoice {displayName = "Top", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_TOP"},
-			@VEPropertyChoice {displayName = "Bottom", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_BUTTOM"},
-			@VEPropertyChoice {displayName = "Fixed Top", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_FIXED_TOP"},
-			@VEPropertyChoice {displayName = "Fixed Bottom", id = "${typeName:dojo.widgets.DojoLib}.TAB_POSITION_FIXED_BUTTOM"}
+			@VEPropertyChoice {displayName = "Top", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TAB_POSITION_TOP"},
+			@VEPropertyChoice {displayName = "Bottom", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TAB_POSITION_BOTTOM"},
+			@VEPropertyChoice {displayName = "Fixed Top", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TAB_POSITION_FIXED_TOP"},
+			@VEPropertyChoice {displayName = "Fixed Bottom", id = "${typeName:dojo.mobile.widgets.DojoMobileLib}.TAB_POSITION_FIXED_BOTTOM"}
 		], 
 		default = "Top"
 	}};

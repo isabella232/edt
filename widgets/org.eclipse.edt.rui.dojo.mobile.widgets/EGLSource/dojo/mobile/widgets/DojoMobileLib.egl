@@ -37,9 +37,9 @@ library DojoMobileLib {}
 	* Dojo Mobile TabContainer position
 	*/
 	const TAB_POSITION_TOP String = "top";
-	CONST TAB_POSITION_BUTTOM String = "Bottom";
+	CONST TAB_POSITION_BOTTOM String = "Bottom";
 	const TAB_POSITION_FIXED_TOP String = "Fixed Top";
-	const TAB_POSITION_FIXED_BUTTOM String = "Fixed Bottom";
+	const TAB_POSITION_FIXED_BOTTOM String = "Fixed Bottom";
 	
 	/*
 	* Dojo Mobile ToolBar transaction type

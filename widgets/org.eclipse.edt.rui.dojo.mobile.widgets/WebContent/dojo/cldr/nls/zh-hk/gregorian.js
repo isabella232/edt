@@ -2,14 +2,14 @@ define(
 //begin v1.x content
 {
 	"dateFormatItem-yM": "yyyy/M",
-	"field-minute": "åˆ†é?˜",
+	"field-minute": "分鐘",
 	"eraNames": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"field-weekday": "é€±å¤©",
+	"field-weekday": "週天",
 	"dateFormatItem-MMdd": "MM/dd",
-	"field-day-relative+-3": "å¤§å‰?å¤©",
+	"field-day-relative+-3": "大前天",
 	"months-standAlone-narrow": [
 		"1",
 		"2",
@@ -25,61 +25,61 @@ define(
 		"12"
 	],
 	"dateTimeFormat-short": "{1} {0}",
-	"field-era": "å¹´ä»£",
-	"field-hour": "å°?æ™‚",
+	"field-era": "年代",
+	"field-hour": "小時",
 	"dateTimeFormat-medium": "{1} {0}",
 	"quarters-standAlone-abbr": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
-	"timeFormat-full": "zzzzahæ™‚mmåˆ†ssç§’",
-	"dateFormatItem-Ed": "dæ—¥(E)",
-	"dateFormatItem-yMMM": "yå¹´Mæœˆ",
+	"timeFormat-full": "zzzzah時mm分ss秒",
+	"dateFormatItem-Ed": "d日(E)",
+	"dateFormatItem-yMMM": "y年M月",
 	"eraAbbr": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"field-day-relative+2": "å¾Œå¤©",
-	"field-day-relative+3": "å¤§å¾Œå¤©",
-	"dateFormat-long": "yå¹´Mæœˆdæ—¥",
+	"field-day-relative+2": "後天",
+	"field-day-relative+3": "大後天",
+	"dateFormat-long": "y年M月d日",
 	"timeFormat-medium": "ah:mm:ss",
-	"field-zone": "å?€åŸŸ",
+	"field-zone": "區域",
 	"dateFormat-medium": "yyyy/M/d",
 	"quarters-standAlone-wide": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
-	"field-week": "é€±",
-	"timeFormat-long": "zahæ™‚mmåˆ†ssç§’",
-	"dateFormatItem-H": "Hæ™‚",
+	"field-week": "週",
+	"timeFormat-long": "zah時mm分ss秒",
+	"dateFormatItem-H": "H時",
 	"quarters-format-abbr": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
-	"field-second": "ç§’",
-	"dateFormatItem-MEd": "M/dï¼ˆEï¼‰",
+	"field-second": "秒",
+	"dateFormatItem-MEd": "M/d（E）",
 	"dateFormat-short": "yy/M/d",
-	"dateFormatItem-yMMMEd": "yå¹´Mæœˆdæ—¥EEE",
-	"dateFormat-full": "yå¹´Mæœˆdæ—¥EEEE",
+	"dateFormatItem-yMMMEd": "y年M月d日EEE",
+	"dateFormat-full": "y年M月d日EEEE",
 	"dateFormatItem-Md": "M/d",
-	"dateFormatItem-yMEd": "yyyy/M/dï¼ˆEEEï¼‰",
+	"dateFormatItem-yMEd": "yyyy/M/d（EEE）",
 	"quarters-format-wide": [
-		"ç¬¬1å­£",
-		"ç¬¬2å­£",
-		"ç¬¬3å­£",
-		"ç¬¬4å­£"
+		"第1季",
+		"第2季",
+		"第3季",
+		"第4季"
 	],
 	"eraNarrow": [
-		"è¥¿å…ƒå‰?",
-		"è¥¿å…ƒ"
+		"西元前",
+		"西元"
 	],
-	"dateFormatItem-h": "ahæ™‚"
+	"dateFormatItem-h": "ah時"
 }
 //end v1.x content
 );

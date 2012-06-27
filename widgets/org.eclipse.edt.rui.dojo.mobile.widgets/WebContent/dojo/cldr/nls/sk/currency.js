@@ -1,14 +1,14 @@
 define(
 //begin v1.x content
 {
-	"HKD_displayName": "Hong KongskÃ½ dolÃ¡r",
-	"CHF_displayName": "Å vajÄ?iarskÃ½ frank",
-	"CAD_displayName": "KanadskÃ½ dolÃ¡r",
-	"CNY_displayName": "ÄŒÃ­nsky Yuan Renminbi",
-	"AUD_displayName": "AustrÃ¡lsky dolÃ¡r",
-	"JPY_displayName": "JaponskÃ½ yen",
-	"USD_displayName": "US dolÃ¡r",
-	"GBP_displayName": "BritskÃ¡ libra",
+	"HKD_displayName": "Hong Kongský dolár",
+	"CHF_displayName": "Švajčiarský frank",
+	"CAD_displayName": "Kanadský dolár",
+	"CNY_displayName": "Čínsky Yuan Renminbi",
+	"AUD_displayName": "Austrálsky dolár",
+	"JPY_displayName": "Japonský yen",
+	"USD_displayName": "US dolár",
+	"GBP_displayName": "Britská libra",
 	"EUR_displayName": "Euro"
 }
 //end v1.x content

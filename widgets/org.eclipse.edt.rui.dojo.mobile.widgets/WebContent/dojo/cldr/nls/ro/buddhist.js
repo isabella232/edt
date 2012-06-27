@@ -32,7 +32,7 @@ define(
 	],
 	"dateFormatItem-EEEd": "EEE d",
 	"eraNames": [
-		"era budistÄƒ"
+		"era budistă"
 	],
 	"days-standAlone-narrow": [
 		"D",
@@ -89,13 +89,13 @@ define(
 		"e.b."
 	],
 	"days-format-wide": [
-		"duminicÄƒ",
+		"duminică",
 		"luni",
-		"marÈ›i",
+		"marți",
 		"miercuri",
 		"joi",
 		"vineri",
-		"sÃ¢mbÄƒtÄƒ"
+		"sâmbătă"
 	],
 	"dateFormatItem-yQ": "'trimestrul' Q y",
 	"dateFormatItem-yMMM": "MMM y",
@@ -114,7 +114,7 @@ define(
 		"Mi",
 		"Jo",
 		"Vi",
-		"SÃ¢"
+		"Sâ"
 	]
 }
 //end v1.x content

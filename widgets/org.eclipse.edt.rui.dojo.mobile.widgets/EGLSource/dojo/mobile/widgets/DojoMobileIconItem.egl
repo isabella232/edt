@@ -1,24 +1,24 @@
 package dojo.mobile.widgets;
     
 // basic handler   
-ExternalType DojoMobileIconItem extends DojoMobileContainer type JavaScriptObject 
+ExternalType DojoMobileIconItem extends DojoMobileBase type JavaScriptObject 
 // Use Declarations   
 {           
 	relativePath = "dojo/mobile/widgets",
 	ExternalName = "DojoMobileIconItem",
-	@VEWidget{      
-		category = "Mobile",
-		template = "${typeName}{\n" +
-					"\ticon=\"dojo/mobile/images/icon-1.png\",\n" +
-					"\tlabelString=\"icon\"\n"+
-					"\n\t}",
+	@VEWidget{        
+		category = "Mobile",  
+		template = "${typeName}{\n" +   
+					"\timagePath=\"dojo/mobile/images/icon-1.png\",\n" +
+					"\ttext=\"icon\"\n"+
+					"\n\t}", 
 		displayName = "IconItem", 
 		smallIcon   = "icons/ctool16/mobile_iconitem_pal16.gif",
 		largeIcon   = "icons/ctool24/mobile_iconitem_pal24.gif",
 		propertyFilterType = FilterKind.EXCLUDEALLEXCEPT, 
 		propertyFilter = [],
-		eventFilterType  = filterKind.excludeAll,
-		container   = @VEContainer{} 
+		eventFilterType  = filterKind.excludeAllExcept,
+		eventFilter  = ["onClick"]
 	} 
 } 
 	/*

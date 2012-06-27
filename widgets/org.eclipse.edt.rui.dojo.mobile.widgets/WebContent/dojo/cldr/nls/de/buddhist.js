@@ -29,7 +29,7 @@ define(
 	"months-standAlone-abbr": [
 		"Jan",
 		"Feb",
-		"MÃ¤r",
+		"Mär",
 		"Apr",
 		"Mai",
 		"Jun",
@@ -66,7 +66,7 @@ define(
 	"months-format-abbr": [
 		"Jan",
 		"Feb",
-		"MÃ¤r",
+		"Mär",
 		"Apr",
 		"Mai",
 		"Jun",
@@ -98,7 +98,7 @@ define(
 	"months-format-wide": [
 		"Januar",
 		"Februar",
-		"MÃ¤rz",
+		"März",
 		"April",
 		"Mai",
 		"Juni",

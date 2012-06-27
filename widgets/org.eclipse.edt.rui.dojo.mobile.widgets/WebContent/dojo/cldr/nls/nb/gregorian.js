@@ -67,7 +67,7 @@ define(
 		"4. kvartal"
 	],
 	"timeFormat-long": "HH:mm:ss z",
-	"field-year": "Ã¥r",
+	"field-year": "år",
 	"dateFormatItem-yMMM": "MMM y",
 	"dateFormatItem-yQ": "Q yyyy",
 	"dateFormatItem-yyyyMMMM": "MMMM y",
@@ -121,13 +121,13 @@ define(
 	],
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
-		"sÃ¸ndag",
+		"søndag",
 		"mandag",
 		"tirsdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lÃ¸rdag"
+		"lørdag"
 	],
 	"dateFormatItem-yyMMM": "MMM yy",
 	"timeFormat-medium": "HH:mm:ss",
@@ -145,30 +145,30 @@ define(
 	"field-minute": "minutt",
 	"field-dayperiod": "AM/PM",
 	"days-standAlone-abbr": [
-		"sÃ¸n.",
+		"søn.",
 		"man.",
 		"tir.",
 		"ons.",
 		"tor.",
 		"fre.",
-		"lÃ¸r."
+		"lør."
 	],
 	"dateFormatItem-d": "d.",
 	"dateFormatItem-ms": "mm.ss",
-	"field-day-relative+-1": "i gÃ¥r",
-	"field-day-relative+-2": "i forgÃ¥rs",
-	"field-day-relative+-3": "i forforgÃ¥rs",
+	"field-day-relative+-1": "i går",
+	"field-day-relative+-2": "i forgårs",
+	"field-day-relative+-3": "i forforgårs",
 	"dateFormatItem-MMMd": "d. MMM",
 	"dateFormatItem-MEd": "E d.M",
 	"field-day": "dag",
 	"days-format-wide": [
-		"sÃ¸ndag",
+		"søndag",
 		"mandag",
 		"tirsdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lÃ¸rdag"
+		"lørdag"
 	],
 	"field-zone": "sone",
 	"dateFormatItem-y": "y",
@@ -189,13 +189,13 @@ define(
 	"dateFormatItem-yyMM": "MM.yy",
 	"dateFormatItem-hm": "h:mm a",
 	"days-format-abbr": [
-		"sÃ¸n.",
+		"søn.",
 		"man.",
 		"tir.",
 		"ons.",
 		"tor.",
 		"fre.",
-		"lÃ¸r."
+		"lør."
 	],
 	"eraNames": [
 		"f.Kr.",
@@ -210,7 +210,7 @@ define(
 		"F",
 		"L"
 	],
-	"field-month": "mÃ¥ned",
+	"field-month": "måned",
 	"days-standAlone-narrow": [
 		"S",
 		"M",

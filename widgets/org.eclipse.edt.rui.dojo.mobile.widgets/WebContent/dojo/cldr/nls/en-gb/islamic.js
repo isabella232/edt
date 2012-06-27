@@ -43,16 +43,16 @@ define(
 	"months-standAlone-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"eraNames": [
 		"AH"
@@ -80,8 +80,8 @@ define(
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"dateFormatItem-yQQQ": "QQQ y",
 	"dateFormatItem-yyyyMM": "MM/y G",
@@ -91,16 +91,16 @@ define(
 	"months-format-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"dateFormatItem-yM": "M/y",
 	"months-format-abbr": [
@@ -114,8 +114,8 @@ define(
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"eraAbbr": [
 		"AH"

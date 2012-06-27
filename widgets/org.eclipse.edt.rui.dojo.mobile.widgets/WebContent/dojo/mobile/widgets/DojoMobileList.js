@@ -21,7 +21,6 @@ egl.defineWidget(
 	"constructor" : function() {
 		var _this = this;
 		_this.style = "Rounded Rectangle";
-		_this.children = [];
 		_this.acceptChildrenTypes = {
 			"dojo.mobile.widgets.DojoMobileListCategory" : true, 
 			"dojo.mobile.widgets.DojoMobileListItem" : true
@@ -73,6 +72,26 @@ egl.defineWidget(
 				_this.setChildren( _this.children, _this.containerWidget );
 			}
 		);
+	},
+	'setChildren' : function( children, containerWidget ){
+		var _this = this;
+		egl.dojo.mobile.widgets.DojoMobileContainer.prototype.setChildren.call(
+				this, children, containerWidget
+		);
+		if( _this.dojoWidget && _this.children && _this.children.length > 0 )
+			require(
+				["dojo/ready"],
+				function( ready ){
+					ready( 
+						function()
+						{
+							for( var i = 0; i < _this.children.length; ++ i )
+								if( _this.children[i].dojoWidget && _this.children[i].dojoWidget.startup )
+									_this.children[i].dojoWidget.startup();					
+						}
+					);
+				}
+			);
 	},
 	"setStyle" : function(style) {
 		if(this.dojoWidget){

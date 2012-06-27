@@ -75,10 +75,10 @@ define(
 		"dom",
 		"lun",
 		"mar",
-		"miÃ©",
+		"mié",
 		"jue",
 		"vie",
-		"sÃ¡b"
+		"sáb"
 	],
 	"dateFormatItem-M": "L",
 	"dateFormatItem-yMMMd": "d MMM y G",
@@ -106,18 +106,18 @@ define(
 	"dateFormatItem-d": "d",
 	"quarters-format-wide": [
 		"1er trimestre",
-		"2Âº trimestre",
+		"2º trimestre",
 		"3er trimestre",
-		"4Âº trimestre"
+		"4º trimestre"
 	],
 	"days-format-wide": [
 		"domingo",
 		"lunes",
 		"martes",
-		"miÃ©rcoles",
+		"miércoles",
 		"jueves",
 		"viernes",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"dateFormatItem-h": "hh a"
 }

@@ -15,7 +15,7 @@ define(
 		"N",
 		"D"
 	],
-	"field-weekday": "dÃ­a de la semana",
+	"field-weekday": "día de la semana",
 	"dateFormatItem-yyQQQQ": "QQQQ 'de' yy",
 	"dateFormatItem-yQQQ": "QQQ y",
 	"dateFormatItem-yMEd": "EEE d/M/y",
@@ -63,12 +63,12 @@ define(
 	"timeFormat-short": "HH:mm",
 	"quarters-format-wide": [
 		"1er trimestre",
-		"2Âº trimestre",
+		"2º trimestre",
 		"3er trimestre",
-		"4Âº trimestre"
+		"4º trimestre"
 	],
 	"timeFormat-long": "HH:mm:ss z",
-	"field-year": "aÃ±o",
+	"field-year": "año",
 	"dateFormatItem-yMMM": "MMM y",
 	"dateFormatItem-yQ": "Q y",
 	"field-hour": "hora",
@@ -89,9 +89,9 @@ define(
 	"dateFormatItem-yyQ": "Q yy",
 	"timeFormat-full": "HH:mm:ss zzzz",
 	"field-day-relative+0": "hoy",
-	"field-day-relative+1": "maÃ±ana",
-	"field-day-relative+2": "pasado maÃ±ana",
-	"field-day-relative+3": "Dentro de tres dÃ­as",
+	"field-day-relative+1": "mañana",
+	"field-day-relative+2": "pasado mañana",
+	"field-day-relative+3": "Dentro de tres días",
 	"months-standAlone-abbr": [
 		"ene",
 		"feb",
@@ -114,19 +114,19 @@ define(
 	],
 	"quarters-standAlone-wide": [
 		"1er trimestre",
-		"2Âº trimestre",
+		"2º trimestre",
 		"3er trimestre",
-		"4Âº trimestre"
+		"4º trimestre"
 	],
 	"dateFormatItem-M": "L",
 	"days-standAlone-wide": [
 		"domingo",
 		"lunes",
 		"martes",
-		"miÃ©rcoles",
+		"miércoles",
 		"jueves",
 		"viernes",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"dateFormatItem-MMMMd": "d 'de' MMMM",
 	"dateFormatItem-yyMMM": "MMM-yy",
@@ -143,34 +143,34 @@ define(
 		"d.C."
 	],
 	"field-minute": "minuto",
-	"field-dayperiod": "periodo del dÃ­a",
+	"field-dayperiod": "periodo del día",
 	"days-standAlone-abbr": [
 		"dom",
 		"lun",
 		"mar",
-		"miÃ©",
+		"mié",
 		"jue",
 		"vie",
-		"sÃ¡b"
+		"sáb"
 	],
 	"dateFormatItem-d": "d",
 	"dateFormatItem-ms": "mm:ss",
 	"field-day-relative+-1": "ayer",
 	"dateFormatItem-h": "hh a",
 	"field-day-relative+-2": "antes de ayer",
-	"field-day-relative+-3": "Hace tres dÃ­as",
+	"field-day-relative+-3": "Hace tres días",
 	"dateFormatItem-MMMd": "d MMM",
 	"dateFormatItem-MEd": "E, d/M",
 	"dateFormatItem-yMMMM": "MMMM 'de' y",
-	"field-day": "dÃ­a",
+	"field-day": "día",
 	"days-format-wide": [
 		"domingo",
 		"lunes",
 		"martes",
-		"miÃ©rcoles",
+		"miércoles",
 		"jueves",
 		"viernes",
-		"sÃ¡bado"
+		"sábado"
 	],
 	"field-zone": "zona",
 	"dateFormatItem-yyyyMM": "MM/yyyy",
@@ -195,14 +195,14 @@ define(
 		"dom",
 		"lun",
 		"mar",
-		"miÃ©",
+		"mié",
 		"jue",
 		"vie",
-		"sÃ¡b"
+		"sáb"
 	],
 	"eraNames": [
 		"antes de Cristo",
-		"anno DÃ³mini"
+		"anno Dómini"
 	],
 	"days-format-narrow": [
 		"D",

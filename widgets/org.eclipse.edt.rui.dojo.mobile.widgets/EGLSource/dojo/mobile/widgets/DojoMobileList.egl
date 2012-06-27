@@ -24,12 +24,12 @@ ExternalType DojoMobileList extends DojoMobileContainer type JavaScriptObject {
 						"\t\tstyle = ${typeName:dojo.mobile.widgets.DojoMobileLib}.LIST_STYLE_ROUNDED_RECTANGLE,\n" + 
 						"\t\tchildren = [\n" + 
 						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListCategory}{ title = \"Category 1\" },\n" + 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 1\", icon = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 2\", icon = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 3\", icon = \"dojo/mobile/images/i-icon-1.png\" },\n" +
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 1\", imagePath = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 2\", imagePath = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 3\", imagePath = \"dojo/mobile/images/i-icon-1.png\" },\n" +
 						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListCategory}{ title = \"Category 2\" },\n" + 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 4\", icon = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
-						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 5\", icon = \"dojo/mobile/images/i-icon-1.png\" }\n" +  
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 4\", imagePath = \"dojo/mobile/images/i-icon-1.png\" },\n" + 
+						"\t\t\tnew ${typeName:dojo.mobile.widgets.DojoMobileListItem}{ text = \"List Item 5\", imagePath = \"dojo/mobile/images/i-icon-1.png\" }\n" +  
 						"\t\t]\n\t}",
 			displayName = "List",
 			smallIcon = "icons/ctool16/mobile_list_pal16.gif",

@@ -1,24 +1,24 @@
 define(
 //begin v1.x content
 {
-	"field-dayperiod": "ÄŒas dneva",
+	"field-dayperiod": "Čas dneva",
 	"dayPeriods-format-wide-pm": "pop.",
 	"field-minute": "Minuta",
 	"eraNames": [
-		"pred naÅ¡im Å¡tetjem",
-		"naÅ¡e Å¡tetje"
+		"pred našim štetjem",
+		"naše štetje"
 	],
 	"dateFormatItem-MMMEd": "E., d. MMM",
-	"field-day-relative+-1": "VÄ?eraj",
+	"field-day-relative+-1": "Včeraj",
 	"field-weekday": "Dan v tednu",
-	"field-day-relative+-2": "PredvÄ?erajÅ¡njim",
+	"field-day-relative+-2": "Predvčerajšnjim",
 	"field-day-relative+-3": "Pred tremi dnevi",
 	"days-standAlone-wide": [
 		"nedelja",
 		"ponedeljek",
 		"torek",
 		"sreda",
-		"Ä?etrtek",
+		"četrtek",
 		"petek",
 		"sobota"
 	],
@@ -64,28 +64,28 @@ define(
 		"p",
 		"t",
 		"s",
-		"Ä?",
+		"č",
 		"p",
 		"s"
 	],
 	"eraAbbr": [
-		"pr. n. Å¡t.",
+		"pr. n. št.",
 		"po Kr."
 	],
-	"field-day-relative+2": "PojutriÅ¡njem",
-	"field-day-relative+3": "ÄŒez tri dni",
+	"field-day-relative+2": "Pojutrišnjem",
+	"field-day-relative+3": "Čez tri dni",
 	"dateFormatItem-yyyyMMMM": "MMMM y",
 	"dateFormat-long": "dd. MMMM y",
 	"timeFormat-medium": "HH:mm:ss",
-	"field-zone": "ObmoÄ?je",
+	"field-zone": "Območje",
 	"dateFormatItem-Hm": "HH:mm",
 	"dateFormat-medium": "d. MMM yyyy",
 	"dateFormatItem-Hms": "HH:mm:ss",
 	"quarters-standAlone-wide": [
-		"1. Ä?etrtletje",
-		"2. Ä?etrtletje",
-		"3. Ä?etrtletje",
-		"4. Ä?etrtletje"
+		"1. četrtletje",
+		"2. četrtletje",
+		"3. četrtletje",
+		"4. četrtletje"
 	],
 	"dateFormatItem-ms": "mm:ss",
 	"field-year": "Leto",
@@ -134,7 +134,7 @@ define(
 		"pon",
 		"tor",
 		"sre",
-		"Ä?et",
+		"čet",
 		"pet",
 		"sob"
 	],
@@ -144,7 +144,7 @@ define(
 		"p",
 		"t",
 		"s",
-		"Ä?",
+		"č",
 		"p",
 		"s"
 	],
@@ -170,7 +170,7 @@ define(
 		"pon",
 		"tor",
 		"sre",
-		"Ä?et",
+		"čet",
 		"pet",
 		"sob"
 	],
@@ -195,22 +195,22 @@ define(
 		"december"
 	],
 	"quarters-format-wide": [
-		"1. Ä?etrtletje",
-		"2. Ä?etrtletje",
-		"3. Ä?etrtletje",
-		"4. Ä?etrtletje"
+		"1. četrtletje",
+		"2. četrtletje",
+		"3. četrtletje",
+		"4. četrtletje"
 	],
 	"days-format-wide": [
 		"nedelja",
 		"ponedeljek",
 		"torek",
 		"sreda",
-		"Ä?etrtek",
+		"četrtek",
 		"petek",
 		"sobota"
 	],
 	"eraNarrow": [
-		"pr. n. Å¡t.",
+		"pr. n. št.",
 		"po Kr."
 	]
 }

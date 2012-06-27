@@ -7,15 +7,15 @@ define(
 	"scientificFormat": "#E0",
 	"percentFormat": "#,##0%",
 	"list": ";",
-	"infinity": "âˆž",
+	"infinity": "∞",
 	"patternDigit": "#",
 	"minusSign": "-",
 	"decimal": ",",
 	"nan": "NaN",
 	"nativeZeroDigit": "0",
-	"perMille": "â€°",
+	"perMille": "‰",
 	"decimalFormat": "#,##0.###",
-	"currencyFormat": "#,##0.00Â Â¤",
+	"currencyFormat": "#,##0.00 ¤",
 	"plusSign": "+"
 }
 //end v1.x content

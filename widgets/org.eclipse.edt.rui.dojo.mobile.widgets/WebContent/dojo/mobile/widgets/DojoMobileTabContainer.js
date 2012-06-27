@@ -20,17 +20,33 @@ egl.defineWidget(
 {
 	"constructor" : function() {		
 		var _this = this;
-		_this.selection	= 1;
-		_this.acceptChildrenTypes = { 
+		this.selection	= 1;
+		this.acceptChildrenTypes = { 
 			"dojo.mobile.widgets.DojoMobileTab" : true
 		};
-		_this.started = false;
-		_this.segmentedControl = true;
-		_this.children = [];
+		this.started = false;
+		this.segmentedControl = true;
 		require(["dojox/mobile/TabBar"], function(){
 			_this.renderWhenDojoIsDoneLoading();
 		});	
-	},	
+	},
+	"addEventHandlers" : function(){
+		var _this = this;
+		/* @todo: add tab updates to selection in VE
+		require(
+			[
+			 	"dojo/_base/connect"
+			 ],
+			function( connect ){
+				connect.subscribe(
+					_this.dojoWidget.id+"-selectChild", function(child) {
+						alert( "select" );
+						debugger;
+					}
+				);
+			}
+		);*/
+	},
 	"getChildrenLength" : function(){
 		if( this.tabBarWidget ){
 			var btnWidgets = this.tabBarWidget.getChildren();
@@ -269,6 +285,7 @@ egl.defineWidget(
 						
 						// visually select
 						_this.started = true;
+						_this.addEventHandlers();
 					}
 				);
 			}
@@ -398,5 +415,11 @@ egl.defineWidget(
 	},
 	"setTabPosition" : function( newLayout ){
 		this._tabPosition = newLayout;
+	},
+	"getOnTabSelected" : function() { 
+		return this.onTabSelected || (this.onTabSelected = []); 
+	},
+	"setOnTabSelected" : function() { 
+		throw egl.eglx.ui.rui.Widget.ErrorMessageForEventHandlers; 
 	}
 });

@@ -1,20 +1,20 @@
 define(
 //begin v1.x content
 {
-	"group": "Â ",
+	"group": " ",
 	"percentSign": "%",
 	"exponential": "E",
 	"scientificFormat": "#E0",
-	"percentFormat": "#,##0Â %",
+	"percentFormat": "#,##0 %",
 	"list": ";",
-	"infinity": "âˆž",
+	"infinity": "∞",
 	"patternDigit": "#",
 	"minusSign": "-",
 	"decimal": ",",
 	"nativeZeroDigit": "0",
-	"perMille": "â€°",
+	"perMille": "‰",
 	"decimalFormat": "#,##0.###",
-	"currencyFormat": "#,##0.00Â Â¤",
+	"currencyFormat": "#,##0.00 ¤",
 	"plusSign": "+"
 }
 //end v1.x content

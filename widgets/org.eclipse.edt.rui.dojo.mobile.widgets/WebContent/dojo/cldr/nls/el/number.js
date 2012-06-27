@@ -6,14 +6,14 @@ define(
 	"exponential": "e",
 	"percentFormat": "#,##0%",
 	"list": ",",
-	"infinity": "âˆž",
+	"infinity": "∞",
 	"patternDigit": "#",
 	"minusSign": "-",
 	"decimal": ",",
 	"nan": "NaN",
 	"nativeZeroDigit": "0",
-	"perMille": "â€°",
-	"currencyFormat": "#,##0.00Â Â¤",
+	"perMille": "‰",
+	"currencyFormat": "#,##0.00 ¤",
 	"plusSign": "+"
 }
 //end v1.x content

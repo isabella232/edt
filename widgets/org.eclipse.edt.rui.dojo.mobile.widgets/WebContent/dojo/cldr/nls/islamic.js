@@ -33,16 +33,16 @@ define({ root:
 	"months-format-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"dateTimeFormat-medium": "{1} {0}",
 	"dateFormatItem-EEEd": "d EEE",
@@ -55,16 +55,16 @@ define({ root:
 	"months-standAlone-wide": [
 		"Muharram",
 		"Safar",
-		"RabiÊ» I",
-		"RabiÊ» II",
+		"Rabiʻ I",
+		"Rabiʻ II",
 		"Jumada I",
 		"Jumada II",
 		"Rajab",
-		"ShaÊ»ban",
+		"Shaʻban",
 		"Ramadan",
 		"Shawwal",
-		"DhuÊ»l-QiÊ»dah",
-		"DhuÊ»l-Hijjah"
+		"Dhuʻl-Qiʻdah",
+		"Dhuʻl-Hijjah"
 	],
 	"timeFormat-short": "HH:mm",
 	"quarters-format-wide": [
@@ -88,8 +88,8 @@ define({ root:
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"timeFormat-full": "HH:mm:ss zzzz",
 	"dateTimeFormats-appendItem-Week": "{0} ({2}: {1})",
@@ -105,8 +105,8 @@ define({ root:
 		"Sha.",
 		"Ram.",
 		"Shaw.",
-		"DhuÊ»l-Q.",
-		"DhuÊ»l-H."
+		"Dhuʻl-Q.",
+		"Dhuʻl-H."
 	],
 	"quarters-format-abbr": [
 		"Q1",

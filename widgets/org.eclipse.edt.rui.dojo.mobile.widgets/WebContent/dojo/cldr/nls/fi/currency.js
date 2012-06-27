@@ -4,7 +4,7 @@ define(
 	"HKD_displayName": "Hongkongin dollari",
 	"CHF_displayName": "Sveitsin frangi",
 	"CHF_symbol": "CHF",
-	"JPY_symbol": "Â¥",
+	"JPY_symbol": "¥",
 	"CAD_displayName": "Kanadan dollari",
 	"HKD_symbol": "HKD",
 	"CNY_displayName": "Kiinan yuan",

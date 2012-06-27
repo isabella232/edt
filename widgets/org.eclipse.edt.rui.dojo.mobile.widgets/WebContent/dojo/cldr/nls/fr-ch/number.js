@@ -1,7 +1,7 @@
 define(
 //begin v1.x content
 {
-	"currencyFormat": "Â¤Â #,##0.00;Â¤-#,##0.00",
+	"currencyFormat": "¤ #,##0.00;¤-#,##0.00",
 	"group": "'",
 	"decimal": "."
 }

@@ -34,12 +34,16 @@ egl.defineWidget(
 				msgContainerBox = document.createElement("DIV");
 				msgContainerBox.id = "egl-mobile-msg-box";
 				msgContainerBox.style["border"] = "1px solid #555555";
-				msgContainerBox.style["background-color"] = "#E5F3FF";
+				msgContainerBox.style["background"] = "#E5F3FF";
 				msgContainerBox.style["width"] = "90%";
 				msgContainerBox.style["padding"] = "4%";
 				msgContainerBox.style["margin"]  = "5px auto";
+				
 				var bodyEle = document.getElementsByTagName( "body" )[0];
-				bodyEle.appendChild( msgContainerBox );
+				if( bodyEle.firstChild )
+					bodyEle.insertBefore( msgContainerBox, bodyEle.firstChild );
+				else
+					bodyEle.appendChild( msgContainerBox );
 			}
 			msgContainerBox.innerHTML = msgContainerBox.innerHTML ?  (msgContainerBox.innerHTML + "<hr>" + msg) : msg;
 		}
@@ -66,11 +70,11 @@ egl.defineWidget(
 			   egl.println("<font color=red><b>You are using IE6. For performance and security reasons, upgrade your browser from Internet Explorer 6 to a newer version.");
 		}
 		
-		if (!egl.enableEditing && !egl.debugg && egl.contextAware && !egl.dectectWebKit) {
+		if ( !egl.dectectWebKit ) {
 			if( !egl.WebKit )
-				egl.println(
-					"<div style='border: 1px solid #555555; background-color: #E5F3FF; width:700px; padding: 9px;'><b>Warning: </b>You are using non-webkit browser. For performance and stability reasons, please use WebKit kernal browser to render this page.<br>"
-					+ "<hr>This message is only printed in Preview mode, and not when you deploy or debug your application.</div>"
+				this.log(
+					"<b>Warning: </b>You are using non-webkit browser. For performance and stability reasons, please use WebKit kernel browser to render this page.<br>"
+					+ "<hr>This message is only printed in development mode, and not when you deploy application."
 				);			
 			egl.dectectWebKit = true;
 		}

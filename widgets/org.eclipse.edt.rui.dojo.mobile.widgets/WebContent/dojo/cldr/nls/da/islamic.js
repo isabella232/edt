@@ -46,13 +46,13 @@ define(
 		"K4"
 	],
 	"days-format-abbr": [
-		"sÃ¸n",
+		"søn",
 		"man",
 		"tir",
 		"ons",
 		"tor",
 		"fre",
-		"lÃ¸r"
+		"lør"
 	],
 	"dateFormatItem-M": "M",
 	"dateFormatItem-yyyyQQQ": "QQQ y G",
@@ -74,13 +74,13 @@ define(
 		"4. kvartal"
 	],
 	"days-format-wide": [
-		"sÃ¸ndag",
+		"søndag",
 		"mandag",
 		"tirsdag",
 		"onsdag",
 		"torsdag",
 		"fredag",
-		"lÃ¸rdag"
+		"lørdag"
 	]
 }
 //end v1.x content

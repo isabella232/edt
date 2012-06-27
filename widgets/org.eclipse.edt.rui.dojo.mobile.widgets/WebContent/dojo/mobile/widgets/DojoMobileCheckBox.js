@@ -16,7 +16,7 @@
 egl.defineWidget(
 	'dojo.mobile.widgets', 'DojoMobileCheckBox',
 	'dojo.mobile.widgets', 'DojoMobileBase',
-	'div',
+	'span',
 	{
 		"constructor" : function(){
 			var _this = this;
@@ -34,6 +34,7 @@ egl.defineWidget(
 		"createDojoWidget" : function(parent){
 			var _this = this;
 			var inputElement = document.createElement("input");
+			_this.containerNode = parent;
 			_this.dojoWidget = new dojox.mobile.CheckBox(
 					{
 						checked : (_this.selected ? _this.selected : false),
@@ -47,7 +48,19 @@ egl.defineWidget(
 			parent.appendChild(document.createTextNode(text));
 			
 			_this.synchronor.trigger( _this, "SYN_READY" );
-
+			
+			// fix checkbox layout problem
+			_this.dojoWidget.domNode.style["-webkit-transform"] = "none";
+			_this.dojoWidget.domNode.style["marginTop"] = "0";
+			_this.dojoWidget.domNode.style["vertical-align"] = "middle";
+			
+			// fix ugly eze$domElement rewritten problem by default copyAttribute
+			var oldCopyAttribute = _this.copyAttribute;
+			_this.copyAttribute = function(){
+				oldCopyAttribute.apply( _this, arguments );
+				_this.eze$$DOMElement = _this.containerNode;
+			};
+			
 			require( ["dojo/on"], function(on){
 				on( parent, "click", function(evt){
 					if(_this.dojoWidget){

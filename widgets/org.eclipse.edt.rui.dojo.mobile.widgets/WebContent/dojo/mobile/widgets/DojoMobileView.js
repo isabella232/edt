@@ -19,16 +19,19 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		this.backText = "";
-		this.headerTitle = "";
-		this.id = "";
-		this.refs = [];
-		this._containerWidth = '100%';
-		this._scrollBar = true;
-		this._class   = '';
-		this.selected = false;
-		this.toolBar  = null;
 		var _this = this;
+		
+		_this.backText = "";
+		_this.headerTitle = "";
+		_this.id = "";
+		_this.refs = [];
+		_this._containerWidth = '100%';
+		_this._scrollBar = true;
+		_this._class   = '';
+		_this.selected = false;
+		_this.toolBar  = null;
+		_this.children = [];
+		
 		require(
 			[ 
 			  "dojo/mobile/utility/Synchronor",

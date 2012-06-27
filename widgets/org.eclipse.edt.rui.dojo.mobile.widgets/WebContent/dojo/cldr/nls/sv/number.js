@@ -1,21 +1,21 @@
 define(
 //begin v1.x content
 {
-	"group": "Â ",
+	"group": " ",
 	"percentSign": "%",
-	"exponential": "Ã—10^",
+	"exponential": "×10^",
 	"scientificFormat": "#E0",
-	"percentFormat": "#,##0Â %",
+	"percentFormat": "#,##0 %",
 	"list": ";",
-	"infinity": "âˆž",
+	"infinity": "∞",
 	"patternDigit": "#",
-	"minusSign": "âˆ’",
+	"minusSign": "−",
 	"decimal": ",",
-	"nan": "Â¤Â¤Â¤",
+	"nan": "¤¤¤",
 	"nativeZeroDigit": "0",
-	"perMille": "â€°",
+	"perMille": "‰",
 	"decimalFormat": "#,##0.###",
-	"currencyFormat": "#,##0.00Â Â¤",
+	"currencyFormat": "#,##0.00 ¤",
 	"plusSign": "+"
 }
 //end v1.x content
