@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xml:lang="en-us" lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<meta name="DC.Type" content="topic"></meta>
+<meta name="DC.Title" content="DojoMobileButton widget"></meta>
+<meta name="abstract" content="A Dojo mobile button invokes an event handler in response to a user’s click."></meta>
+<meta name="description" content="A Dojo mobile button invokes an event handler in response to a user’s click."></meta>
+<meta name="DC.subject" content="Rich UI, widgets, DojoMobileButton, DojoMobileButton Rich UI widget"></meta>
+<meta name="keywords" content="Rich UI, widgets, DojoMobileButton, DojoMobileButton Rich UI widget"></meta>
+<meta name="DC.Relation" scheme="URI" content="../topics/redt00281.html"></meta>
+<meta name="copyright" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Rights.Owner" content="(C) Copyright 2011, 2012" type="primary"></meta>
+<meta name="DC.Format" content="XHTML"></meta>
+<meta name="DC.Identifier" content="redt00128"></meta>
+<meta name="DC.Language" content="en-us"></meta>
+<link rel="stylesheet" type="text/css" href="../../org.eclipse.edt.core.doc.top/style/commonltr.css"></link>
+<title>DojoMobileButton widget</title>
+</head>
+<body id="redt00128">
+
+
+<h1 class="title topictitle1">DojoMobileButton widget</h1>
+
+
+
+<div class="body"><p class="shortdesc">A Dojo mobile button invokes an event handler in response
+to a user’s click.</p>
+
+<div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
+<dt class="dt dlterm">text</dt>
+
+<dd class="dd">The text label for the button.</dd>
+
+
+
+</dl>
+</div>
+
+<div class="section"><h2 class="title sectiontitle">Example</h2><pre class="pre codeblock">handler MyHandler type RUIhandler{initialUI =[button]}
+
+   button DojoMobileButton{text = "Press this button", 
+      width = "150", margin = 20, onClick ::= myClick};
+
+   function start()
+   end
+
+   function myClick(e Event in)
+      Syslib.writeStdout("Button clicked!");
+      button.text = "Click button";
+    end
+end</pre>
+</div>
+
+<div class="p">Use of this widget requires the following statement:<pre class="pre codeblock">import dojo.mobile.widgets.DojoMobileButton;</pre>
+</div>
+
+</div>
+
+<anchor id="related_links"></anchor>
+
+
+</body>
+</html>

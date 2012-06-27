@@ -148,27 +148,17 @@ Encoding is by the local code page. </td>
 <td class="entry" valign="top" width="18.84057971014493%" headers="d925e54 ">STRING, <p class="p">STRING(<em class="ph i">n</em>)</p>
 </td>
 
-<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of two-byte UNICODE characters.</p>
+<td class="entry" valign="top" width="16.563146997929607%" headers="d925e57 "><p class="p">Number of characters.</p>
 </td>
 
-<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &lt;= 16383; here, <em class="ph i">n</em> represents
+<td class="entry" valign="top" width="17.184265010351968%" headers="d925e63 "><em class="ph i">n</em> &gt;= 1; here, <em class="ph i">n</em> represents
 a limit on length, making STRING(<em class="ph i">n</em>) similar to the SQL VARCHAR
 type.</td>
 
-<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Reference.</td>
+<td class="entry" valign="top" width="23.395445134575567%" headers="d925e66 ">Reference. </td>
 
-<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 ">Encoding is UNICODE; specifically, UTF-16. <div class="p">At
-this writing, the string(<em class="ph i">n</em>) type is not supported for the following
-purposes:<ul class="ul">
-<li class="li">To access a relational database.</li>
-
-<li class="li">To access a host program on IBM i.</li>
-
-<li class="li">To read or write a JSON string in code generated for Java.</li>
-
-</ul>
-</div>
-</td>
+<td class="entry" valign="top" width="24.016563146997928%" headers="d925e69 ">A value of type STRING(<em class="ph i">n</em>) is not padded
+automatically with blanks. The <em class="ph i">n</em> is only a limit.</td>
 
 </tr>
 
@@ -200,9 +190,9 @@ Encoding is UNICODE; specifically, UTF-16. </td>
 <div class="tablenoborder"><table cellpadding="4" cellspacing="0" summary="" id="cedt00020__compat_table" class="table" frame="border" border="1" rules="all">
 <thead class="thead" align="left">
 <tr class="row" valign="bottom">
-<th class="entry" valign="bottom" width="29.145728643216078%" id="d925e307">Platform</th>
+<th class="entry" valign="bottom" width="29.145728643216078%" id="d925e297">Platform</th>
 
-<th class="entry" valign="bottom" width="70.85427135678391%" id="d925e310">Issue</th>
+<th class="entry" valign="bottom" width="70.85427135678391%" id="d925e300">Issue</th>
 
 </tr>
 
@@ -211,9 +201,9 @@ Encoding is UNICODE; specifically, UTF-16. </td>
 <tbody class="tbody">
 <anchor id="compat_rows_start"></anchor>
 <tr id="cedt00020__compat_javascript" class="row">
-<td class="entry" valign="top" width="29.145728643216078%" headers="d925e307 ">JavaScript generation</td>
+<td class="entry" valign="top" width="29.145728643216078%" headers="d925e297 ">JavaScript generation</td>
 
-<td class="entry" valign="top" width="70.85427135678391%" headers="d925e310 ">The reference types STRING and STRING(<em class="ph i">n</em>)
+<td class="entry" valign="top" width="70.85427135678391%" headers="d925e300 ">The reference types STRING and STRING(<em class="ph i">n</em>)
 are the only supported character types. </td>
 
 </tr>
