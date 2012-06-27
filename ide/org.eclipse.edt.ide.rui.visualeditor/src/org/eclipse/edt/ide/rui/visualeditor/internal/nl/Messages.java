@@ -247,6 +247,7 @@ public class Messages {
 	public static String NL_NEVWP_Primitive_Type_Detail_Message_Smallfloat;
 	public static String NL_NEVWP_Primitive_Type_Detail_Message_Smallint;
 	public static String NL_NEVWP_Primitive_Type_Detail_Message_String;
+	public static String NL_NEVWP_Primitive_Type_Detail_Message_Limited_String;
 	public static String NL_NEVWP_Primitive_Type_Detail_Message_Time;
 	public static String NL_NEVWP_Primitive_Type_Detail_Message_Timestamp;
 	public static String NL_NEVWP_Search_DataItem_Group;

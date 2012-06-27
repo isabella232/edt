@@ -74,6 +74,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 	
 	class SupportedPrimitiveType{
 		public static final String STRING = "string";
+		public static final String LIMITED_STRING = "string(n)";
 		public static final String DATE = "date";
 		public static final String TIME = "time";
 		public static final String TIMESTAMP = "timestamp";
@@ -95,8 +96,8 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		this.setTitle(Messages.NL_NEVWP_Title);
 		this.setDescription(Messages.NL_NEVWP_Description);
 		this.evEditor = evEditor;
-		this.supportedPrimitiveTypes = new String[]{SupportedPrimitiveType.STRING, SupportedPrimitiveType.BOOLEAN,
-				SupportedPrimitiveType.DATE, /*SupportedPrimitiveType.TIME,*/ SupportedPrimitiveType.TIMESTAMP,
+		this.supportedPrimitiveTypes = new String[]{SupportedPrimitiveType.STRING, SupportedPrimitiveType.LIMITED_STRING, SupportedPrimitiveType.BOOLEAN,
+				SupportedPrimitiveType.DATE, SupportedPrimitiveType.TIME, SupportedPrimitiveType.TIMESTAMP,
 				SupportedPrimitiveType.SMALLINT, SupportedPrimitiveType.INT, SupportedPrimitiveType.BIGINT,
 				/*SupportedPrimitiveType.BIN,*/ SupportedPrimitiveType.SMALLFLOAT, SupportedPrimitiveType.FLOAT,
 				SupportedPrimitiveType.DECIMAL, /*SupportedPrimitiveType.NUM, SupportedPrimitiveType.MONEY, SupportedPrimitiveType.NUMBER*/};
@@ -399,6 +400,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 			
 			private void updateTypeDetailMessageText(){
 				if(fieldType != null){
+					secondDimensionsText.setVisible(true);
 					if(fieldType.equals(SupportedPrimitiveType.BIGINT)){
 						typeDetailMessageText.setText(Messages.NL_NEVWP_Primitive_Type_Detail_Message_Bigint);
 						disableDimensionsComposite();
@@ -448,6 +450,11 @@ public class NewEGLVariableWizardPage extends WizardPage {
 						typeDetailMessageText.setText(Messages.NL_NEVWP_Primitive_Type_Detail_Message_String);
 						disableDimensionsComposite();
 					}
+					if (fieldType.equals(SupportedPrimitiveType.LIMITED_STRING)) {
+						typeDetailMessageText.setText(Messages.NL_NEVWP_Primitive_Type_Detail_Message_Limited_String);
+						enableDimensionsComposite("1", "");
+						secondDimensionsText.setVisible(false);
+					}
 					if(fieldType.equals(SupportedPrimitiveType.TIME)){
 						typeDetailMessageText.setText(Messages.NL_NEVWP_Primitive_Type_Detail_Message_Time);
 						disableDimensionsComposite();
@@ -476,7 +483,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 		
 			try{
 				int iFirstDim = Integer.parseInt(firstDim);	
-				if(iFirstDim < 0){
+				if (iFirstDim < 0 || firstDim.trim().equals("-0")) {
 					setErrorMessage(Messages.NL_NEVWP_Error_Message_Primitive_Type_Dimensions_Is_None);
 					return false;
 				}
@@ -484,7 +491,7 @@ public class NewEGLVariableWizardPage extends WizardPage {
 				//has secondDimension
 				if(secondDim != null && !secondDim.equals("")){
 					int iSecondDim	= Integer.parseInt(secondDim);
-					if(iSecondDim < 0){
+					if (iSecondDim < 0 || secondDim.trim().equals("-0")) {
 						setErrorMessage(Messages.NL_NEVWP_Error_Message_Primitive_Type_Dimensions_Is_None);
 						return false;
 					}
@@ -517,6 +524,12 @@ public class NewEGLVariableWizardPage extends WizardPage {
 				if(fieldType.equals(SupportedPrimitiveType.NUM)){
 					if((iFirstDim <1 || iFirstDim > 32)){
 						setErrorMessage(Messages.NL_NEVWP_Error_Message_Primitive_Type_Dimensions_Is_Not_Valid);	
+						return false;
+					}
+				}
+				if (fieldType.equals(SupportedPrimitiveType.LIMITED_STRING)) {
+					if ((iFirstDim == 0)) {
+						setErrorMessage(Messages.NL_NEVWP_Error_Message_Primitive_Type_Dimensions_Is_Not_Valid);
 						return false;
 					}
 				}
@@ -610,6 +623,9 @@ public class NewEGLVariableWizardPage extends WizardPage {
 	
 	private void setDefaultFieldName(Text fieldNameText){
 		String tempFieldName = "my" + fieldType;
+		if (fieldType.equals(SupportedPrimitiveType.LIMITED_STRING)) {
+			tempFieldName = tempFieldName.substring(0, tempFieldName.length() - 3);
+		}
 		fieldName = tempFieldName;
 		int i = 0;
 		while(NameFinder.getInstance().isFieldNameExist(fieldName)){
@@ -622,7 +638,11 @@ public class NewEGLVariableWizardPage extends WizardPage {
 	private void updatePreview(){
 		StringBuffer sbPreview = new StringBuffer();
 		if(fieldName != null && fieldType != null){
-			sbPreview.append(fieldName).append(" ").append(fieldType);
+			if (fieldType.equals(SupportedPrimitiveType.LIMITED_STRING)) {
+				sbPreview.append(fieldName).append(" ").append("string");
+			} else {
+				sbPreview.append(fieldName).append(" ").append(fieldType);
+			}
 			if(hasDimensions){
 				sbPreview.append("(");
 				if(firstDimension != null && !firstDimension.equals("")){
