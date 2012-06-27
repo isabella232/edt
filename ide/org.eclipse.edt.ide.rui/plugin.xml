@@ -156,7 +156,8 @@ Register the Preference Pages
             id="org.eclipse.edt.ide.ui.projects.mobileWebServiceClient.widget.libraryProviderContainer">
          <providerRef
                id="org.eclipse.edt.rui.widgets_0.8.1"
-               selected="false">
+               isMandatory="true"
+               selected="true">
          </providerRef>
          <providerRef
                id="org.eclipse.edt.rui.dojo.mobile_0.8.1"
