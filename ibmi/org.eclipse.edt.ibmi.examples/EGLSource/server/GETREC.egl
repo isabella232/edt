@@ -59,13 +59,13 @@ service GETREC
 		return(custs);
 	end
 
-	private function GETREC(CUST CUST[] inout, eof string inout, count decimal( 2, 0 ) inout){
+	private function GETREC(CUST CUST[] inout, eof string(1) inout, count decimal( 2, 0 ) inout){
 		@IBMiProgram {
 			programName = "GETREC",
 			libraryName = "/QSYS.LIB/VARLABXX.LIB",
 			parameterAnnotations = [
 				@StructArray {elementCount = 10,returnCountVariable = count},
-				@StructText {length = 1},
+				null,
 				null
 			]		
 		}
