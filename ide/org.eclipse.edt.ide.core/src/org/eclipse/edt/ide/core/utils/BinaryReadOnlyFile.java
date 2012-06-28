@@ -104,10 +104,12 @@ public class BinaryReadOnlyFile implements IFile {
 			try {
 				zip = new ZipFile(eglarPath.toFile());
 				ZipEntry ze = new ZipEntry(sourcePath);
-				sourceContent = new String(Util.getZipEntryByteContent(ze, zip));
+				sourceContent = new String(Util.getZipEntryByteContent(ze, zip), this.getCharset());
 			} catch (ZipException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
