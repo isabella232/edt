@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.java.templates.eglx.lang;
 
 import java.util.List;
 
-import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.templates.JavaTemplate;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
@@ -21,6 +20,7 @@ import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.NewExpression;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -83,10 +83,10 @@ public class ListTypeTemplate extends JavaTemplate
 		}
 		else if ( expr.getId().equalsIgnoreCase( "appendElement" ) )
 		{
-			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
-				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			Expression arg0 = expr.getArguments().get( 0 );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
 			{
@@ -94,24 +94,27 @@ public class ListTypeTemplate extends JavaTemplate
 			}
 			else
 			{
-				CommonUtilities.genEzeCopyTo(arg0, ctx, out);
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg0 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke( genExpression, arg0, ctx, out );
 				out.print( ", " );
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
 				out.print( ')' );
 			}
 			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
 				out.print( ')' );
 			out.print( ')' );
 		}
 		else if ( expr.getId().equalsIgnoreCase( "insertElement" )
 					|| expr.getId().equalsIgnoreCase( "setElement" ) )
 		{
-			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
-				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			Expression arg0 = expr.getArguments().get( 0 );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
+				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
 			{
@@ -119,14 +122,17 @@ public class ListTypeTemplate extends JavaTemplate
 			}
 			else
 			{
-				CommonUtilities.genEzeCopyTo(arg0, ctx, out);
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg0 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke( genExpression, arg0, ctx, out );
 				out.print( ", " );
 				ctx.invoke( genInstantiation, arg0.getType(), ctx, out );
 				out.print( ')' );
 			}
 			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
 				out.print( ')' );
 			out.print( ", " );
 			ctx.invoke( genExpression, expr.getArguments().get( 1 ), ctx, out );
