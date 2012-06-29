@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 
@@ -44,8 +43,7 @@ public class InvocationExpressionTemplate extends JavaTemplate {
 		// check to see if we are trying to pass a nullable to a non-nullable
 		if (expr.getArguments() != null) {
 			for (int i = 0; i < expr.getArguments().size(); i++) {
-				Expression argExpr = expr.getArguments().get(i);
-				ctx.invoke(genExpression, argExpr, ctx, out, expr.getTarget().getParameters().get(i));
+				ctx.invoke(genExpression, expr.getArguments().get(i), ctx, out, expr.getTarget().getParameters().get(i));
 				if (i < expr.getArguments().size() - 1)
 					out.print(", ");
 			}

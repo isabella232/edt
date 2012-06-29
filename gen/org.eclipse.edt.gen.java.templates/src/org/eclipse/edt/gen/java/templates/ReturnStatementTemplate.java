@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.java.templates;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.ReturnStatement;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
@@ -31,8 +30,7 @@ public class ReturnStatementTemplate extends JavaTemplate {
 		out.print("return");
 		if (stmt.getExpression() != null) {
 			out.print(" ");
-			Expression retExpr = IRUtils.makeExprCompatibleToType(stmt.getExpression(), ((FunctionMember) stmt.getContainer()).getType());
-			ctx.invoke(genExpression, retExpr, ctx, out, (FunctionMember) stmt.getContainer());
+			ctx.invoke(genExpression, IRUtils.makeExprCompatibleToType(stmt.getExpression(), ((FunctionMember) stmt.getContainer()).getType()), ctx, out, (FunctionMember) stmt.getContainer());
 		}
 	}
 }
