@@ -14,5 +14,5 @@ Require-Bundle: org.eclipse.edt.compiler;bundle-version="0.8.1";visibility:=reex
  org.eclipse.edt.gen.java.templates.egl.lang;bundle-version="0.8.1";visibility:=reexport,
  org.eclipse.edt.gen.java.templates.eglx.persistence;bundle-version="0.8.1";visibility:=reexport,
  org.eclipse.edt.gen.java.templates.jee;bundle-version="0.8.1";visibility:=reexport
-BBundle-Vendor: %providerName
+Bundle-Vendor: %providerName
 Bundle-Localization: plugin
