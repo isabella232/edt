@@ -14,10 +14,14 @@ package org.eclipse.edt.gen.java.templates;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class FloatingPointLiteralTemplate extends JavaTemplate {
 
 	public void genExpression(FloatingPointLiteral expr, Context ctx, TabbedWriter out) {
-		out.print(expr.getValue());
+		if (TypeUtils.getTypeKind(expr.getType()) == TypeUtils.TypeKind_SMALLFLOAT)
+			out.print(expr.getValue() + "f");
+		else
+			out.print(expr.getValue());
 	}
 }
