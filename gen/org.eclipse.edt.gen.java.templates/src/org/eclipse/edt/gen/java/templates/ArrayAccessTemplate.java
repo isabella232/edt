@@ -18,6 +18,7 @@ import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -36,7 +37,15 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(temporary + ".set(");
 				ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 				out.print(" - 1, ");
-				CommonUtilities.genEzeCopyTo(arg1, ctx, out);
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg1 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				out.print(temporary + ".get(");
@@ -56,6 +65,11 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(" - 1, ");
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print("), ");
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
 				ctx.invoke(genExpression, arg1, ctx, out);
 				if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 					out.print(".ezeUnbox()");
@@ -68,7 +82,15 @@ public class ArrayAccessTemplate extends JavaTemplate {
 				out.print(" - 1, ");
 				ctx.invoke(genExpression, expr.getArray(), ctx, out);
 				out.print("), ");
-				CommonUtilities.genEzeCopyTo(arg1, ctx, out);
+				out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg1 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(", ");
 				ctx.invoke(genExpression, (Expression) expr, ctx, out);
@@ -83,20 +105,42 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print(" - 1, ");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print("), ");
+			// if we are doing some type of complex assignment, we need to place that in the argument
+			if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+				ctx.invoke(genExpression, expr, ctx, out);
+				out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+			}
 			ctx.invoke(genExpression, arg1, ctx, out);
 			if (CommonUtilities.isBoxedOutputTemp(arg1, ctx))
 				out.print(".ezeUnbox()");
 			out.print(")");
 		} else {
 			// non-nullable array
-			CommonUtilities.genEzeCopyTo(arg1, ctx, out);
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 			// if the parameter is non-nullable but the argument is nullable, we have a special case
 			if (arg1.isNullable() && !CommonUtilities.isBoxedOutputTemp(arg1, ctx)) {
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg1 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(")");
-			} else
+			} else {
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg1 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg1, ctx, out);
+			}
 			out.print(", ");
 			ctx.invoke(genExpression, (Expression) expr, ctx, out);
 			out.print(")");

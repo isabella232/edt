@@ -37,6 +37,11 @@ public class NameTemplate extends JavaTemplate {
 				}
 				out.print(propertyFunction);
 				out.print('(');
+				// if we are doing some type of complex assignment, we need to place that in the argument
+				if (arg2.length() > 3 && arg2.indexOf("=") > 1) {
+					ctx.invoke(genExpression, expr, ctx, out);
+					out.print(arg2.substring(0, arg2.indexOf("=")) + arg2.substring(arg2.indexOf("=") + 1));
+				}
 				ctx.invoke(genExpression, arg1, ctx, out);
 				out.print(')');
 			}
