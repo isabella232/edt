@@ -176,6 +176,9 @@ egl.defineClass(
 	                    	}
 		                    if(encoding === egl.eglx.services.Encoding.NONE){
 		                        if(callbackArgs.length > 0){
+       		                    	if(egl.unboxAny(http.response.body) === null){
+       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+       		                    	}
 		                            callbackArgs[callbackArgs.length-1] = http.response.body;
 		                        }
 		                    }
@@ -185,24 +188,40 @@ egl.defineClass(
                             		if(callbackArgs.length > 1){ 
                             			var argInstances = new Array();
                             			for ( var idx = 0; idx < callbackArgs.length; idx++) {
-                            				argInstances[idx] = new callbackArgs[idx];
+                            				argInstances[idx] = new callbackArgs[idx].eglType;
                             			}
 	                        			expectedResult.result = argInstances;
 	    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
-	    		                    	callbackArgs = expectedResult.result;
+	    		                    	if(expectedResult.result instanceof Array){
+	                            			for ( var idx = 0; idx < callbackArgs.length; idx++) {
+	               		                    	if(egl.unboxAny(expectedResult.result[idx]) === null){
+	               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature);
+	               		                    	}
+	                            				callbackArgs[idx] = expectedResult.result[idx];
+	                            			}
+	    		                    	}
+	    		                    	else{
+		    		                    	callbackArgs = expectedResult.result;
+	    		                    	}
                             		}
                                 	else if(callbackArgs.length == 1){
                                 		//if there is only one return/out 
-                               			expectedResult.result = new callbackArgs[0];
+                               			expectedResult.result = new callbackArgs[0].eglType;
            		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+           		                    	if(egl.unboxAny(expectedResult.result) === null){
+           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+           		                    	}
            		                    	callbackArgs[0] = expectedResult.result;
                                 	}
                             	}
                             	else{
                             		if(callbackArgs.length == 1){
 	                            		//if there is only one return/out 
-                            			var eglObject = new callbackArgs[0];
+                            			var eglObject = new callbackArgs[0].eglType;
 	       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, eglObject, false );
+          		                    	if(egl.unboxAny(eglObject) === null){
+           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+           		                    	}
 	       		                    	callbackArgs[0] = eglObject;
 	                            	}
                             	}
@@ -213,10 +232,12 @@ egl.defineClass(
 		                        	//we're assuming it's never null in xml
 		                        	//then return the record
 		                        	//replace the element in the callbackArgs with the record it returned
-//		                        	callbackArgs[callbackArgs.length-1] = callbackArgs[callbackArgs.length-1](1);
-                        			var eglObject = new callbackArgs[callbackArgs.length-1];
+                        			var eglObject = new callbackArgs[callbackArgs.length-1].eglType;
 		                        	egl.eglx.xml.XmlLib.convertFromXML(http.response.body, eglObject);
-       		                    	callbackArgs[callbackArgs.length-1] = eglObject;
+      		                    	if(egl.unboxAny(eglObject) === null){
+       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature);
+       		                    	}
+		                        	callbackArgs[callbackArgs.length-1] = eglObject;
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding._FORM){
@@ -567,12 +588,24 @@ egl.defineClass(
     }
 });
 
+new egl.eglx.services.ServiceRT();
+egl.eglx.services.ServiceRT["checkSignatureForNull"] = function(eglSignature) {
+	if(eglSignature.charAt(0) !== "?"){
+		throw egl.createRuntimeException("CRRUI2023E", [ fieldInfo.setterFunction ]);
+	}
+};
+
+egl.eglx.services.ServiceRT["checkNull"] = function(fieldInfo) {
+	if(fieldInfo !== null && fieldInfo !== undefined ){
+		egl.eglx.services.ServiceRT.checkSignatureForNull(fieldInfo.eglSignature);
+	}
+	return null;
+};
+
 egl.emptyStateChangeFunction = function() {};
 
-new egl.eglx.services.ServiceRT();
 egl.statefulSessionMap = new Object();
 egl.eze$$SetProxyAuth=null;
-
 egl.eglx.services.createServiceInvocationException = function( /*string*/ messageID, /*string or array*/ inserts )
 {
 	if (typeof(inserts) != "string") {

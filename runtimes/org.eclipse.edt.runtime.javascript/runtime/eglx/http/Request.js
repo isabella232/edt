@@ -6,15 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * IBM Corporation - initial API and implementation
+ *     IBM Corporation - initial API and implementation
  *
- *******************************************************************************/
+*******************************************************************************/
 egl.defineClass('eglx.http', 'Request',
 {
 	'eze$$fileName': 'eglx/http/Request.egl',
 	'eze$$runtimePropertiesFile': 'eglx.http.Request',
 		"constructor": function() {
-			this.eze$$setInitial();
 		}
 		,
 		"eze$$setEmpty": function() {
@@ -59,54 +58,37 @@ egl.defineClass('eglx.http', 'Request',
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("uri", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("uri");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("uri", "uri", "S;", String, annotations);
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("uri", "uri", "?S;", String, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("method", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("method");
-				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("method", "method", "eglx.http.HttpMethod", egl.eglx.http.HttpMethod, annotations);
+				this.fieldInfos[1] =new egl.eglx.services.FieldInfo("method", "method", "?eglx.http.HttpMethod", egl.eglx.http.HttpMethod, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("encoding", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("encoding");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("encoding", "encoding", "eglx.services.Encoding", egl.eglx.services.Encoding, annotations);
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("encoding", "encoding", "?eglx.services.Encoding", egl.eglx.services.Encoding, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("charset", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("charset");
-				this.fieldInfos[3] =new egl.eglx.services.FieldInfo("charset", "charset", "S;", String, annotations);
+				this.fieldInfos[3] =new egl.eglx.services.FieldInfo("charset", "charset", "?S;", String, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("contentType", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("contentType");
-				this.fieldInfos[4] =new egl.eglx.services.FieldInfo("contentType", "contentType", "S;", String, annotations);
+				this.fieldInfos[4] =new egl.eglx.services.FieldInfo("contentType", "contentType", "?S;", String, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("headers", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("headers");
-				this.fieldInfos[5] =new egl.eglx.services.FieldInfo("headers", "headers", "y;", egl.eglx.lang.EDictionary, annotations);
+				this.fieldInfos[5] =new egl.eglx.services.FieldInfo("headers", "headers", "?y;", egl.eglx.lang.EDictionary, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("body", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("body");
-				this.fieldInfos[6] =new egl.eglx.services.FieldInfo("body", "body", "S;", String, annotations);
+				this.fieldInfos[6] =new egl.eglx.services.FieldInfo("body", "body", "?S;", String, annotations);
 			}
 			return this.fieldInfos;
 		}
 		,
 		"toString": function() {
 			return "[Request]";
-		}
-		,
-		"eze$$getName": function() {
-			return "Request";
-		}
-		,
-		"eze$$getChildVariables": function() {
-			var eze$$parent = this;
-			return [
-			{name: "uri", value : eze$$parent.uri, type : "eglx.lang.EString", jsName : "uri"},
-			{name: "method", value : eze$$parent.method, type : "eglx.http.HttpMethod", jsName : "method"},
-			{name: "encoding", value : eze$$parent.encoding, type : "eglx.services.Encoding", jsName : "encoding"},
-			{name: "charset", value : eze$$parent.charset, type : "eglx.lang.EString", jsName : "charset"},
-			{name: "contentType", value : eze$$parent.contentType, type : "eglx.lang.EString", jsName : "contentType"},
-			{name: "headers", value : eze$$parent.headers, type : "eglx.lang.EDictionary", jsName : "headers"},
-			{name: "body", value : eze$$parent.body, type : "eglx.lang.EString", jsName : "body"}
-			];
 		}
 	}
 );

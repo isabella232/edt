@@ -12,7 +12,6 @@
 egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "AnyException", {
 	"eze$$fileName" : "eglx/services/ServiceInvocationException.egl",
 		"constructor": function() {
-			this.eze$$setInitial();
 		}
 		,
 		"ezeCopy": function(source) {
@@ -37,9 +36,9 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "Any
 			var ezert$$1 = this;
 			var ezert$$2 = new egl.eglx.services.ServiceInvocationException();
 			ezert$$2.source = ezert$$1.source === null ? null : ezert$$1.source;
-			ezert$$2.detail1 = ezert$$1.detail1;
-			ezert$$2.detail2 = ezert$$1.detail2;
-			ezert$$2.detail3 = ezert$$1.detail3;
+			ezert$$2.detail1 = ezert$$1.detail1 === null ? null : ezert$$1.detail1;
+			ezert$$2.detail2 = ezert$$1.detail2 === null ? null : ezert$$1.detail2;
+			ezert$$2.detail3 = ezert$$1.detail3 === null ? null : ezert$$1.detail3;
 			return ezert$$2;
 		}
 		,
@@ -58,7 +57,7 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "Any
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("source", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("source");
-				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("source", "source", "eglx.services.ServiceKind", egl.eglx.services.ServiceKind, annotations);
+				this.fieldInfos[0] =new egl.eglx.services.FieldInfo("source", "source", "?eglx.services.ServiceKind", egl.eglx.services.ServiceKind, annotations);
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("detail1", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("detail1");
@@ -77,20 +76,6 @@ egl.defineClass('eglx.services', "ServiceInvocationException", "eglx.lang", "Any
 		,
 		"toString": function() {
 			return "[ServiceInvocationException]";
-		}
-		,
-		"eze$$getName": function() {
-			return "eglx.services.ServiceInvocationException";
-		}
-		,
-		"eze$$getChildVariables": function() {
-			var eze$$parent = this;
-			var childVars = this.eze$$superClass.prototype.eze$$getChildVariables.call(this);
-			childVars.push({name: "source", value : eze$$parent.source, type : "eglx.services.ServiceKind", jsName : "source"});
-			childVars.push({name: "detail1", value : eze$$parent.detail1, type : "eglx.lang.EString", jsName : "detail1"});
-			childVars.push({name: "detail2", value : eze$$parent.detail2, type : "eglx.lang.EString", jsName : "detail2"});
-			childVars.push({name: "detail3", value : eze$$parent.detail3, type : "eglx.lang.EString", jsName : "detail3"});
-			return childVars;
 		}
 	}
 );

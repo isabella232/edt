@@ -259,6 +259,9 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 				jsonObject = egl.eglx.json.$JSONParser[egl.eglx.json.JsonLib.parserType](str);
 			}
 			if (eglObject !== null && typeof eglObject === "object" && typeof jsonObject === "object") {
+				if("eze$$setInitial" in eglObject){
+					eglObject.eze$$setInitial();
+				}
 				this.populateObjectFromJsonObject(jsonObject, eglObject, undefined, cleanDictionary);
 			} else {
 				//throw exception;
@@ -272,10 +275,10 @@ egl.eglx.json.JsonLib["convertFromJSON"] = function( /* String */str, /* egl obj
 	return null;
 };
 egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */jsonObject, /* recordOrDictionary */eglObject, /*FieldInfo*/ fieldInfo, /* boolean */cleanDictionary) {
-	if (jsonObject === undefined || jsonObject === null) {
-		return null;
-	}
 	if (fieldInfo != undefined && fieldInfo != null) {
+		if (jsonObject === null) {
+			return egl.eglx.services.ServiceRT.checkNull(fieldInfo);
+		}
 		var firstCharIdx = 0;
 		var firstChar = fieldInfo.eglSignature.charAt(0);
 		if (firstChar !== '?') {
@@ -339,8 +342,14 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
 		}
 	}
+	if (jsonObject === undefined || jsonObject === null) {
+		return null;
+	}
 	if ((eglObject == undefined || eglObject == null) && fieldInfo != null) {
 		eglObject = new fieldInfo.eglType();
+		if("eze$$setInitial" in eglObject){
+			eglObject.eze$$setInitial();
+		}
 	}
 	if(!(typeof jsonObject === "object" && jsonObject instanceof Array)){
 		if(eglObject !== null && typeof eglObject === "object" && eglObject instanceof egl.eglx.lang.Enumeration){
@@ -462,4 +471,3 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		return '"Cannot toJSONString '+jsonObject;
 	}
 };
-

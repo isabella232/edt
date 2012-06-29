@@ -59,7 +59,7 @@ egl.defineClass('eglx.http', 'HttpRest',
 				annotations = {};
 				annotations["XMLStyle"] = new egl.eglx.xml.binding.annotation.XMLElement("restType", null, false, false);
 				annotations["JsonName"] = new egl.eglx.json.JsonName("restType");
-				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("restType", "restType", "eglx.rest.ServiceType", egl.eglx.rest.ServiceType, annotations);
+				this.fieldInfos[2] =new egl.eglx.services.FieldInfo("restType", "restType", "?eglx.rest.ServiceType", egl.eglx.rest.ServiceType, annotations);
 			}
 			return this.fieldInfos;
 		}
