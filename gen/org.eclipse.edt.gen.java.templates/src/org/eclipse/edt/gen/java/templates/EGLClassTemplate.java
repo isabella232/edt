@@ -179,19 +179,22 @@ public class EGLClassTemplate extends JavaTemplate {
 
 	public void genInitializeMethodBody(EGLClass part, Context ctx, TabbedWriter out) {
 		List<Field> fields = part.getFields();
-		if (fields.size() > 0 && fields.get(0).getInitializerStatements() == null) {
-			// Work around JDT issue - if the first stmt in the initializer won't have an SMAP entry then add one anyway,
+		if (fields.size() > 0) {
+			// Work around JDT issue - if there is at least 1 field without an initializer and at least 1 with, then add smap entry
 			// mapped to the part declaration line.
 			// Otherwise for some reason the stepIntos skip right over the rest of the function. Only do this if there is at
 			// least one initializer statement.
 			boolean hasInit = false;
+			boolean hasNoInit = false;
 			for (Field field : fields) {
-				if (field.getInitializerStatements() != null) {
-					hasInit = true;
-					break;
+				if (!(field instanceof ConstantField)) {
+					if (field.getInitializerStatements() == null)
+						hasNoInit = true;
+					else
+						hasInit = true;
 				}
 			}
-			if (hasInit) {
+			if (hasNoInit && hasInit) {
 				Annotation annotation = part.getAnnotation(IEGLConstants.EGL_LOCATION);
 				if (annotation != null && annotation.getValue(IEGLConstants.EGL_PARTLINE) != null) {
 					ctx.getSmapData().append("" + annotation.getValue(IEGLConstants.EGL_PARTLINE));
@@ -208,24 +211,26 @@ public class EGLClassTemplate extends JavaTemplate {
 		}
 		// now process the fields that don't have initializer statements
 		for (Field field : fields) {
-			if (field.getInitializerStatements() == null) {
+			if (field.getInitializerStatements() == null)
 				ctx.invoke(genInitializeMethod, part, ctx, out, field);
-				ctx.writeSmapLine();
-			}
 		}
 		// now process the fields that do have initializer statements
 		for (Field field : fields) {
 			if (field.getInitializerStatements() != null) {
-				ctx.invoke(genInitializeMethod, part, ctx, out, field);
-				ctx.writeSmapLine();
+				if (field instanceof ConstantField)
+					ctx.invoke(genInitializeMethod, part, ctx, out, field);
+				else {
+					ctx.genSmapEnd(field, out);
+					ctx.invoke(genInitializeMethod, part, ctx, out, field);
+					ctx.writeSmapLine();
+				}
 			}
 		}
 	}
 
 	public void genInitializeMethod(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
-		if (!(arg instanceof ConstantField)) {
+		if (!(arg instanceof ConstantField))
 			ctx.invoke(genInitializeStatement, arg, ctx, out);
-		}
 	}
 
 	public void genGetterSetters(EGLClass part, Context ctx, TabbedWriter out) {
