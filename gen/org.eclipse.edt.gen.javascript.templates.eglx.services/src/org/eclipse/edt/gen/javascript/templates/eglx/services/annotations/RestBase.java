@@ -258,7 +258,7 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 		out.println("], ");
 	}
 
-	private void genCallbackArgs(Function function, Context ctx, TabbedWriter out){
+	protected void genCallbackArgs(Function function, Context ctx, TabbedWriter out){
 		out.print("[");
 		boolean isFirst = true;
 		for(FunctionParameter param : function.getParameters()){
@@ -267,7 +267,15 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 					out.print(", ");
 				
 				//get the temp var name
+				out.print("{");
+				out.print("eglSignature : \"");
+				if(param.isNullable()){
+					out.print("?");
+				}
+				ctx.invoke(genSignature, param.getType(), ctx, out);
+				out.print("\", eglType : ");
 				ctx.invoke(genServiceCallbackArgType, param.getType(), ctx, out);
+				out.print("}");
 				isFirst = false;				
 			}
 		}
@@ -276,7 +284,15 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 				out.print(", ");
 			
 			//get the temp var name
+			out.print("{");
+			out.print("eglSignature : \"");
+			if(function.isNullable()){
+				out.print("?");
+			}
+			ctx.invoke(genSignature, function.getReturnType(), ctx, out);
+			out.print("\", eglType : ");
 			ctx.invoke(genServiceCallbackArgType, function.getReturnType(), ctx, out);
+			out.print("}");
 		}
 		out.println("], ");
 	}
