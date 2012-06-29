@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.NullLiteral;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Record;
 import org.eclipse.edt.mof.egl.ReturnStatement;
@@ -207,14 +208,21 @@ public class RecordTemplate extends JavaTemplate {
 			// otherwise, if a null is passed in as the to arg (2nd) and it doesn't get updated on return
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(arg3);
-			CommonUtilities.genEzeCopyTo(arg2, ctx, out);
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 			// if the parameter is non-nullable but the argument is nullable, we have a special case
 			if (!arg1.isNullable() && arg2.isNullable() && !CommonUtilities.isBoxedOutputTemp(arg2, ctx)) {
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg2 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg2, ctx, out);
 				out.print(")");
-			} else
+			} else {
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (arg2 instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, arg2, ctx, out);
+			}
 			out.print(", ");
 			ctx.invoke(genExpression, arg1, ctx, out);
 			out.print(")");
@@ -231,15 +239,22 @@ public class RecordTemplate extends JavaTemplate {
 			ctx.invoke(genRuntimeTypeName, type, ctx, out, TypeNameKind.JavaPrimitive);
 			out.println(" " + temporary + " = null;");
 			out.print("return (");
-			CommonUtilities.genEzeCopyTo(arg.getExpression(), ctx, out);
+			out.print("org.eclipse.edt.runtime.java.eglx.lang.AnyValue.ezeCopyTo(");
 			Expression returnExpr = IRUtils.makeExprCompatibleToType(arg.getExpression(), ((FunctionMember) arg.getContainer()).getType());
 			// if the parameter is non-nullable but the argument is nullable, we have a special case
 			if (!((FunctionMember) arg.getContainer()).isNullable() && arg.getExpression().isNullable() && !CommonUtilities.isBoxedOutputTemp(arg.getExpression(), ctx)) {
 				out.print("org.eclipse.edt.javart.util.JavartUtil.checkNullable(");
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (returnExpr instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, returnExpr, ctx, out);
 				out.print(")");
-			} else
+			} else {
+				// if this is the null literal, we need to cast this to prevent the javagen ambiguous errors
+				if (returnExpr instanceof NullLiteral)
+					out.print("(eglx.lang.AnyValue) ");
 				ctx.invoke(genExpression, returnExpr, ctx, out);
+			}
 			out.print(", ");
 			out.print(temporary);
 			out.print(")");
