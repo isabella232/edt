@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DojoMobileSwitch widget"></meta>
-<meta name="abstract" content="A Dojo mobile switch"></meta>
-<meta name="description" content="A Dojo mobile switch"></meta>
+<meta name="abstract" content="A Dojo mobile switch displays a rectangular widget with an embedded knob at one side or another. The position of the knob denotes one of two alternative values. The user toggles to a different value by either clicking or dragging the knob."></meta>
+<meta name="description" content="A Dojo mobile switch displays a rectangular widget with an embedded knob at one side or another. The position of the knob denotes one of two alternative values. The user toggles to a different value by either clicking or dragging the knob."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoMobileSwitch, DojoMobileSwitch Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoMobileSwitch, DojoMobileSwitch Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00281.html"></meta>
@@ -26,18 +26,31 @@
 
 
 
-<div class="body"><p class="shortdesc">A Dojo mobile switch</p>
+<div class="body"><p class="shortdesc">A Dojo mobile switch displays a rectangular widget with
+an embedded knob at one side or another. The position of the knob
+denotes one of two alternative values. The user toggles to a different
+value by either clicking or dragging the knob.</p>
 
 <div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
-<dt class="dt dlterm"></dt>
+<dt class="dt dlterm">offText</dt>
 
-<dd class="dd"></dd>
+<dd class="dd">String that is displayed on the knob, when the value of the widget
+is set to false. By default, the string is "Off".</dd>
+
+
+<dt class="dt dlterm">onText</dt>
+
+<dd class="dd">String that is displayed on the knob, when the value of the widget
+is set to true. By default, the string is "On".</dd>
 
 </dl>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">Example</h2></div>
+<div class="section"><h2 class="title sectiontitle">Events</h2><p class="p">The <strong class="ph b">onChange</strong> event fires when
+the user clicks or drags the knob.</p>
+</div>
 
+<div class="section"><h2 class="title sectiontitle">Example</h2></div>
 
 <div class="p">Use of this widget requires a statement like this:<pre class="pre codeblock">import dojo.mobile.widgets.DojoMobileSwitch;</pre>
 </div>

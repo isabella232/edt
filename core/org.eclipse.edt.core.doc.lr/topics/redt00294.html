@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 <meta name="DC.Type" content="topic"></meta>
 <meta name="DC.Title" content="DojoMobileTab widget"></meta>
-<meta name="abstract" content="A Dojo mobile tab"></meta>
-<meta name="description" content="A Dojo mobile tab"></meta>
+<meta name="abstract" content="A Dojo mobile tab displays a tab within a Dojo mobile tab container."></meta>
+<meta name="description" content="A Dojo mobile tab displays a tab within a Dojo mobile tab container."></meta>
 <meta name="DC.subject" content="Rich UI, widgets, DojoMobileTab, DojoMobileTab Rich UI widget"></meta>
 <meta name="keywords" content="Rich UI, widgets, DojoMobileTab, DojoMobileTab Rich UI widget"></meta>
 <meta name="DC.Relation" scheme="URI" content="../topics/redt00281.html"></meta>
@@ -26,18 +26,46 @@
 
 
 
-<div class="body"><p class="shortdesc">A Dojo mobile tab</p>
+<div class="body"><p class="shortdesc">A Dojo mobile tab displays a tab within a Dojo mobile tab
+container.</p>
 
 <div class="section"><h2 class="title sectiontitle">Fields</h2><dl class="dl">
-<dt class="dt dlterm"></dt>
+<dt class="dt dlterm">deSelectedIcon</dt>
 
-<dd class="dd"></dd>
+<dd class="dd">Icon to show on the tab when the tab loses focus. The value is
+optional.</dd>
+
+
+<dt class="dt dlterm">selectedIcon</dt>
+
+<dd class="dd">Icon to show on the tab when the tab gains focus. The value is
+optional, and the icon is displayed only on Android devices.</dd>
+
+
+<dt class="dt dlterm">title</dt>
+
+<dd class="dd">The string that is displayed at the top of the tab. The value
+is optional.</dd>
+
+</dl>
+<p class="p">Other supported fields are described in “Rich UI
+widget fields.”</p>
+</div>
+
+<div class="section"><h2 class="title sectiontitle">Events</h2><dl class="dl">
+<dt class="dt dlterm">onTabSelected</dt>
+
+<dd class="dd">The event that occurs when the tab is selected.</dd>
 
 </dl>
 </div>
 
-<div class="section"><h2 class="title sectiontitle">Example</h2></div>
+<div class="section"><h2 class="title sectiontitle">Functions</h2><p class="p">No functions are specific to this
+widget type. For functions that are typically supported, see "Rich
+UI widget functions."</p>
+</div>
 
+<div class="section"><h2 class="title sectiontitle">Example</h2></div>
 
 <div class="p">Use of this widget requires a statement like this:<pre class="pre codeblock">import dojo.mobile.widgets.DojoMobileTab;</pre>
 </div>
