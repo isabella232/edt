@@ -27,3 +27,5 @@ Export-Package: eglx.http,
  org.eclipse.edt.javart.util.gzip,
  resources,
  resources.edt.binding
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
