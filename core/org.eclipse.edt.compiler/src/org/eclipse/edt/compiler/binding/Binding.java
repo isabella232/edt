@@ -396,4 +396,14 @@ public abstract class Binding implements IBinding {
 	public void clear() {
 		annotations = Collections.EMPTY_LIST;
 	}
+	
+	@Override
+	public String getActualBindingName() {
+		return null;
+	}
+	
+	@Override
+	public String[] getActualBindingPackage() {
+		return null;
+	}
 }

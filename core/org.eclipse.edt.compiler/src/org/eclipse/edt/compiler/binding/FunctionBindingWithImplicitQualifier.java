@@ -284,4 +284,14 @@ public class FunctionBindingWithImplicitQualifier implements IFunctionBinding {
 		return false;
 	}
 
+	@Override
+	public String getActualBindingName() {
+		return null;
+	}
+
+	@Override
+	public String[] getActualBindingPackage() {
+		return null;
+	}
+	
 }

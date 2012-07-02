@@ -236,4 +236,14 @@ public class OverloadedFunctionSet implements IDataBinding {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	@Override
+	public String getActualBindingName() {
+		return null;
+	}
+
+	@Override
+	public String[] getActualBindingPackage() {
+		return null;
+	}
+	
 }

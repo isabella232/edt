@@ -18,7 +18,9 @@ import java.util.Set;
 
 import org.eclipse.edt.compiler.core.ast.FunctionParameter.UseType;
 import org.eclipse.edt.compiler.core.ast.Primitive;
+import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.compiler.internal.core.lookup.System.SystemLibrary;
+import org.eclipse.edt.mof.egl.utils.InternUtil;
 
 
 
@@ -534,5 +536,15 @@ public abstract class PrimitiveTypeBinding extends TypeBinding {
 		
 		return IBinding.NOT_FOUND_BINDING;
 	}
+
+    @Override
+    public String[] getActualBindingPackage() {
+    	return SystemEnvironmentPackageNames.EGLX_LANG;
+    }
+    
+    @Override
+    public String getActualBindingName() {
+    	return InternUtil.intern("e" + getPrimitive().getName());
+    }
 
 }

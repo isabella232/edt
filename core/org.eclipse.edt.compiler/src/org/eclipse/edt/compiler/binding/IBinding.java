@@ -62,4 +62,8 @@ public interface IBinding extends Serializable {
     byte[] getMD5HashKey();
     
     boolean isValidBinding();
+    
+    String getActualBindingName();
+    String[] getActualBindingPackage();
+    
 }

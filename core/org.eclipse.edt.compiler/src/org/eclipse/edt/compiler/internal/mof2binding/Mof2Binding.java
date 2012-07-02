@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.mof2binding;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
@@ -27,7 +28,7 @@ public class Mof2Binding extends Mof2BindingMember {
 	public IPartBinding convert(EObject part) {
 		part.accept(this);
 		IBinding binding = stack.pop();
-		if (binding instanceof PrimitiveTypeBinding) {
+		if (Binding.isValidBinding(binding) && binding.getActualBindingName() != null) {
 			resolvePrimitiveAsExternalTypeBinding = true;
 			part.accept(this);
 			binding = stack.pop();

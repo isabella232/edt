@@ -196,5 +196,16 @@ public class DictionaryBinding extends PartBinding {
     	
     	ORDERINGKIND.setEnvironment(environment);
     }
+    
+    @Override
+    public String getActualBindingName() {
+    	return InternUtil.internCaseSensitive("edictionary");
+    }
+    @Override
+    public String[] getActualBindingPackage() {
+    	return SystemEnvironmentPackageNames.EGLX_LANG;
+    }
+    
+    
     	
 }

@@ -455,4 +455,15 @@ public class NotFoundBinding implements IDataBinding, IFunctionBinding, IPackage
 	public boolean isInstantiable() {
 		return false;
 	}
+	
+	@Override
+	public String getActualBindingName() {
+		return null;
+	}
+
+	@Override
+	public String[] getActualBindingPackage() {
+		return null;
+	}
+
 }
