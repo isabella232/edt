@@ -33,7 +33,7 @@ public class BooleanTypeTemplate extends JavaScriptTemplate {
 	public void genUnaryExpression(EGLClass type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// TODO sbg Confirm with Jeff, possibly incorporate into TypeTypeTemplate.genUnary....
 		out.print(arg.getOperator() + "(");
-		ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+		ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getExpression());
 		out.print(")");
 	}
 
