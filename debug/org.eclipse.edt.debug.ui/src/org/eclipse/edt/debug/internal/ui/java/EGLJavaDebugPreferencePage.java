@@ -273,7 +273,7 @@ public class EGLJavaDebugPreferencePage extends AbstractPreferencePage implement
 			}
 			stepTypeBuf.append( category.getId() );
 			stepTypeBuf.append( '=' );
-			stepTypeBuf.append( category.getStepType().toString() );
+			stepTypeBuf.append( category.getStepType( null ).toString() );
 		}
 		
 		PreferenceUtil.setString( IEGLDebugCoreConstants.PREFERENCE_TYPE_FILTER_ENABLEMENT, enablementBuf.toString() );
@@ -294,7 +294,7 @@ public class EGLJavaDebugPreferencePage extends AbstractPreferencePage implement
 		{
 			this.category = category;
 			this.enabled = category.isEnabled();
-			this.type = category.getStepType();
+			this.type = category.getStepType( null );
 		}
 		
 		void save()
