@@ -61,7 +61,7 @@ plugin@org.eclipse.edt.compiler.tests=v201204101438,:pserver:anonymous@dev.eclip
 
 feature@org.eclipse.edt.jtopen.feature=v201206291352,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.jtopen.feature
 plugin@org.eclipse.edt.gen.java.templates.eglx.jtopen=v201206251415,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.gen.java.templates.eglx.jtopen
-plugin@org.eclipse.edt.runtime.java.jtopen=v201206291352,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
+plugin@org.eclipse.edt.runtime.java.jtopen=v201207021137,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.runtime.java.jtopen
 plugin@org.eclipse.edt.ide.jtopen=v201206291352,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.ide.jtopen
 plugin@org.eclipse.edt.mof.eglx.jtopen=v201206251415,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.eclipse.edt.mof.eglx.jtopen
 plugin@org.jtopen=v201206291352,:pserver:anonymous@dev.eclipse.org:/cvsroot/tools,,org.eclipse.edt/ibmi/org.jtopen
