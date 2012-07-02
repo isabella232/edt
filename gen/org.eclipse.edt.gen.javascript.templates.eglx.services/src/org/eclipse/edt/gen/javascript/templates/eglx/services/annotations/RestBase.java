@@ -275,7 +275,9 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 				ctx.invoke(genSignature, param.getType(), ctx, out);
 				out.print("\", eglType : ");
 				ctx.invoke(genServiceCallbackArgType, param.getType(), ctx, out);
-				out.print("}");
+				out.print(", paramName : \"");
+				ctx.invoke(genName, param, ctx, out);
+				out.print("\"}");
 				isFirst = false;				
 			}
 		}
@@ -292,7 +294,7 @@ public abstract class RestBase extends JavaScriptTemplate implements Constants{
 			ctx.invoke(genSignature, function.getReturnType(), ctx, out);
 			out.print("\", eglType : ");
 			ctx.invoke(genServiceCallbackArgType, function.getReturnType(), ctx, out);
-			out.print("}");
+			out.print(", paramName : \"return\"}");
 		}
 		out.println("], ");
 	}
