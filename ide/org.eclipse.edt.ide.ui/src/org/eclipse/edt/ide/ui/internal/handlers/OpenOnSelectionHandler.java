@@ -44,6 +44,7 @@ import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.utils.BoundNodeLocationUtility;
 import org.eclipse.edt.ide.core.internal.utils.IBoundNodeAddress;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
@@ -152,7 +153,8 @@ public class OpenOnSelectionHandler extends EGLHandler {
 									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
 								}
 								else {
-									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
+									binding = getActualBinding(binding);
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, name, currentFile.getProject());
 									IFile boundFile = null;
 									if(address[0] != null) {
 										boundFile = address[0].getDeclaringFile();
@@ -173,6 +175,33 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							return false;
 						}
 						
+						public boolean visit(org.eclipse.edt.compiler.core.ast.PrimitiveType primitiveType) {
+							IBinding binding = getActualBinding(primitiveType.resolveTypeBinding());
+							if (Binding.isValidBinding(binding)) {
+								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
+								IFile boundFile = null;
+								if(address[0] != null) {
+									boundFile = address[0].getDeclaringFile();
+								}
+								
+								if(boundFile != null) {
+									if (boundFile.getProject() == null 
+											&& boundFile instanceof BinaryReadOnlyFile) {
+										((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
+									}
+								}
+								selectedNodeName[0] = binding.getName();
+							}
+							return false;
+						}
+						
+						private IBinding getActualBinding(IBinding binding) {
+							if (currentFile.getProject() != null && Binding.isValidBinding(binding) && binding.getActualBindingName() != null) {
+								return WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(currentFile.getProject()).getPartBinding(binding.getActualBindingPackage(), binding.getActualBindingName());
+							}
+							return binding;
+						}
+						
 						public boolean visit(FieldAccess fieldAccess){
 							IDataBinding binding = fieldAccess.resolveDataBinding();
 							if(Binding.isValidBinding(binding)) {
@@ -181,7 +210,18 @@ public class OpenOnSelectionHandler extends EGLHandler {
 									localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
 								}
 								else {
-									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, fieldAccess, currentFile.getProject());
+									
+									IFile boundFile = null;
+									if(address[0] != null) {
+										boundFile = address[0].getDeclaringFile();
+									}
+									if(boundFile != null) {
+										if (boundFile.getProject() == null 
+												&& boundFile instanceof BinaryReadOnlyFile) {
+											((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
+										}
+									}
 								}
 								selectedNodeName[0] = fieldAccess.getID();
 							}
@@ -192,7 +232,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
 							if (Binding.isValidBinding(typeBinding)) {
 								if (typeBinding.isPartBinding()) {
-									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
+									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding, stringLiteral, currentFile.getProject());
 								}
 							}
 							return false;
@@ -340,80 +380,4 @@ public class OpenOnSelectionHandler extends EGLHandler {
 		}
 	}
 	
-	class NavigationASTExpressionVisitor extends AbstractASTExpressionVisitor {
-		final String[] selectedNodeName;
-		final IBoundNodeAddress[] address;
-		final int[][] localVariableDefinition;
-		Node boundPart;
-		
-		public NavigationASTExpressionVisitor(String[] selectedNodeName,IBoundNodeAddress[] address,
-				int[][] localVariableDefinition,Node boundPart) {
-			this.selectedNodeName = selectedNodeName;
-			this.address = address;
-			this.localVariableDefinition = localVariableDefinition;
-			this.boundPart = boundPart;
-		}
-		
-		public boolean visit(org.eclipse.edt.compiler.core.ast.File file) {
-			//short circuit here so we do not end up visiting the imports of the file
-			return false;
-		}
-		
-		public boolean visitName(Name name){
-			IBinding binding = name.resolveBinding();
-			if (binding != null && binding != IBinding.NOT_FOUND_BINDING){
-				if(binding.isDataBinding() && IDataBinding.LOCAL_VARIABLE_BINDING == ((IDataBinding) binding).getKind()) {
-					localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-				}
-				else {
-					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-				}
-				selectedNodeName[0] = name.getIdentifier();
-			}				
-			return false;
-		}
-		
-		public boolean visit(FieldAccess fieldAccess){
-			IDataBinding binding = fieldAccess.resolveDataBinding();
-			if(Binding.isValidBinding(binding)) {
-				ITypeBinding type = binding.getType();
-				if(IDataBinding.LOCAL_VARIABLE_BINDING == binding.getKind()) {
-					localVariableDefinition[0] = findLocalVariableDeclaration((LocalVariableBinding) binding, boundPart);
-				}
-				else {
-					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding);
-				}
-				selectedNodeName[0] = fieldAccess.getID();
-			}
-			return false;
-		}
-
-		public boolean visit(StringLiteral stringLiteral){
-			ITypeBinding typeBinding = stringLiteral.resolveTypeBinding();
-			if (Binding.isValidBinding(typeBinding)) {
-				if (typeBinding.isPartBinding()) {
-					address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress((IPartBinding) typeBinding);
-				}
-			}
-			return false;
-		}
-
-		public boolean visit(NestedFunction nestedFunction) {
-			return false;
-		}
-
-		public boolean visit(Constructor constructor) {
-			return false;
-		}
-
-		private int[] findLocalVariableDeclaration(LocalVariableBinding binding, Node boundPart) {
-			final int[][] result = new int[][] {null};
-			LocalVariableDeclarationFinder finder = new LocalVariableDeclarationFinder(binding);
-			boundPart.accept(finder);
-			if(finder.localVariableDeclarationName != null) {
-				result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
-			}
-			return result[0];
-		}
-	}//class NavigationASTExpressionVisitor
 }
