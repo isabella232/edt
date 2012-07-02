@@ -1405,6 +1405,7 @@ public interface IProblemRequestor {
 	// messages for call statement 
 	public static final int DUPE_CALL_OPTION = 6603;
 	public static final int TOO_MANY_ARGS_ON_CALL = 6604;
+	public static final int INVALID_STATMENT = 6605;
 //	public static final int CANT_HAVE_FUNC_INVOC_ARG_ON_CALL = 6605;	
 //	public static final int CANT_HAVE_EXPR_ARG_ON_CALL = 6606;		
 //	public static final int CANT_HAVE_NUMERIC_ARG_ON_CALL = 6607;
