@@ -148,9 +148,8 @@ public class FieldTemplate extends JavaScriptTemplate {
 				out.print("\", ");
 				out.print("\"");
 				ctx.invoke(genName, field, ctx, out);
-				out.print("\", ");
+				out.print("\", \"");
 			}
-			out.print("\"");
 			if(field.isNullable()){
 				out.print("?");
 			}
