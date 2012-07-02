@@ -67,7 +67,7 @@ public class ProjectEnvironmentManager {
         irEnvironments = new HashMap<IProject, ProjectIREnvironment>();
     }
     
-    public ProjectEnvironment getProjectEnvironment(IProject project) {
+    public synchronized ProjectEnvironment getProjectEnvironment(IProject project) {
         ProjectEnvironment result = projectEnvironments.get(project);
         
         if(result == null) {
@@ -89,7 +89,7 @@ public class ProjectEnvironmentManager {
      * @param project  The project.
      * @return the IR environment.
      */
-    protected ProjectIREnvironment getIREnvironment(IProject project) {
+    protected synchronized ProjectIREnvironment getIREnvironment(IProject project) {
     	ProjectIREnvironment env = irEnvironments.get(project);
     	if (env == null) {
     		env = new ProjectIREnvironment();
