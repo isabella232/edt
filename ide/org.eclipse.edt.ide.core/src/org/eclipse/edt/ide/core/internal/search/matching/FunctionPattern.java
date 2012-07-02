@@ -179,8 +179,16 @@ public int matchesFunctionPartType(Name node,IPartBinding partBinding){
 		}
 		if (typeBinding != null && typeBinding != IBinding.NOT_FOUND_BINDING && typeBinding.getKind() == ITypeBinding.FUNCTION_BINDING){
 			IPartBinding pBinding = ((IFunctionBinding)typeBinding).getDeclarer();
-			String[] packageName = pBinding.getPackageName().length > 0 ? pBinding.getPackageName(): null;
-			String partName = pBinding.getCaseSensitiveName() + "." + typeBinding.getCaseSensitiveName();
+			String[] packageName;
+			String partName;
+			if (pBinding != null) {
+				packageName = pBinding.getPackageName().length > 0 ? pBinding.getPackageName(): null;
+				partName = pBinding.getCaseSensitiveName() + "." + typeBinding.getCaseSensitiveName();
+			}
+			else {
+				packageName = null;
+				partName = typeBinding.getCaseSensitiveName();
+			}
 //			if (node.isQualifiedName()){
 //				//see if node is qualified with declaring part
 //				if (pBinding.getName().compareToIgnoreCase(((QualifiedName)node).getQualifier().getIdentifier()) == 0){
