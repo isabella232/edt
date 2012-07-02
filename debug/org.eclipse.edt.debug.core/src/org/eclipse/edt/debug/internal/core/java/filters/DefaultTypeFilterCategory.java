@@ -14,6 +14,7 @@ package org.eclipse.edt.debug.internal.core.java.filters;
 import org.eclipse.edt.debug.core.java.filters.FilterStepType;
 import org.eclipse.edt.debug.core.java.filters.ITypeFilter;
 import org.eclipse.edt.debug.core.java.filters.ITypeFilterCategory;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 
 /**
  * Default implementation of a type filter category.
@@ -138,7 +139,7 @@ public class DefaultTypeFilterCategory implements ITypeFilterCategory
 	}
 	
 	@Override
-	public FilterStepType getStepType()
+	public FilterStepType getStepType( IJavaStackFrame frame )
 	{
 		return stepType;
 	}

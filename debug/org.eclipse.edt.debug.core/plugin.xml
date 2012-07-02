@@ -76,6 +76,7 @@
           visible="true">
     </category>
     <category
+          class="org.eclipse.edt.debug.internal.core.java.filters.JREFilterCategory"
           defaultEnablement="true"
           defaultStepType="return"
           description="%JREFilterDescription"

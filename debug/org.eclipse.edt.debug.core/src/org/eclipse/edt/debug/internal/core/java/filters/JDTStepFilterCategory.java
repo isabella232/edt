@@ -12,6 +12,7 @@
 package org.eclipse.edt.debug.internal.core.java.filters;
 
 import org.eclipse.edt.debug.core.java.filters.FilterStepType;
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
 import org.eclipse.jdt.internal.debug.ui.IJDIPreferencesConstants;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 
@@ -22,7 +23,7 @@ import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 public class JDTStepFilterCategory extends DefaultTypeFilterCategory
 {
 	@Override
-	public FilterStepType getStepType()
+	public FilterStepType getStepType( IJavaStackFrame frame )
 	{
 		if ( JDIDebugUIPlugin.getDefault().getPreferenceStore().getBoolean( IJDIPreferencesConstants.PREF_STEP_THRU_FILTERS ) )
 		{

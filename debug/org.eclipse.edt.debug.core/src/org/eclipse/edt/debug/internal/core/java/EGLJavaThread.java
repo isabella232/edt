@@ -468,7 +468,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 											{
 												if ( TRACE_FILTERS )
 												{
-													System.out.println( "EDT DEBUG: Forcing resume for frame " + topJavaFrame.getReceivingTypeName() //$NON-NLS-1$
+													System.out.println( "EDT DEBUG: Forcing resume for frame " + topJavaFrame.getReferenceType().getName() //$NON-NLS-1$
 															+ "." + topJavaFrame.getName() ); //$NON-NLS-1$
 												}
 												topJavaFrame.resume();
@@ -478,7 +478,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 												if ( TRACE_FILTERS )
 												{
 													System.out.println( "EDT DEBUG: Forcing stepInto for frame " //$NON-NLS-1$
-															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+															+ topJavaFrame.getReferenceType().getName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
 												}
 												topJavaFrame.stepInto();
 											}
@@ -487,7 +487,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 												if ( TRACE_FILTERS )
 												{
 													System.out.println( "EDT DEBUG: Forcing stepReturn for frame " //$NON-NLS-1$
-															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+															+ topJavaFrame.getReferenceType().getName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
 												}
 												topJavaFrame.stepReturn();
 											}
@@ -497,7 +497,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 												if ( TRACE_FILTERS )
 												{
 													System.out.println( "EDT DEBUG: Forcing resume (stepReturn not supported) for frame " //$NON-NLS-1$
-															+ topJavaFrame.getReceivingTypeName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
+															+ topJavaFrame.getReferenceType().getName() + "." + topJavaFrame.getName() ); //$NON-NLS-1$
 												}
 												topJavaFrame.resume();
 											}
@@ -515,7 +515,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 												if ( TRACE_FILTERS )
 												{
 													System.out.println( "EDT DEBUG: Forcing stepInto for EGL frame " //$NON-NLS-1$
-															+ topEGLFrame.getJavaStackFrame().getReceivingTypeName() + "." //$NON-NLS-1$
+															+ topEGLFrame.getJavaStackFrame().getReferenceType().getName() + "." //$NON-NLS-1$
 															+ topEGLFrame.getJavaStackFrame().getName() );
 												}
 												stepInto();
@@ -581,7 +581,7 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 		{
 			if ( filter.filter( frame, target ) )
 			{
-				return filter.getCategory().getStepType();
+				return filter.getCategory().getStepType( frame );
 			}
 		}
 		

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.debug.core.java.filters;
 
+import org.eclipse.jdt.debug.core.IJavaStackFrame;
+
 /**
  * A type filter category represents one or more type filters. When the category is enabled, all its contained filters are checked when suspending to
  * see if we should continue execution. They are contributed via the "org.eclipse.edt.debug.core.typeFilters" extension point.
@@ -90,9 +92,14 @@ public interface ITypeFilterCategory
 	public void setDefaultEnablement( boolean defaultEnablement );
 	
 	/**
+	 * Returns this category's step type. When a frame is being filtered, that frame is passed in for optional step type criteria.
+	 * Null may be passed in when a client is looking for the user-chosen step type and there is no Java frame to be consulted for
+	 * additional criteria.
+	 * 
+	 * @param frame The Java frame that's being filtered, possible null.
 	 * @return this category's step type.
 	 */
-	public FilterStepType getStepType();
+	public FilterStepType getStepType( IJavaStackFrame frame );
 	
 	/**
 	 * Sets this category's step type.
