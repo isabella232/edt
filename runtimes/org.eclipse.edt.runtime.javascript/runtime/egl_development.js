@@ -1886,7 +1886,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 				egl.suspendReason = null;
 				egl.breakpoints = null;
 				egl.nextDebuggerPoll = null;
-				egl.loadIDEURL("___windowClosed", null, true);
+				egl.loadIDEURL("___windowClosed", null, !egl.IE || egl.IEVersion < 9);
 				egl.debugg = false;
 				egl.contextKey = null;
 			}
@@ -1983,4 +1983,14 @@ define(["runtime/edt_runtime_all.js"], function(){
 		}
 		return childVars; 
 	};
+	
+	// If using IE9, disconnect debugger - it's not supported.
+	if (egl.debugg && egl.IE && egl.IEVersion >= 9) {
+		try {
+			egl.cleanupDebug();
+		}
+		catch (e) {
+		}
+		egl.println("<span style=\"color:#ff0000;\">The Rich UI debugger does not support Internet Explorer 9 or later. The debug session has been disconnected. Please use a different browser for debugging the application.</span>");
+	}
 });
