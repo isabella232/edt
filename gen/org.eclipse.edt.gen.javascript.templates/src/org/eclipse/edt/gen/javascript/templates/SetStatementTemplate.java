@@ -24,10 +24,10 @@ public class SetStatementTemplate extends JavaScriptTemplate {
 			for (int j = 0; j < stmt.getStates().size(); j++) {
 				String state = stmt.getStates().get(j);
 				if (state.equalsIgnoreCase("empty")) {
-					ctx.invoke(genExpression, expression, ctx, out);
+					ctx.invoke(genExpression, expression, ctx, out, expression);
 					out.print(".ezeSetEmpty()");
 				} else if (state.equalsIgnoreCase("initial")) {
-					ctx.invoke(genExpression, expression, ctx, out);
+					ctx.invoke(genExpression, expression, ctx, out, expression);
 					out.print(".ezeInitialize()");
 				}
 				if (j < stmt.getStates().size() - 1)

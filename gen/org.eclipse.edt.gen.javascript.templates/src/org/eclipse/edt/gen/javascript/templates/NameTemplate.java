@@ -35,7 +35,7 @@ public class NameTemplate extends JavaScriptTemplate {
 			if (CommonUtilities.isCurrentFunction(ctx, propertyFunction, expr.getNamedElement())) {
 				genAsAssignment = false;
 				if (expr.getQualifier() != null) {
-					ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+					ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 					out.print('.');
 				}
 				else {
@@ -52,7 +52,7 @@ public class NameTemplate extends JavaScriptTemplate {
 					
 					if ( expr.getQualifier() != null )
 					{
-						ctx.invoke( genExpression, expr.getQualifier(), ctx, out );
+						ctx.invoke( genExpression, expr.getQualifier(), ctx, out, expr.getQualifier() );
 						out.print( '.' );
 					}
 					else {

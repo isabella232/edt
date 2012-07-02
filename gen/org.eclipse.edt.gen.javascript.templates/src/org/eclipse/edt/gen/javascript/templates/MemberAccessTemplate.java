@@ -18,7 +18,6 @@ import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MemberAccess;
 import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.Type;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class MemberAccessTemplate extends JavaScriptTemplate {
 
@@ -48,12 +47,7 @@ public class MemberAccessTemplate extends JavaScriptTemplate {
 				ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 			}
 		else {
-			if (TypeUtils.isReferenceType(expr.getQualifier().getType()) || expr.getQualifier().isNullable()) {
-				out.print("egl.checkNull(");
-				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
-				out.print(")");
-			} else
-				ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 			out.print(".");
 			ctx.invoke(genAccessor, expr.getMember(), ctx, out);
 		}

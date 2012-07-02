@@ -23,7 +23,7 @@ public class DelegateInvocationTemplate extends JavaScriptTemplate {
 		IRUtils.makeCompatible(expr);
 		// then process the function invocation
 		if (expr.getQualifier() != null) {
-			ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+			ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 			out.print(".");
 		}
 		ctx.invoke(genExpression, expr.getExpression(), ctx, out);

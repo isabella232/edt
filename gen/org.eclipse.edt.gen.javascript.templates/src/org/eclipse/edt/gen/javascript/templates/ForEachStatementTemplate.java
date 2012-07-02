@@ -25,14 +25,7 @@ public class ForEachStatementTemplate extends JavaScriptTemplate {
 		if (ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel) != null
 			&& ((Boolean) ctx.getAttribute(stmt, org.eclipse.edt.gen.Constants.SubKey_statementNeedsLabel)).booleanValue())
 			out.print(label.getName() + ": ");
-		
-		if(stmt.getDataSource().isNullable()){
-			out.print( "egl.checkNull(" );
-		}
-		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out);
-		if(stmt.getDataSource().isNullable()){
-			out.print( ")" );
-		}
+		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out, stmt.getDataSource());
 		out.print(".forEach(function( ");
 		ctx.invoke(genName, stmt.getDeclarationExpression().getFields().get(0), ctx, out);
 		out.println(" )");

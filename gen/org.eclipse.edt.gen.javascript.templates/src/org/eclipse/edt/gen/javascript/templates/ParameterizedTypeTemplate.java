@@ -40,20 +40,20 @@ public class ParameterizedTypeTemplate extends JavaScriptTemplate {
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 		out.print("(ezeProgram, ");
-		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+		ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 		out.print(", ");
-		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+		ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(0));
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
 
 	public void genUnaryExpression(ParameterizedType type, Context ctx, TabbedWriter out, UnaryExpression arg) {
 		// we only need to check for minus sign and if found, we need to change it to .negate()
 		if (arg.getOperator().equals("-")) {
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getExpression());
 			out.print(".negate()");
 		} else if (arg.getOperator().equals("~")) {
 			out.print("(");
-			ctx.invoke(genExpression, arg.getExpression(), ctx, out);
+			ctx.invoke(genExpression, arg.getExpression(), ctx, out, arg.getExpression());
 			out.print(".negate()");
 			out.print(" - 1)");
 		} else
