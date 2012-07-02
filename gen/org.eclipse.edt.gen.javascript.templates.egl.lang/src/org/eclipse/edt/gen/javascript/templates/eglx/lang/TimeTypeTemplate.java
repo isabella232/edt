@@ -68,9 +68,9 @@ public class TimeTypeTemplate extends JavaScriptTemplate {
 		out.print(ctx.getNativeImplementationMapping((Type) arg.getOperation().getContainer()) + '.');
 		out.print(CommonUtilities.getNativeRuntimeOperationName(arg));
 		out.print("(");
-		ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+		ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 		out.print(", ");
-		ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+		ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));
 		out.print(")" + CommonUtilities.getNativeRuntimeComparisionOperation(arg));
 	}
 

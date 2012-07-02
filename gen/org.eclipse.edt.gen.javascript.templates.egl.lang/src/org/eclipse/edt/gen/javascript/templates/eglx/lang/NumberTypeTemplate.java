@@ -145,9 +145,9 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 	public void genBinaryExpression(Type type, Context ctx, TabbedWriter out, BinaryExpression arg) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
 			out.print(getNativeStringPrefixOperation(arg));
-			ctx.invoke(genExpression, arg.getLHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getLHS(), ctx, out, arg.getOperation().getParameters().get(0));
 			out.print(getNativeStringOperation(arg));
-			ctx.invoke(genExpression, arg.getRHS(), ctx, out);
+			ctx.invoke(genExpression, arg.getRHS(), ctx, out, arg.getOperation().getParameters().get(1));
 			out.print(getNativeStringPostfixOperation(arg));
 		}
 		else

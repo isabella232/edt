@@ -59,10 +59,10 @@ public class ListTypeTemplate extends JavaScriptTemplate {
 //		else 
 		if ( expr.getId().equalsIgnoreCase( "appendElement" ) )
 		{
-			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
-				out.print("egl.checkNull(");
 			Expression arg0 = expr.getArguments().get( 0 );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
+				out.print("egl.checkNull(");
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
 			{
@@ -77,16 +77,16 @@ public class ListTypeTemplate extends JavaScriptTemplate {
 				out.print( ')' );
 			}
 			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
 				out.print( ')' );
 		}
 		else if ( expr.getId().equalsIgnoreCase( "insertElement" )
 					|| expr.getId().equalsIgnoreCase( "setElement" ) )
 		{
-			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
-				out.print("egl.checkNull(");
 			Expression arg0 = expr.getArguments().get( 0 );
+			// if the array is not nullable, make sure we aren't using a nullable element
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
+				out.print("egl.checkNull(");
 			if ( arg0.getType() == null || TypeUtils.isReferenceType( arg0.getType() ) 
 					|| ctx.mapsToPrimitiveType( arg0.getType() ) )
 			{
@@ -101,7 +101,7 @@ public class ListTypeTemplate extends JavaScriptTemplate {
 				out.print( ')' );
 			}
 			// if the array is not nullable, make sure we aren't using a nullable element
-			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable())
+			if (!((ArrayType) expr.getQualifier().getType()).elementsNullable() && arg0.isNullable())
 				out.print( ')' );
 			out.print( ", " );
 			ctx.invoke( genExpression, expr.getArguments().get( 1 ), ctx, out );
