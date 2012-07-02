@@ -17,6 +17,7 @@ import java.net.UnknownHostException;
 import org.eclipse.edt.ide.rui.actions.ActionLaunchExternalBrowser;
 import org.eclipse.edt.ide.rui.visualeditor.internal.actions.EvActionPreferences;
 import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Tooltips;
+import org.eclipse.edt.ide.rui.visualeditor.internal.util.BrowserManager;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -52,6 +53,7 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 	protected ToolItem		_itemLaunchExternalBrowser	= null;
 	protected ToolItem		_itemPreferences			= null;
 	protected ToolItem		_itemRefreshWebPage			= null;
+	protected ToolItem		_itemBrowserInfo			= null;
 	protected EvPreviewPage	_pagePreview				= null;
 	protected ToolBar		_toolbar					= null;
 	
@@ -78,6 +80,7 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 		gridData = new GridData( GridData.HORIZONTAL_ALIGN_END );
 		_toolbar.setLayoutData( gridData );
 		
+		_itemBrowserInfo = createBrowserInfo();
 		_itemLaunchExternalBrowser = createExternalBrowser();
 		_itemPreferences = createPreferences();
 		_itemRefreshWebPage = createRefreshWebPage();
@@ -87,6 +90,14 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 		EvHelp.setHelp( _toolbar, EvHelp.PREVIEW_TOOLBAR );
 		for( int i = 0; i < _toolbar.getItemCount(); ++i )
 			EvHelp.setHelp( _toolbar.getItem( i ).getControl(), EvHelp.PREVIEW_TOOLBAR );
+	}
+	
+	protected ToolItem createBrowserInfo() {
+		ToolItem item = new ToolItem( _toolbar, SWT.PUSH | SWT.FLAT );
+		item.setImage( Activator.getImage( EvConstants.ICON_USER_AGENT ) );
+		item.addSelectionListener( this );
+		item.setToolTipText( Tooltips.NL_User_agent );
+		return item;
 	}
 	
 	/**
@@ -186,6 +197,12 @@ public class EvPreviewToolbar extends Composite implements SelectionListener {
 			// to present the tool bar help
 			//-----------------------------------
 			_itemLaunchExternalBrowser.getParent().setFocus();
+		}
+		
+		// Display browser information
+		//------------------------
+		else if( event.widget == _itemBrowserInfo ) {
+			BrowserManager.getInstance().displayBrowserInfo(_pagePreview.getBrowser());
 		}
 	}
 }

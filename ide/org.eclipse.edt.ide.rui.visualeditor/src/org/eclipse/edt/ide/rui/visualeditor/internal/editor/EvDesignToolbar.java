@@ -20,6 +20,7 @@ import org.eclipse.edt.ide.rui.visualeditor.internal.nl.Tooltips;
 import org.eclipse.edt.ide.rui.visualeditor.internal.preferences.EvPreferences;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.BidiFormat;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.BidiUtils;
+import org.eclipse.edt.ide.rui.visualeditor.internal.util.BrowserManager;
 import org.eclipse.edt.ide.rui.visualeditor.internal.util.TranslationTestMode;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -51,6 +52,7 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 	protected ToolItem		_itemTransparencyDisabled		= null;
 	protected ToolItem		_itemTransparencyFixed			= null;
 	protected ToolItem		_itemTransparencyVariable		= null;
+	protected ToolItem		_itemBrowserInfo				= null;
 	protected Label			_labelTransparencyPercent		= null;
 	protected EvDesignPage	_pageDesign						= null;
 	protected Slider		_sliderTransparencyAmount		= null;
@@ -120,7 +122,7 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 		Label label = new Label( this, SWT.NULL );
 		GridData gridData = new GridData( GridData.GRAB_HORIZONTAL );
 		label.setLayoutData( gridData );
-
+		
 		// 2
 		createTransparencyComposite( this );
 
@@ -134,7 +136,8 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 		ToolBar toolbar = new ToolBar( this, SWT.HORIZONTAL | SWT.FLAT );
 		gridData = new GridData( GridData.HORIZONTAL_ALIGN_END );
 		toolbar.setLayoutData( gridData );
-
+		
+		_itemBrowserInfo = createBrowserInfo( toolbar );
 		_itemShowTransparencyControls = createShowTransparencyControls( toolbar );
 		_itemShowBrowserSizeControls = createShowBrowserSizeControls( toolbar );
 
@@ -166,6 +169,14 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 
 		EvHelp.setHelp( _buttonOverlayOnTop, EvHelp.DESIGN_TOOLBAR );
 		EvHelp.setHelp( _buttonBrowserOnTop, EvHelp.DESIGN_TOOLBAR );
+	}
+	
+	protected ToolItem createBrowserInfo( ToolBar toolbar ) {
+		ToolItem item = new ToolItem( toolbar, SWT.PUSH | SWT.FLAT );
+		item.setImage( Activator.getImage( EvConstants.ICON_USER_AGENT ) );
+		item.addSelectionListener( this );
+		item.setToolTipText( Tooltips.NL_User_agent );
+		return item;
 	}
 
 	// IBM BIDI Append Start
@@ -463,6 +474,12 @@ public class EvDesignToolbar extends Composite implements SelectionListener, IPr
 			_buttonOverlayOnTop.setEnabled( true );
 			_buttonBrowserOnTop.setEnabled( false );
 			_pageDesign.setDesignMode( false );
+		}
+		
+		// Display browser information
+		//------------------------
+		else if( event.widget == _itemBrowserInfo ) {
+			BrowserManager.getInstance().displayBrowserInfo(_pageDesign.getBrowser());
 		}
 	}
 }
