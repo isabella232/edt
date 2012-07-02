@@ -177,7 +177,7 @@ egl.defineClass(
 		                    if(encoding === egl.eglx.services.Encoding.NONE){
 		                        if(callbackArgs.length > 0){
        		                    	if(egl.unboxAny(http.response.body) === null){
-       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
        		                    	}
 		                            callbackArgs[callbackArgs.length-1] = http.response.body;
 		                        }
@@ -195,7 +195,7 @@ egl.defineClass(
 	    		                    	if(expectedResult.result instanceof Array){
 	                            			for ( var idx = 0; idx < callbackArgs.length; idx++) {
 	               		                    	if(egl.unboxAny(expectedResult.result[idx]) === null){
-	               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature);
+	               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature, callbackArgs[idx].paramName);
 	               		                    	}
 	                            				callbackArgs[idx] = expectedResult.result[idx];
 	                            			}
@@ -209,7 +209,7 @@ egl.defineClass(
                                			expectedResult.result = new callbackArgs[0].eglType;
            		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
            		                    	if(egl.unboxAny(expectedResult.result) === null){
-           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
            		                    	}
            		                    	callbackArgs[0] = expectedResult.result;
                                 	}
@@ -220,7 +220,7 @@ egl.defineClass(
                             			var eglObject = new callbackArgs[0].eglType;
 	       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, eglObject, false );
           		                    	if(egl.unboxAny(eglObject) === null){
-           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
            		                    	}
 	       		                    	callbackArgs[0] = eglObject;
 	                            	}
@@ -235,7 +235,7 @@ egl.defineClass(
                         			var eglObject = new callbackArgs[callbackArgs.length-1].eglType;
 		                        	egl.eglx.xml.XmlLib.convertFromXML(http.response.body, eglObject);
       		                    	if(egl.unboxAny(eglObject) === null){
-       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature);
+       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature, callbackArgs[callbackArgs.length-1].paramName);
        		                    	}
 		                        	callbackArgs[callbackArgs.length-1] = eglObject;
 		                        }
@@ -589,15 +589,15 @@ egl.defineClass(
 });
 
 new egl.eglx.services.ServiceRT();
-egl.eglx.services.ServiceRT["checkSignatureForNull"] = function(eglSignature) {
+egl.eglx.services.ServiceRT["checkSignatureForNull"] = function(eglSignature, fieldName) {
 	if(eglSignature.charAt(0) !== "?"){
-		throw egl.createRuntimeException("CRRUI2023E", [ fieldInfo.setterFunction ]);
+		throw egl.createRuntimeException("CRRUI2023E", [ fieldName ]);
 	}
 };
 
 egl.eglx.services.ServiceRT["checkNull"] = function(fieldInfo) {
 	if(fieldInfo !== null && fieldInfo !== undefined ){
-		egl.eglx.services.ServiceRT.checkSignatureForNull(fieldInfo.eglSignature);
+		egl.eglx.services.ServiceRT.checkSignatureForNull(fieldInfo.eglSignature, fieldInfo.setterFunction);
 	}
 	return null;
 };
