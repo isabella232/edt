@@ -1671,7 +1671,7 @@ define(["runtime/edt_runtime_all.js"], function(){
 						this.extrainfo += ";";
 					}
 				}
-				if ( this.package == "dojo.widgets" && this.type == "DojoTabContainer" ) {
+                if ( (this.package == "dojo.widgets" && this.type == "DojoTabContainer") || (this.package == "dojo.mobile.widgets" && this.type == "DojoMobileTabContainer")) {
 					var tabContainer =  ele.eze$$DOMElement;
 					if ( tabContainer["children"].length > 0 ) {
 						var tabs = tabContainer.children[0];
