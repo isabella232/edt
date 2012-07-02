@@ -62,12 +62,6 @@ import org.eclipse.edt.compiler.internal.core.validation.ProgramParameterValidat
 		
 		public boolean visit(final CallStatement callStatement) {
 
-			//Do not need to validate calls to service functions..this is validated elsewhere		
-			ITypeBinding targetType = callStatement.getInvocationTarget().resolveTypeBinding();
-			if (Binding.isValidBinding(targetType) && (targetType.getKind() == ITypeBinding.FUNCTION_BINDING || targetType.getKind() == ITypeBinding.DELEGATE_BINDING)) { 
-				return false;				
-			}
-			
 			//check for 'any' argument or setValues arguments
 			
 			if(callStatement.hasArguments()) {
