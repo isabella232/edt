@@ -13,8 +13,8 @@ package org.eclipse.edt.ide.rui.visualeditor.internal.preferences;
 
 import java.util.StringTokenizer;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
+import org.eclipse.edt.ide.rui.visualeditor.internal.util.BrowserManager;
 import org.eclipse.edt.ide.rui.visualeditor.plugin.Activator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.RGB;
@@ -156,7 +156,7 @@ public class EvPreferences {
 		_preferenceStore.setDefault( EvConstants.PREFERENCE_PATTERN_DROP_LOCATION_SELECTED, EvConstants.PREFERENCE_DEFAULT_PATTERN_DROP_LOCATION_SELECTED );
 		_preferenceStore.setDefault( EvConstants.PREFERENCE_PATTERN_SELECTION, EvConstants.PREFERENCE_DEFAULT_PATTERN_SELECTION );
 		_preferenceStore.setDefault( EvConstants.PREFERENCE_PERFORMANCE, EvConstants.PREFERENCE_DEFAULT_PERFORMANCE );
-		_preferenceStore.setDefault( EvConstants.PREFERENCE_RENDERENGINE, EvConstants.PREFERENCE_RENDERENGINE_DEFAULT );
+		_preferenceStore.setDefault( EvConstants.PREFERENCE_RENDERENGINE, BrowserManager.getInstance().getDefaultRenderEngine() );
 		_preferenceStore.setDefault( EvConstants.PREFERENCE_PROMPT_FOR_A_NEW_WIDGET_NAME, EvConstants.PREFERENCE_DEFAULT_PROMPT_FOR_A_NEW_WIDGET_NAME );
 
 		// IBMBIDI Append Start
@@ -242,7 +242,7 @@ public class EvPreferences {
 		// Render Engine
 		//------------
 		if( _preferenceStore.contains( EvConstants.PREFERENCE_RENDERENGINE ) == false )
-			setInt( EvConstants.PREFERENCE_RENDERENGINE, EvConstants.PREFERENCE_DEFAULT_RENDERENGINE );
+			setInt( EvConstants.PREFERENCE_RENDERENGINE, BrowserManager.getInstance().getDefaultRenderEngine() );
 
 		// Widget creation
 		//----------------

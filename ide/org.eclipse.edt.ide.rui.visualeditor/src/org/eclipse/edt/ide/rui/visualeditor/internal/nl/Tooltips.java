@@ -44,6 +44,7 @@ public class Tooltips extends NLS {
 	public static String	NL_Show_the_web_page_in_an_external_web_browser;
 	public static String	NL_Show_transparency_controls;
 	public static String	NL_Variable_transparency;
+	public static String	NL_User_agent;
 
 	// Design page
 	//------------

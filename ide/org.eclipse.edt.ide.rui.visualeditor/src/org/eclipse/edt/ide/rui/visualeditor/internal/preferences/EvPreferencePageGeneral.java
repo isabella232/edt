@@ -52,10 +52,10 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 	protected Button				_radioEditorTabSource				= null;
 	protected Button				_radioOptimizeResources				= null;
 	protected Button				_radioOptimizeSpeed					= null;
-	protected Button				_radioRenderEngineDefault			= null;
 	protected Button				_radioRenderEngineWebKit			= null;
 	protected Button				_radioRenderEngineXULRunner			= null;
 	protected Button				_radioRenderEngineIE				= null;
+	protected Button				_radioRenderEngineUserConfigured	= null;
 	protected Button				_radioTransparencyNone				= null;
 	protected Button				_radioTransparencyFixed				= null;
 	protected Button				_radioTransparencyVariable			= null;
@@ -294,32 +294,38 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		groupRenderEngineTab.setLayout( gridLayout );
 		groupRenderEngineTab.setText( Messages.NL_VisualEditor_RenderEngion );
 		
-		_radioRenderEngineDefault = new Button( groupRenderEngineTab, SWT.RADIO );
-		gridData = new GridData();
-		gridData.horizontalIndent = 16;
-		_radioRenderEngineDefault.setLayoutData( gridData );
-		_radioRenderEngineDefault.setText( Messages.NL_VisualEditor_RenderEngion_DEFAULT );
-
-		if (BrowserManager.getInstance().ECLIPSE_37 ) {
-			_radioRenderEngineWebKit = new Button( groupRenderEngineTab, SWT.RADIO );
+		// Do not display xulrunner or webkit for win64 - only IE will work.
+		if (!Platform.getOSArch().equals(Platform.ARCH_X86_64) || !Platform.getOS().equals(Platform.OS_WIN32)) {
+			// Webkit is only for Eclipse 3.7 or later
+			if (!BrowserManager.getInstance().ECLIPSE_36) {
+				_radioRenderEngineWebKit = new Button( groupRenderEngineTab, SWT.RADIO );
+				gridData = new GridData();
+				gridData.horizontalIndent = 16;
+				_radioRenderEngineWebKit.setLayoutData( gridData );
+				_radioRenderEngineWebKit.setText( Messages.NL_VisualEditor_RenderEngion_WEBKIT );
+			}
+			
+			_radioRenderEngineXULRunner = new Button( groupRenderEngineTab, SWT.RADIO );
 			gridData = new GridData();
 			gridData.horizontalIndent = 16;
-			_radioRenderEngineWebKit.setLayoutData( gridData );
-			_radioRenderEngineWebKit.setText( Messages.NL_VisualEditor_RenderEngion_WEBKIT );
+			_radioRenderEngineXULRunner.setLayoutData( gridData );
+			_radioRenderEngineXULRunner.setText( Messages.NL_VisualEditor_RenderEngion_XULRUNNER );
 		}
-		
-		_radioRenderEngineXULRunner = new Button( groupRenderEngineTab, SWT.RADIO );
-		gridData = new GridData();
-		gridData.horizontalIndent = 16;
-		_radioRenderEngineXULRunner.setLayoutData( gridData );
-		_radioRenderEngineXULRunner.setText( Messages.NL_VisualEditor_RenderEngion_XULRUNNER );
 
-		if (Platform.getOS().equals(Platform.OS_WIN32) ) {
+		if (Platform.getOS().equals(Platform.OS_WIN32)) {
 			_radioRenderEngineIE = new Button( groupRenderEngineTab, SWT.RADIO );
 			gridData = new GridData();
 			gridData.horizontalIndent = 16;
 			_radioRenderEngineIE.setLayoutData( gridData );
 			_radioRenderEngineIE.setText( Messages.NL_VisualEditor_RenderEngion_IE );
+		}
+		
+		if (Platform.OS_LINUX.equals(Platform.getOS())) {
+			_radioRenderEngineUserConfigured = new Button( groupRenderEngineTab, SWT.RADIO );
+			gridData = new GridData();
+			gridData.horizontalIndent = 16;
+			_radioRenderEngineUserConfigured.setLayoutData( gridData );
+			_radioRenderEngineUserConfigured.setText( Messages.NL_VisualEditor_RenderEngion_USER_CONFIGURED );
 		}
 
 		// Reflect the current preference
@@ -327,8 +333,10 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		int iTabIndex = EvPreferences.getInt( EvConstants.PREFERENCE_RENDERENGINE );
 
 		switch( iTabIndex ){
-			case EvConstants.PREFERENCE_RENDERENGINE_DEFAULT:
-				_radioRenderEngineDefault.setSelection( true );
+			case EvConstants.PREFERENCE_RENDERENGINE_USER_CONFIGURED:
+				if (_radioRenderEngineUserConfigured != null) {
+					_radioRenderEngineUserConfigured.setSelection( true );
+				}
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_WEBKIT:
@@ -338,7 +346,9 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER:
-				_radioRenderEngineXULRunner.setSelection( true );
+				if (_radioRenderEngineXULRunner != null) {
+					_radioRenderEngineXULRunner.setSelection( true );
+				}
 				break;
 
 			case EvConstants.PREFERENCE_RENDERENGINE_IE:
@@ -348,7 +358,9 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 				break;
 
 			default:
-				_radioRenderEngineDefault.setSelection( true );
+				if (_radioRenderEngineUserConfigured != null) {
+					_radioRenderEngineUserConfigured.setSelection( true );
+				}
 		}
 	}
 	
@@ -575,13 +587,18 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 
 		// Render Engine
 		//------------
-		_radioRenderEngineDefault.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_DEFAULT );
-		if ( _radioRenderEngineWebKit != null ) {
-			_radioRenderEngineWebKit.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT );
+		int defaultBrowser = BrowserManager.getInstance().getDefaultRenderEngine();
+		if (_radioRenderEngineUserConfigured != null) {
+			_radioRenderEngineUserConfigured.setSelection( defaultBrowser == EvConstants.PREFERENCE_RENDERENGINE_USER_CONFIGURED );
 		}
-		_radioRenderEngineXULRunner.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER );
+		if ( _radioRenderEngineWebKit != null ) {
+			_radioRenderEngineWebKit.setSelection( defaultBrowser == EvConstants.PREFERENCE_RENDERENGINE_WEBKIT );
+		}
+		if (_radioRenderEngineXULRunner != null) {
+			_radioRenderEngineXULRunner.setSelection( defaultBrowser == EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER );
+		}
 		if ( _radioRenderEngineIE != null ) {
-			_radioRenderEngineIE.setSelection( EvConstants.PREFERENCE_DEFAULT_RENDERENGINE == EvConstants.PREFERENCE_RENDERENGINE_IE );
+			_radioRenderEngineIE.setSelection( defaultBrowser == EvConstants.PREFERENCE_RENDERENGINE_IE );
 		}
 
 		// Widget name
@@ -678,11 +695,11 @@ public class EvPreferencePageGeneral extends Composite implements SelectionListe
 		//------------
 		iValue = 0;
 
-		if( _radioRenderEngineDefault.getSelection() == true )
-			iValue = EvConstants.PREFERENCE_RENDERENGINE_DEFAULT;
+		if( _radioRenderEngineUserConfigured != null && _radioRenderEngineUserConfigured.getSelection() == true )
+			iValue = EvConstants.PREFERENCE_RENDERENGINE_USER_CONFIGURED;
 		else if( _radioRenderEngineWebKit != null && _radioRenderEngineWebKit.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_WEBKIT;
-		else if( _radioRenderEngineXULRunner.getSelection() == true )
+		else if( _radioRenderEngineXULRunner != null && _radioRenderEngineXULRunner.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_XULRUNNER;
 		else if( _radioRenderEngineIE != null && _radioRenderEngineIE.getSelection() == true )
 			iValue = EvConstants.PREFERENCE_RENDERENGINE_IE;

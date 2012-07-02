@@ -115,7 +115,7 @@ public class Messages {
 	public static String	NL_Vertical;
 	public static String	NL_Widget_creation;
 	public static String	NL_VisualEditor_RenderEngion;
-	public static String	NL_VisualEditor_RenderEngion_DEFAULT;
+	public static String	NL_VisualEditor_RenderEngion_USER_CONFIGURED;
 	public static String	NL_VisualEditor_RenderEngion_WEBKIT;
 	public static String	NL_VisualEditor_RenderEngion_XULRUNNER;
 	public static String	NL_VisualEditor_RenderEngion_IE;
@@ -273,4 +273,9 @@ public class Messages {
 	public static String NL_GLWCMA_Delete;
 	public static String NL_GLWCMA_Delete_Row;
 	public static String NL_GLWCMA_Delete_Column;
+	
+	// User agent dialog
+	//------------------------------------------------
+	public static String NL_User_Agent_Title;
+	public static String NL_User_Agent_Error_Retrieving;
 }

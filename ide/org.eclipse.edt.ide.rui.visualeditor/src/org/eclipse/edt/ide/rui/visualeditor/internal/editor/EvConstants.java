@@ -27,6 +27,7 @@ public interface EvConstants {
 	public static final String	ICON_DEFAULT_WIDGET									= "elcl16/defaultwidget_obj.gif";
 	public static final String	ICON_EDITOR											= "obj16/ruivisualeditor.gif";
 	public static final String	ICON_LAUNCH_EXTERNAL_BROWSER						= "elcl16/launchexternalbrowser_obj.gif";
+	public static final String	ICON_USER_AGENT										= "elcl16/userAgent_obj.gif";
 	public static final String	ICON_PREFERENCES									= "elcl16/preferences_obj.gif";
 	public static final String	ICON_REFRESH_PALETTE								= "elcl16/refreshpalette_obj.gif";
 	public static final String	ICON_REFRESH_WEB_PAGE								= "elcl16/refreshwebpage_obj.gif";
@@ -129,13 +130,11 @@ public interface EvConstants {
 	// Performance
 	//------------
 	public static final String	PREFERENCE_RENDERENGINE								= PREFERENCE_PREFIX + "RenderEngine";
-	public static final int		PREFERENCE_RENDERENGINE_DEFAULT						= 0;
+	public static final int		PREFERENCE_RENDERENGINE_USER_CONFIGURED				= 0;
 	public static final int		PREFERENCE_RENDERENGINE_WEBKIT						= 1;
 	public static final int		PREFERENCE_RENDERENGINE_XULRUNNER					= 2;
 	public static final int		PREFERENCE_RENDERENGINE_IE							= 3;
 	
-	public static final int		PREFERENCE_DEFAULT_RENDERENGINE						= PREFERENCE_RENDERENGINE_DEFAULT;
-
 	// Widget creation
 	//----------------
 	public static final String	PREFERENCE_PROMPT_FOR_A_NEW_WIDGET_NAME				= PREFERENCE_PREFIX + "PromptForNewWidgetName";

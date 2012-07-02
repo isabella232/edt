@@ -128,7 +128,7 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 	protected EvEditorUndoManager	_undoManager				= null;
 	
 	protected String				_widgetId					= null;
-	public static int				_iRenderEngine				= EvConstants.PREFERENCE_DEFAULT_RENDERENGINE;
+	public static int				_iRenderEngine				= EvPreferences.getInt( EvConstants.PREFERENCE_RENDERENGINE );
 	/**
 	 * Closes the editor
 	 */

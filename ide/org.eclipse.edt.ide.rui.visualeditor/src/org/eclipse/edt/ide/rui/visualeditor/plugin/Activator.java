@@ -20,9 +20,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.ide.rui.visualeditor.internal.editor.EvConstants;
 import org.eclipse.edt.ide.rui.visualeditor.internal.palette.EvPaletteRoot;
 import org.eclipse.edt.ide.rui.visualeditor.internal.widget.WidgetPart;
@@ -287,5 +290,18 @@ public class Activator extends AbstractUIPlugin {
 	public void stop( BundleContext context ) throws Exception {
 		_instance = null;
 		super.stop( context );
+	}
+	
+	public static void log(IStatus status) {
+		getDefault().getLog().log(status);
+	}
+	
+	public static void log(Throwable t) {
+		if (t instanceof CoreException) {
+			log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, t.getMessage(), t.getCause() == null ? t : t.getCause()));
+		}
+		else {
+			log(new Status(IStatus.ERROR, PLUGIN_ID, IStatus.ERROR, "Internal Error", t)); //$NON-NLS-1$
+		}
 	}
 }
