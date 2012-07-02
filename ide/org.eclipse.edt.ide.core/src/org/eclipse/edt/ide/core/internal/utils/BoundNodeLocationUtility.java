@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.edt.compiler.ISystemPackageBuildPathEntry;
 import org.eclipse.edt.compiler.SystemEnvironment;
 import org.eclipse.edt.compiler.SystemPackageMOFPathEntry;
@@ -38,6 +39,7 @@ import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.FormGroup;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -55,6 +57,7 @@ import org.eclipse.edt.ide.core.internal.compiler.workingcopy.IWorkingCopyCompil
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompilationResult;
 import org.eclipse.edt.ide.core.internal.compiler.workingcopy.WorkingCopyCompiler;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironment;
+import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.partinfo.IPartOrigin;
 import org.eclipse.edt.ide.core.model.EGLCore;
@@ -363,7 +366,7 @@ public class BoundNodeLocationUtility {
 	 * local variables are encouraged to handle local variables in a special way. For
 	 * an example, see class EGLOpenOnSelectionAction in plugin com.ibm.etools.egl.ui.
 	 */
-	public IBoundNodeAddress createBoundNodeAddress(IBinding selectedNodeBinding){
+	public IBoundNodeAddress createBoundNodeAddress(IBinding selectedNodeBinding, Expression expr, IProject  project){
 		
 		IBoundNodeAddress address = null;
 		
@@ -388,8 +391,7 @@ public class BoundNodeLocationUtility {
 				address = getAddressOfForm((FormDataBinding)dataBinding);				
 			}
 			else {
-				IPartBinding declaringPart = dataBinding.getDeclaringPart();
-				
+				IPartBinding declaringPart = getActualBinding(getContainingBinding(dataBinding, expr), project);
 				switch(dataBinding.getKind()){
 					case IDataBinding.ANNOTATION_BINDING:
 						if (dataBinding.getType() instanceof AnnotationTypeBindingImpl){
@@ -445,6 +447,37 @@ public class BoundNodeLocationUtility {
 		
 		return address;
 	}	
+	
+	private IPartBinding getActualBinding(IBinding binding, IProject project) {
+		if (project != null && Binding.isValidBinding(binding) && binding.getActualBindingName() != null) {
+			return WorkingCopyProjectEnvironmentManager.getInstance().getProjectEnvironment(project).getPartBinding(binding.getActualBindingPackage(), binding.getActualBindingName());
+		}
+		if (binding instanceof IPartBinding) {
+			return (IPartBinding) binding;
+		}
+		return null;
+	}
+	
+	private IBinding getContainingBinding(IDataBinding binding, Expression expr) {
+		IPartBinding decl = binding.getDeclaringPart();
+		if (Binding.isValidBinding(decl)) {
+			return decl;
+		}
+		
+		final IBinding[] result = new IBinding[1];
+		expr.accept(new DefaultASTVisitor() {
+			public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName qualifiedName) {
+				result[0] = qualifiedName.getQualifier().resolveTypeBinding();
+				return false;
+			}
+			public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
+				result[0] = fieldAccess.getPrimary().resolveTypeBinding();
+				return false;
+			}
+		});
+		return result[0];
+	}
+
 	
 	private IFile getFileForNode(IPartBinding partBinding){
 		IFile result = null;
