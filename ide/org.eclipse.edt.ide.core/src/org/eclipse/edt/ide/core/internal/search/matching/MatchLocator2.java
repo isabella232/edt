@@ -1311,7 +1311,7 @@ public class MatchLocator2 {//extends MatchLocator {
 				accuracy);
 	}
 	
-	private Name getFunctionName(IClassFile classFile, String functionName) {
+	private Name getFunctionName(IClassFile classFile, String functionName,final String[] parameterTypes) {
 		Part part = getPart(classFile);
 		if (part != null) {
 			
@@ -1320,7 +1320,10 @@ public class MatchLocator2 {//extends MatchLocator {
 			part.accept(new AbstractASTVisitor() {
 				public boolean visit(NestedFunction nestedFunction) {
 					if (nestedFunction.getName().getIdentifier() == iName) {
-						result[0] = nestedFunction.getName();
+						List<FunctionParameter> funcParameters = (List<FunctionParameter>)nestedFunction.getFunctionParameters();
+						if(parameterTypes != null && funcParameters != null && parameterTypes.length == funcParameters.size()){
+							result[0] = nestedFunction.getName();
+						}
 					}
 					return false;
 				}
@@ -1420,7 +1423,7 @@ public class MatchLocator2 {//extends MatchLocator {
 		IClassFile classFile = (parent == null) ? functionDeclaration.getClassFile() : ((parent instanceof BinaryPart) ? ((BinaryPart)parent).getClassFile() : null);
 		Name name = null;
 		if (classFile != null) {
-			name = getFunctionName(classFile, functionDeclaration.getElementName());
+			name = getFunctionName(classFile, functionDeclaration.getElementName(),functionDeclaration.getParameterTypes());
 		}
 		
 		int elementStart = 0;
