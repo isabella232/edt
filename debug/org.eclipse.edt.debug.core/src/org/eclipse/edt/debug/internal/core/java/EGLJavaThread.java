@@ -468,8 +468,9 @@ public class EGLJavaThread extends EGLJavaDebugElement implements IEGLJavaThread
 											{
 												if ( TRACE_FILTERS )
 												{
-													System.out.println( "EDT DEBUG: Forcing resume for frame " + topJavaFrame.getReferenceType().getName() //$NON-NLS-1$
-															+ "." + topJavaFrame.getName() ); //$NON-NLS-1$
+													System.out
+															.println( "EDT DEBUG: Forcing resume for frame " + topJavaFrame.getReferenceType().getName() //$NON-NLS-1$
+																	+ "." + topJavaFrame.getName() ); //$NON-NLS-1$
 												}
 												topJavaFrame.resume();
 											}

@@ -92,9 +92,8 @@ public interface ITypeFilterCategory
 	public void setDefaultEnablement( boolean defaultEnablement );
 	
 	/**
-	 * Returns this category's step type. When a frame is being filtered, that frame is passed in for optional step type criteria.
-	 * Null may be passed in when a client is looking for the user-chosen step type and there is no Java frame to be consulted for
-	 * additional criteria.
+	 * Returns this category's step type. When a frame is being filtered, that frame is passed in for optional step type criteria. Null may be passed
+	 * in when a client is looking for the user-chosen step type and there is no Java frame to be consulted for additional criteria.
 	 * 
 	 * @param frame The Java frame that's being filtered, possible null.
 	 * @return this category's step type.

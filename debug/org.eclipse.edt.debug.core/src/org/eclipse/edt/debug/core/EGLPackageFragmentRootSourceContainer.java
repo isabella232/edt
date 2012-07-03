@@ -94,8 +94,8 @@ public class EGLPackageFragmentRootSourceContainer extends AbstractSourceContain
 					IClassFile file = findClassFile( fragment, type );
 					if ( file.exists() )
 					{
-						return new Object[] { EditorUtility
-								.getBinaryReadonlyFile( file.getEGLProject().getProject(), file.getPath().toString(), name, file ) };
+						return new Object[] { EditorUtility.getBinaryReadonlyFile( file.getEGLProject().getProject(), file.getPath().toString(),
+								name, file ) };
 					}
 					else
 					{
