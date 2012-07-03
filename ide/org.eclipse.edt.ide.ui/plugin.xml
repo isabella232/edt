@@ -1876,6 +1876,13 @@ Templates
           priority="high">
     </content-type>
  </extension>
+ <extension
+       point="org.eclipse.ui.elementFactories">
+    <factory
+          class="org.eclipse.edt.ide.ui.internal.editor.BinaryEditorInputFactory"
+          id="org.eclipse.edt.ide.ui.BinaryEditorInputFactory">
+    </factory>
+ </extension>
 
 <!--   
 ***********************************************************************

@@ -22,11 +22,12 @@ import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.utils.BinaryReadOnlyFile;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
 
 
-public class BinaryEditorInput implements IStorageEditorInput {
+public class BinaryEditorInput implements IStorageEditorInput, IPersistableElement{
     private BinaryReadOnlyFile binaryReadOnlyFile;
     private IClassFile classFile;
     
@@ -56,7 +57,7 @@ public class BinaryEditorInput implements IStorageEditorInput {
        return binaryReadOnlyFile.getName();
     }
     public IPersistableElement getPersistable() {
-    	return null;
+    	return this;
     }
     
     public IStorage getStorage() {
@@ -129,4 +130,14 @@ public class BinaryEditorInput implements IStorageEditorInput {
     public BinaryReadOnlyFile getBinaryReadOnlyFile(){
     	return(this.binaryReadOnlyFile);
     }
+
+	@Override
+	public void saveState(IMemento memento) {
+		BinaryEditorInputFactory.saveState(memento, this);
+	}
+
+	@Override
+	public String getFactoryId() {
+		return BinaryEditorInputFactory.getFactoryId();
+	}
 }
