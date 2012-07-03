@@ -42,6 +42,8 @@ import org.eclipse.edt.compiler.core.ast.ServiceReference;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.StructureItem;
+import org.eclipse.edt.compiler.core.ast.SuperExpression;
+import org.eclipse.edt.compiler.core.ast.ThisExpression;
 import org.eclipse.edt.compiler.core.ast.VariableFormField;
 import org.eclipse.edt.compiler.internal.io.IRFileNameUtility;
 import org.eclipse.edt.ide.core.internal.lookup.workingcopy.WorkingCopyProjectEnvironmentManager;
@@ -155,19 +157,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 								else {
 									binding = getActualBinding(binding);
 									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, name, currentFile.getProject());
-									IFile boundFile = null;
-									if(address[0] != null) {
-										boundFile = address[0].getDeclaringFile();
-									}
-									
-									if(boundFile != null) {
-										if (boundFile.getProject() == null 
-												&& boundFile instanceof BinaryReadOnlyFile) {
-											((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
-										}
-									} else {
-										//for files in MOFAR
-									}
+									setProjectIfMissed(address[0]);
 									
 								}
 								selectedNodeName[0] = name.getIdentifier();
@@ -179,19 +169,31 @@ public class OpenOnSelectionHandler extends EGLHandler {
 							IBinding binding = getActualBinding(primitiveType.resolveTypeBinding());
 							if (Binding.isValidBinding(binding)) {
 								address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
-								IFile boundFile = null;
-								if(address[0] != null) {
-									boundFile = address[0].getDeclaringFile();
-								}
-								
-								if(boundFile != null) {
-									if (boundFile.getProject() == null 
-											&& boundFile instanceof BinaryReadOnlyFile) {
-										((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
-									}
-								}
+								setProjectIfMissed(address[0]);
 								selectedNodeName[0] = binding.getName();
 							}
+							return false;
+						}
+						
+					    public boolean visit(SuperExpression superExpression){
+					    	IBinding binding = getActualBinding(superExpression.resolveTypeBinding());
+					    	if (Binding.isValidBinding(binding)) {
+					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
+					    		setProjectIfMissed(address[0]);
+					    		selectedNodeName[0] = binding.getName();
+					    	}
+							
+							return false;
+						}
+						
+						public boolean visit(ThisExpression thisExpression){
+							IBinding binding = getActualBinding(thisExpression.resolveTypeBinding());
+					    	if (Binding.isValidBinding(binding)) {
+					    		address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, null, currentFile.getProject());
+					    		setProjectIfMissed(address[0]);
+					    		selectedNodeName[0] = binding.getName();
+					    	}
+					    	
 							return false;
 						}
 						
@@ -212,16 +214,7 @@ public class OpenOnSelectionHandler extends EGLHandler {
 								else {
 									address[0] = BoundNodeLocationUtility.getInstance().createBoundNodeAddress(binding, fieldAccess, currentFile.getProject());
 									
-									IFile boundFile = null;
-									if(address[0] != null) {
-										boundFile = address[0].getDeclaringFile();
-									}
-									if(boundFile != null) {
-										if (boundFile.getProject() == null 
-												&& boundFile instanceof BinaryReadOnlyFile) {
-											((BinaryReadOnlyFile)(address[0].getDeclaringFile())).setProject( currentProject );
-										}
-									}
+									setProjectIfMissed(address[0]);
 								}
 								selectedNodeName[0] = fieldAccess.getID();
 							}
@@ -254,6 +247,22 @@ public class OpenOnSelectionHandler extends EGLHandler {
 								result[0] = new int[] {finder.localVariableDeclarationName.getOffset(), finder.localVariableDeclarationName.getLength()};
 							}
 							return result[0];
+						}
+						
+						private void setProjectIfMissed(final IBoundNodeAddress address) {
+							IFile boundFile = null;
+							if(address != null) {
+								boundFile = address.getDeclaringFile();
+							}
+							
+							if(boundFile != null) {
+								if (boundFile.getProject() == null 
+									&& boundFile instanceof BinaryReadOnlyFile) {
+									((BinaryReadOnlyFile)boundFile).setProject( currentProject );
+								}
+							} else {
+									//for files in MOFAR
+							}
 						}
 					} ); //selectedNode.accept
 							
