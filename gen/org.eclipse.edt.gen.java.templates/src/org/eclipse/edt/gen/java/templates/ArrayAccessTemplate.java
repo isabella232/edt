@@ -15,6 +15,7 @@ import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ArrayAccess;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
@@ -166,12 +167,17 @@ public class ArrayAccessTemplate extends JavaTemplate {
 			out.print(" - 1");
 			out.print(")");
 		} else {
+			out.print("(");
+			out.print("(");
+			ctx.invoke(genRuntimeTypeName, ((ArrayType) expr.getArray().getType()).getElementType(), ctx, out, TypeNameKind.JavaObject);
+			out.print(")");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
 			out.print(".get(");
 			out.print("org.eclipse.edt.javart.util.JavartUtil.checkIndex(");
 			ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 			out.print(" - 1, ");
 			ctx.invoke(genExpression, expr.getArray(), ctx, out);
+			out.print(")");
 			out.print(")");
 			out.print(")");
 		}
