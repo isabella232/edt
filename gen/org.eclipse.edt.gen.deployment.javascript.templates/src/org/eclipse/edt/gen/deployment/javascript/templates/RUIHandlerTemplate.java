@@ -13,7 +13,6 @@ package org.eclipse.edt.gen.deployment.javascript.templates;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.edt.gen.deployment.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
