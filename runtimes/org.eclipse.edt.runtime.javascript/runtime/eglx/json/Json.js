@@ -64,74 +64,78 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fie
 			else{
 				signature = object.eze$$signature;
 			}
-			var kind = "";
-			var firstChar = signature.charAt(0);
-			if (firstChar !== '?') {
-				kind = firstChar;
-			} else {
-				kind = signature.charAt(1);
-				firstCharIdx = 1;
-			}
-			switch (kind) {
-				case 'S':
-				case 's':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'K':
-					object = egl.unboxAny( object );
-					if(object === undefined || object === null ){
-						return egl.eglx.json.toJSONString(object, depth, maxDepth);
-					}
-					else{
-						return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd") + '"';
-					}
+			//handlers don't follow the standard signature so they don't have a prefix
+			if(signature.length > 0 &&
+					signature.charAt(signature.length -1) === ';'){
+				var kind = "";
+				var firstChar = signature.charAt(0);
+				if (firstChar !== '?') {
+					kind = firstChar;
+				} else {
+					kind = signature.charAt(1);
+					firstCharIdx = 1;
+				}
+				switch (kind) {
+					case 'S':
+					case 's':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
 					
-				case 'L':
-					object = egl.unboxAny( object );
-					if(object === undefined || object === null ){
-						return egl.eglx.json.toJSONString(object, depth, maxDepth);
-					}
-					else{
-						return '"' + egl.eglx.lang.StringLib.format(object, "HH:mm:ss") + '"' ;
-					}
-				
-				case 'J':
-					object = egl.unboxAny( object );
-					if(object === undefined || object === null ){
-						return egl.eglx.json.toJSONString(object, depth, maxDepth);
-					}
-					else{
-						return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd HH:mm:ss") + '"' ;
-					}
-				
-				case 'I':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'i':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case '0':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'F':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'f':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'B':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'N':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				
-				case 'd':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-				case '9':
-					return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
-			}
-		   	if("eze$$value" in object){
-		   		return egl.eglx.json.toJSONString(egl.unboxAny( object ));
+					case 'K':
+						object = egl.unboxAny( object );
+						if(object === undefined || object === null ){
+							return egl.eglx.json.toJSONString(object, depth, maxDepth);
+						}
+						else{
+							return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd") + '"';
+						}
+						
+					case 'L':
+						object = egl.unboxAny( object );
+						if(object === undefined || object === null ){
+							return egl.eglx.json.toJSONString(object, depth, maxDepth);
+						}
+						else{
+							return '"' + egl.eglx.lang.StringLib.format(object, "HH:mm:ss") + '"' ;
+						}
+					
+					case 'J':
+						object = egl.unboxAny( object );
+						if(object === undefined || object === null ){
+							return egl.eglx.json.toJSONString(object, depth, maxDepth);
+						}
+						else{
+							return '"' + egl.eglx.lang.StringLib.format(object, "yyyy-MM-dd HH:mm:ss") + '"' ;
+						}
+					
+					case 'I':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'i':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case '0':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'F':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'f':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'B':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'N':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					
+					case 'd':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+					case '9':
+						return egl.eglx.json.toJSONString(egl.unboxAny( object ), depth, maxDepth);
+				}
+			   	if("eze$$value" in object){
+			   		return egl.eglx.json.toJSONString(egl.unboxAny( object ));
+				}
 			}
 		}
 		if (typeof(object) == "string") {
@@ -175,6 +179,11 @@ egl.eglx.json.toJSONString = function(object, depth, maxDepth, /*FieldInfo*/ fie
 			}
 			catch (e) {
 			}
+		}
+		if (typeof object === "object" && 
+				"eze$$value" in object &&
+				"eze$$getFieldInfos" in object.eze$$value){
+			object = object.eze$$value;
 		}
 		if (typeof object === "object" && "eze$$getFieldInfos" in object){
 			var s = [];
@@ -279,67 +288,71 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		if (jsonObject === null) {
 			return egl.eglx.services.ServiceRT.checkNull(fieldInfo);
 		}
-		var firstCharIdx = 0;
-		var firstChar = fieldInfo.eglSignature.charAt(0);
-		if (firstChar !== '?') {
-			kind = firstChar;
-		} else {
-			kind = fieldInfo.eglSignature.charAt(1);
-			firstCharIdx = 1;
-		}
-		switch (kind) {
-			case 'S':
-			case 's':
-				var semiColon = fieldInfo.eglSignature.indexOf(';');
-				if(semiColon > (++firstCharIdx)){
-					var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
-					jsonObject = jsonObject.substring(0,len);
-				}
-				return jsonObject;
-			
-			case 'K':
-				return egl.stringToDate(jsonObject, "yyyy-MM-dd");
-			
-			case 'L':
-				return egl.stringToTime(jsonObject, "HH:mm:ss");
-			
-			case 'J':
-				return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
-			
-			case 'I':
-				return egl.convertNumberToInt(jsonObject);
-			
-			case 'i':
-				return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
-			
-			case '0':
-				return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
-			
-			case 'F':
-				return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
-			
-			case 'f':
-				return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
-			
-			case 'B':
-				return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
-			
-			case 'N':
-				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
-						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
-						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
-			
-			case 'd':
-				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
-						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
-						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
-			case '9':
-				var colon = fieldInfo.eglSignature.indexOf(':');
-				return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
-						egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
-						egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
+		//handlers don't follow the standard signature so they don't have a prefix
+		if(fieldInfo.eglSignature.length > 0 &&
+				fieldInfo.eglSignature.charAt(fieldInfo.eglSignature.length -1) === ';'){
+			var firstCharIdx = 0;
+			var firstChar = fieldInfo.eglSignature.charAt(0);
+			if (firstChar !== '?') {
+				kind = firstChar;
+			} else {
+				kind = fieldInfo.eglSignature.charAt(1);
+				firstCharIdx = 1;
+			}
+			switch (kind) {
+				case 'S':
+				case 's':
+					var semiColon = fieldInfo.eglSignature.indexOf(';');
+					if(semiColon > (++firstCharIdx)){
+						var len = egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx, semiColon));
+						jsonObject = jsonObject.substring(0,len);
+					}
+					return jsonObject;
+				
+				case 'K':
+					return egl.stringToDate(jsonObject, "yyyy-MM-dd");
+				
+				case 'L':
+					return egl.stringToTime(jsonObject, "HH:mm:ss");
+				
+				case 'J':
+					return egl.stringToTimeStamp(jsonObject, "yyyy-MM-dd HH:mm:ss");
+				
+				case 'I':
+					return egl.convertNumberToInt(jsonObject);
+				
+				case 'i':
+					return egl.eglx.lang.EInt16.fromEInt32(jsonObject);
+				
+				case '0':
+					return egl.eglx.lang.EBoolean.fromEBoolean(jsonObject);
+				
+				case 'F':
+					return egl.eglx.lang.EFloat64.fromEDecimal(jsonObject);
+				
+				case 'f':
+					return egl.eglx.lang.EFloat32.fromEDecimal(jsonObject);
+				
+				case 'B':
+					return egl.eglx.lang.EInt64.fromEInt32(jsonObject);
+				
+				case 'N':
+					var colon = fieldInfo.eglSignature.indexOf(':');
+					return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+							egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
+				
+				case 'd':
+					var colon = fieldInfo.eglSignature.indexOf(':');
+					return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+							egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
+				case '9':
+					var colon = fieldInfo.eglSignature.indexOf(':');
+					return egl.eglx.lang.EDecimal.fromEString(jsonObject.toString(), 
+							egl.convertStringToSmallint(fieldInfo.eglSignature.substring(colon + 1, fieldInfo.eglSignature.indexOf(';'))),
+							egl.javascript.BigDecimal.prototype.NINES[egl.convertStringToSmallint(fieldInfo.eglSignature.substring(firstCharIdx + 1, colon)) - 1]);
+			}
 		}
 	}
 	if (jsonObject === undefined || jsonObject === null) {
