@@ -49,8 +49,8 @@ egl.defineWidget(
 		},
 		"createDojoWidget" : function( parent ){
 			var _this = this;
-			var _needAdjust = false;
 			var datelocale = this.datelocale;
+			var monthStr = "";
 			var now = new Date();
 			
 			_this.dojoWidget = { "domNode" : parent };
@@ -63,9 +63,6 @@ egl.defineWidget(
 									{}, parent
 							);
 							
-							if( _this.dojoWidget.domNode.offsetHeight == 0 )
-								_needAdjust = true;
-							
 							_this.containerWidget = _this.dojoWidget;
 						
 							require( 
@@ -75,8 +72,27 @@ egl.defineWidget(
 										function(){
 											ready(
 												function(){
-													_this.containerWidget.startup();
 													_this.synchronor.trigger( _this, "SYN_READY" );
+													_this.containerWidget.startup();
+													
+													monthStr = datelocale.format( now, {datePattern:"MMM", selector:"date"});
+													var values = [ now.getFullYear(), monthStr, now.getDate()];
+													if( _this.value instanceof Date ){
+														monthStr = datelocale.format(_this.value, {datePattern:"MMM", selector:"date"});
+														values = [_this.value.getFullYear(), monthStr, _this.value.getDate()];
+													}
+													if( _this.month ){
+														monthStr = _this.datelocale.format( 
+																new Date( 2012, _this.month-1 ),
+																{ datePattern:"MMM", selector:"date" }
+														);
+														values[1] = monthStr;
+													}
+													if( _this.year ) values[0] = _this.year;
+													if( _this.day  ) values[2] = _this.day;
+													
+													_this.dojoWidget.setValue( values );	
+													_this.synchronor.trigger( _this, "SYN_STARTUP" );
 												}
 											);
 										}, has("ie") ? 100 : 0);
@@ -124,37 +140,24 @@ egl.defineWidget(
 			if( status >= 1970 && status < 2038 ){
 				_this.isSettingYear = true;
 				_this.year  = status;
-				require(
-					["dojo/mobile/utility/Synchronor"],
-					function( synchronor ){
-						synchronor.wait( [_this], "SYN_READY",function(){
-							if( _this.dojoWidget )
-								_this.dojoWidget.slots[0].setValue(_this.year);
-						});
-					}
-				);
+				if( _this.dojoWidget )
+					_this.dojoWidget.slots[0].setValue(_this.year);
 			}
 		},
 		"setMonth" : function( status ){
 			var _this = this;
+			// for initial use
+			_this.month = status;
+			
 			if( _this.datelocale && status > 0 && status <= 12 ){
-				_this.isSettingMonth = true;
-				_this.month = _this.datelocale.format( 
-					new Date( _this.year, status-1 ),
-					{datePattern:"MMM", selector:"date"}
-				);
-				require(
-					["dojo/mobile/utility/Synchronor"],
-					function( synchronor ){
-						synchronor.wait( 
-							[_this], "SYN_READY",
-							function(){
-								if( _this.dojoWidget )
-									_this.dojoWidget.slots[1].setValue(_this.month);
-							}
-						);
-					}
-				);
+				if( _this.dojoWidget ){
+					_this.isSettingMonth = true;
+					_this.month = _this.datelocale.format( 
+						new Date( _this.year, status-1 ),
+						{datePattern:"MMM", selector:"date"}
+					);
+					_this.dojoWidget.slots[1].setValue(_this.month);
+				}
 			}
 		},
 		"setDay" : function( status ){
@@ -162,28 +165,20 @@ egl.defineWidget(
 			if( status >= 1 && status <= 31 ){
 				_this.isSettingDay = true;
 				_this.day = status;
-				require(
-					["dojo/mobile/utility/Synchronor"],
-					function( synchronor ){
-						synchronor.wait( 
-							[_this], "SYN_READY",
-							function(){
-								if( _this.dojoWidget )
-									_this.dojoWidget.slots[2].setValue(_this.day);
-							}
-						);
-					}
-				);
+				if( _this.dojoWidget )
+					_this.dojoWidget.slots[2].setValue(_this.day);
 			}
 		},
 		"setValue" : function( status ){
 			var _this = this;
 			if( status instanceof Date ){
 				_this.value = status;
-				_this.isSettingValue = true;
-				_this.setYear ( status.getFullYear() );
-				_this.setMonth( status.getMonth()    );
-				_this.setDay  ( status.getDate() 	 );
+				if( _this.dojoWidget ){
+					_this.isSettingValue = true;
+					_this.setYear ( status.getFullYear() );
+					_this.setMonth( status.getMonth()    );
+					_this.setDay  ( status.getDate() 	 );
+				}
 			}
 		},
 		"getValue" : function(){
@@ -224,7 +219,7 @@ egl.defineWidget(
 			require(
 				["dojo/mobile/utility/Synchronor"],
 				function( synchronor ){
-					synchronor.wait( [_this], "SYN_READY",function(){
+					synchronor.wait( [_this], "SYN_STARTUP",function(){
 						var date = new Date();
 						
 						if( _this.dojoWidget )
