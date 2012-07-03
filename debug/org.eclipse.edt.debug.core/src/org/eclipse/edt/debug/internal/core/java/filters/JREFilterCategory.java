@@ -34,21 +34,21 @@ public class JREFilterCategory extends DefaultTypeFilterCategory
 			{
 				IJavaReferenceType type = frame.getReferenceType();
 				String typeName = frame.getReferenceType().getName();
-				if ( typeName.equals( "java.lang.reflect.Method" ) )
+				if ( typeName.equals( "java.lang.reflect.Method" ) ) //$NON-NLS-1$
 				{
 					return FilterStepType.STEP_INTO;
 				}
-				else if ( typeName.equals( "java.lang.Class" ) || typeName.equals( "java.lang.reflect.Constructor" ) )
+				else if ( typeName.equals( "java.lang.Class" ) || typeName.equals( "java.lang.reflect.Constructor" ) ) //$NON-NLS-1$ //$NON-NLS-2$
 				{
-					if ( frame.getMethodName().startsWith( "newInstance" ) )
+					if ( frame.getMethodName().startsWith( "newInstance" ) ) //$NON-NLS-1$
 					{
 						return FilterStepType.STEP_INTO;
 					}
 				}
-				else if ( type instanceof IJavaClassType && typeName.startsWith( "sun.reflect." ) )
+				else if ( type instanceof IJavaClassType && typeName.startsWith( "sun.reflect." ) ) //$NON-NLS-1$
 				{
-					if ( VariableUtil.isInstanceOf( (IJavaClassType)type, "sun.reflect.MethodAccessor", false ) 
-							|| VariableUtil.isInstanceOf( (IJavaClassType)type, "sun.reflect.ConstructorAccessor", false ) )
+					if ( VariableUtil.isInstanceOf( (IJavaClassType)type, "sun.reflect.MethodAccessor", false ) //$NON-NLS-1$
+							|| VariableUtil.isInstanceOf( (IJavaClassType)type, "sun.reflect.ConstructorAccessor", false ) ) //$NON-NLS-1$
 					{
 						return FilterStepType.STEP_INTO;
 					}
