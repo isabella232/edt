@@ -482,12 +482,18 @@ public class IRUtils {
 		if (TypeUtils.isReferenceType(exprType) 
 				&& exprType instanceof SubType 
 				&& type instanceof StructPart 
-				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) 
-			return createAsExpression(expr, type);
+				&& ((SubType)exprType).isSubtypeOf((StructPart)type)) {
+			
+			//For now, must make special case for Any and Number to support JS
+			if (isAny(type.getClassifier()) || type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
+				return createAsExpression(expr, type);
+			}
+			return expr;
+		}
 		
 		if (TypeUtils.isReferenceType(type) && TypeUtils.isValueType(exprType)) {
 			 //Conversions from value types to Number, Decimal, TimeStamp, String do not need to be boxed
-			if (!(type instanceof ParameterizableType) && !(type == IRUtils.getEGLPrimitiveType(MofConversion.Type_Number))) {
+			if (!(type instanceof ParameterizableType) && !(type.equals(IRUtils.getEGLPrimitiveType(MofConversion.Type_Number)))) {
 				BoxingExpression box = factory.createBoxingExpression();
 				box.setExpr(expr);
 				return createAsExpression(box, type);
