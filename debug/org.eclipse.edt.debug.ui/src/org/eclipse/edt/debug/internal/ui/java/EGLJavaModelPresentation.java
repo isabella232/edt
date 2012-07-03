@@ -286,7 +286,8 @@ public class EGLJavaModelPresentation extends JDIModelPresentation
 					String srcName = BreakpointUtils.getRelativeBreakpointPath( (EGLBreakpoint)item );
 					if ( srcName != null )
 					{
-						item = EditorUtility.getBinaryReadonlyFile( element.getEGLProject().getProject(), element.getPath().toString(), srcName, classFile );
+						item = EditorUtility.getBinaryReadonlyFile( element.getEGLProject().getProject(), element.getPath().toString(), srcName,
+								classFile );
 					}
 				}
 				else
