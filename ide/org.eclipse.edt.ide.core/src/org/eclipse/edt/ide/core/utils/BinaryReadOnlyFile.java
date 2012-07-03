@@ -56,12 +56,24 @@ public class BinaryReadOnlyFile implements IFile {
 	private String irFileFullPath;
 	private IPath projectRelativePath;
 	private String sourceContent;
+	private String eglarPathStr;
+	private String eglarSourcePath;
+	
+	public String getEglarPathStr() {
+		return eglarPathStr;
+	}
+
+	public String getEglarSourcePath() {
+		return eglarSourcePath;
+	}
 	
 	public BinaryReadOnlyFile(String eglarPath, String sourcePath, String irName) {
 		this(eglarPath, sourcePath, irName, null, false);
 	}
 	
 	public BinaryReadOnlyFile(String eglarPath, String sourcePath, String irName, IProject project, boolean isExternal) {
+		this.eglarPathStr = eglarPath;
+		this.eglarSourcePath = sourcePath;
 		this.eglarPath = new Path(eglarPath);
 		this.sourcePath = resolveFileString(sourcePath);
 		this.irName = IRFileNameUtility.toIRFileName(irName);
