@@ -58,25 +58,17 @@ egl.textLen = function (s) {
 
 egl.padWithLeadingZeros = function(s, totChars)
 {
-	var zerosToAdd = (totChars - egl.textLen(s));
-	{
-		var i = 1;
-		for ( ; (i <= zerosToAdd); i = (i + 1) )
-		{
-			s = ("0" + s);
-		}
-	}
+    for ( var zerosToAdd = totChars - s.length; zerosToAdd > 0; zerosToAdd-- )
+    {
+        s = "0" + s;
+    }
 	return s;
 };
 egl.padWithTrailingZeros = function(s, totChars)
 {
-    var zerosToAdd = (totChars - egl.textLen(s));
+    for ( var zerosToAdd = totChars - s.length; zerosToAdd > 0; zerosToAdd-- )
     {
-        var i = 1;
-        for ( ; (i <= zerosToAdd); i = (i + 1) )
-        {
-            s = (s + "0");
-        }
+        s = s + "0";
     }
     return s;
 };
@@ -748,24 +740,15 @@ egl.processToken = function(token, s, result, strict)
 			return null;
 		}
 	}
-	else if(token == "ffffff")
+	else if(token.charAt(0) == "f")
 	{
-		if(s.length < 6)
-		{
-			return null;
-		}
-		
-		result.setMilliseconds(s.substr(0,3));
-		s = s.substr(6);
-	}
-	else if(token == "fff")
-	{
-		if(s.length < 3)
+	    var len = token.length;
+		if(s.length < len)
 		{
 			return null;
 		}
 		result.setMilliseconds(s.substr(0,3));
-		s = s.substr(3);
+		s = s.substr(len);
 	}
 	else if(token == "a")
 	{
@@ -859,14 +842,15 @@ egl.timeStampToString = function( ts, format )
 	var dateParts = egl.getDateInfo(ts);
 	var timeParts = egl.getTimeInfo(ts);
 	var result = "";
+	var regex = /GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|S+|f+|a|Z|''|'([^']|'')*'|[^A-Za-z]/g;
 	
-	var validCheck = format.replace(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|S+|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g, "");
+	var validCheck = format.replace(regex, "");
 	if(validCheck.length > 0)
 	{
 		throw egl.createTypeCastException( "CRRUI2717E", [format] );
 	}
 	
-	var tokens = format.match(/GGG|G|yyyyy|yyyy|yy|MMMMM|MMM|MM|M|dd|d|EEE|HH|hh|mm|ss|S+|ffffff|fff|a|Z|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(regex);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	for(var i = 0; i < numTokens; i++ )
 	{
@@ -934,21 +918,13 @@ egl.timeStampToString = function( ts, format )
 		{
 			result += timeParts[3];
 		}
-        else if(tokens[i].match( /S+/ ) == tokens[i])
-        {
-            result += egl.padWithTrailingZeros("" + ts.getMilliseconds(),tokens[i].length);
-        }
 		else if(tokens[i] == "a")
 		{
 			result += timeParts[4];
 		}
-		else if(tokens[i] == "ffffff")
+		else if(tokens[i].charAt(0) == "f" || tokens[i].charAt(0) == "S")
 		{
-			result += (egl.padWithLeadingZeros("" + ts.getMilliseconds(),3) + "000");
-		}
-		else if(tokens[i] == "fff")
-		{
-			result += egl.padWithLeadingZeros("" + ts.getMilliseconds(),3);
+            result += egl.padWithTrailingZeros("" + ts.getMilliseconds(),tokens[i].length);
 		}
 		else if(tokens[i] == "Z")
 		{
@@ -1010,7 +986,7 @@ egl.stringToTimeStampInternal = function( s, format, strict, defaultSeparator )
 {
 	var result = new Date(1970, 0, 1);
 
-	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|ffffff|fff|a|''|'([^']|'')*'|[^A-Za-z]/g);
+	var tokens = format.match(/yyyy|yy|MM|dd|HH|hh|mm|ss|f+|a|''|'([^']|'')*'|[^A-Za-z]/g);
 	var numTokens = (tokens == null) ? 0 : tokens.length;
 	
 	if(!strict)
@@ -4237,7 +4213,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
     }
     var tempPattern = pattern.replace(/[^\w\s]|(.)(?=\1)/gi, "").toLowerCase();
 	for ( var h = 0; h < k - i - 1; h ++ ) {
-	   if ( tempPattern[h] != chars[ h + i ][ 0 ].toLowerCase() ) {
+	   if ( tempPattern.charAt(h) != chars[ h + i ][ 0 ].toLowerCase() ) {
 	       throw egl.createInvalidArgumentException("CRRUI2032E", [pattern]);
 	   }
 	}

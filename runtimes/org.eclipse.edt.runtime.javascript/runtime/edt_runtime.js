@@ -1105,8 +1105,8 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
 	var endCode = egl.eglx.lang.ETimestamp.getEndCode(pattern);
 	var format = "";
 	var separator = null;
-	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE) {
-		format += "yyyy";
+	if (startCode == egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.YEAR_CODE) {
+		format = "yyyy";
 		separator = "-";
 	}
 	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.MONTH_CODE) {
@@ -1144,11 +1144,14 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
 		format += "ss";
 		separator = ".";
 	}
-	if (startCode <= egl.eglx.lang.ETimestamp.CodeKind.FRACTION6_CODE && endCode >= egl.eglx.lang.ETimestamp.CodeKind.FRACTION1_CODE) {
+	if (endCode >= egl.eglx.lang.ETimestamp.CodeKind.FRACTION1_CODE) {
 		if (separator != null) {
 			format += separator;
 		}
-		format += "ffffff";
+		var match = pattern.match(/f+/);
+		if ( match != null ) {
+			format += match[0];
+		}
 	}
 	return format;
 };
