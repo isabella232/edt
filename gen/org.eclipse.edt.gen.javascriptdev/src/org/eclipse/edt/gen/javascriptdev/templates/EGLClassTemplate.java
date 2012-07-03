@@ -12,22 +12,13 @@
 package org.eclipse.edt.gen.javascriptdev.templates;
 
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.edt.gen.javascript.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.gen.javascriptdev.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.EGLClass;
-import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Library;
-import org.eclipse.edt.mof.egl.Part;
-import org.eclipse.edt.mof.egl.Program;
-import org.eclipse.edt.mof.egl.Service;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 
 public class EGLClassTemplate extends org.eclipse.edt.gen.javascript.templates.EGLClassTemplate {
 	
