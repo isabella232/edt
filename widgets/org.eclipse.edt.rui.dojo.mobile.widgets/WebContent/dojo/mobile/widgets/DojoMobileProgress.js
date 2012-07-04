@@ -20,6 +20,7 @@ egl.defineWidget(
 {
 	"constructor" : function(){
 		var _this = this;
+		_this.intervalTime = 100;
 		require( 
 			["dojo/mobile/utility/Synchronor"],
 			function( synchronor ){
@@ -56,11 +57,26 @@ egl.defineWidget(
 			this.dojoWidget.stop();
 		}		
 	},
-	
-	"setImage": function(file){
+	/**
+	 * @param imagePath string, the url of the progress image animation file
+	 */
+	"setImage": function(imagePath){
 		//TODO match a pattern
 		//Sets an indicator icon image file (typically animated GIF).
-		if(this.dojoWidget && file)
-			this.dojoWidget.setImage(file);
+		if(this.dojoWidget && imagePath)
+			this.dojoWidget.setImage(imagePath);
+	},
+	/**
+	 * @param newValue int, if newValue is negative, it will be reset to 0 instead
+	 */
+	"setUpdateInterval" : function( newValue ){
+		var _this = this;
+		if( newValue < 0 ) newValue = 0;
+		_this.intervalTime = newValue;
+		if( _this.dojoWidget )
+			_this.dojoWidget.interval = _this.intervalTime;
+	},
+	"getUpdateInterval" : function(){
+		return this.intervalTime ;
 	}
 });
