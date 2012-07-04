@@ -45,12 +45,12 @@ egl.defineWidget(
 		"setText" : function(text){
 			this.text = text;
 			if(this.dojoWidget){
-				this.dojoWidget.domNode.innerHTML = text;
+				this.dojoWidget.domNode.value = text;
 			}
 		},
 		"getText" : function(){
 			if(this.dojoWidget){
-				return this.dojoWidget.value;
+				return this.dojoWidget.domNode.value;
 			}
 			return this.text;
 		},
