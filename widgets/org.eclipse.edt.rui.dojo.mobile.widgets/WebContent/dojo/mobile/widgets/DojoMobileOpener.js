@@ -46,14 +46,14 @@ egl.defineWidget(
 			var dojoWidget = this._getContainerWidget( containerWidget );
 			this._removeChildren( 1, dojoWidget );
 		},
-		'showOpener' : function( DojoBaseWidget ){
+		'showOpener' : function( DojoBaseWidget, position ){
 			var _this = this;
 			try{
 				if( _this.dojoWidget )
 					_this.dojoWidget.show( 
 						DojoBaseWidget ? ( DojoBaseWidget.domNode
 							|| ( DojoBaseWidget.dojoWidget && DojoBaseWidget.dojoWidget.domNode ) 
-						) : null );
+						) : null, [position] );
 			}
 			catch( e ){
 				console.error( e );

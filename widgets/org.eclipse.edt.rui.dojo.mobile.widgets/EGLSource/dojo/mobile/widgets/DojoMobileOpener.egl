@@ -16,14 +16,40 @@ ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject
 		propertyFilter = [],
 		eventFilterType  = filterKind.excludeAll,
 		container   = @VEContainer{} 
-	}     
+	}      
 }         
- 	//Choose which widget type will be used, 'Opener' or 'Overlay' 
+ 	/**
+ 		Choose which widget type will be used, 'Opener' mode or 'Overlay' mode. 
+ 		'Opener' behaves like a modal layer, where it prevents user to interact
+ 		with parent widget unless it disappears. Overlay has no such 
+ 		restriction.
+ 	*/
 	isModal boolean{ @Property{}, @VEProperty{ displayName="isModal"} };
-	
-	//Causes the content to shown (popup Tooltip or sliding Overlay).
-	function showOpener( widget DojoMobileBase? );  
-	//Hides the Opener content.
+	   
+	/**
+		Show the content specified in the 'children' field
+		of this widget in a separate view.  On some devices,
+		if its screen's height or width is less than 500px, 
+		a view will be displayed as an overlay which pops up 
+		from bottom with no arrow, otherwise, a view may be displayed
+		with an arrow pointing to the widget specified by 'aroundWidget' as
+		a tooltip
+		
+		@param aroundWidget DojoMobileBase?, AroundWidget gives the location
+		where the opener to pop from when it behaves as a tooltip. This parameter
+		only works when opener behaves like a tooltip in the 'Opener' mode.
+		
+		@param position String?, The relative positions to the aroundWidget in 
+		which to try and place the Tooltip content for best fit. This parameter
+		only works when opener behaves like a tooltip in the 'Opener' mode.
+		There are following options for this parameters:
+		* DojoMobileLib.OPENER_POP_BEFORE: places drop down before the aroundWidget
+		* DojoMobileLib.OPENER_POP_AFTER: places drop down after the aroundWidget
+		* DojoMobileLib.OPENER_POP_ABOVE: drop down goes above aroundWidget
+		* DojoMobileLib.OPENER_POP_BELOW: drop down goes below aroundWidget
+	*/
+	function showOpener( aroundWidget DojoMobileBase?, position String? );  
+
 	function hideOpener();
 	
 end

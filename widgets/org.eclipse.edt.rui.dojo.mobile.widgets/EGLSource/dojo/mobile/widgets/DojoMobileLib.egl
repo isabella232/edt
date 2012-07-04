@@ -50,4 +50,9 @@ library DojoMobileLib {}
 	
 	const TRANSACTION_DIR_FORWARD int = 1;
 	const TRANSACTION_DIR_BACKWARD int = -1;
+	
+	const OPENER_POP_BEFORE string = "before";
+	const OPENER_POP_AFTER string = "after";
+	const OPENER_POP_ABOVE string = "above-centered";
+	const OPENER_POP_BELOW string = "below-centered";
 end
