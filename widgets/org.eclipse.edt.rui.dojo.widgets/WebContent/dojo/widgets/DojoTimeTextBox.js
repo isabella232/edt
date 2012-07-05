@@ -132,7 +132,36 @@ egl.defineWidget(
 	"setValueAsText" : function(time){
 		if(time == "")
 			this.setValue(null);
-		else
-			this.setValue(egl.eglx.lang.ETime.fromEString(time));
+		else{
+			var timeValue;
+			try{
+				timeValue = egl.eglx.lang.ETime.fromEString(time);
+			}catch(e){
+				if(e instanceof egl.eglx.lang.TypeCastException){
+					try{
+						timeValue=egl.eglx.lang.ETime.fromETimestamp(egl.eglx.lang.ETimestamp.fromEString(time), "yyyyMMddhhmmss");
+					}
+					catch(e){
+						if(e instanceof egl.eglx.lang.TypeCastException){
+							try{
+								timeValue=egl.eglx.lang.ETime.fromETimestamp(egl.eglx.lang.ETimestamp.fromEString(time), "hhmmss");
+							}catch(e){
+								if(e instanceof egl.eglx.lang.TypeCastException){
+									throw egl.createTypeCastException( "CRRUI2017E", [ time, "string", "time" ], "time", "string" );
+								}else{
+									throw e;
+								}
+							}
+						}else{
+							throw e;
+						}
+					}	
+				}else{
+					throw e;
+				}
+			}
+			this.setValue(timeValue);
+		}
+			
 	}
 });
