@@ -418,11 +418,17 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 			if (fieldInfos) {
 				for ( var idx = 0; idx < fieldInfos.length; idx++) {
 					var key = fieldInfos[idx].annotations["JsonName"].name;
-					var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx], cleanDictionary);
-					if (fieldInfos[idx].setterFunction instanceof Function) {
-						fieldInfos[idx].setterFunction.apply(value);
-					} else {
-						eglObject[fieldInfos[idx].setterFunction] = value;
+					if(key in jsonObject){
+						try{
+							var value = this.populateObjectFromJsonObject(jsonObject[key], null, fieldInfos[idx], cleanDictionary);
+							if (fieldInfos[idx].setterFunction instanceof Function) {
+								fieldInfos[idx].setterFunction.apply(value);
+							} else {
+								eglObject[fieldInfos[idx].setterFunction] = value;
+							}
+						}catch(e){
+							throw egl.createRuntimeException("CRRUI2109E", [ key, e.toString() ]);
+						}
 					}
 				}
 			}
@@ -441,9 +447,13 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		//for each array element create a new element
 		var ary = new Array();
 		for ( var idx = 0; idx < jsonObject.length; idx++) {
-			var newFieldInfo = egl.clone(fieldInfo);
-			newFieldInfo.eglSignature = newFieldInfo.eglSignature.slice(1);
-			ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, newFieldInfo, cleanDictionary);
+			try{
+				var newFieldInfo = egl.clone(fieldInfo);
+				newFieldInfo.eglSignature = newFieldInfo.eglSignature.slice(1);
+				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, newFieldInfo, cleanDictionary);
+			}catch(e){
+				throw egl.createRuntimeException("CRRUI2109E", [ "array[" + idx + "]", e.toString() ]);
+			}
 		}
 		return ary;
 	}
@@ -451,20 +461,23 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		//for each array element create a new element
 		var ary = new Array();
 		for ( var idx = 0; idx < jsonObject.length; idx++) {
-			if(typeof eglObject === "object" && eglObject instanceof Array){
-				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], idx < eglObject.length ? eglObject[idx] : null, null, cleanDictionary);
-			}
-			else if(eglObject !== undefined && eglObject !== null){
-				var aryObj = eglObject;
-				if("eze$$clone" in eglObject){
-					aryObj = eglObject.eze$$clone();
+			try{
+				if(typeof eglObject === "object" && eglObject instanceof Array){
+					ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], idx < eglObject.length ? eglObject[idx] : null, null, cleanDictionary);
 				}
-				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], aryObj, null, cleanDictionary);
+				else if(eglObject !== undefined && eglObject !== null){
+					var aryObj = eglObject;
+					if("eze$$clone" in eglObject){
+						aryObj = eglObject.eze$$clone();
+					}
+					ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], aryObj, null, cleanDictionary);
+				}
+				else{
+					ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, null, cleanDictionary);
+				}
+			}catch(e){
+				throw egl.createRuntimeException("CRRUI2109E", [ "array[" + idx + "]", e.toString() ]);
 			}
-			else{
-				ary[idx] = this.populateObjectFromJsonObject(jsonObject[idx], null, null, cleanDictionary);
-			}
-
 		}
 		return ary;
 	}
@@ -474,8 +487,12 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 	}
 	if(typeof jsonObject === "object"){
 		for (var f in jsonObject) {
-			if(typeof jsonObject[f] !== "function"){
-				eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
+			try{
+				if(typeof jsonObject[f] !== "function"){
+					eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
+				}
+			}catch(e){
+				throw egl.createRuntimeException("CRRUI2109E", [ f, e.toString() ]);
 			}
 		}
 		return eglObject;

@@ -440,8 +440,12 @@ egl.eglx.xml.XmlLib["dictionaryFromXML"] = function( /*node*/parentElement, /*eg
 	}
 	var fields = this.getNamedChildElements(parentElement);
 	for (var field in fields) {
-		var val = this.fromXML(fields[field], null);
-		egl.eglx.lang.EDictionary.set(eglObj, field, egl.boxAny(val, egl.inferSignature(val)));
+		try{
+			var val = this.fromXML(fields[field], null);
+			egl.eglx.lang.EDictionary.set(eglObj, field, egl.boxAny(val, egl.inferSignature(val)));
+		}catch(e){
+			throw egl.createRuntimeException("CRRUI2109E", [ field, e.toString() ]);
+		}
 	}
 	return eglObj;
 };
@@ -481,10 +485,14 @@ egl.eglx.xml.XmlLib["arrayFromXML"] = function( /*node*/parentElement, /*egl rt 
 	}
 	var array = new Array();
 	for (var idx = 0; idx < arrayElements.length; idx++) {
-		if (this.isEglArray(fieldInfo)) {
-			fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
+		try{
+			if (this.isEglArray(fieldInfo)) {
+				fieldInfo.annotations["XMLArray"] = new egl.eglx.xmlXMLArray( true, names.slice(1));
+			}
+			array[idx] = this.fromXML([arrayElements[idx]], fieldInfo);
+		}catch(e){
+			throw egl.createRuntimeException("CRRUI2109E", [ "array[" + idx + "]", e.toString() ]);
 		}
-		array[idx] = this.fromXML([arrayElements[idx]], fieldInfo);
 	}
 	return array;
 };
@@ -517,19 +525,23 @@ egl.eglx.xml.XmlLib["eglClassFromXML"] = function(/*node*/recElement, /*egl rt o
 		for ( var idx = 0; idx < fieldInfos.length; idx++) {
 			xmlStyle = fieldInfos[idx].annotations["XMLStyle"];
 			var setValue = true;
-			if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
-				value = egl.eglx.xml.XmlLib.convertPrimitive(this.getAttributeNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
-			} else if(!isSimpleContent){
-				value = this.fromXML(this.getChildElementNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
-			} else{
-				value = egl.eglx.xml.XmlLib.convertPrimitive(this.getElementText(recElement), fieldInfos[idx]);
-			}
-			if(setValue){
-				if (fieldInfos[idx].setterFunction instanceof Function) {
-					fieldInfos[idx].setterFunction.apply(value);
-				} else {
-					eglObj[fieldInfos[idx].setterFunction] = value;
+			try{
+				if (xmlStyle instanceof egl.eglx.xml.binding.annotation.XMLAttribute) {
+					value = egl.eglx.xml.XmlLib.convertPrimitive(this.getAttributeNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
+				} else if(!isSimpleContent){
+					value = this.fromXML(this.getChildElementNS(recElement, xmlStyle.name, xmlStyle.namespace), fieldInfos[idx]);
+				} else{
+					value = egl.eglx.xml.XmlLib.convertPrimitive(this.getElementText(recElement), fieldInfos[idx]);
 				}
+				if(setValue){
+					if (fieldInfos[idx].setterFunction instanceof Function) {
+						fieldInfos[idx].setterFunction.apply(value);
+					} else {
+						eglObj[fieldInfos[idx].setterFunction] = value;
+					}
+				}
+			}catch(e){
+				throw egl.createRuntimeException("CRRUI2109E", [ fieldInfos[idx].setterFunction, e.toString() ]);
 			}
 		}
 	}

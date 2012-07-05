@@ -176,10 +176,16 @@ egl.defineClass(
 	                    	}
 		                    if(encoding === egl.eglx.services.Encoding.NONE){
 		                        if(callbackArgs.length > 0){
-       		                    	if(egl.unboxAny(http.response.body) === null){
-       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
-       		                    	}
-		                            callbackArgs[callbackArgs.length-1] = http.response.body;
+		                        	var paramName = callbackArgs[callbackArgs.length-1].paramName;
+		                        	try{
+	       		                    	if(egl.unboxAny(http.response.body) === null){
+	       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature);
+	       		                    	}
+			                            callbackArgs[callbackArgs.length-1] = http.response.body;
+		                			}catch(e){
+		                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
+		                			}
+
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding.JSON){
@@ -194,10 +200,15 @@ egl.defineClass(
 	    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
 	    		                    	if(expectedResult.result instanceof Array){
 	                            			for ( var idx = 0; idx < callbackArgs.length; idx++) {
-	               		                    	if(egl.unboxAny(expectedResult.result[idx]) === null){
-	               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature, callbackArgs[idx].paramName);
-	               		                    	}
-	                            				callbackArgs[idx] = expectedResult.result[idx];
+	                            				var paramName = callbackArgs[idx].paramName;
+	                            				try{
+		               		                    	if(egl.unboxAny(expectedResult.result[idx]) === null){
+		               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature);
+		               		                    	}
+		                            				callbackArgs[idx] = expectedResult.result[idx];
+	        		                			}catch(e){
+	        		                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
+	        		                			}
 	                            			}
 	    		                    	}
 	    		                    	else{
@@ -208,10 +219,15 @@ egl.defineClass(
                                 		//if there is only one return/out 
                                			expectedResult.result = new callbackArgs[0].eglType;
            		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
-           		                    	if(egl.unboxAny(expectedResult.result) === null){
-           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
-           		                    	}
-           		                    	callbackArgs[0] = expectedResult.result;
+                        				var paramName = callbackArgs[0].paramName;
+                        				try{
+	           		                    	if(egl.unboxAny(expectedResult.result) === null){
+	           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+	           		                    	}
+	           		                    	callbackArgs[0] = expectedResult.result;
+			                			}catch(e){
+			                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
+			                			}
                                 	}
                             	}
                             	else{
@@ -219,10 +235,15 @@ egl.defineClass(
 	                            		//if there is only one return/out 
                             			var eglObject = new callbackArgs[0].eglType;
 	       		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, eglObject, false );
-          		                    	if(egl.unboxAny(eglObject) === null){
-           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature, callbackArgs[0].paramName);
-           		                    	}
-	       		                    	callbackArgs[0] = eglObject;
+                        				var paramName = callbackArgs[0].paramName;
+                        				try{
+	          		                    	if(egl.unboxAny(eglObject) === null){
+	           		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[0].eglSignature);
+	           		                    	}
+		       		                    	callbackArgs[0] = eglObject;
+			                			}catch(e){
+			                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
+			                			}
 	                            	}
                             	}
 		                    }
@@ -234,10 +255,15 @@ egl.defineClass(
 		                        	//replace the element in the callbackArgs with the record it returned
                         			var eglObject = new callbackArgs[callbackArgs.length-1].eglType;
 		                        	egl.eglx.xml.XmlLib.convertFromXML(http.response.body, eglObject);
-      		                    	if(egl.unboxAny(eglObject) === null){
-       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature, callbackArgs[callbackArgs.length-1].paramName);
-       		                    	}
-		                        	callbackArgs[callbackArgs.length-1] = eglObject;
+                    				var paramName = callbackArgs[callbackArgs.length-1].paramName;
+                    				try{
+	      		                    	if(egl.unboxAny(eglObject) === null){
+	       		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[callbackArgs.length-1].eglSignature);
+	       		                    	}
+			                        	callbackArgs[callbackArgs.length-1] = eglObject;
+		                			}catch(e){
+		                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
+		                			}
 		                        }
 		                    }
 		                    else if(encoding === egl.eglx.services.Encoding._FORM){
@@ -589,15 +615,15 @@ egl.defineClass(
 });
 
 new egl.eglx.services.ServiceRT();
-egl.eglx.services.ServiceRT["checkSignatureForNull"] = function(eglSignature, fieldName) {
+egl.eglx.services.ServiceRT["checkSignatureForNull"] = function(eglSignature) {
 	if(eglSignature.charAt(0) !== "?"){
-		throw egl.createRuntimeException("CRRUI2023E", [ fieldName ]);
+		throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 };
 
 egl.eglx.services.ServiceRT["checkNull"] = function(fieldInfo) {
 	if(fieldInfo !== null && fieldInfo !== undefined ){
-		egl.eglx.services.ServiceRT.checkSignatureForNull(fieldInfo.eglSignature, fieldInfo.setterFunction);
+		egl.eglx.services.ServiceRT.checkSignatureForNull(fieldInfo.eglSignature);
 	}
 	return null;
 };
