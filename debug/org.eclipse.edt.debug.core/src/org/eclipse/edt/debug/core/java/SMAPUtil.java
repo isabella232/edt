@@ -259,9 +259,6 @@ public class SMAPUtil
 			if ( smap == null )
 			{
 				// No SMAP in the class file; check if the *.eglsmap file can be read in directly.
-				// This only works for *.eglsmap files in the classpath of the debug IDE code (i.e. we don't have
-				// the classpath of the running application). This allows us to support SMAPs in the Java runtime,
-				// since currently their .class files do not contain SMAP data.
 				try
 				{
 					smap = getSMAP( target, ((IJavaReferenceType)type).getName() );
