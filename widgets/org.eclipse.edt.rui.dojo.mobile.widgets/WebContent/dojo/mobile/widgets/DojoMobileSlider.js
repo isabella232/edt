@@ -64,7 +64,9 @@ egl.defineWidget(
 				this.value = value;
 			
 			if(this.dojoWidget){
-				this.dojoWidget.value = value;
+				this.dojoWidget.set(
+					{ "value" : this.value }
+				);
 			}
 		},
 		
