@@ -31,14 +31,25 @@ egl.defineWidget(
 			 	"dojo/_base/lang",
 			 	"dojo/dom-class",
 			 	"dojo/dom-construct",
-			 	"dojox/mobile/common"
+			 	"dojox/mobile/common",
+			 	"dojo/mobile/utility/DisplayController"
 			 ],
-			function( synchronor, li, on, has, lang, domClass, domConstruct, common ){
+			function( 
+					synchronor, li, on, has, 
+					lang, domClass, domConstruct, 
+					common, dc 
+			){
 				_eglWidget.synchronor = synchronor;
 				
 				/** 
-				 * @Smyle: This is a fix to dojox.mobile.ListItem's bug where icon should be 
-				 * relocated after it has loaded, otherwise its offset will be miscalculated.
+				 * @Smyle: Following fixes have been added to original 
+				 * dojox.mobile.ListItem widget 
+				 * (1) Fix dojox.mobile.ListItem's bug where icon should be 
+				 * relocated after it has loaded, otherwise its offset will 
+				 * be miscalculated.
+				 * (2) Add a fix to dojox.mobile.ListItem that if it is in 
+				 * a display:none parent element, its initializing will be
+				 * ensured to work normally.
 				*/
 				if( !li.extendedStartup ){
 					li.extend(
@@ -46,9 +57,17 @@ egl.defineWidget(
 							"startup" : function(){
 								var _this = this;
 								
+								_this.adjusted = dc.checkOffsetHeightZeroForDisplayNone(
+									_this.domNode, _this, true
+								);
+								
+								// @Smyle: add display start guarding handler
+								if( _this.adjusted )
+									dc.makeVisiblityHidden( _this );
+								
 								if(_this._started){ return; }
 								_this.inheritParams();
-							
+								
 								var parent = _this.getParent();
 								if(_this.moveTo || _this.href || _this.url || _this.clickable || (parent && parent.select)){
 									_this._onClickHandle = _this.connect(_this.anchorNode, "onclick", "onClick");
@@ -74,12 +93,21 @@ egl.defineWidget(
 								var imgNode = null;
 								if( _this.iconNode )
 									imgNode = _this.iconNode.getElementsByTagName("IMG")[0];
+								
 								if ( imgNode )
 									on(
 										imgNode,
 										"load",
-										function() {
+										function(){
+											// @Smyle: add display start guarding handler
+											if( _this.adjusted )
+												dc.makeVisiblityHidden( _this );
+											
 											_this.layoutVariableHeight();
+											
+											// @Smyle: add display end guarding handler
+											if( _this.adjusted )
+												dc.makeDisplayNone( _this );
 										}
 									);
 								
@@ -87,6 +115,10 @@ egl.defineWidget(
 								if( (_this.domNode.offsetHeight > 45) && !dojo.hasClass(this.domNode,"mblVariableHeight") ){
 									dojo.addClass(this.domNode,"mblVariableHeight");
 								}
+								
+								// @Smyle: add display end guarding handler
+								if( _this.adjusted )
+									dc.makeDisplayNone( _this );
 							},
 							_setIconAttr: function(icon){
 								// if(!this.getParent()){ return; } // icon may be invalid because inheritParams is not called yet
