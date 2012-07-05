@@ -41,7 +41,12 @@ externalType MathLib type NativeType
 
 	static function cosh(value float in) returns(float);
 	
-	static function decimals(value decimal in) returns(int);
+	static function decimals(value smallint in) returns(int);
+    static function decimals(value int in) returns(int);
+    static function decimals(value bigint in) returns(int);
+    static function decimals(value float in) returns(int);
+    static function decimals(value smallfloat in) returns(int);
+    static function decimals(value decimal in) returns(int);
 
 	static function exp(value float in) returns(float);
 
