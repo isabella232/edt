@@ -13,24 +13,38 @@ egl.defineWidget(
 			this.isSettingValue = false;
 			this.datelocale = null;
 			var _this = this;
+			
 			require(
 				[
 				 	"dojo/date/locale",
 				 	"dojo/mobile/utility/Synchronor",
 				 	"dojox/mobile/SpinWheelDatePicker",
-				 	"dojox/mobile/SpinWheelSlot"
+				 	"dojox/mobile/SpinWheelSlot",
+				 	"dojo/mobile/utility/DisplayController"
 				],
-				function( datelocale, synchronor, dp, swl ){
+				function( datelocale, synchronor, dp, swl, dc ){
 					_this.synchronor = synchronor;
 					_this.datelocale = datelocale;
 					
-					// Resolve the problem that date picker's original startup will conflict 
-					// with the EGL widget framework's startup
+					/**
+					 * (1) Resolve the problem that date picker's original startup will conflict 
+					 * with the EGL widget framework's startup
+					 * (2) Resolve the display:none problem dojox.mobile.SpinWheelDatePicker not support
+					 */
 					if( !swl.extendedStartup ){
 						swl.extend(
 							{
 								"startup" : function(){
 									var parentWidget = this.getParent();
+									
+									this.adjusted = dc.checkOffsetHeightZeroForDisplayNone(
+										parentWidget.domNode, this, true
+									);
+									
+									// @Smyle: add display start guarding handler
+									if( this.adjusted )
+										dc.makeVisiblityHidden( this );
+									
 									if( parentWidget.centerPos == 0 && parentWidget.domNode.offsetHeight != 0 )
 										parentWidget.centerPos = Math.round(parentWidget.domNode.offsetHeight / 2);
 									this.centerPos = parentWidget.centerPos;
@@ -38,6 +52,49 @@ egl.defineWidget(
 									var items = this.panelNodes[1].childNodes;
 									this._itemHeight = items[0].offsetHeight;
 									this.adjust();
+									
+									// @Smyle: add display end guarding handler
+									if( this.adjusted )
+										dc.makeDisplayNone( this );
+								},
+								"setValue": function(newValue){
+									// @Smyle: add display start guarding handler
+									if( this.adjusted )
+										dc.makeVisiblityHidden( this );
+									
+									var idx0, idx1;
+									var curValue = this.getValue();
+									if(!curValue){
+										this._penddingValue = newValue;
+										return;
+									}
+									this._penddingValue = undefined;
+									var n = this.items.length;
+									for(var i = 0; i < n; i++){
+										if(this.items[i][1] === String(curValue)){
+											idx0 = i;
+										}
+										if(this.items[i][1] === String(newValue)){
+											idx1 = i;
+										}
+										if(idx0 !== undefined && idx1 !== undefined){
+											break;
+										}
+									}
+									var d = idx1 - (idx0 || 0);
+									var m;
+									if(d > 0){
+										m = (d < n - d) ? -d : n - d;
+									}else{
+										m = (-d < n + d) ? -d : -(n + d);
+									}
+									var to = this.getPos();
+									to.y += m * this._itemHeight;
+									this.slideTo(to, 1);
+									
+									// @Smyle: add display end guarding handler
+									if( this.adjusted )
+										dc.makeDisplayNone( this );
 								}
 							}
 						);
