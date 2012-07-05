@@ -963,6 +963,7 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(QualifiedFunctionInvocation object) {
+		processInvocation(object);
 		// check to see if this is an assignment of a literal array. if it is, then call out to the type
 		// to see if it wants to ensure that each of the array elements are type matching
 		if ((object.getId().equalsIgnoreCase("appendElement") || object.getId().equalsIgnoreCase("insertElement") || object.getId().equalsIgnoreCase(
@@ -1001,8 +1002,6 @@ public class ReorganizeCode extends AbstractVisitor {
 				object.getArguments().set(0, boxingExpression);
 			}
 		}
-
-		processInvocation(object);
 		return true;
 	}
 
