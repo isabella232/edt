@@ -55,14 +55,14 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The id of the generation contributor
                </documentation>
             </annotation>
          </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The implementation class
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.edt.gen.GenerationContributor"/>
@@ -87,6 +87,11 @@
    </element>
 
    <element name="runtimeContainer">
+      <annotation>
+         <documentation>
+            A runtime container is a Java classpath container that&apos;s added to the Java build path by the generator. A runtime container is necessary when the generated code requires additional runtime jars in order to compile or run.
+         </documentation>
+      </annotation>
       <complexType>
          <sequence minOccurs="1" maxOccurs="unbounded">
             <element ref="runtimeContainerEntry"/>
@@ -94,21 +99,21 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The id of the runtime container.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The display name of the runtime container
                </documentation>
             </annotation>
          </attribute>
          <attribute name="description" type="string">
             <annotation>
                <documentation>
-                  
+                  The description of the runtime container
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -119,46 +124,51 @@
    </element>
 
    <element name="runtimeContainerEntry">
+      <annotation>
+         <documentation>
+            A classpath entry within a runtime container.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="bundleId" type="string">
             <annotation>
                <documentation>
-                  
+                  The symbolic name for the bundle providing the runtime.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="bundleRoot" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional path within the resolved bundle. This is only used when the resolved bundle is a directory.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="versionRange" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional version range. If specified the bundleId must be is within this range, otherwise the highest version of the bundle is used when multiple versions are available.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="sourceBundleId" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional symbolic name for a source bundle. This is only used if sourceBundleRoot wasn&apos;t specified or it didn&apos;t resolve to a valid path within bundleId.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="sourceBundleRoot" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional path within bundleId specifying the source.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="javadocLocation" type="string">
             <annotation>
                <documentation>
-                  
+                  Can be a URL or a location on the file system
                </documentation>
             </annotation>
          </attribute>
