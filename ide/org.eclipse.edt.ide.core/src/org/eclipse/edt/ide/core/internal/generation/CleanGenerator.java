@@ -39,10 +39,9 @@ public class CleanGenerator extends AbstractGenerator {
 			outputLocation.accept(new IResourceProxyVisitor() {
 				@Override
 				public boolean visit(IResourceProxy proxy) throws CoreException {
-					IResource resource = proxy.requestResource();
-					
 					switch (proxy.getType()) {
 						case IResource.FILE:
+							IResource resource = proxy.requestResource();
 							if (!processedFiles.contains(resource)) {
 								IPath fullPath = resource.getFullPath();
 								IPath packagePath = fullPath.removeFirstSegments(segmentCount).removeLastSegments(1);
