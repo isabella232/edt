@@ -2274,13 +2274,31 @@ egl.isa = function( any, signature, anySignature )
 		if ( anySignature != undefined ) {
 			return signature == anySignature;
 		}
-		return egl.inferSignature( any ) === signature;
+		var sig = egl.inferSignature( any );
+		return ( sig === signature || egl.isSubType( sig, signature ) );
 	}
 	else
 	{
 		return false;
 	}
 };
+
+egl.isSubType = function(subTypeSignature, signature)
+{
+    var kind = subTypeSignature.charAt(0);
+    switch ( kind )
+    {
+        case 's':
+        case 'd':
+        case 'J':
+            if ( signature.length == 2 ) {
+                return (kind.toLowerCase() == signature.charAt(0).toLowerCase());
+            } else {
+                return false;
+            }
+    }
+    return false;
+}
 
 egl.valueString = function( any )
 {
@@ -3131,6 +3149,14 @@ egl.initialValueForType = function ( elementType )
 			var time = new Date();
 			time.setMilliseconds( 0 );
 			return time;
+	    case 'T':
+	        elementType = elementType.replace( /\//g, "\." );
+	        var index = elementType.lastIndexOf( '.' );
+	        index = index < 0 ? 0 : index;
+	        var packageName = elementType.substr( 1, index - 1 );
+	        var typeName = elementType.substring( index + 1, elementType.length - 1 );
+	        var pkg = egl.makePackage( packageName );
+	        return new pkg[ typeName ]();
 		default:
 			throw egl.createRuntimeException( "CRRUI2034E", [ elementType ] );
 	}

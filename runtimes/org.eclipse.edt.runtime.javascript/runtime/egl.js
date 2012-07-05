@@ -567,7 +567,7 @@ egl._defineClass = function(
 		clazz.prototype.eze$$typename = className;	
 		clazz.prototype.eze$$signature = 
 				"T" + packageName.toLowerCase().replace(/\./g,"/") + 
-				"/" + className.toLowerCase() + ";";
+				"/" + className + ";";
 					
 		egl.setClassFunctions(clazz, functions, 
 			traceFlag //internal classes not defined by the user?
@@ -635,7 +635,7 @@ egl.defineRUIPropertiesLibrary = function(
 		clazz.prototype.eze$$typename = className;
 		clazz.prototype.eze$$signature = 
 				"T" + packageName.toLowerCase().replace(/\./g,"/") + 
-				"/" + className.toLowerCase() + ";";
+				"/" + className + ";";
 		egl.setClassFunctions(clazz, functions, 
 			true    // these are internal classes not defined by the user
 		);
@@ -690,7 +690,7 @@ egl.defineWidget = function(
 		clazz.prototype.eze$$typename = className;
 		clazz.prototype.eze$$signature = 
 				"T" + packageName.toLowerCase().replace(/\./g,"/") + 
-				"/" + className.toLowerCase() + ";";
+				"/" + className + ";";
 		egl.setClassFunctions(clazz, functions, 
 			true    // these are internal classes not defined by the user
 		);
@@ -772,7 +772,7 @@ egl.defineRUIHandler = function(/*String*/   packageName,
 		clazz.prototype.eze$$typename = className;	
 		clazz.prototype.eze$$signature = 
 			"T" + packageName.toLowerCase().replace(/\./g,"/") + 
-			"/" + className.toLowerCase() + ";";
+			"/" + className + ";";
 		egl.setClassFunctions(clazz, functions,
 			false   // these are user-defined functions
 		);
@@ -839,7 +839,7 @@ egl.defineRUIWidget = function (/*String*/   packageName,
 		clazz.prototype.eze$$typename = className;	
 		clazz.prototype.eze$$signature = 
 				"T" + packageName.toLowerCase().replace(/\./g,"/") + 
-				"/" + className.toLowerCase() + ";";
+				"/" + className + ";";
 		egl.setClassFunctions(clazz, functions,
 			false   // these are user-defined functions
 		);
