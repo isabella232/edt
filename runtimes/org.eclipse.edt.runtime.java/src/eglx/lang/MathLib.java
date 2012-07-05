@@ -201,6 +201,26 @@ public class MathLib extends ExecutableBase {
 	public static int decimals(BigDecimal numericField) {
 		return numericField.scale();
 	}
+	
+	public static int decimals(double numericField) {
+		return 0;
+	}
+
+	public static int decimals(float numericField) {
+		return 0;
+	}
+
+	public static int decimals(int numericField) {
+		return 0;
+	}
+
+	public static int decimals(long numericField) {
+		return 0;
+	}
+
+	public static int decimals(short numericField) {
+		return 0;
+	}
 
 	public static int decimals(EDecimal numericField) {
 		if (numericField == null || numericField.ezeUnbox() == null)
