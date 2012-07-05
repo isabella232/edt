@@ -22,7 +22,7 @@ public class AnyValueTypeTemplate extends JavaScriptTemplate {
 	public void genSignature(EGLClass type, Context ctx, TabbedWriter out) {
 		if (type instanceof NamedElement) {
 			out.print("T");
-			out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
+			out.print(type.getTypeSignature().replaceAll("\\.", "/"));
 			out.print(";");
 		}
 		else {
