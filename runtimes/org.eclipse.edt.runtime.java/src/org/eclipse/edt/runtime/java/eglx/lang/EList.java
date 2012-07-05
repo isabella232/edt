@@ -125,11 +125,11 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 		return object instanceof EList && ((EList)object).signature.equals( signature );
 	}
 
-	public static <T> List<T> ezeCast( Object value, String signature ) throws TypeCastException
+	public static List ezeCast( Object value, String signature ) throws TypeCastException
 	{
 		if ( ezeIsa( value, signature ) )
 		{
-			return (List<T>)((EList)value).ezeUnbox();
+			return (List)((EList)value).ezeUnbox();
 		}
 		else
 		{
