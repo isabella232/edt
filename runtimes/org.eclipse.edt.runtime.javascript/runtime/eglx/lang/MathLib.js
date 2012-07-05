@@ -51,12 +51,15 @@ egl.eglx.lang.MathLib["cos"] = function(/*float*/value) {
 egl.eglx.lang.MathLib["cosh"] = function(/*float*/x) {
 	return ((Math.exp(x) + Math.exp(-x)) / 2);
 };
-egl.eglx.lang.MathLib["decimals"] = function(/*decimal*/x) {
+egl.eglx.lang.MathLib["decimals"] = function(x) {
     if (x instanceof egl.javascript.BigDecimal) {
         return x.scale();
     }
-	if (x.eze$$value === null || x.eze$$value === undefined) {
+    else if (x.eze$$value === undefined) {
 		return 0;
+	}
+    else if (x.eze$$value === null) {
+    	throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 
 	var kind;
