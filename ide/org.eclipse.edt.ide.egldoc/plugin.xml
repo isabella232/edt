@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="org.eclipse.edt.ide.egldoc.menus.genProject"
+            objectClass="org.eclipse.core.resources.IProject">
+         <visibility>
+      		<objectState
+               	name="projectNature"
+                value="org.eclipse.edt.ide.core.eglnature"/>
+         </visibility>
+         <action
+               class="org.eclipse.edt.ide.egldoc.actions.GenerateEGLDoc"
+               definitionId="org.eclipse.edt.ide.egldoc.commands.genProject"
+               enablesFor="*"
+               id="org.eclipse.edt.ide.egldoc.actions.genProject"
+               label="%genProjectActionLabel">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="%genProjectActionDesc"
+            id="org.eclipse.edt.ide.egldoc.commands.genProject"
+            name="%genProjectActionLabel">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.edt.ide.core.generators">
+      <provider
+            class="org.eclipse.edt.ide.egldoc.gen.EGLDocGenerator"
+            compiler="org.eclipse.edt.ide.compiler.edtCompiler"
+            id="org.eclipse.edt.ide.gen.EGLDocProvider"
+            language="HTML"
+            parentGeneratorId="this.hides.the.generator.from.the.ui"
+            provider="Eclipse.org"
+            version="0.8.2">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.edt.ide.core.GenerationContributors">
+      <GenerationContributor
+            class="org.eclipse.edt.gen.egldoc.EGLDocGenerationContributor"
+            id="org.eclipse.edt.ide.egldoc.genContributor1"
+            provider="org.eclipse.edt.ide.gen.EGLDocProvider">
+      </GenerationContributor>
+   </extension>
+
+</plugin>
