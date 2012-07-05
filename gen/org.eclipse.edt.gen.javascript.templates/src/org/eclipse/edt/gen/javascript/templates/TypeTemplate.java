@@ -50,7 +50,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 
 	public Boolean isAssignmentArrayMatchingWanted(Type type, Context ctx) {
 		// types can override this to cause type matching of array literals to be ignored.
-		return false;
+		return true;
 	}
 
 	public Boolean isAssignmentBreakupWanted(Type type, Context ctx, Assignment expr) {
@@ -417,7 +417,7 @@ public class TypeTemplate extends JavaScriptTemplate {
 		// so, how?
 		if ( ctx.get( Constants.SubKey_isaSignature ) != null ) {
 			out.print( "T" );
-			out.print(type.getTypeSignature().toLowerCase().replaceAll("\\.", "/"));
+			out.print(type.getTypeSignature().replaceAll("\\.", "/"));
 			out.print( ";" );
 		} else {
 			out.print(type.getTypeSignature());

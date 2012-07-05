@@ -19,6 +19,7 @@ import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Name;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 public class ArrayAccessTemplate extends JavaScriptTemplate {
 
@@ -32,7 +33,13 @@ public class ArrayAccessTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, expr.getIndex(), ctx, out);
 		out.print(" - 1)]");
 		out.print( " = " );
-		ctx.invoke(genExpression, arg1, ctx, out);
+		if (TypeUtils.isReferenceType(expr.getType()) || ctx.mapsToPrimitiveType(expr.getType())) {
+			out.print("egl.unboxAny(");
+			ctx.invoke(genExpression, arg1, ctx, out);
+			out.print(")");
+		} else {
+			ctx.invoke(genExpression, arg1, ctx, out);
+		}
 	}
 	
 	public void genCheckNullArgs(ArrayAccess expr, Context ctx, TabbedWriter out) {
