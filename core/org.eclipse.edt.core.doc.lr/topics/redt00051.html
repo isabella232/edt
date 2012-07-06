@@ -234,7 +234,43 @@ for example, when the <span class="ph synph"><span class="keyword kwd">as</span>
 /**
   * A pattern-matching function which compares this string to a pattern using
   * the rules of Informix's MATCHES operator.
+  * 
+  * This function makes its comparison character by character, left to right,
+  * and ends when one of the following conditions is met:
   *
+  *    - a character in this string fails to match a position 
+  *      in the regular expression (comparison is false)
+  *    - one string ends but the other does not (comparison is false)
+  *    - both strings end (comparison is true)
+  * 
+  * You can include any of the following special characters 
+  * in the regular expression:
+  *
+  *    * Acts as a wildcard, matching zero or more characters in the string 
+  *        expression
+  *    ? Acts as a wildcard, matching a single character in the string 
+  *        expression
+  *    \ Acts as the escape character, causing an "escape" 
+  *      from the normal processing. For example, if you wanted 
+  *      to specify a regular expression that would be a valid match 
+  *      for the string "a*c", the regular expression would be this:  a\*c
+  *
+  *   [ ] Any one of the characters between the two brackets is valid 
+  *       as a match for the next character in this string. For example, 
+  *       the following component of a regular expression indicates that 
+  *       a, b, or c is valid as a match: [abc]
+  *    
+  *       The - character creates a range within the bracket delimiters, 
+  *       such that any character within the range is valid as a match 
+  *       for the next character in this string. For example, the following 
+  *       component of a regular expression indicates that a, b, or c is valid
+  *       as a match:  [a-c]
+  *
+  *       The ^ character (a caret) reverses the meaning of the bracket 
+  *       delimiters. Any character other than the delimited characters 
+  *       is valid as a match for the next character in the string. For example,
+  *       the following component of a regular expression indicates that 
+  *       any character other than a, b, or c is valid as a match: [^abc].
   *
   * @param value  the pattern to compare with this string.
   * @return true if this string matches the pattern.
@@ -244,8 +280,8 @@ for example, when the <span class="ph synph"><span class="keyword kwd">as</span>
 
 /**
   * A pattern-matching function which compares this string to a pattern using
-  * the rules of Informix's MATCHES operator.
-  *
+  * the rules of Informix's MATCHES operator. For details outside the parameter
+  * list, see the description for the previous function.  
   *
   * @param value  the pattern to compare with this string.
   * @param esc    the escape character for the pattern.
