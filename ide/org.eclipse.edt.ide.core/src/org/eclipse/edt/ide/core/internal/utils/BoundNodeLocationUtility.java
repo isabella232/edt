@@ -33,6 +33,7 @@ import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.IFunctionBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
+import org.eclipse.edt.compiler.binding.NestedFunctionBinding;
 import org.eclipse.edt.compiler.binding.StructureItemBinding;
 import org.eclipse.edt.compiler.binding.TypeBinding;
 import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
@@ -113,6 +114,19 @@ public class BoundNodeLocationUtility {
 
 			this.address = binding.getName();
 			this.functionSignature = getSignature(binding.getFunctionBinding());
+		}
+	}
+	
+	private static class BoundFunctionBindingAddress extends BoundPartAddress {
+		
+		private NestedFunctionBinding functionBinding;
+		public BoundFunctionBindingAddress(IFile declaringFile, String partName, NestedFunctionBinding binding) {
+			super(declaringFile, partName);
+			this.functionBinding = binding;
+		}
+		
+		public NestedFunctionBinding getFunctionBinding(){
+			return this.functionBinding;
 		}
 	}
 	
@@ -227,6 +241,56 @@ public class BoundNodeLocationUtility {
 					return false;
 				}
 			}
+			return true;
+		}
+	}
+	
+	private class BoundFunctionNodeLocator extends AbstractASTVisitor {
+		
+		private BoundFunctionBindingAddress address;
+		private Node result;
+		private IFunctionBinding functionBinding;
+		private List fSearchFuncParaList;
+		
+		public BoundFunctionNodeLocator(BoundFunctionBindingAddress address) {
+			this.address = address;
+			this.functionBinding = (IFunctionBinding)address.getFunctionBinding().getType();
+			this.fSearchFuncParaList = this.functionBinding.getParameters();
+		}
+		
+		public boolean visit(NestedFunction nestedFunction) {
+				if(address.getFunctionBinding().getName() == nestedFunction.getName().getIdentifier()){
+					List aParameterList = nestedFunction.getFunctionParameters();
+					if(aParameterList.size() == fSearchFuncParaList.size()){
+						Iterator aParaItr = aParameterList.iterator();
+						Iterator fSearchParaItr = fSearchFuncParaList.iterator();
+						FunctionParameter aParameter = null;
+						FunctionParameterBinding aSearchParameter = null;
+						
+						while(aParaItr.hasNext()){
+							aParameter = (FunctionParameter)aParaItr.next();
+							aSearchParameter = (FunctionParameterBinding)fSearchParaItr.next();
+							
+							String fSearchTypeName = aSearchParameter.getType().getActualBindingName();
+							if(fSearchTypeName == null){
+								fSearchTypeName = aSearchParameter.getType().getName();
+							}
+							
+							String aTypeName = aParameter.getType().getBaseType().resolveTypeBinding().getActualBindingName();//.getCanonicalName();
+							if(aTypeName == null){
+								aTypeName = aParameter.getType().getBaseType().getCanonicalName();
+							}
+							
+							if(!fSearchTypeName.equalsIgnoreCase(aTypeName)){
+								return(true);
+							}
+						}
+						
+						result = nestedFunction;
+						return false;			
+					}
+			}
+			
 			return true;
 		}
 	}
@@ -436,6 +500,11 @@ public class BoundNodeLocationUtility {
 							address = new BoundFunctionParameterBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), (FunctionParameterBinding) dataBinding);
 						}
 						break;
+					case IDataBinding.NESTED_FUNCTION_BINDING:
+						if(Binding.isValidBinding(declaringPart)) {
+							address = new BoundFunctionBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), (NestedFunctionBinding)dataBinding);
+						}
+						break;
 					default:
 						if(Binding.isValidBinding(declaringPart)) {
 							address = new BoundDataBindingAddress(getFileForNode(declaringPart), declaringPart.getName(), dataBinding.getKind(), dataBinding.getName());
@@ -561,6 +630,11 @@ public class BoundNodeLocationUtility {
 					}
 					else if(address instanceof BoundFunctionParameterBindingAddress) {
 						BoundFunctionParameterBindingNodeLocator locator = new BoundFunctionParameterBindingNodeLocator((BoundFunctionParameterBindingAddress)address);
+						part.accept(locator);							
+						astNode[0] = locator.result;
+					}
+					else if(address instanceof BoundFunctionBindingAddress) {
+						BoundFunctionNodeLocator locator = new BoundFunctionNodeLocator((BoundFunctionBindingAddress)address);
 						part.accept(locator);							
 						astNode[0] = locator.result;
 					}
