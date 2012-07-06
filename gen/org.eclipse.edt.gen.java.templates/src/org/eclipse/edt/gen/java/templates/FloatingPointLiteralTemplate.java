@@ -22,6 +22,6 @@ public class FloatingPointLiteralTemplate extends JavaTemplate {
 		if (TypeUtils.getTypeKind(expr.getType()) == TypeUtils.TypeKind_SMALLFLOAT)
 			out.print(expr.getValue() + "f");
 		else
-			out.print(expr.getValue());
+			out.print(expr.getValue() + "d");
 	}
 }
