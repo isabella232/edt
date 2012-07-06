@@ -153,6 +153,9 @@ egl.eglx.lang.EInt16.fromENumber = function (x, nullable) {
 egl.eglx.lang.EInt16.fromEFloat64 = function (x) {
 	return egl.convertFloatToSmallint(x, egl.createNumericOverflowException);
 };
+egl.eglx.lang.EInt16.fromEFloat32 = function (x) {
+    return egl.convertFloatToSmallint(x, egl.createNumericOverflowException);
+};
 egl.eglx.lang.EInt16.fromEString = function (x) {
 	return egl.convertStringToSmallint(x, egl.createNumericOverflowException);
 };
@@ -286,7 +289,6 @@ egl.eglx.lang.EFloat32.fromEInt64  = function (x) {
 };
 egl.eglx.lang.EFloat32.fromEDecimal  = function (x) {
 	return egl.convertFloatToSmallfloat(Number( x.toString()), egl.createNumericOverflowException);
-
 };
 egl.eglx.lang.EFloat32.fromEString = function (x){
 	return egl.convertStringToFloat(x, egl.createNumericOverflowException);
