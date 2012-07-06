@@ -55,10 +55,7 @@ egl.eglx.lang.MathLib["decimals"] = function(x) {
     if (x instanceof egl.javascript.BigDecimal) {
         return x.scale();
     }
-    else if (x.eze$$value === undefined) {
-		return 0;
-	}
-    else if (x.eze$$value === null) {
+    if (x.eze$$value == null) {
     	throw egl.createNullValueException( "CRRUI2005E", [] );
 	}
 
@@ -181,9 +178,9 @@ egl.eglx.lang.MathLib["pow"] = function(/*float*/base, /*float*/exponent) {
 };
 
 egl.eglx.lang.MathLib["precision"] = function(x) {
-	if (x.eze$$value === null) {
-		return 0;
-	}
+    if (x.eze$$value == null) {
+        throw egl.createNullValueException( "CRRUI2005E", [] );
+    }
 
 	var kind;
 
