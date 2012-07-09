@@ -178,7 +178,7 @@ egl.eglx.lang.EInt16.bitnot = function (x) {
     return egl.bitnot(x); 
 };
 egl.eglx.lang.EInt16.asNumber= function (x) {
-	return egl.boxAny(x, "I;");
+	return egl.boxAny(x, "i;");
 };
 egl.eglx.lang.EInt16.leftShift = function (x1, x2) {
     return x1 << x2; 
@@ -1292,7 +1292,7 @@ egl.defineClass( "eglx.lang", "ENumber",
 {
 }
 );
-egl.eglx.lang.ENumber.ZERO =  {eze$$value : 0, eze$$signature : "N;"};
+egl.eglx.lang.ENumber.ZERO =  {eze$$value : 0, eze$$signature : "I;"};
 egl.eglx.lang.ENumber.fromEInt16 = function (x, decimals, limit) {   
 		return egl.convertIntegerToDecimal(x, limit, egl.createNumericOverflowException);
 };

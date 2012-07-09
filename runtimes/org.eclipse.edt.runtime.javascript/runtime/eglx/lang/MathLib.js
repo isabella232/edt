@@ -71,14 +71,28 @@ egl.eglx.lang.MathLib["decimals"] = function(x) {
 	var result = 0;
 	switch (kind) {
 	case 'b':
-	case 'N':
 	case 'n':
 	case 'd':
 	case '9':
 	case 'p':
 		var colon = x.eze$$signature.indexOf(':');
 		result = colon > 0 ? x.eze$$signature.substring(colon + 1, x.eze$$signature
-				.indexOf(';')) : x.eze$$value.scale() ;
+				.indexOf(';')) : x.eze$$value.scale();
+		break;
+	case 'F':
+	case 'f':
+		if (x.eze$$value != 0) {
+			var numStr = new egl.javascript.BigDecimal(x.eze$$value).format(-1,-1);
+			var pointIndex = numStr.lastIndexOf('.');
+			if (pointIndex != -1) {
+				// Ignore trailing zeros.
+				var lastDigitIndex = numStr.length - 1;
+				while (lastDigitIndex > pointIndex && numStr.charAt(lastDigitIndex) == '0') {
+					lastDigitIndex--;
+				}
+				result = lastDigitIndex - pointIndex;
+			}
+		}
 	}
 
 	return result;
@@ -205,7 +219,6 @@ egl.eglx.lang.MathLib["precision"] = function(x) {
 	case 'f':
 		return 6;
 	case 'b':
-	case 'N':
 	case 'n':
 	case 'd':
 	case '9':
