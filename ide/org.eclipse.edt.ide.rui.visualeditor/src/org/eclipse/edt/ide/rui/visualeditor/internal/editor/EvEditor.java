@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.EGLBasePlugin;
+import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLDocument;
 import org.eclipse.edt.ide.core.model.document.IEGLModelChangeListener;
 import org.eclipse.edt.ide.rui.editor.IEditorSelectAndRevealer;
@@ -967,7 +968,11 @@ public class EvEditor extends MultiPageEditorPart implements IEGLEditorWrapper, 
 		IEditorInput input = getEditorInput();
 		IDocumentProvider provider = getDocumentProvider();
 		IDocument document = provider.getDocument( input );
-		return (IEGLDocument)document;
+		if (document instanceof EGLDocument) {
+			return (IEGLDocument) document;
+		} else {
+			return new EGLDocument();
+		}
 	}
 
 	/**
