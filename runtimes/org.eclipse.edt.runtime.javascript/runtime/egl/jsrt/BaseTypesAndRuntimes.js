@@ -3394,7 +3394,15 @@ egl.nullableCompare = function(v1, v2, falseAnswer) {
 //this is a simple version for "systemType is systemName"
 //the generator spits out a string literal for the systemName (since sysVar.systemType is a string)
 //e is a potential comparator.  if none is provided, == operator used
-egl.is = function(l,r,e) { return (e) ? e(l.toString(),r) : (l == r); };
+egl.is = function(l,r,e) {
+    if ( l != null && l.eze$$value ) {
+        l = l.eze$$value;
+    }
+    if ( l == null ) {
+        return false;
+    }
+    return (e) ? e(l.toString(),r) : (l == r); 
+};
 
 egl.dateEquals = function(/*date*/ a, /*date*/ b, falseAnswer) {
 	if ( !a && !b ) {
