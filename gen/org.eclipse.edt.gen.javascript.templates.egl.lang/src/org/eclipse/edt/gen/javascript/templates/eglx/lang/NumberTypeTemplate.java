@@ -57,6 +57,10 @@ public class NumberTypeTemplate extends JavaScriptTemplate {
 		out.print(Constants.JSRT_EGL_NAMESPACE + ctx.getNativeMapping("eglx.lang.ENumber") + ".ZERO");
 	}
 
+	public Boolean isMathLibDecimalBoxingWanted(Type type, Context ctx) {
+		return !type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber");
+	}
+
 	// this method gets invoked when there is a specific fixed precision needed
 	public void genSignature(FixedPrecisionType type, Context ctx, TabbedWriter out) {
 		if (type.getTypeSignature().equalsIgnoreCase("eglx.lang.ENumber")) {
