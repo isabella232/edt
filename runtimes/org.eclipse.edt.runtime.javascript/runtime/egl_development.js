@@ -1026,16 +1026,21 @@ define(["runtime/edt_runtime_all.js"], function(){
 		var packageName, typeName;
 		try {
 		    egl.canPrintError = false;
-			if ( egl.rootHandler ) {
-				packageName = egl.rootHandler.eze$$package.replace(/\./g, '/');
-				typeName = egl.rootHandler.eze$$typename;
-				egl.partialTerminateSession();
-			}
+		    if(! egl.rootHandler){
+		    	document.location = document.location;
+		    }
+			packageName = egl.rootHandler.eze$$package.replace(/\./g, '/');
+			typeName = egl.rootHandler.eze$$typename;
+			egl.partialTerminateSession();
 			require(["___reloadHandler?key=" + Math.random() + "&contextKey=" + egl.getContextKey() + "&fileName=/" + egl__contextRoot + "/" + packageName + "/" + typeName + ".js"], function(){
-				egl.startupInitCallback();
-				egl.beginWidgetPosition();
-				egl.startVEWidgetTimer();
-				egl.canPrintError = true;
+				try {
+					egl.startupInitCallback();
+					egl.beginWidgetPosition();
+					egl.startVEWidgetTimer();
+					egl.canPrintError = true;
+				} catch ( e ) {
+					document.location = document.location;
+				}
 			});
 		} catch ( e ) {
 			document.location = document.location;
