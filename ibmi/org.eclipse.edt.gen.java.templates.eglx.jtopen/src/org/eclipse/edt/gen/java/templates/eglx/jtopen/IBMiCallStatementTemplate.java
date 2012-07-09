@@ -20,6 +20,7 @@ import org.eclipse.edt.mof.egl.CallStatement;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.MemberAccess;
+import org.eclipse.edt.mof.egl.MemberName;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
@@ -74,15 +75,16 @@ public class IBMiCallStatementTemplate extends JavaTemplate implements Constants
 		return invoc;
 	}
 	
-	public MemberAccess getFunctionAccess(CallStatement callStatement, MemberAccess ma, Context ctx){
-		MemberAccess functionAccess = (MemberAccess)ctx.invoke(getFunctionAccess, callStatement, ma.getNamedElement(), ctx);
-		if(functionAccess == null){
-			functionAccess = ma;
-		}
-		return functionAccess;
+	public MemberAccess getFunctionAccess(CallStatement callStatement, MemberName mn, Context ctx){
+		MemberAccess ma = factory.createMemberAccess();
+		ma.setMember(mn.getMember());
+		ma.setId(mn.getId());
+		ma.setQualifier(factory.createThisExpression());
+		return ma;
 	}
 	
-	public MemberAccess getFunctionAccess(CallStatement callStatement, Function function, Context ctx)  {
-		return null;
+	public MemberAccess getFunctionAccess(CallStatement callStatement, MemberAccess ma, Context ctx){
+		return ma;
 	}
+	
 }
