@@ -15,28 +15,46 @@ egl.defineWidget(
 	'div',
 {
 	"constructor" : function() {
-		this.setChildType("dojo.widgets.DojoTreeNode");
-		this.eglNodes = {};
-		this.showRoot = true;
-		this.requireList = ["dijit/Tree", "dojo/data/ItemFileWriteStore"];
-		this.renderWhenDojoIsDoneLoading(this.requireList);
+		var _this = this;
+		_this.setChildType("dojo.widgets.DojoTreeNode");
+		_this.eglNodes = {};
+		_this.showRoot = true;
+		_this.initRendered = false;
+		_this.requireList = ["dijit/Tree", "dojo/data/ItemFileWriteStore", "utility/Synchronor" ];
+		require(
+			_this.requireList,
+			function( tree, ifws, synchronor ){
+				_this.synchronor = synchronor;
+				_this.renderWhenDojoIsDoneLoading(
+						_this.requireList
+				);
+			}
+		);
 	},
 	"createDojoWidget" : function(parent){
+		if( this.synchronor )
+			this.synchronor.trigger( this, "SYN_MODULE_LOADED" );
+		
 		if(!this.model)
-			this.setModel();
+			this.setModel( false );
+
 		var eglWidget = this;
-		this.dojoID = "egl.DojoTree" + (++egl._dojoSerial);
 		this._mergeArgs({
 			id: this.id || this.dojoID,
-			model: this.model,			
+			model: this.model,
 			showRoot: this.showRoot,
-			_createTreeNode: function(args) {
+			_createTreeNode: function(args){
 				var treeNode = eglWidget.eglNodes[args.item.id];
 				var node;
 				if(treeNode && args.item && !args.item.root){
 					if(treeNode.dojoWidget){
+						// @Smyle: update indent attribute if there is any indent 
+						// change happening, e.g, root hidden, root shown, etc.
+						if( treeNode.dojoWidget.get("indent") != args["indent"] )
+							treeNode.dojoWidget.set( "indent", args["indent"] );
 						return treeNode.dojoWidget;
 					}
+					
 					var style = treeNode.eze$$DOMElement.style;
 					treeNode._mergeArgs(args);
 					treeNode._args.getParent = function(){		               
@@ -56,6 +74,7 @@ egl.defineWidget(
 				return node;				
 			}
 		});
+		
 		this._args.onClick = function(item, node, e){
 			eglWidget.selection = item.id && item.id.length > 0 ? item.id[0] : eglWidget.id;			
 			eglWidget.handleEvent(eglWidget.getOnClick(), "onClick", e);
@@ -79,25 +98,56 @@ egl.defineWidget(
 		
 		setTimeout(egl.startVEWidgetTimer, 2000);
 		this.dojoWidget.startup();
+		this.initRendered = true;
 	},
-	"setModel" : function() {
-		this.storeData = {
-			identifier: 'id',
-			label: 'text',
-			items: this.getModelData()
-		};
-		this.store = new dojo.data.ItemFileWriteStore({data: this.storeData});		
-		this.model = new dijit.tree.ForestStoreModel({
-			store: this.store,
-			rootLabel: this.text
-		});
+	"setModel" : function( toRenderWidget ) {
+		var _this = this;
+	
+		toRenderWidget = toRenderWidget ? true : false;
+		
+		if( !this.id ){
+			_this.dojoID = "egl.DojoTree" + (++egl._dojoSerial);
+			_this.id = _this.dojoID;
+		}
+		
+		require(
+			[
+			 	"utility/Synchronor"
+			 ],
+			function( synchronor ){
+				synchronor.wait(
+					[_this], "SYN_MODULE_LOADED",
+					function(){
+						_this.storeData = {
+							identifier : 'id',
+							label : 'text',
+							items : _this
+									.getModelData()
+						};
+					
+						_this.store = new dojo.data.ItemFileWriteStore(
+								{
+									data : _this.storeData
+								});
+						_this.model = new dijit.tree.ForestStoreModel(
+								{
+									store : _this.store,
+									rootLabel : _this.text,
+									rootId : _this.id
+								});
+						
+						if( toRenderWidget && _this.initRendered )
+							_this.renderWhenDojoIsDoneLoading( _this.requireList ); 
+					}
+				);
+			}
+		);
 	},
 	"setChildren" : function(children) {
-		egl.eglx.ui.rui.Widget.prototype.removeChildren.call(this);
-		this.children = children;
-		if(dojo && dojo.data)
-			this.setModel();
-		this.renderWhenDojoIsDoneLoading(this.requireList);
+		var _this = this;
+		egl.eglx.ui.rui.Widget.prototype.removeChildren.call(_this);
+		_this.children = children;
+		_this.setModel( true );
 	},
 	"removeChildren" : function() {
 		this.setChildren([]);
@@ -107,9 +157,8 @@ egl.defineWidget(
 			child.parent = this;
 			child.setTree(this);
 			var eglWidget = this;
-			this.store.fetchItemByIdentity({
-				identity: eglWidget.id, 
-				onItem: function (item) {
+			this.model.getRoot(
+				function (item) {
 					try {
 						eglWidget.model.newItem(child.getItemOnly(), item);
 						eglWidget.store.save();
@@ -118,10 +167,10 @@ egl.defineWidget(
 						egl.printError("Cannot add TreeNode \""+child.id+"\" to \""+eglWidget.id+"\". Duplicate node is not allowed.", e);
 					}
 				}, 
-				onFail: function() {
+				function() {
 					egl.printError("Cannot add TreeNode \""+child.id+"\" to \""+eglWidget.id+"\". Duplicate node is not allowed.");
 				}
-			});	
+			);	
 			this.children.appendElement(child);
 			if(child.children && child.children.length){
 				for(var i=0; i<child.children.length; i++){
