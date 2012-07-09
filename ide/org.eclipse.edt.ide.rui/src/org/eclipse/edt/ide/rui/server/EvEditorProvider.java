@@ -25,9 +25,9 @@ import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.internal.core.builder.AccumulatingProblemrRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DefaultCompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.gen.javascript.JavaScriptAliaser;
 import org.eclipse.edt.ide.core.internal.model.EGLFile;
 import org.eclipse.edt.ide.core.internal.model.EGLProject;
+import org.eclipse.edt.ide.core.internal.model.document.EGLDocument;
 import org.eclipse.edt.ide.core.model.EGLCore;
 import org.eclipse.edt.ide.core.model.EGLModelException;
 import org.eclipse.edt.ide.core.model.IEGLFile;
@@ -62,6 +62,7 @@ import org.eclipse.edt.ide.rui.utils.Util;
 import org.eclipse.edt.ide.rui.utils.WorkingCopyGenerationResult;
 import org.eclipse.edt.ide.ui.internal.EGLUI;
 import org.eclipse.edt.ide.ui.internal.editor.EGLEditor;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
@@ -99,7 +100,12 @@ public class EvEditorProvider {
 		PROVIDER_KEY += 1;
 		_eglEditor = eglEditor;
 		_currentFile = ( (IFileEditorInput)_eglEditor.getEditorInput() ).getFile();
-		_currentDocument = (IEGLDocument)_eglEditor.getDocumentProvider().getDocument( _eglEditor.getEditorInput() );
+		IDocument doc = _eglEditor.getDocumentProvider().getDocument(_eglEditor.getEditorInput());
+		if (doc instanceof EGLDocument) {
+			_currentDocument = (IEGLDocument) doc;
+		} else {
+			_currentDocument = new EGLDocument();
+		}
 		_generator = new JavaScriptPreviewGenerator( _currentFile );
 		_generationDirectory = ROOT_GENERATION_DIRECTORY.append( Integer.toString( PROVIDER_KEY ) );
 		_documentCache = new DocumentCache( _currentDocument, _currentFile );
