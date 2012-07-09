@@ -1,6 +1,5 @@
 <script type="text/javascript">
 	require({
-		paths: {"bidi": "dojo/widgets/bidi"},
 		packages : [ {
 			name : 'dojo/samples',
 			location : '../dojo/samples'
@@ -13,6 +12,9 @@
 		}, {
 			name : 'dojox',
 			location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox'
+		} ,{
+			name : 'bidi',
+			location : '../dojo/widgets/bidi'
 		} ],
 		locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
 	});
