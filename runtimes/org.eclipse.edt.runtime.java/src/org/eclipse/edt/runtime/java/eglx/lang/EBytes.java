@@ -19,7 +19,10 @@ import org.eclipse.edt.javart.Constants;
 import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.util.NumericUtil;
 
-import eglx.lang.*;
+import eglx.lang.AnyException;
+import eglx.lang.InvalidArgumentException;
+import eglx.lang.InvalidIndexException;
+import eglx.lang.TypeCastException;
 
 public class EBytes extends AnyBoxedObject<byte[]> {
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -53,7 +56,7 @@ public class EBytes extends AnyBoxedObject<byte[]> {
 	}
 
 	public static boolean ezeIsa(Object value, Integer... length) {
-		boolean isa = value instanceof EBytes;
+		boolean isa = (value instanceof EBytes && ((EBytes) value).ezeUnbox() != null);
 		if (isa) {
 			if (length.length != 0)
 				isa = ((EBytes) value).getLength() == length[0];

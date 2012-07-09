@@ -56,7 +56,7 @@ public class ETime extends AnyBoxedObject<Calendar> {
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
-		return value instanceof ETime || value instanceof Calendar;
+		return (value instanceof ETime && ((ETime) value).ezeUnbox() != null) || value instanceof Calendar;
 	}
 
 	public String toString() {

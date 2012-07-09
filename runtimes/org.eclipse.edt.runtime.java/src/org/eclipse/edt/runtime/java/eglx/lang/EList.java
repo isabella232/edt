@@ -122,7 +122,7 @@ public class EList<E> extends AnyBoxedObject<List<E>>
 	 */
 	public static boolean ezeIsa( Object object, String signature ) 
 	{
-		return object instanceof EList && ((EList)object).signature.equals( signature );
+		return (object instanceof EList && ((EList) object).ezeUnbox() != null) && ((EList)object).signature.equals( signature );
 	}
 
 	public static List ezeCast( Object value, String signature ) throws TypeCastException

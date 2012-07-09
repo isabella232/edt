@@ -46,7 +46,7 @@ public class EFloat extends AnyBoxedObject<Double> implements eglx.lang.ENumber 
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EFloat || value instanceof Double;
+		return (value instanceof EFloat && ((EFloat) value).ezeUnbox() != null) || value instanceof Double;
 	}
 
 	public static Double asFloat(Short value) {

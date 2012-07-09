@@ -38,7 +38,7 @@ public class EInt extends AnyBoxedObject<Integer> implements eglx.lang.ENumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EInt || value instanceof Integer;
+		return (value instanceof EInt && ((EInt) value).ezeUnbox() != null) || value instanceof Integer;
 	}
 
 	public String toString() {

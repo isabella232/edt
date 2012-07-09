@@ -58,7 +58,7 @@ public class EString extends AnyBoxedObject<String> {
 	}
 
 	public static boolean ezeIsa(Object value, Integer... length) {
-		boolean isa = value instanceof EString;
+		boolean isa = (value instanceof EString && ((EString) value).ezeUnbox() != null);
 		if (isa) {
 			if (length.length != 0)
 				isa = ((EString) value).getLength() == length[0];

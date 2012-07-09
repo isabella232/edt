@@ -47,7 +47,7 @@ public class EBigint extends AnyBoxedObject<Long> implements eglx.lang.ENumber {
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof EBigint || value instanceof Long;
+		return (value instanceof EBigint && ((EBigint) value).ezeUnbox() != null) || value instanceof Long;
 	}
 
 	public String toString() {

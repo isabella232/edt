@@ -42,7 +42,7 @@ public class ESmallfloat extends AnyBoxedObject<Float> implements eglx.lang.ENum
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof ESmallfloat || value instanceof Float;
+		return (value instanceof ESmallfloat && ((ESmallfloat) value).ezeUnbox() != null) || value instanceof Float;
 	}
 
 	public String toString() {

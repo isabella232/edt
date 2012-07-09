@@ -59,7 +59,7 @@ public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof eglx.lang.ENumber || value instanceof Number;
+		return (value instanceof eglx.lang.ENumber && ((eglx.lang.EAny) value).ezeUnbox() != null) || value instanceof Number;
 	}
 
 	public static eglx.lang.ENumber asNumber(Short value) throws AnyException {

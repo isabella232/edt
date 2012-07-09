@@ -37,7 +37,7 @@ public class ESmallint extends AnyBoxedObject<Short> implements eglx.lang.ENumbe
 	}
 
 	public static boolean ezeIsa(Object value) {
-		return value instanceof ESmallint || value instanceof Short;
+		return (value instanceof ESmallint && ((ESmallint) value).ezeUnbox() != null) || value instanceof Short;
 	}
 
 	public String toString() {

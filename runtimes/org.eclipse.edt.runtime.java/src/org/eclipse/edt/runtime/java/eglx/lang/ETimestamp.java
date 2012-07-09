@@ -151,7 +151,7 @@ public class ETimestamp extends AnyBoxedObject<Calendar> {
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
-		boolean isa = value instanceof ETimestamp;
+		boolean isa = (value instanceof ETimestamp && ((ETimestamp) value).ezeUnbox() != null);
 		if (isa) {
 			if (args.length == 2)
 				isa = ((ETimestamp) value).startCode == args[0] && ((ETimestamp) value).endCode == args[1];

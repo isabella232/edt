@@ -255,7 +255,7 @@ public class EDecimal extends AnyBoxedObject<BigDecimal> implements eglx.lang.EN
 	}
 
 	public static boolean ezeIsa(Object value, Integer... args) {
-		boolean isa = value instanceof EDecimal;
+		boolean isa = (value instanceof EDecimal && ((EDecimal) value).ezeUnbox() != null);
 		if (isa) {
 			if (args.length != 0) {
 				isa = ((EDecimal) value).getPrecision() == args[0];
