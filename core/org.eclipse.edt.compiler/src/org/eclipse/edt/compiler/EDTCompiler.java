@@ -15,12 +15,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
-import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
@@ -131,24 +128,18 @@ public class EDTCompiler extends BaseCompiler {
 			return StatementValidator.Registry.get("eglx.persistence.sql");
 		}
 		else if (validator[0] == null && stmt instanceof org.eclipse.edt.compiler.core.ast.CallStatement) {
-			CallStatement call = (CallStatement) stmt;
-			Expression exp = call.getInvocationTarget();
-			IDataBinding binding = exp.resolveDataBinding();
-			if (Binding.isValidBinding(binding)) {			
-				if(binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
-					return StatementValidator.Registry.get("eglx.jtopen");
-				}
-				else if(binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-						binding.getAnnotation(new String[]{"eglx", "rest"}, "EGLService") != null ||
-						binding.getDeclaringPart() != null && 
-						binding.getDeclaringPart().getKind() == ITypeBinding.SERVICE_BINDING){
-					return StatementValidator.Registry.get("eglx.services");
-				}
+			if(org.eclipse.edt.compiler.tools.IRUtils.isIBMi((CallStatement) stmt)){
+				return StatementValidator.Registry.get("eglx.jtopen");
 			}
-			return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
+			else if(org.eclipse.edt.compiler.tools.IRUtils.isService((CallStatement) stmt)){
+				return StatementValidator.Registry.get("eglx.services");
+				
+			}
+			else{
+				return StatementValidator.Registry.get(MofConversion.EGL_lang_package);
+			}
 		}
-		else {
-			return validator[0];
-		}
+		return validator[0];
 	}
+	
 }

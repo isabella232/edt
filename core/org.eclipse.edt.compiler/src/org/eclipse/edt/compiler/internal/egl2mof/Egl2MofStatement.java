@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
@@ -174,17 +172,13 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.CallStatement callStatement) {
 		//FIXME JV this need to be extensible 
 		CallStatement stmt;
-		org.eclipse.edt.compiler.core.ast.Expression exp = callStatement.getInvocationTarget();
-		IDataBinding binding = exp.resolveDataBinding();
-		if(Binding.isValidBinding(binding) && binding.getAnnotation(new String[]{"eglx", "jtopen","annotations"}, "IBMiProgram") != null){
+		if(org.eclipse.edt.compiler.tools.IRUtils.isIBMi(callStatement)){
 			stmt = IBMiFactory.INSTANCE.createIBMiCallStatement();
 		}
-		else if(Binding.isValidBinding(binding) && (binding.getAnnotation(new String[]{"eglx", "rest"}, "Rest") != null ||
-				binding.getAnnotation(new String[]{"eglx", "rest"}, "EglService") != null ||
-				binding.getDeclaringPart().getKind() == IPartBinding.SERVICE_BINDING)){
+		else if(org.eclipse.edt.compiler.tools.IRUtils.isService(callStatement)){
 			stmt = ServicesFactory.INSTANCE.createServicesCallStatement();
 		}
-		else {
+		else{
 			//TODO this should create a "plain" CallStatement
 			IOStatementGenerator generator = getGeneratorFor(callStatement);
 			stmt = generator.genCallStatement(callStatement, eObjects);
