@@ -23,15 +23,10 @@ public class Constants {
 	public static final String SERIAL_VERSION_UID = "10";
 
 	// EGL message id's
-	public static final String EGLMESSAGE_UNSUPPORTED_ELEMENT = "1000";
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_OBJECT = "1001";
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_ANNOTATION = "1002";
 	public static final String EGLMESSAGE_MISSING_TEMPLATE_FOR_TYPE = "1003";
-	public static final String EGLMESSAGE_VALIDATION_FAILED = "9980";
-	public static final String EGLMESSAGE_VALIDATION_COMPLETED = "9981";
 	public static final String EGLMESSAGE_VALIDATION_NOFUNCFOUND = "9982";
-	public static final String EGLMESSAGE_GENERATION_FAILED = "9990";
-	public static final String EGLMESSAGE_GENERATION_COMPLETED = "9991";
 	public static final String EGLMESSAGE_EXCEPTION_OCCURED = "9998";
 	public static final String EGLMESSAGE_STACK_TRACE = "9999";
 }
