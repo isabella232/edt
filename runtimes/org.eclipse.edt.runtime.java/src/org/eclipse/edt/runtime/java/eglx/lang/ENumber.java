@@ -22,7 +22,7 @@ import eglx.lang.AnyException;
 import eglx.lang.TypeCastException;
 
 /**
- * Class to be used in processing Decimal operations
+ * Class to be used in processing Number operations
  * @author twilson
  */
 public class ENumber extends AnyBoxedObject<Number> implements eglx.lang.ENumber {
