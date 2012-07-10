@@ -21,18 +21,6 @@
 		<property name="writableBuildRoot" value="/tmp/build" />
 
 		<property name="buildDir" value="${writableBuildRoot}/${buildType}_ThisBuild" />
-
-		<!-- Set associate.sites to the update sites that get inserted into content.xml,
-		     to become available for resolving dependencies. -->
-		<condition property="associate.sites" value="http://download.eclipse.org/edt/updates/nightly,${line.separator}http://download.eclipse.org/jetty/updates/jetty-bundles-7.x">
-			<equals arg1="${buildType}" arg2="N" />
-		</condition>
-		<condition property="associate.sites" value="http://download.eclipse.org/edt/milestones/1.0,${line.separator}http://download.eclipse.org/jetty/updates/jetty-bundles-7.x">
-			<equals arg1="${buildType}" arg2="M" />
-		</condition>
-		<condition property="associate.sites" value="http://download.eclipse.org/edt/updates/1.0,${line.separator}http://download.eclipse.org/jetty/updates/jetty-bundles-7.x">
-			<equals arg1="${buildType}" arg2="R" />
-		</condition>
 		
 		<!-- This build goes into directory ${buildType}_ThisBuild and the previous
 		     build is kept in ${buildType}_OlderBuild.  Note that the publish step 
