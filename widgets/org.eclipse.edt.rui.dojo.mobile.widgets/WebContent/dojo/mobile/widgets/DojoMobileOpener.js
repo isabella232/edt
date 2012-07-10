@@ -22,6 +22,7 @@ egl.defineWidget(
 			var _this = this;
 			
 			parent.style.minHeight = "2em";
+			parent.style.zIndex = "10001";
 			
 			if( _this.isModal ) 
 				_this.dojoWidget = new dojox.mobile.Opener({},parent);

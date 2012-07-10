@@ -12,7 +12,7 @@
 // IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
-package dojo.mobile.widgets;        
+package dojo.mobile.widgets;         
            
 ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets", 
@@ -40,7 +40,11 @@ ExternalType DojoMobileTabContainer extends DojoMobileContainer type JavaScriptO
 			container = @VEContainer{} 
 		}      
 	}   
-
+	
+	/**
+		tabPosition string, default "", when tabPosition is 'Fixed Top' or 'Fixed Bottom',
+		tab container's z-index will become 10000. 
+	*/
 	tabPosition String { @Property{}, @VEProperty{
 		propertyType = "choice", 
 		displayName  = "tabPosition",   

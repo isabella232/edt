@@ -25,7 +25,7 @@ ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject
  		restriction.
  	*/
 	isModal boolean{ @Property{}, @VEProperty{ displayName="isModal"} };
-	   
+	    
 	/**
 		Show the content specified in the 'children' field
 		of this widget in a separate view.  On some devices,
@@ -47,6 +47,8 @@ ExternalType DojoMobileOpener extends DojoMobileContainer type JavaScriptObject
 		* DojoMobileLib.OPENER_POP_AFTER: places drop down after the aroundWidget
 		* DojoMobileLib.OPENER_POP_ABOVE: drop down goes above aroundWidget
 		* DojoMobileLib.OPENER_POP_BELOW: drop down goes below aroundWidget
+		
+		@notes Opener's z-index is 10001
 	*/
 	function showOpener( aroundWidget DojoMobileBase?, position String? );  
 
