@@ -20,7 +20,7 @@ egl.defineWidget(
 {
 	"constructor" : function(){
 		var _this = this;
-		_this.intervalTime = 100;
+		this.intervalTime = 0;
 		require( 
 			["dojo/mobile/utility/Synchronor"],
 			function( synchronor ){
@@ -33,7 +33,7 @@ egl.defineWidget(
 		this.dojoWidget = dojox.mobile.ProgressIndicator.getInstance();
 		this.synchronor.trigger( this, "SYN_READY" );
 		
-		if(this.show)
+		if(this.show || this.intervalTime > 0 )
 			this.showProgress();
 		if(this.hide)
 			this.hideProgress();

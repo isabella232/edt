@@ -29,6 +29,8 @@ define(
 				 * @param nodeToCheck HTMLDomElement,
 				 * @param objToStoreResult JSONObject, optional, if leave it default, no result will be stored
 				 * @param isResultStore Boolean, optional, default true
+				 * @return Boolean, return true if find display:none element causing offset height to 0, 
+				 * otherwise return false
 				 */
 				"checkOffsetHeightZeroForDisplayNone" : function(
 					nodeToCheck, objToStoreResult, isResultToStore
@@ -74,7 +76,6 @@ define(
 					return false;
 				},
 				"makeVisiblityHidden" : function( storeObj ){
-					debugger;
 					if( !storeObj["__CHECK_DISPLAY_NONE__"] ) return;
 					for( var key in storeObj["__CHECK_DISPLAY_NONE__"] ){
 						if( storeObj["__CHECK_DISPLAY_NONE__"][key]["node"] ){
@@ -84,7 +85,6 @@ define(
 					}
 				},
 				"makeDisplayNone" : function( storeObj ){
-					debugger;
 					if( !storeObj["__CHECK_DISPLAY_NONE__"] ) return;
 					for( var key in storeObj["__CHECK_DISPLAY_NONE__"] ){
 						if( storeObj["__CHECK_DISPLAY_NONE__"][key]["node"] ){
