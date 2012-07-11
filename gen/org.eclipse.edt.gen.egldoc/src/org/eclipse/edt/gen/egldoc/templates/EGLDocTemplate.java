@@ -20,6 +20,8 @@ public class EGLDocTemplate extends AbstractTemplate {
 	public static final String genPart = "genPart";
 	public static final String genBody = "genBody";
 	
+	public static final String genHead = "genHead";
+	public static final String genTop  = "genTop";
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
 	public static final String preGenPart = "preGenPart";

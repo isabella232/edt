@@ -19,18 +19,44 @@ public class EGLClassTemplate extends EGLDocTemplate {
 	
 	public void preGenPart(EGLClass part, Context ctx) {
 		//TODO any required analysis or validation
+		
+	
+		
+		
 	}
 	
+	
+	
+	
 	public void genPart(EGLClass part, Context ctx, TabbedWriter out) {
-		out.println("<html>");
-		out.println("<body>");
+		ctx.invoke(genTop, part, ctx, out);
+		ctx.invoke(genHead, part, ctx, out);
 		ctx.invoke(genBody, part, ctx, out);
-		out.println("</body>");
 		out.println("</html>");
 	}
 	
+	
+	
+	
+	public void genHead(EGLClass part, Context ctx, TabbedWriter out)
+	{
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></meta>");
+		out.println("<meta name=\"DC.Type\" content=\"topic\"></meta>");
+		out.println("<meta name=\"DC.Title\" content=\"" 
+		            + part.getName() + " " + part.getEClass().getName() + "\"></meta>");
+				   
+		
+	   
+	}
+	
+	
+	
+	
+	
 	public void genBody(EGLClass part, Context ctx, TabbedWriter out) {
+		out.println("<body>");
 		out.println("<b>" + part.getFullyQualifiedName() + "</b>");
-		out.println("TODO - actually generate egldoc");
+		out.println("TODO");
 	}
 }

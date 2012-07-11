@@ -14,16 +14,26 @@ package org.eclipse.edt.gen.egldoc.templates;
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.EGLClass;
+import org.eclipse.edt.mof.egl.Part;
 
-public class RecordTemplate extends EGLDocTemplate {
+public class PartTemplate extends EGLDocTemplate {
 	
-	public void genBody(EGLClass part, Context ctx, TabbedWriter out) {
-		
-		
-		out.println("<b>Record: " + part.getName() + "</b>");
-		
-		
-		
-		out.println("TODO - actually generate egldoc");
+	
+	
+//	public void genPart(Part part, Context ctx, TabbedWriter out) {
+//		ctx.invoke(genTop, part, ctx, out);
+//		ctx.invoke(genHead, part, ctx, out);
+//		ctx.invoke(genBody, part, ctx, out);
+//		out.println("</html>");
+//	}
+	
+	
+	// Is for English.  Language should be made external.
+	public void genTop(Part part, Context ctx, TabbedWriter out)
+	{
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"" + 
+		     "http://www.w3.org/TR/html4/loose.dtd\">");
+		out.println ("<html xml:lang=\"en-us\" lang=\"en-us\">");        
 	}
 }
