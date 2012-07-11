@@ -58,8 +58,7 @@ ExternalType DojoTimeTextBox Extends DojoValidationBase type JavaScriptObject{
 					dataMapping = @DataMapping {
 						forArray = false,
 						isDefault = true,
-						mappings = [MappingKind.TYPE_PRIMITIVE_TIME, 
-									MappingKind.TYPE_PRIMITIVE_TIMESTAMP]
+						mappings = [MappingKind.TYPE_PRIMITIVE_TIME]
 					},
 					genController = true,
 					purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_UPDATE],
@@ -70,8 +69,7 @@ ExternalType DojoTimeTextBox Extends DojoValidationBase type JavaScriptObject{
 					dataMapping = @DataMapping {
 						forArray = false,
 						isDefault = true,
-						mappings = [MappingKind.TYPE_PRIMITIVE_TIME, 
-									MappingKind.TYPE_PRIMITIVE_TIMESTAMP]
+						mappings = [MappingKind.TYPE_PRIMITIVE_TIME]
 					},
 					genController = true,
 					purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
