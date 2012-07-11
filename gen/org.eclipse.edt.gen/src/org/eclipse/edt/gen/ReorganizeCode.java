@@ -370,6 +370,54 @@ public class ReorganizeCode extends AbstractVisitor {
 	}
 
 	public boolean visit(ForEachStatement object) {
+		// if the foreach statement has side effects, we need to assign the expression to a temporary variable
+		if (CommonUtilities.hasSideEffects(object.getDataSource(), ctx)) {
+			// handle the preprocessing
+			String temporary = ctx.nextTempName();
+			LocalVariableDeclarationStatement localDeclaration = factory.createLocalVariableDeclarationStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				localDeclaration.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			localDeclaration.setContainer(currentStatementContainer);
+			DeclarationExpression declarationExpression = factory.createDeclarationExpression();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				declarationExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			Field field = factory.createField();
+			field.setName(temporary);
+			field.setType(object.getDataSource().getType());
+			field.setIsNullable(object.getDataSource().isNullable());
+			// we need to create the member access
+			MemberName nameExpression = factory.createMemberName();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				nameExpression.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			nameExpression.setMember(field);
+			nameExpression.setId(field.getName());
+			// we need to create an assignment statement
+			AssignmentStatement assignmentStatement = factory.createAssignmentStatement();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignmentStatement.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setContainer(currentStatementContainer);
+			Assignment assignment = factory.createAssignment();
+			if (object.getAnnotation(IEGLConstants.EGL_LOCATION) != null)
+				assignment.addAnnotation(object.getAnnotation(IEGLConstants.EGL_LOCATION));
+			assignmentStatement.setAssignment(assignment);
+			assignment.setLHS(nameExpression);
+			assignment.setRHS(object.getDataSource());
+			// add the assignment to the declaration statement block
+			StatementBlock declarationBlock = factory.createStatementBlock();
+			declarationBlock.setContainer(currentStatementContainer);
+			declarationBlock.getStatements().add(assignmentStatement);
+			// add the declaration statement block to the field
+			field.setInitializerStatements(declarationBlock);
+			field.setHasSetValuesBlock(true);
+			// add the field to the declaration expression
+			declarationExpression.getFields().add(field);
+			// connect the declaration expression to the local declaration
+			localDeclaration.setExpression(declarationExpression);
+			// add the local variable to the statement list
+			verify(0).getStatements().add(localDeclaration);
+			// now replace the return expression with the temporary variable
+			object.setDataSource(nameExpression);
+		}
 		// if the statement has an exit or continue, then we need to set a flag to indicate that a label is needed
 		ReorganizeLabel reorganizeLabel = new ReorganizeLabel();
 		if (reorganizeLabel.reorgLabel(object, ctx))
