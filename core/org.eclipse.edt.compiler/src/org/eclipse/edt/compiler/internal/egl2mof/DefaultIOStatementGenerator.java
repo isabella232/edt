@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
@@ -126,6 +127,9 @@ public class DefaultIOStatementGenerator extends AbstractIOStatementGenerator {
 			field.setName(node.getVariableDeclarationName().getCanonicalName());
 			ITypeBinding type = node.getVariableDeclarationType().resolveTypeBinding();
 			field.setType((Type)mofTypeFor(type));
+			if (Binding.isValidBinding(type)) {
+				field.setIsNullable(type.isNullable());
+			}
 			decl.getFields().add(field);
 			eObjects.put(node.getVariableDeclarationName().resolveDataBinding(), field);
 			stmt.setDeclarationExpression(decl);
