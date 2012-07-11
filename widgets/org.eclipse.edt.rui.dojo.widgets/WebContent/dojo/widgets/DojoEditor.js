@@ -27,7 +27,6 @@ egl.defineWidget(
 		var eglWidget = this;
 		var isVisualMode = (this.textLayoutThis == "Visual");		
 		if(isVisualMode || (this.widgetOrientationThis != "")) {
-//			dojo.registerModulePath("bidi", "dojo/widgets/bidi");
 			this._mergeArgs({
 				isVisualMode: (this.textLayoutThis == "Visual"), 
 				dir: this.widgetOrientationThis,isTextReversed: (this.reverseTextDirectionThis == "Yes"),
@@ -46,7 +45,10 @@ egl.defineWidget(
 			});
 			this.dojoWidget = new dijit.Editor(this._args, parent);		
 		}
-		
+		//Bug 384131: if name is not null, the editor will produce error when it is called in parent's onchange function
+		if(egl.IE && egl.IEVersion <9 ){
+			this.dojoWidget.name = "";
+		}
 		this.dojoWidget.startup();
 		require(["dojo/ready"], function(ready){
 			 ready(eglWidget.dojoWidget, function(){
