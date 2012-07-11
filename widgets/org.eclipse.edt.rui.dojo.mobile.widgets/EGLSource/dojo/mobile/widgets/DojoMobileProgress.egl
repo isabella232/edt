@@ -13,7 +13,7 @@
 // OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SAMPLE.
 ////////////////////////////////////////////////////////////////////////////////
 package dojo.mobile.widgets;  
-
+ 
 ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
 		relativePath = "dojo/mobile/widgets",
 		ExternalName = "DojoMobileProgress",
@@ -35,6 +35,6 @@ ExternalType DojoMobileProgress extends DojoMobileBase type JavaScriptObject {
 	*/
 	updateInterval int { @Property {}, @VEProperty {displayName = "Interval"}};
 	
-	function showProgress(updateInterval int in);
+	function showProgress();
 	function hideProgress();
 end

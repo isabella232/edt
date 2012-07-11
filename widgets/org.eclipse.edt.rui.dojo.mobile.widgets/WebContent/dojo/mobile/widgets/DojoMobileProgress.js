@@ -20,7 +20,8 @@ egl.defineWidget(
 {
 	"constructor" : function(){
 		var _this = this;
-		this.intervalTime = 0;
+		_this.initIntervalTime = 100;
+		_this.imagePath = null;
 		require( 
 			["dojo/mobile/utility/Synchronor"],
 			function( synchronor ){
@@ -30,22 +31,29 @@ egl.defineWidget(
 		);
 	},
 	"createDojoWidget" : function(parent) {
-		this.dojoWidget = dojox.mobile.ProgressIndicator.getInstance();
-		this.synchronor.trigger( this, "SYN_READY" );
+		var _this = this;
 		
-		if(this.show || this.intervalTime > 0 )
-			this.showProgress();
-		if(this.hide)
-			this.hideProgress();
-	},
-	"showProgress" : function(interval) {
-		this.show = true;
-		if(interval && interval > 0){
-			this.intervalTime = interval;
-			if(this.dojoWidget)
-				this.dojoWidget.interval = interval;
-		}
+		_this.dojoWidget = dojox.mobile.ProgressIndicator.getInstance();
+		_this.synchronor.trigger( _this, "SYN_READY" );
+		
+		if( _this.dojoWidget ){
+			if( _this.intervalTime && _this.intervalTime > 0)
+				_this.dojoWidget.interval = _this.intervalTime;
+			else
+				_this.dojoWidget.interval = _this.initIntervalTime, _this.intervalTime = _this.initIntervalTime;
 			
+			if( _this.imagePath )
+				_this.dojoWidget.setImage(imagePath);
+			
+			if( _this.show )
+				_this.showProgress();
+			
+			if( _this.hide )
+				_this.hideProgress();
+		}
+	},
+	"showProgress" : function() {
+		this.show = true;		
 		if(this.dojoWidget){
 			document.body.appendChild(this.dojoWidget.domNode);
 			this.dojoWidget.start();
@@ -63,6 +71,7 @@ egl.defineWidget(
 	"setImage": function(imagePath){
 		//TODO match a pattern
 		//Sets an indicator icon image file (typically animated GIF).
+		this.imagePath = imagePath;
 		if(this.dojoWidget && imagePath)
 			this.dojoWidget.setImage(imagePath);
 	},
