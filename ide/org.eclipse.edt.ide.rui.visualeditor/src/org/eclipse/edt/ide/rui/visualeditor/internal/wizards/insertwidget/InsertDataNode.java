@@ -174,9 +174,21 @@ public class InsertDataNode {
 	
 	
 	public WidgetType[] getWidgetTypes(){
+		boolean isTimeStamp = fieldType.equalsIgnoreCase("timestamp(\"hhmmss\")") || fieldType.equalsIgnoreCase("timestamp(\"yyyyMMddhhmmss\")") || fieldType.equalsIgnoreCase("timestamp");		
 		if(purpose.equals(InsertDataNode.Purpose.FOR_DISPLAY)){
 			if(forDisplayWidgetTypes == null){
 				forDisplayDataTemplates = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, nodeType, nodeTypeDetails, isArray, isContainer);
+				if(isTimeStamp){
+					//Copy the DataTemplate of TYPE_PRIMITIVE_TIME, and add to the DataTemplate list. 
+					Set<String> timeNodeTypeDetails = new HashSet<String>();
+					timeNodeTypeDetails.add(NodeTypeDetail.TYPE_PRIMITIVE_TIME);
+					List<DataTemplate> dataTemplatesTime = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, null, timeNodeTypeDetails, isArray, isContainer);
+					for(DataTemplate dataTemplate : dataTemplatesTime){
+						if(dataTemplate.getName().equals("DojoTimeTextBox (read only)")){
+							forDisplayDataTemplates.add(dataTemplate);
+						}
+					}
+				}				
 				forDisplayWidgetTypes = new WidgetType[forDisplayDataTemplates.size()];
 				for(int i=0; i<forDisplayWidgetTypes.length; i++){
 					DataTemplate dataTemplate = forDisplayDataTemplates.get(i);
@@ -191,6 +203,17 @@ public class InsertDataNode {
 		if(purpose.equals(InsertDataNode.Purpose.FOR_CREATE)){
 			if(forCreateWidgetTypes == null){
 				forCreateDataTemplates = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, nodeType, nodeTypeDetails, isArray, isContainer);
+				if(isTimeStamp){
+					//Copy the DataTemplate of TYPE_PRIMITIVE_TIME, and add to the DataTemplate list. 
+					Set<String> timeNodeTypeDetails = new HashSet<String>();
+					timeNodeTypeDetails.add(NodeTypeDetail.TYPE_PRIMITIVE_TIME);
+					List<DataTemplate> dataTemplatesTime = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, null, timeNodeTypeDetails, isArray, isContainer);
+					for(DataTemplate dataTemplate : dataTemplatesTime){
+						if(dataTemplate.getName().equals("DojoTimeTextBox")){
+							forCreateDataTemplates.add(dataTemplate);
+						}
+					}
+				}
 				forCreateWidgetTypes = new WidgetType[forCreateDataTemplates.size()];
 				for(int i=0; i<forCreateWidgetTypes.length; i++){
 					DataTemplate dataTemplate = forCreateDataTemplates.get(i);
@@ -205,6 +228,16 @@ public class InsertDataNode {
 		if(purpose.equals(InsertDataNode.Purpose.FOR_UPDATE)){
 			if(forUpdateWidgetTypes == null){
 				forUpdateDataTemplates = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, nodeType, nodeTypeDetails, isArray, isContainer);
+				if(isTimeStamp){
+					Set<String> timeNodeTypeDetails = new HashSet<String>();
+					timeNodeTypeDetails.add(NodeTypeDetail.TYPE_PRIMITIVE_TIME);
+					List<DataTemplate> dataTemplatesTime = WidgetDescriptorRegistry.getInstance(model.getProject()).getMappingDescriptorDataTemplates(purpose, null, timeNodeTypeDetails, isArray, isContainer);
+					for(DataTemplate dataTemplate : dataTemplatesTime){
+						if(dataTemplate.getName().equals("DojoTimeTextBox") || dataTemplate.getName().equals("DojoTimeTextBox (read only)")){
+							forUpdateDataTemplates.add(dataTemplate);
+						}
+					}
+				}
 				forUpdateWidgetTypes = new WidgetType[forUpdateDataTemplates.size()];
 				for(int i=0; i<forUpdateWidgetTypes.length; i++){
 					DataTemplate dataTemplate = forUpdateDataTemplates.get(i);
