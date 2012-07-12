@@ -1,0 +1,25 @@
+<script type="text/javascript">
+	if( egl && !egl.dojoProvider ){
+		require({
+			packages : [ {
+				name : 'dojo/samples',
+				location : '../dojo/samples'
+			}, {
+				name : 'dojo',
+				location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo'
+			}, {
+				name : 'dijit',
+				location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit'
+			}, {
+				name : 'dojox',
+				location : 'http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox'
+			} ,{
+				name : 'bidi',
+				location : '../dojo/widgets/bidi'
+			} ],
+			locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
+		});
+		egl.urlPrefix = "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/";	
+		egl.dojoProvider = "Remote Workspace, 1.7.1, project: org.eclipse.edt.rui.dojo.remote_0.8.1";
+	}
+</script>
