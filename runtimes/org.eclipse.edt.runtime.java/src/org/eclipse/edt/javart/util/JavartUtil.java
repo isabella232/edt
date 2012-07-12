@@ -19,6 +19,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+import org.eclipse.edt.javart.AnyBoxedObject;
 import org.eclipse.edt.javart.ControlFlow;
 import org.eclipse.edt.javart.FatalProblem;
 import org.eclipse.edt.javart.RunUnit;
@@ -237,7 +238,7 @@ public class JavartUtil
 	 * a NullValueException, otherwise return the object
 	 */
 	public static <T extends Object> T checkNullable(T o) throws NullValueException {
-		if (o == null)
+		if (o == null || (o instanceof AnyBoxedObject && ((AnyBoxedObject<?>) o).ezeUnbox() == null))
 		{
 			NullValueException nvx = new NullValueException();
 			throw nvx.fillInMessage( Message.NULL_NOT_ALLOWED );
