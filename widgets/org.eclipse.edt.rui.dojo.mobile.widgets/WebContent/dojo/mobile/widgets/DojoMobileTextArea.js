@@ -5,11 +5,23 @@ egl.defineWidget(
 	{ 
 		'constructor' : function(){
 			var _this = this;
-			require([ "dojo/mobile/utility/Synchronor", 
-			          "dojox/mobile/ExpandingTextArea"],
-				 function( synchronor ){
+			require(
+					[
+					  "dojo/mobile/utility/Synchronor", 
+			          "dojox/mobile/ExpandingTextArea",
+			          "dojo/_base/sniff"
+					],
+				 function( synchronor, eta, has ){
 					_this.synchronor = synchronor;
-					_this.renderWhenDojoIsDoneLoading();
+					
+					/**
+					 * @Smyle: bring the render step after the initializing steps
+					 */
+					setTimeout(
+						function() {
+							_this.renderWhenDojoIsDoneLoading();
+						}, 1
+					);
 				 }
 			);
 		},
@@ -17,7 +29,6 @@ egl.defineWidget(
 			var _this = this;
 			parent.innerHTML = _this.text || "";
 			_this.domNode = parent;
-			
 			_this._args = {
 				value : _this.text || "",
 				readOnly : (_this.readOnly ? _this.readOnly : false),
@@ -67,10 +78,8 @@ egl.defineWidget(
 				this.domNode.rows = rows;
 			}
 		},
-		
 		"setIsExpandable" : function( status ){
 			this.isExpandable = status || true;
-			
 		},
 		"getIsExpandable" : function(){
 			return this.isExpandable;
@@ -82,7 +91,6 @@ egl.defineWidget(
 				this.dojoWidget.readOnly = readOnly;
 			}
 		},
-		
 		"getReadOnly" : function(){
 			if(this.dojoWidget){
 				return this.dojoWidget.readOnly;
@@ -90,14 +98,12 @@ egl.defineWidget(
 				return this.readOnly;
 			}
 		},
-		
 		"setMaxLength" : function(maxLen){
 			this.maxLength = maxLen;
 			if(this.dojoWidget){
 				this.dojoWidget.maxLength = maxLen;
 			}
 		},
-		
 		"getMaxLength" : function(){
 			if(this.dojoWidget){
 				return this.dojoWidget.maxLength;
@@ -105,14 +111,12 @@ egl.defineWidget(
 				return this.maxLength;
 			}
 		},
-		
 		"setPlaceHolder" : function(defaultValue){
 			this.placeHolder = defaultValue;
 			if(this.dojoWidget){
 				this.dojoWidget.placeHolder = defaultvalue;
 			}
 		},
-		
 		"getPlaceHolder" : function(){
 			if(this.dojoWidget){
 				return this.dojoWidget.placeHolder;
@@ -120,6 +124,5 @@ egl.defineWidget(
 				return this.placeHolder;
 			}
 		}
-	
 	}
 );

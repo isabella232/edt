@@ -52,13 +52,10 @@ egl.defineWidget(
 		this.value = value ? "on" : "off";
 		if(this.dojoWidget){
 			if(this.isValue() == value ) return;
-	
 			var e = { targetTouches : null};				
 			this.dojoWidget.onTouchStart(e);
 			this.dojoWidget.onClick(null);
-
 		}
-
 	},
 	"getValue" : function() {
 		return this.isValue();
@@ -84,9 +81,7 @@ egl.defineWidget(
 			}
 			if(textBox){
 				textBox.innerHTML = this.left;
-			}else{
-
-			}		
+			}
 		}
 	},
 	"getOnText" : function() {
@@ -106,9 +101,7 @@ egl.defineWidget(
 			}
 			if(textBox){
 				textBox.innerHTML = this.right;
-			}else{
-
-			}		
+			}	
 		}
 	},
 	"getOffText" : function() {

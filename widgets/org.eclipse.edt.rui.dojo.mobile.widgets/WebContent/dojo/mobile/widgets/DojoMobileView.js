@@ -36,11 +36,20 @@ egl.defineWidget(
 			[ 
 			  "dojo/mobile/utility/Synchronor",
 			  "dojox/mobile/ScrollableView", 
-			  "dojox/mobile/SwapView"
+			  "dojox/mobile/SwapView",
+			  "dojo/_base/sniff"
 			], 
-			function( synchronor ){
+			function( synchronor, scv, swv, has ){
 				_this.synchronor = synchronor;
-				_this.renderWhenDojoIsDoneLoading();
+				
+				/**
+				 * @Smyle: bring the render step after the initializing steps
+				 */
+				setTimeout(
+					function() {
+						_this.renderWhenDojoIsDoneLoading();
+					}, 1
+				);
 			}
 		);		
 	},

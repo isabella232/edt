@@ -24,10 +24,19 @@ egl.defineWidget(
 			require(
 			   [ 
 			     "dojo/mobile/utility/Synchronor",
-			     "dojox/mobile/ToolBarButton"
-			   ], function( synchronor ){
+			     "dojox/mobile/ToolBarButton",
+			     "dojo/_base/sniff"
+			   ], function( synchronor, tbb, has ){
 					_this.synchronor = synchronor;
-					_this.renderWhenDojoIsDoneLoading();
+					
+					/**
+					 * @Smyle: bring the render step after the initializing steps
+					 */
+					setTimeout(
+						function() {
+							_this.renderWhenDojoIsDoneLoading();
+						}, 1
+					);
 			  }
 			);			
 		},

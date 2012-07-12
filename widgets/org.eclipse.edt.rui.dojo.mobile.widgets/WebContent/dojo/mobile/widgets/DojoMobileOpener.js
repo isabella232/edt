@@ -10,11 +10,20 @@ egl.defineWidget(
 			require(
 				[ 
 				  "dojo/mobile/utility/Synchronor",
-				  "dojox/mobile/Opener"
+				  "dojox/mobile/Opener",
+				  "dojo/_base/sniff"
 				 ],
-				 function( synchronor ){
+				 function( synchronor, op, has ){
 					_this.synchronor = synchronor;
-					_this.renderWhenDojoIsDoneLoading();
+					
+					/**
+					 * @Smyle: bring the render step after the initializing steps
+					 */
+					setTimeout(
+						function() {
+							_this.renderWhenDojoIsDoneLoading();
+						}, 1
+					);
 				 }
 			);
 		},

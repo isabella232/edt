@@ -48,7 +48,7 @@ egl.defineWidget(
 				 * relocated after it has loaded, otherwise its offset will 
 				 * be miscalculated.
 				 * (2) Add a fix to dojox.mobile.ListItem that if it is in 
-				 * a display:none parent element, its initializing will be
+				 * a display:none parent element, its initialization will be
 				 * ensured to work normally.
 				*/
 				if( !li.extendedStartup ){
@@ -146,7 +146,12 @@ egl.defineWidget(
 					);
 					li.extendedStartup = true;
 				}
-				_eglWidget.renderWhenDojoIsDoneLoading();
+				
+				setTimeout(
+					function() {
+						_eglWidget.renderWhenDojoIsDoneLoading();
+					}, 1
+				);
 			}
 		);
 	},
@@ -412,7 +417,6 @@ egl.defineWidget(
 				_this._setActionView();
 			}
 		}
-
 	},
 	"getActionView" : function() {
 		return this.actionView;

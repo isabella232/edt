@@ -26,26 +26,22 @@ egl.defineWidget(
 		};
 		this.started = false;
 		this.segmentedControl = true;
-		require(["dojox/mobile/TabBar"], function(){
-			_this.renderWhenDojoIsDoneLoading();
-		});	
-	},
-	"addEventHandlers" : function(){
-		var _this = this;
-		/* @todo: add tab updates to selection in VE
 		require(
 			[
-			 	"dojo/_base/connect"
-			 ],
-			function( connect ){
-				connect.subscribe(
-					_this.dojoWidget.id+"-selectChild", function(child) {
-						alert( "select" );
-						debugger;
-					}
+			 	"dojox/mobile/TabBar",
+			 	"dojo/_base/sniff"
+			], 
+			function( tb, has ){
+				/**
+				 * @Smyle: bring the render step after the initializing steps
+				 */
+				setTimeout(
+					function() {
+						_this.renderWhenDojoIsDoneLoading();
+					}, 1
 				);
 			}
-		);*/
+		);	
 	},
 	"getChildrenLength" : function(){
 		if( this.tabBarWidget ){
@@ -285,7 +281,6 @@ egl.defineWidget(
 						
 						// visually select
 						_this.started = true;
-						_this.addEventHandlers();
 					}
 				);
 			}
