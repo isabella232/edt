@@ -1,0 +1,22 @@
+<script type="text/javascript">
+	if( egl && !egl.dojoProvider ){
+		require({
+	    	packages : [ {
+				name : 'dojo',
+				location : '../dojo'
+			}, {
+				name : 'dijit',
+				location : '../dijit'
+			}, {
+				name : 'dojox',
+				location : '../dojox'
+			} ,{
+				name : 'bidi',
+				location : '../dojo/widgets/bidi'
+			}],
+			locale: egl__htmlLocale.replace(/_/, "-").toLowerCase()
+	  	});
+	 	egl.urlPrefix = "";
+		egl.dojoProvider = "Local Workspace, 1.7.1, project: org.eclipse.edt.rui.dojo_0.8.1";
+	}
+</script>
