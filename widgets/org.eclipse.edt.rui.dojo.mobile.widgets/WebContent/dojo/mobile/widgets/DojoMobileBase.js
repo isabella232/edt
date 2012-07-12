@@ -25,9 +25,17 @@ egl.defineWidget(
 			eglWidget.renderWhenDojoIsDoneLoadingSafely();
 		});		
 	},
-	"log" : function( msg ){
-		// print in development mode
-		if( egl.enableEditing || egl.debugg || egl.contextAware ){
+	/**
+	 * @summary default print msg in VE & Preview
+	 * @param msg string, default print msg in VE & Preview
+	 * @param notDrawVE Boolean, default false
+	 * @param notDrawPreview Boolean, default false
+	 */
+	"log" : function( msg, notDrawVE, notDrawPreview ){
+		notDrawVE = !!notDrawVE, notDrawPreview = !!notDrawPreview;
+		
+		// print into dom node
+		function logToDom( msg ){
 			var msgContainerBox = document.getElementById("egl-mobile-msg-box");
 			var msgBox = document.createElement("DIV");
 			if( !msgContainerBox ){
@@ -47,10 +55,11 @@ egl.defineWidget(
 			}
 			msgContainerBox.innerHTML = msgContainerBox.innerHTML ?  (msgContainerBox.innerHTML + "<hr>" + msg) : msg;
 		}
-		// print in production mode
-		else if( console && console.warn ){
+		
+		if( (!notDrawVE && egl.enableEditing) || (!notDrawPreview && (!egl.enableEditing)) )
+			logToDom( msg );
+		else if( console && console.warn )
 			console.warn( msg );
-		}
 	},
 	"printStartupMessage" : function(){
 		if (egl.dojo.widgets.DojoDiagnostics && !egl.enableEditing && !egl.debugg && egl.contextAware && !egl.dojoNow) {
@@ -75,6 +84,7 @@ egl.defineWidget(
 				this.log(
 					"<b>Warning: </b>You are using non-webkit browser. For performance and stability reasons, please use WebKit kernel browser to render this page.<br>"
 					+ "<hr>This message is only printed in development mode, and not when you deploy application."
+					,true
 				);			
 			egl.dectectWebKit = true;
 		}
