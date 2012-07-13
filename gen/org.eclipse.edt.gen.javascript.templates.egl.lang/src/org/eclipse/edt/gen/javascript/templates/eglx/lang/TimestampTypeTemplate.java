@@ -49,7 +49,7 @@ public class TimestampTypeTemplate extends JavaScriptTemplate {
 		out.print(".");
 		ctx.invoke(genName, expr.getTarget(), ctx, out);
 		out.print("(");
-		ctx.invoke(genExpression, expr.getQualifier(), ctx, out);
+		ctx.invoke(genExpression, expr.getQualifier(), ctx, out, expr.getQualifier());
 		if (expr.getArguments() != null && expr.getArguments().size() > 0)
 			out.print(", ");
 		ctx.invoke(genInvocationArguments, expr, ctx, out);
