@@ -1322,7 +1322,27 @@ public class MatchLocator2 {//extends MatchLocator {
 					if (nestedFunction.getName().getIdentifier() == iName) {
 						List<FunctionParameter> funcParameters = (List<FunctionParameter>)nestedFunction.getFunctionParameters();
 						if(parameterTypes != null && funcParameters != null && parameterTypes.length == funcParameters.size()){
-							result[0] = nestedFunction.getName();
+							boolean matched = true;
+							for(int i=0; i < parameterTypes.length; i++) {
+								String canonicalName = funcParameters.get(i).getType().getCanonicalName();
+								if("?".equalsIgnoreCase(canonicalName.substring(canonicalName.length()-1)))
+									canonicalName = canonicalName.substring(0, canonicalName.length()-1);
+								String[] packagedSegs = parameterTypes[i].split("\\.");
+								String typeName = packagedSegs[packagedSegs.length-1];
+								if(typeName!=null) {
+									typeName = typeName.substring(0,typeName.length()-1);
+									if(!canonicalName.equalsIgnoreCase(typeName)) {
+										canonicalName = "e" + canonicalName;
+										if(!canonicalName.equalsIgnoreCase(typeName)) {
+											matched = false;
+											break;
+										}
+									} 
+								} 
+							}
+							
+							if(matched)
+							    result[0] = nestedFunction.getName();
 						}
 					}
 					return false;
