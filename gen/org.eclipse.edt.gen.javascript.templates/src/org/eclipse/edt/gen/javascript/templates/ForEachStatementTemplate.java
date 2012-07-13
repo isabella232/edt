@@ -14,6 +14,7 @@ package org.eclipse.edt.gen.javascript.templates;
 import org.eclipse.edt.gen.Label;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.ForEachStatement;
 
 public class ForEachStatementTemplate extends JavaScriptTemplate {
@@ -28,10 +29,17 @@ public class ForEachStatementTemplate extends JavaScriptTemplate {
 		ctx.invoke(genExpression, stmt.getDataSource(), ctx, out, stmt.getDataSource());
 		out.print(".forEach(function( ");
 		ctx.invoke(genName, stmt.getDeclarationExpression().getFields().get(0), ctx, out);
-		out.println(" )");
+		out.println(" ){");
+		// as we have an implicit assignment, we need to check to see if a null check is needed
+		if (!stmt.getDeclarationExpression().getFields().get(0).isNullable()
+			&& (stmt.getDataSource().getType() instanceof ArrayType && ((ArrayType) stmt.getDataSource().getType()).elementsNullable())) {
+			out.print("egl.checkNull(");
+			ctx.invoke(genName, stmt.getDeclarationExpression().getFields().get(0), ctx, out);
+			out.println(");");
+		}
 		// now process the statement block
-		ctx.invoke(genStatement, stmt.getBody(), ctx, out);
-		out.println(", this );");
+		ctx.invoke(genStatementNoBraces, stmt.getBody(), ctx, out);
+		out.println("}, this );");
 		// now remove the label from the stack
 		ctx.popLabelStack();
 	}
