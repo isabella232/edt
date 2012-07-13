@@ -26,13 +26,15 @@ egl.defineWidget(
 		});		
 	},
 	/**
-	 * @summary default print msg in VE & Preview
-	 * @param msg string, default print msg in VE & Preview
-	 * @param notDrawVE Boolean, default false
-	 * @param notDrawPreview Boolean, default false
+	 * @summary default print msg in VE, Preview, Debug, Deployment
+	 * @param msg string 
+	 * @param notDeploy Boolean, default false
+	 * @param notVE Boolean, default false
+	 * @param notPreview Boolean, default false, include internal & external preview
+	 * @param notDebug Boolean, default false
 	 */
-	"log" : function( msg, notDrawVE, notDrawPreview ){
-		notDrawVE = !!notDrawVE, notDrawPreview = !!notDrawPreview;
+	"log" : function( msg, notDeploy, notVE, notPreview, notDebug ){
+		notDeploy = !!notDeploy, notVE = !!notVE, notPreview = !!notPreview, notDebug = !!notDebug;
 		
 		// print into dom node
 		function logToDom( msg ){
@@ -41,9 +43,9 @@ egl.defineWidget(
 			if( !msgContainerBox ){
 				msgContainerBox = document.createElement("DIV");
 				msgContainerBox.id = "egl-mobile-msg-box";
-				msgContainerBox.style["border"] = "1px solid #555555";
+				msgContainerBox.style["border"]  = "1px solid #555555";
 				msgContainerBox.style["background"] = "#E5F3FF";
-				msgContainerBox.style["width"] = "90%";
+				msgContainerBox.style["width"]   = "90%";
 				msgContainerBox.style["padding"] = "4%";
 				msgContainerBox.style["margin"]  = "5px auto";
 				
@@ -56,9 +58,14 @@ egl.defineWidget(
 			msgContainerBox.innerHTML = msgContainerBox.innerHTML ?  (msgContainerBox.innerHTML + "<hr>" + msg) : msg;
 		}
 		
-		if( (!notDrawVE && egl.enableEditing) || (!notDrawPreview && (!egl.enableEditing)) )
+		if( 
+			( egl.enableEditing && !notVE ) || // Design view mode
+			( egl.debugg && !notDebug ) || // Debug mode
+			( !egl.enableEditing && !egl.debugg && egl.contextAware && !notPreview ) || // Preview mode
+			( !egl.debugg && !egl.enableEditing && !egl.contextAware && !notDeploy ) // Deploy mode
+		)
 			logToDom( msg );
-		else if( console && console.warn )
+		else
 			console.warn( msg );
 	},
 	"printStartupMessage" : function(){
@@ -78,13 +85,13 @@ egl.defineWidget(
 			if (navigator.userAgent.indexOf("MSIE 6") != -1) 
 			   egl.println("<font color=red><b>You are using IE6. For performance and security reasons, upgrade your browser from Internet Explorer 6 to a newer version.");
 		}
-		
+
 		if ( !egl.dectectWebKit ) {
 			if( !egl.WebKit )
 				this.log(
 					"<b>Warning: </b>You are using non-webkit browser. For performance and stability reasons, please use WebKit kernel browser to render this page.<br>"
-					+ "<hr>This message is only printed in development mode, and not when you deploy application."
-					,true
+					+ "<hr>This message is only printed in development mode, and not when you deploy application.", 
+					true
 				);			
 			egl.dectectWebKit = true;
 		}

@@ -96,7 +96,8 @@ egl.defineWidget(
 					+ _this.eze$$package+"."+_this.eze$$typename + 
 					" " +   widgetId +
 					"can't contain child " + childToDetectId + "of " + child.eze$$package+"."+child.eze$$typename
-					+ "<br>"
+					+ "<br>",
+					true
 				);
 				returnResult = false;
 			}
