@@ -1,0 +1,48 @@
+@summary Since there are some incorrect css rules in dojo's official theme package, I collected and listed some known issues 
+below for reference. If new version of dojo mobile library is brought in, they need to be carefully taken care of. 
+@author Smyle
+@contact zhenhbj@cn.ibm.com
+
+* Bug 381944 - Dojo mobile list and list item display problem on Android simulator
+---------------------------------------
+/* android.css update */
+.mblRoundRectCategory {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 18px 0px 0px 20px;
+    font-family: Helvetica;
+    font-size: 16px;
+    color: white;
+    background-color: #212021;
+    border-bottom: 1px solid #393439;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px 10px;
+    height: 22px;
+    line-height: 22px;
+    text-shadow: rgba(0, 0, 0, 0.6) 0px -1px 0px;
+}
+.mblRoundRectList .mblRoundRectCategory:first-child {
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+}
+.mblRoundRectList .mblRoundRectCategory:last-child {
+    border-bottom-width: 0px;
+    -webkit-border-bottom-left-radius: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+    -moz-border-radius-bottomleft: 8px;
+    -moz-border-radius-bottomright: 8px;
+}
+---------------------------------------
+
+* Bug 384879 - DojoMobileListItem format changes when adding children
+---------------------------------------
+/* iphone.css update */
+.mblListItem.mblVariableHeight{
+	/* fix variable list item which doesn't left align with default list item */
+	padding-left: 8px !important;
+}
+---------------------------------------

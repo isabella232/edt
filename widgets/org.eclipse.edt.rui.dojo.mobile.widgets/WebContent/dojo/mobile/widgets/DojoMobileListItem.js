@@ -158,7 +158,7 @@ egl.defineWidget(
 	"createDojoWidget" : function(parent) {
 		var _this = this;
 		_this.dom = parent;	
-		_this.dom.style.minHeight = "44px";
+		
 		_this.dojoWidget = new dojox.mobile.ListItem({
 			label: _this.text,
 			rightText: _this.actionText || "",
@@ -222,12 +222,8 @@ egl.defineWidget(
 		if (this.dojoWidget) {
 			var textBox = this.textBox;
 			
-			/* Depreciated*/
-			if(!dojo.hasClass(this.dojoWidget.domNode,"mblVariableHeight")){
+			if(!dojo.hasClass(this.dojoWidget.domNode,"mblVariableHeight"))
 				dojo.addClass(this.dojoWidget.domNode,"mblVariableHeight");
-				//this._setIconStyle(true);
-				//textBox.innerHTML = "";
-			}
 			
 			textBox.appendChild(child.eze$$DOMElement);					
 		}
@@ -293,26 +289,10 @@ egl.defineWidget(
 					function(){
 						if( _this.dojoWidget )
 							_this.dojoWidget.set( {icon:_this.icon} );
-						
-						/** @Depreciated
-						var iconDom = this.dojoWidget.domNode.firstChild;
-						imgNode = this.dojoWidget.domNode.find
-						if( iconDom && iconDom.className == "mblListItemIcon" ){
-							iconDom.src = this.icon;
-						}else{
-							iconDom= document.createElement("img");
-							iconDom.setAttribute("class", "mblListItemIcon");
-							iconDom.src = this.icon;
-							this.dojoWidget.domNode.insertBefore(iconDom, this.dojoWidget.domNode.firstChild);
-							dojo.removeClass(this.dojoWidget.domNode.getElementsByTagName("a")[0],"mblListItemAnchorNoIcon");
-						}*/
 					}
 				);
 			}
 		);
-		
-		
-		
 	},
 	"getImagePath" : function() {
 		return this.icon;
