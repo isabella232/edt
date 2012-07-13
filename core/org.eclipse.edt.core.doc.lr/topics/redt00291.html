@@ -71,14 +71,14 @@ handler MyOtherHandler type RUIhandler{
                         new DojoMobileBUtton{text = "stop", onClick ::= stop},
                         progress ]}; 
 
-   progress DojoMobileProgress{};
+   progress DojoMobileProgress{updateInterval="1000"};
 
    function start()
         
    end
     
    function go(event Event in)
-      progress.showProgress(1000);
+      progress.showProgress();
    end
     
    function stop(event Event in)
