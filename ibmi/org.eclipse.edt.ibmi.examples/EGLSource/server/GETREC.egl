@@ -50,12 +50,12 @@ service GETREC
 			call this.GETREC(custs, eof, count) using conn ;
 			SessionConnectionsLib.returnConnectionToPool(conn);
 		onException(exception AnyException)
+			SysLib.writeStderr(exception.message);
 			if(conn != null)
 				SessionConnectionsLib.returnConnectionToPool(conn);
-				throw exception;
 			end
+			throw exception;
 		end
-		SysLib.wait(2);
 		return(custs);
 	end
 
