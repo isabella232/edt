@@ -33,7 +33,7 @@ handler Combo type RUIWidget{tagName = "select", cssFile = "css/org.eclipse.edt.
 				forArray = false,
 				mappings = [MappingKind.TYPE_PRIMITIVE_ALL]},
 				genController = true,
-				purposes = [PurposeKind.FOR_DISPLAY, PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
+				purposes = [PurposeKind.FOR_CREATE, PurposeKind.FOR_UPDATE],
 				template = "${widgetName} ${typeName:org.eclipse.edt.rui.widgets.Combo} {};"
 			}
 		]

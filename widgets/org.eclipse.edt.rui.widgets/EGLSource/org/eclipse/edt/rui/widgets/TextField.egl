@@ -48,6 +48,7 @@ handler TextField type RUIWidget{tagName="input", onConstructionFunction = start
 				dataMapping = @DataMapping {
 					forArray = false,
 					mappings = [MappingKind.TYPE_PRIMITIVE_STRING,
+								MappingKind.TYPE_PRIMITIVE_TIME,
 								MappingKind.TYPE_PRIMITIVE_BIGINT,
 								MappingKind.TYPE_PRIMITIVE_BIN,
 								MappingKind.TYPE_PRIMITIVE_DECIMAL,
