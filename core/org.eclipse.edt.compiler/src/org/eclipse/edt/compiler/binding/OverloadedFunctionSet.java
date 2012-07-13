@@ -233,8 +233,7 @@ public class OverloadedFunctionSet implements IDataBinding {
 	}
 
 	public boolean isValidBinding() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	@Override
 	public String getActualBindingName() {
