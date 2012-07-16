@@ -20,8 +20,16 @@ public class PartTemplate extends EGLDocTemplate {
 		
 	}
 	
-	public void genPackage(Part part, Context ctx, TabbedWriter out){
-		out.println("Package");
-		out.println(part.getPackageName());
+	public void genPackage(Part part, Context ctx, TabbedWriter out){	    
+		
+		out.println("<dt class=\"dt dlterm\"><a name=\"package\"</a>EGL package name</dt>");
+        	    
+		if (part.getPackageName() == ""){
+		   out.println("<dd> <p class=\"p\">The default package is in use.</p>");	
+		}
+		else {
+			out.println("<dd> <p class=\"p\">" + part.getPackageName() + "</p>");	
+		}
+		out.println("<p class=\"p\"></p></dd></dt>");	
 	}
 }
