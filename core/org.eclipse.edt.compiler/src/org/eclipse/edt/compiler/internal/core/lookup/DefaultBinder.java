@@ -78,7 +78,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
-import org.eclipse.edt.mof.egl.CaseStatement;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -262,7 +261,7 @@ public abstract class DefaultBinder extends AbstractBinder {
         	fieldAccess.setBindAttempted(true);
         	return;
         }
-        Member member = BindingUtil.createDynamicAccessMember(type, fieldAccess.getCaseSensitiveID());
+        Member member = BindingUtil.createExplicitDynamicAccessMember(type, fieldAccess.getCaseSensitiveID());
         if (member != null) {
         	fieldAccess.setMember(member);
         	fieldAccess.setType(member.getType());
@@ -467,16 +466,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 								newExpression.getType().getCanonicalName()
 							});
 					}
-					else {
-						newExpression.setConstructor(cons);
-						if (BindingUtil.isPrivate(cons)) {
-							if (!targetType.equals(currentScope.getPart())) {
-								problemRequestor.acceptProblem(newExpression.getType(),
-										IProblemRequestor.PRIVATE_CONSTRUCTOR,
-									new String[] {newExpression.getType().getCanonicalName()});
-							}
-						}							
-					}
+				}
+				else {
+					newExpression.setConstructor(cons);
+					if (BindingUtil.isPrivate(cons)) {
+						if (!targetType.equals(currentScope.getPart())) {
+							problemRequestor.acceptProblem(newExpression.getType(),
+									IProblemRequestor.PRIVATE_CONSTRUCTOR,
+								new String[] {newExpression.getType().getCanonicalName()});
+						}
+					}											
 				}					
 			}
 		}

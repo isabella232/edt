@@ -12,10 +12,8 @@
 package org.eclipse.edt.compiler.binding;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.edt.compiler.binding.annotationType.AnnotationTypeBindingImpl;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Constructor;
@@ -31,7 +29,14 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.egl.ParameterKind;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -39,97 +44,85 @@ import org.eclipse.edt.mof.egl.utils.InternUtil;
  */
 public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
 
-    private HandlerBinding handlerBinding;
+    private org.eclipse.edt.mof.egl.Handler handlerBinding;
 
-    public HandlerBindingCompletor(Scope currentScope, HandlerBinding handlerBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(handlerBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.handlerBinding = handlerBinding;
+    public HandlerBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.handlerBinding = (org.eclipse.edt.mof.egl.Handler)irBinding.getIrPart();
     }
         
     public boolean visit(Handler handler) {
-    	handler.getName().setBinding(handlerBinding);
+    	handler.getName().setType(handlerBinding);
+        handler.accept(getPartSubTypeAndAnnotationCollector());
     	
-    	handlerBinding.setPrivate(handler.isPrivate());
-    	
-        PartSubTypeAndAnnotationCollector col = getPartSubTypeAndAnnotationCollector();
-		handler.accept(col);
-		
-//		AnnotationBinding subTypeAnnotationBinding = col.getSubTypeAnnotationBinding();
-//		if(subTypeAnnotationBinding == null || annotationIs(subTypeAnnotationBinding.getAnnotationType(), new String[] {"egl", "ui", "jasper"}, "JasperReport")) {
-//			handlerBinding.addDeclaredFunctions(JasperReportAnnotationTypeBinding.getJasperReportFunctions());
-//		}
-		
-		addImplicitFieldsFromAnnotations();
-		
-        for(Iterator iter = handler.getImplementedInterfaces().iterator(); iter.hasNext();) {
-    		Name nextName = (Name) iter.next();
+    	if (handler.isPrivate()) {
+    		handlerBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
+    					
+        for(Name nextName : handler.getImplementedInterfaces()) {
     		try {
-    			ITypeBinding typeBinding = bindTypeName(nextName);
-    			//TODO should probably check to see if this is an interfaceBinding before adding it
-    			handlerBinding.addExtenedInterface(typeBinding);
+    			org.eclipse.edt.mof.egl.Type typeBinding = bindTypeName(nextName);
     			
-    			if(ITypeBinding.INTERFACE_BINDING != typeBinding.getKind()) {
-    				problemRequestor.acceptProblem(
-    					nextName,
-						IProblemRequestor.SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE);
+    			if (typeBinding instanceof StructPart) {
+    				handlerBinding.getSuperTypes().add((StructPart)typeBinding);
     			}
     		}
     		catch (ResolutionException e) {
     			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
     		}
-    	}
-		
+    	}		
 		
         return true;
     }
     
     public boolean visit(Constructor constructor) {
-    	final ConstructorBinding constructorBinding = new ConstructorBinding(handlerBinding);
-    	final Set definedParameters = new HashSet();
+    	final org.eclipse.edt.mof.egl.Constructor constructorBinding = IrFactory.INSTANCE.createConstructor();
+    	final Set<String> definedParameters = new HashSet<String>();
     	
     	constructor.setBinding(constructorBinding);
     	
-    	constructorBinding.setPrivate(constructor.isPrivate());
+    	if (constructor.isPrivate()) {
+    		constructorBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
     	
     	constructor.accept(new AbstractASTVisitor() {
     		public boolean visit(FunctionParameter functionParameter) {
     			String parmName = functionParameter.getName().getIdentifier();
     	        Type parmType = functionParameter.getType();        
-    	        ITypeBinding typeBinding = null;
+    	        org.eclipse.edt.mof.egl.Type typeBinding = null;
     	        try {
     	            typeBinding = bindType(parmType);
     	        } catch (ResolutionException e) {
-    	        	functionParameter.getName().setBinding(new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), handlerBinding, IBinding.NOT_FOUND_BINDING, (IFunctionBinding) constructorBinding.getType()));
     	            problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
     	            return false;
     	        }
     	        
-    	        FunctionParameterBinding funcParmBinding = new FunctionParameterBinding(functionParameter.getName().getCaseSensitiveIdentifier(), handlerBinding, typeBinding, (IFunctionBinding) constructorBinding.getType());
-    	        functionParameter.getName().setBinding(funcParmBinding);
-    	        
-    	        if(!BindingUtilities.isValidDeclarationType(typeBinding)) {
-    	        	problemRequestor.acceptProblem(
-    	        		parmType,
-    	        		IProblemRequestor.FUNCTION_PARAMETER_HAS_INCORRECT_TYPE,
-    					new String[] {functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR});
-    	        	return false;				
-    	        }
+    	        org.eclipse.edt.mof.egl.FunctionParameter funcParmBinding = IrFactory.INSTANCE.createFunctionParameter();
+    	        funcParmBinding.setName(functionParameter.getName().getCaseSensitiveIdentifier());
+    	        functionParameter.getName().setMember(funcParmBinding);
+    	        funcParmBinding.setType(typeBinding);
+    	        funcParmBinding.setIsNullable(parmType.isNullableType());   	        
     	        
     	        FunctionParameter.AttrType attrType = functionParameter.getAttrType();
     	        if (attrType == FunctionParameter.AttrType.FIELD) {
-    	            funcParmBinding.setField(true);
+    	            funcParmBinding.setIsField(true);
     	        } else if (attrType == FunctionParameter.AttrType.SQLNULLABLE) {
-    	            funcParmBinding.setSqlNullable(true);
+    	            funcParmBinding.setIsDefinedSqlNullable(true);
     	        }
+    	        funcParmBinding.setIsConst(functionParameter.isParmConst());
+    	        
     	        FunctionParameter.UseType useType = functionParameter.getUseType();
     	        if (useType == FunctionParameter.UseType.IN) {
-    	            funcParmBinding.setInput(true);
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
     	        } else if (useType == FunctionParameter.UseType.OUT) {
-    	            funcParmBinding.setOutput(true);
-    	        } else if (useType == null && Binding.isValidBinding(typeBinding) && typeBinding.isReference()) {
-    	            funcParmBinding.setInput(true);
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_OUT);
+    	        } else if (useType == null && typeBinding != null && TypeUtils.isReferenceType(typeBinding)) {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
     	        }
-
+    	        else {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_INOUT);
+    	        }
+ 
     	        if (definedParameters.contains(parmName)) {
     	            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR });
     	        } else {
@@ -141,11 +134,11 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     		}
     	});
     	
-    	handlerBinding.addConstructor(constructorBinding);
+    	handlerBinding.getConstructors().add(constructorBinding);
     	
     	if (constructor.hasSettingsBlock()) {
-            FunctionScope functionScope = new FunctionScope(currentScope, (FunctionBinding)constructorBinding.getType());
-            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding, -1, handlerBinding);
+            FunctionScope functionScope = new FunctionScope(currentScope, constructorBinding);
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
             SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, handlerBinding, scope,
                     dependencyRequestor, problemRequestor, compilerOptions);
             constructor.getSettingsBlock().accept(blockCompletor);
@@ -158,19 +151,12 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     
     public void endVisit(Handler handler) {
         processSettingsBlocks();
-		if(handlerBinding.getConstructors().isEmpty()) {
-			//Add default constructor
-			handlerBinding.addConstructor(new ConstructorBinding(handlerBinding));
-		}
         endVisitFunctionContainer(handler);
     }
     
-    protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
+    protected StereotypeType getDefaultStereotypeType() {
     	try {
-    		return null;
-    	}
-    	catch(UnsupportedOperationException e) {
-    		return null;
+    		return (StereotypeType)BindingUtil.getAnnotationType(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("BasicHandler"));
     	}
     	catch(ClassCastException e) {
     		return null;

@@ -21,6 +21,10 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.StereotypeType;
+import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.Type;
 
 
 /**
@@ -28,35 +32,28 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
  */
 public class ServiceBindingCompletor extends FunctionContainerBindingCompletor {
 
-    private ServiceBinding serviceBinding;
+    private org.eclipse.edt.mof.egl.Service serviceBinding;
 
-    public ServiceBindingCompletor(Scope currentScope, ServiceBinding serviceBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(serviceBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.serviceBinding = serviceBinding;
+    public ServiceBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.serviceBinding = (org.eclipse.edt.mof.egl.Service)irBinding.getIrPart();
     }
     
     public boolean visit(Service service) {
-    	service.getName().setBinding(serviceBinding);
-    	service.getName().setTypeBinding(serviceBinding);
+    	service.getName().setType(serviceBinding);
     	service.accept(getPartSubTypeAndAnnotationCollector());
     	
-    	serviceBinding.setPrivate(service.isPrivate());
-    	
-    	addImplicitFieldsFromAnnotations();
-         
-        for(Iterator iter = service.getImplementedInterfaces().iterator(); iter.hasNext();) {
-    		Name nextName = (Name) iter.next();
+    	if (service.isPrivate()) {
+    		serviceBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
+
+    	for(Name nextName : service.getImplementedInterfaces()) {
     		try {
-    			ITypeBinding typeBinding = bindTypeName(nextName);
-    			//TODO should probably check to see if this is an interfaceBinding before adding it
-    			serviceBinding.addExtenedInterface(typeBinding);
-    			
-    			if(ITypeBinding.INTERFACE_BINDING != typeBinding.getKind()) {
-    				problemRequestor.acceptProblem(
-    					nextName,
-						IProblemRequestor.SERVICE_OR_HANDLER_MUST_IMPLEMENT_AN_INTERFACE);
+    			Type typeBinding = bindTypeName(nextName);
+    			if (typeBinding instanceof StructPart) {
+    				serviceBinding.getSuperTypes().add((StructPart)typeBinding);
     			}
-    		}
+     		}
     		catch (ResolutionException e) {
     			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
     		}
@@ -65,12 +62,13 @@ public class ServiceBindingCompletor extends FunctionContainerBindingCompletor {
         return true;
     }
 
-    protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {
-        return null;
-    }   
-    
     public void endVisit(Service service) {
         processSettingsBlocks();
         endVisitFunctionContainer(service);
     }
+
+	@Override
+	protected StereotypeType getDefaultStereotypeType() {
+		return null;
+	}
 }

@@ -36,11 +36,11 @@ public class EDTCompiler extends BaseCompiler {
 		
 	
 	static {
-		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
-		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
-		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
-		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
-		StatementValidator.Registry.put("eglx.jtopen", new IBMiProgramCallStatementValidator());
+//		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
+//		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
+//		StatementValidator.Registry.put("eglx.persistence.sql", new SQLActionStatementValidator());
+//		StatementValidator.Registry.put("eglx.services", new ServicesActionStatementValidator());
+//		StatementValidator.Registry.put("eglx.jtopen", new IBMiProgramCallStatementValidator());
 	}
 
 	@Override

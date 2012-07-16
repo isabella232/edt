@@ -55,9 +55,6 @@ public class ProgramBinder extends FunctionContainerBinder {
 	}
     
     public boolean visit(ProgramParameter programParameter) {
-        if (programParameter.getName().resolveType() == null) {
-            return false;
-        }
         return false;
     }
 

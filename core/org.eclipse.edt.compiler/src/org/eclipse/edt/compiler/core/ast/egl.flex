@@ -385,40 +385,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"@"					{ return symbol(NodeTypes.AT); }
 	"?"					{ return symbol(NodeTypes.QUESTION); }
 	"~"					{ return symbol(NodeTypes.NEGATE); }
-	
-
-	// Primitive Types
-	"any"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.ANY); }
-	"bigint"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BIGINT); }
-//	"bin"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.BIN); }
-	"boolean"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.BOOLEAN); }
-	"bytes"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.BYTES); }
-//	"char"				{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.CHAR); }
-//	"dbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.DBCHAR); }
-	"decimal"			{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.DECIMAL); }
-	"float"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.FLOAT); }
-//	"hex"			 	{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.HEX); }
-	"int"			 	{ return symbol(NodeTypes.PRIMITIVE, Primitive.INT); }
-//	"mbchar"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.MBCHAR); }
-//	"money"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.MONEY); }
-//	"num"			 	{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUM); }
-	"number"			{ return symbol(NodeTypes.PRIMITIVE, Primitive.NUMBER); }
-//	"numc"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.NUMC); }
-//	"pacf"				{ return symbol(NodeTypes.NUMERICPRIMITIVE, Primitive.PACF); }
-	"smallfloat"		{ return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLFLOAT); }
-	"smallint"		    { return symbol(NodeTypes.PRIMITIVE, Primitive.SMALLINT); }
-	"string"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.STRING); }
-//	"unicode"			{ return symbol(NodeTypes.CHARPRIMITIVE, Primitive.UNICODE); }
-
-	// Large Object Type Keywords
-//	"blob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.BLOB); }
-//	"clob"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.CLOB); }
-	
-	// Date/Time Type Keywords
-	"date"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.DATE); }
-//	"interval"		    { return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, null); }
-	"time"				{ return symbol(NodeTypes.PRIMITIVE, Primitive.TIME); }
-	"timestamp"			{ return symbol(NodeTypes.TIMESTAMPINTERVALPRIMITIVE, Primitive.TIMESTAMP); }
 
 	// Keywords reserved for future
 	"as"				{ return symbol(NodeTypes.AS); }

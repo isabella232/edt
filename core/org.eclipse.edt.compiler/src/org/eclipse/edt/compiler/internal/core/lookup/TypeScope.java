@@ -58,7 +58,7 @@ public class TypeScope extends Scope {
 		if (myType == null) {
 			return null;
 		}
-		Member mbr = BindingUtil.createDynamicAccessMember(myType, simpleName);
+		Member mbr = BindingUtil.createExplicitDynamicAccessMember(myType, simpleName);
 		if (mbr != null) {
 			List<Member> list = new ArrayList<Member>();
 			list.add(mbr);

@@ -67,9 +67,6 @@ terminal NULL;
 terminal InlineSQLStatement SQLSTMTLIT, SQLCONDITION;
 terminal InlineDLIStatement INLINE_DLI;
 
-terminal Primitive PRIMITIVE, NUMERICPRIMITIVE, CHARPRIMITIVE;
-terminal Primitive TIMESTAMPINTERVALPRIMITIVE;
-
 // Statement terminals
 terminal CALL, CASE, CONTINUE, EXIT, GOTO, IF, MOVE, TO, RETURN, SET, TRANSFER;
 terminal TRY, THROW, WHILE, CLOSE, CONVERSE, DISPLAY, PRINT, FORWARD, ADD, SHOW;
@@ -102,7 +99,6 @@ nonterminal CallSynchronizationValues callSynchronizationOpt;
 nonterminal CallbackTarget callReturnTo, callOnException;
 nonterminal Expression callUsingOpt;
 nonterminal CallReturns callReturns;
-nonterminal String charPrimitiveSpecOpt;
 nonterminal classContent;
 nonterminal handlerContent;
 nonterminal ContinueStatement.ContinueModifier continueModifierOpt;
@@ -151,7 +147,6 @@ nonterminal Type notNullableNamedType;
 nonterminal Type nullableNamedType;
 nonterminal Boolean sqlNullableOpt;
 nonterminal Boolean parmConstOpt;
-nonterminal String[] numericPrimitiveSpecOpt;
 nonterminal String occursOpt;
 nonterminal OnExceptionBlock onException;
 nonterminal Boolean[] openModifierOpt;
@@ -180,7 +175,6 @@ nonterminal ForStatement.ForStep stepOpt;
 nonterminal stmt;
 nonterminal Node strItemDecl;
 nonterminal Node structureContent;
-nonterminal String timestampIntervalPrimitiveSpecOpt;
 nonterminal TransferStatement.TransferTarget transferTargetOpt;
 nonterminal Type type;
 nonterminal Type nullableType;
@@ -1298,30 +1292,6 @@ expr
 	|	name:name1 settingsBlock:settingsBlock1
 	{: RESULT = new SetValuesExpression(name1, settingsBlock1, name1left, settingsBlock1right); :}
 	
-	|	PRIMITIVE:prim1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new NoSpecPrimitiveType(prim1, prim1left, prim1right), prim1left, typeKeywordright); :}
-
-	|	NUMERICPRIMITIVE:numericprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new NumericSpecPrimitiveType(numericprimitive1, null, numericprimitive1left, numericprimitive1right), numericprimitive1left, typeKeywordright); :}
-
-	|	CHARPRIMITIVE:charprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new CharacterSpecPrimitiveType(charprimitive1, null, charprimitive1left, charprimitive1right), charprimitive1left, typeKeywordright); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, null, timestampintervalprimitive1left, timestampintervalprimitive1right), timestampintervalprimitive1left, typeKeywordright); :}
-	
-	|	PRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new NoSpecPrimitiveType(prim1, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	NUMERICPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new NumericSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	CHARPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new CharacterSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:prim1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
-	{: RESULT = new TypeLiteralExpression(new ArrayType(new TimestampIntervalSpecPrimitiveType(prim1, null, prim1left, prim1right), null, prim1left, rbracket1right), prim1left, typeKeywordright); :}
-	
 	|	name:name1 LBRACKET RBRACKET:rbracket1 DOT TYPE:typeKeyword
 	{: RESULT = new TypeLiteralExpression(new ArrayType(new NameType(name1, name1left, name1right), null, name1left, rbracket1right), name1left, typeKeywordright); :}
 
@@ -1625,19 +1595,7 @@ nullableTypeNoName
 	{: RESULT = new NullableType(typeNoName1, typeNoName1left, question1right); :}
 	;
 	
-notNullableTypeNoName
-	::= PRIMITIVE:prim1
-	{: RESULT = new NoSpecPrimitiveType(prim1, prim1left, prim1right); :}
-	
-	|	NUMERICPRIMITIVE:numericprimitive1 numericPrimitiveSpecOpt:numericPrimitiveSpec1
-	{: RESULT = new NumericSpecPrimitiveType(numericprimitive1, numericPrimitiveSpec1, numericprimitive1left, numericPrimitiveSpec1right); :}
-
-	|	CHARPRIMITIVE:charprimitive1 charPrimitiveSpecOpt:charPrimitiveSpec1
-	{: RESULT = new CharacterSpecPrimitiveType(charprimitive1, charPrimitiveSpec1, charprimitive1left, charPrimitiveSpec1right); :}
-
-	|	TIMESTAMPINTERVALPRIMITIVE:timestampintervalprimitive1 timestampIntervalPrimitiveSpecOpt:timestampIntervalPrimitiveSpec1
-	{: RESULT = new TimestampIntervalSpecPrimitiveType(timestampintervalprimitive1, timestampIntervalPrimitiveSpec1, timestampintervalprimitive1left, timestampIntervalPrimitiveSpec1right); :}
-	
+notNullableTypeNoName	
 	|	notNullableTypeNoName:typeNoName1 LBRACKET RBRACKET:rbracket1
 	{: RESULT = new ArrayType(typeNoName1, null, typeNoName1left, rbracket1right); :}
 
@@ -1650,28 +1608,7 @@ notNullableTypeNoName
 	|	notNullableTypeNoName:typeNoName1 QUESTION:question1 LBRACKET expr:expr1 RBRACKET:rbracket1
 	{: RESULT = new ArrayType(new NullableType(typeNoName1, typeNoName1left, question1right), expr1, typeNoName1left, rbracket1right); :}
 	;
-	
-charPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
-	{: RESULT = length; :}
-	;
-
-numericPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 INTEGER:length COMMA INTEGER:decimal RPAREN:rparen1
-	{: RESULT = new String[] { length, decimal }; :}
-
-	|	LPAREN:lparen1 INTEGER:length RPAREN:rparen1
-	{: RESULT = new String[] { length }; :}
-	;
-	
-timestampIntervalPrimitiveSpecOpt
-	::=
-	|	LPAREN:lparen1 STRING:pattern RPAREN:rparen1
-	{: RESULT = pattern.getCanonicalString(); :}
-	;
-
+		
 namedType
 	::=	notNullableNamedType:notNullableNamedType1
 	{: RESULT = notNullableNamedType1; :}

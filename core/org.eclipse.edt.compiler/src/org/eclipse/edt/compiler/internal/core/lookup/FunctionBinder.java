@@ -50,7 +50,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionMember;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Part;
@@ -70,7 +69,7 @@ public class FunctionBinder extends DefaultBinder {
     
     private String canonicalFunctionName;
     
-    public FunctionBinder(Part partBinding, Function functionBinding, Scope scope,
+    public FunctionBinder(Part partBinding, FunctionMember functionBinding, Scope scope,
             IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(scope, partBinding, dependencyRequestor, problemRequestor, compilerOptions);
         this.partBinding = partBinding;

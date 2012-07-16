@@ -21,10 +21,10 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.HandlerBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ProgramBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.mof.egl.Program;
 
 
 /**
@@ -221,10 +221,11 @@ public abstract class Compiler extends DefaultASTVisitor{
 //				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 //				}
 //				break;
-//			case ITypeBinding.HANDLER_BINDING:
-//				try{
-//				    astNode.accept(new HandlerBinder((HandlerBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//								
+			case ITypeBinding.HANDLER_BINDING:
+				try{
+				    astNode.accept(new HandlerBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+								
+				    //TODO get validator from compiler. also, add code to handle circular buildexception
 //					try{
 //					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
 //					}catch(CancelledException e){
@@ -232,16 +233,16 @@ public abstract class Compiler extends DefaultASTVisitor{
 //					}catch(RuntimeException e){
 //					    handleValidationException((Part)astNode, problemRequestor, e);
 //					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
 //			case ITypeBinding.INTERFACE_BINDING:
 //				try{
 //				    astNode.accept(new InterfaceBinder((InterfaceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));

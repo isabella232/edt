@@ -764,7 +764,12 @@ public class BindingUtil {
 		StructPart sp = (StructPart)type.getClassifier();
 		return !(sp.isSubtypeOf((StructPart)TypeUtils.getType(TypeUtils.Type_AnyValue)));
 	}
-	
+
+	public static boolean isExplicitlyDynamicallyAccessible(Type type) {
+		//Check the type for an annotation
+		return (type != null && type.getClassifier() != null && type.getClassifier().getAnnotation("egl.lang.reflect.Dynamic") != null);
+	}
+
 	public static Member createDynamicAccessMember(Type type, String caseSensitiveName) {
 		if (isDynamicallyAccessible(type)) {
 			Field field = IrFactory.INSTANCE.createField();
@@ -774,6 +779,17 @@ public class BindingUtil {
 		}
 		return null;
 	}
+	
+	public static Member createExplicitDynamicAccessMember(Type type, String caseSensitiveName) {
+		if (isExplicitlyDynamicallyAccessible(type)) {
+			Field field = IrFactory.INSTANCE.createField();
+			field.setName(caseSensitiveName);			
+			field.setType(getEAny());
+			return field;
+		}
+		return null;
+	}
+
 	
 	public static Part getEAny() {
 		return findPart(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("eany"));

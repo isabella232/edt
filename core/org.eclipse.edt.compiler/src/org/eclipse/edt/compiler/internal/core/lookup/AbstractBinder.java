@@ -176,7 +176,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             	org.eclipse.edt.mof.egl.Type type = BindingUtil.getType(member);
                 result = findData(type, identifier);
                 if (result == null) {
-                	Member dynMbr = BindingUtil.createDynamicAccessMember(type, qualifiedName.getCaseSensitiveIdentifier());
+                	Member dynMbr = BindingUtil.createExplicitDynamicAccessMember(type, qualifiedName.getCaseSensitiveIdentifier());
                 	if (dynMbr != null) {
                 		List<Member> list = new ArrayList<Member>();
                 		list.add(dynMbr);
@@ -366,7 +366,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             	org.eclipse.edt.mof.egl.Type type = BindingUtil.getType(member);
                 result = findData(type, identifier);
                 if (result == null) {
-                	Member dynMbr = BindingUtil.createDynamicAccessMember(type, qualifiedName.getCaseSensitiveIdentifier());
+                	Member dynMbr = BindingUtil.createExplicitDynamicAccessMember(type, qualifiedName.getCaseSensitiveIdentifier());
                 	if (dynMbr != null) {
                 		List<Member> list = new ArrayList<Member>();
                 		list.add(dynMbr);

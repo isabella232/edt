@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.edt.compiler.binding.IRPartBinding;
-import org.eclipse.edt.compiler.internal.core.lookup.SystemEnvironmentPackageNames;
 import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.IrFactory;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -64,7 +64,7 @@ public class SystemPartManager {
     	
     	ExternalType et = IrFactory.INSTANCE.createExternalType();
     	et.setName(name);
-    	et.setPackageName(SystemEnvironmentPackageNames.EGL_CORE_REFLECT_STRING);
+    	et.setPackageName(NameUtile.getAsName("egl.core"));
     	IRPartBinding binding = new IRPartBinding(et);
     	return binding;
     }
