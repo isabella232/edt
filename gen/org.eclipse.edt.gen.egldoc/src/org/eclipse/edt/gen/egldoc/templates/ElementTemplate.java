@@ -22,6 +22,7 @@ public class ElementTemplate extends EGLDocTemplate {
 	public void preGenPart(Element part, Context ctx) {
 		
 		String docType = part.getEClass().getName(); 
+		String stereoTypeName = "How Do You Get the Stereotype?";
 		String partName =  part.eGet("Name").toString();
 		String fullPartName = part.eGet("PackageName") + "." + partName;
 		
@@ -42,10 +43,11 @@ public class ElementTemplate extends EGLDocTemplate {
 		
 		// public void putAttribute(Object key, String value, Object entry) {
 		ctx.putAttribute(this, "docType", docType);
+		ctx.putAttribute(this, "stereoTypeName", stereoTypeName);
 		ctx.putAttribute(this, "partName", partName);
 		ctx.putAttribute(this, "fullPartName", fullPartName);
-		ctx.putAttribute(this, "firstPara", mainComments[0]);
-		ctx.putAttribute(this, "postFirstPara", mainComments[1]);
+		ctx.putAttribute(this, "firstPara", mainComments[0].trim());
+		ctx.putAttribute(this, "postFirstPara", mainComments[1].trim());
 	}
 		
 	 
@@ -103,10 +105,38 @@ public class ElementTemplate extends EGLDocTemplate {
 	
 	
 	public void genBody(Element part, Context ctx, TabbedWriter out) {
-		String fullPartName = (String) ctx.getAttribute(this, "fullPartName");
+		String docType = (String) ctx.getAttribute(this, "docType");
+		String stereoTypeName = (String) ctx.getAttribute(this, "stereoTypeName");
+		String partName = (String) ctx.getAttribute(this, "partName");
 		
+		String firstPara = (String) ctx.getAttribute(this, "firstPara");
+		
+		// the topmost detail, with introductory paragraph		
 		out.println("<body>");
-		out.println("<b>" + fullPartName + "</b>");
-		out.println("TODO");
+		out.println("<h1 class=\"title topictitle1\">" + partName + " " + docType + "</h1>");
+		out.println("<div class=\"body\" id=\"body\">");
+		out.println("<p class=\"shortdesc\">" + firstPara + "</p>");
+		
+		// the list
+		out.println("<dl class=\"dl\" id=\"main\">");
+		
+		// stereotype detail
+		out.println("<dt class=\"dt dlterm\"><a name=\"typestereo\"</a>Type stereotype</dt>");
+        
+		if (stereoTypeName == ""){
+		   out.println("<dd> <p class=\"p\">None.</p>");	
+		}
+		else {
+			out.println("<dd> <p class=\"p\">" + stereoTypeName + "</p>");	
+		}
+		out.println("<p class=\"p\"></p></dd></dt>");
+		
+		
+		
+		
+		
+		out.println("</div></dl>");
+		out.println("<anchor id=\"related_links\"></anchor>");
+		out.println("</body>");
 	}
 }
