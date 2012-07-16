@@ -136,6 +136,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		
 		
 		out.println("</div></dl>");
+		ctx.invoke(genPartContent, part, ctx, out);
 		out.println("<anchor id=\"related_links\"></anchor>");
 		out.println("</body>");
 	}
