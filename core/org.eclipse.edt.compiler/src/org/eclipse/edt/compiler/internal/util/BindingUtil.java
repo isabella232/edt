@@ -171,11 +171,11 @@ public class BindingUtil {
 		if (part instanceof StructuredRecord) {
 			return ITypeBinding.FIXED_RECORD_BINDING;
 		}
-		if (part instanceof Record || part instanceof AnnotationType) {
-			return ITypeBinding.FLEXIBLE_RECORD_BINDING;
-		}
 		if (part instanceof Form) {
 			return ITypeBinding.FORM_BINDING;
+		}
+		if (part instanceof Record || part instanceof AnnotationType) {
+			return ITypeBinding.FLEXIBLE_RECORD_BINDING;
 		}
 		if (part instanceof FormGroup) {
 			return ITypeBinding.FORMGROUP_BINDING;
