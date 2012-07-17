@@ -42,6 +42,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 		
 		String fieldContainerType = (String) ctx.getAttribute(this, "fieldContainerType");
 		
+		
 		List<Field> nonConstantFields = new ArrayList<Field>();
 		for (Field field : part.getFields()) {
 			if(!(field instanceof ConstantField)){
@@ -55,7 +56,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 		} 
 		*/
 		
-		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType + " fields</dt>");
+		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType + "" + " fields</dt>");
 		if(nonConstantFields.size() == 0){
 			out.println("<dd class=\"dd\">");
 			out.println("None.");

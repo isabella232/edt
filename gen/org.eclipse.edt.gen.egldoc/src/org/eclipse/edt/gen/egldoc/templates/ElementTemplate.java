@@ -23,7 +23,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		
 		String docType = part.getEClass().getName(); 
 		String fieldContainerType = new String (docType);
-		String stereoTypeName = "How Do You Get the Stereotype?";
+		
 		String partName =  part.eGet("Name").toString();
 		String fullPartName = part.eGet("PackageName") + "." + partName;
 		
@@ -51,7 +51,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		// public void putAttribute(Object key, String value, Object entry) {
 		ctx.putAttribute(this, "docType", docType);
 		ctx.putAttribute(this, "fieldContainerType", fieldContainerType);
-		ctx.putAttribute(this, "stereoTypeName", stereoTypeName);
+		
 		ctx.putAttribute(this, "partName", partName);
 		ctx.putAttribute(this, "fullPartName", fullPartName);
 		ctx.putAttribute(this, "firstPara", mainComments[0].trim());
@@ -131,7 +131,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		// stereotype detail
 		out.println("<dt class=\"dt dlterm\"><a name=\"typestereo\"</a>Type stereotype</dt>");
         
-		if (stereoTypeName == ""){
+		if (stereoTypeName == null){
 		   out.println("<dd> <p class=\"p\">None.</p>");	
 		}
 		else {
