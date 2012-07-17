@@ -45,17 +45,44 @@ public class EGLClassTemplate extends EGLDocTemplate {
 				nonConstantFields.add((Field)field);
 			}
 		}
-		
+
+		/* SBM.  show section in any case 
 		if(nonConstantFields.size() > 0){
 			out.println(part.getEClass().getName() + " fields");
+		} 
+		*/
+		
+		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>Record fields</dt>");
+		if(nonConstantFields.size() == 0){
+			out.println("<dd class=\"dd\">");
+			out.println("None.");
+			out.println("<p class=\"p\"></p>");
+			out.println("</dd>");
 		}
-		for (Field field : nonConstantFields) {
-			ctx.invoke(genField, part, ctx, out, field);
+		else {
+			out.println("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
+			
+			for (Field field : nonConstantFields) {
+				ctx.invoke(genField, part, ctx, out, field);
+				out.println("<p class=\"p\"></p>");
+			}
+			out.println("<p class=\"p\"></p></dd>");			
 		}
+		
+		
+		
+		
+		
+		
 	}
 
 	public void genField(EGLClass part, Context ctx, TabbedWriter out, Field arg) {
 		ctx.invoke(genDeclaration, arg, ctx, out);
+		
+		
+
+		
+		
 	}
 
 	public void genFunctions(EGLClass part, Context ctx, TabbedWriter out) {
@@ -73,7 +100,42 @@ public class EGLClassTemplate extends EGLDocTemplate {
 	}
 
 	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {
+		
 		out.println(part.getFullyQualifiedName());
+		
+				
+/*		
+		
+		<dt class="dt dlterm"><a name="recordfields"></a>Record fields</dt>
+
+		<!-- is the destination for EGLDoc comments that precede Record fields. 
+		Include the last <p class="p"></p>, whether or not the content is supplied, but include "None" if none. -->
+		<dd class="dd"><dl class="dl parml"><p class="p"></p>
+		
+		<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">name</span>
+
+		<!-- uses the Estring definition, calls it String. do an equivalent type renaming when refering to any of the EGL simple-type definitions --> 
+		<a href=eglx.lang.EString>String</a></span></dt>
+		<dd class="dd pd">The customer name.
+		<!-- automatically handle field annotations, each separated from the next by a paragraph -->
+		<p class="p"></p>
+		Field annotations:
+		<dl dlterm><dt class="dt"></dt>
+		<dd class="dd">@<a href="eglx.lang.ExternalName">ExternalName</a> { value = "the_name" }</dd><p class="p"></p></dl></dd>
+
+		<dt class="dt pt dlterm"><span class="ph synph"><span class="keyword kwd">number</span>
+		<a href="eglx.lang.EInt">Int</a>
+		</span></dt>
+		<dd class="dd pd"><class="p">The customer number.
+		<p class="p">Is unique across all our divisions.</p>
+		<p class="p"></p></dd>
+*/		
+
+		
+		
+		
+		
+
 	}
 
 }
