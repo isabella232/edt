@@ -601,7 +601,7 @@ egl.eglx.lang.EString.fromENumber = function (x, len) {
 	return egl.eglx.lang.EString.asString(egl.unboxAny(x).toString(), len );
 };
 egl.eglx.lang.EString.fromETimestamp = function (timestamp, pattern, len) {
-	if(pattern == null) pattern = "yyyyMMddhhmmss";
+	if(pattern == null) pattern = "yyyyMMddHHmmss";
 	var format = egl.eglx.lang.ETimestamp.getFormatFromPattern(pattern);	
 	var result =  egl.timeStampToString(timestamp, format); // TODO sbg Need a constant, but can't depend on eglx.lang.Constants
 	return egl.eglx.lang.EString.asString(result, len );
@@ -1159,7 +1159,7 @@ egl.eglx.lang.ETimestamp.getFormatFromPattern = function(pattern){
 };
 
 egl.eglx.lang.ETimestamp.ezeCast = function(x, nullable, pattern){
-	return egl.convertAnyToTimestamp(x, nullable, pattern);  
+	return egl.convertAnyToTimestamp(x, nullable, pattern || "yyyyMMddHHmmss");  
 };
 egl.eglx.lang.ETimestamp.equals = function (x, y) {   
 	return egl.timeStampEquals(x, y, false);  //TODO sbg false should be a flag indicating nullable

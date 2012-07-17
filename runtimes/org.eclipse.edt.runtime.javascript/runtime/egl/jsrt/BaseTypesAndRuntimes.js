@@ -4257,7 +4257,7 @@ egl.dateTime.extend = function(/*type of date*/ type, /*extension*/ date, /*opti
 
 egl.dateTime.timeStampValueWithPattern = function(/*string*/source, /*optional mask*/timeSpanPattern) {
 	//Returns a TIMESTAMP value that reflects a string and is built based on a timestamp mask that you specify
-	return ( ( source != null ) ? egl.stringToTimeStampWithDefaultSeparator( source, egl.getProperTimeStampPattern( timeSpanPattern ) ) : null );
+	return ( ( source != null ) ? egl.stringToTimeStampWithDefaultSeparator( source, timeSpanPattern ) : null );
 };
 
 
