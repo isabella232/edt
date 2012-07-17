@@ -3,6 +3,7 @@ package org.eclipse.edt.gen.egldoc.templates;
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Stereotype;
 
 public class PartTemplate extends EGLDocTemplate {
 
@@ -17,7 +18,19 @@ public class PartTemplate extends EGLDocTemplate {
 	}
 	
 	public void genClassContent(Part part, Context ctx, TabbedWriter out){
-		
+	
+		out.println("<dt class=\"dt dlterm\"><a name=\"typestereo\"</a>Type stereotype</dt>");
+
+		Stereotype theSubtype = part.getStereotype();
+				
+		if (theSubtype == null){
+			   out.println("<dd> <p class=\"p\">None.</p>");	
+			}
+			else {
+				out.println("<dd> <p class=\"p\">" + theSubtype.toString() + "</p>");	
+			}
+			out.println("<p class=\"p\"></p></dd></dt>");
+				
 	}
 	
 	public void genPackage(Part part, Context ctx, TabbedWriter out){	    
@@ -32,4 +45,8 @@ public class PartTemplate extends EGLDocTemplate {
 		}
 		out.println("<p class=\"p\"></p></dd></dt>");	
 	}
+	
+	
+	
+	
 }
