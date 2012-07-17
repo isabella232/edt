@@ -31,7 +31,7 @@ handler DataGridTooltip  { }
 		td Widget = widget;
 		row any = grid.data[td.getAttribute("row")];
 		column DataGridColumn = grid.getColumn(td);
-		tip Box = provider(row, column.name, td);
+		tip Box? = provider(row, column.name, td);
 		return(tip);
 	end
 	
