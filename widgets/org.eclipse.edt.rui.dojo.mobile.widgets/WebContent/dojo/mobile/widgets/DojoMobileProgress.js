@@ -22,6 +22,7 @@ egl.defineWidget(
 		var _this = this;
 		_this.initIntervalTime = 100;
 		_this.imagePath = null;
+		_this.show = false;
 		require( 
 			["dojo/mobile/utility/Synchronor"],
 			function( synchronor ){
@@ -32,7 +33,7 @@ egl.defineWidget(
 	},
 	"createDojoWidget" : function(parent) {
 		var _this = this;
-		
+	
 		_this.dojoWidget = dojox.mobile.ProgressIndicator.getInstance();
 		_this.synchronor.trigger( _this, "SYN_READY" );
 		
@@ -47,23 +48,26 @@ egl.defineWidget(
 			
 			if( _this.show )
 				_this.showProgress();
-			
-			if( _this.hide )
+			else
 				_this.hideProgress();
 		}
 	},
 	"showProgress" : function() {
-		this.show = true;		
-		if(this.dojoWidget){
+		if( this.dojoWidget && !this.dojoWidget.isShowing ){
 			document.body.appendChild(this.dojoWidget.domNode);
 			this.dojoWidget.start();
+			this.dojoWidget.domNode.style.display = "";
+			this.dojoWidget.isShowing = true;
 		}			
+		this.show = true;		
 	},
 	"hideProgress" : function() {
-		this.hide = true;
-		if(this.dojoWidget){
+		if( this.dojoWidget ){
 			this.dojoWidget.stop();
+			this.dojoWidget.domNode.style.display = "none";
+			this.dojoWidget.isShowing = false;
 		}		
+		this.show = false;
 	},
 	/**
 	 * @param imagePath string, the url of the progress image animation file

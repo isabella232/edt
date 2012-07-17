@@ -46,7 +46,8 @@ egl.defineWidget(
 				 * dojox.mobile.ListItem widget 
 				 * (1) Fix dojox.mobile.ListItem's bug where icon should be 
 				 * relocated after it has loaded, otherwise its offset will 
-				 * be miscalculated.
+				 * be miscalculated. This bug has been fixed in dojo's
+				 * lastest package.
 				 * (2) Add a fix to dojox.mobile.ListItem that if it is in 
 				 * a display:none parent element, its initialization will be
 				 * ensured to work normally.
