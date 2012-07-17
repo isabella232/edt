@@ -22,17 +22,24 @@ public class ElementTemplate extends EGLDocTemplate {
 	public void preGenPart(Element part, Context ctx) {
 		
 		String docType = part.getEClass().getName(); 
+		String fieldContainerType = new String (docType);
 		String stereoTypeName = "How Do You Get the Stereotype?";
 		String partName =  part.eGet("Name").toString();
 		String fullPartName = part.eGet("PackageName") + "." + partName;
 		
 		if (docType.endsWith("Type")) {			
 			int endPosition = docType.lastIndexOf("Type");
-			StringBuffer docType02 = new StringBuffer();
+			
+			StringBuffer docType02 = new StringBuffer();	
+			StringBuffer fieldContainerType02 = new StringBuffer();
+			
 			docType = 
 				 docType02.append(Character.toLowerCase(docType.charAt(0)))
 			              .append(docType.substring(1, endPosition))
 			              .toString();
+			fieldContainerType =
+				 fieldContainerType02.append(fieldContainerType.substring(0, endPosition))
+				                     .toString();
 		}
 				
 		/** TODO:  retrieve comments from the IR */
@@ -43,6 +50,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		
 		// public void putAttribute(Object key, String value, Object entry) {
 		ctx.putAttribute(this, "docType", docType);
+		ctx.putAttribute(this, "fieldContainerType", fieldContainerType);
 		ctx.putAttribute(this, "stereoTypeName", stereoTypeName);
 		ctx.putAttribute(this, "partName", partName);
 		ctx.putAttribute(this, "fullPartName", fullPartName);
