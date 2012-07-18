@@ -20,9 +20,6 @@ import java.util.Set;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
-import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter;
-import org.eclipse.edt.compiler.core.ast.FunctionParameter.AttrType;
 import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
@@ -54,7 +51,6 @@ public class HandlerValidator extends FunctionContainerValidator {
 		partNode = ahandler;
 		EGLNameValidator.validate(handler.getName(), EGLNameValidator.HANDLER, problemRequestor, compilerOptions);
 //		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(ahandler); //TODO
-		validateHandler();
 		
 		checkInterfaceFunctionsOverriden();
 		return true;
@@ -80,43 +76,6 @@ public class HandlerValidator extends FunctionContainerValidator {
 		return false;
 	}
 	
-	private void validateHandler() {
-		DefaultASTVisitor visitor1 =  new DefaultASTVisitor() {
-			public boolean visit(NestedFunction nestedFunction) {
-				
-				final String funcName = nestedFunction.getName().getCanonicalName();
-				
-				DefaultASTVisitor visitor2 = new DefaultASTVisitor() {
-					public boolean visit(NestedFunction nestedFunction) {
-						return true;
-					}
-					public boolean visit(FunctionParameter functionParameter) {				
-						if (functionParameter.getAttrType() == AttrType.FIELD){
-							problemRequestor.acceptProblem(functionParameter,
-									IProblemRequestor.FUNCTION_PARAMETERS_DO_NOT_SUPPORT_NULLABLE_AND_FIELD,
-									new String[] {
-									functionParameter.getName().getCanonicalName(),
-									funcName,
-									handler.getName().getCanonicalName(),
-									IEGLConstants.KEYWORD_FIELD});
-						}
-						return false;
-					}
-
-				};
-				nestedFunction.accept(visitor2);
-				return false;
-			}
-			public boolean visit(Handler handler) {
-				return true;
-			}
-			
-								
-		};
-		
-		handler.accept(visitor1);
-	}
-
 	private void checkInterfaceFunctionsOverriden() {
 		List<Function> declaredAndInheritedFunctions = null;
 		for (Function interfaceFunc : getInterfaceFunctionList()) {
