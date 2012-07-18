@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.IBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ProgramBindingCompletor;
 import org.eclipse.edt.compiler.core.ast.Program;
