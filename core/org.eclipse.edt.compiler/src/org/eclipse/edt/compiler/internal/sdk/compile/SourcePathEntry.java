@@ -13,17 +13,12 @@ package org.eclipse.edt.compiler.internal.sdk.compile;
 
 import java.io.File;
 
-import org.eclipse.edt.compiler.EGL2IREnvironment;
-import org.eclipse.edt.compiler.internal.sdk.utils.Util;
-import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.internal.core.compiler.BindingCompletor;
 import org.eclipse.edt.compiler.internal.core.dependency.NullDependencyRequestor;
-import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.lookup.EnvironmentScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FileScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -31,6 +26,8 @@ import org.eclipse.edt.compiler.internal.core.lookup.IEnvironment;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.core.lookup.SystemScope;
 import org.eclipse.edt.compiler.internal.core.utils.PartBindingCache;
+import org.eclipse.edt.compiler.internal.sdk.utils.Util;
+import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
@@ -111,7 +108,6 @@ public class SourcePathEntry {
         File declaringFile = SourcePathInfo.getInstance().getDeclaringFile(packageName, caseInsensitivePartName);
         
         Node partAST = ASTManager.getInstance().getAST(declaringFile, caseInsensitivePartName);
-        declaringEnvironment.getNewPartBinding(packageName, caseSensitivePartName, Util.getPartType(partAST));
         IPartBinding partBinding = declaringEnvironment.getNewPartBinding(packageName, caseSensitivePartName, Util.getPartType(partAST));
         
         Scope scope;
