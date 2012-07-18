@@ -56,15 +56,19 @@ public class EGLClassTemplate extends EGLDocTemplate {
 		} 
 		*/
 		// part.getEClass().getName()
-		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType  + " fields</dt>");
+		out.println ("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType + " fields</dt>");
 		if(nonConstantFields.size() == 0){
+			
+			out.println ("<dd> <p class=\"p\">None.</p><p class=\"p\"></p></dd></dt>");
+			/*
 			out.println("<dd class=\"dd\">");
 			out.println("None.");
 			out.println("<p class=\"p\"></p>");
 			out.println("</dd>");
+			*/
 		}
-		else {
-			out.println("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
+		else {			
+			out.println ("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
 			
 			for (Field field : nonConstantFields) {
 				ctx.invoke(genField, part, ctx, out, field);

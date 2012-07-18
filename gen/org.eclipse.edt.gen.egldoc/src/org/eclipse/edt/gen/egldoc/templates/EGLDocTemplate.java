@@ -41,6 +41,6 @@ public class EGLDocTemplate extends AbstractTemplate {
 	public static final String genMemberAnnotations = "genMemberAnnotations";
 	public static final String genMemberAnnotation = "genMemberAnnotation";
 	public static final String genDefaultSuperType = "genDefaultSuperType";
-	
+	public static final String genStereotypeName = "genStereotypeName";	
 	public static final String genSyntax = "genSyntax";
 }

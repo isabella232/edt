@@ -34,14 +34,22 @@ public class ElementTemplate extends EGLDocTemplate {
 
 			int endPosition = docType.lastIndexOf("Type");
 			StringBuffer docType02 = new StringBuffer();
-			StringBuffer fieldContainerType02 = new StringBuffer();
 			docType = docType02
 					.append(Character.toLowerCase(docType.charAt(0)))
 					.append(docType.substring(1, endPosition))
 					.append(" type").toString();
-			fieldContainerType = fieldContainerType02
-					.append(fieldContainerType.substring(0, endPosition))
-					.toString();	
+			
+			if (fieldContainerType.equals("ExternalType")){
+				fieldContainerType = "External type";				
+			}
+			else
+			{
+			   StringBuffer fieldContainerType02 = new StringBuffer();
+			   fieldContainerType = fieldContainerType02
+						.append(fieldContainerType.substring(0, endPosition))
+						.toString();
+			}
+			
 			
 			/*
 			 * fieldContainerType = fieldContainerType02

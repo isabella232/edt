@@ -31,19 +31,39 @@ public class AnnotationTypeTemplate extends EGLDocTemplate {
 	}
 	
 	public void genFields(AnnotationType annotationType, Context ctx, TabbedWriter out) {
+	    String fieldContainerType = (String) ctx.get("fieldContainerType");
+
+		out.println ("<dt class=\"dt dlterm\"><a name=\"annofields\"></a>" + fieldContainerType + " fields</dt>");
+		
 		if(annotationType.getEFields().size() > 0){
-			out.println(annotationType.getEClass().getName() + " fields");
+			// out.println(annotationType.getEClass().getName() + " fields");
+			out.println ("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
 		}
+		else {
+			out.println ("<dd> <p class=\"p\">None.</p><p class=\"p\"></p></dd></dt>");			
+		}
+		
 		for (EField efield : annotationType.getEFields()) {
 			ctx.invoke(genField, (Part)annotationType, ctx, out, efield);
 		}
 	}
 
 	public void genField(AnnotationType annotationType, Context ctx, TabbedWriter out, EField arg) {
+		
+		
+		
 		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
 	
 	public void genDeclaration(AnnotationType annotationType, Context ctx, TabbedWriter out) {
-		out.println(annotationType.getFullyQualifiedName());
+		out.println("in AssociationTypeTemplate.genDeclaration " + annotationType.getFullyQualifiedName());
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }
