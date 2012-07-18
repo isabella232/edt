@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.builder;
 
+import org.eclipse.edt.compiler.PartValidator;
 import org.eclipse.edt.compiler.binding.FileBinding;
 import org.eclipse.edt.compiler.binding.IPartBinding;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
@@ -23,8 +24,11 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.HandlerBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
+import org.eclipse.edt.compiler.internal.core.lookup.InterfaceBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.LibraryBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ProgramBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.compiler.internal.core.lookup.ServiceBinder;
 
 
 /**
@@ -56,14 +60,17 @@ public abstract class Compiler extends DefaultASTVisitor{
 				try{
 				    astNode.accept(new ProgramBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 				    
-				    //TODO get validator from compiler. also, add code to handle circular buildexception
-//				    try{
-//					    astNode.accept(new ProgramValidator(problemRequestor, (ProgramBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
+				    //TODO add code to handle circular buildexception
+				    try{
+				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -225,14 +232,17 @@ public abstract class Compiler extends DefaultASTVisitor{
 				try{
 				    astNode.accept(new HandlerBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
 								
-				    //TODO get validator from compiler. also, add code to handle circular buildexception
-//					try{
-//					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
+				    //TODO add code to handle circular buildexception
+					try{
+						PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
 				}catch(CancelledException  e){
 				    throw e;
 				}catch(CircularBuildRequestException e){
@@ -243,48 +253,56 @@ public abstract class Compiler extends DefaultASTVisitor{
 				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 				}
 				break;
-//			case ITypeBinding.INTERFACE_BINDING:
-//				try{
-//				    astNode.accept(new InterfaceBinder((InterfaceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//								
-//					try{
-//					    astNode.accept(new InterfaceValidator(problemRequestor, (InterfaceBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
-//			case ITypeBinding.LIBRARY_BINDING:
-//				try{
-//				    astNode.accept(new LibraryBinder((LibraryBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//								
-//					try{
-//					    astNode.accept(new LibraryValidator(problemRequestor, (LibraryBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
+			case ITypeBinding.INTERFACE_BINDING:
+				try{
+					astNode.accept(new InterfaceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    
+				    //TODO add code to handle circular buildexception
+				    try{
+				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
+			case ITypeBinding.LIBRARY_BINDING:
+				try{
+					astNode.accept(new LibraryBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    
+				    //TODO add code to handle circular buildexception
+				    try{
+				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
 //			case ITypeBinding.FLEXIBLE_RECORD_BINDING:
 //				try{
 //				    astNode.accept(new FlexibleRecordBinder((FlexibleRecordBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
@@ -327,27 +345,31 @@ public abstract class Compiler extends DefaultASTVisitor{
 //				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 //				}
 //				break;
-//			case ITypeBinding.SERVICE_BINDING:
-//				try{
-//				    astNode.accept(new ServiceBinder((ServiceBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//				
-//					try{
-//					    astNode.accept(new ServiceValidator(problemRequestor, (ServiceBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
+			case ITypeBinding.SERVICE_BINDING:
+				try{
+					astNode.accept(new ServiceBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    
+				    //TODO add code to handle circular buildexception
+				    try{
+				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
 //			case ITypeBinding.FORM_BINDING:
 //				try{
 //				    astNode.accept(new FormBinder((FormBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
