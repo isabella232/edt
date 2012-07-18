@@ -46,7 +46,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 		List<Field> nonConstantFields = new ArrayList<Field>();
 		for (Field field : part.getFields()) {
 			if (!(field instanceof ConstantField)) {
-				nonConstantFields.add((Field) field);
+				nonConstantFields.add((Field) field);			
 			}
 		}
 
@@ -67,6 +67,8 @@ public class EGLClassTemplate extends EGLDocTemplate {
 		} else {
 			out.println("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
 
+			
+			/** TODO must alphabetize before presentation */
 			for (Field field : nonConstantFields) {
 				ctx.invoke(genField, part, ctx, out, field);
 				out.println("<p class=\"p\"></p>");
@@ -100,6 +102,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			out.println ("<th class=\"entry\" valign=\"bottom\" width=\"70%\">Description</th></tr></thead>");			
 			out.println ("<tbody class=\"tbody\">");
          	
+			/** TODO must alphabetize before presentation */			
 			for (Function function : part.getFunctions()) {
 				ctx.invoke(genFunction, part, ctx, out, function);
 			}
