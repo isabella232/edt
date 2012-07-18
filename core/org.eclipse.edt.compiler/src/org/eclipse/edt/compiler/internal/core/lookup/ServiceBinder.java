@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.ServiceBinding;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.binding.ServiceBindingCompletor;
 import org.eclipse.edt.compiler.core.ast.Service;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -24,18 +24,20 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
 public class ServiceBinder extends FunctionContainerBinder {
 
-    private ServiceBinding serviceBinding;
+	private org.eclipse.edt.mof.egl.Service serviceBinding;
+    private IRPartBinding irBinding;
     private Scope fileScope;
 
-    public ServiceBinder(ServiceBinding serviceBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(serviceBinding, fileScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.serviceBinding = serviceBinding;
+    public ServiceBinder(IRPartBinding irBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding.getIrPart(), fileScope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.irBinding =irBinding;
+        this.serviceBinding = (org.eclipse.edt.mof.egl.Service)irBinding.getIrPart();
         this.fileScope = fileScope;
     }
 
     public boolean visit(Service service) {
         // First we have to complete the service binding (as a side effect some of the AST nodes are bound)
-        service.accept(new ServiceBindingCompletor(fileScope, serviceBinding, dependencyRequestor, problemRequestor, compilerOptions));
+        service.accept(new ServiceBindingCompletor(fileScope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
         // The current scope only changes once the initial service binding is complete
         currentScope = new ServiceScope(currentScope, serviceBinding);
