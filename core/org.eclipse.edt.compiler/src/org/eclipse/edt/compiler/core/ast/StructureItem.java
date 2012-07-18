@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.core.ast;
 
 import org.eclipse.edt.compiler.binding.IBinding;
+import org.eclipse.edt.mof.egl.Member;
 
 
 /**
@@ -25,6 +26,7 @@ public class StructureItem extends Node {
 	private String levelOpt;
 	private SimpleName name;
 	private Type type;
+	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	String occursOpt;
@@ -32,9 +34,9 @@ public class StructureItem extends Node {
 	private boolean isEmbedded;
 	//Since there is no node to attach binding for filler items...also used to hold the structure imported for
 	// an embed.
-	private IBinding binding;
+	private Member member;
 
-	public StructureItem(String levelOpt, SimpleName name, Type type, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isFiller, boolean isEmbedded, int startOffset, int endOffset) {
+	public StructureItem(String levelOpt, SimpleName name, Type type, Boolean isNullable, String occursOpt, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isFiller, boolean isEmbedded, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.levelOpt = levelOpt;
@@ -57,6 +59,7 @@ public class StructureItem extends Node {
 		}
 		this.isFiller = isFiller;
 		this.isEmbedded = isEmbedded;
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public boolean hasLevel() {
@@ -130,19 +133,24 @@ public class StructureItem extends Node {
 		visitor.endVisit(this);
 	}
 	
-	public IBinding resolveBinding() {
-		if(binding != null) {
-			return binding;
+	public Member resolveMember() {
+		if(member != null) {
+			return member;
 		}
 		if(!isFiller && !isEmbedded) {
-			return getName().resolveBinding();
+			return getName().resolveMember();
 		}
 		return null;
     }
     
-    public void setBinding(IBinding binding) {
-        this.binding = binding;
+    public void setMember(Member member) {
+        this.member = member;
     }
+    
+	public boolean isNullable() {
+		return isNullable;
+	}
+
 	
 	protected Object clone() throws CloneNotSupportedException {
 		String newLevelOpt = levelOpt != null ? new String(levelOpt) : null;
@@ -157,6 +165,6 @@ public class StructureItem extends Node {
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new StructureItem(newLevelOpt, newName, newType, newOccursOpt, newSettingsBlockOpt, newInitializerOpt, isFiller, isEmbedded, getOffset(), getOffset() + getLength());
+		return new StructureItem(newLevelOpt, newName, newType, Boolean.valueOf(isNullable), newOccursOpt, newSettingsBlockOpt, newInitializerOpt, isFiller, isEmbedded, getOffset(), getOffset() + getLength());
 	}
 }

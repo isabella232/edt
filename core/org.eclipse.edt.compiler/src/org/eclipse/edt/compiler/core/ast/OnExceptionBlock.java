@@ -24,8 +24,9 @@ public class OnExceptionBlock extends Node {
 	private List stmts;	// List of Nodes
 	private SimpleName idOpt;
 	private Type typeOpt;
+	private boolean isNullable;
 
-	public OnExceptionBlock(List stmts, SimpleName idOpt, Type typeOpt, int startOffset, int endOffset) {
+	public OnExceptionBlock(List stmts, SimpleName idOpt, Type typeOpt, Boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.stmts = setParent(stmts);
@@ -37,6 +38,7 @@ public class OnExceptionBlock extends Node {
 			this.typeOpt = typeOpt;
 			typeOpt.setParent(this);
 		}
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public List<Node> getStmts() {
@@ -67,9 +69,13 @@ public class OnExceptionBlock extends Node {
 		visitor.endVisit(this);
 	}
 	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {
 		SimpleName newName = idOpt == null ? null : (SimpleName) idOpt.clone();
 		Type newType = typeOpt == null ? null : (Type) typeOpt.clone();
-		return new OnExceptionBlock(cloneList(stmts), newName, newType, getOffset(), getOffset() + getLength());
+		return new OnExceptionBlock(cloneList(stmts), newName, newType, Boolean.valueOf(isNullable), getOffset(), getOffset() + getLength());
 	}
 }

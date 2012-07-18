@@ -337,10 +337,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( nullLiteral );
 	}
 	
-	public boolean visit(NullableType nullableType) {
-		return visitNode( nullableType );
-	}
-	
 	public boolean visit(NoCursorClause noCursorClause) {
 		return visitNode( noCursorClause );
 	}
@@ -389,10 +385,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		return visitNode( prepareStatement );
 	}
 	
-	public boolean visit(PrimitiveType primitiveType) {
-		return visitNode( primitiveType );
-	}
-	
 	public boolean visit(PrintStatement printStatement) {
 		return visitNode( printStatement );
 	}
@@ -431,10 +423,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public boolean visit(Service service) {
 		return visitNode( service );
-	}
-	
-	public boolean visit(ServiceReference serviceReference) {
-		return visitNode( serviceReference );
 	}
 	
 	public boolean visit(SetStatement setStatement) {
@@ -881,10 +869,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( nullLiteral );
 	}
 	
-	public void endVisit(NullableType nullableType) {
-		 endVisitNode( nullableType );
-	}
-	
 	public void endVisit(NoCursorClause noCursorClause) {
 		 endVisitNode( noCursorClause );
 	}
@@ -933,10 +917,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 		 endVisitNode( prepareStatement );
 	}
 	
-	public void endVisit(PrimitiveType primitiveType) {
-		 endVisitNode( primitiveType );
-	}
-	
 	public void endVisit(PrintStatement printStatement) {
 		 endVisitNode( printStatement );
 	}
@@ -975,10 +955,6 @@ public abstract class AbstractASTNodeVisitor implements IASTVisitor {
 	
 	public void endVisit(Service service) {
 		 endVisitNode( service );
-	}
-	
-	public void endVisit(ServiceReference serviceReference) {
-		 endVisitNode( serviceReference );
 	}
 	
 	public void endVisit(SetStatement setStatement) {

@@ -76,11 +76,7 @@ public class NestedFunction extends Node {
 	public ReturnsDeclaration getReturnDeclaration(){
 		return returnsOpt;
 	}	
-	
-	public boolean returnTypeIsSqlNullable() {
-		return returnsOpt.isSqlNullable();
-	}
-	
+		
 	public List getStmts() {
 		return stmts;
 	}

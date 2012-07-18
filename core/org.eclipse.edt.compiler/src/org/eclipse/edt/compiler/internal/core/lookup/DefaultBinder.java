@@ -50,6 +50,7 @@ import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.MBCharLiteral;
 import org.eclipse.edt.compiler.core.ast.MoveStatement;
+import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.NewExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.NullLiteral;
@@ -447,9 +448,12 @@ public abstract class DefaultBinder extends AbstractBinder {
 		    }
 		}
 		
-		if(newExpression.hasArgumentList()) {
-			for(Expression expr : newExpression.getArguments()) {
-				expr.accept(this);
+		if(newExpression.getType().getBaseType() instanceof NameType) {
+			NameType nameType = (NameType)newExpression.getType().getBaseType();
+			if (nameType.hasArguments()) {
+				for(Expression expr : nameType.getArguments()) {
+					expr.accept(this);
+				}
 			}
 		}		
 		return false;
@@ -459,14 +463,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 		org.eclipse.edt.mof.egl.Type targetType = newExpression.getType().resolveType();
 		if(targetType != null) {
 			
-			if(newExpression.hasArgumentList()) {
+			//any arugments for a parameterizable type are part of the type and not constructor arguments
+			if(!BindingUtil.isParameterizableType(targetType) && newExpression.getType() instanceof NameType && ((NameType)newExpression.getType()).hasArguments()) {
 				
+				List<Expression> arguments = ((NameType)newExpression.getType()).getArguments();
 				Constructor cons = null;
 				if (targetType.getClassifier() instanceof EGLClass) {
-					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)targetType.getClassifier(), getArgumentTypes(newExpression.getArguments()), false);
+					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)targetType.getClassifier(), getArgumentTypes(arguments), false);
 				}
 				if (cons == null) {
-					if (newExpression.getArguments().size() > 0) {
+					if (arguments.size() > 0) {
 						problemRequestor.acceptProblem(
 							newExpression.getType(),
 							IProblemRequestor.MATCHING_CONSTRUCTOR_CANNOT_BE_FOUND,

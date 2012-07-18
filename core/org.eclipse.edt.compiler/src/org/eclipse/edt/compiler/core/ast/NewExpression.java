@@ -27,25 +27,15 @@ import org.eclipse.edt.mof.egl.Constructor;
 public class NewExpression extends Expression {
 
 	private Type type;
-	private boolean hasArgumentList;
-	private List funcArgs;	// List of FunctionArguments
 	private SettingsBlock settingsBlockOpt;
 	
 	private org.eclipse.edt.mof.egl.Constructor constructor;
 
-	public NewExpression(Type type, List funcArgs, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
+	public NewExpression(Type type, SettingsBlock settingsBlockOpt, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.type = type;
 		type.setParent(this);
-		if(funcArgs == null) {
-			this.funcArgs = Collections.EMPTY_LIST;
-			hasArgumentList = false;
-		}
-		else {
-			this.funcArgs = setParent(funcArgs);
-			hasArgumentList = true;
-		}
 		if(settingsBlockOpt != null) {
 			this.settingsBlockOpt = settingsBlockOpt;
 			settingsBlockOpt.setParent(this);
@@ -54,14 +44,6 @@ public class NewExpression extends Expression {
 	
 	public Type getType() {
 		return type;
-	}
-	
-	public List<Expression> getArguments() {
-		return funcArgs;
-	}
-	
-	public boolean hasArgumentList() {
-		return hasArgumentList;
 	}
 	
     public String getCanonicalString() {
@@ -88,7 +70,6 @@ public class NewExpression extends Expression {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			type.accept(visitor);
-			acceptChildren(visitor, funcArgs);
 			if(settingsBlockOpt != null) settingsBlockOpt.accept(visitor);
 		}
 		visitor.endVisit(this);
@@ -96,8 +77,7 @@ public class NewExpression extends Expression {
 	
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
-		List newArgs = hasArgumentList ? cloneList(funcArgs) : null;
 		
-		return new NewExpression((Type)type.clone(), newArgs, newSettingsBlockOpt, getOffset(), getOffset() + getLength());
+		return new NewExpression((Type)type.clone(), newSettingsBlockOpt, getOffset(), getOffset() + getLength());
 	}
 }

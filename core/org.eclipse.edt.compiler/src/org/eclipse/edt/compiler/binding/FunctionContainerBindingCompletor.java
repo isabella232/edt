@@ -134,7 +134,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
                         
             field.setContainer((Container)functionContainerBinding);
             field.setType(type);
-            field.setIsNullable(classDataDeclaration.getType().isNullableType());
+            field.setIsNullable(classDataDeclaration.isNullable());
             field.setName(name.getCaseSensitiveIdentifier());
             field.setIsStatic(classDataDeclaration.isStatic() || membersStaticByDefault());
             if (!BindingUtil.isPrivate(field) && membersPrivateByDefault()) {

@@ -19,9 +19,7 @@ import org.eclipse.edt.compiler.binding.ITypeBinding;
 public abstract class Type extends Node {
     
     public static final int NAMETYPE = 0;
-    public static final int PRIMITIVETYPE = 1;
-    public static final int ARRAYTYPE = 2;
-    public static final int NULLABLETYPE = 3;
+    public static final int ARRAYTYPE = 1;
     
     public Type(int startOffset, int endOffset) {
         super(startOffset, endOffset);
@@ -31,16 +29,8 @@ public abstract class Type extends Node {
         return false;
     }
     
-    public boolean isPrimitiveType() {
-        return false;
-    }
-    
     public boolean isArrayType() {
         return false;
-    }
-    
-    public boolean isNullableType() {
-    	return false;
     }
     
     public abstract int getKind();

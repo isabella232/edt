@@ -23,11 +23,12 @@ public class FunctionDataDeclaration extends Statement {
 
 	private List<Name> ID_plus;	// List of SimpleNames
 	private Type type;
+	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	private boolean isConstant;
 
-	public FunctionDataDeclaration(List<Name> ID_plus, Type type, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
+	public FunctionDataDeclaration(List<Name> ID_plus, Type type, Boolean isNullable, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.ID_plus = setParent( ID_plus );
@@ -41,6 +42,7 @@ public class FunctionDataDeclaration extends Statement {
 			this.initializerOpt = initializerOpt;
 			initializerOpt.setParent(this);
 		}
+		this.isNullable = isNullable.booleanValue();
 		this.isConstant = isConstant;
 	}
 	
@@ -83,12 +85,16 @@ public class FunctionDataDeclaration extends Statement {
 		visitor.endVisit(this);
 	}
 	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new FunctionDataDeclaration(cloneList(ID_plus), (Type)type.clone(), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
+		return new FunctionDataDeclaration(cloneList(ID_plus), (Type)type.clone(), Boolean.valueOf(isNullable), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
 		
 	}
 }

@@ -101,14 +101,8 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     	        funcParmBinding.setName(functionParameter.getName().getCaseSensitiveIdentifier());
     	        functionParameter.getName().setMember(funcParmBinding);
     	        funcParmBinding.setType(typeBinding);
-    	        funcParmBinding.setIsNullable(parmType.isNullableType());   	        
+    	        funcParmBinding.setIsNullable(functionParameter.isNullable());   	        
     	        
-    	        FunctionParameter.AttrType attrType = functionParameter.getAttrType();
-    	        if (attrType == FunctionParameter.AttrType.FIELD) {
-    	            funcParmBinding.setIsField(true);
-    	        } else if (attrType == FunctionParameter.AttrType.SQLNULLABLE) {
-    	            funcParmBinding.setIsDefinedSqlNullable(true);
-    	        }
     	        funcParmBinding.setIsConst(functionParameter.isParmConst());
     	        
     	        FunctionParameter.UseType useType = functionParameter.getUseType();

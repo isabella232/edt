@@ -25,11 +25,12 @@ public class ClassDataDeclaration extends Node {
 	private boolean isStatic;
 	private List<Name> ID_plus;	// List of SimpleNames
 	private Type type;
+	private boolean isNullable;
 	private SettingsBlock settingsBlockOpt;
 	private Expression initializerOpt;
 	private boolean isConstant;
 
-	public ClassDataDeclaration(Boolean privateAccessModifierOpt, Boolean staticAccessModifierOpt, List ID_plus, Type type, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
+	public ClassDataDeclaration(Boolean privateAccessModifierOpt, Boolean staticAccessModifierOpt, List ID_plus, Type type, Boolean isNullable, SettingsBlock settingsBlockOpt, Expression initializerOpt, boolean isConstant, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.isPrivate = privateAccessModifierOpt.booleanValue();
@@ -46,6 +47,7 @@ public class ClassDataDeclaration extends Node {
 			initializerOpt.setParent(this);
 		}
 		this.isConstant = isConstant;
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public List<Name> getNames() {
@@ -95,11 +97,15 @@ public class ClassDataDeclaration extends Node {
 		visitor.endVisit(this);
 	}
 	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {
 		SettingsBlock newSettingsBlockOpt = settingsBlockOpt != null ? (SettingsBlock)settingsBlockOpt.clone() : null;
 		
 		Expression newInitializerOpt = initializerOpt != null ? (Expression)initializerOpt.clone() : null;
 		
-		return new ClassDataDeclaration(new Boolean(isPrivate), new Boolean(isStatic), cloneList(ID_plus), (Type)type.clone(), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
+		return new ClassDataDeclaration(new Boolean(isPrivate), new Boolean(isStatic), cloneList(ID_plus), (Type)type.clone(), Boolean.valueOf(isNullable), newSettingsBlockOpt, newInitializerOpt, isConstant, getOffset(), getOffset() + getLength());
 	}
 }

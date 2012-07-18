@@ -73,7 +73,7 @@ public class FunctionBindingCompletor extends AbstractBinder {
             try {
                 typeBinding = bindType(function.getReturnType());
     	        functionBinding.setType(typeBinding);
-    	        functionBinding.setIsNullable(function.getReturnType().isNullableType());
+    	        functionBinding.setIsNullable(function.getReturnDeclaration().isNullable());
             } catch (ResolutionException e) {
                 problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());                
             }
@@ -114,7 +114,7 @@ public class FunctionBindingCompletor extends AbstractBinder {
             }
             
             functionBinding.setType(typeBinding);
-            functionBinding.setIsNullable(function.getReturnType().isNullableType());
+            functionBinding.setIsNullable(function.getReturnDeclaration().isNullable());
         }
 
         if (function.isPrivate()) {
@@ -162,16 +162,8 @@ public class FunctionBindingCompletor extends AbstractBinder {
         }
         
         parm.setType(typeBinding);
-        parm.setIsNullable(parmType.isNullableType());
-        
-        
-        FunctionParameter.AttrType attrType = functionParameter.getAttrType();
-        if (attrType == FunctionParameter.AttrType.FIELD) {
-            parm.setIsField(true);
-        } else if (attrType == FunctionParameter.AttrType.SQLNULLABLE) {
-            parm.setIsDefinedSqlNullable(true);
-        }
-        
+        parm.setIsNullable(functionParameter.isNullable());
+                
         parm.setIsConst(functionParameter.isParmConst());
         
         FunctionParameter.UseType useType = functionParameter.getUseType();

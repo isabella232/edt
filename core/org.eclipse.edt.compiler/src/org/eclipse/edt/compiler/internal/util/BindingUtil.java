@@ -41,6 +41,7 @@ import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
+import org.eclipse.edt.mof.egl.ParameterizableType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.Record;
@@ -814,6 +815,10 @@ public class BindingUtil {
 			return ((NamedElement)elem).getName();
 		}
 		return "";
+	}
+	
+	public static boolean isParameterizableType(Type type) {
+		return type instanceof ParameterizableType;
 	}
 
 }

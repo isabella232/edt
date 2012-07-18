@@ -247,7 +247,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"exit"				{ return symbol(NodeTypes.EXIT); }
 	"extends"			{ return symbol(NodeTypes.EXTENDS); }
 	"externalType"		{ return symbol(NodeTypes.EXTERNALTYPE); }
-	"field"			 	{ return symbol(NodeTypes.FIELD); }
 	"first"				{ return symbol(NodeTypes.FIRST); }
 	"for"			 	{ return symbol(NodeTypes.FOR); }
 	"foreach"			{ return symbol(NodeTypes.FOREACH); }
@@ -276,8 +275,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"label"			 	{ return symbol(NodeTypes.LABEL); }
 	"last"				{ return symbol(NodeTypes.LAST); }
 	"library"			{ return symbol(NodeTypes.LIBRARY); }
-//	"like"				{ return symbol(NodeTypes.LIKE); }
-//	"matches"			{ return symbol(NodeTypes.MATCHES); }
 	"move"				{ return symbol(NodeTypes.MOVE); }
 	"next"				{ return symbol(NodeTypes.NEXT); }
 	"new"			 	{ return symbol(NodeTypes.NEW); }	
@@ -309,7 +306,6 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"set"				{ return symbol(NodeTypes.SET); }
 	"show"				{ return symbol(NodeTypes.SHOW); }
 	"singlerow"			{ return symbol(NodeTypes.SINGLEROW); }
-	"sqlnullable"	    { return symbol(NodeTypes.SQLNULLABLE); }
 	"stack"			 	{ return symbol(NodeTypes.STACK); }
 	"static"			{ return symbol(NodeTypes.STATIC); }
 	"super"				{ return symbol(NodeTypes.SUPER); }

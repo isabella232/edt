@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
+import java.util.Collections;
+import java.util.List;
+
 
 /**
  * NameType AST node type.
@@ -21,12 +24,18 @@ package org.eclipse.edt.compiler.core.ast;
 public class NameType extends Type {
 
 	private Name name;
+	private List<Expression> arguments;
 
-	public NameType(Name name, int startOffset, int endOffset) {
+	public NameType(Name name, List<Expression> arguments, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.name = name;
 		name.setParent(this);
+		if (arguments == null) {
+			arguments = Collections.emptyList();
+		}
+		this.arguments = setParent(arguments);
+
 	}
 	
 	public Name getName() {
@@ -49,6 +58,7 @@ public class NameType extends Type {
 		boolean visitChildren = visitor.visit(this);
 		if(visitChildren) {
 			name.accept(visitor);
+			acceptChildren(visitor, arguments);			
 		}
 		visitor.endVisit(this);
 	}
@@ -57,8 +67,17 @@ public class NameType extends Type {
 		return name.getCanonicalName();
 	}
 	
+	public boolean hasArguments() {
+		return arguments != null && arguments.size() > 0;
+	}
+	
+	
+	public List<Expression> getArguments() {
+		return arguments;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException {
-		return new NameType((Name)name.clone(), getOffset(), getOffset() + getLength());
+		return new NameType((Name)name.clone(), cloneList(arguments), getOffset(), getOffset() + getLength());
 	}
 	
 	public Type getBaseType() {

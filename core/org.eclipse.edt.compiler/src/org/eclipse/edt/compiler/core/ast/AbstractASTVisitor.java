@@ -421,10 +421,6 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 		return true;
 	}
 	
-	public boolean visit(ServiceReference serviceReference) {
-		return true;
-	}
-	
 	public boolean visit(SetStatement setStatement) {
 		return true;
 	}
@@ -756,9 +752,7 @@ public abstract class AbstractASTVisitor implements IASTVisitor {
 	public void endVisit(ReturnStatement returnStatement) {}
 	
 	public void endVisit(Service service) {}
-	
-	public void endVisit(ServiceReference serviceReference) {}
-	
+		
 	public void endVisit(SetStatement setStatement) {}
 	
 	public void endVisit(SetValuesExpression setValuesExpression) {}

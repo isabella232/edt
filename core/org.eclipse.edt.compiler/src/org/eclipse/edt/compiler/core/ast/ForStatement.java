@@ -74,8 +74,9 @@ public class ForStatement extends Statement {
 	private List stmts;	// List of Nodes
 	private SimpleName declarationName;
 	private Type declarationType;
+	private boolean isNullable;
 
-	public ForStatement(Expression lvalue, SimpleName declarationName, Type declarationType, Expression fromExprOpt, Expression expr, ForStep stepOpt, List stmts, int startOffset, int endOffset) {
+	public ForStatement(Expression lvalue, SimpleName declarationName, Type declarationType, Boolean isNullable, Expression fromExprOpt, Expression expr, ForStep stepOpt, List stmts, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		if(lvalue != null) {
@@ -101,6 +102,7 @@ public class ForStatement extends Statement {
 			stepOpt.setParent(this);
 		}
 		this.stmts = setParent(stmts);
+		this.isNullable = isNullable.booleanValue();
 	}
 	
 	public boolean hasVariableDeclaration() {
@@ -185,6 +187,10 @@ public class ForStatement extends Statement {
 		return Arrays.asList(new List[] {stmts});
 	}
 	
+	public boolean isNullable() {
+		return isNullable;
+	}
+	
 	protected Object clone() throws CloneNotSupportedException{
 		Expression newFromExprOpt = fromExprOpt != null ? (Expression)fromExprOpt.clone() : null;
 		
@@ -193,6 +199,6 @@ public class ForStatement extends Statement {
 		Expression lval = lvalue == null ? null : (Expression) lvalue.clone();
 		SimpleName declName = declarationName == null ? null : (SimpleName) declarationName.clone();
 		Type declType = declarationType == null ? null : (Type) declarationType.clone();
-		return new ForStatement(lval, declName, declType, newFromExprOpt, (Expression)expr.clone(), newStepOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
+		return new ForStatement(lval, declName, declType, Boolean.valueOf(isNullable), newFromExprOpt, (Expression)expr.clone(), newStepOpt, cloneList(stmts), getOffset(), getOffset() + getLength());
 	}
 }

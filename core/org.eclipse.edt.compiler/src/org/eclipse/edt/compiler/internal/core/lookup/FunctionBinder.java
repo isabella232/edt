@@ -130,11 +130,11 @@ public class FunctionBinder extends DefaultBinder {
     
     public boolean visit(FunctionDataDeclaration dataDecl) {
     	functionDataDecls.add(dataDecl);
-    	processDataDeclaration(dataDecl.getNames(), dataDecl.getType(), dataDecl.getSettingsBlockOpt(), dataDecl.isConstant(), dataDecl.getInitializer());
+    	processDataDeclaration(dataDecl.getNames(), dataDecl.getType(), dataDecl.isNullable(), dataDecl.getSettingsBlockOpt(), dataDecl.isConstant(), dataDecl.getInitializer());
     	return true;
     }
     
-    private void processDataDeclaration(List<Name> names, Type type, SettingsBlock settingsBlock, boolean isConstantDeclaration, Expression initializer) {
+    private void processDataDeclaration(List<Name> names, Type type, boolean isNullable, SettingsBlock settingsBlock, boolean isConstantDeclaration, Expression initializer) {
 
         org.eclipse.edt.mof.egl.Type typeBinding = null;
         try {
@@ -174,7 +174,7 @@ public class FunctionBinder extends DefaultBinder {
 
             field.setContainer(functionBinding);
             field.setType(typeBinding);
-            field.setIsNullable(type.isNullableType());
+            field.setIsNullable(isNullable);
             field.setName(name.getCaseSensitiveIdentifier());
             
         	if (((ILocalVariableScope) currentScope).hasDeclaredDataName(dataName)) {
@@ -392,6 +392,7 @@ public class FunctionBinder extends DefaultBinder {
     		processDataDeclaration(
     			Arrays.asList(new Name[] {forStatement.getVariableDeclarationName()}),
     			forStatement.getVariableDeclarationType(),
+    			forStatement.isNullable(),
     			null,
     			false,
     			null);
@@ -426,6 +427,7 @@ public class FunctionBinder extends DefaultBinder {
     		processDataDeclaration(
     			Arrays.asList(new Name[] {forEachStatement.getVariableDeclarationName()}),
     			forEachStatement.getVariableDeclarationType(),
+    			forEachStatement.isNullable(),
     			null,
     			false,
     			null);
@@ -472,6 +474,7 @@ public class FunctionBinder extends DefaultBinder {
     		processDataDeclaration(
     			Arrays.asList(new Name[] {onExceptionBlock.getExceptionName()}),
     			onExceptionBlock.getExceptionType(),
+    			onExceptionBlock.isNullable(),
     			null,
     			false,
     			null);

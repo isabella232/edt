@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.core.ast;
 
-import org.eclipse.edt.compiler.binding.ITypeBinding;
 
 /**
  * ArrayType AST node type.
@@ -24,8 +23,9 @@ public class ArrayType extends Type {
 	private Type elementType;
 	private Expression initialSize;
 	private org.eclipse.edt.mof.egl.ArrayType arrayType;
+	private boolean isNullable;
 
-	public ArrayType(Type elementType, Expression initialSize, int startOffset, int endOffset) {
+	public ArrayType(Type elementType, Expression initialSize, boolean isNullable, int startOffset, int endOffset) {
 		super(startOffset, endOffset);
 		
 		this.elementType = elementType;
@@ -35,6 +35,7 @@ public class ArrayType extends Type {
 			this.initialSize = initialSize;
 			this.initialSize.setParent(this);
 		}
+		this.isNullable = isNullable;
 	}
 	
 	public Type getElementType() {
@@ -81,10 +82,14 @@ public class ArrayType extends Type {
 	protected Object clone() throws CloneNotSupportedException {
 		Expression newInitialSize = initialSize != null ? (Expression)initialSize.clone() : null;
 		
-		return new ArrayType((Type)elementType.clone(), newInitialSize, getOffset(), getOffset() + getLength());
+		return new ArrayType((Type)elementType.clone(), newInitialSize, isNullable, getOffset(), getOffset() + getLength());
 	}
 	
 	public Type getBaseType() {
 		return elementType.getBaseType();
+	}
+	
+	public boolean isNullable() {
+		return isNullable;
 	}
 }

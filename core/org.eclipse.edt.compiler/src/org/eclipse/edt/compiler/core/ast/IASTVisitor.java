@@ -319,9 +319,6 @@ public interface IASTVisitor {
 	boolean visit(Service service);
 	void endVisit(Service service);
 	
-	boolean visit(ServiceReference serviceReference);
-	void endVisit(ServiceReference serviceReference);
-	
 	boolean visit(SetStatement setStatement);
 	void endVisit(SetStatement setStatement);
 	

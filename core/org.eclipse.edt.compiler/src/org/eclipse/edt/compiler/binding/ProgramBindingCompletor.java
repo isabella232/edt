@@ -79,7 +79,7 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
 	        org.eclipse.edt.mof.egl.ProgramParameter parameterBinding = IrFactory.INSTANCE.createProgramParameter();
 	        parameterBinding.setType(typeBinding);
 	        parameterBinding.setName(parameterNameNode.getCaseSensitiveIdentifier());
-	        parameterBinding.setIsNullable(parameterType.isNullableType());
+	        parameterBinding.setIsNullable(programParameter.isNullable());
 	        parameterBinding.setAccessKind(AccessKind.ACC_PRIVATE);
 	        
 	        if(definedDataNames.contains(parameterName)) {
