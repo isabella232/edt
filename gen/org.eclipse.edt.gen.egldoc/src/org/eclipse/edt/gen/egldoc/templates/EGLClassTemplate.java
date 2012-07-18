@@ -40,7 +40,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 
 	public void genFields(EGLClass part, Context ctx, TabbedWriter out) {
 		
-		String fieldContainerType = (String) ctx.getAttribute(this, "fieldContainerType");
+		String fieldContainerType = (String) ctx.get("fieldContainerType");
 		
 		
 		List<Field> nonConstantFields = new ArrayList<Field>();
@@ -55,8 +55,8 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			out.println(part.getEClass().getName() + " fields");
 		} 
 		*/
-		
-		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType + "" + " fields</dt>");
+		// part.getEClass().getName()
+		out.println("<dt class=\"dt dlterm\"><a name=\"recordfields\"></a>" + fieldContainerType  + " fields</dt>");
 		if(nonConstantFields.size() == 0){
 			out.println("<dd class=\"dd\">");
 			out.println("None.");
