@@ -11,12 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import org.eclipse.edt.compiler.PartEnvironmentStack;
 import org.eclipse.edt.compiler.core.ast.Name;
-import org.eclipse.edt.compiler.core.ast.NameType;
 import org.eclipse.edt.compiler.core.ast.ProgramParameter;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -27,13 +22,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
-import org.eclipse.edt.mof.egl.Form;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Program;
-import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
-import org.eclipse.edt.mof.egl.utils.InternUtil;
-import org.eclipse.edt.mof.serialization.Environment;
 import org.eclipse.edt.mof.utils.NameUtile;
 
 
