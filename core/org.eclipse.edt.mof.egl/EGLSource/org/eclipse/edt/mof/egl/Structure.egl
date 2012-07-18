@@ -163,7 +163,6 @@ end
 
 externalType StructPart extends Part, Container type MofClass
 	superTypes StructPart[];
-	interfaces EGLInterface[];
 	structuredFields StructuredField[] {containment=true};
 	constructors EGLConstructor[] {containment=true};
 	functions EGLFunction[] {containment=true};
