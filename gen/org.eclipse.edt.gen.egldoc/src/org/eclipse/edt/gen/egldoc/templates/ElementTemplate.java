@@ -36,16 +36,20 @@ public class ElementTemplate extends EGLDocTemplate {
 			StringBuffer docType02 = new StringBuffer();
 			StringBuffer fieldContainerType02 = new StringBuffer();
 			docType = docType02
-					.append(docType.substring(0, endPosition))
+					.append(Character.toLowerCase(docType.charAt(0)))
+					.append(docType.substring(1, endPosition))
 					.append(" type").toString();
 			fieldContainerType = fieldContainerType02
 					.append(fieldContainerType.substring(0, endPosition))
-					.append(" type").toString();						
+					.toString();	
+			
 			/*
 			 * fieldContainerType = fieldContainerType02
              *		.append(Character.toLowerCase(fieldContainerType.charAt(0)))
 			 *      .append(docType.substring(1, endPosition)).toString();
 			 *
+			 *				.append(fieldContainerType.substring(0, endPosition))
+			 *				.append(" type").toString();
 			 */
 		}
 
