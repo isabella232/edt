@@ -78,6 +78,8 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.builder.NullProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.MofSerializable;
 import org.eclipse.edt.mof.egl.Classifier;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Delegate;
@@ -89,8 +91,9 @@ import org.eclipse.edt.mof.egl.MultiOperandExpression;
 import org.eclipse.edt.mof.egl.NamedElement;
 import org.eclipse.edt.mof.egl.Operation;
 import org.eclipse.edt.mof.egl.Part;
+import org.eclipse.edt.mof.egl.Stereotype;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -167,11 +170,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 		Scope scopeForThis = currentScope.getScopeForKeywordThis();
 		if(scopeForThis instanceof FunctionContainerScope) {
 			Part part = ((FunctionContainerScope) scopeForThis).getPart();
-			if (part instanceof SubType) {
-				SubType sub = (SubType) part;
-				if (sub.getSuperTypes().size() > 0) {
-					superExpression.setType(sub.getSuperTypes().get(0));
-					return false;
+			//TODO stereotype's default super type is not being added to the list of super types. change this when it is.
+			Stereotype subtype = part.getSubType();
+			if (subtype != null) {
+				EClass subtypeClass = subtype.getEClass();
+				if (subtypeClass instanceof StereotypeType) {
+					MofSerializable superType = ((StereotypeType)subtypeClass).getDefaultSuperType();
+					if (superType instanceof org.eclipse.edt.mof.egl.Type) {
+						superExpression.setType((org.eclipse.edt.mof.egl.Type)superType);
+						return false;
+					}
 				}
 			}
 		}	
@@ -891,7 +899,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 		}
 		
 		//Handle this() and super()
-		if (functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.ThisExpression || functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.SuperExpression) {
+		if (functionInvocation.getTarget() instanceof ThisExpression || functionInvocation.getTarget() instanceof SuperExpression) {
 			org.eclipse.edt.mof.egl.Type type = functionInvocation.getTarget().resolveType();
 			if (type != null) {
 				List<Constructor> constructors = getConstructors(type);
@@ -899,7 +907,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 				if (constructors != null) {
 					cons = IRUtils.resolveConstructorReferenceFromArgTypes((EGLClass)type.getClassifier(), getArgumentTypes(functionInvocation.getArguments()), false);
 				}
-				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof org.eclipse.edt.mof.egl.SuperExpression)) {
+				if (cons == null || (BindingUtil.isPrivate(cons) &&  functionInvocation.getTarget() instanceof SuperExpression)) {
 					if (functionInvocation.getArguments().size() > 0) {
 						problemRequestor.acceptProblem(
 							functionInvocation,
