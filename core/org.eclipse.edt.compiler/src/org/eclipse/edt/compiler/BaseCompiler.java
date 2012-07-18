@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
 import org.eclipse.edt.mof.egl.Type;
@@ -136,6 +137,11 @@ public class BaseCompiler implements ICompiler {
 
 	@Override
 	public StatementValidator getValidatorFor(Statement stmt) {
+		return null;
+	}
+	
+	@Override
+	public PartValidator getValidatorFor(Part part) {
 		return null;
 	}
 }

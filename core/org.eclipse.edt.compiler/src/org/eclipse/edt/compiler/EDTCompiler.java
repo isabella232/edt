@@ -19,11 +19,8 @@ import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
-import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.DefaultPartValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.jtopen.IBMiProgramCallStatementValidator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.persistence.sql.SQLActionStatementValidator;
-import org.eclipse.edt.compiler.internal.egl2mof.eglx.services.ServicesActionStatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.MofConversion;
 import org.eclipse.edt.mof.egl.Part;
@@ -33,8 +30,8 @@ import org.eclipse.edt.mof.eglx.persistence.sql.SqlActionStatement;
 import org.eclipse.edt.mof.eglx.services.ServicesCallStatement;
 
 public class EDTCompiler extends BaseCompiler {
-		
 	
+	//TODO make this extensible.
 	static {
 //		StatementValidator.Registry.put(MofConversion.Type_SqlRecord, new DefaultStatementValidator());
 //		StatementValidator.Registry.put(MofConversion.EGL_lang_package, new DefaultStatementValidator());
@@ -125,5 +122,17 @@ public class EDTCompiler extends BaseCompiler {
 		else {
 			return validator[0];
 		}
+	}
+	
+	@Override
+	public PartValidator getValidatorFor(org.eclipse.edt.compiler.core.ast.Part part) {
+		PartValidator validator = null;
+		
+		//TODO need some contribution registry to check for non-default validation.
+		
+		if (validator == null) {
+			validator = new DefaultPartValidator();
+		}
+		return validator;
 	}
 }
