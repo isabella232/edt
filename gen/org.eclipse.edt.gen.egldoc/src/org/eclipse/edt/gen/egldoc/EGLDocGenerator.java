@@ -60,6 +60,7 @@ public class EGLDocGenerator extends Generator {
 	public void generate(Object part) throws GenerationException {
 		makeWriter();
 		try {
+			context.putAttribute(context.getClass(), "eglFile", ((EGL2Doc)generator).getEGLFile());
 			context.putAttribute(context.getClass(), Constants.SubKey_partBeingGenerated, part);
 			context.invoke(EGLDocTemplate.preGenPart, part, context);
 			if (!context.getMessageRequestor().isError()) {
