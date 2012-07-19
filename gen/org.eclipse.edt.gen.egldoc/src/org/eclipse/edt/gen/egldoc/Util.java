@@ -69,19 +69,19 @@ public class Util {
 				commentMap.put("postFirstPara", postFirstPara.toString());
 				
 				// We may have a tag
-				String tagName = section.substring(1, section.indexOf(" ")).trim();
-				if(tagName.length() > 1){
-					// We have a valid tag
-					commentMap.put(tagName, section.substring(section.indexOf(" "), section.length()).trim());
-				}else{
-					// throw this section away
+				if(section.length() > 1){
+					String tagName = section.substring(1, section.indexOf(" ")).trim();
+					if(tagName.length() > 1){
+						// We have a valid tag
+						commentMap.put(tagName, section.substring(section.indexOf(" "), section.length()).trim());
+					}
 				}
 			}else if(!foundFirstPara){
 				commentMap.put("firstPara", section);
 				foundFirstPara = true;
 			}else if(!foundEndOfDescription){
 				if(postFirstPara.length() > 0){
-					postFirstPara.append(" ");
+					postFirstPara.append(System.getProperty("line.separator"));
 				}			
 				postFirstPara.append(section);				
 			}
@@ -98,18 +98,22 @@ public class Util {
 			String line = linesFromCommentBlock[i].trim();
 			
 			if(line.length() == 0){
-				// We are looking for the first non-empty line or the start of a new tag
+				// We are looking for the first non-empty line
 				if(foundFirstNonEmptyLine){
 					// We have found the end of a section
-					sections.add(sectionText.toString());
-					sectionText = new StringBuffer();
+					if(sectionText.length() > 0){
+						sections.add(sectionText.toString());
+						sectionText = new StringBuffer();
+					}
 				}
 			}else{
 				foundFirstNonEmptyLine = true;
 				if(line.startsWith("@")){
 					// We are starting a new tag
-					sections.add(sectionText.toString());
-					sectionText = new StringBuffer();
+					if(sectionText.length() > 0){
+						sections.add(sectionText.toString());
+						sectionText = new StringBuffer();
+					}
 				}
 				if(sectionText.length() > 0){
 					sectionText.append(" ");
