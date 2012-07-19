@@ -33,7 +33,7 @@ public class EclipseEGL2Doc extends EGL2Doc {
 	private final Part part;
 
 	public EclipseEGL2Doc(IFile eglFile, Part part, IGenerator generator) {
-		super();
+		super(eglFile);
 		this.eglFile = eglFile;
 		this.part = part;
 	}
