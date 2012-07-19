@@ -1,7 +1,10 @@
 package org.eclipse.edt.gen.egldoc.templates;
 
+import java.util.List;
+
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 
@@ -14,27 +17,37 @@ public class PartTemplate extends EGLDocTemplate {
 	}
 	
 	public void genPartContent(Part part, Context ctx, TabbedWriter out) {
-	
-		ctx.invoke(genPackage, part, ctx, out);
-		
-		ctx.invoke(genClassContent, part, ctx, out);
 
-//		ctx.invoke(genComments, part, ctx, out);
-//		ctx.invoke(genCompatibility, part, ctx, out);
-	}
-	
-	public void genClassContent(Part part, Context ctx, TabbedWriter out){
+		ctx.invoke(genPackage, part, ctx, out);
+        
+		ctx.invoke(genClassContent, part, ctx, out);
 		
+		ctx.invoke(genLastComments, part, ctx, out);
+	
+		// ctx.invoke(genCompatibility, part, ctx, out);
+	}
+
+	public void genClassContent(Part part, Context ctx, TabbedWriter out) {
+
 		ctx.invoke(genStereotypeName, part, ctx, out);
 
 	}
-	
-	public void genPackage(Part part, Context ctx, TabbedWriter out){	    
-		
+
+	public void genLastComments(Element part, Context ctx, TabbedWriter out) {
+		   String theRest = (String) ctx.get("postFirstPara");
+		   if(theRest != null){
+			   theRest.replaceAll("\n", "<p class=\"p\"></p>");
+		   } 
+		   out.println("<dt class=\"dt dlterm\"><a name=\"comments\"</a>Comments</dt>");
+		   
+		  // <dd class="dd">This statement is a comment.</dd>
+		}
+	public void genPackage(Part part, Context ctx, TabbedWriter out) {
+
 		out.println("<dt class=\"dt dlterm\"><a name=\"package\"</a>EGL package name</dt>");
-        	    
-		if (part.getPackageName() == ""){
-		   out.println("<dd> <p class=\"p\">The default package is in use.</p>");	
+
+		if (part.getPackageName() == "") {
+			out.println("<dd> <p class=\"p\">The default package is in use.</p>");
 		} else {
 			out.println("<dd> <p class=\"p\">" + part.getPackageName() + "</p>");
 		}
@@ -71,6 +84,7 @@ public class PartTemplate extends EGLDocTemplate {
 			String stereoString = part.getStereotype().getEClass().getName();
 			out.println("<dd> <p class=\"p\">" + stereoString + "</p>");
 		}
-		out.println("<p class=\"p\"></p></dd></dt>");	
+		out.println("<p class=\"p\"></p></dd></dt>");
 	}
+
 }

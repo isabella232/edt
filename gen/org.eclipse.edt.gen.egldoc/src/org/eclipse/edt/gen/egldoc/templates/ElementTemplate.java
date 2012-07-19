@@ -26,8 +26,9 @@ import org.eclipse.edt.ide.core.internal.utils.Util;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.jface.text.DefaultLineTracker;
+
 public class ElementTemplate extends EGLDocTemplate {
-	
+
 	public void preGenPart(Element part, Context ctx) {
 		
 		String docType = part.getEClass().getName(); 
@@ -109,54 +110,10 @@ public class ElementTemplate extends EGLDocTemplate {
 		ctx.invoke(genBody, part, ctx, out);
 		out.println("</html>");
 	}
+
+	/********************* the remaining functions are in alphabetical order ************************/
 	
-	/** TODO:  must make each language code an external value */
-	public void genTop(Element part, Context ctx, TabbedWriter out) {
-			out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-			out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
-				+ "http://www.w3.org/TR/html4/loose.dtd\">");
-			out.println ("<html xml:lang=\"en-us\" lang=\"en-us\">");        
-		}
-		
-	public void genHead(Element part, Context ctx, TabbedWriter out) {
-		
-		String docType = (String) ctx.get("docType");
-		String partName = (String) ctx.get("partName");
-		String fullPartName = (String) ctx.get("fullPartName");
-		String firstPara = (String) ctx.get("firstPara");		
-		
-		out.println("<head>");
-		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></meta>");
-		out.println("<meta name=\"DC.Type\" content=\"topic\"></meta>");
-		out.println("<meta name=\"DC.Title\" content=\"" + partName + " "
-				+ docType + "\"></meta>");
-		out.println("<meta name=\"abstract\" content=\"" + firstPara
-				+ "\"></meta>");
-		out.println("<meta name=\"description\" content=\"" + firstPara
-				+ "\"></meta>");
-		out.println("<meta name=\"DC.subject\" content=\"" + partName
-				+ "\"></meta>");
-		out.println("<meta name=\"keywords\" content=\"" + partName
-				+ "\"></meta>");
-		
-		/** TODO:  must do something about the copyright and owner */
-		out.println("<meta name=\"copyright\" content=\""
-				+ "\"(C) Copyright 2011, 2012\" type=\"primary\"></meta>");
-		out.println("<meta name=\"DC.Rights.Owner\" content=\""
-				+ "\"(C) Copyright 2011, 2012\" type=\"primary\"></meta>");
-		
-		out.println("<meta name=\"DC.Format\" content=\"XHTML\"></meta>");
-		out.println("<meta name=\"DC.Identifier\" content=\"" + fullPartName
-				+ "\"></meta>");
-		
-		/** TODO:  must make language an external value */
-		out.println("<meta name=\"DC.Language\" content=\"en-us\"></meta>");
-		
-		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/commonltr.css\"></link>");
-		out.println("<title>" + partName + " " + docType + "</title>");
-		out.println("</head>");
-	}
-	
+
 	public void genBody(Element part, Context ctx, TabbedWriter out) {
 		String docType = (String) ctx.get("docType");
 		String stereoTypeName = (String) ctx.get("stereoTypeName");
@@ -192,5 +149,54 @@ public class ElementTemplate extends EGLDocTemplate {
 		out.println("<anchor id=\"related_links\"></anchor>");
 		out.println("</body>");
 	}
+
+	public void genHead(Element part, Context ctx, TabbedWriter out) {
+		
+		String docType = (String) ctx.get("docType");
+		String partName = (String) ctx.get("partName");
+		String fullPartName = (String) ctx.get("fullPartName");
+		String firstPara = (String) ctx.get("firstPara");		
+		
+		out.println("<head>");
+		out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></meta>");
+		out.println("<meta name=\"DC.Type\" content=\"topic\"></meta>");
+		out.println("<meta name=\"DC.Title\" content=\"" + partName + " "
+				+ docType + "\"></meta>");
+		out.println("<meta name=\"abstract\" content=\"" + firstPara
+				+ "\"></meta>");
+		out.println("<meta name=\"description\" content=\"" + firstPara
+				+ "\"></meta>");
+		out.println("<meta name=\"DC.subject\" content=\"" + partName
+				+ "\"></meta>");
+		out.println("<meta name=\"keywords\" content=\"" + partName
+				+ "\"></meta>");
+		
+		/** TODO:  must do something about the copyright and owner */
+		out.println("<meta name=\"copyright\" content=\""
+				+ "\"(C) Copyright 2011, 2012\" type=\"primary\"></meta>");
+		out.println("<meta name=\"DC.Rights.Owner\" content=\""
+				+ "\"(C) Copyright 2011, 2012\" type=\"primary\"></meta>");
+		
+		out.println("<meta name=\"DC.Format\" content=\"XHTML\"></meta>");
+		out.println("<meta name=\"DC.Identifier\" content=\"" + fullPartName
+				+ "\"></meta>");
+		
+		/** TODO:  must make language an external value */
+		out.println("<meta name=\"DC.Language\" content=\"en-us\"></meta>");
+		
+		/** TODO: must calculate the folder level for the CSS file and then prepend "../" as many times */
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/commonltr.css\"></link>");
+		out.println("<title>" + partName + " " + docType + "</title>");
+		out.println("</head>");
+	}
+
 	
-}
+	/** TODO: must make each language code an external value */
+	public void genTop(Element part, Context ctx, TabbedWriter out) {
+		out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""
+				+ "http://www.w3.org/TR/html4/loose.dtd\">");
+		out.println("<html xml:lang=\"en-us\" lang=\"en-us\">");
+	}
+	
+	}
