@@ -107,8 +107,9 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			out.println("class=\"table\" frame=\"border\" border=\"1\" rules=\"all\">");
 			out.println("<thead class=\"thead\" align=\"left\">");
 			out.println("<tr class=\"row\" valign=\"bottom\">");
-			out.println("<th class=\"entry\" valign=\"bottom\" width=\"30%\">Name</th>");
-			out.println("<th class=\"entry\" valign=\"bottom\" width=\"70%\">Description</th></tr></thead>");
+			// out.println("<th class=\"entry\" valign=\"bottom\">Name</th>");
+			// out.println("<th class=\"entry\" valign=\"bottom\" width=\"70%\">Description</th>)
+			out.println("</tr></thead>");
 			out.println("<tbody class=\"tbody\">");
 
 			List<Function> theFunctions = new ArrayList<Function>();

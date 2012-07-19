@@ -78,10 +78,10 @@ public class FunctionTemplate extends EGLDocTemplate {
 		String functionFirstPara = "What a function!";
 				
 		out.println("<tr id=\"" + functionName + "\" class=\"row\">");
-		out.println("<td class=\"entry\" valign=\"top\" width=\"20%\">" + functionName + " (");
+		out.println("<td class=\"entry\" valign=\"top\">" + functionName + " (");
 		ctx.invoke(genSyntax, function, ctx, out);
-		out.println(")</td>");
-		out.println("<td class=\"entry\" valign=\"top\" width=\"80%\">" + functionFirstPara + "</td></tr>");
+		out.println(")<p></p>");
+		out.println(functionFirstPara + "</td></tr>");
 		
 		//ctx.invoke(genFunctionExampleUse, function, ctx, out);
 		//ctx.invoke(genComments()
