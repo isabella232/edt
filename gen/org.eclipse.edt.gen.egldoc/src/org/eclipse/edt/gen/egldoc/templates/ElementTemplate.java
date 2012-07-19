@@ -145,7 +145,9 @@ public class ElementTemplate extends EGLDocTemplate {
 		// the list
 		out.println("<dl class=\"dl\" id=\"main\">");
 
-		// stereotype detail
+		/*
+		 *  stereotype detail
+		 
 		out.println("<dt class=\"dt dlterm\"><a name=\"typestereo\"</a>Type stereotype</dt>");
 
 		if (stereoTypeName == null) {
@@ -156,6 +158,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		out.println("<p class=\"p\"></p></dd></dt>");
 
 		out.println("</div></dl>");
+		*/
 		ctx.invoke(genPartContent, part, ctx, out);
 		out.println("<anchor id=\"related_links\"></anchor>");
 		out.println("</body>");

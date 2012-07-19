@@ -17,6 +17,7 @@ import org.eclipse.edt.mof.egl.Part;
 public class EGLClassTemplate extends EGLDocTemplate {
 
 	public void genClassContent(Part part, Context ctx, TabbedWriter out) {
+		ctx.invoke(genStereotypeName, part, ctx, out);
 		ctx.invoke(genConstants, part, ctx, out);
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);

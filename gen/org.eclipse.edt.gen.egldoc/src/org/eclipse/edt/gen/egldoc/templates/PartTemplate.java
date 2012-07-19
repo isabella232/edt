@@ -12,7 +12,7 @@ public class PartTemplate extends EGLDocTemplate {
 	public void genPartContent(Part part, Context ctx, TabbedWriter out) {
 
 		ctx.invoke(genPackage, part, ctx, out);
-
+        
 		ctx.invoke(genClassContent, part, ctx, out);
 
 		// ctx.invoke(genComments, part, ctx, out);
@@ -39,8 +39,12 @@ public class PartTemplate extends EGLDocTemplate {
 
 	public void genStereotypeName(Part part, Context ctx, TabbedWriter out) {
 
-		List<Stereotype> stereotypeType = part.getStereotypes();
-
+		// List<Stereotype> stereotypeType = part.getStereotypes();
+		Stereotype stereotypeType = part.getStereotype();
+        // String stereoString = stereotypeType.toString();
+        // int firstPeriod = stereoString.indexOf(':');
+        // stereoString = stereoString.substring(firstPeriod);
+        
 		out.println("<dt class=\"dt dlterm\"><a name=\"typestereo\"</a>Type stereotype</dt>");
 
 		/*
@@ -60,7 +64,8 @@ public class PartTemplate extends EGLDocTemplate {
 		if (stereotypeType == null) {
 			out.println("<dd> <p class=\"p\">None.</p>");
 		} else {
-			out.println("<dd> <p class=\"p\">" + stereotypeType.toString() + "</p>");
+			String stereoString = part.getStereotype().getEClass().getName();
+			out.println("<dd> <p class=\"p\">" + stereoString + "</p>");
 		}
 		out.println("<p class=\"p\"></p></dd></dt>");
 	}
