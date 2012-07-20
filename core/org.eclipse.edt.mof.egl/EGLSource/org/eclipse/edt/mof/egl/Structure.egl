@@ -94,7 +94,8 @@ enumeration ElementKind {@MofEnum}
 	AnnotationValue,
 	AnnotationType,
 	EnumerationPart,
-	EnumerationEntry
+	EnumerationEntry,
+	ClassPart
 end
 
 enumeration AccessKind {@MofEnum}

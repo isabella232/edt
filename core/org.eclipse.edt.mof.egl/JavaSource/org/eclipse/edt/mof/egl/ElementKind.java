@@ -44,5 +44,6 @@ public enum ElementKind {
 	AnnotationValue,
 	AnnotationType,
 	EnumerationPart,
-	EnumerationEntry
+	EnumerationEntry,
+	ClassPart
 }
