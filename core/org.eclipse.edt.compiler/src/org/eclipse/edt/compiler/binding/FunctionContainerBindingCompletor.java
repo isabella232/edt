@@ -122,6 +122,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
             
             fieldBinding.setIsPrivate(classDataDeclaration.isPrivate());
             fieldBinding.setIsReadOnly(varIsReadOnly);
+            fieldBinding.setIsStatic(classDataDeclaration.isStatic());
 
             if (definedDataNames.contains(dataName) || definedFunctionNames.contains(dataName)) {
                 problemRequestor.acceptProblem(name, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { name.getCanonicalName(),

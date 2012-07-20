@@ -55,6 +55,7 @@ public class ElementKind extends Enumeration{
 	public final static int EXITSTATEMENT_CONSTANT = 31;
 	public final static int ENUMERATIONPART_CONSTANT = 32;
 	public final static int ENUMERATIONENTRY_CONSTANT = 33;
+	public final static int CLASSPART_CONSTANT = 34;
 
 	public final static EnumerationTypeBinding TYPE = new SystemEnumerationTypeBinding(SystemEnvironmentPackageNames.EGL_CORE, InternUtil.internCaseSensitive("ElementKind"), ELEMENTKIND);
 	public final static SystemEnumerationDataBinding DATATABLEPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("DataTablePart"), null, TYPE, DATATABLEPART_CONSTANT);
@@ -90,6 +91,7 @@ public class ElementKind extends Enumeration{
 	public final static SystemEnumerationDataBinding EXITSTATEMENT = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("ExitStatement"), null, TYPE, EXITSTATEMENT_CONSTANT);
 	public final static SystemEnumerationDataBinding ENUMERATIONPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("EnumerationPart"), null, TYPE, ENUMERATIONPART_CONSTANT);
 	public final static SystemEnumerationDataBinding ENUMERATIONENTRY = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("EnumerationEntry"), null, TYPE, ENUMERATIONENTRY_CONSTANT);
+	public final static SystemEnumerationDataBinding CLASSPART = new SystemEnumerationDataBinding(InternUtil.internCaseSensitive("ClassPart"), null, TYPE, CLASSPART_CONSTANT);
 	
 	static {
 		TYPE.setValid(true);
@@ -126,6 +128,7 @@ public class ElementKind extends Enumeration{
 		TYPE.addEnumeration(EXITSTATEMENT);
 		TYPE.addEnumeration(ENUMERATIONPART);
 		TYPE.addEnumeration(ENUMERATIONENTRY);
+		TYPE.addEnumeration(CLASSPART);
 	};
 	
     public EnumerationTypeBinding getType() {

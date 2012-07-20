@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.binding.ArrayTypeBinding;
 import org.eclipse.edt.compiler.binding.Binding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
+import org.eclipse.edt.compiler.binding.EGLClassBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
 import org.eclipse.edt.compiler.binding.FixedStructureBinding;
@@ -274,7 +275,7 @@ public class TypeCompatibilityUtil {
 		}
 		if(ITypeBinding.ARRAY_TYPE_BINDING == targetType.getKind()) {
 			return ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind() &&
-			       typesOrElementTypesMoveCompatible(((ArrayTypeBinding) targetType).getElementType(), ((ArrayTypeBinding) sourceType).getElementType(), compilerOptions);
+			       targetType == sourceType;
 		}
 		if(ITypeBinding.ARRAY_TYPE_BINDING == sourceType.getKind()) {
 			return false;
@@ -602,7 +603,7 @@ public class TypeCompatibilityUtil {
 	}
 	
 	private static boolean isAnyRecord(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
+		if (Binding.isValidBinding(type) ) {
 			return (type.getPackageName() == InternUtil.intern(new String[] {"eglx", "lang"}) && type.getName() == InternUtil.intern("AnyRecord"));
 		}
 		return false;
@@ -654,6 +655,10 @@ public class TypeCompatibilityUtil {
 			return true;
 		}
 
+		if(ITypeBinding.CLASS_BINDING == tBinding.getKind()) {
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -667,6 +672,10 @@ public class TypeCompatibilityUtil {
 			return ((HandlerBinding) tBinding).getImplementedInterfaces();
 		}
 
+		if(ITypeBinding.CLASS_BINDING == tBinding.getKind()) {
+			return ((EGLClassBinding) tBinding).getImplementedInterfaces();
+		}
+		
 		return Collections.EMPTY_LIST;
 	}
 	
@@ -951,6 +960,15 @@ public class TypeCompatibilityUtil {
 			}
 		}
 
+		if(ITypeBinding.CLASS_BINDING == targetType.getKind()) {
+			if(ITypeBinding.CLASS_BINDING == sourceType.getKind()) {
+				if(((EGLClassBinding) sourceType).getExtendedHierarchy().contains(targetType) ||
+				   ((EGLClassBinding) targetType).getExtendedHierarchy().contains(sourceType)) {
+					return true;
+				}
+			}
+		}
+
 		if( extendsInterfaces(sourceType) &&
 			extendsInterfaces(targetType)) {
 			List implementedInterfaces = getExtendedInterfaces(sourceType);
@@ -985,7 +1003,7 @@ public class TypeCompatibilityUtil {
 				}
 			}
 		}
-		
+
 		if(ITypeBinding.DELEGATE_BINDING == targetType.getKind()) {
 			if(ITypeBinding.DELEGATE_BINDING == sourceType.getKind()) {
 				return functionSignituresAreIdentical(
@@ -1037,7 +1055,7 @@ public class TypeCompatibilityUtil {
 		}
 		
 		if (targetType.isReference()) {		
-			return isReferenceCompatible(sourceType, targetType, compilerOptions);
+			return false;
 		}
 		
 		else {
@@ -1592,6 +1610,19 @@ public class TypeCompatibilityUtil {
 		}
 	}
 
+	private static class SuperClassInterfaceTypeTargetWidener implements IWidener {		
+		private EGLClassBinding sourceType;
+
+		public SuperClassInterfaceTypeTargetWidener(EGLClassBinding sourceType) {
+			this.sourceType = sourceType;
+		}
+		
+		public int getDistance(ITypeBinding targetType) {
+			return sourceType.getImplementedInterfaces().contains(targetType) ?
+				1 : -1;
+		}
+	}
+
 	private static class ArrayOfCompatibleReferenceTypesTargetWidener implements IWidener {		
 		private ArrayTypeBinding sourceType;
 		private ICompilerOptions compilerOptions;
@@ -1845,6 +1876,10 @@ public class TypeCompatibilityUtil {
 
 			case ITypeBinding.HANDLER_BINDING:
 				result.add(new SuperHandlerInterfaceTypeTargetWidener((HandlerBinding) sourceType));
+				break;
+				
+			case ITypeBinding.CLASS_BINDING:
+				result.add(new SuperClassInterfaceTypeTargetWidener((EGLClassBinding) sourceType));
 				break;
 				
 			case ITypeBinding.FLEXIBLE_RECORD_BINDING:

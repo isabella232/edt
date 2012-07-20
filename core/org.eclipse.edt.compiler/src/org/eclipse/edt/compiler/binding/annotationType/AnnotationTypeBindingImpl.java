@@ -127,6 +127,11 @@ public class AnnotationTypeBindingImpl extends AnnotationTypeBinding implements 
 						return true;
 					}
 					break;
+				case ElementKind.CLASSPART_CONSTANT:
+					if(targetBinding.isTypeBinding() && ITypeBinding.CLASS_BINDING == ((ITypeBinding) targetBinding).getKind()) {
+						return true;
+					}
+					break;
 				case ElementKind.INTERFACEPART_CONSTANT:
 					if(targetBinding.isTypeBinding() && ITypeBinding.INTERFACE_BINDING == ((ITypeBinding) targetBinding).getKind()) {
 						return true;

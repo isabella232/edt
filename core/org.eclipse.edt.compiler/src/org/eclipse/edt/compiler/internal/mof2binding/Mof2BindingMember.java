@@ -95,7 +95,6 @@ public abstract class Mof2BindingMember extends Mof2BindingPart {
 				value = field.getValue().getObjectValue();
 			}
 			binding = new ClassConstantBinding(name, declarer, type, value);
-			((ClassConstantBinding)binding).setIsStatic(field.isStatic());
 			((ClassConstantBinding)binding).setIsPrivate(field.getAccessKind() == AccessKind.ACC_PRIVATE);
 			handleAnnotations(field, binding);
 			putBinding(field, binding);

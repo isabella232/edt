@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.builder;
 import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
+import org.eclipse.edt.compiler.binding.EGLClassBinding;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FileBinding;
@@ -37,6 +38,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.DataItemBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DataTableBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.DelegateBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.EnumerationBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
@@ -55,6 +57,7 @@ import org.eclipse.edt.compiler.internal.core.lookup.ServiceBinder;
 import org.eclipse.edt.compiler.internal.core.validation.part.DataItemValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.DataTableValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.DelegateValidator;
+import org.eclipse.edt.compiler.internal.core.validation.part.EGLClassValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.EnumerationValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.ExternalTypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.part.FixedRecordValidator;
@@ -268,6 +271,27 @@ public abstract class Compiler extends DefaultASTVisitor{
 								
 					try{
 					    astNode.accept(new HandlerValidator(problemRequestor, (HandlerBinding)partBinding, compilerOptions));
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
+			case ITypeBinding.CLASS_BINDING:
+				try{
+				    astNode.accept(new EGLClassBinder((EGLClassBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+								
+					try{
+					    astNode.accept(new EGLClassValidator(problemRequestor, (EGLClassBinding)partBinding, compilerOptions));
 					}catch(CancelledException e){
 					    throw e;
 					}catch(RuntimeException e){

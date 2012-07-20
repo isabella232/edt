@@ -102,6 +102,8 @@ public abstract class PartBinding extends TypeBinding implements IPartBinding {
                 return new LibraryBinding(packageName, caseSensitivePartName);
             case ITypeBinding.PROGRAM_BINDING:
                 return new ProgramBinding(packageName, caseSensitivePartName);
+            case ITypeBinding.CLASS_BINDING:
+                return new EGLClassBinding(packageName, caseSensitivePartName);
             case ITypeBinding.SERVICE_BINDING:
                 return new ServiceBinding(packageName, caseSensitivePartName);
             case ITypeBinding.DATAITEM_BINDING:

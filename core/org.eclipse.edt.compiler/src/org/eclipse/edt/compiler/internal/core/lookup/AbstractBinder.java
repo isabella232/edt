@@ -402,7 +402,8 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     		result = typeBinding.findData(identifier);;
     	}
         else if(typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING ||
-        		typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
+        		typeBinding.getKind() == ITypeBinding.EXTERNALTYPE_BINDING ||
+        		typeBinding.getKind() == ITypeBinding.CLASS_BINDING) {
         	result = typeBinding.findData(identifier);
         	if(result != IBinding.NOT_FOUND_BINDING) {
         		if(IDataBinding.NESTED_FUNCTION_BINDING == result.getKind() && !((IFunctionBinding) result.getType()).isStatic()) {

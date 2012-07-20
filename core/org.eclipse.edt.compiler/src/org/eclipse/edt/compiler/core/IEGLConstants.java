@@ -90,6 +90,7 @@ public interface IEGLConstants {
 	public static final String KEYWORD_CALL = "call";  //$NON-NLS-1$
 	public static final String KEYWORD_CASE = "case";  //$NON-NLS-1$
 	public static final String KEYWORD_CHAR = "char";  //$NON-NLS-1$
+	public static final String KEYWORD_CLASS = "class";  //$NON-NLS-1$
 	public static final String KEYWORD_CLOB = "clob";  //$NON-NLS-1$
 	public static final String KEYWORD_CLOSE = "close";  //$NON-NLS-1$
 	public static final String KEYWORD_CONST = "const";  //$NON-NLS-1$

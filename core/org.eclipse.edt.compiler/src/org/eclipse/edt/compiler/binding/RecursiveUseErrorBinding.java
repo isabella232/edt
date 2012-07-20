@@ -264,4 +264,8 @@ public class RecursiveUseErrorBinding implements IPartBinding {
 		return null;
 	}
 
+	@Override
+	public void setPrivate(boolean bool) {
+	}
+
 }

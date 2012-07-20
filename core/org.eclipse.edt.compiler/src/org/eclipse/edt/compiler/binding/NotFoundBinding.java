@@ -466,4 +466,8 @@ public class NotFoundBinding implements IDataBinding, IFunctionBinding, IPackage
 		return null;
 	}
 
+	@Override
+	public void setPrivate(boolean bool) {
+	}
+
 }

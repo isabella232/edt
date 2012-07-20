@@ -17,6 +17,8 @@ import org.eclipse.edt.compiler.binding.DataTableBinding;
 import org.eclipse.edt.compiler.binding.DataTableBindingCompletor;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DelegateBindingCompletor;
+import org.eclipse.edt.compiler.binding.EGLClassBinding;
+import org.eclipse.edt.compiler.binding.EGLClassBindingCompletor;
 import org.eclipse.edt.compiler.binding.EnumerationBindingCompletor;
 import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
@@ -116,6 +118,9 @@ public class BindingCompletor {
 				break;			
 			case ITypeBinding.EXTERNALTYPE_BINDING:
 				astNode.accept(new ExternalTypeBindingCompletor(parentScope, (ExternalTypeBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				break;			
+			case ITypeBinding.CLASS_BINDING:
+				astNode.accept(new EGLClassBindingCompletor(parentScope, (EGLClassBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 		}
 	}

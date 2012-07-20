@@ -26,6 +26,7 @@ import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FormGroup;
@@ -120,6 +121,11 @@ public class Util {
 	
 			public boolean visit(Program program) {
 				value[0] = new Integer(ITypeBinding.PROGRAM_BINDING);
+				return false;
+			}
+
+			public boolean visit(EGLClass eglClass) {
+				value[0] = new Integer(ITypeBinding.CLASS_BINDING);
 				return false;
 			}
 

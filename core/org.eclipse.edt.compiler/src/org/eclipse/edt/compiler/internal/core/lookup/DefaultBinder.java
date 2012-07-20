@@ -35,6 +35,7 @@ import org.eclipse.edt.compiler.binding.DataItemBinding;
 import org.eclipse.edt.compiler.binding.DelegateBinding;
 import org.eclipse.edt.compiler.binding.DictionaryBinding;
 import org.eclipse.edt.compiler.binding.DynamicDataBinding;
+import org.eclipse.edt.compiler.binding.EGLClassBinding;
 import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.FixedRecordBinding;
@@ -325,7 +326,15 @@ public abstract class DefaultBinder extends AbstractBinder {
 		if(scopeForThis instanceof FunctionContainerScope) {
 			IPartBinding binding = ((FunctionContainerScope) scopeForThis).getPartBinding();
 			if (binding instanceof PartBinding) {
-				IPartBinding superType = ((PartBinding)binding).getDefaultSuperType();
+				PartBinding thisType = (PartBinding) binding;
+				if (thisType.getKind() == ITypeBinding.CLASS_BINDING) {
+					EGLClassBinding classBinding = (EGLClassBinding) thisType;
+					if (classBinding.getExtends() != null) {
+						superExpression.setTypeBinding(classBinding.getExtends());
+						return false;
+					}
+				}
+				IPartBinding superType = thisType.getDefaultSuperType();
 				superExpression.setTypeBinding(superType);
 				return false;
 			}
@@ -1770,9 +1779,16 @@ public abstract class DefaultBinder extends AbstractBinder {
 				}
 			}
 			else {
-				if(ITypeBinding.DICTIONARY_BINDING == targetType.getKind()) {
-					for(Iterator iter = ((DictionaryBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
-						constructors.addNestedFunctionBinding((IDataBinding) iter.next());   
+				if(ITypeBinding.CLASS_BINDING == targetType.getKind()) {
+					for(Iterator iter = ((EGLClassBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
+						constructors.addNestedFunctionBinding((IDataBinding) iter.next());
+					}
+				}
+				else {
+					if(ITypeBinding.DICTIONARY_BINDING == targetType.getKind()) {
+						for(Iterator iter = ((DictionaryBinding) targetType).getConstructors().iterator(); iter.hasNext();) {
+							constructors.addNestedFunctionBinding((IDataBinding) iter.next());   
+						}
 					}
 				}
 			}
@@ -2738,7 +2754,6 @@ public abstract class DefaultBinder extends AbstractBinder {
 			ITypeBinding toType = asExpression.getType().resolveTypeBinding();
 			if(fromType != null && fromType.isValid() && toType != null && toType.isValid()) {
 				if(fromType.isDynamic() ||
-				   fromType.getBaseType().isDynamic() && ITypeBinding.ARRAY_TYPE_BINDING == toType.getKind() ||
 				   TypeCompatibilityUtil.typesOrElementTypesMoveCompatible(toType, fromType, compilerOptions) ||
 				   TypeCompatibilityUtil.areCompatibleExceptions(fromType, toType, compilerOptions)) {
 					asExpression.setTypeBinding(convertDataItemToPrimitive(toType));

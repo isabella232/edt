@@ -59,6 +59,7 @@ import org.eclipse.edt.compiler.core.ast.ConstantFormField;
 import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.FormGroup;
@@ -260,7 +261,12 @@ public class AnnotationValidator {
 				visitFunctionContainer(library, library.getSubType());
 				return false;
 			}
-			
+
+			public boolean visit(EGLClass eglClass) {
+				visitFunctionContainer(eglClass, eglClass.getSubType());
+				return false;
+			}
+
 			public boolean visit(Handler handler) {
 				visitFunctionContainer(handler, handler.getSubType());
 				return false;

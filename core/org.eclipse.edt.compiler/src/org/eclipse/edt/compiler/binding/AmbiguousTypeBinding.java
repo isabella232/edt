@@ -259,4 +259,8 @@ public class AmbiguousTypeBinding implements IPartBinding {
 		return null;
 	}
 
+	@Override
+	public void setPrivate(boolean bool) {
+	}
+
 }

@@ -48,6 +48,7 @@ public interface ITypeBinding extends IBinding {
     int DELEGATE_BINDING = 27;
     int EXTERNALTYPE_BINDING = 28;
     int FOREIGNLANGUAGETYPE_BINDING = 29;
+    int CLASS_BINDING = 30;
     
     int getKind();
 

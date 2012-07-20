@@ -42,6 +42,7 @@ public interface IPartBinding extends ITypeBinding {
     boolean isDeclarablePart();
     
     boolean isPrivate();
+    void setPrivate(boolean bool);
     
     boolean isSystemPart();
     

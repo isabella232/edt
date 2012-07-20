@@ -17,6 +17,7 @@ import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -113,7 +114,12 @@ public class BindingCreator extends DefaultASTVisitor {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.PROGRAM_BINDING);
 		return false;
 	}
-	
+
+	public boolean visit(EGLClass eglClass) {
+		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.CLASS_BINDING);
+		return false;
+	}
+
 	public boolean visit(Service service) {
 		partBinding = environment.getNewPartBinding(packageName, caseSensitiveInternedPartName, ITypeBinding.SERVICE_BINDING);
 		return false;
