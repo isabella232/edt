@@ -12,6 +12,7 @@ public class PartTemplate extends EGLDocTemplate {
 
 	public void preGenPart(Part part, Context ctx) {
 		ctx.put("partName", part.getName());
+		ctx.put("packageName", part.getPackageName());
 		ctx.put("fullPartName", part.getFullyQualifiedName());
 		ctx.invokeSuper(this, preGenPart, part, ctx);
 	}

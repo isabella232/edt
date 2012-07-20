@@ -146,5 +146,14 @@ public class Util {
 		}
 		return lines;
 	}
+	
+	public static String createRelativePath(String packageName){
+		StringBuffer result = new StringBuffer();
+		String[] split = packageName.split(".");
+		for (int i = 0; i < split.length; i++) {
+			result.append("../");
+		}
+		return result.toString();
+	}
 
 }

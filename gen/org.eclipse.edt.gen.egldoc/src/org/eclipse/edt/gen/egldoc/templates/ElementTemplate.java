@@ -185,7 +185,7 @@ public class ElementTemplate extends EGLDocTemplate {
 		out.println("<meta name=\"DC.Language\" content=\"en-us\"></meta>");
 		
 		/** TODO: must calculate the folder level for the CSS file and then prepend "../" as many times */
-		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"style/commonltr.css\"></link>");
+		out.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + org.eclipse.edt.gen.egldoc.Util.createRelativePath((String)ctx.get("packageName")) + "../css/commonltr.css\"></link>");
 		out.println("<title>" + partName + " " + docType + "</title>");
 		out.println("</head>");
 	}
