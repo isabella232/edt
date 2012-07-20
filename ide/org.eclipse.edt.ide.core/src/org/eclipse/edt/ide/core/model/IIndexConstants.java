@@ -43,6 +43,7 @@ public interface IIndexConstants {
 	char EXTERNALTYPE_SUFFIX = 0x2000;
 	char ENUMERATION_SUFFIX = 0x4000;
 	char STEREOTYPE_SUFFIX = 0x8000;
+	char CLASS_SUFFIX = 0x0000;   //TODO remove unsupported types and free up a bit for CLASS to use
 	
 
 

@@ -52,6 +52,7 @@ public interface IEGLSearchConstants {
 	int ENUMERATION_PART = 17;
 	int ANNOTATION_PART = 18;
 	int STEREOTYPE_PART = 19;
+	int CLASS_PART = 20;
 	/**
 	 * The searched element is a package.
 	 */

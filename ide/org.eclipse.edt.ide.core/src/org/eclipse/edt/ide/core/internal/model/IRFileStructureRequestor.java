@@ -479,6 +479,7 @@ public class IRFileStructureRequestor extends AbstractSourceElementRequestor imp
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_EXTERNALTYPE : astType = org.eclipse.edt.compiler.core.ast.Part.EXTERNALTYPE; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_ENUMERATION : astType = org.eclipse.edt.compiler.core.ast.Part.ENUMERATION; break;
 				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_SERVICE : 	   astType = org.eclipse.edt.compiler.core.ast.Part.SERVICE; break;
+				case org.eclipse.edt.ide.core.internal.model.IRPartType.PART_CLASS : 	   astType = org.eclipse.edt.compiler.core.ast.Part.CLASS; break;
 			}
 			return astType;
 		}

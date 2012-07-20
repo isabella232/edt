@@ -338,7 +338,11 @@ public String toString() {
 	public boolean isProgram() {
 		return fPartType == Part.PROGRAM;
 	}
-	
+
+	public boolean isClass() {
+		return fPartType == Part.CLASS;
+	}
+
 	public boolean isCalledProgram() {
 		return (isProgram() && parameterNames != null);
 	}

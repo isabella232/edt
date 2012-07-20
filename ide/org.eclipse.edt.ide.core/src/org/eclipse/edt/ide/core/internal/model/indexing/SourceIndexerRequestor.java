@@ -153,6 +153,7 @@ public void enterPart(int partType, char[] subType, int contentCode, int declara
 		case Part.EXTERNALTYPE : partChar = EXTERNALTYPE_SUFFIX; break;
 		case Part.ENUMERATION : partChar = ENUMERATION_SUFFIX; break;
 		case Part.SERVICE : 	partChar = SERVICE_SUFFIX; break;
+		case Part.CLASS :   	partChar = CLASS_SUFFIX; break;
 
 		default : 					partChar = PART_SUFFIX; break;
 	}

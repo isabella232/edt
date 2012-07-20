@@ -825,6 +825,9 @@ public boolean matchesPartType(IPartBinding partBinding){
 		case IIndexConstants.PART_SUFFIX:
 			match = true;
 			break;
+		case IIndexConstants.CLASS_SUFFIX:
+			match = partBinding.getKind() == ITypeBinding.CLASS_BINDING;
+			break;
 	}
 	
 	return match;

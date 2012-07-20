@@ -30,6 +30,7 @@ import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.Expression;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
@@ -529,6 +530,9 @@ public class MatchingNodeSet {
 			case Part.DATAITEM :
 				reportMatchingDataItem((DataItem) part, enclosingElement);
 				break;
+			case Part.CLASS :
+				reportMatchingClass((EGLClass) part, enclosingElement);
+				break;
 		}
 		
 		Name subtype = part.getSubType();
@@ -634,7 +638,13 @@ public class MatchingNodeSet {
 		reportMatchingUses(handler, enclosingElement);
 		reportMatchingNestedFunctions(handler, enclosingElement);
 	}
-	
+
+	private void reportMatchingClass(final EGLClass eglClass, IEGLElement enclosingElement) throws CoreException{		
+		reportMatchingFields(eglClass, enclosingElement);
+		reportMatchingUses(eglClass, enclosingElement);
+		reportMatchingNestedFunctions(eglClass, enclosingElement);
+	}
+
 	private void reportMatchingService(final Service service, final IEGLElement enclosingElement) throws CoreException{		
 	    reportMatchingFields(service, enclosingElement);
 		reportMatchingUses(service, enclosingElement);

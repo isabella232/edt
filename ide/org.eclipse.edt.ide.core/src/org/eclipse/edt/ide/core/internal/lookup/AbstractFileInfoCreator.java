@@ -28,6 +28,7 @@ import org.eclipse.edt.compiler.core.ast.DataItem;
 import org.eclipse.edt.compiler.core.ast.DataTable;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Delegate;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.Enumeration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.core.ast.File;
@@ -204,7 +205,12 @@ public abstract class AbstractFileInfoCreator {
 					processPart(reader, program, ITypeBinding.PROGRAM_BINDING, program.getOffset(), program.getLength());
 					return false;
 				}
-	
+
+				public boolean visit(EGLClass eglClass) {
+					processPart(reader, eglClass, ITypeBinding.CLASS_BINDING, eglClass.getOffset(), eglClass.getLength());
+					return false;
+				}
+
 				public boolean visit(Record record) {
 					if(record.isFlexible()){
 						processPart(reader, record, ITypeBinding.FLEXIBLE_RECORD_BINDING, record.getOffset(), record.getLength());

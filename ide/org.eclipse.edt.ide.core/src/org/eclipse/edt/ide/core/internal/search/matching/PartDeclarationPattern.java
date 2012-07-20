@@ -487,6 +487,9 @@ private boolean matchesPartType(Part part){
 		case IIndexConstants.ENUMERATION_SUFFIX:
 			match = partType == Part.ENUMERATION;
 			break;
+		case IIndexConstants.CLASS_SUFFIX:
+			match = partType == Part.CLASS;
+			break;
 		case IIndexConstants.PART_SUFFIX:
 			match = true;
 			break;
