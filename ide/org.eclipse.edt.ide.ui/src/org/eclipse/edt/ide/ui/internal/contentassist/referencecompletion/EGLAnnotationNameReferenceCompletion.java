@@ -117,7 +117,10 @@ public class EGLAnnotationNameReferenceCompletion extends EGLAbstractPropertyRef
 				return new ForElementKindAnnotationGatherer(ElementKind.DELEGATEPART, settingsBlock);
 			case Part.EXTERNALTYPE:
 				return new ForElementKindAnnotationGatherer(ElementKind.EXTERNALTYPEPART, settingsBlock);
+			case Part.CLASS:
+				return new ForElementKindAnnotationGatherer(ElementKind.CLASSPART, settingsBlock);
 			case Part.ENUMERATION:
+				return new ForElementKindAnnotationGatherer(ElementKind.ENUMERATIONPART, settingsBlock);
 			}
 		}
 		else if(container instanceof UseStatement) {

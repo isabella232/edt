@@ -315,6 +315,9 @@ public class SearchHandler extends EGLHandler {
 				case ITypeBinding.FORM_BINDING:
 					searchFor = IEGLSearchConstants.FORM_PART;
 					break;
+				case ITypeBinding.CLASS_BINDING:
+					searchFor = IEGLSearchConstants.CLASS_PART;
+					break;
 				}
 			}
 
