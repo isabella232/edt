@@ -9,6 +9,7 @@ import org.eclipse.edt.gen.egldoc.Util;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionParameter;
+import org.eclipse.edt.mof.egl.Type;
 
 public class FunctionTemplate extends EGLDocTemplate {
 
@@ -100,9 +101,61 @@ public class FunctionTemplate extends EGLDocTemplate {
 				numberOfParmsLeft--;
 			}
 		}
-
+		out.println(")");
+	
+		Type theReturnType = function.getReturnType();		
 		
-		out.println(")</span><p class=\"p\"></p>");		
+		if (theReturnType != null){
+			
+			// String theReturnSpec = "something";
+			// gives the long name for EList:  
+			//           String theReturnSpec = theReturnType.getTypeSignature().toString();
+			//    or     String theReturnSpec = theReturnType.getClassifier().getTypeSignature();
+			// the next gives this:
+			/*
+			   Instance of: org.eclipse.edt.mof.EClass - org.eclipse.edt.mof.egl.ArrayType eClass 
+			-> Instance of: org.eclipse.edt.mof.EClass - org.eclipse.edt.mof.EClass metadata 
+			-> [] name -> ArrayType packageName -> org.eclipse.edt.mof.egl eTypeParameters 
+			-> [] superTypes 
+			-> [Instance of: org.eclipse.edt.mof.EClass - org.eclipse.edt.mof.egl.GenericType] isAbstract 
+			-> false isInterface 
+			-> false eFields 
+			-> [initialSize : org.eclipse.edt.mof.egl.Expression, elementsNullable : org.eclipse.edt.mof.EBoolean] eFunctions 
+			-> [Instance of: org.eclipse.edt.mof.EFunction, 
+			Instance of: org.eclipse.edt.mof.EFunction, Instance of: org.eclipse.edt.mof.EFunction] 
+			*/
+			// String theReturnSpec = theReturnType.getEClass().toString();
+			// the next returns this:  org.eclipse.edt.mof.egl.impl.ArrayTypeImpl 
+			// String theReturnSpec = theReturnType.getClass().getCanonicalName().toString();
+			// the next returns ArrayTypeImpl
+			// String theReturnSpec = theReturnType.getClass().getSimpleName();
+			// the next gives this:  egl:eglx.lang.elist 
+			// String theReturnSpec = theReturnType.getMofSerializationKey();
+			String theReturnSpec = theReturnType.getTypeSignature();
+			
+			/*			
+			int lastPeriod = theReturnSpec.lastIndexOf('.');
+			
+			if (lastPeriod != 0) {
+	           theReturnSpec = theReturnSpec.substring(lastPeriod + 1, theReturnSpec.length() - 1);
+			}
+			*/
+			
+			out.println(" returns " + "<a href=\"" + theReturnSpec + "\"" + ">" + theReturnSpec + "</a>");
+			
+		}
+     
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		out.println("</span><p class=\"p\"></p>");		
 		out.println(functionFirstPara + "</td></tr>");
 
 		/*
