@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.edt.gen.egldoc.Context;
-import org.eclipse.edt.gen.egldoc.FieldComparator;
+import org.eclipse.edt.gen.egldoc.NamedElementComparator;
 import org.eclipse.edt.gen.egldoc.FunctionComparator;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ConstantField;
@@ -15,7 +15,9 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.Part;
 
 public class EGLClassTemplate extends EGLDocTemplate {
-
+	
+	NamedElementComparator comparator = new NamedElementComparator();
+	
 	public void genClassContent(Part part, Context ctx, TabbedWriter out) {
 		ctx.invoke(genStereotypeName, part, ctx, out);
 		ctx.invoke(genConstants, part, ctx, out);
@@ -34,7 +36,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			out.println("Constants");
 		} else {
 			
-			FieldComparator comparator = new FieldComparator();
+			
 			Collections.sort(constantFields, comparator);			
 			
 			for (ConstantField constantField : constantFields) {
@@ -74,7 +76,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			 * out.println("<p class=\"p\"></p>"); out.println("</dd>");
 			 */
 		} else {
-			FieldComparator comparator = new FieldComparator();
+			// FieldComparator comparator = new FieldComparator();
 			Collections.sort(nonConstantFields, comparator);
 
 			out.println("<dd class=\"dd\"><dl class=\"dl parml\"><p class=\"p\"></p>");
@@ -117,7 +119,7 @@ public class EGLClassTemplate extends EGLDocTemplate {
 				theFunctions.add((Function) theFunction);
 			}
 
-			FunctionComparator comparator = new FunctionComparator();
+			// FunctionComparator comparator = new FunctionComparator();
 			Collections.sort(theFunctions, comparator);
 
 			for (Function function : theFunctions) {
@@ -133,11 +135,4 @@ public class EGLClassTemplate extends EGLDocTemplate {
 			Function arg) {
 		ctx.invoke(genDeclaration, arg, ctx, out);
 	}
-
-	public void genDeclaration(EGLClass part, Context ctx, TabbedWriter out) {
-
-		// out.println(part.getFullyQualifiedName());
-		out.println("in EGLClassTemplate.genDeclaration");		
-	}
-
 }
