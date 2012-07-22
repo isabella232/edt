@@ -118,7 +118,6 @@ public class ElementTemplate extends EGLDocTemplate {
 		String docType = (String) ctx.get("docType");
 		String stereoTypeName = (String) ctx.get("stereoTypeName");
 		String partName = (String) ctx.get("partName");
-
 		String firstPara = (String) ctx.get("firstPara");
 		
 		// the topmost detail, with introductory paragraph
