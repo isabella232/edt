@@ -35,14 +35,14 @@ public class PartTemplate extends EGLDocTemplate {
 	}
 
 	public void genLastComments(Element part, Context ctx, TabbedWriter out) {
-		   String theRest = (String) ctx.get("postFirstPara");
-		   if(theRest != null){
-			   theRest.replaceAll("\n", "<p class=\"p\"></p>");
+		   String postFirstPara = (String) ctx.get("postFirstPara");
+		   if(postFirstPara != null){
+			   postFirstPara.replaceAll("\n", "<p class=\"p\"></p>");
+			   out.println("<dt class=\"dt dlterm\"><a name=\"comments\"</a>Comments</dt>");		    
+			   out.println("<dd class=\"dd\">" + postFirstPara + "</dd>");
 		   } 
-		   out.println("<dt class=\"dt dlterm\"><a name=\"comments\"</a>Comments</dt>");
-		   
-		  // <dd class="dd">This statement is a comment.</dd>
 		}
+	
 	public void genPackage(Part part, Context ctx, TabbedWriter out) {
 
 		out.println("<dt class=\"dt dlterm\"><a name=\"package\"</a>EGL package name</dt>");
