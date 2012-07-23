@@ -14,11 +14,14 @@ package org.eclipse.edt.gen.java.templates.jee;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
+import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Type;
 
 public class TypeTemplate extends org.eclipse.edt.gen.java.templates.TypeTemplate implements Constants {
 
 	public void genJsonTypeDependentOptions(Type type, Context ctx, TabbedWriter out) {
 		// no default
+	}
+	public void preGenAddXMLSchemaType(Type type, Context ctx, Field field){
 	}
 }

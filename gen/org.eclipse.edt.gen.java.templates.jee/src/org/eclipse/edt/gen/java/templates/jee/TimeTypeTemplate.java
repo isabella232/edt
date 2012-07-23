@@ -11,39 +11,28 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.jee;
 
-import org.eclipse.edt.gen.java.jee.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
+import org.eclipse.edt.gen.java.jee.CommonUtilities;
 import org.eclipse.edt.gen.java.jee.Constants;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Field;
-import org.eclipse.edt.mof.egl.TimestampType;
 import org.eclipse.edt.mof.egl.Type;
 
-public class TimestampTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.lang.TimestampTypeTemplate implements Constants {
+public class TimeTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.lang.TimeTypeTemplate implements Constants {
 
-	public void genJsonTypeDependentOptions(TimestampType type, Context ctx, TabbedWriter out) {
-		String pattern = "yyyyMMddhhmmss";
-		if (type.getPattern() != null && !type.getPattern().equalsIgnoreCase("null"))
-			pattern = type.getPattern();
-		out.print("\"");
-		out.print(getStartPattern(pattern));
-		out.print("\", \"");
-		out.print(getEndPattern(pattern));
-		out.print("\"");
-	}
 	public void preGenAddXMLSchemaType(Type type, Context ctx, Field field){
 		// if there is not a scema type we may need to add it for type like time, date, timestamp
+		Annotation annotation = null;
 		try {
-			Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLSchemaType);
-			annotation.setValue("name", "datetime");
+			annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLSchemaType);
+			annotation.setValue("name", "time");
 			org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 		}
 		catch (Exception e) {}
 		if (org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlJavaTypeAdapter, ctx) == null) {
-			Annotation annotation = CommonUtilities.getLocalAnnotation(ctx, Constants.AnnotationXmlJavaTypeAdapter);
+			annotation = CommonUtilities.getLocalAnnotation(ctx, Constants.AnnotationXmlJavaTypeAdapter);
 			if(annotation != null){
-				annotation.setValue("value", "org.eclipse.edt.runtime.java.eglx.xml.DateTimeAdapter");
+				annotation.setValue("value", "org.eclipse.edt.runtime.java.eglx.xml.TimeAdapter");
 				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			}
 		}
