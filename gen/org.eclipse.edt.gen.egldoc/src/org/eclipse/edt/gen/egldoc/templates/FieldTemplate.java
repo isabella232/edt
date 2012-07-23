@@ -12,20 +12,11 @@ public class FieldTemplate extends EGLDocTemplate {
 	
 	public void genDeclaration(Field field, Context ctx, TabbedWriter out) {
 		
-		String lastTypeQualifier = field.getType().getTypeSignature();
-		
 		/** TODO.  Identify the url for the field-type doc*/
-		String typeDocLocation = "unknownField";
-		
-		
-		int lastPeriod = lastTypeQualifier.lastIndexOf('.');
-		
-		if (lastPeriod != 0) {
-           lastTypeQualifier = lastTypeQualifier.substring(lastPeriod + 1);
-		}
-		
+		String typeDocLocation = field.getType().getTypeSignature(); 		
+	    String displayedTypeName = Util.getEGLSimpleType(typeDocLocation);			
 		out.println("<dt class=\"dt pt dlterm\"><span class=\"ph synph\"><span class=\"keyword kwd\">" + field.getName() + "</span>");
-		out.println("<a href=" + typeDocLocation + ">" +  lastTypeQualifier + "</a></span></dt>");
+		out.println("<a href=" + typeDocLocation + ">" +  displayedTypeName + "</a></span></dt>");
         out.println("<dd class=\"dd pd\">" + "<p></p>" + "This is the purpose!" + "</dd>");
 		
 //		String blockComment = Util.findBlockComment(ctx, Util.getLine(field));

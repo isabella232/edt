@@ -131,18 +131,13 @@ public class FunctionTemplate extends EGLDocTemplate {
 			// String theReturnSpec = theReturnType.getClass().getSimpleName();
 			// the next gives this:  egl:eglx.lang.elist 
 			// String theReturnSpec = theReturnType.getMofSerializationKey();
-			String theReturnSpec = theReturnType.getTypeSignature();
 			
-			/*			
-			int lastPeriod = theReturnSpec.lastIndexOf('.');
-			
-			if (lastPeriod != 0) {
-	           theReturnSpec = theReturnSpec.substring(lastPeriod + 1, theReturnSpec.length() - 1);
-			}
-			*/
-			
-			out.println(" returns " + "<a href=\"" + theReturnSpec + "\"" + ">" + theReturnSpec + "</a>");
-			
+
+			/** TODO. Identify the url for the field-type doc */
+			String typeDocLocation = theReturnType.getTypeSignature();
+			String displayedTypeName = Util.getEGLSimpleType(typeDocLocation);
+									
+			out.println(" returns " + "<a href=\"" + typeDocLocation + "\"" + ">" + displayedTypeName + "</a>");			
 		}
      
 		
