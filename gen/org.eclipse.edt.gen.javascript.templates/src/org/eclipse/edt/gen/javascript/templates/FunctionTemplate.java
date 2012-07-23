@@ -23,7 +23,7 @@ public class FunctionTemplate extends JavaScriptTemplate {
 	public void preGen(Function function, Context ctx) {
 		ctx.invoke(preGen, function.getStatementBlock(), ctx);
 		
-		for (Annotation annot : function.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(function, ctx)) {
 			ctx.invoke(preGen, annot.getEClass(), ctx, annot, function);
 		}
 	}

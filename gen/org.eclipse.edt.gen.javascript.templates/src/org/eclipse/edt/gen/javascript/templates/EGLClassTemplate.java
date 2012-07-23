@@ -43,12 +43,12 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		ctx.invoke(preGenUsedParts, part, ctx);
 		ctx.invoke(preGenFields, part, ctx);
 		ctx.invoke(preGenFunctions, part, ctx);
-		if (part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
+		if (org.eclipse.edt.gen.CommonUtilities.getAnnotation(part, Constants.AnnotationXMLRootElement, ctx) == null) {
 			// add an xmlRootElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
+				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
 				annotation.setValue("name", part.getId());
-				part.addAnnotation(annotation);
+				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(part, annotation, ctx);
 			}
 			catch (Exception e) {}
 		}
@@ -58,7 +58,8 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 	private void addNamespaceMap(EGLClass part, Context ctx) {
 		String localName = part.getName();
 		String namespace = CommonUtilities.createNamespaceFromPackage(part);
-		Annotation annot = part.getAnnotation("eglx.xml.binding.annotation.xmlRootElement");
+		
+		Annotation annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(part, Constants.AnnotationXMLRootElement, ctx);
 		if (annot != null) {
 			if (annot.getValue("namespace") != null && ((String) annot.getValue("namespace")).length() > 0) {
 				namespace = (String) annot.getValue("namespace");
@@ -286,7 +287,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		for (Field field : part.getFields()) {
 			// Need to generate annotations before the initializers, in case the annotation offers a default value
 			// that gets overridden by the initializers.
-			for (Annotation annot : field.getAnnotations()) {
+			for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)) {
 				try {
 					ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field, genInitializeMethod);
 				}
@@ -400,7 +401,7 @@ public class EGLClassTemplate extends JavaScriptTemplate {
 		out.println(": function() {");
 		out.println("if(this.annotations === undefined){");
 		out.println("this.annotations = {};");
-		for (Annotation annot : part.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(part, ctx)) {
 			ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, part);
 		}
 		out.println("}");

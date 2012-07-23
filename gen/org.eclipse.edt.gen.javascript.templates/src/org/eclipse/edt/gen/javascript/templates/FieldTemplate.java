@@ -26,25 +26,25 @@ public class FieldTemplate extends JavaScriptTemplate {
 
 	public void preGen(Field field, Context ctx) {
 		ctx.invoke(preGen, field.getType(), ctx);
-		if(field.getAnnotation(Constants.AnnotationXmlAttribute) == null &&
-				field.getAnnotation(Constants.AnnotationXmlElement) == null) {
-			//add an xmlElement
+		if (org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlElement, ctx) == null &&
+						org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlAttribute, ctx) == null) {
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
-				annotation.setValue("name", field.getId());
-				field.addAnnotation(annotation);
+				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXmlElement);
+				annotation.setValue("name", field.getName());
+				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
-		}	
-		if(field.getAnnotation(Constants.AnnotationJsonName) == null) {
+		}
+
+		if(org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationJsonName, ctx) == null) {
 			//add an xmlElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
+				Annotation annotation = org.eclipse.edt.gen.CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationJsonName);
 				annotation.setValue(field.getId());
-				field.addAnnotation(annotation);
+				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
 			} catch (Exception e) {}
 		}	
 		
-		for (Annotation annot : field.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)) {
 			ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
 		}
 	}
@@ -130,7 +130,7 @@ public class FieldTemplate extends JavaScriptTemplate {
 				(supportConversion == null || supportConversion.booleanValue())){
 			out.println("annotations = {};");
 			
-			for(Annotation annot : field.getAnnotations()){
+			for(Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)){
 				ctx.invoke(genConversionControlAnnotation, annot.getEClass(), ctx, out, annot, field);
 			}
 			

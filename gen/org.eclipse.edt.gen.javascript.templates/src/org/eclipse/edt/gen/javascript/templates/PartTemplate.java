@@ -36,7 +36,7 @@ public class PartTemplate extends JavaScriptTemplate {
 		ctx.putAttribute(ctx.getClass(), Constants.SubKey_partRecordsUsed, new ArrayList<Record>());
 		ctx.invoke(preGenClassBody, part, ctx);
 		
-		for (Annotation annot : part.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(part, ctx)) {
 			ctx.invoke(preGen, annot.getEClass(), ctx, annot, part);
 		}
 	}

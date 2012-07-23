@@ -29,7 +29,11 @@ public class XMLRootElementTemplate extends JavaScriptTemplate {
 			out.print(quoted((String) annot.getValue("name")));
 		}
 		else{
-			out.print(quoted(part.getName()));
+			StringBuilder name = new StringBuilder(part.getName());
+			if(Character.isUpperCase(name.charAt(0))){
+				name.setCharAt(0, Character.toLowerCase(name.charAt(0)));
+			}
+			out.print(quoted(name.toString()));
 		}
 		out.print( ", ");
 		if(annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))){

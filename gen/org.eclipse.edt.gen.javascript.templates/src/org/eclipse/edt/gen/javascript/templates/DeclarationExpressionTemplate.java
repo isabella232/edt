@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.javascript.templates;
 
+import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.javascript.Context;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -26,7 +27,7 @@ public class DeclarationExpressionTemplate extends JavaScriptTemplate {
 
 	public void genDeclarationExpression(DeclarationExpression expr, Context ctx, TabbedWriter out) {
 		for (Field field : expr.getFields()) {
-			for (Annotation annot : field.getAnnotations()) {
+			for (Annotation annot : CommonUtilities.getAnnotations(field, ctx)){
 				ctx.invoke(preGen, annot.getEClass(), ctx, annot, field);
 			}
 			genFieldDeclaration(expr, ctx, out, field);
