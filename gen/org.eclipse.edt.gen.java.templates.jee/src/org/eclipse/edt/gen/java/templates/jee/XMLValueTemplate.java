@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.templates.jee;
 
+
 import org.eclipse.edt.gen.java.CommonUtilities;
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
@@ -31,8 +32,8 @@ public class XMLValueTemplate extends JavaTemplate implements Constants {
 		if (kind != null) {
 			if ("simpleContent".equalsIgnoreCase(CommonUtilities.getEnumerationName(kind))) {
 				for (Field field : part.getFields()) {
-					if (field.getAnnotation(Constants.AnnotationXmlAttribute) == null) {
-						field.addAnnotation(annot);
+					if (org.eclipse.edt.gen.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlAttribute, ctx) == null) {
+						org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(field, annot, ctx);
 						break;
 					}
 				}
