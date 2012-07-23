@@ -11,13 +11,20 @@
  *******************************************************************************/
 package org.eclipse.edt.gen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.edt.gen.EGLMessages.EGLMessage;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.Annotation;
+import org.eclipse.edt.mof.egl.AnnotationType;
 import org.eclipse.edt.mof.egl.Assignment;
 import org.eclipse.edt.mof.egl.BoxingExpression;
 import org.eclipse.edt.mof.egl.ConstructorInvocation;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
+import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.Expression;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionParameter;
@@ -26,8 +33,12 @@ import org.eclipse.edt.mof.egl.Literal;
 import org.eclipse.edt.mof.egl.NewExpression;
 import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 import org.eclipse.edt.mof.impl.AbstractVisitor;
+import org.eclipse.edt.mof.serialization.DeserializationException;
+import org.eclipse.edt.mof.serialization.Environment;
+import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class CommonUtilities {
 
@@ -292,5 +303,66 @@ public class CommonUtilities {
 			annotation.addAnnotation(ctx.getFactory().createAnnotation(EGLMessage.IncludeEndOffset));
 		}
 		return annotation;
+	}
+	public static void addGeneratorAnnotation(Element element, Annotation annot, EglContext ctx){
+		if(annot != null){
+			@SuppressWarnings("unchecked")
+			Map<String, Annotation> annotations = (Map<String, Annotation>)ctx.getAttribute(element, Constants.SubKey_GeneratorAnnotations);
+			if(annotations == null){
+				annotations = new HashMap<String, Annotation>();
+				ctx.putAttribute(element, Constants.SubKey_GeneratorAnnotations, annotations);
+			}
+			annotations.put(annot.getEClass().getETypeSignature(), annot);
+		}
+	}
+	public static Annotation getAnnotation(Element element, String annotationSignature, EglContext ctx){
+		//check the context first because array will add the subtype to the field on the context
+		Annotation annotation = null;
+		@SuppressWarnings("unchecked")
+		Map<String, Annotation> annotations = ((Map<String, Annotation>)ctx.getAttribute(element, Constants.SubKey_GeneratorAnnotations));
+		if(annotations != null){
+			annotation = annotations.get(annotationSignature);
+		}
+		if(annotation == null){
+			annotation = element.getAnnotation(annotationSignature);
+		}
+		return annotation;
+	}
+	public static List<Annotation> getAnnotations(Element element, EglContext ctx){
+		//check the context first because array will add the subtype to the field on the context
+		List<Annotation> annotations = new ArrayList<Annotation>();
+		List<String> annotationTypes = new ArrayList<String>();
+		@SuppressWarnings("unchecked")
+		Map<String, Annotation> generatorAnnotations = ((Map<String, Annotation>)ctx.getAttribute(element, Constants.SubKey_GeneratorAnnotations));
+		if(generatorAnnotations != null){
+			annotations.addAll(generatorAnnotations.values());
+			for(Annotation annot : annotations){
+				annotationTypes.add(annot.getEClass().getETypeSignature());
+			}
+		}
+		if(element.getAnnotations() != null){
+			for(Annotation annot : element.getAnnotations()){
+				if(!annotationTypes.contains(annot.getEClass().getETypeSignature())){
+					annotationTypes.add(annot.getEClass().getETypeSignature());
+					annotations.add(annot);
+				}
+			}
+		}
+		return annotations;
+	}
+
+	public static Annotation annotationNewInstance(EglContext ctx, String key) throws MofObjectNotFoundException, DeserializationException {
+		EObject eObject = Environment.getCurrentEnv().find(key);
+		return newInstance(eObject);
+	}
+	
+
+	public static Annotation newInstance(EObject eObject) {
+		if (eObject instanceof StereotypeType && (eObject = ((StereotypeType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
+		} else if (eObject instanceof AnnotationType && (eObject = ((AnnotationType) eObject).newInstance()) instanceof Annotation) {
+			return (Annotation) eObject;
+		}
+		return null;
 	}
 }
