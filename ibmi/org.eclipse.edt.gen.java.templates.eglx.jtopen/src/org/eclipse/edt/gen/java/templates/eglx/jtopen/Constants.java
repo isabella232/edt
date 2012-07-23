@@ -64,7 +64,6 @@ public interface Constants {
 	public static final String subKey_validElementCountVariable = "returnCountVariable";
 	public static final String subKey_elementTypeAnnotation = "elementTypeAnnotation";
 	static final String subKey_ibmiGeneratedHelpers = "ibmiGeneratedHelpers";
-	static final String subKey_ibmiAnnotations = "ibmiAnnotations";
 	static final String subKey_realFunctionName = "realFunctionName";
 	
 	//Misc constants

@@ -35,39 +35,39 @@ public class AS400GenType {
 	
 	public void genAS400Type(Member member, Type type, Context ctx, TabbedWriter out){
 		out.print("new ");
-		Annotation annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin1, ctx);
-		if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin1, ctx)) != null){
+		Annotation annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin1, ctx);
+		if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin1, ctx)) != null){
 			out.print("org.eclipse.edt.java.jtopen.access.AS400Bin1()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin2, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin2, ctx)) != null){
 			genAS400Bin2(out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin4, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin4, ctx)) != null){
 			genAS400Bin4(out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin8, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructBin8, ctx)) != null){
 			genAS400Bin8(out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin1, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin1, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400UnsignedBin1()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin2, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin2, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400UnsignedBin2()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin4, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin4, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400UnsignedBin4()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin8, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructUnsignedBin8, ctx)) != null){
 			out.print("org.eclipse.edt.java.jtopen.access.AS400UnsignedBin8()");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructZonedDecimal, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructZonedDecimal, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400ZonedDecimal(");
 			genLength(type, out, annot);
 			out.print(", ");
 			genDecimals(type, out, annot);
 			out.print(")");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructDecFloat, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructDecFloat, ctx)) != null){
 			out.print("com.ibm.as400.access.AS400DecFloat(");
 			if(annot.getValue(Constants.subKey_length) != null){
 				out.print(((Integer)annot.getValue(Constants.subKey_length)).toString());
@@ -77,35 +77,35 @@ public class AS400GenType {
 			}
 			out.print(")");
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructPackedDecimal, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructPackedDecimal, ctx)) != null){
 			genAS400PackedDecimal(type, ctx, out, annot);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructFloat4, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructFloat4, ctx)) != null){
 			genAS400Float4(out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructFloat8, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructFloat8, ctx)) != null){
 			genAS400Float8(out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructDate, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructDate, ctx)) != null){
 			genAS400Date(member, type, annot, ctx, out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructText, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructText, ctx)) != null){
 			genAS400Text(member, type, annot, ctx, out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructTimestamp, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructTimestamp, ctx)) != null){
 			genAS400Timestamp(type, ctx, out, annot);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructTime, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructTime, ctx)) != null){
 			genAS400Time(member, type, annot, ctx, out);
 		}
-		else if((annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructByteArray, ctx)) != null){
+		else if((annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructByteArray, ctx)) != null){
 			genAS400ByteArray(member, type, annot, ctx, out);
 		}
 		else if(type instanceof ArrayType &&
-				(annot = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructArray, ctx)) != null){
+				(annot = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructArray, ctx)) != null){
 			out.print("org.eclipse.edt.java.jtopen.access.AS400Array(");
 			if(annot != null){
-				CommonUtilities.addAnntation(member, (Annotation)annot.getValue(Constants.subKey_elementTypeAnnotation), ctx);
+				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(member, (Annotation)annot.getValue(Constants.subKey_elementTypeAnnotation), ctx);
 			}
 			genAS400Type(member, ((ArrayType)type).getElementType(), ctx, out);
 			out.print(", ");

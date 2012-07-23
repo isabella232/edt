@@ -74,7 +74,7 @@ public class AS400GenArrayResize {
 	}
 	
 	private MemberName getCountMember(Member member, Context ctx) {
-		Annotation as400Array = org.eclipse.edt.gen.java.templates.eglx.jtopen.CommonUtilities.getAnnotation(member, Constants.signature_StructArray, ctx);
+		Annotation as400Array = org.eclipse.edt.gen.CommonUtilities.getAnnotation(member, Constants.signature_StructArray, ctx);
 		return as400Array == null ? null : (MemberName)as400Array.getValue(Constants.subKey_validElementCountVariable);
 	}
 	

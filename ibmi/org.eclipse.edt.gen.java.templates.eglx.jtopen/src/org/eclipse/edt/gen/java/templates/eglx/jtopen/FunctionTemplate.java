@@ -147,7 +147,7 @@ public class FunctionTemplate extends JavaTemplate implements Constants, org.ecl
 			if(parameterAnnotationList != null && idx < parameterAnnotationList.size()){
 				Object annot = parameterAnnotationList.get(idx);
 				if(annot instanceof Annotation){
-					CommonUtilities.addAnntation(parameter, (Annotation)annot, ctx);
+					org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(parameter, (Annotation)annot, ctx);
 				}
 			}
 			idx++;
