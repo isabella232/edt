@@ -32,6 +32,12 @@ public class XMLElementTemplate extends JavaTemplate implements Constants {
 			out.print("name=\"" + (String) annot.getValue("name") + "\"");
 			addComma = true;
 		}
+		else{
+			out.print("name=\"");
+			ctx.invoke(genName, member, ctx, out);
+			out.print("\"");
+			addComma = true;
+		}
 		if (annot.getValue("namespace") instanceof String && !"##default".equals(annot.getValue("namespace"))) {
 			if (addComma) {
 				out.print(", ");
