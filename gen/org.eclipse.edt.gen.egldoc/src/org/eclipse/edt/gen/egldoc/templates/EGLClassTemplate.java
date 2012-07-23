@@ -18,7 +18,8 @@ public class EGLClassTemplate extends EGLDocTemplate {
 	NamedElementComparator comparator = new NamedElementComparator();
 	
 	public void genClassContent(Part part, Context ctx, TabbedWriter out) {
-		ctx.invoke(genStereotypeName, part, ctx, out);
+		// ctx.invoke(genStereotypeName, part, ctx, out);
+		ctx.invokeSuper(this, genClassContent, part, ctx);
 		ctx.invoke(genConstants, part, ctx, out);
 		ctx.invoke(genFields, part, ctx, out);
 		ctx.invoke(genFunctions, part, ctx, out);
