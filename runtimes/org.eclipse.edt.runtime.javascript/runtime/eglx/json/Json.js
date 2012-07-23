@@ -408,7 +408,7 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 			return jsonObject;
 		}
 		if ( typeof(jsonObject) == "number") {
-			return jsonObject;
+			return new egl.javascript.BigDecimal(jsonObject);
 		}
 		if (typeof(jsonObject) == "boolean") {
 			return jsonObject;
@@ -489,7 +489,13 @@ egl.eglx.json.JsonLib["populateObjectFromJsonObject"] = function( /* Object */js
 		for (var f in jsonObject) {
 			try{
 				if(typeof jsonObject[f] !== "function"){
-					eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
+					if(eglObject instanceof egl.eglx.lang.EDictionary){
+						var value = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
+						egl.eglx.lang.EDictionary.set(eglObject, f, value === null ? { eze$$value : null, eze$$signature : "?;" }: egl.boxAny(value, egl.inferSignature(value)));
+					}
+					else{
+						eglObject[f] = this.populateObjectFromJsonObject(jsonObject[f], eglObject[f] === undefined ? null : eglObject[f], null, cleanDictionary);
+					}
 				}
 			}catch(e){
 				throw egl.createRuntimeException("CRRUI2109E", [ f, e.toString() ]);
