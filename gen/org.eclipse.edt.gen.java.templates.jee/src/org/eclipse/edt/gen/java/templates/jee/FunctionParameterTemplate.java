@@ -22,7 +22,7 @@ public class FunctionParameterTemplate extends org.eclipse.edt.gen.java.template
 
 	public void genDeclaration(FunctionParameter decl, Context ctx, TabbedWriter out) {
 		ctx.put(Constants.SubKey_keepAnnotationsOnTheSameLine, Boolean.TRUE);
-		for (Annotation annot : decl.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(decl, ctx)) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, decl);
 		}
 		ctx.remove(Constants.SubKey_keepAnnotationsOnTheSameLine);
