@@ -26,7 +26,6 @@ import org.eclipse.edt.javart.messages.Message;
 import org.eclipse.edt.javart.resources.ExecutableBase;
 
 import eglx.lang.AnyException;
-import eglx.lang.AnyValue;
 import eglx.lang.InvalidArgumentException;
 
 public class XmlLib extends ExecutableBase {
@@ -58,16 +57,23 @@ public class XmlLib extends ExecutableBase {
 		try {
 			Object egl;
 			if (storage instanceof AnyBoxedObject) {
-				egl = ((AnyBoxedObject) storage).ezeUnbox();
+				egl = ((AnyBoxedObject<Object>) storage).ezeUnbox();
 			} else {
 				egl = storage;
 			}
 
 			Reader reader = new StringReader(xml);
-			Object obj = JAXBContext.newInstance(egl.getClass()).createUnmarshaller().unmarshal(reader);
-			Method method;
-			if ((method = egl.getClass().getMethod("ezeCopy", AnyValue.class)) != null) {
-				method.invoke(egl, obj);
+			Object newValue = JAXBContext.newInstance(egl.getClass()).createUnmarshaller().unmarshal(reader);
+			if (storage instanceof AnyBoxedObject) {
+				((AnyBoxedObject)storage).ezeCopy(newValue);
+			} else {
+				try{
+					Method method = egl.getClass().getMethod("ezeCopy", Object.class);
+					method.invoke(egl, newValue);
+				}
+				catch(NoSuchMethodException nsme){
+					nsme.printStackTrace();
+				}
 			}
 		}
 		catch (Exception e) {
