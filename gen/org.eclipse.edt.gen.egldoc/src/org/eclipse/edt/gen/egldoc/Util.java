@@ -167,20 +167,24 @@ public class Util {
 
 	public static String getEGLSimpleType(String typeSignature) {
 
+		
 		int lastPeriod;
 
-		// assume that no one wants the full package name displayed
-		// if (typeSignature.startsWith("egl")) {
+		
+		// is the signature for a list?
+		String[] theComponents = typeSignature.split("<", 2);
 
+		if (theComponents.length == 2) {
+		   typeSignature = theComponents[1].replace(">", "[]");
+		   		   					
+		} 
+		
 		lastPeriod = typeSignature.lastIndexOf('.');
 
 		if (lastPeriod != 0) {
-			typeSignature = typeSignature.substring(lastPeriod + 1);
-			if (typeSignature.endsWith(">")) {
-				typeSignature.replace(">", "[]");
-			}
+			typeSignature = typeSignature.substring(lastPeriod + 1);				
 		}
-
+		
 		return typeSignature;
 	}
 }
