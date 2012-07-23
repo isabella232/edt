@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.gen.egldoc.NamedElementComparator;
-import org.eclipse.edt.gen.egldoc.FunctionComparator;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.ConstantField;
 import org.eclipse.edt.mof.egl.EGLClass;
