@@ -1,5 +1,6 @@
 package org.eclipse.edt.gen.egldoc.templates;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,16 +46,10 @@ public class FunctionTemplate extends EGLDocTemplate {
 				String key = (String) iterator.next();
 				if (key == "firstPara") {
 				    functionFirstPara = blockCommentMap.get(key);					
-				}
-		
-							
-				
+				}		
 			}
 			
-            
-			
 		    // functionFirstPara = blockComment;
-            
 		}
 		
 		/*		
@@ -83,7 +78,28 @@ public class FunctionTemplate extends EGLDocTemplate {
 			String parmType = functionParameter.getType().getTypeSignature()
 					.toString();
 
-			/** TODO. Identify the url for the field-type doc */
+			
+			// display, element, and list (if appropriate)
+			ArrayList<String> stringDetails = (ArrayList<String>) Util.getEGLSimpleType(functionParameter.getType().getTypeSignature());			
+		
+			out.println(parmName + "<a href=\"" + stringDetails.get(1) + "\">");
+			out.println(stringDetails.get(0) + "</a>");
+			
+			if (stringDetails.get(2) != null) {
+	             out.println("<a href=\"" + stringDetails.get(2) + "\">");
+	             out.println(" [ ]</a>");
+			}     
+	/*		
+			out.println("</span></dt>");
+			out.println("<dd class=\"dd pd\">" + "<p></p>" + "This is the purpose!"
+					+ "</dd>");
+	*/		
+			
+			
+			
+			
+			
+			/*
 			String typeDocLocation = "unknownParmType";
 
 			int lastPeriod = parmType.lastIndexOf('.');
@@ -94,12 +110,13 @@ public class FunctionTemplate extends EGLDocTemplate {
 
 			out.println(parmName + " <a href=\"" + typeDocLocation + "\">"
 					+ parmType + "</a>");
-
+*/
 			if (numberOfParmsLeft > 0) {
 
 				out.println(", ");
 				numberOfParmsLeft--;
 			}
+			
 		}
 		out.println(")");
 	
@@ -133,22 +150,18 @@ public class FunctionTemplate extends EGLDocTemplate {
 			// String theReturnSpec = theReturnType.getMofSerializationKey();
 			
 
-			/** TODO. Identify the url for the field-type doc */
-			String typeDocLocation = theReturnType.getTypeSignature();
-			String displayedTypeName = Util.getEGLSimpleType(typeDocLocation);
-									
-			out.println(" returns " + "<a href=\"" + typeDocLocation + "\"" + ">" + displayedTypeName + "</a>");			
+			// display, element, and list (if appropriate)
+			ArrayList<String> stringDetails = (ArrayList<String>) Util.getEGLSimpleType(theReturnType.getTypeSignature());			
+			out.println(" returns <a href=\"" + stringDetails.get(1) + "\">");
+			out.println(stringDetails.get(0) + "</a>");
+			
+			if (stringDetails.get(2) != null) {
+				 //  <a href="eglx.lang.EInt">EInt</a> <a href="eglx.lang.EList"> [ ]</a>
+                 out.println("<a href=\"" + stringDetails.get(2) + "\">");
+                 out.println(" [ ]</a>");
+			}     
 		}
-     
-		
-		
-		
-		
-		
-		
-		
-		
-		
+     	
 		
 		out.println("</span><p class=\"p\"></p>");		
 		out.println(functionFirstPara + "</td></tr>");

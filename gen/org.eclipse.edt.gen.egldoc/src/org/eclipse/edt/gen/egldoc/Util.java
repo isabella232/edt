@@ -165,26 +165,43 @@ public class Util {
 		return result.toString();
 	}
 
-	public static String getEGLSimpleType(String typeSignature) {
+	public static List<String> getEGLSimpleType(String typeSignature) {
 
 		
 		int lastPeriod;
-
 		
+		// displayValue, element type, and (if appropriate) list type
+		ArrayList<String> returnList = new ArrayList();
+        String displayValue, elementType; 
+        String listType = null;
+        
 		// is the signature for a list?
 		String[] theComponents = typeSignature.split("<", 2);
 
-		if (theComponents.length == 2) {
-		   typeSignature = theComponents[1].replace(">", "[]");
-		   		   					
-		} 
+		if (theComponents.length == 2) {	
+			int rightAnglePosition = theComponents[1].lastIndexOf('>');
+			
+			typeSignature = theComponents[1].replace(">", "");
+			elementType = theComponents[1].substring(0, rightAnglePosition);
+		    listType = theComponents[0];
+		}
+		else {
+			elementType = typeSignature;
+		}
 		
 		lastPeriod = typeSignature.lastIndexOf('.');
 
+		// specify the display value (without [])
 		if (lastPeriod != 0) {
-			typeSignature = typeSignature.substring(lastPeriod + 1);				
+			returnList.add(typeSignature.substring(lastPeriod + 1));				
 		}
-		
-		return typeSignature;
+		else {
+			returnList.add(typeSignature);
+		}
+			
+        returnList.add(elementType);
+		returnList.add(listType); 
+        
+		return returnList;
 	}
 }
