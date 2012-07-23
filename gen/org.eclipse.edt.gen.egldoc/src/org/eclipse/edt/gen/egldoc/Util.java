@@ -93,6 +93,11 @@ public class Util {
 				postFirstPara.append(section);
 			}
 		}
+		
+		if(!foundEndOfDescription && postFirstPara.length() > 0){
+			commentMap.put("postFirstPara", postFirstPara.toString());
+		}
+		
 		return commentMap;
 	}
 
