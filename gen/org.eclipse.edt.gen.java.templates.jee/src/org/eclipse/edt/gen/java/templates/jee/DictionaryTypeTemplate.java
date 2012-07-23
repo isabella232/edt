@@ -13,17 +13,17 @@ package org.eclipse.edt.gen.java.templates.jee;
 
 import org.eclipse.edt.gen.java.Context;
 import org.eclipse.edt.gen.java.jee.Constants;
-import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-import org.eclipse.edt.mof.egl.ArrayType;
 import org.eclipse.edt.mof.egl.Field;
+import org.eclipse.edt.mof.egl.Type;
 
-public class ArrayTypeTemplate extends org.eclipse.edt.gen.java.templates.ArrayTypeTemplate implements Constants {
-
-	public void genJsonTypeDependentOptions(ArrayType type, Context ctx, TabbedWriter out) {
-		ctx.invoke(genJsonTypeDependentOptions, type.getElementType(), ctx, out);
-	}
-	public void preGenAddXMLSchemaType(ArrayType type, Context ctx, Field field){
-		// if there is not a scema type we may need to add it for type like time, date, timestamp
-		ctx.invoke(preGenAddXMLSchemaType, type.getElementType(), ctx, field);
+public class DictionaryTypeTemplate extends org.eclipse.edt.gen.java.templates.eglx.lang.DictionaryTypeTemplate implements Constants { 
+	public void preGenAddXMLSchemaType(Type type, Context ctx, Field field){
+//		if (org.eclipse.edt.gen.java.CommonUtilities.getAnnotation(field, Constants.AnnotationXmlJavaTypeAdapter, ctx) == null) {
+//			Annotation annotation = CommonUtilities.getLocalAnnotation(ctx, Constants.AnnotationXmlJavaTypeAdapter);
+//			if(annotation != null){
+//				annotation.setValue("value", "org.eclipse.edt.runtime.java.eglx.xml.DictionaryAdapter");
+//				org.eclipse.edt.gen.java.CommonUtilities.addGeneratorAnnotation(field, annotation, ctx);
+//			}
+//		}
 	}
 }
