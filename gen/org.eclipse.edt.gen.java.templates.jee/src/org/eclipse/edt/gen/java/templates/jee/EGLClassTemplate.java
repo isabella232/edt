@@ -12,7 +12,7 @@
 package org.eclipse.edt.gen.java.templates.jee;
 
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.gen.java.jee.CommonUtilities;
+import org.eclipse.edt.gen.CommonUtilities;
 import org.eclipse.edt.gen.java.jee.Constants;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
@@ -29,18 +29,18 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClas
 	}
 
 	public void preGenAnnotations(EGLClass part, Context ctx) {
-		for (Annotation annot : part.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(part, ctx)) {
 			ctx.invoke(preGen, annot.getEClass(), ctx, annot, part);
 		}
 	}
 
 	public void preGenPartAnnotation(EGLClass part, Context ctx) {
-		if (part.getAnnotation(Constants.AnnotationXMLRootElement) == null) {
+		if (org.eclipse.edt.gen.CommonUtilities.getAnnotation(part, Constants.AnnotationXMLRootElement, ctx) == null) {
 			// add an xmlRootElement
 			try {
-				Annotation annotation = CommonUtilities.getAnnotation(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
-				annotation.setValue("name", part.getId());
-				part.addAnnotation(annotation);
+				Annotation annotation = CommonUtilities.annotationNewInstance(ctx, Type.EGL_KeyScheme + Type.KeySchemeDelimiter + Constants.AnnotationXMLRootElement);
+				annotation.setValue("name", part.getName());
+				org.eclipse.edt.gen.CommonUtilities.addGeneratorAnnotation(part, annotation, ctx);
 			}
 			catch (Exception e) {}
 		}
@@ -53,7 +53,7 @@ public class EGLClassTemplate extends org.eclipse.edt.gen.java.templates.EGLClas
 	}
 
 	public void genPartAnnotations(EGLClass part, Context ctx, TabbedWriter out) {
-		for (Annotation annot : part.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(part, ctx)) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot);
 		}
 	}
