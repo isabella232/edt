@@ -447,16 +447,16 @@ public class JsonLib {
         	retVal = EList.ezeBox((List<Object>)retVal, "eglx.lang.EList<eglx.lang.EAny>");
         }
     	else if(jsonValue instanceof BooleanNode){
-    		retVal = convertToEgl(EBoolean.class, null, null, jsonValue);
+    		retVal = EBoolean.ezeBox(((BooleanNode)jsonValue).getValue());
     	}
     	else if(jsonValue instanceof DecimalNode){
-    		retVal = convertToEgl(EDecimal.class, null, null, jsonValue);
+   			retVal = EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava()));
     	}
     	else if(jsonValue instanceof FloatingPointNode){
-    		retVal = convertToEgl(EFloat.class, null, null, jsonValue);
+    		retVal = EFloat.ezeBox(EFloat.asFloat(jsonValue.toJava()));
     	}
     	else if(jsonValue instanceof IntegerNode){
-    		retVal = convertToEgl(EDecimal.class, new String[] {"32", "0"}, null, jsonValue);
+   			retVal = EDecimal.ezeBox(EDecimal.asDecimal(jsonValue.toJava()));
     	}
     	else if(jsonValue instanceof NullNode){
         	return NullType.ezeWrap(null);
@@ -465,7 +465,7 @@ public class JsonLib {
     		retVal = convertToEgl(EDictionary.class, null, null, jsonValue);
     	}
     	else if(jsonValue instanceof StringNode){
-    		retVal = convertToEgl(EString.class, null, null, jsonValue);
+   			retVal = EString.ezeBox(jsonValue.toJava());
     	}
     	if(!(retVal instanceof eglx.lang.EAny)){
     		retVal = EAny.ezeBox(retVal);
