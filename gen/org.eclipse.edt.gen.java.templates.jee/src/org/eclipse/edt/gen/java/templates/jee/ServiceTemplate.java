@@ -37,7 +37,7 @@ public class ServiceTemplate extends org.eclipse.edt.gen.java.templates.ServiceT
 	}
 	
 	public void genFieldAnnotations(Service service, Context ctx, TabbedWriter out, Field field) {
-		for (Annotation annot : field.getAnnotations()) {
+		for (Annotation annot : org.eclipse.edt.gen.CommonUtilities.getAnnotations(field, ctx)) {
 			ctx.invoke(genAnnotation, annot.getEClass(), ctx, out, annot, field);
 		}
 	}
