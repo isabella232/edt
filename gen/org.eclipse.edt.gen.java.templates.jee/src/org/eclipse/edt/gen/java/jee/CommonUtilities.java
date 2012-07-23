@@ -11,24 +11,65 @@
  *******************************************************************************/
 package org.eclipse.edt.gen.java.jee;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.edt.gen.java.Context;
-import org.eclipse.edt.mof.EObject;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.AnnotationType;
-import org.eclipse.edt.mof.egl.StereotypeType;
-import org.eclipse.edt.mof.serialization.DeserializationException;
-import org.eclipse.edt.mof.serialization.Environment;
-import org.eclipse.edt.mof.serialization.MofObjectNotFoundException;
 
 public class CommonUtilities {
+	private static CommonUtilities instance = new CommonUtilities();
 
-	public static Annotation getAnnotation(Context ctx, String key) throws MofObjectNotFoundException, DeserializationException {
-		EObject eObject = Environment.getCurrentEnv().find(key);
-		if (eObject instanceof StereotypeType && (eObject = ((StereotypeType) eObject).newInstance()) instanceof Annotation) {
-			return (Annotation) eObject;
-		} else if (eObject instanceof AnnotationType && (eObject = ((AnnotationType) eObject).newInstance()) instanceof Annotation) {
-			return (Annotation) eObject;
+	public static Annotation getLocalAnnotation(Context ctx, String key){
+		if(generationAnnotations.containsKey(key)){
+			return org.eclipse.edt.gen.CommonUtilities.newInstance(generationAnnotations.get(key).getAnnotationType(ctx));
 		}
 		return null;
+	}
+
+	
+	private static Map<String, BaseAnnotationCreator> generationAnnotations = new HashMap<String, BaseAnnotationCreator>();
+	static {
+		XmlJavaTypeAdapter xmlJavaTypeAdapter = instance.new XmlJavaTypeAdapter("eglx.xml.javax.xml.bind.annotation.adapters", "XmlJavaTypeAdapter");
+		generationAnnotations.put(xmlJavaTypeAdapter.getQualifiedName(), xmlJavaTypeAdapter);
+	}
+
+	
+	private abstract class BaseAnnotationCreator{
+		protected abstract AnnotationType getAnnotationType(Context ctx);
+	}	
+	private class XmlJavaTypeAdapter extends BaseAnnotationCreator{
+		private String pkg;
+		private String name;
+		private AnnotationType annotationType;
+		public XmlJavaTypeAdapter(String pkg, String name) {
+			this.name = name;
+			this.pkg = pkg;
+		}
+		public String getQualifiedName() {
+			return pkg + '.' + name;
+		}
+		protected AnnotationType getAnnotationType(Context ctx){
+			if(annotationType == null){
+				annotationType = ctx.getFactory().createAnnotationType();
+				annotationType.setPackageName(pkg);
+				annotationType.setName(name);
+				EField eField = MofFactory.INSTANCE.createEField(true);
+				eField.setName("value");
+				eField.setEType(MofFactory.INSTANCE.getEStringEDataType());
+				eField.setContainment(true);
+				annotationType.addMember(eField);
+		
+				eField = MofFactory.INSTANCE.createEField(true);
+				eField.setName("type");
+				eField.setEType(MofFactory.INSTANCE.getEStringEDataType());
+				eField.setContainment(true);
+				annotationType.addMember(eField);
+			}
+			return annotationType;
+		}
 	}
 }

@@ -15,6 +15,7 @@ public interface Constants {
 	// these are sub key values used as context hashmap keys
 	public static final String SubKey_fieldsProcessed4Resource = "fieldsProcessed4Resource";
 	public static final String SubKey_keepAnnotationsOnTheSameLine = "keepAnnotationsOnTheSameLine";
+	public static final String SubKey_MemberAnnotations = "SubKey_MemberAnnotations";
 
 	// these are sub key values used on annotations 
 
@@ -22,7 +23,10 @@ public interface Constants {
 	public static final String AnnotationXmlAttribute = "eglx.xml.binding.annotation.xmlAttribute";
 	public static final String AnnotationXMLRootElement = "eglx.xml.binding.annotation.XMLRootElement";
 	public static final String AnnotationXmlElement = "eglx.xml.binding.annotation.xmlElement";
+	public static final String AnnotationXMLSchemaType = "eglx.xml.binding.annotation.XMLSchemaType";
 	public static final String AnnotationJsonName = "eglx.json.JsonName";
+	public static final String AnnotationXmlJavaTypeAdapter = "eglx.xml.javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter";
+
 	public static final String PartHttpRest = "eglx.http.HttpRest";
 	public static final String PartHttpProxy = "eglx.http.HttpProxy";
 	public static final String LibrarySys = "eglx.lang.SysLib";
@@ -41,6 +45,7 @@ public interface Constants {
 	public static final String genJavaAnnotation = "genJavaAnnotation";
 	public static final String genJsonTypeDependentOptions = "genJsonTypeDependentOptions";
 	public static final String genResourceAnnotation = "genResourceAnnotation";
+	public static final String preGenAddXMLSchemaType = "preGenAddXMLSchemaType";
 	
 	// these are used by the validation step. preGen is used to preGen individual items within the part being generated.
 	// preGenPart is invoked by the generator and should not be overridden or used by extending logic
