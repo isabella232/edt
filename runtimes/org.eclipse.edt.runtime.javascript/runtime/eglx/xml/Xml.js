@@ -288,11 +288,17 @@ egl.eglx.xml.XmlLib["addNamespacesToXML"] = function(namespaces, xml) {
 	var ndx = xml.indexOf(">");
 	return xml.substring(0, ndx) + s.join('') + xml.substring(ndx);
 };
-egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
+egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglType) {
 	if (typeof (xml) != "string") {
 		throw egl.createRuntimeException("CRRUI2030E", typeof (xml));
 	}
-	eglObj = egl.unboxAny(eglObj);
+	var eglObj = eglType;
+	//FIXME this is a hack because of defect 385533
+	if(eglObj instanceof egl.eglx.lang.AnyBoxedObject){//for some reason handlers are wrapped so make it look like an any
+		eglType.eze$$signature = eglObj.eze$$value.eze$$signature;
+		eglType.eze$$value = eglObj.eze$$value.eze$$value;
+		eglObj = eglType.eze$$value;
+	}
 	this.validateXMLObject(eglObj);
 	xml = egl.trim(xml);
 	var dom = null;
@@ -334,7 +340,7 @@ egl.eglx.xml.XmlLib["convertFromXML"] = function(/*String*/xml, /*any*/eglObj) {
 		eglObj.eze$$setInitial();
 	}
 	eglObj = this.eglFromXML(dom.documentElement, eglObj);
-	return eglObj;
+	return eglType;
 };
 egl.eglx.xml.XmlLib["eglFromXML"] = function( /*node*/parentElement, /*egl rt object*/eglObj) {
 	if(eglObj !== null && typeof eglObj === "object" && "eze$$value" in eglObj && "eze$$signature" in eglObj){
@@ -442,7 +448,7 @@ egl.eglx.xml.XmlLib["dictionaryFromXML"] = function( /*node*/parentElement, /*eg
 	for (var field in fields) {
 		try{
 			var val = this.fromXML(fields[field], null);
-			egl.eglx.lang.EDictionary.set(eglObj, field, egl.boxAny(val, egl.inferSignature(val)));
+			egl.eglx.lang.EDictionary.set(eglObj, field, val === null ? { eze$$value : null, eze$$signature : "?;" } : egl.boxAny(val, egl.inferSignature(val)));
 		}catch(e){
 			throw egl.createRuntimeException("CRRUI2109E", [ field, e.toString() ]);
 		}

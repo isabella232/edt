@@ -198,6 +198,7 @@ egl.defineClass(
                             			}
 	                        			expectedResult.result = argInstances;
 	    		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+	    		                    	expectedResult.result = egl.unboxAny(expectedResult.result);
 	    		                    	if(expectedResult.result instanceof Array){
 	                            			for ( var idx = 0; idx < callbackArgs.length; idx++) {
 	                            				var paramName = callbackArgs[idx].paramName;
@@ -205,7 +206,7 @@ egl.defineClass(
 		               		                    	if(egl.unboxAny(expectedResult.result[idx]) === null){
 		               		                    		egl.eglx.services.ServiceRT.checkSignatureForNull(callbackArgs[idx].eglSignature);
 		               		                    	}
-		                            				callbackArgs[idx] = expectedResult.result[idx];
+		                            				callbackArgs[idx] = egl.unboxAny(expectedResult.result[idx]);
 	        		                			}catch(e){
 	        		                				throw egl.createRuntimeException("CRRUI2109E", [ paramName, e.toString() ]);
 	        		                			}
@@ -219,6 +220,7 @@ egl.defineClass(
                                 		//if there is only one return/out 
                                			expectedResult.result = new callbackArgs[0].eglType;
            		                    	egl.eglx.json.JsonLib.convertFromJSON( http.response.body, expectedResult, false );
+	    		                    	expectedResult.result = egl.unboxAny(expectedResult.result);
                         				var paramName = callbackArgs[0].paramName;
                         				try{
 	           		                    	if(egl.unboxAny(expectedResult.result) === null){
