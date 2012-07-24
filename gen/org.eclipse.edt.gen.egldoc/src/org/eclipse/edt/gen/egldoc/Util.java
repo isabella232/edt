@@ -8,6 +8,7 @@ import java.util.Map;
 
 import java_cup.runtime.Symbol;
 
+//import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.mof.egl.Annotation;
 import org.eclipse.edt.mof.egl.Element;
@@ -62,40 +63,49 @@ public class Util {
 		Map<String, String> commentMap = new LinkedHashMap<String, String>();
 
 		boolean foundFirstPara = false;
-		boolean foundEndOfDescription = false;
-		StringBuffer postFirstPara = new StringBuffer();
+		boolean foundPostFirstPara = false;
+		String tagName = null;
+		StringBuffer buffer = new StringBuffer();
 		for (int i = 0; i < sectionsFromCommentBlock.length; i++) {
 			String section = sectionsFromCommentBlock[i];
 			if (section.startsWith("@")) {
 				// We are no longer looking for a description
-				foundEndOfDescription = true;
-				commentMap.put("postFirstPara", postFirstPara.toString());
+				foundFirstPara = true;
+				foundPostFirstPara = true;
+				
+				if(tagName != null && buffer.length() > 0){
+					commentMap.put(tagName, /*StringEscapeUtils.escapeHtml(*/buffer.toString().trim());//);
+					buffer = new StringBuffer();
+					tagName = null;
+				}
 
 				// We may have a tag
 				if (section.length() > 1) {
-					String tagName = section.substring(1, section.indexOf(" "))
-							.trim();
+					tagName = section.substring(1, section.indexOf(" ")).trim();
 					if (tagName.length() > 1) {
 						// We have a valid tag
-						commentMap.put(
-								tagName,
-								section.substring(section.indexOf(" "),
-										section.length()).trim());
+						buffer.append( section.substring(section.indexOf(" "), section.length()).trim());
+					}else{
+						tagName = null;
 					}
 				}
 			} else if (!foundFirstPara) {
 				commentMap.put("firstPara", section);
 				foundFirstPara = true;
-			} else if (!foundEndOfDescription) {
-				if (postFirstPara.length() > 0) {
-					postFirstPara.append(System.getProperty("line.separator"));
+			} else {
+				if (!foundPostFirstPara) {
+					tagName = "postFirstPara";
+					foundPostFirstPara = true;
+				}				
+				if (buffer.length() > 0) {
+					buffer.append(System.getProperty("line.separator"));
 				}
-				postFirstPara.append(section);
+				buffer.append(section);
 			}
 		}
 		
-		if(!foundEndOfDescription && postFirstPara.length() > 0){
-			commentMap.put("postFirstPara", postFirstPara.toString());
+		if(buffer.length() > 0){
+			commentMap.put(tagName, /*StringEscapeUtils.escapeHtml(*/buffer.toString().trim()); //);
 		}
 		
 		return commentMap;
