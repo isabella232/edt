@@ -281,11 +281,9 @@ public class ServicesActionStatementValidator extends DefaultStatementValidator 
 			return false;
 		}
 		
-		if (type.getKind() == ITypeBinding.EXTERNALTYPE_BINDING) {
-			IPartBinding part =  (IPartBinding) type;
-			if (InternUtil.intern(part.getPackageQualifiedName()) == getQualAnyExceptionString()) {
-				return true;
-			}
+		IPartBinding part =  (IPartBinding) type;
+		if (InternUtil.intern(part.getPackageQualifiedName()) == getQualAnyExceptionString()) {
+			return true;
 		}
 		
 		return false;
