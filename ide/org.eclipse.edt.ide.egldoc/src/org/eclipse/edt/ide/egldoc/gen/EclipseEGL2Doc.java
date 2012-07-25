@@ -11,17 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.egldoc.gen;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.edt.compiler.ICompiler;
 import org.eclipse.edt.gen.Constants;
 import org.eclipse.edt.gen.Generator;
@@ -36,10 +29,6 @@ import org.eclipse.edt.mof.egl.utils.LoadPartException;
  */
 public class EclipseEGL2Doc extends EGL2Doc {
 
-	private static final String RESOURCE_PLUGIN_NAME = "org.eclipse.edt.gen.egldoc";
-	private static final String CSS_FOLDER_NAME = "css";
-	private static final String CSS_FILE = "commonltr.css";
-	
 	private final IFile eglFile;
 	private final Part part;
 
@@ -64,26 +53,9 @@ public class EclipseEGL2Doc extends EGL2Doc {
 			// call back to the generator, to see if it wants to do any supplementary tasks
 			generator.processFile(outputFile.getFullPath().toString());
 			
-			copyCSSFile();
-			
 		} else {
 			// super's method handles writing to an absolute file system path.
 			super.writeFile(part, generator);
-		}
-	}
-	
-	private void copyCSSFile(){
-		try{
-			URL url = FileLocator.resolve(Platform.getBundle(RESOURCE_PLUGIN_NAME).getEntry(CSS_FOLDER_NAME + "/" + CSS_FILE));
-			if(url != null){
-				// Add CSS file to the output folder
-				EclipseUtilities.writeFileInEclipse(EclipseUtilities.getOutputContainer(new EGLDocGenerator().getOutputDirectory(eglFile) + Path.SEPARATOR + CSS_FOLDER_NAME, eglFile, ""), new Path(CSS_FILE), new BufferedInputStream(url.openStream()), true); 
-			}
-		}catch (IOException e) {
-			// TODO: handle exception
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }

@@ -76,7 +76,12 @@ public class EGLDocGenerator extends AbstractGenerator {
 	@Override
 	public String getOutputDirectory(IResource resource) {
 		// For now we just write to <project>/egldoc
-		return EclipseUtilities.convertToInternalPath("egldoc"); //$NON-NLS-1$
+		return EclipseUtilities.convertToInternalPath(getRootOutputDirectory());
 	}
+	
+	public String getRootOutputDirectory(){
+		return "egldoc"; //$NON-NLS-1$
+	}
+
 }
 

@@ -11,22 +11,34 @@
  *******************************************************************************/
 package org.eclipse.edt.ide.egldoc.actions;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.edt.compiler.internal.interfaces.IGenerationMessageRequestor;
 import org.eclipse.edt.gen.EGLMessages.AccumulatingGenerationMessageRequestor;
@@ -40,8 +52,10 @@ import org.eclipse.edt.ide.core.model.IEGLFile;
 import org.eclipse.edt.ide.core.model.IEGLProject;
 import org.eclipse.edt.ide.core.model.IPackageFragmentRoot;
 import org.eclipse.edt.ide.core.model.IPart;
+import org.eclipse.edt.ide.core.utils.EclipseUtilities;
 import org.eclipse.edt.ide.egldoc.Activator;
 import org.eclipse.edt.ide.egldoc.Messages;
+import org.eclipse.edt.ide.egldoc.gen.EGLDocGenerator;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
 import org.eclipse.edt.mof.serialization.Environment;
@@ -55,8 +69,12 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
+@SuppressWarnings("deprecation")
 public class GenerateEGLDoc implements IObjectActionDelegate {
 
+	private static final String RESOURCE_PLUGIN_NAME = "org.eclipse.edt.gen.egldoc";
+	private static final String RESOURCE_FOLDER_NAME = "resources";
+	
 	private ISelection selection;
 	private static final IGenerator generator;
 	protected IWorkbenchSite site;
@@ -92,6 +110,8 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 						
 						monitor.beginTask("", size);
 						for (Map.Entry<IEGLProject, Set<PartKey>> entry : parts.entrySet()) {
+							Set<PartKey> generatedParts = new HashSet<PartKey>();
+						
 							ProjectEnvironment env = ProjectEnvironmentManager.getInstance().getProjectEnvironment(entry.getKey().getProject());
 							try {
 								Environment.pushEnv(env.getIREnvironment());
@@ -106,6 +126,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 										Part part = env.findPart(key.packageName, key.partName);
 										if (part != null && !part.hasCompileErrors()) {
 											generator.generate(key.filePath, part, env.getIREnvironment(), requestor);
+											generatedParts.add(key);
 										}
 									}
 									catch (CanceledException ce) {
@@ -118,6 +139,11 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 										monitor.worked(1);
 									}
 								}
+								
+								// Create HTML Index for the generated parts
+								generateIndex(entry.getKey().getProject(), sortPartsByPackage(generatedParts));
+								
+								writeCSSFile(entry.getKey().getProject());
 							}
 							catch (CanceledException ce) {
 								throw ce;
@@ -144,6 +170,177 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 		}
 	}
 	
+	private void generateIndex(IProject project, Map<String[], Set<PartKey>> packageLists) {
+		List<String> allParts = new ArrayList<String>();
+		Set<String[]> allPackages = new HashSet<String[]>();
+		for (Iterator<String[]> packageIterator = packageLists.keySet().iterator(); packageIterator.hasNext();) {
+			String[] packageName = (String[]) packageIterator.next();
+						
+			allPackages.add(packageName);
+			
+			List<String> partsList = new ArrayList<String>();
+			Set<PartKey> partSet = packageLists.get(packageName);
+			for (Iterator<PartKey> partIterator = partSet.iterator(); partIterator.hasNext();) {
+				PartKey partKey = (PartKey) partIterator.next();
+				allParts.add(partKey.getQualifiedName());
+				partsList.add(partKey.partName);
+			}
+			
+			writePackageFile(project, packageName, partsList);
+		}
+		
+		writeAllPartsFile(project, allParts);
+		writePackagesFiles(project, allPackages);
+		writeIndexFile(project, allParts.get(0));
+	}
+	
+	private void writeIndexFile(IProject project, String qualifiedPartName){
+		try {
+			String fileContents = loadFileContents("index.html");
+			
+			fileContents = fileContents.replace("{$ARCHIVE}", project.getName());
+			fileContents = fileContents.replace("{$PART_PATH}", "./" + qualifiedPartName.replace(".", "/"));
+			
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()), "index.html", new StringBufferInputStream(fileContents));
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void writePackagesFiles(IProject project, Set<String[]> allPackages) {
+		try {
+			String fileContents = loadFileContents("eze_packages.html");
+			StringBuffer packagesString = new StringBuffer();
+			
+			packagesString.append("<dt><A href=\"./");
+			packagesString.append("eze_allParts.html\" target=\"partList\">");
+			packagesString.append("all");
+			packagesString.append("</A><dt>");
+			packagesString.append(System.getProperty("line.separator"));
+			
+			for (Iterator<String[]> iterator = allPackages.iterator(); iterator.hasNext();) {
+				String[] packageName = (String[]) iterator.next();
+				
+				packagesString.append("<dt><A href=\"./");
+				if(packageName.length > 0){
+					packagesString.append(Util.stringArrayToPath(packageName).toOSString().toLowerCase());
+					packagesString.append("/");
+				}
+				packagesString.append("eze_packageList.html\" target=\"partList\">");
+				if(packageName.length > 0){
+					packagesString.append(Util.stringArrayToPath(packageName).toString().replace("/", ".").toLowerCase());
+				}else{
+					packagesString.append("default");
+				}
+				packagesString.append("</A><dt>");
+				packagesString.append(System.getProperty("line.separator"));
+			}
+			
+			fileContents = fileContents.replace("{$PACKAGES}", packagesString.toString());
+			
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()), "eze_packages.html", new StringBufferInputStream(fileContents));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+
+	private void writeAllPartsFile(IProject project, List<String> allParts) {
+		try {
+			String fileContents = loadFileContents("eze_allParts.html");
+			StringBuffer partsString = new StringBuffer();
+			
+			for (Iterator<String> iterator = allParts.iterator(); iterator.hasNext();) {
+				String qualifiedPartName = (String) iterator.next();
+				partsString.append("<dt><A href=\"./");
+				partsString.append(qualifiedPartName.replace(".", "/"));
+				partsString.append(".html\" target=\"part\">");
+				partsString.append(qualifiedPartName);
+				partsString.append("</A><dt>");
+				partsString.append(System.getProperty("line.separator"));
+			}
+			
+			fileContents = fileContents.replace("{$PARTS}", partsString.toString());
+			
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()), "eze_allParts.html", new StringBufferInputStream(fileContents));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void writePackageFile(IProject project, String[] packageName, List<String> partsList) {
+		try {
+			String fileContents = loadFileContents("eze_packageList.html");
+			StringBuffer partsString = new StringBuffer();
+			
+			String packageNameString;
+			if(packageName.length == 0){
+				packageNameString = "default";
+			}else{
+				packageNameString = Util.stringArrayToPath(packageName).toString().replace("/", ".").toLowerCase();
+			}
+			
+			for (Iterator<String> iterator = partsList.iterator(); iterator.hasNext();) {
+				String partName = (String) iterator.next();
+				partsString.append("<dt><A href=\"./");
+				partsString.append(partName);
+				partsString.append(".html\" target=\"part\">");
+				partsString.append(partName);
+				partsString.append("</A><dt>");
+				partsString.append(System.getProperty("line.separator"));
+			}
+			
+			fileContents = fileContents.replace("{$PACKAGE_NAME}", packageNameString);
+			fileContents = fileContents.replace("{$PARTS}", partsString.toString());
+			
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory()).getFolder(Util.stringArrayToPath(packageName).toString().toLowerCase()), "eze_packageList.html", new StringBufferInputStream(fileContents));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void writeFileContents(IContainer container, String fileName, InputStream fileContents){
+		try {
+			EclipseUtilities.writeFileInEclipse(container, new Path(fileName), new BufferedInputStream(fileContents), true);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private String loadFileContents(String fileName) throws IOException{
+		URL url = FileLocator.resolve(Platform.getBundle(RESOURCE_PLUGIN_NAME).getEntry(RESOURCE_FOLDER_NAME + File.separator + fileName));
+		if(url != null){
+			InputStream fileContents = new BufferedInputStream(url.openStream());
+			byte[] bytes = new byte[fileContents.available()];
+			
+			try{
+				fileContents.read(bytes);
+			}finally{
+				fileContents.close();
+			}
+			
+			return new String(bytes, "UTF-8");
+		}else{
+			throw new IOException();
+		}
+	}
+	
+	private void writeCSSFile(IProject project){
+		try{
+			String cssFile = loadFileContents("commonltr.css");
+			writeFileContents(project.getFolder(new EGLDocGenerator().getRootOutputDirectory() + File.separator + "css"), "commonltr.css", new StringBufferInputStream(cssFile)); 
+		}catch (IOException e) {
+			// TODO: handle exception
+		}
+	}
+
 	protected Map<IEGLProject, Set<PartKey>> gatherParts(StructuredSelection selection, IProgressMonitor monitor) throws CoreException {
 		monitor.subTask(Messages.GatheringParts);
 		Map<IEGLProject, Set<PartKey>> parts = new HashMap<IEGLProject, Set<PartKey>>();
@@ -187,6 +384,20 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.site = targetPart.getSite();
+	}
+	
+	private Map<String[], Set<PartKey>> sortPartsByPackage(Set<PartKey> generatedPartSet){
+		Map<String[], Set<PartKey>> result = new HashMap<String[], Set<PartKey>>();
+		for (Iterator<PartKey> iterator = generatedPartSet.iterator(); iterator.hasNext();) {
+			PartKey partKey = (PartKey) iterator.next();
+			Set<PartKey> partSet = result.get(partKey.packageName);
+			if(partSet == null){
+				partSet = new HashSet<PartKey>();
+				result.put(partKey.packageName, partSet);
+			}
+			partSet.add(partKey);
+		}
+		return result;
 	}
 	
 	private class ResourceVisitor implements IResourceProxyVisitor {
@@ -265,4 +476,5 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 	private class CanceledException extends RuntimeException {
 		private static final long serialVersionUID = -8448345391106191072L;
 	}
+
 }
