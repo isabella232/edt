@@ -225,12 +225,12 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 				
 				packagesString.append("<dt><A href=\"./");
 				if(packageName.length > 0){
-					packagesString.append(Util.stringArrayToPath(packageName).toOSString().toLowerCase());
+					packagesString.append(Util.stringArrayToPath(packageName).toPortableString().toLowerCase());
 					packagesString.append("/");
 				}
 				packagesString.append("eze_packageList.html\" target=\"partList\">");
 				if(packageName.length > 0){
-					packagesString.append(Util.stringArrayToPath(packageName).toString().replace("/", ".").toLowerCase());
+					packagesString.append(Util.stringArrayToPath(packageName).toPortableString().replace("/", ".").toLowerCase());
 				}else{
 					packagesString.append("default");
 				}
@@ -281,7 +281,7 @@ public class GenerateEGLDoc implements IObjectActionDelegate {
 			if(packageName.length == 0){
 				packageNameString = "default";
 			}else{
-				packageNameString = Util.stringArrayToPath(packageName).toString().replace("/", ".").toLowerCase();
+				packageNameString = Util.stringArrayToPath(packageName).toPortableString().replace("/", ".").toLowerCase();
 			}
 			
 			for (Iterator<String> iterator = partsList.iterator(); iterator.hasNext();) {
