@@ -18,7 +18,8 @@ public class FieldTemplate extends EGLDocTemplate {
 				+ field.getName() + "</span>");
 
 		// display, element, and list (if appropriate)
-		ArrayList<String> stringDetails = (ArrayList<String>) Util.getEGLSimpleType(field.getType().getTypeSignature());
+		ArrayList<String> stringDetails;
+		stringDetails = (ArrayList<String>) Util.getEGLSimpleType(field.getType().getTypeSignature());
 
 		out.println("<a href=\"" + stringDetails.get(1) + "\">");
 		out.println(stringDetails.get(0) + "</a>");
@@ -48,7 +49,7 @@ public class FieldTemplate extends EGLDocTemplate {
 		 * out.println(someField.getTypeSignature());
 		 */
 
-		/* EGL_LOCATION is always present... */
+		/* EGL_LOCATION is always present, so test for > 1 ... */
 		if (theList.size() > 1) {
 
 			out.println("<dl class=\"dl\">");
@@ -58,9 +59,9 @@ public class FieldTemplate extends EGLDocTemplate {
 			out.println("<dd class=\"dd pd\">" + "<p></p>");
 			out.println("Field annotations");
 
-			Iterator<Annotation> iterator = theList.iterator();
+			Iterator<Annotation> iterator = theList.iterator();		
+			
 			String annotationName;
-			String annotationValue;
 
 			while (iterator.hasNext()) {
 
@@ -74,18 +75,21 @@ public class FieldTemplate extends EGLDocTemplate {
 				 * metadata -> [] len -> 41 off -> 182 line -> 18
 				 */
 
-				annotationName = iterator.next().getEClass().getETypeSignature();
+				
+				ctx.invoke(genAnnotation, iterator.next(), ctx, out); 
+				// annotationName = iterator.next().getEClass().getETypeSignature();
 
 				// gives display value, element type, and list type (if
 				// appropriate); but assume no list
-				stringDetails = (ArrayList<String>) Util.getEGLSimpleType(annotationName);
-				if (stringDetails.get(0).equals("EGL_Location")) {
+				// stringDetails = (ArrayList<String>) Util.getEGLSimpleType(annotationName);
+				/*
+				 *  if (stringDetails.get(0).equals("EGL_Location")) {				 
 					continue;
 				}
-
+				
 				out.println("<a href=\"" + stringDetails.get(1) + "\">");
 				out.println(stringDetails.get(0) + "</a>");
-
+*/
 				// "eglx.lang.ExternalName EGL_Location":
 				// out.println(iterator.next().getEClass().getETypeSignature());
 				// annotationName =
