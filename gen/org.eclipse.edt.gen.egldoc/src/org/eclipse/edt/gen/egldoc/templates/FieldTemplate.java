@@ -35,20 +35,6 @@ public class FieldTemplate extends EGLDocTemplate {
 		// get field annotations such as ExternalName
 		List<Annotation> theList = field.getAnnotations();
 
-		/*
-		 * from brian; but maybe the intent was to pass processing to
-		 * AnnotationType List fields = annotation.getEClass().getEFields();
-		 * for(Iterator fieldsIterator : fields.iterator() ){
-		 * annotation.eGet(filedsIterator.next()); }
-		 */
-		/*
-		 * guessed this... List<EField> fields = field.getEClass().getEFields();
-		 * Iterator<EField> theIterator = fields.iterator(); while
-		 * (theIterator.hasNext()) { ... and the next line blows up ... EField
-		 * someField = (EField)field.eGet(theIterator.next());
-		 * out.println(someField.getTypeSignature());
-		 */
-
 		/* EGL_LOCATION is always present, so test for > 1 ... */
 		if (theList.size() > 1) {
 
@@ -61,8 +47,6 @@ public class FieldTemplate extends EGLDocTemplate {
 
 			Iterator<Annotation> iterator = theList.iterator();		
 			
-			String annotationName;
-
 			while (iterator.hasNext()) {
 
 				// out.println(iterator.next().toString()); gives this:
@@ -77,44 +61,14 @@ public class FieldTemplate extends EGLDocTemplate {
 
 				
 				ctx.invoke(genAnnotation, iterator.next(), ctx, out); 
-				// annotationName = iterator.next().getEClass().getETypeSignature();
-
-				// gives display value, element type, and list type (if
-				// appropriate); but assume no list
-				// stringDetails = (ArrayList<String>) Util.getEGLSimpleType(annotationName);
-				/*
-				 *  if (stringDetails.get(0).equals("EGL_Location")) {				 
-					continue;
 				}
-				
-				out.println("<a href=\"" + stringDetails.get(1) + "\">");
-				out.println(stringDetails.get(0) + "</a>");
-*/
-				// "eglx.lang.ExternalName EGL_Location":
-				// out.println(iterator.next().getEClass().getETypeSignature());
-				// annotationName =
-				// iterator.next().getEClass().getETypeSignature();
-
-				// display, element, and list (if appropriate); but assume no
-				// list
-				// stringDetails = (ArrayList<String>)
-				// Util.getEGLSimpleType(annotationName);
-				// out.println("<a href=\"" + stringDetails.get(1) + "\">");
-				// out.println(stringDetails.get(0) + "</a>");
-
-				// "hello 41":
-				// out.println(iterator.next().getValue().toString());
-
-			}
 
 			out.println("</dd></dl>");
 
 		}
-
-		// out.println("</dd></dl>");
 		out.println("</dd>");
-
 	}
+}
 
 	/*
 	 * String typeDocLocation = field.getType().getTypeSignature(); String
@@ -138,5 +92,3 @@ public class FieldTemplate extends EGLDocTemplate {
 	// out.println((String)blockCommentMap.get(key));
 	// }
 	// }
-
-}
