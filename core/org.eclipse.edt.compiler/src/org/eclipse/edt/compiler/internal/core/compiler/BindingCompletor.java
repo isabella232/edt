@@ -14,6 +14,7 @@ package org.eclipse.edt.compiler.internal.core.compiler;
 import org.eclipse.edt.compiler.binding.DataItemBindingCompletor;
 import org.eclipse.edt.compiler.binding.DataTableBindingCompletor;
 import org.eclipse.edt.compiler.binding.DelegateBindingCompletor;
+import org.eclipse.edt.compiler.binding.EGLClassBindingCompletor;
 import org.eclipse.edt.compiler.binding.EnumerationBindingCompletor;
 import org.eclipse.edt.compiler.binding.ExternalTypeBindingCompletor;
 import org.eclipse.edt.compiler.binding.FileBinding;
@@ -75,6 +76,9 @@ public class BindingCompletor {
 				break;
 			case ITypeBinding.HANDLER_BINDING:
 				astNode.accept(new HandlerBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				break;
+			case ITypeBinding.CLASS_BINDING:
+				astNode.accept(new EGLClassBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;
 			case ITypeBinding.INTERFACE_BINDING:
 				astNode.accept(new InterfaceBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));

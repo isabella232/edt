@@ -226,6 +226,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"byposition"		{ return symbol(NodeTypes.BYPOSITION); }
 	"call"				{ return symbol(NodeTypes.CALL); }
 	"case"				{ return symbol(NodeTypes.CASE); }
+	"class"			 	{ return symbol(NodeTypes.CLASS); }
 	"close"			 	{ return symbol(NodeTypes.CLOSE); }
 	"const"			 	{ return symbol(NodeTypes.CONST); }
 	"constructor"		{ return symbol(NodeTypes.CONSTRUCTOR); }
@@ -381,7 +382,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"@"					{ return symbol(NodeTypes.AT); }
 	"?"					{ return symbol(NodeTypes.QUESTION); }
 	"~"					{ return symbol(NodeTypes.NEGATE); }
-
+	
 	// Keywords reserved for future
 	"as"				{ return symbol(NodeTypes.AS); }
 	"dlicall"			{ return symbol(NodeTypes.DLICALL); }       //future

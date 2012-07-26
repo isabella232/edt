@@ -217,7 +217,37 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		stack.push(part);
 		return false;
 	}
-	
+
+	@Override
+	public boolean visit(org.eclipse.edt.compiler.core.ast.EGLClass eglClass) {
+		EGLClass part = (EGLClass)defaultHandleVisitPart(eglClass);
+		
+		if (eglClass.getExtends() != null) {
+			ITypeBinding tb = (ITypeBinding)eglClass.getExtends().resolveBinding();
+			if (Binding.isValidBinding(tb) && tb.getKind() == ITypeBinding.CLASS_BINDING) {
+				EObject obj = mofTypeFor(tb);
+				if (obj instanceof StructPart) {
+					//remove the default supertype
+					((EGLClass)part).getSuperTypes().clear();
+					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+				}
+			}
+		}
+		
+		for (Node node : (List<Node>)eglClass.getImplementedInterfaces()) {
+			ITypeBinding tb = (ITypeBinding)((org.eclipse.edt.compiler.core.ast.Name)node).resolveBinding();
+			if (Binding.isValidBinding(tb) && tb.getKind() == ITypeBinding.INTERFACE_BINDING) {
+				EObject obj = mofTypeFor(tb);
+				if (obj instanceof StructPart) {
+					((EGLClass)part).getSuperTypes().add((StructPart)obj);
+				}
+			}
+		}
+		
+		stack.push(part);
+		return false;
+	}
+
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.Library node) {
 		MofSerializable part = defaultHandleVisitPart(node);
@@ -233,6 +263,9 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		part.setBaseType((Type)mofTypeFor(type.getPrimitiveTypeBinding()));
 		part.setPackageName(concatWithSeparator(type.getPackageName(), ".").toUpperCase().toLowerCase());
 		createAnnotations(type, part);
+		if (dataItem.isPrivate()) {
+			part.setAccessKind(AccessKind.ACC_PRIVATE);
+		}
 		stack.push(part);
 		return false;
 	}
@@ -267,6 +300,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		}
 		setElementInformation(delegate, part);
 		partProcessingStack.pop();
+		
+		if (delegate.isPrivate()) {
+			part.setAccessKind(AccessKind.ACC_PRIVATE);
+		}
 		stack.push(part);
 		return false;
 	}
@@ -277,6 +314,9 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		group.setName(formGroup.getName().getCaseSensitiveIdentifier());
 		FormGroupBinding groupBinding = (FormGroupBinding)formGroup.getName().resolveBinding();
 		group.setPackageName(concatWithSeparator(groupBinding.getPackageName(), ".").toUpperCase().toLowerCase());
+		if (formGroup.isPrivate()) {
+			group.setAccessKind(AccessKind.ACC_PRIVATE);
+		}
 		stack.push(group);
 		for (Node node : (List<Node>)formGroup.getContents()) {
 			//TODO handle USE statment for top level forms
@@ -298,6 +338,10 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		Form part = factory.createForm();
 		part.setName(nestedForm.getName().getCaseSensitiveIdentifier());
 		FormBinding binding = (FormBinding)nestedForm.getName().resolveBinding();
+		
+		if (nestedForm.isPrivate()) {
+			part.setAccessKind(AccessKind.ACC_PRIVATE);
+		}
 		stack.push(part);
 		for (Node field : (List<Node>)nestedForm.getContents()) {
 			field.accept(this);
@@ -343,6 +387,9 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		setElementInformation(node, function);
 		part.setFunction(function);
 		function.setName(part.getName());
+		if (node.isPrivate()) {
+			part.setAccessKind(AccessKind.ACC_PRIVATE);
+		}
 		for (Node parm : (List<Node>)node.getFunctionParameters()) {
 			parm.accept(this);
 			function.addMember((FunctionParameter)stack.pop());
@@ -492,8 +539,17 @@ abstract class Egl2MofPart extends Egl2MofBase {
 		if (mofPart instanceof EClass) {
 			createAnnotations(partBinding, (EClass)mofPart);
 			setElementInformation(astPart,  (EClass)mofPart);
+			if (mofPart instanceof AnnotationType) {
+				if (astPart.isPrivate()) {
+					((AnnotationType)mofPart).setAccessKind(AccessKind.ACC_PRIVATE);
+				}
+			}		
 		}
 		else if (mofPart instanceof Part) {
+			if (astPart.isPrivate()) {
+				((Part)mofPart).setAccessKind(AccessKind.ACC_PRIVATE);
+			}
+			
 			createAnnotations(partBinding, (Part)mofPart);
 			if (mofPart instanceof StructPart)
 				setDefaultSuperType((StructPart)mofPart);

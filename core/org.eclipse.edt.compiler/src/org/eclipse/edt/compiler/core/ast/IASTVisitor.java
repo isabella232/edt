@@ -109,6 +109,9 @@ public interface IASTVisitor {
 	boolean visit(DisplayStatement displayStatement);
 	void endVisit(DisplayStatement displayStatement);
 	
+	boolean visit(EGLClass eglClass);
+	void endVisit(EGLClass eglClass);
+	
 	boolean visit(ElseBlock elseBlock);
 	void endVisit(ElseBlock elseBlock);
 	

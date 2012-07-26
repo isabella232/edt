@@ -12,13 +12,14 @@
 package org.eclipse.edt.compiler.binding;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.core.ast.FunctionParameter;
-import org.eclipse.edt.compiler.core.ast.Handler;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.internal.core.builder.IMarker;
@@ -29,42 +30,49 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
-import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.AccessKind;
-import org.eclipse.edt.mof.egl.IrFactory;
-import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
-import org.eclipse.edt.mof.egl.utils.TypeUtils;
-import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
  * @author winghong
  */
-public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
+public class EGLClassBindingCompletor extends FunctionContainerBindingCompletor {
 
-    private org.eclipse.edt.mof.egl.Handler handlerBinding;
+    private org.eclipse.edt.mof.egl.EGLClass classBinding;
 
-    public HandlerBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+    public EGLClassBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
-        this.handlerBinding = (org.eclipse.edt.mof.egl.Handler)irBinding.getIrPart();
+        this.classBinding = (org.eclipse.edt.mof.egl.EGLClass)irBinding.getIrPart();
     }
         
-    public boolean visit(Handler handler) {
-    	handler.getName().setType(handlerBinding);
-        handler.accept(getPartSubTypeAndAnnotationCollector());
+    public boolean visit(EGLClass eglClass) {
+    	eglClass.getName().setType(classBinding);
+        eglClass.accept(getPartSubTypeAndAnnotationCollector());
     	
-    	if (handler.isPrivate()) {
-    		handlerBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	if (eglClass.isPrivate()) {
+    		classBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
+    	
+    	if (eglClass.getExtends() != null) {
+    		try {
+    			org.eclipse.edt.mof.egl.Type typeBinding = bindTypeName(eglClass.getExtends());
+    			if (typeBinding instanceof StructPart) {
+    				classBinding.getSuperTypes().add((StructPart)typeBinding);
+    			}
+   		}
+    		catch (ResolutionException e) {
+    			problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+    		}
     	}
     					
-        for(Name nextName : handler.getImplementedInterfaces()) {
+        for(Name nextName : eglClass.getImplementedInterfaces()) {
     		try {
     			org.eclipse.edt.mof.egl.Type typeBinding = bindTypeName(nextName);
     			
     			if (typeBinding instanceof StructPart) {
-    				handlerBinding.getSuperTypes().add((StructPart)typeBinding);
+    				classBinding.getSuperTypes().add((StructPart)typeBinding);
     			}
     		}
     		catch (ResolutionException e) {
@@ -75,17 +83,13 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
         return true;
     }
     
-    public void endVisit(Handler handler) {
+    public void endVisit(EGLClass eglClass) {
         processSettingsBlocks();
-        endVisitFunctionContainer(handler);
+        endVisitFunctionContainer(eglClass);
     }
     
     protected StereotypeType getDefaultStereotypeType() {
-    	try {
-    		return (StereotypeType)BindingUtil.getAnnotationType(NameUtile.getAsName("eglx.lang"), NameUtile.getAsName("BasicHandler"));
-    	}
-    	catch(ClassCastException e) {
-    		return null;
-    	}
+    	return null;
     }
+
 }

@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.edt.compiler.core.IEGLConstants;
+import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Constructor;
+import org.eclipse.edt.compiler.core.ast.FunctionParameter;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Part;
@@ -30,6 +33,7 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.FunctionContainerScope;
+import org.eclipse.edt.compiler.internal.core.lookup.FunctionScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.ResolutionException;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
@@ -41,11 +45,13 @@ import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.LogicAndDataPart;
+import org.eclipse.edt.mof.egl.ParameterKind;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
+import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
 
 /**
@@ -292,5 +298,73 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     protected boolean membersPrivateByDefault() {
     	return false;
     }
+    
+    public boolean visit(Constructor constructor) {
+    	final org.eclipse.edt.mof.egl.Constructor constructorBinding = IrFactory.INSTANCE.createConstructor();
+    	final Set<String> definedParameters = new HashSet<String>();
+    	
+    	constructor.setBinding(constructorBinding);
+    	
+    	if (constructor.isPrivate()) {
+    		constructorBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+    	}
+    	
+    	constructor.accept(new AbstractASTVisitor() {
+    		public boolean visit(FunctionParameter functionParameter) {
+    			String parmName = functionParameter.getName().getIdentifier();
+    	        org.eclipse.edt.compiler.core.ast.Type parmType = functionParameter.getType();        
+    	        org.eclipse.edt.mof.egl.Type typeBinding = null;
+    	        try {
+    	            typeBinding = bindType(parmType);
+    	        } catch (ResolutionException e) {
+    	            problemRequestor.acceptProblem(e.getStartOffset(), e.getEndOffset(), IMarker.SEVERITY_ERROR, e.getProblemKind(), e.getInserts());
+    	            return false;
+    	        }
+    	        
+    	        org.eclipse.edt.mof.egl.FunctionParameter funcParmBinding = IrFactory.INSTANCE.createFunctionParameter();
+    	        funcParmBinding.setName(functionParameter.getName().getCaseSensitiveIdentifier());
+    	        functionParameter.getName().setMember(funcParmBinding);
+    	        funcParmBinding.setType(typeBinding);
+    	        funcParmBinding.setIsNullable(functionParameter.isNullable());   	        
+    	        
+    	        funcParmBinding.setIsConst(functionParameter.isParmConst());
+    	        
+    	        FunctionParameter.UseType useType = functionParameter.getUseType();
+    	        if (useType == FunctionParameter.UseType.IN) {
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
+    	        } else if (useType == FunctionParameter.UseType.OUT) {
+    	            funcParmBinding.setParameterKind(ParameterKind.PARM_OUT);
+    	        } else if (useType == null && typeBinding != null && TypeUtils.isReferenceType(typeBinding)) {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_IN);
+    	        }
+    	        else {
+    	        	funcParmBinding.setParameterKind(ParameterKind.PARM_INOUT);
+    	        }
+ 
+    	        if (definedParameters.contains(parmName)) {
+    	            problemRequestor.acceptProblem(functionParameter, IProblemRequestor.DUPLICATE_NAME_ACROSS_LISTS, new String[] { functionParameter.getName().getCanonicalName(), IEGLConstants.KEYWORD_CONSTRUCTOR });
+    	        } else {
+    	            constructorBinding.addParameter(funcParmBinding);
+    	            definedParameters.add(parmName);
+    	        }
+    	        
+    	        return false;
+    		}
+    	});
+    	
+    	((StructPart)functionContainerBinding).getConstructors().add(constructorBinding);
+    	
+    	if (constructor.hasSettingsBlock()) {
+            FunctionScope functionScope = new FunctionScope(currentScope, constructorBinding);
+            AnnotationLeftHandScope scope = new AnnotationLeftHandScope(functionScope, constructorBinding, null, constructorBinding);
+            SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(functionScope, functionContainerBinding, scope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.getSettingsBlock().accept(blockCompletor);
+    		
+    	}
+    	
+    	return false;
+    }
+
     
 }

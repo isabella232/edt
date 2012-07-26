@@ -12,6 +12,7 @@
 package org.eclipse.edt.compiler.internal.core.lookup;
 
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
+import org.eclipse.edt.compiler.core.ast.Constructor;
 import org.eclipse.edt.compiler.core.ast.DefaultASTVisitor;
 import org.eclipse.edt.compiler.core.ast.Name;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
@@ -90,4 +91,15 @@ public abstract class FunctionContainerBinder extends DefaultBinder {
         }
         return false;
     }    
+    
+    public boolean visit(Constructor constructor) {    	
+    	org.eclipse.edt.mof.egl.Constructor constructorBinding = constructor.getBinding();
+        if (constructorBinding != null) {
+            FunctionBinder functionBinder = new FunctionBinder(functionContainerBinding, constructorBinding, currentScope,
+                    dependencyRequestor, problemRequestor, compilerOptions);
+            constructor.accept(functionBinder);
+        }
+        return false;
+    }
+
 }

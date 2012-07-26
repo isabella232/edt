@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.HandlerBindingCompletor;
+import org.eclipse.edt.compiler.binding.EGLClassBindingCompletor;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.Constructor;
-import org.eclipse.edt.compiler.core.ast.Handler;
+import org.eclipse.edt.compiler.core.ast.EGLClass;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 
@@ -23,38 +23,34 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
  * @author winghong
  */
 
-public class HandlerBinder extends FunctionContainerBinder {
+public class EGLClassBinder extends FunctionContainerBinder {
 
-    private org.eclipse.edt.mof.egl.Handler handlerBinding;
+    private org.eclipse.edt.mof.egl.EGLClass classBinding;
     private IRPartBinding irBinding;
     private Scope fileScope;
 
-    public HandlerBinder(IRPartBinding irBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+    public EGLClassBinder(IRPartBinding irBinding, Scope fileScope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(irBinding.getIrPart(), fileScope, dependencyRequestor, problemRequestor, compilerOptions);
         this.irBinding =irBinding;
-        this.handlerBinding = (org.eclipse.edt.mof.egl.Handler)irBinding.getIrPart();
+        this.classBinding = (org.eclipse.edt.mof.egl.EGLClass)irBinding.getIrPart();
         this.fileScope = fileScope;
     }
 
-    public boolean visit(Handler handler) {
-        // First we have to complete the handler binding (as a side effect some of the AST nodes are bound)
-        handler.accept(new HandlerBindingCompletor(fileScope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    public boolean visit(EGLClass eglClass) {
+        // First we have to complete the class binding (as a side effect some of the AST nodes are bound)
+        eglClass.accept(new EGLClassBindingCompletor(fileScope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
 
-        // The current scope only changes once the initial handler binding is complete
-        currentScope = new HandlerScope(currentScope, handlerBinding);
+        // The current scope only changes once the initial class binding is complete
+        currentScope = new FunctionContainerScope(currentScope, classBinding);
         
-        preprocessPart(handler);
+        preprocessPart(eglClass);
 
-        // We will bind the rest of the handler now
+        // We will bind the rest of the class now
         return true;
     }
     
-	public void endVisit(Handler handler) {
+	public void endVisit(EGLClass classs) {
 		doneVisitingPart();
 	}
-	
-	protected void doneVisitingPart() {
-		super.doneVisitingPart();
-    }
-	
+		
 }

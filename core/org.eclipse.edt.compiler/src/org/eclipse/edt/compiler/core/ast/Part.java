@@ -215,6 +215,7 @@ public abstract class Part extends Node {
 	public static final int DELEGATE = 12;
 	public static final int EXTERNALTYPE = 13;
 	public static final int ENUMERATION = 14;
+	public static final int CLASS = 15;
 
     protected boolean isPrivate;
 	protected SimpleName name;

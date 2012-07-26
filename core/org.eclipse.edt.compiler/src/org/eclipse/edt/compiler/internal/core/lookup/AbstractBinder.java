@@ -44,6 +44,10 @@ import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
+import org.eclipse.edt.mof.EClass;
+import org.eclipse.edt.mof.EDataType;
+import org.eclipse.edt.mof.EField;
+import org.eclipse.edt.mof.MofFactory;
 import org.eclipse.edt.mof.egl.BooleanLiteral;
 import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.ConstantField;
@@ -51,6 +55,8 @@ import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.IrFactory;
 import org.eclipse.edt.mof.egl.Member;
+import org.eclipse.edt.mof.egl.ParameterizableType;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PrimitiveTypeLiteral;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
@@ -85,6 +91,10 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     }
 
     public org.eclipse.edt.mof.egl.Type bindType(Type type) throws ResolutionException {
+    	return bindType(type, false);
+    }
+
+    public org.eclipse.edt.mof.egl.Type bindType(Type type, boolean bindingNewExpr) throws ResolutionException {
         switch(type.getKind()) {
             case Type.ARRAYTYPE:
                 ArrayType arrayType = (ArrayType) type;
@@ -95,11 +105,107 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
 
             case Type.NAMETYPE:
                 NameType nameType = (NameType) type;
-                //TODO handle parameterized types
-                return bindTypeName(nameType.getName());   // No need to set on type as it is delegated
+                org.eclipse.edt.mof.egl.Type result =  bindTypeName(nameType.getName());   // No need to set on type as it is delegated
+                if (result != null && nameType.getArguments() != null && nameType.getArguments().size() > 0) {
+                	org.eclipse.edt.mof.egl.Type parmType = getParameterizedType(nameType, bindingNewExpr);
+                	if (parmType != result) {
+                		result = parmType;
+                		nameType.getName().setType(result);
+                	}
+                }
+                return result;
                 
             default: throw new RuntimeException("Shouldn't come into here");            
         }
+    }
+    
+    private org.eclipse.edt.mof.egl.Type getParameterizedType(NameType nameType, boolean bindingNewExpr) throws ResolutionException {
+    	org.eclipse.edt.mof.egl.Type baseType = nameType.resolveType();
+    	
+    	if (!BindingUtil.isParameterizableType(baseType)) {    		
+    		if (bindingNewExpr) {
+    			return baseType;
+    		}
+    		else {
+            	throw new ResolutionException(nameType.getName().getOffset(), nameType.getName().getOffset() + nameType.getName().getLength(), IProblemRequestor.TYPE_IS_NOT_PARAMETERIZABLE, new String[] {nameType.getName().getCanonicalName()});
+    		}
+    	}
+    	
+    	ParameterizableType parmableType = (ParameterizableType) baseType;
+   	
+    	
+		EClass parameterizedTypeClass = parmableType.getParameterizedType();
+		if (parameterizedTypeClass != null) {
+			ParameterizedType type = (ParameterizedType)parameterizedTypeClass.newInstance();
+			List<String> args = getTypeArguments(nameType);
+			if (args.size() > type.getMaxNumberOfParms() || args.size() < type.getMinNumberOfParms()) {
+            	throw new ResolutionException(nameType.getOffset(), nameType.getOffset() + nameType.getLength(), IProblemRequestor.TYPE_ARGS_INVALID_SIZE, new String[] {nameType.getName().getCanonicalName()});
+			}			
+			type.setParameterizableType(parmableType);
+			
+			int argIndex = 0;
+			for (String arg : args) {
+				int fieldIndex = parameterizedTypeClass.getAllEFields().size() - type.getMaxNumberOfParms() + argIndex;
+				try {
+					EField field = parameterizedTypeClass.getAllEFields().get(fieldIndex);
+					Object converted = MofFactory.INSTANCE.createFromString((EDataType)field.getEType(), arg);
+					type.eSet(field, converted);
+				} catch (Exception e) {
+					Expression expr = nameType.getArguments().get(argIndex);
+	            	throw new ResolutionException(expr.getOffset(), expr.getOffset() + expr.getLength(), IProblemRequestor.TYPE_ARG_NOT_VALID, new String[] {expr.getCanonicalString(), nameType.getName().getCanonicalName()});
+				}
+				argIndex = argIndex + 1;
+			}	
+			return type;
+		}
+
+    	return baseType; 
+    }
+    
+    private List<String> getTypeArguments(NameType nameType) throws ResolutionException {
+    	List<Expression> args = nameType.getArguments();
+    	List<String> list = new ArrayList<String>();
+    	for (Expression expr : args) {
+    		final boolean[] isValid = new boolean[1];
+    		final String[] value = new String[1];
+    		expr.accept(new DefaultASTVisitor() {
+    			public boolean visit(IntegerLiteral integerLiteral) {
+    				isValid[0] = true;
+    				value [0] = integerLiteral.getValue();
+    				return false;
+    			}
+    			public boolean visit(StringLiteral stringLiteral) {
+    				isValid[0] = true;
+    				value [0] = stringLiteral.getValue();
+    				return false;
+    			}
+    			
+    			public boolean visit(org.eclipse.edt.compiler.core.ast.BooleanLiteral booleanLiteral) {
+    				isValid[0] = true;
+    				value [0] = booleanLiteral.getValue();
+    				return false;
+    			}
+    			
+    			public boolean visit(DecimalLiteral decimalLiteral) {
+    				isValid[0] = true;
+    				value [0] = decimalLiteral.getValue();
+    				return false;
+    			}
+    			
+    			public boolean visit(FloatLiteral floatLiteral) {
+    				isValid[0] = true;
+    				value [0] = floatLiteral.getValue();
+    				return false;
+    			}
+			});
+    		
+    		if (!isValid[0]) {
+            	throw new ResolutionException(expr.getOffset(), expr.getOffset() + expr.getLength(), IProblemRequestor.TYPE_ARG_NOT_VALID, new String[] {expr.getCanonicalString(), nameType.getName().getCanonicalName()});
+    		}
+    		list.add(value[0]);
+    	}
+    	
+    	return list;
     }
     
     public org.eclipse.edt.mof.egl.Type bindTypeName(Name name) throws ResolutionException {

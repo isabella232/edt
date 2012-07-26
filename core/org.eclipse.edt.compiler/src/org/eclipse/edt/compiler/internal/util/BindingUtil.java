@@ -23,6 +23,7 @@ import org.eclipse.edt.mof.egl.Container;
 import org.eclipse.edt.mof.egl.DataItem;
 import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.Delegate;
+import org.eclipse.edt.mof.egl.EGLClass;
 import org.eclipse.edt.mof.egl.Element;
 import org.eclipse.edt.mof.egl.ElementKind;
 import org.eclipse.edt.mof.egl.Enumeration;
@@ -205,6 +206,9 @@ public class BindingUtil {
 		if (part instanceof Enumeration) {
 			return ITypeBinding.ENUMERATION_BINDING;
 		}
+		if (part instanceof EGLClass) {
+			return ITypeBinding.CLASS_BINDING;
+		}
 		
 		return -1;
 	}
@@ -259,6 +263,9 @@ public class BindingUtil {
         case ITypeBinding.ENUMERATION_BINDING:
         	part = createEnumeration(pkgName, name);
         	return createPartBinding(part);
+        case ITypeBinding.CLASS_BINDING:
+        	part = createEGLClass(pkgName, name);
+        	return createPartBinding(part);
         
         default:
             throw new RuntimeException("Unsupported kind: " + type);
@@ -300,6 +307,13 @@ public class BindingUtil {
 		return ser;		
 	}
 
+	private static EGLClass createEGLClass(String pkgName, String name) {
+		EGLClass eglClass = IrFactory.INSTANCE.createEGLClass();
+		eglClass.setName(name);
+		eglClass.setPackageName(pkgName);
+		return eglClass;		
+	}
+	
 	private static Enumeration createEnumeration(String pkgName, String name) {
 		Enumeration enm = IrFactory.INSTANCE.createEnumeration();
 		enm.setName(name);

@@ -351,6 +351,9 @@ public interface IProblemRequestor {
 	public static final int BIGINT_LITERAL_OUT_OF_RANGE = 3278;
 	public static final int SMALLINT_LITERAL_OUT_OF_RANGE = 3279;
 	public static final int SMALLFLOAT_LITERAL_OUT_OF_RANGE = 3280;
+	public static final int TYPE_IS_NOT_PARAMETERIZABLE = 3281;
+	public static final int TYPE_ARG_NOT_VALID = 3282;
+	public static final int TYPE_ARGS_INVALID_SIZE = 3283;
 	
 	public static final int PUBLISHHELPER_FUNCTION_INVALID = 3320;	
 	public static final int RETRIEVEVEVIEWHELPER_FUNCTION_INVALID = 3321;	

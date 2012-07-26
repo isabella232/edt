@@ -1331,6 +1331,7 @@ abstract class Egl2MofBase extends AbstractASTVisitor implements MofConversion {
 			case ITypeBinding.FORMGROUP_BINDING: typeSignature = Type_FormGroup; break;
 			case ITypeBinding.FUNCTION_BINDING: typeSignature = Type_FunctionPart; break;
 			case ITypeBinding.HANDLER_BINDING: typeSignature = Type_Handler; break;
+			case ITypeBinding.CLASS_BINDING: typeSignature = Type_EGLClass; break;
 			case ITypeBinding.INTERFACE_BINDING: typeSignature = Type_Interface; break;
 			case ITypeBinding.LIBRARY_BINDING: typeSignature = Type_Library; break;
 			case ITypeBinding.PROGRAM_BINDING: typeSignature = Type_Program; break;

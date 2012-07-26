@@ -95,6 +95,7 @@ import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.Stereotype;
 import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
+import org.eclipse.edt.mof.egl.SubType;
 import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
 
@@ -171,6 +172,15 @@ public abstract class DefaultBinder extends AbstractBinder {
 		Scope scopeForThis = currentScope.getScopeForKeywordThis();
 		if(scopeForThis instanceof FunctionContainerScope) {
 			Part part = ((FunctionContainerScope) scopeForThis).getPart();
+			
+			if (part instanceof SubType) {
+				SubType sub = (SubType) part;
+				if (sub.getSuperTypes().size() > 0) {
+					superExpression.setType(sub.getSuperTypes().get(0));
+					return false;
+				}
+			}
+			
 			//TODO stereotype's default super type is not being added to the list of super types. change this when it is.
 			Stereotype subtype = part.getSubType();
 			if (subtype != null) {
@@ -431,7 +441,7 @@ public abstract class DefaultBinder extends AbstractBinder {
 	public boolean visit(NewExpression newExpression) {
 		try {
 		    if (!newExpression.isBindAttempted()) {
-		        newExpression.setType(bindType(newExpression.getType()));	
+		        newExpression.setType(bindType(newExpression.getType(), true));	
 		    }
 		}
 		catch(ResolutionException e) {
