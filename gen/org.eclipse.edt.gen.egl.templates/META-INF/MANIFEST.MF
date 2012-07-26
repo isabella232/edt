@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: org.eclipse.edt.gen.egl.templates
 Bundle-Version: 0.8.1.qualifier
-Require-Bundle: org.eclipse.edt.gen;bundle-version="0.8.1",
+Require-Bundle: org.eclipse.edt.gen;bundle-version="0.8.2",
  org.eclipse.edt.mof;bundle-version="0.8.1",
- org.eclipse.edt.compiler;bundle-version="0.8.1",
+ org.eclipse.edt.compiler;bundle-version="0.8.2",
  org.eclipse.edt.gen.egl;bundle-version="0.8.1",
- org.eclipse.edt.mof.egl;bundle-version="0.8.1"
+ org.eclipse.edt.mof.egl;bundle-version="0.8.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.edt.gen.egl.templates,
