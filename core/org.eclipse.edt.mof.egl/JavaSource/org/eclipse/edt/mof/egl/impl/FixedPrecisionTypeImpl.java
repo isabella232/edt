@@ -65,4 +65,9 @@ public class FixedPrecisionTypeImpl extends ParameterizedTypeImpl implements Fix
 			return super.typeArgsSignature();
 	}
 
+	@Override
+	public int getMaxNumberOfParms() {
+		return 2;
+	}
+
 }
