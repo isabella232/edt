@@ -5,13 +5,13 @@ Bundle-SymbolicName: org.eclipse.edt.gen.javascript.templates.eglx.services
 Bundle-Version: 0.8.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %providerName
-Require-Bundle: org.eclipse.edt.gen.javascript.templates;bundle-version="0.8.1",
+Require-Bundle: org.eclipse.edt.gen.javascript.templates;bundle-version="0.8.2",
  org.eclipse.edt.mof;bundle-version="0.8.1",
- org.eclipse.edt.mof.egl;bundle-version="0.8.1",
+ org.eclipse.edt.mof.egl;bundle-version="0.8.2",
  org.eclipse.edt.mof.eglx.services;bundle-version="0.8.1",
- org.eclipse.edt.gen.javascript;bundle-version="0.8.1",
- org.eclipse.edt.compiler;bundle-version="0.8.1",
- org.eclipse.edt.gen;bundle-version="0.8.1"
+ org.eclipse.edt.gen.javascript;bundle-version="0.8.2",
+ org.eclipse.edt.compiler;bundle-version="0.8.2",
+ org.eclipse.edt.gen;bundle-version="0.8.2"
 Export-Package: org.eclipse.edt.gen.javascript.templates.eglx.services,
  org.eclipse.edt.gen.javascript.templates.eglx.services.annotations
 Bundle-Localization: plugin
