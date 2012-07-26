@@ -42,7 +42,7 @@ terminal LINE_COMMENT, BLOCK_COMMENT, LINEBREAKS;
 // Regular terminals
 terminal PACKAGE, IMPORT;
 terminal END;
-terminal DATAITEM, RECORD, DATATABLE, FORMGROUP, FORM, HANDLER, CLASS;
+terminal DATAITEM, RECORD, DATATABLE, FORMGROUP, FORM, HANDLER, EGLCLASS;
 terminal PROGRAM, LIBRARY, FUNCTION, SERVICE, INTERFACE, DELEGATE, EXTERNALTYPE, ENUMERATION;
 terminal IMPLEMENTS, EXTENDS;
 terminal TYPE;
@@ -299,7 +299,7 @@ part
 	|	privateAccessModifierOpt:privateAccessModifier1 HANDLER:handler1 ID:id1 implementsOpt:implements1 partSubTypeOpt:partSubType1 handlerContent_star:handlerContents1 END:end1
 	{: RESULT = new Handler(privateAccessModifier1, new SimpleName(id1, id1left, id1right), implements1, partSubType1, handlerContents1, privateAccessModifier1 == Boolean.FALSE ? handler1left : privateAccessModifier1left, end1right); :}
 
-	|	privateAccessModifierOpt:privateAccessModifier1 CLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
+	|	privateAccessModifierOpt:privateAccessModifier1 EGLCLASS:class1 ID:id1 singleExtendsOpt:extends1 implementsOpt:implements1 partSubTypeOpt:partSubType1 eglClassContent_star:classContents1 END:end1
 	{: RESULT = new EGLClass(privateAccessModifier1, new SimpleName(id1, id1left, id1right), extends1, implements1, partSubType1, classContents1, privateAccessModifier1 == Boolean.FALSE ? class1left : privateAccessModifier1left, end1right); :}
 
 	|	privateAccessModifierOpt:privateAccessModifier1 PROGRAM:program1 ID:id1 partSubTypeOpt:partSubType1 programParametersOpt:programParameters1 classContent_star:classContents1 END:end1

@@ -226,7 +226,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"byposition"		{ return symbol(NodeTypes.BYPOSITION); }
 	"call"				{ return symbol(NodeTypes.CALL); }
 	"case"				{ return symbol(NodeTypes.CASE); }
-	"class"			 	{ return symbol(NodeTypes.CLASS); }
+	"eglclass"			{ return symbol(NodeTypes.EGLCLASS); }
 	"close"			 	{ return symbol(NodeTypes.CLOSE); }
 	"const"			 	{ return symbol(NodeTypes.CONST); }
 	"constructor"		{ return symbol(NodeTypes.CONSTRUCTOR); }

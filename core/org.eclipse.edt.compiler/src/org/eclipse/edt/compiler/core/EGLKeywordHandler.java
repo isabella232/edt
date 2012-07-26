@@ -37,7 +37,7 @@ public class EGLKeywordHandler {
 			"call", //$NON-NLS-1$
 			"case", //$NON-NLS-1$
 			"close", //$NON-NLS-1$
-			"class", //$NON-NLS-1$
+			"eglclass", //$NON-NLS-1$
 			"const", //$NON-NLS-1$
 			"continue", //$NON-NLS-1$
 			"constructor", //$NON-NLS-1$
