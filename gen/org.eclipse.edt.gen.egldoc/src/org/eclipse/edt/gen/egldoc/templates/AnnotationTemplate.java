@@ -8,6 +8,7 @@ import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.gen.egldoc.Util;
 import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EMetadataObject;
+import org.eclipse.edt.mof.EModelElement;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 import org.eclipse.edt.mof.egl.Annotation;
 
@@ -24,8 +25,14 @@ public class AnnotationTemplate extends EGLDocTemplate {
 		if (stringDetails.get(0).equals("EGL_Location")) {
 			return;
 		}
+		
+		out.println("<dl>");
+		
 		ctx.invoke(genDeclaration, annotation, ctx, out, stringDetails);
-        	
+        
+		out.println("</dl>");
+		
+		
 		// "eglx.lang.ExternalName EGL_Location":
 		// out.println(iterator.next().getEClass().getETypeSignature());
 		// annotationName =
@@ -45,7 +52,7 @@ public class AnnotationTemplate extends EGLDocTemplate {
 		
 	public void genDeclaration(Annotation annotation, Context ctx, TabbedWriter out, ArrayList<String> stringList) {
 
-		
+		out.println("<dt></dt><dd>");
 		out.println("<a href=\"" + stringList.get(1) + "\">");
 		out.println(stringList.get(0) + "</a>");
 		
@@ -86,15 +93,40 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			// EField theEField = (EField)annotation.eGet(fieldsIterator.next());
 			EField theEField = fieldsIterator.next();
 			String theSignature = theEField.getTypeSignature();
-			String theName = theEField.getName();
-	
+			String theName = theEField.getName();	
 			Object theDetail = annotation.eGet(theEField);
 			
+			// display, element, and list (if appropriate)
+			ArrayList<String> stringDetails;
+			stringDetails = (ArrayList<String>) Util.getEGLSimpleType(theSignature);
+
+			if (fields.size() > 1) {
+			   out.println ("<p><span style=\"padding-left:20px\">");
+			}
+			out.println (theName);
+			out.println("<a href=\"" + stringDetails.get(1) + "\">");
+			out.println(stringDetails.get(0) + "</a>");
+
+			if (stringDetails.get(2) != null) {
+				out.println("<a href=\"" + stringDetails.get(2) + "\">");
+				out.println(" [ ]</a>");
+			}
 			
+			out.println (" = ");
+		
 			if (theDetail != null){
-				out.println(theDetail.toString());
 				
-			    
+		        String theDetailString = theDetail.toString();
+		        
+		        if (theDetailString.startsWith("Instance of")){
+		        	
+		        	
+		        	
+		        	
+		        }
+		        
+		        
+		        
 			}
 			
 			
@@ -103,18 +135,18 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			
 			
 			
-			/* gives nothing
-			List<EMetadataObject> metadata = theEField.getMetadataList();
 			
-			Iterator<EMetadataObject> metadataIterator = metadata.iterator();
+		//	List<EMetadataObject> metadata = ((EModelElement) theDetail).getMetadataList();
 			
+		//	Iterator<EMetadataObject> metadataIterator = metadata.iterator();
+		/*	
 			while (metadataIterator.hasNext()) {
 				EMetadataObject theMetadataObject = metadataIterator.next();
 				String theMetadata = theMetadataObject.toString();
 				
 				out.println(theMetadata);
 			}
-			*/ 
+		*/	 
 			
 			
 
@@ -130,7 +162,7 @@ public class AnnotationTemplate extends EGLDocTemplate {
 			   }
 			*/
 		
-			// out.println(theName + " " + theSignature);
+//			out.println(theName + " " + theSignature);
 			
 			
 		}
@@ -156,6 +188,10 @@ public class AnnotationTemplate extends EGLDocTemplate {
 		*/
 		
 		out.println("}");
+		if (fields.size() > 1) {
+			out.println("</p>");
+		}
 		
+		out.println("</dd>");
 	}
 }
