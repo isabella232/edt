@@ -181,6 +181,8 @@ public class FunctionTemplate extends EGLDocTemplate {
 	public void genDeclaration(Function function,
 			org.eclipse.edt.gen.egldoc.Context ctx, TabbedWriter out) {
 
+		// out.println("in FunctionTemplate.genDeclaration");
+		
 		ctx.invoke(genSyntax, function, ctx, out);
 
 		// ctx.invoke(genFunctionExampleUse, function, ctx, out);
