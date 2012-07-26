@@ -7,14 +7,14 @@ Bundle-Activator: org.eclipse.edt.ide.jtopen.Activator
 Bundle-Vendor: %providerName
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.edt.ide.ui;bundle-version="0.8.1",
+ org.eclipse.edt.ide.ui;bundle-version="0.8.2",
  org.eclipse.edt.ide.deployment.core;bundle-version="0.8.1",
  org.eclipse.core.resources,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.ui.forms,
  org.eclipse.edt.debug.core;bundle-version="0.8.1",
  org.eclipse.edt.ide.testserver;bundle-version="0.8.1",
- org.eclipse.edt.gen.java.templates.eglx.jtopen;bundle-version="0.8.1"
+ org.eclipse.edt.gen.java.templates.eglx.jtopen;bundle-version="0.8.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
