@@ -115,6 +115,7 @@ SQLComment		= "--" {InputCharacter}* {LineTerminator}?
 	"byposition"		{ return ErrorNodeTypes.BYPOSITION; }
 	"call"				{ return ErrorNodeTypes.CALL; }
 	"case"				{ return ErrorNodeTypes.CASE; }
+	"eglclass"			{ return ErrorNodeTypes.EGLCLASS; }
 	"close"			 	{ return ErrorNodeTypes.CLOSE; }
 	"const"			 	{ return ErrorNodeTypes.CONST; }
 	"constructor"		{ return ErrorNodeTypes.CONSTRUCTOR; }
