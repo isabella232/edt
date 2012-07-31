@@ -32,7 +32,7 @@
 		<mkdir dir="${buildDir}"/>
 		
 		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng"/>
-		<property name="relengBaseBuilderDir" value="/opt/public/cbi/build/org.eclipse.releng.basebuilder"/>
+		<property name="relengBaseBuilderDir" value="/opt/public/cbi/build/org.eclipse.releng.basebuilder_R36_RC4"/>
 	</target>
 
 	<target name="run" depends="init">
