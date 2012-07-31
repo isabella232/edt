@@ -40,6 +40,7 @@ import org.eclipse.edt.compiler.core.ast.SimpleName;
 import org.eclipse.edt.compiler.core.ast.StringLiteral;
 import org.eclipse.edt.compiler.core.ast.Type;
 import org.eclipse.edt.compiler.core.ast.UnaryExpression;
+import org.eclipse.edt.compiler.core.ast.UnaryExpression.Operator;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.utils.ExpressionParser;
@@ -168,6 +169,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     	for (Expression expr : args) {
     		final boolean[] isValid = new boolean[1];
     		final String[] value = new String[1];
+    		final boolean[] negative = new boolean[1];
     		expr.accept(new DefaultASTVisitor() {
     			public boolean visit(IntegerLiteral integerLiteral) {
     				isValid[0] = true;
@@ -197,10 +199,27 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     				value [0] = floatLiteral.getValue();
     				return false;
     			}
+    			
+    			public boolean visit(UnaryExpression unaryExpression) {
+    				if (unaryExpression.getOperator() == Operator.MINUS) {
+    					negative[0] = !negative[0];
+    				}
+    				else {
+    					if (unaryExpression.getOperator() != Operator.PLUS) {
+    						isValid[0] = false;
+    						return false;
+    					}
+    				}
+    				return true;
+    					
+    			}
 			});
     		
     		if (!isValid[0]) {
             	throw new ResolutionException(expr.getOffset(), expr.getOffset() + expr.getLength(), IProblemRequestor.TYPE_ARG_NOT_VALID, new String[] {expr.getCanonicalString(), nameType.getName().getCanonicalName()});
+    		}
+    		if (negative[0]) {
+    			value[0] = "-" + value[0];
     		}
     		list.add(value[0]);
     	}
