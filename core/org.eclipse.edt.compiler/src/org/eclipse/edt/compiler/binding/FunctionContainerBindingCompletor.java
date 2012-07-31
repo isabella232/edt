@@ -163,30 +163,14 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
         		IDataBinding fDataBinding = (IDataBinding) iter.next();
         		IFunctionBinding fBinding = (IFunctionBinding) fDataBinding.getType();
         		if(TypeCompatibilityUtil.functionSignituresAreIdentical(fBinding, functionBinding, compilerOptions, false, false)) {
-        			if (fBinding.isImplicit()) {
-        				//remove the implicit and add the new function
-        				removeThese.add(fDataBinding);
-        				
-        				if (!isOverride(nestedFunction)) {
-    	        			problemRequestor.acceptProblem(
-    		        				nestedFunction.getName(),
-    		        				IProblemRequestor.OVERRIDING_IMPLICIT_FUNCTION,
-    		        				IMarker.SEVERITY_WARNING,
-    		        				new String[] {
-    		        					nestedFunction.getName().getCanonicalName()
-    		        				});
-        				}
-        			}
-        			else {
-	        			problemRequestor.acceptProblem(
-	        				nestedFunction.getName(),
-	        				IProblemRequestor.DUPLICATE_NAME_IN_FILE,
-	        				new String[] {
-	        					IEGLConstants.KEYWORD_FUNCTION,
-	        					nestedFunction.getName().getCanonicalName()
-	        				});
-	        			return false;
-        			}
+        			problemRequestor.acceptProblem(
+        				nestedFunction.getName(),
+        				IProblemRequestor.DUPLICATE_NAME_IN_FILE,
+        				new String[] {
+        					IEGLConstants.KEYWORD_FUNCTION,
+        					nestedFunction.getName().getCanonicalName()
+        				});
+        			return false;
         		}
         	}
         } else {
@@ -363,95 +347,7 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     	}
     	return functionContainerScope;
     }
-    
-    protected void addImplicitFieldsFromAnnotations() {
-		for(Iterator iter = functionContainerBinding.getAnnotations().iterator(); iter.hasNext();) {
-			IAnnotationBinding annotationBinding = (IAnnotationBinding) iter.next();
-			annotationBinding = annotationBinding.getAnnotation(AnnotationAnnotationTypeBinding.getInstance());
-			if(annotationBinding != null) {
-				IAnnotationBinding aBinding = (IAnnotationBinding) annotationBinding.findData("implicitFields");
-				if(IBinding.NOT_FOUND_BINDING != aBinding) {
-					IAnnotationBinding[] implicitFields = (IAnnotationBinding[]) aBinding.getValue();
-					for(int i = 0; i < implicitFields.length; i++) {
-						IAnnotationBinding implicitField = implicitFields[i];
-						IAnnotationBinding fieldNameBinding = (IAnnotationBinding) implicitField.findData("FieldName");
-						IAnnotationBinding fieldTypeBinding = (IAnnotationBinding) implicitField.findData("FieldType");
-						IAnnotationBinding isPrivateBinding = (IAnnotationBinding) implicitField.findData("IsPrivate");
-						if(IBinding.NOT_FOUND_BINDING != fieldNameBinding && IBinding.NOT_FOUND_BINDING != fieldTypeBinding) {
-							ClassFieldBinding newField = new ClassFieldBinding(
-								InternUtil.internCaseSensitive((String) fieldNameBinding.getValue()),
-								functionContainerBinding,
-								(ITypeBinding) fieldTypeBinding.getValue()
-							);
-							newField.setIsPrivate(IBinding.NOT_FOUND_BINDING != isPrivateBinding && Boolean.YES == isPrivateBinding.getValue());
-							functionContainerBinding.addClassField(newField);
-							newField.addAnnotations(implicitField.getAnnotations());
-							newField.setImplicit(true);
-							definedDataNames.add(newField);
-						}
-					}
-				}
-				
-				aBinding = (IAnnotationBinding) annotationBinding.findData("implicitFunctions");
-				if(IBinding.NOT_FOUND_BINDING != aBinding) {
-					IAnnotationBinding[] implicitFunctions = (IAnnotationBinding[]) aBinding.getValue();
-					for(int i = 0; i < implicitFunctions.length; i++) {
-						IAnnotationBinding implicitFunction = implicitFunctions[i];
-						IAnnotationBinding functionNameBinding = (IAnnotationBinding) implicitFunction.findData("FunctionName");
-						IAnnotationBinding isStaticBinding = (IAnnotationBinding) implicitFunction.findData("IsStatic");
-						IAnnotationBinding parameterTypesBinding = (IAnnotationBinding) implicitFunction.findData("ParameterTypes");
-						IAnnotationBinding returnTypeBinding = (IAnnotationBinding) implicitFunction.findData("ReturnType");
-						IAnnotationBinding isPrivateBinding = (IAnnotationBinding) implicitFunction.findData("IsPrivate");
-						IAnnotationBinding modifiersBinding = (IAnnotationBinding) implicitFunction.findData("modifiers");
-						
-						if(IBinding.NOT_FOUND_BINDING != functionNameBinding) {
-							FunctionBinding newFunction = new FunctionBinding(
-								InternUtil.internCaseSensitive((String) functionNameBinding.getValue()),
-								functionContainerBinding
-							);
-							newFunction.setImplicit(true);
-							if(IBinding.NOT_FOUND_BINDING != isStaticBinding && Boolean.YES == isStaticBinding.getValue()) {
-								newFunction.setStatic(true);
-							}
-							if(IBinding.NOT_FOUND_BINDING != isPrivateBinding && Boolean.YES == isPrivateBinding.getValue()) {
-								newFunction.setPrivate(true);
-							}
-							
-							if(IBinding.NOT_FOUND_BINDING != parameterTypesBinding) {
-								Object[] parameterTypes = (Object[]) parameterTypesBinding.getValue();
-								Object[] modifiers = null;
-								if(IBinding.NOT_FOUND_BINDING != modifiersBinding) {
-									modifiers =  (Object[])modifiersBinding.getValue();
-								}
-								for(int j = 0; j < parameterTypes.length; j++) {
-									ITypeBinding typeBinding = (ITypeBinding) parameterTypes[j];
-									FunctionParameterBinding functionParameterBinding = new FunctionParameterBinding(InternUtil.internCaseSensitive("arg" + Integer.toString(j+1)), functionContainerBinding, typeBinding, newFunction);
-									
-									if (modifiers != null && j < modifiers.length) {
-										if (modifiers[j].toString().equalsIgnoreCase(ParameterModifierKind.INMODIFIER.getName())) {
-											functionParameterBinding.setInput(true);
-										}
-										else {
-											if (modifiers[j].toString().equalsIgnoreCase(ParameterModifierKind.OUTMODIFIER.getName())) {
-												functionParameterBinding.setOutput(true);
-											}
-										}
-									}
-									newFunction.addParameter(functionParameterBinding);
-								}
-							}
-							if(IBinding.NOT_FOUND_BINDING != returnTypeBinding) {
-								newFunction.setReturnType((ITypeBinding) returnTypeBinding.getValue());
-							}
-							functionContainerBinding.addDeclaredFunction(new NestedFunctionBinding(newFunction.getCaseSensitiveName(), functionContainerBinding, newFunction));
-							definedFunctionNames.add(newFunction.getName());
-						}
-					}
-				}
-			}
-		}		
-	}
-    
+        
     private void convertItemsToNullableIfNeccesary() {
 		IAnnotationBinding aBinding = functionContainerBinding.getAnnotation(new String[] {"egl", "core"}, "I4GLItemsNullable");
 		if(aBinding != null && Boolean.YES == aBinding.getValue()) {

@@ -42,8 +42,6 @@ public class ServiceBindingCompletor extends FunctionContainerBindingCompletor {
     	
     	serviceBinding.setPrivate(service.isPrivate());
     	
-    	addImplicitFieldsFromAnnotations();
-         
         for(Iterator iter = service.getImplementedInterfaces().iterator(); iter.hasNext();) {
     		Name nextName = (Name) iter.next();
     		try {

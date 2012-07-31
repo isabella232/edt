@@ -52,8 +52,6 @@ public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
         programBinding.setPrivate(program.isPrivate());
         programBinding.setCallable(program.isCallable());
         
-        addImplicitFieldsFromAnnotations();
-        
         return true;
     }  
     

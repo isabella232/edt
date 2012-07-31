@@ -38,8 +38,6 @@ public class LibraryBindingCompletor extends FunctionContainerBindingCompletor {
         
         libraryBinding.setPrivate(library.isPrivate());
         
-        addImplicitFieldsFromAnnotations();
-        
         return true;
     }
     protected IPartSubTypeAnnotationTypeBinding getDefaultSubType() {

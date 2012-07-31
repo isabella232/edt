@@ -52,8 +52,6 @@ public class EGLClassBindingCompletor extends FunctionContainerBindingCompletor 
         PartSubTypeAndAnnotationCollector col = getPartSubTypeAndAnnotationCollector();
 		eglClass.accept(col);
 				
-		addImplicitFieldsFromAnnotations();
-		
 		if (eglClass.getExtends() != null) {
     		try {
     			ITypeBinding typeBinding = bindTypeName(eglClass.getExtends());

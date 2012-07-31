@@ -53,14 +53,7 @@ public class HandlerBindingCompletor extends FunctionContainerBindingCompletor {
     	
         PartSubTypeAndAnnotationCollector col = getPartSubTypeAndAnnotationCollector();
 		handler.accept(col);
-		
-//		AnnotationBinding subTypeAnnotationBinding = col.getSubTypeAnnotationBinding();
-//		if(subTypeAnnotationBinding == null || annotationIs(subTypeAnnotationBinding.getAnnotationType(), new String[] {"egl", "ui", "jasper"}, "JasperReport")) {
-//			handlerBinding.addDeclaredFunctions(JasperReportAnnotationTypeBinding.getJasperReportFunctions());
-//		}
-		
-		addImplicitFieldsFromAnnotations();
-		
+				
         for(Iterator iter = handler.getImplementedInterfaces().iterator(); iter.hasNext();) {
     		Name nextName = (Name) iter.next();
     		try {
