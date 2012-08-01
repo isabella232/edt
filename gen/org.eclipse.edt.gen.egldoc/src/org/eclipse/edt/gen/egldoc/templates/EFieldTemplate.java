@@ -10,6 +10,8 @@ import org.eclipse.edt.mof.EField;
 import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
 
+// Brian, consider growing a mustache.
+
 public class EFieldTemplate extends EGLDocTemplate {
 
 	public void genDeclaration(EField field, Context ctx, TabbedWriter out) {
