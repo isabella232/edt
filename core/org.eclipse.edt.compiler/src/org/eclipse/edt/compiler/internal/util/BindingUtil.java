@@ -71,6 +71,7 @@ public class BindingUtil {
 		aliasedTypesNames.put(NameUtile.getAsName("any"), new PackageAndPartName("eglx.lang", "EAny"));
 		aliasedTypesNames.put(NameUtile.getAsName("bigint"), new PackageAndPartName("eglx.lang", "EBigint"));
 		aliasedTypesNames.put(NameUtile.getAsName("boolean"), new PackageAndPartName("eglx.lang", "EBoolean"));
+		aliasedTypesNames.put(NameUtile.getAsName("bytes"), new PackageAndPartName("eglx.lang", "EBytes"));
 		aliasedTypesNames.put(NameUtile.getAsName("date"), new PackageAndPartName("eglx.lang", "EDate"));
 		aliasedTypesNames.put(NameUtile.getAsName("decimal"), new PackageAndPartName("eglx.lang", "EDecimal"));
 		aliasedTypesNames.put(NameUtile.getAsName("dictionary"), new PackageAndPartName("eglx.lang", "EDictionary"));
@@ -81,6 +82,7 @@ public class BindingUtil {
 		aliasedTypesNames.put(NameUtile.getAsName("smallint"), new PackageAndPartName("eglx.lang", "ESmallint"));
 		aliasedTypesNames.put(NameUtile.getAsName("string"), new PackageAndPartName("eglx.lang", "EString"));
 		aliasedTypesNames.put(NameUtile.getAsName("timestamp"), new PackageAndPartName("eglx.lang", "ETimestamp"));
+		aliasedTypesNames.put(NameUtile.getAsName("time"), new PackageAndPartName("eglx.lang", "ETime"));
 	};
 
 
