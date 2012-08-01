@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.internal.core.lookup;
 
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
 import org.eclipse.edt.compiler.binding.ExternalTypeBindingCompletor;
+import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.ExternalType;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
@@ -23,19 +23,28 @@ import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
  * @author demurray
  */
 
-public class ExternalTypeBinder extends DefaultBinder {
+public class ExternalTypeBinder extends FunctionContainerBinder {
 
-    private ExternalTypeBinding externalTypeBinding;
+    private org.eclipse.edt.mof.egl.ExternalType externalTypeBinding;
+    private IRPartBinding irBinding;
     private Scope scope;
 
-    public ExternalTypeBinder(ExternalTypeBinding externalTypeBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(scope, externalTypeBinding, dependencyRequestor, problemRequestor, compilerOptions);
-        this.externalTypeBinding = externalTypeBinding;
+    public ExternalTypeBinder(IRPartBinding irBinding, Scope scope, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(irBinding.getIrPart(), scope, dependencyRequestor, problemRequestor, compilerOptions);
+        this.irBinding = irBinding;
+    	this.externalTypeBinding = (org.eclipse.edt.mof.egl.ExternalType)irBinding.getIrPart();
         this.scope = scope;
     }
 
     public boolean visit(ExternalType externalType) {
-    	externalType.accept(new ExternalTypeBindingCompletor(scope, externalTypeBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	externalType.accept(new ExternalTypeBindingCompletor(scope, irBinding, dependencyRequestor, problemRequestor, compilerOptions));
+    	
+        // The current scope only changes once the initial class binding is complete
+        currentScope = new ExternalTypeScope(currentScope, externalTypeBinding);
+        
+        preprocessPart(externalType);
+
+        // We will bind the rest of the externaltype now
 		return true;
 	}
     
