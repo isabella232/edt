@@ -1,16 +1,11 @@
 package org.eclipse.edt.gen.egldoc.templates;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.edt.gen.egldoc.Context;
 import org.eclipse.edt.gen.egldoc.Util;
 import org.eclipse.edt.mof.EField;
-import org.eclipse.edt.mof.EMetadataObject;
 import org.eclipse.edt.mof.codegen.api.TabbedWriter;
-
-// Brian, consider growing a mustache.
 
 public class EFieldTemplate extends EGLDocTemplate {
 
