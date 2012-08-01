@@ -18,26 +18,23 @@
 	<!-- ===================================================================== -->
 	<target name="pre.build.jars">
 		
-		<!-- These tasks create zips containing the three widget projects from the latest code in CVS. -->
+		<!-- These tasks create zips containing the three widget projects from the latest code in Git. -->
 
 		<!-- Update these properties when the version numbers change. -->
 		<property name="edtVersion" value="0.8.1"/>
 		<property name="dojoVersion" value="1.7.1"/>
 		
-		<!-- Check out the projects into a temporary directory. -->
-		<mkdir dir="${build.result.folder}/widgetzips"/>
-		<cvs cvsRoot=":pserver:anonymous@dev.eclipse.org:/cvsroot/tools"
-			dest="${build.result.folder}/widgetzips"
-			package="org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.local org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.runtime.remote org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.dojo.mobile.widgets org.eclipse.edt/widgets/org.eclipse.edt.rui.widgets"/>
-	
-		
-		<!-- Store the root of the extracted projects in a property. -->
-		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips/org.eclipse.edt/widgets"/>
+		<!-- Create a temporary directory to work in. -->
+		<property name="widgetsBaseDir" value="${build.result.folder}/widgetzips"/>
+		<mkdir dir="${widgetsBaseDir}"/>
+
+		<!-- Put the location of the widgets into a property. -->
+		<property name="widgetsSourceDir" value="${writableBuildRoot}/../widgets"/>
 
 		<!-- Copy the widgets project to a new project named org.eclipse.edt.rui.widgets_${edtVersion} -->
 		<property name="ruiDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.widgets_${edtVersion}"/>
 		<copy todir="${ruiDir}" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.widgets/"/>
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.widgets/"/>
 		</copy>
 		
 		<!-- Update .project file for org.eclipse.edt.rui.widgets to include a version number -->
@@ -52,18 +49,18 @@
 		<property name="dojoDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo_${edtVersion}"/>
 		<property name="dojoRemoteDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.remote_${edtVersion}"/>
 		<copy todir="${dojoDir}" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets"/>
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.dojo.widgets"/>
 		</copy>
 		<copy todir="${dojoRemoteDir}" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.widgets"/>
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.dojo.widgets"/>
 		</copy>
 		<copy todir="${dojoDir}/WebContent" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.local/WebContent">
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.dojo.runtime.local/WebContent">
 				<exclude name="**/dojo/dojo.js.uncompressed.js"/>
 			</fileset>
 		</copy>
 		<copy todir="${dojoRemoteDir}/WebContent" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.runtime.remote/WebContent"/>
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.dojo.runtime.remote/WebContent"/>
 		</copy>
 		
 		<!-- Update .project file for org.eclipse.edt.rui.dojo to include a version number -->
@@ -82,7 +79,7 @@
 		<!-- Copy the widgets project to a new project named org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion} -->
 		<property name="dojoMobileDir" value="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}"/>
 		<copy todir="${dojoMobileDir}" overwrite="true">
-			<fileset dir="${widgetsBaseDir}/org.eclipse.edt.rui.dojo.mobile.widgets/"/>
+			<fileset dir="${widgetsSourceDir}/org.eclipse.edt.rui.dojo.mobile.widgets/"/>
 		</copy>
 		
 		<!-- Update .project file for org.eclipse.edt.rui.dojo.mobile.widgets to include a version number -->
@@ -95,9 +92,8 @@
 			excludes="org.eclipse.edt.rui.dojo.mobile.widgets_${edtVersion}/build"/>
 		
 		<!-- Delete the temporary directory. -->
-		<delete dir="${build.result.folder}/widgetzips"/>
-	
-		
+		<delete dir="${widgetsBaseDir}"/>
+
 	</target>
 
 	<!-- ===================================================================== -->
