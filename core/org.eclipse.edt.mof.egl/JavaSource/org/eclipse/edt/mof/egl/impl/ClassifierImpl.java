@@ -106,6 +106,9 @@ public abstract class ClassifierImpl extends NamedElementImpl implements Classif
 	
 	@Override
 	public String getTypeSignature() {
+		if (getPackageName().length() == 0) {
+			return getName();
+		}
 		return getPackageName()+"."+getName();
 	}
 	
