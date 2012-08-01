@@ -34,12 +34,10 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public class ProgramBindingCompletor extends FunctionContainerBindingCompletor {
 
     private Program programBinding;
-    private IProblemRequestor problemRequestor;
  
     public ProgramBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
         this.programBinding = (Program) irBinding.getIrPart();
-        this.problemRequestor = problemRequestor;
     }
     
     public boolean visit(org.eclipse.edt.compiler.core.ast.Program program) {

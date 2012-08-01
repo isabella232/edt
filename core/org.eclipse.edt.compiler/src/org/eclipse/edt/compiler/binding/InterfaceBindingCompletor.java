@@ -11,9 +11,7 @@
  *******************************************************************************/
 package org.eclipse.edt.compiler.binding;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.edt.compiler.core.ast.Interface;
 import org.eclipse.edt.compiler.core.ast.Name;
@@ -34,7 +32,6 @@ import org.eclipse.edt.mof.egl.Type;
 public class InterfaceBindingCompletor extends FunctionContainerBindingCompletor {
 
     private org.eclipse.edt.mof.egl.Interface interfaceBinding;
-	protected Set definedFunctionNames = new HashSet();
 
     public InterfaceBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
         super(irBinding, currentScope, dependencyRequestor, problemRequestor, compilerOptions);
@@ -62,11 +59,10 @@ public class InterfaceBindingCompletor extends FunctionContainerBindingCompletor
             		Name name = (Name) iter.next();
         			Type typeBinding = bindTypeName(name);
         			if (typeBinding instanceof org.eclipse.edt.mof.egl.Interface) {
-        				//TODO check if typeBinding extends interfaceBinding (see old code below)
         				interfaceBinding.getSuperTypes().add((org.eclipse.edt.mof.egl.Interface)typeBinding);
         			}
         			
-        			
+        			//TODO move this to InterfaceValidator
 //        			if (Binding.isValidBinding(typeBinding) && typeBinding.getKind() == ITypeBinding.INTERFACE_BINDING) {
 //        				
 //        				InterfaceBinding extendedInterface = (InterfaceBinding) typeBinding;

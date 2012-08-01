@@ -14,12 +14,9 @@ package org.eclipse.edt.compiler.internal.core.validation.part;
 import org.eclipse.edt.compiler.binding.IRPartBinding;
 import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.AbstractASTVisitor;
-import org.eclipse.edt.compiler.core.ast.ClassDataDeclaration;
 import org.eclipse.edt.compiler.core.ast.NestedFunction;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.Program;
-import org.eclipse.edt.compiler.core.ast.SettingsBlock;
-import org.eclipse.edt.compiler.core.ast.UseStatement;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
@@ -53,28 +50,8 @@ public class ProgramValidator extends FunctionContainerValidator {
 		return true;
 	}
 	
-	public boolean visit(ClassDataDeclaration classDataDeclaration) {
-//		super.visit(classDataDeclaration); TODO JZS
-		return false;
-	}
-	
-	public boolean visit(NestedFunction nestedFunction) {
-		super.visit(nestedFunction);
-		return false;
-	}
-	
-	public boolean visit(SettingsBlock settingsBlock) {
-//		super.visit(settingsBlock); TODO JZS
-		return false;
-	}
-	
-	public boolean visit(UseStatement useStatement) {
-//		super.visit(useStatement); TODO JZS
-		return false;
-	}
-	
 	protected void validateProgramParameters(){
-		//TODO port this to the new framework when called programs are supported
+		//TODO port this to the new framework when called programs are supported. Also check each parm type with NameTypeValidator (used to be done in binder)
 //		program.accept(new AbstractASTVisitor(){
 //			int parmcount = 0;
 //			public boolean visit (ProgramParameter programParameter){
@@ -119,8 +96,6 @@ public class ProgramValidator extends FunctionContainerValidator {
 //				}
 //				return false;
 //			}
-//			
-//
 //		});
 	}
 	
@@ -142,7 +117,6 @@ public class ProgramValidator extends FunctionContainerValidator {
 //				checkParmTypeNotStaticArray(parm, ((ArrayType) parmType).getElementType());
 //			}
 //        }
-//			
 //	}
 
 	

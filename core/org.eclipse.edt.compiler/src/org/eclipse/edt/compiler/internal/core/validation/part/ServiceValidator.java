@@ -39,7 +39,7 @@ import org.eclipse.edt.mof.utils.NameUtile;
 public class ServiceValidator extends FunctionContainerValidator {
 	IRPartBinding irBinding;
 	org.eclipse.edt.mof.egl.Service serviceBinding;
-	protected Service service = null;
+	protected Service service;
 	
 	public ServiceValidator(IProblemRequestor problemRequestor, IRPartBinding irBinding, ICompilerOptions compilerOptions) {
 		super(problemRequestor, irBinding, compilerOptions);

@@ -38,7 +38,7 @@ public class HandlerValidator extends FunctionContainerValidator {
 	
 	IRPartBinding irBinding;
 	org.eclipse.edt.mof.egl.Handler handlerBinding;
-	Handler handler = null;
+	Handler handler;
 	
 	public HandlerValidator(IProblemRequestor problemRequestor, IRPartBinding irBinding, ICompilerOptions compilerOptions) {
 		super(problemRequestor, irBinding, compilerOptions);
