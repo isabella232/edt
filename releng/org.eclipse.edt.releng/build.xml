@@ -32,10 +32,9 @@
 		<mkdir dir="${buildDir}"/>
 
 		<!-- Get the basebuilder that knows how to grab files from Git. -->
-		<mkdir dir="${buildDir}/releng"/>
 		<cvs cvsRoot=":local:/cvsroot/eclipse" package="org.eclipse.releng.basebuilder" tag="R38M6PlusRC3"
-		       dest="${buildDir}/releng"/>
-		<property name="relengBaseBuilderDir" value="${buildDir}/releng/org.eclipse.releng.basebuilder"/>
+		       dest="${writableBuildRoot}"/>
+		<property name="relengBaseBuilderDir" value="${writableBuildRoot}/org.eclipse.releng.basebuilder"/>
 		
 		<property name="relengCommonBuilderDir" value="/opt/public/cbi/build/org.eclipse.dash.common.releng"/>
 	</target>
