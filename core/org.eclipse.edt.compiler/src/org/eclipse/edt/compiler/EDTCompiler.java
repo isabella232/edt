@@ -20,6 +20,7 @@ import org.eclipse.edt.compiler.core.ast.CallStatement;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.lookup.BindingCreator;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultPartValidator;
+import org.eclipse.edt.compiler.internal.core.validation.DefaultTypeValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CallStatementValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.MofConversion;
@@ -44,7 +45,7 @@ public class EDTCompiler extends BaseCompiler {
 	public String getSystemEnvironmentPath() {
 		
 		if (systemEnvironmentRootPath == null) {
-
+			//TODO make extensible
 			String path = SystemEnvironmentUtil.getSystemLibraryPath(BindingCreator.class, "lib");
 			path += File.pathSeparator;
 			path += SystemEnvironmentUtil.getSystemLibraryPath(SqlActionStatement.class, "egllib");
@@ -132,6 +133,17 @@ public class EDTCompiler extends BaseCompiler {
 		
 		if (validator == null) {
 			validator = new DefaultPartValidator();
+		}
+		return validator;
+	}
+	
+	public TypeValidator getValidatorFor(Type type) {
+		TypeValidator validator = null;
+		
+		//TODO need some contribution registry to check for non-default validation.
+		
+		if (validator == null) {
+			validator = new DefaultTypeValidator();
 		}
 		return validator;
 	}

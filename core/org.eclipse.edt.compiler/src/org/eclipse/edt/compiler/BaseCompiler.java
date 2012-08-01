@@ -144,4 +144,9 @@ public class BaseCompiler implements ICompiler {
 	public PartValidator getValidatorFor(Part part) {
 		return null;
 	}
+	
+	@Override
+	public TypeValidator getValidatorFor(Type type) {
+		return null;
+	}
 }

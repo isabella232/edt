@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.Statement;
 import org.eclipse.edt.compiler.internal.core.builder.IBuildNotifier;
+import org.eclipse.edt.mof.egl.Type;
 
 public interface ICompiler {
 	
@@ -90,5 +91,6 @@ public interface ICompiler {
 	
 	public StatementValidator getValidatorFor(Statement stmt);
 	public PartValidator getValidatorFor(Part part);
+	public TypeValidator getValidatorFor(Type type);
 	
 }

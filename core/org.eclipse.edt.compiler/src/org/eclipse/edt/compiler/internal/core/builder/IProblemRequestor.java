@@ -735,11 +735,11 @@ public interface IProblemRequestor {
 	public static final int MISSING_LENGTH_FOR_PRIMITIVE_TYPE = 4350;
 	
 	public static final int LENGTH_NOT_ALLOWED = 4400;
-	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE = 4401;
+	public static final int INVALID_LENGTH_FOR_PARAMETERIZED_TYPE = 4401;
 	public static final int INVALID_DECIMALS = 4402;
 	public static final int DECIMALS_GREATER_THAN_LENGTH = 4403;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_LOGICAL_CHILDREN = 4404;
-	public static final int PRIMITIVE_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
+	public static final int PARAMETERIZED_TYPE_REQUIRES_DATETIME_PATTERN = 4405;
 //	public static final int TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4405;
 //	public static final int NAMELESS_TYPEDEF_ITEM_CAUSES_CIRCULAR_TYPEDEFS = 4406;
 	public static final int DUPLICATE_ITEM_NAME = 4407;
@@ -747,6 +747,7 @@ public interface IProblemRequestor {
 	public static final int INVALID_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH = 4409;
 	public static final int INVALID_CALCULATED_LENGTH_FOR_PRIMITIVE_TYPE_WITH_FIXED_LENGTH_WITH_LOGICAL_CHILDREN = 4410;
 	public static final int DUPLICATE_ITEM_NAME_DUE_TO_EMBED = 4411;
+	public static final int NEGATIVE_LENGTH_INVALID = 4412;
 
 //
 //	//4500-4599: Used for SQL validation messages (may change)!

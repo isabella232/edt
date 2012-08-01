@@ -73,7 +73,6 @@ import org.eclipse.edt.compiler.internal.core.builder.IMarker;
 import org.eclipse.edt.compiler.internal.core.builder.IProblemRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.validation.name.EGLNameValidator;
-import org.eclipse.edt.compiler.internal.core.validation.statement.AssignmentStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.CaseStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ContinueStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.ConverseStatementValidator;
@@ -97,6 +96,7 @@ import org.eclipse.edt.compiler.internal.core.validation.statement.ThrowStatemen
 import org.eclipse.edt.compiler.internal.core.validation.statement.TransferStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.TryStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.WhileStatementValidator;
+import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.Member;
@@ -158,7 +158,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 		checkNumberOfParms(nestedFunction.getFunctionParameters(), nestedFunction.getName(), functionName);
 		checkForConstructorCalls(nestedFunction);
 //		new AnnotationValidator(problemRequestor, compilerOptions).validateAnnotationTarget(nestedFunction); TODO
-
 		
 		return true;
 	}
@@ -172,6 +171,14 @@ public class FunctionValidator extends AbstractASTVisitor {
 		
 		return true;
 	}
+	
+	public boolean visit(org.eclipse.edt.compiler.core.ast.ReturnsDeclaration returnsDeclaration) {
+		Type type = returnsDeclaration.getType();
+		if (type != null) {
+			TypeValidator.validate(type, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
+		}
+		return true;
+	};
 	
 	private void checkForConstructorCalls(Node node) {
 		node.accept(new AbstractASTVisitor() {
@@ -214,6 +221,8 @@ public class FunctionValidator extends AbstractASTVisitor {
         
         Member member = functionParameter.getName().resolveMember();
         if(member instanceof org.eclipse.edt.mof.egl.FunctionParameter) {
+        	TypeValidator.validate(parmType, problemRequestor, compilerOptions, enclosingPart.getEnvironment().getCompiler());
+        	
         	org.eclipse.edt.mof.egl.FunctionParameter memberParam = (org.eclipse.edt.mof.egl.FunctionParameter)member;
         	
 	        checkParmTypeNotStaticArray(functionParameter, parmType);
@@ -274,6 +283,9 @@ public class FunctionValidator extends AbstractASTVisitor {
 	}
 	
 	private void checkParmNotEmptyRecord(FunctionParameter functionParameter, org.eclipse.edt.mof.egl.Type parmType) {
+		//TODO remove when record fields are being bound. until then they're always "empty"
+		if (true) return;
+		
 		if (parmType instanceof Part) {
 			boolean isEmptyRecord = false;
 			
@@ -379,7 +391,8 @@ public class FunctionValidator extends AbstractASTVisitor {
 	public boolean visit(AssignmentStatement assignmentStatement) {
 		preVisitStatement(assignmentStatement);
 		if (checkStatementAllowedInContainer(assignmentStatement)) {
-			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
+			//TODO AssignmentStatementValidator blows up right now
+//			assignmentStatement.accept(new AssignmentStatementValidator(problemRequestor, compilerOptions, enclosingPart));
 		}
 		postVisitStatement(assignmentStatement);
 		return false;
