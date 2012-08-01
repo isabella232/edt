@@ -105,7 +105,7 @@ public class BindingCompletor {
 				astNode.accept(new EnumerationBindingCompletor(parentScope, (EnumerationTypeBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 			case ITypeBinding.EXTERNALTYPE_BINDING:
-				astNode.accept(new ExternalTypeBindingCompletor(parentScope, (ExternalTypeBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
+				astNode.accept(new ExternalTypeBindingCompletor(parentScope, (IRPartBinding)binding, NullDependencyRequestor.getInstance(), NullProblemRequestor.getInstance(), compilerOptions));
 				break;			
 		}
 	}
