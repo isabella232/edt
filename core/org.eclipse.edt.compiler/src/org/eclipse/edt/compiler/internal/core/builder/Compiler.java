@@ -22,6 +22,7 @@ import org.eclipse.edt.compiler.core.ast.Part;
 import org.eclipse.edt.compiler.core.ast.TopLevelFunction;
 import org.eclipse.edt.compiler.internal.core.dependency.IDependencyRequestor;
 import org.eclipse.edt.compiler.internal.core.lookup.EGLClassBinder;
+import org.eclipse.edt.compiler.internal.core.lookup.ExternalTypeBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.FileBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.HandlerBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
@@ -103,27 +104,31 @@ public abstract class Compiler extends DefaultASTVisitor{
 //				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
 //				}
 //				break;
-//			case ITypeBinding.EXTERNALTYPE_BINDING:
-//				try{
-//				    astNode.accept(new ExternalTypeBinder((ExternalTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
-//				    
-//				    try{
-//					    astNode.accept(new ExternalTypeValidator(problemRequestor, (ExternalTypeBinding)partBinding, compilerOptions));
-//					}catch(CancelledException e){
-//					    throw e;
-//					}catch(RuntimeException e){
-//					    handleValidationException((Part)astNode, problemRequestor, e);
-//					}
-//				}catch(CancelledException  e){
-//				    throw e;
-//				}catch(CircularBuildRequestException e){
-//				    throw e;
-//				}catch(BuildException e){
-//				    throw e;
-//				}catch(RuntimeException e){
-//				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
-//				}
-//				break;
+			case ITypeBinding.EXTERNALTYPE_BINDING:
+				try{
+					astNode.accept(new ExternalTypeBinder((IRPartBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
+				    
+				    //TODO add code to handle circular buildexception
+				    try{
+				    	PartValidator validator = partBinding.getEnvironment().getCompiler().getValidatorFor((Part)astNode);
+				    	if (validator != null) {
+				    		validator.validatePart((Part)astNode, (IRPartBinding)partBinding, problemRequestor, compilerOptions);
+				    	}
+					}catch(CancelledException e){
+					    throw e;
+					}catch(RuntimeException e){
+					    handleValidationException((Part)astNode, problemRequestor, e);
+					}
+				}catch(CancelledException  e){
+				    throw e;
+				}catch(CircularBuildRequestException e){
+				    throw e;
+				}catch(BuildException e){
+				    throw e;
+				}catch(RuntimeException e){
+				    handleBinderException((Part)astNode, partBinding, problemRequestor, e);
+				}
+				break;
 //			case ITypeBinding.ENUMERATION_BINDING:
 //				try{
 //				    astNode.accept(new EnumerationBinder((EnumerationTypeBinding)partBinding, parentScope, dependencyRequestor, problemRequestor, compilerOptions));
