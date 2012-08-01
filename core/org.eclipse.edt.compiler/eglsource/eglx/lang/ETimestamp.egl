@@ -19,6 +19,11 @@ import org.eclipse.edt.mof.egl.TimestampType;
 externalType ETimestamp extends AnyValue type ParameterizableType {
 	parameterizedType = TimestampType
 }
+	/**
+	 * A timestamp without a pattern has no default value.
+	 */
+	private constructor();
+	
 	/**  
 	 * {@Operation <} Compares two timestamps.
 	 */
@@ -53,41 +58,101 @@ externalType ETimestamp extends AnyValue type ParameterizableType {
 	 * {@Operation narrow} Converts a string to a timestamp.  The string is parsed
 	 * by searching for the timestamp fields specified in the mask, in order
 	 * from years down to fractions of seconds.  Each field from the mask must
-	 * be present in the string.  Years must be represented with four digits,
-	 * fractions of seconds with six digits, and other fields with two digits.
-	 * One separator character must appear in between each field.  Any character
-	 * may be used as a separator, and the separators do not have to match.
+	 * be present in the string.  Years must be represented with four digits, and
+	 * two digits must be used for months, days, hours, minutes, and seconds.  If
+	 * the mask includes fractions, there must be one digit in the string for each
+	 * fraction specified by the mask.  One separator character must appear in between
+	 * each field.  Any character may be used as a separator, and the separators do 
+	 * not have to match.
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a timestamp or the mask is invalid.
 	 */
-	static function asTimestamp(value EString in, mask EString in) returns (ETimestamp) {@Operation{"narrow"}};
+	static function asTimestamp(value EString? in, mask EString in) returns (ETimestamp?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts any timestamp to a timestamp with the specified mask.
 	 */
-	static function asTimestamp(value ETimestamp in, mask EString in) returns (ETimestamp) {@Operation{"widen"}};
+	static function asTimestamp(value ETimestamp? in, mask EString in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation widen} Converts a date to a timestamp.
 	 */
-	static function asTimestamp(value EDate in) returns (ETimestamp) {@Operation{"widen"}};
+	static function asTimestamp(value EDate? in) returns (ETimestamp?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a timestamp.
 	 */
-	static function asTimestamp(value EString in) returns (ETimestamp) {@Operation{"narrow"}};
-
+	static function asTimestamp(value EString? in) returns (ETimestamp?) {@Operation{"narrow"}};
+	
+	/**
+	 * Returns the day value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'dd'.
+	 */
 	function dayOf() returns(EInt);
-
+	
+	/**
+	 * Returns the month value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'MM'.
+	 */
 	function monthOf() returns(EInt);
-
+	
+	/**
+	 * Returns the year value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'yyyy'.
+	 */
 	function yearOf() returns(EInt);
-
+	
+	/**
+	 * Returns the day of the week value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'dd'.
+	 */
 	function weekdayOf() returns(EInt);
-
+	
+	/**
+	 * Returns the date portion of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'yyyyMMdd'.
+	 */
 	function dateOf() returns(EDate);
-
-	function timeOf() returns(ETimestamp);//TODO this really should return ETimestamp("hhmmss"), but we can't handle that.
-
+	
+	/**
+	 * Returns the time portion of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'HHmmss'.
+	 */
+	function timeOf() returns(ETime);
+	
+	/**
+	 * Returns the hour value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'HH'.
+	 */
+	function hourOf() returns(EInt);
+	
+	/**
+	 * Returns the minute value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'mm'.
+	 */
+	function minuteOf() returns(EInt);
+	
+	/**
+	 * Returns the second value of the timestamp.
+	 * 
+	 * @throws InvalidArgumentException if the timestamp format does not contain 'ss'.
+	 */
+	function secondOf() returns(EInt);
+	
+	/**
+	 * Returns a new timestamp based on this one, using the given mask. Any fields in this timestamp
+	 * that exist in the given mask will be copied into the new timestamp being returned.
+	 * 
+	 * @param timeSpanMask the mask to use for the new timestamp being returned.
+	 * @throws InvalidArgumentException if the mask is not valid.
+	 */
 	function extend(timeSpanMask EString in) returns(ETimestamp);
 end

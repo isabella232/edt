@@ -24,6 +24,11 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	parameterizedType = FixedPrecisionType
 }
 	/**
+	 * Constructs a decimal with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value EDecimal in) returns (EDecimal) {@Operation{"+"}};
@@ -96,73 +101,73 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	/**
 	 * {@Operation widen} Converts a bigint to a decimal of arbitrary precision.
 	 */
-	static function asDecimal(value EBigint in) returns(EDecimal) {@Operation{"widen"}};
+	static function asDecimal(value EBigint? in) returns(EDecimal?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a bigint to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value EBigint in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EBigint? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts any decimal to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value EDecimal in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EDecimal? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts a smallint to a decimal of arbitrary precision.
 	 */
-	static function asDecimal(value ESmallint in) returns(EDecimal) {@Operation{"widen"}};
+	static function asDecimal(value ESmallint? in) returns(EDecimal?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a smallint to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value ESmallint in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value ESmallint? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a smallfloat to a decimal of arbitrary precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
-	static function asDecimal(value ESmallfloat in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value ESmallfloat? in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a smallfloat to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value ESmallfloat in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value ESmallfloat? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts an int to a decimal of arbitrary precision.
 	 */
-	static function asDecimal(value EInt in) returns(EDecimal) {@Operation{"widen"}};
+	static function asDecimal(value EInt? in) returns(EDecimal?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts an int to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value EInt in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EInt? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a float to a decimal of arbitrary precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
-	static function asDecimal(value EFloat in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EFloat? in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a float to a decimal with the specified precision.
 	 *
 	 * @throws TypeCastException if the value is out of range.
 	 */
-	static function asDecimal(value EFloat in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EFloat? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts a string to a decimal.  The string is parsed
@@ -172,7 +177,7 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a decimal.
 	 */
-	static function asDecimal(value EString in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EString? in) returns(EDecimal?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts a string to a decimal with the specified precision.
@@ -182,24 +187,24 @@ externalType EDecimal extends ENumber type ParameterizableType {
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a decimal.
 	 */
-	static function asDecimal(value EString in, length EInt in, decimals EInt in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EString? in, length EInt in, decimals EInt in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a number to a decimal of arbitrary precision.
 	 *
 	 * @throws TypeCastException if the value can't be represented with the specified precision.
 	 */
-	static function asDecimal(value ENumber in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value ENumber? in) returns(EDecimal?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts bytes to a decimal.
 	 *
 	 * @throws TypeCastException if the bytes are not valid format for a decimal.
 	 */
-	static function asDecimal(value EBytes in) returns(EDecimal) {@Operation{"narrow"}};
+	static function asDecimal(value EBytes? in) returns(EDecimal?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation widen} Converts a decimal to a number.
 	 */
-	static function asNumber(value EDecimal in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value EDecimal? in) returns(ENumber?) {@Operation{"widen"}};
 end

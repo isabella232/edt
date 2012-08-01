@@ -16,6 +16,11 @@ import egl.lang.reflect.mof.Operation;
 
 externalType ESmallint extends ENumber type ClassType
 	/**
+	 * Constructs a smallint with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value ESmallint in) returns (EInt) {@Operation{"+"}};
@@ -132,7 +137,7 @@ externalType ESmallint extends ENumber type ClassType
 	/**
 	 * {@Operation widen} Converts a smallint to a number.
 	 */
-	static function asNumber(value ESmallint in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallint? in) returns(ENumber?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a decimal to a smallint.  Digits after the
@@ -140,7 +145,7 @@ externalType ESmallint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the decimal is out of range for a smallint.
 	 */
-	static function asSmallint(value EDecimal in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EDecimal? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a float to a smallint.  Digits after the
@@ -148,14 +153,14 @@ externalType ESmallint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the float is out of range for a smallint.
 	 */
-	static function asSmallint(value EFloat in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EFloat? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts an int to a smallint.
 	 *
 	 * @throws TypeCastException if the int is out of range for a smallint.
 	 */
-	static function asSmallint(value EInt in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EInt? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a smallint.  The string is parsed
@@ -165,7 +170,7 @@ externalType ESmallint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a smallint.
 	 */
-	static function asSmallint(value EString in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EString? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a smallfloat to a smallint.  Digits after the
@@ -173,14 +178,14 @@ externalType ESmallint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the smallfloat is out of range for a smallint.
 	 */
-	static function asSmallint(value ESmallfloat in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value ESmallfloat? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a bigint to a smallint.
 	 *
 	 * @throws TypeCastException if the bigint is out of range for a smallint.
 	 */
-	static function asSmallint(value EBigint in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EBigint? in) returns(ESmallint?) {@Operation{"narrow"}};
 
 	/**
 	 * {@Operation narrow} Converts a number to a smallint.  Digits after the
@@ -188,12 +193,12 @@ externalType ESmallint extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the number is out of range for a smallint.
 	 */
-	static function asSmallint(value ENumber in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value ENumber? in) returns(ESmallint?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts bytes to a smallint.
 	 *
 	 * @throws TypeCastException if the bytes are not valid format for a smallint.
 	 */
-	static function asSmallint(value EBytes in) returns(ESmallint) {@Operation{"narrow"}};
+	static function asSmallint(value EBytes? in) returns(ESmallint?) {@Operation{"narrow"}};
 end

@@ -18,7 +18,7 @@ externaltype XmlLib type NativeType
 	private constructor();
 
     static function convertFromXML(xmlstr string in, rec AnyRecord inout);
-    static function convertFromXML(xmlstr string in, eglType any in);
+    static function convertFromXML(xmlstr string in, eglType any inout);
 
     static function convertToXML(eglType AnyRecord inout, document boolean in)returns(string);
     static function convertToXML(eglType any in, document boolean in)returns(string);

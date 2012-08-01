@@ -11,6 +11,8 @@
  *******************************************************************************/
 package eglx.lang;
 
+import eglx.lang.NativeType;
+
 externalType Resources type NativeType
 	static function getResource(uri string const in)returns(any);
 end

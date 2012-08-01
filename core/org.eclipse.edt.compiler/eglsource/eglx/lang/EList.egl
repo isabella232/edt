@@ -21,6 +21,10 @@ import egl.lang.reflect.mof.Operation;
 externalType EList type ClassType {  
 	typeParameters = ["E"]
 }
+	/**
+	 * Constructs an empty list.
+	 */
+	constructor();
 
 	/**
 	 * {@Operation ::} Creates a new list consisting of the first operand's elements

@@ -11,6 +11,8 @@
  *******************************************************************************/
 package eglx.http;
 
+import eglx.lang.NativeType;
+
 // interface
 externalType IHttp type NativeType 
 	private constructor();

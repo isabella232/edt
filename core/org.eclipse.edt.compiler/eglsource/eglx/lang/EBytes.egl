@@ -20,6 +20,11 @@ externalType EBytes extends AnyValue type ParameterizableType {
 	parameterizedType = SequenceType
 }
 	/**
+	 * Constructs an empty bytes.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} Concatenates two bytes.
 	 */
 	static function $Plus(lvalue EBytes? in, rvalue EBytes? in) returns(EBytes) {@Operation{"+"}};
@@ -75,62 +80,47 @@ externalType EBytes extends AnyValue type ParameterizableType {
 	 * 
 	 * @throws TypeCastException if the bigint is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value EBigint in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value EBigint? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts an int to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the int is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value EInt in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value EInt? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a smallint to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the smallint is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value ESmallint in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value ESmallint? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a float to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the float is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value EFloat in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value EFloat? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a smallfloat to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the smallfloat is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value ESmallfloat in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value ESmallfloat? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a decimal to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the decimal is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value EDecimal in) returns(EBytes) {@Operation{"widen"}};
+	static function asBytes(value EDecimal? in) returns(EBytes?) {@Operation{"widen"}};
 	
 	/**
 	 * {@Operation widen} Converts a number to bytes using the numeric type's bit pattern.
 	 * 
 	 * @throws TypeCastException if the number is not the correct length in bytes for the target.
 	 */
-	static function asBytes(value ENumber in) returns(EBytes) {@Operation{"widen"}};
-	
-	/**
-	 * {@Operation widen} Converts a string to bytes using the bit pattern of the
-	 * Unicode characters in the string.
-	 */
-	static function asBytes(value EString in) returns(EBytes) {@Operation{"widen"}};
-	
-	/**
-	 * Returns this bytes as a string, using the specified encoding for the conversion.
-	 * 
-	 * @param encoding  the encoding to be used when converting the bytes.
-	 * @return the string value of the bytes.
-	 * @throws TypeCastException if the encoding is invalid for the bytes.
-	 */
-	function toString(encoding EString in) returns(EString);
+	static function asBytes(value ENumber? in) returns(EBytes?) {@Operation{"widen"}};
 end

@@ -11,6 +11,9 @@
  *******************************************************************************/
 package eglx.persistence.sql;
 
+import eglx.lang.AnyException;
+import eglx.lang.NativeType;
+
 externalType SQLException extends AnyException type NativeType
 	SQLState string?{@Property {}};
 	ErrorCode int?{@Property {}};

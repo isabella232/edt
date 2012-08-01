@@ -11,11 +11,8 @@
  *******************************************************************************/
 package eglx.http;
 
-// RUI Handler
+import eglx.lang.NativeType;
 
-
-//
-//
 externalType HttpSoap extends IHttp type NativeType
 	constructor();
 	request Request{@Property {}};

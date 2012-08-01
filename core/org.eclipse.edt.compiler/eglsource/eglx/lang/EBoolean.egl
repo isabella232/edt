@@ -18,6 +18,10 @@ import egl.lang.reflect.mof.Operation;
  * This is the class for booleans: true/false values.
  */
 externalType EBoolean extends AnyValue type ClassType
+	/**
+	 * Constructs a boolean with a default value of false.
+	 */
+	constructor();
 
 	/**
 	 * {@Operation ==} Compares two booleans.
@@ -38,6 +42,11 @@ externalType EBoolean extends AnyValue type ClassType
 	 * {@Operation ||} Returns true if either operand is true.
 	 */
 	static function $OR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"||"}};
+
+	/**
+	 * {@Operation xor} Returns true if one operand is true and the other is false.
+	 */
+	static function $XOR(lvalue EBoolean in, rvalue EBoolean in) returns(EBoolean) {@Operation{"xor"}};
 
 	/**
 	 * {@Operation !} Negates a boolean.

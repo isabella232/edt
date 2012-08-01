@@ -11,6 +11,8 @@
  *******************************************************************************/
 package eglx.persistence.sql;
 
+import eglx.lang.Nativetype;
+
 externalType SQLWarning extends SQLException type NativeType 
     nextWarning SQLWarning?{@Property {}};
 end

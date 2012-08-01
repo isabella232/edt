@@ -11,6 +11,9 @@
  *******************************************************************************/
 package egl.lang.reflect;
 
+import egl.lang.reflect.PartType;
+import org.eclipse.edt.mof.egl.Stereotype;
+
 record ClassType type Annotation {
 	targets = [ElementKind.ExternalTypePart],
 	@PartType{"org.eclipse.edt.mof.egl.EGLClass"},

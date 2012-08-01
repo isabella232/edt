@@ -16,6 +16,11 @@ import egl.lang.reflect.mof.Operation;
 
 externalType ESmallfloat extends ENumber type ClassType
 	/**
+	 * Constructs a smallfloat with a default value of 0.
+	 */
+	constructor();
+	
+	/**
 	 * {@Operation +} A unary plus (has no effect on the numeric value).
 	 */
 	static function $Plus(value ESmallfloat in) returns (ESmallfloat) {@Operation{"+"}};
@@ -85,9 +90,9 @@ externalType ESmallfloat extends ENumber type ClassType
 	 */
 	static function $NEQ(lvalue ESmallfloat? in, rvalue ESmallfloat? in) returns(EBoolean) {@Operation{"!="}};
 
-	static function asNumber(value ESmallfloat in) returns(ENumber) {@Operation{"widen"}};
+	static function asNumber(value ESmallfloat? in) returns(ENumber?) {@Operation{"widen"}};
 
-	static function asSmallfloat(value EDecimal in) returns(ESmallfloat) {@Operation{"widen"}};
+	static function asSmallfloat(value EDecimal? in) returns(ESmallfloat?) {@Operation{"widen"}};
 
 	/**
 	 * {@Operation narrow} Converts a string to a smallfloat.  The string is parsed
@@ -99,18 +104,18 @@ externalType ESmallfloat extends ENumber type ClassType
 	 *
 	 * @throws TypeCastException if the string can't be parsed into a smallfloat.
 	 */
-	static function asSmallfloat(value EString in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value EString? in) returns(ESmallfloat?) {@Operation{"narrow"}};
 	
-	static function asSmallfloat(value ESmallint in) returns(ESmallfloat) {@Operation{"widen"}};
-	static function asSmallfloat(value EInt in) returns(ESmallfloat) {@Operation{"narrow"}};
-	static function asSmallfloat(value EFloat in) returns(ESmallfloat) {@Operation{"narrow"}};
-	static function asSmallfloat(value EBigint in) returns(ESmallfloat) {@Operation{"narrow"}};
-	static function asSmallfloat(value ENumber in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value ESmallint? in) returns(ESmallfloat?) {@Operation{"widen"}};
+	static function asSmallfloat(value EInt? in) returns(ESmallfloat?) {@Operation{"widen"}};
+	static function asSmallfloat(value EFloat? in) returns(ESmallfloat?) {@Operation{"narrow"}};
+	static function asSmallfloat(value EBigint? in) returns(ESmallfloat?) {@Operation{"widen"}};
+	static function asSmallfloat(value ENumber? in) returns(ESmallfloat?) {@Operation{"narrow"}};
 	
 	/**
 	 * {@Operation narrow} Converts bytes to a smallfloat.
 	 *
 	 * @throws TypeCastException if the bytes are not valid format for a smallfloat.
 	 */
-	static function asSmallfloat(value EBytes in) returns(ESmallfloat) {@Operation{"narrow"}};
+	static function asSmallfloat(value EBytes? in) returns(ESmallfloat?) {@Operation{"narrow"}};
 end
