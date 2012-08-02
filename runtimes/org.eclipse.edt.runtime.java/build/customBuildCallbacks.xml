@@ -68,8 +68,25 @@
 	<target name="post.compile.@dot">
 <echo message="Post-compile SMAP info..."/>
 <echo message="  ${@dot.classpath}"/>
+<echo message="  ${.classpath}"/>
+<echo message="  ${post.compile.@dot.classpath}"/>
 <echo message="  ${target.folder}"/>
 <echo message="  ${source.folder1}"/>
+
+<exec executable="pwd"/>		
+
+<available property="file.present" file="build/transformer.jar"/>
+<echo message="  file.present = ${file.present}"/>
+<available property="dir1.present" file="build"/>
+<echo message="  dir1.present = ${dir1.present}"/>
+<available property="dir2.present" file="../build"/>
+<echo message="  dir2.present = ${dir2.present}"/>
+<available property="class1.present" classname="org.eclipse.edt.debug.core.SMAPTransformer"/>	
+<echo message="  class1.present = ${class1.present}"/>
+<available property="class2.present" classpath="build/transformer.jar" classname="org.eclipse.edt.debug.core.SMAPTransformer"/>	
+<echo message="  class2.present = ${class2.present}"/>
+		
+		
 		<!-- Add SMAP data into the .class files. transformer.jar was created by enabling the SMAP Transformer builder
 		     on the org.eclipse.edt.debug.core project, and copying the jar to this project. -->
 		<java classpath="build/transformer.jar" classname="org.eclipse.edt.debug.core.SMAPTransformer">
