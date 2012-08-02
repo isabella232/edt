@@ -25,6 +25,7 @@ import org.eclipse.edt.compiler.internal.core.validation.type.TypeValidator;
 import org.eclipse.edt.compiler.internal.util.BindingUtil;
 import org.eclipse.edt.mof.egl.Constructor;
 import org.eclipse.edt.mof.egl.Interface;
+import org.eclipse.edt.mof.egl.ParameterizedType;
 import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.StructPart;
 
@@ -52,9 +53,10 @@ public class FieldValidator extends DefaultASTVisitor{
 			}
 		}
 		else {
+			//TODO records have no constructor - look into this once records are being bound (might need to add 'constructor()' to EGLRecord and StructuredRecord)
 			org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
 			//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
-			if (typeBinding != null && !classDataDeclaration.isNullable() && !hasPublicDefaultConstructor(typeBinding)) {
+			if (typeBinding != null && !classDataDeclaration.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
 				//Don't need to throw error if the field is in an ExternalType
 				if (declaringPart == null || declaringPart.getKind() != ITypeBinding.EXTERNALTYPE_BINDING) {
 					problemRequestor.acceptProblem(type,
@@ -93,7 +95,7 @@ public class FieldValidator extends DefaultASTVisitor{
 			else {
 				org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
 				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
-				if (typeBinding != null && !functionDataDeclaration.isNullable() && !hasPublicDefaultConstructor(typeBinding)) {
+				if (typeBinding != null && !functionDataDeclaration.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
 					problemRequestor.acceptProblem(type,
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
 						new String[] {type.getCanonicalName()});
@@ -132,7 +134,7 @@ public class FieldValidator extends DefaultASTVisitor{
 			if (!structureItem.hasInitializer()) {
 				org.eclipse.edt.mof.egl.Type typeBinding = type.resolveType();
 				//Non-nullable reference types must be instantiable, because they are initialized with the default constructor
-				if (typeBinding != null && !structureItem.isNullable() && !hasPublicDefaultConstructor(typeBinding)) {
+				if (typeBinding != null && !structureItem.isNullable() && !(typeBinding instanceof ParameterizedType) && !hasPublicDefaultConstructor(typeBinding)) {
 					problemRequestor.acceptProblem(type,
 							IProblemRequestor.TYPE_NOT_INSTANTIABLE,
 						new String[] {type.getCanonicalName()});

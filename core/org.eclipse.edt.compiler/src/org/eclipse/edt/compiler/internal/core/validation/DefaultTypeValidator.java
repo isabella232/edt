@@ -34,12 +34,12 @@ public class DefaultTypeValidator implements TypeValidator {
 						new String[] {Integer.toString(len), typeBinding.getClassifier().getTypeSignature(), "(1..32)"});
 			}
 			
+			// Don't report too many errors at once
 			if (decimals < 0 || decimals > 32) {
 				problemRequestor.acceptProblem(type, IProblemRequestor.INVALID_DECIMALS,
 						new String[] {Integer.toString(decimals), typeBinding.getClassifier().getTypeSignature(), "(1..32)"});
 			}
-			
-			if (decimals > len) {
+			else if (decimals > len) {
 				problemRequestor.acceptProblem(type, IProblemRequestor.DECIMALS_GREATER_THAN_LENGTH,
 						new String[] {Integer.toString(decimals), typeBinding.getClassifier().getTypeSignature(), Integer.toString(len)});
 			}

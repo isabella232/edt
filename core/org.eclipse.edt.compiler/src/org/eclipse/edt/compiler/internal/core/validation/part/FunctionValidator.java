@@ -264,10 +264,6 @@ public class FunctionValidator extends AbstractASTVisitor {
 	
 	private void checkParmTypeNotStaticArray(FunctionParameter functionParameter, Type parmType) {
 
-		if (functionParameter.isNullable()) {
-			checkParmTypeNotStaticArray(functionParameter, parmType.getBaseType());
-		}
-		
 		if(parmType.isArrayType()) {
 			if (((ArrayType) parmType).hasInitialSize()) {
         	problemRequestor.acceptProblem(

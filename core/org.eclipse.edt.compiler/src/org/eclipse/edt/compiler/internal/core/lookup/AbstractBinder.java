@@ -783,7 +783,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
     
         
     protected void processSettingsBlock(ClassDataDeclaration classDataDeclaration, Part functionContainerBinding, Scope functionContainerScope, IProblemRequestor problemRequestor) {
-        
+        if (true) return; //TODO currently blows up
         boolean annotationFoundUsingScope = false;
         for (Name name : classDataDeclaration.getNames()) {
              if (classDataDeclaration.hasSettingsBlock()) {
