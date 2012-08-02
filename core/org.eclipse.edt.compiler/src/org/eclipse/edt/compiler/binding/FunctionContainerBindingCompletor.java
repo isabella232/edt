@@ -52,6 +52,7 @@ import org.eclipse.edt.mof.egl.StereotypeType;
 import org.eclipse.edt.mof.egl.StructPart;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.TypeUtils;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 
 /**
@@ -301,6 +302,8 @@ public abstract class FunctionContainerBindingCompletor extends AbstractBinder {
     
     public boolean visit(Constructor constructor) {
     	final org.eclipse.edt.mof.egl.Constructor constructorBinding = IrFactory.INSTANCE.createConstructor();
+    	constructorBinding.setName(NameUtile.getAsCaseSensitiveName(IEGLConstants.KEYWORD_CONSTRUCTOR));
+    	constructorBinding.setType(functionContainerBinding);
     	final Set<String> definedParameters = new HashSet<String>();
     	
     	constructor.setBinding(constructorBinding);

@@ -16,43 +16,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.DataTableBinding;
-import org.eclipse.edt.compiler.binding.DelegateBinding;
-import org.eclipse.edt.compiler.binding.DynamicDataBinding;
-import org.eclipse.edt.compiler.binding.EnumerationDataBinding;
-import org.eclipse.edt.compiler.binding.EnumerationTypeBinding;
-import org.eclipse.edt.compiler.binding.ExternalTypeBinding;
-import org.eclipse.edt.compiler.binding.FormBinding;
-import org.eclipse.edt.compiler.binding.FormGroupBinding;
-import org.eclipse.edt.compiler.binding.FunctionParameterBinding;
-import org.eclipse.edt.compiler.binding.IAnnotationBinding;
-import org.eclipse.edt.compiler.binding.IBinding;
-import org.eclipse.edt.compiler.binding.IDataBinding;
-import org.eclipse.edt.compiler.binding.IFunctionBinding;
-import org.eclipse.edt.compiler.binding.IPartBinding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.InterfaceBinding;
-import org.eclipse.edt.compiler.binding.LibraryBinding;
-import org.eclipse.edt.compiler.binding.LibraryDataBinding;
-import org.eclipse.edt.compiler.binding.PartBinding;
-import org.eclipse.edt.compiler.binding.PrimitiveTypeBinding;
-import org.eclipse.edt.compiler.binding.ProgramBinding;
-import org.eclipse.edt.compiler.binding.ServiceBinding;
-import org.eclipse.edt.compiler.binding.TopLevelFunctionBinding;
-import org.eclipse.edt.compiler.binding.annotationType.EGLSystemConstantAnnotationTypeBinding;
-import org.eclipse.edt.compiler.core.IEGLConstants;
 import org.eclipse.edt.compiler.core.ast.ArrayType;
 import org.eclipse.edt.compiler.core.ast.FieldAccess;
 import org.eclipse.edt.compiler.core.ast.LikeMatchesExpression;
 import org.eclipse.edt.compiler.core.ast.LiteralExpression;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.ParenthesizedExpression;
-import org.eclipse.edt.compiler.core.ast.Primitive;
 import org.eclipse.edt.compiler.core.ast.QualifiedName;
 import org.eclipse.edt.compiler.core.ast.SettingsBlock;
 import org.eclipse.edt.compiler.core.ast.SimpleName;
-import org.eclipse.edt.compiler.internal.core.lookup.System.ISystemLibrary;
 import org.eclipse.edt.mof.EObject;
 import org.eclipse.edt.mof.egl.ArrayAccess;
 import org.eclipse.edt.mof.egl.ArrayLiteral;
@@ -65,25 +37,35 @@ import org.eclipse.edt.mof.egl.BytesLiteral;
 import org.eclipse.edt.mof.egl.CharLiteral;
 import org.eclipse.edt.mof.egl.ConstructorInvocation;
 import org.eclipse.edt.mof.egl.DBCharLiteral;
+import org.eclipse.edt.mof.egl.DataTable;
 import org.eclipse.edt.mof.egl.DecimalLiteral;
 import org.eclipse.edt.mof.egl.DeclarationExpression;
+import org.eclipse.edt.mof.egl.Delegate;
 import org.eclipse.edt.mof.egl.DelegateInvocation;
 import org.eclipse.edt.mof.egl.DynamicAccess;
 import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.Enumeration;
 import org.eclipse.edt.mof.egl.Expression;
+import org.eclipse.edt.mof.egl.ExternalType;
 import org.eclipse.edt.mof.egl.Field;
 import org.eclipse.edt.mof.egl.FloatingPointLiteral;
+import org.eclipse.edt.mof.egl.Form;
+import org.eclipse.edt.mof.egl.FormGroup;
+import org.eclipse.edt.mof.egl.Function;
 import org.eclipse.edt.mof.egl.FunctionInvocation;
 import org.eclipse.edt.mof.egl.FunctionMember;
+import org.eclipse.edt.mof.egl.FunctionParameter;
 import org.eclipse.edt.mof.egl.FunctionPart;
 import org.eclipse.edt.mof.egl.FunctionPartInvocation;
 import org.eclipse.edt.mof.egl.FunctionStatement;
 import org.eclipse.edt.mof.egl.HexLiteral;
 import org.eclipse.edt.mof.egl.IntegerLiteral;
+import org.eclipse.edt.mof.egl.Interface;
 import org.eclipse.edt.mof.egl.InvocationExpression;
 import org.eclipse.edt.mof.egl.IsAExpression;
 import org.eclipse.edt.mof.egl.IsNotExpression;
 import org.eclipse.edt.mof.egl.LHSExpr;
+import org.eclipse.edt.mof.egl.Library;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
 import org.eclipse.edt.mof.egl.MBCharLiteral;
 import org.eclipse.edt.mof.egl.Member;
@@ -98,7 +80,9 @@ import org.eclipse.edt.mof.egl.ObjectExpression;
 import org.eclipse.edt.mof.egl.ObjectExpressionEntry;
 import org.eclipse.edt.mof.egl.Part;
 import org.eclipse.edt.mof.egl.PartName;
+import org.eclipse.edt.mof.egl.Program;
 import org.eclipse.edt.mof.egl.QualifiedFunctionInvocation;
+import org.eclipse.edt.mof.egl.Service;
 import org.eclipse.edt.mof.egl.SetValuesExpression;
 import org.eclipse.edt.mof.egl.Statement;
 import org.eclipse.edt.mof.egl.StatementBlock;
@@ -132,7 +116,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		setElementInformation(expr, asExpr);
 		expr.getExpression().accept(this);
 		asExpr.setObjectExpr((Expression)stack.pop());
-		Type eType = (Type)mofTypeFor(expr.resolveTypeBinding());
+		Type eType = (Type)mofTypeFor(expr.resolveType());
 		asExpr.setEType(eType);
 		return false;
 	}
@@ -147,8 +131,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			org.eclipse.edt.compiler.core.ast.Expression indexExpr = (org.eclipse.edt.compiler.core.ast.Expression) node.getIndices().get(i);
 			indexExpr.accept(this);
 			Expression index = (Expression)stack.pop();
-			ITypeBinding exprType = indexExpr.resolveTypeBinding();
-			if (!Binding.isValidBinding(exprType)) {
+			Type exprType = indexExpr.resolveType();
+			if (exprType == null) {
 				ArrayAccess ax = factory.createArrayAccess();
 				ax.setIndex(index);
 				ax.setArray(arrayExpression);
@@ -165,7 +149,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 					lastAC = ax;
 				} else {
 					ArrayAccess ax = factory.createArrayAccess();
-					ax.setIndex(IRUtils.createAsExpression(index, mofPrimitiveFor(Primitive.INT)));
+					ax.setIndex(IRUtils.createAsExpression(index, (Type)getMofSerializable(Type_EGLInt)));
 					ax.setArray(arrayExpression);
 					lastAC = ax;
 				}
@@ -179,9 +163,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ArrayLiteral node) {
 		List<Expression> entries = new ArrayList<Expression>();
-		Iterator i = node.getExpressions().iterator();
-		while (i.hasNext()) {
-			org.eclipse.edt.compiler.core.ast.Expression expr = (org.eclipse.edt.compiler.core.ast.Expression) i.next();
+		for(org.eclipse.edt.compiler.core.ast.Expression expr : node.getExpressions()) {
 			expr.accept(this);
 			entries.add((Expression)stack.pop());
 		}
@@ -195,9 +177,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ObjectExpression node) {
 		List<ObjectExpressionEntry> entries = new ArrayList<ObjectExpressionEntry>();
-		Iterator i = node.getEntries().iterator();
-		while (i.hasNext()) {
-			org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry entry =  (org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry) i.next();
+		for (org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry entry : (List<org.eclipse.edt.compiler.core.ast.ObjectExpressionEntry>)node.getEntries()) {
 			ObjectExpressionEntry entryIR = factory.createObjectExpressionEntry();
 			entryIR.setId(entry.getId());
 			entry.getExpression().accept(this);
@@ -338,7 +318,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FieldAccess fieldAccess) {
-		Type type = (Type)mofTypeFor(fieldAccess.getPrimary().resolveTypeBinding());
+		Type type = (Type)mofTypeFor(fieldAccess.getPrimary().resolveType());
 		if (TypeUtils.isDynamicType(type)) {
 			DynamicAccess expr = factory.createDynamicAccess();
 			setElementInformation(fieldAccess, expr);
@@ -364,39 +344,38 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	public boolean visit(org.eclipse.edt.compiler.core.ast.FunctionInvocation node) {
 		InvocationExpression fi;
 		
- 		ITypeBinding typeBinding = node.getTarget().resolveTypeBinding();
-		List<FunctionParameterBinding> functionParmBindings;
-		if (typeBinding instanceof DelegateBinding) {
+ 		Type typeBinding = node.getTarget().resolveType();
+		List<FunctionParameter> functionParmBindings;
+		if (typeBinding instanceof Delegate) {
 			
-			functionParmBindings =  ((DelegateBinding)typeBinding).getParemeters();
+			functionParmBindings =  ((Delegate)typeBinding).getParameters();
 			fi = factory.createDelegateInvocation();
-			fi.setId(typeBinding.getCaseSensitiveName());
+			fi.setId(((Delegate) typeBinding).getCaseSensitiveName());
 			node.getTarget().accept(this);
 			((DelegateInvocation)fi).setExpression((Expression)stack.pop());
 		}
 		else {
 						
-			ITypeBinding targetBinding = node.getTarget().resolveTypeBinding();
-			IFunctionBinding functionBinding = null;
-			IPartBinding declarer = null;
-			if (Binding.isValidBinding(targetBinding) && (targetBinding instanceof IFunctionBinding)) {
-				functionBinding = (IFunctionBinding) targetBinding;
+			Element targetBinding = (Element)node.getTarget().resolveElement();
+			Function functionBinding = null;
+			Part declarer = null;
+			if (targetBinding instanceof Function) {
+				functionBinding = (Function) targetBinding;
 				functionParmBindings =  functionBinding.getParameters();
-				declarer = functionBinding.getDeclarer();
+				declarer = (Part)functionBinding.getContainer();
 			}
 			else {
-				functionParmBindings =  new ArrayList();
+				functionParmBindings =  new ArrayList<FunctionParameter>();
 				
 			}
 			
-			if (functionBinding instanceof TopLevelFunctionBinding) {
+			if (functionBinding instanceof Function && declarer == null) {
 				fi = factory.createFunctionPartInvocation();
-				String packageName = concatWithSeparator(((TopLevelFunctionBinding)functionBinding).getPackageName(), ".");
-				((FunctionPartInvocation)fi).setPackageName(packageName);
+				((FunctionPartInvocation)fi).setPackageName(declarer.getCaseSensitivePackageName());
 				fi.setId(functionBinding.getCaseSensitiveName());			
 			}
 			else {
-				boolean isStatic = Binding.isValidBinding(functionBinding) && (functionBinding.isStatic() || declarer instanceof LibraryBinding);
+				boolean isStatic = functionBinding != null && (functionBinding.isStatic() || declarer instanceof Library);
 				if (node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.ThisExpression
 						|| node.getTarget() instanceof org.eclipse.edt.compiler.core.ast.SuperExpression) {
 					// Constructor invocation.
@@ -439,7 +418,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 							id =  ((FunctionMember)mbr).getName();
 						}
 						else {
-							if(Binding.isValidBinding(functionBinding)) {
+							if(functionBinding != null) {
 								id = functionBinding.getCaseSensitiveName();
 							}
 						}
@@ -460,7 +439,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 								id =  ((FunctionMember)mbr).getName();
 							}
 							else {
-								if(Binding.isValidBinding(functionBinding)) {
+								if(functionBinding != null) {
 									id = functionBinding.getCaseSensitiveName();
 								}
 							}
@@ -474,7 +453,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 							fi.setId(functionBinding.getCaseSensitiveName());
 							PartName partName = factory.createPartName();
 							partName.setId(declarer.getCaseSensitiveName());
-							partName.setPackageName(concatWithSeparator(declarer.getPackageName(), "."));
+							partName.setPackageName(declarer.getCaseSensitivePackageName());
 							setElementInformation(node.getTarget(), partName);
 							((QualifiedFunctionInvocation)fi).setQualifier(partName);
 						}
@@ -508,7 +487,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 										id =  ((FunctionMember)mbr).getName();
 									}
 									else {
-										if(Binding.isValidBinding(functionBinding)) {
+										if(functionBinding != null) {
 											id = functionBinding.getCaseSensitiveName();
 										}
 									}
@@ -547,8 +526,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 		
 		int index = 0;
-		for (Iterator iter = node.getArguments().iterator(); iter.hasNext();) {
-			org.eclipse.edt.compiler.core.ast.Expression argExpr = (org.eclipse.edt.compiler.core.ast.Expression) iter.next();
+		for (Iterator<org.eclipse.edt.compiler.core.ast.Expression> iter = node.getArguments().iterator(); iter.hasNext();) {
+			org.eclipse.edt.compiler.core.ast.Expression argExpr = iter.next();
 			argExpr.accept(this);
 			Expression expr = (Expression)stack.pop();
 			
@@ -561,7 +540,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			// if passing any type to anything other than an any, must change
 			// the arg to an AsExpression...only need to do this if the parm is an input type...do not need
 			// to massage the arguments for output parms
-			FunctionParameterBinding parm = null;
+			FunctionParameter parm = null;
 			if (functionParmBindings.size() > 0) {
 				if (functionParmBindings.size() > index) {
 					parm = functionParmBindings.get(index);					
@@ -634,7 +613,7 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		stack.push(isaExpr);
 		expr.getExpression().accept(this);
 		isaExpr.setObjectExpr((Expression)stack.pop());
-		Type type = (Type)mofTypeFor(expr.getType().resolveTypeBinding());
+		Type type = (Type)mofTypeFor(expr.getType().resolveType());
 		isaExpr.setEType(type);
 		return false;
 	}
@@ -644,18 +623,18 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return true;
 	}
 	
-	private Name createNameForPart(IPartBinding binding) {
-		if (binding instanceof TopLevelFunctionBinding) {
+	private Name createNameForPart(Part binding) {
+		if (binding instanceof Function) {
 			return factory.createTopLevelFunctionName();
 		}
-		else if (binding instanceof LibraryBinding 
-				|| binding instanceof DataTableBinding 
-				|| binding instanceof ExternalTypeBinding
-				|| binding instanceof EnumerationTypeBinding
-				|| binding instanceof FormBinding
-				|| binding instanceof ProgramBinding
-				|| binding instanceof InterfaceBinding
-				|| binding instanceof ServiceBinding) {
+		else if (binding instanceof Library 
+				|| binding instanceof DataTable 
+				|| binding instanceof ExternalType
+				|| binding instanceof Enumeration
+				|| binding instanceof Form
+				|| binding instanceof Program
+				|| binding instanceof Interface
+				|| binding instanceof Service) {
 			// Is only a proper reference to a part if given part type is allowed to have
 			// field references to the part itself (static reference) as opposed to field
 			// of an instance.  SimpleName AST values may be referencing a Part in the case
@@ -663,12 +642,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			// that is being compiled independently
 			PartName name = factory.createPartName();
 			String packageName;
-			if (binding instanceof FormBinding) {
-				FormGroupBinding fg = ((FormBinding)binding).getEnclosingFormGroup();
-				packageName = concatWithSeparator(fg == null ? binding.getPackageName() : fg.getPackageName(), ".");
+			if (binding instanceof Form) {
+				FormGroup fg = ((Form)binding).getContainer();
+				packageName = fg == null ? binding.getCaseSensitivePackageName() : fg.getCaseSensitivePackageName();
 			}
 			else {
-				packageName = concatWithSeparator(((ITypeBinding)binding).getPackageName(), ".");
+				packageName = binding.getCaseSensitivePackageName();
 				//TODO - remove this temporary hardcoded remapping of "egl.core" system parts when the front
 				// end references to system parts are handled through a proper System Scope configuration
 				// that will bind to the configured part
@@ -688,9 +667,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SimpleName node) {
-		IBinding binding = node.resolveBinding();
+		Member binding = node.resolveMember();
 		// Since there was no binding this is an invalid name
-		if (!Binding.isValidBinding(binding)) {
+		if (binding == null) {
 			Name invalid;
 			if (currentPart instanceof FunctionPart) {
 				invalid = factory.createDanglingReference();
@@ -704,57 +683,34 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			return false;
 		}
 		Name name = null;
-		ITypeBinding part = null;
-		if (binding instanceof IDataBinding && ((IDataBinding)binding).isStaticPartDataBinding()) {
-			part = ((IDataBinding)binding).getType();
+		Type part = null;
+		if (binding.isStatic()) {
+			part = binding.getType();
 		}
-		else if (binding instanceof IPartBinding) {
-			part = (IPartBinding)binding;
+		else if (binding instanceof Part) {
+			part = (Part)binding;
 		}
 		if (part != null) {
-			name = createNameForPart((IPartBinding)part);
+			name = createNameForPart((Part)part);
 		}
 		else {
 			name = factory.createMemberName();
 		}
 			
-		if (part instanceof FormBinding) {
-			FormGroupBinding fg = ((FormBinding) part).getEnclosingFormGroup();
+		if (part instanceof Form) {
+			FormGroup fg = ((Form) part).getContainer();
 			String id;
 			if (fg == null) {
-				id = part.getCaseSensitiveName();
+				id = ((Form) part).getCaseSensitiveName();
 			}
 			else {
-				id = fg.getCaseSensitiveName() + Type.NestedPartDelimiter + part.getCaseSensitiveName();
+				id = fg.getCaseSensitiveName() + Type.NestedPartDelimiter + ((Form)part).getCaseSensitiveName();
 			}
 			name.setId(id);
 		}
 		else {
-			if (binding instanceof DynamicDataBinding) {
-				name.setId(node.getCaseSensitiveIdentifier());
-			}
-			else {
-				name.setId(binding.getCaseSensitiveName());
-			}
+			name.setId(binding.getCaseSensitiveName());
 		}
-		
-		IDataBinding qualifier = (IDataBinding) node.getAttribute(org.eclipse.edt.compiler.core.ast.Name.IMPLICIT_QUALIFIER_DATA_BINDING);
-		
-		if (qualifier == null && binding instanceof EnumerationDataBinding) {
-			name = (Name)addQualifier(createNameForPart((IPartBinding)((EnumerationDataBinding)binding).getDeclaringPart()), name);
-		}
-		
-		if (qualifier != null) {
-			
-			if (qualifier instanceof LibraryDataBinding ) {
-				name = (Name)addQualifier(createNameForPart((IPartBinding)qualifier.getType()), name);
-			}
-			else {
-				Element context = (Element)getEObjectFor(qualifier);
-				name = (Name)addQualifier(context, name);
-			}
-		}
-		
 		
 		if (name instanceof MemberName) {
 			if (isSuperTypeMember(binding)) {
@@ -777,10 +733,10 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.QualifiedName name) {
-		EObject objType = mofTypeFor(name.getQualifier().resolveTypeBinding());
+		EObject objType = mofTypeFor(name.getQualifier().resolveType());
 		Type type = null;
 		if (objType instanceof Type) {
-			type = (Type)mofTypeFor(name.getQualifier().resolveTypeBinding());
+			type = (Type)mofTypeFor(name.getQualifier().resolveType());
 		}
 		if (TypeUtils.isDynamicType(type)) {
 			DynamicAccess expr = factory.createDynamicAccess();
@@ -798,9 +754,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 			stack.push(nameExpr);
 			nameExpr.setId(name.getCaseSensitiveIdentifier());
 			
-			IBinding qualBinding = name.getQualifier().resolveBinding();
-			if (qualBinding instanceof PartBinding) {
-				nameExpr.setQualifier(createNameForPart((IPartBinding)qualBinding));
+			Element qualBinding = (Element)name.getQualifier().resolveElement();
+			if (qualBinding instanceof Part) {
+				nameExpr.setQualifier(createNameForPart((Part)qualBinding));
 			}
 			else {
 				name.getQualifier().accept(this);
@@ -865,8 +821,8 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@SuppressWarnings("unchecked")
 	public boolean visit(org.eclipse.edt.compiler.core.ast.NewExpression newExpression) {
 		NewExpression expr = factory.createNewExpression();
-		ITypeBinding type = newExpression.resolveTypeBinding();
-		if (!Binding.isValidBinding(type)) {
+		Type type = newExpression.resolveType();
+		if (type == null) {
 			stack.push(expr);
 			return false;
 		}
@@ -880,12 +836,12 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		Type mofType = (Type)obj;
 		expr.setId(mofType.getTypeSignature());
 		setElementInformation(newExpression, expr);
-		for (Node node : (List<Node>)newExpression.getArguments()) {
-			node.accept(this);
-			expr.getArguments().add((Expression)stack.pop());
-		}
+//FIXME jv		for (Node node : (List<Node>)newExpression.getArguments()) {
+//			node.accept(this);
+//			expr.getArguments().add((Expression)stack.pop());
+//		}
 		
-		if (type.getKind() == ITypeBinding.ARRAY_TYPE_BINDING) {
+		if (newExpression.getType().isArrayType()) {
 			processNewArray(newExpression.getType(), expr);
 		}
 		if (newExpression.getSettingsBlock() != null && newExpression.getSettingsBlock().getSettings().size() > 0) {
@@ -900,9 +856,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	}
 	
 	private void processNewArray(org.eclipse.edt.compiler.core.ast.Type type, NewExpression expr) {
-		if (type.isNullableType()) {
-			processNewArray(type.getBaseType(), expr);
-		}
 		
 		if (type.isArrayType()) {
 			ArrayType arrType = ((ArrayType)type);
@@ -922,12 +875,13 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		}
 	}
 
+
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.SetValuesExpression setValuesExpression) {
 		setValuesExpression.getExpression().accept(this);
 		Type targetType = null;
-		if (Binding.isValidBinding(setValuesExpression.getExpression().resolveTypeBinding())) {
-			EObject obj = mofTypeFor(setValuesExpression.getExpression().resolveTypeBinding());
+		if (setValuesExpression.getExpression().resolveType() != null) {
+			EObject obj = mofTypeFor(setValuesExpression.getExpression().resolveType());
 			if (obj instanceof Type) {
 				targetType = (Type) obj;
 			}
@@ -962,7 +916,6 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		setElementInformation(settings, block);
 		
 		// Can assume no annotations
-		int arrayIndex = 0;
 		MemberName localRef = null;
 		Field decl = null;
 		if (!(target instanceof LHSExpr)) {
@@ -1084,9 +1037,9 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 	@Override
 	public boolean visit(org.eclipse.edt.compiler.core.ast.ThisExpression thisExpression) {
 		ThisExpression expr = factory.createThisExpression();
-		IBinding binding = thisExpression.resolveDataBinding();
+		Element binding = (Element)thisExpression.resolveElement();
 		if (binding == null) {
-			binding = thisExpression.resolveTypeBinding();
+			binding = thisExpression.resolveType();
 		}
 		Element obj = (Element)getEObjectFor(binding);
 		expr.setThisObject(obj);
@@ -1120,128 +1073,20 @@ abstract class Egl2MofExpression extends Egl2MofStatement {
 		return false;
 	}
 
-	private boolean isAny(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-			PrimitiveTypeBinding primType = (PrimitiveTypeBinding) type;
-			if (primType.getPrimitive() == Primitive.ANY) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isFormBinding (ITypeBinding type) {
-		return (Binding.isValidBinding(type) && ITypeBinding.FORM_BINDING == type.getKind());
-	}
-
-	private boolean isFormFieldBinding(IBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		if (!binding.isDataBinding()) {
-			return false;
-		}
-		if (((IDataBinding) binding).getKind() == IDataBinding.FORM_FIELD) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isNumeric(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && type.getKind() == ITypeBinding.PRIMITIVE_TYPE_BINDING) {
-			PrimitiveTypeBinding primType = (PrimitiveTypeBinding) type;
-			return Primitive.isNumericType(primType.getPrimitive());
-		}
-		return false;
-	}
-
-	private boolean isPartBinding(IBinding binding) {
-	
-		if (binding.isFunctionBinding()) {
-			return false;
-		}
-	
-		if (binding.isTypeBinding()) {
-			return true;
-		}
-	
-		if (binding.isDataBinding()) {
-			IDataBinding dataBinding = (IDataBinding) binding;
-			if (dataBinding.getKind() == IDataBinding.DATATABLE_BINDING || dataBinding.getKind() == IDataBinding.PROGRAM_BINDING
-					|| dataBinding.getKind() == IDataBinding.LIBRARY_BINDING
-					|| dataBinding.getKind() == IDataBinding.ENUMERATIONTYPE_BINDING || dataBinding.getKind() == IDataBinding.FORM_BINDING
-					|| dataBinding.getKind() == IDataBinding.EXTERNALTYPE_BINDING) {
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-
-	private boolean isResourceAssociationBinding(IBinding binding) {
-		return Binding.isValidBinding(binding) && binding.isDataBinding()
-				&& (((IDataBinding) binding).getKind() == IDataBinding.SYSTEM_VARIABLE_BINDING)
-				&& IEGLConstants.SYSTEM_WORD_RESOURCEASSOCIATION.equalsIgnoreCase(binding.getName());
-	}
-
-	private boolean isSizeFunction(IDataBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		IAnnotationBinding ann = binding.getAnnotation(EGLSystemConstantAnnotationTypeBinding.getInstance());
-		if (ann == null) {
-			return false;
-		}
-		if (ann.getValue() instanceof Integer) {
-			int value = ((Integer) ann.getValue()).intValue();
-			return value == ISystemLibrary.Size_func;
-		}
-		return false;
-	}
-
-	private boolean isStructureItemBinding(IBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		if (!binding.isDataBinding()) {
-			return false;
-		}
-		if (((IDataBinding) binding).getKind() == IDataBinding.STRUCTURE_ITEM_BINDING) {
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isSuperTypeMember(IBinding binding) {
-		if (binding == null || binding == IBinding.NOT_FOUND_BINDING)
+	private boolean isSuperTypeMember(Element binding) {
+		if (binding == null)
 			return false;
 		
 		StructPart part = null;
-		if (binding.isDataBinding()) {
-			part = (StructPart)mofTypeFor(((IDataBinding)binding).getDeclaringPart());
+		if (binding instanceof Member && ((Member)binding).getContainer() instanceof StructPart) {
+			part = (StructPart)mofTypeFor((Type)((Member)binding).getContainer());
 		}
-		else if (binding.isFunctionBinding()) {
-			part = (StructPart)mofTypeFor(((IFunctionBinding)binding).getDeclarer());
+		else if (binding instanceof Member) {
+			return isSuperTypeMember(((Member)binding).getContainer());
 		}
 
 		StructPart current = (StructPart)currentPart;
 		return  part != null && !current.equals(part) && current.isSubtypeOf(part);
 	}
 
-	private boolean isWithPatternFunction(IDataBinding binding) {
-		if (!Binding.isValidBinding(binding)) {
-			return false;
-		}
-		IAnnotationBinding ann = binding.getAnnotation(EGLSystemConstantAnnotationTypeBinding.getInstance());
-		if (ann == null) {
-			return false;
-		}
-		if (ann.getValue() instanceof Integer) {
-			int value = ((Integer) ann.getValue()).intValue();
-			return (value == ISystemLibrary.TimeStampValueWithPattern_func || value == ISystemLibrary.IntervalValueWithPattern_func);
-		}
-		return false;
-	}
-
-	
 }
