@@ -100,7 +100,7 @@ public abstract class AbstractBinder extends AbstractASTVisitor {
             case Type.ARRAYTYPE:
                 ArrayType arrayType = (ArrayType) type;
                 org.eclipse.edt.mof.egl.Type elementType = bindType(arrayType.getElementType());
-                org.eclipse.edt.mof.egl.ArrayType arrayTypeBinding = BindingUtil.getArrayType(elementType, false); //TODO
+                org.eclipse.edt.mof.egl.ArrayType arrayTypeBinding = BindingUtil.getArrayType(elementType, arrayType.isNullable()); //TODO
                 arrayType.setType(arrayTypeBinding);
                 return arrayTypeBinding;
 
