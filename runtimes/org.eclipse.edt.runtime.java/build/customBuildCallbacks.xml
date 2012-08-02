@@ -66,6 +66,10 @@
 	<!--                      reference to the classpath structure.            -->
 	<!-- ===================================================================== -->
 	<target name="post.compile.@dot">
+<echo message="Post-compile SMAP info..."/>
+<echo message="  ${@dot.classpath}"/>
+<echo message="  ${target.folder}"/>
+<echo message="  ${source.folder1}"/>
 		<!-- Add SMAP data into the .class files. transformer.jar was created by enabling the SMAP Transformer builder
 		     on the org.eclipse.edt.debug.core project, and copying the jar to this project. -->
 		<java classpath="build/transformer.jar" classname="org.eclipse.edt.debug.core.SMAPTransformer">
