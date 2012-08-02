@@ -14,9 +14,6 @@ package org.eclipse.edt.compiler.internal.egl2mof;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.edt.compiler.binding.Binding;
-import org.eclipse.edt.compiler.binding.ITypeBinding;
-import org.eclipse.edt.compiler.binding.LocalVariableBinding;
 import org.eclipse.edt.compiler.core.ast.AbstractASTExpressionVisitor;
 import org.eclipse.edt.compiler.core.ast.Node;
 import org.eclipse.edt.compiler.core.ast.OnExceptionBlock;
@@ -44,6 +41,7 @@ import org.eclipse.edt.mof.egl.IfStatement;
 import org.eclipse.edt.mof.egl.LHSExpr;
 import org.eclipse.edt.mof.egl.LabelStatement;
 import org.eclipse.edt.mof.egl.LocalVariableDeclarationStatement;
+import org.eclipse.edt.mof.egl.Member;
 import org.eclipse.edt.mof.egl.MoveStatement;
 import org.eclipse.edt.mof.egl.OpenUIStatement;
 import org.eclipse.edt.mof.egl.Operation;
@@ -59,7 +57,6 @@ import org.eclipse.edt.mof.egl.TransferStatement;
 import org.eclipse.edt.mof.egl.TryStatement;
 import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.WhileStatement;
-import org.eclipse.edt.mof.egl.utils.IRUtils;
 import org.eclipse.edt.mof.eglx.jtopen.IBMiFactory;
 import org.eclipse.edt.mof.serialization.IEnvironment;
 
@@ -126,11 +123,11 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		stack.push(stmt);
 		DeclarationExpression expr = factory.createDeclarationExpression();
 		for (org.eclipse.edt.compiler.core.ast.Name name : (List<org.eclipse.edt.compiler.core.ast.Name>)decl.getNames()) {
-			if (Binding.isValidBinding(name.resolveDataBinding())) {
-				LocalVariableBinding binding = (LocalVariableBinding)name.resolveDataBinding();
+			if (name.resolveMember() != null) {
+				Member binding = name.resolveMember();
 				
 				Field field;
-				if (binding.isConstant()) {
+				if (binding.isStatic()) {
 					field = factory.createConstantField();
 				}
 				else{
@@ -141,7 +138,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 				if (objType instanceof Type) {
 					field.setType((Type)mofTypeFor(binding.getType()));
 				}
-				field.setIsNullable(binding.getType().isNullable());
+				field.setIsNullable(binding.isNullable());
 				field.setContainer(getCurrentFunctionMember());
 				addInitializers(decl.getInitializer(), decl.getSettingsBlockOpt(), field, decl.getType());
 				expr.getFields().add(field);
@@ -259,7 +256,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			criterion = (Expression)stack.pop();
 		}
 		IfStatement current = null;
-		for (Node node : (List<Node>)caseStatement.getWhenClauses()) {
+		for (Node node : caseStatement.getWhenClauses()) {
 			node.accept(this);
 			IfStatement when = (IfStatement)stack.pop();
 			if (criterion != null) {
@@ -307,7 +304,7 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 		IfStatement clause = factory.createIfStatement();
 		
 		Expression prevCond = null;
-		for (Node node : (List<Node>)whenClause.getExpr_plus()) {
+		for (Node node : whenClause.getExpr_plus()) {
 			node.accept(this);
 			
 			Expression expr = (Expression)stack.pop();
@@ -457,10 +454,10 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			DeclarationExpression decl = factory.createDeclarationExpression();
 			Field field = factory.createField();
 			field.setName(forStatement.getVariableDeclarationName().getCanonicalName());
-			ITypeBinding type = forStatement.getVariableDeclarationType().resolveTypeBinding();
+			Type type = forStatement.getVariableDeclarationType().resolveType();
 			field.setType((Type)mofTypeFor(type));
 			decl.getFields().add(field);
-			eObjects.put(forStatement.getVariableDeclarationName().resolveDataBinding(), field);
+			eObjects.put(forStatement.getVariableDeclarationName().resolveMember(), field);
 			stmt.setDeclarationExpression(decl);
 			
 			setElementInformation(forStatement.getVariableDeclarationName(), field);
@@ -774,9 +771,9 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			Parameter ex = factory.createParameter();
 			setElementInformation(onExceptionBlock.getExceptionName(), ex);			
 			ex.setName(onExceptionBlock.getExceptionName().getCaseSensitiveIdentifier());
-			ITypeBinding type = onExceptionBlock.getExceptionType().resolveTypeBinding();
+			Type type = onExceptionBlock.getExceptionType().resolveType();
 			ex.setType((Type)mofTypeFor(type));
-			eObjects.put(onExceptionBlock.getExceptionName().resolveDataBinding(), ex);
+			eObjects.put(onExceptionBlock.getExceptionName().resolveMember(), ex);
 			block.setException(ex);
 		}
 		for (Node node : (List<Node>)onExceptionBlock.getStmts()) {
@@ -840,9 +837,9 @@ abstract class Egl2MofStatement extends Egl2MofMember {
 			};
 			public boolean visit(org.eclipse.edt.compiler.core.ast.FromOrToExpressionClause clause) {
 				if (generator[0] == null && clause.getExpression() != null) {
-					ITypeBinding type = clause.getExpression().resolveTypeBinding();
-					if (type != null && type.getPackageName() != null) {
-						String key = IRUtils.concatWithSeparator(type.getPackageName(), ".");
+					Type type = clause.getExpression().resolveType();
+					if (type != null && type.getEClass().getPackageName() != null) {
+						String key = type.getEClass().getPackageName();
 						generator[0] = IOStatementGenerator.Registry.get(key);
 					}
 				}

@@ -22,7 +22,12 @@ import org.eclipse.edt.compiler.internal.core.lookup.FunctionArgumentValidator;
 import org.eclipse.edt.compiler.internal.core.utils.TypeCompatibilityUtil;
 import org.eclipse.edt.compiler.internal.core.validation.DefaultStatementValidator;
 import org.eclipse.edt.compiler.internal.core.validation.statement.StatementValidator;
+import org.eclipse.edt.mof.egl.Element;
+import org.eclipse.edt.mof.egl.ExternalType;
+import org.eclipse.edt.mof.egl.Function;
+import org.eclipse.edt.mof.egl.Type;
 import org.eclipse.edt.mof.egl.utils.InternUtil;
+import org.eclipse.edt.mof.utils.NameUtile;
 
 public class IBMiProgramCallStatementValidator extends DefaultStatementValidator {
 
@@ -38,16 +43,14 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 	
 	private void validateIBMiProgramCall(CallStatement callStatement) {
 				
-		ITypeBinding targType = callStatement.getInvocationTarget().resolveTypeBinding();
-		if (!Binding.isValidBinding(targType) || ITypeBinding.FUNCTION_BINDING != targType.getKind()) {
+		Element targType = (Element)callStatement.getInvocationTarget().resolveElement();
+		if (targType == null || !(targType instanceof Function)) {
 			return;
 		}
 				
-		IFunctionBinding functionBinding = (IFunctionBinding)targType;
-		
 		//TODO for now, do not allow a local function call to a function that is not an IBMiProgram function.		
-		if (functionBinding.getAnnotation(InternUtil.intern(new String[]{"eglx", "jtopen", "annotations"}), InternUtil.intern("IBMiProgram")) == null) {
-			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()});
+		if (targType.getAnnotation("eglx.jtopen.annotations.IBMiProgram") == null) {
+			problemRequestor.acceptProblem(callStatement.getInvocationTarget(), IProblemRequestor.IBMIPROGRAM_MUST_BE_SPECIFIED, IMarker.SEVERITY_ERROR, new String[] {((Function)targType).getCaseSensitiveName()});
 			return;
 		}
 
@@ -56,7 +59,7 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		callStatement.accept(new FunctionArgumentValidator(functionBinding, functionBinding.getDeclarer(), problemRequestor, compilerOptions));
 		
 		//if the function returns a value, a returns is required
-		if (functionBinding.getReturnType() != null && 
+		if (((Function)targType).getReturnType() != null && 
 				(callStatement.getCallSynchronizationValues() == null || 
 						(callStatement.getCallSynchronizationValues().getReturnTo() == null) &&
 						(callStatement.getCallSynchronizationValues().getReturns() == null)
@@ -65,8 +68,8 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		}
 		
 		if (callStatement.getUsing() != null) {
-			ITypeBinding usingType = callStatement.getUsing().resolveTypeBinding();
-			if (Binding.isValidBinding(usingType)) {
+			Type usingType = callStatement.getUsing().resolveType();
+			if (usingType != null) {
 				if (!isIBMiConnection(usingType)) {
 					problemRequestor.acceptProblem(callStatement.getUsing(), IProblemRequestor.IBMIPROGRAM_USING_HAS_WRONG_TYPE, IMarker.SEVERITY_ERROR, new String[] {});
 				}
@@ -77,17 +80,15 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 		if (callStatement.getCallSynchronizationValues() != null) {
 			if (callStatement.getCallSynchronizationValues().getReturns() != null) {
 				//If a returns is specified, the function must return a value
-				if (functionBinding.getReturnType() == null) {
+				if (((Function)targType).getReturnType() == null) {
 					problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_ALLOWED, IMarker.SEVERITY_ERROR, new String[] {functionBinding.getCaseSensitiveName()});
 				}
 				else {
 				//Ensure that the returns type of the call is compatible with the function's return type
-					if (Binding.isValidBinding(functionBinding.getReturnType())) {
-						Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
-						ITypeBinding callReturnsType = callReturnsExpr.resolveTypeBinding();
-						if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, functionBinding.getReturnType(), null, compilerOptions)) {
-							problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(functionBinding.getReturnType()), functionBinding.getCaseSensitiveName(), StatementValidator.getShortTypeString(callReturnsType), callReturnsExpr.getCanonicalString()});
-						}
+					Expression callReturnsExpr = callStatement.getCallSynchronizationValues().getReturns().getExpression();
+					Type callReturnsType = callReturnsExpr.resolveType();
+					if (!TypeCompatibilityUtil.isMoveCompatible(callReturnsType, ((Function)targType).getReturnType(), null, compilerOptions)) {
+						problemRequestor.acceptProblem(callStatement.getCallSynchronizationValues().getReturns(), IProblemRequestor.IBMIPROGRAM_RETURNS_NOT_COMPAT_WITH_FUNCTION, IMarker.SEVERITY_ERROR, new String[] {StatementValidator.getShortTypeString(((Function)targType).getReturnType()), ((Function)targType).getCaseSensitiveName(), StatementValidator.getShortTypeString(callReturnsType), callReturnsExpr.getCanonicalString()});
 					}
 				}
 			}
@@ -103,11 +104,9 @@ public class IBMiProgramCallStatementValidator extends DefaultStatementValidator
 			
 	}
 	
-	private boolean isIBMiConnection(ITypeBinding type) {
-		if (Binding.isValidBinding(type) && ITypeBinding.EXTERNALTYPE_BINDING == type.getKind()) {
-			return (type.getName() == InternUtil.intern("IBMiConnection") && type.getPackageName() == InternUtil.intern(new String[] {"eglx", "jtopen"}));
-		}
-		return false;
+//FIXME also look at supertypes 
+	private boolean isIBMiConnection(Type type) {
+		return NameUtile.equals("eglx.jtopen.IBMiConnection", type.getTypeSignature());
 	}
 	
 }
