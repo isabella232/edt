@@ -27,6 +27,9 @@ import org.eclipse.edt.compiler.internal.core.lookup.AbstractBinder;
 import org.eclipse.edt.compiler.internal.core.lookup.AnnotationLeftHandScope;
 import org.eclipse.edt.compiler.internal.core.lookup.ICompilerOptions;
 import org.eclipse.edt.compiler.internal.core.lookup.Scope;
+import org.eclipse.edt.mof.egl.AccessKind;
+import org.eclipse.edt.mof.egl.EnumerationEntry;
+import org.eclipse.edt.mof.egl.IrFactory;
 
 
 /**
@@ -34,29 +37,31 @@ import org.eclipse.edt.compiler.internal.core.lookup.Scope;
  */
 public class EnumerationBindingCompletor extends AbstractBinder {
 
-    private EnumerationTypeBinding enumerationBinding;
+    private org.eclipse.edt.mof.egl.Enumeration enumerationBinding;
     private IProblemRequestor problemRequestor;
     
-    private Set fieldNames = new HashSet();
+    private Set<String> fieldNames = new HashSet<String>();
 
-    public EnumerationBindingCompletor(Scope currentScope, EnumerationTypeBinding enumerationBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
-        super(currentScope, enumerationBinding, dependencyRequestor, compilerOptions);
-        this.enumerationBinding = enumerationBinding;
+    public EnumerationBindingCompletor(Scope currentScope, IRPartBinding irBinding, IDependencyRequestor dependencyRequestor, IProblemRequestor problemRequestor, ICompilerOptions compilerOptions) {
+        super(currentScope, irBinding.getIrPart(), dependencyRequestor, compilerOptions);
+        this.enumerationBinding = (org.eclipse.edt.mof.egl.Enumeration)irBinding.getIrPart();
         this.problemRequestor = problemRequestor;
     }
     
     public boolean visit(Enumeration enumeration) {
-    	enumeration.getName().setBinding(enumerationBinding);
-    	enumerationBinding.setPrivate(enumerationBinding.isPrivate());
+    	enumeration.getName().setType(enumerationBinding);
+        if (enumeration.isPrivate()) {
+        	enumerationBinding.setAccessKind(AccessKind.ACC_PRIVATE);
+        }
     	
     	return true;
     }
     
 	public void endVisit(Enumeration enumeration) {
-		enumerationBinding.setValid(true);
 	}
     
 	public boolean visit(EnumerationField enumerationField) {
+
 		int constantValue = -1;
 		if(enumerationField.hasConstantValue()) {
 			final int constantValueAry[] = new int[] {-1};
@@ -83,9 +88,14 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		else {
 			constantValue = fieldNames.size();
 		}
-		EnumerationDataBinding enumDataBinding = new EnumerationDataBinding(enumerationField.getName().getCaseSensitiveIdentifier(), enumerationBinding, enumerationBinding, constantValue);
-		enumerationField.getName().setBinding(enumDataBinding);
-		enumDataBinding.setStatic(true);  //PRH!!! make sure to do this!!
+		EnumerationEntry enumEntry = IrFactory.INSTANCE.createEnumerationEntry();
+		enumEntry.setContainer(enumerationBinding);
+		enumEntry.setName(enumerationField.getName().getCaseSensitiveIdentifier());
+		enumEntry.setValue(constantValue);
+		
+		enumerationField.getName().setElement(enumEntry);
+		enumEntry.setIsStatic(true);
+
 		
 		if(fieldNames.contains(enumerationField.getName().getIdentifier())) {
     		problemRequestor.acceptProblem(
@@ -99,14 +109,16 @@ public class EnumerationBindingCompletor extends AbstractBinder {
 		}
 		else {
 			fieldNames.add(enumerationField.getName().getIdentifier());
-			enumerationBinding.addEnumeration(enumDataBinding);
+			enumerationBinding.getEntries().add(enumEntry);
 		}
 		return false;
 	}
 	
     public boolean visit(SettingsBlock settingsBlock) {
-        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumerationBinding, enumerationBinding, enumerationBinding, -1, enumerationBinding);
+        AnnotationLeftHandScope scope = new AnnotationLeftHandScope(currentScope, enumerationBinding, enumerationBinding, enumerationBinding);
         SettingsBlockAnnotationBindingsCompletor blockCompletor = new SettingsBlockAnnotationBindingsCompletor(currentScope, enumerationBinding, scope, dependencyRequestor, problemRequestor, compilerOptions);
         settingsBlock.accept(blockCompletor);
         return false;
-    }}
+    }
+    
+}
